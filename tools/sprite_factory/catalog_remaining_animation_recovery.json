@@ -51,8 +51,10 @@
         "faint_loop": "pm0028_00_00_00521_down01_loop.gfbanm",
         "physical_attack_2": "pm0028_00_00_00410_attack02.gfbanm"
       },
-      "appearance_approved": false,
-      "battle_approved": false
+      "appearance_approved": true,
+      "battle_approved": false,
+      "appearance_feedback": "Ja die 2 zien er goed uit",
+      "appearance_review_sha256": "5d2f9b07ea4355aaca110776782ffc1adcd421b1e0056a8d5f20123754ab952f"
     },
     {
       "species": "clefairy",
@@ -341,7 +343,9 @@
       },
       "appearance_approved": true,
       "battle_approved": false,
-      "appearance_review_note": "User accepted the native normal appearance; battle review pending"
+      "appearance_review_note": "User accepted the native normal appearance; battle review pending",
+      "appearance_feedback": "Ja die 2 zien er goed uit",
+      "appearance_review_sha256": "5d2f9b07ea4355aaca110776782ffc1adcd421b1e0056a8d5f20123754ab952f"
     },
     {
       "species": "lunala",
@@ -394,8 +398,10 @@
         "faint_loop": "pm0028_00_00_00521_down01_loop.gfbanm",
         "physical_attack_2": "pm0028_00_00_00410_attack02.gfbanm"
       },
-      "appearance_approved": false,
-      "battle_approved": false
+      "appearance_approved": true,
+      "battle_approved": false,
+      "appearance_feedback": "Ja die 2 zien er goed uit",
+      "appearance_review_sha256": "5d2f9b07ea4355aaca110776782ffc1adcd421b1e0056a8d5f20123754ab952f"
     },
     {
       "species": "clefairy@shiny",
@@ -1166,8 +1172,10 @@
         "faint_loop": "pm0809_00_00_00521_down01_loop",
         "physical_attack_2": "pm0809_00_00_00410_attack02"
       },
-      "appearance_approved": false,
-      "battle_approved": false
+      "appearance_approved": true,
+      "battle_approved": false,
+      "appearance_feedback": "Ja die 2 zien er goed uit",
+      "appearance_review_sha256": "5d2f9b07ea4355aaca110776782ffc1adcd421b1e0056a8d5f20123754ab952f"
     }
   ],
   "feedback_holds": [

@@ -1,0 +1,2447 @@
+{
+  "schema": 1,
+  "date": "2026-09-30",
+  "scope": "two_candidate_pairs_flat_floor_classic_stadium_both_sides; HUD proxy screenshots plus isolated production presenter lifecycle",
+  "technical_battle_check_passed": true,
+  "battle_visual_approved": false,
+  "runtime_approved": false,
+  "published": false,
+  "entries": [
+    {
+      "species": "sandslash",
+      "variant": "normal",
+      "glb_sha256": "cd11e4667ce4721d95497802c9026e95ced371ccc911df92ef05a5a11ef27a53",
+      "runtime_sha256": "9f635982c03fccf6457575385d05d33a2a407ac3ee2546c5ac6c7e6caa687963",
+      "minimum_clearance_120hz": 0.0249432995915413,
+      "idle_minimum_height_pixels": 82.1591186523438,
+      "shots": 16,
+      "all_in_view": true,
+      "no_hud_proxy_overlap": true
+    },
+    {
+      "species": "sandslash",
+      "variant": "shiny",
+      "glb_sha256": "522c5bcdf58025b3fbf52dda109df5b0b8cade732bbb2007936ea58471f20b23",
+      "runtime_sha256": "de86e60775e7e11b1a4d18e6d174de042ddcaa271d610466cc15aaacbf8efaf0",
+      "minimum_clearance_120hz": 0.0249432995915413,
+      "idle_minimum_height_pixels": 82.1591186523438,
+      "shots": 16,
+      "all_in_view": true,
+      "no_hud_proxy_overlap": true
+    },
+    {
+      "species": "toucannon",
+      "variant": "normal",
+      "glb_sha256": "aa7326cd854e4d8f0b6eb124a7ceb4935601b6f5ae44aa07389943b739dfa5cc",
+      "runtime_sha256": "135359e7ef537f24f25fedd3351282d48d62d53322038d86b9b5aac9e767e3db",
+      "minimum_clearance_120hz": 0.0178735107183456,
+      "idle_minimum_height_pixels": 88.1907348632812,
+      "shots": 16,
+      "all_in_view": true,
+      "no_hud_proxy_overlap": true
+    },
+    {
+      "species": "toucannon",
+      "variant": "shiny",
+      "glb_sha256": "280a75fcef32145f63d63decb054250d8c1ca605780eff0c112adbf77c11857a",
+      "runtime_sha256": "7f6233d1dc4ee195e67851e6670c07c917e3a9a9f37383d25bfa439e9de8187f",
+      "minimum_clearance_120hz": 0.0178735107183456,
+      "idle_minimum_height_pixels": 88.1907348632812,
+      "shots": 16,
+      "all_in_view": true,
+      "no_hud_proxy_overlap": true
+    }
+  ],
+  "toucannon_interpolation_corrections": [
+    {
+      "changes": [
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 1
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        }
+      ],
+      "reason": "Sampled wing hierarchy has compensating 0.001 parent and 1000 child scales. Linear interpolation between valid native frame samples produces enormous temporary wings. Hold complete affected hierarchy at authored samples; key values and timestamps unchanged.",
+      "runtime_sha256": "135359e7ef537f24f25fedd3351282d48d62d53322038d86b9b5aac9e767e3db",
+      "schema": 1,
+      "source_sha256": "6d6c9ed0981a5eabf8f7ef2f1df748258e200089b4a050d0a5661a8143069648"
+    },
+    {
+      "changes": [
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "damage",
+          "keys": 41,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 1
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_loop",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "faint_start",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "idle",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack",
+          "keys": 131,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "physical_attack_2",
+          "keys": 151,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 0,
+          "type": 3
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "sleep",
+          "keys": 101,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 0,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:left_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_01",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_02",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_03",
+          "prior_interpolation": 1,
+          "type": 3
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 1
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 2
+        },
+        {
+          "action": "special_attack",
+          "keys": 121,
+          "path": "pm0809_00_00/Skeleton3D:right_wing_b_04",
+          "prior_interpolation": 1,
+          "type": 3
+        }
+      ],
+      "reason": "Sampled wing hierarchy has compensating 0.001 parent and 1000 child scales. Linear interpolation between valid native frame samples produces enormous temporary wings. Hold complete affected hierarchy at authored samples; key values and timestamps unchanged.",
+      "runtime_sha256": "7f6233d1dc4ee195e67851e6670c07c917e3a9a9f37383d25bfa439e9de8187f",
+      "schema": 1,
+      "source_sha256": "b0622ec53c59b48805523ebc90110ef88ed6a5046821368f8eaa0d21be7d0046"
+    }
+  ],
+  "runtime_lifecycle_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 636.511,
+      "frame_p95_ms": 9.311,
+      "frame_samples": 287,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 22.684,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 23.28,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5,
+          "ms": 3.637,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5,
+          "ms": 3.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 27,
+          "ms": 3.12,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 27,
+          "ms": 3.221,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 34,
+          "ms": 2.744,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 34,
+          "ms": 2.905,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 44,
+          "ms": 22.49,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 44,
+          "ms": 22.651,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 61,
+          "ms": 2.962,
+          "operation": "demand validation"
+        },
+        {
+          "frame": 61,
+          "ms": 3.12,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 91,
+          "ms": 6.19,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 132,
+          "ms": 5.199,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 175,
+          "ms": 2.921,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 175,
+          "ms": 3.1,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 200,
+          "ms": 1.853,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 200,
+          "ms": 1.985,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 214,
+          "ms": 1.397,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 254,
+          "ms": 1.658,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 636.511
+        },
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 58.323
+        },
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 50.853
+        }
+      ],
+      "static_bytes": 286861001
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 2,
+      "frame_max_ms": 136.625,
+      "frame_p95_ms": 6.982,
+      "frame_samples": 237,
+      "load_spans": [
+        {
+          "frame": 291,
+          "ms": 1.134,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 291,
+          "ms": 1.25,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 298,
+          "ms": 1.9,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 298,
+          "ms": 1.97,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 319,
+          "ms": 2.241,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 319,
+          "ms": 2.351,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 334,
+          "ms": 47.576,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 419,
+          "ms": 1.235,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 419,
+          "ms": 1.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 443,
+          "ms": 1.127,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 443,
+          "ms": 1.206,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 456,
+          "ms": 1.069,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 496,
+          "ms": 1.073,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 136.625
+        },
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 50.791
+        }
+      ],
+      "static_bytes": 287903297
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 101.792,
+      "frame_p95_ms": 6.991,
+      "frame_samples": 231,
+      "load_spans": [
+        {
+          "frame": 533,
+          "ms": 1.04,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 540,
+          "ms": 1.746,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 540,
+          "ms": 1.849,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 559,
+          "ms": 1.97,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 559,
+          "ms": 2.063,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 573,
+          "ms": 1.393,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 636,
+          "ms": 1.245,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 656,
+          "ms": 1.413,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 656,
+          "ms": 1.513,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 679,
+          "ms": 1.029,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 679,
+          "ms": 1.081,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 692,
+          "ms": 1.1,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 732,
+          "ms": 1.072,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 101.792
+        }
+      ],
+      "static_bytes": 288198541
+    }
+  ],
+  "evidence_sha256": {
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/captures/battle-review.json": "14adc391db2170a0d22f8451ef502c42efa7c01b5a207860f96c8e2843f49582",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/wing-fix/captures/battle-review.json": "94e743dc210060598ba47ab4f5f3a0993f6c6b09248a338a7bb7eebfbad53a0e",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/runtime-stress.json": "4454b5ea8a14ee3118c8a4fed3605a61b0ef9b853066471cc428c4077090de39",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/runtime-catalog-final.json": "6720524a595dccd8b94dcab6d210a93f749cc2b27dd4f0958144975fbfacf53a",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/verify_patch.gd": "873a5b543223e1e14258dc916b91679dc36b17beeb4605ea453fc283fd822bb8"
+  },
+  "limitations": [
+    "Human battle review still pending.",
+    "Toucannon scenes differ from appearance-approved scenes only in selected wing hierarchy interpolation; every key and timestamp verified unchanged.",
+    "No catalogue admission or bundle creation."
+  ]
+}
