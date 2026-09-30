@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android login fields and the in-game chat input now move above the keyboard while typing and return to their original position when it closes.
+
 - Nog 39 Pokémon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles, met gecontroleerde kleuren, ogen, battleplaatsing en animaties. De catalogus bevat nu 751 gewone Pokémon plus Mega Dragonite.
 
 - Android assets are pinned to the signed APK build, allowing Android test downloads and releases independently of browser publication.

@@ -2,6 +2,7 @@ extends Control
 
 const NewsLocalizationService := preload("res://scripts/services/news_localization_service.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+const MobileKeyboardAvoidance := preload("res://scripts/ui/mobile_keyboard_avoidance.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 signal login_submitted(username: String, password: String)
@@ -76,6 +77,10 @@ var web_demo_notice_acknowledged := false
 var login_return_notice := ""
 
 func _ready() -> void:
+	var keyboard_avoidance := MobileKeyboardAvoidance.new()
+	keyboard_avoidance.surface = $Background/Shell
+	keyboard_avoidance.inputs.assign([username_input, password_input])
+	add_child(keyboard_avoidance)
 	MusicManager.play_login_music()
 	_apply_remember_me_style()
 	LanguageSelectorStyle.configure_login_compact(language_options_button)
