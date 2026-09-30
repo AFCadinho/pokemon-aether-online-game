@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Sandslash en Toucannon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Ogen, shiny-kleuren, battleplaatsing en Toucannons vleugelovergangen zijn gecontroleerd.
+
 - Desktop 3D battles now ignore a saved forest-manifest path if that file has moved, and use the launcher-installed forest assets instead.
 
 - De vrouwelijke Team Rocket-haarstijl toont nu ook de bijbehorende wenkbrauwen.

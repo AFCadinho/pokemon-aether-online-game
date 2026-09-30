@@ -1,0 +1,535 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "sandslash",
+            "runtime_sha256": "9f635982c03fccf6457575385d05d33a2a407ac3ee2546c5ac6c7e6caa687963",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "sandslash@shiny",
+            "runtime_sha256": "de86e60775e7e11b1a4d18e6d174de042ddcaa271d610466cc15aaacbf8efaf0",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:sandslash:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 28,
+        "object_key": "optional-assets/pokemon_3d/sandslash/base/v1-d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3.zip",
+        "sha256": "d6b0cf852346171071c188999aae58b10cb875c9624ad3f0fcb91a2517b173c3",
+        "size_bytes": 17941750,
+        "species_id": "sandslash",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "toucannon",
+            "runtime_sha256": "135359e7ef537f24f25fedd3351282d48d62d53322038d86b9b5aac9e767e3db",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "toucannon@shiny",
+            "runtime_sha256": "7f6233d1dc4ee195e67851e6670c07c917e3a9a9f37383d25bfa439e9de8187f",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:toucannon:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 733,
+        "object_key": "optional-assets/pokemon_3d/toucannon/base/v1-3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18.zip",
+        "sha256": "3271c6f988827355743d69542dbd426a8870bf92f471d5ac8ecdc1c535c0fd18",
+        "size_bytes": 40306783,
+        "species_id": "toucannon",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "animation-recovery-pair-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 58248533,
+  "date": "2026-09-30",
+  "evidence_sha256": {
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/bundles/asset-index.json": "1635ba36b3c929aa9ed60124f6e30016fce7a3fdccc3565c92d3733144ca56ae",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/install.log": "32ac4155b1a9d85b555267c335c0aac28eab7865159c8f8c277c556b635287e3",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/installed-stress.json": "7a6bf36baf4872a131261523f819749df6c55c3873da45bd8e58cfa96e4929b0",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/installed-stress.log": "fae493f8eda17df60606d338ad5ecac13fbff9bfc6e8b6002a8558946ec26776",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/installed/installed-catalog.json": "54f4e148e30eccbe246b04529f6322c1e3bf4fe4105184215b218c58bca2d6e1",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/registered-stress.json": "69153a433d6ec20ad5f1d8cd76181b336e4dbbe5acc159350dab77b145584c85",
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/registered-stress.log": "b14426f49c95d32edecccd6fdcfb11c86fd6ed2c10e2e0f827bc28ce0cf4ee91",
+    "tools/sprite_factory/admit_animation_recovery_pair.py": "3eb170d711af86e4d22a83ba46003a1f65d74f9074f27a697493a5cdc236812b",
+    "tools/sprite_factory/catalog_animation_recovery_pair_battle.json": "2ca540968b0413c940f8abf8e5b2214b539ae79d1115725a5bf616d5b9bb42ed",
+    "tools/sprite_factory/catalog_animation_recovery_pair_profiles.json": "597f20c89d7d5994496ac176281ad966fb2984c3c77d0867b04c01ad7904817b"
+  },
+  "installed_runtime_check_passed": true,
+  "no_op_restart_check_passed": true,
+  "published": false,
+  "registered_runtime_check_passed": true,
+  "registered_runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 318.282,
+      "frame_p95_ms": 7.206,
+      "frame_samples": 228,
+      "load_spans": [
+        {
+          "frame": 7,
+          "ms": 2.047,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7,
+          "ms": 2.152,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 26,
+          "ms": 1.758,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 26,
+          "ms": 1.837,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 39,
+          "ms": 1.191,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 121,
+          "ms": 1.092,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 121,
+          "ms": 1.17,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 143,
+          "ms": 1.087,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 143,
+          "ms": 1.158,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 195,
+          "ms": 1.023,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 318.282
+        }
+      ],
+      "static_bytes": 286193914
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 2,
+      "frame_max_ms": 85.088,
+      "frame_p95_ms": 7.121,
+      "frame_samples": 230,
+      "load_spans": [
+        {
+          "frame": 239,
+          "ms": 1.648,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 239,
+          "ms": 1.692,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 258,
+          "ms": 1.635,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 258,
+          "ms": 1.706,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 271,
+          "ms": 34.892,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 354,
+          "ms": 1.275,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 354,
+          "ms": 1.372,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 377,
+          "ms": 1.144,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 377,
+          "ms": 1.272,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 389,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 85.088
+        }
+      ],
+      "static_bytes": 287234374
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 82.256,
+      "frame_p95_ms": 7.153,
+      "frame_samples": 230,
+      "load_spans": [
+        {
+          "frame": 474,
+          "ms": 1.511,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 474,
+          "ms": 1.568,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 493,
+          "ms": 1.757,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 493,
+          "ms": 1.819,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 507,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 592,
+          "ms": 1.341,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 592,
+          "ms": 1.438,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 613,
+          "ms": 1.384,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 613,
+          "ms": 1.467,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 625,
+          "ms": 1.079,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 82.256
+        }
+      ],
+      "static_bytes": 287528354
+    }
+  ],
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release certification and publication"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 318.452,
+      "frame_p95_ms": 6.992,
+      "frame_samples": 228,
+      "load_spans": [
+        {
+          "frame": 7,
+          "ms": 2.262,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7,
+          "ms": 2.331,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 25,
+          "ms": 1.586,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 25,
+          "ms": 1.638,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 38,
+          "ms": 1.235,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 120,
+          "ms": 1.085,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 120,
+          "ms": 1.169,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 142,
+          "ms": 1.124,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 142,
+          "ms": 1.193,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 155,
+          "ms": 1.133,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 195,
+          "ms": 1.144,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 318.452
+        }
+      ],
+      "static_bytes": 286894845
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 2,
+      "frame_max_ms": 84.726,
+      "frame_p95_ms": 7.009,
+      "frame_samples": 229,
+      "load_spans": [
+        {
+          "frame": 239,
+          "ms": 1.968,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 239,
+          "ms": 2.058,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 257,
+          "ms": 1.893,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 257,
+          "ms": 1.944,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 272,
+          "ms": 66.248,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 355,
+          "ms": 1.277,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 355,
+          "ms": 1.38,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 377,
+          "ms": 1.073,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 377,
+          "ms": 1.194,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 389,
+          "ms": 1.562,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 429,
+          "ms": 1.056,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 84.726
+        },
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 72.057
+        }
+      ],
+      "static_bytes": 287937117
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 2,
+      "frame_max_ms": 99.081,
+      "frame_p95_ms": 7.007,
+      "frame_samples": 229,
+      "load_spans": [
+        {
+          "frame": 466,
+          "ms": 1.04,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 466,
+          "ms": 1.087,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 473,
+          "ms": 1.724,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 473,
+          "ms": 1.811,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 492,
+          "ms": 1.638,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 492,
+          "ms": 1.695,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 506,
+          "ms": 1.68,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 546,
+          "ms": 1.033,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 588,
+          "ms": 1.099,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 588,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 610,
+          "ms": 1.653,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 610,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2,
+      "retained_source_bytes": 40305726,
+      "stalls_over_50ms": [
+        {
+          "context": "load sandslash",
+          "covered": true,
+          "ms": 99.081
+        }
+      ],
+      "static_bytes": 288231741
+    }
+  ],
+  "schema": 1,
+  "species": [
+    "sandslash",
+    "toucannon"
+  ]
+}

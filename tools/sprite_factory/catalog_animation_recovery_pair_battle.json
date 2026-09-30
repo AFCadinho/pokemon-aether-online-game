@@ -3,7 +3,7 @@
   "date": "2026-09-30",
   "scope": "two_candidate_pairs_flat_floor_classic_stadium_both_sides; HUD proxy screenshots plus isolated production presenter lifecycle",
   "technical_battle_check_passed": true,
-  "battle_visual_approved": false,
+  "battle_visual_approved": true,
   "runtime_approved": false,
   "published": false,
   "entries": [
@@ -16,7 +16,9 @@
       "idle_minimum_height_pixels": 82.1591186523438,
       "shots": 16,
       "all_in_view": true,
-      "no_hud_proxy_overlap": true
+      "no_hud_proxy_overlap": true,
+      "appearance_reviewed_runtime_sha256": "9f635982c03fccf6457575385d05d33a2a407ac3ee2546c5ac6c7e6caa687963",
+      "appearance_approved": true
     },
     {
       "species": "sandslash",
@@ -27,7 +29,9 @@
       "idle_minimum_height_pixels": 82.1591186523438,
       "shots": 16,
       "all_in_view": true,
-      "no_hud_proxy_overlap": true
+      "no_hud_proxy_overlap": true,
+      "appearance_reviewed_runtime_sha256": "de86e60775e7e11b1a4d18e6d174de042ddcaa271d610466cc15aaacbf8efaf0",
+      "appearance_approved": true
     },
     {
       "species": "toucannon",
@@ -38,7 +42,9 @@
       "idle_minimum_height_pixels": 88.1907348632812,
       "shots": 16,
       "all_in_view": true,
-      "no_hud_proxy_overlap": true
+      "no_hud_proxy_overlap": true,
+      "appearance_reviewed_runtime_sha256": "6d6c9ed0981a5eabf8f7ef2f1df748258e200089b4a050d0a5661a8143069648",
+      "appearance_approved": true
     },
     {
       "species": "toucannon",
@@ -49,7 +55,9 @@
       "idle_minimum_height_pixels": 88.1907348632812,
       "shots": 16,
       "all_in_view": true,
-      "no_hud_proxy_overlap": true
+      "no_hud_proxy_overlap": true,
+      "appearance_reviewed_runtime_sha256": "b0622ec53c59b48805523ebc90110ef88ed6a5046821368f8eaa0d21be7d0046",
+      "appearance_approved": true
     }
   ],
   "toucannon_interpolation_corrections": [
@@ -2437,11 +2445,83 @@
     ".tmp/remaining-animation-recovery/repaired-pair-battle/wing-fix/captures/battle-review.json": "94e743dc210060598ba47ab4f5f3a0993f6c6b09248a338a7bb7eebfbad53a0e",
     ".tmp/remaining-animation-recovery/repaired-pair-battle/runtime-stress.json": "4454b5ea8a14ee3118c8a4fed3605a61b0ef9b853066471cc428c4077090de39",
     ".tmp/remaining-animation-recovery/repaired-pair-battle/runtime-catalog-final.json": "6720524a595dccd8b94dcab6d210a93f749cc2b27dd4f0958144975fbfacf53a",
-    ".tmp/remaining-animation-recovery/repaired-pair-battle/verify_patch.gd": "873a5b543223e1e14258dc916b91679dc36b17beeb4605ea453fc283fd822bb8"
+    ".tmp/remaining-animation-recovery/repaired-pair-battle/verify_patch.gd": "873a5b543223e1e14258dc916b91679dc36b17beeb4605ea453fc283fd822bb8",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/index.html": "1d0f08b00f8593b526b6acb2ef4e27bb8be3c3b5934924d651fd6333044b1a12"
   },
   "limitations": [
-    "Human battle review still pending.",
     "Toucannon scenes differ from appearance-approved scenes only in selected wing hierarchy interpolation; every key and timestamp verified unchanged.",
     "No catalogue admission or bundle creation."
-  ]
+  ],
+  "user_review": {
+    "feedback": "akkoord",
+    "scope": "Sandslash and Toucannon normal/shiny; final corrected battle scenes, both cameras and all displayed poses"
+  },
+  "capture_sha256": {
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-0-idle.png": "72885f58e6ae55bfd2c1548706228c8790585baabad4d323529b4a73c767ceb0",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-0-special_attack.png": "6371168b69c83756aad62ed3c8850c7211bfbf94a62884f528f9706a7f163ee7",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-0-sleep.png": "df16eb4aad7631271bf640321b9aa7d3209d27cbdb4721cc6575c394a9712da4",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-0-faint_start.png": "9cc01a6228e7762d9b15345ab2d4dcd044100e4ee3b65da7558df86c7af68860",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-1-idle.png": "1a800fb837157d315b0c64fa363c3090e5228f85d67a8f36cc2741bd064b8b9c",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-1-special_attack.png": "fd103aff9fe9235f62108ea55ebf4a11bc2b41385bae2170e798ce744c505da2",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-1-sleep.png": "6d38a9625fb3a6fa558be7a2558f481722f86e4eb92dc61ee9c4e96de744e7dc",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-classic-1-faint_start.png": "5652d148d392ee0292d5bdb553192711d7d0ba2c9229be67c3e0ca54f59abfa3",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-0-idle.png": "94fbf8db2bf8c77586e8cff077ab71b1f7665372bd7c7752f200cb9214d380ef",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-0-special_attack.png": "caafe2ed3e8d18561a399fb63def13cb9bfe2621764e5590f276d05f773d34b1",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-0-sleep.png": "82da122145092e201014709765ef374a41e46c8c0c4c7e4bdc96d785ea777f63",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-0-faint_start.png": "98c4c4412178f5e138cc53687062de201db68e99268ec259cb18f7fc10f343e7",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-1-idle.png": "c10bb84f9e80857608e1f72e0bc75e6677d8d58a837feb6589fce18c214f0d92",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-1-special_attack.png": "1248a1280666af61f2ef320cfbc12a2a483dd900769e10b24c2dbcc610053d60",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-1-sleep.png": "2d6b2baf08da312f6bca6f76447c404a358a83462c55681a8e5e0b61304527e9",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-normal-stadium-1-faint_start.png": "745338dae53a8918a2319f3926706fc0f692e8108aa3ece2869423e24bea2886",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-0-idle.png": "e2eb5d4bbb878d30792ffa5cd5ec00a516750690e9c5f27bb479d275abe16bef",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-0-special_attack.png": "f51f024f985ca2a5961c4245b624df2633d799579a7cb3b290d12b7f9fb74187",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-0-sleep.png": "d9175a70c544d5a4bfd5ff1d2ec8195262a45e761bdfba53d95d7b0aff050f68",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-0-faint_start.png": "7b5fa74e5ba958e7151b9dd663f8e6631ba1cc8cb99cb5f56e52111dad5a1608",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-1-idle.png": "46396e38ef904bcd047f729405969c85a3f49af4b5a60e76cda851c8110b4600",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-1-special_attack.png": "fae70f44afdf833d2afab5de8456af9cfb89fae0f069c203231ed51da8febbb3",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-1-sleep.png": "d6cd54df17e51c72d78e9b3604582c57cfae3420a2f9ef7f796227f0e0686ead",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-classic-1-faint_start.png": "4e98e2eb435f71be6aced032b3dcd5713463d6c1066af56b41fb235903c1553a",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-0-idle.png": "e815394f04bb8d24937cf29816e9ffe1c0078a6ef552a5e6f7cabbd6f49be019",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-0-special_attack.png": "738dd2e1d29b971a2ae17d8cacbfc38b23f6cd67da7377d8677087a2071242f5",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-0-sleep.png": "b0208c4c4100b10a44ad605f5d3f34668f9e83fe5274bea095b0d23eb7cb6f5b",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-0-faint_start.png": "1c222863b3035233efb3e01336b097f233d65bd80f0eb34bcd41167a534dc99a",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-1-idle.png": "a2ce2744be9b6580c12baeca955bdf4c89976997bc44cc3685062c366020ef95",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-1-special_attack.png": "172eba1f815f338c3389e42bf08b797ee11fcb86a962532ba7676298ea973bbe",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-1-sleep.png": "8fb1742aa7341403830fab2fc1ca0815af3e6540cf79a2205d8cfe4a5e83006c",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/sandslash-shiny-stadium-1-faint_start.png": "4d0588c080419bdab62f2e8a6e05d84a99ee769bcda688fcfb3c034f54a6b4c8",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-0-idle.png": "8c16e9891dbdf3482192adab699acf2c3c8f63f3bc9f02ff97ed7c6f3a62c720",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-0-special_attack.png": "87ca9eeea08de2fcf07bda008a212e7e84a9ae74d1123ee9e385c66ba44e9bf0",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-0-sleep.png": "387dd1c3f00f8def598ba588ce7eb3745c98d2df5edf7ecf55c29085f36bb74c",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-0-faint_start.png": "62b6385c950a02c4bb036be9fc194e27228c55993612785cacd2c6d1a7f77ae8",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-1-idle.png": "a123a5ea10e7958ce78ea6e732a8364a36dab4bcea92821168e8e53ad4796b0d",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-1-special_attack.png": "22db54f88b5cd83e2f66585275eb69c6ac83dc7143f8fb02c8897aa231c129d5",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-1-sleep.png": "929537e090de05b4e4cf7239698e91050fcad48ae843b020db534bb7ee27ff82",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-classic-1-faint_start.png": "97e5fb60a998f0f826a10dfd8de4d98252d1f7091405235451a1866ee14a2e94",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-0-idle.png": "0963c7c7783a3fbc5a0f7c31358a45906e6fcdc58d6f09197a6d0abaf31da8f2",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-0-special_attack.png": "6b9d7f3757c32a184aa37266e486c0997286f06e79d320b58ab69bc89bfdcc08",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-0-sleep.png": "df0a0835aeed318e33fe76f51626bdc9ca3f0d26d322a8d697a3d38b4c99fd27",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-0-faint_start.png": "e24edae2d9310c9f7d40ae22c6ff5044a53ce8f122741cc40da296ed1aaab8fd",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-1-idle.png": "d7344a03f32c42b840dfa2f750deb90c9f0ff13255bed4e4d84b755cdd86e421",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-1-special_attack.png": "03ee4e156be2f1c7b5c9f11d84f30b6dc6f9752874ea579bb9a36c9436d54868",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-1-sleep.png": "4be89538f6f9f5b48a4f26b9f5f483e1b352026ef3d4b25ccd0f290f4090c1e5",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-normal-stadium-1-faint_start.png": "494756aaa889770dc92ffd095dfa580203e563b2c4e8b886b66a0b809c978ae8",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-0-idle.png": "5b84cc53784666cc2cce2469c75fa8760b9aa2823984ffd13c6e01425c97cc72",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-0-special_attack.png": "f8095096f92db8409ac5f97679bd14460056b32d766647079162bfdb4d14c622",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-0-sleep.png": "08e94e2fc12c2f38f5b361e7ae0749b96c06c87313194e57c193075bbf8823d3",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-0-faint_start.png": "a78a7c53bea309b6b961ebab08b87e8bc9dd8bbe29240f5bd6eb164ee7b97fa3",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-1-idle.png": "966cbb7742af0ce02eda48199c60e5837bb55bcaaa470ec02030055ac382b06b",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-1-special_attack.png": "a026d9a9af9ec7f9de5ce27e45fde240e64262b24e0f9bffd33a6f10fabf8ced",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-1-sleep.png": "ee6605009802b69992b128f8a96c62a7c9835537a8b073e4d5c74ea789c236a1",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-classic-1-faint_start.png": "1aa66ee8ff628dc6a5dfbfc737943223d081e3998620a3abd62d5cf287f1aad1",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-0-idle.png": "ad2be656aa40145c0b84bab147cd1c7ecd22315778f38fcde0b52a86c5ecf129",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-0-special_attack.png": "c2c3589baf7830ae9b2f05a4e27e96b8c56de50de9a02f9dbd9fbbf7b0168c5e",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-0-sleep.png": "dfc1b7b87341fc31a419499991361f073630d3dfcb3111abbc396bbf37efa4d5",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-0-faint_start.png": "1e6b05789315c5ed252e551992aee2036a1d017285fd39135ee4e7fea55c0e7b",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-1-idle.png": "caea490df39961ae2c51da390ad3b263f0039f6cbe38bdc82bbb5c8dbcc97063",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-1-special_attack.png": "b47282c955c144ba961c31b737d8e205833bd2abaa5d9d67d3705d2fc862fc38",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-1-sleep.png": "7255c0561baf8f916eb46a5e8f288cef84b82a18cc8d7144db5fddd1f2f096c1",
+    ".tmp/remaining-animation-recovery/review/repaired-pair-battle/captures/toucannon-shiny-stadium-1-faint_start.png": "183790f5247ebdd2cf71b19483e2fdee1277e925f8cf9fd46ede851afb35a62d"
+  },
+  "profiles_sha256": "597f20c89d7d5994496ac176281ad966fb2984c3c77d0867b04c01ad7904817b",
+  "appearance_receipt_sha256": "20c01ebe0840e0282ec455d2f8485cc9fd28bc09c215d22e7d173c71bdf51783"
 }
