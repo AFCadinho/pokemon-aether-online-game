@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.
+
 - Huis 2 en Huis 3 in Vermilion City hebben elk twee bewoners met gelokaliseerde dialogen en een rondlopende overworld-Pokemon: Krabby en Pikachu.
 
 - Player and future-self dialogue portraits show the full trainer-card artwork at its original resolution, without a zoomed crop.
