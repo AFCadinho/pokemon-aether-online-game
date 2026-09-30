@@ -6180,5 +6180,16 @@
   "ui.appearance.option.royal_shoes": "以太王室靴子",
   "ui.appearance.option.royal_crown": "以太王室王冠",
   "ui.appearance.category.back": "背部",
-  "ui.appearance.option.royal_cape": "以太王室披风"
+  "ui.appearance.option.royal_cape": "以太王室披风",
+  "ui.skills.thieving.target.vermilion_visitor_iris": "Harbor Visitor Iris",
+  "ui.skills.thieving.target.vermilion_fan_club_hugo": "Pokemon Fan Hugo",
+  "ui.skills.thieving.target.vermilion_elder_elsie": "Resident Elsie",
+  "ui.skills.thieving.target.vermilion_worker_owen": "Worker Owen",
+  "ui.skills.thieving.target.vermilion_ace_trainer_sienna": "Ace Trainer Sienna",
+  "ui.skills.thieving.target.vermilion_trainer_felix": "Trainer Felix",
+  "ui.skills.thieving.target.vermilion_child_toby": "Toby",
+  "ui.skills.thieving.target.vermilion_harbor_worker_bram": "Harbor Worker Bram",
+  "ui.skills.thieving.target.vermilion_retired_sailor_abel": "Retired Sailor Abel",
+  "ui.skills.thieving.target.vermilion_picnicker_june": "Picnicker June",
+  "ui.skills.thieving.location.vermilion_city": "Vermilion City"
 }
