@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser HOME icons now load individually when displayed. The world video on the login screen streams separately at its original resolution, reducing the required startup download.
+
 ### 3D Battles and Model Catalog
 
 - Desktop 3D battles now ignore a saved forest manifest path when the file has moved and use the launcher-installed forest assets instead.

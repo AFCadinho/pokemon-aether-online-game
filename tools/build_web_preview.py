@@ -12,6 +12,10 @@ import shutil
 import subprocess
 import struct
 import time
+try:
+    from .build_web_on_demand import prepare_home_icons, prepare_login_media
+except ImportError:
+    from build_web_on_demand import prepare_home_icons, prepare_login_media
 
 ROOT = Path(__file__).resolve().parents[1]
 # Background music is external; effects/cries and core gameplay stay bundled.
@@ -170,6 +174,9 @@ def main():
         parser.error('Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.')
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
+    home_bytes = prepare_home_icons(ROOT, output)
+    print('Preparing streamed login video at source quality...', flush=True)
+    media_bytes = prepare_login_media(ROOT, output)
     console_log = output / 'export-console.log'
     # Godot treats any previously imported file below the project as an
     # exportable resource, even when an export exclude_filter names that
@@ -214,8 +221,7 @@ def main():
         b'generated/tiled_visuals/pewter_gym/pewter_gym.visual.tscn',
         b'generated/tiled_visuals/lobby/lobby.visual.tscn',
         b'assets/fonts/DejaVuSans.ttf',
-        b'assets/sprites/pokemon/pokemon_home/Pikachu.png',
-        b'assets/sprites/pokemon/pokemon_home_shiny/pikachu.png',
+        b'assets/ui/home_unknown.png',
     )
     forbidden_markers = (
         b'node_modules/playwright-core/',
@@ -235,6 +241,15 @@ def main():
 
     initial_bytes = sum(item['bytes'] for item in files)
     validate_external_music_pack(pck_path)
+    packed_names = set(pack_entry_names(pck_path))
+    excluded_sources = ('assets/sprites/pokemon/pokemon_home/', 'assets/sprites/pokemon/pokemon_home_shiny/', 'assets/video/login_background.ogv')
+    if any(name.startswith(excluded_sources) for name in packed_names):
+        raise RuntimeError('Web PCK embeds on-demand HOME icons or login video.')
+    for folder in ('assets/sprites/pokemon/pokemon_home', 'assets/sprites/pokemon/pokemon_home_shiny'):
+        for metadata in (ROOT / folder).glob('*.import'):
+            imported = re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text())
+            if packed_names.intersection(imported):
+                raise RuntimeError('Web PCK embeds imported HOME textures.')
     if initial_bytes > size_limit:
         raise RuntimeError(
             f'Web build is {initial_bytes / 1048576:.1f} MiB; '
@@ -255,6 +270,8 @@ def main():
         'browserAudioFiles': len(browser_audio_files),
         'browserAudioBytes': sum(int(item['bytes']) for item in browser_audio_files),
         'initialBytes': initial_bytes,
+        'homeIconBytes': home_bytes,
+        'loginMediaBytes': media_bytes,
     }
     (output / 'build-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
     print(f"Web preview exported: {receipt['initialBytes'] / 1048576:.1f} MiB before HTTP compression.")

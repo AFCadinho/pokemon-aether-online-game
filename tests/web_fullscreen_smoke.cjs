@@ -11,7 +11,7 @@ const assert = require('node:assert/strict');
     const page = await browser.newPage();
     const errors=[];
     page.on('pageerror', e=>errors.push(e.message));
-    await page.setContent(`<canvas id="canvas" tabindex="0"></canvas><button id="enter">Enter</button><button id="leave">Leave</button><script>${script}</script>`);
+    await page.setContent(`<div id="game-surface"><canvas id="canvas" tabindex="0"></canvas></div><button id="enter">Enter</button><button id="leave">Leave</button><script>${script}</script>`);
     await page.evaluate(() => {
       document.getElementById('enter').onclick = () => window.pokeaetherFullscreen.request(true);
       document.getElementById('leave').onclick = () => window.pokeaetherFullscreen.request(false);
@@ -27,7 +27,7 @@ const assert = require('node:assert/strict');
     });
     await page.getByRole('button',{name:'Enter fullscreen',exact:true}).click();
     await page.waitForFunction(()=>window.pokeaetherFullscreen.active());
-    assert.equal(await page.evaluate(()=>document.fullscreenElement.id),'canvas');
+    assert.equal(await page.evaluate(()=>document.fullscreenElement.id),'game-surface');
     // Escape/window-manager exits use the same fullscreenchange state path.
     await page.evaluate(()=>document.exitFullscreen());
     await page.waitForFunction(()=>!window.pokeaetherFullscreen.active());
@@ -38,7 +38,7 @@ const assert = require('node:assert/strict');
     await page.waitForFunction(()=>!window.pokeaetherFullscreen.active());
     // A denied request leaves the state off and exposes a usable retry.
     await page.evaluate(()=>{
-      document.getElementById('canvas').requestFullscreen=()=>Promise.reject(new Error('Denied'));
+      document.getElementById('game-surface').requestFullscreen=()=>Promise.reject(new Error('Denied'));
     });
     await page.getByRole('button',{name:'Enter',exact:true}).click();
     await page.getByRole('button',{name:'Enter fullscreen',exact:true}).waitFor({state:'visible'});

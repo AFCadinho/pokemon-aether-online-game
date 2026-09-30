@@ -11525,7 +11525,7 @@ func _warm_up_pokedex() -> void:
 		var species_values := _array_from_variant(search_result.get("species", []))
 		for index in range(species_values.size()):
 			var species_value: Variant = species_values[index]
-			if species_value is Dictionary:
+			if species_value is Dictionary and not OS.has_feature("web"):
 				_load_pokedex_species_list_icon(species_value as Dictionary)
 			if index > 0 and index % 8 == 0:
 				await get_tree().process_frame
@@ -36647,7 +36647,10 @@ func _create_pokedex_species_button(species: Dictionary) -> Control:
 	icon.custom_minimum_size = Vector2(44, 44)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = _load_pokedex_species_list_icon(species)
+	if OS.has_feature("web"):
+		WebHomeIconService.bind_visible(icon, species_name, pokedex_shiny_mode)
+	else:
+		icon.texture = _load_pokedex_species_list_icon(species)
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	row.add_child(icon)

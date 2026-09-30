@@ -2073,6 +2073,12 @@ func request_web_sprite_frames(species: String, side: String, is_shiny: bool = f
 		_remember_sprite_frames(cache_key, frames)
 		_remember_shared_sprite_frames(cache_key, frames)
 		return frames
+	if OS.has_feature("web"):
+		await WebHomeIconService.load_icon(species, is_shiny)
+		var fallback := _load_sprite_frames_from_home_sprite(species, is_shiny)
+		if fallback != null:
+			_apply_species_position_offset(fallback, species, side, is_shiny)
+			return fallback
 	return null
 
 

@@ -124,9 +124,9 @@ def main() -> None:
             continue
         relative = source.relative_to(export_dir)
         relative_name = relative.as_posix()
-        if relative_name in {"index.html", "build-receipt.json"} or source.suffix == ".log":
+        if relative_name in {"index.html", "build-receipt.json"} or source.suffix == ".log" or any(part.startswith(".") for part in relative.parts):
             continue
-        on_r2 = relative_name.startswith("browser-audio/") or (
+        on_r2 = relative_name.startswith(("browser-audio/", "home-icons/", "login-media/")) or (
             source.name.startswith("index.") and source.name != "index.js"
         )
         if on_r2:

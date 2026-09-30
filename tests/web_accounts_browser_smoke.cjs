@@ -63,7 +63,7 @@ const assert = require('node:assert/strict');
     });
   });
   const page = await context.newPage();
-  const errors = [], external = [], api = [], pokemonAssets = [];
+  const errors = [], external = [], api = [], pokemonAssets = [], homeAssets = [];
   const output = path.join(frontend, 'builds/web-accounts-qa');
   fs.mkdirSync(output, { recursive: true });
   await context.route('**/*', async route => {
@@ -72,6 +72,7 @@ const assert = require('node:assert/strict');
 		if (url.pathname.startsWith('/pokemon-assets/battle/') || url.pathname.startsWith('/pokemon-assets/gen5/')) {
 			pokemonAssets.push(url.pathname);
 		}
+    if (url.pathname.startsWith('/home-icons/')) homeAssets.push(url.pathname);
     if (!url.pathname.startsWith('/api/')) return route.continue();
 		const result = await request({ method: req.method(), path: url.pathname, body: req.postData() || '', headers: req.headers() });
     api.push({ path: url.pathname, status: result.status });
@@ -96,6 +97,10 @@ const assert = require('node:assert/strict');
   try {
 		await page.goto(previewUrl);
     await start();
+    if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+      await page.waitForFunction(() => document.getElementById('login-video').currentTime > 0);
+      assert.equal(await page.evaluate(() => document.getElementById('canvas').getContext('webgl2').getContextAttributes().alpha), true);
+    }
     // The Godot canvas link calls this same shell entry point. Invoke it
     // directly so password-recovery/link layout changes do not make account
     // registration coverage depend on a viewport coordinate.
@@ -136,6 +141,20 @@ const assert = require('node:assert/strict');
 		await waitForApi(item => item.path === '/api/game/story' && item.status === 200, 30000);
 		await page.waitForTimeout(3000);
     await page.screenshot({ path: path.join(output, 'world.png') });
+    if (process.env.POKEAETHER_STARTUP_ASSETS_ONLY) {
+      assert(await page.evaluate(() => {
+        const video = document.getElementById('login-video');
+        return video.hidden && video.paused && !video.hasAttribute('src');
+      }), 'world entry stops video and releases its source');
+      assert(homeAssets.some(name => name.endsWith('/catalog.json')), 'HOME catalog loads');
+      assert(homeAssets.some(name => name.endsWith('.png')), 'party/NPC HOME images download on demand');
+      assert(homeAssets.length < 30, 'entering world does not fetch the entire HOME collection');
+      assert.deepEqual(external, []);
+      assert.deepEqual(errors, []);
+      fs.writeFileSync(path.join(output, 'startup-assets.json'), JSON.stringify({homeAssets, videoStopped: true}, null, 2));
+      console.log('web_accounts_browser_smoke: PASS (startup assets: login video, world entry, individual HOME icons)');
+      return;
+    }
 		assert(api.some(item => item.path === '/api/game/profile' && item.status === 200), 'browser profile supplies the initial world position');
     assert(api.some(item => item.path === '/api/game/story' && item.status === 200), 'shared story loads through the browser boundary');
 		assert(api.some(item => item.path.startsWith('/api/npcs/') && item.status === 200), 'demo NPC metadata really loads');
