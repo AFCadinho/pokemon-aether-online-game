@@ -11,8 +11,8 @@
     "native_actions_ambiguous": 15
   },
   "normal_candidates": 41,
-  "shiny_candidates": 22,
-  "missing_shiny_candidates": 19,
+  "shiny_candidates": 23,
+  "missing_shiny_candidates": 18,
   "alternative_za_file_presence_candidates": 50,
   "source_audit_sha256": "37ebe465e7888a9d0277e48c4696ae27b7bda0eddd75ef9a2f0ca5887d8f8cd8",
   "runtime_approved": false,
@@ -39,8 +39,8 @@
     {
       "species": "sandslash",
       "source_sha256": "b7954c869414413397a9ec4ee060d53a11a844eca5132deab174d9761fe88cd3",
-      "glb_sha256": "ac435ff32b04afc3c8df496f637c0c3c271cb092acaaa023b0b242ef2d215e1b",
-      "runtime_sha256": "c0029ce46dfd29013b26b4fa06a02a51c0d4ef65146858ca50e4d9520d9dee35",
+      "glb_sha256": "cd11e4667ce4721d95497802c9026e95ced371ccc911df92ef05a5a11ef27a53",
+      "runtime_sha256": "9f635982c03fccf6457575385d05d33a2a407ac3ee2546c5ac6c7e6caa687963",
       "native_actions": {
         "physical_attack": "pm0028_00_00_00400_attack01.gfbanm",
         "damage": "pm0028_00_00_00500_damage01.gfbanm",
@@ -339,8 +339,9 @@
         "faint_loop": "pm0809_00_00_00521_down01_loop",
         "physical_attack_2": "pm0809_00_00_00410_attack02"
       },
-      "appearance_approved": false,
-      "battle_approved": false
+      "appearance_approved": true,
+      "battle_approved": false,
+      "appearance_review_note": "User accepted the native normal appearance; battle review pending"
     },
     {
       "species": "lunala",
@@ -381,8 +382,8 @@
     {
       "species": "sandslash@shiny",
       "source_sha256": "b7954c869414413397a9ec4ee060d53a11a844eca5132deab174d9761fe88cd3",
-      "glb_sha256": "dded3996f4cde139fe934bebc07a089310d05aff6c3db0dea7fc775b287e63ff",
-      "runtime_sha256": "c176952d6c03205e863c14251babf0e2fda1a35f45754e96bbc2fb16347c6f51",
+      "glb_sha256": "522c5bcdf58025b3fbf52dda109df5b0b8cade732bbb2007936ea58471f20b23",
+      "runtime_sha256": "de86e60775e7e11b1a4d18e6d174de042ddcaa271d610466cc15aaacbf8efaf0",
       "native_actions": {
         "physical_attack": "pm0028_00_00_00400_attack01.gfbanm",
         "damage": "pm0028_00_00_00500_damage01.gfbanm",
@@ -1149,6 +1150,24 @@
       },
       "appearance_approved": false,
       "battle_approved": false
+    },
+    {
+      "species": "toucannon@shiny",
+      "source_sha256": "3317889de9230aab15ca7e9db22e9eff42c29a81b28541e1657d769b0c610929",
+      "glb_sha256": "280a75fcef32145f63d63decb054250d8c1ca605780eff0c112adbf77c11857a",
+      "runtime_sha256": "b0622ec53c59b48805523ebc90110ef88ed6a5046821368f8eaa0d21be7d0046",
+      "native_actions": {
+        "idle": "pm0809_00_00_00000_defaultwait01_loop",
+        "physical_attack": "pm0809_00_00_00400_attack01",
+        "special_attack": "pm0809_00_00_00450_rangeattack01",
+        "damage": "pm0809_00_00_00500_damage01",
+        "sleep": "pm0809_00_00_00281_sleep01_loop",
+        "faint_start": "pm0809_00_00_00520_down01_start",
+        "faint_loop": "pm0809_00_00_00521_down01_loop",
+        "physical_attack_2": "pm0809_00_00_00410_attack02"
+      },
+      "appearance_approved": false,
+      "battle_approved": false
     }
   ],
   "feedback_holds": [
@@ -1173,8 +1192,11 @@
       }
     ],
     "toucannon": {
-      "normal": "native shader bake",
-      "shiny": "held: incompatible source texture layout"
-    }
+      "normal": "native source shader; appearance accepted by user",
+      "shiny": "native source shader with hash-verified official rare colours and textures; visual review pending",
+      "recipe_sha256": "d466d29bb9b8e37f7983dda0ad4ecda54b70b56a2989e868cc04b6c404b71249",
+      "za_trial": "rejected after own visual identity check; not used"
+    },
+    "sandslash_highlight_mask_sha256": "65dbfbddc9bc9a3c96c011f1f38e328c9808649523c187d009b12294c216fcf1"
   }
 }

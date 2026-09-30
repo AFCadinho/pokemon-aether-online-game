@@ -5,6 +5,7 @@ chooses shiny colours. Shader mixes and unconnected colour inputs remain holds.
 """
 
 import hashlib
+import math
 import json
 from pathlib import Path
 import sys
@@ -119,6 +120,15 @@ def bake(job):
     source = Path(job['source'])
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Native Blend source changed')
+    official = None
+    if any(item.get('colour_overrides') or item.get('texture_overrides') for item in job['materials']):
+        from scvi_material_probe import inspect_materials
+        official = []
+        for variant in ('normal', 'rare'):
+            table = Path(job[variant + '_table'])
+            if hashlib.sha256(table.read_bytes()).hexdigest() != job[variant + '_table_sha256']:
+                raise ValueError('Official variant table changed')
+            official.append({row['name']: row for row in inspect_materials(table)})
     bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False, load_ui=False)
     rig, _ = isolate(source)
     select_action(rig, bpy.data.actions[job['idle_action']])
@@ -135,6 +145,38 @@ def bake(job):
         if not material.use_nodes:
             raise ValueError('Native material has no shader graph')
         tree = material.node_tree
+        for change in item.get('colour_overrides', []):
+            if any(rows[item['name']]['colors'].get(change['key']) != change[variant]
+                   for rows, variant in zip(official, ('normal', 'rare'))):
+                raise ValueError('Colour override differs from official tables')
+            nodes = [n for n in tree.nodes if n.type == 'GROUP' and change['key'] in n.inputs]
+            if len(nodes) != 1 or nodes[0].inputs[change['key']].is_linked:
+                raise ValueError('Rare colour has no unique authored input')
+            socket = nodes[0].inputs[change['key']]
+            if not all(math.isclose(a, b, abs_tol=1e-5) for a, b in zip(socket.default_value, change['normal'])):
+                raise ValueError('Rare colour normal baseline differs from source')
+            socket.default_value = change['rare']
+        for change in item.get('texture_overrides', []):
+            normal, rare = Path(change['normal']), Path(change['rare'])
+            if any(path != Path(job[variant + '_table']).parent /
+                   Path(rows[item['name']]['textures']['BaseColorMap']).with_suffix('.png').name
+                   for rows, variant, path in zip(official, ('normal', 'rare'), (normal, rare))):
+                raise ValueError('Texture override differs from official tables')
+            if (hashlib.sha256(normal.read_bytes()).hexdigest() != change['normal_sha256'] or
+                    hashlib.sha256(rare.read_bytes()).hexdigest() != change['rare_sha256']):
+                raise ValueError('Rare texture source changed')
+            matches = [n for n in tree.nodes if n.type == 'TEX_IMAGE' and n.image
+                       and n.image.name.split('.png')[0] == normal.stem]
+            if len(matches) != 1:
+                raise ValueError('Rare texture lacks a unique authored binding')
+            old = matches[0].image
+            check = bpy.data.images.load(str(normal), check_existing=False)
+            check.colorspace_settings.name = old.colorspace_settings.name
+            if list(check.size) != list(old.size) or any(abs(a-b) > 1e-5 for a,b in zip(check.pixels[:],old.pixels[:])):
+                raise ValueError('Rare texture normal pixels differ from source')
+            image = bpy.data.images.load(str(rare), check_existing=False)
+            image.colorspace_settings.name = old.colorspace_settings.name
+            matches[0].image = image
         replace_uv(tree)
         outputs = [n for n in tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output]
         if len(outputs) != 1 or len(outputs[0].inputs['Surface'].links) != 1:

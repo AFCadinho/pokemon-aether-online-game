@@ -77,7 +77,24 @@ other eye layers, body materials, geometry and animations. This is a visual
 calibration candidate, not a claim that the original game shader uses this gain.
 Both normal and shiny use the same correction and retain exact geometry parity.
 
-Toucannon's Biochao mesh uses a different material/UV arrangement from the SCVI
-texture set. Its normal is now reconstructed from its own connected source
-shader graph. Its prior shiny reconstruction is withheld; a compatible shiny
-source is still needed. The normal correction preserves geometry and motions.
+Toucannon's flattened material reconstruction did not preserve the connected
+native colour graph. A later source-number audit confirmed that the original
+SCVI tables were already bound to pm0809; the defect was not a wrong-number
+binding. Native normals retain the approved appearance. Its shiny now uses the
+same native shader graph with official rare BaseColorMap substitutions and
+colour inputs. Overrides verify both material-table hashes, exact parameter
+values, unique graph bindings, and the normal image pixels before substitution.
+Nonzero native emission still remains held. Untranslated rare response fields
+remain diagnostic limitations, not implicit approval.
+
+Sandslash now also composites the authored achromatic pm0028 eye_msk clearcoat
+highlight, which was missing from the first black-pupil correction. The helper
+rejects coloured masks or full-white masks before touching a model. Normal and
+shiny remain exact geometry/motion matches. All four corrected models have six
+captured action poses without render errors; visual acceptance is pending for
+Sandslash and shiny Toucannon.
+
+A provisional ZA import used pm0733 and own visual inspection identified it as
+a different species. It was rejected before being shown on the review page.
+No ZA model is used for this Toucannon pair. Source numbers must come from the
+proven rig/developer mapping, never the National Pokédex number alone.
