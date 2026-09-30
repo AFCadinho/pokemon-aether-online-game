@@ -70,7 +70,9 @@ battle qualification and individual bundles for accepted pairs.
 
 ## Appearance feedback: Sandslash and Toucannon
 
-Both remain pending visual approval. Sandslash's black pupil channel has a
+Both normal/shiny pairs received appearance approval on 2026-09-30
+("Ja die 2 zien er goed uit"). Battle qualification is still pending.
+Sandslash's black pupil channel has a
 maximum decoded mask value of 29/255. The diagnostic correction increases only
 that authored black-pupil channel to full coverage (gain 255/29), preserving the
 other eye layers, body materials, geometry and animations. This is a visual
@@ -91,10 +93,35 @@ Sandslash now also composites the authored achromatic pm0028 eye_msk clearcoat
 highlight, which was missing from the first black-pupil correction. The helper
 rejects coloured masks or full-white masks before touching a model. Normal and
 shiny remain exact geometry/motion matches. All four corrected models have six
-captured action poses without render errors; visual acceptance is pending for
-Sandslash and shiny Toucannon.
+captured action poses without render errors. The portable receipt binds the
+user approval to all four exact reviewed scene hashes. This does not approve
+the other recovery candidates or activate either pair in the catalogue.
 
 A provisional ZA import used pm0733 and own visual inspection identified it as
 a different species. It was rejected before being shown on the review page.
 No ZA model is used for this Toucannon pair. Source numbers must come from the
 proven rig/developer mapping, never the National Pokédex number alone.
+
+## Battle check for the two appearance-approved pairs
+
+The initial 60 Hz measurements had matching normal/shiny bounds and idle
+readability above 80 pixels in both camera presets. Sandslash passed the
+independent corrected 120 Hz clearance measurement. Toucannon failed it:
+linear interpolation of its compensating wing hierarchy (parent scale 0.001,
+child scale about 1000) creates transient oversized wings between otherwise
+valid sampled poses. Do not accept the original battle report for Toucannon.
+
+`patch_reviewed_track_interpolation.gd` creates a new hash-bound scene with
+nearest interpolation for explicitly selected wing-b hierarchy tracks only.
+Both variants preserve every animation key and timestamp, clip duration and
+loop mode, and all unrelated interpolation modes. Materials are untouched.
+The changed scene hashes require their own battle review; original appearance
+approval remains attached to the previously reviewed hashes. These are still
+candidates, with no catalogue admission, bundles or publication claimed.
+
+Both derived Toucannon variants now pass independent 120 Hz validation
+(minimum clearance 0.01787 m), while Sandslash reaches 0.02494 m. All four
+scenes have 16 in-view captures without HUD proxy overlap. Three production
+presenter lifecycle rounds passed for both species and variants. The portable
+`catalog_animation_recovery_pair_battle.json` records those scene hashes and
+the explicit interpolation recipe. Human battle approval remains pending.
