@@ -4,6 +4,10 @@
 
 - Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
 
+- De Collision-laag van het Vermilion Port-interieur is leeg zodat deze handmatig kan worden ingevuld.
+
+- Vermilion Port heeft een interieur met de artist-TMX-visual en doorgangen tussen de stad en de docks.
+
 - Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
 
 - Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.

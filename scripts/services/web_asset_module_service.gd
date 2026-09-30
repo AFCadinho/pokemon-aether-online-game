@@ -57,6 +57,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_underground_path_route_6_entrance": "res://scenes/overworld/kanto/interiors/underground_path/route_6_entrance.tscn",
 	"kanto_underground_path_tunnel": "res://scenes/overworld/kanto/interiors/underground_path/tunnel.tscn",
 	"kanto_vermilion_city_pokemon_fan_club": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn",
+	"kanto_vermilion_city_port_interior": "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn",
 	"kanto_vermilion_city_house_1": "res://scenes/overworld/kanto/towns/vermilion_city/house1.tscn",
 	"kanto_vermilion_city_house_2": "res://scenes/overworld/kanto/towns/vermilion_city/house2.tscn",
 	"kanto_vermilion_city_house_3": "res://scenes/overworld/kanto/towns/vermilion_city/house3.tscn",
