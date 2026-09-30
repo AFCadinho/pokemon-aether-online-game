@@ -47,6 +47,14 @@ func _run() -> void:
 				var cell := Vector2i(x, y)
 				if collision.get_cell_source_id(cell) == -1:
 					_check(reached.has(cell), "all free floor is reachable")
+		if number == 1:
+			var guru := house.get_node("Entities/NPCs/FishingGuru")
+			_check(guru.npc_id == "kanto_pallet_town_fishing_guru" and guru.reward_id == "kanto_pallet_town_old_rod", "Guru retains his quest and reward identity")
+			_check(guru.get_script().resource_path == "res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd" and guru.preload_quest_markers, "Guru retains lesson, help and quest marker behavior")
+			_check(guru.npc_sprite_frames != null and guru.mugshot != null, "Guru keeps his sprites and portrait")
+			var guru_cell := collision.local_to_map(guru.position)
+			_check(collision.get_cell_source_id(guru_cell) == -1 and reached.has(guru_cell + Vector2i.DOWN), "Guru stands on free floor and is reachable from the entrance")
+			_check(guru_cell != start, "Guru does not occupy the arrival tile")
 		var entrance := city.get_node("Exits/ToHouse%d" % number)
 		var exit := house.get_node("Exits/ToOutside")
 		_check(entrance.target_scene_path == house_path and entrance.target_spawn_name == "FromOutside", "city doorway destination")

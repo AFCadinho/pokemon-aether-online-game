@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Fishing Guru geeft zijn Old Rod en visles-quest nu in Huis 1 in Vermilion City. Zijn lesbeloning en hulp verhuizen mee; bestaande questvoortgang blijft behouden.
+
 - Player dialogue portraits now use trainer-card artwork; Mt. Moon’s future self uses the matching masked Mysterious Outfit portrait.
 
 - Shiny follower sparkles now surround the visible Pokémon and scale with its sprite, instead of floating above small followers.
