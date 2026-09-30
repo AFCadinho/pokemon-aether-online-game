@@ -328,16 +328,20 @@ drives automatic zoom or centering. Battle presentation is unaffected.
 The current local catalog points at `portrait-runtime-v1`; its
 `previous-catalog.json` preserves the preceding streaming catalog for rollback.
 
-For local development review, a machine-local ignored file at
-`.pokeaether/rendered-preview-catalog` may contain the absolute path of the
-preview catalog. Debug builds use it when the explicit
-`POKEAETHER_RENDERED_PREVIEW_CATALOG` environment variable is not set, so
-`godot .` remains sufficient on a configured checkout. Release builds and
-machines without that file retain the approved-catalog/fallback behavior.
-While this explicit local review catalog is active, its `needs_review` entries
-take priority over enabled sprite content packs so the reviewer cannot
-accidentally inspect a pack fallback. Outside review, player-selected content
-packs retain their normal priority over approved built-in renders.
+Local development review now requires the explicit
+`POKEAETHER_RENDERED_PREVIEW_CATALOG` environment variable for that Godot process.
+The former machine-local `.pokeaether/rendered-preview-catalog` pointer is ignored:
+starting the game normally must use the player's sprite selection and on-demand
+sprite cache without silently activating a previous review session.
+
+```sh
+POKEAETHER_RENDERED_PREVIEW_CATALOG="$output/preview-batch.json" godot --path .
+```
+
+While an explicit review catalog is active, its `needs_review` entries take
+priority over enabled sprite content packs so the reviewer inspects the intended
+asset. Outside review, player-selected content packs retain their normal priority
+over explicitly configured approved renders and the ordinary sprite resolver.
 
 ## Full action review pass (2026-09-19)
 

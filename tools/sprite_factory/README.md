@@ -39,6 +39,10 @@ python tools/sprite_factory/factory.py catalog "$build" --preview --output "$out
 POKEAETHER_RENDERED_PREVIEW_CATALOG="$output/preview.json" godot --path .
 ```
 
+Preview catalogs are enabled only through the environment variable for the
+review process. The former `.pokeaether/rendered-preview-catalog` file is ignored,
+so a normal game start cannot inherit an old review override.
+
 Inspect first. New sources need a reviewed manifest with their exact hash, rig,
 action names/slots, frame selection, explicit cameras and presentation settings.
 `build` repeats inspection and validates the source before rendering. Suspicious
