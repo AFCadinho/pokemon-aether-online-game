@@ -5,16 +5,41 @@ const MIN_WINDOW_SIZE := Vector2i(1280, 720)
 const WINDOWED_SAFE_MARGIN := Vector2i(80, 128)
 const MOBILE_CONTENT_SCALE_FACTOR := 1.25
 
+var _touch_ui := false
+
+
+func is_touch_ui() -> bool:
+	return _touch_ui
+
+
 func _ready() -> void:
 	# Fill the window while retaining a uniform UI/world transform.
 	get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-	if OS.has_feature("mobile"):
-		get_window().content_scale_factor = MOBILE_CONTENT_SCALE_FACTOR
-		return
+	_touch_ui = OS.has_feature("mobile") or OS.has_feature("web_android") or OS.has_feature("web_ios")
 	if OS.has_feature("web"):
+		# iPadOS may use a desktop user agent; include touch-first browsers.
+		_touch_ui = _touch_ui or bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0 && matchMedia('(pointer: coarse)').matches", true))
+	get_window().size_changed.connect(apply_ui_scale)
+	apply_ui_scale.call_deferred()
+	if OS.has_feature("mobile") or OS.has_feature("web"):
 		return
 
 	call_deferred("_fit_window_to_screen")
+
+
+func apply_ui_scale() -> void:
+	var window := get_window()
+	var reference := DESIGN_WINDOW_SIZE
+	if OS.has_feature("web") and is_touch_ui():
+		# Screen orientation stays stable while the virtual keyboard shrinks
+		# the visual viewport; choosing by the remaining height would flip layouts.
+		var portrait := bool(JavaScriptBridge.eval("screen.orientation ? screen.orientation.type.startsWith('portrait') : (Math.abs(window.orientation || 0) === 90 ? false : screen.width < screen.height)", true))
+		reference = Vector2i(600, 960) if portrait else Vector2i(960, 540)
+	window.content_scale_size = reference
+	var settings := get_node_or_null("/root/SettingsManager")
+	var percentage := float(settings.get("ui_scale")) if settings != null else 100.0
+	var platform_factor := MOBILE_CONTENT_SCALE_FACTOR if OS.has_feature("mobile") else 1.0
+	window.content_scale_factor = platform_factor * percentage / 100.0
 
 
 func fit_window_to_screen(target_window_size: Vector2i = DESIGN_WINDOW_SIZE) -> void:

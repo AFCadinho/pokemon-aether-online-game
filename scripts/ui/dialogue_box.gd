@@ -56,7 +56,7 @@ var current_line_index := 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	touch_input_enabled = OS.has_feature("mobile")
+	touch_input_enabled = WindowFit.is_touch_ui()
 	default_mugshot = npc_sprite.texture
 	quest_offer_decline_button.pressed.connect(_on_quest_offer_declined)
 	quest_offer_accept_button.pressed.connect(_on_quest_offer_accepted)
