@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
+
 - Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
 
 - Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.

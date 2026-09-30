@@ -51,6 +51,8 @@ const HorizontalStairElevationScript := preload("res://scripts/world/horizontal_
 const GuildEmblemTexture := preload("res://scripts/ui/guild_emblem_texture.gd")
 const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
+const FishingFeedbackButton := preload("res://scripts/ui/fishing_feedback_button.gd")
+const FISHING_FEEDBACK_LAYER := 60
 const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
@@ -213,11 +215,11 @@ const FISHING_CAST_DURATION := 0.45
 const FISHING_BITE_DELAY_MIN := 0.85
 const FISHING_BITE_DELAY_MAX := 2.15
 const FISHING_BITE_WINDOW_DURATION := 1.25
-const FISHING_RESULT_HOLD_DURATION := 0.45
-const FISHING_PROMPT_SIZE := Vector2(30.0, 30.0)
-const FISHING_PROMPT_POSITION := Vector2(18.0, -72.0)
-const FISHING_BITE_PROMPT_SIZE := Vector2(28.0, 28.0)
-const FISHING_BITE_PROMPT_POSITION := Vector2(10.0, -92.0)
+const FISHING_RESULT_HOLD_DURATION := 0.65
+const FISHING_PROMPT_SIZE := Vector2(44.0, 44.0)
+const FISHING_PROMPT_POSITION := Vector2(26.0, -80.0)
+const FISHING_BITE_PROMPT_SIZE := Vector2(44.0, 44.0)
+const FISHING_BITE_PROMPT_POSITION := Vector2(-22.0, -132.0)
 const SURF_PROMPT_SIZE := Vector2(30.0, 30.0)
 const SURF_PROMPT_POSITION := Vector2(-48.0, -72.0)
 const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
@@ -302,6 +304,10 @@ var base_look_position := Vector2.ZERO
 var base_rider_position := Vector2.ZERO
 var fishing_prompt_button: Button
 var fishing_bite_prompt_button: Button
+var fishing_feedback_layer: CanvasLayer
+var fishing_feedback_root: Control
+var fishing_missed_reason := "missed"
+var fishing_waiting_ripple_time := 0.0
 var surf_prompt_button: Button
 var fishing_input_handled_frame := -1
 var fishing_bite_prompt_rendered_state := ""
@@ -1362,6 +1368,13 @@ func _setup_fishing_prompt() -> void:
 	if fishing_prompt_button != null:
 		return
 
+	fishing_feedback_layer = CanvasLayer.new()
+	fishing_feedback_layer.name = "FishingFeedbackLayer"
+	fishing_feedback_layer.layer = FISHING_FEEDBACK_LAYER
+	add_child(fishing_feedback_layer)
+	fishing_feedback_root = Control.new()
+	fishing_feedback_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fishing_feedback_layer.add_child(fishing_feedback_root)
 	fishing_prompt_button = Button.new()
 	fishing_prompt_button.name = "FishingPromptButton"
 	fishing_prompt_button.visible = false
@@ -1378,14 +1391,14 @@ func _setup_fishing_prompt() -> void:
 	fishing_prompt_button.tooltip_text = _fishing_prompt_tooltip("ui.fishing.prompt.fish")
 	_apply_fishing_prompt_style(fishing_prompt_button)
 	fishing_prompt_button.pressed.connect(Callable(self, "_on_fishing_prompt_pressed"))
-	add_child(fishing_prompt_button)
+	fishing_feedback_root.add_child(fishing_prompt_button)
 	_setup_fishing_bite_prompt()
 
 func _setup_fishing_bite_prompt() -> void:
 	if fishing_bite_prompt_button != null:
 		return
 
-	fishing_bite_prompt_button = Button.new()
+	fishing_bite_prompt_button = FishingFeedbackButton.new()
 	fishing_bite_prompt_button.name = "FishingBitePromptButton"
 	fishing_bite_prompt_button.visible = false
 	fishing_bite_prompt_button.text = "!"
@@ -1401,7 +1414,7 @@ func _setup_fishing_bite_prompt() -> void:
 	fishing_bite_prompt_button.button_down.connect(Callable(self, "_on_fishing_bite_prompt_button_down"))
 	fishing_bite_prompt_button.gui_input.connect(Callable(self, "_on_fishing_bite_prompt_gui_input"))
 	fishing_bite_prompt_button.pressed.connect(Callable(self, "_on_fishing_bite_prompt_pressed"))
-	add_child(fishing_bite_prompt_button)
+	fishing_feedback_root.add_child(fishing_bite_prompt_button)
 
 func _setup_surf_prompt() -> void:
 	if surf_prompt_button != null:
@@ -1471,6 +1484,17 @@ func _sync_fishing_prompt_visibility() -> void:
 		return
 	fishing_prompt_button.visible = can_fish_here()
 
+func _update_fishing_feedback_position() -> void:
+	if fishing_feedback_root == null:
+		return
+	var anchor := get_global_transform_with_canvas().origin
+	var viewport_size := get_viewport_rect().size
+	# Keep the ring and its caption in view near shorelines at screen edges.
+	var lower_bound := Vector2(92, 144)
+	var upper_bound := (viewport_size - Vector2(92, 16)).max(lower_bound)
+	fishing_feedback_root.position = anchor.clamp(lower_bound, upper_bound).round()
+
+
 func refresh_fishing_prompt() -> void:
 	_sync_fishing_prompt_visibility()
 
@@ -1482,24 +1506,48 @@ func _sync_surf_prompt_visibility() -> void:
 func _sync_fishing_bite_prompt_visibility() -> void:
 	if fishing_bite_prompt_button == null:
 		return
+	if not fishing_activity_active:
+		fishing_bite_prompt_button.visible = false
+		if fishing_bite_prompt_rendered_state != FISHING_STATE_NONE:
+			fishing_bite_prompt_rendered_state = FISHING_STATE_NONE
+			fishing_bite_prompt_button.call("update_feedback", FISHING_STATE_NONE, 0.0, 1.0, "")
+		return
 	_sync_fishing_bite_prompt_state()
-	fishing_bite_prompt_button.visible = fishing_activity_active and (
-		fishing_activity_state == FISHING_STATE_BITE
-		or fishing_activity_state == FISHING_STATE_REEL_SUCCESS
-		or fishing_activity_state == FISHING_STATE_MISSED
-	)
+	fishing_bite_prompt_button.visible = fishing_activity_active and fishing_activity_state != FISHING_STATE_NONE
 
 func _sync_fishing_bite_prompt_state() -> void:
 	if fishing_bite_prompt_button == null:
 		return
+	var caption := LocalizationManager.text("ui.fishing.feedback.waiting")
+	if fishing_activity_state == FISHING_STATE_BITE:
+		caption = (
+			LocalizationManager.text("ui.fishing.feedback.tap")
+			if DisplayServer.is_touchscreen_available()
+			else _fishing_prompt_tooltip("ui.fishing.prompt.reel")
+		)
+	elif fishing_activity_state == FISHING_STATE_REEL_SUCCESS:
+		caption = LocalizationManager.text("ui.fishing.feedback.hooked")
+	elif fishing_activity_state == FISHING_STATE_MISSED:
+		caption = LocalizationManager.text(
+			"ui.fishing.feedback.early" if fishing_missed_reason == "early" else "ui.fishing.feedback.late"
+		)
+	fishing_bite_prompt_button.call(
+		"update_feedback", fishing_activity_state, fishing_activity_time_left, FISHING_BITE_WINDOW_DURATION, caption
+	)
 	if fishing_bite_prompt_rendered_state == fishing_activity_state:
 		return
 
 	fishing_bite_prompt_rendered_state = fishing_activity_state
 
 	match fishing_activity_state:
+		FISHING_STATE_CAST, FISHING_STATE_WAITING:
+			fishing_bite_prompt_button.text = "..."
+			fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_apply_fishing_bite_result_style(
+				fishing_bite_prompt_button, Color(0.08, 0.16, 0.23, 0.96), Color(0.25, 0.62, 0.77), Color.WHITE, 20
+			)
 		FISHING_STATE_REEL_SUCCESS:
-			fishing_bite_prompt_button.text = "OK"
+			fishing_bite_prompt_button.text = ""
 			fishing_bite_prompt_button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_apply_fishing_bite_result_style(
 				fishing_bite_prompt_button,
@@ -1572,6 +1620,7 @@ func _process(delta: float) -> void:
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
 	_update_fishing_activity(delta)
+	_update_fishing_feedback_position()
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
 	_sync_fishing_bite_prompt_visibility()
@@ -1994,6 +2043,7 @@ func _sync_surf_state_after_move() -> void:
 	_finish_surf_activity()
 
 func _start_fishing_activity(fishing_tier: int = 1) -> void:
+	_update_fishing_feedback_position()
 	fishing_activity_active = true
 	fishing_activity_state = FISHING_STATE_CAST
 	fishing_activity_time_left = FISHING_CAST_DURATION
@@ -2014,6 +2064,11 @@ func _update_fishing_activity(delta: float) -> void:
 	if not fishing_activity_active:
 		return
 
+	if fishing_activity_state == FISHING_STATE_WAITING:
+		fishing_waiting_ripple_time -= delta
+		if fishing_waiting_ripple_time <= 0.0:
+			fishing_waiting_ripple_time = 0.8
+			_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_wait", false)
 	fishing_activity_time_left = maxf(fishing_activity_time_left - delta, 0.0)
 	if fishing_activity_time_left > 0.0:
 		return
@@ -2032,6 +2087,7 @@ func _update_fishing_activity(delta: float) -> void:
 
 func _enter_fishing_waiting_state() -> void:
 	fishing_activity_state = FISHING_STATE_WAITING
+	fishing_waiting_ripple_time = 0.0
 	fishing_activity_time_left = randf_range(FISHING_BITE_DELAY_MIN, FISHING_BITE_DELAY_MAX)
 	_sync_fishing_bite_prompt_visibility()
 	_debug_fishing_state("waiting")
@@ -2041,9 +2097,11 @@ func _enter_fishing_bite_state() -> void:
 	fishing_activity_time_left = FISHING_BITE_WINDOW_DURATION
 	_sync_fishing_bite_prompt_visibility()
 	_debug_fishing_state("bite")
+	SfxManager.play("fishing_bite", 0.0, 1.25)
 	_spawn_water_ripple_effect(_get_fishing_ripple_position(), "fish_bite", false)
 
 func _enter_fishing_missed_state(reason: String = "missed") -> void:
+	fishing_missed_reason = reason
 	fishing_activity_state = FISHING_STATE_MISSED
 	fishing_activity_time_left = FISHING_RESULT_HOLD_DURATION
 	_sync_fishing_bite_prompt_visibility()
