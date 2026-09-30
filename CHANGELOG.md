@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android now uses immersive fullscreen mode to hide the system status and navigation bars while playing.
+
 - Android HOME icons, Pokémon cries and the full-quality login video now download separately and remain cached between launches. Battle sprites also use a bounded persistent cache.
 
 - Sandslash en Toucannon hebben lokaal goedgekeurde normal/shiny-3D-modellen in individuele bundles. Ogen, shiny-kleuren, battleplaatsing en Toucannons vleugelovergangen zijn gecontroleerd.
