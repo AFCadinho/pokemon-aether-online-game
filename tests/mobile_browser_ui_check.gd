@@ -92,6 +92,13 @@ func _run() -> void:
 			for key: String in ["MovesGrid", "UtilityActions", "CurrentActionPanel"]:
 				var control: Control = battle.get_node("%" + key)
 				check(host.get_global_rect().grow(1).encloses(control.get_global_rect()), str("host=",host.get_global_rect()," stage=",battle.battle_stage.size," rect=",control.get_global_rect()) + " touch battle control fits: %s / %s / %s" % [key,dimensions,percentage])
+	battle.setup_coop_battle()
+	for frame in 5:
+		await process_frame
+	check(battle.custom_minimum_size.x == 1500, "co-op keeps its existing wider battlefield")
+	check(battle.battle_stage.custom_minimum_size.x == 1152, "co-op's uncropped stage is preserved")
+	var coop_viewport: Control = battle.get_node("%BattleStageViewport")
+	check(host.get_global_rect().grow(1).encloses(coop_viewport.get_global_rect()), "co-op viewport fits after switching battle mode")
 	host.release()
 	host.queue_free()
 	await process_frame
