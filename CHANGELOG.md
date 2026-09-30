@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Pokemon Fan Club in Vermilion City is toegankelijk, met de Chairman en zijn Bike Voucher-quest, drie nieuwe bezoekers en Rapidash, Eevee en Clefairy. De Chairman staat niet meer in de Cerulean Bike Shop.
+
 - Professor Oak's starter choices show their guaranteed shiny appearance. Your future self in Mt. Moon also summons a shiny final evolution of your chosen starter.
 
 - Vermilion Gym heeft drie nieuwe NPC-trainers met Electric-type teams op level 20–22, geldbeloningen en gelokaliseerde gevechtsdialogen.

@@ -274,6 +274,9 @@ position = Vector2(400, 528)
 [node name="FromGym" type="Marker2D" parent="Spawns"]
 position = Vector2(464, 1328)
 
+[node name="FromFanClub" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 944)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1021724467]
 
 [node name="ToRoute6" type="Area2D" parent="Exits" unique_id=1456232347]
@@ -336,6 +339,21 @@ transition_facing_direction = "up"
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToGym" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+flow_direction = "up"
+
+[node name="ToFanClub" type="Area2D" parent="Exits"]
+position = Vector2(368, 880)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_fan_club.tscn"
+target_spawn_name = "FromVermilionCity"
+transition_id = "kanto_vermilion_city__to_pokemon_fan_club"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFanClub"]
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToFanClub" instance=ExtResource("center_door_hint")]
 z_as_relative = false
 flow_direction = "up"
 
