@@ -261,6 +261,12 @@ def main():
             imported = re.findall(r'res://(\.godot/imported/[^"\n]+)', metadata.read_text())
             if packed_names.intersection(imported):
                 raise RuntimeError('Web PCK embeds imported HOME textures.')
+    full_scope = json.loads((ROOT / 'docs/browser-full-world-scope.json').read_text())
+    world_catalog = json.loads((ROOT / 'generated/world_access_catalog.json').read_text())
+    for map_id in full_scope['extendedMapIds']:
+        scene = str(world_catalog['areas'][map_id]['scenePath']).removeprefix('res://')
+        if scene in packed_names or scene + '.remap' in packed_names:
+            raise RuntimeError(f'Web core embeds on-demand world map: {map_id}')
     if initial_bytes > size_limit:
         raise RuntimeError(
             f'Web build is {initial_bytes / 1048576:.1f} MiB; '

@@ -32,5 +32,8 @@ func _init() -> void:
 	for map_id: String in LOADER.EXTENDED_MAP_SCENES:
 		if str(catalog.areas[map_id].scenePath) != LOADER.EXTENDED_MAP_SCENES[map_id]:
 			failures += 1
+	for map_id: String in ["kanto_route_5_daycare", "kanto_route_6", "kanto_vermilion_city", "kanto_rock_tunnel_1f", "kanto_cerulean_cave_b1f", "kanto_cinnabar_island"]:
+		if LOADER.module_for_scene(LOADER.scene_for_map(map_id)) != LOADER.EXTENDED_MODULE_NAME:
+			failures += 1
 	print("web_asset_module_manifest_check: ", "PASS" if failures == 0 else "FAIL")
 	quit(failures)

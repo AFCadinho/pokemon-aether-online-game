@@ -74,6 +74,12 @@ def main():
     import_project(args.godot, output)
     scope = json.loads((ROOT / "docs/browser-misty-scope.json").read_text())
     catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())
+    full_scope = json.loads((ROOT / "docs/browser-full-world-scope.json").read_text())
+    covered = set(full_scope["coreMapIds"]) | set(scope["additionalMapIds"]) | set(full_scope["extendedMapIds"])
+    missing = [map_id for map_id, area in catalog["areas"].items()
+               if map_id.startswith("kanto_") and area.get("scenePath") and map_id not in covered]
+    if missing:
+        raise RuntimeError(f"Browser map partition misses current Kanto maps: {missing}")
     misty_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in scope["additionalMapIds"]]
     aether_scenes = ["res://scenes/overworld/aether_clash/" + name + ".tscn"
                      for name in ("waiting_area", "aether_clash_duel", "aether_clash_battle_royale")]
@@ -89,12 +95,7 @@ def main():
     modules["kanto-through-misty-maps"] = build_module(
         args.godot, output, "kanto-through-misty-maps", "Web Misty Maps Trial", misty_scenes,
         tuple(path.removeprefix("res://").encode() for path in misty_scenes), forbidden)
-    extended_ids = (
-        "kanto_route_5",
-        "kanto_route_9",
-        "kanto_cerulean_cave",
-        "kanto_route_10_pokemon_center",
-    )
+    extended_ids = full_scope["extendedMapIds"]
     extended_scenes = [catalog["areas"][map_id]["scenePath"] for map_id in extended_ids]
     modules["kanto-extended-maps"] = build_module(
         args.godot, output, "kanto-extended-maps", "Web Extended Kanto Maps", extended_scenes,

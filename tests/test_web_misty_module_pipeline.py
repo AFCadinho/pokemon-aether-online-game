@@ -50,6 +50,26 @@ class MistyModulePipelineTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "misses required"):
             self.build([])
 
+    def test_full_world_scope_covers_every_current_kanto_scene(self):
+        scope = json.loads((ROOT / "docs/browser-full-world-scope.json").read_text())
+        misty = json.loads((ROOT / "docs/browser-misty-scope.json").read_text())
+        catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())
+        covered = set(scope["coreMapIds"]) | set(misty["additionalMapIds"]) | set(scope["extendedMapIds"])
+        for map_id, area in catalog["areas"].items():
+            if map_id.startswith("kanto_") and area["scenePath"]:
+                self.assertIn(map_id, covered, map_id)
+        self.assertFalse(set(scope["extendedMapIds"]) & set(misty["additionalMapIds"]))
+        presets = (ROOT / "export_presets.cfg").read_text()
+        module = presets.split("[preset.8]\n")[1].split("[preset.8.options]")[0]
+        core = presets.split("[preset.3]\n")[1].split("[preset.3.options]")[0]
+        loader = (ROOT / "scripts/services/web_asset_module_service.gd").read_text()
+        for map_id in scope["extendedMapIds"]:
+            path = catalog["areas"][map_id]["scenePath"]
+            self.assertTrue((ROOT / path.removeprefix("res://")).is_file(), map_id)
+            self.assertIn(path, module, map_id)
+            self.assertIn(path, loader, map_id)
+            self.assertIn(path.removeprefix("res://"), core, map_id)
+
     def test_scope_matches_module_selection_and_browser_loader(self):
         scope = json.loads((ROOT / "docs/browser-misty-scope.json").read_text())
         catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())

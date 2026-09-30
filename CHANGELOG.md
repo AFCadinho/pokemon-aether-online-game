@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser map downloads now cover the current Kanto world beyond Cerulean, including Route 5, Vermilion, Rock Tunnel and Cinnabar. Normal progression requirements still apply.
+
 - Browser cries and sound effects now load as separate audio files, reducing the initial game download.
 
 - Browser HOME icons now load individually when displayed. The world video on the login screen streams separately at its original resolution, reducing the required startup download.
