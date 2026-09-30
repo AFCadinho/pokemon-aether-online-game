@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://csgoikpxks0do"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/pokemon_center.visual.tileset.compact_source_1_0.texture.res" id="1_7uwux"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pokemon_center/assets/pokemon_center.visual.tileset.compact_source_4097_0.texture.res" id="2_2b1qc"]

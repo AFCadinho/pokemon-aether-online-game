@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bt6ggb8fu3uev"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pallet_animated_tiles_test/assets/pallet_animated_tiles_test.visual.tileset.compact_source_1_0.texture.res" id="1_b2136"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/pallet_animated_tiles_test/assets/pallet_animated_tiles_test.visual.tileset.compact_source_1025_0.texture.res" id="2_c50rx"]
