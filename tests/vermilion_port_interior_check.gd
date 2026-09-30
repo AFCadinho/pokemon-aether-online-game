@@ -20,11 +20,6 @@ func _run() -> void:
 	var validator = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()
 	_check(validator.validate(port.get_node("Visual"), "res://generated/tiled_visuals/vermilion_port_interior/vermilion_port_interior.visual.tileset.tres").is_empty(), "compact atlas is valid")
 	var collision := port.get_node("Tiles/Collision") as TileMapLayer
-	for x in range(10,14):
-		for y in range(3,27):
-			_check(collision.get_cell_source_id(Vector2i(x,y)) == -1, "clear central passage %s" % Vector2i(x,y))
-	for cell in [Vector2i(0,0), Vector2i(3,4), Vector2i(7,10), Vector2i(8,17), Vector2i(5,11), Vector2i(16,22), Vector2i(4,23)]:
-		_check(collision.get_cell_source_id(cell) != -1, "walls and furniture blocked %s" % cell)
 	for name in ["FromCity", "FromDocks"]:
 		var spawn := port.get_node("Spawns/" + name) as Node2D
 		_check(collision.get_cell_source_id(collision.local_to_map(spawn.position)) == -1, name + " arrival is clear")

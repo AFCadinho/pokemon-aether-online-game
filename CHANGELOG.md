@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Vermilion Port heeft een interieur met de artist-TMX-visual, collision en doorgangen tussen de stad en de docks.
+- De Collision-laag van het Vermilion Port-interieur is leeg zodat deze handmatig kan worden ingevuld.
+
+- Vermilion Port heeft een interieur met de artist-TMX-visual en doorgangen tussen de stad en de docks.
 
 - Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
 
