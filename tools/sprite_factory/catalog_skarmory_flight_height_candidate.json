@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-10-01",
   "species": "skarmory",
-  "status": "higher_flight_candidate_user_review_pending",
+  "status": "higher_flight_user_approved_delivery_checks_complete",
   "runtime_approved": false,
   "published": false,
   "reason": "Original minimum flight clearance was0.025m; user reported low flight. Candidate adds0.7m visual height to idle, attacks and damage, smoothly removes it during faint, and keeps sleep/faint loop unchanged.",
@@ -398,5 +398,10 @@
     "Final compressed standalone scenes and installation/runtime checks",
     "Version2 Skarmory bundle and registry update",
     "R2 publication"
-  ]
+  ],
+  "user_review_pending": false,
+  "user_approval": {
+    "date": "2026-10-01",
+    "answer": "Nieuwe hoogte is goed"
+  }
 }

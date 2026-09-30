@@ -861,7 +861,10 @@
       "battle_approved": true,
       "battle_clearance_passed": true,
       "published": true,
-      "r2_publication_receipt": "release/approved_3d_remaining_56_r2_upload.json"
+      "r2_publication_receipt": "release/approved_3d_remaining_56_r2_upload.json",
+      "latest_bundle_version": 2,
+      "latest_bundle_qualification": "tools/sprite_factory/catalog_skarmory_flight_height_qualification.json",
+      "latest_bundle_published": false
     },
     {
       "species": "smoochum",
