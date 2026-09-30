@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
+
 - Mt. Moon's fossil ambush only stops players while its story step is active, and failed cutscene attempts restore the actors and follower before retrying.
 
 - Android login fields and the in-game chat input now move above the keyboard while typing and return to their original position when it closes.
