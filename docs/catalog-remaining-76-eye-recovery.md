@@ -109,11 +109,17 @@ idle restores the visual offset, and invalid clocks are rejected.
 `battle-76/normal-combined.json` binds the latest normal results and their
 retained source reports. `final-canonical-stage.json` and
 `final-pair-proof.json` bind the latest selected 152 SCNs, including Dhelmise's
-replacement pair. Final visual battle review is still required.
+replacement pair. The user approved 75 pairs on 2026-10-01. Wailord was held because its generic
+380-pixel width cap made its long body too small beside Dragonite. A larger
+species-specific placement is 1.597 times larger. It passed fresh actual120Hz
+idle and all-clip clearance, and all16 normal/shiny camera captures remain in
+frame and clear of the HUD proxy. Shiny clearance is derived from the pinned
+actual scene parity, with fresh shiny renders. The larger size awaits review
+at `battle-76/wailord-size-review-v1/index.html`.
 
 ## Remaining work
 
-Final user battle review and qualification remain pending for all 76. Thirty-four native
+Wailord size review and qualification/bundle checks remain pending. Thirty-four native
 sources use centimetres and require placement scale 0.01; the other 42 retain
 scale 1.0 before readability/framing calibration. This unit conversion is
 checked against local species dimensions and retains native proportions.
