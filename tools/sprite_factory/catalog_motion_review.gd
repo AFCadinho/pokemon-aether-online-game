@@ -21,7 +21,8 @@ func _pose(model: Node3D, player: AnimationPlayer, action: String, fraction: flo
 	player.seek(player.get_animation(action).length * fraction, true)
 	for skeleton: Skeleton3D in model.find_children("*", "Skeleton3D", true, false):
 		skeleton.force_update_all_bone_transforms()
-	await RenderingServer.frame_post_draw
+	await process_frame
+	RenderingServer.force_draw(false)
 	return _bounds(model)
 
 func _run() -> void:
@@ -149,7 +150,8 @@ func _run() -> void:
 							var capture_fractions: Array = [0.0, 0.25, 0.5, 0.75, 1.0] if eye_sweep else ([0.5] if eye_review else ([1.0 if action == "faint_start" else 0.5] if quick_review else FRACTIONS))
 							for fraction: float in capture_fractions:
 								var box := await _pose(model, player, action, fraction)
-								await RenderingServer.frame_post_draw
+								await process_frame
+								RenderingServer.force_draw(false)
 								var image_name := "%s-%s-%d.png" % [record.species, action, roundi(fraction * 100)]
 								if root.get_texture().get_image().save_png(output.path_join(image_name)) != OK:
 									record.errors.append("Screenshot failed: " + image_name)

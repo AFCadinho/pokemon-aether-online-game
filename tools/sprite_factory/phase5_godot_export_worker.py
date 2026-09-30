@@ -286,7 +286,8 @@ def run(job):
     path = Path(job['output']) / 'model.glb'
     bpy.ops.export_scene.gltf(filepath=str(path), export_format='GLB', use_selection=True,
         export_animation_mode='NLA_TRACKS', export_animations=True, export_force_sampling=True,
-        export_hierarchy_flatten_bones=job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True,
+        export_hierarchy_flatten_bones=(job.get('native_flatten_bone_hierarchy_diagnostic') is True
+            or job.get('identity_intake', {}).get('flatten_bone_hierarchy_diagnostic') is True),
         export_frame_range=False, export_reset_pose_bones=True, export_frame_step=1,
         export_cameras=False, export_lights=False, export_materials='EXPORT', export_yup=True,
         export_tangents=bool(baked))

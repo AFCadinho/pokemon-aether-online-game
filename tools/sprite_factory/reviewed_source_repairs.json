@@ -1,18 +1,42 @@
 {
   "schema": 1,
-  "repairs": [{
-    "id": "retracted-vines-base-battle-set-v1",
-    "source_sha256": "796a83d2d0c831febccc63cf7dbe4922ac2c9b7ebfde484481977fa45b1231a1",
-    "reason": "This authored source leaves its two retractable vine meshes visible at rest. Omit them only for the reviewed base battle set, which does not include the separate rangeattack02 vine sequence. This is an explicit asset-authoring correction, not inferred native visibility metadata.",
-    "exclude_meshes": ["pm0001_00_00_right_tuta_mesh_shape", "pm0001_00_00_left_tuta_mesh_shape"],
-    "allowed_actions": [
-      "pm0001_00_00_00001_battlewait01_loop.gfbanm",
-      "pm0001_00_00_00400_attack01.gfbanm",
-      "pm0001_00_00_00450_rangeattack01.gfbanm",
-      "pm0001_00_00_00500_damage01.gfbanm",
-      "pm0001_00_00_00281_sleep01_loop.gfbanm",
-      "pm0001_00_00_00520_down01_start.gfbanm",
-      "pm0001_00_00_00521_down01_loop.gfbanm"
-    ]
-  }]
+  "repairs": [
+    {
+      "id": "retracted-vines-base-battle-set-v1",
+      "source_sha256": "796a83d2d0c831febccc63cf7dbe4922ac2c9b7ebfde484481977fa45b1231a1",
+      "reason": "This authored source leaves its two retractable vine meshes visible at rest. Omit them only for the reviewed base battle set, which does not include the separate rangeattack02 vine sequence. This is an explicit asset-authoring correction, not inferred native visibility metadata.",
+      "exclude_meshes": [
+        "pm0001_00_00_right_tuta_mesh_shape",
+        "pm0001_00_00_left_tuta_mesh_shape"
+      ],
+      "allowed_actions": [
+        "pm0001_00_00_00001_battlewait01_loop.gfbanm",
+        "pm0001_00_00_00400_attack01.gfbanm",
+        "pm0001_00_00_00450_rangeattack01.gfbanm",
+        "pm0001_00_00_00500_damage01.gfbanm",
+        "pm0001_00_00_00281_sleep01_loop.gfbanm",
+        "pm0001_00_00_00520_down01_start.gfbanm",
+        "pm0001_00_00_00521_down01_loop.gfbanm"
+      ]
+    },
+    {
+      "id": "chatot-native-additionbase-folded-wings-v1",
+      "source_sha256": "6dd3db778952ba7a5acfc1b96ed9e8d7cbddc35f17511a1090af7d9c74c88986",
+      "reason": "The native additionbase_loop sets both folded-wing dummy bones to zero scale. None of the eight selected battle actions overrides them. Selecting an isolated action resets these unkeyed bones to unit scale, exposing folded wings alongside the animated open wings. Omit only these two accessory meshes for this exact battle action set; other animation sets require a new visibility decision.",
+      "exclude_meshes": [
+        "pm0441_00_00_left_closewing_mesh",
+        "pm0441_00_00_right_closewing_mesh"
+      ],
+      "allowed_actions": [
+        "pm0441_00_00_20281_sleep01_loop",
+        "pm0441_00_00_20500_damage01_start",
+        "pm0441_00_00_20450_rangeattack01_start",
+        "pm0441_00_00_20000_defaultwait01_loop",
+        "pm0441_00_00_20400_attack01",
+        "pm0441_00_00_20520_down01_start",
+        "pm0441_00_00_20521_down01_loop",
+        "pm0441_00_00_20410_attack02"
+      ]
+    }
+  ]
 }
