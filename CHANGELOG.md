@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion Gym heeft de nieuwe Tiled-visual, Lt. Surge, een Gym Guide en de verbinding met de stad. De terrein-collisionlaag is voorbereid en blijft leeg voor handmatige inrichting.
+
 - Vermilion City heeft een bereikbaar Pokémon Center met de standaardvoorzieningen, drie eigen bezoekers en Mareep, Squirtle en Wingull met gelokaliseerde dialogen.
 
 - Starting the game normally no longer activates a stale local sprite-review catalog over on-demand 2D battle sprites. Sprite reviews require an explicit preview launch.

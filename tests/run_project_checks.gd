@@ -224,6 +224,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_thieving_check.gd",
 	"res://tests/vermilion_population_check.gd",
 	"res://tests/vermilion_pokemon_center_check.gd",
+	"res://tests/vermilion_gym_scene_check.gd",
 	"res://tests/cerulean_lively_population_check.gd",
 	"res://tests/cerulean_mountain_staff_spawns_check.gd",
 	"res://tests/cerulean_rock_smash_sites_check.gd",

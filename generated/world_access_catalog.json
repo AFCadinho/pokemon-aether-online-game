@@ -2988,6 +2988,16 @@
 						"y": 67
 					}
 				},
+				"from_gym": {
+					"facingDirection": "down",
+					"label": "Gym",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGym",
+					"tile": {
+						"x": 14,
+						"y": 41
+					}
+				},
 				"from_pokecenter": {
 					"facingDirection": "down",
 					"label": "Pokémon Center",
@@ -3016,6 +3026,28 @@
 					"tile": {
 						"x": 21,
 						"y": 1
+					}
+				}
+			}
+		},
+		"kanto_vermilion_city_gym": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Vermilion City Gym",
+			"locationGroupId": "kanto_vermilion_city",
+			"locationGroupLabel": "Vermilion City",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+			"spawnPoints": {
+				"from_vermilion_city": {
+					"facingDirection": "down",
+					"label": "Vermilion City",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVermilionCity",
+					"tile": {
+						"x": 11,
+						"y": 31
 					}
 				}
 			}
@@ -6140,6 +6172,21 @@
 			"destinationAreaId": "kanto_vermilion_docks",
 			"sourceMapId": "kanto_vermilion_city"
 		},
+		"kanto_vermilion_city__to_gym": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_vermilion_city_gym",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromVermilionCity"
+			},
+			"destinationAreaId": "kanto_vermilion_city_gym",
+			"sourceMapId": "kanto_vermilion_city"
+		},
 		"kanto_vermilion_city__to_pokemon_center": {
 			"destination": {
 				"facingDirection": "up",
@@ -6186,6 +6233,23 @@
 			},
 			"destinationAreaId": "kanto_route_6",
 			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city_gym__to_outside": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1328.0
+				},
+				"spawnMarker": "FromGym"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_vermilion_city_gym"
 		},
 		"kanto_vermilion_city_pokemon_center__to_outside": {
 			"destination": {
