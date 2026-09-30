@@ -1,0 +1,108 @@
+name: Prepare Android test download
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: Successful main Android candidate run ID
+        required: true
+        type: string
+      build_run_attempt:
+        description: Candidate attempt
+        default: "1"
+        required: true
+        type: string
+
+concurrency:
+  group: prepare-android-test-download
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    environment: web-production
+    steps:
+      - uses: actions/checkout@v6
+      - name: Verify selected signed candidate
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+        run: |
+          python3 - <<'PY'
+          import os
+          assert os.environ['BUILD_RUN_ID'].isdigit() and int(os.environ['BUILD_RUN_ID']) > 0
+          assert os.environ['BUILD_RUN_ATTEMPT'].isdigit() and int(os.environ['BUILD_RUN_ATTEMPT']) > 0
+          PY
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${BUILD_RUN_ID}" > /tmp/android-build-run.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          run = json.loads(Path('/tmp/android-build-run.json').read_text())
+          assert run['name'] == 'Build Android release candidate'
+          assert run['head_branch'] == 'main' and run['event'] == 'workflow_dispatch'
+          assert run['status'] == 'completed' and run['conclusion'] == 'success'
+          assert str(run['run_attempt']) == os.environ['BUILD_RUN_ATTEMPT']
+          assert run['head_sha'] == os.environ['GITHUB_SHA'], 'Candidate must match the reviewed main source'
+          PY
+      - uses: actions/download-artifact@v5
+        with:
+          name: android-release-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: release
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v5
+        with:
+          name: android-assets-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: android-assets
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload matching assets without activating a browser release
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/prepare_android_test_download.py --assets-only
+  apk:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v5
+        with:
+          name: android-release-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: release
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/download-artifact@v5
+        with:
+          name: android-assets-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: android-assets
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload signed test APK without activating the updater
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/prepare_android_test_download.py --apk-only
+      - name: Record test download
+        run: cat android-test-download.json >> "${GITHUB_STEP_SUMMARY}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-test-download-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: android-test-download.json
+          if-no-files-found: error

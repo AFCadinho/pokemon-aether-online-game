@@ -138,6 +138,11 @@ func flee_after_ambush() -> void:
 	visible = false
 
 
+func reset_after_ambush_failure() -> void:
+	_has_fled_ambush = false
+	_apply_story_position()
+
+
 func _show_panic_dialogue() -> void:
 	var result: Dictionary = await NpcDialogueService.resolve_dialogue(
 		PANIC_DIALOGUE_ID,

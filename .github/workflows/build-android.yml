@@ -109,9 +109,27 @@ jobs:
           VERSION_CODE: ${{ inputs.version_code }}
         run: |
           echo "ANDROID_BUILD_ID=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          python3 - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          def read(url):
+              with urlopen(Request(url, headers={'User-Agent': 'PokeAetherAndroidCandidate/1.0', 'Cache-Control': 'no-cache'}), timeout=30) as response:
+                  return json.load(response)
+          game = read('https://updates.pokeaether.com/manifest-android.json')['game']
+          compatible = str(game['buildId'])
+          assert re.fullmatch(r'[A-Za-z0-9._-]{1,120}', compatible)
+          assert int(os.environ['VERSION_CODE']) > int(game['versionCode'])
+          assert read('https://api.pokeaether.com/client-version?platform=android')['requiredBuild'] == compatible
+          Path('/tmp/android-compatible-build.txt').write_text(compatible)
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write(f'ANDROID_TEST_COMPATIBLE_BUILD_ID={compatible}\n')
+          PY
+          compatible_build="$(cat /tmp/android-compatible-build.txt)"
           python3 tools/android_release.py prepare \
             --version "${VERSION_NAME}" --code "${VERSION_CODE}" \
-            --build-id "${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+            --build-id "${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+            --compatible-build-id "${compatible_build}"
 
       - name: Import Godot assets and run Android checks
         run: |
@@ -157,6 +175,7 @@ jobs:
             --apksigner "${ANDROID_HOME}/build-tools/35.0.1/apksigner" \
             --version "${VERSION_NAME}" --code "${VERSION_CODE}" \
             --build-id "${ANDROID_BUILD_ID}" \
+            --compatible-build-id "${ANDROID_TEST_COMPATIBLE_BUILD_ID}" \
             --certificate "${RELEASE_CERT_SHA256}" \
             --output release/manifest-android.json
 
@@ -165,5 +184,16 @@ jobs:
         with:
           name: android-release-${{ github.run_id }}-${{ github.run_attempt }}
           path: release/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Prepare matching Android asset payload
+        run: python3 tools/prepare_android_assets.py --asset-output builds/android-assets
+
+      - name: Retain matching Android assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-assets-${{ github.run_id }}-${{ github.run_attempt }}
+          path: builds/android-assets/
           if-no-files-found: error
           retention-days: 30

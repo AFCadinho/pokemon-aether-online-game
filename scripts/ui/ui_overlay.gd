@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const MobileKeyboardAvoidance := preload("res://scripts/ui/mobile_keyboard_avoidance.gd")
+
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
 const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 const LOAN_RETURNS_DIALOG_SCRIPT := preload("res://scripts/ui/loan_returns_dialog.gd")
@@ -1819,6 +1821,11 @@ func _ready() -> void:
 		root_control.resized.connect(_refresh_quest_tracker_layout)
 	_setup_chat_resize_button()
 	_setup_chat_surface_ui()
+	var keyboard_avoidance := MobileKeyboardAvoidance.new()
+	keyboard_avoidance.surface = chat_panel
+	keyboard_avoidance.inputs.assign([chat_input])
+	keyboard_avoidance.layout_changed.connect(_on_chat_keyboard_layout_changed)
+	add_child(keyboard_avoidance)
 	_setup_chat_message_context_menus()
 	_setup_chat_moderation_popup()
 	_setup_normal_ui_focus_groups()
@@ -31480,6 +31487,12 @@ func _position_chat_resize_button() -> void:
 
 	chat_resize_button.position = collapse_button.position + Vector2(0.0, COLLAPSE_BUTTON_SIZE.y + CHAT_RESIZE_BUTTON_GAP)
 	chat_resize_button.size = COLLAPSE_BUTTON_SIZE
+
+func _on_chat_keyboard_layout_changed() -> void:
+	_position_chat_tabs_panel()
+	_position_collapsible_button("chat")
+	_position_chat_resize_button()
+
 
 func _position_chat_tabs_panel() -> void:
 	if has_meta("battle_chat_active"):

@@ -41,9 +41,11 @@ def replace_setting(path: Path, section: str, key: str, value: str) -> None:
     raise ValueError(f"Missing [{section}] {key} in {path}")
 
 
-def prepare(project: Path, presets: Path, version: str, code: int, build_id: str) -> None:
+def prepare(project: Path, presets: Path, version: str, code: int, build_id: str, compatible_build_id: str = "") -> None:
     if not VERSION.fullmatch(version) or not BUILD_ID.fullmatch(build_id):
         raise ValueError("Invalid Android version or build ID")
+    if compatible_build_id and not BUILD_ID.fullmatch(compatible_build_id):
+        raise ValueError("Invalid Android test compatibility build ID")
     previous = int(setting(presets, "preset.7.options", "version/code"))
     if code <= previous or code > 2147483647:
         raise ValueError(f"Android version code must be greater than {previous}")
@@ -52,12 +54,14 @@ def prepare(project: Path, presets: Path, version: str, code: int, build_id: str
     replace_setting(project, "application", "config/version", json.dumps(version))
     replace_setting(project, "application", "config/build_id", json.dumps(build_id))
     replace_setting(project, "application", "config/android_version_code", str(code))
+    replace_setting(project, "application", "config/android_asset_build_id", json.dumps(build_id))
+    replace_setting(project, "application", "config/android_test_compatible_build_id", json.dumps(compatible_build_id))
     replace_setting(presets, "preset.7.options", "version/code", str(code))
     replace_setting(presets, "preset.7.options", "version/name", json.dumps(version))
 
 
 def inspect(apk: Path, aapt: Path, apksigner: Path, version: str, code: int,
-            build_id: str, certificate: str, output: Path) -> dict:
+            build_id: str, certificate: str, output: Path, compatible_build_id: str = "") -> dict:
     if not VERSION.fullmatch(version) or not BUILD_ID.fullmatch(build_id):
         raise ValueError("Invalid Android version or build ID")
     certificate = certificate.lower().replace(":", "")
@@ -88,6 +92,10 @@ def inspect(apk: Path, aapt: Path, apksigner: Path, version: str, code: int,
         "sizeBytes": apk.stat().st_size,
         "sha256": digest.hexdigest(),
     }}
+    if compatible_build_id:
+        if not BUILD_ID.fullmatch(compatible_build_id):
+            raise ValueError("Invalid Android test compatibility build ID")
+        manifest["game"]["testCompatibleBuildId"] = compatible_build_id
     output.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return manifest
 
@@ -108,12 +116,13 @@ def main() -> None:
         command.add_argument("--version", required=True)
         command.add_argument("--code", type=int, required=True)
         command.add_argument("--build-id", required=True)
+        command.add_argument("--compatible-build-id", default="")
     args = parser.parse_args()
     if args.command == "prepare":
-        prepare(args.project, args.presets, args.version, args.code, args.build_id)
+        prepare(args.project, args.presets, args.version, args.code, args.build_id, args.compatible_build_id)
     else:
         inspect(args.apk, args.aapt, args.apksigner, args.version, args.code,
-                args.build_id, args.certificate, args.output)
+                args.build_id, args.certificate, args.output, args.compatible_build_id)
 
 
 if __name__ == "__main__":

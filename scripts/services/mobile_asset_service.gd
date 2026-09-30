@@ -35,6 +35,11 @@ func fetch_url(url: String, sha := "", limit := 4 * 1024 * 1024) -> String:
 	return path
 
 func release_prefix() -> String:
+	var pinned := str(ProjectSettings.get_setting("application/config/android_asset_build_id", ""))
+	if pinned != "":
+		if "/" in pinned or ".." in pinned or ":" in pinned or "\\" in pinned:
+			return ""
+		return "https://web-assets.pokeaether.com/android/releases/" + pinned + "/"
 	var config: Dictionary = await get_tree().root.get_node("WebPokemonSpriteService")._get_release_config()
 	var build := str(config.get("buildId", ""))
 	if build == "" or "/" in build or ".." in build:

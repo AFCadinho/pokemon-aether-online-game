@@ -198,7 +198,7 @@ jobs:
 
       - name: Run release-focused checks
         run: |
-          python3 -m unittest tests.test_package_web_release
+          python3 -m unittest tests.test_package_web_release tests.test_publish_web_sprite_catalog
           node tests/web_cloudflare_function_test.mjs
           ./godot --headless --path . --script res://tests/web_runtime_check.gd
           ./godot --headless --path . --script res://tests/web_dynamic_pokemon_sprite_check.gd
@@ -239,28 +239,14 @@ jobs:
           RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           RCLONE_CONFIG_R2_ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
         run: |
-          publish_pack() {
-            style="$1"
-            side="$2"
-            version="$3"
-            if curl -fsSI "${ASSET_BASE_URL}/web/assets/${version}/pikachu/animation.json" >/dev/null; then
-              echo "Browser sprite catalog already exists: ${version}"
-              return
-            fi
-            curl -fsSL -o "/tmp/${version}.zip" "${SOURCE_ASSET_BASE_URL}/assets/${version}.zip"
-            python3 tools/extract_web_sprite_pack.py "/tmp/${version}.zip" \
-              --style "${style}" --side "${side}" --output "/tmp/web-sprites/${version}"
-            rclone copy "/tmp/web-sprites/${version}" "R2:${R2_BUCKET}/web/assets/${version}" \
-              --immutable --header-upload "Cache-Control: public, max-age=31536000, immutable"
-          }
-          publish_pack animated front "${POKEMON_FRONT_ASSET_VERSION}"
-          publish_pack animated back "${POKEMON_BACK_ASSET_VERSION}"
-          publish_pack animated shiny_front "${POKEMON_SHINY_FRONT_ASSET_VERSION}"
-          publish_pack animated shiny_back "${POKEMON_SHINY_BACK_ASSET_VERSION}"
-          publish_pack pixel front "${POKEMON_GEN5_FRONT_ASSET_VERSION}"
-          publish_pack pixel back "${POKEMON_GEN5_BACK_ASSET_VERSION}"
-          publish_pack pixel shiny_front "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}"
-          publish_pack pixel shiny_back "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh animated front "${POKEMON_FRONT_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh animated back "${POKEMON_BACK_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh animated shiny_front "${POKEMON_SHINY_FRONT_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh animated shiny_back "${POKEMON_SHINY_BACK_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh pixel front "${POKEMON_GEN5_FRONT_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh pixel back "${POKEMON_GEN5_BACK_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh pixel shiny_front "${POKEMON_GEN5_SHINY_FRONT_ASSET_VERSION}"
+          bash tools/publish_web_sprite_catalog.sh pixel shiny_back "${POKEMON_GEN5_SHINY_BACK_ASSET_VERSION}"
 
       - name: Deploy Cloudflare Pages
         env:

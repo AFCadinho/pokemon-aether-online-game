@@ -3,6 +3,8 @@ extends Area2D
 class_name StoryTrigger
 
 @export var story_host_path: NodePath
+@export var required_quest_id := ""
+@export var required_step_id := ""
 
 var _in_flight := false
 var _owns_overworld_lock := false
@@ -15,6 +17,16 @@ func _ready() -> void:
 		body_entered.connect(entered)
 
 
+func _exit_tree() -> void:
+	_release_owned_overworld_lock()
+
+
+func _story_step_is_active() -> bool:
+	return required_quest_id.is_empty() or StoryService.is_requirement_met(
+		required_quest_id, required_step_id, "active"
+	)
+
+
 func _process(_delta: float) -> void:
 	if _pending_body == null:
 		return
@@ -23,6 +35,7 @@ func _process(_delta: float) -> void:
 		return
 	if (
 		_in_flight
+		or not _story_step_is_active()
 		or GameState.is_overworld_input_locked()
 		or GameState.is_ui_input_locked()
 	):
@@ -36,10 +49,10 @@ func _process(_delta: float) -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if _in_flight or not _is_player(body):
 		return
-	if GameState.is_overworld_input_locked() or GameState.is_ui_input_locked():
-		# Map transitions can place the player inside an area before their input
-		# lock is released. Keep that entry pending instead of requiring the
-		# player to leave and walk back into the trigger.
+	if not _story_step_is_active() or GameState.is_overworld_input_locked() or GameState.is_ui_input_locked():
+		# Map transitions and fossil collection can activate a story while the
+		# player is already inside the area. Keep the entry pending until its
+		# step and input are ready, without stopping unrelated passers-by.
 		_pending_body = body
 		return
 	_pending_body = null
@@ -78,6 +91,9 @@ func _on_body_entered(body: Node2D) -> void:
 		_in_flight = false
 		return
 	var result: Dictionary = result_value as Dictionary
+	if result.has("success") and not bool(result.get("success")) and str(result.get("status", "")) != "pending_battle":
+		if is_instance_valid(story_host) and story_host.has_method("abort_story_sequence"):
+			story_host.call("abort_story_sequence")
 	if str(result.get("status", "")) == "pending_battle":
 		# World owns the battle lock from here.
 		_owns_overworld_lock = false

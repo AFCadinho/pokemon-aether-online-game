@@ -6,6 +6,13 @@ var failed := false
 
 
 func _init() -> void:
+	var candidate_response := {"detail": {"code": "client_update_required", "requiredBuild": "published-6"}}
+	_check(ClientBuild.android_candidate_target(candidate_response, "published-6", "candidate-7") == "published-6", "Android candidate can use only its approved prior release before publication")
+	candidate_response.detail.requiredBuild = "candidate-7"
+	_check(ClientBuild.android_candidate_target(candidate_response, "published-6", "candidate-7") == "candidate-7", "same signed candidate uses its real identity after publication")
+	candidate_response.detail.requiredBuild = "newer-8"
+	_check(ClientBuild.android_candidate_target(candidate_response, "published-6", "candidate-7") == "", "later Android releases still require a normal update")
+	_check(ClientBuild.android_candidate_target(candidate_response, "", "candidate-7") == "", "ordinary builds do not enable candidate compatibility")
 	var build_id := ClientBuild.get_build_id()
 	_check(not build_id.is_empty(), "client build identity is always available")
 	_check(
