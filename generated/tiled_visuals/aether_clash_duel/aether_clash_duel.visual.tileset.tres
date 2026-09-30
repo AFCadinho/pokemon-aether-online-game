@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bjpgx104k4psd"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/aether_clash_duel/assets/aether_clash_duel.visual.tileset.compact_source_1_0.texture.res" id="1_3rvy1"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/aether_clash_duel/assets/aether_clash_duel.visual.tileset.compact_source_10241_0.texture.res" id="2_krbk4"]
