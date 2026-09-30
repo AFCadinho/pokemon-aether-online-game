@@ -11,8 +11,8 @@
     "native_actions_ambiguous": 15
   },
   "normal_candidates": 41,
-  "shiny_candidates": 23,
-  "missing_shiny_candidates": 18,
+  "shiny_candidates": 22,
+  "missing_shiny_candidates": 19,
   "alternative_za_file_presence_candidates": 50,
   "source_audit_sha256": "37ebe465e7888a9d0277e48c4696ae27b7bda0eddd75ef9a2f0ca5887d8f8cd8",
   "runtime_approved": false,
@@ -39,8 +39,8 @@
     {
       "species": "sandslash",
       "source_sha256": "b7954c869414413397a9ec4ee060d53a11a844eca5132deab174d9761fe88cd3",
-      "glb_sha256": "2c53fa77560bf8d465936507b205931f04c1ff93c66ac3340e7d93b06998ee5b",
-      "runtime_sha256": "c336e5ba2656d313a3cf291349e876079f07ed62ee27fd98a45d57fb4268c2dd",
+      "glb_sha256": "ac435ff32b04afc3c8df496f637c0c3c271cb092acaaa023b0b242ef2d215e1b",
+      "runtime_sha256": "c0029ce46dfd29013b26b4fa06a02a51c0d4ef65146858ca50e4d9520d9dee35",
       "native_actions": {
         "physical_attack": "pm0028_00_00_00400_attack01.gfbanm",
         "damage": "pm0028_00_00_00500_damage01.gfbanm",
@@ -327,8 +327,8 @@
     {
       "species": "toucannon",
       "source_sha256": "3317889de9230aab15ca7e9db22e9eff42c29a81b28541e1657d769b0c610929",
-      "glb_sha256": "cf20e096cceef85892af60e64e8f8df6c392eab1ef14e3dc22ac07f75c237786",
-      "runtime_sha256": "9efb049a8a0bb6f77e5edd349458bc58bbbdb87c93ceba51685a36c50dbd9dcb",
+      "glb_sha256": "aa7326cd854e4d8f0b6eb124a7ceb4935601b6f5ae44aa07389943b739dfa5cc",
+      "runtime_sha256": "6d6c9ed0981a5eabf8f7ef2f1df748258e200089b4a050d0a5661a8143069648",
       "native_actions": {
         "idle": "pm0809_00_00_00000_defaultwait01_loop",
         "physical_attack": "pm0809_00_00_00400_attack01",
@@ -381,8 +381,8 @@
     {
       "species": "sandslash@shiny",
       "source_sha256": "b7954c869414413397a9ec4ee060d53a11a844eca5132deab174d9761fe88cd3",
-      "glb_sha256": "d9995db376b7df74b349335ce1f41fe47e804fe073d0f590702596fa5149b742",
-      "runtime_sha256": "bb483c4cffeb75c9f79f1d693229ed8d77a397e98b66581ac8f786f8f2c8dce6",
+      "glb_sha256": "dded3996f4cde139fe934bebc07a089310d05aff6c3db0dea7fc775b287e63ff",
+      "runtime_sha256": "c176952d6c03205e863c14251babf0e2fda1a35f45754e96bbc2fb16347c6f51",
       "native_actions": {
         "physical_attack": "pm0028_00_00_00400_attack01.gfbanm",
         "damage": "pm0028_00_00_00500_damage01.gfbanm",
@@ -662,24 +662,6 @@
         "sleep": "pm0623_00_00_00281_sleep01_loop",
         "faint_loop": "pm0623_00_00_00521_down01_loop",
         "physical_attack_2": "pm0623_00_00_00410_attack02"
-      },
-      "appearance_approved": false,
-      "battle_approved": false
-    },
-    {
-      "species": "toucannon@shiny",
-      "source_sha256": "3317889de9230aab15ca7e9db22e9eff42c29a81b28541e1657d769b0c610929",
-      "glb_sha256": "27fb59d3b61283c3bde74b47bfe3435d1768be775eca1e3ac009396064bd6030",
-      "runtime_sha256": "cf8f0a9019218bd9acb3c1ce46988b302a7e2671186830f6c9f683ca0155ecc6",
-      "native_actions": {
-        "idle": "pm0809_00_00_00000_defaultwait01_loop",
-        "physical_attack": "pm0809_00_00_00400_attack01",
-        "special_attack": "pm0809_00_00_00450_rangeattack01",
-        "damage": "pm0809_00_00_00500_damage01",
-        "sleep": "pm0809_00_00_00281_sleep01_loop",
-        "faint_start": "pm0809_00_00_00520_down01_start",
-        "faint_loop": "pm0809_00_00_00521_down01_loop",
-        "physical_attack_2": "pm0809_00_00_00410_attack02"
       },
       "appearance_approved": false,
       "battle_approved": false
@@ -1168,5 +1150,31 @@
       "appearance_approved": false,
       "battle_approved": false
     }
-  ]
+  ],
+  "feedback_holds": [
+    "sandslash",
+    "toucannon"
+  ],
+  "visual_calibration": {
+    "sandslash": [
+      {
+        "material": "l_eye",
+        "pupil_mask_peak": 29,
+        "pupil_mask_gain": 8.793103448275861,
+        "mask_sha256": "71b5559515a6339546fa26fa05d4f9c6b6a8b87c41d15ae3b56198211ed9c0e1",
+        "needs_visual_approval": true
+      },
+      {
+        "material": "r_eye",
+        "pupil_mask_peak": 29,
+        "pupil_mask_gain": 8.793103448275861,
+        "mask_sha256": "71b5559515a6339546fa26fa05d4f9c6b6a8b87c41d15ae3b56198211ed9c0e1",
+        "needs_visual_approval": true
+      }
+    ],
+    "toucannon": {
+      "normal": "native shader bake",
+      "shiny": "held: incompatible source texture layout"
+    }
+  }
 }
