@@ -156,7 +156,10 @@ func start_quest_offer(quest: Dictionary, speaker_name := "", mugshot: Texture2D
 
 func _set_portrait_texture(texture: Texture2D) -> void:
 	npc_sprite.texture = texture
-	var is_trainer_card := texture != null and texture.resource_path.begins_with(TRAINER_CARD_TEXTURE_ROOT)
+	var is_trainer_card := texture != null and (
+		texture.resource_path.begins_with(TRAINER_CARD_TEXTURE_ROOT)
+		or bool(texture.get_meta("trainer_card_portrait", false))
+	)
 	var is_system_mugshot := texture == SYSTEM_MUGSHOT
 	if is_trainer_card or is_system_mugshot:
 		npc_sprite.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
