@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
+
 - De Collision-laag van het Vermilion Port-interieur is leeg zodat deze handmatig kan worden ingevuld.
 
 - Vermilion Port heeft een interieur met de artist-TMX-visual en doorgangen tussen de stad en de docks.

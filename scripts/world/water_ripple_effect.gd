@@ -69,6 +69,13 @@ func _configure_kind(kind: String) -> void:
 			ring_count = 2
 			line_width = 1.2
 			ripple_color = Color(0.86, 0.96, 1.0, 0.72)
+		"fish_wait":
+			duration = 0.75
+			start_radius = 2.0
+			end_radius = 9.0
+			ring_count = 1
+			line_width = 1.0
+			ripple_color = Color(0.78, 0.93, 1.0, 0.38)
 		KIND_FISH_BITE:
 			duration = 0.48
 			start_radius = 3.0

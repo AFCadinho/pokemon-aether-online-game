@@ -13,6 +13,10 @@ const FIELD_MOVE_SOUND_IDS := {
 	"sunny-day": "field_move_sunny_day",
 }
 const SOUND_DATA := {
+	"fishing_bite": {
+		"path": "res://assets/audio/sfx/overworld/item_found.ogg",
+		"volume_db": -9.0,
+	},
 	"battle_item_use": {
 		"path": "res://assets/audio/sfx/battle/battle_item_use.ogg",
 		"volume_db": -4.0,
