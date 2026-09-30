@@ -114,12 +114,13 @@ replacement pair. The user approved 75 pairs on 2026-10-01. Wailord was held bec
 species-specific placement is 1.597 times larger. It passed fresh actual120Hz
 idle and all-clip clearance, and all16 normal/shiny camera captures remain in
 frame and clear of the HUD proxy. Shiny clearance is derived from the pinned
-actual scene parity, with fresh shiny renders. The larger size awaits review
-at `battle-76/wailord-size-review-v1/index.html`.
+actual scene parity, with fresh shiny renders. The user approved the larger size on 2026-10-01 at
+`battle-76/wailord-size-review-v1/index.html`.
 
 ## Remaining work
 
-Wailord size review and qualification/bundle checks remain pending. Thirty-four native
+All76 visual battle reviews are approved. Qualification/bundle checks remain
+pending. Thirty-four native
 sources use centimetres and require placement scale 0.01; the other 42 retain
 scale 1.0 before readability/framing calibration. This unit conversion is
 checked against local species dimensions and retains native proportions.
@@ -136,3 +137,19 @@ alone as a successful qualification.
 After sleep and battle review pass, run qualification and bundle installation
 checks, then create individual bundles. No new runtime admission, bundle,
 R2 publication or player-visible change has occurred in this checkpoint.
+
+## Local bundle validation (2026-10-01)
+
+All76 individual bundles have been built (236399223bytes /225.45MiB). All152
+SCNs passed transactional installation, hash verification, PackedScene loading,
+no-op update and restart. The installed catalog has completed three real battle
+passes in classic/stadium/classic, including normal/shiny swaps and faint
+replacement; retained source bytes and post-cycle memory stay bounded.
+
+The first run had a GLES3 null-material diagnostic during arena transitions;
+its report/log are retained. The identical rerun with per-pair logging had no
+material errors, but stadium p95 was21.033ms (gate20ms). A short control run
+with already approved Abra, Skarmory and Venusaur also exceeded the stadium
+gate (20.462ms) while another normal game was running. Final performance
+qualification remains pending; no threshold has been changed, and the76 pairs
+have not yet been admitted to the game/launcher registry or uploaded.
