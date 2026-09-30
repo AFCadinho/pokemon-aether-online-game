@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
+
 - Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.
 
 - Huis 2 en Huis 3 in Vermilion City hebben elk twee bewoners met gelokaliseerde dialogen en een rondlopende overworld-Pokemon: Krabby en Pikachu.
