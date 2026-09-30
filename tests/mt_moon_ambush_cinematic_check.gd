@@ -47,7 +47,7 @@ func _run() -> void:
 	_expect("await _attack_and_faint_follower()" in controller_source, "Team Rocket attacks the player's visible follower before the rescue")
 	_expect("func set_story_player(player: Node2D)" in controller_source and "_resolve_player_follower(player)" in controller_source, "the ambush targets the player that actually entered the trigger")
 	_expect(
-		"skipping cosmetic ambush attack" in controller_source and "return true\n\t_fainted_follower.visible = true" in controller_source,
+		"skipping cosmetic ambush attack" in controller_source and "return true\n\t_follower_was_visible = _fainted_follower.visible" in controller_source,
 		"a temporarily unavailable follower skips only the cosmetic attack and does not abort the rescue"
 	)
 	_expect("story.mt_moon.cutscene.follower_fainted" in controller_source, "the player begs their fainted follower to get up")
