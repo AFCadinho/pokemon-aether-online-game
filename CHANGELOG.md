@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De SS Anne 1F-visual gebruikt opnieuw de bijgewerkte artist-TMX.
+
 - De oceaan rond SS Anne 3F beweegt nu met de vier wateranimatieframes uit Tiled.
 
 - Tourist Sana op SS Anne 3F is vervangen door Beauty Rose, met een korte Titanic-verwijzing.
