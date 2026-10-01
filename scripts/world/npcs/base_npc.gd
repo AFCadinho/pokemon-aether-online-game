@@ -121,7 +121,7 @@ const NAMEPLATE_HORIZONTAL_PADDING := 5.0
 const NAMEPLATE_VERTICAL_PADDING := 2.0
 const NAMEPLATE_CARD_BOTTOM := 20.0
 const NAMEPLATE_OFFSET_TOP := -80.0
-const THIEVING_PROMPT_SIZE := Vector2(30.0, 30.0)
+const THIEVING_PROMPT_SIZE := Vector2(44.0, 44.0)
 const THIEVING_PROMPT_NAMEPLATE_GAP := 6.0
 const OVERHEAD_NAMEPLATE_Z := RenderingServer.CANVAS_ITEM_Z_MAX - 1
 const THIEVING_PROMPT_POSITION := Vector2(
@@ -796,35 +796,34 @@ func _setup_thieving_prompt() -> void:
 func _apply_thieving_prompt_style(button: Button) -> void:
 	button.add_theme_stylebox_override(
 		"normal",
-		_make_thieving_prompt_style(Color("#111127f2"), Color("#b67afff2"))
+		_make_thieving_prompt_style(Color("#19162d"), Color("#9975c6"))
 	)
 	button.add_theme_stylebox_override(
 		"hover",
-		_make_thieving_prompt_style(Color("#211542fa"), Color("#e2b6ffff"))
+		_make_thieving_prompt_style(Color("#302249"), Color("#e3b7ff"))
 	)
 	button.add_theme_stylebox_override(
 		"pressed",
-		_make_thieving_prompt_style(Color("#0b0a1dfc"), Color("#8758cfff"))
+		_make_thieving_prompt_style(Color("#100c20"), Color("#efdaff"), true)
 	)
 	button.add_theme_color_override("icon_normal_color", Color.WHITE)
-	button.add_theme_color_override("icon_hover_color", Color.WHITE)
+	button.add_theme_color_override("icon_hover_color", Color("#f4eaff"))
 	button.add_theme_color_override("icon_pressed_color", Color("#ddd2eaff"))
 	button.add_theme_constant_override("h_separation", 0)
-	button.add_theme_constant_override("icon_max_width", 22)
+	button.add_theme_constant_override("icon_max_width", 32)
+	button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 
 
-func _make_thieving_prompt_style(background_color: Color, border_color: Color) -> StyleBoxFlat:
+func _make_thieving_prompt_style(background_color: Color, border_color: Color, pressed := false) -> StyleBoxFlat:
 	var style := StyleBoxFlat.new()
 	style.bg_color = background_color
 	style.border_color = border_color
 	style.set_border_width_all(1)
-	style.set_corner_radius_all(9)
-	style.content_margin_left = 4.0
-	style.content_margin_top = 4.0
-	style.content_margin_right = 4.0
-	style.content_margin_bottom = 4.0
-	style.shadow_color = Color(0.0, 0.0, 0.0, 0.5)
-	style.shadow_size = 3
+	style.set_corner_radius_all(14)
+	style.set_content_margin_all(6)
+	style.shadow_color = Color(0.015, 0.01, 0.03, 0.48)
+	style.shadow_size = 1 if pressed else 3
+	style.shadow_offset = Vector2(0, 1 if pressed else 2)
 	return style
 
 
