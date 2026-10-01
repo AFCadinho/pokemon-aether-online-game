@@ -1,42 +1,107 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://dyhd01jcjx2xx"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_port_exterior/vermilion_port_exterior.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
-
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
-
+[ext_resource type="Script" uid="uid://cwoy7c4b5aqge" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_0tspk"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/ss_anne_skipper.tscn" id="skipper"]
-
-[sub_resource type="RectangleShape2D" id="boarding_shape"]
-size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_city"]
 size = Vector2(96, 32)
 
-[node name="VermilionPortExterior" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="boarding_shape"]
+size = Vector2(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4oa1j"]
+texture = ExtResource("5_0tspk")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_txwiy"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_4oa1j")
+
+[node name="VermilionPortExterior" type="Node2D" unique_id=1432317769]
 script = ExtResource("2_metadata")
+water_reference_tile = Vector2i(0, 20)
 map_id = "kanto_vermilion_docks"
 map_region_name = "Kanto"
 map_display_name = "Vermilion Port"
 world_access_group_id = "kanto_vermilion_city"
 world_access_group_label = "Vermilion City"
-world_access_area_type = "exterior"
 location_id = "kanto.vermilion.docks"
 location_name = "Vermilion Port"
 region_id = "kanto"
-water_reference_tile = Vector2i(0, 20)
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=1665241760 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=315348954]
 
-[node name="FromVermilionCity" type="Marker2D" parent="Spawns"]
+[node name="FromVermilionCity" type="Marker2D" parent="Spawns" unique_id=501474668]
 position = Vector2(1040, 48)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="FromSSAnne" type="Marker2D" parent="Spawns" unique_id=1684548505]
+position = Vector2(1392, 656)
 
-[node name="ToVermilionCity" type="Area2D" parent="Exits"]
+[node name="Exits" type="Node2D" parent="." unique_id=1725513365]
+
+[node name="ToVermilionCity" type="Area2D" parent="Exits" unique_id=1602970289]
 position = Vector2(1040, 16)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
@@ -44,46 +109,41 @@ target_spawn_name = "FromDocks"
 transition_id = "kanto_vermilion_docks__to_city"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity" unique_id=2092447255]
 shape = SubResource("shape_city")
 
-[node name="Entities" type="Node2D" parent="."]
-z_index = 5
-
-[node name="Players" type="Node2D" parent="Entities"]
-
-[node name="NPCs" type="Node2D" parent="Entities"]
-
-[node name="SSAnneSkipper" parent="Entities/NPCs" instance=ExtResource("skipper")]
-position = Vector2(1392, 624)
-facing_direction = Vector2(-1, 0)
-
-[node name="Pokemon" type="Node2D" parent="Entities"]
-
-[node name="Interactables" type="Node2D" parent="Entities"]
-
-[node name="Tiles" type="Node2D" parent="."]
-visible = false
-
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-visible = false
-z_index = 4096
-tile_set = ExtResource("collision_tiles")
-
-[node name="FromSSAnne" type="Marker2D" parent="Spawns"]
-position = Vector2(1392, 656)
-
-[node name="ToSSAnne" type="Area2D" parent="Exits"]
-position = Vector2(1424, 624)
+[node name="ToSSAnne" type="Area2D" parent="Exits" unique_id=1805357083]
+position = Vector2(1424, 592)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
 target_spawn_name = "At_48_23"
 transition_id = "kanto_vermilion_city__to_ss_anne"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSSAnne"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSSAnne" unique_id=1942108119]
 shape = SubResource("boarding_shape")
 
-[connection signal="body_entered" from="Exits/ToSSAnne" to="Exits/ToSSAnne" method="_on_body_entered"]
+[node name="Entities" type="Node2D" parent="." unique_id=1237438157]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities" unique_id=2067855604]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1035754566]
+
+[node name="SSAnneSkipper" parent="Entities/NPCs" unique_id=533330662 instance=ExtResource("skipper")]
+position = Vector2(1392, 624)
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=147305687]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1626181647]
+
+[node name="Tiles" type="Node2D" parent="." unique_id=1030475738]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=36148274]
+z_index = 4096
+tile_map_data = PackedByteArray("AAAdAAAAAAAEAAAAAAAdAAEAAAAEAAAAAAAdAAIAAAAEAAAAAAAdAAMAAAAEAAAAAAAdAAQAAAAEAAAAAAAdAAUAAAAEAAAAAAAbAAUAAAAEAAAAAAAcAAUAAAAEAAAAAAAcAAYAAAAEAAAAAAAbAAYAAAAEAAAAAAAbAAcAAAAEAAAAAAAbAAgAAAAEAAAAAAAbAAkAAAAEAAAAAAAbAAoAAAAEAAAAAAAbAAsAAAAEAAAAAAAcAAsAAAAEAAAAAAAdAAsAAAAEAAAAAAAdAAwAAAAEAAAAAAAdAA0AAAAEAAAAAAAdAA4AAAAEAAAAAAAdAA8AAAAEAAAAAAAdABAAAAAEAAAAAAAdABEAAAAEAAAAAAAdABIAAAAEAAAAAAAdABMAAAAEAAAAAAAdABQAAAAEAAAAAAAjAAAAAAAEAAAAAAAjAAEAAAAEAAAAAAAjAAIAAAAEAAAAAAAjAAMAAAAEAAAAAAAjAAQAAAAEAAAAAAAjAAUAAAAEAAAAAAAkAAUAAAAEAAAAAAAlAAUAAAAEAAAAAAAlAAYAAAAEAAAAAAAlAAcAAAAEAAAAAAAlAAgAAAAEAAAAAAAlAAkAAAAEAAAAAAAlAAoAAAAEAAAAAAAlAAsAAAAEAAAAAAAjAAsAAAAEAAAAAAAkAAsAAAAEAAAAAAAjAAwAAAAEAAAAAAAjAA0AAAAEAAAAAAAjAA4AAAAEAAAAAAAjAA8AAAAEAAAAAAAjABAAAAAEAAAAAAAjABEAAAAEAAAAAAAjABIAAAAEAAAAAAAkABIAAAAEAAAAAAAlABIAAAAEAAAAAAAmABIAAAAEAAAAAAAnABIAAAAEAAAAAAAoABIAAAAEAAAAAAApABIAAAAEAAAAAAAqABIAAAAEAAAAAAAtABIAAAAEAAAAAAAuABIAAAAEAAAAAAAvABIAAAAEAAAAAAAwABIAAAAEAAAAAAAxABIAAAAEAAAAAAAyABIAAAAEAAAAAAAwABMAAAAEAAAAAAApABEAAAAEAAAAAAAqABEAAAAEAAAAAAArABEAAAAEAAAAAAAsABEAAAAEAAAAAAAtABEAAAAEAAAAAAAuABEAAAAEAAAAAAAvABEAAAAEAAAAAAApAA4AAAAEAAAAAAApAA8AAAAEAAAAAAApABAAAAAEAAAAAAAqAA4AAAAEAAAAAAAqAA8AAAAEAAAAAAAqABAAAAAEAAAAAAArAA4AAAAEAAAAAAArAA8AAAAEAAAAAAArABAAAAAEAAAAAAAsAA4AAAAEAAAAAAAsAA8AAAAEAAAAAAAsABAAAAAEAAAAAAAtAA4AAAAEAAAAAAAtAA8AAAAEAAAAAAAtABAAAAAEAAAAAAAuAA4AAAAEAAAAAAAuAA8AAAAEAAAAAAAuABAAAAAEAAAAAAAvAA4AAAAEAAAAAAAvAA8AAAAEAAAAAAAvABAAAAAEAAAAAAAwAA8AAAAEAAAAAAAyABMAAAAEAAAAAAAyABQAAAAEAAAAAAAyABUAAAAEAAAAAAAyABYAAAAEAAAAAAAyABcAAAAEAAAAAAAdABcAAAAEAAAAAAAeABcAAAAEAAAAAAAfABcAAAAEAAAAAAAgABcAAAAEAAAAAAAhABcAAAAEAAAAAAAiABcAAAAEAAAAAAAjABcAAAAEAAAAAAAkABcAAAAEAAAAAAAlABcAAAAEAAAAAAAmABcAAAAEAAAAAAAnABcAAAAEAAAAAAAoABcAAAAEAAAAAAApABcAAAAEAAAAAAAqABcAAAAEAAAAAAArABcAAAAEAAAAAAAsABcAAAAEAAAAAAAtABcAAAAEAAAAAAAuABcAAAAEAAAAAAAvABcAAAAEAAAAAAAwABcAAAAEAAAAAAAxABcAAAAEAAAAAAAdABUAAAAEAAAAAAAdABYAAAAEAAAAAAAkAAYAAAAEAAAAAAASAAYAAAAEAAAAAAATAAYAAAAEAAAAAAAUAAYAAAAEAAAAAAAVAAYAAAAEAAAAAAAWAAYAAAAEAAAAAAAXAAYAAAAEAAAAAAAYAAYAAAAEAAAAAAAZAAYAAAAEAAAAAAApAAYAAAAEAAAAAAAqAAYAAAAEAAAAAAArAAYAAAAEAAAAAAAsAAYAAAAEAAAAAAAtAAYAAAAEAAAAAAAuAAYAAAAEAAAAAAAvAAYAAAAEAAAAAAAwAAYAAAAEAAAAAAAxAAYAAAAEAAAAAAAyAAYAAAAEAAAAAAAzAAYAAAAEAAAAAAA0AAYAAAAEAAAAAAA1AAYAAAAEAAAAAAA2AAYAAAAEAAAAAAA3AAYAAAAEAAAAAAA4AAYAAAAEAAAAAABGAAAAAAAEAAAAAABGAAEAAAAEAAAAAABGAAIAAAAEAAAAAABGAAMAAAAEAAAAAABGAAQAAAAEAAAAAABHAAQAAAAEAAAAAABIAAQAAAAEAAAAAABJAAQAAAAEAAAAAABKAAQAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_txwiy")
 
 [connection signal="body_entered" from="Exits/ToVermilionCity" to="Exits/ToVermilionCity" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToSSAnne" to="Exits/ToSSAnne" method="_on_body_entered"]
