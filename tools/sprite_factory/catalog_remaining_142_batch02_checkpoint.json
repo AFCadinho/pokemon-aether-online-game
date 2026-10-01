@@ -1,0 +1,432 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "runtime_approved": false,
+  "review_url": "http://127.0.0.1:8782/appearance-six-v1/index.html",
+  "normal_review_pending": 6,
+  "shiny_qualified": 0,
+  "battle_qualified": 0,
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/action-batch02-v1/status.json": "4faa6092fef773fe568aa3eb450abe32ca3431a651db1d4e3e18dd904902f1b9",
+    ".tmp/remaining-142-production/action-batch02-colours-v1/status.json": "76472d07b08c7a9c34ae266b86cc3c648caa838d566b7834ef276786d07ce17d",
+    ".tmp/remaining-142-production/action-batch02-runtime-v1/report.json": "fad27a23410096086b547bf4a77a5dfd7e5ac7c152b6bb346bf6e7aa000eb0df",
+    ".tmp/remaining-142-production/action-batch02-captures-v1/review.json": "04600bb061f03426c0606ad98d0975eb39ec04486f63b596f852509e1c4c5ada",
+    ".tmp/remaining-142-production/appearance-six-v1/index.html": "e3fb7160d94274ee817e22c8e60d5e3c1225c99149959ef8f959ebee587de9dc",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-idle-50.webp": "f41fd0813a1b7f8c9df553880044013492f373f85f45469791824175bf421d01",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-physical_attack-50.webp": "51752a7dfa97d5e99b1f1307d8f021717992eabe09accec5c2630e507901a5cd",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-physical_attack_2-50.webp": "804ffe77b19a89bf84903e714173cac04828206b19a12498fc790a26aecb3f93",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-special_attack-50.webp": "6da14d2457da143f170a407bac9b4383157edd67eb08538ed3d6e1703b366a25",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-sleep-50.webp": "4342091d119a903badd195dfa9db3e37b772d0f58decf9c6ea5f8e00d2238840",
+    ".tmp/remaining-142-production/appearance-six-v1/media/flygon-faint_start-100.webp": "d2354565b23b45bdac49fd7a7a023ffdc060df9732401e3904eb0bc9537457f6",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-idle-50.webp": "e84a3ddb9bfdf38b4c8330ff96b1bdb3b5d90eef11425f7bb4cdc79db9a4de45",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-physical_attack-50.webp": "afa2b260fe553311da3db49530e240caea876a050dd2104ad3e3dd5a82c4a31f",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-physical_attack_2-50.webp": "3d2f374da02705827b5c54ca1aaac154ea78e86556ffe4e2136ab9104d6d89f7",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-special_attack-50.webp": "49d04593af4115250fb810c2edfabeb655467ccfa650246410bded5a0f8d8c56",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-sleep-50.webp": "7435e88a9285c8c736162497d89f4e6c4bada1862c703b947320d6990ab4daf7",
+    ".tmp/remaining-142-production/appearance-six-v1/media/ho-oh-faint_start-100.webp": "e6c804fd5d381cbc5f8b1ed96a6d20b6a99602f5f81c8c4fb23251928abf82de",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-idle-50.webp": "5ef86723b86d0cf9f3293d06c88833c0f616112f2ca6e9d949af07c128b46d9b",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-physical_attack-50.webp": "ff439b72dec35948f130608ee062e23faae4ad8e5a0314446d888a3264c80eb0",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-physical_attack_2-50.webp": "4d56b1e0b9c50d4d325b63ba6272cf376d7543a310ec4c87a12b16a381d3ab35",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-special_attack-50.webp": "0ba41b0ff588eebb0ad8833c0318fbfb17524ddb3423f4b4e2ab7747d9b8f652",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-sleep-50.webp": "18e3f070c3762902e0f7dd0b9791e6afad811d68c574b1a9e07e6de9b85c7720",
+    ".tmp/remaining-142-production/appearance-six-v1/media/lugia-faint_start-100.webp": "52835bf4839f652d6384849c09844a3cc9ced3545e454c29251ec1d6da1466bb",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-idle-50.webp": "f8fe49e5f62fc9ed8f44afb50db586e2cd85918d997e903af2eaf1886be464e6",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-physical_attack-50.webp": "200dcbb851fa37467ec7c6ddab29a3c663080509b8d4a297e74c3ef09d7b2fa7",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-physical_attack_2-50.webp": "21e3f10f0831aecb9f37bed5c236aa4745231f5048b449839bbed903e284e3e5",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-special_attack-50.webp": "93ba7ecfcf1066d2fd614bc7a73c0963606aea3140f70917f8e5919b41af7c06",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-sleep-50.webp": "bcce503eba26ec4f9a4ff7ccda7fc7e8c56b6cad8d0006fdc5de69737dcd1037",
+    ".tmp/remaining-142-production/appearance-six-v1/media/mandibuzz-faint_start-100.webp": "b635bfedbbb0a8f724a1739736570d6810c2835ae8b13d303b3fb6857ad998fd",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-idle-50.webp": "833c63cb64e7acf013831dc487a16de19d5642afafdec6b395e732335c6e467b",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-physical_attack-50.webp": "5b9fdd46ff529a41283c9187f14848e290c28aa3e24a8881a8ced095d80f5f5c",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-physical_attack_2-50.webp": "2c4e2b405d1273edbff2b5b9ba070d213857a263567f2b7114438cbbc9414838",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-special_attack-50.webp": "99eeff507aafc88a78ac25433dce76c05bbd0769ce15090eb931cad7fd353ee0",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-sleep-50.webp": "62a53e2d0cc6ae49f81e6f8f93952db5cc9115599498d901cfec91caa77e6e34",
+    ".tmp/remaining-142-production/appearance-six-v1/media/swanna-faint_start-100.webp": "8a3abcc825feff9560c5806585114404ccad5dad095e81d3f042a8902baaab2f",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-idle-50.webp": "687acc0fcf5d9f953f5e15bfb24a34a130dcb6437b0dc31f1c8719c58e903cb3",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-physical_attack-50.webp": "3002dedbad32e73287d0e2b978966a3d71ac936d04dd1b3c18f19f2e1564b98c",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-physical_attack_2-50.webp": "e247ae8453cd2c23be447cd73bc5aa31220fe9d06bac0a56bc441caa9db58de1",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-special_attack-50.webp": "848f2b73128a8dae4530e68496aab267be3b12c564694baa5c76934cd2546170",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-sleep-50.webp": "cac20e47a63f227622c58dfae0cb8385e50cfbb1ebe458123fb84d7ddc054b48",
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-faint_start-100.webp": "a9a4909286378c54bad27fe3356c30fba8eb538221c7af599c696c0f36fbeb01"
+  },
+  "entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 127.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 277.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 377.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 577.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 347.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "c0c102ee58b91af1858acbb91d3b0791a3278e0c7ca056d61a68bb644972d9b3",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/lugia/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/lugia.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "5d2b1d168e2f759b12060649b97bf8762e64321edb662c1479fe2222fd4b92af",
+      "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
+      "species": "lugia",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 152.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 302.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 252.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 302.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 377.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 502.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 407.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "1a78fbf0c2172612cc11a1c4dd2ad288daf1f2ed51e933f13131ef641fdaf625",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/ho-oh/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/ho-oh.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "a10a5494dbe8df5be4f57bb5c14f5ecf83c27ebcf7fc84736441becfbfaed2c4",
+      "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
+      "species": "ho-oh",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 102.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 202.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 402.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 227.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 277.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 302.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "102a226453e30c0fc724a126dc12adfe23b6c83bd4f2208ce9dcdffc97bfe260",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/vibrava/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/vibrava.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "c2d03747eb8530ae6e872b3e508709c3df27f1240428682c2fac5207ae50665c",
+      "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
+      "species": "vibrava",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 102.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 222.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 252.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 277.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 277.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 377.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 347.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "c93325907a7dbf51036479abbfebcd42c358e5876d40155fd529779b1dda952d",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/flygon/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/flygon.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "fb585ac772c03ea2aa66d8de66ef5fc807fb5d60117a4607e760ab946d24fb86",
+      "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
+      "species": "flygon",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "4d774c9d1584cc619264c9b727ed978afe36dcde7397f38e9a5c8c5073cd2725",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/swanna/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/swanna.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "f7a456f00051cc2dd5874c9ef0ce87e07f09a21d5724fdf0b0bc68da1b3d22d2",
+      "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
+      "species": "swanna",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "ef249ccdabaababf53ef64427a56d67318fc2dc808a206a5506ea401c66760cb",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/mandibuzz/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/mandibuzz.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "b6d7298c013a92e979c4d05b87184a82448972ad31cc8cde89bed6907d3eac0e",
+      "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
+      "species": "mandibuzz",
+      "variant": "normal",
+      "status": "normal_appearance_review_pending",
+      "appearance_approved": false,
+      "battle_approved": false
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog acht Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Arctovish, Lillipup, Mr. Rime, Noctowl, Palpitoad, Poipole, Seismitoad en Trumbeak.
+
 - De S.S. Anne heeft Gary op 2F, een captain-quest met HM Cut, keuken- en bemannings-NPCs, optionele trainers en een rustpunt. Bij de Vermilion Gym staat een Cut-boom; tile-collision blijft handmatig.
 
 - De Pokémon Fan Club gebruikt de bijgewerkte artist-TMX-visual.

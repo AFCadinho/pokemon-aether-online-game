@@ -1,0 +1,1641 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "existing_approved_base_species": 883,
+  "remaining_species_count": 142,
+  "legacy_source_found_count": 127,
+  "legacy_source_missing_count": 15,
+  "source_root": "/home/adinho/Documents/3d_models",
+  "runtime_approved": false,
+  "entries": [
+    {
+      "national_dex": 1,
+      "species": "bulbasaur",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0001_00.blend",
+        "bytes": 12359360,
+        "crc32": "98ed0661"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 10,
+      "species": "caterpie",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0010_00.blend",
+        "bytes": 1164948,
+        "crc32": "2d6237e9"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 19,
+      "species": "rattata",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0019_00.blend",
+        "bytes": 2375072,
+        "crc32": "8f2e94f2"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 21,
+      "species": "spearow",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0021_00.blend",
+        "bytes": 2355709,
+        "crc32": "4edca9d8"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 22,
+      "species": "fearow",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0022_00.blend",
+        "bytes": 4102050,
+        "crc32": "44f97aa7"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 30,
+      "species": "nidorina",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0030_00.blend",
+        "bytes": 1972994,
+        "crc32": "5bfb2e1c"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 31,
+      "species": "nidoqueen",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0031_00.blend",
+        "bytes": 2355778,
+        "crc32": "6e47cb96"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 33,
+      "species": "nidorino",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0033_00.blend",
+        "bytes": 2331278,
+        "crc32": "c800fec2"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 34,
+      "species": "nidoking",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0034_00.blend",
+        "bytes": 2557247,
+        "crc32": "ea158b3a"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 46,
+      "species": "paras",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0046_00.blend",
+        "bytes": 2280329,
+        "crc32": "8bc63995"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 72,
+      "species": "tentacool",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0072_00.blend",
+        "bytes": 1410048,
+        "crc32": "7c225cf0"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 73,
+      "species": "tentacruel",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0073_00.blend",
+        "bytes": 3682816,
+        "crc32": "6365bb12"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 77,
+      "species": "ponyta",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0077_00.blend",
+        "bytes": 6783829,
+        "crc32": "d2cfb1aa"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 78,
+      "species": "rapidash",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0078_00.blend",
+        "bytes": 7223134,
+        "crc32": "0224a84e"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 84,
+      "species": "doduo",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0084.blend",
+        "bytes": 67124836,
+        "crc32": "e91c169b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 98,
+      "species": "krabby",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0098_00.blend",
+        "bytes": 1653522,
+        "crc32": "e868db39"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 99,
+      "species": "kingler",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0099_00.blend",
+        "bytes": 2167196,
+        "crc32": "393ba86b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 111,
+      "species": "rhyhorn",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0111.blend",
+        "bytes": 54767078,
+        "crc32": "2d589ed1"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 112,
+      "species": "rhydon",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0112.blend",
+        "bytes": 66242562,
+        "crc32": "b8ca0b7b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 119,
+      "species": "seaking",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0119_00.blend",
+        "bytes": 2114000,
+        "crc32": "1d08ea0c"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 124,
+      "species": "jynx",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0124_00.blend",
+        "bytes": 6163254,
+        "crc32": "2c42b9ab"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 138,
+      "species": "omanyte",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0138_00.blend",
+        "bytes": 1901158,
+        "crc32": "012086e6"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 139,
+      "species": "omastar",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0139_00.blend",
+        "bytes": 2875141,
+        "crc32": "956c7c0a"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 140,
+      "species": "kabuto",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0140_00.blend",
+        "bytes": 1125176,
+        "crc32": "a4c34980"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 141,
+      "species": "kabutops",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen1.zip",
+        "member": "pm0141_00.blend",
+        "bytes": 1942676,
+        "crc32": "b1209ec5"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 164,
+      "species": "noctowl",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0164.blend",
+        "bytes": 20348690,
+        "crc32": "e6e2a33b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 165,
+      "species": "ledyba",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0165.blend",
+        "bytes": 10193799,
+        "crc32": "1eb5f988"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 166,
+      "species": "ledian",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0166.blend",
+        "bytes": 10080019,
+        "crc32": "afb54658"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 182,
+      "species": "bellossom",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0182.blend",
+        "bytes": 27037497,
+        "crc32": "0623fd08"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 186,
+      "species": "politoed",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0186.blend",
+        "bytes": 21895883,
+        "crc32": "cbb6b0e7"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 190,
+      "species": "aipom",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0190.blend",
+        "bytes": 19726561,
+        "crc32": "a5db4f4b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 207,
+      "species": "gligar",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0207.blend",
+        "bytes": 25937723,
+        "crc32": "38f77df4"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 221,
+      "species": "piloswine",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0221.blend",
+        "bytes": 18494243,
+        "crc32": "33cc7fa3"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 222,
+      "species": "corsola",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0222_00.blend",
+        "bytes": 558820,
+        "crc32": "5066e585"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 223,
+      "species": "remoraid",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0223_00.blend",
+        "bytes": 1532923,
+        "crc32": "9fdf2951"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 224,
+      "species": "octillery",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0224_00.blend",
+        "bytes": 2832390,
+        "crc32": "8ca212c4"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 226,
+      "species": "mantine",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0226_00.blend",
+        "bytes": 2692019,
+        "crc32": "6d55c3ee"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 249,
+      "species": "lugia",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0249.blend",
+        "bytes": 45768948,
+        "crc32": "f97d7701"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 250,
+      "species": "ho-oh",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0250.blend",
+        "bytes": 32482900,
+        "crc32": "771cd544"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 269,
+      "species": "dustox",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0269.blend",
+        "bytes": 11856760,
+        "crc32": "6d7533bc"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 274,
+      "species": "nuzleaf",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0274.blend",
+        "bytes": 21593383,
+        "crc32": "97f671fe"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 275,
+      "species": "shiftry",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0275.blend",
+        "bytes": 30644973,
+        "crc32": "df66b5ac"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 276,
+      "species": "taillow",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0276_00.blend",
+        "bytes": 1435720,
+        "crc32": "7773430d"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 277,
+      "species": "swellow",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0277_00.blend",
+        "bytes": 1462187,
+        "crc32": "9b4c8a57"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 290,
+      "species": "nincada",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0290_00.blend",
+        "bytes": 1795164,
+        "crc32": "df7a8413"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 291,
+      "species": "ninjask",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0291_00.blend",
+        "bytes": 1487225,
+        "crc32": "912fafbb"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 292,
+      "species": "shedinja",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0292_00.blend",
+        "bytes": 440943,
+        "crc32": "e1548cc6"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 293,
+      "species": "whismur",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0293_00.blend",
+        "bytes": 1554431,
+        "crc32": "fd6490e3"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 294,
+      "species": "loudred",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0294_00.blend",
+        "bytes": 2684605,
+        "crc32": "19cd86d5"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 295,
+      "species": "exploud",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0295_00.blend",
+        "bytes": 3190928,
+        "crc32": "60338f09"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 300,
+      "species": "skitty",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0300_00.blend",
+        "bytes": 1097031,
+        "crc32": "3d4bcf97"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 301,
+      "species": "delcatty",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0301_00.blend",
+        "bytes": 1612033,
+        "crc32": "af09ccea"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 320,
+      "species": "wailmer",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0320_00.blend",
+        "bytes": 901417,
+        "crc32": "d63c4057"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 327,
+      "species": "spinda",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0327.blend",
+        "bytes": 1809221,
+        "crc32": "b3a6b549"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 329,
+      "species": "vibrava",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0329.blend",
+        "bytes": 16297564,
+        "crc32": "191d9bc5"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 330,
+      "species": "flygon",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0330.blend",
+        "bytes": 22615364,
+        "crc32": "cbf31013"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 337,
+      "species": "lunatone",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0337_00.blend",
+        "bytes": 524720,
+        "crc32": "bc657083"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 338,
+      "species": "solrock",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0338_00.blend",
+        "bytes": 813091,
+        "crc32": "dc839343"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 343,
+      "species": "baltoy",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0343_00.blend",
+        "bytes": 972896,
+        "crc32": "f8435527"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 344,
+      "species": "claydol",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0344_00.blend",
+        "bytes": 681928,
+        "crc32": "212433c0"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 345,
+      "species": "lileep",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0345_00.blend",
+        "bytes": 4380961,
+        "crc32": "6e221fa1"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 346,
+      "species": "cradily",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0346_00.blend",
+        "bytes": 4917660,
+        "crc32": "92f40c6b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 347,
+      "species": "anorith",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0347_00.blend",
+        "bytes": 2810033,
+        "crc32": "3a3846ec"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 348,
+      "species": "armaldo",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0348_00.blend",
+        "bytes": 2871434,
+        "crc32": "4a5fe645"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 351,
+      "species": "castform",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0351.blend",
+        "bytes": 1600999,
+        "crc32": "011b4a38"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 364,
+      "species": "sealeo",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0364_00.blend",
+        "bytes": 2771643,
+        "crc32": "4e059bd9"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 365,
+      "species": "walrein",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0365_00.blend",
+        "bytes": 2857253,
+        "crc32": "6b86bb59"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 366,
+      "species": "clamperl",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0366_00.blend",
+        "bytes": 630725,
+        "crc32": "3ee430ad"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 367,
+      "species": "huntail",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0367_00.blend",
+        "bytes": 880918,
+        "crc32": "b63c9c8a"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 368,
+      "species": "gorebyss",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0368_00.blend",
+        "bytes": 1279796,
+        "crc32": "ed9cc788"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 369,
+      "species": "relicanth",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0369_00.blend",
+        "bytes": 1793190,
+        "crc32": "77fc3b38"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 386,
+      "species": "deoxys",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0386.blend",
+        "bytes": 114569231,
+        "crc32": "655f54e7"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 399,
+      "species": "bidoof",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0399.blend",
+        "bytes": 20841688,
+        "crc32": "a98d13e7"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 400,
+      "species": "bibarel",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0400.blend",
+        "bytes": 19459727,
+        "crc32": "b73b19b3"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 412,
+      "species": "burmy",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0412.blend",
+        "bytes": 11183958,
+        "crc32": "1652914e"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 413,
+      "species": "wormadam",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0413.blend",
+        "bytes": 21991387,
+        "crc32": "5840bb61"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 421,
+      "species": "cherrim",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0421.blend",
+        "bytes": 8276016,
+        "crc32": "fb7216e0"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 424,
+      "species": "ambipom",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0424.blend",
+        "bytes": 21730564,
+        "crc32": "3574570f"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 464,
+      "species": "rhyperior",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0464.blend",
+        "bytes": 20247328,
+        "crc32": "45f9e933"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 492,
+      "species": "shaymin",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen4.zip",
+        "member": "pm0492.blend",
+        "bytes": 33561956,
+        "crc32": "aa6bfec1"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 506,
+      "species": "lillipup",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0506_00.blend",
+        "bytes": 13157141,
+        "crc32": "a0a56964"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 510,
+      "species": "liepard",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0510_00.blend",
+        "bytes": 18596951,
+        "crc32": "413a8de6"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 520,
+      "species": "tranquill",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0520_00.blend",
+        "bytes": 12597871,
+        "crc32": "1a1da99d"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 521,
+      "species": "unfezant",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0521.blend",
+        "bytes": 34789937,
+        "crc32": "ca1fe60f"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 524,
+      "species": "roggenrola",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0524_00.blend",
+        "bytes": 2703425,
+        "crc32": "24a63218"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 525,
+      "species": "boldore",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0525_00.blend",
+        "bytes": 5520903,
+        "crc32": "4f694b20"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 526,
+      "species": "gigalith",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0526_00.blend",
+        "bytes": 6759394,
+        "crc32": "b5bedb38"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 535,
+      "species": "tympole",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0535_00.blend",
+        "bytes": 2552599,
+        "crc32": "5b1b714b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 536,
+      "species": "palpitoad",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0536_00.blend",
+        "bytes": 9856551,
+        "crc32": "01f676b0"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 537,
+      "species": "seismitoad",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0537_00.blend",
+        "bytes": 18737044,
+        "crc32": "9a95fcf6"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 564,
+      "species": "tirtouga",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0564_00.blend",
+        "bytes": 10061544,
+        "crc32": "47e8b5c4"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 565,
+      "species": "carracosta",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0565_00.blend",
+        "bytes": 9453307,
+        "crc32": "24cb1844"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 567,
+      "species": "archeops",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0567_00.blend",
+        "bytes": 33098536,
+        "crc32": "665b1b1a"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 581,
+      "species": "swanna",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0581.blend",
+        "bytes": 68328763,
+        "crc32": "e31ca5e1"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 588,
+      "species": "karrablast",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0588_00.blend",
+        "bytes": 3796033,
+        "crc32": "76105c8d"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 589,
+      "species": "escavalier",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0589_00.blend",
+        "bytes": 5226804,
+        "crc32": "d576c77a"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 593,
+      "species": "jellicent-male",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0593.blend",
+        "bytes": 38737275,
+        "crc32": "30d25de4"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 597,
+      "species": "ferroseed",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0597_00.blend",
+        "bytes": 2254546,
+        "crc32": "da76c73b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 605,
+      "species": "elgyem",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0605_00.blend",
+        "bytes": 6774951,
+        "crc32": "1cafb8e8"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 606,
+      "species": "beheeyem",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0606_00.blend",
+        "bytes": 5465753,
+        "crc32": "ab4fe279"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 616,
+      "species": "shelmet",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0616_00.blend",
+        "bytes": 4773686,
+        "crc32": "ff47cec5"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 617,
+      "species": "accelgor",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0617_00.blend",
+        "bytes": 12876958,
+        "crc32": "10406793"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 621,
+      "species": "druddigon",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0621_00.blend",
+        "bytes": 17943602,
+        "crc32": "4c2f0226"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 630,
+      "species": "mandibuzz",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0630.blend",
+        "bytes": 57433886,
+        "crc32": "3d4c2465"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 631,
+      "species": "heatmor",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0631_00.blend",
+        "bytes": 16422096,
+        "crc32": "e4c4e892"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 632,
+      "species": "durant",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0632_00.blend",
+        "bytes": 11958460,
+        "crc32": "2b700dab"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 646,
+      "species": "kyurem",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0646.blend",
+        "bytes": 211568441,
+        "crc32": "12059736"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 647,
+      "species": "keldeo-ordinary",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0647.blend",
+        "bytes": 143292031,
+        "crc32": "01f2807b"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 649,
+      "species": "genesect",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0649.blend",
+        "bytes": 49531756,
+        "crc32": "6a5e28de"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 676,
+      "species": "furfrou",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+        "member": "pm0701.blend",
+        "bytes": 594160814,
+        "crc32": "f4995e13"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 681,
+      "species": "aegislash-shield",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+        "member": "pm0746.blend",
+        "bytes": 83334645,
+        "crc32": "66af9c99"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 710,
+      "species": "pumpkaboo-average",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+        "member": "pm0735.blend",
+        "bytes": 185098206,
+        "crc32": "b4051593"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 711,
+      "species": "gourgeist-average",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+        "member": "pm0736.blend",
+        "bytes": 214556023,
+        "crc32": "3457fd44"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 718,
+      "species": "zygarde-50",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+        "member": "pm0770.blend",
+        "bytes": 245254292,
+        "crc32": "191b83af"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 732,
+      "species": "trumbeak",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0808.blend",
+        "bytes": 13046097,
+        "crc32": "a65324cc"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 774,
+      "species": "minior",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0824.blend",
+        "bytes": 10357995,
+        "crc32": "359c7aff"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 800,
+      "species": "necrozma",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0865.blend",
+        "bytes": 41837133,
+        "crc32": "008e3d84"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 803,
+      "species": "poipole",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0886.blend",
+        "bytes": 17078774,
+        "crc32": "b662ca5b"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 805,
+      "species": "stakataka",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0884.blend",
+        "bytes": 43925385,
+        "crc32": "04bbf873"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 825,
+      "species": "dottler",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0931.blend",
+        "bytes": 9502231,
+        "crc32": "c9704585"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 845,
+      "species": "cramorant",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0917.blend",
+        "bytes": 468598203,
+        "crc32": "099a68cf"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 851,
+      "species": "centiskorch",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0916.blend",
+        "bytes": 110945145,
+        "crc32": "9da4a082"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 866,
+      "species": "mr-rime",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0980.blend",
+        "bytes": 60387223,
+        "crc32": "458bbc68"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 867,
+      "species": "runerigus",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0979.blend",
+        "bytes": 144778495,
+        "crc32": "18f1a9ab"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 869,
+      "species": "alcremie",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0925.blend",
+        "bytes": 373129110,
+        "crc32": "d6a2df97"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 877,
+      "species": "morpeko",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0941.blend",
+        "bytes": 77825911,
+        "crc32": "415d1aee"
+      },
+      "previous_status": "source_or_motion_recovery_pending",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 883,
+      "species": "arctovish",
+      "legacy_source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen8.zip",
+        "member": "pm0963.blend",
+        "bytes": 21569877,
+        "crc32": "a83dfabd"
+      },
+      "previous_status": "native_material_hold",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1011,
+      "species": "dipplin",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1012,
+      "species": "poltchageist",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1013,
+      "species": "sinistcha",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1014,
+      "species": "okidogi",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1015,
+      "species": "munkidori",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1016,
+      "species": "fezandipiti",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1017,
+      "species": "ogerpon",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1018,
+      "species": "archaludon",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1019,
+      "species": "hydrapple",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1020,
+      "species": "gouging-fire",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1021,
+      "species": "raging-bolt",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1022,
+      "species": "iron-boulder",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1023,
+      "species": "iron-crown",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1024,
+      "species": "terapagos",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    },
+    {
+      "national_dex": 1025,
+      "species": "pecharunt",
+      "legacy_source": null,
+      "previous_status": "dlc_model_found_native_motion_missing",
+      "runtime_approved": false
+    }
+  ]
+}

@@ -1,5 +1,16 @@
 # Remaining 274 base Pokémon — production checkpoint
 
+## Current checkpoint — 1 October 2026
+
+883 ordinary species plus Mega Dragonite are approved and their complete
+884-profile index is published on R2.142 ordinary species remain. The next
+recovery run has12 technically exported normal candidates:8 awaiting appearance
+review and4 needing further visual repairs. No new pairs have been admitted.
+See `docs/catalog-remaining-142-production.md` and
+`tools/sprite_factory/catalog_remaining_142_checkpoint.json`.
+
+## Historical checkpoint — 30 September 2026
+
 As of 2026-09-30, this production run started with 751 approved base species
 plus Mega Dragonite and 274 remaining base species. The first 56 pairs are now
 approved locally and individually bundled: 807 base species plus Mega Dragonite

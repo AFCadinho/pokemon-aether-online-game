@@ -1,0 +1,1000 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "arctovish",
+            "runtime_sha256": "ca5db4dfa4caca43e591526a898ea76b223337d552e85b3ca05d871c60e86985",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "arctovish@shiny",
+            "runtime_sha256": "7186cb89941c132c671830d83e86881a3d8e42a4d7e2154ab7b7698326cee093",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:arctovish:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 883,
+        "object_key": "optional-assets/pokemon_3d/arctovish/base/v1-f07663a9bc5d3a236b27d15c16a61fd85471d7ec3a991ad543101d7f196af165.zip",
+        "sha256": "f07663a9bc5d3a236b27d15c16a61fd85471d7ec3a991ad543101d7f196af165",
+        "size_bytes": 1925550,
+        "species_id": "arctovish",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "lillipup",
+            "runtime_sha256": "ea8698cf87042bdcd3a2959ff7131c21d5b5ef5e01bcac5bbde31bfb478eaeb0",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "lillipup@shiny",
+            "runtime_sha256": "a60a6913b84dcbcf9c7b347fc3080922f3bf4013222415624041a16687b3ae61",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:lillipup:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 506,
+        "object_key": "optional-assets/pokemon_3d/lillipup/base/v1-5a4d0aa1bb3de315a1b12a575c3f679bab7f39e78d85696bdc4a3553f5da34c3.zip",
+        "sha256": "5a4d0aa1bb3de315a1b12a575c3f679bab7f39e78d85696bdc4a3553f5da34c3",
+        "size_bytes": 1656810,
+        "species_id": "lillipup",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "mr-rime",
+            "runtime_sha256": "c93e25813ee5f261b038853463a150c34dbc529e9b26836a4252a24a637c4dfd",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "mr-rime@shiny",
+            "runtime_sha256": "2a8fc0a738fa566e52ec89c1ea50497bed540e54a764f24b404e648283f46d93",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:mr-rime:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 866,
+        "object_key": "optional-assets/pokemon_3d/mr-rime/base/v1-e1a6280076acc72e33818f62bc5369dd5f7a25b1d7a36420d919af6044e9de04.zip",
+        "sha256": "e1a6280076acc72e33818f62bc5369dd5f7a25b1d7a36420d919af6044e9de04",
+        "size_bytes": 5731832,
+        "species_id": "mr-rime",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "noctowl",
+            "runtime_sha256": "18ca5d0f6c752b5ae095b3b30672852a3a99734bc086883992a495d0f9cda67c",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "noctowl@shiny",
+            "runtime_sha256": "aa9935ca5f0e85b5412e4811fe93bb1b63ad19aa062508fce1c886e720b89b8a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:noctowl:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 164,
+        "object_key": "optional-assets/pokemon_3d/noctowl/base/v1-8679e84c018e041935bb56dc745546213658c60620460ef77bf662f4041a99e7.zip",
+        "sha256": "8679e84c018e041935bb56dc745546213658c60620460ef77bf662f4041a99e7",
+        "size_bytes": 11104949,
+        "species_id": "noctowl",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "palpitoad",
+            "runtime_sha256": "b45e59bde009fd9c0698c776eee4526c98204b1b0dd8755e074d5379124b50db",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "palpitoad@shiny",
+            "runtime_sha256": "2ac3d630c816b25c3d8a016e73e98eba1051147522c97beedb6d14b8a3d959d0",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:palpitoad:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 536,
+        "object_key": "optional-assets/pokemon_3d/palpitoad/base/v1-6b2b08dcfa9963ecee52dbcf08f6c7368f22649a29919f3d920840ce4a3308c5.zip",
+        "sha256": "6b2b08dcfa9963ecee52dbcf08f6c7368f22649a29919f3d920840ce4a3308c5",
+        "size_bytes": 1909906,
+        "species_id": "palpitoad",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "poipole",
+            "runtime_sha256": "a47b04a16473fe0a09b25104370e6a9df18c099241e1f598cbd6f46d6bcf1b02",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "poipole@shiny",
+            "runtime_sha256": "124b67b613cd3674303d901a61679a7253f64c95846b6256a0135678766d4803",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:poipole:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 803,
+        "object_key": "optional-assets/pokemon_3d/poipole/base/v1-7ab32e77df531cae8d700140bcd0533e9dc3237e098161ecbaa2fd3a0874aa87.zip",
+        "sha256": "7ab32e77df531cae8d700140bcd0533e9dc3237e098161ecbaa2fd3a0874aa87",
+        "size_bytes": 2786366,
+        "species_id": "poipole",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "seismitoad",
+            "runtime_sha256": "53ef2cf8dce895e95cd35709b4d346202dc79521e86cce0a4a92f04cb492112f",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "seismitoad@shiny",
+            "runtime_sha256": "3421f738fd94c615da66eccb8a37b089da54c594d84358824c6a6a311dc2169a",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:seismitoad:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 537,
+        "object_key": "optional-assets/pokemon_3d/seismitoad/base/v1-487fd024fe4d41a364e4ab873c7270ba2a15bb6c9c24c54ad3c53ff21af21746.zip",
+        "sha256": "487fd024fe4d41a364e4ab873c7270ba2a15bb6c9c24c54ad3c53ff21af21746",
+        "size_bytes": 2240506,
+        "species_id": "seismitoad",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "trumbeak",
+            "runtime_sha256": "fac734f56d56bb83f67bc07d466d01350c2c708a47a7569f4ea6e8aca8556b5c",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "trumbeak@shiny",
+            "runtime_sha256": "a93f03c9ce0fe9d1619e48d8c2a39bcab6dc593fff4e9f346f44a011d7a5411e",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:trumbeak:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 732,
+        "object_key": "optional-assets/pokemon_3d/trumbeak/base/v1-04b66bb3321e9d131492dda171cc1693b92d0519c24e3163969620ef1d5d25d5.zip",
+        "sha256": "04b66bb3321e9d131492dda171cc1693b92d0519c24e3163969620ef1d5d25d5",
+        "size_bytes": 7837862,
+        "species_id": "trumbeak",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "remaining-142-eight-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 35193781,
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/approved-eight/admitted_check.gd": "72fea5cbdd64182bf7038f6b0ec984393d3729e6127e925c1d4977c51899b021",
+    ".tmp/remaining-142-production/approved-eight/bundles/asset-index.json": "362dfaa18ad4e2d7b9185a2d0f1ac0e5ee50c493c548d42637aae18f8c43d669",
+    ".tmp/remaining-142-production/approved-eight/install-launcher.log": "2ab2f3aa663b1bcd699b126e5e538001325e112af6ad991ee39a49367167143a",
+    ".tmp/remaining-142-production/approved-eight/installed-stress.json": "3100885e9d322c39bf4b7b70a1b9cd66a95b61fc73c6f1ad3e377c1e29be1df4",
+    ".tmp/remaining-142-production/approved-eight/installed-stress.log": "a227f0483fa9d88daba789c6f04e69843fd0c2959df68c5e79a7affa6509008c",
+    ".tmp/remaining-142-production/approved-eight/installed/installed-catalog.json": "e03898c204fe921f68258d1ec0462956314739cf4869bcbdf64d11d84366bd1c",
+    ".tmp/remaining-142-production/approved-eight/runtime_check.gd": "fa1b8eb15d390b216e0fe440ec9e943f26be6d78b10f220c4cf845cb513c535e",
+    "tools/sprite_factory/admit_remaining_142_eight.py": "fdfc74482445f2b4db9b5252c370803af71fcae952d04acfb015aea4e60072c8",
+    "tools/sprite_factory/catalog_remaining_142_eight_battle_qualification.json": "b137c718bf442fa75fa13103ed9c519725fb88325290cc042934b05bb3dd89a2",
+    "tools/sprite_factory/catalog_remaining_142_eight_profiles.json": "fb2ebee1cea23a466cd7bebd30220decbd0f2a35a5c6cda2bf6a863989989d26"
+  },
+  "installed_runtime_check_passed": true,
+  "no_op_restart_check_passed": true,
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release certification and publication"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 8,
+      "frame_max_ms": 386.117,
+      "frame_p95_ms": 16.881,
+      "frame_samples": 395,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 2.0,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 2.053,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 1.179,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 1.309,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6,
+          "ms": 1.153,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6,
+          "ms": 1.265,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8,
+          "ms": 9.937,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 49,
+          "ms": 1.047,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 49,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 53,
+          "ms": 1.201,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 53,
+          "ms": 1.305,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 97,
+          "ms": 1.631,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 97,
+          "ms": 1.748,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 102,
+          "ms": 1.506,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 102,
+          "ms": 1.607,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 106,
+          "ms": 1.406,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 130,
+          "ms": 2.379,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 149,
+          "ms": 1.665,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 149,
+          "ms": 1.763,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 157,
+          "ms": 1.563,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 157,
+          "ms": 1.662,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 162,
+          "ms": 1.74,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 186,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 204,
+          "ms": 1.064,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 204,
+          "ms": 1.164,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 208,
+          "ms": 1.343,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 208,
+          "ms": 1.451,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 210,
+          "ms": 1.025,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 252,
+          "ms": 1.383,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 252,
+          "ms": 1.464,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 256,
+          "ms": 1.245,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 256,
+          "ms": 1.362,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 300,
+          "ms": 1.5,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 300,
+          "ms": 1.612,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 305,
+          "ms": 1.286,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 305,
+          "ms": 1.392,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 307,
+          "ms": 1.394,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 330,
+          "ms": 1.083,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 347,
+          "ms": 1.479,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 347,
+          "ms": 1.585,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 353,
+          "ms": 1.244,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 353,
+          "ms": 1.337,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 356,
+          "ms": 1.234,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 379,
+          "ms": 1.129,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 8,
+      "retained_source_bytes": 7836811,
+      "stalls_over_50ms": [
+        {
+          "context": "load arctovish",
+          "covered": true,
+          "ms": 386.117
+        },
+        {
+          "context": "load arctovish",
+          "covered": true,
+          "ms": 107.869
+        },
+        {
+          "context": "load mr-rime",
+          "covered": false,
+          "ms": 95.446
+        },
+        {
+          "context": "load poipole",
+          "covered": false,
+          "ms": 94.426
+        }
+      ],
+      "static_bytes": 224675941
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 8,
+      "frame_max_ms": 149.931,
+      "frame_p95_ms": 17.048,
+      "frame_samples": 393,
+      "load_spans": [
+        {
+          "frame": 399,
+          "ms": 2.309,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 399,
+          "ms": 2.359,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 401,
+          "ms": 1.088,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 401,
+          "ms": 1.17,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 405,
+          "ms": 1.038,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 405,
+          "ms": 1.141,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 407,
+          "ms": 1.515,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 407,
+          "ms": 69.948,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 448,
+          "ms": 1.055,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 448,
+          "ms": 1.153,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 452,
+          "ms": 1.055,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 452,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 454,
+          "ms": 1.055,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 496,
+          "ms": 1.58,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 496,
+          "ms": 1.737,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 501,
+          "ms": 1.422,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 501,
+          "ms": 1.566,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 504,
+          "ms": 1.431,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 527,
+          "ms": 1.462,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 545,
+          "ms": 1.564,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 545,
+          "ms": 1.676,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 553,
+          "ms": 1.881,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 553,
+          "ms": 1.983,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 558,
+          "ms": 1.95,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 600,
+          "ms": 1.211,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 600,
+          "ms": 1.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 604,
+          "ms": 1.024,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 606,
+          "ms": 1.105,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 630,
+          "ms": 1.004,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 648,
+          "ms": 1.235,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 648,
+          "ms": 1.328,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 652,
+          "ms": 1.339,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 652,
+          "ms": 1.438,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 654,
+          "ms": 1.26,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 696,
+          "ms": 1.361,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 696,
+          "ms": 1.447,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 700,
+          "ms": 1.511,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 700,
+          "ms": 1.614,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 702,
+          "ms": 1.163,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 744,
+          "ms": 1.311,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 744,
+          "ms": 1.397,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 749,
+          "ms": 1.261,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 749,
+          "ms": 1.36,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 752,
+          "ms": 1.335,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 776,
+          "ms": 1.262,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 8,
+      "retained_source_bytes": 7836811,
+      "stalls_over_50ms": [
+        {
+          "context": "load arctovish",
+          "covered": true,
+          "ms": 110.67
+        },
+        {
+          "context": "load arctovish",
+          "covered": true,
+          "ms": 149.931
+        },
+        {
+          "context": "load mr-rime",
+          "covered": false,
+          "ms": 69.018
+        },
+        {
+          "context": "load poipole",
+          "covered": false,
+          "ms": 84.648
+        }
+      ],
+      "static_bytes": 226500753
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 8,
+      "frame_max_ms": 96.352,
+      "frame_p95_ms": 16.863,
+      "frame_samples": 395,
+      "load_spans": [
+        {
+          "frame": 797,
+          "ms": 2.141,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 797,
+          "ms": 2.182,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 799,
+          "ms": 1.136,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 799,
+          "ms": 1.318,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 803,
+          "ms": 1.209,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 803,
+          "ms": 1.316,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 805,
+          "ms": 1.707,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 805,
+          "ms": 10.245,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 847,
+          "ms": 1.099,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 847,
+          "ms": 1.214,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 851,
+          "ms": 1.232,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 851,
+          "ms": 1.336,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 895,
+          "ms": 1.418,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 895,
+          "ms": 1.511,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 900,
+          "ms": 1.617,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 900,
+          "ms": 1.737,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 903,
+          "ms": 1.419,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 926,
+          "ms": 1.399,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 945,
+          "ms": 1.637,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 945,
+          "ms": 1.731,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 946,
+          "ms": 6.202,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 953,
+          "ms": 1.563,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 953,
+          "ms": 1.656,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 958,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1000,
+          "ms": 1.165,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1000,
+          "ms": 1.269,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1004,
+          "ms": 1.087,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1004,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1006,
+          "ms": 1.096,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1048,
+          "ms": 1.177,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1048,
+          "ms": 1.263,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1052,
+          "ms": 1.087,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1052,
+          "ms": 1.181,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1096,
+          "ms": 1.399,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1096,
+          "ms": 1.491,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1100,
+          "ms": 1.148,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1100,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1102,
+          "ms": 1.073,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1126,
+          "ms": 1.06,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1144,
+          "ms": 1.312,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1144,
+          "ms": 1.41,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1149,
+          "ms": 1.411,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1149,
+          "ms": 1.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1152,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1176,
+          "ms": 1.072,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 8,
+      "retained_source_bytes": 7836811,
+      "stalls_over_50ms": [
+        {
+          "context": "load arctovish",
+          "covered": true,
+          "ms": 96.352
+        }
+      ],
+      "static_bytes": 226569725
+    }
+  ],
+  "schema": 1,
+  "species": [
+    "arctovish",
+    "lillipup",
+    "mr-rime",
+    "noctowl",
+    "palpitoad",
+    "poipole",
+    "seismitoad",
+    "trumbeak"
+  ]
+}

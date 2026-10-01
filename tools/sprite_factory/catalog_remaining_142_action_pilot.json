@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "noctowl",
+      "national_dex": 164,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0164.blend",
+        "bytes": 20348690,
+        "crc32": "e6e2a33b"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0164-noctowl/report.json",
+      "probe_sha256": "e1d6e18b1739989cec23808eaf438ecf158fe408fe885a42be9caea0ddcf079f",
+      "actions": {
+        "idle": "pm0164_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0164_00_00_20400_attack01.gfbanm",
+        "special_attack": "pm0164_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0164_00_00_20500_damage01.gfbanm",
+        "sleep": "pm0164_00_00_00281_sleep01_loop.gfbanm",
+        "faint_start": "pm0164_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0164_00_00_20521_down01_loop.gfbanm",
+        "physical_attack_2": "pm0164_00_00_20410_attack02.gfbanm"
+      },
+      "policy": "Explicit source battle bank2 plus unique authored sleep from same rig; review only"
+    },
+    {
+      "species": "trumbeak",
+      "national_dex": 732,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+        "member": "pm0808.blend",
+        "bytes": 13046097,
+        "crc32": "a65324cc"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0732-trumbeak/report.json",
+      "probe_sha256": "660049c6d324d3d5e632d808d9099b4cf1b9d53ed108febb211c400f99756cc3",
+      "actions": {
+        "idle": "pm0808_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0808_00_00_20400_attack01",
+        "special_attack": "pm0808_00_00_20450_rangeattack01",
+        "damage": "pm0808_00_00_20500_damage01",
+        "sleep": "pm0808_00_00_00281_sleep01_loop",
+        "faint_start": "pm0808_00_00_20520_down01_start",
+        "faint_loop": "pm0808_00_00_20521_down01_loop",
+        "physical_attack_2": "pm0808_00_00_20410_attack02"
+      },
+      "policy": "Explicit source battle bank2 plus unique authored sleep from same rig; review only"
+    }
+  ]
+}

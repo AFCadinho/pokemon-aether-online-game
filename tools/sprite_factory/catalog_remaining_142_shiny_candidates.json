@@ -1,0 +1,2192 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "scope": "Eight normal-approved species: authored shiny review candidates, no admission",
+  "runtime_approved": false,
+  "appearance_approval_pending": false,
+  "battle_qualification_pending": true,
+  "policy": "Explicit per-material RGB anchors from pinned local HOME references; native geometry/skin/animations and alpha preserved. Not claimed to be official rare table exports.",
+  "review_url": "http://127.0.0.1:8782/appearance-eight-pairs-v2/index.html",
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/shiny-runtime-v3/report.json": "82d6d41b5c89fe2e293f7fc2524a8b1210e8c8526d6796ff5617ec1b3f1f033a",
+    ".tmp/remaining-142-production/shiny-captures-v2/review.json": "8d6caf92254d64e392a6195fc91be8a51b15056d9fba8354103cae069b7e867a",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/index.html": "63097713791baf13cfa2e8fd758286f90d0f9b9bca81f61e6733303ab5112149",
+    "tools/sprite_factory/catalog_animation_palette_variants.py": "18b70881ab4cb4f2af11c192f29fd2c65f199e2c57b33447de25c0b2590126de",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/arctovish-idle-50.webp": "4d065902555adda1fb13d5197e65c1f90a9addd1556c46f75d863037c60412f0",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/arctovish-physical_attack-50.webp": "914b29f35851481fa88e9a1d7b4e72b0a66bda676dbdf633167d73861b71d9ab",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/arctovish-special_attack-50.webp": "ba787a9e051cb55995197ae37b3f3c61533a7d87785665ab402fc17677c62714",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/arctovish-sleep-50.webp": "c37be55ed5045ab1167ebf6480fa0b2a2a6699f57a5a1f6eb9f199d0ee721c85",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/arctovish-faint_start-100.webp": "1bb55bcb3d8e7c33569a777e47b6e23a00bfd2fbf1c691830a150d377d0bd77e",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-arctovish-idle-50.webp": "5869288c338ff030f6cfc197d0b8c74260462584bf6328113b5da6442760933f",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-arctovish-physical_attack-50.webp": "3bbaec69c8b78e46a3bb6bd295e533ad64d23c5b73ac35a4e36e024aeab7f45d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-arctovish-special_attack-50.webp": "b3118232547d4854b34312de31b723ec36a9f2b0d923ef41e0d225c1d0ec5ff9",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-arctovish-sleep-50.webp": "641c8460f76a0f1b6a037fc3a0e26553c2995be74638dc69b4894b43519acf19",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-arctovish-faint_start-100.webp": "94e16119d6cad060f77a4cef4ae5b56648998906491de0ffb4d65a40822916aa",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/lillipup-idle-50.webp": "70ed4ca479082f29e61e427e9865bf627220fe467cf8acae9ffcd84dacc2d5b2",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/lillipup-physical_attack-50.webp": "a4304131f49efaa5c2d02be740bad3b79d61b8ee8ffb92caba54a02bddd33563",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/lillipup-special_attack-50.webp": "18a5fa3fca4949ade8ca4ded0c9e82a099fc436d7367c401b312013f5a4208b5",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/lillipup-sleep-50.webp": "2513ca31bf3c213016cfced05ceddb6c3538324686375456cf15417176b98e35",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/lillipup-faint_start-100.webp": "3bb5351b2efd6a1249dd0b46cb08315f7b8609ac1e4aecdb9e83ae5403af953a",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-lillipup-idle-50.webp": "f2c1aa9c7ae7666fd3c40805618ff6ed3439789f24b5e84dabd246d3c96150e1",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-lillipup-physical_attack-50.webp": "7a78d0957c5310d72fe429ab6574c7419225aee64d50506ebd1370462be896a0",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-lillipup-special_attack-50.webp": "d43bd4a83f95ac0c36d003a564219ff57a7c06ae64f5abc11fc82c04c3e170a3",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-lillipup-sleep-50.webp": "8b0565e811a5dabc2b9497ddc851a275f3bc1f3e633d25de05ed43f5f1f1251d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-lillipup-faint_start-100.webp": "7bebd55ad36c55f693a78c478cf4ac8d13c19e6a4d19261279eba691b98d9cbc",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/mr-rime-idle-50.webp": "fc9374ade349d8885c0cf5aeb9dfceec3d8732116b8ce99904888cdf3697d43d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/mr-rime-physical_attack-50.webp": "da9f60076c11c02b6e5efbb5e1ab0e67b949c78f31e90f1b230902b0d20f8c63",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/mr-rime-special_attack-50.webp": "af8bb92299b789f082903b0cd094e48baa969bd62bacaf01ae4b80cc96df0daf",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/mr-rime-sleep-50.webp": "0804530ea11f518c02e6b08633a7edac9fc3feb792d22b931c24adc158bdf830",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/mr-rime-faint_start-100.webp": "8999821b014c42498f6f6c346244f104140d3701aa315dc0347f62a3506862a1",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-mr-rime-idle-50.webp": "fe5ce7889f8c832007d2d9107822a46cae485a10fca7d3927634506349903ca2",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-mr-rime-physical_attack-50.webp": "06650977486764b66259820847a261596f07fd4090625d1c00220c7b0c014d76",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-mr-rime-special_attack-50.webp": "39b05ba5bc367ab9298c1df09afc8425d3b7e092a74e2a3f267908c1b6b443d0",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-mr-rime-sleep-50.webp": "e9db02c4393a8fd746c0507cc32a99ec1772b96809c7d17c16593e6ee1fedc71",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-mr-rime-faint_start-100.webp": "44aff3b921c6ee3b5088d2dc4c7afeea42361ba1ef02a819bfccf0cc61ee6142",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-idle-50.webp": "d368cf60d5f04a7269a37efd3295f5343135d231ba1bf662410d5233e9cb8f77",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-physical_attack-50.webp": "5c4209ba056b149f072bd9f95aab6b0c8ff3f43e8e35dd9bc70973dffed70a9d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-physical_attack_2-50.webp": "aa2393d6e65299d92921a585a30552e3ae13926c74242418ae86085f99091380",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-special_attack-50.webp": "6a4d55198faf887e3b30fca05e10073c6133f6bed6acb5b21850817672e7c1fb",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-sleep-50.webp": "43fdcbe194e708295fa2223fad2ee8a447aa99dfbd4db24cf10b0c31a3f648fb",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/noctowl-faint_start-100.webp": "41e9257a9a8d6b2ddf314d0a37bfaad11564f5f693239266f14716782a3955d3",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-idle-50.webp": "34eb9efe7dd702d27b642dc2b5eb39592f4fc397713b090f5847ca627f50de42",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-physical_attack-50.webp": "d8dfc225ee4fe54b3cb1eb2eb59024a13baa1ba26bbb5836ef586ea7c9da7f2a",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-physical_attack_2-50.webp": "53c62240b2b79fabf18a0557ea10c32273632b4d1339abc843eb272128206390",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-special_attack-50.webp": "e95b57a84a0aa759a8189006936200d7dc73ad0a731c905c6ccc21fa3cc295fd",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-sleep-50.webp": "cfbb46354599932eedb33e5f7d99eba65917249604ac6961f77ff09adfea86eb",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-noctowl-faint_start-100.webp": "013d596fdf9249445665ebb86659fc7a40ea14c8b4104a1c141cfb8c46145652",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/palpitoad-idle-50.webp": "9dc2428f491d9d78c4d8452224911a7fa2b935609d20023867d9df0752ca806d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/palpitoad-physical_attack-50.webp": "7711268e19826ba0fb5fe9b69bd54a19a8ca13a0849ffe7d3e6a5d51d713fc88",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/palpitoad-special_attack-50.webp": "8fc41cef63d37048bd77b09855390cc24351b9a03a120fc502acb38e70672447",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/palpitoad-sleep-50.webp": "296dfb02dafadd23e193aa626c5d43494292240b212c1bd269bb3552342b8868",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/palpitoad-faint_start-100.webp": "6f70ecd3e625770dbe03deb11135f3caf8fd9d877f597ded57d065f3c8b6ce05",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-palpitoad-idle-50.webp": "251f9027a1650c282881d2ee0f2593af376dd8a1159000c0cc1fe1f3a81fab22",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-palpitoad-physical_attack-50.webp": "86c9e20148fdf1a58cd86037864631e544b09135d8885122648129fc25c576b3",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-palpitoad-special_attack-50.webp": "3c5db710d0add7cdbf406511bec8e08ab1f240a7a58987cde048035bd38e417b",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-palpitoad-sleep-50.webp": "a1532ba6e0c624ee7831db3343b63a2d1b8790ec623976aacb2a9a9215406e28",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-palpitoad-faint_start-100.webp": "efa2b45f97199845c92f1b81bd6b5aabfb2483f151053de20586ff51055df16f",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-idle-50.webp": "8e2595c88eaaf684fe2f1fc1945ce022d343ca0444b0027af9d43d3dcce3fe1b",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-physical_attack-50.webp": "cfa7e15c32967b48c1bb87cbaa6e276a4144d67051a473b9b88af9052c5af946",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-physical_attack_2-50.webp": "8e542ccbbe6039758a3b16b698930c8295971b9d83b2f62baebdc40d9593360f",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-special_attack-50.webp": "1fd7e335c3e3d202602b06144ebe4c5920e95ddfee8e9e6829df64060a195ffd",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-sleep-50.webp": "109bb37d004380a268e26ac8f5f4417d08296cc579e78890fb93139f952f2ae5",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/poipole-faint_start-100.webp": "2334646f6d743be2824027977e943466d2ace8d505a0542f569deb059ffe1903",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-idle-50.webp": "71ee1308dc1753d8d3df73f8dc626bb373f9cc1bb7c8e61d7d09ee1e1ad51efc",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-physical_attack-50.webp": "146d2a495f41965b9005b23c4a0a143d3366a243a369389154ac57752e02a046",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-physical_attack_2-50.webp": "3831ef07fff10341dc8acce43bab1acf2b998336387959650d942711f14d03a7",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-special_attack-50.webp": "9433b6b96b63d8c17a666145ef855c67910f5db78fae9f69773aaa87f517b422",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-sleep-50.webp": "6cfd658ad7ef43f24b2eb7ae2485070745d017a465c9f09361234b8dc01263b2",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-poipole-faint_start-100.webp": "561093e4b77351caf43a873b29a3a88302781317aa937d57cd560325affebbe7",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/seismitoad-idle-50.webp": "8b01e26b756309fdfedf3cc74973f36af3a25475133872b29ba149c2317e9797",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/seismitoad-physical_attack-50.webp": "299efe99cc11193a8d67915c826af1a19f46d0915f158c72647bdd4a658e8820",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/seismitoad-special_attack-50.webp": "4eeb88c4bbd6b52c59476cafa9193431522512b7450419f921a278d922caca3b",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/seismitoad-sleep-50.webp": "994bd8ee2f9e38671d57a750f1ee03f688505470e2faea21c405c2e6886e56fd",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/seismitoad-faint_start-100.webp": "30b333e8951504cbbcb59a214ac63c08e8bf964d57bdc38c4834b7f65afbf67c",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-seismitoad-idle-50.webp": "b48278c7c880352e79b5b29a51de6506ef41e196d5d6889001cd8111e8097d50",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-seismitoad-physical_attack-50.webp": "383e144bac08ad174e9583ac85591aaf07da7dbda6494dba332e262eea907491",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-seismitoad-special_attack-50.webp": "1c2f0682b6b2c56d9ddece6fc94f1e783fd865703b0268119f4e415ce5bcdb68",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-seismitoad-sleep-50.webp": "06573a24a128317a5a101ed4de9b62549c0d83138a00ccbddc6aff1dd96beb4a",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-seismitoad-faint_start-100.webp": "19e3536ed713843b50258504911a40c6a2babfa0d86d629b7487cffefc932694",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-idle-50.webp": "17f61af2a7c7cb2b21a09b7bb0bc6a4cf1b51c7c9516786401a12332798b8171",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-physical_attack-50.webp": "98572fb60d471be9f27cd02db827a127443b679c614bceb5c5b19c1c90a39d61",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-physical_attack_2-50.webp": "17915f4d45553596ab8b953da0899ff8466b613a70f969d663b6859717b4edff",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-special_attack-50.webp": "d527b1f526118c84729a7d3011db39e0a1e7d9eeb06a8a6e0b472bfe748c190d",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-sleep-50.webp": "cbdaaedd647c12a8d3f7241516f51bb1748c7af279e96211ab491f884a4a1ddc",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/trumbeak-faint_start-100.webp": "e84bf9b24d3456c695c2388ff5253b929a73e3b2660a953c90935e394acca372",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-idle-50.webp": "8a658e5e46d7f46e4c5840dfef53a696d7442bce33546cf18b574d9218bec1c1",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-physical_attack-50.webp": "25b545ce79d6144a5514b713602e12abbcc98845a5d1b17ee83e3c6818473395",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-physical_attack_2-50.webp": "26fed900f554083f7eccd014e5dbfa27c03f851b1ab4093762bb920e741d1006",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-special_attack-50.webp": "f9c44ca181f6c6904f27dc9c706475253c6bd091320b6008d248a29f4126fe52",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-sleep-50.webp": "063fe2539957e19f89d911b655038663f6fefce5a499d1c3db6d65c05b98dcd2",
+    ".tmp/remaining-142-production/appearance-eight-pairs-v2/media/shiny-trumbeak-faint_start-100.webp": "36808d1f31cfa2de235059e342d57870291fabd5f6553a0782ba146179c2daaa"
+  },
+  "entries": [
+    {
+      "species": "arctovish",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/arctovish/model.glb",
+      "source_sha256": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/arctovish/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Arctovish.png",
+          "sha256": "207a07e5405d87b35b89218a35cedd2be99efb1f638a682f82916406df6c14d9"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/arctovish.png",
+          "sha256": "c4d573e4d13481652ee62d8955115e2896bdea03b7fa3b01b5ab7b12441fc97f"
+        }
+      ],
+      "materials": {
+        "BodySpcVco01": [
+          {
+            "from": [
+              110,
+              148,
+              173
+            ],
+            "to": [
+              148,
+              160,
+              154
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              0,
+              84,
+              124
+            ],
+            "to": [
+              97,
+              110,
+              116
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              37,
+              73,
+              120
+            ],
+            "to": [
+              159,
+              124,
+              195
+            ],
+            "tolerance": 36
+          },
+          {
+            "from": [
+              70,
+              137,
+              168
+            ],
+            "to": [
+              137,
+              144,
+              160
+            ],
+            "tolerance": 28
+          }
+        ],
+        "BodySpcVco00": [
+          {
+            "from": [
+              110,
+              148,
+              173
+            ],
+            "to": [
+              148,
+              160,
+              154
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              0,
+              84,
+              124
+            ],
+            "to": [
+              97,
+              110,
+              116
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              37,
+              73,
+              120
+            ],
+            "to": [
+              159,
+              124,
+              195
+            ],
+            "tolerance": 36
+          },
+          {
+            "from": [
+              70,
+              137,
+              168
+            ],
+            "to": [
+              137,
+              144,
+              160
+            ],
+            "tolerance": 28
+          }
+        ],
+        "BodySpcVco02": [
+          {
+            "from": [
+              110,
+              148,
+              173
+            ],
+            "to": [
+              148,
+              160,
+              154
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              0,
+              84,
+              124
+            ],
+            "to": [
+              97,
+              110,
+              116
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              37,
+              73,
+              120
+            ],
+            "to": [
+              159,
+              124,
+              195
+            ],
+            "tolerance": 36
+          },
+          {
+            "from": [
+              70,
+              137,
+              168
+            ],
+            "to": [
+              137,
+              144,
+              160
+            ],
+            "tolerance": 28
+          }
+        ],
+        "Body": [
+          {
+            "from": [
+              110,
+              148,
+              173
+            ],
+            "to": [
+              148,
+              160,
+              154
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              0,
+              84,
+              124
+            ],
+            "to": [
+              97,
+              110,
+              116
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              37,
+              73,
+              120
+            ],
+            "to": [
+              159,
+              124,
+              195
+            ],
+            "tolerance": 36
+          },
+          {
+            "from": [
+              70,
+              137,
+              168
+            ],
+            "to": [
+              137,
+              144,
+              160
+            ],
+            "tolerance": 28
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "arctovish",
+        "variant": "shiny",
+        "source_sha256": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+        "glb_sha256": "24c23e3d4b335a8b99301fcf0671330ecf400f68aa2eb6689be360a75b5159e1",
+        "geometry_motion_sha256": "72a963c56fc5e197cb64a7452429f95548920196264842acbeedcce8ac3061c2",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "BodySpcVco01",
+            "png_sha256": "99622a9f6fecee7a4d5a79d502431090d54561dd4f105e2809cab6d5663b129e"
+          },
+          {
+            "material": "BodySpcVco00",
+            "png_sha256": "46c87c699ed3f6bc6f3a00865cf9419baa93f849e132de024f9ef4e1857b4b37"
+          },
+          {
+            "material": "BodySpcVco02",
+            "png_sha256": "99622a9f6fecee7a4d5a79d502431090d54561dd4f105e2809cab6d5663b129e"
+          },
+          {
+            "material": "Body",
+            "png_sha256": "99622a9f6fecee7a4d5a79d502431090d54561dd4f105e2809cab6d5663b129e"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 60.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 100.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 220.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 160.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 160.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 160.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "24c23e3d4b335a8b99301fcf0671330ecf400f68aa2eb6689be360a75b5159e1",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/arctovish/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/arctovish.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "7186cb89941c132c671830d83e86881a3d8e42a4d7e2154ab7b7698326cee093",
+        "source_sha256": "1090c38940e5fe8fccfe87db38498aec84dbd71c7f59d2b15fde3163e00ac0d2",
+        "species": "arctovish",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "lillipup",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/lillipup/model.glb",
+      "source_sha256": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/lillipup/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Lillipup.png",
+          "sha256": "8506feb3a115a6cd79de0351dc380e175ef5b9e4cead77bb4346a6108172c424"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/lillipup.png",
+          "sha256": "e8cbbf173af7ed68233f427d4d59c451939ac889ec90e153b85422c5bbe54b0b"
+        }
+      ],
+      "materials": {
+        "Body00": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          },
+          {
+            "from": [
+              220,
+              154,
+              114
+            ],
+            "to": [
+              183,
+              155,
+              90
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              52,
+              57,
+              78
+            ],
+            "to": [
+              66,
+              66,
+              45
+            ],
+            "tolerance": 22
+          }
+        ],
+        "REye": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          },
+          {
+            "from": [
+              69,
+              62,
+              55
+            ],
+            "to": [
+              39,
+              75,
+              45
+            ],
+            "tolerance": 17
+          },
+          {
+            "from": [
+              56,
+              44,
+              33
+            ],
+            "to": [
+              28,
+              58,
+              33
+            ],
+            "tolerance": 13
+          }
+        ],
+        "LEye": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          },
+          {
+            "from": [
+              69,
+              62,
+              55
+            ],
+            "to": [
+              39,
+              75,
+              45
+            ],
+            "tolerance": 17
+          },
+          {
+            "from": [
+              56,
+              44,
+              33
+            ],
+            "to": [
+              28,
+              58,
+              33
+            ],
+            "tolerance": 13
+          }
+        ],
+        "Mouth": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          }
+        ],
+        "Body02": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          },
+          {
+            "from": [
+              220,
+              154,
+              114
+            ],
+            "to": [
+              183,
+              155,
+              90
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              52,
+              57,
+              78
+            ],
+            "to": [
+              66,
+              66,
+              45
+            ],
+            "tolerance": 22
+          }
+        ],
+        "Body01": [
+          {
+            "from": [
+              239,
+              213,
+              153
+            ],
+            "to": [
+              237,
+              238,
+              153
+            ],
+            "tolerance": 22
+          },
+          {
+            "from": [
+              220,
+              154,
+              114
+            ],
+            "to": [
+              183,
+              155,
+              90
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              52,
+              57,
+              78
+            ],
+            "to": [
+              66,
+              66,
+              45
+            ],
+            "tolerance": 22
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "lillipup",
+        "variant": "shiny",
+        "source_sha256": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+        "glb_sha256": "f41d4edbda7e8ebf0a57ac1e734e6ff3d7dcc243592c900ed6874f5b25bb6d02",
+        "geometry_motion_sha256": "86da1dfd5efd9787756cf521bb8bea49cd75a37469b29bbb9acb194989988ef7",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "Body00",
+            "png_sha256": "a003e64ef396ab36ced1b3d1c4819169dee63b22a3ed94411eb19e88322e15a6"
+          },
+          {
+            "material": "REye",
+            "png_sha256": "bf138fbb8c64d3c4218066e0076005e8fc4c644633719e1289609aa03b368043"
+          },
+          {
+            "material": "LEye",
+            "png_sha256": "5ffea989830334384761412d6ab201aee332591d7b915a1c80308b33df66fa0c"
+          },
+          {
+            "material": "Mouth",
+            "png_sha256": "09f74086a3637caca6de739a533dce4ae1311966dd6c81083644185e9ba63ae7"
+          },
+          {
+            "material": "Body02",
+            "png_sha256": "a003e64ef396ab36ced1b3d1c4819169dee63b22a3ed94411eb19e88322e15a6"
+          },
+          {
+            "material": "Body01",
+            "png_sha256": "a003e64ef396ab36ced1b3d1c4819169dee63b22a3ed94411eb19e88322e15a6"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 40.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 96.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 44.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 200.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 180.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 128.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "f41d4edbda7e8ebf0a57ac1e734e6ff3d7dcc243592c900ed6874f5b25bb6d02",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/lillipup/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/lillipup.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "a60a6913b84dcbcf9c7b347fc3080922f3bf4013222415624041a16687b3ae61",
+        "source_sha256": "f6ca37bc1ad5a96d32d70a4be5ab02effaf808a8464801707fb17406753b7b61",
+        "species": "lillipup",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "mr-rime",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/mr-rime/model.glb",
+      "source_sha256": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/mr-rime/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Mr-Rime.png",
+          "sha256": "1e22883d6bcbb3dd0317ca07ab42e7027e93fcc59187598f6711bda73606517c"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/mrrime.png",
+          "sha256": "073f20d011766ad46390bcff26cf661b0b1b23662a550dbd32803950d853122c"
+        }
+      ],
+      "materials": {
+        "body_00": [
+          {
+            "from": [
+              29,
+              50,
+              145
+            ],
+            "to": [
+              146,
+              145,
+              166
+            ],
+            "tolerance": 80
+          },
+          {
+            "from": [
+              20,
+              18,
+              35
+            ],
+            "to": [
+              51,
+              37,
+              53
+            ],
+            "tolerance": 14
+          }
+        ],
+        "body_01": [
+          {
+            "from": [
+              137,
+              22,
+              44
+            ],
+            "to": [
+              163,
+              100,
+              118
+            ],
+            "tolerance": 65
+          }
+        ],
+        "ice": [
+          {
+            "from": [
+              81,
+              130,
+              172
+            ],
+            "to": [
+              158,
+              172,
+              185
+            ],
+            "tolerance": 70
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "mr-rime",
+        "variant": "shiny",
+        "source_sha256": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+        "glb_sha256": "69385c92f955c61fcbc5c8d4e7035b380d4d8a5a950eeded1b68ff47f5fc6117",
+        "geometry_motion_sha256": "9e17b0634325d8a328a716a92195b19f251e4b77fb302c5fa0e18a4f65346078",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "body_00",
+            "png_sha256": "af631b8a326e0e86ccf1f540682dcbcb6b4f20f1fef01e9bf2bd6b6f0b4fe7b1"
+          },
+          {
+            "material": "body_01",
+            "png_sha256": "15eaa1b9a1d1482f66a6f06f589295cc3bd8dde5fe1fa7ae730e5765cbc83150"
+          },
+          {
+            "material": "ice",
+            "png_sha256": "073a7f92af5e8526c2c29df7a494602d827d2d9e8745e33e3cae0598ebae282a"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 40.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_loop": {
+            "frames": 120.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 120.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 112.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 134.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 150.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 148.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "69385c92f955c61fcbc5c8d4e7035b380d4d8a5a950eeded1b68ff47f5fc6117",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/mr-rime/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/mr-rime.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "2a8fc0a738fa566e52ec89c1ea50497bed540e54a764f24b404e648283f46d93",
+        "source_sha256": "dac109636a276d320d703b9f586dd6d154e1a1ebf035d2ae83c06d56804c0802",
+        "species": "mr-rime",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "noctowl",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/noctowl/model.glb",
+      "source_sha256": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/noctowl/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Noctowl.png",
+          "sha256": "c7526aa9c3b2a0536f5e75701e93d3b9642f302f5bd6636813512cb0a907fd8e"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/noctowl.png",
+          "sha256": "745edebd21098a27d41df5d8147fbac2afe73289b3f1461f6e0f837e6f9c8ab8"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              140,
+              104,
+              83
+            ],
+            "to": [
+              133,
+              153,
+              62
+            ],
+            "tolerance": 42
+          },
+          {
+            "from": [
+              202,
+              185,
+              147
+            ],
+            "to": [
+              209,
+              222,
+              109
+            ],
+            "tolerance": 32
+          },
+          {
+            "from": [
+              229,
+              214,
+              166
+            ],
+            "to": [
+              234,
+              243,
+              147
+            ],
+            "tolerance": 30
+          },
+          {
+            "from": [
+              165,
+              128,
+              106
+            ],
+            "to": [
+              160,
+              174,
+              65
+            ],
+            "tolerance": 36
+          }
+        ],
+        "body_b": [
+          {
+            "from": [
+              158,
+              117,
+              94
+            ],
+            "to": [
+              186,
+              112,
+              48
+            ],
+            "tolerance": 42
+          },
+          {
+            "from": [
+              71,
+              51,
+              39
+            ],
+            "to": [
+              105,
+              63,
+              31
+            ],
+            "tolerance": 32
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "noctowl",
+        "variant": "shiny",
+        "source_sha256": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+        "glb_sha256": "ace0c0ea705c862ffcd7f77b18c6aafd13ab7b44821bc48f281485dfc35ccc91",
+        "geometry_motion_sha256": "52ee4b92b4f9647f9ba7186cf046bf9c2c0913f307865f2036ef91eb76a40abe",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "body_a_00",
+            "png_sha256": "1b636a46d388975f6ffa532eb7093fd10ed525c7ab2de35929d20d2ac6374e10"
+          },
+          {
+            "material": "body_b",
+            "png_sha256": "1825068bf0aba7cfb213f0200b5f84b3b40f525ea97eacffa54724b5b86032b3"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 102.5,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_loop": {
+            "frames": 302.5,
+            "loop": true,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 277.5,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 152.5,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 327.5,
+            "loop": false,
+            "speed": 1.0
+          },
+          "physical_attack_2": {
+            "frames": 327.5,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 327.5,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 347.5,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "ace0c0ea705c862ffcd7f77b18c6aafd13ab7b44821bc48f281485dfc35ccc91",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/noctowl/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/noctowl.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "aa9935ca5f0e85b5412e4811fe93bb1b63ad19aa062508fce1c886e720b89b8a",
+        "source_sha256": "227e38ea332724e2f56cc18d17a81088d045f7e8e8892a4c6754725174b1dff2",
+        "species": "noctowl",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "palpitoad",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/palpitoad/model.glb",
+      "source_sha256": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/palpitoad/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Palpitoad.png",
+          "sha256": "d0a25b2da2a3737ff6b31cbc2d5b89a66556408cf2b4d73bf303e2ddfc98884b"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/palpitoad.png",
+          "sha256": "76e499732cb6dd481512e6fb91543d339838b060932d5a66694d4f201cd8fefb"
+        }
+      ],
+      "materials": {
+        "Eye": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              53,
+              170,
+              184
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              131,
+              204,
+              201
+            ],
+            "to": [
+              237,
+              156,
+              29
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              238,
+              218,
+              173
+            ],
+            "to": [
+              237,
+              209,
+              222
+            ],
+            "tolerance": 30
+          }
+        ],
+        "BodyATattu00": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              53,
+              170,
+              184
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              131,
+              204,
+              201
+            ],
+            "to": [
+              237,
+              156,
+              29
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              238,
+              218,
+              173
+            ],
+            "to": [
+              237,
+              209,
+              222
+            ],
+            "tolerance": 30
+          }
+        ],
+        "BodyA00": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              53,
+              170,
+              184
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              131,
+              204,
+              201
+            ],
+            "to": [
+              237,
+              156,
+              29
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              238,
+              218,
+              173
+            ],
+            "to": [
+              237,
+              209,
+              222
+            ],
+            "tolerance": 30
+          }
+        ],
+        "BodyATattu01": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              53,
+              170,
+              184
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              131,
+              204,
+              201
+            ],
+            "to": [
+              237,
+              156,
+              29
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              238,
+              218,
+              173
+            ],
+            "to": [
+              237,
+              209,
+              222
+            ],
+            "tolerance": 30
+          }
+        ],
+        "BodyATattu02": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              53,
+              170,
+              184
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              131,
+              204,
+              201
+            ],
+            "to": [
+              237,
+              156,
+              29
+            ],
+            "tolerance": 38
+          },
+          {
+            "from": [
+              238,
+              218,
+              173
+            ],
+            "to": [
+              237,
+              209,
+              222
+            ],
+            "tolerance": 30
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "palpitoad",
+        "variant": "shiny",
+        "source_sha256": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+        "glb_sha256": "80e116f7b63b7122414cb3b1333db0abafdcb165b09db863ae8e3afc39c9ae4e",
+        "geometry_motion_sha256": "3555f23ead9cb7e0424c0d541091325ac8828282eb52878d5c6a574b1475e6c8",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "Eye",
+            "png_sha256": "d5b22908ee95f0f0b8aa82a83be18b55a8aee35bac61567691d55aaced854ca0"
+          },
+          {
+            "material": "BodyATattu00",
+            "png_sha256": "0dc54e96b2d3b58da263546bb0408206c9926276c49dacdd512c0e04bd132ad6"
+          },
+          {
+            "material": "BodyA00",
+            "png_sha256": "d7618e209a50e38c663d378619bf048754e642e4115b5707c2bd1f38745cc549"
+          },
+          {
+            "material": "BodyATattu01",
+            "png_sha256": "d7618e209a50e38c663d378619bf048754e642e4115b5707c2bd1f38745cc549"
+          },
+          {
+            "material": "BodyATattu02",
+            "png_sha256": "d7618e209a50e38c663d378619bf048754e642e4115b5707c2bd1f38745cc549"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 40.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 100.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 112.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 112.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 120.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 120.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "80e116f7b63b7122414cb3b1333db0abafdcb165b09db863ae8e3afc39c9ae4e",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/palpitoad/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/palpitoad.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "2ac3d630c816b25c3d8a016e73e98eba1051147522c97beedb6d14b8a3d959d0",
+        "source_sha256": "18dedd6e0294949c7f3da26cabe9dc50c20a5ee151d018515c3972f02d106994",
+        "species": "palpitoad",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "poipole",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/poipole/model.glb",
+      "source_sha256": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/poipole/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Poipole.png",
+          "sha256": "b87027970e15ffc9d2508b9968d05914601667405da7cd790f8a51c5e5efcc70"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/poipole.png",
+          "sha256": "85859651c2bbb1db7d354035c860c15fefcb18e841f221d351b9947b62107a23"
+        }
+      ],
+      "materials": {
+        "BodyEnv": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "Body02": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "Body00": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "Body01": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "BodyVco00": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "BodyVco01": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ],
+        "Eye": [
+          {
+            "from": [
+              86,
+              57,
+              140
+            ],
+            "to": [
+              214,
+              211,
+              220
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              176,
+              77,
+              138
+            ],
+            "to": [
+              217,
+              152,
+              25
+            ],
+            "tolerance": 55
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "poipole",
+        "variant": "shiny",
+        "source_sha256": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+        "glb_sha256": "eea40e7ffc858e143993b422af42b534e33dab9c1e94b805692daabe199761d4",
+        "geometry_motion_sha256": "56bab21ef6941b58e9fca0422f665ef5d9c293f673b4848e02b110d6ace7b275",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "BodyEnv",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "Body02",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "Body00",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "Body01",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "BodyVco00",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "BodyVco01",
+            "png_sha256": "6dc3bd01c05f5bd1f03a3247f09fd0027b2fac25cbb8c0e2807fc51f725101a0"
+          },
+          {
+            "material": "Eye",
+            "png_sha256": "b961ce089e0ff67843c7cb441f3917e0f75720c9c8927028cc02049ee299adc2"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 80.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 200.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 240.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 328.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "physical_attack_2": {
+            "frames": 312.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 512.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 320.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "eea40e7ffc858e143993b422af42b534e33dab9c1e94b805692daabe199761d4",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/poipole/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/poipole.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "124b67b613cd3674303d901a61679a7253f64c95846b6256a0135678766d4803",
+        "source_sha256": "04d28e50e6f87c1e43749f14d509571c3ac6d753657db10e5566ef40bd8094be",
+        "species": "poipole",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "seismitoad",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/seismitoad/model.glb",
+      "source_sha256": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/seismitoad/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Seismitoad.png",
+          "sha256": "bcb8201ba29f7cddb3c56026e4b0cc4c8ae63edfff8f6cd50030e26b14afbf49"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/seismitoad.png",
+          "sha256": "4056f977d3221370370ccb163c861779fa01e7164ca35fa45f59e60373a18604"
+        }
+      ],
+      "materials": {
+        "BodyA": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              40,
+              160,
+              134
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              133,
+              200,
+              198
+            ],
+            "to": [
+              228,
+              143,
+              74
+            ],
+            "tolerance": 35
+          }
+        ],
+        "BodyATattuVco": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              40,
+              160,
+              134
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              133,
+              200,
+              198
+            ],
+            "to": [
+              228,
+              143,
+              74
+            ],
+            "tolerance": 35
+          }
+        ],
+        "BodyATattu": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              40,
+              160,
+              134
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              133,
+              200,
+              198
+            ],
+            "to": [
+              228,
+              143,
+              74
+            ],
+            "tolerance": 35
+          }
+        ],
+        "LEye": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              40,
+              160,
+              134
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              133,
+              200,
+              198
+            ],
+            "to": [
+              228,
+              143,
+              74
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              146,
+              95,
+              104
+            ],
+            "to": [
+              168,
+              148,
+              55
+            ],
+            "tolerance": 25
+          },
+          {
+            "from": [
+              217,
+              103,
+              95
+            ],
+            "to": [
+              211,
+              190,
+              42
+            ],
+            "tolerance": 40
+          }
+        ],
+        "REye": [
+          {
+            "from": [
+              57,
+              134,
+              195
+            ],
+            "to": [
+              40,
+              160,
+              134
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              133,
+              200,
+              198
+            ],
+            "to": [
+              228,
+              143,
+              74
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              146,
+              95,
+              104
+            ],
+            "to": [
+              168,
+              148,
+              55
+            ],
+            "tolerance": 25
+          },
+          {
+            "from": [
+              217,
+              103,
+              95
+            ],
+            "to": [
+              211,
+              190,
+              42
+            ],
+            "tolerance": 40
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "seismitoad",
+        "variant": "shiny",
+        "source_sha256": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+        "glb_sha256": "5f7f3ba390c855c91ad30c9e9f02a7b00d5a55a4e5a847292b3184371c55e005",
+        "geometry_motion_sha256": "afb07f5d5367c96740596b1c3ca6206c904e52fc179b09a615a549c465416ea8",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "BodyA",
+            "png_sha256": "cd91f8d73e7180b4268c058dd37550c0454c964ce22eb2a345f929a1a605bcae"
+          },
+          {
+            "material": "BodyATattuVco",
+            "png_sha256": "cd91f8d73e7180b4268c058dd37550c0454c964ce22eb2a345f929a1a605bcae"
+          },
+          {
+            "material": "BodyATattu",
+            "png_sha256": "cd91f8d73e7180b4268c058dd37550c0454c964ce22eb2a345f929a1a605bcae"
+          },
+          {
+            "material": "LEye",
+            "png_sha256": "d917b1f5887636361a9a6b4acdebf148b31c88b3885a0bee482ed4f2510b84a1"
+          },
+          {
+            "material": "REye",
+            "png_sha256": "f6d4241bc658cbfc2c8148177d648617572aeb4528a941bec43aa8f1c7bddcd8"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 40.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 116.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 90.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 132.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 120.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 120.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "5f7f3ba390c855c91ad30c9e9f02a7b00d5a55a4e5a847292b3184371c55e005",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/seismitoad/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/seismitoad.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "3421f738fd94c615da66eccb8a37b089da54c594d84358824c6a6a311dc2169a",
+        "source_sha256": "2d27fddecf8fa36d2f1c8667105530efdcfbda7104d25ff88a3c9d7f3f74e9ba",
+        "species": "seismitoad",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "trumbeak",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-pilot-colours-v1/trumbeak/model.glb",
+      "source_sha256": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae",
+      "output": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/trumbeak/model.glb",
+      "references": [
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home/Trumbeak.png",
+          "sha256": "d56352318249b758b30b98ec4472c8b8a47c29555df4564c05dbf235910bf498"
+        },
+        {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/assets/sprites/pokemon/pokemon_home_shiny/trumbeak.png",
+          "sha256": "ecef987f090a87aa3f5ccd35ade47edb4af3fb8abc2ce93bccb694931c9e4031"
+        }
+      ],
+      "materials": {
+        "body_a_00": [
+          {
+            "from": [
+              146,
+              25,
+              8
+            ],
+            "to": [
+              130,
+              32,
+              144
+            ],
+            "tolerance": 65
+          },
+          {
+            "from": [
+              64,
+              2,
+              1
+            ],
+            "to": [
+              90,
+              5,
+              88
+            ],
+            "tolerance": 35
+          },
+          {
+            "from": [
+              239,
+              104,
+              0
+            ],
+            "to": [
+              170,
+              31,
+              163
+            ],
+            "tolerance": 55
+          }
+        ],
+        "l_eye": [
+          {
+            "from": [
+              4,
+              127,
+              190
+            ],
+            "to": [
+              91,
+              160,
+              103
+            ],
+            "tolerance": 60
+          }
+        ],
+        "r_eye": [
+          {
+            "from": [
+              4,
+              127,
+              190
+            ],
+            "to": [
+              91,
+              160,
+              103
+            ],
+            "tolerance": 60
+          }
+        ]
+      },
+      "review_only": true,
+      "receipt": {
+        "species": "trumbeak",
+        "variant": "shiny",
+        "source_sha256": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae",
+        "glb_sha256": "273c9c5bb80ca2fd5c6ee4933b57938fa6161e86a1dcff17bb26d7f98a15fc9d",
+        "geometry_motion_sha256": "08e4687c550ad2451d2528c1f91270c2638c813889c558eb10006527ab5d21cc",
+        "policy": "authored-local-home-reference-palette-v1",
+        "changes": [
+          {
+            "material": "body_a_00",
+            "png_sha256": "f771bb4ff1063ecdfb1fecc51b7aae4bd2b0fa8562888e6d31f44b5b7195b98b"
+          },
+          {
+            "material": "l_eye",
+            "png_sha256": "e2bc850a033904ab2fb7acfb12cb60d9fd362f16001758e93d2b72d555dc2a4d"
+          },
+          {
+            "material": "r_eye",
+            "png_sha256": "e2bc850a033904ab2fb7acfb12cb60d9fd362f16001758e93d2b72d555dc2a4d"
+          }
+        ],
+        "alpha_unchanged": true,
+        "runtime_approved": false
+      },
+      "runtime_scene": {
+        "action_timing": {
+          "damage": {
+            "frames": 40.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "faint_loop": {
+            "frames": 100.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "faint_start": {
+            "frames": 90.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "idle": {
+            "frames": 60.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "physical_attack": {
+            "frames": 130.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "physical_attack_2": {
+            "frames": 130.0,
+            "loop": false,
+            "speed": 1.0
+          },
+          "sleep": {
+            "frames": 200.0,
+            "loop": true,
+            "speed": 1.0
+          },
+          "special_attack": {
+            "frames": 138.0,
+            "loop": false,
+            "speed": 1.0
+          }
+        },
+        "converter_version": 2,
+        "glb_sha256": "273c9c5bb80ca2fd5c6ee4933b57938fa6161e86a1dcff17bb26d7f98a15fc9d",
+        "godot_version": "4.6.2-stable (official)",
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-palettes-v2/trumbeak/model.glb",
+        "placement": {
+          "scale": 1.0,
+          "yaw_degrees": 0.0
+        },
+        "provenance_schema": 1,
+        "runtime_approved": false,
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/shiny-runtime-v3/trumbeak.scn",
+        "runtime_schema": 1,
+        "runtime_sha256": "a93f03c9ce0fe9d1619e48d8c2a39bcab6dc593fff4e9f346f44a011d7a5411e",
+        "source_sha256": "fdb18b696ff450b83d8195cbfdd84231d1ba11133c318fce267106b195251bdf",
+        "species": "trumbeak",
+        "variant": "shiny"
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false
+    }
+  ],
+  "appearance_approval": {
+    "answer": "Alle acht goed",
+    "date": "2026-10-01",
+    "scope": "Eight exact normal/shiny rendered appearance pairs; battle pending",
+    "page_sha256": "63097713791baf13cfa2e8fd758286f90d0f9b9bca81f61e6733303ab5112149"
+  }
+}
