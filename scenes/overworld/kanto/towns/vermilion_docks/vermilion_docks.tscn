@@ -6,6 +6,11 @@
 
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/ss_anne_skipper.tscn" id="skipper"]
+
+[sub_resource type="RectangleShape2D" id="boarding_shape"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_city"]
 size = Vector2(96, 32)
 
@@ -49,6 +54,10 @@ z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities"]
 
+[node name="SSAnneSkipper" parent="Entities/NPCs" instance=ExtResource("skipper")]
+position = Vector2(1392, 624)
+facing_direction = Vector2(-1, 0)
+
 [node name="Pokemon" type="Node2D" parent="Entities"]
 
 [node name="Interactables" type="Node2D" parent="Entities"]
@@ -60,5 +69,21 @@ visible = false
 visible = false
 z_index = 4096
 tile_set = ExtResource("collision_tiles")
+
+[node name="FromSSAnne" type="Marker2D" parent="Spawns"]
+position = Vector2(1392, 656)
+
+[node name="ToSSAnne" type="Area2D" parent="Exits"]
+position = Vector2(1424, 624)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
+target_spawn_name = "At_48_23"
+transition_id = "kanto_vermilion_city__to_ss_anne"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSSAnne"]
+shape = SubResource("boarding_shape")
+
+[connection signal="body_entered" from="Exits/ToSSAnne" to="Exits/ToSSAnne" method="_on_body_entered"]
 
 [connection signal="body_entered" from="Exits/ToVermilionCity" to="Exits/ToVermilionCity" method="_on_body_entered"]

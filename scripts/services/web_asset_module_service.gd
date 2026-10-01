@@ -64,6 +64,10 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_vermilion_city_gym": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_gym.tscn",
 	"kanto_vermilion_city_pokemon_center": "res://scenes/overworld/kanto/towns/vermilion_city/pokemon_center.tscn",
 	"kanto_vermilion_city": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+	"kanto_ss_anne_1f": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+	"kanto_ss_anne_2f": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+	"kanto_ss_anne_b1f": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+	"kanto_ss_anne_3f": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
 	"kanto_vermilion_docks": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
 }
 

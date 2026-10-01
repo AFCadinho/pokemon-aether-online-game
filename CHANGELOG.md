@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- S.S. Anne heeft vier geïmporteerde verdiepingen met verbonden hutten, keuken en dek. De schipper bij Vermilion Port controleert het S.S. Ticket; collisionlagen blijven leeg voor handmatige inrichting.
+
 - De haven ten zuiden van Vermilion City gebruikt de nieuwe Port Exterior-visual, met aansluitende aankomstpunten en een lege collisionlaag voor handmatige inrichting.
 
 - Kanto Route 11 gebruikt de opnieuw geïmporteerde artist-TMX-visual.
