@@ -328,6 +328,15 @@ jobs:
           grep -a -q "assets/player/female/body/body_manifest.json" "builds/linux/PokeAether.pck"
           grep -a -q "data/world_text/signs/en/kanto/cerulean_city.json" "builds/linux/PokeAether.pck"
 
+      - name: Verify SS Anne audience in packed game runtimes
+        run: |
+          for platform in windows linux; do
+            audience_test_data="$(mktemp -d)"
+            XDG_DATA_HOME="$audience_test_data" ./godot --headless \
+              --main-pack "builds/${platform}/PokeAether.pck" \
+              --script "$GITHUB_WORKSPACE/tests/ss_anne_packed_runtime_check.gd"
+          done
+
       - name: Verify sign catalogues in packed Linux runtime
         run: |
           sign_test_data="$(mktemp -d)"
