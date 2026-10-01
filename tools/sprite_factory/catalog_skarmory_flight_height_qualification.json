@@ -1,0 +1,80 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "skarmory",
+            "runtime_sha256": "97e97335df6c2379e22c0dfe1d8ff705608d234805bf735e0b8e19afd9c016c8",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "skarmory@shiny",
+            "runtime_sha256": "1b3b72c5879e0af65d040813465af0d500fe3235756928c6324b4d2483c667fe",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:skarmory:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 227,
+        "object_key": "optional-assets/pokemon_3d/skarmory/base/v2-df13a90f92d771ceef0e4647fd0cbba2a18fdfc38fa6677e369eb68f53fdea67.zip",
+        "sha256": "df13a90f92d771ceef0e4647fd0cbba2a18fdfc38fa6677e369eb68f53fdea67",
+        "size_bytes": 7146179,
+        "species_id": "skarmory",
+        "version": 2
+      }
+    ],
+    "catalog_revision": "skarmory-flight-height-v2",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 7146179,
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-274-production/skarmory-flight-v1/bundles/asset-index.json": "d64cdc33bab124cb40e7ad30ad7e1d773366f9e06422c429550c749d7e611f5f",
+    ".tmp/remaining-274-production/skarmory-flight-v1/compression-proof.json": "f6585ce727dc45710000d4b51975daba92f3c6dce5c3e612282d769de2451ba7",
+    ".tmp/remaining-274-production/skarmory-flight-v1/install.log": "f22d825632ca2a879532514a507e0825c2b381ce70a532ce3e8c0e42af1ce730",
+    ".tmp/remaining-274-production/skarmory-flight-v1/installed-stress-fixed.json": "64de6e2a26f5bf55b53969219d6cbc99d12b7defed04ca207204bc1f7af8e411",
+    ".tmp/remaining-274-production/skarmory-flight-v1/installed-stress-fixed.log": "f9780e46b61091d0232e48c52d793d1964350fcc027652139ff60a8825ff7203",
+    ".tmp/remaining-274-production/skarmory-flight-v1/installed-stress-merged.json": "235adcbe8054a6e38e265cfa270f461a7dd4bb6669542ead9749044c123575e6",
+    ".tmp/remaining-274-production/skarmory-flight-v1/installed-stress-merged.log": "758ee95e727274d0d4dd9a8c8e8a7bef1d1eaf7f1c71db3b520628c3fc3ce9e1",
+    ".tmp/remaining-274-production/skarmory-flight-v1/installed/installed-catalog.json": "a17a75dc9a8daec4a6cfecaa85203dbd1859999acf1c28eea18d9d0dd04ce502",
+    ".tmp/remaining-274-production/skarmory-flight-v1/layout-check-merged.log": "5a15020870e8017e5d1557b5b09f590ae897f60bf95c953d09c5e07695e3fe6d",
+    ".tmp/remaining-274-production/skarmory-flight-v1/layout-check.log": "5a15020870e8017e5d1557b5b09f590ae897f60bf95c953d09c5e07695e3fe6d",
+    ".tmp/remaining-274-production/skarmory-flight-v1/previous-registry-skarmory.json": "430993fbd1dfeba5e2537bb22b66b7f3e970b2c794d7f573becec7b971224fe4",
+    ".tmp/remaining-274-production/skarmory-flight-v1/registry-check.log": "6925b309b2cae49cb774178855823115cddae74fa01f7c8324b341a6516d60ac",
+    ".tmp/remaining-274-production/skarmory-flight-v1/registry_check.gd": "451b39206e6d5225195cbf5e302a10c670e7a1d5bd656b673f7207b444a9f383",
+    ".tmp/remaining-274-production/skarmory-flight-v1/runtime-catalog-final.json": "53562298deb091a3a8389c06df82be1d251880fa55f45c5a07611eb446ae907a",
+    ".tmp/remaining-274-production/skarmory-flight-v1/runtime-fixture.json": "86ff1fdbfe027a8779f5ea529519ccbeda4d18922a0e268091cd6a9bd77da0c9",
+    ".tmp/remaining-274-production/skarmory-flight-v1/runtime_check.gd": "4976da61759c963278a09dfbe6f0012dfd628d9e29a42635cd4321cd65de225d",
+    ".tmp/remaining-274-production/skarmory-flight-v1/update-check.log": "0404f6fdcf51cbcc8d7bd7408dacca600f8262f0b468b10fafcba6c7373e5af4",
+    ".tmp/remaining-274-production/skarmory-flight-v1/update_check.gd": "46c8adb11017c34dd47f10cd1663f955447cb80b948c69e942aedfe575ad946e",
+    "scripts/battle/battle_ui/immersive_hud.gd": "d350252caf7921ae0482b1e19ca7b951ce22b1c24089ca4d08cac7e659f5a36f",
+    "tools/sprite_factory/admit_skarmory_flight_height.py": "369c95bf6866fb8319f935e486f005484b6478e8b1e99d40a0d99b28d06d0d4d",
+    "tools/sprite_factory/catalog_skarmory_flight_height_candidate.json": "ff56d88f8aa538c6901a915c8a7861cf0addb8a47c6701ec605aa0027f05eaf9"
+  },
+  "immersive_layout_regression_passed": true,
+  "installed_real_battle_functional_checks_passed": true,
+  "merged_development_focused_recheck_passed": true,
+  "published": false,
+  "registry_checks_passed": true,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "Release certification/publication"
+  ],
+  "runtime_approved": true,
+  "schema": 1,
+  "scope": "Reviewed0.7m visual flight height; preserved native keys/bone poses; exact compression geometry/animation parity; actual120Hz floor checks and32 camera views; fresh install, actualv1-v2 update/no-op/restart and three installed real-battle functional passes. Frame-rate certification remains separate because concurrent Godot runs affect timing.",
+  "species": [
+    "skarmory"
+  ]
+}

@@ -155,6 +155,10 @@ func _process(delta: float) -> void:
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
 		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
 		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] else target
+		# Keep the HP panel above a newly revealed or rising 3D model.
+		# Easing upwards can otherwise leave it inside the model for a few frames.
+		if realtime_3d and anchored_to_sprite:
+			position_next.y = minf(position_next.y, target.y)
 		if index == 1 and occupied.intersects(Rect2(position_next, extent + Vector2(0, 48))):
 			position_next.y = occupied.position.y - extent.y - 52
 			if position_next.y < 62:
