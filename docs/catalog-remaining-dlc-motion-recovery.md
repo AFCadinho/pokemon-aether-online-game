@@ -139,9 +139,18 @@ battle qualification and bundles remain open. The approved runtime catalog and
 R2 content have not changed.
 
 The five pending pairs have a separate focused page at
-<http://127.0.0.1:8786/>. Images are rendered at 1024 pixels with camera fitting
-based on projected per-pose bounds, instead of the full 3D AABB diagonal.
+<http://127.0.0.1:8786/>. Images are rendered at 1024 pixels with per-pose bounds used for camera
+fitting.
 This affects the review camera only. Ogerpon starts in its maskless comparison
 view; other poses and its masked view remain selectable. All 12 diagnostic
 variants (the five pairs plus two maskless views) passed the same pose/timing
 checks, and all 86 page/manifest/image requests returned HTTP 200.
+
+The user subsequently approved Ogerpon, Gouging Fire, Raging Bolt and Iron
+Crown: **14 appearance-approved pairs, only Iron Boulder pending**. Its ordinary
+review camera looked down onto the head, making the face difficult to inspect.
+A camera-only follow-up at <http://127.0.0.1:8786/iron-boulder-face/> provides
+low front, oblique front and head-bone-centred close-up views at 1024 pixels.
+The camera uses projected bounds; the GLB and original idle pose are unchanged.
+Both variants passed pose/timing checks and all 14 page/manifest/image requests
+returned HTTP 200. Final qualification and runtime approval remain pending.

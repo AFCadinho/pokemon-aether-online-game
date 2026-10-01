@@ -11,7 +11,7 @@
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
   "pending": [
-    "five_species_appearance_review",
+    "iron_boulder_face_appearance_review",
     "native_parallax_Fresnel_and_Terapagos_flow_qualification",
     "authored_sleep_poses",
     "standalone_SCN_conversion_and_battle_qualification",
@@ -647,7 +647,7 @@
           "loop": false
         }
       },
-      "appearance_approved": false
+      "appearance_approved": true
     },
     {
       "species": "archaludon",
@@ -990,7 +990,7 @@
           "loop": false
         }
       },
-      "appearance_approved": false
+      "appearance_approved": true
     },
     {
       "species": "raging-bolt",
@@ -1081,7 +1081,7 @@
           "loop": false
         }
       },
-      "appearance_approved": false
+      "appearance_approved": true
     },
     {
       "species": "iron-boulder",
@@ -1311,7 +1311,7 @@
           "loop": false
         }
       },
-      "appearance_approved": false
+      "appearance_approved": true
     },
     {
       "species": "terapagos",
@@ -1509,14 +1509,14 @@
       "archaludon",
       "hydrapple",
       "terapagos",
-      "pecharunt"
-    ],
-    "pending_species": [
+      "pecharunt",
       "ogerpon",
       "gouging-fire",
       "raging-bolt",
-      "iron-boulder",
       "iron-crown"
+    ],
+    "pending_species": [
+      "iron-boulder"
     ],
     "focused_pending_review": {
       "url": "http://127.0.0.1:8786/",
@@ -1526,6 +1526,15 @@
       "godot_diagnostic_views": 12,
       "godot_pose_or_timing_errors": 0,
       "godot_report_sha256": "bf4572aa003270065537fe87d263845f580967d7811c8bc29179dace3b6dc977"
+    },
+    "boulder_face_review": {
+      "url": "http://127.0.0.1:8786/iron-boulder-face/",
+      "scope": "camera-only idle face inspection; original pose and asset SHA-256 unchanged",
+      "page_sha256": "f24797c89235eb8cc5dcad1b7a97ded5358e24c0fcac28869b2988ffa51a5a24",
+      "manifest_sha256": "d3e70340d6a271b6f62b7038acb6d4cfed32ddf4aa61de9088ce033aa8a84ed7",
+      "godot_report_sha256": "8d41a9103e816242b1ec99d61f0c970d8108e2d035695ec366b74f1de3cc130d",
+      "pose_timing_errors": 0,
+      "http_checked_files": 14
     }
   },
   "native_detail_review": {
