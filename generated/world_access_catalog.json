@@ -1934,14 +1934,24 @@
 						"y": 21
 					}
 				},
-				"from_vermilion": {
+				"from_vermilion_north": {
 					"facingDirection": "down",
-					"label": "Vermilion",
+					"label": "Vermilion North",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromVermilion",
+					"spawnMarker": "FromVermilionNorth",
 					"tile": {
-						"x": 2,
-						"y": 21
+						"x": 1,
+						"y": 12
+					}
+				},
+				"from_vermilion_south": {
+					"facingDirection": "down",
+					"label": "Vermilion South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromVermilionSouth",
+					"tile": {
+						"x": 1,
+						"y": 29
 					}
 				}
 			}
@@ -3606,14 +3616,24 @@
 						"y": 67
 					}
 				},
-				"from_route_11": {
+				"from_route_11_north": {
 					"facingDirection": "down",
-					"label": "Route 11",
+					"label": "Route 11 North",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromRoute11",
+					"spawnMarker": "FromRoute11North",
 					"tile": {
-						"x": 72,
+						"x": 73,
 						"y": 22
+					}
+				},
+				"from_route_11_south": {
+					"facingDirection": "down",
+					"label": "Route 11 South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute11South",
+					"tile": {
+						"x": 73,
+						"y": 39
 					}
 				},
 				"from_route_6": {
@@ -5806,10 +5826,27 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
 				"position": {
-					"x": 2320.0,
+					"x": 2352.0,
 					"y": 720.0
 				},
-				"spawnMarker": "FromRoute11"
+				"spawnMarker": "FromRoute11North"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_route_11"
+		},
+		"kanto_route_11__to_vermilion_south": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 2352.0,
+					"y": 1264.0
+				},
+				"spawnMarker": "FromRoute11South"
 			},
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_route_11"
@@ -7759,13 +7796,32 @@
 			"destination": {
 				"facingDirection": "right",
 				"mapId": "kanto_route_11",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://eybnpiu0571i"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
 				"position": {
-					"x": 64.0,
-					"y": 688.0
+					"x": 48.0,
+					"y": 400.0
 				},
-				"spawnMarker": "FromVermilion"
+				"spawnMarker": "FromVermilionNorth"
+			},
+			"destinationAreaId": "kanto_route_11",
+			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city__to_route11_south": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_route_11",
+				"mapSceneAliases": [
+					"uid://eybnpiu0571i"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
+				"position": {
+					"x": 48.0,
+					"y": 944.0
+				},
+				"spawnMarker": "FromVermilionSouth"
 			},
 			"destinationAreaId": "kanto_route_11",
 			"sourceMapId": "kanto_vermilion_city"

@@ -115,8 +115,11 @@ tile_set = SubResource("TileSet_e5jyj")
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1958333514]
 
-[node name="FromVermilion" type="Marker2D" parent="Spawns" unique_id=991671955]
+[node name="FromVermilionNorth" type="Marker2D" parent="Spawns" unique_id=991671955]
 position = Vector2(48, 400)
+
+[node name="FromVermilionSouth" type="Marker2D" parent="Spawns"]
+position = Vector2(48, 944)
 
 [node name="FromRoute12West" type="Marker2D" parent="Spawns" unique_id=805886081]
 position = Vector2(2384, 656)
@@ -126,15 +129,27 @@ position = Vector2(560, 432)
 
 [node name="Exits" type="Node2D" parent="." unique_id=221387019]
 
-[node name="ToVermilion" type="Area2D" parent="Exits" unique_id=1665277234]
+[node name="ToVermilionNorth" type="Area2D" parent="Exits" unique_id=1665277234]
 position = Vector2(16, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
-target_spawn_name = "FromRoute11"
+target_spawn_name = "FromRoute11North"
 transition_id = "kanto_route_11__to_vermilion"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilion" unique_id=2040461173]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionNorth" unique_id=2040461173]
+position = Vector2(-16, 0)
+shape = SubResource("shape_1")
+
+[node name="ToVermilionSouth" type="Area2D" parent="Exits"]
+position = Vector2(16, 944)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
+target_spawn_name = "FromRoute11South"
+transition_id = "kanto_route_11__to_vermilion_south"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionSouth"]
 position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
@@ -267,6 +282,7 @@ npc_sprite_frames = ExtResource("6_worker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=329768349]
 
-[connection signal="body_entered" from="Exits/ToVermilion" to="Exits/ToVermilion" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToVermilionNorth" to="Exits/ToVermilionNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToVermilionSouth" to="Exits/ToVermilionSouth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12West" to="Exits/ToRoute12West" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToDiglettCave" to="Exits/ToDiglettCave" method="_on_body_entered"]

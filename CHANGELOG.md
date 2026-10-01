@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion City en Route 11 hebben nu aparte noordelijke en zuidelijke overgangen met spawns op het bijbehorende pad.
+
 - Rose en de speler draaien vóór de Titanic-pose weer naar de zee.
 
 - Rose op de S.S. Anne gebruikt nu haar Beauty-portret en eigen dialoog; haar Titanic-posequest geeft eenmalig een PP Up.
