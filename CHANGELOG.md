@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Fishing Guru in Vermilion City heet nu Fishing Guru Sam; de naam verschijnt ook zo in questteksten en alle vertalingen.
+
 - In Route 2 House zijn de twee bewoners vervangen door Oaks assistent, met een side quest om tien verschillende Pokémon te vangen voor HM Flash.
 
 - De SS Anne-battlearena heeft een kleine groep van zes juichende passagiers en matrozen op het achterdek.
