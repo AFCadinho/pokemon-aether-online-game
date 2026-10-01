@@ -1,0 +1,371 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "archaludon",
+          "runtime_sha256": "847525acfc94cb5ffed1184d2df100592b4a5823d83283bbf834857fc3e86dce",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "archaludon@shiny",
+          "runtime_sha256": "46781a4eaa1f4bde818fce73867607f72c243a2a938d2689bd78bb48df830c15",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:archaludon:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1018,
+      "object_key": "optional-assets/pokemon_3d/archaludon/base/v1-43f83244060b47e922cc2d67a7b6d7e58a481d3547784a87f7435217d1739897.zip",
+      "sha256": "43f83244060b47e922cc2d67a7b6d7e58a481d3547784a87f7435217d1739897",
+      "size_bytes": 29429341,
+      "species_id": "archaludon",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "dipplin",
+          "runtime_sha256": "a31025e66be5788797cd9078ca9935795797dc0dfd40d7186924844ed830d5df",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "dipplin@shiny",
+          "runtime_sha256": "e12df949eed4b452a543511f96c58fa15a1cc72b6a0aae712cfedfd07a6706eb",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:dipplin:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1011,
+      "object_key": "optional-assets/pokemon_3d/dipplin/base/v1-f258f890024cdfd67d3aa6a422a6687bd5c19a49274a44fe2bcfeb44ba4852f2.zip",
+      "sha256": "f258f890024cdfd67d3aa6a422a6687bd5c19a49274a44fe2bcfeb44ba4852f2",
+      "size_bytes": 11061437,
+      "species_id": "dipplin",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "fezandipiti",
+          "runtime_sha256": "f96812e5c7dfece5b1a1eb2fd89dfbaa44e56366ad8725a64502edb75b5e9c06",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "fezandipiti@shiny",
+          "runtime_sha256": "a4819ffaa71da2b776189ae38de8393880b3dd01f91e7aa87bb8194c272c27f5",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:fezandipiti:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1016,
+      "object_key": "optional-assets/pokemon_3d/fezandipiti/base/v1-b93d1e83b68bd56746f109e774880e1f1d2f809176f985575d03abd1f5b89d77.zip",
+      "sha256": "b93d1e83b68bd56746f109e774880e1f1d2f809176f985575d03abd1f5b89d77",
+      "size_bytes": 27508216,
+      "species_id": "fezandipiti",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "gouging-fire",
+          "runtime_sha256": "844d55e20e48bc0e42bf66dc57d81b82c148abb004c265c7839bb3bb55a5b4f4",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "gouging-fire@shiny",
+          "runtime_sha256": "346608c3978c7b6dc6dd05c0f9e1ce78bba6c616a568954d7662c37165700831",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:gouging-fire:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1020,
+      "object_key": "optional-assets/pokemon_3d/gouging-fire/base/v1-d64d4872324d8e323421836bc0ffd85ead81d32ff25537f54efc1c5f37bd5d80.zip",
+      "sha256": "d64d4872324d8e323421836bc0ffd85ead81d32ff25537f54efc1c5f37bd5d80",
+      "size_bytes": 28095125,
+      "species_id": "gouging-fire",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "hydrapple",
+          "runtime_sha256": "f965a449e4959965fbf18028fe4b258377c1a072a212f2642163a08af4a6c7d6",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "hydrapple@shiny",
+          "runtime_sha256": "7dfba9f1061fb89d77c6dd062fbb9ac3711ed24fec0bf6c70dc1104f7a3ceb63",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:hydrapple:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1019,
+      "object_key": "optional-assets/pokemon_3d/hydrapple/base/v1-6f8b0c82d0313d46278f2fee9afe894182740b6a0ff0f84420125e1a2999c210.zip",
+      "sha256": "6f8b0c82d0313d46278f2fee9afe894182740b6a0ff0f84420125e1a2999c210",
+      "size_bytes": 18825084,
+      "species_id": "hydrapple",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "iron-boulder",
+          "runtime_sha256": "2e4e292abda46b361902d2df0b7eddb3e0847cfa13873f7b0dbe6a97ca20a159",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "iron-boulder@shiny",
+          "runtime_sha256": "978c769eb96f9635f099304ce31f4b1ef1d74c8baa33ad73617f3b71158f2c17",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:iron-boulder:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1022,
+      "object_key": "optional-assets/pokemon_3d/iron-boulder/base/v1-3d3fcb51f9e14196abfd8698a09a4551712f1ebaffa1d8d207c504ffe7539b45.zip",
+      "sha256": "3d3fcb51f9e14196abfd8698a09a4551712f1ebaffa1d8d207c504ffe7539b45",
+      "size_bytes": 16467779,
+      "species_id": "iron-boulder",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "iron-crown",
+          "runtime_sha256": "927be927fc4c7c0e99b62188b90440c507dfae7833e93151c3cd9dfc4ea74613",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "iron-crown@shiny",
+          "runtime_sha256": "dc16c198129372473940bd0ad3170bd879b3cee267072da1d5ec38442911e58d",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:iron-crown:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1023,
+      "object_key": "optional-assets/pokemon_3d/iron-crown/base/v1-353f461a7acd93188e4362a0eca0910df64bb033b95badba30bbcbd209818f55.zip",
+      "sha256": "353f461a7acd93188e4362a0eca0910df64bb033b95badba30bbcbd209818f55",
+      "size_bytes": 22968733,
+      "species_id": "iron-crown",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "munkidori",
+          "runtime_sha256": "2fcc16e047213927ec0dbb988f50d8b2471f7db7812ef12b2d31a6b15432dcbb",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "munkidori@shiny",
+          "runtime_sha256": "2f3abc95e045c242909131e4c9b173feb330dfd8ee56681fab0e25a6db67ae02",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:munkidori:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1015,
+      "object_key": "optional-assets/pokemon_3d/munkidori/base/v1-7cb4635422081f022e2407cda4f14f4184422acf8e9535657e5c7962c7a6553d.zip",
+      "sha256": "7cb4635422081f022e2407cda4f14f4184422acf8e9535657e5c7962c7a6553d",
+      "size_bytes": 24326226,
+      "species_id": "munkidori",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "ogerpon",
+          "runtime_sha256": "e7208d18abee2a047fd3c66adbafba75b31053750ff43bb2c01c654eedbec20d",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "ogerpon@shiny",
+          "runtime_sha256": "3f4710460e3db2f3cf89afa5dcdd7377c3760133f3637d0279f4d0805c312643",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:ogerpon:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1017,
+      "object_key": "optional-assets/pokemon_3d/ogerpon/base/v1-4491a4c4b13e8e662f61ec375e81c9affe2b1ec8bca6a3f2dede4078d31b7905.zip",
+      "sha256": "4491a4c4b13e8e662f61ec375e81c9affe2b1ec8bca6a3f2dede4078d31b7905",
+      "size_bytes": 32660781,
+      "species_id": "ogerpon",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "okidogi",
+          "runtime_sha256": "69b84fa35da6d1de0539cb33ddb8c3b16af772e18b6a1107c0b199b79cd2408f",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "okidogi@shiny",
+          "runtime_sha256": "30e56407df0c7dada64aa05a8c963f73bd7fce2880b2c1114946a5cf5d6bf226",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:okidogi:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1014,
+      "object_key": "optional-assets/pokemon_3d/okidogi/base/v1-cdccda4c4eae552631465486883e45493d5137506250f1faf574301263bca6bc.zip",
+      "sha256": "cdccda4c4eae552631465486883e45493d5137506250f1faf574301263bca6bc",
+      "size_bytes": 26363495,
+      "species_id": "okidogi",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "pecharunt",
+          "runtime_sha256": "71953625e278e4b552cbf0b80ccb137baace14915d4c13cbff78ee6b04efc5d7",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "pecharunt@shiny",
+          "runtime_sha256": "b3804ffac4323d86bb19053569e3d5e75e7f281b4f03cd62bf72d77cfb1e034d",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:pecharunt:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1025,
+      "object_key": "optional-assets/pokemon_3d/pecharunt/base/v1-90c65be5d516efad69cbc35df288d4c2b812876671057a84c20f08e90e7eb68a.zip",
+      "sha256": "90c65be5d516efad69cbc35df288d4c2b812876671057a84c20f08e90e7eb68a",
+      "size_bytes": 27559034,
+      "species_id": "pecharunt",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "poltchageist",
+          "runtime_sha256": "cf2a78a7307c2cfb18e87ebb8d7041e16415cfcac97bc28eea361998b56a8eaf",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "poltchageist@shiny",
+          "runtime_sha256": "9acab602467e17010cdeaffb425619ccdf3179ca3b7b51868f58792882afc329",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:poltchageist:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1012,
+      "object_key": "optional-assets/pokemon_3d/poltchageist/base/v1-773a89ab9d20580f0bc2e99256f7defbca8bfe38d3ca8ffa2641994ba999b9cb.zip",
+      "sha256": "773a89ab9d20580f0bc2e99256f7defbca8bfe38d3ca8ffa2641994ba999b9cb",
+      "size_bytes": 16859775,
+      "species_id": "poltchageist",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "raging-bolt",
+          "runtime_sha256": "80f85f3b1fd56cf92cf48129f6887fa9fb92612dfcafd962d2c6badbcdb85393",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "raging-bolt@shiny",
+          "runtime_sha256": "16954d4d090bb1649a20723e177f1c581cdc723f65063aebad4555229a757e1b",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:raging-bolt:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1021,
+      "object_key": "optional-assets/pokemon_3d/raging-bolt/base/v1-c73a0ff99981673efd77f2284a2968689bd626d675ce879c474d2a318b777451.zip",
+      "sha256": "c73a0ff99981673efd77f2284a2968689bd626d675ce879c474d2a318b777451",
+      "size_bytes": 30513210,
+      "species_id": "raging-bolt",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "sinistcha",
+          "runtime_sha256": "c9b258ff0a3f6f2f8e3ebb6e2e792295a562f3eaeca80ca8f54a1965657f8115",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "sinistcha@shiny",
+          "runtime_sha256": "3225e7f6835c7822599c9531f6cd988f40f4f1a274d5bfb2a687f43fce431f07",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:sinistcha:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1013,
+      "object_key": "optional-assets/pokemon_3d/sinistcha/base/v1-c75a266ca19ecfe0d684ec25a8613a25ee72787c37d176ee3ecef246a781e771.zip",
+      "sha256": "c75a266ca19ecfe0d684ec25a8613a25ee72787c37d176ee3ecef246a781e771",
+      "size_bytes": 23549986,
+      "species_id": "sinistcha",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "terapagos",
+          "runtime_sha256": "580fdad8d7abcb9687afaa53134cd19f1210374543ee7d859c50cabaed7dcc44",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "terapagos@shiny",
+          "runtime_sha256": "20c7fe8a51ec046d4e4942acba77881a3be9376e130668c9b1acda03fa17e85c",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:terapagos:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1024,
+      "object_key": "optional-assets/pokemon_3d/terapagos/base/v1-f825df919bf3cfd4274321a551227a88dcef8e9a5e566cfbd7a1efa74eb79a96.zip",
+      "sha256": "f825df919bf3cfd4274321a551227a88dcef8e9a5e566cfbd7a1efa74eb79a96",
+      "size_bytes": 14335546,
+      "species_id": "terapagos",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "remaining-dlc-15-approved-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}

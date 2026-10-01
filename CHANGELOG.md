@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De laatste 15 DLC-Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny, rustposes en individuele downloadbundles.
+
 - Lavender Town heeft nu een eigen Tiled-visual en een overgang van en naar Route 10 via Lavender Town North; de collisionlaag staat klaar om in te vullen.
 
 - Trap- en doorgangsovergangen in Diglett Cave en Rock Tunnel laten spelers nu naar het gangpad op de aankomstverdieping kijken.
