@@ -337,3 +337,35 @@ meshes, receipts and captures. None of these trials changes the approved
 registries or counts. Next work must inspect native UV/attribute animation
 and fire-layer visibility and reconstruct moving materials; further static
 palette trials should not be treated as a production solution.
+
+## Moving fire prototypes (normal appearance review pending)
+
+Ponyta, Rapidash and Centiskorch now have isolated standalone preview scenes
+with a periodic fire shader. Real source noise drives movement. Centiskorch
+retains the recovered source coverage. Ponyta and Rapidash use an authored UV
+cutout and warm palette on their oversized source fire cards; this is an
+approximation, not exact native material recovery. Outer masks are disabled.
+Their source Blender references are included alongside the new renders.
+
+The mesh bake previously selected a mesh merely listing the material, even
+when none of its faces used it. Centiskorch's shared material slots therefore
+produced empty fire maps. Selection now requires actual material-bearing faces.
+BakeUV is the render target, and named source UV nodes follow the SourceUV
+rename. Fresh real-mesh bakes produce nonempty alpha for all eight Centiskorch
+fire materials; source blend hashes remain unchanged.
+
+All three preview packs preserve the exact meshes, skin binds, skeleton rests,
+and animation keys through a fresh binary reload. Fifteen five-pose captures
+render without errors. With the skeleton frozen, all three fire sweeps show
+visible pixel changes and identical start/end pixels over the two-second loop.
+Four sampled phases establish this limited evidence, not continuous smoothness.
+The preview page explicitly labels its animation as four snapshots.
+
+`catalog_remaining_142_fire_preview.json` pins the scenes, inputs, captures,
+source bakes, shader and loop evidence. User appearance review is pending,
+particularly for Rapidash's large fire layers. Shiny, gameplay shader whitelist,
+battle placement, installed bundles and performance are not qualified. The
+experimental shader is confined to the diagnostic tools; catalog counts remain
+898 ordinary species plus Mega Dragonite, with 127 ordinary species remaining.
+
+[Three moving fire previews](http://127.0.0.1:8782/fire-live-preview-v1/review-v7/index.html)

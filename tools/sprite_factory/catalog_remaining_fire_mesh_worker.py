@@ -27,7 +27,9 @@ def main(job):
     receipts = []
     for item in job['materials']:
         candidates = [o for o in bpy.context.scene.objects if o.type == 'MESH' and not o.hide_render
-                      and any(m and m.name == item['name'] for m in o.data.materials)]
+                      and any(o.data.materials[face.material_index]
+                              and o.data.materials[face.material_index].name == item['name']
+                              for face in o.data.polygons)]
         assert candidates, item['name']
         original = sorted(candidates, key=lambda o: o.name)[0]
         obj = original.copy()
@@ -41,13 +43,14 @@ def main(job):
         bpy.context.view_layer.objects.active = obj
         source_uv = obj.data.uv_layers.active
         assert source_uv is not None
+        original_uv_name = source_uv.name
         source_uv.name = 'SourceUV'
         bake_uv = obj.data.uv_layers.new(name='BakeUV', do_init=False)
         x0, y0, x1, y1 = item.get('source_uv_domain', [0, 0, 1, 1])
         for i, corner in enumerate(source_uv.data):
             bake_uv.data[i].uv = ((corner.uv.x-x0)/(x1-x0), (corner.uv.y-y0)/(y1-y0))
         obj.data.uv_layers.active = bake_uv
-        source_uv.active_render = True
+        bake_uv.active_render = True
         target = None
         for i, material in enumerate(list(obj.data.materials)):
             if material is None:
@@ -63,6 +66,10 @@ def main(job):
         assert target
         tree = target.node_tree
         replace_uv(tree)
+        # Explicit named UV nodes must follow the renamed source layer too.
+        for node in tree.nodes:
+            if node.type == 'UVMAP' and node.uv_map == original_uv_name:
+                node.uv_map = 'SourceUV'
         output = next(n for n in tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
         colour, alpha, glow = colour_sockets(tree, output.inputs['Surface'].links[0].from_socket, True)
         emission = tree.nodes.new('ShaderNodeEmission')
@@ -75,6 +82,9 @@ def main(job):
             opacity_material = bpy.data.materials[item['opacity_material']].copy()
             opacity_tree = opacity_material.node_tree
             replace_uv(opacity_tree)
+            for node in opacity_tree.nodes:
+                if node.type == 'UVMAP' and node.uv_map == original_uv_name:
+                    node.uv_map = 'SourceUV'
             opacity_output = next(n for n in opacity_tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output)
             _, source_alpha, _ = colour_sockets(opacity_tree, opacity_output.inputs['Surface'].links[0].from_socket, True)
             opacity_emission = opacity_tree.nodes.new('ShaderNodeEmission')
