@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 112 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, gecontroleerde oogdetails en individuele downloadbundles.
+
 - De beoordeelde vuureffecten van Ponyta, Rapidash en Centiskorch worden ondersteund door de 3D-battlerenderer.
 
 - Nurse Joy op SS Anne 1F stelt nu ook je terugkeerplek in op een spawnmarker naast haar.

@@ -2,6 +2,7 @@
 import copy
 import hashlib
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -58,6 +59,18 @@ def main():
             assert abs(profile['scale']-measured['scale']) < 1e-8
             assert abs(profile['lift']-measured['candidate_lift']) < .001
             profile['sha256'] = raw['runtime_sha256']
+            if not profile['clips']:
+                # Fully airborne models need no additional lift. Persist explicit
+                # zero correction curves from their measured clip clocks so the
+                # runtime recognizes their completed calibration as well.
+                for action, clip in measured['clips'].items():
+                    if action == 'idle':
+                        continue
+                    seconds = float(clip['duration'])
+                    profile['clips'][action] = {
+                        'duration': seconds,
+                        'intent': 'grounded_rest' if action == 'sleep' else 'clearance_only',
+                        'offsets': [0.0] * (math.ceil(seconds*60.0)+1)}
             place = {k: profile[k] for k in ['scale', 'yaw_degrees']}
             bounds = {a: {'min': [x/profile['scale'] for x in r['envelope_min']],
                           'size': [x/profile['scale'] for x in r['envelope_size']]}
@@ -78,7 +91,10 @@ def main():
                             'runtime_sha256': raw['runtime_sha256'], 'appearance_approved': True, 'battle_approved': True})
         assert pair_profiles[0] == pair_profiles[1], name
     assert len(rows) == 224 and len(images) == 3584
-    WORK.mkdir(exist_ok=False)
+    if WORK.exists():
+        assert read(WORK/'runtime-catalog-final.json') == rows, 'Cannot replace reviewed scenes'
+    else:
+        WORK.mkdir()
     write(WORK / 'runtime-catalog-final.json', rows)
     write(WORK / 'runtime-fixture.json', fixture)
     profiles = HERE / 'catalog_remaining_final_profiles.json'; write(profiles, fixture)

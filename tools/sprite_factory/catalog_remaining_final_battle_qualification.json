@@ -3591,7 +3591,7 @@
   "date": "2026-10-01",
   "evidence_sha256": {
     ".tmp/remaining-final-batch-v1/approved-final/runtime-catalog-final.json": "7c95baa5f3e89a630576837c98f48ad999ff1d5b4a82aed3338c66bd1dd87fe5",
-    ".tmp/remaining-final-batch-v1/approved-final/runtime-fixture.json": "6d341f78ae07204ce1b64ae648dcb03f870a9c6250698c70bcae2e4da22880e2",
+    ".tmp/remaining-final-batch-v1/approved-final/runtime-fixture.json": "bd381a830ac424634c6366a0fa8dfe3b80a6726a6defa515455ba7a745b167f5",
     ".tmp/remaining-final-batch-v1/battle-final-normal-v7.json": "5b1c4fc67cd1ba946a03a250604dece0e38712a636fcf9e3c7abe18a1df64d0f",
     ".tmp/remaining-final-batch-v1/battle-final-repair-v6/0/corrected/battle-review.json": "33193d2d33818fa65146bd4fd063531151a7e71f4c9b8e43fe76049482bef2e3",
     ".tmp/remaining-final-batch-v1/battle-final-repair-v6/1/corrected/battle-review.json": "2fd46c2a60d67bf8453fe812fb4ef17feddba90139b6509b2455ad42122c657c",
@@ -3652,11 +3652,11 @@
     ".tmp/remaining-final-batch-v1/pose-order-final-all.json": "549238093d25eaac41507e22dda0c430ecf6ebce047463cd27151c1ab7775213",
     ".tmp/remaining-final-batch-v1/runtime-final-all-v1.json": "155dc5815c49d0dbce4fd16b4e571625a52655290b105960430df62ab3d04734",
     ".tmp/remaining-final-batch-v1/runtime-final-channel-proof-v1.json": "49f813b965a638a1680f745a1b17c366292e41b8d426684303190af810539307",
-    "tools/sprite_factory/catalog_remaining_final_checkpoint.json": "a15c5ff41fb6e79f79193a0d95dede3dc473ab6713c036fa855eea53d7942df3",
-    "tools/sprite_factory/catalog_remaining_final_profiles.json": "6d341f78ae07204ce1b64ae648dcb03f870a9c6250698c70bcae2e4da22880e2",
-    "tools/sprite_factory/prepare_remaining_final_admission.py": "e014ddc793ed1dca45a337d1aa343769e81d3d6d275f4c87bd3ed493ae3f7c76"
+    "tools/sprite_factory/catalog_remaining_final_checkpoint.json": "201a67cc95aa505d27a487753a3ce30b4370cc85a95cb5662a3aaa46b050c639",
+    "tools/sprite_factory/catalog_remaining_final_profiles.json": "bd381a830ac424634c6366a0fa8dfe3b80a6726a6defa515455ba7a745b167f5",
+    "tools/sprite_factory/prepare_remaining_final_admission.py": "9853d8abff6b18dbdc6e64d94b7f03ca0c8b196f1492b738bc525a79eb3ac79f"
   },
-  "profiles_sha256": "6d341f78ae07204ce1b64ae648dcb03f870a9c6250698c70bcae2e4da22880e2",
+  "profiles_sha256": "bd381a830ac424634c6366a0fa8dfe3b80a6726a6defa515455ba7a745b167f5",
   "records": [
     {
       "appearance_approved": true,
