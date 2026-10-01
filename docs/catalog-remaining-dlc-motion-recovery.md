@@ -166,3 +166,89 @@ Next: create and validate explicit sleep poses, complete standalone SCN
 conversion and battle qualification (including grounding, scale, native
 effect limitations and loading), then build individual bundles. These models
 are not yet runtime-approved or uploaded to R2.
+
+
+## Standalone rest and battle proposals
+
+The 15 appearance-approved pairs now have explicit authored rest clips. These
+are not recovered native sleep animations. The rest baseline samples each
+model's own idle at time zero, retains only its own faint-endpoint eyelid
+transforms, and adds 0.6% root breathing. Idle midpoint was rejected after
+Hydrapple's accessory transforms visibly stretched the proposed rest pose.
+Models without usable eyelids retain their source rest eyes. Iron Boulder and
+Iron Crown use their official base Eye colour with Eye emission disabled during
+rest; their other glowing panels remain intact.
+
+A STEP interpolation endpoint error in the proposal sampler was fixed in code.
+Focused regressions cover exact STEP key boundaries, a shared clip clock for
+tracks of different durations, and antipodal quaternion interpolation. No
+validation threshold was relaxed. Archaludon's recovered native damage action
+had Blender's `.001` suffix and was omitted by an earlier exact-name selection;
+that real source action is now appended with source, node and export hash guards.
+
+`catalog_dlc_sleep_proposals.py` retains the original mesh/skin/node data, native
+animation metadata and binary prefix. All 30 outputs reproduce byte-for-byte;
+15 normal/shiny pairs have exact geometry/skin/motion parity. Their standalone
+SCN scenes reload without external dependencies. The rest material pack also
+checks Eye emission across idle → sleep → idle after serialization. All 30
+standalone diagnostic scenes passed timing, finite posed geometry and reverse
+pose-order checks with zero errors.
+
+Current immutable evidence is under `.tmp/remaining-dlc-15-v1/`:
+`flat-motion-v1`, `flat-approved-v1`, `sleep-flat-v4`, `runtime-flat-v2`,
+`flat-rest-parity-v4.json`, `sleep-flat-captures-v1`, and `battle-flat-v4`. Earlier superseded proposals
+remain available for diagnosis. `catalog_dlc_runtime_review.gd` captures the
+standalone rest/pose proof; `catalog_dlc_battle_review_page.py` assembles one
+normal/shiny page only after all battle floor/camera checks pass.
+
+The static native emission-layer reconstruction remains a documented material
+limitation: animated parallax, view-dependent Fresnel and Terapagos flow are not
+claimed reconstructed. Final sleep and battle presentation require the user's
+collective review. Runtime catalog admission, performance/loading qualification,
+individual bundles and R2 upload follow that approval.
+
+
+### Half-frame interpolation repair
+
+Independent 120 Hz sampling rejected the hierarchical proposals: Munkidori's
+faint and special attack, Ogerpon's physical attack, and Poltchageist's idle and
+physical attack had intervening geometry excursions. The 60 Hz key-adjacent
+samples alone missed some of these. No large root lift was accepted as a fix.
+
+All 15 exact prepared sources were re-exported with Blender's existing native
+`export_hierarchy_flatten_bones` option. `catalog_dlc_flat_motion.py` transfers
+that representation into both reviewed variants, checking identical vertices,
+UVs, indices, weights, named joint assignments and material assignments. Original
+reviewed materials and texture bytes are retained exactly, including Pecharunt's
+already-reviewed closed-shell exclusion. Skeleton hierarchy, inverse bind
+matrices and sampled transform curves deliberately change; source action
+selection and timing remain pinned. Archaludon's real suffixed damage action is
+included in this export.
+
+Authored sleep eyelids are transferred relative to their original non-eyelid
+ancestor so a faint head position cannot displace eyes in the idle body. Breathing
+is applied to the common flattened rig parent; the standalone complete-pose
+adapter restores its default scale on other actions. Focused tests include that
+relative eyelid transfer. The final 30 rest GLBs reproduce byte-for-byte and all
+15 geometry/motion variant pairs match. The new battle baseline uses a 4 cm idle
+clearance margin; other offsets remain clearance corrections and are independently
+checked against the unchanged 2.5 cm floor requirement.
+
+
+### Final collective review ready
+
+The final flattened/rest scenes passed all 30 independent battle sweeps: **216
+clips**, no floor failures at 120 Hz, **480** pose/camera/side captures with no
+out-of-camera or HUD-proxy overlaps. Minimum measured clearance is
+**0.03474596 m**, above the unchanged 0.025 m requirement. These are geometric
+and presentation checks, not a frame-rate or full battle-UI certification.
+
+The collective page is <http://127.0.0.1:8787/>. It combines 15 normal/shiny
+pairs, enlarged idle/rest views, four battle poses and both camera/side presets.
+Its manifest pins 1081 page/image files; all 1082 page/manifest/image requests
+returned HTTP 200, and `xdg-open` dispatched the URL. The user has been asked for
+one final sleep/battle verdict. `catalog_remaining_dlc_battle_checkpoint.json`
+and `catalog_remaining_dlc_battle_candidates.json` record the exact held scene
+hashes, placement/motion proposals and evidence hashes. Appearance approvals
+remain intact; sleep/battle approval is pending, and no runtime registry,
+individual bundle, R2 index or release has been changed by this step.

@@ -64,7 +64,12 @@ func _run() -> void:
        clip.track_set_path(track,target)
        clip.value_track_set_update_mode(track,Animation.UPDATE_DISCRETE)
        clip.track_insert_key(track,0.0,closed if action=="sleep" else original.albedo_texture)
-     bindings.append({"node":str(node.get_path_to(mesh)),"surface":surface,"material":original.resource_name,"closed_sha256":data.sha256})
+       if data.get("disable_emission_on_sleep", false):
+        var emission_track:=clip.add_track(Animation.TYPE_VALUE)
+        clip.track_set_path(emission_track,NodePath(str(node.get_path_to(mesh))+":surface_material_override/"+str(surface)+":emission_enabled"))
+        clip.value_track_set_update_mode(emission_track,Animation.UPDATE_DISCRETE)
+        clip.track_insert_key(emission_track,0.0,false if action=="sleep" else original.emission_enabled)
+     bindings.append({"node":str(node.get_path_to(mesh)),"surface":surface,"material":original.resource_name,"closed_sha256":data.sha256,"disable_emission_on_sleep":data.get("disable_emission_on_sleep",false),"original_emission_enabled":original.emission_enabled})
   var completion:=preload("complete_pose_channels.gd").new()
   assert(completion.apply(node),completion.failure)
   _inline(node,{})
@@ -83,6 +88,8 @@ func _run() -> void:
     var mesh:MeshInstance3D=actor.get_node(binding.node)
     var material:StandardMaterial3D=mesh.get_active_material(binding.surface)
     assert(material.albedo_texture!=null)
+    if binding.disable_emission_on_sleep:
+     assert(material.emission_enabled==(false if action=="sleep" else binding.original_emission_enabled),"Eye emission state did not survive reload: "+row.species)
     if action=="sleep":
      var actual:=material.albedo_texture.get_image()
      var expected:=Image.load_from_file(row.eye_states[binding.material].path)

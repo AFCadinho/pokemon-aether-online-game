@@ -11,9 +11,9 @@
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
   "pending": [
-    "native_parallax_Fresnel_and_Terapagos_flow_qualification",
-    "authored_sleep_poses",
-    "standalone_SCN_conversion_and_battle_qualification",
+    "material_effect_limitations_final_review",
+    "authored_rest_and_battle_visual_review",
+    "runtime_admission_and_loading_performance",
     "individual_bundles"
   ],
   "entries": [
@@ -1554,5 +1554,11 @@
       "source graph Fresnel/flow approximation requires remaining review and qualification",
       "sleep poses and standalone battle qualification pending"
     ]
+  },
+  "standalone_battle_checkpoint": {
+    "path": "tools/sprite_factory/catalog_remaining_dlc_battle_checkpoint.json",
+    "sha256": "953bed5e0131b35949024eab0437bfca8ca05eb904ec54f0727620d669e6d0c2",
+    "technical_pass": true,
+    "user_battle_approved": false
   }
 }
