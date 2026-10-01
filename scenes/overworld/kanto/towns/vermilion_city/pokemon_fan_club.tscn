@@ -1,22 +1,22 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://dw5y66kla4o03"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_fan_club/vermilion_fan_club.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="Script" uid="uid://byc4pfx3mxmlv" path="res://scripts/world/kanto/towns/pokemon_fan_club_chairman.gd" id="chairman"]
+[ext_resource type="TileSet" uid="uid://bw4ggkfn67bev" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="door_hint"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/pokemon_fan_club_chairman.gd" id="chairman"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="frames_poke_fan_m"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="frames_poke_fan_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="frames_lass"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="frames_lass"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="frames_poke_fan_f"]
+[ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="frames_poke_fan_m"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_fan_club/vermilion_fan_club.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
-[node name="PokemonFanClub" type="Node2D"]
+[node name="PokemonFanClub" type="Node2D" unique_id=922071260]
 script = ExtResource("metadata")
 map_id = "kanto_vermilion_city_pokemon_fan_club"
 map_region_name = "Kanto"
@@ -31,9 +31,9 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.vermilion_city"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=1181890628 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1549567862]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
@@ -42,94 +42,101 @@ floor_regions = {
 }
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1102087912]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1088342865]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2104699645]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1500513326]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=1145131289]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=2137296128]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1233206735]
 
-[node name="PokemonFanClubChairman" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="PokemonFanClubChairman" parent="Entities/NPCs" unique_id=1153216672 instance=ExtResource("dialogue")]
 position = Vector2(560, 432)
 script = ExtResource("chairman")
+intro_dialogue_id = ""
+not_now_dialogue_id = ""
+story_dialogue_id = ""
+reward_id = ""
+success_dialogue_lines = Array[String](["Here, take this. It will help you fish in any body of water."])
+already_received_dialogue_lines = Array[String](["That Old Rod should be enough to get you started."])
+failure_dialogue_lines = Array[String](["I cannot give you this item right now.", "Please try again in a moment."])
+success_dialogue_id = ""
+already_received_dialogue_id = ""
+failure_dialogue_id = ""
+locked_dialogue_id = ""
+reward_item_id = ""
+locked_dialogue_lines = Array[String](["I do not have anything for you just yet."])
 npc_id = "kanto_pokemon_fan_club_chairman"
-display_name = "Pokemon Fan Club Chairman"
 npc_definition_id = "trainer_class_poke_fan_m"
+display_name = "Pokemon Fan Club Chairman"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("frames_poke_fan_m")
 preload_quest_markers = true
 
-[node name="FanLola" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="FanLola" parent="Entities/NPCs" unique_id=926452487 instance=ExtResource("dialogue")]
 position = Vector2(272, 432)
 npc_id = "kanto_vermilion_city_fan_club_lola"
 npc_definition_id = "trainer_class_lass"
 display_name = "Pokemon Fan Lola"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("frames_lass")
 
-[node name="FanBram" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="FanBram" parent="Entities/NPCs" unique_id=1887280697 instance=ExtResource("dialogue")]
 position = Vector2(144, 528)
 npc_id = "kanto_vermilion_city_fan_club_bram"
 npc_definition_id = "trainer_class_poke_fan_m"
 display_name = "Pokemon Fan Bram"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("frames_poke_fan_m")
 
-[node name="FanNoor" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="FanNoor" parent="Entities/NPCs" unique_id=1512079013 instance=ExtResource("dialogue")]
 position = Vector2(464, 624)
 npc_id = "kanto_vermilion_city_fan_club_noor"
 npc_definition_id = "trainer_class_poke_fan_f"
 display_name = "Pokemon Fan Noor"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("frames_poke_fan_f")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=904725468]
 
-[node name="Rapidash" parent="Entities/Pokemon" instance=ExtResource("pokemon")]
+[node name="Rapidash" parent="Entities/Pokemon" unique_id=1301751394 instance=ExtResource("pokemon")]
 position = Vector2(624, 464)
 overworld_pokemon_id = "kanto_vermilion_city_fan_club_rapidash_1"
 species_id = "rapidash"
-display_name = "Rapidash"
 level = 25
+display_name = "Rapidash"
 facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="Eevee" parent="Entities/Pokemon" instance=ExtResource("pokemon")]
+[node name="Eevee" parent="Entities/Pokemon" unique_id=103240504 instance=ExtResource("pokemon")]
 position = Vector2(144, 560)
 overworld_pokemon_id = "kanto_vermilion_city_fan_club_eevee_1"
 species_id = "eevee"
-display_name = "Eevee"
 level = 16
+display_name = "Eevee"
 facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="Clefairy" parent="Entities/Pokemon" instance=ExtResource("pokemon")]
+[node name="Clefairy" parent="Entities/Pokemon" unique_id=1014213772 instance=ExtResource("pokemon")]
 position = Vector2(496, 656)
 overworld_pokemon_id = "kanto_vermilion_city_fan_club_clefairy_1"
 species_id = "clefairy"
-display_name = "Clefairy"
 level = 18
+display_name = "Clefairy"
 facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=958808561]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=842472558]
 
-[node name="FromVermilionCity" type="Marker2D" parent="Spawns"]
+[node name="FromVermilionCity" type="Marker2D" parent="Spawns" unique_id=851917163]
 position = Vector2(368, 720)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1600753135]
 
-[node name="ToVermilionCity" type="Area2D" parent="Exits"]
+[node name="ToVermilionCity" type="Area2D" parent="Exits" unique_id=1760647125]
 position = Vector2(368, 752)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
@@ -137,18 +144,18 @@ target_spawn_name = "FromFanClub"
 transition_id = "kanto_vermilion_city_pokemon_fan_club__to_outside"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity" unique_id=602574228]
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToVermilionCity" instance=ExtResource("door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToVermilionCity" unique_id=1987593882 instance=ExtResource("door_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 flow_direction = "down"
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=1887559734]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1355966872]
 visible = false
 z_index = 4096
 tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAARAAAAAAAAAAAAAAASAAAAAAAAAAAAAAATAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAVAAAAAAAAAAAAAAAWAAAAAAAAAAAAAAAXAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAABAAEAAAAAAAAAAAACAAEAAAAAAAAAAAADAAEAAAAAAAAAAAAEAAEAAAAAAAAAAAAFAAEAAAAAAAAAAAAGAAEAAAAAAAAAAAAHAAEAAAAAAAAAAAAIAAEAAAAAAAAAAAAJAAEAAAAAAAAAAAAKAAEAAAAAAAAAAAALAAEAAAAAAAAAAAAMAAEAAAAAAAAAAAANAAEAAAAAAAAAAAAOAAEAAAAAAAAAAAAPAAEAAAAAAAAAAAAQAAEAAAAAAAAAAAARAAEAAAAAAAAAAAASAAEAAAAAAAAAAAATAAEAAAAAAAAAAAAUAAEAAAAAAAAAAAAVAAEAAAAAAAAAAAAWAAEAAAAAAAAAAAAXAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAABAAIAAAAAAAAAAAACAAIAAAAAAAAAAAADAAIAAAAAAAAAAAAEAAIAAAAAAAAAAAAFAAIAAAAAAAAAAAAGAAIAAAAAAAAAAAAHAAIAAAAAAAAAAAAIAAIAAAAAAAAAAAAJAAIAAAAAAAAAAAAKAAIAAAAAAAAAAAALAAIAAAAAAAAAAAAMAAIAAAAAAAAAAAANAAIAAAAAAAAAAAAOAAIAAAAAAAAAAAAPAAIAAAAAAAAAAAAQAAIAAAAAAAAAAAARAAIAAAAAAAAAAAASAAIAAAAAAAAAAAATAAIAAAAAAAAAAAAUAAIAAAAAAAAAAAAVAAIAAAAAAAAAAAAWAAIAAAAAAAAAAAAXAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAADAAMAAAAAAAAAAAAEAAMAAAAAAAAAAAAFAAMAAAAAAAAAAAAGAAMAAAAAAAAAAAAHAAMAAAAAAAAAAAAIAAMAAAAAAAAAAAAJAAMAAAAAAAAAAAAKAAMAAAAAAAAAAAALAAMAAAAAAAAAAAAMAAMAAAAAAAAAAAANAAMAAAAAAAAAAAAOAAMAAAAAAAAAAAAPAAMAAAAAAAAAAAAQAAMAAAAAAAAAAAARAAMAAAAAAAAAAAASAAMAAAAAAAAAAAATAAMAAAAAAAAAAAAUAAMAAAAAAAAAAAAVAAMAAAAAAAAAAAAWAAMAAAAAAAAAAAAXAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAAAAAAAAAAAEAAQAAAAAAAAAAAAFAAQAAAAAAAAAAAAGAAQAAAAAAAAAAAAHAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAJAAQAAAAAAAAAAAAKAAQAAAAAAAAAAAALAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAANAAQAAAAAAAAAAAAOAAQAAAAAAAAAAAAPAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAARAAQAAAAAAAAAAAASAAQAAAAAAAAAAAATAAQAAAAAAAAAAAAUAAQAAAAAAAAAAAAVAAQAAAAAAAAAAAAWAAQAAAAAAAAAAAAXAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAABAAUAAAAAAAAAAAACAAUAAAAAAAAAAAADAAUAAAAAAAAAAAAEAAUAAAAAAAAAAAAFAAUAAAAAAAAAAAAGAAUAAAAAAAAAAAAHAAUAAAAAAAAAAAAIAAUAAAAAAAAAAAAJAAUAAAAAAAAAAAAKAAUAAAAAAAAAAAALAAUAAAAAAAAAAAAMAAUAAAAAAAAAAAANAAUAAAAAAAAAAAAOAAUAAAAAAAAAAAAPAAUAAAAAAAAAAAAQAAUAAAAAAAAAAAARAAUAAAAAAAAAAAASAAUAAAAAAAAAAAATAAUAAAAAAAAAAAAUAAUAAAAAAAAAAAAVAAUAAAAAAAAAAAAWAAUAAAAAAAAAAAAXAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAABAAYAAAAAAAAAAAACAAYAAAAAAAAAAAADAAYAAAAAAAAAAAAEAAYAAAAAAAAAAAAFAAYAAAAAAAAAAAAGAAYAAAAAAAAAAAAHAAYAAAAAAAAAAAAIAAYAAAAAAAAAAAAJAAYAAAAAAAAAAAAKAAYAAAAAAAAAAAALAAYAAAAAAAAAAAAMAAYAAAAAAAAAAAANAAYAAAAAAAAAAAAOAAYAAAAAAAAAAAAPAAYAAAAAAAAAAAAQAAYAAAAAAAAAAAARAAYAAAAAAAAAAAASAAYAAAAAAAAAAAATAAYAAAAAAAAAAAAUAAYAAAAAAAAAAAAVAAYAAAAAAAAAAAAWAAYAAAAAAAAAAAAXAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAABAAcAAAAAAAAAAAACAAcAAAAAAAAAAAADAAcAAAAAAAAAAAAEAAcAAAAAAAAAAAAFAAcAAAAAAAAAAAAGAAcAAAAAAAAAAAAHAAcAAAAAAAAAAAAIAAcAAAAAAAAAAAAJAAcAAAAAAAAAAAAKAAcAAAAAAAAAAAALAAcAAAAAAAAAAAAMAAcAAAAAAAAAAAANAAcAAAAAAAAAAAAOAAcAAAAAAAAAAAAPAAcAAAAAAAAAAAAQAAcAAAAAAAAAAAARAAcAAAAAAAAAAAASAAcAAAAAAAAAAAATAAcAAAAAAAAAAAAUAAcAAAAAAAAAAAAVAAcAAAAAAAAAAAAWAAcAAAAAAAAAAAAXAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAABAAgAAAAAAAAAAAACAAgAAAAAAAAAAAADAAgAAAAAAAAAAAAEAAgAAAAAAAAAAAAIAAgAAAAAAAAAAAAPAAgAAAAAAAAAAAASAAgAAAAAAAAAAAAVAAgAAAAAAAAAAAAWAAgAAAAAAAAAAAAXAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAABAAkAAAAAAAAAAAACAAkAAAAAAAAAAAADAAkAAAAAAAAAAAAEAAkAAAAAAAAAAAAIAAkAAAAAAAAAAAAPAAkAAAAAAAAAAAASAAkAAAAAAAAAAAAVAAkAAAAAAAAAAAAWAAkAAAAAAAAAAAAXAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAABAAoAAAAAAAAAAAACAAoAAAAAAAAAAAASAAoAAAAAAAAAAAATAAoAAAAAAAAAAAAVAAoAAAAAAAAAAAAWAAoAAAAAAAAAAAAXAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAABAAsAAAAAAAAAAAACAAsAAAAAAAAAAAAJAAsAAAAAAAAAAAAKAAsAAAAAAAAAAAALAAsAAAAAAAAAAAAMAAsAAAAAAAAAAAASAAsAAAAAAAAAAAATAAsAAAAAAAAAAAAVAAsAAAAAAAAAAAAWAAsAAAAAAAAAAAAXAAsAAAAAAAAAAAAAAAwAAAAAAAAAAAABAAwAAAAAAAAAAAACAAwAAAAAAAAAAAASAAwAAAAAAAAAAAATAAwAAAAAAAAAAAAVAAwAAAAAAAAAAAAWAAwAAAAAAAAAAAAXAAwAAAAAAAAAAAAAAA0AAAAAAAAAAAABAA0AAAAAAAAAAAACAA0AAAAAAAAAAAAVAA0AAAAAAAAAAAAWAA0AAAAAAAAAAAAXAA0AAAAAAAAAAAAAAA4AAAAAAAAAAAABAA4AAAAAAAAAAAACAA4AAAAAAAAAAAAGAA4AAAAAAAAAAAAPAA4AAAAAAAAAAAAVAA4AAAAAAAAAAAAWAA4AAAAAAAAAAAAXAA4AAAAAAAAAAAAAAA8AAAAAAAAAAAABAA8AAAAAAAAAAAACAA8AAAAAAAAAAAAGAA8AAAAAAAAAAAAKAA8AAAAAAAAAAAALAA8AAAAAAAAAAAAMAA8AAAAAAAAAAAAPAA8AAAAAAAAAAAAVAA8AAAAAAAAAAAAWAA8AAAAAAAAAAAAXAA8AAAAAAAAAAAAAABAAAAAAAAAAAAABABAAAAAAAAAAAAACABAAAAAAAAAAAAAGABAAAAAAAAAAAAAKABAAAAAAAAAAAAALABAAAAAAAAAAAAAPABAAAAAAAAAAAAAVABAAAAAAAAAAAAAWABAAAAAAAAAAAAAXABAAAAAAAAAAAAAAABEAAAAAAAAAAAABABEAAAAAAAAAAAACABEAAAAAAAAAAAAGABEAAAAAAAAAAAALABEAAAAAAAAAAAAPABEAAAAAAAAAAAAVABEAAAAAAAAAAAAWABEAAAAAAAAAAAAXABEAAAAAAAAAAAAAABIAAAAAAAAAAAABABIAAAAAAAAAAAACABIAAAAAAAAAAAAVABIAAAAAAAAAAAAWABIAAAAAAAAAAAAXABIAAAAAAAAAAAAAABMAAAAAAAAAAAABABMAAAAAAAAAAAACABMAAAAAAAAAAAAVABMAAAAAAAAAAAAWABMAAAAAAAAAAAAXABMAAAAAAAAAAAAAABQAAAAAAAAAAAABABQAAAAAAAAAAAACABQAAAAAAAAAAAADABQAAAAAAAAAAAAUABQAAAAAAAAAAAAVABQAAAAAAAAAAAAWABQAAAAAAAAAAAAXABQAAAAAAAAAAAAAABUAAAAAAAAAAAABABUAAAAAAAAAAAACABUAAAAAAAAAAAADABUAAAAAAAAAAAAUABUAAAAAAAAAAAAVABUAAAAAAAAAAAAWABUAAAAAAAAAAAAXABUAAAAAAAAAAAAAABYAAAAAAAAAAAABABYAAAAAAAAAAAACABYAAAAAAAAAAAADABYAAAAAAAAAAAAUABYAAAAAAAAAAAAVABYAAAAAAAAAAAAWABYAAAAAAAAAAAAXABYAAAAAAAAAAAAAABcAAAAAAAAAAAABABcAAAAAAAAAAAACABcAAAAAAAAAAAADABcAAAAAAAAAAAAEABcAAAAAAAAAAAAFABcAAAAAAAAAAAAGABcAAAAAAAAAAAAHABcAAAAAAAAAAAAIABcAAAAAAAAAAAAJABcAAAAAAAAAAAANABcAAAAAAAAAAAAOABcAAAAAAAAAAAAPABcAAAAAAAAAAAAQABcAAAAAAAAAAAARABcAAAAAAAAAAAASABcAAAAAAAAAAAATABcAAAAAAAAAAAAUABcAAAAAAAAAAAAVABcAAAAAAAAAAAAWABcAAAAAAAAAAAAXABcAAAAAAAAAAAAAABgAAAAAAAAAAAABABgAAAAAAAAAAAACABgAAAAAAAAAAAADABgAAAAAAAAAAAAEABgAAAAAAAAAAAAFABgAAAAAAAAAAAAGABgAAAAAAAAAAAAHABgAAAAAAAAAAAAIABgAAAAAAAAAAAAJABgAAAAAAAAAAAAKABgAAAAAAAAAAAALABgAAAAAAAAAAAAMABgAAAAAAAAAAAANABgAAAAAAAAAAAAOABgAAAAAAAAAAAAPABgAAAAAAAAAAAAQABgAAAAAAAAAAAARABgAAAAAAAAAAAASABgAAAAAAAAAAAATABgAAAAAAAAAAAAUABgAAAAAAAAAAAAVABgAAAAAAAAAAAAWABgAAAAAAAAAAAAXABgAAAAAAAAAAAAAABkAAAAAAAAAAAABABkAAAAAAAAAAAACABkAAAAAAAAAAAADABkAAAAAAAAAAAAEABkAAAAAAAAAAAAFABkAAAAAAAAAAAAGABkAAAAAAAAAAAAHABkAAAAAAAAAAAAIABkAAAAAAAAAAAAJABkAAAAAAAAAAAAKABkAAAAAAAAAAAALABkAAAAAAAAAAAAMABkAAAAAAAAAAAANABkAAAAAAAAAAAAOABkAAAAAAAAAAAAPABkAAAAAAAAAAAAQABkAAAAAAAAAAAARABkAAAAAAAAAAAASABkAAAAAAAAAAAATABkAAAAAAAAAAAAUABkAAAAAAAAAAAAVABkAAAAAAAAAAAAWABkAAAAAAAAAAAAXABkAAAAAAAAAAAAAABoAAAAAAAAAAAABABoAAAAAAAAAAAACABoAAAAAAAAAAAADABoAAAAAAAAAAAAEABoAAAAAAAAAAAAFABoAAAAAAAAAAAAGABoAAAAAAAAAAAAHABoAAAAAAAAAAAAIABoAAAAAAAAAAAAJABoAAAAAAAAAAAAKABoAAAAAAAAAAAALABoAAAAAAAAAAAAMABoAAAAAAAAAAAANABoAAAAAAAAAAAAOABoAAAAAAAAAAAAPABoAAAAAAAAAAAAQABoAAAAAAAAAAAARABoAAAAAAAAAAAASABoAAAAAAAAAAAATABoAAAAAAAAAAAAUABoAAAAAAAAAAAAVABoAAAAAAAAAAAAWABoAAAAAAAAAAAAXABoAAAAAAAAAAAAAABsAAAAAAAAAAAABABsAAAAAAAAAAAACABsAAAAAAAAAAAADABsAAAAAAAAAAAAEABsAAAAAAAAAAAAFABsAAAAAAAAAAAAGABsAAAAAAAAAAAAHABsAAAAAAAAAAAAIABsAAAAAAAAAAAAJABsAAAAAAAAAAAAKABsAAAAAAAAAAAALABsAAAAAAAAAAAAMABsAAAAAAAAAAAANABsAAAAAAAAAAAAOABsAAAAAAAAAAAAPABsAAAAAAAAAAAAQABsAAAAAAAAAAAARABsAAAAAAAAAAAASABsAAAAAAAAAAAATABsAAAAAAAAAAAAUABsAAAAAAAAAAAAVABsAAAAAAAAAAAAWABsAAAAAAAAAAAAXABsAAAAAAAAAAAA=")

@@ -1,0 +1,95 @@
+{
+  "arena_component_probe": [
+    {
+      "draw_calls": 390.0,
+      "median_ms": 16.581,
+      "mode": "baseline",
+      "p95_ms": 17.989,
+      "primitives": 637516.0,
+      "species": "buzzwole"
+    },
+    {
+      "draw_calls": 388.0,
+      "median_ms": 16.669,
+      "mode": "no_crowd",
+      "p95_ms": 17.22,
+      "primitives": 57196.0,
+      "species": "buzzwole"
+    },
+    {
+      "draw_calls": 146.0,
+      "median_ms": 16.672,
+      "mode": "no_boxes",
+      "p95_ms": 17.411,
+      "primitives": 634588.0,
+      "species": "buzzwole"
+    },
+    {
+      "draw_calls": 386.0,
+      "median_ms": 16.67,
+      "mode": "no_beams",
+      "p95_ms": 17.838,
+      "primitives": 636556.0,
+      "species": "buzzwole"
+    },
+    {
+      "draw_calls": 128.0,
+      "median_ms": 16.835,
+      "mode": "no_arena",
+      "p95_ms": 17.322,
+      "primitives": 53282.0,
+      "species": "buzzwole"
+    },
+    {
+      "draw_calls": 390.0,
+      "median_ms": 16.679,
+      "mode": "baseline_again",
+      "p95_ms": 17.674,
+      "primitives": 637516.0,
+      "species": "buzzwole"
+    }
+  ],
+  "conclusion": "Original unchanged full76 functional/performance gate passes on sequential confirmation. Frame-time variability observed; no deterministic model defect isolated. No production code or performance thresholds changed.",
+  "confirmed_rounds": [
+    {
+      "arena": "classic",
+      "frame_p95_ms": 16.891,
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "static_bytes": 237848930
+    },
+    {
+      "arena": "stadium",
+      "frame_p95_ms": 18.872,
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "static_bytes": 239884866
+    },
+    {
+      "arena": "classic",
+      "frame_p95_ms": 16.843,
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "static_bytes": 240164794
+    }
+  ],
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-274-production/approved-76/arena-cost.json": "a0874b2f14495fc001ef5361fb5462b0cb7a1e05dccf607bb63345fd2c97f94a",
+    ".tmp/remaining-274-production/approved-76/arena-cost.log": "c5e04bc361ed3573c056a28de1bf6b0f255621e11983b76ecc15c2e2ddfbb5a2",
+    ".tmp/remaining-274-production/approved-76/arena_cost_diagnostic.gd": "5a1cea249e0bb581265be6d46aafb768558a1ff8ea1b3a58258f6a09f62dafaf",
+    ".tmp/remaining-274-production/approved-76/confirmed-stress.json": "5d7495e415952cf031b21abf0c3eaadd4a5df692e8eebb9465adb6dabda310b4",
+    ".tmp/remaining-274-production/approved-76/confirmed-stress.log": "bd67cdeb86894c82419338eee56e8412365865da8650feb37fef67b79a9aae2d",
+    ".tmp/remaining-274-production/approved-76/diagnostic-stress.json": "8ad5f21bf29c4bad5355d708b86531140e9bbe4e0be00fc56de5cfaae05f343b",
+    ".tmp/remaining-274-production/approved-76/diagnostic-stress.log": "d2205f8d5974c3ec61e9e82218bbad4fd75f16043e7de9a3d432774b941e3202",
+    ".tmp/remaining-274-production/approved-76/performance_diagnostic.gd": "fcec2452e858664b912d36b236b58297c3bd04f8a10e3a8e234f0129546256e3"
+  },
+  "limitations": [
+    "Exact cause of run-to-run frame-time variation not established.",
+    "Instrumented exploratory run had GLES3 null-material diagnostics at stadium transition and is not qualification evidence.",
+    "Per-context diagnostic callback did not export at shutdown; no per-Pokemon attribution is claimed."
+  ],
+  "performance_limit_ms": 20,
+  "renderer_device": "AMD Radeon Graphics (radeonsi, renoir)",
+  "schema": 1
+}
