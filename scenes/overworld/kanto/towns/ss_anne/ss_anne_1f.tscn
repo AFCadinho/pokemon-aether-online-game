@@ -248,7 +248,7 @@ preload_quest_markers = true
 [node name="PassengerEdwin" parent="Entities/NPCs" unique_id=133059021 instance=ExtResource("trainer")]
 position = Vector2(400, 432)
 trainer_id = "kanto_ss_anne_passenger"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_passenger"
 display_name = "Gentleman Edwin"
 npc_sprite_frames = ExtResource("population_gentleman")
@@ -281,7 +281,7 @@ npc_sprite_frames = ExtResource("population_worker")
 [node name="PopulationGentlemanThomas" parent="Entities/NPCs" unique_id=1399074691 instance=ExtResource("trainer")]
 position = Vector2(944, 432)
 trainer_id = "kanto_ss_anne_gentleman_thomas"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_gentleman_thomas"
 npc_definition_id = "trainer_class_elder"
 display_name = "Gentleman Thomas"
@@ -292,7 +292,7 @@ portrait_id = "showdown_gentleman_gen6"
 [node name="PopulationYoungsterTyler" parent="Entities/NPCs" unique_id=1734344321 instance=ExtResource("trainer")]
 position = Vector2(1520, 496)
 trainer_id = "kanto_ss_anne_youngster_tyler"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_youngster_tyler"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Youngster Tyler"
@@ -302,7 +302,7 @@ npc_sprite_frames = ExtResource("population_youngster")
 [node name="PopulationLassAnn" parent="Entities/NPCs" unique_id=235972606 instance=ExtResource("trainer")]
 position = Vector2(2256, 432)
 trainer_id = "kanto_ss_anne_lass_ann"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_lass_ann"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lass Ann"

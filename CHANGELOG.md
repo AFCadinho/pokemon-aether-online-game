@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Onverslagen trainers op de S.S. Anne dagen je nu automatisch uit binnen drie tegels van hun zichtlijn.
+
 - Rose's Titanic-quest is nu beschikbaar in Trainer Progress bij Side Quests, met resetten, activeren en voltooien.
 
 - Vermilion City en Route 11 hebben nu aparte noordelijke en zuidelijke overgangen met spawns op het bijbehorende pad.
