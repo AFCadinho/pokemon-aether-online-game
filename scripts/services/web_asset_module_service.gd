@@ -35,6 +35,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_diglett_cave_route_11_entrance": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
 	"kanto_diglett_cave_route_2_entrance": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
 	"kanto_diglett_cave_tunnel": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
+	"kanto_lavender_town": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 	"kanto_lavender_town_north": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
 	"kanto_power_plant": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
 	"kanto_rock_tunnel_1f": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
