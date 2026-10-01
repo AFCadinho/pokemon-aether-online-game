@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - De hoofdquest na Misty verwijst naar de SS Anne-schipper in Vermilion Port. Het gesprek met de schipper toont je ticket en rondt de quest af, met een hoofdquestmarker bij de NPC.
 
 - The fishing start button uses a larger illustrated rod icon, a rounded navy surface, and clearer hover/press feedback.
