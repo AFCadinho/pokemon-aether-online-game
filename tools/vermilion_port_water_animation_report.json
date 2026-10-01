@@ -1,0 +1,25 @@
+{
+	"after": {
+		"baseRGBABytes": 1704960,
+		"cells": 2547,
+		"fingerprint": "19c166f9aefc681ed2ec67a39275feb42ad0b437908d79690a9d0850a327b93e",
+		"layers": 7,
+		"usedTiles": 96
+	},
+	"animated_cells": {
+		"water": 2037
+	},
+	"animated_types": 11,
+	"before": {
+		"baseRGBABytes": 562176,
+		"cells": 2547,
+		"fingerprint": "19c166f9aefc681ed2ec67a39275feb42ad0b437908d79690a9d0850a327b93e",
+		"layers": 7,
+		"usedTiles": 96
+	},
+	"map": "vermilion_port_exterior",
+	"preserved_animations": {
+
+	},
+	"version": 1
+}

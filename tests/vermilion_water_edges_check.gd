@@ -48,6 +48,8 @@ func _run() -> void:
 	]:
 		var other: Node = load(entry[0]).instantiate()
 		root.add_child(other)
+		if entry[0].ends_with("vermilion_docks.tscn"):
+			_check_water_animation(other.get_node("Visual"), "res://tools/vermilion_port_water_animation_report.json")
 		var count := 0
 		for y in range(entry[1].y):
 			for x in range(entry[1].x):
@@ -65,9 +67,9 @@ func _check(ok: bool, message: String) -> void:
 		failed = true
 		push_error(message)
 
-func _check_water_animation(visual: Node) -> void:
+func _check_water_animation(visual: Node, report_path: String = "res://tools/vermilion_water_animation_report.json") -> void:
 	var fingerprint = preload("res://tests/support/visual_atlas_fingerprint.gd").new()
-	var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/vermilion_water_animation_report.json"))
+	var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
 	var actual: Dictionary = fingerprint.capture(visual)
 	for key in ["fingerprint", "cells", "layers", "usedTiles"]:
 		_check(actual[key] == report.before[key], "water animation preserves original visual " + key)
