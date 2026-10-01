@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De gedeelde Vermilion-housevisual is opnieuw geïmporteerd met de opgeslagen TMX-laagindeling.
+
 - Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual, inclusief bijgewerkte tilelagen.
 
 - Nog zes Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Lugia, Ho-Oh, Vibrava, Flygon, Swanna en Mandibuzz.
