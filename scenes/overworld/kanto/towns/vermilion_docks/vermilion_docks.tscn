@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_port_exterior/vermilion_port_exterior.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://cwoy7c4b5aqge" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_4oa1j"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_0tspk"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/ss_anne_skipper.tscn" id="skipper"]
 
@@ -122,6 +123,9 @@ transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSSAnne" unique_id=1942108119]
 shape = SubResource("boarding_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToSSAnne" unique_id=628573849 instance=ExtResource("4_4oa1j")]
+z_as_relative = false
 
 [node name="Entities" type="Node2D" parent="." unique_id=1237438157]
 z_index = 5
