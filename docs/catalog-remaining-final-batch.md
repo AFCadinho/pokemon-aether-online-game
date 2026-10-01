@@ -126,3 +126,52 @@ JavaScript syntax and local HTTP checks pass. This audit records no human
 approval: the 112 pairs remain pending final review, counts and the released
 catalogue are unchanged, and no bundles were uploaded. The 15 DLC holds and
 fire gameplay integration described above still apply.
+
+
+## Explicit final approval and local packaging — 2026-10-01
+
+The user approved all pairs on final-review-v3: “Zien er allemaal goed uit”.
+This supersedes the earlier pending visual review status, for exactly 112 pairs
+and 224 pinned SCNs. The checkpoint records the answer and review-manifest hash.
+
+112 individually versioned bundles were prepared (513,060,767 bytes) and all
+were installed through the launcher store with no-op/restart verification.
+All 224 standalone scenes loaded without external dependencies, including 88
+supported shader surfaces. The existing material-effect regression and the
+new exact-fire-code/parameter rejection check passed. The reviewed fire shader
+is byte-identical to the preview code and now recognized by gameplay material
+validation; the approved fire SCNs have not been rewritten.
+
+The ordinary game must be closed for the installed rendered battle performance
+run. The runtime registry is not yet updated: 899 approved profiles remain the
+baseline until that qualification passes. The local preflight receipt records
+the generated bundles and successful installation, with runtime_approved=false.
+No additional human appearance review is required for these exact scenes.
+
+
+## Completed local runtime admission — 2026-10-01
+
+All 112 approved pairs passed transactional launcher installation and three
+installed, rendered battle passes (classic/stadium/classic): 336 paired passes
+and 336 faint replacements. p95 frame times were 6.989 / 6.974 / 7.004 ms;
+no uncovered stall exceeded 100 ms, threaded dispatch/collect remained below
+2.744 ms, and retained model source data was 3,399,844 bytes. Static memory grew
+321,180 bytes between the second and third passes, below the existing 1 MiB
+limit. The harness emitted an ObjectDB exit warning; actor/viewport weak-reference
+release checks passed. This is focused local qualification, not release or
+cross-platform certification.
+
+Sixteen airborne models initially had empty motion correction dictionaries.
+Explicit zero-offset curves now record their measured native clocks and their
+already verified clearance. No model, shader, pose or animation timing changed
+for this fix. The incomplete first stress log is retained and excluded from
+qualification. All 224 profiles then passed the actual runtime placement/motion
+validators, followed by the unchanged installed battle stress assertions.
+
+The authoritative game and launcher registries are identical and now contain
+**1,010 ordinary species plus Mega Dragonite: 1,011 profiles / 2,022 model
+records**. `catalog_remaining_final_bundle_qualification.json` pins the 112
+individual bundles and qualification evidence; the checkpoint records their
+local admission. All 112 are finished locally and require no further human
+review. The 15 DLC species remain held for usable motions. R2 upload and release
+certification/publication have not been performed by this task.
