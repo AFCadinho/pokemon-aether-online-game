@@ -6248,4 +6248,11 @@
   "story.kanto.ss_anne_titanic_pose.summary": "Doe samen met Rose een beroemde pose op de S.S. Anne. Beloning: 1 PP Up.",
   "story.kanto.ss_anne_pose_with_rose": "Doe de Titanic-pose met Rose op het dek op 3F.",
   "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Titanic-pose"
+,
+  "story.kanto.route_2_oak_assistant.title": "Oak's Pokédexonderzoek",
+  "story.kanto.route_2_oak_assistant.summary": "Help Professor Oaks assistent door tien verschillende Pokémon te vangen.",
+  "story.kanto.route_2_oak_assistant.objective": "Vang tien verschillende Pokémon en ga terug naar Oaks assistent.",
+  "story.kanto.route_2_oak_assistant.progress": "Je hebt {caught} van de {required} verschillende Pokémon in je Pokédex geregistreerd.",
+  "story.kanto.route_2_oak_assistant.reward": "Uitstekend werk! Professor Oak zal blij zijn met je onderzoek. Hier is HM Flash.",
+  "story.kanto.route_2_oak_assistant.completed": "Bedankt dat je Professor Oak hebt geholpen met zijn Pokédexonderzoek. Gebruik HM Flash om donkere grotten te verlichten."
 }

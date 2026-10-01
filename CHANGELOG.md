@@ -4,6 +4,8 @@
 
 - Het SS Anne-battledek is rondom aangekleed met verspreid juichend publiek, deklichten, patrijspoorten en een voordek met seinmast en scheepsbeslag.
 
+- In Route 2 House zijn de twee bewoners vervangen door Oaks assistent, met een side quest om tien verschillende Pokémon te vangen voor HM Flash.
+
 - De SS Anne-battlearena heeft een kleine groep van zes juichende passagiers en matrozen op het achterdek.
 
 - Diglett Cave gebruikt nu het Viridian Forest-theme; beide Rock Tunnel-verdiepingen gebruiken het Mt. Moon-theme.

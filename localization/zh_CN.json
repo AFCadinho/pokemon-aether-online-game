@@ -6244,4 +6244,11 @@
   "story.kanto.ss_anne_titanic_pose.summary": "与Rose在圣安努号重现经典姿势。奖励：1个PP提升剂。",
   "story.kanto.ss_anne_pose_with_rose": "在3F甲板与Rose摆出泰坦尼克号的经典姿势。",
   "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · 泰坦尼克号姿势"
+,
+  "story.kanto.route_2_oak_assistant.title": "大木博士的图鉴研究",
+  "story.kanto.route_2_oak_assistant.summary": "帮助大木博士的助手，捕捉十种不同的宝可梦。",
+  "story.kanto.route_2_oak_assistant.objective": "捕捉十种不同的宝可梦，然后回去找大木博士的助手。",
+  "story.kanto.route_2_oak_assistant.progress": "你已在图鉴中登记了 {required} 种不同宝可梦中的 {caught} 种。",
+  "story.kanto.route_2_oak_assistant.reward": "做得好！大木博士会为你的研究成果感到高兴。收下这个 HM 闪光。",
+  "story.kanto.route_2_oak_assistant.completed": "再次感谢你帮助大木博士进行图鉴研究。使用 HM 闪光照亮黑暗的洞穴。"
 }

@@ -11,6 +11,15 @@ func _init() -> void:
 	var house_source := FileAccess.get_file_as_string(HOUSE_PATH)
 	_check(not route_source.is_empty(), "%s loads" % ROUTE_PATH)
 	_check(not house_source.is_empty(), "%s loads" % HOUSE_PATH)
+	var house_scene := load(HOUSE_PATH) as PackedScene
+	_check(house_scene != null, "Route 2 house scene and NPC script resources load")
+	if house_scene != null:
+		var house_instance := house_scene.instantiate()
+		_check(
+			house_instance.get_node_or_null("Entities/NPCs/OakAssistant") != null,
+			"Oak's assistant instantiates in the Route 2 house"
+		)
+		house_instance.free()
 	_check_route(route_source)
 	_check_house(house_source)
 	quit(1 if failed else 0)
@@ -34,10 +43,12 @@ func _check_house(source: String) -> void:
 	_check(source.contains('weather_profile = "disabled"'), "Route 2 house disables outdoor weather")
 	_check(source.contains('[node name="BrownHouseTemplate" parent="." instance='), "Route 2 house reuses the brown-house template")
 	_check(source.contains('[node name="Players" type="Node2D" parent="Entities"]'), "Route 2 house provides the multiplayer player container")
-	_check(source.contains('npc_id = "kanto_route_2_house_poke_fan_miles"'), "Route 2 house contains Poke Fan Miles")
-	_check(source.contains('npc_id = "kanto_route_2_house_school_kid_nolan"'), "Route 2 house contains School Kid Nolan")
-	_check(source.contains('npc_sprite_frames = ExtResource("7_poke_fan_m")'), "Miles uses the Poke Fan overworld sprite")
-	_check(source.contains('npc_sprite_frames = ExtResource("8_school_kid_m")'), "Nolan uses the School Kid overworld sprite")
+	_check(source.contains('npc_id = "kanto_route_2_house_oak_assistant"'), "Route 2 house contains Oak's assistant")
+	_check(source.contains('script = ExtResource("7_oak_assistant")'), "Oak's assistant uses the Pokédex quest interaction")
+	_check(source.contains('npc_sprite_frames = ExtResource("8_scientist_m")'), "Oak's assistant uses the scientist overworld sprite")
+	_check(source.contains('portrait_id = "showdown_scientist_gen7"'), "Oak's assistant uses a scientist portrait")
+	_check(not source.contains("kanto_route_2_house_poke_fan_miles"), "Poke Fan Miles was removed")
+	_check(not source.contains("kanto_route_2_house_school_kid_nolan"), "School Kid Nolan was removed")
 	_check(source.contains('[node name="FromRoute2" type="Marker2D" parent="Spawns"]\nposition = Vector2(304, 464)'), "Route 2 house has a safe indoor arrival")
 	var exit := _node_block(source, "ToRoute2")
 	_check(not exit.is_empty(), "Route 2 house has an exit back to the route")
