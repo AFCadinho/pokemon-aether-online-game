@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pickpocket attempts show a short animated meter above the NPC, wait for the server result, and display success, detection, or interrupted feedback with confirmed money and XP. The pickpocket pose now resolves its appearance service correctly.
+
 - Thieving prompts have a larger hand-and-coin icon, a rounded violet surface, and clearer hover/press feedback matching the fishing button style.
 
 - Nog acht Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Arctovish, Lillipup, Mr. Rime, Noctowl, Palpitoad, Poipole, Seismitoad en Trumbeak.

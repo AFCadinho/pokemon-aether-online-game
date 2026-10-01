@@ -266,6 +266,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/fishing_hotkey_settings_check.gd",
 	"res://tests/pickpocket_pose_check.gd",
 	"res://tests/thieving_position_check.gd",
+	"res://tests/thieving_attempt_feedback_check.gd",
 	"res://tests/thieving_arrest_sequence_check.gd",
 	"res://tests/thieving_mentor_reward_check.gd",
 	"res://tests/thieving_foundation_check.gd",
