@@ -63,13 +63,22 @@ def recover(row, output):
                 item['source_uv_domain'] = domains[i]['source_uv_domain']
             if material['name'] in row.get('preserve_glass_materials', []):
                 item['preserve_surface'] = 'BSDF_GLASS'
+            if row.get('official_shiny_review'):
+                item.update(row['official_shiny_review']['materials'].get(material['name'], {}))
             materials.append(item)
         job = {'source': str(source), 'source_sha256': row['source_sha256'],
                'idle_action': row['actions']['idle'], 'materials': materials,
                'constant_colour_review': True, 'receipt': str(directory / 'shader-receipt.json')}
+        if row.get('official_shiny_review'):
+            for key in ('normal_table', 'normal_table_sha256', 'rare_table', 'rare_table_sha256'):
+                job[key] = row['official_shiny_review'][key]
         write(directory / 'bake-job.json', job)
+        grants = [(directory, ''), (HERE, ':ro')]
+        if row.get('official_shiny_review'):
+            grants += [(parent, ':ro') for parent in sorted({
+                Path(job[key]).resolve().parent for key in ('normal_table', 'rare_table')})]
         run_flatpak(HERE / 'catalog_animation_material_worker.py', directory / 'bake-job.json',
-                    [(directory, ''), (HERE, ':ro')], directory / 'bake.log')
+                    grants, directory / 'bake.log')
         receipts = json.loads((directory / 'shader-receipt.json').read_text())
         if [r['material'] for r in receipts] != [m['name'] for m in materials]:
             raise ValueError('Native shader receipt incomplete')
