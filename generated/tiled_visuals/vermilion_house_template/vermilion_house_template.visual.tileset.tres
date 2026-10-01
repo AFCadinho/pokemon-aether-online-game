@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3 uid="uid://bl148d2npitmi"]
+[gd_resource type="TileSet" format=3]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_house_template/assets/vermilion_house_template.visual.tileset.compact_source_1_0.texture.res" id="1_cromi"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_house_template/assets/vermilion_house_template.visual.tileset.compact_source_1025_0.texture.res" id="2_trmdb"]
