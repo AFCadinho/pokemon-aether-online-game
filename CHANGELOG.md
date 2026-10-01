@@ -4,6 +4,8 @@
 
 - Het publiek in de SS Anne-battlearena gebruikt geklede Quaternius-personages met skeletanimaties voor zwaaien en rusten.
 
+- De Fishing Guru in Vermilion City heet nu Fishing Guru Sam; de naam verschijnt ook zo in questteksten en alle vertalingen.
+
 - Het SS Anne-battledek is rondom aangekleed met verspreid juichend publiek, deklichten, patrijspoorten en een voordek met seinmast en scheepsbeslag.
 
 - In Route 2 House zijn de twee bewoners vervangen door Oaks assistent, met een side quest om tien verschillende Pokémon te vangen voor HM Flash.
