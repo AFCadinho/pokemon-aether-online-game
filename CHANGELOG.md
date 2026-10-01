@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De remastered soundtracks spelen nu in Vermilion City, de S.S. Anne en op Routes 11–15.
+
 - De oceaan rond SS Anne 3F beweegt nu met de vier wateranimatieframes uit Tiled.
 
 - Tourist Sana op SS Anne 3F is vervangen door Beauty Rose, met een korte Titanic-verwijzing.

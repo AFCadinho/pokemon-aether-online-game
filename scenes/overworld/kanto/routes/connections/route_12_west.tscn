@@ -18,6 +18,7 @@ world_access_area_type = "transition"
 location_id = "kanto.route.12.west"
 location_name = "Route 12 West"
 region_id = "kanto"
+music_profile_id = "kanto.routes_11_15"
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
