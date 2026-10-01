@@ -37,3 +37,27 @@ The migration stages and verifies all affected maps before writing canonical fil
 - Live Viridian City and Mt. Moon previews: frames change while enabled and two paused captures are identical. Route 10 rendered in Tiled; authoring verification covers 38 affected/dependent maps and 951,899 layer positions.
 
 No gameplay scene/node changes, runtime shader, new NPCs, or release deployment.
+
+## Vermilion sea water
+
+Vermilion's current artist visual uses a different three-color sea palette.
+`vermilion_water_animation.gd` builds sixteen 160 ms frames from that artwork,
+using the same two-pixel horizontal motion as Cerulean. Only sea-colored pixels
+move; frame 0, coastlines, map geometry, TileData and existing grass animations
+are preserved. The separate `vermilion_water_animation_report.json` records
+1,976 animated cells across thirteen water/shore variants and the original fingerprint.
+
+After reimporting this static artist TMX, reapply in the assigned task slot:
+
+```sh
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://tools/vermilion_water_animation.gd -- --apply
+```
+
+An already animated map is left unchanged. Preview with
+`tools/preview_animated_map.gd -- vermilion_city`.
+
+For the active Vermilion Port exterior visual, use the same command with
+`-- --apply --port`. Its separate `vermilion_port_water_animation_report.json`
+records 2,037 animated cells across eleven water/kade variants, with the same
+original-frame, geometry and animation checks. Preview with
+`tools/preview_animated_map.gd -- vermilion_port_exterior`.

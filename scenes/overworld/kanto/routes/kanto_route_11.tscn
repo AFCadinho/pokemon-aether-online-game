@@ -1,11 +1,11 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://eybnpiu0571i"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_11/route_11.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(32, 160)
+size = Vector2(32, 96)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 96)
@@ -13,7 +13,7 @@ size = Vector2(32, 96)
 [sub_resource type="RectangleShape2D" id="shape_3"]
 size = Vector2(96, 32)
 
-[node name="Route11" type="Node2D"]
+[node name="Route11" type="Node2D" unique_id=815691839]
 script = ExtResource("2_metadata")
 map_id = "kanto_route_11"
 map_region_name = "Kanto"
@@ -26,58 +26,61 @@ location_name = "Route 11"
 region_id = "kanto"
 music_profile_id = "kanto.routes_3_10_16_22"
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=347631843 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=1958333514]
 
-[node name="FromVermilion" type="Marker2D" parent="Spawns"]
-position = Vector2(64, 688)
+[node name="FromVermilion" type="Marker2D" parent="Spawns" unique_id=991671955]
+position = Vector2(48, 400)
 
-[node name="FromRoute12West" type="Marker2D" parent="Spawns"]
-position = Vector2(2496, 688)
+[node name="FromRoute12West" type="Marker2D" parent="Spawns" unique_id=805886081]
+position = Vector2(2384, 656)
 
-[node name="FromDiglettCave" type="Marker2D" parent="Spawns"]
-position = Vector2(560, 496)
+[node name="FromDiglettCave" type="Marker2D" parent="Spawns" unique_id=2061609447]
+position = Vector2(560, 432)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=221387019]
 
-[node name="ToVermilion" type="Area2D" parent="Exits"]
-position = Vector2(16, 688)
+[node name="ToVermilion" type="Area2D" parent="Exits" unique_id=1665277234]
+position = Vector2(16, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
 target_spawn_name = "FromRoute11"
 transition_id = "kanto_route_11__to_vermilion"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilion"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilion" unique_id=2040461173]
+position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
-[node name="ToRoute12West" type="Area2D" parent="Exits"]
-position = Vector2(2384, 688)
+[node name="ToRoute12West" type="Area2D" parent="Exits" unique_id=1886307383]
+position = Vector2(2448, 656)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn"
 target_spawn_name = "FromRoute11"
 transition_id = "kanto_route_11__to_route12_west"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12West"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12West" unique_id=1229716049]
+position = Vector2(16, 0)
 shape = SubResource("shape_2")
 
-[node name="ToDiglettCave" type="Area2D" parent="Exits"]
-position = Vector2(560, 432)
+[node name="ToDiglettCave" type="Area2D" parent="Exits" unique_id=678849447]
+position = Vector2(560, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn"
 target_spawn_name = "FromRoute11"
 transition_id = "kanto_route_11__to_diglett_cave"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave" unique_id=363035727]
+position = Vector2(0, -16)
 shape = SubResource("shape_3")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=2014260382]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=329768349]
 
 [connection signal="body_entered" from="Exits/ToVermilion" to="Exits/ToVermilion" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12West" to="Exits/ToRoute12West" method="_on_body_entered"]

@@ -8,6 +8,7 @@ func _init() -> void:
 func _run() -> void:
 	var city: Node = load("res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn").instantiate()
 	root.add_child(city)
+	_check_water_animation(city.get_node("Visual"))
 	var game_state := root.get_node("GameState")
 	var original_map: Node = game_state.current_map
 	game_state.current_map = city
@@ -47,6 +48,8 @@ func _run() -> void:
 	]:
 		var other: Node = load(entry[0]).instantiate()
 		root.add_child(other)
+		if entry[0].ends_with("vermilion_docks.tscn"):
+			_check_water_animation(other.get_node("Visual"), "res://tools/vermilion_port_water_animation_report.json")
 		var count := 0
 		for y in range(entry[1].y):
 			for x in range(entry[1].x):
@@ -63,3 +66,58 @@ func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failed = true
 		push_error(message)
+
+func _check_water_animation(visual: Node, report_path: String = "res://tools/vermilion_water_animation_report.json") -> void:
+	var fingerprint = preload("res://tests/support/visual_atlas_fingerprint.gd").new()
+	var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(report_path))
+	var actual: Dictionary = fingerprint.capture(visual)
+	for key in ["fingerprint", "cells", "layers", "usedTiles"]:
+		_check(actual[key] == report.before[key], "water animation preserves original visual " + key)
+	var catalog := {}
+	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tools/map_animation_assets/catalog.json"))
+	for entry: Dictionary in data.tiles:
+		if entry.group == "water":
+			catalog[entry.source_pixel_sha256] = entry
+	var signatures = load("res://tools/vermilion_water_animation.gd")._animation_signatures(visual)
+	for hash in report.preserved_animations:
+		var previous: Array = report.preserved_animations[hash]
+		var current: Array = signatures.get(hash,[])
+		_check(current.size() == previous.size(), "existing grass frame count preserved")
+		for f in mini(current.size(),previous.size()):
+			_check(current[f].hash == previous[f].hash, "existing grass pixels preserved")
+			_check(is_equal_approx(current[f].duration,previous[f].duration), "existing grass timing preserved")
+			_check(is_equal_approx(current[f].speed,previous[f].speed), "existing grass speed preserved")
+	var layers: Array[TileMapLayer] = []
+	preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_compactor.gd").new()._collect(visual,layers)
+	var water_tiles := {}
+	var tiles := layers[0].tile_set
+	var water_colors := [Color8(16,96,184),Color8(24,104,192),Color8(24,112,208)]
+	for i in tiles.get_source_count():
+		var sid := tiles.get_source_id(i)
+		var source := tiles.get_source(sid) as TileSetAtlasSource
+		var image := source.texture.get_image()
+		image.convert(Image.FORMAT_RGBA8)
+		for j in source.get_tiles_count():
+			var coords := source.get_tile_id(j)
+			var first := image.get_region(source.get_tile_texture_region(coords,0))
+			var hash: String = fingerprint._hash(first.get_data())
+			if not catalog.has(hash):
+				continue
+			var entry: Dictionary = catalog[hash]
+			water_tiles[str(sid)+str(coords)] = true
+			_check(source.get_tile_animation_frames_count(coords) == 16, "water has sixteen frames")
+			for f in source.get_tile_animation_frames_count(coords):
+				var frame := image.get_region(source.get_tile_texture_region(coords,f))
+				_check(fingerprint._hash(frame.get_data()) == entry.frame_hashes[f], "water frame artwork matches catalog")
+				_check(is_equal_approx(source.get_tile_animation_frame_duration(coords,f),0.16), "water timing matches Cerulean")
+				for y in 32:
+					for x in 32:
+						if not first.get_pixel(x,y) in water_colors:
+							_check(first.get_pixel(x,y) == frame.get_pixel(x,y), "shore artwork stays fixed")
+	var count := 0
+	for layer in layers:
+		for cell in layer.get_used_cells():
+			if water_tiles.has(str(layer.get_cell_source_id(cell))+str(layer.get_cell_atlas_coords(cell))):
+				count += 1
+	_check(count == int(report.animated_cells.water), "all reported water cells animate")
+	_check(water_tiles.size() == int(report.animated_types), "all reported shore variants animate")
