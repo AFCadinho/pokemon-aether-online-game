@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De visuals van SS Anne 1F, 2F en B1F zijn opnieuw geïmporteerd uit de bijgewerkte artist-TMX-bestanden.
+
 - Alle vier SS Anne-mappen gebruiken de scheepsarena nu ook voor PvP en gevechten met een meegegeven omgevingskeuze.
 
 - SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
