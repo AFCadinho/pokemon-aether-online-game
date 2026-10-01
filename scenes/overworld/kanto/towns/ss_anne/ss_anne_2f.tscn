@@ -182,6 +182,8 @@ position = Vector2(1680, 1008)
 npc_id = "kanto_ss_anne_rival"
 npc_definition_id = "trainer_class_blue"
 visibility_required_quest_id = "board_ss_anne"
+visibility_hidden_quest_id = "ss_anne_rival"
+defer_story_hide_until_reload = true
 display_name = "Gary Oak"
 npc_sprite_frames = ExtResource("blue")
 preload_quest_markers = true
@@ -195,6 +197,7 @@ position = Vector2(2352, 1136)
 script = ExtResource("captain")
 npc_id = "kanto_ss_anne_captain"
 display_name = "S.S. Anne Captain"
+portrait_id = "showdown_mrbriney"
 npc_sprite_frames = ExtResource("population_gentleman")
 preload_quest_markers = true
 

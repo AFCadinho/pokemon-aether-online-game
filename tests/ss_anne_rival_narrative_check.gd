@@ -37,11 +37,51 @@ func run() -> void:
 	check(guest._resolve_story_dialogue_id() == "guest_clue", "Guests give clues during the search")
 	story.apply_story({"revision": 5, "quests": []})
 	check(guest._resolve_story_dialogue_id() == "guest_default", "Guests keep ordinary dialogue outside the quest")
+	var scene := load("res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn") as PackedScene
+	var map := scene.instantiate()
+	var gary := map.get_node("Entities/NPCs/GaryOak")
+	gary.interaction_area = gary.get_node("InteractionArea")
+	story.apply_story({"revision": 6, "quests": [
+		{"questId": "board_ss_anne", "status": "completed"},
+		{"questId": "ss_anne_rival", "status": "active"},
+	]})
+	gary._apply_story_visibility()
+	check(gary.visible and gary.interaction_area.monitoring, "Gary is present before his battle")
+	story.apply_story({"revision": 7, "quests": [
+		{"questId": "board_ss_anne", "status": "completed"},
+		{"questId": "ss_anne_rival", "status": "completed"},
+	]})
+	gary._apply_story_visibility(true)
+	check(gary.visible, "Gary remains for the rest of the current visit after the win")
+	map.free()
+	map = scene.instantiate()
+	gary = map.get_node("Entities/NPCs/GaryOak")
+	gary.interaction_area = gary.get_node("InteractionArea")
+	gary._apply_story_visibility()
+	check(not gary.visible and not gary.interaction_area.monitoring,
+		"Reloading the map hides defeated Gary and disables interaction")
+	var captain := map.get_node("Entities/NPCs/Captain")
+	# Exercise the real ready-time portrait resolution without metadata requests.
+	captain.npc_id = ""
+	captain.preload_quest_markers = false
+	captain.get_parent().remove_child(captain)
+	captain.owner = null
+	root.add_child(captain)
+	check(captain.mugshot != null and captain.mugshot.resource_path == "res://assets/sprites/trainer_cards/showdown/mrbriney.png",
+		"Captain resolves his sailor portrait instead of inherited Professor Oak")
+	story.apply_story({"revision": 8, "quests": [
+		{"questId": "board_ss_anne", "status": "completed"},
+		{"questId": "ss_anne_rival", "status": "active"},
+	]})
+	gary._apply_story_visibility(true)
+	check(gary.visible and gary.interaction_area.monitoring, "Resetting the rival quest restores Gary")
+	captain.free()
+	map.free()
 	story.apply_story(original)
 	guest.free()
 	skipper.free()
 	if not failed:
-		print("SS_ANNE_NARRATIVE PASS: skipper welcome/reminder/thanks and guest clue/relief transitions")
+		print("SS_ANNE_NARRATIVE PASS: skipper/guest dialogue, captain portrait and Gary visibility after reload")
 	quit(1 if failed else 0)
 
 func check(condition: bool, label: String) -> void:
