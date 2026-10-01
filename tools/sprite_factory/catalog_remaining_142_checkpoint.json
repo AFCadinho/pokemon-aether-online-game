@@ -1,0 +1,736 @@
+{
+  "battle_qualified_pairs": 0,
+  "date": "2026-10-01",
+  "entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 60.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 220.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 160.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 160.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/arctovish/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/arctovish.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "ca5db4dfa4caca43e591526a898ea76b223337d552e85b3ca05d871c60e86985",
+      "source_sha256": "1090c38940e5fe8fccfe87db38498aec84dbd71c7f59d2b15fde3163e00ac0d2",
+      "species": "arctovish",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 102.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 164.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 170.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 160.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Multiple fire variants remain visible; source vertex-dependent emission/visibility requires reconstruction",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "c894d8bbbf79ddb1c490d7b0fe6cc6627d9778b12eb3b125a204ff2047f2c900",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-transparent-v2/centiskorch/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/transparent-runtime-v2/centiskorch.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
+      "source_sha256": "cbe104a8af833d33cb5e6ce9bc6e16d99a0e94dfad5986c9147533da08762e56",
+      "species": "centiskorch",
+      "status": "normal_visual_repair_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 96.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 44.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 200.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 128.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/lillipup/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/lillipup.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "ea8698cf87042bdcd3a2959ff7131c21d5b5ef5e01bcac5bbde31bfb478eaeb0",
+      "source_sha256": "f6ca37bc1ad5a96d32d70a4be5ab02effaf808a8464801707fb17406753b7b61",
+      "species": "lillipup",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 112.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 150.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/mr-rime/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/mr-rime.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "c93e25813ee5f261b038853463a150c34dbc529e9b26836a4252a24a637c4dfd",
+      "source_sha256": "dac109636a276d320d703b9f586dd6d154e1a1ebf035d2ae83c06d56804c0802",
+      "species": "mr-rime",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 102.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 302.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 277.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 152.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 327.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 347.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/noctowl/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/noctowl.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "18ca5d0f6c752b5ae095b3b30672852a3a99734bc086883992a495d0f9cda67c",
+      "source_sha256": "227e38ea332724e2f56cc18d17a81088d045f7e8e8892a4c6754725174b1dff2",
+      "species": "noctowl",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 112.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 112.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/palpitoad/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/palpitoad.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "b45e59bde009fd9c0698c776eee4526c98204b1b0dd8755e074d5379124b50db",
+      "source_sha256": "18dedd6e0294949c7f3da26cabe9dc50c20a5ee151d018515c3972f02d106994",
+      "species": "palpitoad",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 129.6,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 98.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 122.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Normal palette still resembles shiny; clear eye cover uses a reviewed-only physical approximation",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "7bcd5125950e27f81b862823b7aa7e4afbd2935ef06c4cb2023c4723bf05eb51",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-transparent-v4/paras/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-runtime-v4/paras.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "6968f6e6023d67f2d863b974de1d0b908dd863e8350af64b36f90933c9dc272b",
+      "source_sha256": "37bf19ab4e08dbf1a37d0195df33861c997c90ad262814e4c41e8bd436a0e026",
+      "species": "paras",
+      "status": "normal_visual_repair_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 80.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 200.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 328.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 312.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 512.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 320.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/poipole/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/poipole.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "a47b04a16473fe0a09b25104370e6a9df18c099241e1f598cbd6f46d6bcf1b02",
+      "source_sha256": "04d28e50e6f87c1e43749f14d509571c3ac6d753657db10e5566ef40bd8094be",
+      "species": "poipole",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 122.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 122.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Fire brightness and colours require further source/reference comparison",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "f0af3c62ad2959466ac7cfa05b79e085e7d3063e452d4773160048baa5db18e2",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/ponyta/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/ponyta.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
+      "source_sha256": "00fc87f759ac601ff840b09343be0a072d3b425bd524a39b2a73bd90efd90ceb",
+      "species": "ponyta",
+      "status": "normal_visual_repair_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 62.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 194.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 151.2,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 158.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Fire brightness and shape require further source/reference comparison",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "e6669b6be642bc82feb3b3c6e7cdab7e68fb7bc16eab91ba6dbc1aa01bd40cd6",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/rapidash/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/rapidash.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
+      "source_sha256": "cff2c05d83910c81deaab592a808f4ab06ae105014ef5cca2a389dbdac8141b9",
+      "species": "rapidash",
+      "status": "normal_visual_repair_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 116.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 90.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 132.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/native-materials-v2/seismitoad/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/seismitoad.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "53ef2cf8dce895e95cd35709b4d346202dc79521e86cce0a4a92f04cb492112f",
+      "source_sha256": "2d27fddecf8fa36d2f1c8667105530efdcfbda7104d25ff88a3c9d7f3f74e9ba",
+      "species": "seismitoad",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 200.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-pilot-colours-v1/trumbeak/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/normal-runtime-v1/trumbeak.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "fac734f56d56bb83f67bc07d466d01350c2c708a47a7569f4ea6e8aca8556b5c",
+      "source_sha256": "fdb18b696ff450b83d8195cbfdd84231d1ba11133c318fce267106b195251bdf",
+      "species": "trumbeak",
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "variant": "normal"
+    }
+  ],
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/appearance-8-v1/index.html": "c93b42f45983c359e7e61caf2a75115725c77ded1ac2b206f6465a203c48e95d",
+    ".tmp/remaining-142-production/default-worker-regression-current/status.json": "07c412e5b365b7c40ffde6a77e3610eeb11fac48cda153638b6c189116675334",
+    ".tmp/remaining-142-production/default-worker-regression-current/trumbeak/model.glb": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae",
+    ".tmp/remaining-142-production/dlc-scvi-motion-presence.json": "5d71d8c76cc121eccec39e1f30f897b6ed3c0542b44ca05c20beedc20fc28aba",
+    ".tmp/remaining-142-production/dlc-za-motion-presence.json": "f12d70876dfd328d905848f569b85a632ef30d04c4b75ae7ad8cad86db21a524",
+    ".tmp/remaining-142-production/intake-v1/inventory.json": "1842e5a2df7ed25fc1a9b5baceabb434f2c32d9d493fb60d8b9f91707fa43fed",
+    ".tmp/remaining-142-production/native-materials-v2/status.json": "a8d2bdb8635231ee0dc33eb2ac86d0572e7bf185a42036d5ffc2ddd6fe62c583",
+    ".tmp/remaining-142-production/native-transparent-v4/status.json": "2daff43b4cfa2298e721bd386eedefcf5611e7326aa94e40b0f6095379bbe821",
+    ".tmp/remaining-142-production/normal-captures-v1/review.json": "8bc0f879783d589540cd12819385f39329351824f1e7cd7422796d55e7f148c2",
+    ".tmp/remaining-142-production/normal-runtime-v1/report.json": "0c64edeed0b071171351ac1359e57947ee21bbc17c2dde8f2e75ea5ee6697761",
+    ".tmp/remaining-142-production/paras-captures-v4/review.json": "f255b418ab6222f400500727fb4cd6cf1ef453a955d7a47ae22f97c6c0db2298",
+    ".tmp/remaining-142-production/paras-runtime-v4/report.json": "a8854120b49e488e9319241a5c337dd95cd98134da8d9afb29d0b4a8b01ae5e9",
+    ".tmp/remaining-142-production/transparent-captures-v2/review.json": "755b9218d349851716a9ff1718378ddc6fc1e11f250a7da1cef9bb65c46c08f1",
+    ".tmp/remaining-142-production/transparent-runtime-v2/report.json": "e4e5894e4169e7fefe1d20a46986021a6389cfaa7a413a676e54f72a1577599b"
+  },
+  "limitations": [
+    "Candidates only: no registry admission, individual bundles or upload",
+    "Paras normal palette still requires repair; thin cover omits refraction and angle-dependent Fresnel",
+    "Centiskorch colour bake cannot yet represent vertex-dependent fire selection",
+    "No claims about unsearched external motion sources"
+  ],
+  "native_motion_missing_dlc": 15,
+  "normal_appearance_approval": {
+    "answer": "Alle acht goed",
+    "date": "2026-10-01",
+    "glb_sha256": {
+      "arctovish": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+      "lillipup": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+      "mr-rime": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+      "noctowl": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+      "palpitoad": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+      "poipole": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+      "seismitoad": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+      "trumbeak": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae"
+    },
+    "review_url": "http://127.0.0.1:8782/appearance-8-v1/index.html",
+    "scope": "Normal appearance only; shiny and battle qualification pending",
+    "species": [
+      "arctovish",
+      "lillipup",
+      "mr-rime",
+      "noctowl",
+      "palpitoad",
+      "poipole",
+      "seismitoad",
+      "trumbeak"
+    ]
+  },
+  "normal_appearance_approved": 8,
+  "normal_user_review_pending": 0,
+  "normal_visual_repairs_pending": 4,
+  "review_url": "http://127.0.0.1:8782/appearance-8-v1/index.html",
+  "runtime_approved": false,
+  "schema": 1,
+  "shared_worker_default_guard": "Noctowl remains held for emission without explicit opt-in; Trumbeak produces byte-identical GLB",
+  "shiny_qualified_pairs": 0,
+  "source_archives_found": 127,
+  "starting_remaining_species": 142,
+  "technical_normal_candidates": 12
+}

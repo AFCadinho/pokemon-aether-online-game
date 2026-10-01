@@ -6,10 +6,11 @@
   "remaining_base_species": 142,
   "runtime_approved": false,
   "counts": {
-    "source_or_motion_recovery_pending": 117,
+    "source_or_motion_recovery_pending": 115,
     "approved_individual_bundle_ready": 132,
-    "native_material_hold": 10,
-    "dlc_model_found_native_motion_missing": 15
+    "normal_candidate_visual_repair_pending": 4,
+    "dlc_model_found_native_motion_missing": 15,
+    "normal_appearance_approved_shiny_battle_pending": 8
   },
   "review_url": "http://127.0.0.1:8781/appearance-56-v1/index.html",
   "diagnostic_root": ".tmp/remaining-274-production",
@@ -318,8 +319,12 @@
       "species": "paras",
       "national_dex": 46,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native shader mix is not Principled plus emission"
+      "status": "normal_candidate_visual_repair_pending",
+      "reason": "Native shader mix is not Principled plus emission",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "7bcd5125950e27f81b862823b7aa7e4afbd2935ef06c4cb2023c4723bf05eb51",
+      "normal_candidate_runtime_sha256": "6968f6e6023d67f2d863b974de1d0b908dd863e8350af64b36f90933c9dc272b",
+      "latest_attention": "Normal palette still resembles shiny; clear eye cover uses a reviewed-only physical approximation"
     },
     {
       "species": "parasect",
@@ -456,15 +461,23 @@
       "species": "ponyta",
       "national_dex": 77,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native emission is active; separate reconstruction needed: FireCoreA"
+      "status": "normal_candidate_visual_repair_pending",
+      "reason": "Native emission is active; separate reconstruction needed: FireCoreA",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "f0af3c62ad2959466ac7cfa05b79e085e7d3063e452d4773160048baa5db18e2",
+      "normal_candidate_runtime_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
+      "latest_attention": "Fire brightness and colours require further source/reference comparison"
     },
     {
       "species": "rapidash",
       "national_dex": 78,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native emission is active; separate reconstruction needed: FireCoreA"
+      "status": "normal_candidate_visual_repair_pending",
+      "reason": "Native emission is active; separate reconstruction needed: FireCoreA",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "e6669b6be642bc82feb3b3c6e7cdab7e68fb7bc16eab91ba6dbc1aa01bd40cd6",
+      "normal_candidate_runtime_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
+      "latest_attention": "Fire brightness and shape require further source/reference comparison"
     },
     {
       "species": "doduo",
@@ -716,9 +729,12 @@
       "species": "noctowl",
       "national_dex": 164,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_approved_shiny_battle_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+      "normal_candidate_runtime_sha256": "18ca5d0f6c752b5ae095b3b30672852a3a99734bc086883992a495d0f9cda67c"
     },
     {
       "species": "ledyba",
@@ -1612,8 +1628,11 @@
       "species": "lillipup",
       "national_dex": 506,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Authored shader inputs changed while cloning the graph"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Authored shader inputs changed while cloning the graph",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+      "normal_candidate_runtime_sha256": "ea8698cf87042bdcd3a2959ff7131c21d5b5ef5e01bcac5bbde31bfb478eaeb0"
     },
     {
       "species": "herdier",
@@ -1864,15 +1883,21 @@
       "species": "palpitoad",
       "national_dex": 536,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native Base Color is not connected unambiguously"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Native Base Color is not connected unambiguously",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+      "normal_candidate_runtime_sha256": "b45e59bde009fd9c0698c776eee4526c98204b1b0dd8755e074d5379124b50db"
     },
     {
       "species": "seismitoad",
       "national_dex": 537,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native Base Color is not connected unambiguously"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Native Base Color is not connected unambiguously",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+      "normal_candidate_runtime_sha256": "53ef2cf8dce895e95cd35709b4d346202dc79521e86cce0a4a92f04cb492112f"
     },
     {
       "species": "throh",
@@ -2398,9 +2423,12 @@
       "species": "trumbeak",
       "national_dex": 732,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_approved_shiny_battle_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae",
+      "normal_candidate_runtime_sha256": "fac734f56d56bb83f67bc07d466d01350c2c708a47a7569f4ea6e8aca8556b5c"
     },
     {
       "species": "morelull",
@@ -2699,8 +2727,11 @@
       "species": "poipole",
       "national_dex": 803,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native emission is active; separate reconstruction needed: Eye"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Native emission is active; separate reconstruction needed: Eye",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+      "normal_candidate_runtime_sha256": "a47b04a16473fe0a09b25104370e6a9df18c099241e1f598cbd6f46d6bcf1b02"
     },
     {
       "species": "naganadel",
@@ -2873,8 +2904,12 @@
       "species": "centiskorch",
       "national_dex": 851,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native shader mix is not Principled plus emission"
+      "status": "normal_candidate_visual_repair_pending",
+      "reason": "Native shader mix is not Principled plus emission",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "c894d8bbbf79ddb1c490d7b0fe6cc6627d9778b12eb3b125a204ff2047f2c900",
+      "normal_candidate_runtime_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
+      "latest_attention": "Multiple fire variants remain visible; source vertex-dependent emission/visibility requires reconstruction"
     },
     {
       "species": "clobbopus",
@@ -2927,8 +2962,11 @@
       "species": "mr-rime",
       "national_dex": 866,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Native emission is active; separate reconstruction needed: ice"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Native emission is active; separate reconstruction needed: ice",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+      "normal_candidate_runtime_sha256": "c93e25813ee5f261b038853463a150c34dbc529e9b26836a4252a24a637c4dfd"
     },
     {
       "species": "runerigus",
@@ -2997,8 +3035,11 @@
       "species": "arctovish",
       "national_dex": 883,
       "runtime_approved": false,
-      "status": "native_material_hold",
-      "reason": "Material without baseColorTexture requires separate reconstruction"
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "reason": "Material without baseColorTexture requires separate reconstruction",
+      "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
+      "normal_candidate_glb_sha256": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+      "normal_candidate_runtime_sha256": "ca5db4dfa4caca43e591526a898ea76b223337d552e85b3ca05d871c60e86985"
     },
     {
       "species": "dipplin",
@@ -3114,7 +3155,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "za-final-stage-v3.json",
+  "current_stage": "remaining-142:8 normal appearances approved; shiny/battle pending,4 visual repairs pending, no new admissions",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,
@@ -3130,5 +3171,31 @@
   "bundle_qualification_sha256": "afea4c0c29d3f8c2bf9fa6b2ab540c214397bf3001614484f96d09b5d59eeccb",
   "r2_publication_receipt_sha256": "0913cd87a53d82245730d0a0a692a38e1f8c23f8cb6116b60c496f68218ce785",
   "remaining_76_bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-  "latest_full_published_index_receipt": "release/approved_3d_bundles_884_r2_upload.json"
+  "latest_full_published_index_receipt": "release/approved_3d_bundles_884_r2_upload.json",
+  "remaining_142_normal_approval": {
+    "answer": "Alle acht goed",
+    "date": "2026-10-01",
+    "glb_sha256": {
+      "arctovish": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
+      "lillipup": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
+      "mr-rime": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
+      "noctowl": "025abc47c8f49367c465783c95ffee63ff7118ebf2dbb108ca3dad757ae8d3a3",
+      "palpitoad": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
+      "poipole": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
+      "seismitoad": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
+      "trumbeak": "524bb6d96abb55d2b4a26cddfdbec51b2c7af7b07c984aa048f7666ba74f3fae"
+    },
+    "review_url": "http://127.0.0.1:8782/appearance-8-v1/index.html",
+    "scope": "Normal appearance only; shiny and battle qualification pending",
+    "species": [
+      "arctovish",
+      "lillipup",
+      "mr-rime",
+      "noctowl",
+      "palpitoad",
+      "poipole",
+      "seismitoad",
+      "trumbeak"
+    ]
+  }
 }

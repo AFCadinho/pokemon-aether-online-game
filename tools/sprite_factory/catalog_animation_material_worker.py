@@ -49,6 +49,12 @@ def replace_uv(tree):
             node.node_tree = node.node_tree.copy()
             restore_inputs(node, values)
             replace_uv(node.node_tree)
+        if node.type == 'TEX_IMAGE' and not node.inputs['Vector'].is_linked:
+            # Implicit image UVs otherwise read the destination BakeUV layer,
+            # losing the actual negative/multi-tile source coordinates.
+            uv = tree.nodes.new('ShaderNodeUVMap')
+            uv.uv_map = 'SourceUV'
+            tree.links.new(uv.outputs['UV'], node.inputs['Vector'])
         if node.type == 'TEX_COORD':
             links = [link for link in list(tree.links) if link.from_node == node
                      and link.from_socket.name == 'UV']
@@ -59,14 +65,34 @@ def replace_uv(tree):
                     tree.links.new(uv.outputs['UV'], link.to_socket)
 
 
-def colour_sockets(tree, shader_socket):
+def colour_sockets(tree, shader_socket, constant_colour_review=False):
     node = shader_socket.node
     if node.type == 'MIX_SHADER':
         branches = [socket.links[0].from_socket if len(socket.links) == 1 else None
                     for socket in (node.inputs[1], node.inputs[2])]
+        if constant_colour_review and all(branches) and sum(s.node.type == 'BSDF_TRANSPARENT' for s in branches) == 1:
+            transparent_index = next(i for i, s in enumerate(branches) if s.node.type == 'BSDF_TRANSPARENT')
+            transparent = branches[transparent_index].node.inputs['Color']
+            if transparent.is_linked or any(abs(float(v) - 1) > 1e-6 for v in transparent.default_value[:3]):
+                raise ValueError('Tinted transmission requires separate reconstruction')
+            colour, alpha, glow = colour_sockets(tree, branches[1 - transparent_index], True)
+            factor = node.inputs[0]
+            weight = tree.nodes.new('ShaderNodeMath')
+            weight.operation = 'SUBTRACT' if transparent_index == 1 else 'MULTIPLY'
+            weight.use_clamp = True
+            weight.inputs[0].default_value = 1
+            if factor.is_linked:
+                tree.links.new(factor.links[0].from_socket, weight.inputs[1])
+            else:
+                weight.inputs[1].default_value = factor.default_value
+            opacity = tree.nodes.new('ShaderNodeMath')
+            opacity.operation = 'MULTIPLY'
+            tree.links.new(alpha, opacity.inputs[0])
+            tree.links.new(weight.outputs[0], opacity.inputs[1])
+            return colour, opacity.outputs[0], glow
         if not all(branches) or [s.node.type for s in branches] != ['BSDF_PRINCIPLED', 'EMISSION']:
             raise ValueError('Native shader mix is not Principled plus emission')
-        colour, alpha, _ = colour_sockets(tree, branches[0])
+        colour, alpha, principled_glow = colour_sockets(tree, branches[0], constant_colour_review)
         lamp = branches[1].node
         glow = tree.nodes.new('ShaderNodeVectorMath')
         glow.operation = 'SCALE'
@@ -76,11 +102,55 @@ def colour_sockets(tree, shader_socket):
                 tree.links.new(source.links[0].from_socket, destination)
             else:
                 destination.default_value = source.default_value[:3] if hasattr(source.default_value, '__len__') else source.default_value
-        # The caller accepts this route only if the emission bake is zero.
+        if constant_colour_review:
+            factor = node.inputs[0]
+            if factor.is_linked:
+                raise ValueError('View-dependent shader mix needs separate reconstruction')
+            weight = float(factor.default_value)
+            if not math.isfinite(weight) or not 0 <= weight <= 1:
+                raise ValueError('Native shader mix factor is outside [0,1]')
+            def weighted(socket, value):
+                scaled = tree.nodes.new('ShaderNodeVectorMath')
+                scaled.operation = 'SCALE'
+                tree.links.new(socket, scaled.inputs[0])
+                scaled.inputs[3].default_value = value
+                return scaled.outputs[0]
+            colour = weighted(colour, 1 - weight)
+            merged = tree.nodes.new('ShaderNodeVectorMath')
+            merged.operation = 'ADD'
+            tree.links.new(weighted(principled_glow, 1 - weight), merged.inputs[0])
+            tree.links.new(weighted(glow.outputs[0], weight), merged.inputs[1])
+            opacity = tree.nodes.new('ShaderNodeMath')
+            opacity.operation = 'MULTIPLY_ADD'
+            tree.links.new(alpha, opacity.inputs[0])
+            opacity.inputs[1].default_value = 1 - weight
+            opacity.inputs[2].default_value = weight
+            return colour, opacity.outputs[0], merged.outputs[0]
+        # The default caller accepts this route only if the emission bake is zero.
         return colour, alpha, glow.outputs[0]
+    if node.type == 'EMISSION' and constant_colour_review:
+        black = tree.nodes.new('ShaderNodeRGB')
+        black.outputs[0].default_value = (0, 0, 0, 1)
+        opaque = tree.nodes.new('ShaderNodeValue')
+        opaque.outputs[0].default_value = 1
+        glow = tree.nodes.new('ShaderNodeVectorMath')
+        glow.operation = 'SCALE'
+        for destination, source in [(glow.inputs[0], node.inputs['Color']),
+                                    (glow.inputs[3], node.inputs['Strength'])]:
+            if source.is_linked:
+                tree.links.new(source.links[0].from_socket, destination)
+            else:
+                destination.default_value = source.default_value[:3] if hasattr(source.default_value, '__len__') else source.default_value
+        return black.outputs[0], opaque.outputs[0], glow.outputs[0]
     if node.type == 'BSDF_PRINCIPLED':
         colour = node.inputs['Base Color']
-        if len(colour.links) != 1:
+        if not colour.links and constant_colour_review:
+            constant = tree.nodes.new('ShaderNodeRGB')
+            constant.outputs[0].default_value = colour.default_value
+            colour_source = constant.outputs[0]
+        elif len(colour.links) == 1:
+            colour_source = colour.links[0].from_socket
+        else:
             raise ValueError('Native Base Color is not connected unambiguously')
         alpha = node.inputs['Alpha']
         if not alpha.is_linked:
@@ -99,7 +169,7 @@ def colour_sockets(tree, shader_socket):
                 tree.links.new(source.links[0].from_socket, destination)
             else:
                 destination.default_value = source.default_value[:3] if hasattr(source.default_value, '__len__') else source.default_value
-        return colour.links[0].from_socket, alpha_source, glow.outputs[0]
+        return colour_source, alpha_source, glow.outputs[0]
     if node.type != 'GROUP' or not node.node_tree:
         raise ValueError('Native surface is not a single Principled shader path')
     graph = node.node_tree
@@ -109,7 +179,7 @@ def colour_sockets(tree, shader_socket):
     socket = outputs[0].inputs.get(shader_socket.name)
     if socket is None or len(socket.links) != 1:
         raise ValueError('Native shader group output is not connected')
-    colour, alpha, glow = colour_sockets(graph, socket.links[0].from_socket)
+    colour, alpha, glow = colour_sockets(graph, socket.links[0].from_socket, constant_colour_review)
     values = input_values(node)
     for name, kind, source in [('PAO_SourceColour', 'NodeSocketColor', colour),
                                ('PAO_SourceAlpha', 'NodeSocketFloat', alpha),
@@ -186,7 +256,18 @@ def bake(job):
         if len(outputs) != 1 or len(outputs[0].inputs['Surface'].links) != 1:
             raise ValueError('Native material surface is ambiguous')
         surface = outputs[0].inputs['Surface'].links[0].from_socket
-        colour, alpha, glow = colour_sockets(tree, surface)
+        if item.get('preserve_surface'):
+            if item['preserve_surface'] != 'BSDF_GLASS' or surface.node.type != 'BSDF_GLASS':
+                raise ValueError('Preserved material is not the requested native glass shader')
+            glass = surface.node
+            if any(glass.inputs[name].is_linked for name in ('Color', 'IOR', 'Roughness')):
+                raise ValueError('Linked native glass parameters require separate reconstruction')
+            receipts.append({'material': item['name'], 'preserved_source_surface': 'BSDF_GLASS',
+                             'source_glass_colour': list(glass.inputs['Color'].default_value),
+                             'source_glass_ior': float(glass.inputs['IOR'].default_value),
+                             'source_glass_roughness': float(glass.inputs['Roughness'].default_value)})
+            continue
+        colour, alpha, glow = colour_sockets(tree, surface, job.get('constant_colour_review', False))
         for obj in list(bpy.data.objects):
             bpy.data.objects.remove(obj, do_unlink=True)
         bpy.ops.mesh.primitive_plane_add()
@@ -224,8 +305,21 @@ def bake(job):
             bpy.ops.object.bake(type='EMIT', margin=0)
             images.append(image)
         glow_pixels = list(images[2].pixels)
-        if any(abs(value) > 1e-6 for i, value in enumerate(glow_pixels) if i % 4 != 3):
+        glow_peak = max(abs(value) for i, value in enumerate(glow_pixels) if i % 4 != 3)
+        glow_active = glow_peak > 1e-6
+        if glow_active and not item.get('glow_output'):
             raise ValueError('Native emission is active; separate reconstruction needed: ' + item['name'])
+        if glow_active:
+            if not math.isfinite(glow_peak) or any(value < -1e-6 for i, value in enumerate(glow_pixels) if i % 4 != 3):
+                raise ValueError('Native emission is not finite nonnegative RGB')
+            strength = max(1.0, glow_peak)
+            for i in range(len(glow_pixels)):
+                if i % 4 != 3:
+                    glow_pixels[i] /= strength
+            images[2].pixels.foreach_set(glow_pixels)
+            images[2].filepath_raw = item['glow_output']
+            images[2].file_format = 'PNG'
+            images[2].save()
         pixels = list(images[0].pixels)
         alpha_pixels = list(images[1].pixels)
         for i in range(3, len(pixels), 4):
@@ -234,7 +328,9 @@ def bake(job):
         images[0].filepath_raw = item['output']
         images[0].file_format = 'PNG'
         images[0].save()
-        receipts.append({'material': item['name'], 'native_emission_output_zero': True,
+        receipts.append({'material': item['name'], 'native_emission_output_zero': not glow_active,
+                         **({'emission_strength': strength, 'emission_peak': glow_peak,
+                             'emission_output': item['glow_output']} if glow_active else {}),
                          **({'source_uv_domain': domain} if domain is not None else {})})
         print('NATIVE_COLOUR_BAKED', item['name'], item['output'], flush=True)
     Path(job['receipt']).write_text(json.dumps(receipts, indent=2) + '\n')
