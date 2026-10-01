@@ -8,6 +8,7 @@ const CAVE_ENVIRONMENT_ID := &"cave"
 const PVP_STADIUM_ENVIRONMENT_ID := &"pvp_stadium"
 
 const PROFILES: Dictionary = {
+	&"ss_anne": preload("res://resources/battle/environments/ss_anne.tres"),
 	&"pallet_town": preload("res://resources/battle/environments/pallet_town.tres"),
 	&"pallet_town_water": preload("res://resources/battle/environments/pallet_town_water.tres"),
 	&"viridian_city": preload("res://resources/battle/environments/viridian_city.tres"),

@@ -1,6 +1,6 @@
 extends RefCounted
 ## Arena presentation contract. No battle rules or species-specific offsets.
-const IDS := ["pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
+const IDS := ["ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city", "pewter_city_gym", "cerulean_city_gym", "classic", "forest", "cave", "sea", "stadium", "route_1", "route_1_water", "route_22", "route_22_water", "route_3", "route_2", "route_2_water", "route_4", "route_4_water", "cerulean_city", "cerulean_city_water", "route_24", "route_24_water", "route_25", "route_25_water"]
 const Framing = preload("res://scripts/battle/arenas/shared/framing.gd")
 const OutdoorLighting = preload("res://scripts/battle/arenas/shared/outdoor_lighting.gd")
 const CAMERA_FOV := Framing.CAMERA_FOV
@@ -20,6 +20,7 @@ static func resolve(selection: String, environment_id: StringName, battle_kind: 
 		match str(definition(local_arena).terrain):
 			"water", "pool": return "sea"
 			"cave", "stone": return "cave"
+			"deck": return local_arena
 			_: return "forest"
 	return local_arena
 # Compatibility API names retain existing settings, preparation UI and metrics.
@@ -43,6 +44,7 @@ static func prepare_forest(manifest_path: String) -> String:
 
 # Stable IDs preserve saved selections. Scope/type make the authoring structure explicit.
 const DEFINITIONS := {
+	"ss_anne": {"scope": "map", "map_id": "kanto_ss_anne_3f", "terrain": "deck", "lighting": "outdoor", "builder": "maps/ss_anne/arena.gd"},
 	"pallet_town": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "grass", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
 	"pallet_town_water": {"scope": "map", "map_id": "kanto_pallet_town", "terrain": "water", "lighting": "outdoor", "builder": "maps/pallet_town/arena.gd"},
 	"viridian_city": {"scope": "map", "map_id": "kanto_viridian_city", "terrain": "grass", "lighting": "outdoor", "builder": "maps/viridian_city/arena.gd"},
@@ -77,6 +79,7 @@ static func definition(id: String) -> Dictionary:
 	return DEFINITIONS.get(validate(id), DEFINITIONS.classic).duplicate(true)
 
 const BUILDERS := {
+	"ss_anne": preload("res://scripts/battle/arenas/maps/ss_anne/arena.gd"),
 	"pewter_city_gym": preload("res://scripts/battle/arenas/maps/pewter_city_gym/arena.gd"),
 	"cerulean_city_gym": preload("res://scripts/battle/arenas/maps/cerulean_city_gym/arena.gd"),
 	"cave": preload("res://scripts/battle/arenas/generic/cave_arena.gd"),

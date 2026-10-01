@@ -21,11 +21,11 @@ func _init() -> void:
 	for id in Arenas.IDS:
 		assert(Arenas.validate(id)==id)
 		var entry := Arenas.definition(id)
-		assert(entry.scope == ("map" if (id in ["pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city"] or id.ends_with("_gym") or id.begins_with("route_") or id.begins_with("cerulean_city")) else "generic"))
+		assert(entry.scope == ("map" if (id in ["ss_anne", "pallet_town", "pallet_town_water", "viridian_city", "viridian_city_water", "pewter_city"] or id.ends_with("_gym") or id.begins_with("route_") or id.begins_with("cerulean_city")) else "generic"))
 		if id != "classic":
 			assert(ResourceLoader.exists("res://scripts/battle/arenas/" + entry.builder))
 		if entry.scope == "map":
-			assert(entry.map_id == "kanto_" + id.trim_suffix("_water"))
+			assert(entry.map_id == ("kanto_ss_anne_3f" if id == "ss_anne" else "kanto_" + id.trim_suffix("_water")))
 		assert((Arenas.camera_home(id) - Arenas.battle_origin(id)).is_equal_approx(Vector3(2.5, 5, 16) if id == "stadium" else Vector3(4, 5.5, 12)))
 		assert((Arenas.camera_target(id) - Arenas.battle_origin(id)).is_equal_approx(Vector3(0, 2.8, 0) if id == "stadium" else Vector3(0, 1.3, 0)))
 	assert(Arenas.CAMERA_FOV == 48.0)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
+
 - Onverslagen trainers op de S.S. Anne dagen je nu automatisch uit binnen drie tegels van hun zichtlijn.
 
 - Rose's Titanic-quest is nu beschikbaar in Trainer Progress bij Side Quests, met resetten, activeren en voltooien.
