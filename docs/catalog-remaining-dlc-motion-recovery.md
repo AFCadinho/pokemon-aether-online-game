@@ -82,3 +82,18 @@ and robot eye readability, Hydrapple's hidden-accessory/camera bounds, and
 Terapagos flow/transparency. The 30 proposals are not visual approvals. Complete
 these details and explicit sleep proposals before the one collective user
 review; the approved catalog count and R2 content are unchanged.
+
+## User-requested appearance review
+
+At the user's request, all 15 normal/shiny pairs are presented together at
+<http://127.0.0.1:8784/>. The page covers idle, rear view, special attack and
+faint. Search, a shared pose selector and full-size paired images are provided.
+It explicitly excludes sleep and battle-size approval.
+
+A new diagnostic capture fits each pose individually, preventing Hydrapple's
+other-pose bounds from making the idle appearance too small to inspect. This
+changes only review framing. All 30 variants again report zero pose/timing
+errors. The page and all 240 thumbnail/full-size images returned HTTP 200;
+`xdg-open` dispatched the review URL successfully. The hash-bound review
+manifest and page SHA-256 are recorded in the material checkpoint. User
+appearance approval is still pending.

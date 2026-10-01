@@ -910,5 +910,21 @@
         }
       }
     }
-  ]
+  ],
+  "appearance_review": {
+    "url": "http://127.0.0.1:8784/",
+    "evidence_root": ".tmp/remaining-dlc-15-v1/appearance-review-v1/",
+    "manifest_sha256": "f83fbb08aecedd9849ce684a1030b326ef31a3e0b076a9e68f3511b3898f81b2",
+    "page_sha256": "58e7d6d6487097d0827f1ea0ca6449eec9d6771b881ef4732019bf17c8016707",
+    "species": 15,
+    "variants": 30,
+    "poses": [
+      "idle_front",
+      "idle_back",
+      "special_attack",
+      "faint_start"
+    ],
+    "scope": "appearance_only_no_sleep_or_battle",
+    "user_approved": false
+  }
 }
