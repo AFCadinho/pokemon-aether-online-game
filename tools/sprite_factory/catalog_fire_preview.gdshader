@@ -9,6 +9,10 @@ uniform vec4 uv_transform = vec4(1.0, 1.0, 0.0, 0.0);
 uniform float coverage_gain = 1.0;
 uniform float review_time = -1.0;
 uniform float loop_seconds = 2.0;
+uniform float tongue_base = 0.3;
+uniform float tongue_span = 0.5;
+uniform float layer_opacity = 1.0;
+uniform bool retain_coverage = false;
 uniform bool shape_flames = false;
 uniform bool enabled = true;
 void fragment() {
@@ -25,11 +29,12 @@ void fragment() {
 	if (shape_flames) {
 		// Authored cutout shortens the oversized source cards without moving
 		// vertices or bones; repeated source UV tiles keep separate tongues.
-		float height = 1.0 - clamp(UV.y, 0.0, 1.0);
-		float sideways = fract(UV.x);
+		float height = 1.0 - clamp(uv.y, 0.0, 1.0);
+		float sideways = fract(uv.x);
 		float sides = smoothstep(0.0, 0.12, sideways) * smoothstep(0.0, 0.12, 1.0-sideways);
-		float tongue = 1.0-smoothstep(0.3+0.5*density, 0.4+0.5*density, height);
-		opacity = sides * tongue * (0.8 + 0.2 * density);
+		float tongue = 1.0-smoothstep(tongue_base+tongue_span*density, tongue_base+0.1+tongue_span*density, height);
+		opacity = sides * tongue * (0.8 + 0.2 * density) * layer_opacity;
+		if (retain_coverage) { opacity *= sqrt(coverage); }
 		coverage = 1.0-height;
 	}
 	if (!enabled || opacity < 0.025) { discard; }

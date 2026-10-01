@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "review_v7": {
+    "answer": "Ponyta voelt nog kalig. Rapidash vlammen zijn ook te kort. Centiskorch ziet er wel goed uit",
+    "accepted": [
+      "centiskorch"
+    ],
+    "rejected": [
+      "ponyta",
+      "rapidash"
+    ],
+    "scope": "normal fire appearance only",
+    "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v7/index.html"
+  },
+  "review_v8": {
+    "pending": [
+      "ponyta",
+      "rapidash"
+    ],
+    "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v8/index.html",
+    "changes": [
+      "Ponyta outer fire layers enabled with pinned source coverage and 0.8 layer opacity",
+      "Ponyta/Rapidash tongue cutoff extended from 0.3+0.5*density to 0.65+0.25*density",
+      "Normalized source UV domain used for authored card shape"
+    ],
+    "centiskorch_unchanged_pixels": true
+  },
+  "centiskorch_approved_scene": {
+    "answer": "Centiskorch ziet er wel goed uit",
+    "approved_runtime_sha256": "a3f65ad779b197fe7dc7716bfa4dfa89d8e9940d4807026084f251c6165caba8",
+    "approved_shader_sha256": "198ea77b44ff112625153aa5f12d9ece8c517be502c2a5f1d068b8e85c3fe985",
+    "scope": "Normal fire appearance only; shiny and battle qualification pending",
+    "v8_sampled_pose_and_fire_pixels_identical_to_approved_v7": true
+  }
+}

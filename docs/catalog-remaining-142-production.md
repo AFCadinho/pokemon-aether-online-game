@@ -369,3 +369,21 @@ experimental shader is confined to the diagnostic tools; catalog counts remain
 898 ordinary species plus Mega Dragonite, with 127 ordinary species remaining.
 
 [Three moving fire previews](http://127.0.0.1:8782/fire-live-preview-v1/review-v7/index.html)
+
+### Fire appearance feedback and fuller horse flames
+
+The user accepted Centiskorch's normal fire appearance but found Ponyta too
+sparse and Rapidash's flames too short. That feedback and the exact accepted
+Centiskorch scene/shader hashes are frozen in
+`catalog_remaining_142_fire_appearance_review.json`.
+
+The v8 horse proposal extends the procedural tongue height and enables Ponyta's
+outer flame layers with the pinned source opacity and 0.8 layer opacity. The
+cutout now uses the normalized UV domain for multi-tile outer cards. Fresh
+standalone reload parity, all fifteen pose captures, visible fire motion and
+sampled loop-boundary equality pass again. Centiskorch's ten sampled pose/fire
+images remain pixel-identical to the accepted v7 scene. Only Ponyta/Rapidash
+normal fire review is pending here; all three still need shiny and production
+runtime/battle qualification. Approved catalog counts are unchanged.
+
+[Fuller Ponyta and longer Rapidash flames](http://127.0.0.1:8782/fire-live-preview-v1/review-v8/index.html)
