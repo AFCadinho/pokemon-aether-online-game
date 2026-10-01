@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nurse Joy op SS Anne 1F stelt nu ook je terugkeerplek in op een spawnmarker naast haar.
+
 - De rustkamer op SS Anne 1F heeft nu Nurse Joy als genezer.
 
 - Doorgangen binnen dezelfde map, waaronder de kamers van SS Anne 1F, blijven bruikbaar nadat je heen en terug bent gegaan.

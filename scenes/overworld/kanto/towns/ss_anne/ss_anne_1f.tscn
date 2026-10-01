@@ -242,6 +242,9 @@ position = Vector2(816, 1904)
 npc_id = "kanto_ss_anne_rest_attendant"
 npc_definition_id = ""
 display_name = "Nurse Joy"
+respawn_point_id = "kanto_ss_anne_rest_attendant"
+respawn_spawn_marker = "HealNPC"
+respawn_facing_direction = "up"
 preload_quest_markers = true
 
 [node name="PassengerEdwin" parent="Entities/NPCs" unique_id=133059021 instance=ExtResource("trainer")]
@@ -313,6 +316,9 @@ npc_sprite_frames = ExtResource("population_lass")
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1641154203]
 
 [node name="Spawns" type="Node2D" parent="." unique_id=654725455]
+
+[node name="HealNPC" type="Marker2D" parent="Spawns"]
+position = Vector2(816, 1936)
 
 [node name="At_3_6" type="Marker2D" parent="Spawns" unique_id=1502237307]
 position = Vector2(112, 208)
