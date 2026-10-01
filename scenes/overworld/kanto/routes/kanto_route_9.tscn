@@ -5,6 +5,11 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_cfv8a"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="4_t3cr7"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="camper"]
+[ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="bug_catcher"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_gkrtn"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_8oey7"]
 
@@ -247,6 +252,8 @@ world_access_area_type = "route"
 location_id = "kanto.route.9"
 location_name = "Route 9"
 region_id = "kanto"
+encounter_area_id = "kanto_route_9"
+grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Visual" parent="." unique_id=721276409 instance=ExtResource("1_visual")]
@@ -302,6 +309,94 @@ shape = SubResource("shape_3")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1196930494]
 z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PicnickerAlicia" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(640, 560)
+trainer_id = "kanto_route_9_picnicker_alicia"
+npc_id = "kanto_route_9_picnicker_alicia"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Alicia"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("picnicker")
+sight_range_tiles = 3
+
+[node name="HikerJeremy" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1008, 496)
+trainer_id = "kanto_route_9_hiker_jeremy"
+npc_id = "kanto_route_9_hiker_jeremy"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Jeremy"
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="CamperChris" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1328, 752)
+trainer_id = "kanto_route_9_camper_chris"
+npc_id = "kanto_route_9_camper_chris"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Chris"
+npc_sprite_frames = ExtResource("camper")
+sight_range_tiles = 3
+
+[node name="BugCatcherBrent" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1712, 560)
+trainer_id = "kanto_route_9_bug_catcher_brent"
+npc_id = "kanto_route_9_bug_catcher_brent"
+npc_definition_id = "trainer_class_bug_catcher"
+display_name = "Bug Catcher Brent"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("bug_catcher")
+sight_range_tiles = 3
+
+[node name="HikerAlan" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2016, 656)
+trainer_id = "kanto_route_9_hiker_alan"
+npc_id = "kanto_route_9_hiker_alan"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Alan"
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="BugCatcherConner" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2240, 496)
+trainer_id = "kanto_route_9_bug_catcher_conner"
+npc_id = "kanto_route_9_bug_catcher_conner"
+npc_definition_id = "trainer_class_bug_catcher"
+display_name = "Bug Catcher Conner"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("bug_catcher")
+sight_range_tiles = 3
+
+[node name="CamperDrew" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2528, 688)
+trainer_id = "kanto_route_9_camper_drew"
+npc_id = "kanto_route_9_camper_drew"
+npc_definition_id = "trainer_class_camper"
+display_name = "Camper Drew"
+npc_sprite_frames = ExtResource("camper")
+sight_range_tiles = 3
+
+[node name="HikerBrice" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2688, 880)
+trainer_id = "kanto_route_9_hiker_brice"
+npc_id = "kanto_route_9_hiker_brice"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Brice"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="PicnickerCaitlin" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2816, 624)
+trainer_id = "kanto_route_9_picnicker_caitlin"
+npc_id = "kanto_route_9_picnicker_caitlin"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Caitlin"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("picnicker")
+sight_range_tiles = 3
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1115842656]
 

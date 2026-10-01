@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+- Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
 - De Vermilion City-visual is opnieuw geïmporteerd vanuit de bijgewerkte Tiled-bron.
 
 - Lavender Town heeft nu drie bewoners, twee zichtbare Pokémon en een Pokémon Center met Nurse Joy, een bezoeker, een Cubone en werkende in- en uitgang.
