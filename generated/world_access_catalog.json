@@ -3267,7 +3267,7 @@
 		"kanto_vermilion_docks": {
 			"areaType": "exterior",
 			"defaultMode": "open",
-			"label": "Vermilion Docks",
+			"label": "Vermilion Port",
 			"locationGroupId": "kanto_vermilion_city",
 			"locationGroupLabel": "Vermilion City",
 			"regionName": "Kanto",
@@ -3280,7 +3280,7 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromVermilionCity",
 					"tile": {
-						"x": 31,
+						"x": 32,
 						"y": 1
 					}
 				}
@@ -6344,7 +6344,7 @@
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
 				"position": {
-					"x": 1008.0,
+					"x": 1040.0,
 					"y": 48.0
 				},
 				"spawnMarker": "FromVermilionCity"
