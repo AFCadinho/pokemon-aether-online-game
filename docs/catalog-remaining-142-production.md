@@ -314,3 +314,26 @@ Local totals: **898 ordinary species plus Mega Dragonite** (899 profiles,
 Rapidash and Centiskorch material holds, 109 source/action holds and 15 DLC
 motion holds. The 274-species task now has 147 approved individual bundles.
 Fifteen bundles (the previous eight and six, plus Paras) await R2 publication.
+
+## Fire source-mesh diagnosis: three cases remain held
+
+The dedicated source-mesh worker preserves the real Generated coordinates,
+UV layers and vertex attributes that the previous plane baker could not
+represent. Floating-point emission buffers prevent values near 2.0 from being
+clipped to 1.0 before PNG encoding. Explicit core opacity graphs can be
+evaluated on an outer mesh's own UV domain; stretching a core bake directly
+is rejected because the domains differ (outer V spans up to eight tiles).
+Pinned source Blend files were checked unchanged after every bake.
+
+Ponyta and Rapidash candidate scenes retain all original geometry, skin and
+six native clips each. Standalone conversion and five-pose quick presentation
+checks pass for both. Nevertheless, self-review rejects the static unlit and
+authored warm-ramp candidates: oversized, flat fire layers remain. Disabling
+outer layers is also insufficient. Centiskorch's eight fire materials were
+baked over source meshes for diagnosis, but no new scene is proposed.
+
+`catalog_remaining_142_fire_mesh_diagnosis.json` binds the source, recipes,
+meshes, receipts and captures. None of these trials changes the approved
+registries or counts. Next work must inspect native UV/attribute animation
+and fire-layer visibility and reconstruct moving materials; further static
+palette trials should not be treated as a production solution.

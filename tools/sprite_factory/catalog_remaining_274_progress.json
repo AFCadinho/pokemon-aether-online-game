@@ -474,7 +474,8 @@
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "f0af3c62ad2959466ac7cfa05b79e085e7d3063e452d4773160048baa5db18e2",
       "normal_candidate_runtime_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
-      "latest_attention": "Fire brightness and colours require further source/reference comparison"
+      "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
     },
     {
       "species": "rapidash",
@@ -485,7 +486,8 @@
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "e6669b6be642bc82feb3b3c6e7cdab7e68fb7bc16eab91ba6dbc1aa01bd40cd6",
       "normal_candidate_runtime_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
-      "latest_attention": "Fire brightness and shape require further source/reference comparison"
+      "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
     },
     {
       "species": "doduo",
@@ -2995,7 +2997,8 @@
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "c894d8bbbf79ddb1c490d7b0fe6cc6627d9778b12eb3b125a204ff2047f2c900",
       "normal_candidate_runtime_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
-      "latest_attention": "Multiple fire variants remain visible; source vertex-dependent emission/visibility requires reconstruction"
+      "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
     },
     {
       "species": "clobbopus",
