@@ -30,7 +30,7 @@ world_access_area_type = "route"
 location_id = "kanto.route.11"
 location_name = "Route 11"
 region_id = "kanto"
-music_profile_id = "kanto.routes_3_10_16_22"
+music_profile_id = "kanto.routes_11_15"
 encounter_area_id = "kanto_route_11"
 grass_encounter_chance = 0.21
 

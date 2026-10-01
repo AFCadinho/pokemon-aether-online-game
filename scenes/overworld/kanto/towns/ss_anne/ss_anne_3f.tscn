@@ -181,7 +181,7 @@ location_name = "S.S. Anne 3F"
 region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "kanto.vermilion_city"
+music_profile_id = "kanto.ss_anne"
 
 [node name="Visual" parent="." unique_id=777884906 instance=ExtResource("visual")]
 

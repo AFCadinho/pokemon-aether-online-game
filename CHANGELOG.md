@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De remastered soundtracks spelen nu in Vermilion City, de S.S. Anne en op Routes 11–15.
+
 - De SS Anne 1F-visual gebruikt opnieuw de bijgewerkte artist-TMX.
 
 - De oceaan rond SS Anne 3F beweegt nu met de vier wateranimatieframes uit Tiled.

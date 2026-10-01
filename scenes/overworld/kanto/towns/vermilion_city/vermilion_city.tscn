@@ -325,6 +325,7 @@ world_access_group_label = "Vermilion City"
 location_id = "kanto.vermilion.city"
 location_name = "Vermilion City"
 region_id = "kanto"
+music_profile_id = "kanto.vermilion_city"
 
 [node name="Visual" parent="." unique_id=1192574244 instance=ExtResource("1_visual")]
 

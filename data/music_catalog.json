@@ -29,6 +29,10 @@
       "label": "Kanto Routes 3–10 & 16–22",
       "path": "res://assets/music/overworld/kanto/routes/kanto_routes_3_10_16_22.ogg"
     },
+    "overworld.kanto.routes_11_15_zame": {
+      "label": "Kanto Routes 11–15 Arrangement - Zame",
+      "path": "res://assets/music/overworld/kanto/routes/kanto_routes_11_15.ogg"
+    },
     "overworld.kanto.viridian_forest": {
       "label": "Viridian Forest",
       "path": "res://assets/music/overworld/kanto/routes/viridian_forest.ogg"
@@ -40,6 +44,14 @@
     "overworld.kanto.viridian_city": {
       "label": "Viridian City",
       "path": "res://assets/music/overworld/kanto/towns/viridian_city.ogg"
+    },
+    "overworld.kanto.vermilion_city_remastered_zame": {
+      "label": "Vermilion City Remastered - Zame",
+      "path": "res://assets/music/overworld/kanto/towns/vermilion_city_remastered_zame.ogg"
+    },
+    "overworld.kanto.ss_anne_zame": {
+      "label": "S.S. Anne Remastered - Zame",
+      "path": "res://assets/music/overworld/kanto/towns/ss_anne.ogg"
     },
     "overworld.kanto.cerulean_city": {
       "label": "Cerulean City Remastered (Zame)",
@@ -74,7 +86,10 @@
     "gym.interior": "overworld.gym.black_white_remastered_zame",
     "kanto.pallet_town": "overworld.kanto.pallet_town",
     "kanto.viridian_city": "overworld.kanto.viridian_city",
+    "kanto.vermilion_city": "overworld.kanto.vermilion_city_remastered_zame",
+    "kanto.ss_anne": "overworld.kanto.ss_anne_zame",
     "kanto.pewter_city": "overworld.kanto.viridian_city",
+    "kanto.routes_11_15": "overworld.kanto.routes_11_15_zame",
     "kanto.routes_3_10_16_22": "overworld.kanto.routes_3_10_16_22",
     "aether_clash.duel": "overworld.aether_clash.duel"
   }
