@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De SS Anne-passagiers en hun CC0-licentie worden meegenomen in het gamepakket; de desktop-release controleert de arena en animaties vanuit de geëxporteerde Windows- en Linux-pakketten.
+
 - Het publiek in de SS Anne-battlearena gebruikt geklede Quaternius-personages met skeletanimaties voor zwaaien en rusten.
 
 - De Fishing Guru in Vermilion City heet nu Fishing Guru Sam; de naam verschijnt ook zo in questteksten en alle vertalingen.
