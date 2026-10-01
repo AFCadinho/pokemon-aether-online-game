@@ -27,7 +27,7 @@ size = Vector2(96, 32)
 size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_docks"]
-size = Vector2(96, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_center_door"]
 size = Vector2(32, 32)
@@ -309,7 +309,7 @@ transition_facing_direction = "right"
 shape = SubResource("shape_2")
 
 [node name="ToDocks" type="Area2D" parent="Exits" unique_id=1382610854]
-position = Vector2(1040, 2224)
+position = Vector2(1040, 2128)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn"
 target_spawn_name = "FromCity"
@@ -318,6 +318,11 @@ transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDocks" unique_id=1550545660]
 shape = SubResource("shape_docks")
+
+[node name="DoorTransitionHint" parent="Exits/ToDocks" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 1)
+flow_direction = "up"
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=949357627]
 position = Vector2(400, 464)

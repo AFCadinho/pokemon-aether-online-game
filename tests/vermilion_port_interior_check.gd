@@ -37,6 +37,13 @@ func _run() -> void:
 		var target_collision := target.get_node_or_null("Tiles/Collision") as TileMapLayer
 		if target_collision != null:
 			_check(target_collision.get_cell_source_id(target_collision.local_to_map(spawn.position)) == -1, "return arrival has no collision")
+	var city_exit: Node = city.get_node("Exits/ToDocks")
+	var city_collision := city.get_node("Tiles/Collision") as TileMapLayer
+	var entrance := Vector2(1040, 2128)
+	_check(city_exit.contains_world_position(entrance), "city entrance covers the visible port doorway")
+	_check(city_collision.get_cell_source_id(city_collision.local_to_map(entrance)) == -1, "city doorway is reachable without collision changes")
+	_check(not city.is_water_tile_for_actor(entrance, null), "city doorway is dry")
+	_check(port.get_node("Exits/ToCity").transition_facing_direction == "down", "return to city faces away from the doorway")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(port.map_id), "port is registered")
 	for id in ["kanto_vermilion_city__to_port_interior", "kanto_vermilion_docks__to_port_interior", "kanto_vermilion_city_port_interior__to_city", "kanto_vermilion_city_port_interior__to_docks"]:
