@@ -2,7 +2,7 @@
   "schema": 1,
   "runtime_approved": false,
   "normal_shiny_appearance_approved": true,
-  "visual_battle_review_pending": true,
+  "visual_battle_review_pending": false,
   "battle_stress_pending": true,
   "scope": "Exact standalone scenes, full native clips at 120Hz, two shared cameras and HUD proxy on a flat floor; visual approval, real-battle stress and bundles pending",
   "review_url": "http://127.0.0.1:8782/battle-six-review-v1/index.html",
@@ -1837,7 +1837,8 @@
       "minimum_idle_pixels": 243.111511230469,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "ho-oh",
@@ -3729,7 +3730,8 @@
       "minimum_idle_pixels": 262.407135009766,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "vibrava",
@@ -5426,7 +5428,8 @@
       "minimum_idle_pixels": 65.9146728515625,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "flygon",
@@ -7413,7 +7416,8 @@
       "minimum_idle_pixels": 211.043151855469,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "swanna",
@@ -8188,7 +8192,8 @@
       "minimum_idle_pixels": 126.217224121094,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "mandibuzz",
@@ -8938,7 +8943,8 @@
       "minimum_idle_pixels": 106.003967285156,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "lugia",
@@ -10770,7 +10776,8 @@
       "minimum_idle_pixels": 243.111511230469,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "ho-oh",
@@ -12662,7 +12669,8 @@
       "minimum_idle_pixels": 262.407135009766,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "vibrava",
@@ -14359,7 +14367,8 @@
       "minimum_idle_pixels": 65.9146728515625,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "flygon",
@@ -16346,7 +16355,8 @@
       "minimum_idle_pixels": 211.043151855469,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "swanna",
@@ -17121,7 +17131,8 @@
       "minimum_idle_pixels": 126.217224121094,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "mandibuzz",
@@ -17871,7 +17882,8 @@
       "minimum_idle_pixels": 106.003967285156,
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     }
   ],
   "evidence_sha256": {
@@ -18084,5 +18096,9 @@
     ".tmp/remaining-142-production/battle-six-review-v1/media/vibrava-shiny-vibrava-stadium-1-idle.webp": "8aab099f34f3a961a9e69a4b0caaa57203b1d3e7ed0ff109a956841a1ecb3d33",
     ".tmp/remaining-142-production/battle-six-review-v1/media/vibrava-shiny-vibrava-stadium-1-sleep.webp": "d89858531c7a72da5a500293a2d27f53e54ac4d54785e96ffb6772fcaa7d55ea",
     ".tmp/remaining-142-production/battle-six-review-v1/media/vibrava-shiny-vibrava-stadium-1-special_attack.webp": "475b85bff1437cb7b8d92ba46706e65d3323ea058e8f40456ac756b3e1a9745a"
+  },
+  "battle_user_approval": {
+    "answer": "Zien er goed uit",
+    "review_url": "http://127.0.0.1:8782/battle-six-review-v1/index.html"
   }
 }

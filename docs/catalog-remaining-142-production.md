@@ -194,3 +194,23 @@ proof hashes. User battle approval, installed stress and individual bundles
 are still pending; approved catalog counts remain unchanged.
 
 [Six pairs in battle](http://127.0.0.1:8782/battle-six-review-v1/index.html)
+
+## Six further pairs completed locally
+
+The user approved the battle page (“Zien er goed uit”). Six individual
+versioned bundles contain twelve standalone scenes and 96 native clips,
+totaling 90,777,697 bytes (86.57 MiB). Fresh transactional install, no-op update
+and restart checks passed. The unchanged real-battle stress check passed all
+three classic/stadium/classic rounds, with p95 frame times of 11.368, 10.705 and
+10.475 ms (20 ms maximum). No competing Godot processes were interrupted; an
+existing game and editor were running during this successful performance gate.
+The final admitted-registry check matched all twelve scenes and measured
+profiles, and rejected unapproved hashes. Game and launcher registries agree.
+`catalog_remaining_142_six_bundle_qualification.json` binds all evidence.
+
+Local totals are now **897 ordinary species plus Mega Dragonite** (898 profiles,
+1,796 normal/shiny records), with **128 ordinary species remaining**: four
+material-repair candidates, 109 source/action holds and fifteen DLC motion
+holds. The task’s 274-species intake now has 146 approved individual bundles.
+These six and the preceding eight are local bundle-ready; none of those
+fourteen has been uploaded to R2 or included in a new release.

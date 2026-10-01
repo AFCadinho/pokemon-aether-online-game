@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "date": "2026-10-01",
-  "runtime_approved": false,
+  "runtime_approved": true,
   "review_url": "http://127.0.0.1:8782/appearance-six-v1/index.html",
   "normal_review_pending": 0,
-  "shiny_qualified": 0,
-  "battle_qualified": 0,
+  "shiny_qualified": 6,
+  "battle_qualified": 6,
   "evidence_sha256": {
     ".tmp/remaining-142-production/action-batch02-v1/status.json": "4faa6092fef773fe568aa3eb450abe32ca3431a651db1d4e3e18dd904902f1b9",
     ".tmp/remaining-142-production/action-batch02-colours-v1/status.json": "76472d07b08c7a9c34ae266b86cc3c648caa838d566b7834ef276786d07ce17d",
@@ -106,16 +106,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-runtime-v2/lugia.scn",
       "runtime_schema": 1,
       "runtime_sha256": "4bf55bf184c02a780de92254eb38c083f34ae2224fdf4d517ed239644b7f62a1",
       "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
       "species": "lugia",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false,
+      "battle_approved": true,
       "superseded_runtime": {
         "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/lugia/model.glb",
         "glb_sha256": "c0c102ee58b91af1858acbb91d3b0791a3278e0c7ca056d61a68bb644972d9b3",
@@ -175,16 +175,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/ho-oh.scn",
       "runtime_schema": 1,
       "runtime_sha256": "a10a5494dbe8df5be4f57bb5c14f5ecf83c27ebcf7fc84736441becfbfaed2c4",
       "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
       "species": "ho-oh",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true
     },
     {
       "action_timing": {
@@ -238,16 +238,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/vibrava.scn",
       "runtime_schema": 1,
       "runtime_sha256": "c2d03747eb8530ae6e872b3e508709c3df27f1240428682c2fac5207ae50665c",
       "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
       "species": "vibrava",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true
     },
     {
       "action_timing": {
@@ -301,16 +301,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/flygon.scn",
       "runtime_schema": 1,
       "runtime_sha256": "fb585ac772c03ea2aa66d8de66ef5fc807fb5d60117a4607e760ab946d24fb86",
       "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
       "species": "flygon",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true
     },
     {
       "action_timing": {
@@ -364,16 +364,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-runtime-v2/swanna.scn",
       "runtime_schema": 1,
       "runtime_sha256": "bfb3aa060eb472f5be00adfc3faf7be8e444dac3b92c7db825f4dda5ef303d2e",
       "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
       "species": "swanna",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false,
+      "battle_approved": true,
       "superseded_runtime": {
         "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/swanna/model.glb",
         "glb_sha256": "4d774c9d1584cc619264c9b727ed978afe36dcde7397f38e9a5c8c5073cd2725",
@@ -433,16 +433,16 @@
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/mandibuzz.scn",
       "runtime_schema": 1,
       "runtime_sha256": "b6d7298c013a92e979c4d05b87184a82448972ad31cc8cde89bed6907d3eac0e",
       "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
       "species": "mandibuzz",
       "variant": "normal",
-      "status": "normal_shiny_appearance_approved_battle_review_pending",
+      "status": "approved_individual_bundle_ready",
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true
     }
   ],
   "normal_appearance_approved": 6,
@@ -452,5 +452,6 @@
   "shiny_appearance_approved": 6,
   "shiny_user_review": "Diezien er goed uit",
   "battle_review_url": "http://127.0.0.1:8782/battle-six-review-v1/index.html",
-  "battle_review_pending": 6
+  "battle_review_pending": 0,
+  "bundle_qualification_receipt": "tools/sprite_factory/catalog_remaining_142_six_bundle_qualification.json"
 }

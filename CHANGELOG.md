@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog zes Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Lugia, Ho-Oh, Vibrava, Flygon, Swanna en Mandibuzz.
+
 - Story Progress in de devtools heeft Vermilion/S.S. Anne-checkpoints; de bemanningsquest is instelbaar via Side Quests.
 
 - Pickpocket attempts show a short animated meter above the NPC, wait for the server result, and display success, detection, or interrupted feedback with confirmed money and XP. The pickpocket pose now resolves its appearance service correctly.
