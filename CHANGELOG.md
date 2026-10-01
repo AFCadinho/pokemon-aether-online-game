@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De drie huizen in Vermilion City gebruiken de opnieuw geïmporteerde gedeelde artist-TMX-visual.
+
 - De Pokemon Fan Club gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual.
