@@ -7,6 +7,7 @@ signal dialogue_preflight_progress
 const ALLOWED_ACTION_TYPES: Array[String] = [
 	"dialogue",
 	"wait",
+	"player_pose",
 	"face_actor",
 	"move_actor",
 	"battle",
@@ -180,11 +181,11 @@ func _validate_action(action_type: String, action: Dictionary) -> String:
 			var dialogue_id := str(action.get("dialogueId", ""))
 			if not (action.get("dialogueId") is String) or not _is_valid_reference(dialogue_id):
 				return "dialogueId is required."
-		"wait":
+		"wait", "player_pose":
 			if not _is_semantic_integer(action.get("durationMs")):
 				return "durationMs must be an integer."
 			var duration_ms := int(action.get("durationMs", -1))
-			if duration_ms < 0 or duration_ms > MAX_WAIT_DURATION_MS:
+			if duration_ms < (1 if action_type == "player_pose" else 0) or duration_ms > MAX_WAIT_DURATION_MS:
 				return "durationMs is outside the supported range."
 		"face_actor":
 			var actor := str(action.get("actor", ""))
@@ -214,7 +215,7 @@ func _expected_action_fields(action_type: String) -> Array[String]:
 	match action_type:
 		"dialogue":
 			return ["type", "dialogueId"]
-		"wait":
+		"wait", "player_pose":
 			return ["type", "durationMs"]
 		"face_actor":
 			return ["type", "actor", "target"]
@@ -263,6 +264,8 @@ func _run_action(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
 			return await _run_dialogue(action, host)
 		"wait":
 			return await _run_wait(action)
+		"player_pose":
+			return await _run_player_pose(action, player)
 		"face_actor":
 			return _run_face_actor(action, host, player)
 		"move_actor":
@@ -307,6 +310,18 @@ func _run_wait(action: Dictionary) -> Dictionary:
 	var duration_seconds := float(int(action.get("durationMs", 0))) / 1000.0
 	if duration_seconds > 0.0:
 		await get_tree().create_timer(duration_seconds).timeout
+	return {"success": true}
+
+
+func _run_player_pose(action: Dictionary, player: Node2D) -> Dictionary:
+	if player == null or not player.has_method("set_activity_style") or not player.has_method("get_activity_style"):
+		return {"success": false, "status": "player_pose_unavailable"}
+	var previous_style := str(player.call("get_activity_style"))
+	player.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
+	await _run_wait(action)
+	if not is_instance_valid(player):
+		return {"success": false, "status": "player_pose_interrupted"}
+	player.call("set_activity_style", previous_style)
 	return {"success": true}
 
 
