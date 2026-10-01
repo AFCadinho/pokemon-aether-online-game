@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 11 heeft tien FRLG-trainers en gameplay-gras dat de wild encounters aan de bestaande visual koppelt; tile-collision blijft handmatig.
+
 - De SS Anne B1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - De SS Anne 2F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
