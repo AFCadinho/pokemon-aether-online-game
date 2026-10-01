@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_kkef3"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_lrh64"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="5_rrflk"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 
 [sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
 size = Vector2(32, 32)
@@ -160,6 +163,8 @@ world_access_area_type = "route"
 location_id = "kanto.route.10"
 location_name = "Route 10"
 region_id = "kanto"
+encounter_area_id = "kanto_route_10"
+grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_3_10_16_22"
 
 [node name="Visual" parent="." unique_id=79561395 instance=ExtResource("1_visual")]
@@ -305,6 +310,66 @@ flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=2061554904]
 z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PicnickerHeidi" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(944, 560)
+trainer_id = "kanto_route_10_picnicker_heidi"
+npc_id = "kanto_route_10_picnicker_heidi"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Heidi"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("picnicker")
+sight_range_tiles = 3
+
+[node name="PokemaniacMark" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1136, 944)
+trainer_id = "kanto_route_10_pokemaniac_mark"
+npc_id = "kanto_route_10_pokemaniac_mark"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Poké Maniac Mark"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="PicnickerCarol" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1456, 1248)
+trainer_id = "kanto_route_10_picnicker_carol"
+npc_id = "kanto_route_10_picnicker_carol"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Carol"
+npc_sprite_frames = ExtResource("picnicker")
+sight_range_tiles = 3
+
+[node name="HikerClark" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1792, 1392)
+trainer_id = "kanto_route_10_hiker_clark"
+npc_id = "kanto_route_10_hiker_clark"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Clark"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="HikerTrent" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1968, 1104)
+trainer_id = "kanto_route_10_hiker_trent"
+npc_id = "kanto_route_10_hiker_trent"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Trent"
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
+
+[node name="PokemaniacHerman" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2400, 848)
+trainer_id = "kanto_route_10_pokemaniac_herman"
+npc_id = "kanto_route_10_pokemaniac_herman"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Poké Maniac Herman"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("hiker")
+sight_range_tiles = 3
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1826864528]
 

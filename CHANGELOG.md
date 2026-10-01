@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+- Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
 - De Vermilion City-visual is opnieuw geïmporteerd vanuit de bijgewerkte Tiled-bron.
 
 - Lavender Town heeft nu een actieve Aethernet Beacon, een Keeper en veilige aankomstpositie; Meowth vervangt de voor Fuji's huis gereserveerde Cubone.
