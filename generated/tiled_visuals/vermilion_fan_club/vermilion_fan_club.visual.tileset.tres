@@ -1,9 +1,9 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dfxsqydowm8jy"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_1_0.texture.res" id="1_b1nj7"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_1025_0.texture.res" id="2_n5225"]
+[ext_resource type="Texture2D" uid="uid://bfybkoabalveq" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_1025_0.texture.res" id="2_n5225"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_2049_0.texture.res" id="3_ra3mr"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_3073_0.texture.res" id="4_m2ktl"]
+[ext_resource type="Texture2D" uid="uid://du7ne7epr7rdx" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_3073_0.texture.res" id="4_m2ktl"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_fan_club/assets/vermilion_fan_club.visual.tileset.compact_source_4097_0.texture.res" id="5_aeh0y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_66eyy"]
