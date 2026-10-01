@@ -1,0 +1,6932 @@
+{
+  "approved_control_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 3,
+      "frame_max_ms": 446.094,
+      "frame_p95_ms": 16.825,
+      "frame_samples": 154,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 48.136,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 48.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 1.223,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 1.314,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7,
+          "ms": 1.608,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10,
+          "ms": 9.037,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 51,
+          "ms": 2.201,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 51,
+          "ms": 2.32,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 57,
+          "ms": 1.643,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 57,
+          "ms": 1.73,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 61,
+          "ms": 1.428,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 85,
+          "ms": 1.171,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 103,
+          "ms": 2.321,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 103,
+          "ms": 2.428,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 109,
+          "ms": 2.548,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 109,
+          "ms": 2.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 113,
+          "ms": 2.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 137,
+          "ms": 2.189,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3,
+      "retained_source_bytes": 8114215,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 446.094
+        },
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 72.977
+        }
+      ],
+      "static_bytes": 230345163
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 3,
+      "frame_max_ms": 114.184,
+      "frame_p95_ms": 19.172,
+      "frame_samples": 157,
+      "load_spans": [
+        {
+          "frame": 158,
+          "ms": 12.132,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 158,
+          "ms": 12.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 160,
+          "ms": 1.442,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 160,
+          "ms": 1.564,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 165,
+          "ms": 1.596,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 165,
+          "ms": 1.684,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 168,
+          "ms": 1.214,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 168,
+          "ms": 51.091,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 210,
+          "ms": 2.222,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 210,
+          "ms": 2.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 216,
+          "ms": 1.989,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 216,
+          "ms": 2.11,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 220,
+          "ms": 1.438,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 244,
+          "ms": 1.822,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 262,
+          "ms": 4.811,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 262,
+          "ms": 5.061,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 270,
+          "ms": 2.819,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 270,
+          "ms": 2.913,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 275,
+          "ms": 2.708,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 299,
+          "ms": 2.079,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3,
+      "retained_source_bytes": 8114215,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 112.864
+        },
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 114.184
+        }
+      ],
+      "static_bytes": 232223775
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 3,
+      "frame_max_ms": 117.713,
+      "frame_p95_ms": 16.893,
+      "frame_samples": 153,
+      "load_spans": [
+        {
+          "frame": 320,
+          "ms": 28.408,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 320,
+          "ms": 28.462,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 322,
+          "ms": 1.321,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 322,
+          "ms": 1.447,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 326,
+          "ms": 1.406,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 326,
+          "ms": 1.493,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 329,
+          "ms": 1.466,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 329,
+          "ms": 8.866,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 371,
+          "ms": 1.844,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 371,
+          "ms": 1.953,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 377,
+          "ms": 1.65,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 377,
+          "ms": 1.74,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 381,
+          "ms": 1.331,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 405,
+          "ms": 1.37,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 423,
+          "ms": 2.583,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 423,
+          "ms": 2.7,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 429,
+          "ms": 2.849,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 429,
+          "ms": 2.975,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 433,
+          "ms": 2.715,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 457,
+          "ms": 2.251,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3,
+      "retained_source_bytes": 8114215,
+      "stalls_over_50ms": [
+        {
+          "context": "load abra",
+          "covered": true,
+          "ms": 117.713
+        }
+      ],
+      "static_bytes": 232348019
+    }
+  ],
+  "approved_control_species": [
+    "abra",
+    "skarmory",
+    "venusaur"
+  ],
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-274-production/approved-76/control-isolated.json": "856887fa66ba1fb4c368ac811d906b5c3c9ead7c72ea062de6dd1d7337497f6d",
+    ".tmp/remaining-274-production/approved-76/control-isolated.log": "c62e922cbdb5aa56a9874584af23cbfe0c507c3480f2452b28af9a73bf96d61d",
+    ".tmp/remaining-274-production/approved-76/installed-stress.json": "191b9a660fde9f647f1752dbaf257242b397ffad9f0ec4db3a86a58a027c48b6",
+    ".tmp/remaining-274-production/approved-76/installed-stress.log": "6f35b865516132ee75dda367e1205d12e834fadde29068e66f2bee9f111af544",
+    ".tmp/remaining-274-production/approved-76/installed/installed-catalog.json": "09933ad2b41472873d5aeffca4eda9ef41c148bc9671be0c56af677f5aabeb28",
+    ".tmp/remaining-274-production/approved-76/runtime_check.gd": "191cda0d95c027efae4108f6e9a4dfef3ce6f299ebeda991aad337be4b124235",
+    "scripts/battle/battle_ui/immersive_hud.gd": "d350252caf7921ae0482b1e19ca7b951ce22b1c24089ca4d08cac7e659f5a36f",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "aebca18ecace390af8cbcffb43bea661eafa1387898fbc8ac9b983d52b40bdf3"
+  },
+  "frame_p95_limit_ms": 20,
+  "functional_checks_passed": true,
+  "performance_passed": false,
+  "published": false,
+  "remaining": [
+    "Investigate stadium frame time before runtime admission"
+  ],
+  "rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 76,
+      "frame_max_ms": 461.404,
+      "frame_p95_ms": 17.472,
+      "frame_samples": 3683,
+      "load_spans": [
+        {
+          "frame": 0,
+          "ms": 56.251,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0,
+          "ms": 56.308,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2,
+          "ms": 1.156,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2,
+          "ms": 1.274,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6,
+          "ms": 1.087,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6,
+          "ms": 1.17,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8,
+          "ms": 8.218,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 31,
+          "ms": 1.208,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 49,
+          "ms": 1.276,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 49,
+          "ms": 1.37,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 53,
+          "ms": 1.173,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 53,
+          "ms": 1.259,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 55,
+          "ms": 1.33,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 79,
+          "ms": 1.383,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 97,
+          "ms": 1.253,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 97,
+          "ms": 1.327,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 101,
+          "ms": 1.589,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 101,
+          "ms": 1.689,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 103,
+          "ms": 1.205,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 127,
+          "ms": 1.083,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 145,
+          "ms": 2.618,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 145,
+          "ms": 2.744,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 151,
+          "ms": 2.037,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 151,
+          "ms": 2.151,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 154,
+          "ms": 1.842,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 178,
+          "ms": 1.706,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 196,
+          "ms": 1.222,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 196,
+          "ms": 1.32,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 200,
+          "ms": 1.14,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 200,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 202,
+          "ms": 1.497,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 226,
+          "ms": 1.369,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 244,
+          "ms": 1.473,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 244,
+          "ms": 1.574,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 248,
+          "ms": 1.328,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 248,
+          "ms": 1.404,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 250,
+          "ms": 1.474,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 274,
+          "ms": 1.601,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 292,
+          "ms": 1.268,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 292,
+          "ms": 1.367,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 296,
+          "ms": 1.306,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 296,
+          "ms": 1.396,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 298,
+          "ms": 1.315,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 322,
+          "ms": 1.29,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 340,
+          "ms": 1.083,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 344,
+          "ms": 1.24,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 344,
+          "ms": 1.34,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 346,
+          "ms": 1.088,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 388,
+          "ms": 1.976,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 388,
+          "ms": 2.095,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 394,
+          "ms": 2.031,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 394,
+          "ms": 2.115,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 398,
+          "ms": 1.558,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 422,
+          "ms": 1.131,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 440,
+          "ms": 1.303,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 440,
+          "ms": 1.418,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 444,
+          "ms": 1.101,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 444,
+          "ms": 1.193,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 446,
+          "ms": 1.457,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 470,
+          "ms": 1.497,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 489,
+          "ms": 2.164,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 489,
+          "ms": 2.261,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 494,
+          "ms": 1.888,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 494,
+          "ms": 1.974,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 497,
+          "ms": 1.535,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 521,
+          "ms": 1.377,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 539,
+          "ms": 1.084,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 543,
+          "ms": 1.016,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 545,
+          "ms": 1.868,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 587,
+          "ms": 1.132,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 587,
+          "ms": 1.224,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 591,
+          "ms": 1.577,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 591,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 593,
+          "ms": 1.319,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 617,
+          "ms": 1.065,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 635,
+          "ms": 1.641,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 635,
+          "ms": 1.739,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 640,
+          "ms": 1.64,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 640,
+          "ms": 1.72,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 643,
+          "ms": 1.125,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 685,
+          "ms": 1.005,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 685,
+          "ms": 1.093,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 689,
+          "ms": 1.226,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 689,
+          "ms": 1.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 691,
+          "ms": 1.424,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 733,
+          "ms": 1.364,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 733,
+          "ms": 1.48,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 737,
+          "ms": 1.182,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 737,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 739,
+          "ms": 1.634,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 763,
+          "ms": 1.223,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 781,
+          "ms": 1.154,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 781,
+          "ms": 1.255,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 785,
+          "ms": 1.183,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 785,
+          "ms": 1.283,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 787,
+          "ms": 1.49,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 811,
+          "ms": 1.168,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 829,
+          "ms": 1.014,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 829,
+          "ms": 1.105,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 833,
+          "ms": 1.122,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 833,
+          "ms": 1.213,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 835,
+          "ms": 1.201,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 859,
+          "ms": 1.063,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 877,
+          "ms": 1.33,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 877,
+          "ms": 1.415,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 881,
+          "ms": 1.276,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 881,
+          "ms": 1.372,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 883,
+          "ms": 1.975,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 907,
+          "ms": 1.367,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 925,
+          "ms": 1.199,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 925,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 929,
+          "ms": 1.345,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 929,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 931,
+          "ms": 1.094,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 973,
+          "ms": 1.047,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 973,
+          "ms": 1.143,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 977,
+          "ms": 1.432,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 977,
+          "ms": 1.528,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 979,
+          "ms": 1.379,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1003,
+          "ms": 1.245,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1021,
+          "ms": 1.085,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1021,
+          "ms": 1.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1025,
+          "ms": 1.084,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1025,
+          "ms": 1.186,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1027,
+          "ms": 1.645,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1051,
+          "ms": 1.082,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1069,
+          "ms": 1.198,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1069,
+          "ms": 1.296,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1073,
+          "ms": 1.041,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1073,
+          "ms": 1.135,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1075,
+          "ms": 1.323,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1099,
+          "ms": 1.431,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1117,
+          "ms": 2.361,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1117,
+          "ms": 2.462,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1123,
+          "ms": 2.26,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1123,
+          "ms": 2.348,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1126,
+          "ms": 2.023,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1150,
+          "ms": 1.903,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1168,
+          "ms": 1.19,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1168,
+          "ms": 1.283,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1172,
+          "ms": 1.194,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1172,
+          "ms": 1.289,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1174,
+          "ms": 1.698,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1198,
+          "ms": 1.36,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1216,
+          "ms": 1.347,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1216,
+          "ms": 1.453,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1220,
+          "ms": 1.201,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1220,
+          "ms": 1.284,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1222,
+          "ms": 1.039,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1312,
+          "ms": 1.051,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1364,
+          "ms": 1.003,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1408,
+          "ms": 1.565,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1408,
+          "ms": 1.677,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1412,
+          "ms": 1.536,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1412,
+          "ms": 1.624,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1414,
+          "ms": 1.176,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1438,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1456,
+          "ms": 1.162,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1456,
+          "ms": 1.258,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1460,
+          "ms": 1.265,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1460,
+          "ms": 1.362,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1462,
+          "ms": 1.163,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1486,
+          "ms": 1.102,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1504,
+          "ms": 1.059,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1504,
+          "ms": 1.153,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1508,
+          "ms": 1.133,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1508,
+          "ms": 1.221,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1552,
+          "ms": 1.034,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1558,
+          "ms": 1.51,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1600,
+          "ms": 1.26,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1600,
+          "ms": 1.382,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1604,
+          "ms": 1.19,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1604,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1606,
+          "ms": 1.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1630,
+          "ms": 1.298,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1648,
+          "ms": 1.192,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1648,
+          "ms": 1.291,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1652,
+          "ms": 1.392,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1652,
+          "ms": 1.483,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1654,
+          "ms": 1.253,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1678,
+          "ms": 1.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1696,
+          "ms": 1.573,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1696,
+          "ms": 1.675,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1701,
+          "ms": 1.764,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1701,
+          "ms": 1.859,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1704,
+          "ms": 1.209,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1728,
+          "ms": 1.088,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1746,
+          "ms": 1.081,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1746,
+          "ms": 1.19,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1750,
+          "ms": 1.013,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1750,
+          "ms": 1.118,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1752,
+          "ms": 1.123,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1776,
+          "ms": 1.085,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1794,
+          "ms": 1.287,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1794,
+          "ms": 1.404,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1798,
+          "ms": 1.071,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1798,
+          "ms": 1.188,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1800,
+          "ms": 1.298,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1824,
+          "ms": 1.058,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1842,
+          "ms": 1.092,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1842,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1846,
+          "ms": 1.012,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1846,
+          "ms": 1.111,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1848,
+          "ms": 1.415,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1872,
+          "ms": 1.205,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1890,
+          "ms": 2.007,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1890,
+          "ms": 2.124,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1895,
+          "ms": 2.097,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1895,
+          "ms": 2.326,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1898,
+          "ms": 1.763,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1922,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1940,
+          "ms": 1.011,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1940,
+          "ms": 1.106,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1944,
+          "ms": 1.069,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1944,
+          "ms": 1.172,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1946,
+          "ms": 1.392,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1988,
+          "ms": 1.029,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1988,
+          "ms": 1.124,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1992,
+          "ms": 1.096,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1992,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1994,
+          "ms": 1.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2036,
+          "ms": 2.291,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2036,
+          "ms": 2.405,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2041,
+          "ms": 1.954,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2041,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2044,
+          "ms": 2.074,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2068,
+          "ms": 1.95,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2086,
+          "ms": 1.131,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2086,
+          "ms": 1.256,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2090,
+          "ms": 1.157,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2090,
+          "ms": 1.265,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2092,
+          "ms": 1.634,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2116,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2134,
+          "ms": 1.479,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2134,
+          "ms": 1.59,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2138,
+          "ms": 1.609,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2138,
+          "ms": 1.738,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2140,
+          "ms": 1.268,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2164,
+          "ms": 1.159,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2182,
+          "ms": 1.284,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2182,
+          "ms": 1.386,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2186,
+          "ms": 1.22,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2186,
+          "ms": 1.32,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2188,
+          "ms": 1.693,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2212,
+          "ms": 1.483,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2230,
+          "ms": 1.483,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2230,
+          "ms": 1.622,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2234,
+          "ms": 1.588,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2234,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2236,
+          "ms": 1.392,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2260,
+          "ms": 1.119,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2278,
+          "ms": 1.07,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2278,
+          "ms": 1.165,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2282,
+          "ms": 1.012,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2282,
+          "ms": 1.092,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2284,
+          "ms": 1.216,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2326,
+          "ms": 1.055,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2330,
+          "ms": 1.082,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2330,
+          "ms": 1.168,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2332,
+          "ms": 1.211,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2356,
+          "ms": 1.031,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2375,
+          "ms": 1.915,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2375,
+          "ms": 2.02,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2381,
+          "ms": 1.787,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2381,
+          "ms": 1.88,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2385,
+          "ms": 1.74,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2409,
+          "ms": 1.54,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2427,
+          "ms": 1.25,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2427,
+          "ms": 1.348,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2431,
+          "ms": 1.298,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2431,
+          "ms": 1.395,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2433,
+          "ms": 1.642,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2457,
+          "ms": 1.295,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2475,
+          "ms": 1.003,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2475,
+          "ms": 1.097,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2479,
+          "ms": 1.05,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2479,
+          "ms": 1.134,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2481,
+          "ms": 1.33,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2505,
+          "ms": 1.425,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2523,
+          "ms": 1.144,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2523,
+          "ms": 1.236,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2527,
+          "ms": 1.489,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2527,
+          "ms": 1.594,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2529,
+          "ms": 1.127,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2553,
+          "ms": 1.076,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2571,
+          "ms": 1.204,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2571,
+          "ms": 1.292,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2575,
+          "ms": 1.29,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2575,
+          "ms": 1.375,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2577,
+          "ms": 1.354,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2601,
+          "ms": 1.221,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2619,
+          "ms": 1.238,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2619,
+          "ms": 1.337,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2623,
+          "ms": 1.578,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2623,
+          "ms": 1.688,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2625,
+          "ms": 1.52,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2649,
+          "ms": 1.299,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2667,
+          "ms": 1.294,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2667,
+          "ms": 1.402,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2671,
+          "ms": 1.105,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2671,
+          "ms": 1.189,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2673,
+          "ms": 1.425,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2697,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2715,
+          "ms": 1.215,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2715,
+          "ms": 1.323,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2719,
+          "ms": 1.093,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2719,
+          "ms": 1.185,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2721,
+          "ms": 1.522,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2745,
+          "ms": 1.241,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2763,
+          "ms": 1.249,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2763,
+          "ms": 1.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2767,
+          "ms": 1.175,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2767,
+          "ms": 1.25,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2769,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2793,
+          "ms": 1.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2811,
+          "ms": 1.335,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2811,
+          "ms": 1.44,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2816,
+          "ms": 1.604,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2816,
+          "ms": 1.698,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2818,
+          "ms": 1.294,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2842,
+          "ms": 1.301,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2860,
+          "ms": 1.371,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2860,
+          "ms": 1.457,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2864,
+          "ms": 1.269,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2864,
+          "ms": 1.357,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2866,
+          "ms": 1.082,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2890,
+          "ms": 1.155,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2908,
+          "ms": 1.269,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2908,
+          "ms": 1.346,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2912,
+          "ms": 1.501,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2912,
+          "ms": 1.599,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2914,
+          "ms": 1.191,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2938,
+          "ms": 1.291,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2956,
+          "ms": 1.839,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2956,
+          "ms": 1.935,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2961,
+          "ms": 1.782,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2961,
+          "ms": 1.864,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2964,
+          "ms": 1.604,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2988,
+          "ms": 1.701,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3006,
+          "ms": 1.11,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3006,
+          "ms": 1.205,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3010,
+          "ms": 1.09,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3010,
+          "ms": 1.18,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3012,
+          "ms": 1.174,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3036,
+          "ms": 1.074,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3054,
+          "ms": 1.35,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3054,
+          "ms": 1.474,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3058,
+          "ms": 1.175,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3058,
+          "ms": 1.286,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3060,
+          "ms": 1.321,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3084,
+          "ms": 1.268,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3102,
+          "ms": 1.628,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3102,
+          "ms": 1.716,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3107,
+          "ms": 1.732,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3107,
+          "ms": 1.845,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3110,
+          "ms": 1.798,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3134,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3152,
+          "ms": 1.514,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3152,
+          "ms": 1.617,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3157,
+          "ms": 1.516,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3157,
+          "ms": 1.611,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3160,
+          "ms": 1.585,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3184,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3202,
+          "ms": 1.414,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3202,
+          "ms": 1.512,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3206,
+          "ms": 1.294,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3206,
+          "ms": 1.385,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3208,
+          "ms": 1.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3232,
+          "ms": 1.175,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3250,
+          "ms": 1.068,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3250,
+          "ms": 1.166,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3254,
+          "ms": 1.026,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3254,
+          "ms": 1.106,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3256,
+          "ms": 1.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3280,
+          "ms": 1.376,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3298,
+          "ms": 1.047,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3298,
+          "ms": 1.139,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3302,
+          "ms": 1.373,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3302,
+          "ms": 1.463,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3304,
+          "ms": 1.131,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3346,
+          "ms": 1.267,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3346,
+          "ms": 1.409,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3350,
+          "ms": 1.087,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3352,
+          "ms": 1.163,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3376,
+          "ms": 1.289,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3394,
+          "ms": 1.698,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3394,
+          "ms": 1.824,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3398,
+          "ms": 1.331,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3398,
+          "ms": 1.439,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3400,
+          "ms": 1.772,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3424,
+          "ms": 1.716,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3442,
+          "ms": 1.076,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3442,
+          "ms": 1.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3446,
+          "ms": 1.084,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3446,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3448,
+          "ms": 1.154,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3472,
+          "ms": 1.073,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3490,
+          "ms": 1.4,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3490,
+          "ms": 1.527,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3494,
+          "ms": 1.373,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3494,
+          "ms": 1.482,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3496,
+          "ms": 1.27,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3520,
+          "ms": 1.18,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3538,
+          "ms": 2.072,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3538,
+          "ms": 2.164,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3543,
+          "ms": 1.883,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3543,
+          "ms": 1.959,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3546,
+          "ms": 1.369,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3570,
+          "ms": 1.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3588,
+          "ms": 1.238,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3588,
+          "ms": 1.346,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3592,
+          "ms": 1.477,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3592,
+          "ms": 1.572,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3594,
+          "ms": 2.313,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3618,
+          "ms": 1.414,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3636,
+          "ms": 1.084,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3636,
+          "ms": 1.18,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3640,
+          "ms": 1.141,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3640,
+          "ms": 1.241,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3642,
+          "ms": 1.175,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3666,
+          "ms": 1.354,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "stalls_over_50ms": [
+        {
+          "context": "load archen",
+          "covered": true,
+          "ms": 461.404
+        },
+        {
+          "context": "load archen",
+          "covered": true,
+          "ms": 103.776
+        }
+      ],
+      "static_bytes": 237874186
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 76,
+      "frame_max_ms": 133.545,
+      "frame_p95_ms": 21.717,
+      "frame_samples": 3637,
+      "load_spans": [
+        {
+          "frame": 3687,
+          "ms": 19.55,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 3687,
+          "ms": 19.612,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3689,
+          "ms": 1.593,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3689,
+          "ms": 1.721,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3693,
+          "ms": 1.302,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3693,
+          "ms": 1.402,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3695,
+          "ms": 62.56,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3718,
+          "ms": 1.63,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3736,
+          "ms": 1.635,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3736,
+          "ms": 1.747,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3740,
+          "ms": 1.44,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3740,
+          "ms": 1.555,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3742,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3766,
+          "ms": 1.303,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3781,
+          "ms": 1.035,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3784,
+          "ms": 1.596,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3784,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3788,
+          "ms": 1.483,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3788,
+          "ms": 1.584,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3790,
+          "ms": 1.734,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3814,
+          "ms": 1.171,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3832,
+          "ms": 2.219,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3832,
+          "ms": 2.311,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3837,
+          "ms": 2.016,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3837,
+          "ms": 2.109,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3840,
+          "ms": 1.769,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3864,
+          "ms": 1.881,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3882,
+          "ms": 1.274,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3882,
+          "ms": 1.411,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3886,
+          "ms": 1.32,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3886,
+          "ms": 1.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3888,
+          "ms": 1.401,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3912,
+          "ms": 1.405,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3930,
+          "ms": 1.72,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3930,
+          "ms": 1.828,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3934,
+          "ms": 1.602,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3934,
+          "ms": 1.707,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3936,
+          "ms": 1.851,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3960,
+          "ms": 1.75,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3978,
+          "ms": 1.296,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3978,
+          "ms": 1.393,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3982,
+          "ms": 1.517,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3982,
+          "ms": 1.626,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3984,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4007,
+          "ms": 1.474,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4025,
+          "ms": 1.1,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4025,
+          "ms": 1.223,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4029,
+          "ms": 1.007,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4029,
+          "ms": 1.096,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4073,
+          "ms": 2.146,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4073,
+          "ms": 2.24,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4079,
+          "ms": 2.111,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4079,
+          "ms": 2.203,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4083,
+          "ms": 1.589,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4107,
+          "ms": 1.326,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4125,
+          "ms": 1.225,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4125,
+          "ms": 1.328,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4130,
+          "ms": 1.096,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4130,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4132,
+          "ms": 1.81,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4156,
+          "ms": 1.43,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4174,
+          "ms": 2.053,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4174,
+          "ms": 2.164,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4180,
+          "ms": 2.252,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4180,
+          "ms": 2.374,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4183,
+          "ms": 1.83,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4207,
+          "ms": 1.643,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4225,
+          "ms": 1.216,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4225,
+          "ms": 1.323,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4229,
+          "ms": 1.556,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4229,
+          "ms": 1.69,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4231,
+          "ms": 2.354,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4254,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4272,
+          "ms": 1.198,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4272,
+          "ms": 1.325,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4276,
+          "ms": 1.166,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4276,
+          "ms": 1.262,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4278,
+          "ms": 1.271,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4302,
+          "ms": 1.113,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4320,
+          "ms": 1.807,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4320,
+          "ms": 1.913,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4325,
+          "ms": 1.862,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4325,
+          "ms": 1.962,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4328,
+          "ms": 1.454,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4352,
+          "ms": 1.182,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4370,
+          "ms": 1.479,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4370,
+          "ms": 1.587,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4374,
+          "ms": 1.276,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4374,
+          "ms": 1.395,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4376,
+          "ms": 1.535,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4399,
+          "ms": 1.178,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4417,
+          "ms": 1.983,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4417,
+          "ms": 2.119,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4422,
+          "ms": 1.622,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4422,
+          "ms": 1.741,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4424,
+          "ms": 1.885,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4448,
+          "ms": 1.457,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4466,
+          "ms": 1.249,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4466,
+          "ms": 1.354,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4470,
+          "ms": 1.306,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4470,
+          "ms": 1.411,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4472,
+          "ms": 1.529,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4496,
+          "ms": 1.658,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4514,
+          "ms": 1.609,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4514,
+          "ms": 1.758,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4518,
+          "ms": 1.652,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4518,
+          "ms": 1.845,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4520,
+          "ms": 1.7,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4543,
+          "ms": 1.382,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4561,
+          "ms": 1.333,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4561,
+          "ms": 1.438,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4565,
+          "ms": 1.362,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4565,
+          "ms": 1.474,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4567,
+          "ms": 2.215,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4590,
+          "ms": 1.713,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4608,
+          "ms": 1.873,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4608,
+          "ms": 1.988,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4612,
+          "ms": 1.535,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4612,
+          "ms": 1.637,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4614,
+          "ms": 1.425,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4637,
+          "ms": 1.312,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4655,
+          "ms": 1.131,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4655,
+          "ms": 1.235,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4659,
+          "ms": 1.24,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4659,
+          "ms": 1.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4661,
+          "ms": 1.658,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4685,
+          "ms": 1.376,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4703,
+          "ms": 1.044,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4703,
+          "ms": 1.157,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4707,
+          "ms": 1.199,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4707,
+          "ms": 1.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4709,
+          "ms": 1.966,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4732,
+          "ms": 2.014,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4750,
+          "ms": 1.401,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4750,
+          "ms": 1.52,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4754,
+          "ms": 1.223,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4754,
+          "ms": 1.347,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4756,
+          "ms": 1.701,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4780,
+          "ms": 1.362,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4799,
+          "ms": 2.697,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4799,
+          "ms": 2.805,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4805,
+          "ms": 2.297,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4805,
+          "ms": 2.388,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4810,
+          "ms": 2.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4834,
+          "ms": 1.847,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4852,
+          "ms": 2.319,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4852,
+          "ms": 2.465,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4856,
+          "ms": 1.64,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4856,
+          "ms": 1.743,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4858,
+          "ms": 2.113,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4881,
+          "ms": 1.631,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4899,
+          "ms": 1.575,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4899,
+          "ms": 1.693,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4903,
+          "ms": 1.611,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4903,
+          "ms": 1.72,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4905,
+          "ms": 1.087,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4946,
+          "ms": 1.072,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4946,
+          "ms": 1.209,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4950,
+          "ms": 1.136,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4950,
+          "ms": 1.265,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4994,
+          "ms": 1.11,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4994,
+          "ms": 1.224,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4998,
+          "ms": 1.015,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4998,
+          "ms": 1.124,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5041,
+          "ms": 1.32,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5041,
+          "ms": 1.454,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5045,
+          "ms": 1.102,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5045,
+          "ms": 1.205,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5048,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5090,
+          "ms": 1.299,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5090,
+          "ms": 1.408,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5094,
+          "ms": 1.158,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5094,
+          "ms": 1.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5096,
+          "ms": 2.352,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5119,
+          "ms": 1.207,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5137,
+          "ms": 1.312,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5137,
+          "ms": 1.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5141,
+          "ms": 1.485,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5141,
+          "ms": 1.608,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5144,
+          "ms": 1.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5168,
+          "ms": 1.216,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5186,
+          "ms": 1.379,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5186,
+          "ms": 1.492,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5190,
+          "ms": 1.13,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5190,
+          "ms": 1.276,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5192,
+          "ms": 1.067,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5233,
+          "ms": 1.069,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5239,
+          "ms": 1.849,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5263,
+          "ms": 1.031,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5281,
+          "ms": 1.219,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5281,
+          "ms": 1.323,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5285,
+          "ms": 1.761,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5285,
+          "ms": 1.919,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5287,
+          "ms": 1.336,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5310,
+          "ms": 1.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5328,
+          "ms": 1.757,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5328,
+          "ms": 1.914,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5332,
+          "ms": 1.363,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5332,
+          "ms": 1.475,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5334,
+          "ms": 1.456,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5358,
+          "ms": 1.427,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5376,
+          "ms": 1.939,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5376,
+          "ms": 2.082,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5381,
+          "ms": 1.675,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5381,
+          "ms": 1.799,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5384,
+          "ms": 1.526,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5408,
+          "ms": 1.043,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5426,
+          "ms": 1.109,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5426,
+          "ms": 1.221,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5430,
+          "ms": 1.432,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5430,
+          "ms": 1.575,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5432,
+          "ms": 1.497,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5456,
+          "ms": 1.511,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5474,
+          "ms": 1.167,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5474,
+          "ms": 1.28,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5478,
+          "ms": 1.042,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5480,
+          "ms": 1.605,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5504,
+          "ms": 1.378,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5522,
+          "ms": 1.294,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5522,
+          "ms": 1.42,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5526,
+          "ms": 1.558,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5526,
+          "ms": 1.685,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5528,
+          "ms": 1.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5551,
+          "ms": 1.576,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5570,
+          "ms": 2.329,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5570,
+          "ms": 2.453,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5576,
+          "ms": 2.595,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5576,
+          "ms": 2.767,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5579,
+          "ms": 1.312,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5601,
+          "ms": 1.601,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5612,
+          "ms": 1.022,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5612,
+          "ms": 1.144,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5617,
+          "ms": 1.36,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5617,
+          "ms": 1.507,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5619,
+          "ms": 1.201,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5655,
+          "ms": 1.268,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5655,
+          "ms": 1.399,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5659,
+          "ms": 1.153,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5659,
+          "ms": 1.255,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5661,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5694,
+          "ms": 2.085,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5694,
+          "ms": 2.209,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5700,
+          "ms": 2.658,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5700,
+          "ms": 2.801,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5703,
+          "ms": 4.89,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5726,
+          "ms": 2.458,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5744,
+          "ms": 1.02,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5744,
+          "ms": 1.121,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5748,
+          "ms": 1.189,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5748,
+          "ms": 1.281,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5750,
+          "ms": 1.475,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5773,
+          "ms": 1.671,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5791,
+          "ms": 1.915,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5791,
+          "ms": 2.037,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5795,
+          "ms": 1.386,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5795,
+          "ms": 1.489,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5797,
+          "ms": 1.42,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5821,
+          "ms": 1.066,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5837,
+          "ms": 1.417,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5837,
+          "ms": 1.536,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5841,
+          "ms": 1.28,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5841,
+          "ms": 1.379,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5843,
+          "ms": 1.493,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5867,
+          "ms": 1.274,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5885,
+          "ms": 1.44,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5885,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5889,
+          "ms": 1.449,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5889,
+          "ms": 1.538,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5891,
+          "ms": 1.47,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5915,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5933,
+          "ms": 1.755,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5933,
+          "ms": 1.952,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5937,
+          "ms": 1.238,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5937,
+          "ms": 1.37,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5939,
+          "ms": 1.307,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5963,
+          "ms": 2.587,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5981,
+          "ms": 1.334,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5981,
+          "ms": 1.461,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5985,
+          "ms": 2.652,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5985,
+          "ms": 2.926,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5987,
+          "ms": 1.525,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6010,
+          "ms": 1.984,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6028,
+          "ms": 1.644,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6028,
+          "ms": 1.741,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6035,
+          "ms": 2.329,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6035,
+          "ms": 2.448,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6039,
+          "ms": 2.873,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6062,
+          "ms": 1.583,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6080,
+          "ms": 1.312,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6080,
+          "ms": 1.449,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6084,
+          "ms": 2.152,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6084,
+          "ms": 2.3,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6087,
+          "ms": 3.121,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6111,
+          "ms": 1.587,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6129,
+          "ms": 1.071,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6133,
+          "ms": 1.084,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6133,
+          "ms": 1.195,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6135,
+          "ms": 1.85,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6159,
+          "ms": 2.417,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6177,
+          "ms": 1.185,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6177,
+          "ms": 1.291,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6181,
+          "ms": 1.321,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6181,
+          "ms": 1.414,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6183,
+          "ms": 1.395,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6207,
+          "ms": 1.383,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6225,
+          "ms": 1.922,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6225,
+          "ms": 2.065,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6229,
+          "ms": 1.605,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6229,
+          "ms": 1.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6231,
+          "ms": 1.702,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6254,
+          "ms": 1.661,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6272,
+          "ms": 1.417,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6272,
+          "ms": 1.526,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6276,
+          "ms": 1.156,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6276,
+          "ms": 1.239,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6278,
+          "ms": 1.403,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6302,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6320,
+          "ms": 1.095,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6320,
+          "ms": 1.214,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6324,
+          "ms": 1.255,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6324,
+          "ms": 1.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6326,
+          "ms": 1.528,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6350,
+          "ms": 1.364,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6368,
+          "ms": 1.102,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6372,
+          "ms": 1.014,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6372,
+          "ms": 1.103,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6374,
+          "ms": 1.38,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6398,
+          "ms": 1.384,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6416,
+          "ms": 1.459,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6416,
+          "ms": 1.554,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6420,
+          "ms": 1.449,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6420,
+          "ms": 1.547,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6422,
+          "ms": 1.327,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6446,
+          "ms": 1.04,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6464,
+          "ms": 1.399,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6464,
+          "ms": 1.492,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6468,
+          "ms": 1.531,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6468,
+          "ms": 1.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6470,
+          "ms": 1.324,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6493,
+          "ms": 1.248,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6511,
+          "ms": 1.641,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6511,
+          "ms": 1.752,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6515,
+          "ms": 1.547,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6515,
+          "ms": 1.669,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6517,
+          "ms": 1.508,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6537,
+          "ms": 2.531,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6555,
+          "ms": 1.686,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6555,
+          "ms": 1.806,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6559,
+          "ms": 1.508,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6559,
+          "ms": 1.605,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6561,
+          "ms": 1.34,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6585,
+          "ms": 1.433,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6603,
+          "ms": 1.841,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6603,
+          "ms": 1.924,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6608,
+          "ms": 2.042,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6608,
+          "ms": 2.147,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6610,
+          "ms": 2.043,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6634,
+          "ms": 1.619,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6652,
+          "ms": 1.118,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6652,
+          "ms": 1.249,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6656,
+          "ms": 1.198,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6656,
+          "ms": 1.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6658,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6699,
+          "ms": 1.087,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6703,
+          "ms": 1.058,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6703,
+          "ms": 1.158,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6705,
+          "ms": 1.502,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6729,
+          "ms": 1.103,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6747,
+          "ms": 1.608,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6747,
+          "ms": 1.718,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6752,
+          "ms": 1.662,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6752,
+          "ms": 1.759,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6754,
+          "ms": 2.087,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6778,
+          "ms": 1.335,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6796,
+          "ms": 1.39,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6796,
+          "ms": 1.486,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6801,
+          "ms": 1.561,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6801,
+          "ms": 1.654,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6803,
+          "ms": 1.361,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6827,
+          "ms": 1.55,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6845,
+          "ms": 1.304,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6845,
+          "ms": 1.39,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6849,
+          "ms": 1.164,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6849,
+          "ms": 1.239,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6851,
+          "ms": 1.476,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6875,
+          "ms": 1.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6892,
+          "ms": 1.192,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6892,
+          "ms": 1.38,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6896,
+          "ms": 1.328,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6896,
+          "ms": 1.427,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6898,
+          "ms": 1.275,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6922,
+          "ms": 1.36,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6940,
+          "ms": 1.24,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6940,
+          "ms": 1.344,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6944,
+          "ms": 1.071,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6944,
+          "ms": 1.176,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6946,
+          "ms": 1.06,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6988,
+          "ms": 1.078,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6992,
+          "ms": 1.07,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7036,
+          "ms": 1.197,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7036,
+          "ms": 1.334,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7040,
+          "ms": 1.144,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7040,
+          "ms": 1.238,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7042,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7066,
+          "ms": 1.228,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7084,
+          "ms": 1.125,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7084,
+          "ms": 1.229,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7088,
+          "ms": 1.036,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7090,
+          "ms": 1.275,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7114,
+          "ms": 1.204,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7132,
+          "ms": 1.142,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7132,
+          "ms": 1.225,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7136,
+          "ms": 1.169,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7136,
+          "ms": 1.256,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7138,
+          "ms": 1.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7162,
+          "ms": 1.319,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7181,
+          "ms": 1.966,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7181,
+          "ms": 2.075,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7186,
+          "ms": 1.982,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7186,
+          "ms": 2.077,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7189,
+          "ms": 1.346,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7213,
+          "ms": 1.259,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7231,
+          "ms": 1.165,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7231,
+          "ms": 1.259,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7235,
+          "ms": 1.162,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7235,
+          "ms": 1.255,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7237,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7261,
+          "ms": 1.273,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7279,
+          "ms": 1.011,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7279,
+          "ms": 1.138,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7283,
+          "ms": 1.108,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7283,
+          "ms": 1.199,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7285,
+          "ms": 1.147,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7308,
+          "ms": 1.222,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "stalls_over_50ms": [
+        {
+          "context": "load archen",
+          "covered": true,
+          "ms": 133.545
+        },
+        {
+          "context": "load archen",
+          "covered": true,
+          "ms": 132.222
+        },
+        {
+          "context": "load nihilego",
+          "covered": false,
+          "ms": 50.538
+        },
+        {
+          "context": "action nihilego",
+          "covered": false,
+          "ms": 54.291
+        },
+        {
+          "context": "load nihilego",
+          "covered": false,
+          "ms": 63.968
+        },
+        {
+          "context": "load parasect",
+          "covered": false,
+          "ms": 50.605
+        },
+        {
+          "context": "load sizzlipede",
+          "covered": false,
+          "ms": 71.317
+        }
+      ],
+      "static_bytes": 239956518
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 76,
+      "frame_max_ms": 110.556,
+      "frame_p95_ms": 17.634,
+      "frame_samples": 3676,
+      "load_spans": [
+        {
+          "frame": 7329,
+          "ms": 17.79,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 7329,
+          "ms": 17.831,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7331,
+          "ms": 1.089,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7331,
+          "ms": 1.193,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7335,
+          "ms": 1.293,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7335,
+          "ms": 1.381,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7337,
+          "ms": 7.34,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7361,
+          "ms": 1.402,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7379,
+          "ms": 1.622,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7379,
+          "ms": 1.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7383,
+          "ms": 1.186,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7383,
+          "ms": 1.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7385,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7409,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7427,
+          "ms": 1.4,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7427,
+          "ms": 1.518,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7431,
+          "ms": 1.575,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7431,
+          "ms": 1.728,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7433,
+          "ms": 1.858,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7456,
+          "ms": 1.161,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7474,
+          "ms": 2.158,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7474,
+          "ms": 2.236,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7479,
+          "ms": 2.401,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7479,
+          "ms": 2.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7482,
+          "ms": 2.379,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7506,
+          "ms": 1.887,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7524,
+          "ms": 1.273,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7524,
+          "ms": 1.374,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7528,
+          "ms": 1.189,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7528,
+          "ms": 1.281,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7530,
+          "ms": 1.518,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7554,
+          "ms": 1.673,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7572,
+          "ms": 1.451,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7572,
+          "ms": 1.518,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7576,
+          "ms": 1.44,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7576,
+          "ms": 1.529,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7578,
+          "ms": 1.603,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7602,
+          "ms": 1.627,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7620,
+          "ms": 1.349,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7620,
+          "ms": 1.445,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7624,
+          "ms": 1.174,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7624,
+          "ms": 1.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7626,
+          "ms": 1.351,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7650,
+          "ms": 1.461,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7668,
+          "ms": 1.245,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7668,
+          "ms": 1.34,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7672,
+          "ms": 1.144,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7672,
+          "ms": 1.234,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7717,
+          "ms": 2.137,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7717,
+          "ms": 2.23,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7723,
+          "ms": 2.044,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7723,
+          "ms": 2.13,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7726,
+          "ms": 1.351,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7750,
+          "ms": 1.288,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7768,
+          "ms": 1.114,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7768,
+          "ms": 1.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7772,
+          "ms": 1.113,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7772,
+          "ms": 1.207,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7774,
+          "ms": 1.558,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7798,
+          "ms": 1.369,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7816,
+          "ms": 1.965,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7816,
+          "ms": 2.062,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7821,
+          "ms": 1.87,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7821,
+          "ms": 1.953,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7824,
+          "ms": 1.269,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7848,
+          "ms": 1.452,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7866,
+          "ms": 1.291,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7866,
+          "ms": 1.401,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7870,
+          "ms": 1.19,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7870,
+          "ms": 1.286,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7872,
+          "ms": 2.08,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7896,
+          "ms": 1.156,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7914,
+          "ms": 1.148,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7914,
+          "ms": 1.232,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7918,
+          "ms": 1.115,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7918,
+          "ms": 1.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7920,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7944,
+          "ms": 1.098,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7962,
+          "ms": 1.565,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7962,
+          "ms": 1.646,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7967,
+          "ms": 2.007,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7967,
+          "ms": 2.099,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7970,
+          "ms": 1.001,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7994,
+          "ms": 1.073,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8012,
+          "ms": 1.244,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8012,
+          "ms": 1.341,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8016,
+          "ms": 1.067,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8016,
+          "ms": 1.152,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8018,
+          "ms": 1.38,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8041,
+          "ms": 1.225,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8059,
+          "ms": 1.435,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8059,
+          "ms": 1.514,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8063,
+          "ms": 1.454,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8063,
+          "ms": 1.553,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8065,
+          "ms": 1.527,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8089,
+          "ms": 1.362,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8107,
+          "ms": 1.123,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8107,
+          "ms": 1.219,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8111,
+          "ms": 1.198,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8111,
+          "ms": 1.293,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8113,
+          "ms": 1.33,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8137,
+          "ms": 1.447,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8155,
+          "ms": 1.093,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8155,
+          "ms": 1.181,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8159,
+          "ms": 1.101,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8159,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8161,
+          "ms": 1.327,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8185,
+          "ms": 1.381,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8203,
+          "ms": 1.353,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8203,
+          "ms": 1.446,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8207,
+          "ms": 1.211,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8207,
+          "ms": 1.294,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8209,
+          "ms": 1.758,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8233,
+          "ms": 1.637,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8251,
+          "ms": 1.427,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8251,
+          "ms": 1.531,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8255,
+          "ms": 1.326,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8255,
+          "ms": 1.399,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8257,
+          "ms": 1.267,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8299,
+          "ms": 1.095,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8299,
+          "ms": 1.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8303,
+          "ms": 1.092,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8303,
+          "ms": 1.177,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8305,
+          "ms": 1.403,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8329,
+          "ms": 1.434,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8347,
+          "ms": 1.091,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8347,
+          "ms": 1.17,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8351,
+          "ms": 1.005,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8351,
+          "ms": 1.093,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8353,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8376,
+          "ms": 1.244,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8394,
+          "ms": 1.085,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8394,
+          "ms": 1.176,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8398,
+          "ms": 1.022,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8398,
+          "ms": 1.149,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8400,
+          "ms": 1.281,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8424,
+          "ms": 1.488,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8443,
+          "ms": 2.146,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8443,
+          "ms": 2.219,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8449,
+          "ms": 2.409,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8449,
+          "ms": 2.537,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8452,
+          "ms": 2.289,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8476,
+          "ms": 1.955,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8494,
+          "ms": 1.371,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8494,
+          "ms": 1.463,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8498,
+          "ms": 1.313,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8498,
+          "ms": 1.401,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8500,
+          "ms": 1.659,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8524,
+          "ms": 1.312,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8542,
+          "ms": 1.286,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8542,
+          "ms": 1.372,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8546,
+          "ms": 1.32,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8546,
+          "ms": 1.411,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8548,
+          "ms": 1.049,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8590,
+          "ms": 1.046,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8594,
+          "ms": 1.255,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8594,
+          "ms": 1.37,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8596,
+          "ms": 1.005,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8686,
+          "ms": 1.131,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8686,
+          "ms": 1.233,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8690,
+          "ms": 1.012,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8734,
+          "ms": 1.275,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8734,
+          "ms": 1.367,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8738,
+          "ms": 1.159,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8738,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8740,
+          "ms": 1.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8764,
+          "ms": 1.209,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8782,
+          "ms": 1.302,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8782,
+          "ms": 1.386,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8786,
+          "ms": 1.171,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8786,
+          "ms": 1.264,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8788,
+          "ms": 1.362,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8812,
+          "ms": 1.381,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8830,
+          "ms": 1.299,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8830,
+          "ms": 1.395,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8834,
+          "ms": 1.171,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8834,
+          "ms": 1.26,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8836,
+          "ms": 1.124,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8882,
+          "ms": 1.007,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8884,
+          "ms": 1.829,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8908,
+          "ms": 1.011,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8926,
+          "ms": 1.066,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8926,
+          "ms": 1.146,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8930,
+          "ms": 1.207,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8930,
+          "ms": 1.299,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8932,
+          "ms": 1.721,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8956,
+          "ms": 1.376,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8974,
+          "ms": 1.371,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8974,
+          "ms": 1.483,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8978,
+          "ms": 1.403,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8978,
+          "ms": 1.489,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8980,
+          "ms": 1.384,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9004,
+          "ms": 1.373,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9022,
+          "ms": 1.532,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9022,
+          "ms": 1.616,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9027,
+          "ms": 1.81,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9027,
+          "ms": 1.925,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9030,
+          "ms": 1.262,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9054,
+          "ms": 1.301,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9072,
+          "ms": 1.104,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9072,
+          "ms": 1.201,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9076,
+          "ms": 1.019,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9076,
+          "ms": 1.111,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9078,
+          "ms": 1.337,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9102,
+          "ms": 1.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9120,
+          "ms": 1.142,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9120,
+          "ms": 1.243,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9124,
+          "ms": 1.044,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9124,
+          "ms": 1.142,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9126,
+          "ms": 1.3,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9150,
+          "ms": 1.424,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9168,
+          "ms": 1.082,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9168,
+          "ms": 1.199,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9172,
+          "ms": 1.097,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9172,
+          "ms": 1.184,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9174,
+          "ms": 1.292,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9198,
+          "ms": 1.204,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9216,
+          "ms": 1.805,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9216,
+          "ms": 1.911,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9221,
+          "ms": 1.786,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9221,
+          "ms": 1.877,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9224,
+          "ms": 1.652,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9247,
+          "ms": 1.334,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9265,
+          "ms": 1.117,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9265,
+          "ms": 1.198,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9269,
+          "ms": 1.207,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9269,
+          "ms": 1.301,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9271,
+          "ms": 1.024,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9295,
+          "ms": 1.095,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9313,
+          "ms": 1.241,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9313,
+          "ms": 1.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9317,
+          "ms": 1.016,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9319,
+          "ms": 1.117,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9361,
+          "ms": 1.659,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9361,
+          "ms": 1.776,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9366,
+          "ms": 1.678,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9366,
+          "ms": 1.764,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9369,
+          "ms": 1.768,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9393,
+          "ms": 1.697,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9411,
+          "ms": 1.191,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9411,
+          "ms": 1.279,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9415,
+          "ms": 1.194,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9415,
+          "ms": 1.291,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9417,
+          "ms": 1.595,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9441,
+          "ms": 1.539,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9459,
+          "ms": 1.234,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9459,
+          "ms": 1.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9463,
+          "ms": 1.531,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9463,
+          "ms": 1.654,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9465,
+          "ms": 1.294,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9489,
+          "ms": 1.277,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9507,
+          "ms": 1.343,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9507,
+          "ms": 1.431,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9511,
+          "ms": 1.089,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9511,
+          "ms": 1.174,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9513,
+          "ms": 1.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9537,
+          "ms": 1.193,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9555,
+          "ms": 1.322,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9555,
+          "ms": 1.392,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9559,
+          "ms": 1.53,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9559,
+          "ms": 1.636,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9561,
+          "ms": 1.244,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9585,
+          "ms": 1.404,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9603,
+          "ms": 1.097,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9603,
+          "ms": 1.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9607,
+          "ms": 1.161,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9607,
+          "ms": 1.268,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9609,
+          "ms": 1.211,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9633,
+          "ms": 1.058,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9651,
+          "ms": 1.16,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9651,
+          "ms": 1.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9655,
+          "ms": 1.07,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9657,
+          "ms": 1.182,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9680,
+          "ms": 1.088,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9699,
+          "ms": 1.633,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9699,
+          "ms": 1.716,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9705,
+          "ms": 1.862,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9705,
+          "ms": 1.962,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9709,
+          "ms": 1.597,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9733,
+          "ms": 1.837,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9751,
+          "ms": 1.224,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9751,
+          "ms": 1.319,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9755,
+          "ms": 1.316,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9755,
+          "ms": 1.427,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9757,
+          "ms": 1.624,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9780,
+          "ms": 1.53,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9798,
+          "ms": 1.255,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9798,
+          "ms": 1.34,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9802,
+          "ms": 1.121,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9802,
+          "ms": 1.212,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9804,
+          "ms": 1.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9828,
+          "ms": 1.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9846,
+          "ms": 1.071,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9846,
+          "ms": 1.161,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9850,
+          "ms": 1.052,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9850,
+          "ms": 1.14,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9852,
+          "ms": 1.31,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9876,
+          "ms": 1.078,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9894,
+          "ms": 1.53,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9894,
+          "ms": 1.622,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9898,
+          "ms": 1.35,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9898,
+          "ms": 1.447,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9900,
+          "ms": 1.377,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9924,
+          "ms": 1.535,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9942,
+          "ms": 1.326,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9942,
+          "ms": 1.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9946,
+          "ms": 1.169,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9946,
+          "ms": 1.246,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9948,
+          "ms": 1.201,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9972,
+          "ms": 1.823,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9990,
+          "ms": 1.315,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9990,
+          "ms": 1.396,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9994,
+          "ms": 1.118,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9994,
+          "ms": 1.214,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9996,
+          "ms": 1.513,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10020,
+          "ms": 1.527,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10038,
+          "ms": 1.284,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10038,
+          "ms": 1.371,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10042,
+          "ms": 1.04,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10042,
+          "ms": 1.183,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10044,
+          "ms": 1.449,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10068,
+          "ms": 1.494,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10086,
+          "ms": 1.184,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10086,
+          "ms": 1.26,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10090,
+          "ms": 1.457,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10090,
+          "ms": 1.543,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10092,
+          "ms": 1.664,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10116,
+          "ms": 1.808,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10134,
+          "ms": 1.439,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10134,
+          "ms": 1.57,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10139,
+          "ms": 1.279,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10139,
+          "ms": 1.349,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10141,
+          "ms": 1.503,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10165,
+          "ms": 1.548,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10183,
+          "ms": 1.396,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10183,
+          "ms": 1.518,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10187,
+          "ms": 1.744,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10187,
+          "ms": 1.844,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10189,
+          "ms": 1.514,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10213,
+          "ms": 1.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10231,
+          "ms": 1.479,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10231,
+          "ms": 1.593,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10236,
+          "ms": 1.359,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10236,
+          "ms": 1.451,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10238,
+          "ms": 1.451,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10262,
+          "ms": 1.63,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10280,
+          "ms": 1.7,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10280,
+          "ms": 1.797,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10285,
+          "ms": 2.57,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10285,
+          "ms": 2.699,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10288,
+          "ms": 1.573,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10312,
+          "ms": 1.654,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10330,
+          "ms": 1.088,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10330,
+          "ms": 1.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10334,
+          "ms": 1.205,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10334,
+          "ms": 1.314,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10336,
+          "ms": 1.303,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10360,
+          "ms": 1.095,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10378,
+          "ms": 1.278,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10378,
+          "ms": 1.386,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10382,
+          "ms": 1.368,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10382,
+          "ms": 1.478,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10384,
+          "ms": 1.223,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10408,
+          "ms": 1.083,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10426,
+          "ms": 1.722,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10426,
+          "ms": 1.815,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10431,
+          "ms": 1.604,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10431,
+          "ms": 1.694,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10434,
+          "ms": 1.574,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10458,
+          "ms": 1.544,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10476,
+          "ms": 1.541,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10476,
+          "ms": 1.636,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10481,
+          "ms": 1.518,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10481,
+          "ms": 1.63,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10483,
+          "ms": 1.544,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10507,
+          "ms": 1.829,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10525,
+          "ms": 1.396,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10525,
+          "ms": 1.481,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10529,
+          "ms": 1.356,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10529,
+          "ms": 1.465,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10531,
+          "ms": 1.432,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10555,
+          "ms": 1.297,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10573,
+          "ms": 1.443,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10573,
+          "ms": 1.532,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10577,
+          "ms": 1.157,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10577,
+          "ms": 1.265,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10579,
+          "ms": 1.331,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10602,
+          "ms": 1.508,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10620,
+          "ms": 1.203,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10620,
+          "ms": 1.301,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10624,
+          "ms": 1.194,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10624,
+          "ms": 1.304,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10626,
+          "ms": 1.207,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10668,
+          "ms": 1.007,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10668,
+          "ms": 1.119,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10672,
+          "ms": 1.204,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10672,
+          "ms": 1.302,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10674,
+          "ms": 1.042,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10716,
+          "ms": 1.264,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10716,
+          "ms": 1.365,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10720,
+          "ms": 1.146,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10720,
+          "ms": 1.241,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10722,
+          "ms": 2.092,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10746,
+          "ms": 1.585,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10764,
+          "ms": 1.243,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10764,
+          "ms": 1.352,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10768,
+          "ms": 1.296,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10768,
+          "ms": 1.397,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10770,
+          "ms": 1.544,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10794,
+          "ms": 1.187,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10812,
+          "ms": 1.383,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10812,
+          "ms": 1.536,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10816,
+          "ms": 1.504,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10816,
+          "ms": 1.614,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10818,
+          "ms": 1.219,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10842,
+          "ms": 1.306,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10861,
+          "ms": 2.515,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10861,
+          "ms": 2.619,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10866,
+          "ms": 2.023,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10866,
+          "ms": 2.14,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10869,
+          "ms": 1.579,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10893,
+          "ms": 1.522,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10911,
+          "ms": 1.649,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10911,
+          "ms": 1.773,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10915,
+          "ms": 1.816,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10915,
+          "ms": 2.001,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10917,
+          "ms": 2.044,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10941,
+          "ms": 1.4,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10959,
+          "ms": 1.36,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10959,
+          "ms": 1.465,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10963,
+          "ms": 1.409,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10963,
+          "ms": 1.514,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10965,
+          "ms": 1.604,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10989,
+          "ms": 1.194,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 76,
+      "retained_source_bytes": 2249075,
+      "stalls_over_50ms": [
+        {
+          "context": "load archen",
+          "covered": true,
+          "ms": 110.556
+        }
+      ],
+      "static_bytes": 240245822
+    }
+  ],
+  "runtime_approved": false,
+  "schema": 1,
+  "species_count": 76,
+  "user_confirmed_other_game_closed": true
+}
