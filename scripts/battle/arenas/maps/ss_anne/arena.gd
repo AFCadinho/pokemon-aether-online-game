@@ -82,15 +82,10 @@ func build() -> Node3D:
 
 func _add_spectators(arena: Node3D) -> void:
 	var audience := group(arena, "DeckAudience")
-	var models := [
-		preload("res://assets/models/battle/ss_anne_audience/male_suit.glb"),
-		preload("res://assets/models/battle/ss_anne_audience/female_formal.glb"),
-		preload("res://assets/models/battle/ss_anne_audience/male_casual.glb"),
-		preload("res://assets/models/battle/ss_anne_audience/female_casual.glb"),
-	]
+	var models = preload("res://scripts/battle/arenas/shared/animated_spectator.gd").MODELS
 	var positions := [Vector3(-8, 0, -20), Vector3(8, 0, -20), Vector3(-19.3, 0, -7), Vector3(19.3, 0, -7), Vector3(-7.5, 0, 23.5), Vector3(7.5, 0, 23.5)]
 	for i in positions.size():
-		var spectator := preload("res://scripts/battle/arenas/maps/ss_anne/spectator.gd").new()
+		var spectator := preload("res://scripts/battle/arenas/shared/animated_spectator.gd").new()
 		spectator.name = "Passenger%d" % i
 		spectator.position = positions[i]
 		spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)

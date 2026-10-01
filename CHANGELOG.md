@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+- De PvP 3D-arena gebruikt 160 geanimeerde Quaternius-supporters op alle vier de tribunes, met dezelfde NPC-modellen als SS Anne.
 - De bewakers bij beide Saffron-poorten tonen zelf de lockdown-dialoog wanneer servertoegang de doorgang blokkeert.
 
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
