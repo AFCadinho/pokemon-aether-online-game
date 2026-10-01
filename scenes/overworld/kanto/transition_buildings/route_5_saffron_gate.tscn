@@ -15,6 +15,8 @@ music_track_id = "overworld.kanto.route.1"
 [node name="GateNPC" parent="Entities/NPCs" index="0"]
 npc_id = "kanto_route_5_saffron_gate_attendant"
 display_name = "Saffron Gate Attendant"
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_route_5_saffron_gate__to_saffron_city"
 requires_party_pokemon = false
 
 [node name="ToNorth" parent="Exits" index="0"]

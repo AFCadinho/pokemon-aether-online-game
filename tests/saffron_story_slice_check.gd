@@ -2,6 +2,7 @@ extends SceneTree
 
 const OAK_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
 const GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
+const ROUTE_5_GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn"
 const STORY_HOOK_SCRIPT := "res://scripts/world/story/story_hook.gd"
 
 var failures := 0
@@ -14,6 +15,7 @@ func _init() -> void:
 func _run() -> void:
 	await process_frame
 	_check_gate()
+	_check_route_5_gate()
 	_check_oak()
 	quit(1 if failures > 0 else 0)
 
@@ -29,11 +31,32 @@ func _check_gate() -> void:
 	if npc != null:
 		_check(npc.get("preload_quest_markers") == true, "gate attendant preloads active quest markers")
 		_check(npc.get("blocked_dialogue_id") == "kanto_route_6_saffron_gate_unsafe", "gate attendant uses the lockdown dialogue")
+		_check(
+			npc.get("guard_role") == "transition_guard"
+			and npc.get("guarded_transition_id") == "kanto_route_6_saffron_gate__to_saffron_city",
+			"Route 6 attendant presents denied Saffron entry as the guard"
+		)
 		var hook := npc.get_node_or_null("SaffronClosedStoryHook")
 		var hook_script: Script = hook.get_script() as Script if hook != null else null
 		_check(hook_script != null and hook_script.resource_path == STORY_HOOK_SCRIPT, "gate attendant has a story interaction hook")
 		if hook != null:
 			_check(hook.get("interaction_id") == "kanto_route_6_saffron_gate_closed", "gate hook records the expected quest event")
+	gate.free()
+
+
+func _check_route_5_gate() -> void:
+	var packed := load(ROUTE_5_GATE_SCENE) as PackedScene
+	_check(packed != null, "Route 5 Saffron gate scene loads")
+	if packed == null:
+		return
+	var gate := packed.instantiate()
+	var npc := gate.get_node_or_null("Entities/NPCs/GateNPC")
+	_check(
+		npc != null
+		and npc.get("guard_role") == "transition_guard"
+		and npc.get("guarded_transition_id") == "kanto_route_5_saffron_gate__to_saffron_city",
+		"Route 5 attendant also presents denied Saffron entry as the guard"
+	)
 	gate.free()
 
 
