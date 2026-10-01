@@ -11,7 +11,6 @@
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
   "pending": [
-    "iron_boulder_face_appearance_review",
     "native_parallax_Fresnel_and_Terapagos_flow_qualification",
     "authored_sleep_poses",
     "standalone_SCN_conversion_and_battle_qualification",
@@ -1190,7 +1189,7 @@
           "loop": false
         }
       },
-      "appearance_approved": false
+      "appearance_approved": true
     },
     {
       "species": "iron-crown",
@@ -1498,7 +1497,7 @@
     "page_sha256": "1208fde69df11754f4be64553bea27837be97bdf561fdeaa75ffe96fc76b3a5f",
     "manifest_sha256": "ac0232dfa058cf78b89d0e7d153bf6b7eca116a51acb7bf093844278aad06e5a",
     "scope": "appearance_only_no_sleep_or_battle",
-    "user_approved": false,
+    "user_approved": true,
     "approved_species": [
       "dipplin",
       "sinistcha",
@@ -1513,11 +1512,10 @@
       "ogerpon",
       "gouging-fire",
       "raging-bolt",
-      "iron-crown"
-    ],
-    "pending_species": [
+      "iron-crown",
       "iron-boulder"
     ],
+    "pending_species": [],
     "focused_pending_review": {
       "url": "http://127.0.0.1:8786/",
       "page_sha256": "b468026c3fbf7d5594caa53e7d8aa998d5875f74cd8e3bc9d05ae9a4664947c4",
@@ -1534,7 +1532,8 @@
       "manifest_sha256": "d3e70340d6a271b6f62b7038acb6d4cfed32ddf4aa61de9088ce033aa8a84ed7",
       "godot_report_sha256": "8d41a9103e816242b1ec99d61f0c970d8108e2d035695ec366b74f1de3cc130d",
       "pose_timing_errors": 0,
-      "http_checked_files": 14
+      "http_checked_files": 14,
+      "user_approved": true
     }
   },
   "native_detail_review": {

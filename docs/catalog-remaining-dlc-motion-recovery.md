@@ -154,3 +154,15 @@ low front, oblique front and head-bone-centred close-up views at 1024 pixels.
 The camera uses projected bounds; the GLB and original idle pose are unchanged.
 Both variants passed pose/timing checks and all 14 page/manifest/image requests
 returned HTTP 200. Final qualification and runtime approval remain pending.
+
+## Appearance review completed
+
+The user also approved Iron Boulder after inspecting its lower-camera face
+comparison. All **15 normal/shiny pairs are now appearance-approved**. No
+appearance review cases remain in this intake. This records the existing
+reviewed asset hashes; no model, animation, material or review image changed.
+
+Next: create and validate explicit sleep poses, complete standalone SCN
+conversion and battle qualification (including grounding, scale, native
+effect limitations and loading), then build individual bundles. These models
+are not yet runtime-approved or uploaded to R2.
