@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
 
 - De SS Anne-passagiers en hun CC0-licentie worden meegenomen in het gamepakket; de desktop-release controleert de arena en animaties vanuit de geëxporteerde Windows- en Linux-pakketten.
 

@@ -6253,5 +6253,9 @@
   "story.kanto.route_2_oak_assistant.objective": "Capture dez espécies diferentes de Pokémon e volte ao assistente do Professor Carvalho.",
   "story.kanto.route_2_oak_assistant.progress": "Você registrou {caught} de {required} espécies diferentes na Pokédex.",
   "story.kanto.route_2_oak_assistant.reward": "Excelente trabalho! O Professor Carvalho ficará feliz com sua pesquisa. Aqui está o HM Flash.",
-  "story.kanto.route_2_oak_assistant.completed": "Obrigado por ajudar na pesquisa da Pokédex do Professor Carvalho. Use o HM Flash para iluminar cavernas escuras."
+  "story.kanto.route_2_oak_assistant.completed": "Obrigado por ajudar na pesquisa da Pokédex do Professor Carvalho. Use o HM Flash para iluminar cavernas escuras.",
+  "story.kanto.return_to_oak_after_saffron_closed.title": "Um bloqueio em Saffron",
+  "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron está fechada por segurança. Volte ao Professor Oak e peça orientação.",
+  "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "Tente chegar a Saffron pelo portão da Rota 6.",
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Volte para Pallet e peça conselhos ao Professor Oak."
 }

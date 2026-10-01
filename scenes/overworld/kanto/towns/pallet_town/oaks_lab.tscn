@@ -171,6 +171,10 @@ preload_quest_markers = true
 script = ExtResource("16_story_hook")
 interaction_id = "oaks_lab_oak_parcel_request"
 
+[node name="RockTunnelAdviceStoryHook" type="Node" parent="Entities/NPCs/Oak"]
+script = ExtResource("16_story_hook")
+interaction_id = "kanto_oaks_lab_oak_rock_tunnel_advice"
+
 [node name="Gary" parent="Entities/NPCs" unique_id=2130040430 instance=ExtResource("17_gary")]
 position = Vector2(432, 784)
 

@@ -6254,5 +6254,9 @@
   "story.kanto.route_2_oak_assistant.objective": "Vang tien verschillende Pokémon en ga terug naar Oaks assistent.",
   "story.kanto.route_2_oak_assistant.progress": "Je hebt {caught} van de {required} verschillende Pokémon in je Pokédex geregistreerd.",
   "story.kanto.route_2_oak_assistant.reward": "Uitstekend werk! Professor Oak zal blij zijn met je onderzoek. Hier is HM Flash.",
-  "story.kanto.route_2_oak_assistant.completed": "Bedankt dat je Professor Oak hebt geholpen met zijn Pokédexonderzoek. Gebruik HM Flash om donkere grotten te verlichten."
+  "story.kanto.route_2_oak_assistant.completed": "Bedankt dat je Professor Oak hebt geholpen met zijn Pokédexonderzoek. Gebruik HM Flash om donkere grotten te verlichten.",
+  "story.kanto.return_to_oak_after_saffron_closed.title": "Een wegversperring in Saffron",
+  "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron City is uit veiligheid gesloten. Ga terug naar Professor Oak en vraag hem waar je nu heen kunt.",
+  "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "Probeer Saffron City via de poort op Route 6 te bereiken.",
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Ga terug naar Pallet Town en vraag Professor Oak om advies."
 }
