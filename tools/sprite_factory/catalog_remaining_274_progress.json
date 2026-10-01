@@ -2,13 +2,12 @@
   "schema": 1,
   "task": "remaining-274-production",
   "date": "2026-10-01",
-  "existing_approved_base_species": 897,
-  "remaining_base_species": 128,
+  "existing_approved_base_species": 898,
+  "remaining_base_species": 127,
   "runtime_approved": false,
   "counts": {
     "source_or_motion_recovery_pending": 109,
-    "approved_individual_bundle_ready": 146,
-    "battle_approved_bundle_performance_pending": 1,
+    "approved_individual_bundle_ready": 147,
     "normal_candidate_visual_repair_pending": 3,
     "dlc_model_found_native_motion_missing": 15
   },
@@ -318,13 +317,13 @@
     {
       "species": "paras",
       "national_dex": 46,
-      "runtime_approved": false,
-      "status": "battle_approved_bundle_performance_pending",
-      "reason": "Native shader mix is not Principled plus emission",
+      "runtime_approved": true,
+      "status": "approved_individual_bundle_ready",
+      "reason": "Normal/shiny appearance and battle approved; individual bundle install/no-op/restart and warmed-cache performance gates passed",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_material_repairs_review.json",
       "normal_candidate_glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
       "normal_candidate_runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
-      "latest_attention": "Appearance and battle user-approved; individual bundle install/no-op/restart passed; performance measurement pending without competing Godot game",
+      "latest_attention": "Locally admitted; R2 publication and release certification pending",
       "normal_appearance_approved": true,
       "normal_appearance_approval_answer": "paras goed",
       "shiny_appearance_approved": true,
@@ -332,7 +331,8 @@
       "battle_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_paras_battle_candidates.json",
       "battle_approved": true,
       "battle_approval_answer": "battle goed",
-      "battle_qualification": "tools/sprite_factory/catalog_remaining_142_paras_battle_qualification.json"
+      "battle_qualification": "tools/sprite_factory/catalog_remaining_142_paras_battle_qualification.json",
+      "bundle_qualification": "tools/sprite_factory/catalog_remaining_142_paras_bundle_qualification.json"
     },
     {
       "species": "parasect",
@@ -3247,7 +3247,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "Paras battle approved; bundle installed; performance gate pending; three fire reconstructions held",
+  "current_stage": "Paras individual bundle admitted; three fire reconstructions, 109 source/action and 15 DLC motion holds remain",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,
@@ -3289,5 +3289,6 @@
       "seismitoad",
       "trumbeak"
     ]
-  }
+  },
+  "remaining_142_paras_bundle_qualification_sha256": "ee85aff0e6a280bf88d75a3f1ed43180d8ea6da15c8db21ca43ecc7054aa51b7"
 }

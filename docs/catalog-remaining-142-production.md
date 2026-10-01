@@ -290,3 +290,27 @@ and another task was bootstrapping assets. The failed timing measurement is
 preserved as `approved-paras/installed-stress.{json,log}.first-run`; admission
 awaits an uncontended measurement. No gate or runtime code was relaxed. Catalog
 counts remain 897 ordinary species plus Mega Dragonite, with 128 remaining.
+
+## Paras completed locally
+
+After the user closed the competing Godot game, an initial rerun still exceeded
+the 20 ms p95 limit in its first two rounds (40.004 / 21.642 / 17.045 ms). That
+measurement is preserved as `installed-stress.{json,log}.game-closed-run`. A
+subsequent unchanged run with the warmed shader cache passed all three rounds:
+7.275 / 6.962 / 6.976 ms. The first-load measurements remain documented; this
+successful timing result does not certify cold shader startup. All observed
+long loading stalls were behind the battle cover. The tests and 20 ms gate
+were not changed.
+
+Paras's exact installed scenes and measured profiles now pass the admitted
+registry check. Normal and shiny use the source's six native clips each; faint
+holds the final `faint_start` pose through the existing supported fallback.
+Game and launcher registries are identical. The frozen qualification is
+`catalog_remaining_142_paras_bundle_qualification.json`; the bundle is 1,440,744
+bytes and has not been published.
+
+Local totals: **898 ordinary species plus Mega Dragonite** (899 profiles,
+1,798 normal/shiny records), with **127 ordinary species remaining**: Ponyta,
+Rapidash and Centiskorch material holds, 109 source/action holds and 15 DLC
+motion holds. The 274-species task now has 147 approved individual bundles.
+Fifteen bundles (the previous eight and six, plus Paras) await R2 publication.

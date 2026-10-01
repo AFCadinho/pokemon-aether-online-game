@@ -1,0 +1,160 @@
+{
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "paras",
+            "runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "paras@shiny",
+            "runtime_sha256": "cbb85d6541a8aec6f9b6c52aa0f68a303fc001b6b58993b7c6074fcb3a2c0d7c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:paras:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 46,
+        "object_key": "optional-assets/pokemon_3d/paras/base/v1-3bdbc33fb9459d5b33a6ad127c109b1b3a11456e01a3680f151b4fb4f7a72cbb.zip",
+        "sha256": "3bdbc33fb9459d5b33a6ad127c109b1b3a11456e01a3680f151b4fb4f7a72cbb",
+        "size_bytes": 1440744,
+        "species_id": "paras",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "remaining-142-paras-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 1440744,
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/approved-paras/admitted_check.gd": "c29271bd0994fb3918c0f25b4419381d934483f2afc570ff2bc04624beb79e59",
+    ".tmp/remaining-142-production/approved-paras/bundles/asset-index.json": "ca5669eb67be221d9c227b4801a126961e21bce2ea8759824f4bc656ff8029e9",
+    ".tmp/remaining-142-production/approved-paras/install-launcher.log": "65b04795cc973167f25cd0062641c03f17d920ea4366c1918ece64079ca7f742",
+    ".tmp/remaining-142-production/approved-paras/installed-stress.json": "6b52d1dbf5215ea5262683363ce197cc564b037f6657f09b4013af5029029ede",
+    ".tmp/remaining-142-production/approved-paras/installed-stress.log": "09b5705077e5d40a19d9a1c5c91405378f68c1bea0cdfd9edb2f7cbc0492486b",
+    ".tmp/remaining-142-production/approved-paras/installed/installed-catalog.json": "ea6421eed1afe10f113832f6909376957a817370e72fc0d494672df01fd961aa",
+    ".tmp/remaining-142-production/approved-paras/runtime_check.gd": "3a57ed3f086615b2eb139edf25655be9105bdebec75633801628743bee843cf4",
+    "tools/sprite_factory/admit_remaining_142_paras.py": "b0fcf9ef9d4da428d8ae22b7bf45bb72c16725eea80062b0aa34bb1ebc7d00c3",
+    "tools/sprite_factory/catalog_remaining_142_paras_battle_qualification.json": "9f2a90239298b8991d92cb5fef93b5a3a4f6743f0a6686b163e762d0f6129d30",
+    "tools/sprite_factory/catalog_remaining_142_paras_profiles.json": "9ed23beaaf1a3f84846fb0c29f64f4621df3654e654ac4cc10c095bd2000b5a5"
+  },
+  "installed_runtime_check_passed": true,
+  "no_op_restart_check_passed": true,
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release certification and publication"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 1,
+      "frame_max_ms": 405.124,
+      "frame_p95_ms": 7.275,
+      "frame_samples": 82,
+      "load_spans": [
+        {
+          "frame": 7,
+          "ms": 1.238,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7,
+          "ms": 1.335,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9,
+          "ms": 2.101,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 49,
+          "ms": 1.215,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 1,
+      "retained_source_bytes": 1439707,
+      "stalls_over_50ms": [
+        {
+          "context": "load paras",
+          "covered": true,
+          "ms": 405.124
+        }
+      ],
+      "static_bytes": 221370190
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 1,
+      "frame_max_ms": 108.241,
+      "frame_p95_ms": 6.962,
+      "frame_samples": 78,
+      "load_spans": [
+        {
+          "frame": 90,
+          "ms": 1.136,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 90,
+          "ms": 43.814,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 1,
+      "retained_source_bytes": 1439707,
+      "stalls_over_50ms": [
+        {
+          "context": "load paras",
+          "covered": true,
+          "ms": 108.241
+        }
+      ],
+      "static_bytes": 223055478
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 1,
+      "frame_max_ms": 96.455,
+      "frame_p95_ms": 6.976,
+      "frame_samples": 77,
+      "load_spans": [
+        {
+          "frame": 173,
+          "ms": 3.487,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 1,
+      "retained_source_bytes": 1439707,
+      "stalls_over_50ms": [
+        {
+          "context": "load paras",
+          "covered": true,
+          "ms": 96.455
+        }
+      ],
+      "static_bytes": 223071918
+    }
+  ],
+  "schema": 1,
+  "species": [
+    "paras"
+  ]
+}
