@@ -76,7 +76,7 @@ tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_vlm2t")
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(32, 96)
+size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 96)
@@ -118,7 +118,7 @@ tile_set = SubResource("TileSet_e5jyj")
 [node name="FromVermilionNorth" type="Marker2D" parent="Spawns" unique_id=991671955]
 position = Vector2(48, 400)
 
-[node name="FromVermilionSouth" type="Marker2D" parent="Spawns"]
+[node name="FromVermilionSouth" type="Marker2D" parent="Spawns" unique_id=1682656148]
 position = Vector2(48, 944)
 
 [node name="FromRoute12West" type="Marker2D" parent="Spawns" unique_id=805886081]
@@ -141,7 +141,7 @@ transition_facing_direction = "left"
 position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
-[node name="ToVermilionSouth" type="Area2D" parent="Exits"]
+[node name="ToVermilionSouth" type="Area2D" parent="Exits" unique_id=246849371]
 position = Vector2(16, 944)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
@@ -149,8 +149,8 @@ target_spawn_name = "FromRoute11South"
 transition_id = "kanto_route_11__to_vermilion_south"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionSouth"]
-position = Vector2(-16, 0)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionSouth" unique_id=1233225631]
+position = Vector2(-16, 32)
 shape = SubResource("shape_1")
 
 [node name="ToRoute12West" type="Area2D" parent="Exits" unique_id=1886307383]
@@ -183,7 +183,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=296895238]
 
 [node name="YoungsterEddie" parent="Entities/NPCs" unique_id=42975451 instance=ExtResource("4_trainer")]
-position = Vector2(752, 560)
+position = Vector2(656, 720)
 trainer_id = "kanto_route_11_youngster_eddie"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_youngster_eddie"
@@ -193,7 +193,7 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("6_youngster")
 
 [node name="YoungsterDillon" parent="Entities/NPCs" unique_id=84321959 instance=ExtResource("4_trainer")]
-position = Vector2(976, 624)
+position = Vector2(976, 560)
 trainer_id = "kanto_route_11_youngster_dillon"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_youngster_dillon"
@@ -202,7 +202,7 @@ display_name = "Youngster Dillon"
 npc_sprite_frames = ExtResource("6_youngster")
 
 [node name="YoungsterDave" parent="Entities/NPCs" unique_id=1837187355 instance=ExtResource("4_trainer")]
-position = Vector2(1264, 624)
+position = Vector2(1360, 592)
 trainer_id = "kanto_route_11_youngster_dave"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_youngster_dave"
@@ -212,7 +212,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("6_youngster")
 
 [node name="YoungsterYasu" parent="Entities/NPCs" unique_id=466375617 instance=ExtResource("4_trainer")]
-position = Vector2(1168, 944)
+position = Vector2(1008, 976)
 trainer_id = "kanto_route_11_youngster_yasu"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_youngster_yasu"
@@ -222,7 +222,7 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_youngster")
 
 [node name="GamerHugo" parent="Entities/NPCs" unique_id=2142182343 instance=ExtResource("4_trainer")]
-position = Vector2(1552, 720)
+position = Vector2(1584, 752)
 trainer_id = "kanto_route_11_gamer_hugo"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_gamer_hugo"
@@ -232,7 +232,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("6_gentleman")
 
 [node name="GamerJasper" parent="Entities/NPCs" unique_id=1266807346 instance=ExtResource("4_trainer")]
-position = Vector2(1744, 560)
+position = Vector2(1712, 656)
 trainer_id = "kanto_route_11_gamer_jasper"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_gamer_jasper"
@@ -241,7 +241,7 @@ display_name = "Gamer Jasper"
 npc_sprite_frames = ExtResource("6_gentleman")
 
 [node name="GamerDarian" parent="Entities/NPCs" unique_id=584315104 instance=ExtResource("4_trainer")]
-position = Vector2(1968, 720)
+position = Vector2(2128, 752)
 trainer_id = "kanto_route_11_gamer_darian"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_gamer_darian"
@@ -251,7 +251,7 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_gentleman")
 
 [node name="GamerDirk" parent="Entities/NPCs" unique_id=94349319 instance=ExtResource("4_trainer")]
-position = Vector2(1840, 944)
+position = Vector2(1840, 976)
 trainer_id = "kanto_route_11_gamer_dirk"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_gamer_dirk"
@@ -261,7 +261,7 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_gentleman")
 
 [node name="EngineerBraxton" parent="Entities/NPCs" unique_id=1576682322 instance=ExtResource("4_trainer")]
-position = Vector2(1520, 944)
+position = Vector2(1488, 976)
 trainer_id = "kanto_route_11_engineer_braxton"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_engineer_braxton"
@@ -271,7 +271,7 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("6_worker")
 
 [node name="EngineerBernie" parent="Entities/NPCs" unique_id=1162613472 instance=ExtResource("4_trainer")]
-position = Vector2(2192, 784)
+position = Vector2(2288, 944)
 trainer_id = "kanto_route_11_engineer_bernie"
 sight_range_tiles = 3
 npc_id = "kanto_route_11_engineer_bernie"
