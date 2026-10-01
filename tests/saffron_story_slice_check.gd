@@ -1,6 +1,7 @@
 extends SceneTree
 
 const OAK_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
+const LAVENDER_SCENE := "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
 const GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
 const ROUTE_5_GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn"
 const STORY_HOOK_SCRIPT := "res://scripts/world/story/story_hook.gd"
@@ -17,6 +18,7 @@ func _run() -> void:
 	_check_gate()
 	_check_route_5_gate()
 	_check_oak()
+	_check_lavender()
 	quit(1 if failures > 0 else 0)
 
 
@@ -76,6 +78,23 @@ func _check_oak() -> void:
 		if advice_hook != null:
 			_check(advice_hook.get("interaction_id") == "kanto_oaks_lab_oak_rock_tunnel_advice", "Oak advice hook matches the main quest catalog")
 	lab.free()
+
+
+func _check_lavender() -> void:
+	var packed := load(LAVENDER_SCENE) as PackedScene
+	_check(packed != null, "Lavender Town scene loads")
+	if packed == null:
+		return
+	var town := packed.instantiate()
+	var resident := town.get_node_or_null("Entities/NPCs/LavenderResident")
+	var arrival := town.get_node_or_null("StoryTriggers/LavenderArrival")
+	_check(resident != null, "Lavender resident is present")
+	_check(arrival != null, "Lavender arrival warning trigger is present")
+	if arrival != null:
+		_check(arrival.get("required_quest_id") == "travel_to_lavender_town", "arrival warning is tied to the Lavender quest")
+		var hook := arrival.get_node_or_null("StoryHook")
+		_check(hook != null and hook.get("interaction_id") == "kanto_lavender_town_resident_warning", "arrival trigger records the warning interaction")
+	town.free()
 
 
 func _check(condition: bool, label: String) -> void:

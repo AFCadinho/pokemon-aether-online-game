@@ -6257,5 +6257,11 @@
   "story.kanto.return_to_oak_after_saffron_closed.title": "Saffron 的道路封锁",
   "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron 因安全原因暂时封闭。回到真新镇向 Oak 教授询问下一步该怎么做。",
   "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "尝试通过 6 号道路的入口前往 Saffron。",
-  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "返回真新镇，向 Oak 教授寻求建议。"
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "返回真新镇，向 Oak 教授寻求建议。",
+  "story.kanto.travel_to_lavender_town.title": "紫苑镇的警告",
+  "story.kanto.travel_to_lavender_town.summary": "穿过 Rock Tunnel 抵达紫苑镇，了解 Pokémon Tower 发生了什么。",
+  "story.kanto.travel_to_lavender_town.cross_rock_tunnel": "穿过 Rock Tunnel 抵达紫苑镇。",
+  "story.kanto.travel_to_lavender_town.hear_lavender_warning": "听听紫苑镇居民的警告。",
+  "ui.staff.story_checkpoint.rock_tunnel_to_lavender": "岩山隧道 · 抵达紫苑镇",
+  "ui.staff.story_checkpoint.lavender_warning": "紫苑镇 · 听取警告"
 }

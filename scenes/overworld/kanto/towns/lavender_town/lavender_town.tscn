@@ -5,12 +5,19 @@
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_collision"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="6_dialogue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="7_resident"]
+[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="8_story_trigger"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="9_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_west"]
 size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="shape_arrival_story"]
+size = Vector2(176, 128)
 
 [node name="LavenderTown" type="Node2D"]
 script = ExtResource("2_metadata")
@@ -108,7 +115,32 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities"]
 
+[node name="LavenderResident" parent="Entities/NPCs" instance=ExtResource("6_dialogue")]
+position = Vector2(848, 144)
+npc_id = "kanto_lavender_town_resident"
+npc_definition_id = "trainer_class_elder_f"
+display_name = "Lavender Resident"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("7_resident")
+
 [node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="StoryTriggers" type="Node2D" parent="."]
+
+[node name="LavenderArrival" type="Area2D" parent="StoryTriggers"]
+position = Vector2(720, 80)
+script = ExtResource("8_story_trigger")
+story_host_path = NodePath("../../Entities/NPCs/LavenderResident")
+required_quest_id = "travel_to_lavender_town"
+required_step_id = "hear_lavender_warning"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/LavenderArrival"]
+shape = SubResource("shape_arrival_story")
+
+[node name="StoryHook" type="Node" parent="StoryTriggers/LavenderArrival"]
+script = ExtResource("9_story_hook")
+interaction_id = "kanto_lavender_town_resident_warning"
+entity_id = "kanto_lavender_town_resident"
 
 [node name="Tiles" type="Node2D" parent="."]
 visible = false

@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Na Oaks advies over Rock Tunnel activeert de hoofdquest de route naar Lavender Town. Daar waarschuwt een inwoner automatisch voor Pokémon Tower, Team Rocket en de vermiste Mr. Fuji.
+
 - De bewakers bij beide Saffron-poorten tonen zelf de lockdown-dialoog wanneer servertoegang de doorgang blokkeert.
 
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
