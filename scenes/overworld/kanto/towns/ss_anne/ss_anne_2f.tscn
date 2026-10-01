@@ -12,6 +12,11 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="blue"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="population_poke_fan_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="population_gentleman"]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -139,6 +144,34 @@ interaction_id = "kanto_ss_anne_meet_captain"
 [node name="ReturnTeaStoryHook" type="Node" parent="Entities/NPCs/Captain"]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_return_tea"
+
+[node name="PopulationCollectorNoor" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(1040, 400)
+npc_id = "kanto_ss_anne_collector_noor"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Collector Noor"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_poke_fan_f")
+
+[node name="PopulationStewardOscar" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(1168, 1232)
+npc_id = "kanto_ss_anne_steward_oscar"
+npc_definition_id = "trainer_class_elder"
+portrait_id = "showdown_gentleman_gen6"
+display_name = "Steward Oscar"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("population_gentleman")
+
+[node name="PopulationGentlemanArthur" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(272, 400)
+npc_id = "kanto_ss_anne_gentleman_arthur"
+npc_definition_id = "trainer_class_elder"
+portrait_id = "showdown_gentleman_gen6"
+display_name = "Gentleman Arthur"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("population_gentleman")
+trainer_id = "kanto_ss_anne_gentleman_arthur"
+sight_range_tiles = 0
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

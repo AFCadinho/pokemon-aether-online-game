@@ -10,6 +10,10 @@
 [ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="population_picnicker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="population_sailor"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
 
@@ -74,6 +78,25 @@ npc_sprite_frames = ExtResource("gentleman")
 [node name="ReportStoryHook" type="Node" parent="Entities/NPCs/OfficerMara"]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_deliver_report"
+
+[node name="PopulationTouristSana" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(336, 432)
+npc_id = "kanto_ss_anne_tourist_sana"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Tourist Sana"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("population_picnicker")
+
+[node name="PopulationSailorTrevor" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(688, 496)
+npc_id = "kanto_ss_anne_sailor_trevor"
+npc_definition_id = ""
+portrait_id = "showdown_sailor_gen6"
+display_name = "Sailor Trevor"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("population_sailor")
+trainer_id = "kanto_ss_anne_sailor_trevor"
+sight_range_tiles = 0
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 
