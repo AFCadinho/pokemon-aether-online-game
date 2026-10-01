@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rose en de speler draaien vóór de Titanic-pose weer naar de zee.
+
 - Rose op de S.S. Anne gebruikt nu haar Beauty-portret en eigen dialoog; haar Titanic-posequest geeft eenmalig een PP Up.
 
 - De remastered soundtracks spelen nu in Vermilion City, de S.S. Anne en op Routes 11–15.
