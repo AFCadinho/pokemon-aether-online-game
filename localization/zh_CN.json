@@ -6250,5 +6250,9 @@
   "story.kanto.route_2_oak_assistant.objective": "捕捉十种不同的宝可梦，然后回去找大木博士的助手。",
   "story.kanto.route_2_oak_assistant.progress": "你已在图鉴中登记了 {required} 种不同宝可梦中的 {caught} 种。",
   "story.kanto.route_2_oak_assistant.reward": "做得好！大木博士会为你的研究成果感到高兴。收下这个 HM 闪光。",
-  "story.kanto.route_2_oak_assistant.completed": "再次感谢你帮助大木博士进行图鉴研究。使用 HM 闪光照亮黑暗的洞穴。"
+  "story.kanto.route_2_oak_assistant.completed": "再次感谢你帮助大木博士进行图鉴研究。使用 HM 闪光照亮黑暗的洞穴。",
+  "story.kanto.return_to_oak_after_saffron_closed.title": "Saffron 的道路封锁",
+  "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron 因安全原因暂时封闭。回到真新镇向 Oak 教授询问下一步该怎么做。",
+  "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "尝试通过 6 号道路的入口前往 Saffron。",
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "返回真新镇，向 Oak 教授寻求建议。"
 }

@@ -36,6 +36,35 @@ func _process(_delta: float) -> void:
 
 
 func _run_story_or_legacy_interaction(body: Node2D, trigger: String) -> Dictionary:
+	if StoryService.is_requirement_met(
+		"return_to_oak_after_saffron_closed",
+		"ask_oak_for_advice",
+		"active"
+	):
+		var advice_hook := get_node_or_null("RockTunnelAdviceStoryHook")
+		if advice_hook == null or not advice_hook.has_method("try_handle_interaction"):
+			await GameErrorDialogService.show_report_to_staff_message()
+			return {
+				"success": false,
+				"handled": true,
+				"status": "missing_rock_tunnel_advice_hook",
+			}
+		var advice_result: Variant = await advice_hook.call(
+			"try_handle_interaction",
+			self,
+			body,
+			trigger
+		)
+		if advice_result is Dictionary:
+			var result := advice_result as Dictionary
+			if bool(result.get("success", false)) and bool(result.get("handled", false)):
+				await _after_story_interaction(body, result)
+			return result
+		return {
+			"success": false,
+			"handled": true,
+			"status": "invalid_story_hook_result",
+		}
 	if _is_gary_starter_sequence_active():
 		return {
 			"success": true,

@@ -180,6 +180,7 @@ func _verify_integration_contract() -> void:
 	var overlay := _source("res://scripts/ui/ui_overlay.gd")
 	var oak := _source("res://scripts/world/kanto/towns/pallet_town/oak.gd")
 	var oak_lab := _source("res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn")
+	var saffron_gate := _source("res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn")
 	var inventory := _source("res://scripts/services/inventory_service.gd")
 	var ev_training := _source("res://scripts/services/ev_training_service.gd")
 	var thieving := _source("res://scripts/services/thieving_service.gd")
@@ -220,6 +221,18 @@ func _verify_integration_contract() -> void:
 		oak_lab.contains('interaction_id = "oaks_lab_oak_parcel_request"')
 		and oak_lab.contains("preload_quest_markers = true"),
 		"Oak starts the parcel quest through a separate marked interaction"
+	)
+	_expect(
+		oak_lab.contains('interaction_id = "kanto_oaks_lab_oak_rock_tunnel_advice"')
+		and oak.contains('"ask_oak_for_advice"')
+		and oak.contains("RockTunnelAdviceStoryHook"),
+		"Oak handles the post-Saffron advice quest without replacing the parcel interaction"
+	)
+	_expect(
+		saffron_gate.contains('interaction_id = "kanto_route_6_saffron_gate_closed"')
+		and saffron_gate.contains("preload_quest_markers = true")
+		and saffron_gate.contains('blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"'),
+		"Route 6 Saffron guard marks and records the lockdown interaction"
 	)
 	_expect(
 		oak.contains("questTurnInId")

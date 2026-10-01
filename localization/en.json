@@ -6254,5 +6254,9 @@
   "story.kanto.route_2_oak_assistant.objective": "Catch ten different Pokémon and return to Oak’s assistant.",
   "story.kanto.route_2_oak_assistant.progress": "You have registered {caught} of {required} different Pokémon in your Pokédex.",
   "story.kanto.route_2_oak_assistant.reward": "Excellent work! Professor Oak will be pleased with your research. Take this HM Flash.",
-  "story.kanto.route_2_oak_assistant.completed": "Thanks again for helping with Professor Oak’s Pokédex research. Use HM Flash to light up dark caves."
+  "story.kanto.route_2_oak_assistant.completed": "Thanks again for helping with Professor Oak’s Pokédex research. Use HM Flash to light up dark caves.",
+  "story.kanto.return_to_oak_after_saffron_closed.title": "A Roadblock in Saffron",
+  "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron City is closed for safety. Return to Professor Oak and ask him where to go next.",
+  "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "Try to reach Saffron City through the Route 6 gate.",
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Return to Pallet Town and ask Professor Oak for advice."
 }

@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
 
 - Drie Ogerpon-maskers en Terapagos Terastal/Stellar zijn lokaal gekwalificeerd voor 3D, normal en shiny, met individuele bundles en vooraf geladen Terapagos-vormwissels. Nieuwe downloads op hetzelfde cataloguspad worden direct beschikbaar.
 
