@@ -134,6 +134,21 @@ func _run() -> void:
 		_check_equal(music_manager.call("get_map_music_path", map), lavender_track,
 			"%s resolves Lavender Town music through the runtime manager" % scene_path)
 		map.free()
+	for cave_name: String in ["diglett_cave", "rock_tunnel"]:
+		var expected_track := (
+			"res://assets/music/overworld/kanto/routes/viridian_forest.ogg"
+			if cave_name == "diglett_cave" else MT_MOON_TRACK
+		)
+		var cave_directory := "res://scenes/overworld/kanto/caves/" + cave_name
+		for scene_file: String in DirAccess.get_files_at(cave_directory):
+			if not scene_file.ends_with(".tscn"):
+				continue
+			var map := (load(cave_directory.path_join(scene_file)) as PackedScene).instantiate()
+			_check_equal(music_manager.call("get_map_music_path", map), expected_track,
+				"%s/%s selects the requested cave theme at runtime" % [cave_name, scene_file])
+			map.free()
+		var stream := load(expected_track) as AudioStream
+		_check(stream != null and stream.get_length() > 0, "%s theme decodes successfully" % cave_name)
 	music_manager.free()
 	inherited_interior.free()
 	quit(1 if failed else 0)
