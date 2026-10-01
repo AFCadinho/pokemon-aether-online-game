@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bij alle SS Anne-trappen kijkt de speler bij aankomst recht vooruit naar rechts, door de open zijde van de trap.
+
 - Lavender Town heeft voorbereidende exits en aankomstspawns voor Route 8 in het westen en Route 12 in het zuiden; de bestaande noordelijke verbinding met Route 10 blijft actief.
 
 - Route 10 en Lavender Town zijn nu direct in beide richtingen verbonden; Lavender Town North is verwijderd uit de wereld en staff-teleportcatalogus.
