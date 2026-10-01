@@ -155,3 +155,18 @@ remain pending user review; all six still require shiny and battle qualification
 parity; the batch checkpoint records four approved normal appearances.
 
 [Eye close-ups](http://127.0.0.1:8782/eyes-lugia-swanna-v1/index.html)
+
+## Six normals approved; shiny review prepared
+
+The user approved the corrected Lugia and Swanna eyes (“ja, ze zijn goed”).
+All six normal appearances are now approved. Official normal/rare tables and
+source-matching image pixels supplied six shiny variants. Vibrava and Flygon
+require the measured two authored image bindings to be replaced together; each
+binding still passes exact normal-pixel validation. Ho-Oh’s five unrepresented
+iridescence/emission colours remain an explicit visual-review limitation.
+All six shiny GLBs passed exact geometry/skin/eight-clip parity; six standalone
+shiny SCNs and 72 pair captures passed without technical errors. Cropped review
+images enlarge the models for inspection. Shiny and battle approval remain
+pending; catalog counts and runtime admission are unchanged.
+
+[Six normal/shiny pairs](http://127.0.0.1:8782/appearance-six-pairs-v1/index.html)

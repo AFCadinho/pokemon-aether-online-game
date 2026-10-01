@@ -241,16 +241,18 @@ def bake(job):
                 raise ValueError('Rare texture source changed')
             matches = [n for n in tree.nodes if n.type == 'TEX_IMAGE' and n.image
                        and n.image.name.split('.png')[0] == normal.stem]
-            if len(matches) != 1:
+            expected_bindings = change.get('expected_authored_bindings', 1)
+            if not isinstance(expected_bindings, int) or expected_bindings < 1 or len(matches) != expected_bindings:
                 raise ValueError('Rare texture lacks a unique authored binding')
-            old = matches[0].image
-            check = bpy.data.images.load(str(normal), check_existing=False)
-            check.colorspace_settings.name = old.colorspace_settings.name
-            if list(check.size) != list(old.size) or any(abs(a-b) > 1e-5 for a,b in zip(check.pixels[:],old.pixels[:])):
-                raise ValueError('Rare texture normal pixels differ from source')
-            image = bpy.data.images.load(str(rare), check_existing=False)
-            image.colorspace_settings.name = old.colorspace_settings.name
-            matches[0].image = image
+            for match in matches:
+                old = match.image
+                check = bpy.data.images.load(str(normal), check_existing=False)
+                check.colorspace_settings.name = old.colorspace_settings.name
+                if list(check.size) != list(old.size) or any(abs(a-b) > 1e-5 for a,b in zip(check.pixels[:],old.pixels[:])):
+                    raise ValueError('Rare texture normal pixels differ from source')
+                image = bpy.data.images.load(str(rare), check_existing=False)
+                image.colorspace_settings.name = old.colorspace_settings.name
+                match.image = image
         replace_uv(tree)
         outputs = [n for n in tree.nodes if n.type == 'OUTPUT_MATERIAL' and n.is_active_output]
         if len(outputs) != 1 or len(outputs[0].inputs['Surface'].links) != 1:
