@@ -43,6 +43,12 @@ func _run() -> void:
 		world.add_child(arena)
 		assert(arena.has_node("ShipSuperstructure/ShipName"))
 		assert(arena.has_node("Ocean") and arena.has_node("OutdoorLighting"))
+		var audience := arena.get_node("DeckAudience")
+		assert(audience.get_child_count() == 6)
+		for spectator in audience.get_children():
+			var before: float = spectator.left_arm.rotation.z
+			spectator._process(0.5)
+			assert(not is_equal_approx(spectator.left_arm.rotation.z, before), "Spectators cheer")
 		var meshes: Array[MeshInstance3D] = []
 		_collect(arena, meshes)
 		assert(meshes.size() < 300)

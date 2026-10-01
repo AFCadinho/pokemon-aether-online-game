@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De SS Anne-battlearena heeft een kleine groep van zes juichende passagiers en matrozen op het achterdek.
+
 - De Route 10-visual is opnieuw geïmporteerd uit de bijgewerkte artist-TMX.
 
 - De S.S. Anne-captain gebruikt het Mr. Briney-zeemansportret; Gary verdwijnt na zijn nederlaag zodra SS Anne 2F opnieuw wordt geladen.
