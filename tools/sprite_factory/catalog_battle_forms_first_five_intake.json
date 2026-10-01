@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "visual_approved": false,
+  "creator": "Zyphex Skybreaker",
+  "attribution_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3428100851",
+  "source_root": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump",
+  "entries": [
+    {
+      "species": "ogerpon-wellspring",
+      "identity": "pm1120_12_00",
+      "national_dex": 1017,
+      "model": "pm1120/pm1120_12_00/pm1120_12_00.trmdl",
+      "motion_url": "https://steamusercontent-a.akamaihd.net/ugc/16140667682107026708/124A0B9E470EC28F953B979B086023BBEDF28DAF/",
+      "motion_name": "Ogerpon (Wellspring Mask)"
+    },
+    {
+      "species": "ogerpon-hearthflame",
+      "identity": "pm1120_13_00",
+      "national_dex": 1017,
+      "model": "pm1120/pm1120_13_00/pm1120_13_00.trmdl",
+      "motion_url": "https://steamusercontent-a.akamaihd.net/ugc/16509754874099263344/454E435F30C2156AE6CE0975730F5642D07117CD/",
+      "motion_name": "Ogerpon (Hearthflame Mask)"
+    },
+    {
+      "species": "ogerpon-cornerstone",
+      "identity": "pm1120_14_00",
+      "national_dex": 1017,
+      "model": "pm1120/pm1120_14_00/pm1120_14_00.trmdl",
+      "motion_url": "https://steamusercontent-a.akamaihd.net/ugc/17154947651767469037/31D061A357A9A28A2D2742B18137FD0BABDCECBF/",
+      "motion_name": "Ogerpon (Cornerstone Mask)"
+    },
+    {
+      "species": "terapagos-terastal",
+      "identity": "pm1130_12_00",
+      "national_dex": 1024,
+      "model": "pm1130/pm1130_12_00/pm1130_12_00.trmdl",
+      "motion_url": "https://steamusercontent-a.akamaihd.net/ugc/10197374677212516510/73D873100248B7C75E2263D629A0FD4391286729/",
+      "motion_name": "Terapagos (Terastall)"
+    },
+    {
+      "species": "terapagos-stellar",
+      "identity": "pm1130_13_00",
+      "national_dex": 1024,
+      "model": "pm1130/pm1130_13_00/pm1130_13_00.trmdl",
+      "motion_url": "https://steamusercontent-a.akamaihd.net/ugc/15939998320060488447/48D1B9E9E3AC2AED389DD0027C7D36BD6CB74EB9/",
+      "motion_name": "Terapagos (Stellar)"
+    }
+  ]
+}

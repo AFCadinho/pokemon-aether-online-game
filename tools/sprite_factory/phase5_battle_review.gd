@@ -126,7 +126,7 @@ func _validate_motion(entry: Dictionary, model: Node3D, player: AnimationPlayer,
 func _shots(entry: Dictionary, model: Node3D, player: AnimationPlayer, measured: Dictionary,
 		control: Node3D, control_player: AnimationPlayer, control_measure: Dictionary) -> Array:
 	var result := []
-	var poses := [["idle", 0.0], ["special_attack", 0.5], ["sleep", 0.5], ["faint_start", 1.0]]
+	var poses: Array = entry.get("battle_review_poses", [["idle", 0.0], ["special_attack", 0.5], ["sleep", 0.5], ["faint_start", 1.0]])
 	for arena in ["classic", "stadium"]:
 		camera.position = framing.camera_home(arena)
 		camera.look_at(framing.camera_target(arena))
