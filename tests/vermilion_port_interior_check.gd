@@ -45,7 +45,7 @@ func _run() -> void:
 		if target_collision != null:
 			_check(target_collision.get_cell_source_id(target_collision.local_to_map(spawn.position)) == -1, "return arrival has no collision")
 	var city_collision := city.get_node("Tiles/Collision") as TileMapLayer
-	for entry in [["ToPortNorth", Vector2(1040, 1872), "down"], ["ToPortSouth", Vector2(1040, 2128), "up"], ["ToDocks", Vector2(1040, 2224), "down"]]:
+	for entry in [["ToPortNorth", Vector2(1040, 1904), "down"], ["ToPortSouth", Vector2(1040, 2128), "up"], ["ToDocks", Vector2(1040, 2224), "down"]]:
 		var city_exit: Node = city.get_node("Exits/" + entry[0])
 		_check(city_exit.contains_world_position(entry[1]), "entrance covers " + str(entry[0]))
 		_check(city_collision.get_cell_source_id(city_collision.local_to_map(entry[1])) == -1, "entrance is walkable " + str(entry[0]))

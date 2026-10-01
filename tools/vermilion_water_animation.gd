@@ -1,25 +1,31 @@
 extends "res://tools/map_animation_rollout.gd"
 
-# Rebuild only Vermilion's native sea-water frames, preserving the imported layout.
+# Rebuild Vermilion city or port sea-water frames, preserving the imported layout.
 # Same 16 frames / 160 ms / 2 px horizontal motion as the approved Cerulean water.
-const WATER_REPORT := "res://tools/vermilion_water_animation_report.json"
-const MAP_ID := "vermilion_city"
+var water_report := "res://tools/vermilion_water_animation_report.json"
+var map_id := "vermilion_city"
+var gameplay_scene := "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
 
 func _run() -> void:
 	if not "--apply" in OS.get_cmdline_user_args():
 		_fail("Use --apply to rebuild Vermilion water animations.")
 		return
+	if "--port" in OS.get_cmdline_user_args():
+		map_id = "vermilion_port_exterior"
+		water_report = "res://tools/vermilion_port_water_animation_report.json"
+		gameplay_scene = "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn"
+	var catalog_changed := false
 	var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CATALOG))
 	for entry: Dictionary in data.tiles:
 		if entry.group == "water":
 			catalog[entry.source_pixel_sha256] = entry
-	var path := _path(MAP_ID)
+	var path := _path(map_id)
 	var root := (ResourceLoader.load(path,"PackedScene",ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene).instantiate()
 	var before := Fingerprint.new().capture(root)
 	var prior_animations := _animation_signatures(root)
 	var ground := root.get_node("Ground") as TileMapLayer
 	# The gameplay scene's reference cell identifies this map's open-water artwork.
-	var gameplay := (ResourceLoader.load("res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn","PackedScene",ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene).instantiate()
+	var gameplay := (ResourceLoader.load(gameplay_scene,"PackedScene",ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene).instantiate()
 	var reference: Vector2i = gameplay.water_reference_tile
 	gameplay.free()
 	var source := ground.tile_set.get_source(ground.get_cell_source_id(reference)) as TileSetAtlasSource
@@ -65,6 +71,7 @@ func _run() -> void:
 				"durations_ms":[160,160,160,160,160,160,160,160,160,160,160,160,160,160,160,160],"frame_hashes":hashes}
 			if not catalog.has(hash):
 				assert(strip.save_png(CATALOG.get_base_dir().path_join(entry.image)) == OK)
+				catalog_changed = true
 				data.tiles.append(entry)
 				catalog[hash] = entry
 	var plan := _plan(root)
@@ -74,7 +81,7 @@ func _run() -> void:
 		quit()
 		return
 	scratch = "user://vermilion_water_%d" % OS.get_process_id()
-	var temp := scratch.path_join(MAP_ID+"/"+MAP_ID+".visual.tscn")
+	var temp := scratch.path_join(map_id+"/"+map_id+".visual.tscn")
 	var result := _save(root,temp,plan.animations)
 	root.free()
 	if not result.success or _verify(temp,before).is_empty():
@@ -95,11 +102,12 @@ func _run() -> void:
 	var after := _verify(path,before)
 	if after.is_empty():
 		return
-	FileAccess.open(CATALOG,FileAccess.WRITE).store_string(JSON.stringify(data,"  ",false)+"\n")
-	_write(WATER_REPORT,{"version":1,"map":MAP_ID,"before":before,"after":after,
+	if catalog_changed:
+		FileAccess.open(CATALOG,FileAccess.WRITE).store_string(JSON.stringify(data,"  ",false)+"\n")
+	_write(water_report,{"version":1,"map":map_id,"before":before,"after":after,
 		"animated_cells":plan.cells,"animated_types":plan.types,"preserved_animations":prior_animations})
 	_cleanup(scratch)
-	print("VERMILION_WATER PASS ",JSON.stringify({"cells":plan.cells,"types":plan.types}))
+	print("VERMILION_WATER PASS ",JSON.stringify({"map":map_id,"cells":plan.cells,"types":plan.types}))
 	quit()
 
 static func _animation_signatures(root: Node) -> Dictionary:
