@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_vfovf"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_x3286"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_q2i8i"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="16_by6y8"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="20_6abko"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_awqls"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="life_ace_trainer_f"]
@@ -613,6 +615,10 @@ display_name = "Picnicker June"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("life_picnicker")
 
+[node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1599793774 instance=ExtResource("16_by6y8")]
+position = Vector2(784, 144)
+local_destination_id = ""
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=649267465]
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=1375550960 instance=ExtResource("life_pokemon")]
@@ -696,6 +702,9 @@ position = Vector2(1776, 432)
 [node name="GymCutTree" parent="Entities/Interactables" unique_id=683514050 instance=ExtResource("ss_anne_gym_tree")]
 position = Vector2(688, 1264)
 interactable_id = "kanto_vermilion_gym_cut_tree"
+
+[node name="AetherBeacon" parent="Entities/Interactables" unique_id=1244201938 instance=ExtResource("20_6abko")]
+position = Vector2(848, 144)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false

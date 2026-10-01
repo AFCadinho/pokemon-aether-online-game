@@ -1,31 +1,28 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bwjfoqisbmtk2"]
 
+[ext_resource type="PackedScene" uid="uid://b0kbfjahj50l" path="res://scenes/overworld/kanto/towns/vermilion_city/house_template.tscn" id="6_wayf7"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="frames_poke_fan_f"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/vermilion_house_template.tscn" id="template"]
 
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="frames_poke_fan_f"]
-
-[node name="House2" instance=ExtResource("template")]
+[node name="House2" unique_id=702453506 instance=ExtResource("template")]
 map_id = "kanto_vermilion_city_house_2"
 map_display_name = "Vermilion City House 2"
 location_id = "kanto.vermilion_city.house_2"
 location_name = "Vermilion City House 2"
 
-[node name="ToOutside" parent="Exits" index="0"]
-target_spawn_name = "FromHouse2"
-transition_id = "kanto_vermilion_city_house_2__to_outside"
+[node name="HouseTemplate" parent="." index="0" unique_id=1250997727 instance=ExtResource("6_wayf7")]
 
-[node name="WorkerNiels" parent="Entities/NPCs" index="0" instance=ExtResource("dialogue")]
+[node name="WorkerNiels" parent="Entities/NPCs" index="0" unique_id=780351839 instance=ExtResource("dialogue")]
 position = Vector2(304, 336)
 npc_id = "kanto_vermilion_city_house_2_worker_niels"
 npc_definition_id = "trainer_class_worker"
 display_name = "Harbor Worker Niels"
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("frames_worker")
 
-[node name="ResidentAda" parent="Entities/NPCs" index="1" instance=ExtResource("dialogue")]
+[node name="ResidentAda" parent="Entities/NPCs" index="1" unique_id=110407386 instance=ExtResource("dialogue")]
 position = Vector2(432, 400)
 npc_id = "kanto_vermilion_city_house_2_resident_ada"
 npc_definition_id = "trainer_class_poke_fan_f"
@@ -33,7 +30,7 @@ display_name = "Resident Ada"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("frames_poke_fan_f")
 
-[node name="Krabby" parent="Entities/Pokemon" index="0" instance=ExtResource("pokemon")]
+[node name="Krabby" parent="Entities/Pokemon" index="0" unique_id=1816981345 instance=ExtResource("pokemon")]
 position = Vector2(176, 336)
 overworld_pokemon_id = "kanto_vermilion_city_house_2_krabby_1"
 species_id = "krabby"
@@ -44,3 +41,7 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 movement_speed_pixels = 32.0
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_spawn_name = "FromHouse2"
+transition_id = "kanto_vermilion_city_house_2__to_outside"
