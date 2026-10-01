@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- De Vermilion City-visual is opnieuw geïmporteerd vanuit de bijgewerkte Tiled-bron.
+
 - Lavender Town heeft nu drie bewoners, twee zichtbare Pokémon en een Pokémon Center met Nurse Joy, een bezoeker, een Cubone en werkende in- en uitgang.
 
 - Na Oaks advies over Rock Tunnel activeert de hoofdquest de route naar Lavender Town. Daar waarschuwt een inwoner automatisch voor Pokémon Tower, Team Rocket en de vermiste Mr. Fuji.
