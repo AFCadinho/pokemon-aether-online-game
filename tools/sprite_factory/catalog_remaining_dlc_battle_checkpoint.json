@@ -1,0 +1,2896 @@
+{
+  "schema": 1,
+  "scope": "standalone authored rest and native-source flattened motion; two battle cameras and sides; floor/HUD proxy checks",
+  "species": 15,
+  "variants": 30,
+  "runtime_approved": false,
+  "user_sleep_battle_approved": false,
+  "native_sleep": false,
+  "standalone_pose_timing_errors": 0,
+  "exact_geometry_motion_variant_pairs": 15,
+  "exact_reproduction_variants": 30,
+  "battle_measurement_hz": [
+    60,
+    120
+  ],
+  "battle_failures": [],
+  "floor_requirement": 0.025,
+  "minimum_floor_clearance": 0.0347459614276886,
+  "battle_shots": 480,
+  "out_of_camera": 0,
+  "hud_proxy_overlaps": 0,
+  "review_url": "http://127.0.0.1:8787/",
+  "http_200_files": 1082,
+  "evidence_sha256": {
+    ".tmp/remaining-dlc-15-v1/sleep-flat-v4/stage.json": "40f866fbf3f7360a6fc698bbba9a5feea5bd8cb7ae1775e247aae619cd7a9e27",
+    ".tmp/remaining-dlc-15-v1/runtime-flat-v1/report.json": "2edb45b6373d9cf6f32039668d523f85a858b9bf96f07310106fb546ddb672d0",
+    ".tmp/remaining-dlc-15-v1/runtime-flat-v2/report.json": "846380a69b03cc644832f0de6c9b5ca0155a6de5b2ed1ab2cb8a1d07b078229c",
+    ".tmp/remaining-dlc-15-v1/flat-rest-parity-v4.json": "9643a83f82c0b3b14cd2037145cff2b1e4ac1d76f9c4b2b0409f373f2ffd2161",
+    ".tmp/remaining-dlc-15-v1/sleep-flat-captures-v1/godot-review.json": "e5abd347faf1d6d381ae12ca0e4c044660659237ce78904880af92cb8329b84f",
+    ".tmp/remaining-dlc-15-v1/battle-flat-v4/status.json": "26da63d4ef588fe2a36f612ad1b6635f2d0b2b766e49f41e938951d9ab50fb41",
+    ".tmp/remaining-dlc-15-v1/final-battle-review-v1/manifest.json": "8eca9297e1201e52feae0f7ad7d47cbc90bcc5e938292a7e162528d250d87c67",
+    ".tmp/remaining-dlc-15-v1/final-battle-review-v1/index.html": "5a10ca961ba881ff3229a08ed8b4ce9cea898ceb8a408437d86284264c7f1ad6"
+  },
+  "candidates_sha256": "403ed256c13d542bc6194da4b548a9a8579dcb26162a75bf38c39eeb5ce6f953",
+  "records": [
+    {
+      "species": "dipplin",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/dipplin/model.glb",
+      "glb_sha256": "062662863ba609b0554c0f9646357667304ed12aa075c390816150bc0ea88d77",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/dipplin.scn",
+      "runtime_sha256": "a31025e66be5788797cd9078ca9935795797dc0dfd40d7186924844ed830d5df",
+      "animations": {
+        "damage": {
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1121_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 3.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.03417857220224,
+        "yaw_degrees": 0.0,
+        "lift": 0.0474385055340827
+      },
+      "floor_minimum_120hz": 0.0399999991059303,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "73894978c3b77965795c0dffff5422696c630e18b99718691ce6d42d3e8ee67c",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "36d05eb0feea568175a48dd980b2e6e60bbd5ed8f1f795f2773f8007d09cc7de",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "f80b6ddc936c4ccbb3041d66c88b5bbf9e272efc61a6f25c1115a5dd42a3c863",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "062662863ba609b0554c0f9646357667304ed12aa075c390816150bc0ea88d77",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "f80b6ddc936c4ccbb3041d66c88b5bbf9e272efc61a6f25c1115a5dd42a3c863"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "dipplin-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/dipplin-shiny/model.glb",
+      "glb_sha256": "14dac7791b75f58f17d05634817b74d892ac668cb687bb45d73637ea9de8eafc",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/dipplin-shiny.scn",
+      "runtime_sha256": "e12df949eed4b452a543511f96c58fa15a1cc72b6a0aae712cfedfd07a6706eb",
+      "animations": {
+        "damage": {
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1121_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 3.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1121_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.03417857220224,
+        "yaw_degrees": 0.0,
+        "lift": 0.0474385055340827
+      },
+      "floor_minimum_120hz": 0.0399999991059303,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "06d1878f98d72a0f9e67fb9eb9d626bec5a452c1c7f2ca680def9e8c6290e35a",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "36d05eb0feea568175a48dd980b2e6e60bbd5ed8f1f795f2773f8007d09cc7de",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "a8acffe9dc98bd3a84b5544055f339362bbe606f12f72ae12df16b04984fdd9d",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "14dac7791b75f58f17d05634817b74d892ac668cb687bb45d73637ea9de8eafc",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "a8acffe9dc98bd3a84b5544055f339362bbe606f12f72ae12df16b04984fdd9d"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "sinistcha",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/sinistcha/model.glb",
+      "glb_sha256": "89e6fc05995ab20671651d37a1601ef9b8e320d33ff738448c3beaac6832ccf3",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/sinistcha.scn",
+      "runtime_sha256": "7119d78eec92caa54933b09c78fcbd95ccf4376ad40913a219c0410c3fac5f65",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1134_11_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 6.29166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 2.43732612543209,
+        "yaw_degrees": 0.0,
+        "lift": 0.0935842813551426
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "a068b4ce1422d2728aa10f23eafd83d2c25d9f1788fc60da2f63c33d5e219dbc",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "cf9bcfb989bc2982d7e98e5e1d678b61325ffcedd449d4f2656452a67236c10d",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "ed615b54cf1b4e67c5dc5c43fc4bb93db9e41f98bacd8a54187a1b2064f1b7d8",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "89e6fc05995ab20671651d37a1601ef9b8e320d33ff738448c3beaac6832ccf3",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "ed615b54cf1b4e67c5dc5c43fc4bb93db9e41f98bacd8a54187a1b2064f1b7d8"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "sinistcha-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/sinistcha-shiny/model.glb",
+      "glb_sha256": "84e31d2c5a82f18359af00f1ba651b46a3ad1ed2e2a3d444fbd8015f715def5b",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/sinistcha-shiny.scn",
+      "runtime_sha256": "6edeee7a034d6b0f97c81751d1686be010fdb416febbef6aa1507189fbf74640",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1134_11_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 6.29166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1134_11_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 2.43732612543209,
+        "yaw_degrees": 0.0,
+        "lift": 0.0935842813551426
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "f248490e9f162aed2160762491eba6cc8cf2433d8c76ab28d4da114f3461c5ce",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "cf9bcfb989bc2982d7e98e5e1d678b61325ffcedd449d4f2656452a67236c10d",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "c6315d15df7ff95f66de8e2512ac1ccaade804a322a282dda62493c16941d2ea",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "84e31d2c5a82f18359af00f1ba651b46a3ad1ed2e2a3d444fbd8015f715def5b",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "c6315d15df7ff95f66de8e2512ac1ccaade804a322a282dda62493c16941d2ea"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "poltchageist",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/poltchageist/model.glb",
+      "glb_sha256": "6a9836dbf48e15aebd4fde817cd3855bcf25c4af51cd8cf192859f8e86f8973a",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/poltchageist.scn",
+      "runtime_sha256": "b0beb33778c57752a8e65e154da11f188b21c2e41ce64ede27e164cff95bdb8f",
+      "animations": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1133_11_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 3.6901938647338,
+        "yaw_degrees": 0.0,
+        "lift": 0.0952275963127613
+      },
+      "floor_minimum_120hz": 0.034776858985424,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "7ff894bc0564f0f438c0d2e7d9a0a2551fd6e65985b666734313cab7c0a7a0ed",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "f46b2927d44afbdafa13a0e8ca3beb07b2ab7c3f98d39867ccc9a7af1f448838",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "18ae1d1208fa200b2d43bab3d9d3e345fcacb8a092a372dcf4e74d7459702ae9",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "6a9836dbf48e15aebd4fde817cd3855bcf25c4af51cd8cf192859f8e86f8973a",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "18ae1d1208fa200b2d43bab3d9d3e345fcacb8a092a372dcf4e74d7459702ae9"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "poltchageist-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/poltchageist-shiny/model.glb",
+      "glb_sha256": "a3be48850661d1e8b1e71cf79b8f643f8b61870070e3428472f679a338a1a5a4",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/poltchageist-shiny.scn",
+      "runtime_sha256": "3a2bbd72461c2d7e1d621fe859da1356d01e8c36a5bbae3659bfc10aea709b77",
+      "animations": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1133_11_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1133_11_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 3.6901938647338,
+        "yaw_degrees": 0.0,
+        "lift": 0.0952275963127613
+      },
+      "floor_minimum_120hz": 0.034776858985424,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "6ac4d2148c50a88e7ce5a1da8643dbe17ba69f702f107fe7c85bec6b819e8400",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "f46b2927d44afbdafa13a0e8ca3beb07b2ab7c3f98d39867ccc9a7af1f448838",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "82c9241ee36c0719f293e4467de250947b55bb37faeb233a74cbc08401fdb602",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "a3be48850661d1e8b1e71cf79b8f643f8b61870070e3428472f679a338a1a5a4",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "82c9241ee36c0719f293e4467de250947b55bb37faeb233a74cbc08401fdb602"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "okidogi",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/okidogi/model.glb",
+      "glb_sha256": "df59ddd2bd97a6afb82c2b63fa66ce81a7a17a3a91ea43def51ef04aa7690387",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/okidogi.scn",
+      "runtime_sha256": "69b84fa35da6d1de0539cb33ddb8c3b16af772e18b6a1107c0b199b79cd2408f",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1123_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0621114605665207
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_01",
+          "left_lower_eyelid_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_01",
+          "right_lower_eyelid_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "1ff505329ea759590cef88e1198fbbec1bc2c7ba0f7c11f98ad7b8122ce1b5e0",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "51d906dec566d905ae5a60ecfc59892403a1125eb1e6cf9b45a0d1e0050de44d",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "dbe652740e7f7f94e989bc80f5168fbf122c8eef2e58225eeab232e02d17a338",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "df59ddd2bd97a6afb82c2b63fa66ce81a7a17a3a91ea43def51ef04aa7690387",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "dbe652740e7f7f94e989bc80f5168fbf122c8eef2e58225eeab232e02d17a338"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "okidogi-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/okidogi-shiny/model.glb",
+      "glb_sha256": "5889e51cdeaa690a21321b16b171ebb1f0de3ff0d84b5636fcd7cf751931e41a",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/okidogi-shiny.scn",
+      "runtime_sha256": "30e56407df0c7dada64aa05a8c963f73bd7fce2880b2c1114946a5cf5d6bf226",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1123_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1123_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0621114605665207
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_01",
+          "left_lower_eyelid_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_01",
+          "right_lower_eyelid_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "d9ffa45120ba5593dfb7938c68a9c27a3f0d02177d69ffdc75d919e04333554f",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "51d906dec566d905ae5a60ecfc59892403a1125eb1e6cf9b45a0d1e0050de44d",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "febe17f1949855f24a6c4d347f4c4d9e04bba6c6a29f7ca365b35a3332625fe4",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "5889e51cdeaa690a21321b16b171ebb1f0de3ff0d84b5636fcd7cf751931e41a",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "febe17f1949855f24a6c4d347f4c4d9e04bba6c6a29f7ca365b35a3332625fe4"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "munkidori",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/munkidori/model.glb",
+      "glb_sha256": "f336bdcabe447d297d53da31e5e60097aed7ce3e7637b02acc267e941c6eb192",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/munkidori.scn",
+      "runtime_sha256": "2fcc16e047213927ec0dbb988f50d8b2471f7db7812ef12b2d31a6b15432dcbb",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1124_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0476985470950603
+      },
+      "floor_minimum_120hz": 0.0349999703466892,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "left_upper_eyelid_d_01",
+          "left_upper_eyelid_d_02",
+          "left_upper_eyelid_e_01",
+          "left_upper_eyelid_e_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02",
+          "right_upper_eyelid_d_01",
+          "right_upper_eyelid_d_02",
+          "right_upper_eyelid_e_01",
+          "right_upper_eyelid_e_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "aac1a90f4974e9ae7c8e5d5d1743439638d2425d503e46de328a88e2b758fe2f",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "77ec4ffacf1dd96235f1ab91f827cd48176779c5ddeb574eabf5c3beafc63873",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "78cd1695acbea794ec4e939229bf564e87a499489e921c5b53d667d209569b11",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "f336bdcabe447d297d53da31e5e60097aed7ce3e7637b02acc267e941c6eb192",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "78cd1695acbea794ec4e939229bf564e87a499489e921c5b53d667d209569b11"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "munkidori-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/munkidori-shiny/model.glb",
+      "glb_sha256": "bd76494e6dfd3a559f5feab7f224ef95263ed565c698b609030485273761e852",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/munkidori-shiny.scn",
+      "runtime_sha256": "2f3abc95e045c242909131e4c9b173feb330dfd8ee56681fab0e25a6db67ae02",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1124_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1124_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0476985470950603
+      },
+      "floor_minimum_120hz": 0.0349999703466892,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "left_upper_eyelid_d_01",
+          "left_upper_eyelid_d_02",
+          "left_upper_eyelid_e_01",
+          "left_upper_eyelid_e_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02",
+          "right_upper_eyelid_d_01",
+          "right_upper_eyelid_d_02",
+          "right_upper_eyelid_e_01",
+          "right_upper_eyelid_e_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "29412a6708b8c0b2a0d4543756ba4b9b74352a2ec7259a14c5b908110566e7aa",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "77ec4ffacf1dd96235f1ab91f827cd48176779c5ddeb574eabf5c3beafc63873",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "c9a0f76d0fc3a09ce64e06ebe514890b65d95c79c01ace6ea81e371a8960dff6",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "bd76494e6dfd3a559f5feab7f224ef95263ed565c698b609030485273761e852",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "c9a0f76d0fc3a09ce64e06ebe514890b65d95c79c01ace6ea81e371a8960dff6"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "fezandipiti",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/fezandipiti/model.glb",
+      "glb_sha256": "e9bc79e80e3b82c05d6a8c762b9bef08316708167fdc1a7676f60e5eb4bbf2c1",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/fezandipiti.scn",
+      "runtime_sha256": "f96812e5c7dfece5b1a1eb2fd89dfbaa44e56366ad8725a64502edb75b5e9c06",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1125_00_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.877106466293335
+      },
+      "floor_minimum_120hz": 0.0350000262260437,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_upper_eyelid_a",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "left_upper_eyelid_d",
+          "left_upper_eyelid_e",
+          "pm1125_00_00_eyelid_mesh",
+          "pm1125_00_00_eyelid_mesh_lod1",
+          "pm1125_00_00_eyelid_mesh_lod2",
+          "right_upper_eyelid_a",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c",
+          "right_upper_eyelid_d",
+          "right_upper_eyelid_e"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "ee80fcdbd022b05b45da19391ca6c4a677f85713859768f8f362987477e1ffa2",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "0c165812ea6b87dacfb1813223f43d60112adaec6059f74e26a6bcb546999da0",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "6b4792a82b84573c8dfbc7c24ec5976c02b894eda2d35ddcfe7ac71cdf7dd0e2",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "e9bc79e80e3b82c05d6a8c762b9bef08316708167fdc1a7676f60e5eb4bbf2c1",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "6b4792a82b84573c8dfbc7c24ec5976c02b894eda2d35ddcfe7ac71cdf7dd0e2"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "fezandipiti-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/fezandipiti-shiny/model.glb",
+      "glb_sha256": "fbb5509ddd80c651304fc4a6b1860a6729f04a9a9012feaadc6b3edb5763a422",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/fezandipiti-shiny.scn",
+      "runtime_sha256": "a4819ffaa71da2b776189ae38de8393880b3dd01f91e7aa87bb8194c272c27f5",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1125_00_00_20010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1125_00_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.877106466293335
+      },
+      "floor_minimum_120hz": 0.0350000262260437,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_upper_eyelid_a",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "left_upper_eyelid_d",
+          "left_upper_eyelid_e",
+          "pm1125_00_00_eyelid_mesh",
+          "pm1125_00_00_eyelid_mesh_lod1",
+          "pm1125_00_00_eyelid_mesh_lod2",
+          "right_upper_eyelid_a",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c",
+          "right_upper_eyelid_d",
+          "right_upper_eyelid_e"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "2e7a606fb37cfd92fa16efe87c45cbf17f541e1a06081f1140e2129170e189a3",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "0c165812ea6b87dacfb1813223f43d60112adaec6059f74e26a6bcb546999da0",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "a0c712a76e5b746520ceb776ecadc7494d05647b3ccde54c542c26a3b64e8284",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "fbb5509ddd80c651304fc4a6b1860a6729f04a9a9012feaadc6b3edb5763a422",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "a0c712a76e5b746520ceb776ecadc7494d05647b3ccde54c542c26a3b64e8284"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "ogerpon",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/ogerpon/model.glb",
+      "glb_sha256": "8c799faa3b543fe720d53d4ab6654b770dfb30790480da6fbf6abdee7d3133db",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/ogerpon.scn",
+      "runtime_sha256": "e7208d18abee2a047fd3c66adbafba75b31053750ff43bb2c01c654eedbec20d",
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1120_11_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0448487805761397
+      },
+      "floor_minimum_120hz": 0.0350000001490116,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a",
+          "left_lower_eyelid_b",
+          "left_lower_eyelid_c",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "left_upper_eyelid_d",
+          "left_upper_eyelid_e",
+          "right_lower_eyelid_a",
+          "right_lower_eyelid_b",
+          "right_lower_eyelid_c",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c",
+          "right_upper_eyelid_d",
+          "right_upper_eyelid_e"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "16b1019c558fe33f4d51442ed2792492ae05c66f1411cbfcd8e25e67737f9a5a",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "b05877771a8914690a60d6f00bf90bb791581299694c4ae92c487d3f50028852",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "3ea90be2c2e120c4663d560e42d38b38be023d427b7cca36a9e6f26ce8b1976d",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "8c799faa3b543fe720d53d4ab6654b770dfb30790480da6fbf6abdee7d3133db",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "3ea90be2c2e120c4663d560e42d38b38be023d427b7cca36a9e6f26ce8b1976d"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "ogerpon-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/ogerpon-shiny/model.glb",
+      "glb_sha256": "9ed1fc55f5d269db6edd4480e53887ead85fefeebda8b5e707b02637bf88486c",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/ogerpon-shiny.scn",
+      "runtime_sha256": "3f4710460e3db2f3cf89afa5dcdd7377c3760133f3637d0279f4d0805c312643",
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1120_11_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1120_11_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0448487805761397
+      },
+      "floor_minimum_120hz": 0.0350000001490116,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a",
+          "left_lower_eyelid_b",
+          "left_lower_eyelid_c",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "left_upper_eyelid_d",
+          "left_upper_eyelid_e",
+          "right_lower_eyelid_a",
+          "right_lower_eyelid_b",
+          "right_lower_eyelid_c",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c",
+          "right_upper_eyelid_d",
+          "right_upper_eyelid_e"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "dcbc9417ff9100c66e9b32837b740a1a3b9cc5895af187320adc93317a6aea4b",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "b05877771a8914690a60d6f00bf90bb791581299694c4ae92c487d3f50028852",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "a010394337d5125aa2f3fabd5393e04d5b0abfd0dc415185939b28d4592a533f",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "9ed1fc55f5d269db6edd4480e53887ead85fefeebda8b5e707b02637bf88486c",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "a010394337d5125aa2f3fabd5393e04d5b0abfd0dc415185939b28d4592a533f"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "archaludon",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/archaludon/model.glb",
+      "glb_sha256": "34acbc1971020d854fc4f6fa78226a332592a98fff2f509cfe5074e6e8780962",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/archaludon.scn",
+      "runtime_sha256": "847525acfc94cb5ffed1184d2df100592b4a5823d83283bbf834857fc3e86dce",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00500_damage01.001"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1132_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.063592246696353
+      },
+      "floor_minimum_120hz": 0.0349998772144318,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "c5168979d5495b4265734bf6b7fac3f8e27be8c7c255d006fcd4fe222815d40c",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "a4ad3889e8e0f2aff4e023b91ab8ea1046bb099ef2778f79f34c5c28c0c8166f",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "55b4180b72d0dd4a709bcbf924687b43642f482bfd009d668648ac49ea68e3c8",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "34acbc1971020d854fc4f6fa78226a332592a98fff2f509cfe5074e6e8780962",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "55b4180b72d0dd4a709bcbf924687b43642f482bfd009d668648ac49ea68e3c8"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "archaludon-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/archaludon-shiny/model.glb",
+      "glb_sha256": "81f2bc10213d2f3778c4208bd597815bf20a4375de20ed246a2bf3b97c9478a3",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/archaludon-shiny.scn",
+      "runtime_sha256": "46781a4eaa1f4bde818fce73867607f72c243a2a938d2689bd78bb48df830c15",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00500_damage01.001"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1132_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1132_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.063592246696353
+      },
+      "floor_minimum_120hz": 0.0349998772144318,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "1579d4cf2e0d3faed59a4ab496391ed1cd47cf87833c2162fcd6668440c9ac11",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "a4ad3889e8e0f2aff4e023b91ab8ea1046bb099ef2778f79f34c5c28c0c8166f",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "45f5491b85c172d97df8e13de9fca8c25f62246dfc2d2942555ca76400cce01e",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "81f2bc10213d2f3778c4208bd597815bf20a4375de20ed246a2bf3b97c9478a3",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "45f5491b85c172d97df8e13de9fca8c25f62246dfc2d2942555ca76400cce01e"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "hydrapple",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/hydrapple/model.glb",
+      "glb_sha256": "ddd1eddb0593ffc3bf0e489cfd73b2547a8be12491fa9f421eb038d53bcfed13",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/hydrapple.scn",
+      "runtime_sha256": "f965a449e4959965fbf18028fe4b258377c1a072a212f2642163a08af4a6c7d6",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1122_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0571645227819681
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "fb490286722fdb2611213bc987cdfbab9ffd50b058943d66d02dd0437013a7ac",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "ae6995b853914b8a128028c76a148d2463b077b68cd9212adb37badf495d9143",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "7aa9a2670674a0b1d71142ec0819d0bd8d468b0884d47a704a07ae5929add8b1",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "ddd1eddb0593ffc3bf0e489cfd73b2547a8be12491fa9f421eb038d53bcfed13",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "7aa9a2670674a0b1d71142ec0819d0bd8d468b0884d47a704a07ae5929add8b1"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "hydrapple-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/hydrapple-shiny/model.glb",
+      "glb_sha256": "eb28627dd46696c6e31ef821be1113b133d5e37a9785e534d11a4b0f94fd7a31",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/hydrapple-shiny.scn",
+      "runtime_sha256": "7dfba9f1061fb89d77c6dd062fbb9ac3711ed24fec0bf6c70dc1104f7a3ceb63",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1122_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1122_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0571645227819681
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "2d9442bf8b04b7e034af0827e8a1aca63fe028289ab37e382753266fcdcfd668",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "ae6995b853914b8a128028c76a148d2463b077b68cd9212adb37badf495d9143",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "11f683334ae7a000a61191da47049aefc9e83a8a2e8e0617ded8918c594f43a0",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "eb28627dd46696c6e31ef821be1113b133d5e37a9785e534d11a4b0f94fd7a31",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "11f683334ae7a000a61191da47049aefc9e83a8a2e8e0617ded8918c594f43a0"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "gouging-fire",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/gouging-fire/model.glb",
+      "glb_sha256": "8f6ba0b725fb3c459bcd50f17ea2efed5d34b0e3a50c274b3de12f4eb95b0b59",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/gouging-fire.scn",
+      "runtime_sha256": "844d55e20e48bc0e42bf66dc57d81b82c148abb004c265c7839bb3bb55a5b4f4",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1126_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 0.805116952965178,
+        "yaw_degrees": 0.0,
+        "lift": 0.0862702214717865
+      },
+      "floor_minimum_120hz": 0.034999992698431,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a_01",
+          "left_lower_eyelid_a_02",
+          "left_lower_eyelid_a_03",
+          "left_lower_eyelid_b_01",
+          "left_lower_eyelid_b_02",
+          "left_lower_eyelid_c_01",
+          "left_lower_eyelid_c_02",
+          "left_lower_eyelid_d_01",
+          "left_lower_eyelid_d_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_a_01",
+          "right_lower_eyelid_a_02",
+          "right_lower_eyelid_a_03",
+          "right_lower_eyelid_b_01",
+          "right_lower_eyelid_b_02",
+          "right_lower_eyelid_c_01",
+          "right_lower_eyelid_c_02",
+          "right_lower_eyelid_d_01",
+          "right_lower_eyelid_d_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "7fde666d7645b84d2ac72010ac65c9caeea85456a27181774a91a701ed49c7ea",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "a7441af1c88d9aa907ff56f7ae8dc9e3c7a2a725fb8dfd60c00a82475846fa38",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "86856f71ae52a08a8f6e397314fbbc6848f18e33da663ba1e876cd554089b313",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "8f6ba0b725fb3c459bcd50f17ea2efed5d34b0e3a50c274b3de12f4eb95b0b59",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "86856f71ae52a08a8f6e397314fbbc6848f18e33da663ba1e876cd554089b313"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "gouging-fire-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/gouging-fire-shiny/model.glb",
+      "glb_sha256": "d4392b95d1f850be2f0e3481154c9cca656e07148c204dde535714086adc2bac",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/gouging-fire-shiny.scn",
+      "runtime_sha256": "346608c3978c7b6dc6dd05c0f9e1ce78bba6c616a568954d7662c37165700831",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 6.70833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1126_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1126_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 0.805116952965178,
+        "yaw_degrees": 0.0,
+        "lift": 0.0862702214717865
+      },
+      "floor_minimum_120hz": 0.034999992698431,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a_01",
+          "left_lower_eyelid_a_02",
+          "left_lower_eyelid_a_03",
+          "left_lower_eyelid_b_01",
+          "left_lower_eyelid_b_02",
+          "left_lower_eyelid_c_01",
+          "left_lower_eyelid_c_02",
+          "left_lower_eyelid_d_01",
+          "left_lower_eyelid_d_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_a_01",
+          "right_lower_eyelid_a_02",
+          "right_lower_eyelid_a_03",
+          "right_lower_eyelid_b_01",
+          "right_lower_eyelid_b_02",
+          "right_lower_eyelid_c_01",
+          "right_lower_eyelid_c_02",
+          "right_lower_eyelid_d_01",
+          "right_lower_eyelid_d_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "e5944c4eb55c0501f7d723602ac3fc89d7c565b0162bc18de03080be6ceaa040",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "a7441af1c88d9aa907ff56f7ae8dc9e3c7a2a725fb8dfd60c00a82475846fa38",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "3ce9ad6d5afb2f1b971c369130719511252855176e53778423312f8b22638670",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "d4392b95d1f850be2f0e3481154c9cca656e07148c204dde535714086adc2bac",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "3ce9ad6d5afb2f1b971c369130719511252855176e53778423312f8b22638670"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "raging-bolt",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/raging-bolt/model.glb",
+      "glb_sha256": "9c2795117a8c386b0a22ace408bfc425313eb2429020661d173901a6070921a3",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/raging-bolt.scn",
+      "runtime_sha256": "80f85f3b1fd56cf92cf48129f6887fa9fb92612dfcafd962d2c6badbcdb85393",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1127_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 0.587150374074752,
+        "yaw_degrees": 0.0,
+        "lift": 0.0491933095827699
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a",
+          "left_lower_eyelid_b_01",
+          "left_lower_eyelid_b_02",
+          "left_lower_eyelid_c_01",
+          "left_lower_eyelid_c_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_a",
+          "right_lower_eyelid_b_01",
+          "right_lower_eyelid_b_02",
+          "right_lower_eyelid_c_01",
+          "right_lower_eyelid_c_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "79a4f883756486c6cc5f9a9e33f4ec6035b00340ff3ac21603093b37154d7a47",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "6460dcaf982c15c18c4cc62bf6f12b7c4b6206d8b3f6e7f58bc46fddc4ac3b68",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "436507954cea9d7132c6ce151b0bd16882e6e7e7edea5d880a58b3c1b3161739",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "9c2795117a8c386b0a22ace408bfc425313eb2429020661d173901a6070921a3",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "436507954cea9d7132c6ce151b0bd16882e6e7e7edea5d880a58b3c1b3161739"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "raging-bolt-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/raging-bolt-shiny/model.glb",
+      "glb_sha256": "ec324038c5961b6d8ae6673c4cd4eda4fe28f8daa051849bafbeb154ca6c4ae8",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/raging-bolt-shiny.scn",
+      "runtime_sha256": "16954d4d090bb1649a20723e177f1c581cdc723f65063aebad4555229a757e1b",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1127_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1127_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 0.587150374074752,
+        "yaw_degrees": 0.0,
+        "lift": 0.0491933095827699
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a",
+          "left_lower_eyelid_b_01",
+          "left_lower_eyelid_b_02",
+          "left_lower_eyelid_c_01",
+          "left_lower_eyelid_c_02",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_b_01",
+          "left_upper_eyelid_b_02",
+          "left_upper_eyelid_c_01",
+          "left_upper_eyelid_c_02",
+          "right_lower_eyelid_a",
+          "right_lower_eyelid_b_01",
+          "right_lower_eyelid_b_02",
+          "right_lower_eyelid_c_01",
+          "right_lower_eyelid_c_02",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_b_01",
+          "right_upper_eyelid_b_02",
+          "right_upper_eyelid_c_01",
+          "right_upper_eyelid_c_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "e4331dd920baeda421f287bf1d4f2ac68e3e90e7c6c9f0f18bbcf49ec96e797b",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "6460dcaf982c15c18c4cc62bf6f12b7c4b6206d8b3f6e7f58bc46fddc4ac3b68",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "ec7d254aea45967524bda7b900cdf0c73d8f52c23e60d09c29c715caa0f85efd",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "ec324038c5961b6d8ae6673c4cd4eda4fe28f8daa051849bafbeb154ca6c4ae8",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "ec7d254aea45967524bda7b900cdf0c73d8f52c23e60d09c29c715caa0f85efd"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "iron-boulder",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/iron-boulder/model.glb",
+      "glb_sha256": "d409595463cb676f44ec55a221eccb1bb02cf2b272956d23c3e110d5abe9a99d",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/iron-boulder.scn",
+      "runtime_sha256": "2e4e292abda46b361902d2df0b7eddb3e0847cfa13873f7b0dbe6a97ca20a159",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1129_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 6.29166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0536818662285805
+      },
+      "floor_minimum_120hz": 0.0347459614276886,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "bf844fc4534385fac9980138ea398518a75f15d6204f0d9e10cc4b3244d988c5",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "c24544d90191be2aa6843b5e6148dd136f044db1e6ed34ca799bf1fef02250fd",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "171bac5dd8ec89559e758cfb1bfe9a33e95c31144204a446c91fe553e49a9042",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "d409595463cb676f44ec55a221eccb1bb02cf2b272956d23c3e110d5abe9a99d",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "171bac5dd8ec89559e758cfb1bfe9a33e95c31144204a446c91fe553e49a9042"
+      },
+      "sleep_eye_proposals": [
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "l_eye",
+          "node": "pm1129_00_00/Skeleton3D/pm1129_00_00_head_mesh",
+          "original_emission_enabled": true,
+          "surface": 4
+        },
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "r_eye",
+          "node": "pm1129_00_00/Skeleton3D/pm1129_00_00_head_mesh",
+          "original_emission_enabled": true,
+          "surface": 5
+        }
+      ]
+    },
+    {
+      "species": "iron-boulder-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/iron-boulder-shiny/model.glb",
+      "glb_sha256": "a29fdbbea48685caf7b2ecda6482ae2301518ea601e6658dd5cd0f5142296121",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/iron-boulder-shiny.scn",
+      "runtime_sha256": "978c769eb96f9635f099304ce31f4b1ef1d74c8baa33ad73617f3b71158f2c17",
+      "animations": {
+        "damage": {
+          "duration": 2.54166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1129_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 6.29166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1129_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.0536818662285805
+      },
+      "floor_minimum_120hz": 0.0347459614276886,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "78f574553c5dd80168b1a560c17200276bc5f64a5b84ef0294a08c00f7da87e0",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "c24544d90191be2aa6843b5e6148dd136f044db1e6ed34ca799bf1fef02250fd",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "d99a1ea5aee52523a6573d545bd09c6e941de33066c590c5ddfd8c521676f9f4",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "a29fdbbea48685caf7b2ecda6482ae2301518ea601e6658dd5cd0f5142296121",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "d99a1ea5aee52523a6573d545bd09c6e941de33066c590c5ddfd8c521676f9f4"
+      },
+      "sleep_eye_proposals": [
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "l_eye",
+          "node": "pm1129_00_00/Skeleton3D/pm1129_00_00_head_mesh",
+          "original_emission_enabled": true,
+          "surface": 4
+        },
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "r_eye",
+          "node": "pm1129_00_00/Skeleton3D/pm1129_00_00_head_mesh",
+          "original_emission_enabled": true,
+          "surface": 5
+        }
+      ]
+    },
+    {
+      "species": "iron-crown",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/iron-crown/model.glb",
+      "glb_sha256": "68f6d688f00e609719629f4f9b0c54798c5eee24a98932e5b010c214a31d9d2e",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/iron-crown.scn",
+      "runtime_sha256": "927be927fc4c7c0e99b62188b90440c507dfae7833e93151c3cd9dfc4ea74613",
+      "animations": {
+        "damage": {
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1128_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.043230489557609
+      },
+      "floor_minimum_120hz": 0.0350000001490116,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "7c196656ce3fdea0927db881147b973f124f0e5d9ea115d0a390cb19b57d33df",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "e82e6211c187075e94ed78c4a328f146be542c6ab1cab94104265f874258b234",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "3e0b7363ead9d13670e4c8a47376e8f21badb143ff8eb3eadc6018e9852e6714",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "68f6d688f00e609719629f4f9b0c54798c5eee24a98932e5b010c214a31d9d2e",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "3e0b7363ead9d13670e4c8a47376e8f21badb143ff8eb3eadc6018e9852e6714"
+      },
+      "sleep_eye_proposals": [
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "l_eye",
+          "node": "pm1128_00_00/Skeleton3D/pm1128_00_00_body_mesh",
+          "original_emission_enabled": true,
+          "surface": 4
+        },
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "r_eye",
+          "node": "pm1128_00_00/Skeleton3D/pm1128_00_00_body_mesh",
+          "original_emission_enabled": true,
+          "surface": 5
+        }
+      ]
+    },
+    {
+      "species": "iron-crown-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/iron-crown-shiny/model.glb",
+      "glb_sha256": "9b2ee34c22e5475ee0359a8668296555b8772426dbddeecbd43676801465c728",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/iron-crown-shiny.scn",
+      "runtime_sha256": "dc16c198129372473940bd0ad3170bd879b3cee267072da1d5ec38442911e58d",
+      "animations": {
+        "damage": {
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.04166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 7.54166666666667,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1128_00_00_00010_defaultidle01"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 6.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1128_00_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0,
+        "lift": 0.043230489557609
+      },
+      "floor_minimum_120hz": 0.0350000001490116,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "9bb05ec818a4ccf3e04975ea20bb97b422074d958328fefb1b8504f91d5f8d82",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "e82e6211c187075e94ed78c4a328f146be542c6ab1cab94104265f874258b234",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "3bbb2ee71a7b8f3bd6d511b5b082095ff4b1b3bddf005148b4637c1feac72cc7",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "9b2ee34c22e5475ee0359a8668296555b8772426dbddeecbd43676801465c728",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "3bbb2ee71a7b8f3bd6d511b5b082095ff4b1b3bddf005148b4637c1feac72cc7"
+      },
+      "sleep_eye_proposals": [
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "l_eye",
+          "node": "pm1128_00_00/Skeleton3D/pm1128_00_00_body_mesh",
+          "original_emission_enabled": true,
+          "surface": 4
+        },
+        {
+          "closed_sha256": "e04d0437993d5b19d27967a07f4145819b47ff0ae7d9879667883a46619a4c2d",
+          "disable_emission_on_sleep": true,
+          "material": "r_eye",
+          "node": "pm1128_00_00/Skeleton3D/pm1128_00_00_body_mesh",
+          "original_emission_enabled": true,
+          "surface": 5
+        }
+      ]
+    },
+    {
+      "species": "terapagos",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/terapagos/model.glb",
+      "glb_sha256": "23065495756ae177da404ff49ae7059b5527445f56cbfd35bb9338d3e4ecd900",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/terapagos.scn",
+      "runtime_sha256": "580fdad8d7abcb9687afaa53134cd19f1210374543ee7d859c50cabaed7dcc44",
+      "animations": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1130_11_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.72417151967058,
+        "yaw_degrees": 0.0,
+        "lift": 0.0429908015858382
+      },
+      "floor_minimum_120hz": 0.034999992698431,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a_01",
+          "left_lower_eyelid_a_02",
+          "left_lower_eyelid_b",
+          "left_lower_eyelid_c",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_a_03",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "right_lower_eyelid_a_01",
+          "right_lower_eyelid_a_02",
+          "right_lower_eyelid_b",
+          "right_lower_eyelid_c",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_a_03",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "8ab07733bb506aad618152a8afc78829c7c72998b808c5a4b0f8a597a39049f1",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "e8b5826f2827120c0be89dd9b5a8788c6bc8153d22841f0af97906afe4e65d2e",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "1b7dcdffcc55930f4b260b2e375e9369b1af7b41051f061f0727bd55f027f436",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "23065495756ae177da404ff49ae7059b5527445f56cbfd35bb9338d3e4ecd900",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "1b7dcdffcc55930f4b260b2e375e9369b1af7b41051f061f0727bd55f027f436"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "terapagos-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/terapagos-shiny/model.glb",
+      "glb_sha256": "d3147c208d22e745ecb862d6c1890526b5c5ba36d1c8f1cdbd00a6f89b4bbe1e",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/terapagos-shiny.scn",
+      "runtime_sha256": "20c7fe8a51ec046d4e4942acba77881a3be9376e130668c9b1acda03fa17e85c",
+      "animations": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm1130_11_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 1.83333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm1130_11_00_00450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 1.72417151967058,
+        "yaw_degrees": 0.0,
+        "lift": 0.0429908015858382
+      },
+      "floor_minimum_120hz": 0.034999992698431,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_lower_eyelid_a_01",
+          "left_lower_eyelid_a_02",
+          "left_lower_eyelid_b",
+          "left_lower_eyelid_c",
+          "left_upper_eyelid_a_01",
+          "left_upper_eyelid_a_02",
+          "left_upper_eyelid_a_03",
+          "left_upper_eyelid_b",
+          "left_upper_eyelid_c",
+          "right_lower_eyelid_a_01",
+          "right_lower_eyelid_a_02",
+          "right_lower_eyelid_b",
+          "right_lower_eyelid_c",
+          "right_upper_eyelid_a_01",
+          "right_upper_eyelid_a_02",
+          "right_upper_eyelid_a_03",
+          "right_upper_eyelid_b",
+          "right_upper_eyelid_c"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "ef55b75369af7723d0246b886456d20327b285e621db3ed9091e8c302c6de882",
+          "excluded_alternate_shell": [],
+          "flattened_export_sha256": "e8b5826f2827120c0be89dd9b5a8788c6bc8153d22841f0af97906afe4e65d2e",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "746b36ed8b417bab9094883221f45e658f3e08982834612c14e7221b9d38f106",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "d3147c208d22e745ecb862d6c1890526b5c5ba36d1c8f1cdbd00a6f89b4bbe1e",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "746b36ed8b417bab9094883221f45e658f3e08982834612c14e7221b9d38f106"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "pecharunt",
+      "variant": "normal",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/pecharunt/model.glb",
+      "glb_sha256": "664bc6991c932caec6a4261f4efe17b1aaa202b82514ce346d1647206c7db011",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/pecharunt.scn",
+      "runtime_sha256": "71953625e278e4b552cbf0b80ccb137baace14915d4c13cbff78ee6b04efc5d7",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 4.20833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1131_00_00_20001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 2.28062413947789,
+        "yaw_degrees": 0.0,
+        "lift": 0.0439303814992309
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_eyelid_a_01",
+          "left_eyelid_a_02",
+          "left_eyelid_b_01",
+          "left_eyelid_b_02",
+          "left_eyelid_c_01",
+          "left_eyelid_c_02",
+          "left_eyelid_d_01",
+          "left_eyelid_d_02",
+          "left_eyelid_e_01",
+          "left_eyelid_e_02",
+          "left_eyelid_f_01",
+          "left_eyelid_f_02",
+          "left_eyelid_g_01",
+          "left_eyelid_g_02",
+          "left_eyelid_h_01",
+          "left_eyelid_h_02",
+          "left_eyelid_i_01",
+          "left_eyelid_i_02",
+          "left_eyelid_j_01",
+          "left_eyelid_j_02",
+          "left_eyelid_k_01",
+          "left_eyelid_k_02",
+          "left_eyelid_l_01",
+          "left_eyelid_l_02",
+          "left_eyelid_m_01",
+          "left_eyelid_m_02",
+          "left_eyelid_n_01",
+          "left_eyelid_n_02",
+          "left_eyelid_o_01",
+          "left_eyelid_o_02",
+          "left_eyelid_p_01",
+          "left_eyelid_p_02",
+          "left_eyelid_q_01",
+          "left_eyelid_q_02",
+          "left_eyelid_r_01",
+          "left_eyelid_r_02",
+          "right_eyelid_a_01",
+          "right_eyelid_a_02",
+          "right_eyelid_b_01",
+          "right_eyelid_b_02",
+          "right_eyelid_c_01",
+          "right_eyelid_c_02",
+          "right_eyelid_d_01",
+          "right_eyelid_d_02",
+          "right_eyelid_e_01",
+          "right_eyelid_e_02",
+          "right_eyelid_f_01",
+          "right_eyelid_f_02",
+          "right_eyelid_g_01",
+          "right_eyelid_g_02",
+          "right_eyelid_h_01",
+          "right_eyelid_h_02",
+          "right_eyelid_i_01",
+          "right_eyelid_i_02",
+          "right_eyelid_j_01",
+          "right_eyelid_j_02",
+          "right_eyelid_k_01",
+          "right_eyelid_k_02",
+          "right_eyelid_l_01",
+          "right_eyelid_l_02",
+          "right_eyelid_m_01",
+          "right_eyelid_m_02",
+          "right_eyelid_n_01",
+          "right_eyelid_n_02",
+          "right_eyelid_o_01",
+          "right_eyelid_o_02",
+          "right_eyelid_p_01",
+          "right_eyelid_p_02",
+          "right_eyelid_q_01",
+          "right_eyelid_q_02",
+          "right_eyelid_r_01",
+          "right_eyelid_r_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "29efb637fcc8e82026a2fbfb02a23b93c05bf778c9e52a4e57271f0b175a2a57",
+          "excluded_alternate_shell": [
+            "pm1131_00_00_closedshell_mesh",
+            "pm1131_00_00_closedshell_mesh"
+          ],
+          "flattened_export_sha256": "a0ac30731b003e8eec897802ccc9c925e538fe1dacce1d8202e55d3ffac683ce",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "db76b8ab053d9685cc5327d94ea1ed3167d03a876278c8d3731639bedf67f32c",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "664bc6991c932caec6a4261f4efe17b1aaa202b82514ce346d1647206c7db011",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "db76b8ab053d9685cc5327d94ea1ed3167d03a876278c8d3731639bedf67f32c"
+      },
+      "sleep_eye_proposals": []
+    },
+    {
+      "species": "pecharunt-shiny",
+      "variant": "shiny",
+      "runtime_approved": false,
+      "user_battle_approved": false,
+      "glb": ".tmp/remaining-dlc-15-v1/sleep-flat-v4/pecharunt-shiny/model.glb",
+      "glb_sha256": "0f55780d8c2211a72c99b9e38b4ed16869caacbc0c2a70125819ba337d43de06",
+      "runtime_scene": ".tmp/remaining-dlc-15-v1/runtime-flat-v2/pecharunt-shiny.scn",
+      "runtime_sha256": "b3804ffac4323d86bb19053569e3d5e75e7f281b4f03cd62bf72d77cfb1e034d",
+      "animations": {
+        "damage": {
+          "duration": 1.70833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20520_down01_start"
+        },
+        "idle": {
+          "duration": 4.20833333333333,
+          "fps": 24.0,
+          "loop": true,
+          "source_action": "pm1131_00_00_20001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 5.45833333333333,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20400_attack01"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "special_attack": {
+          "duration": 5.79166666666667,
+          "fps": 24.0,
+          "loop": false,
+          "source_action": "pm1131_00_00_20450_rangeattack01"
+        }
+      },
+      "placement": {
+        "scale": 2.28062413947789,
+        "yaw_degrees": 0.0,
+        "lift": 0.0439303814992309
+      },
+      "floor_minimum_120hz": 0.0349999964237213,
+      "sleep_proposal": {
+        "eyelid_bones_from_own_faint": [
+          "left_eyelid_a_01",
+          "left_eyelid_a_02",
+          "left_eyelid_b_01",
+          "left_eyelid_b_02",
+          "left_eyelid_c_01",
+          "left_eyelid_c_02",
+          "left_eyelid_d_01",
+          "left_eyelid_d_02",
+          "left_eyelid_e_01",
+          "left_eyelid_e_02",
+          "left_eyelid_f_01",
+          "left_eyelid_f_02",
+          "left_eyelid_g_01",
+          "left_eyelid_g_02",
+          "left_eyelid_h_01",
+          "left_eyelid_h_02",
+          "left_eyelid_i_01",
+          "left_eyelid_i_02",
+          "left_eyelid_j_01",
+          "left_eyelid_j_02",
+          "left_eyelid_k_01",
+          "left_eyelid_k_02",
+          "left_eyelid_l_01",
+          "left_eyelid_l_02",
+          "left_eyelid_m_01",
+          "left_eyelid_m_02",
+          "left_eyelid_n_01",
+          "left_eyelid_n_02",
+          "left_eyelid_o_01",
+          "left_eyelid_o_02",
+          "left_eyelid_p_01",
+          "left_eyelid_p_02",
+          "left_eyelid_q_01",
+          "left_eyelid_q_02",
+          "left_eyelid_r_01",
+          "left_eyelid_r_02",
+          "right_eyelid_a_01",
+          "right_eyelid_a_02",
+          "right_eyelid_b_01",
+          "right_eyelid_b_02",
+          "right_eyelid_c_01",
+          "right_eyelid_c_02",
+          "right_eyelid_d_01",
+          "right_eyelid_d_02",
+          "right_eyelid_e_01",
+          "right_eyelid_e_02",
+          "right_eyelid_f_01",
+          "right_eyelid_f_02",
+          "right_eyelid_g_01",
+          "right_eyelid_g_02",
+          "right_eyelid_h_01",
+          "right_eyelid_h_02",
+          "right_eyelid_i_01",
+          "right_eyelid_i_02",
+          "right_eyelid_j_01",
+          "right_eyelid_j_02",
+          "right_eyelid_k_01",
+          "right_eyelid_k_02",
+          "right_eyelid_l_01",
+          "right_eyelid_l_02",
+          "right_eyelid_m_01",
+          "right_eyelid_m_02",
+          "right_eyelid_n_01",
+          "right_eyelid_n_02",
+          "right_eyelid_o_01",
+          "right_eyelid_o_02",
+          "right_eyelid_p_01",
+          "right_eyelid_p_02",
+          "right_eyelid_q_01",
+          "right_eyelid_q_02",
+          "right_eyelid_r_01",
+          "right_eyelid_r_02"
+        ],
+        "faint_loop_duration": 1.0,
+        "flattened_motion": {
+          "approved_materials_and_textures_unchanged": true,
+          "approved_source_sha256": "78cae857722af21eff51570dd3b37f4560fcaa6b74368246b0bc84f73aeecce2",
+          "excluded_alternate_shell": [
+            "pm1131_00_00_closedshell_mesh",
+            "pm1131_00_00_closedshell_mesh"
+          ],
+          "flattened_export_sha256": "a0ac30731b003e8eec897802ccc9c925e538fe1dacce1d8202e55d3ffac683ce",
+          "geometry_uv_weights_named_joints_unchanged": true,
+          "glb_sha256": "0ef9ab803ffd037a0ac5896bfd26194cc2acd5b92bcbc563e81b15ceac50f0c1",
+          "policy": "native Blender flattened bone hierarchy; original source actions and timing retained"
+        },
+        "glb_sha256": "0f55780d8c2211a72c99b9e38b4ed16869caacbc0c2a70125819ba337d43de06",
+        "idle_sample_fraction": 0.0,
+        "native_geometry_and_clips_unchanged": true,
+        "native_sleep": false,
+        "policy": "authored rest, frozen native idle plus own faint eyelids and root breathing",
+        "sleep_duration": 2.0,
+        "source_sha256": "0ef9ab803ffd037a0ac5896bfd26194cc2acd5b92bcbc563e81b15ceac50f0c1"
+      },
+      "sleep_eye_proposals": []
+    }
+  ],
+  "remaining": [
+    "user_sleep_and_battle_visual_review",
+    "runtime_admission_and_loading_performance",
+    "individual_bundles_and_R2_upload"
+  ],
+  "material_limitations": [
+    "Static source emission-layer approximation; animated parallax and view-dependent Fresnel not reconstructed",
+    "Terapagos source flow animation not reconstructed"
+  ]
+}
