@@ -53,7 +53,7 @@ const NameplateLayout := preload("res://scripts/ui/nameplate_layout.gd")
 const RoleBadgeTexture := preload("res://scripts/ui/role_badge_texture.gd")
 const FishingFeedbackButton := preload("res://scripts/ui/fishing_feedback_button.gd")
 const FISHING_FEEDBACK_LAYER := 60
-const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/OLDROD.png")
+const FISHING_PROMPT_ICON: Texture2D = preload("res://assets/ui/fishing_rod.svg")
 const SURF_PROMPT_ICON: Texture2D = preload("res://assets/items/icons/WAVEINCENSE.png")
 const APPEARANCE_PART_SPRITES := {
 	"cape": "CapeSprite",
@@ -1439,14 +1439,29 @@ func _setup_surf_prompt() -> void:
 	add_child(surf_prompt_button)
 
 func _apply_fishing_prompt_style(button: Button) -> void:
-	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(0.98, 0.95, 0.86, 0.94), Color(0.18, 0.14, 0.20, 0.88)))
-	button.add_theme_stylebox_override("hover", _make_fishing_prompt_style(Color(1.0, 0.98, 0.90, 0.98), Color(0.30, 0.22, 0.34, 0.95)))
-	button.add_theme_stylebox_override("pressed", _make_fishing_prompt_style(Color(0.90, 0.86, 0.78, 0.98), Color(0.12, 0.10, 0.14, 0.95)))
+	button.add_theme_stylebox_override("normal", _make_fishing_start_style(Color("#102838"), Color("#458eaa")))
+	button.add_theme_stylebox_override("hover", _make_fishing_start_style(Color("#173b4f"), Color("#89e3f0")))
+	button.add_theme_stylebox_override("pressed", _make_fishing_start_style(Color("#091d2b"), Color("#d0f7ff"), true))
 	button.add_theme_color_override("icon_normal_color", Color.WHITE)
-	button.add_theme_color_override("icon_hover_color", Color.WHITE)
-	button.add_theme_color_override("icon_pressed_color", Color(0.92, 0.92, 0.92, 1.0))
+	button.add_theme_color_override("icon_hover_color", Color("#e2fbff"))
+	button.add_theme_color_override("icon_pressed_color", Color("#b8dce6"))
 	button.add_theme_constant_override("h_separation", 0)
-	button.add_theme_constant_override("icon_max_width", 22)
+	button.add_theme_constant_override("icon_max_width", 32)
+	button.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+
+
+func _make_fishing_start_style(background: Color, border: Color, pressed := false) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(14)
+	style.set_content_margin_all(6)
+	style.shadow_color = Color(0.015, 0.03, 0.05, 0.48)
+	style.shadow_size = 1 if pressed else 3
+	style.shadow_offset = Vector2(0, 1 if pressed else 2)
+	return style
+
 
 func _apply_surf_prompt_style(button: Button) -> void:
 	button.add_theme_stylebox_override("normal", _make_fishing_prompt_style(Color(0.82, 0.94, 1.0, 0.94), Color(0.05, 0.22, 0.38, 0.88)))
