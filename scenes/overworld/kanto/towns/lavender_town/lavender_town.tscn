@@ -20,6 +20,7 @@ world_access_area_type = "exterior"
 location_id = "kanto.lavender.town"
 location_name = "Lavender Town"
 region_id = "kanto"
+music_profile_id = "kanto.lavender_town"
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
