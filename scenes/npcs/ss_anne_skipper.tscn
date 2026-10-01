@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_033_Sailor.png" id="2_reiw8"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/sailor-gen6.png" id="3_nhg1y"]
 
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhg1y"]
 atlas = ExtResource("2_reiw8")
 region = Rect2(0, 0, 64, 64)
@@ -62,6 +64,7 @@ size = Vector2(96, 97)
 script = ExtResource("1_3cqkf")
 display_name = "S.S. Anne Skipper"
 npc_id = "kanto_vermilion_port_ss_anne_skipper"
+preload_quest_markers = true
 requires_party_pokemon = false
 guarded_transition_id = "kanto_vermilion_city__to_ss_anne"
 allowed_dialogue_id = "kanto_ss_anne_skipper_allowed"
@@ -82,3 +85,7 @@ animation = &"idle_down"
 shape = SubResource("RectangleShape2D_ajb6c")
 
 [node name="FeetMarker" type="Marker2D" parent="."]
+
+[node name="StoryHook" type="Node" parent="."]
+script = ExtResource("story_hook")
+interaction_id = "kanto_ss_anne_show_ticket"

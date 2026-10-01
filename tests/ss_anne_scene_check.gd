@@ -46,6 +46,8 @@ func _run() -> void:
 	_check(total == 50, "48 internal connections and two boarding directions")
 	var skipper: Node = maps[PORT].get_node("Entities/NPCs/SSAnneSkipper")
 	_check(skipper.guarded_transition_id == "kanto_vermilion_city__to_ss_anne", "skipper uses story boarding transition")
+	_check(skipper._find_story_hook().interaction_id == "kanto_ss_anne_show_ticket", "skipper conversation invokes the ticket quest")
+	_check(skipper.preload_quest_markers, "skipper loads main quest marker on spawn")
 	_check(not skipper.requires_party_pokemon and skipper.guard_role == "attendant", "skipper stays visible and checks ticket")
 	_check(maps[PORT].get_node("Exits/ToSSAnne").contains_world_position(Vector2(1424, 624)), "gangway boarding position")
 	for map in maps.values():
