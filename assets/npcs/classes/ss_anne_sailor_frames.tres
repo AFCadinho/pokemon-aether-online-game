@@ -1,6 +1,6 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://bext5y1mblgc5"]
 
-[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_033_Sailor.png" id="2_reiw8"]
+[ext_resource type="Texture2D" uid="uid://cygjg582hii4j" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_033_Sailor.png" id="2_reiw8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nhg1y"]
 atlas = ExtResource("2_reiw8")

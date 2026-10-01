@@ -4,6 +4,24 @@
 
 - De beoordeelde vuureffecten van Ponyta, Rapidash en Centiskorch worden ondersteund door de 3D-battlerenderer.
 
+- Nurse Joy op SS Anne 1F stelt nu ook je terugkeerplek in op een spawnmarker naast haar.
+
+- De rustkamer op SS Anne 1F heeft nu Nurse Joy als genezer.
+
+- Doorgangen binnen dezelfde map, waaronder de kamers van SS Anne 1F, blijven bruikbaar nadat je heen en terug bent gegaan.
+
+- De S.S. Anne-verhaallijn begint met de gunst van de skipper: zoek de opschepperige Gary via aanwijzingen van gasten en bemanning, versla hem bij de captainhut en help daarna de zeezieke, uitgeputte captain met gemberthee voor HM Cut.
+
+- De S.S. Anne heeft acht extra passagiers en bemanningsleden met gelokaliseerde dialogen en zes optionele FRLG-trainers op level 17–21, verdeeld over de vier verdiepingen.
+
+- De SS Anne 1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- Route 11 heeft tien FRLG-trainers en gameplay-gras dat de wild encounters aan de bestaande visual koppelt; tile-collision blijft handmatig.
+
+- De SS Anne B1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- De SS Anne 2F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - Paras is lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, aangepaste battle-grootte en een individuele downloadbundle.
 
 - Vermilion’s Aether Beacon and Keeper now join Aethernet Travel, with local attunement, Aether Anchor selection, and an arrival point beside the Beacon.

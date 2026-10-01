@@ -1,6 +1,6 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://scripts/world/npcs/gate_npc.gd" id="1_3cqkf"]
+[ext_resource type="Script" path="res://scripts/world/npcs/ss_anne_skipper.gd" id="1_3cqkf"]
 [ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_033_Sailor.png" id="2_reiw8"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/sailor-gen6.png" id="3_nhg1y"]
 
