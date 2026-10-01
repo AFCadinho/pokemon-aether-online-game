@@ -1,0 +1,12 @@
+Ultimate Modular Men Pack / Ultimate Modular Women Pack
+Author: Quaternius
+License: CC0 1.0 Universal (public domain)
+https://creativecommons.org/publicdomain/zero/1.0/
+Sources:
+https://quaternius.com/packs/ultimatemodularcharacters.html
+https://quaternius.com/packs/ultimatemodularwomen.html
+
+Selected models: male Casual_2 and Suit; female Casual and Formal.
+Converted embedded glTF to GLB; retained Idle_Neutral and Wave clips only.
+Other clips and unused accessor/buffer data removed. Pistol accessory from
+Suit is removed when instantiated. No source materials or geometry altered.

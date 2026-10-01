@@ -80,54 +80,22 @@ func build() -> Node3D:
 	_add_spectators(arena)
 	return arena
 
-func _sphere(parent: Node3D, material: Material, pos: Vector3, radius: float) -> MeshInstance3D:
-	var mesh := SphereMesh.new()
-	mesh.radius = radius
-	mesh.height = radius * 2.0
-	mesh.radial_segments = 12
-	mesh.rings = 6
-	return prop(parent, mesh, material, pos)
-
 func _add_spectators(arena: Node3D) -> void:
 	var audience := group(arena, "DeckAudience")
-	var shirts := [Color("f0e9da"), Color("ca6456"), Color("568e9a"), Color("e0ad58"), Color("f0e9da"), Color("7970a0")]
-	var skins := [Color("c68f67"), Color("e9b991"), Color("986342")]
-	var navy := matte(Color("263c55"))
-	var shoes := matte(Color("34313a"))
-	var hair := matte(Color("4d3529"))
-	var white := matte(Color("f0e9da"))
+	var models := [
+		preload("res://assets/models/battle/ss_anne_audience/male_suit.glb"),
+		preload("res://assets/models/battle/ss_anne_audience/female_formal.glb"),
+		preload("res://assets/models/battle/ss_anne_audience/male_casual.glb"),
+		preload("res://assets/models/battle/ss_anne_audience/female_casual.glb"),
+	]
 	var positions := [Vector3(-8, 0, -20), Vector3(8, 0, -20), Vector3(-19.3, 0, -7), Vector3(19.3, 0, -7), Vector3(-7.5, 0, 23.5), Vector3(7.5, 0, 23.5)]
 	for i in positions.size():
 		var spectator := preload("res://scripts/battle/arenas/maps/ss_anne/spectator.gd").new()
-		spectator.name = "Sailor%d" % i if i in [0, 4] else "Passenger%d" % i
+		spectator.name = "Passenger%d" % i
 		spectator.position = positions[i]
 		spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
-		spectator.phase = i * 1.37
+		spectator.configure(models[i % models.size()], i * 1.37)
 		audience.add_child(spectator)
-		var skin := matte(skins[i % skins.size()])
-		var shirt := matte(shirts[i])
-		for side in [-1, 1]:
-			cylinder(spectator, navy, Vector3(side * 0.15, 0.46, 0), 0.11, 0.72)
-			box(spectator, shoes, Vector3(side * 0.15, 0.075, 0.07), Vector3(0.23, 0.15, 0.36))
-		cylinder(spectator, shirt, Vector3(0, 1.16, 0), 0.27, 0.76, 0.32)
-		cylinder(spectator, skin, Vector3(0, 1.66, 0), 0.095, 0.19)
-		_sphere(spectator, skin, Vector3(0, 1.92, 0), 0.23)
-		if i in [0, 4]:
-			cylinder(spectator, navy, Vector3(0, 2.08, 0), 0.24, 0.07)
-			cylinder(spectator, white, Vector3(0, 2.16, 0), 0.255, 0.13)
-			box(spectator, navy, Vector3(0, 1.45, 0.3), Vector3(0.16, 0.27, 0.035))
-		else:
-			_sphere(spectator, hair, Vector3(0, 2.035, -0.035), 0.205).scale.y = 0.7
-		for side in [-1, 1]:
-			box(spectator, shoes, Vector3(side * 0.075, 1.94, 0.21), Vector3(0.035, 0.04, 0.025))
-			var arm := group(spectator, "LeftArm" if side < 0 else "RightArm", Vector3(side * 0.34, 1.5, 0))
-			cylinder(arm, shirt, Vector3(0, -0.2, 0), 0.095, 0.38)
-			cylinder(arm, skin, Vector3(0, -0.45, 0), 0.075, 0.2)
-			_sphere(arm, skin, Vector3(0, -0.6, 0), 0.095)
-			if side < 0:
-				spectator.left_arm = arm
-			else:
-				spectator.right_arm = arm
 
 func _add_deck_details(arena: Node3D, ivory: Material, navy: Material, brass: Material, red: Material, wood: Material, glass: Material) -> void:
 	# Low forecastle and nautical fittings give the sea-facing end its own identity.

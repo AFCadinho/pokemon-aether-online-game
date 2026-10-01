@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het publiek in de SS Anne-battlearena gebruikt geklede Quaternius-personages met skeletanimaties voor zwaaien en rusten.
+
 - Het SS Anne-battledek is rondom aangekleed met verspreid juichend publiek, deklichten, patrijspoorten en een voordek met seinmast en scheepsbeslag.
 
 - In Route 2 House zijn de twee bewoners vervangen door Oaks assistent, met een side quest om tien verschillende Pokémon te vangen voor HM Flash.
