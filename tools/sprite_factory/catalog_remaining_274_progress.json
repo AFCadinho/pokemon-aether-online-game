@@ -83,7 +83,9 @@
       "geometry_motion_sha256": "eda4f87107d9a9531354100bdd7dab54a8b6cb87f0509a77ca4b2d3f3c94056e",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "butterfree",
@@ -94,7 +96,9 @@
       "geometry_motion_sha256": "5d8707dbe859d308ba3744cd71f8a60fe631fdc64bf916c3f6bd542d450067cd",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "weedle",
@@ -198,7 +202,9 @@
       "geometry_motion_sha256": "cf8100c05f231b52336650fb6b785e615dd8da29478285bc30341e6b3a2e07f1",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "spearow",
@@ -225,7 +231,9 @@
       "geometry_motion_sha256": "16d13f34d7e57f7ffb7c4203fa13a5a0227e8064bd713d19533f4fb40ed2bd15",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "nidorina",
@@ -252,7 +260,9 @@
       "geometry_motion_sha256": "07bd3c7a8108d25d881ad2a0d07e09766670fa73fdbb679d2a29e5cb3453dde6",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "nidorino",
@@ -320,7 +330,9 @@
       "geometry_motion_sha256": "f8b0bad296ff1498260995b0260a6b4827251f57058412c06268e6d4b05e13c1",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "abra",
@@ -504,7 +516,9 @@
       "geometry_motion_sha256": "ac10b8e8c5154f18b19014280860febfff98317b42f7c9204d6daa4c708e1132",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "rhyhorn",
@@ -531,7 +545,9 @@
       "geometry_motion_sha256": "6ddb86e67d3cf17489987c21049ce1a57ebbf435ec0920feaff19d8da98b7983",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "kangaskhan",
@@ -559,7 +575,9 @@
       "geometry_motion_sha256": "75032a3cc836e7a699cff2241c48deed7d6fbfdff939c56caf5f473b89496ebd",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "seaking",
@@ -744,7 +762,9 @@
       "geometry_motion_sha256": "7b5fd6b60a90d187553f3320b2f5001ddfeae6e952f8717024a3ad1921b3612f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "togetic",
@@ -755,7 +775,9 @@
       "geometry_motion_sha256": "978c9957697173347403466ee2bd3afcdb006a69b0da7220d8d9624d66bef4da",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "natu",
@@ -766,7 +788,9 @@
       "geometry_motion_sha256": "2d78cb3cba60f7d6ac3e3324d5cd416764277d326aa5e077aa43ea10dd23b9a1",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "xatu",
@@ -777,7 +801,9 @@
       "geometry_motion_sha256": "86e1941501f7745cd939aea2e0dfaba89e8b39a9c98948aa3c99d3c808b6b126",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "bellossom",
@@ -812,7 +838,9 @@
       "geometry_motion_sha256": "919ea50aefb89c7ad8c47f90feb1ca96f30599b4fc87c8e2f613baecdb361861",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "gligar",
@@ -848,7 +876,9 @@
       "geometry_motion_sha256": "db9172f65e13d7d43a56b618d048908f65517b3d458576ca527e40635d8f10a8",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "piloswine",
@@ -908,7 +938,8 @@
       "r2_publication_receipt": "release/approved_3d_remaining_56_r2_upload.json",
       "latest_bundle_version": 2,
       "latest_bundle_qualification": "tools/sprite_factory/catalog_skarmory_flight_height_qualification.json",
-      "latest_bundle_published": false
+      "latest_bundle_published": true,
+      "latest_bundle_publication_receipt": "release/approved_3d_skarmory_flight_v2_r2_upload.json"
     },
     {
       "species": "smoochum",
@@ -919,7 +950,9 @@
       "geometry_motion_sha256": "aff4beb517cc8306324c2bfc6b996ea455d49d5137bd961a2850a286a980d096",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "miltank",
@@ -930,7 +963,9 @@
       "geometry_motion_sha256": "edde47a427d4c28c9bf3301de2db381fba706fefb4f65f3dd1614a2ed1ec4620",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "lugia",
@@ -957,7 +992,9 @@
       "geometry_motion_sha256": "1abaf9be1356978dfe50b3b93edd4a5d1e67fe77c22e6f6cb23454f42163b489",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "combusken",
@@ -1002,7 +1039,9 @@
       "geometry_motion_sha256": "3fe157a0c5f3fef3d06ce62c311a5f140a58f95c0722ca5fcc62d0d969ef3939",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "linoone",
@@ -1013,7 +1052,9 @@
       "geometry_motion_sha256": "d1e1f0114e6c8b099b189671f26e57ebfbe4bf8a5ffaef22112f3793175c5b14",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dustox",
@@ -1221,7 +1262,9 @@
       "geometry_motion_sha256": "4acc3947b858f691a0f99a9e235908983c662cb83d9b1877f3c5ced0ad87b84c",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "spinda",
@@ -1362,7 +1405,9 @@
       "geometry_motion_sha256": "bac408667dd84dc6f4405610509c573db7fb815993735aba8ef17a8b9658cd7b",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "spheal",
@@ -1375,7 +1420,9 @@
       "geometry_motion_sha256": "5d4b64a9b1140dfd17d9742af9c49b7f251c6d6352d27cd8dd8a116402944a2f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "sealeo",
@@ -1523,7 +1570,9 @@
       "geometry_motion_sha256": "b8f2fbc866c04566922b22b364ff98a59d86bbfefc5ce7d41ca6d82b8dab0d09",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "patrat",
@@ -1578,7 +1627,9 @@
       "normal_runtime_sha256": "0ff469973908dadd426eab060cdccda014775de1ce17771b3c03533dacea0731",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "stoutland",
@@ -1591,7 +1642,9 @@
       "geometry_motion_sha256": "7a90759749afd64f98054e246b84d5eaeaa0bc37bcb69021da37d1f7aa2886e4",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "liepard",
@@ -1729,7 +1782,9 @@
       "geometry_motion_sha256": "f25da274c8345ce9f5794c84359acd2709b6da7d5cef628b51d44cf2174c117f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tranquill",
@@ -1780,7 +1835,9 @@
       "geometry_motion_sha256": "d2f2b00cc73025a78bdb4e0a9401cdad50a1baa09febe59d91ba1fcecd8a76c5",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "swoobat",
@@ -1791,7 +1848,9 @@
       "geometry_motion_sha256": "22133036e0d7fcd350940f36275913d0a8634bd5e9590f5e8210f48e1fd806a8",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tympole",
@@ -1909,7 +1968,9 @@
       "geometry_motion_sha256": "79fbc22d747a336f7626e41a3bd4d85a1e9dd113e35d433c46e146a9fa56ed89",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "maractus",
@@ -1920,7 +1981,9 @@
       "geometry_motion_sha256": "e33e9aec969fb8451a165bd67b70ce5432eafa66da8ac270d3a58fd2a369ce79",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dwebble",
@@ -1931,7 +1994,9 @@
       "geometry_motion_sha256": "1303395f46b12518e704e7aea780ed753df98c04479cc6481671666e01a64c1c",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "crustle",
@@ -1942,7 +2007,9 @@
       "geometry_motion_sha256": "cdfb2a7ee6473ca641fd3179f4a53b58eb00eab77befd588b08ccbb15cd66b6d",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "sigilyph",
@@ -1953,7 +2020,9 @@
       "geometry_motion_sha256": "7215b61d134a230eb52a0428570b28e4c1afeccb77718586a44aef5e1945dc86",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "yamask",
@@ -1997,7 +2066,9 @@
       "geometry_motion_sha256": "c61ce59523dffeaedbb85175ad028783416b075fd640762636e54fffc512d634",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "archeops",
@@ -2093,7 +2164,9 @@
       "geometry_motion_sha256": "5cd22dbe38620482c31d51e4d9a7aa74257cd05469049adcc10f43773893293c",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "jellicent-male",
@@ -2120,7 +2193,9 @@
       "geometry_motion_sha256": "0c9f6a4c1fac42b183651d5bd1b0d522c43f8c045fabb69eef1e45ada36f33ab",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "klink",
@@ -2131,7 +2206,9 @@
       "geometry_motion_sha256": "61b73705315fdb7656b0dda27b17d8f30d6e02fc018e2c7473e814b2ed553d7c",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "klang",
@@ -2142,7 +2219,9 @@
       "geometry_motion_sha256": "5db8f0a81a7274ca31480b7ac465f9ed2252a50a8bc76bd2e81cd025a0757a4f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "klinklang",
@@ -2153,7 +2232,9 @@
       "geometry_motion_sha256": "ce82a96c575adffd3a70f13ea7db088c2bc38c8df262b370cb8e848945c39191",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "elgyem",
@@ -2204,7 +2285,9 @@
       "geometry_motion_sha256": "23f3765b8b3246cca0fc596eb9cb259d5a23f5fc7e083ff12334c1b555808429",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "mandibuzz",
@@ -2328,7 +2411,9 @@
       "geometry_motion_sha256": "d09bba612ecb56e529bd70a3ffe0d6ed2159f62a07f576ec4c308140cdb4d0cb",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "shiinotic",
@@ -2339,7 +2424,9 @@
       "geometry_motion_sha256": "dceac84e6bce511c1031f913de789fb2921ee5639660f5660e2fc9dcc26fba11",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "stufful",
@@ -2350,7 +2437,9 @@
       "geometry_motion_sha256": "f24ab8383209188d9513b3818a85cc0eb332726117a0404a497ca3e3ec3da845",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "bewear",
@@ -2361,7 +2450,9 @@
       "geometry_motion_sha256": "608a56cca52ce26c6d79fcff671219d01b0a9dc57f5fa3710b50720a1a0491e1",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "wimpod",
@@ -2389,7 +2480,9 @@
       "geometry_motion_sha256": "2b0dd6bfde50add33cac1342b8c4e1a7e25f7e232c9dda5e5229975bad6318b2",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "type-null",
@@ -2400,7 +2493,9 @@
       "geometry_motion_sha256": "f416d2db68845402df69c86d8ae773a0878048f08c6a654f39ba04cadbcc79c9",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "minior",
@@ -2419,7 +2514,9 @@
       "geometry_motion_sha256": "6f69935715f165cef9d5d34fce80dcec70b64eff02cc3b6f28a98fa0a0bcdf5f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "togedemaru",
@@ -2430,7 +2527,9 @@
       "geometry_motion_sha256": "5c17e2fdc86514c12dcd8b9baad55e05ae130811ac1e57a853819d949e3dce85",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dhelmise",
@@ -2441,7 +2540,9 @@
       "geometry_motion_sha256": "7659abe84db52478cbbe8ee8386c28f73ff6f14dbceba61d2b4b9067ebbb8242",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tapu-koko",
@@ -2452,7 +2553,9 @@
       "geometry_motion_sha256": "803912b49d565e864edf315c1dc0301b1293b651f8b2b23d27569db541181644",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tapu-lele",
@@ -2463,7 +2566,9 @@
       "geometry_motion_sha256": "5550ce92ede491e260bdd252ab6ac21ce057313317a016350e3a0dd42b6a4d75",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tapu-bulu",
@@ -2474,7 +2579,9 @@
       "geometry_motion_sha256": "c5b51c4dbffe0743deb344ebdf3e4ebead1d107dbe6aa5a82ad70345fcd55a7b",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "tapu-fini",
@@ -2485,7 +2592,9 @@
       "geometry_motion_sha256": "6b567e5c08ca15ae294fb89bae18da3723aab8a7958f3da00584a1d80315a8d6",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "nihilego",
@@ -2496,7 +2605,9 @@
       "geometry_motion_sha256": "f611157348eb028c084658c4c5a833b262f829e5e871d3b8f4dad39588ef10dc",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "buzzwole",
@@ -2507,7 +2618,9 @@
       "geometry_motion_sha256": "af5964992fb752339e77d7f9b68b7b299862f79951144f34a5a7f78482235ca8",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "pheromosa",
@@ -2518,7 +2631,9 @@
       "geometry_motion_sha256": "3065c61d957d0c2d89c1b42e89cf37fc15415181d4694514c68ac1be02a4c54f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "xurkitree",
@@ -2529,7 +2644,9 @@
       "geometry_motion_sha256": "3af8a398cee91dbd2354afd9feeeb93eacaef93ac2831ae959092f70bd5ea6cc",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "celesteela",
@@ -2540,7 +2657,9 @@
       "geometry_motion_sha256": "506c69baea297e49a111d7a0e888e23cdc57f0ccc4044cdff1839b579b5647af",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "kartana",
@@ -2551,7 +2670,9 @@
       "geometry_motion_sha256": "647c457fd9c4fe8cd75627d52e4c93d29252f4710f919470dd9c6c8a1019876e",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "guzzlord",
@@ -2562,7 +2683,9 @@
       "geometry_motion_sha256": "4a6140d994041168404b800c2d33c1b8f185770cf02404585c5c444cb39d4f97",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "necrozma",
@@ -2588,7 +2711,9 @@
       "geometry_motion_sha256": "54dbdc286a438587a1ed99b619bbbe11d752e8f13d9f0edf02db333801e9baa8",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "stakataka",
@@ -2607,7 +2732,9 @@
       "geometry_motion_sha256": "a131b1bd599c42ec7b02e5748c5c26a03dfd278d3cf39385a61935f8a918288f",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "blipbug",
@@ -2618,7 +2745,9 @@
       "geometry_motion_sha256": "7a7c4858af1a35ac4588633164d265ae5f0e7e2237e9076303a8ba93cf50184c",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dottler",
@@ -2637,7 +2766,9 @@
       "geometry_motion_sha256": "ed9bbcc77536e7f4f6ffb1042959d3ad1a193867594cd1991a2eaef1b0459b9a",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "gossifleur",
@@ -2648,7 +2779,9 @@
       "geometry_motion_sha256": "00fba8f350269a0392055d9c7f17182b3f808731d4d79f12b2281e665db51f07",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "eldegoss",
@@ -2659,7 +2792,9 @@
       "geometry_motion_sha256": "a4ac6b130f1928e99ece9362fcbccfae787da3b4954796c9b7f46481582a231a",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "wooloo",
@@ -2670,7 +2805,9 @@
       "geometry_motion_sha256": "89af3f7bc9d192968b46ece8823ff31b7236c43e835be98fc984aa7aff76088d",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dubwool",
@@ -2681,7 +2818,9 @@
       "geometry_motion_sha256": "c6fe6d346b5564ad9c7dbb9f67c42372cef1cb604c5c0359e69a2e9b3ffe3d0e",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "yamper",
@@ -2692,7 +2831,9 @@
       "geometry_motion_sha256": "7bf4836d5419bb26a3028280f353b44354f0c7589e26e1a6d30c6ae8cd002c54",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "boltund",
@@ -2703,7 +2844,9 @@
       "geometry_motion_sha256": "da6de4ba315f2d3042b4235b708152c42c6fa13b16c2b5e452cb7c0eee132ce3",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "cramorant",
@@ -2722,7 +2865,9 @@
       "geometry_motion_sha256": "fb88bf42814698f04965ffb25c9a2a9845b165f3cc7c02120868a2a5b6a6b516",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "centiskorch",
@@ -2774,7 +2919,9 @@
       "geometry_motion_sha256": "8491314705db0ba81f12201382877d930010637000fbddaa6dc0471927bc8c45",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "mr-rime",
@@ -2816,7 +2963,9 @@
       "geometry_motion_sha256": "54516359ded518d6a2ada7e493904d846794e72e72591e33bc1cd62efb82b3cb",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "arctozolt",
@@ -2827,7 +2976,9 @@
       "geometry_motion_sha256": "d6467cea15d918720c8bda609bd24c7ecd73f9ed652d267d9b7949ab51b18838",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "dracovish",
@@ -2838,7 +2989,9 @@
       "geometry_motion_sha256": "58a731773f805380a57bd04aec16c0db4c5c56902f41580d4fb64cbb91f0ea06",
       "bundle_qualification": "tools/sprite_factory/catalog_remaining_76_bundle_qualification.json",
       "bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
-      "bundle_published": false
+      "bundle_published": true,
+      "bundle_publication_receipt": "release/approved_3d_remaining_76_r2_upload.json",
+      "bundle_publication_receipt_sha256": "feb1b69f5f047b67d264f840d3cc3cbd70461e63d015e5e91fb2a345b1da8e93"
     },
     {
       "species": "arctovish",
@@ -2976,5 +3129,6 @@
   "inventory_base_species": 274,
   "bundle_qualification_sha256": "afea4c0c29d3f8c2bf9fa6b2ab540c214397bf3001614484f96d09b5d59eeccb",
   "r2_publication_receipt_sha256": "0913cd87a53d82245730d0a0a692a38e1f8c23f8cb6116b60c496f68218ce785",
-  "remaining_76_bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a"
+  "remaining_76_bundle_qualification_sha256": "f1dca6b2e375aa28c56b31e6e34854a139745b81bb0e5476112289b90c672b6a",
+  "latest_full_published_index_receipt": "release/approved_3d_bundles_884_r2_upload.json"
 }
