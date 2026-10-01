@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Nog 76 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles.
+
 - Skarmory vliegt 70 cm hoger in 3D-battles; slaap en flauw blijven op de grond. HP-panelen schuiven direct omhoog bij hoger verschijnende 3D-modellen.
 - De ingang naar Vermilion Port zit nu op de zichtbare havendeur in Vermilion City; terugkeren plaatst je voor de deur met de juiste kijkrichting.
 
