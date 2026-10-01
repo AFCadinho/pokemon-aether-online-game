@@ -225,7 +225,7 @@ portrait_id = "showdown_gentleman_gen6"
 [node name="PopulationGentlemanArthur" parent="Entities/NPCs" unique_id=733806730 instance=ExtResource("trainer")]
 position = Vector2(272, 400)
 trainer_id = "kanto_ss_anne_gentleman_arthur"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_gentleman_arthur"
 npc_definition_id = "trainer_class_elder"
 display_name = "Gentleman Arthur"
