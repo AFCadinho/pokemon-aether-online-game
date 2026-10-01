@@ -1,0 +1,1133 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "creator": "Zyphex Skybreaker",
+  "attribution_url": "https://steamcommunity.com/sharedfiles/filedetails/?id=3428100851",
+  "source_format": "public Tabletop Simulator UnityFS bundles",
+  "dependency": "UnityPy==1.25.3",
+  "total_species": 15,
+  "source_clip_objects": 118,
+  "distinct_source_clip_names": 116,
+  "own_rig_motion_proposals": 15,
+  "local_archive_motion_scan": {
+    "SCVI_Model_Dump_RAR_motion_files": 0,
+    "ZA_RAR_pm1120_to_pm1134_files": 0,
+    "extracted_SV_every_file_highest_normal_resource": "pm1114"
+  },
+  "evidence_root": ".tmp/remaining-dlc-15-v1/",
+  "entries": [
+    {
+      "species": "dipplin",
+      "identity": "pm1121_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Dipplin",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323975023442418/FD1604CE0FA24BD18662992BD15CC7F966B8F6EA/",
+      "source_sha256": "7b1c31d06ec7e9417b6f6deee76cc68f23f8f420b3c40e221ff5bbe568f40f63",
+      "source_bytes": 568912,
+      "clips": [
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.7916669845581055,
+          "frames": 141,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00500_damage01.gfbanm",
+          "duration": 2.125,
+          "frames": 52,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00100_run01_loop.gfbanm",
+          "duration": 0.7916666865348816,
+          "frames": 21,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00030_walk01_loop.gfbanm",
+          "duration": 1.5416667461395264,
+          "frames": 39,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00400_attack01.gfbanm",
+          "duration": 3.7916667461395264,
+          "frames": 93,
+          "transform_bindings": 252
+        },
+        {
+          "name": "pm1121_00_00.trmdl|pm1121_00_00_00520_down01_start.gfbanm",
+          "duration": 3.375,
+          "frames": 82,
+          "transform_bindings": 252
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "940557960b49423b07dd8525e06da0358f37515962c4dc3e0230591cff53a651",
+      "conversion_report_sha256": "6c877da54abdd922b493a4f19bbb793820e6b2333ef33b30995faff31627cbf6",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "68919fbd069381ea781cb033ae1e52f6dae9c7aa10ef8156f1379e3bc5c705ee",
+      "decoded_motion_sha256": "97257a7d2087cceb15d238cde287fa4fc25d881b6913ce117634aa40571d91e7"
+    },
+    {
+      "species": "sinistcha",
+      "identity": "pm1134_11_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Sinistcha",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323975023711041/0E04785B520C9BE251EC0643270E5D877BD3B4F2/",
+      "source_sha256": "9effac979323504d8deb3232eda88f0df57ac4dc125f71e9494f8e350c502b15",
+      "source_bytes": 1386931,
+      "clips": [
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20030_walk01_loop.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20100_run01_loop.gfbanm",
+          "duration": 3.7916667461395264,
+          "frames": 93,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20520_down01_start.gfbanm",
+          "duration": 3.375,
+          "frames": 82,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20410_attack02.gfbanm",
+          "duration": 6.2916669845581055,
+          "frames": 153,
+          "transform_bindings": 531
+        },
+        {
+          "name": "pm1134_11_00.trmdl|pm1134_11_00_20450_rangeattack01.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 531
+        }
+      ],
+      "converted_action_count": 8,
+      "prepared_sha256": "243f387259df9f0dfe3cc07067c52994b1bb97ae31a61e51aa462a996f2388c0",
+      "conversion_report_sha256": "f64c160fdc3187b468b16d8f7ae6ed275f5a13bd9d587608ddb355402d9e1111",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "47784ae1f93fc3e2511f502eb6035d9c81b202eeac04806cba3849298c52616d",
+      "decoded_motion_sha256": "bd74c69af8b3610a05a5fb4fa0ebbb85e90894514b7098aa9e9bef22139d99f1"
+    },
+    {
+      "species": "poltchageist",
+      "identity": "pm1133_11_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Poltchageist",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/15092256451557765710/491DBD5552D5DA44FD77EEA7F5D9D0C5EB272FAF/",
+      "source_sha256": "41b0126fae4556f3811b82cec6aa905057a5e9daedc37200ba3b9a9e650d6706",
+      "source_bytes": 1340701,
+      "clips": [
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20010_defaultidle01",
+          "duration": 3.000000238418579,
+          "frames": 182,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20011_defaultidle02",
+          "duration": 4.0,
+          "frames": 241,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20450_rangeattack01",
+          "duration": 2.700000047683716,
+          "frames": 164,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20030_walk01_loop",
+          "duration": 3.000000238418579,
+          "frames": 182,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20520_down01_start",
+          "duration": 2.0,
+          "frames": 121,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20400_attack01",
+          "duration": 2.1666667461395264,
+          "frames": 132,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20001_battlewait01_loop",
+          "duration": 2.6666667461395264,
+          "frames": 162,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20500_damage01",
+          "duration": 0.8333333730697632,
+          "frames": 52,
+          "transform_bindings": 414
+        },
+        {
+          "name": "pm1133_11_00|pm1133_11_00_20100_run01_loop",
+          "duration": 1.3333333730697632,
+          "frames": 82,
+          "transform_bindings": 414
+        }
+      ],
+      "converted_action_count": 9,
+      "prepared_sha256": "8e273827d90da782a5fb859caa27258c987bf034352c3009480cfbbf92dca9fe",
+      "conversion_report_sha256": "8f31fa02ad8ae84cbf5109688c420a7533148216353add879c95b59c95499f27",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "96f277e2db3538d3c13377e6eefce9d8b451b8ef6ab56f1bfff03f7c13ddf2af",
+      "decoded_motion_sha256": "50c46c364a69792e06a774369410492a97eb92ba7b7607b9bbacea225a7a4743"
+    },
+    {
+      "species": "okidogi",
+      "identity": "pm1123_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Okidogi",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244777374430/B1F329E1847C3F6A8748406CD380494FDEE3A08A/",
+      "source_sha256": "92391ee47606ace22361f511ec0efe63d2b04b2d3838e8a4fae9fd2ef70b7281",
+      "source_bytes": 1776746,
+      "clips": [
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00100_run01_loop.gfbanm",
+          "duration": 2.0416667461395264,
+          "frames": 51,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00030_walk01_loop.gfbanm",
+          "duration": 2.9583334922790527,
+          "frames": 73,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00520_down01_start.gfbanm",
+          "duration": 4.625,
+          "frames": 112,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.7916669845581055,
+          "frames": 141,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00010_defaultidle01.gfbanm",
+          "duration": 6.708333492279053,
+          "frames": 163,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 468
+        },
+        {
+          "name": "pm1123_00_00.trmdl|pm1123_00_00_00500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 468
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "996599e6de8279ad507bb96dbb727a9faf50ba811b61f2b000338d15f6d0b48b",
+      "conversion_report_sha256": "a821fe66f5e6e164531029655f2b856e182857bc55e4bba93c7f420b29d44f97",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "9ad93590a622ef51eefa05be5b457edd98b214c9a5bdf6aa1d8d3579bf0d40b8",
+      "decoded_motion_sha256": "970741854cde1c6d18e411365d1c51596e564fed140b57bcbce6da2a3c873a23"
+    },
+    {
+      "species": "munkidori",
+      "identity": "pm1124_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Munkidori",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244775960068/E9E0BD9C08F9A434E03C972C0427A43097ADC292/",
+      "source_sha256": "b2e9473ee1d02caa3bb355ed828e48576205d2510b1583c5bf9b114aed71af78",
+      "source_bytes": 1549717,
+      "clips": [
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00520_down01_start.gfbanm",
+          "duration": 5.875,
+          "frames": 142,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00500_damage01.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00030_walk01_loop.gfbanm",
+          "duration": 2.0416667461395264,
+          "frames": 51,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.7916669845581055,
+          "frames": 141,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00100_run01_loop.gfbanm",
+          "duration": 1.2083333730697632,
+          "frames": 31,
+          "transform_bindings": 441
+        },
+        {
+          "name": "pm1124_00_00.trmdl|pm1124_00_00_00010_defaultidle01.gfbanm",
+          "duration": 6.708333492279053,
+          "frames": 163,
+          "transform_bindings": 441
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "79e5fca4e83a49f70049929b834219f6aa57f614aef4a2cfd3bef11972ada715",
+      "conversion_report_sha256": "42782074780d083704c02a6307ee9cb6cedd30c039c8ce084f080675e3226317",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "ddf90d8e65f262f2ce6f5f3eb08a488ca03517670179b5681388d5f1a6bc7f21",
+      "decoded_motion_sha256": "6bf79452be568c556cdb5294f701a5ea8c11496cdf1b194afd40d0f3406cdc21"
+    },
+    {
+      "species": "fezandipiti",
+      "identity": "pm1125_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Fezandipiti",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244776019387/4D9FA04646250BA7590876688E9021D45B54909D/",
+      "source_sha256": "08b2dce77c1aa8e43e3ad7b6a837770061be3553f59ce6aae2e36bb28550a5c2",
+      "source_bytes": 1599333,
+      "clips": [
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20520_down01_start.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20030_walk01_loop.gfbanm",
+          "duration": 4.625,
+          "frames": 112,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20400_attack01.gfbanm",
+          "duration": 4.625,
+          "frames": 112,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20100_run01_loop.gfbanm",
+          "duration": 4.208333492279053,
+          "frames": 103,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20450_rangeattack01.gfbanm",
+          "duration": 6.7916669845581055,
+          "frames": 165,
+          "transform_bindings": 510
+        },
+        {
+          "name": "pm1125_00_00.trmdl|pm1125_00_00_20500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 510
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "94ab79cdf7e1d08b7810a59cc839e9a27b97d1f19a57556ad7e5311099d860c0",
+      "conversion_report_sha256": "169050d44dd63acac3cada7db9db168d2f7733d524a7754b772ddd99d278c230",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "5510455427244bdf77c8af650c4d4f848001c907d70b0e0f4106178a94cd6cc5",
+      "decoded_motion_sha256": "9f780b47e75c003fe6d6bb2533160f4014f87b6a0ce73714f3e8ebb102e8ca5c"
+    },
+    {
+      "species": "ogerpon",
+      "identity": "pm1120_11_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Ogerpon (Teal Mask)",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/14092338990965493228/70C02F47F02F0F77EF264BDB3CA1B8118CF39BFF/",
+      "source_sha256": "631f464b656268761a56e0ed213716d6811432dc520fc43089b9055e7e9ceb7a",
+      "source_bytes": 3217094,
+      "clips": [
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00400_attack01",
+          "duration": 1.5000001192092896,
+          "frames": 92,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00520_down01_start",
+          "duration": 1.8333333730697632,
+          "frames": 112,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00450_rangeattack01",
+          "duration": 2.0,
+          "frames": 121,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00630_directionattack01",
+          "duration": 3.8000001907348633,
+          "frames": 230,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00030_walk01_loop",
+          "duration": 1.3333333730697632,
+          "frames": 82,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00001_battlewait01_loop",
+          "duration": 1.5000001192092896,
+          "frames": 92,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00500_damage01",
+          "duration": 0.6666666865348816,
+          "frames": 42,
+          "transform_bindings": 438
+        },
+        {
+          "name": "pm1120_11_00|pm1120_11_00_00100_run01_loop",
+          "duration": 0.6666666865348816,
+          "frames": 42,
+          "transform_bindings": 438
+        }
+      ],
+      "converted_action_count": 8,
+      "prepared_sha256": "05dd089135a779eee2accd5d624c84b439682c7cc9132ac77e1720ca48e916dc",
+      "conversion_report_sha256": "c7327323ffb02b0c27ba4ca3f4e0a6706d66d011c829198be44391e8b6ac3bb0",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "f53dd12d6c58ac20550adee6faab2a31f4dd687a4485706f0c02b32020740c04",
+      "decoded_motion_sha256": "f4675cdff733ebd7d2190886904ba492483eb3bccde8e372fd8252e0dc61ae68"
+    },
+    {
+      "species": "archaludon",
+      "identity": "pm1132_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Archaludon",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244767324292/D9B41E221E5620B12A4AE882A4008801B8DB432E/",
+      "source_sha256": "8a77b055486c8ee1acb91a6e6b811736280af985d8941476d012b6cb6da295cc",
+      "source_bytes": 1774796,
+      "clips": [
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00030_walk01_loop.gfbanm",
+          "duration": 4.375,
+          "frames": 106,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00500_damage01.gfbanm.001",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00461_rangeattack02_loop.gfbanm",
+          "duration": 1.9583333730697632,
+          "frames": 49,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00462_rangeattack02_end.gfbanm",
+          "duration": 2.9583334922790527,
+          "frames": 73,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00520_down01_start.gfbanm",
+          "duration": 4.625,
+          "frames": 112,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00100_run01_loop.gfbanm",
+          "duration": 2.125,
+          "frames": 52,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 294
+        },
+        {
+          "name": "pm1132_00_00.trmdl.001|pm1132_00_00_00460_rangeattack02_start.gfbanm.001",
+          "duration": 1.9583333730697632,
+          "frames": 49,
+          "transform_bindings": 294
+        }
+      ],
+      "converted_action_count": 10,
+      "prepared_sha256": "f72f67e87914c8b233d66c83f0ebdd993cd31df6b287e8492da475ffca0e0d1e",
+      "conversion_report_sha256": "cecbc746648982b4befc3dcc14741f6a5308ed64cb83159790ac78add38589e3",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "244465e161c2ebfe4933a3cdc05a243fa4104118f992ec4d7aa2ba337291d22b",
+      "decoded_motion_sha256": "cc5fcff5e9aaff61cfd2d4039744346d1052070ac324119776776a35317c20a0"
+    },
+    {
+      "species": "hydrapple",
+      "identity": "pm1122_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Hydrapple",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/17472949816616684073/9821667E796FBA5E45E9576934F781310AE4C4F8/",
+      "source_sha256": "1a6b61d02e593da83872b5db6e7ddc6f928c6aae7bad435bcb9d0378df56c289",
+      "source_bytes": 1507303,
+      "clips": [
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00631_directionattack02.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00520_down01_start.gfbanm",
+          "duration": 5.875,
+          "frames": 142,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.7916669845581055,
+          "frames": 141,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00400_attack01.gfbanm",
+          "duration": 4.625,
+          "frames": 112,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00630_directionattack01.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00100_run01_loop.gfbanm",
+          "duration": 1.2083333730697632,
+          "frames": 31,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00030_walk01_loop.gfbanm",
+          "duration": 2.0416667461395264,
+          "frames": 51,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00632_directionattack03.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 819
+        },
+        {
+          "name": "pm1122_00_00.trmdl|pm1122_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 819
+        }
+      ],
+      "converted_action_count": 10,
+      "prepared_sha256": "5abce9e3555c64055c3c72eb79c8e183e843c8feb9b6682cee5a5e21079dedc1",
+      "conversion_report_sha256": "6de8dd20a401ce439593a311a857c900207463303eec1b4b5f7cbb413b329487",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "aaed6b2cedbaecb29731c51806219ebbc996644e8c197539646437cfa2600294",
+      "decoded_motion_sha256": "03ffe75ad66094bfb35aef4096307cc7e8559a6461657e3e6e7b0cddf57fa4d9"
+    },
+    {
+      "species": "gouging-fire",
+      "identity": "pm1126_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Gouging Fire",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42322610786393054/39977C04BB5A2224D36CFF9B304C4BC9C6C045BE/",
+      "source_sha256": "847aeee178af1ec2c979d32cac64e1d580ee55fc6d361da7cde4a55df0ca5a61",
+      "source_bytes": 1860608,
+      "clips": [
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00010_defaultidle01.gfbanm",
+          "duration": 6.708333492279053,
+          "frames": 163,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00450_rangeattack01.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00520_down01_start.gfbanm",
+          "duration": 5.875,
+          "frames": 142,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00100_run01_loop.gfbanm",
+          "duration": 1.375,
+          "frames": 34,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 474
+        },
+        {
+          "name": "pm1126_00_00.trmdl|pm1126_00_00_00030_walk01_loop.gfbanm",
+          "duration": 4.208333492279053,
+          "frames": 103,
+          "transform_bindings": 474
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "878d382f8f7bf6d39d1e19d80dabca5499e04dc4601007b465d75cdc9fc58ca8",
+      "conversion_report_sha256": "b136271238a2bd24b2f0729117b8d65e75928fdb4222da2496185331cfe92888",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "e5fcea737a1bacf09ec9debe9b6aec29715ddec8bc3374bfaf4218ef5134a0e5",
+      "decoded_motion_sha256": "38f13fd2ff1d064f26052e37ec79ede8a42c793b4d80937429032d987ee31fd8"
+    },
+    {
+      "species": "raging-bolt",
+      "identity": "pm1127_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Raging Bolt",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244762543019/1FCDBE93253A1D1C1EB7D3D7E38609BA19A7BA67/",
+      "source_sha256": "b52f474f2daa843650ae35cba949824a57095ff22748e0ffb79ba97d9c77b9a7",
+      "source_bytes": 1461707,
+      "clips": [
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00450_rangeattack01.gfbanm",
+          "duration": 6.7916669845581055,
+          "frames": 165,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00030_walk01_loop.gfbanm",
+          "duration": 6.708333492279053,
+          "frames": 163,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00100_run01_loop.gfbanm",
+          "duration": 3.2083334922790527,
+          "frames": 79,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00500_damage01.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 351
+        },
+        {
+          "name": "pm1127_00_00.trmdl|pm1127_00_00_00520_down01_start.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 351
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "3258ee1129404aee5379ae078f4df2e698a31171f4aa27ff7d0ca3290809ec26",
+      "conversion_report_sha256": "54d4f0e41b0d4b5bf0fcbdd2a81fd262956b68627eb2602d2cfd569d1d511001",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "b731f5f272ed7157f9b221b6f1419f7aeae599bf796ea2b92fa3267db821af87",
+      "decoded_motion_sha256": "c56c8034ce1b0eb6b76de9f63a43358922f27f458d1aa0997b4145b8ffca4b9a"
+    },
+    {
+      "species": "iron-boulder",
+      "identity": "pm1129_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Iron Boulder",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42322610788466538/7B457E4A6792895F622865996FE40D6D6CAB5DA1/",
+      "source_sha256": "17d4cf5d61e7f7e34b9d27984de8eca19d2b15b1b2e6eafbeaca82321f6341a5",
+      "source_bytes": 1396759,
+      "clips": [
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00520_down01_start.gfbanm",
+          "duration": 5.875,
+          "frames": 142,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00450_rangeattack01.gfbanm",
+          "duration": 6.7916669845581055,
+          "frames": 165,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00500_damage01.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00100_run01_loop.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00030_walk01_loop.gfbanm",
+          "duration": 3.7916667461395264,
+          "frames": 93,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00410_attack02.gfbanm",
+          "duration": 6.2916669845581055,
+          "frames": 153,
+          "transform_bindings": 210
+        },
+        {
+          "name": "pm1129_00_00.trmdl|pm1129_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 210
+        }
+      ],
+      "converted_action_count": 8,
+      "prepared_sha256": "751999e3c8fbd5ad99021c70d5e63ebc6f1e106e8024698d7c1c5b687fba0c86",
+      "conversion_report_sha256": "31cd1f9a0842498a046a5b91e79e5f68483332276ee120b7bc2929ca6f722154",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "f0a933d1c1300763e8fdee0d3adb6653fb6eeb988415f3ad3dbbfca1b4b3cbf8",
+      "decoded_motion_sha256": "e0e63f02dda97d2d87037e70908f2900666aa09c942cf8f82cfacb6447acd7cb"
+    },
+    {
+      "species": "iron-crown",
+      "identity": "pm1128_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Iron Crown",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244770233860/0EAF41FC33C0EDF6E21870D5C0C2FDC78B20B904/",
+      "source_sha256": "a94a59bc0ea115ba18d0197bf8680c594c663b7f2d54e0f97c2951dd1c8f21ba",
+      "source_bytes": 1775380,
+      "clips": [
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00450_rangeattack01.gfbanm",
+          "duration": 6.7916669845581055,
+          "frames": 165,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00100_run01_loop.gfbanm",
+          "duration": 1.2916667461395264,
+          "frames": 33,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00010_defaultidle01.gfbanm",
+          "duration": 7.5416669845581055,
+          "frames": 183,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00410_attack02.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00030_walk01_loop.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00030_walk01_loop.gfbanm",
+          "duration": 2.5416667461395264,
+          "frames": 63,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00520_down01_start.gfbanm",
+          "duration": 5.0416669845581055,
+          "frames": 123,
+          "transform_bindings": 240
+        },
+        {
+          "name": "pm1128_00_00.trmdl|pm1128_00_00_00500_damage01.gfbanm",
+          "duration": 2.125,
+          "frames": 52,
+          "transform_bindings": 240
+        }
+      ],
+      "converted_action_count": 8,
+      "prepared_sha256": "eebec2e4eef0a53f2d9f2bca890fa6302182b7b09070e87ac544c24187d69f85",
+      "conversion_report_sha256": "4e6457dd34bc28a568bc817c8655862278a4d50d3d4b7a836604f8c96252fa47",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "734fe088a0db09e08a309c3f46f5c230649d44f0a2f38732f19a5c31301d2bd6",
+      "decoded_motion_sha256": "5f66c638b2122228b296e11fe2eb688a1b018d01c1b0831d04626490defd26d8"
+    },
+    {
+      "species": "terapagos",
+      "identity": "pm1130_11_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Terapagos (Base)",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/11996557001585817622/EE771BF3AAB2E9748826D24E3B7B43622A6AA0C6/",
+      "source_sha256": "7392b62c0ab5fbb2aaa3a4ed8b16ad46522b43d7c313cb9d43bc7fc0735567a9",
+      "source_bytes": 1080018,
+      "clips": [
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00450_rangeattack01",
+          "duration": 2.3000001907348633,
+          "frames": 140,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00520_down01_start",
+          "duration": 1.6666667461395264,
+          "frames": 102,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00001_battlewait01_loop",
+          "duration": 1.8333333730697632,
+          "frames": 112,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00100_run01_loop",
+          "duration": 0.5,
+          "frames": 31,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00400_attack01",
+          "duration": 1.8333333730697632,
+          "frames": 112,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00030_walk01_loop",
+          "duration": 1.0,
+          "frames": 61,
+          "transform_bindings": 270
+        },
+        {
+          "name": "pm1130_11_00|pm1130_11_00_00500_damage01",
+          "duration": 0.8333333730697632,
+          "frames": 52,
+          "transform_bindings": 270
+        }
+      ],
+      "converted_action_count": 7,
+      "prepared_sha256": "fe7035fd8ddef0e27e6ea3f10eb90f713004361ae3389b9af7ad58cb56a4702c",
+      "conversion_report_sha256": "37a5ce2a529e8483a3fae34f3021b2f5d65932213249a601a1e4a4afebd2bd46",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "3432fac290641069ab8f306e15fce6821989610c24afd617abcae980deaa3ebb",
+      "decoded_motion_sha256": "d8ac46fe44da599d1a68424dd29f7561ab61bb82b4fb5110cf817681ea7122aa"
+    },
+    {
+      "species": "pecharunt",
+      "identity": "pm1131_00_00",
+      "status": "motion_recovery_candidate",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "source_name": "Pecharunt",
+      "source_url": "https://steamusercontent-a.akamaihd.net/ugc/42323244762954736/240230456ADF0E196E47A15522C85A5F9EE4EDED/",
+      "source_sha256": "f91bc3809fcb09c6d0d84218cf8debd4791dd03dc8deabf87d8b0eb663594e8c",
+      "source_bytes": 1331315,
+      "clips": [
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20500_damage01.gfbanm",
+          "duration": 1.7083333730697632,
+          "frames": 43,
+          "transform_bindings": 480
+        },
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20450_rangeattack01.gfbanm",
+          "duration": 5.7916669845581055,
+          "frames": 141,
+          "transform_bindings": 480
+        },
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20001_battlewait01_loop.gfbanm",
+          "duration": 4.208333492279053,
+          "frames": 103,
+          "transform_bindings": 480
+        },
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20520_down01_start.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 480
+        },
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20630_directionattack01.gfbanm",
+          "duration": 5.875,
+          "frames": 142,
+          "transform_bindings": 480
+        },
+        {
+          "name": "pm1131_00_00.trmdl|pm1131_00_00_20400_attack01.gfbanm",
+          "duration": 5.458333492279053,
+          "frames": 133,
+          "transform_bindings": 480
+        }
+      ],
+      "converted_action_count": 6,
+      "prepared_sha256": "2f53fc61a842135fa0bb614764142a24d6a00ba9a8e4f6abcd2662755b8e52ee",
+      "conversion_report_sha256": "d91fe26608db8d881028b2926374e0d111852cb230dab9bd8758c0ce8a049ab0",
+      "genuine_sleep_clip_available": false,
+      "pending": [
+        "material_and_eye_qualification",
+        "sleep_pose",
+        "standalone_Godot_pose_and_timing",
+        "battle_grounding_and_scale",
+        "collective_user_review",
+        "bundles"
+      ],
+      "source_rig_sha256": "a41bd5d882c0654934784e3380aaf67a209dba4a63f4eca450a46a1fca7836dc",
+      "decoded_motion_sha256": "52acc5408560b4bd4b94a751f77d0c26b4c7de2d5130f149713477b51504fc44"
+    }
+  ]
+}
