@@ -2,17 +2,17 @@
   "schema": 1,
   "stage": "authored fire prototype; appearance review pending",
   "approval_counts_changed": false,
-  "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v8/index.html",
+  "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v9/index.html",
   "shader_sha256": "352acc7531f716a7818713446e2255d3ed953632e40554b312f55295d4950f79",
   "mesh_worker_sha256": "2d04b9b4ea7fc1a425ef59bd182dacc5f6666f1bacc817ed00aafe3d2298618d",
-  "pack_job_sha256": "cdb04f3cfcc72ced9bb2c6c124bbbfa6ccc057aaf206dbf5f2d0f4f2319cc376",
+  "pack_job_sha256": "26f42db33549ebd1e1da253df33ba22906a419cb677242041ed90f47e134e4a9",
   "entries": [
     {
       "source_blend_sha256": "00fc87f759ac601ff840b09343be0a072d3b425bd524a39b2a73bd90efd90ceb",
       "bake_job_sha256": "54b20c786a9def4fa366c36b644dc862ded7dd6c4b5b5ee7992a2d9bde11548e",
       "bake_receipt_sha256": "515c294fcc83ee368fa6b4124ce424ae0a560b4e100763a0414e5180cf5c46b8",
       "species": "ponyta",
-      "runtime_sha256": "f8c9f9afb4bb4310db5bad4d9c2c74b4715718e7d47af888c5a554efe47b5b83",
+      "runtime_sha256": "67be96bd0662614ceedf56bfbb8cf7585b101c15602412726a747f2f7fab9516",
       "source_scene_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
       "native_geometry_skin_animation_unchanged": true,
       "native_clips": 6,
@@ -21,16 +21,16 @@
       "appearance_approved": false,
       "runtime_approved": false,
       "captures": {
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/ponyta-faint_start-100.png": "3a92e948dde15630f28ca3cebd7273693c6e32f780e8d5b86b69d4cca25c4e23",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/ponyta-idle-50.png": "06497f30b0e07c0124e92e20360f8210835ad7900beba1fd7f54bc9b0c6a0aef",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/ponyta-physical_attack-50.png": "b20116cdea7ed639c410e77b964d749467a9e28624e0f79536cac3c1bd69213f",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/ponyta-sleep-50.png": "00855eb368ab0375705a4894f9742f6482934d153e98f43c1cb017b723c183db",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/ponyta-special_attack-50.png": "d47f51dc30a23aa0edc331759fc3a40d2c88db15aa40c5f04b4bf9eede84406f",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/ponyta-idle-0.png": "f904a7010b8e9387163b1d73ecffa779c525376440ae899959b8394d21592c66",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/ponyta-idle-100.png": "f904a7010b8e9387163b1d73ecffa779c525376440ae899959b8394d21592c66",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/ponyta-idle-25.png": "95c3ab98d2fc0978567f098283c68382b9d3eacc671d70d77dd914cc1914d56d",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/ponyta-idle-50.png": "3bb9385b7f58579e91891d137852e75e71d79c7f4254c09a48d99480becf6eb7",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/ponyta-idle-75.png": "867cfe34e53de221fbaaadb02a26050bc253a7f0f7caff87388a40f39c661ac1"
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/ponyta-faint_start-100.png": "3a92e948dde15630f28ca3cebd7273693c6e32f780e8d5b86b69d4cca25c4e23",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/ponyta-idle-50.png": "06497f30b0e07c0124e92e20360f8210835ad7900beba1fd7f54bc9b0c6a0aef",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/ponyta-physical_attack-50.png": "b20116cdea7ed639c410e77b964d749467a9e28624e0f79536cac3c1bd69213f",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/ponyta-sleep-50.png": "00855eb368ab0375705a4894f9742f6482934d153e98f43c1cb017b723c183db",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/ponyta-special_attack-50.png": "d47f51dc30a23aa0edc331759fc3a40d2c88db15aa40c5f04b4bf9eede84406f",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/ponyta-idle-0.png": "f904a7010b8e9387163b1d73ecffa779c525376440ae899959b8394d21592c66",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/ponyta-idle-100.png": "f904a7010b8e9387163b1d73ecffa779c525376440ae899959b8394d21592c66",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/ponyta-idle-25.png": "95c3ab98d2fc0978567f098283c68382b9d3eacc671d70d77dd914cc1914d56d",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/ponyta-idle-50.png": "3bb9385b7f58579e91891d137852e75e71d79c7f4254c09a48d99480becf6eb7",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/ponyta-idle-75.png": "867cfe34e53de221fbaaadb02a26050bc253a7f0f7caff87388a40f39c661ac1"
       },
       "fire_inputs": [
         {
@@ -270,7 +270,7 @@
       "bake_job_sha256": "add4f5e4be6141921e45da0b814a45848effcbf72a66669b16982196a76723ed",
       "bake_receipt_sha256": "7b643272872294538eca093e93baa8f41d24970260a039a36492ca59d4a671e3",
       "species": "rapidash",
-      "runtime_sha256": "11c57cbcc4df6716709b089b04e3872c2c5c179d82b5a11809aab4acab25d80d",
+      "runtime_sha256": "faa22c41818bd08caba4eb085843e164eb417fb2c66727d64145be0121e44dbb",
       "source_scene_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
       "native_geometry_skin_animation_unchanged": true,
       "native_clips": 6,
@@ -279,16 +279,16 @@
       "appearance_approved": false,
       "runtime_approved": false,
       "captures": {
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/rapidash-faint_start-100.png": "ef888e839a5282a3c7cc8ffd05d8ffe0eea82b5c593e0fd722520f2d614d91ee",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/rapidash-idle-50.png": "d515e3fb1452169ddeb50dde9c8873d6525358510c2bd29e1c545f78cfdfed42",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/rapidash-physical_attack-50.png": "9bbdde3ef80560101734e091e70a6bc67a16150c6b4a767cb1fdf7ef11995619",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/rapidash-sleep-50.png": "43405f0da01773a73bc07171f5889c4472a508c09333a3047fe82253220e1364",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/rapidash-special_attack-50.png": "fec3f24477082e612ea1b1e81d8e62e1b591cd21c4029b2157810394dd85c70f",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/rapidash-idle-0.png": "e4f983105319eb06075f92e4c3534ca9aa2d84f82ceadec0b949ae7ff9a71d2d",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/rapidash-idle-100.png": "e4f983105319eb06075f92e4c3534ca9aa2d84f82ceadec0b949ae7ff9a71d2d",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/rapidash-idle-25.png": "3aba23e8995ab45bb856d665df7fefe0eaf9a13bf7fdd713228a3a4aa403163c",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/rapidash-idle-50.png": "7410be0ea5ebea50b853ecf9e3612ff59848ed1519eb9682a56fad290798754f",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/rapidash-idle-75.png": "dcb60cf0c3b9cc991086a2a8c4f60bb2a1c871f0be49f2d4f5b6eb7453e22c14"
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/rapidash-faint_start-100.png": "b110a45fe21bae1c9fe3a219092476903fe80a4922cc205cbf182b93a03f0e73",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/rapidash-idle-50.png": "7289fccd73072f264871249acc1200bcce9d85075ca1a69d91ad3d5922149810",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/rapidash-physical_attack-50.png": "7f277c9abd8dd66f97fb69127b78207003dcf4825dd17780751e7c5f3572afa3",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/rapidash-sleep-50.png": "6d94decb81a5d7ed3087e5aaf3945b3c2e4de68d2f0fde9e36a961e67ba22587",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/rapidash-special_attack-50.png": "717430ade26de1ed5f33a08e78e49e240a6101792ed8ebd52c312a45757ef816",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/rapidash-idle-0.png": "1d6dd933ada6d6b99660dda9aff6eb566685adbcc17036700b7ac8866b9ac4f9",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/rapidash-idle-100.png": "1d6dd933ada6d6b99660dda9aff6eb566685adbcc17036700b7ac8866b9ac4f9",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/rapidash-idle-25.png": "ad7cc4826f86b5f0b078e93c5d6bc37d68fd2fd62121b4c82cd4b203747ea3d0",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/rapidash-idle-50.png": "eb0d97247a81de51718c905028dcb294ee53cc39f3356119bf267457d57c7e0b",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/rapidash-idle-75.png": "09edb40385e0282238fa881cae634cee912ae50a3d53f5f65b01306d04942288"
       },
       "fire_inputs": [
         {
@@ -326,8 +326,8 @@
             "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
           },
           "shape_flames": true,
-          "tongue_base": 0.65,
-          "tongue_span": 0.25,
+          "tongue_base": 0.95,
+          "tongue_span": 0.1,
           "transform": [
             0.5,
             1.0,
@@ -473,15 +473,17 @@
             "sha256": "edd4153228600e4bb05b67474a09aa5941b9dd48cb98d3c576caf2418c62623f"
           },
           "coverage_gain": 1.0,
-          "enabled": false,
+          "enabled": true,
+          "layer_opacity": 0.8,
           "material": "FireMaskB",
           "noise": {
             "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
             "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
           },
+          "retain_coverage": true,
           "shape_flames": true,
-          "tongue_base": 0.65,
-          "tongue_span": 0.25,
+          "tongue_base": 0.95,
+          "tongue_span": 0.1,
           "transform": [
             1.0,
             0.125,
@@ -606,7 +608,7 @@
       "bake_job_sha256": "5938673b58c22c784cd889ebd59195da7cc3516d0d1324ef60dbd2dfb7160c16",
       "bake_receipt_sha256": "6aad2eac2648685dca031b55f58c134ad436ba863b797e61f7041f2acf7a77cb",
       "species": "centiskorch",
-      "runtime_sha256": "6d83efcefe8164f4b4269074d2107dc1684aa8e0fb629835e1e7c43bbe3e669c",
+      "runtime_sha256": "ac97a47cfd74fb018b0a83f614d3b0f38f1ed43b4ceb358cfede797eef17060c",
       "source_scene_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
       "native_geometry_skin_animation_unchanged": true,
       "native_clips": 6,
@@ -615,16 +617,16 @@
       "appearance_approved": false,
       "runtime_approved": false,
       "captures": {
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/centiskorch-faint_start-100.png": "dca639b195fc1b94ce588f3a1ff8c89b22db8f003097d163a1fdecdeb4a91398",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/centiskorch-idle-50.png": "ff087749b00091aa4886fd243633689cc64636da3a028a59f8191c74ff5b5bae",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/centiskorch-physical_attack-50.png": "420b2869868035b37661e8fd956fca8bdf288362795cac42eb1e8cf05bde314f",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/centiskorch-sleep-50.png": "8a284b0ccc965495bb34ac6463b3fe180bb964808427a22fe0962293315d26b2",
-        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v8/centiskorch-special_attack-50.png": "828e34b924e238e9067e8f487ab59ea21129d066c3a3bf33867f9b7e0f9cbe8a",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/centiskorch-idle-0.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/centiskorch-idle-100.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/centiskorch-idle-25.png": "10863ec0909af3470323780b9ded9c4d101b8db17ed4153c121eaa98a86c18f1",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/centiskorch-idle-50.png": "bbde20369e7569716834d795a40ad58162d901b4567fb3a0dc3111d9751efb6a",
-        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v8/centiskorch-idle-75.png": "7fff3b63646a7931cc4c059c3c4e82129df0c567854902d719404181fff4f587"
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/centiskorch-faint_start-100.png": "dca639b195fc1b94ce588f3a1ff8c89b22db8f003097d163a1fdecdeb4a91398",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/centiskorch-idle-50.png": "ff087749b00091aa4886fd243633689cc64636da3a028a59f8191c74ff5b5bae",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/centiskorch-physical_attack-50.png": "420b2869868035b37661e8fd956fca8bdf288362795cac42eb1e8cf05bde314f",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/centiskorch-sleep-50.png": "8a284b0ccc965495bb34ac6463b3fe180bb964808427a22fe0962293315d26b2",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v9/centiskorch-special_attack-50.png": "828e34b924e238e9067e8f487ab59ea21129d066c3a3bf33867f9b7e0f9cbe8a",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/centiskorch-idle-0.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/centiskorch-idle-100.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/centiskorch-idle-25.png": "10863ec0909af3470323780b9ded9c4d101b8db17ed4153c121eaa98a86c18f1",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/centiskorch-idle-50.png": "bbde20369e7569716834d795a40ad58162d901b4567fb3a0dc3111d9751efb6a",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v9/centiskorch-idle-75.png": "7fff3b63646a7931cc4c059c3c4e82129df0c567854902d719404181fff4f587"
       },
       "fire_inputs": [
         {
@@ -792,7 +794,7 @@
   ],
   "limitations": [
     "Authored reconstruction, not exact recovery of original source shaders",
-    "Horse flame cards use an authored UV cutout; Ponyta outer masks use source coverage; Rapidash outer masks are disabled",
+    "Horse flame cards use an authored UV cutout; enabled outer layers and coverage settings are pinned in the recipe",
     "Only normal appearance preview; shiny, runtime whitelist, battle clearance and performance are not qualified",
     "Four fire phases verify visible movement and exact sampled loop boundary; intermediate smoothness is not certified"
   ],
@@ -802,5 +804,26 @@
     "approved_shader_sha256": "198ea77b44ff112625153aa5f12d9ece8c517be502c2a5f1d068b8e85c3fe985",
     "scope": "Normal fire appearance only; shiny and battle qualification pending",
     "v8_sampled_pose_and_fire_pixels_identical_to_approved_v7": true
-  }
+  },
+  "tail_revision": {
+    "materials": [
+      "FireCoreB",
+      "FireMaskB"
+    ],
+    "bone_mapping": "TailB chain; FireMaskB also bound to Hips",
+    "appearance_approved": false,
+    "side_capture_sha256": {
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v8/rapidash-faint_start-100.png": "5cd0c6e6264827b1ef9db38717845a996f55e689d050f3c338a459728b737e21",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v8/rapidash-idle-50.png": "d7e3edecd61bd4e91ab718d7db1dc2c6ce796f032792d626be96ce4fec01223a",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v8/rapidash-physical_attack-50.png": "f02a21fb5315ed18959a62f6164da748f603b3784e28d4d61d477bf66923895c",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v8/rapidash-sleep-50.png": "27515c425d0072108ec384183cfda5743f3c97930d027de1e97ca42ff3cbbbf1",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v8/rapidash-special_attack-50.png": "a3889545656a9cd4443c7328c698998985f9c40578e734d49c5f53bc4e81e022",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v9/rapidash-faint_start-100.png": "5763bdcfad4fe36b24145ec3a8f9bed04da29a3b147654b7beb19582c21cd590",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v9/rapidash-idle-50.png": "f3ddc93cbef30d1c50c3587a26b5802c2514e5b502619f44a091ed195ab4b773",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v9/rapidash-physical_attack-50.png": "1751c5eea231cbca8bceac0d4c2cb684d649513b8c60b97014127985b3441e76",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v9/rapidash-sleep-50.png": "821a69ca79588100484a06d0787d3063b0bbf0a5f30c880dd5be8cd232e98110",
+      ".tmp/remaining-142-production/fire-live-preview-v1/rapidash-side-v9/rapidash-special_attack-50.png": "95b147268bb0a8bf6f226acb09e5cf8f02ac9ce0250b7e387f48f67a735cff16"
+    }
+  },
+  "pony_and_centiskorch_pixels_unchanged_from_v8": true
 }

@@ -3250,7 +3250,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "Centiskorch normal fire visually accepted; fuller Ponyta and longer Rapidash fire previews await appearance review; counts unchanged",
+  "current_stage": "Centiskorch normal fire accepted; Rapidash tail-only revision and fuller Ponyta await review; counts unchanged",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,
@@ -3294,5 +3294,5 @@
     ]
   },
   "remaining_142_paras_bundle_qualification_sha256": "ee85aff0e6a280bf88d75a3f1ed43180d8ea6da15c8db21ca43ecc7054aa51b7",
-  "remaining_142_fire_preview_sha256": "ca03c5e82ab52596161c8a12e4b75331533e2014d5193cb10a230ed82a994c5f"
+  "remaining_142_fire_preview_sha256": "1ae78cf0327ed9aa93f799967a16951498608fdc7ff7955ea5a5b00c5549e8ba"
 }

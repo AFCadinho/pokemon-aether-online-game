@@ -23,7 +23,8 @@
       "Ponyta/Rapidash tongue cutoff extended from 0.3+0.5*density to 0.65+0.25*density",
       "Normalized source UV domain used for authored card shape"
     ],
-    "centiskorch_unchanged_pixels": true
+    "centiskorch_unchanged_pixels": true,
+    "feedback": "Vooral bij Rapidash staart"
   },
   "centiskorch_approved_scene": {
     "answer": "Centiskorch ziet er wel goed uit",
@@ -31,5 +32,18 @@
     "approved_shader_sha256": "198ea77b44ff112625153aa5f12d9ece8c517be502c2a5f1d068b8e85c3fe985",
     "scope": "Normal fire appearance only; shiny and battle qualification pending",
     "v8_sampled_pose_and_fire_pixels_identical_to_approved_v7": true
+  },
+  "review_v9": {
+    "pending": [
+      "ponyta",
+      "rapidash"
+    ],
+    "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v9/index.html",
+    "changes": [
+      "Rapidash FireCoreB extends through nearly the full source card",
+      "Rapidash FireMaskB restored with source coverage and 0.8 opacity",
+      "Matched side-camera comparison added"
+    ],
+    "centiskorch_and_ponyta_unchanged": true
   }
 }
