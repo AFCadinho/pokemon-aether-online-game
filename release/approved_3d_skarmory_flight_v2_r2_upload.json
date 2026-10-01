@@ -1,0 +1,41 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 2,
+  "bundle_bytes": 7146179,
+  "bundle_qualification_sha256": "a59dc4c698d8c34c99b4b3966cb1c45311446631671c7994b0beca80f735d9b1",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:skarmory:base",
+      "object_key": "optional-assets/pokemon_3d/skarmory/base/v2-df13a90f92d771ceef0e4647fd0cbba2a18fdfc38fa6677e369eb68f53fdea67.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "df13a90f92d771ceef0e4647fd0cbba2a18fdfc38fa6677e369eb68f53fdea67",
+      "size_bytes": 7146179,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "skarmory-flight-height-v2",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/skarmory-flight-height-v2-d64cdc33bab124cb40e7ad30ad7e1d773366f9e06422c429550c749d7e611f5f.json",
+    "sha256": "d64cdc33bab124cb40e7ad30ad7e1d773366f9e06422c429550c749d7e611f5f",
+    "size_bytes": 1086
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/skarmory-flight-height-v2-d64cdc33bab124cb40e7ad30ad7e1d773366f9e06422c429550c749d7e611f5f.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "d64cdc33bab124cb40e7ad30ad7e1d773366f9e06422c429550c749d7e611f5f",
+    "size_bytes": 1086,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 1,
+  "profile_count": 1,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 2,
+  "public_head_size_verified_objects": 2,
+  "reviewed_catalog_sha256": "6492fb245bc8028f81a35dcba6c3ffe403f29bd951e29d3fba7d6af41178e6c2",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-01T00:28:57.978527+00:00"
+}
