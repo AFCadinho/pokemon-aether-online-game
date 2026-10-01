@@ -325,7 +325,7 @@ npc_sprite_frames = ExtResource("picnicker")
 sight_range_tiles = 3
 
 [node name="PokemaniacMark" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1136, 976)
+position = Vector2(1136, 944)
 trainer_id = "kanto_route_10_pokemaniac_mark"
 npc_id = "kanto_route_10_pokemaniac_mark"
 npc_definition_id = "trainer_class_hiker"
@@ -354,7 +354,7 @@ npc_sprite_frames = ExtResource("hiker")
 sight_range_tiles = 3
 
 [node name="HikerTrent" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(2112, 1104)
+position = Vector2(1968, 1104)
 trainer_id = "kanto_route_10_hiker_trent"
 npc_id = "kanto_route_10_hiker_trent"
 npc_definition_id = "trainer_class_hiker"

@@ -323,7 +323,7 @@ npc_sprite_frames = ExtResource("picnicker")
 sight_range_tiles = 3
 
 [node name="HikerJeremy" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1008, 496)
+position = Vector2(976, 560)
 trainer_id = "kanto_route_9_hiker_jeremy"
 npc_id = "kanto_route_9_hiker_jeremy"
 npc_definition_id = "trainer_class_hiker"
@@ -351,7 +351,7 @@ npc_sprite_frames = ExtResource("bug_catcher")
 sight_range_tiles = 3
 
 [node name="HikerAlan" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(2016, 656)
+position = Vector2(2000, 656)
 trainer_id = "kanto_route_9_hiker_alan"
 npc_id = "kanto_route_9_hiker_alan"
 npc_definition_id = "trainer_class_hiker"
@@ -360,7 +360,7 @@ npc_sprite_frames = ExtResource("hiker")
 sight_range_tiles = 3
 
 [node name="BugCatcherConner" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(2240, 496)
+position = Vector2(2256, 560)
 trainer_id = "kanto_route_9_bug_catcher_conner"
 npc_id = "kanto_route_9_bug_catcher_conner"
 npc_definition_id = "trainer_class_bug_catcher"
