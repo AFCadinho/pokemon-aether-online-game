@@ -6,29 +6,12 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_2hk1e"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="6_piffx"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="7_dialogue"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="8_elder_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="9_bug_catcher"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="10_lass"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="11_overworld_pokemon"]
-[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="14_door_hint"]
-[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="15_story_trigger"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_west"]
 size = Vector2(32, 160)
-
-[sub_resource type="RectangleShape2D" id="shape_arrival_story"]
-size = Vector2(176, 128)
-
-[sub_resource type="RectangleShape2D" id="shape_pokemon_center_door"]
-size = Vector2(48, 32)
-
-[sub_resource type="RectangleShape2D" id="shape_arrival_story"]
-size = Vector2(176, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kqacb"]
 texture = ExtResource("5_2hk1e")
@@ -179,9 +162,6 @@ music_profile_id = "kanto.lavender_town"
 [node name="FromRoute10" type="Marker2D" parent="Spawns" unique_id=1172666964]
 position = Vector2(720, 80)
 
-[node name="FromPokecenter" type="Marker2D" parent="Spawns"]
-position = Vector2(272, 432)
-
 [node name="FromRoute8" type="Marker2D" parent="Spawns" unique_id=2103617432]
 editor_description = "Arrival from the future Route 8 map, facing right into Lavender Town."
 position = Vector2(80, 784)
@@ -194,19 +174,6 @@ position = Vector2(720, 1520)
 position = Vector2(720, 784)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1200942811]
-
-[node name="ToPokecenter" type="Area2D" parent="Exits"]
-position = Vector2(272, 368)
-script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn"
-target_spawn_name = "FromOutside"
-transition_id = "kanto_lavender_town__to_pokemon_center"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter"]
-shape = SubResource("shape_pokemon_center_door")
-
-[node name="DoorTransitionHint" parent="Exits/ToPokecenter" instance=ExtResource("14_door_hint")]
-z_as_relative = false
 
 [node name="ToRoute10" type="Area2D" parent="Exits" unique_id=1932513659]
 position = Vector2(720, 16)
@@ -273,73 +240,7 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1361975311]
 
-[node name="LavenderResident" parent="Entities/NPCs" instance=ExtResource("7_dialogue")]
-position = Vector2(720, 176)
-npc_id = "kanto_lavender_town_resident"
-npc_definition_id = "trainer_class_elder_f"
-preload_quest_markers = true
-display_name = "Lavender Resident"
-facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("8_elder_f")
-
-[node name="TowerWatcher" parent="Entities/NPCs" instance=ExtResource("7_dialogue")]
-position = Vector2(816, 784)
-npc_id = "kanto_lavender_town_tower_watcher"
-npc_definition_id = "trainer_class_bug_catcher"
-display_name = "Tower Watcher"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = ExtResource("9_bug_catcher")
-
-[node name="PokecenterVisitor" parent="Entities/NPCs" instance=ExtResource("7_dialogue")]
-position = Vector2(304, 432)
-npc_id = "kanto_lavender_town_pokecenter_visitor"
-npc_definition_id = "trainer_class_lass"
-display_name = "Lavender Visitor"
-facing_direction = Vector2(1, 0)
-npc_sprite_frames = ExtResource("10_lass")
-
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=516271231]
-
-[node name="Pokemon" type="Node2D" parent="Entities"]
-
-[node name="Cubone" parent="Entities/Pokemon" instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(288, 640)
-overworld_pokemon_id = "kanto_lavender_town_cubone_1"
-species_id = "cubone"
-level = 17
-display_name = "Cubone"
-facing_direction = Vector2(-1, 0)
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
-movement_wait_seconds = 2.0
-
-[node name="Clefairy" parent="Entities/Pokemon" instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(1280, 928)
-overworld_pokemon_id = "kanto_lavender_town_clefairy_1"
-species_id = "clefairy"
-level = 16
-display_name = "Clefairy"
-facing_direction = Vector2(0, -1)
-movement_behavior = "pace_vertical"
-movement_tiles = 1
-movement_wait_seconds = 2.5
-
-[node name="StoryTriggers" type="Node2D" parent="."]
-
-[node name="LavenderArrival" type="Area2D" parent="StoryTriggers"]
-position = Vector2(720, 80)
-script = ExtResource("15_story_trigger")
-story_host_path = NodePath("../../Entities/NPCs/LavenderResident")
-required_quest_id = "travel_to_lavender_town"
-required_step_id = "hear_lavender_warning"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/LavenderArrival"]
-shape = SubResource("shape_arrival_story")
-
-[node name="StoryHook" type="Node" parent="StoryTriggers/LavenderArrival"]
-script = ExtResource("16_story_hook")
-interaction_id = "kanto_lavender_town_resident_warning"
-entity_id = "kanto_lavender_town_resident"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1898872130]
 visible = false
@@ -494,6 +395,5 @@ position = Vector2(1360, 816)
 position = Vector2(1296, 816)
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
