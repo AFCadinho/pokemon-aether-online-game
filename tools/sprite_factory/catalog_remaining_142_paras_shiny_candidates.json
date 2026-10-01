@@ -4,7 +4,7 @@
   "runtime_approved": false,
   "normal_appearance_approved": true,
   "normal_approval_answer": "paras goed",
-  "shiny_appearance_approved": false,
+  "shiny_appearance_approved": true,
   "battle_approved": false,
   "review_url": "http://127.0.0.1:8782/paras-pair-review-v1/index.html",
   "entries": [
@@ -152,5 +152,10 @@
     ".tmp/remaining-142-production/paras-pair-review-v1/normal-reference.png": "7e8b017b76d22e9cd4cf737ee61a20832c232e6bcb2d09df5b05545a31d94117",
     ".tmp/remaining-142-production/paras-pair-review-v1/shiny-reference.png": "161a74e0a74ef25a280d4de444b117521e8c11f5e98ab1912e47bc16fd8ace22",
     ".tmp/remaining-142-production/paras-pair-review-v1/index.html": "ec578f37c3b9794cf4e9c7081b6ae9494aaf87d9f6eda11783e26941c4159238"
+  },
+  "shiny_appearance_approval": {
+    "answer": "shiny goed",
+    "date": "2026-10-01",
+    "scope": "Paras shiny colours, eyes, teeth and shown presentation poses"
   }
 }

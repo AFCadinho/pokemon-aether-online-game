@@ -258,3 +258,19 @@ into facial/body detail. `catalog_remaining_142_paras_shiny_candidates.json`
 pins the narrow skin-only proposal and the user's normal approval.
 
 [Paras normal/shiny comparison](http://127.0.0.1:8782/paras-pair-review-v1/index.html)
+
+The user approved shiny (“shiny goed”). Paras's battle candidate uses a uniform
+2.1260462187 root scale, raising its minimum idle height from 31.98 to 67.34 px.
+The shared normal/shiny placement has a 48.966 mm lift. The unchanged battle
+reviewer measured all six native clips per variant at 60 Hz, then independently
+checked corrected floor clearance at 120 Hz: minimum 25 mm (15 mm gate).
+All 32 camera/side/pose shots are in view and clear the bounds-based HUD proxy.
+The native grounded sleep uses a constant resting offset; attacks and faint use
+measured conservative clearance offsets. No animation track or source pose was
+replaced. The source has no independent `faint_loop` or second physical clip;
+these checks cover the six clips actually present, without inventing extras.
+`catalog_remaining_142_paras_battle_candidates.json` binds scenes, profiles,
+measurements and images. User battle review, installed bundle/performance checks
+and admission remain pending. Approved totals have not increased.
+
+[Paras battle comparison](http://127.0.0.1:8782/battle-paras-review-v1/index.html)

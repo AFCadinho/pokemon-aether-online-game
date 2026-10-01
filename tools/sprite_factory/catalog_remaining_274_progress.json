@@ -10,9 +10,9 @@
     "dlc_model_found_native_motion_missing": 15,
     "normal_candidate_visual_repair_pending": 3,
     "source_or_motion_recovery_pending": 109,
-    "normal_appearance_approved_shiny_pending": 1
+    "appearance_approved_battle_pending": 1
   },
-  "review_url": "http://127.0.0.1:8781/appearance-56-v1/index.html",
+  "review_url": "http://127.0.0.1:8782/battle-paras-review-v1/index.html",
   "diagnostic_root": ".tmp/remaining-274-production",
   "evidence": {
     "inventory.json": "69e410f3ecdd8609621fddc41ce53cc70e6cbf3e55b46bc212727ac2aa0b8f22",
@@ -319,14 +319,17 @@
       "species": "paras",
       "national_dex": 46,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_pending",
+      "status": "appearance_approved_battle_pending",
       "reason": "Native shader mix is not Principled plus emission",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_material_repairs_review.json",
       "normal_candidate_glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
       "normal_candidate_runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
-      "latest_attention": "Authored normal HOME-reference palette proposed; eye glass approximation still pending review",
+      "latest_attention": "Normal/shiny appearance approved; calibrated battle page awaiting user approval; installed bundle/performance pending",
       "normal_appearance_approved": true,
-      "normal_appearance_approval_answer": "paras goed"
+      "normal_appearance_approval_answer": "paras goed",
+      "shiny_appearance_approved": true,
+      "shiny_appearance_approval_answer": "shiny goed",
+      "battle_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_paras_battle_candidates.json"
     },
     {
       "species": "parasect",
@@ -3241,7 +3244,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "Paras normal approved; shiny and battle pending; three fire reconstructions held",
+  "current_stage": "Paras normal/shiny appearance approved; battle calibration underway; three fire reconstructions held",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,
