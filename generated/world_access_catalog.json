@@ -982,38 +982,6 @@
 				}
 			}
 		},
-		"kanto_lavender_town_north": {
-			"areaType": "transition",
-			"defaultMode": "open",
-			"label": "Lavender Town North",
-			"locationGroupId": "kanto_lavender_town_north",
-			"locationGroupLabel": "Lavender Town North",
-			"regionName": "Kanto",
-			"sceneAliases": [],
-			"scenePath": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
-			"spawnPoints": {
-				"from_lavender_town": {
-					"facingDirection": "down",
-					"label": "Lavender Town",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "FromLavenderTown",
-					"tile": {
-						"x": 38,
-						"y": 5
-					}
-				},
-				"from_route_10": {
-					"facingDirection": "down",
-					"label": "Route 10",
-					"safeForStaffTeleport": true,
-					"spawnMarker": "FromRoute10",
-					"tile": {
-						"x": 39,
-						"y": 2
-					}
-				}
-			}
-		},
 		"kanto_mt_moon_1f": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -1842,11 +1810,11 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_10.tscn",
 			"spawnPoints": {
-				"from_lavender_north": {
+				"from_lavender_town": {
 					"facingDirection": "down",
-					"label": "Lavender North",
+					"label": "Lavender Town",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromLavenderNorth",
+					"spawnMarker": "FromLavenderTown",
 					"tile": {
 						"x": 38,
 						"y": 102
@@ -4920,37 +4888,7 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
-		"kanto_lavender_town__to_lavender_north": {
-			"destination": {
-				"facingDirection": "up",
-				"mapId": "kanto_lavender_town_north",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
-				"position": {
-					"x": 1232.0,
-					"y": 176.0
-				},
-				"spawnMarker": "FromLavenderTown"
-			},
-			"destinationAreaId": "kanto_lavender_town_north",
-			"sourceMapId": "kanto_lavender_town"
-		},
-		"kanto_lavender_town_north__to_lavender_town": {
-			"destination": {
-				"facingDirection": "down",
-				"mapId": "kanto_lavender_town",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
-				"position": {
-					"x": 720.0,
-					"y": 80.0
-				},
-				"spawnMarker": "FromRoute10"
-			},
-			"destinationAreaId": "kanto_lavender_town",
-			"sourceMapId": "kanto_lavender_town_north"
-		},
-		"kanto_lavender_town_north__to_route10": {
+		"kanto_lavender_town__to_route10": {
 			"destination": {
 				"facingDirection": "up",
 				"mapId": "kanto_route_10",
@@ -4962,10 +4900,10 @@
 					"x": 1232.0,
 					"y": 3280.0
 				},
-				"spawnMarker": "FromLavenderNorth"
+				"spawnMarker": "FromLavenderTown"
 			},
 			"destinationAreaId": "kanto_route_10",
-			"sourceMapId": "kanto_lavender_town_north"
+			"sourceMapId": "kanto_lavender_town"
 		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {
@@ -5730,19 +5668,19 @@
 			"destinationAreaId": "kanto_rock_tunnel_1f",
 			"sourceMapId": "kanto_rock_tunnel_b1f"
 		},
-		"kanto_route_10__to_lavender_north": {
+		"kanto_route_10__to_lavender_town": {
 			"destination": {
 				"facingDirection": "down",
-				"mapId": "kanto_lavender_town_north",
+				"mapId": "kanto_lavender_town",
 				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 				"position": {
-					"x": 1248.0,
-					"y": 64.0
+					"x": 720.0,
+					"y": 80.0
 				},
 				"spawnMarker": "FromRoute10"
 			},
-			"destinationAreaId": "kanto_lavender_town_north",
+			"destinationAreaId": "kanto_lavender_town",
 			"sourceMapId": "kanto_route_10"
 		},
 		"kanto_route_10__to_pokemon_center": {

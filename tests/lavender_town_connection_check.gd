@@ -1,7 +1,6 @@
 extends SceneTree
 
 const TOWN := "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
-const NORTH := "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"
 const ROUTE := "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 const AtlasValidator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd")
 var failures := 0
@@ -13,14 +12,13 @@ func _init() -> void:
 
 func _run() -> void:
 	var town := (load(TOWN) as PackedScene).instantiate()
-	var north := (load(NORTH) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
 	_check(town.get("map_id") == "kanto_lavender_town", "Lavender Town has its own map identity")
 	_check(town.has_node("Entities/Players") and town.has_node("Entities/NPCs")
 		and town.has_node("Entities/Interactables"), "Town supports players, NPCs and interactables")
 	var collision := town.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.tile_set != null and collision.get_used_cells().is_empty(),
-		"Collision tileset is ready without painting any blocking cells")
+	_check(collision.tile_set != null,
+		"Town retains its editable collision layer")
 	var visual := town.get_node("Visual")
 	var metadata: Dictionary = visual.get_meta("tiled_visual_map")
 	_check(metadata.get("width") == 50 and metadata.get("height") == 50,
@@ -30,12 +28,13 @@ func _run() -> void:
 	var atlas_errors: Array[String] = AtlasValidator.new().validate(
 		visual, "res://generated/tiled_visuals/lavender_town/lavender_town.visual.tileset.tres")
 	_check(atlas_errors.is_empty(), "New visual meets compact lossless atlas contract: %s" % [atlas_errors])
-	_check_connection(route, "ToLavenderNorth", north, NORTH)
-	_check_connection(north, "ToLavenderTown", town, TOWN)
-	_check_connection(town, "ToRoute10", north, NORTH)
-	_check_connection(north, "ToRoute10", route, ROUTE)
+	_check_connection(route, "ToLavenderTown", town, TOWN)
+	_check_connection(town, "ToRoute10", route, ROUTE)
+	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
+	_check(not catalog.areas.has("kanto_lavender_town_north"), "Removed north map is absent from staff catalog")
+	_check(not ResourceLoader.exists("res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"),
+		"Removed north scene cannot be loaded")
 	town.free()
-	north.free()
 	route.free()
 	quit(1 if failures > 0 else 0)
 

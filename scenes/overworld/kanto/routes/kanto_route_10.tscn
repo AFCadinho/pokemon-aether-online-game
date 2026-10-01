@@ -181,7 +181,7 @@ position = Vector2(1072, 1072)
 [node name="FromRockTunnelSouth" type="Marker2D" parent="Spawns" unique_id=899213792]
 position = Vector2(624, 2512)
 
-[node name="FromLavenderNorth" type="Marker2D" parent="Spawns" unique_id=1645792106]
+[node name="FromLavenderTown" type="Marker2D" parent="Spawns" unique_id=1645792106]
 position = Vector2(1232, 3280)
 
 [node name="FromPowerPlant" type="Marker2D" parent="Spawns" unique_id=1617080901]
@@ -286,19 +286,19 @@ shape = SubResource("shape_4")
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 
-[node name="ToLavenderNorth" type="Area2D" parent="Exits" unique_id=459165126]
+[node name="ToLavenderTown" type="Area2D" parent="Exits" unique_id=459165126]
 position = Vector2(1248, 3312)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"
+target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
 target_spawn_name = "FromRoute10"
-transition_id = "kanto_route_10__to_lavender_north"
+transition_id = "kanto_route_10__to_lavender_town"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToLavenderNorth" unique_id=1160466403]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToLavenderTown" unique_id=1160466403]
 position = Vector2(-32, 15.5)
 shape = SubResource("shape_5")
 
-[node name="RouteTransitionHint" parent="Exits/ToLavenderNorth" unique_id=1548152894 instance=ExtResource("5_lrh64")]
+[node name="RouteTransitionHint" parent="Exits/ToLavenderTown" unique_id=1548152894 instance=ExtResource("5_lrh64")]
 z_as_relative = false
 position = Vector2(-32, -1)
 tile_footprint = Vector2i(4, 1)
@@ -334,4 +334,4 @@ tile_set = SubResource("TileSet_kkef3")
 [connection signal="body_entered" from="Exits/ToRoute9River" to="Exits/ToRoute9River" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRockTunnelNorth" to="Exits/ToRockTunnelNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRockTunnelSouth" to="Exits/ToRockTunnelSouth" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToLavenderNorth" to="Exits/ToLavenderNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]

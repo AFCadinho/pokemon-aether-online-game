@@ -37,9 +37,9 @@ position = Vector2(720, 784)
 [node name="ToRoute10" type="Area2D" parent="Exits"]
 position = Vector2(720, 16)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromLavenderTown"
-transition_id = "kanto_lavender_town__to_lavender_north"
+transition_id = "kanto_lavender_town__to_route10"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10"]

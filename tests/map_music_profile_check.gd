@@ -129,7 +129,6 @@ func _run() -> void:
 	var music_manager := load("res://scripts/services/music_manager.gd").new() as Node
 	for scene_path: String in [
 		"res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
-		"res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
 	]:
 		var map := (load(scene_path) as PackedScene).instantiate()
 		_check_equal(music_manager.call("get_map_music_path", map), lavender_track,
