@@ -25,7 +25,7 @@ func _run() -> void:
 	_check_water(route_21, Vector2i(50, 90), 3690)
 	_check_water(cinnabar, Vector2i(64, 72), 2212)
 	_check_water(vermilion, Vector2i(80, 64), 654)
-	_check_water(docks, Vector2i(64, 48), 2290)
+	_check_water(docks, Vector2i(75, 30), 1939)
 	_expect(_water(cinnabar, 32, 1) and _water(route_21, 26, 88),
 		"Route 21 and Cinnabar arrivals are Surf water")
 	_expect(not _water(cinnabar, 33, 10), "Cinnabar north landing is land")
@@ -33,11 +33,11 @@ func _run() -> void:
 	_check_exit(route_21, "ToCinnabarIsland", CINNABAR, "FromRoute21", Vector2(832, 2864))
 	_check_exit(cinnabar, "ToRoute21", ROUTE_21, "FromCinnabarIsland", Vector2(1024, 16))
 	_check_exit(vermilion, "ToDocks", DOCKS, "FromVermilionCity", Vector2(1328, 2032))
-	_check_exit(docks, "ToVermilionCity", VERMILION, "FromDocks", Vector2(1008, 16))
+	_check_exit(docks, "ToVermilionCity", VERMILION, "FromDocks", Vector2(1040, 16))
 	_expect(_position(cinnabar, "FromRoute21") == Vector2(1040, 48), "Cinnabar north arrival")
 	_expect(_position(route_21, "FromCinnabarIsland") == Vector2(848, 2832), "Route 21 south arrival")
 	_expect(_position(vermilion, "FromDocks") == Vector2(1328, 2000), "Vermilion docks arrival")
-	_expect(_position(docks, "FromVermilionCity") == Vector2(1008, 48), "Docks city arrival")
+	_expect(_position(docks, "FromVermilionCity") == Vector2(1040, 48), "Docks city arrival")
 	_expect(cinnabar.get_node_or_null("Visual/ObjectsTop") != null, "Cinnabar imported visual in scene")
 	_expect(cinnabar.get_node_or_null("Visual/PavementCorners") != null, "Cinnabar includes the completed road corners")
 	var terrain := cinnabar.get_node("Visual/GroundDetail") as TileMapLayer

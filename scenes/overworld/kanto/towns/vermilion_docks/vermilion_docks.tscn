@@ -1,40 +1,42 @@
 [gd_scene format=3]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_docks/vermilion_docks.visual.tscn" id="1_visual"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_port_exterior/vermilion_port_exterior.visual.tscn" id="1_visual"]
 [ext_resource type="Script" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
 [ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
 
 [sub_resource type="RectangleShape2D" id="shape_city"]
 size = Vector2(96, 32)
 
-[node name="VermilionDocks" type="Node2D"]
+[node name="VermilionPortExterior" type="Node2D"]
 script = ExtResource("2_metadata")
 map_id = "kanto_vermilion_docks"
 map_region_name = "Kanto"
-map_display_name = "Vermilion Docks"
+map_display_name = "Vermilion Port"
 world_access_group_id = "kanto_vermilion_city"
 world_access_group_label = "Vermilion City"
 world_access_area_type = "exterior"
 location_id = "kanto.vermilion.docks"
-location_name = "Vermilion Docks"
+location_name = "Vermilion Port"
 region_id = "kanto"
-water_reference_tile = Vector2i(40, 20)
+water_reference_tile = Vector2i(0, 20)
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
 [node name="Spawns" type="Node2D" parent="."]
 
 [node name="FromVermilionCity" type="Marker2D" parent="Spawns"]
-position = Vector2(1008, 48)
+position = Vector2(1040, 48)
 
 [node name="Exits" type="Node2D" parent="."]
 
 [node name="ToVermilionCity" type="Area2D" parent="Exits"]
-position = Vector2(1008, 16)
+position = Vector2(1040, 16)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn"
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
 target_spawn_name = "FromDocks"
-transition_id = "kanto_vermilion_docks__to_port_interior"
+transition_id = "kanto_vermilion_docks__to_city"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity"]
@@ -44,5 +46,19 @@ shape = SubResource("shape_city")
 z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities"]
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+visible = false
+z_index = 4096
+tile_set = ExtResource("collision_tiles")
 
 [connection signal="body_entered" from="Exits/ToVermilionCity" to="Exits/ToVermilionCity" method="_on_body_entered"]
