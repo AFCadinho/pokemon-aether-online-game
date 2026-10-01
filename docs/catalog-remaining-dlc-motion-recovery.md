@@ -97,3 +97,51 @@ errors. The page and all 240 thumbnail/full-size images returned HTTP 200;
 `xdg-open` dispatched the review URL successfully. The hash-bound review
 manifest and page SHA-256 are recorded in the material checkpoint. User
 appearance approval is still pending.
+
+## Body detail and shiny correction follow-up
+
+The user's detail review found real omissions. All 15 body graphs were baked
+from their prepared native SCVI sources at 1024 pixels, with normal/rare table,
+texture and source Blend hash guards. The separately reconstructed Eye diffuse
+was retained. Original geometry, skinning, animation and response-map bindings
+were checked against all 30 input GLBs. Their 15 variant pairs still have exact
+geometry/motion parity.
+
+The SCVI importer leaves its inside-parallax input black. Its graph bake alone
+therefore still omits Iron Crown/Boulder's source-authored coloured panels.
+`catalog_dlc_layer_emission.py` restores those panels and active Eye emission
+from the official RGBA layer masks and normal/rare emission colours/intensities.
+It also restores explicitly opaque source classifications. This is a static
+mask proposal; native parallax animation, animated flow and view-dependent
+Fresnel are **not** claimed recovered. Reproduction produced identical SHA-256
+for all 30 outputs. Material/hash guards were retained; no tests were loosened.
+
+Pecharunt's alternate closed-shell mesh overlapped its open body, obscuring
+both detail and the gold shiny body. The recovered source has nine enabled mesh
+renderers, excluding the closed shell. The proposal excludes only that mesh
+binding in both variants. Restoring the binding in a disposable parity check
+recovers the exact original geometry/skin/motion signature; no vertices or
+animation curves were changed. Native visibility animation remains a future
+qualification step.
+
+Ogerpon's Teal Mask covers its orange/green-yellow face difference. An additional
+maskless comparison view excludes the mask mesh only for review; the primary
+Teal Mask profile and species counts are unchanged.
+
+The updated appearance page is <http://127.0.0.1:8785/>. Its 246 page/manifest
+and image requests returned HTTP 200. Godot sampled 30 primary variants plus
+the two maskless views with **zero pose/timing errors**. The user's follow-up
+approved appearance for **10 pairs**: Dipplin, Sinistcha, Poltchageist, Okidogi,
+Munkidori, Fezandipiti, Archaludon, Hydrapple, Terapagos and Pecharunt. **Ogerpon,
+Gouging Fire, Raging Bolt, Iron Boulder and Iron Crown remain explicitly pending
+appearance review.** These are appearance approvals only; sleep, standalone
+battle qualification and bundles remain open. The approved runtime catalog and
+R2 content have not changed.
+
+The five pending pairs have a separate focused page at
+<http://127.0.0.1:8786/>. Images are rendered at 1024 pixels with camera fitting
+based on projected per-pose bounds, instead of the full 3D AABB diagonal.
+This affects the review camera only. Ogerpon starts in its maskless comparison
+view; other poses and its masked view remain selectable. All 12 diagnostic
+variants (the five pairs plus two maskless views) passed the same pose/timing
+checks, and all 86 page/manifest/image requests returned HTTP 200.

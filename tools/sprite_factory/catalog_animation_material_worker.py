@@ -197,6 +197,9 @@ def colour_sockets(tree, shader_socket, constant_colour_review=False, static_fre
 
 
 def bake(job):
+    resolution = job.get('bake_resolution', 512)
+    if resolution not in (512, 1024, 2048):
+        raise ValueError('Unsupported native bake resolution')
     source = Path(job['source'])
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Native Blend source changed')
@@ -304,8 +307,8 @@ def bake(job):
         bpy.context.scene.cycles.samples = 1
         images = []
         for label, socket in [('colour', colour), ('alpha', alpha), ('glow', glow)]:
-            image = bpy.data.images.new(item['name'] + '_' + label, width=512,
-                                       height=512, alpha=True, is_data=label == 'alpha')
+            image = bpy.data.images.new(item['name'] + '_' + label, width=resolution,
+                                       height=resolution, alpha=True, is_data=label == 'alpha')
             node = tree.nodes.new('ShaderNodeTexImage')
             node.image = image
             tree.nodes.active = node
