@@ -112,7 +112,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn"
 target_spawn_name = "FromRoute2Entrance"
 transition_id = "kanto_diglett_cave_route_2_entrance__to_tunnel"
-transition_facing_direction = "down"
+transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel" unique_id=379339118]
 position = Vector2(16, 0)
