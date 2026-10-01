@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="population_picnicker"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_045_Beauty.png" id="population_rose"]
 [ext_resource type="SpriteFrames" uid="uid://bext5y1mblgc5" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="population_sailor"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
@@ -21,6 +22,22 @@ size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
 size = Vector2(32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rose"]
+atlas = ExtResource("population_rose")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rose"]
+resource_local_to_scene = true
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rose")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n2cux"]
 texture = ExtResource("11_ohes4")
@@ -209,10 +226,11 @@ interaction_id = "kanto_ss_anne_deliver_report"
 [node name="PopulationTouristSana" parent="Entities/NPCs" unique_id=98047104 instance=ExtResource("dialogue")]
 position = Vector2(208, 432)
 npc_id = "kanto_ss_anne_tourist_sana"
-npc_definition_id = "trainer_class_picnicker"
-display_name = "Tourist Sana"
+npc_definition_id = ""
+display_name = "Rose"
 facing_direction = Vector2(-1, 0)
-npc_sprite_frames = ExtResource("population_picnicker")
+npc_sprite_frames = SubResource("SpriteFrames_rose")
+dialogue_lines = Array[String](["I'm flying, Jack!"])
 
 [node name="PopulationSailorTrevor" parent="Entities/NPCs" unique_id=1253978292 instance=ExtResource("trainer")]
 position = Vector2(816, 496)
