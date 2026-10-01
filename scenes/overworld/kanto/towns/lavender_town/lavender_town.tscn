@@ -9,6 +9,9 @@
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(160, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_west"]
+size = Vector2(32, 160)
+
 [node name="LavenderTown" type="Node2D"]
 script = ExtResource("2_metadata")
 map_id = "kanto_lavender_town"
@@ -28,6 +31,14 @@ music_profile_id = "kanto.lavender_town"
 
 [node name="FromRoute10" type="Marker2D" parent="Spawns"]
 position = Vector2(720, 80)
+
+[node name="FromRoute8" type="Marker2D" parent="Spawns"]
+position = Vector2(80, 784)
+editor_description = "Arrival from the future Route 8 map, facing right into Lavender Town."
+
+[node name="FromRoute12" type="Marker2D" parent="Spawns"]
+position = Vector2(720, 1520)
+editor_description = "Arrival from the future Route 12 map, facing up into Lavender Town."
 
 [node name="TownCenter" type="Marker2D" parent="Spawns"]
 position = Vector2(720, 784)
@@ -49,6 +60,46 @@ shape = SubResource("shape_north")
 tile_footprint = Vector2i(5, 1)
 flow_direction = "up"
 
+[node name="ToRoute8" type="Area2D" parent="Exits"]
+position = Vector2(16, 784)
+monitoring = false
+monitorable = false
+script = ExtResource("3_exit")
+transition_id = "kanto_lavender_town__to_route8"
+transition_facing_direction = "left"
+editor_description = "Pending Route 8: set target_scene_path and target_spawn_name when the map exists, register the transition, then enable monitoring and the collision shape."
+metadata/planned_target_map_id = "kanto_route_8"
+metadata/planned_target_spawn_name = "FromLavenderTown"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute8"]
+shape = SubResource("shape_west")
+disabled = true
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute8" instance=ExtResource("4_hint")]
+visible = false
+tile_footprint = Vector2i(1, 5)
+flow_direction = "left"
+
+[node name="ToRoute12" type="Area2D" parent="Exits"]
+position = Vector2(720, 1584)
+monitoring = false
+monitorable = false
+script = ExtResource("3_exit")
+transition_id = "kanto_lavender_town__to_route12"
+transition_facing_direction = "down"
+editor_description = "Pending Route 12: set target_scene_path and target_spawn_name when the map exists, register the transition, then enable monitoring and the collision shape."
+metadata/planned_target_map_id = "kanto_route_12"
+metadata/planned_target_spawn_name = "FromLavenderTown"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12"]
+shape = SubResource("shape_north")
+disabled = true
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute12" instance=ExtResource("4_hint")]
+visible = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
+
 [node name="Entities" type="Node2D" parent="."]
 z_index = 5
 y_sort_enabled = true
@@ -67,3 +118,6 @@ z_index = 4096
 tile_set = ExtResource("5_collision")
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]

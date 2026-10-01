@@ -30,6 +30,23 @@ func _run() -> void:
 	_check(atlas_errors.is_empty(), "New visual meets compact lossless atlas contract: %s" % [atlas_errors])
 	_check_connection(route, "ToLavenderTown", town, TOWN)
 	_check_connection(town, "ToRoute10", route, ROUTE)
+	for route_number in [8, 12]:
+		var planned_exit := town.get_node("Exits/ToRoute%d" % route_number) as Area2D
+		var planned_shape := planned_exit.get_node("CollisionShape2D") as CollisionShape2D
+		_check(not planned_exit.monitoring and planned_shape.disabled,
+			"Future Route %d exit cannot trigger during gameplay" % route_number)
+		_check(str(planned_exit.get("target_scene_path")).is_empty()
+			and str(planned_exit.get("target_spawn_name")).is_empty(),
+			"Future Route %d exit has no dangling scene or spawn reference" % route_number)
+		var arrival := town.get_node("Spawns/FromRoute%d" % route_number) as Marker2D
+		var rectangle := planned_shape.shape as RectangleShape2D
+		var bounds := Rect2(planned_exit.position - rectangle.size / 2, rectangle.size)
+		_check(not bounds.has_point(arrival.position),
+			"Future Route %d spawn arrives inside town, outside its exit" % route_number)
+	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
+	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
+	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 1,
+		"Catalog builder accepts town and registers only the connected Route 10 exit")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(not catalog.areas.has("kanto_lavender_town_north"), "Removed north map is absent from staff catalog")
 	_check(not ResourceLoader.exists("res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"),
