@@ -445,3 +445,12 @@ must not be admitted. Sleep clears at approximately 0.030 m for all three.
 `catalog_remaining_142_fire_battle_checkpoint.json` freezes this result, the
 failed profiles and capture hashes. Next work must repair Centiskorch's
 attack/faint placement and repeat the same gate, then obtain battle visual review.
+
+## All remaining species: consolidated review — 2026-10-01
+
+The next task attempted all 127 remaining species. There are now 112
+normal/shiny proposals on one final appearance/battle page and 15 explicit DLC
+holds. Counts remain 899 approved profiles; no new approval/upload is implied.
+See [the consolidated checkpoint](catalog-remaining-final-batch.md) for current
+hashes, checks, limitations and the single final review link. Earlier fire and
+individual preview pages are superseded for this review.

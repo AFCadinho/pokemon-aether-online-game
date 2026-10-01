@@ -65,7 +65,7 @@ def replace_uv(tree):
                     tree.links.new(uv.outputs['UV'], link.to_socket)
 
 
-def colour_sockets(tree, shader_socket, constant_colour_review=False):
+def colour_sockets(tree, shader_socket, constant_colour_review=False, static_fresnel_review=False):
     node = shader_socket.node
     if node.type == 'MIX_SHADER':
         branches = [socket.links[0].from_socket if len(socket.links) == 1 else None
@@ -75,7 +75,7 @@ def colour_sockets(tree, shader_socket, constant_colour_review=False):
             transparent = branches[transparent_index].node.inputs['Color']
             if transparent.is_linked or any(abs(float(v) - 1) > 1e-6 for v in transparent.default_value[:3]):
                 raise ValueError('Tinted transmission requires separate reconstruction')
-            colour, alpha, glow = colour_sockets(tree, branches[1 - transparent_index], True)
+            colour, alpha, glow = colour_sockets(tree, branches[1 - transparent_index], True, static_fresnel_review)
             factor = node.inputs[0]
             weight = tree.nodes.new('ShaderNodeMath')
             weight.operation = 'SUBTRACT' if transparent_index == 1 else 'MULTIPLY'
@@ -92,7 +92,7 @@ def colour_sockets(tree, shader_socket, constant_colour_review=False):
             return colour, opacity.outputs[0], glow
         if not all(branches) or [s.node.type for s in branches] != ['BSDF_PRINCIPLED', 'EMISSION']:
             raise ValueError('Native shader mix is not Principled plus emission')
-        colour, alpha, principled_glow = colour_sockets(tree, branches[0], constant_colour_review)
+        colour, alpha, principled_glow = colour_sockets(tree, branches[0], constant_colour_review, static_fresnel_review)
         lamp = branches[1].node
         glow = tree.nodes.new('ShaderNodeVectorMath')
         glow.operation = 'SCALE'
@@ -105,7 +105,13 @@ def colour_sockets(tree, shader_socket, constant_colour_review=False):
         if constant_colour_review:
             factor = node.inputs[0]
             if factor.is_linked:
-                raise ValueError('View-dependent shader mix needs separate reconstruction')
+                if not static_fresnel_review:
+                    raise ValueError('View-dependent shader mix needs separate reconstruction')
+                # Explicit authored review proposal: retain native diffuse
+                # colour, excluding the camera-dependent emission mix. This
+                # is never claimed as native Fresnel recovery or admission.
+                for link in list(factor.links): tree.links.remove(link)
+                factor.default_value = 0.0
             weight = float(factor.default_value)
             if not math.isfinite(weight) or not 0 <= weight <= 1:
                 raise ValueError('Native shader mix factor is outside [0,1]')
@@ -179,7 +185,7 @@ def colour_sockets(tree, shader_socket, constant_colour_review=False):
     socket = outputs[0].inputs.get(shader_socket.name)
     if socket is None or len(socket.links) != 1:
         raise ValueError('Native shader group output is not connected')
-    colour, alpha, glow = colour_sockets(graph, socket.links[0].from_socket, constant_colour_review)
+    colour, alpha, glow = colour_sockets(graph, socket.links[0].from_socket, constant_colour_review, static_fresnel_review)
     values = input_values(node)
     for name, kind, source in [('PAO_SourceColour', 'NodeSocketColor', colour),
                                ('PAO_SourceAlpha', 'NodeSocketFloat', alpha),
@@ -204,7 +210,7 @@ def bake(job):
                 raise ValueError('Official variant table changed')
             official.append({row['name']: row for row in inspect_materials(table)})
     bpy.ops.wm.open_mainfile(filepath=str(source), use_scripts=False, load_ui=False)
-    rig, _ = isolate(source)
+    rig, _ = isolate(source, job.get('diagnostic_rig_selection'))
     select_action(rig, bpy.data.actions[job['idle_action']])
     for track in rig.animation_data.nla_tracks:
         track.mute = True
@@ -269,7 +275,7 @@ def bake(job):
                              'source_glass_ior': float(glass.inputs['IOR'].default_value),
                              'source_glass_roughness': float(glass.inputs['Roughness'].default_value)})
             continue
-        colour, alpha, glow = colour_sockets(tree, surface, job.get('constant_colour_review', False))
+        colour, alpha, glow = colour_sockets(tree, surface, job.get('constant_colour_review', False), job.get('static_fresnel_colour_review', False))
         for obj in list(bpy.data.objects):
             bpy.data.objects.remove(obj, do_unlink=True)
         bpy.ops.mesh.primitive_plane_add()
@@ -331,6 +337,7 @@ def bake(job):
         images[0].file_format = 'PNG'
         images[0].save()
         receipts.append({'material': item['name'], 'native_emission_output_zero': not glow_active,
+                         'static_fresnel_colour_review': job.get('static_fresnel_colour_review', False),
                          **({'emission_strength': strength, 'emission_peak': glow_peak,
                              'emission_output': item['glow_output']} if glow_active else {}),
                          **({'source_uv_domain': domain} if domain is not None else {})})

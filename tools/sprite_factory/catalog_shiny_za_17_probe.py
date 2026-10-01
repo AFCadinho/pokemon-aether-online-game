@@ -88,6 +88,7 @@ def probe(row, source_root, output):
     place = output / name
     place.mkdir(parents=True, exist_ok=True)
     entry = source_entry({'species': name, 'pm': int(ident[2:]),
+                          **({'resource_id': row['za_identity']} if row.get('za_identity') else {}),
                           'target_game_height_px': 100}, source_root, source_root)
     holds = [x for x in entry['warnings'] if x.startswith(('motion_bank_hold:', 'missing_action:'))]
     if holds:

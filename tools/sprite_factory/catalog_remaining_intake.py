@@ -156,6 +156,8 @@ def probe_one(entry, output, worker):
             job = {"species": entry["species"], "source": str(extracted),
                    "source_sha256": digest, "archive": source["archive"],
                    "member": source["member"], "output": str(report)}
+            if entry.get('diagnostic_rig_selection'):
+                job['diagnostic_rig_selection'] = entry['diagnostic_rig_selection']
             job_path = Path(temporary) / "job.json"
             job_path.write_text(json.dumps(job))
             command = ["flatpak", "run", "--unshare=network", "--nofilesystem=host",

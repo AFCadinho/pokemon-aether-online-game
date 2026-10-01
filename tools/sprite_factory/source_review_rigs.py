@@ -34,20 +34,26 @@ def material_images(tree, visited=None):
     return result
 
 
-def isolate(source):
+def isolate(source, diagnostic_selection=None):
     import bpy
     rigs = [o for o in bpy.context.scene.objects if o.type == 'ARMATURE']
     if bpy.data.libraries or not rigs:
         raise ValueError('Expected self-contained source rigs')
-    if len(rigs) == 1:
+    if diagnostic_selection:
+        import hashlib
+        if (diagnostic_selection.get('policy') != 'explicit_source_variant_review_v1'
+                or hashlib.sha256(Path(source).read_bytes()).hexdigest() != diagnostic_selection.get('source_sha256')):
+            raise ValueError('Explicit source variant requires unchanged source evidence')
+    if len(rigs) == 1 and not diagnostic_selection:
         return rigs[0], {'policy': 'single_rig', 'rig': rigs[0].name}
-    expected = image_identity(Path(source).stem + '.')
+    expected = diagnostic_selection['expected_identity'] if diagnostic_selection else image_identity(Path(source).stem + '.')
     if expected is None:
         raise ValueError('Multiple rigs require a source variant identity')
     members = {r.name: [r] for r in rigs}
     for obj in bpy.context.scene.objects:
         if obj.type != 'MESH':
-            if obj.type not in ('ARMATURE', 'CAMERA', 'LIGHT'):
+            if obj.type not in ('ARMATURE', 'CAMERA', 'LIGHT') and not (
+                    diagnostic_selection and obj.type == 'EMPTY'):
                 raise ValueError('Unsupported multi-rig scene object: ' + obj.name)
             continue
         owners = {m.object for m in obj.modifiers if m.type == 'ARMATURE' and m.object}
@@ -59,17 +65,39 @@ def isolate(source):
         members[owner.name].append(obj)
     identities = {}
     for rig in rigs:
-        if rig.parent or rig.constraints or any(o.constraints for o in members[rig.name]):
+        reviewed_parent = bool(diagnostic_selection and rig.name == diagnostic_selection.get('rig')
+            and rig.parent and rig.parent.type == 'EMPTY'
+            and rig.parent.name == diagnostic_selection.get('rig_parent'))
+        # Other source variants may also have their own Empty parent. Only the
+        # selected, pinned parent is accepted; excluded variants stay isolated.
+        excluded_parent = bool(diagnostic_selection and rig.name != diagnostic_selection.get('rig')
+                               and rig.parent and rig.parent.type == 'EMPTY')
+        if (rig.parent and not (reviewed_parent or excluded_parent)) or rig.constraints or any(o.constraints for o in members[rig.name]):
             raise ValueError('Constrained/composite rigs need explicit review')
         if any(o.animation_data and o.animation_data.drivers for o in members[rig.name]):
             raise ValueError('Driven multi-rig scenes need explicit review')
         images = {name for o in members[rig.name] if o.type == 'MESH'
                   for mat in o.data.materials if mat for name in material_images(mat.node_tree)}
         identities[rig.name] = sorted({identity for name in images if (identity := image_identity(name))})
-    selected = choose_variant(identities, expected)
+    if diagnostic_selection:
+        selected = diagnostic_selection['rig']
+        expected = diagnostic_selection['expected_identity']
+        rig_identity = diagnostic_selection.get('rig_identity', expected)
+        if (selected not in identities or expected not in identities[selected]
+                or rig_identity[:6] != expected[:6]
+                or not re.match(re.escape(rig_identity) + r'(?:_|\.|$)',
+                    diagnostic_selection.get('rig_parent', selected))):
+            raise ValueError('Explicit rig name and positive texture identity disagree')
+    else:
+        selected = choose_variant(identities, expected)
     record = {'policy': 'exclusive_texture_variant_v1', 'rig': selected,
               'expected_identity': expected, 'evidence': identities,
               'excluded_rigs': [r.name for r in rigs if r.name != selected]}
+    if diagnostic_selection:
+        record['policy'] = diagnostic_selection['policy']
+        record['review_required'] = True
+        record['rig_parent'] = diagnostic_selection.get('rig_parent')
+        record['auxiliary_source_objects'] = sorted(o.name for o in bpy.context.scene.objects if o.type == 'EMPTY')
     result = bpy.data.objects[selected]
     for name, objects in members.items():
         if name != selected:

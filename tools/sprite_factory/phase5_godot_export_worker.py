@@ -41,9 +41,11 @@ def run(job):
                 from material_effect_export import prepare
                 effects = prepare(job)
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
-    rig, rig_selection = isolate(source)
+    rig, rig_selection = isolate(source, job.get('diagnostic_rig_selection'))
     from source_repairs import apply as apply_repair
     source_repair = apply_repair(job['source_sha256'], job['actions'].values())
+    from authored_motion_review import author
+    authored_motion = author(rig, job)
     quaternion_repair = []
     quaternion_clips = job.get('identity_intake', {}).get('quaternion_continuity_diagnostic')
     if quaternion_clips:
@@ -278,7 +280,9 @@ def run(job):
         timing[name] = {'source_action': original, 'duration': (end - start) / fps,
                         'fps': fps, 'loop': name in ('idle', 'sleep', 'faint_loop')}
     bpy.ops.object.select_all(action='DESELECT')
-    for obj in bpy.context.scene.objects:
+    excluded_by_source_view_layer = [obj.name for obj in bpy.context.scene.objects
+                                     if obj.name not in bpy.context.view_layer.objects]
+    for obj in bpy.context.view_layer.objects:
         if obj.type in ('MESH', 'ARMATURE'):
             obj.select_set(True)
     bpy.context.view_layer.objects.active = rig
@@ -306,10 +310,12 @@ def run(job):
     if hashlib.sha256(source.read_bytes()).hexdigest() != job['source_sha256']:
         raise ValueError('Source modified during export')
     report = {'status': 'exported_for_review', 'path': str(path),
+        'excluded_by_source_view_layer': excluded_by_source_view_layer,
         'glb_sha256': hashlib.sha256(payload).hexdigest(), 'bytes': len(payload),
         'animations': timing, 'source_warnings': inspection['warnings'], 'verified_texture_replacements': replacements,
         'rig_selection': rig_selection,
         'source_repair': source_repair,
+        'authored_motion_review': authored_motion,
         'unrepresented_rare_textures': unrepresented_textures,
         'quaternion_continuity_repair': quaternion_repair,
         'flatten_bone_hierarchy': (job.get('native_flatten_bone_hierarchy_diagnostic') is True

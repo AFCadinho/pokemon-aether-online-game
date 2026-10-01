@@ -1,0 +1,230 @@
+{
+  "schema": 2,
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "dipplin",
+      "resource_id": "pm1121",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "3a8d6ff03a48d2f4c868d5182a217477ff7f9dd555f1ba7c77b852d6d8f5df9f",
+      "models": [
+        "pm1121/pm1121_00_00/pm1121_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1121/pm1121_00_00/pm1121_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "poltchageist",
+      "resource_id": "pm1134",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "2f4831b700a87bb8b82b5e51bed2d9421d1b42e549c2c02f0092f76b7cae2165",
+      "models": [
+        "pm1134/pm1134_11_00/pm1134_11_00.trmdl",
+        "pm1134/pm1134_12_00/pm1134_12_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1134/pm1134_11_00/pm1134_11_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "sinistcha",
+      "resource_id": "pm1133",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "94fa9b6dee9f47b322a628f64d9db83bf7fc2eb56aa87b64368e617d5a876a85",
+      "models": [
+        "pm1133/pm1133_11_00/pm1133_11_00.trmdl",
+        "pm1133/pm1133_12_00/pm1133_12_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1133/pm1133_11_00/pm1133_11_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "okidogi",
+      "resource_id": "pm1123",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "e072169083f9c0b1b29c5d974a5d21c669d33d55f41864d90aefd8489103536a",
+      "models": [
+        "pm1123/pm1123_00_00/pm1123_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1123/pm1123_00_00/pm1123_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "munkidori",
+      "resource_id": "pm1124",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "b79d9ebe99be485c33aa9feefe1a09c3547297ae37137642f2ad7500121e25a6",
+      "models": [
+        "pm1124/pm1124_00_00/pm1124_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1124/pm1124_00_00/pm1124_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "fezandipiti",
+      "resource_id": "pm1125",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "7fc4d16fde4297e0bf660b7e56ac9ae4030f548428a002ca1ab200c91c805849",
+      "models": [
+        "pm1125/pm1125_00_00/pm1125_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1125/pm1125_00_00/pm1125_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "ogerpon",
+      "resource_id": "pm1120",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "169c4ef68c0d5b0483baa495100a0b20968d0c1e7894841a8dcea5cbf8e060ab",
+      "models": [
+        "pm1120/pm1120_11_00/pm1120_11_00.trmdl",
+        "pm1120/pm1120_11_99/pm1120_11_99.trmdl",
+        "pm1120/pm1120_12_00/pm1120_12_00.trmdl",
+        "pm1120/pm1120_12_99/pm1120_12_99.trmdl",
+        "pm1120/pm1120_13_00/pm1120_13_00.trmdl",
+        "pm1120/pm1120_13_99/pm1120_13_99.trmdl",
+        "pm1120/pm1120_14_00/pm1120_14_00.trmdl",
+        "pm1120/pm1120_14_99/pm1120_14_99.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1120/pm1120_11_00/pm1120_11_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "archaludon",
+      "resource_id": "pm1132",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "aecc99f69abfd5d980bf214027ca1017002415ecacf7bd0d8da8b8085c9b2948",
+      "models": [
+        "pm1132/pm1132_00_00/pm1132_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1132/pm1132_00_00/pm1132_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "hydrapple",
+      "resource_id": "pm1122",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "15063bf5328d4d821877cb413f006450c23643b94e8eb7b00a9be5ba66c5ded5",
+      "models": [
+        "pm1122/pm1122_00_00/pm1122_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1122/pm1122_00_00/pm1122_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "gouging-fire",
+      "resource_id": "pm1126",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "843c78c87d8552544e187afbef8c8efac1687af5ef2185cb79b20018662db7f3",
+      "models": [
+        "pm1126/pm1126_00_00/pm1126_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1126/pm1126_00_00/pm1126_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "raging-bolt",
+      "resource_id": "pm1127",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "cc501e49e7db13cdb4377279e857b8ff3c1854925621ec7f71ab8e9bcdff839a",
+      "models": [
+        "pm1127/pm1127_00_00/pm1127_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1127/pm1127_00_00/pm1127_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "iron-boulder",
+      "resource_id": "pm1129",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "c99e5a7117c7235348baf1c2f4e621971967e2534e4c514131b55c9e7554f5ec",
+      "models": [
+        "pm1129/pm1129_00_00/pm1129_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1129/pm1129_00_00/pm1129_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "iron-crown",
+      "resource_id": "pm1128",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "09b414ecc33904c73144d070e4a3c98ede549d622f873dd07170706fea11df11",
+      "models": [
+        "pm1128/pm1128_00_00/pm1128_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1128/pm1128_00_00/pm1128_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    },
+    {
+      "species": "terapagos",
+      "resource_id": "pm1130",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "a46b3e026816234a55f0d1164fc2785d872e3395f8c50114d3e5d142a86dc357",
+      "models": [
+        "pm1130/pm1130_11_00/pm1130_11_00.trmdl",
+        "pm1130/pm1130_12_00/pm1130_12_00.trmdl",
+        "pm1130/pm1130_13_00/pm1130_13_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1130/pm1130_11_00/pm1130_11_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review",
+      "material_aliases": {
+        "body_a_02": "body_a"
+      }
+    },
+    {
+      "species": "pecharunt",
+      "resource_id": "pm1131",
+      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "icon_sha256": "d0280bd3065194a49a9238b2ed1fb066b41711b19bf183ea9f881d2a9bbc4c41",
+      "models": [
+        "pm1131/pm1131_00_00/pm1131_00_00.trmdl"
+      ],
+      "motion_folder_present": false,
+      "runtime_approved": false,
+      "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1131/pm1131_00_00/pm1131_00_00_00.png",
+      "status": "held_missing_motion_and_baseline_pose",
+      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+    }
+  ]
+}
