@@ -11,12 +11,10 @@
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
   "pending": [
-    "native_eye_and_layered_emission_review",
-    "Hydrapple_hidden_accessory_bounds_and_camera",
-    "Terapagos_flow_and_transparency",
+    "five_species_appearance_review",
+    "native_parallax_Fresnel_and_Terapagos_flow_qualification",
     "authored_sleep_poses",
     "standalone_SCN_conversion_and_battle_qualification",
-    "collective_user_review",
     "individual_bundles"
   ],
   "entries": [
@@ -28,21 +26,65 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "29a792f76b882b6b45520fe5866dd355c740df6a11c2d87849629b7924cde7c3",
+          "glb_sha256": "73894978c3b77965795c0dffff5422696c630e18b99718691ce6d42d3e8ee67c",
           "material_table_sha256": "2e87aedd6c2d751dfd6c78df427ffd3ffbd1dfed36e7b1bd048d4c906de49b24",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "29a792f76b882b6b45520fe5866dd355c740df6a11c2d87849629b7924cde7c3",
+          "native_shader_receipt_sha256": "c9e37d666bf661aa42dd1df2d22e8e0c957b2453132901832157b926d620a653",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "c66a4bef251007bb17534dfea06aee3f6e7dabc69842da800805cfd90b3c412d",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "c66a4bef251007bb17534dfea06aee3f6e7dabc69842da800805cfd90b3c412d",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_c",
+              "mask_sha256": "85c331c964b0684558b8456891e03c968d18b462503606cae944fee2bff4743b",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "b34334951f8113ae6a11e5ea1974d802cf517613cb003c6ea67e7e8bc40a5a14",
+          "glb_sha256": "06d1878f98d72a0f9e67fb9eb9d626bec5a452c1c7f2ca680def9e8c6290e35a",
           "material_table_sha256": "6f8dbae6857f2750529b92cfbcff19f3901343f9842c3027c1fe8336132872cf",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "b34334951f8113ae6a11e5ea1974d802cf517613cb003c6ea67e7e8bc40a5a14",
+          "native_shader_receipt_sha256": "c9e37d666bf661aa42dd1df2d22e8e0c957b2453132901832157b926d620a653",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "c66a4bef251007bb17534dfea06aee3f6e7dabc69842da800805cfd90b3c412d",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "c66a4bef251007bb17534dfea06aee3f6e7dabc69842da800805cfd90b3c412d",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_c",
+              "mask_sha256": "85c331c964b0684558b8456891e03c968d18b462503606cae944fee2bff4743b",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -78,7 +120,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "sinistcha",
@@ -88,20 +131,28 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "f9815ef23098c2001d46b05105ae5e8bb3ab74f47706f95309d0360bf9219fbb",
+          "glb_sha256": "a068b4ce1422d2728aa10f23eafd83d2c25d9f1788fc60da2f63c33d5e219dbc",
           "material_table_sha256": "5450fe3efc83884cb84cc70ee92c296becda251f89b72c7b0a3b07ae62180e11",
           "material_count": 5,
           "limitations": [
-            "separate eyelid texture layers need pose review"
-          ]
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "f9815ef23098c2001d46b05105ae5e8bb3ab74f47706f95309d0360bf9219fbb",
+          "native_shader_receipt_sha256": "9d5cbacc9873ec773f4bd97e040f5456a3ce0908f6a963b7d26722e38f82a3f4",
+          "layer_emission_receipt": []
         },
         "shiny": {
-          "glb_sha256": "d408327cff508faf1af14584a8fcbdd1df7a3db225037cf7241abc5bf9a5d4f4",
+          "glb_sha256": "f248490e9f162aed2160762491eba6cc8cf2433d8c76ab28d4da114f3461c5ce",
           "material_table_sha256": "64245316c8d55ce6f5d45688782c0d3bd0a0e09f718be08b46cf7354ebf84e33",
           "material_count": 5,
           "limitations": [
-            "separate eyelid texture layers need pose review"
-          ]
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "d408327cff508faf1af14584a8fcbdd1df7a3db225037cf7241abc5bf9a5d4f4",
+          "native_shader_receipt_sha256": "9d5cbacc9873ec773f4bd97e040f5456a3ce0908f6a963b7d26722e38f82a3f4",
+          "layer_emission_receipt": []
         }
       },
       "geometry_motion_sha256": "390617321afcd256f33373ae7143f53aaa32b3fb0e611a58a1459c54c89b6772",
@@ -142,7 +193,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "poltchageist",
@@ -152,20 +204,26 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "5743bd3ed11c340286180218e880a85ef54435b0a3ddb1baab281e2f4524ac11",
+          "glb_sha256": "7ff894bc0564f0f438c0d2e7d9a0a2551fd6e65985b666734313cab7c0a7a0ed",
           "material_table_sha256": "28c3109f159054b4e4e18117ec8de020c47c13c88e686827ba0da608f5ffa457",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
-          ]
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "5743bd3ed11c340286180218e880a85ef54435b0a3ddb1baab281e2f4524ac11",
+          "native_shader_receipt_sha256": "1c21390e35a4185f0c2bbb22c2b8222b9c4f4c297396858a5068cbd133fccfbe",
+          "layer_emission_receipt": []
         },
         "shiny": {
-          "glb_sha256": "948b7476bda786fd2ad8b692d1f71afd6ae8864ad61e858a60bb5cbbe6c097c6",
+          "glb_sha256": "6ac4d2148c50a88e7ce5a1da8643dbe17ba69f702f107fe7c85bec6b819e8400",
           "material_table_sha256": "ca3ad7dd999eb2ac7c632e6e62ecc86cdac2ca963425ebd4ab85a40d61f99867",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
-          ]
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "948b7476bda786fd2ad8b692d1f71afd6ae8864ad61e858a60bb5cbbe6c097c6",
+          "native_shader_receipt_sha256": "1c21390e35a4185f0c2bbb22c2b8222b9c4f4c297396858a5068cbd133fccfbe",
+          "layer_emission_receipt": []
         }
       },
       "geometry_motion_sha256": "e80e70413274ef7c4617d6e5e250e1d1b43c71972e3ca19dede3d68d98cf5db9",
@@ -200,7 +258,8 @@
           "fps": 60.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "okidogi",
@@ -210,19 +269,51 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "844ed83397be184cbaf384a339cfc806764ec1c9908e4e40937dffc8ca1cf2a3",
+          "glb_sha256": "1ff505329ea759590cef88e1198fbbec1bc2c7ba0f7c11f98ad7b8122ce1b5e0",
           "material_table_sha256": "e792f6f92af7fda7f1ed19b9198946e934a3e18a0c08b3f2b5dd300b1ddae50d",
           "material_count": 5,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "844ed83397be184cbaf384a339cfc806764ec1c9908e4e40937dffc8ca1cf2a3",
+          "native_shader_receipt_sha256": "e132b392e23415590f54418e8d1b9263ff11ae113c3b4487e6f1fcfb63141aa6",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "84abbb09aa191e371e0ead58ed19a438bf474913ffa4f18e642f303041974f1f",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "84abbb09aa191e371e0ead58ed19a438bf474913ffa4f18e642f303041974f1f",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "d2d86ab4a0ce77135e8686653effa9084e1c38a432320d06fb307e90802c66a8",
+          "glb_sha256": "d9ffa45120ba5593dfb7938c68a9c27a3f0d02177d69ffdc75d919e04333554f",
           "material_table_sha256": "a1a09f82fdc0d61231d3a428a335d4b3998013ea21e16582abbbd444be29c23e",
           "material_count": 5,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "d2d86ab4a0ce77135e8686653effa9084e1c38a432320d06fb307e90802c66a8",
+          "native_shader_receipt_sha256": "e132b392e23415590f54418e8d1b9263ff11ae113c3b4487e6f1fcfb63141aa6",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "84abbb09aa191e371e0ead58ed19a438bf474913ffa4f18e642f303041974f1f",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "84abbb09aa191e371e0ead58ed19a438bf474913ffa4f18e642f303041974f1f",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -258,7 +349,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "munkidori",
@@ -268,19 +360,75 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "7d0aa2933aa26527f8fb82f5e13f04b55ba692065f811e160f31ac520bd3e21c",
+          "glb_sha256": "aac1a90f4974e9ae7c8e5d5d1743439638d2425d503e46de328a88e2b758fe2f",
           "material_table_sha256": "6ab88b1e6a45bd7e2b2e529f76784298384a05414d7b252769b72a5993cd2cc2",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "7d0aa2933aa26527f8fb82f5e13f04b55ba692065f811e160f31ac520bd3e21c",
+          "native_shader_receipt_sha256": "0a85e7e9c6c037834223d1758bde6298eefa5b41e8f7d0952918a043b42ad908",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "898f6359658c8a03f9762fbc586c88df251faaca9b27ce1b4658d12cd86f7906",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "898f6359658c8a03f9762fbc586c88df251faaca9b27ce1b4658d12cd86f7906",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye_b",
+              "mask_sha256": "434811b9bac75a75aa3360d5c4909e0e1af5d9a0e950d21a6d8ec0bcb3be2cfa",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_b",
+              "mask_sha256": "434811b9bac75a75aa3360d5c4909e0e1af5d9a0e950d21a6d8ec0bcb3be2cfa",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "8612aed12f70f85997e4e72c36b3f8dc797f4181e9b66f4736605ec939910dee",
+          "glb_sha256": "29412a6708b8c0b2a0d4543756ba4b9b74352a2ec7259a14c5b908110566e7aa",
           "material_table_sha256": "6c9b7e6bc682aa463fb1b1c22f51dea9e78f670193f42eaf8cc5273302af17db",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "8612aed12f70f85997e4e72c36b3f8dc797f4181e9b66f4736605ec939910dee",
+          "native_shader_receipt_sha256": "0a85e7e9c6c037834223d1758bde6298eefa5b41e8f7d0952918a043b42ad908",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "898f6359658c8a03f9762fbc586c88df251faaca9b27ce1b4658d12cd86f7906",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "898f6359658c8a03f9762fbc586c88df251faaca9b27ce1b4658d12cd86f7906",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye_b",
+              "mask_sha256": "434811b9bac75a75aa3360d5c4909e0e1af5d9a0e950d21a6d8ec0bcb3be2cfa",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_b",
+              "mask_sha256": "434811b9bac75a75aa3360d5c4909e0e1af5d9a0e950d21a6d8ec0bcb3be2cfa",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -316,7 +464,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "fezandipiti",
@@ -326,19 +475,51 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "695c55cb67953ebdfef4004a49d907ae473ba2492a607d29491ebe71a9268ba9",
+          "glb_sha256": "ee80fcdbd022b05b45da19391ca6c4a677f85713859768f8f362987477e1ffa2",
           "material_table_sha256": "09a12780a0e4c9bd5e43f0d65e659c100743a3fba87bc0722da38879112bfa69",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "695c55cb67953ebdfef4004a49d907ae473ba2492a607d29491ebe71a9268ba9",
+          "native_shader_receipt_sha256": "b98d564b0c17fcce5c1e2002188ddd5cd8452138dd83babf0af5cfcc825ed99d",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "0b83ab57cf938dbaa4ad93996919d0b39b5d26aa6bf253d3114f7617da4be847",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "0b83ab57cf938dbaa4ad93996919d0b39b5d26aa6bf253d3114f7617da4be847",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "5e347e418fcaedca27f4792442753ae48b0f14eaaeec340d078ef840b092208f",
+          "glb_sha256": "2e7a606fb37cfd92fa16efe87c45cbf17f541e1a06081f1140e2129170e189a3",
           "material_table_sha256": "c42c638c80b6d7493aaedd3867204266253164191e4e2790da80771179c9f9fd",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "5e347e418fcaedca27f4792442753ae48b0f14eaaeec340d078ef840b092208f",
+          "native_shader_receipt_sha256": "b98d564b0c17fcce5c1e2002188ddd5cd8452138dd83babf0af5cfcc825ed99d",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "0b83ab57cf938dbaa4ad93996919d0b39b5d26aa6bf253d3114f7617da4be847",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "0b83ab57cf938dbaa4ad93996919d0b39b5d26aa6bf253d3114f7617da4be847",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -374,7 +555,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "ogerpon",
@@ -384,19 +566,51 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "ceaa99d2f4b446dc37f0eb70764530570e82dc99ba827c09babd3533724b464a",
+          "glb_sha256": "16b1019c558fe33f4d51442ed2792492ae05c66f1411cbfcd8e25e67737f9a5a",
           "material_table_sha256": "3645471201b5ce6d2886aec0e4d4653b98c12036470d7618e71b9b3eaf6daec7",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "ceaa99d2f4b446dc37f0eb70764530570e82dc99ba827c09babd3533724b464a",
+          "native_shader_receipt_sha256": "4fe276b9beac80b43fd8ed1ce7bb97c4860c7d4d541396d4ede267aa9fba1e0b",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "2f49636c6431ed6716de3980e158393f71db2b033e67aa4e9b12fcc0999968df",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "2f49636c6431ed6716de3980e158393f71db2b033e67aa4e9b12fcc0999968df",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "feb464f7897b08ab0b61189066da983b60c86cacc0a46a56bdc4ea60f92bb907",
+          "glb_sha256": "dcbc9417ff9100c66e9b32837b740a1a3b9cc5895af187320adc93317a6aea4b",
           "material_table_sha256": "37a45595d6383e0120fbf5a3f5c4328af800d507234f40ce2ebaf434a9f28824",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "feb464f7897b08ab0b61189066da983b60c86cacc0a46a56bdc4ea60f92bb907",
+          "native_shader_receipt_sha256": "4fe276b9beac80b43fd8ed1ce7bb97c4860c7d4d541396d4ede267aa9fba1e0b",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "2f49636c6431ed6716de3980e158393f71db2b033e67aa4e9b12fcc0999968df",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "2f49636c6431ed6716de3980e158393f71db2b033e67aa4e9b12fcc0999968df",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -432,7 +646,8 @@
           "fps": 60.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": false
     },
     {
       "species": "archaludon",
@@ -442,21 +657,53 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "cfca27b2a058a523dd9928346ab9cc10aab4ad52b7666346eb17ac910a86f195",
+          "glb_sha256": "c5168979d5495b4265734bf6b7fac3f8e27be8c7c255d006fcd4fe222815d40c",
           "material_table_sha256": "cdd90cc9c30a3f91a8ff76a57fa5014c5ba4f2dbeed841c856e94e4e6253ae25",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "cfca27b2a058a523dd9928346ab9cc10aab4ad52b7666346eb17ac910a86f195",
+          "native_shader_receipt_sha256": "49e02eb89a61b6ccd87c10b57c426e8c06ba30a219fbf9512c3b6cb6fba11828",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "8431f98be71f7a2b131908b18cbe7804ab43269c8904e9aa9bb2c24c6907fa6a",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "8431f98be71f7a2b131908b18cbe7804ab43269c8904e9aa9bb2c24c6907fa6a",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "c937b834fdd4de7d6280917d0f0e7fa92b1719433973566eb28d3214a6d77f15",
+          "glb_sha256": "1579d4cf2e0d3faed59a4ab496391ed1cd47cf87833c2162fcd6668440c9ac11",
           "material_table_sha256": "e0a18fefefa324924cde8776811e21ed82c3075caf81ceb05c2217aa6005702e",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "c937b834fdd4de7d6280917d0f0e7fa92b1719433973566eb28d3214a6d77f15",
+          "native_shader_receipt_sha256": "49e02eb89a61b6ccd87c10b57c426e8c06ba30a219fbf9512c3b6cb6fba11828",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "8431f98be71f7a2b131908b18cbe7804ab43269c8904e9aa9bb2c24c6907fa6a",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "8431f98be71f7a2b131908b18cbe7804ab43269c8904e9aa9bb2c24c6907fa6a",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -486,7 +733,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "hydrapple",
@@ -496,21 +744,101 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "fdcff0522ff54efa565323135abedc09cb76c43b0f7b462bc79e19e51e9d56d3",
+          "glb_sha256": "fb490286722fdb2611213bc987cdfbab9ffd50b058943d66d02dd0437013a7ac",
           "material_table_sha256": "cca9721e2f9081aa19e83173346909c4ba8f27b40efebcc633580292ef334872",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "fdcff0522ff54efa565323135abedc09cb76c43b0f7b462bc79e19e51e9d56d3",
+          "native_shader_receipt_sha256": "6535b98b474205fedc1638af98bc753895ac1c938826a7393c12150122f79341",
+          "layer_emission_receipt": [
+            {
+              "material": "eye_a",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_f",
+              "mask_sha256": "9ee7a53cae30042c126c47211eb10d82a09b91d04e087f8f1c2aee69d8eb1477",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_b",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_c",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_d",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_e",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "60ed714776cba1e614651f08f142a593713e871c896e4ccbdb7f7099e6e44759",
+          "glb_sha256": "2d9442bf8b04b7e034af0827e8a1aca63fe028289ab37e382753266fcdcfd668",
           "material_table_sha256": "18e4eccd900329db851b4a0dac1710cb6231030fa1365e2b30fc6595d2309e3d",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed",
-            "separate eyelid texture layers need pose review"
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "60ed714776cba1e614651f08f142a593713e871c896e4ccbdb7f7099e6e44759",
+          "native_shader_receipt_sha256": "6535b98b474205fedc1638af98bc753895ac1c938826a7393c12150122f79341",
+          "layer_emission_receipt": [
+            {
+              "material": "eye_a",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_f",
+              "mask_sha256": "9ee7a53cae30042c126c47211eb10d82a09b91d04e087f8f1c2aee69d8eb1477",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_b",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_c",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_d",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "eye_e",
+              "mask_sha256": "25f91734afc105a482edea6b034cb67ad18cad27f921175a7c9d20ab4c32db21",
+              "strength": 1.2000000476837158,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -546,7 +874,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "gouging-fire",
@@ -556,19 +885,75 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "81a54a026620e22cf87665b94a6ebc39ba4baeb218307bbef7e054a330d29823",
+          "glb_sha256": "7fde666d7645b84d2ac72010ac65c9caeea85456a27181774a91a701ed49c7ea",
           "material_table_sha256": "3c9cafaf40793039eb4434b911f4fc3d5a4bb106bae84ca8a61b3adad25dc4c6",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "81a54a026620e22cf87665b94a6ebc39ba4baeb218307bbef7e054a330d29823",
+          "native_shader_receipt_sha256": "272f3dbd45cac890b0c3e2ecad7b2fb04616fd0faa62bd72571d19e66bbb9958",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "86f5029195a12eaa36a0f9fa3256377b9833a5c8d2214d0dc65b57162db596bd",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "86f5029195a12eaa36a0f9fa3256377b9833a5c8d2214d0dc65b57162db596bd",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye_b",
+              "mask_sha256": "22dc6cca31efd734bee259d6335963836278c561b5d3cc4cfad9d09210795fa6",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_b",
+              "mask_sha256": "22dc6cca31efd734bee259d6335963836278c561b5d3cc4cfad9d09210795fa6",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "2bd52e50ee81eb2346c4cd40fb34482b06172abf3b65be062a6868f13750c310",
+          "glb_sha256": "e5944c4eb55c0501f7d723602ac3fc89d7c565b0162bc18de03080be6ceaa040",
           "material_table_sha256": "333fdca0ff9f6c8d34e8add4b7adf347be000ba47ce1d4e9399a84f673c93aba",
           "material_count": 8,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "2bd52e50ee81eb2346c4cd40fb34482b06172abf3b65be062a6868f13750c310",
+          "native_shader_receipt_sha256": "272f3dbd45cac890b0c3e2ecad7b2fb04616fd0faa62bd72571d19e66bbb9958",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye_a",
+              "mask_sha256": "86f5029195a12eaa36a0f9fa3256377b9833a5c8d2214d0dc65b57162db596bd",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_a",
+              "mask_sha256": "86f5029195a12eaa36a0f9fa3256377b9833a5c8d2214d0dc65b57162db596bd",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye_b",
+              "mask_sha256": "22dc6cca31efd734bee259d6335963836278c561b5d3cc4cfad9d09210795fa6",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye_b",
+              "mask_sha256": "22dc6cca31efd734bee259d6335963836278c561b5d3cc4cfad9d09210795fa6",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -604,7 +989,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": false
     },
     {
       "species": "raging-bolt",
@@ -614,19 +1000,51 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "daeb3f2a425f14c7866dbfecd154a79a9e5c90565a39c01ab45f02ac7a2a2ea4",
+          "glb_sha256": "79a4f883756486c6cc5f9a9e33f4ec6035b00340ff3ac21603093b37154d7a47",
           "material_table_sha256": "3e5a3d2c313cec725339f84f04ee999c6fc2caaada1a9e9b3683c1b3ad6d03e6",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "daeb3f2a425f14c7866dbfecd154a79a9e5c90565a39c01ab45f02ac7a2a2ea4",
+          "native_shader_receipt_sha256": "866e3747cc9f529d1cb8010c795385a304a94b206377fc09f3fc6b824c2df2e1",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "eb82c7b18f7999b3f106c02fd1d9be137a2651a014d630a57411704f897467f9",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "eb82c7b18f7999b3f106c02fd1d9be137a2651a014d630a57411704f897467f9",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "a94dacb451fc9500d8edc452efdeca71202738a87fa05235c6126bb79f75fdbf",
+          "glb_sha256": "e4331dd920baeda421f287bf1d4f2ac68e3e90e7c6c9f0f18bbcf49ec96e797b",
           "material_table_sha256": "48dc27ec643ccbe265879aa3fb627d5ae788e830070f9fb4a395fd1b8e8d58e2",
           "material_count": 7,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "a94dacb451fc9500d8edc452efdeca71202738a87fa05235c6126bb79f75fdbf",
+          "native_shader_receipt_sha256": "866e3747cc9f529d1cb8010c795385a304a94b206377fc09f3fc6b824c2df2e1",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "eb82c7b18f7999b3f106c02fd1d9be137a2651a014d630a57411704f897467f9",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "eb82c7b18f7999b3f106c02fd1d9be137a2651a014d630a57411704f897467f9",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -662,7 +1080,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": false
     },
     {
       "species": "iron-boulder",
@@ -672,19 +1091,63 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "1294cee8a54015036ad6641825e83ad180399d33d44e420a3e373e2ae8141ee1",
+          "glb_sha256": "bf844fc4534385fac9980138ea398518a75f15d6204f0d9e10cc4b3244d988c5",
           "material_table_sha256": "ced970cded63c0561b618245d00e7828d5572a85994ddb971298ce6069f79cba",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "1294cee8a54015036ad6641825e83ad180399d33d44e420a3e373e2ae8141ee1",
+          "native_shader_receipt_sha256": "d5a2b5f9e752d19e2174813627c273d2c6f31e8e48fce5cf1e4be18a59c30d0b",
+          "layer_emission_receipt": [
+            {
+              "material": "body_a_01",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye",
+              "mask_sha256": "46683e52c1b1ebc2fdf1bd8304005fb491f12516084377df8f685ba38b1be13b",
+              "strength": 1.5,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "46683e52c1b1ebc2fdf1bd8304005fb491f12516084377df8f685ba38b1be13b",
+              "strength": 1.5,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "41f8eda544b3463c399337019c4dad07ec73a2af40386a326629c9ae86fd8146",
+          "glb_sha256": "78f574553c5dd80168b1a560c17200276bc5f64a5b84ef0294a08c00f7da87e0",
           "material_table_sha256": "235a17512cf4d048a78820cbadd820a30ce1dc598b298a518d84a18eed38160c",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "41f8eda544b3463c399337019c4dad07ec73a2af40386a326629c9ae86fd8146",
+          "native_shader_receipt_sha256": "d5a2b5f9e752d19e2174813627c273d2c6f31e8e48fce5cf1e4be18a59c30d0b",
+          "layer_emission_receipt": [
+            {
+              "material": "body_a_01",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0000240802764893,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye",
+              "mask_sha256": "46683e52c1b1ebc2fdf1bd8304005fb491f12516084377df8f685ba38b1be13b",
+              "strength": 1.5000361204147339,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "46683e52c1b1ebc2fdf1bd8304005fb491f12516084377df8f685ba38b1be13b",
+              "strength": 1.5000361204147339,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -726,7 +1189,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": false
     },
     {
       "species": "iron-crown",
@@ -736,19 +1200,75 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "0157ab3573d786ae58225e9297a26c94983326c4021a338494aedb7eaba3738e",
+          "glb_sha256": "7c196656ce3fdea0927db881147b973f124f0e5d9ea115d0a390cb19b57d33df",
           "material_table_sha256": "d95bed35f0db2f0b751d638dc299301ac0e6abec39feeab1d208b7211cf81565",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "0157ab3573d786ae58225e9297a26c94983326c4021a338494aedb7eaba3738e",
+          "native_shader_receipt_sha256": "e606621fb905ee3c1105b27444c1556ad451d417edd844560cd62cd0c6f9b6de",
+          "layer_emission_receipt": [
+            {
+              "material": "body_b_01",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "body_b_02",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye",
+              "mask_sha256": "6ff75fa76aab485834516b5b76f09c5d14fa6040124ab5ace5a5e4210c1f8d66",
+              "strength": 1.4866681694984436,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "6ff75fa76aab485834516b5b76f09c5d14fa6040124ab5ace5a5e4210c1f8d66",
+              "strength": 1.4866681694984436,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "6bc25e9bc6965f58e599138a5d63d23cc4a6aac339c068e37361f34325ab13e7",
+          "glb_sha256": "9bb05ec818a4ccf3e04975ea20bb97b422074d958328fefb1b8504f91d5f8d82",
           "material_table_sha256": "420725464e305ad43583addd984d38d7808f7eafe1a21a81f449cc2dadd85929",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed"
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "6bc25e9bc6965f58e599138a5d63d23cc4a6aac339c068e37361f34325ab13e7",
+          "native_shader_receipt_sha256": "e606621fb905ee3c1105b27444c1556ad451d417edd844560cd62cd0c6f9b6de",
+          "layer_emission_receipt": [
+            {
+              "material": "body_b_01",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "body_b_02",
+              "mask_sha256": "723ea44df307a57c662d97d0bc91a946d00b8adc87e901732ec291a2a6aab7f0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "l_eye",
+              "mask_sha256": "6ff75fa76aab485834516b5b76f09c5d14fa6040124ab5ace5a5e4210c1f8d66",
+              "strength": 1.4866679906845093,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "6ff75fa76aab485834516b5b76f09c5d14fa6040124ab5ace5a5e4210c1f8d66",
+              "strength": 1.4866679906845093,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -790,7 +1310,8 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": false
     },
     {
       "species": "terapagos",
@@ -800,21 +1321,53 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "e6341be05f7b27235ec67c02dc66f822d73c39d54d789caa09f093e6596f7a27",
+          "glb_sha256": "8ab07733bb506aad618152a8afc78829c7c72998b808c5a4b0f8a597a39049f1",
           "material_table_sha256": "fa3775f07b4abb7d1655147a05981be426447c37646cf0982f5061f715bf104f",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed",
-            "source transparency/iridescence needs visual review"
+            "source transparency/iridescence needs visual review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "e6341be05f7b27235ec67c02dc66f822d73c39d54d789caa09f093e6596f7a27",
+          "native_shader_receipt_sha256": "3de375196111351c8d98253fe7ae1a58e04ae03f15c036be81fe93a6cd54f007",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "d606b441f9f02fb854cb558215bf52c519ac541454952413cf18e7d442bfcba0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "d606b441f9f02fb854cb558215bf52c519ac541454952413cf18e7d442bfcba0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         },
         "shiny": {
-          "glb_sha256": "f39dfaa841d554e1731adf2d2e67c289b4a012ae7b6732033a7d09a8bc76edd5",
+          "glb_sha256": "ef55b75369af7723d0246b886456d20327b285e621db3ed9091e8c302c6de882",
           "material_table_sha256": "960f515e3bc0bcb2e16275274fe701902d853242560b96f1090532866b5e3bac",
           "material_count": 6,
           "limitations": [
-            "layered emission is not reconstructed",
-            "source transparency/iridescence needs visual review"
+            "source transparency/iridescence needs visual review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "f39dfaa841d554e1731adf2d2e67c289b4a012ae7b6732033a7d09a8bc76edd5",
+          "native_shader_receipt_sha256": "3de375196111351c8d98253fe7ae1a58e04ae03f15c036be81fe93a6cd54f007",
+          "layer_emission_receipt": [
+            {
+              "material": "l_eye",
+              "mask_sha256": "d606b441f9f02fb854cb558215bf52c519ac541454952413cf18e7d442bfcba0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            },
+            {
+              "material": "r_eye",
+              "mask_sha256": "d606b441f9f02fb854cb558215bf52c519ac541454952413cf18e7d442bfcba0",
+              "strength": 1.0,
+              "policy": "static source-mask emission; parallax not reconstructed"
+            }
           ]
         }
       },
@@ -850,7 +1403,8 @@
           "fps": 60.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
     },
     {
       "species": "pecharunt",
@@ -860,20 +1414,28 @@
       "status": "material_pair_candidate",
       "variants": {
         "normal": {
-          "glb_sha256": "8c045588d49e0cbfd1ca817e311a9df37d7496b0e576f8408eb1be301988cb6a",
+          "glb_sha256": "29efb637fcc8e82026a2fbfb02a23b93c05bf778c9e52a4e57271f0b175a2a57",
           "material_table_sha256": "a1e657f85610feef9d7bc5f07da477b39a0d6e4547fa7307fd5776d60c13f0f0",
           "material_count": 7,
           "limitations": [
-            "separate eyelid texture layers need pose review"
-          ]
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "8c045588d49e0cbfd1ca817e311a9df37d7496b0e576f8408eb1be301988cb6a",
+          "native_shader_receipt_sha256": "a6c43f9ecb273db9d961dab38f74492f3baad96c8318f60a48f93cb3e7c2b87f",
+          "layer_emission_receipt": []
         },
         "shiny": {
-          "glb_sha256": "4dae9b8d418acf8b0aa0ce10bd8cb679af74a0935f3df822fb58aea2dd42ba91",
+          "glb_sha256": "78cae857722af21eff51570dd3b37f4560fcaa6b74368246b0bc84f73aeecce2",
           "material_table_sha256": "96c45ca2d35248f2a1ffdae9a8cb3bc40e44c1315edb0ad4a5874cf8d0ccf976",
           "material_count": 7,
           "limitations": [
-            "separate eyelid texture layers need pose review"
-          ]
+            "separate eyelid texture layers need pose review",
+            "static source-mask emission and native Fresnel/flow require qualification"
+          ],
+          "previous_glb_sha256": "4dae9b8d418acf8b0aa0ce10bd8cb679af74a0935f3df822fb58aea2dd42ba91",
+          "native_shader_receipt_sha256": "a6c43f9ecb273db9d961dab38f74492f3baad96c8318f60a48f93cb3e7c2b87f",
+          "layer_emission_receipt": []
         }
       },
       "geometry_motion_sha256": "ae76fba4b7b269ac2058a4270d6d28ea4e0e07046791ab2b7806fc38de6cbe43",
@@ -908,23 +1470,81 @@
           "fps": 24.0,
           "loop": false
         }
-      }
+      },
+      "appearance_approved": true
+    }
+  ],
+  "appearance_review_history": [
+    {
+      "url": "http://127.0.0.1:8784/",
+      "evidence_root": ".tmp/remaining-dlc-15-v1/appearance-review-v1/",
+      "manifest_sha256": "f83fbb08aecedd9849ce684a1030b326ef31a3e0b076a9e68f3511b3898f81b2",
+      "page_sha256": "58e7d6d6487097d0827f1ea0ca6449eec9d6771b881ef4732019bf17c8016707",
+      "species": 15,
+      "variants": 30,
+      "poses": [
+        "idle_front",
+        "idle_back",
+        "special_attack",
+        "faint_start"
+      ],
+      "scope": "appearance_only_no_sleep_or_battle",
+      "user_approved": false
     }
   ],
   "appearance_review": {
-    "url": "http://127.0.0.1:8784/",
-    "evidence_root": ".tmp/remaining-dlc-15-v1/appearance-review-v1/",
-    "manifest_sha256": "f83fbb08aecedd9849ce684a1030b326ef31a3e0b076a9e68f3511b3898f81b2",
-    "page_sha256": "58e7d6d6487097d0827f1ea0ca6449eec9d6771b881ef4732019bf17c8016707",
-    "species": 15,
-    "variants": 30,
-    "poses": [
-      "idle_front",
-      "idle_back",
-      "special_attack",
-      "faint_start"
-    ],
+    "url": "http://127.0.0.1:8785/",
+    "directory": "appearance-review-v2",
+    "page_sha256": "1208fde69df11754f4be64553bea27837be97bdf561fdeaa75ffe96fc76b3a5f",
+    "manifest_sha256": "ac0232dfa058cf78b89d0e7d153bf6b7eca116a51acb7bf093844278aad06e5a",
     "scope": "appearance_only_no_sleep_or_battle",
-    "user_approved": false
+    "user_approved": false,
+    "approved_species": [
+      "dipplin",
+      "sinistcha",
+      "poltchageist",
+      "okidogi",
+      "munkidori",
+      "fezandipiti",
+      "archaludon",
+      "hydrapple",
+      "terapagos",
+      "pecharunt"
+    ],
+    "pending_species": [
+      "ogerpon",
+      "gouging-fire",
+      "raging-bolt",
+      "iron-boulder",
+      "iron-crown"
+    ],
+    "focused_pending_review": {
+      "url": "http://127.0.0.1:8786/",
+      "page_sha256": "b468026c3fbf7d5594caa53e7d8aa998d5875f74cd8e3bc9d05ae9a4664947c4",
+      "manifest_sha256": "25db23c468dffc079e4a69992a285f1455b75f1138d3869dd1ce4300d27f91bf",
+      "resolution": 1024,
+      "godot_diagnostic_views": 12,
+      "godot_pose_or_timing_errors": 0,
+      "godot_report_sha256": "bf4572aa003270065537fe87d263845f580967d7811c8bc29179dace3b6dc977"
+    }
+  },
+  "native_detail_review": {
+    "policy": "full native body-colour bake at 1024, retained verified Eye diffuse, restored static source-mask emission",
+    "godot_diagnostic_views": 32,
+    "godot_pose_or_timing_errors": 0,
+    "godot_report_sha256": "04e3f263883f863ba2bcb9d772db21fcfdd03ceb7c6f427e3177d1a4f736f0cf",
+    "pair_geometry_motion_parity": 15,
+    "original_geometry_motion_parity": 30,
+    "visibility_exception": "Pecharunt alternate closed shell excluded from open-shell review; all geometry accessors unchanged",
+    "pecharunt_source_sha256": "f91bc3809fcb09c6d0d84218cf8debd4791dd03dc8deabf87d8b0eb663594e8c",
+    "ogerpon_maskless": "separate comparison-only view; primary Teal Mask model unchanged",
+    "native_worker_sha256": "2316f98a01946135fc996b270fb694e77730726be6f173e1cf3d0f47afdffa97",
+    "detail_probe_sha256": "e104e84eebde4a1d8b7808c07e45902965b3ac151c4866fa87e6a076f4cc76f1",
+    "layer_probe_sha256": "47202d48b1eeb8f3e96e30a050df68df7ef305ec4faa1e9d3e88f0f96a67240e",
+    "limitations": [
+      "static mask emission, native parallax animation remains unqualified",
+      "source graph Fresnel/flow approximation requires remaining review and qualification",
+      "sleep poses and standalone battle qualification pending"
+    ]
   }
 }
