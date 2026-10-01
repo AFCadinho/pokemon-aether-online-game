@@ -12,6 +12,12 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_1f/ss_anne_1f.visual.tscn" id="visual"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="population_gentleman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="population_poke_fan_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="population_youngster"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="population_lass"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -210,6 +216,62 @@ sight_range_tiles = 0
 npc_id = "kanto_ss_anne_passenger"
 display_name = "Gentleman Edwin"
 npc_sprite_frames = ExtResource("gentleman")
+
+[node name="PopulationReaderIris" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(368, 1968)
+npc_id = "kanto_ss_anne_reader_iris"
+npc_definition_id = "trainer_class_elder"
+portrait_id = "showdown_gentleman_gen6"
+display_name = "Reader Iris"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("population_gentleman")
+
+[node name="PopulationTravelerLena" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(1040, 2000)
+npc_id = "kanto_ss_anne_traveler_lena"
+npc_definition_id = "trainer_class_poke_fan_f"
+display_name = "Traveler Lena"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_poke_fan_f")
+
+[node name="PopulationKitchenMilo" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(2704, 1872)
+npc_id = "kanto_ss_anne_kitchen_milo"
+npc_definition_id = "trainer_class_worker"
+display_name = "Kitchen Assistant Milo"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_worker")
+
+[node name="PopulationGentlemanThomas" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(944, 432)
+npc_id = "kanto_ss_anne_gentleman_thomas"
+npc_definition_id = "trainer_class_elder"
+portrait_id = "showdown_gentleman_gen6"
+display_name = "Gentleman Thomas"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("population_gentleman")
+trainer_id = "kanto_ss_anne_gentleman_thomas"
+sight_range_tiles = 0
+
+[node name="PopulationYoungsterTyler" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1520, 496)
+npc_id = "kanto_ss_anne_youngster_tyler"
+npc_definition_id = "trainer_class_youngster"
+display_name = "Youngster Tyler"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("population_youngster")
+trainer_id = "kanto_ss_anne_youngster_tyler"
+sight_range_tiles = 0
+
+[node name="PopulationLassAnn" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2256, 432)
+npc_id = "kanto_ss_anne_lass_ann"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Ann"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_lass")
+trainer_id = "kanto_ss_anne_lass_ann"
+sight_range_tiles = 0
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=995219452]
 

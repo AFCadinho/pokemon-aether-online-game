@@ -11,6 +11,9 @@
 [ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="sailor"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="population_sailor"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -110,6 +113,34 @@ npc_id = "kanto_ss_anne_sailor"
 trainer_id = "kanto_ss_anne_sailor"
 display_name = "Sailor Kai"
 npc_sprite_frames = ExtResource("sailor")
+sight_range_tiles = 0
+
+[node name="PopulationMechanicInez" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(1456, 400)
+npc_id = "kanto_ss_anne_mechanic_inez"
+npc_definition_id = "trainer_class_worker"
+display_name = "Mechanic Inez"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_worker")
+
+[node name="PopulationCrewRobin" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(560, 1744)
+npc_id = "kanto_ss_anne_crew_robin"
+npc_definition_id = ""
+portrait_id = "showdown_sailor_gen6"
+display_name = "Crew Member Robin"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_sailor")
+
+[node name="PopulationSailorDuncan" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(944, 400)
+npc_id = "kanto_ss_anne_sailor_duncan"
+npc_definition_id = ""
+portrait_id = "showdown_sailor_gen6"
+display_name = "Sailor Duncan"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("population_sailor")
+trainer_id = "kanto_ss_anne_sailor_duncan"
 sight_range_tiles = 0
 
 [node name="Pokemon" type="Node2D" parent="Entities"]

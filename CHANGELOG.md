@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De S.S. Anne heeft acht extra passagiers en bemanningsleden met gelokaliseerde dialogen en zes optionele FRLG-trainers op level 17–21, verdeeld over de vier verdiepingen.
+
 - De SS Anne 1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - Route 11 heeft tien FRLG-trainers en gameplay-gras dat de wild encounters aan de bestaande visual koppelt; tile-collision blijft handmatig.
