@@ -38,6 +38,13 @@ func _run() -> void:
 	_check(npc_sprite.texture == default_mugshot, "An explicit mugshot overrides the System default")
 	dialogue_box.hide_dialogue()
 
+	var trainer_portrait := BattlePlayerTrainerCatalog.build_dialogue_portrait({"gender": "female"})
+	dialogue_box.start_dialogue(["Player dialogue"], "Player", trainer_portrait)
+	_check(npc_sprite.texture == trainer_portrait, "Player dialogue displays the layered trainer-card portrait")
+	_check(npc_sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Trainer pixel art stays sharp in dialogue")
+	_check(npc_sprite.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED, "Full trainer remains visible without cropping in dialogue")
+	dialogue_box.hide_dialogue()
+
 	dialogue_layer.queue_free()
 	quit(1 if failed else 0)
 

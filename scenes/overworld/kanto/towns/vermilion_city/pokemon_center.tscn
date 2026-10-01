@@ -1,0 +1,88 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="3_pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="frames_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="frames_bird_keeper"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_vermilion_city_pokemon_center"
+map_display_name = "Vermilion City Pokémon Center"
+world_access_group_id = "kanto_vermilion_city"
+world_access_group_label = "Vermilion City"
+world_access_area_type = "interior"
+location_id = "kanto.vermilion_city.pokemon_center"
+location_name = "Vermilion City Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0"]
+respawn_point_id = "kanto_vermilion_city_pokemon_center"
+
+[node name="WorkerPetra" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="8" instance=ExtResource("2_dialogue")]
+position = Vector2(336, 496)
+npc_id = "kanto_vermilion_city_pokemon_center_worker_petra"
+npc_definition_id = "trainer_class_worker"
+display_name = "Worker Petra"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_worker")
+
+[node name="TravelerNori" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="9" instance=ExtResource("2_dialogue")]
+position = Vector2(528, 816)
+npc_id = "kanto_vermilion_city_pokemon_center_traveler_nori"
+npc_definition_id = "trainer_class_lass"
+display_name = "Traveler Nori"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_lass")
+
+[node name="BirdKeeperElias" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="10" instance=ExtResource("2_dialogue")]
+position = Vector2(368, 848)
+npc_id = "kanto_vermilion_city_pokemon_center_bird_keeper_elias"
+npc_definition_id = "trainer_class_bird_keeper"
+display_name = "Bird Keeper Elias"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("frames_bird_keeper")
+
+[node name="Pokemon" type="Node2D" parent="Entities" parent_id_path=PackedInt32Array(1761485951) index="3"]
+
+[node name="Mareep" parent="Entities/Pokemon" index="0" instance=ExtResource("3_pokemon")]
+position = Vector2(368, 496)
+overworld_pokemon_id = "kanto_vermilion_city_pokemon_center_mareep_1"
+species_id = "mareep"
+level = 17
+display_name = "Mareep"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Squirtle" parent="Entities/Pokemon" index="1" instance=ExtResource("3_pokemon")]
+position = Vector2(560, 816)
+overworld_pokemon_id = "kanto_vermilion_city_pokemon_center_squirtle_1"
+species_id = "squirtle"
+level = 16
+display_name = "Squirtle"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "idle"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Wingull" parent="Entities/Pokemon" index="2" instance=ExtResource("3_pokemon")]
+position = Vector2(400, 848)
+overworld_pokemon_id = "kanto_vermilion_city_pokemon_center_wingull_1"
+species_id = "wingull"
+level = 15
+display_name = "Wingull"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
+target_spawn_name = "FromPokecenter"
+transition_id = "kanto_vermilion_city_pokemon_center__to_outside"
+transition_facing_direction = "down"

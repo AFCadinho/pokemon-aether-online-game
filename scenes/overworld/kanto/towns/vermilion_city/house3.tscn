@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/vermilion_house_template.tscn" id="template"]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="frames_elder_f"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_m_frames.tres" id="frames_school_kid_m"]
+
+[node name="House3" instance=ExtResource("template")]
+map_id = "kanto_vermilion_city_house_3"
+map_display_name = "Vermilion City House 3"
+location_id = "kanto.vermilion_city.house_3"
+location_name = "Vermilion City House 3"
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_spawn_name = "FromHouse3"
+transition_id = "kanto_vermilion_city_house_3__to_outside"
+
+[node name="GrandmotherTessa" parent="Entities/NPCs" index="0" instance=ExtResource("dialogue")]
+position = Vector2(304, 336)
+npc_id = "kanto_vermilion_city_house_3_grandmother_tessa"
+npc_definition_id = "trainer_class_elder"
+display_name = "Grandmother Tessa"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("frames_elder_f")
+
+[node name="SchoolKidMilo" parent="Entities/NPCs" index="1" instance=ExtResource("dialogue")]
+position = Vector2(176, 336)
+npc_id = "kanto_vermilion_city_house_3_school_kid_milo"
+npc_definition_id = "trainer_class_school_kid_m"
+display_name = "School Kid Milo"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("frames_school_kid_m")
+
+[node name="Pikachu" parent="Entities/Pokemon" index="0" instance=ExtResource("pokemon")]
+position = Vector2(400, 400)
+overworld_pokemon_id = "kanto_vermilion_city_house_3_pikachu_1"
+species_id = "pikachu"
+level = 18
+display_name = "Pikachu"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+movement_speed_pixels = 32.0

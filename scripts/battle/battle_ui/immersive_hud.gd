@@ -46,12 +46,20 @@ func _process(delta: float) -> void:
 	if battle.coop_mode:
 		field_anchor = Vector2(130, 20)
 	_place(field_indicators, field_anchor, field_indicators.size, 0.65)
-	_place(battle.get_node("%MovesGrid"), Vector2(area.x - 340, area.y - 170), Vector2(400, 188), 0.8)
-	_place(battle.get_node("%UtilityActions"), Vector2(area.x - 204, area.y - 210), Vector2(178, 34), 0.8)
+	var settings := get_node("/root/SettingsManager")
+	var ui_factor := float(settings.get("ui_scale")) / 100.0
+	var window_fit := get_node("/root/WindowFit")
+	var touch_factor := 1.5 if window_fit.call("is_touch_ui") else 1.0
+	var move_scale := minf(0.8 * ui_factor * touch_factor, maxf(0.4, (area.x * 0.5) / 400.0))
+	var move_delta := Vector2(400, 188) * (move_scale - 0.8)
+	var moves_position := Vector2(area.x - 340, area.y - 170) - move_delta
+	_place(battle.get_node("%MovesGrid"), moves_position, Vector2(400, 188), move_scale)
+	var utility_position := Vector2(area.x - 204, moves_position.y - 40) - Vector2(178, 34) * (move_scale - 0.8)
+	_place(battle.get_node("%UtilityActions"), utility_position, Vector2(178, 34), move_scale)
 	var mechanics: Control = battle.get_node("%MechanicsPanel")
-	_place(mechanics, Vector2(area.x - 332, area.y - 233), mechanics.size, minf(0.5,120.0 / maxf(1,mechanics.size.x)))
+	_place(mechanics, Vector2(area.x - 332 - move_delta.x, utility_position.y - 23), mechanics.size, minf(0.5,120.0 / maxf(1,mechanics.size.x)))
 	var center_left := area.x * 0.25
-	var center_width := area.x - 354 - center_left
+	var center_width := area.x - 354 - move_delta.x - center_left
 	var prompt: Control = battle.get_node("%CurrentActionPanel")
 	var prompt_y := area.y - 140.0
 	var prompt_width := center_width

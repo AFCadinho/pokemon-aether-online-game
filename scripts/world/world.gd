@@ -1623,6 +1623,10 @@ func _prepare_battle_instance_reveal() -> void:
 func _reveal_prepared_wild_battle() -> void:
 	if is_instance_valid(battle_screen_host):
 		await wild_encounter_transition.reveal()
+		# The screen may still be preparing 3D or its fallback behind its own
+		# cover. Do not play the battle intro until that reveal has finished.
+		if is_instance_valid(battle_screen_host):
+			await battle_screen_host.wait_until_revealed()
 		return
 	if battle_instance == null or not (battle_instance is Control):
 		await wild_encounter_transition.reveal()
@@ -4063,9 +4067,9 @@ func start_triggered_wild_battle_for_area(
 
 	MusicManager.play_wild_battle_music()
 	_trace_mobile_wild_transition("music_selected", transition_started_at_msec)
-	if OS.has_feature("mobile"):
-		# Let the battle's first rendered frame finish behind the closed encounter
-		# cover, so texture upload cannot interrupt the visible reveal.
+	# Warm the first battle frame behind the cover on every rendered platform.
+	# Headless checks have no rendered frame to wait for.
+	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		_trace_mobile_wild_transition("battle_frame_drawn", transition_started_at_msec)
 	await _reveal_prepared_wild_battle()

@@ -67,6 +67,37 @@ static func build_layers(appearance_state: Dictionary) -> Array[Dictionary]:
 	return layers
 
 
+# Dialogue uses the same layered art and orientation as the trainer card,
+# keeping the full canvas at its authored resolution for the dialogue to fit.
+static func build_dialogue_portrait(appearance_state: Dictionary) -> Texture2D:
+	var layers := build_layers(appearance_state)
+	if layers.is_empty():
+		return null
+	var canvas_size := int(_get_manifest().get("canvasSize", 160))
+	var canvas := Image.create(canvas_size, canvas_size, false, Image.FORMAT_RGBA8)
+	for layer: Dictionary in layers:
+		var texture := layer.get("texture") as Texture2D
+		if texture == null:
+			continue
+		var image := texture.get_image()
+		if image == null or image.is_empty():
+			continue
+		image = image.duplicate() as Image
+		image.convert(Image.FORMAT_RGBA8)
+		var layer_scale := float(layer.get("scale", 1.0))
+		image.resize(
+			maxi(1, roundi(image.get_width() * layer_scale)),
+			maxi(1, roundi(image.get_height() * layer_scale)),
+			Image.INTERPOLATE_NEAREST
+		)
+		image.flip_x()
+		var offset := (Vector2i(canvas_size, canvas_size) - image.get_size()) / 2
+		canvas.blend_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), offset)
+	var texture := ImageTexture.create_from_image(canvas)
+	texture.set_meta("trainer_card_portrait", true)
+	return texture
+
+
 static func _resolve_part_layer(
 	gender_data: Dictionary,
 	appearance_state: Dictionary,

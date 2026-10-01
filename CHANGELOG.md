@@ -3,6 +3,45 @@
 ## Unreleased
 
 - Skarmory vliegt 70 cm hoger in 3D-battles; slaap en flauw blijven op de grond. HP-panelen schuiven direct omhoog bij hoger verschijnende 3D-modellen.
+- Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
+
+- De Collision-laag van het Vermilion Port-interieur is leeg zodat deze handmatig kan worden ingevuld.
+
+- Vermilion Port heeft een interieur met de artist-TMX-visual en doorgangen tussen de stad en de docks.
+
+- Vermilion City gebruikt de opnieuw geïmporteerde artist-TMX-visual, met bijgewerkte terrein-, gras- en objectlagen.
+
+- Geschilderde waterranden in Vermilion City worden nu als water herkend: lopen is geblokkeerd en Surf en vissen gebruiken de Water-laag.
+
+- Huis 2 en Huis 3 in Vermilion City hebben elk twee bewoners met gelokaliseerde dialogen en een rondlopende overworld-Pokemon: Krabby en Pikachu.
+
+- Player and future-self dialogue portraits show the full trainer-card artwork at its original resolution, without a zoomed crop.
+
+- De Fishing Guru geeft zijn Old Rod en visles-quest nu in Huis 1 in Vermilion City. Zijn lesbeloning en hulp verhuizen mee; bestaande questvoortgang blijft behouden.
+
+- Player dialogue portraits now use trainer-card artwork; Mt. Moon’s future self uses the matching masked Mysterious Outfit portrait.
+
+- Shiny follower sparkles now surround the visible Pokémon and scale with its sprite, instead of floating above small followers.
+
+- De drie huizen in Vermilion City hebben toegankelijke interieurs met de gedeelde Vermilion House-visual, collision en eigen stadsverbindingen.
+
+- De Pokemon Fan Club in Vermilion City is toegankelijk, met de Chairman en zijn Bike Voucher-quest, drie nieuwe bezoekers en Rapidash, Eevee en Clefairy. De Chairman staat niet meer in de Cerulean Bike Shop.
+
+- Professor Oak's starter catalog and selection preview show normal forms to keep the shiny gift a surprise. Your future self in Mt. Moon summons a shiny final evolution of your chosen starter.
+
+- Vermilion Gym heeft drie nieuwe NPC-trainers met Electric-type teams op level 20–22, geldbeloningen en gelokaliseerde gevechtsdialogen.
+
+- Vermilion Gym heeft de nieuwe Tiled-visual, Lt. Surge, een Gym Guide en de verbinding met de stad. De terrein-collisionlaag is voorbereid en blijft leeg voor handmatige inrichting.
+
+- Vermilion City heeft een bereikbaar Pokémon Center met de standaardvoorzieningen, drie eigen bezoekers en Mareep, Squirtle en Wingull met gelokaliseerde dialogen.
+
+- Starting the game normally no longer activates a stale local sprite-review catalog over on-demand 2D battle sprites. Sprite reviews require an explicit preview launch.
+
+- Wild battles now use smoother sliding bands, a softer entry flash without a second flash on reveal, and an opaque cover while the first battle frame loads. Battle intros wait until the dedicated loading cover has cleared.
+
+- Browser players on phones and tablets now get a compact login, larger touch controls and collapsible HUD panels. Settings includes a saved UI scale slider with a reset button; login and chat follow the browser keyboard.
+
+- Vermilion City heeft tien nieuwe aanspreekbare en pickpocketbare buiten-NPC’s en zes rondlopende of rustende overworld-Pokémon.
 
 - Nog 56 Pokémon hebben goedgekeurde normal/shiny-3D-modellen in individuele bundles. Kleuren, ogen, battleplaatsing, animaties en installatie zijn gecontroleerd. De lokale catalogus bevat nu 807 gewone Pokémon plus Mega Dragonite.
 

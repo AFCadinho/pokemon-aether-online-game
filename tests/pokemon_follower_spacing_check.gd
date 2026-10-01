@@ -39,6 +39,7 @@ func _run() -> void:
 	_check_remote_player_accepts_follower_before_ready()
 	_check_reset_spacing_in_every_direction()
 	_check_visual_offset_in_every_direction()
+	_check_shiny_sparkle_geometry()
 	_check_trail_keeps_one_open_tile()
 	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
@@ -152,6 +153,40 @@ func _check_visual_offset_in_every_direction() -> void:
 			offset.is_equal_approx(expected_offset),
 			"follower uses the intended visual spacing when facing %s" % direction
 		)
+	follower.free()
+
+
+func _check_shiny_sparkle_geometry() -> void:
+	# A small, bottom-aligned body with deliberately asymmetric transparent
+	# margins exposes the old fixed center above the Pokémon.
+	var sheet := Image.create(256, 256, false, Image.FORMAT_RGBA8)
+	for row in range(4):
+		for column in range(4):
+			for y in range(32, 56):
+				for x in range(23, 41):
+					sheet.set_pixel(column * 64 + x + column % 2, row * 64 + y, Color.WHITE)
+	var frames := FollowerSpriteService._build_sprite_frames(ImageTexture.create_from_image(sheet), "test")
+	var follower: Variant = (load(FOLLOWER_SCRIPT_PATH) as Script).new()
+	get_root().add_child(follower)
+	follower.sprite.sprite_frames = frames
+	for direction: Vector2 in CARDINAL_DIRECTIONS:
+		follower.last_animation_direction = direction
+		follower.call("_play_idle_animation")
+		var center: Vector2 = follower.call("_get_shiny_sparkle_center")
+		_check(center.is_equal_approx(Vector2(0.5, -4)), "sparkles follow the visible body rather than the transparent frame when facing %s" % direction)
+		var radii: Vector2 = follower.call("_get_shiny_sparkle_radii")
+		_check(radii.x < 20 and radii.y < 20, "small Pokémon keep a compact sparkle envelope")
+		follower.sprite.play(follower.call("_get_walk_animation_name", direction))
+		for frame_index in range(4):
+			follower.sprite.frame = frame_index
+			_check((follower.call("_get_shiny_sparkle_center") as Vector2).is_equal_approx(center), "walking frames keep the sparkle center stable")
+	follower.sprite.position += Vector2(5, 8)
+	_check((follower.call("_get_shiny_sparkle_center") as Vector2).is_equal_approx(Vector2(5.5, 4)), "sparkles respect the rendered sprite position")
+	follower.sprite.scale = Vector2(2, 2)
+	_check((follower.call("_get_shiny_sparkle_radii") as Vector2).is_equal_approx(Vector2(23, 28)), "sparkle spread follows scaled visible dimensions")
+	_check(frames.has_meta("follower_visual_bounds"), "visible bounds are cached on the shared follower frames")
+	var empty_frames := SpriteFrames.new()
+	_check(not FollowerSpriteService.get_visual_bounds(empty_frames, "idle_down").has_area(), "empty sprite frames retain the safe geometry fallback")
 	follower.free()
 
 

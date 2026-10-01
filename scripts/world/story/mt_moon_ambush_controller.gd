@@ -6,7 +6,6 @@ const QUEST_ID := "travel_through_mt_moon"
 const FINAL_STEP_ID := "cross_mt_moon"
 const OVERWORLD_POKEMON_SCENE := preload("res://scenes/npcs/overworld_pokemon.tscn")
 const RIFT_TEXTURE := preload("res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Animations & Others/DistortionWorld_Portal.png")
-const FUTURE_SELF_MUGSHOT := preload("res://assets/sprites/mugshots/future_self_mugshot.png")
 const CINEMATIC_MOVE_CATALOG := preload("res://scripts/world/story/mt_moon_cinematic_move_catalog.gd")
 const ROCKET_PORTRAIT_ID := "showdown_rainbowrocketgrunt"
 const ROCKET_SPECIES: Array[String] = ["zubat", "rattata", "ekans", "koffing", "sandshrew"]
@@ -82,7 +81,6 @@ var _rocket_pokemon: Array[Node2D] = []
 var _rift: Sprite2D
 var _overlay_layer: CanvasLayer
 var _overlay_root: Control
-var _player_portrait_renderer: TrainerHeadPortrait
 var _prepared := false
 var _counterattack_played := false
 var _future_self_spawn_global_position := Vector2.ZERO
@@ -387,7 +385,7 @@ func _spawn_starter_final_evolution() -> void:
 		return
 	_starter_species_id = species_id
 	var starter_target := future_self.global_position + Vector2(0, 48)
-	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target))
+	_starter = _create_cutscene_pokemon(species_id, to_local(starter_target), true)
 	var localized_name := ContentLocalization.display_name("species", species_id, species_name)
 	await _show_caption(_text("story.mt_moon.cutscene.go").replace("{pokemon}", localized_name), 0.75)
 	await _play_ball_summon(future_self.global_position + Vector2(12, -16), _starter, "ultra-ball")
@@ -594,9 +592,10 @@ func _close_rift() -> void:
 	_rift.queue_free()
 
 
-func _create_cutscene_pokemon(species_id: String, local_position: Vector2) -> Node2D:
+func _create_cutscene_pokemon(species_id: String, local_position: Vector2, is_shiny := false) -> Node2D:
 	var pokemon := OVERWORLD_POKEMON_SCENE.instantiate() as Node2D
 	pokemon.set("species_id", species_id)
+	pokemon.set("shiny", is_shiny)
 	pokemon.set("display_name", "")
 	pokemon.position = local_position
 	pokemon.visible = false
@@ -704,26 +703,27 @@ func _dialogue_portrait(stage: int) -> Texture2D:
 	if stage in PLAYER_DIALOGUE_STAGES:
 		return await _player_mugshot()
 	if stage in REVEALED_FUTURE_SELF_DIALOGUE_STAGES:
-		return FUTURE_SELF_MUGSHOT
+		return _future_self_mugshot()
 	return null
 
 
 func _player_mugshot() -> Texture2D:
-	if not is_instance_valid(_player_portrait_renderer):
-		_ensure_overlay()
-		_player_portrait_renderer = TrainerHeadPortrait.new()
-		_player_portrait_renderer.name = "PlayerDialoguePortrait"
-		_player_portrait_renderer.head_only = false
-		_player_portrait_renderer.render_scale = 1.25
-		_player_portrait_renderer.custom_minimum_size = Vector2(64, 64)
-		_player_portrait_renderer.size = Vector2(64, 64)
-		_player_portrait_renderer.position = Vector2(-128, -128)
-		_player_portrait_renderer.appearance_state = PlayerSave.to_appearance_state()
-		_overlay_root.add_child(_player_portrait_renderer)
-		await get_tree().process_frame
-	if _player_portrait_renderer.viewport == null:
-		return null
-	return _player_portrait_renderer.viewport.get_texture()
+	return BattlePlayerTrainerCatalog.build_dialogue_portrait(PlayerSave.to_appearance_state())
+
+
+func _future_self_mugshot() -> Texture2D:
+	var appearance := PlayerSave.to_appearance_state()
+	appearance.merge({
+		"top": "Mysterious_Shirt",
+		"bottom": "Mysterious_Trousers",
+		"shoes": "Mysterious_Shoes",
+		"facegear": "Mysterious_Mask",
+		"hair": "",
+		"headgear": "",
+		"facial_hair": "",
+		"cape": "",
+	}, true)
+	return BattlePlayerTrainerCatalog.build_dialogue_portrait(appearance)
 
 
 func _wait_for_interact_release() -> void:

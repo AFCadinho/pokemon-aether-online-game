@@ -51,6 +51,9 @@ var _mobile_video_path := ""
 @onready var quit_button: Button = $Background/ScreenActions/QuitButton
 @onready var settings_menu: PanelContainer = $Background/LoginSettingsMenu
 
+var _touch_login_column: VBoxContainer
+var _touch_login_scroll: ScrollContainer
+
 var server_online := false
 var server_in_maintenance := false
 var server_health_check_in_progress := false
@@ -81,6 +84,8 @@ func _ready() -> void:
 	keyboard_avoidance.surface = $Background/Shell
 	keyboard_avoidance.inputs.assign([username_input, password_input])
 	add_child(keyboard_avoidance)
+	_apply_responsive_layout()
+	get_viewport().size_changed.connect(_apply_responsive_layout)
 	MusicManager.play_login_music()
 	_apply_remember_me_style()
 	LanguageSelectorStyle.configure_login_compact(language_options_button)
@@ -120,8 +125,9 @@ func _ready() -> void:
 	server_health_retry_timer.timeout.connect(_refresh_server_health)
 	add_child(server_health_retry_timer)
 	_setup_player_preview()
-	if not OS.has_feature("mobile"):
+	if not WindowFit.is_touch_ui():
 		username_input.grab_focus()
+	_apply_responsive_layout.call_deferred()
 	_center_settings_menu.call_deferred()
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
@@ -427,6 +433,61 @@ func _notification(what: int) -> void:
 		_center_settings_menu()
 
 
+func _apply_responsive_layout() -> void:
+	if not WindowFit.is_touch_ui():
+		return
+	var shell := $Background/Shell as PanelContainer
+	if _touch_login_scroll == null:
+		var split := $Background/Shell/MainSplit as HBoxContainer
+		_touch_login_column = split.get_node("LoginColumn") as VBoxContainer
+		split.get_node("BrandPanel").hide()
+		split.get_node("FormSpacerRight").hide()
+		_touch_login_scroll = ScrollContainer.new()
+		_touch_login_scroll.name = "TouchLoginScroll"
+		_touch_login_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+		_touch_login_scroll.follow_focus = true
+		shell.remove_child(split)
+		shell.add_child(_touch_login_scroll)
+		_touch_login_scroll.add_child(split)
+		split.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		split.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		var actions := HBoxContainer.new()
+		actions.name = "TouchLoginActions"
+		$Background.add_child(actions)
+		actions.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+		actions.offset_left = 16
+		actions.offset_right = -16
+		actions.offset_top = -72
+		actions.offset_bottom = -8
+		actions.add_theme_constant_override("separation", 12)
+		for button: Control in [language_options_button, options_button]:
+			button.reparent(actions)
+			button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		$Background/ScreenActions.hide()
+	_touch_login_column.custom_minimum_size.x = 0
+	_touch_login_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	login_card.custom_minimum_size.x = 0
+	saved_session_card.custom_minimum_size.x = 0
+	for card: PanelContainer in [login_card, saved_session_card]:
+		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	shell.offset_left = 16
+	shell.offset_right = -16
+	shell.offset_top = 12
+	shell.offset_bottom = -88
+	_touch_login_column.get_node("TextLogo").custom_minimum_size.y = 80
+	var margin := login_card.get_node("LoginMargin") as MarginContainer
+	margin.add_theme_constant_override("margin_left", 24)
+	margin.add_theme_constant_override("margin_right", 24)
+	margin.add_theme_constant_override("margin_top", 16)
+	margin.add_theme_constant_override("margin_bottom", 16)
+	for control: Control in [username_input, password_input, login_button, continue_button, logout_button, options_button, language_options_button, remember_me_checkbox]:
+		control.custom_minimum_size.y = 64
+		control.add_theme_font_size_override("font_size", 20)
+	for link: LinkButton in [register_link_button, forgot_password_link_button]:
+		link.custom_minimum_size.y = 48
+		link.add_theme_font_size_override("font_size", 18)
+
+
 func _center_settings_menu() -> void:
 	if settings_menu == null:
 		return
@@ -438,7 +499,7 @@ func _center_settings_menu() -> void:
 		menu_size = Vector2(440, 540)
 
 	var viewport_size: Vector2 = get_viewport_rect().size
-	settings_menu.position = (viewport_size - menu_size) * 0.5
+	settings_menu.position = (viewport_size - menu_size * settings_menu.scale) * 0.5
 
 
 func _fetch_news() -> void:

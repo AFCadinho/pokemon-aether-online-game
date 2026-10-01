@@ -6,6 +6,7 @@ class_name OverworldPokemon
 @export var overworld_pokemon_id := ""
 @export var species_id := ""
 @export var level := 5
+@export var shiny := false
 @export var auto_resolve_home_icon := true
 @export var auto_resolve_follower_sprite := true
 @export var cry_dialogue_lines: Array[String] = []
@@ -130,7 +131,7 @@ func _resolve_home_mugshot() -> void:
 	if not auto_resolve_home_icon:
 		return
 
-	var home_icon := PokemonAssets.load_home_sprite(species_id)
+	var home_icon := PokemonAssets.load_home_sprite(species_id, shiny)
 	if home_icon == null:
 		home_icon = PokemonAssets.load_unknown_icon()
 	mugshot = home_icon
@@ -144,7 +145,7 @@ func _apply_follower_sprite_frames() -> void:
 	if resolved_species_id.is_empty():
 		return
 
-	var follower_sprite_frames := FollowerSpriteService.get_sprite_frames(resolved_species_id, false)
+	var follower_sprite_frames := FollowerSpriteService.get_sprite_frames(resolved_species_id, shiny)
 	if follower_sprite_frames == null:
 		return
 

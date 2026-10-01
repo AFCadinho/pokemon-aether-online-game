@@ -143,6 +143,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	if not already_prepared:
 		$Content.add_child(battle)
 	resized.connect(_fit_battle)
+	battle.battle_stage.minimum_size_changed.connect(_fit_battle)
 	_fit_battle()
 	if battle.has_meta("immersive_battle_ui") and is_instance_valid(overlay) and overlay.has_node("Control/ChatPanel") and overlay.has_node("Control/ChatTabsPanel"):
 		chat_bridge = preload("res://scripts/battle/battle_ui/battle_chat_bridge.gd").new()
@@ -168,6 +169,12 @@ func _fit_battle() -> void:
 	# Preserve the HUD's design coordinates; expand its logical canvas for wide
 	# displays, instead of stretching Pokémon or cropping controls on small ones.
 	var design := Vector2(1500, 780)
+	var window_fit := get_node_or_null("/root/WindowFit")
+	if window_fit != null and window_fit.call("is_touch_ui") and battle.has_meta("immersive_battle_ui") and not battle.coop_mode:
+		design.x = 960
+		battle.battle_stage.custom_minimum_size.x = 960
+		battle.get_node("%BattleStageViewport").design_size.x = 960
+	battle.custom_minimum_size.x = design.x
 	var factor := minf(size.x / design.x, size.y / design.y)
 	if factor <= 0.0:
 		return
@@ -207,12 +214,13 @@ func _reveal_cover() -> void:
 		return
 	# Keep the opaque loading cover until 3D or its 2D fallback is ready.
 	loading_label.get_parent().hide()
+	entry_transition.is_revealing = true
 	entry_transition.cover_progress = 1.0
 	entry_transition.show()
 	entry_transition.set_process(true)
 	$Cover.color.a = 0.0
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(entry_transition, "cover_progress", 0.0, WildEncounterTransition.REVEAL_SECONDS).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	reveal_tween.tween_property(entry_transition, "cover_progress", 0.0, WildEncounterTransition.REVEAL_SECONDS).set_trans(Tween.TRANS_LINEAR if entry_transition.transition_style == WildEncounterTransition.STYLE_WILD else Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	await reveal_tween.finished
 	if not released:
 		entry_transition.hide()
@@ -220,6 +228,11 @@ func _reveal_cover() -> void:
 		$Cover.hide()
 		if is_instance_valid(battle):
 			battle.remove_meta("battle_screen_preparing")
+
+func wait_until_revealed() -> void:
+	var token := generation
+	while not released and token == generation and is_inside_tree() and $Cover.visible:
+		await get_tree().process_frame
 
 func release() -> void:
 	if released:

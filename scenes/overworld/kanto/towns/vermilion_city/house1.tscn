@@ -1,0 +1,29 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/house/vermilion_house_template.tscn" id="template"]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="guru_npc"]
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd" id="guru_script"]
+[ext_resource type="SpriteFrames" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="guru_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="guru_portrait"]
+
+[node name="House1" instance=ExtResource("template")]
+map_id = "kanto_vermilion_city_house_1"
+map_display_name = "Vermilion City House 1"
+location_id = "kanto.vermilion_city.house_1"
+location_name = "Vermilion City House 1"
+
+[node name="ToOutside" parent="Exits" index="0"]
+target_spawn_name = "FromHouse1"
+transition_id = "kanto_vermilion_city_house_1__to_outside"
+
+[node name="FishingGuru" parent="Entities/NPCs" index="0" instance=ExtResource("guru_npc")]
+position = Vector2(304, 336)
+script = ExtResource("guru_script")
+reward_id = "kanto_pallet_town_old_rod"
+npc_id = "kanto_pallet_town_fishing_guru"
+display_name = "Fishing Guru"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("guru_frames")
+mugshot = ExtResource("guru_portrait")
+preload_quest_markers = true

@@ -54,6 +54,10 @@ var input_binding_capture_action := ""
 var world_pixel_scale_label: Label
 var world_pixel_scale_options_button: OptionButton
 var world_pixel_scale_hint_label: Label
+var ui_scale_label: Label
+var ui_scale_slider: HSlider
+var ui_scale_value_label: Label
+var compact_navigation: OptionButton
 var cursor_scale_label: Label
 var cursor_scale_slider: HSlider
 var cursor_scale_value_label: Label
@@ -140,6 +144,8 @@ func _ready() -> void:
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
+	if WindowFit.is_touch_ui():
+		_apply_touch_style(self)
 	LanguageSelectorStyle.configure(language_options_button)
 	LanguageSelectorStyle.configure(terminology_options_button)
 	_configure_graphics_dropdowns()
@@ -153,6 +159,7 @@ func _ready() -> void:
 	fullscreen_check_box.toggled.connect(_on_fullscreen_toggled)
 	resolution_options_button.item_selected.connect(_on_resolution_selected)
 	world_pixel_scale_options_button.item_selected.connect(_on_world_pixel_scale_selected)
+	ui_scale_slider.value_changed.connect(_on_ui_scale_changed)
 	cursor_scale_slider.value_changed.connect(_on_cursor_scale_changed)
 	master_volume_slider.value_changed.connect(_on_master_volume_changed)
 	music_volume_slider.value_changed.connect(_on_music_volume_changed)
@@ -196,6 +203,8 @@ func open(context: String = "game") -> void:
 
 
 func _process(_delta: float) -> void:
+	if visible:
+		_fit_to_viewport()
 	if OS.has_feature("web") and visible and fullscreen_check_box != null:
 		fullscreen_check_box.set_pressed_no_signal(SettingsManager.fullscreen)
 		fullscreen_check_box.disabled = not bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.supported())", true))
@@ -205,6 +214,36 @@ func _process(_delta: float) -> void:
 	if visible and world_pixel_scale_options_button != null:
 		if world_pixel_scale_options_button.disabled != (OS.has_feature("web") or ArenaCameraPolicy.is_locked(get_tree())):
 			_apply_world_pixel_scale_options_to_control()
+
+
+func _apply_touch_style(node: Node) -> void:
+	if node is Label:
+		var label := node as Label
+		label.add_theme_font_size_override("font_size", maxi(20, label.get_theme_font_size("font_size")))
+	elif node is BaseButton:
+		var button := node as BaseButton
+		button.custom_minimum_size.y = maxf(64, button.custom_minimum_size.y)
+		button.add_theme_font_size_override("font_size", 20)
+	elif node is HSlider:
+		(node as HSlider).custom_minimum_size.y = 64
+	for child in node.get_children():
+		_apply_touch_style(child)
+
+
+func _fit_to_viewport() -> void:
+	var available := get_viewport_rect().size - Vector2(24, 24)
+	var menu_size := get_combined_minimum_size().max(custom_minimum_size)
+	var factor := minf(1.0, minf(available.x / menu_size.x, available.y / menu_size.y))
+	set_anchors_preset(Control.PRESET_TOP_LEFT)
+	size = menu_size
+	scale = Vector2.ONE * maxf(factor, 0.1)
+	position = (get_viewport_rect().size - size * scale) * 0.5
+	if compact_navigation != null:
+		for index in compact_navigation.item_count:
+			var tab_index := compact_navigation.get_item_id(index)
+			compact_navigation.set_item_text(index, tab_container.get_tab_title(tab_index))
+			compact_navigation.set_item_disabled(index, tab_container.is_tab_hidden(tab_index))
+		compact_navigation.select(tab_container.current_tab)
 
 
 func show_impersonation_return_confirmation() -> void:
@@ -283,6 +322,7 @@ func _apply_settings_to_controls() -> void:
 	_apply_resolution_options_to_control()
 	_apply_world_pixel_scale_options_to_control()
 	resolution_options_button.disabled = SettingsManager.fullscreen
+	_set_percentage_control(ui_scale_slider, ui_scale_value_label, SettingsManager.ui_scale)
 	_set_percentage_control(cursor_scale_slider, cursor_scale_value_label, SettingsManager.cursor_scale)
 
 	_set_volume_control(master_volume_slider, master_volume_value_label, SettingsManager.master_volume)
@@ -304,6 +344,7 @@ func _setup_tabs() -> void:
 	tab_container = TabContainer.new()
 	tab_container.name = "SettingsTabs"
 	tab_container.tabs_visible = false
+	tab_container.use_hidden_tabs_for_min_size = false
 	tab_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	tab_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	tab_container.tab_changed.connect(_on_settings_tab_changed)
@@ -371,7 +412,19 @@ func _setup_tabs() -> void:
 	)
 	account_tab_root = account_tab.get_parent().get_parent().get_parent() as Control
 	_build_navigation()
+	if WindowFit.is_touch_ui():
+		settings_navigation_panel.hide()
+		compact_navigation = OptionButton.new()
+		compact_navigation.name = "CompactSettingsNavigation"
+		compact_navigation.custom_minimum_size.y = 44
+		for index in tab_container.get_tab_count():
+			compact_navigation.add_item(tab_container.get_tab_title(index), index)
+		compact_navigation.item_selected.connect(func(index: int): tab_container.current_tab = compact_navigation.get_item_id(index))
+		settings_layout.add_child(compact_navigation)
+		settings_layout.move_child(compact_navigation, 1)
+		custom_minimum_size = Vector2(540, 500)
 	_create_world_pixel_scale_control()
+	_create_ui_scale_control()
 	_create_cursor_scale_control()
 
 	language_label = Label.new()
@@ -491,6 +544,7 @@ func _setup_tabs() -> void:
 	var world_scale_row := _create_labeled_control_row(
 		world_pixel_scale_label, world_pixel_scale_options_button, world_pixel_scale_hint_label
 	)
+	var ui_scale_row := _create_labeled_control_row(ui_scale_label, ui_scale_slider.get_parent() as Control)
 	var cursor_scale_row := _create_labeled_control_row(
 		cursor_scale_label, cursor_scale_slider.get_parent() as Control
 	)
@@ -501,6 +555,7 @@ func _setup_tabs() -> void:
 		fullscreen_row,
 		resolution_row,
 		world_scale_row,
+		ui_scale_row,
 		cursor_scale_row,
 		performance_row,
 		performance_hint,
@@ -511,6 +566,7 @@ func _setup_tabs() -> void:
 		fullscreen_row,
 		resolution_row,
 		world_scale_row,
+		ui_scale_row,
 		cursor_scale_row,
 		performance_row,
 		performance_hint,
@@ -755,8 +811,8 @@ func _create_labeled_control_row(
 	margin.add_theme_constant_override("margin_bottom", 9)
 	panel.add_child(margin)
 
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 18)
+	var row: BoxContainer = VBoxContainer.new() if WindowFit.is_touch_ui() else HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10 if WindowFit.is_touch_ui() else 18)
 	margin.add_child(row)
 
 	var copy := VBoxContainer.new()
@@ -878,6 +934,37 @@ func _create_world_pixel_scale_control() -> void:
 	world_pixel_scale_hint_label.name = "WorldPixelScaleHintLabel"
 	world_pixel_scale_hint_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_set_localized_text(world_pixel_scale_hint_label, "ui.settings.world_pixel_scale_hint")
+
+
+func _create_ui_scale_control() -> void:
+	ui_scale_label = Label.new()
+	_set_localized_text(ui_scale_label, "ui.settings.ui_scale")
+	var row := HBoxContainer.new()
+	row.name = "UIScaleRow"
+	row.add_theme_constant_override("separation", 10)
+	ui_scale_slider = HSlider.new()
+	ui_scale_slider.name = "UIScaleSlider"
+	ui_scale_slider.custom_minimum_size = Vector2(160, 44)
+	ui_scale_slider.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	ui_scale_slider.min_value = SettingsManager.MIN_UI_SCALE
+	ui_scale_slider.max_value = SettingsManager.MAX_UI_SCALE
+	ui_scale_slider.step = 5.0
+	row.add_child(ui_scale_slider)
+	ui_scale_value_label = Label.new()
+	ui_scale_value_label.custom_minimum_size = Vector2(48, 0)
+	row.add_child(ui_scale_value_label)
+	var reset := Button.new()
+	reset.name = "ResetUIScaleButton"
+	_set_localized_text(reset, "ui.settings.ui_scale_reset")
+	reset.custom_minimum_size.y = 44
+	reset.pressed.connect(func(): ui_scale_slider.value = SettingsManager.DEFAULT_UI_SCALE)
+	row.add_child(reset)
+
+
+func _on_ui_scale_changed(value: float) -> void:
+	_set_percentage_value_label(ui_scale_value_label, value)
+	if not loading_controls:
+		SettingsManager.set_ui_scale(value)
 
 
 func _create_cursor_scale_control() -> void:

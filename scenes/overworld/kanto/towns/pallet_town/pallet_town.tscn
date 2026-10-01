@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://ded086gk741xq" path="res://scenes/npcs/gate_npc.tscn" id="5_n6c5k"]
 [ext_resource type="Texture2D" uid="uid://ba8f0l65uv4cv" path="res://assets/tilesets/overworld/JohtoFX.png" id="5_uujun"]
 [ext_resource type="Texture2D" uid="uid://b6drbo1a67h55" path="res://assets/tilesets/overworld/nature/ledges/ledges.png" id="7_fiq1l"]
-[ext_resource type="Texture2D" uid="uid://cnixsmivuhykq" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/NPC_068_Fisherman.png" id="9_q27eu"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="12_h1bkg"]
 [ext_resource type="Texture2D" uid="uid://bsxw7vgtdrlpk" path="res://assets/followers/HORSEA.png" id="13_j8pek"]
 [ext_resource type="Texture2D" uid="uid://3tny2dss8f2p" path="res://assets/tilesets/fiver/tiles_env2_32.png" id="14_2e47g"]
@@ -16,11 +15,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="23_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="24_door_hint"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="25_sign"]
-[ext_resource type="Script" uid="uid://b0etnt1wy21yr" path="res://scripts/world/kanto/towns/pallet_town/fishing_guru.gd" id="26_fishing_guru"]
-[ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="26_item_gift"]
 [ext_resource type="Texture2D" uid="uid://e2ksljyggppg" path="res://assets/tilesets/fiver/tiles_env2_floors32.png" id="27_q27eu"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="28_wfrmf"]
-[ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="29_fisherman_card"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="30_abkj7"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="30_dialogue_npc"]
 [ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="31_poke_fan_f"]
@@ -30,189 +26,6 @@
 [ext_resource type="PackedScene" uid="uid://csmsqlujka4ma" path="res://scenes/world/interactables/locked_door_interactable.tscn" id="35_locked_door"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/transit_keeper_npc.tscn" id="36_transit_keeper"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/aether_beacon_placeholder.tscn" id="37_aether_beacon"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ih4yo"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uh5vu"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k81it"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kntt5"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_httxw"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dgsb8"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6xqow"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jdcey"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wtyve"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hp3ta"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(64, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_thnuy"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(128, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kfdk0"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(192, 64, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m7moy"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_avdvm"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(64, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_85pli"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(128, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7mw4s"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(192, 128, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jtr0h"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(0, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vait5"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(64, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cmwdm"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(128, 192, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cewwl"]
-atlas = ExtResource("9_q27eu")
-region = Rect2(192, 192, 64, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_27c3h"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ih4yo")
-}],
-"loop": true,
-"name": &"idle_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uh5vu")
-}],
-"loop": true,
-"name": &"idle_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k81it")
-}],
-"loop": true,
-"name": &"idle_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kntt5")
-}],
-"loop": true,
-"name": &"idle_up",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_httxw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dgsb8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6xqow")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jdcey")
-}],
-"loop": true,
-"name": &"walk_down",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wtyve")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hp3ta")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_thnuy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kfdk0")
-}],
-"loop": true,
-"name": &"walk_left",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m7moy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_avdvm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_85pli")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7mw4s")
-}],
-"loop": true,
-"name": &"walk_right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jtr0h")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vait5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cmwdm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cewwl")
-}],
-"loop": true,
-"name": &"walk_up",
-"speed": 5.0
-}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2p5pd"]
 atlas = ExtResource("13_j8pek")
@@ -2322,15 +2135,6 @@ required_quest_id = "choose_starter"
 required_quest_step_id = "choose_starter"
 display_name = "Pallet Route Guide"
 
-[node name="FishingGuru" parent="Entities/NPCs" unique_id=1517982080 instance=ExtResource("26_item_gift")]
-position = Vector2(368, 816)
-script = ExtResource("26_fishing_guru")
-reward_id = "kanto_pallet_town_old_rod"
-npc_id = "kanto_pallet_town_fishing_guru"
-facing_direction = Vector2(0, 1)
-npc_sprite_frames = SubResource("SpriteFrames_27c3h")
-mugshot = ExtResource("29_fisherman_card")
-preload_quest_markers = true
 
 [node name="PalletResident" parent="Entities/NPCs" unique_id=346251658 instance=ExtResource("30_dialogue_npc")]
 position = Vector2(784, 1008)
