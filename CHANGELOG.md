@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Kanto Route 11 gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - Het havengebouw in Vermilion City is van noord en zuid toegankelijk, met aankomstpunten aan beide kanten van het interieur en doorgang naar de docks via de zuidelijke stadsrand.
 
 - Skarmory vliegt 70 cm hoger in 3D-battles; slaap en flauw blijven op de grond. HP-panelen schuiven direct omhoog bij hoger verschijnende 3D-modellen.
