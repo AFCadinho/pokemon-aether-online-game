@@ -14,6 +14,14 @@ class PosePlayer extends Node2D:
 		styles.append(value)
 
 
+class PoseHost extends Node2D:
+	var prepared_before_animation := false
+
+	func prepare_player_pose(player: Node2D) -> void:
+		prepared_before_animation = player.get_activity_style() == "default"
+		await get_tree().process_frame
+
+
 func _init() -> void:
 	_run.call_deferred()
 
@@ -25,8 +33,11 @@ func _run() -> void:
 		_check(not bool(runner.validate_actions([{"type": "player_pose", "durationMs": duration}]).success), "invalid pose duration is rejected")
 	var player := PosePlayer.new()
 	root.add_child(player)
-	var result: Dictionary = await runner.run_sequence([{"type": "player_pose", "durationMs": 1}], player, player)
+	var host := PoseHost.new()
+	root.add_child(host)
+	var result: Dictionary = await runner.run_sequence([{"type": "player_pose", "durationMs": 1}], host, player)
 	_check(bool(result.success), "pose finishes successfully")
+	_check(host.prepared_before_animation, "Rose turns before the pose animation begins")
 	_check(player.styles == ["pickpocket", "default"], "pose reuses thieving visuals and restores the prior style")
 	var scene := load("res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn") as PackedScene
 	var map := scene.instantiate()
@@ -35,6 +46,7 @@ func _run() -> void:
 	_check(rose.get_node("TitanicPoseStoryHook").interaction_id == "kanto_ss_anne_titanic_pose", "Rose starts the server-owned pose interaction")
 	map.free()
 	player.free()
+	host.free()
 	quit(1 if failed else 0)
 
 

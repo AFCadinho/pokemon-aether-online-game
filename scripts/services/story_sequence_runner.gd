@@ -265,7 +265,7 @@ func _run_action(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
 		"wait":
 			return await _run_wait(action)
 		"player_pose":
-			return await _run_player_pose(action, player)
+			return await _run_player_pose(action, host, player)
 		"face_actor":
 			return _run_face_actor(action, host, player)
 		"move_actor":
@@ -313,9 +313,13 @@ func _run_wait(action: Dictionary) -> Dictionary:
 	return {"success": true}
 
 
-func _run_player_pose(action: Dictionary, player: Node2D) -> Dictionary:
+func _run_player_pose(action: Dictionary, host: Node, player: Node2D) -> Dictionary:
 	if player == null or not player.has_method("set_activity_style") or not player.has_method("get_activity_style"):
 		return {"success": false, "status": "player_pose_unavailable"}
+	if host.has_method("prepare_player_pose"):
+		await host.call("prepare_player_pose", player)
+	if not is_instance_valid(player):
+		return {"success": false, "status": "player_pose_interrupted"}
 	var previous_style := str(player.call("get_activity_style"))
 	player.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
 	await _run_wait(action)
