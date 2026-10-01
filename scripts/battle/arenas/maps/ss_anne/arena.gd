@@ -76,6 +76,7 @@ func build() -> Node3D:
 	var glow := matte(Color("ffe0a0"), 0.6)
 	for x in [-13, 13]:
 		lamp(cabin, Vector3(x, 4.8, 6.2), 0, brass, glow)
+	_add_deck_details(arena, ivory, navy, brass, red, wood, glass)
 	_add_spectators(arena)
 	return arena
 
@@ -95,10 +96,11 @@ func _add_spectators(arena: Node3D) -> void:
 	var shoes := matte(Color("34313a"))
 	var hair := matte(Color("4d3529"))
 	var white := matte(Color("f0e9da"))
-	for i in 6:
+	var positions := [Vector3(-8, 0, -20), Vector3(8, 0, -20), Vector3(-19.3, 0, -7), Vector3(19.3, 0, -7), Vector3(-7.5, 0, 23.5), Vector3(7.5, 0, 23.5)]
+	for i in positions.size():
 		var spectator := preload("res://scripts/battle/arenas/maps/ss_anne/spectator.gd").new()
 		spectator.name = "Sailor%d" % i if i in [0, 4] else "Passenger%d" % i
-		spectator.position = Vector3((-1.0 if i < 3 else 1.0) * (6.5 + (i % 3) * 1.8), 0, -19.8 - (i % 2) * 0.45)
+		spectator.position = positions[i]
 		spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
 		spectator.phase = i * 1.37
 		audience.add_child(spectator)
@@ -126,3 +128,51 @@ func _add_spectators(arena: Node3D) -> void:
 				spectator.left_arm = arm
 			else:
 				spectator.right_arm = arm
+
+func _add_deck_details(arena: Node3D, ivory: Material, navy: Material, brass: Material, red: Material, wood: Material, glass: Material) -> void:
+	# Low forecastle and nautical fittings give the sea-facing end its own identity.
+	var bow := group(arena, "Forecastle")
+	box(bow, ivory, Vector3(0, 0.2, 29), Vector3(28, 0.4, 6))
+	box(bow, wood, Vector3(0, 0.42, 29), Vector3(28, 0.04, 6))
+	for step in 3:
+		box(bow, wood, Vector3(0, 0.07 * (step + 1), 25.2 + step * 0.3), Vector3(5, 0.14 * (step + 1), 0.3))
+	for side in [-1, 1]:
+		var bollard := group(bow, "MooringBollard", Vector3(side * 11, 0.44, 29))
+		box(bollard, navy, Vector3(0, 0.07, 0), Vector3(1.3, 0.14, 0.8))
+		for x in [-0.38, 0.38]:
+			cylinder(bollard, brass, Vector3(x, 0.45, 0), 0.18, 0.75)
+	var capstan := group(bow, "AnchorCapstan", Vector3(0, 0.44, 28))
+	cylinder(capstan, navy, Vector3(0, 0.5, 0), 0.5, 1.0)
+	cylinder(capstan, brass, Vector3(0, 1.02, 0), 0.7, 0.14)
+	for yaw in [0.0, PI / 2]:
+		box(capstan, wood, Vector3(0, 1.07, 0), Vector3(2.8, 0.1, 0.12)).rotation.y = yaw
+	var mast := group(arena, "BowSignalMast", Vector3(0, 0.44, 31))
+	cylinder(mast, ivory, Vector3(0, 4.4, 0), 0.11, 8.8, 0.06)
+	box(mast, brass, Vector3(0, 7, 0), Vector3(6, 0.09, 0.09))
+	for side in [-1, 1]:
+		beam(mast, brass, Vector3(side * 3, 7, 0), Vector3(side * 5, 0, 0), 0.035)
+		var flag_material: StandardMaterial3D = (red if side < 0 else navy).duplicate()
+		flag_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		var flag := SurfaceTool.new()
+		flag.begin(Mesh.PRIMITIVE_TRIANGLES)
+		for vertex in [Vector3(side * 0.3, 6.4, 0), Vector3(side * 2.7, 5.6, 0.15), Vector3(side * 0.3, 4.8, 0)]:
+			flag.add_vertex(vertex)
+		flag.generate_normals()
+		prop(mast, flag.commit(), flag_material, Vector3.ZERO)
+	# Lamps frame the port/starboard views without enclosing the combat space.
+	var lamps := group(arena, "PromenadeLamps")
+	var glow := matte(Color("ffe4b1"), 0.5)
+	for side in [-1, 1]:
+		for z in [-11, 12]:
+			var post := group(lamps, "DeckLantern", Vector3(side * 19.6, 0, z))
+			cylinder(post, navy, Vector3(0, 1.55, 0), 0.065, 3.1)
+			cylinder(post, glow, Vector3(0, 3.22, 0), 0.19, 0.38)
+			cylinder(post, brass, Vector3(0, 3.47, 0), 0.27, 0.16, 0.05)
+	# Portholes continue around the cabin sides for oblique camera views.
+	var cabin := arena.get_node("ShipSuperstructure")
+	for side in [-1, 1]:
+		for z in [-3, 2]:
+			var frame := cylinder(cabin, brass, Vector3(side * 14.6, 3.6, z), 0.7, 0.16)
+			frame.rotation.z = PI / 2
+			var pane := cylinder(cabin, glass, Vector3(side * 14.7, 3.6, z), 0.56, 0.1)
+			pane.rotation.z = PI / 2

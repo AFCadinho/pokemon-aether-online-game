@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het SS Anne-battledek is rondom aangekleed met verspreid juichend publiek, deklichten, patrijspoorten en een voordek met seinmast en scheepsbeslag.
+
 - De SS Anne-battlearena heeft een kleine groep van zes juichende passagiers en matrozen op het achterdek.
 
 - Diglett Cave gebruikt nu het Viridian Forest-theme; beide Rock Tunnel-verdiepingen gebruiken het Mt. Moon-theme.
