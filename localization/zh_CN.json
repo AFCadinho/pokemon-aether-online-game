@@ -6206,5 +6206,20 @@
   "ui.skills.thieving.target.vermilion_harbor_worker_bram": "Harbor Worker Bram",
   "ui.skills.thieving.target.vermilion_retired_sailor_abel": "Retired Sailor Abel",
   "ui.skills.thieving.target.vermilion_picnicker_june": "Picnicker June",
-  "ui.skills.thieving.location.vermilion_city": "Vermilion City"
+  "ui.skills.thieving.location.vermilion_city": "Vermilion City",
+  "story.kanto.ss_anne_rival.title": "圣安奴号上的劲敌",
+  "story.kanto.ss_anne_rival.summary": "前往2F拜访船长，劲敌正在走廊等你。",
+  "story.kanto.ss_anne_defeat_rival": "在2F找到青绿并赢得对战。",
+  "story.kanto.help_ss_anne_captain.title": "帮助船长",
+  "story.kanto.help_ss_anne_captain.summary": "去厨房为晕船的船长拿姜茶，获得HM Cut。",
+  "story.kanto.ss_anne_meet_captain": "与2F船长室里的船长交谈。",
+  "story.kanto.ss_anne_collect_tea": "在1F厨房找厨师雨果拿姜茶。",
+  "story.kanto.ss_anne_return_tea": "把姜茶送回2F的船长室。",
+  "story.kanto.challenge_vermilion_gym.title": "获得橙色徽章",
+  "story.kanto.challenge_vermilion_gym.summary": "在枯叶道馆使用居合斩，击败马志士。",
+  "story.kanto.vermilion_defeat_surge": "进入枯叶道馆并击败马志士。",
+  "story.kanto.ss_anne_crew_report.title": "船员的委托",
+  "story.kanto.ss_anne_crew_report.summary": "帮助芬恩让玛拉批准维护报告。",
+  "story.kanto.ss_anne_deliver_report": "把报告送到3F甲板上的玛拉手中。",
+  "story.kanto.ss_anne_return_report": "返回B1F走廊寻找芬恩。"
 }
