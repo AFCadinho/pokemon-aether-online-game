@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town heeft voorbereidende exits en aankomstspawns voor Route 8 in het westen en Route 12 in het zuiden; de bestaande noordelijke verbinding met Route 10 blijft actief.
+
 - Route 10 en Lavender Town zijn nu direct in beide richtingen verbonden; Lavender Town North is verwijderd uit de wereld en staff-teleportcatalogus.
 
 - Lavender Town en de noordelijke aansluiting gebruiken nu de remastered HeartGold/SoulSilver-soundtrack van Zame.
