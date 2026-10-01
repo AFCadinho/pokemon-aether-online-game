@@ -3,7 +3,7 @@
   "date": "2026-10-01",
   "runtime_approved": false,
   "normal_shiny_appearance_approved": true,
-  "visual_battle_review_pending": true,
+  "visual_battle_review_pending": false,
   "battle_stress_pending": true,
   "scope": "Independent 120Hz pose clearance and shared classic/stadium camera checks on exact standalone scenes; flat floor and HUD proxy only",
   "review_url": "http://127.0.0.1:8782/battle-eight-review-v1/index.html",
@@ -542,7 +542,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -1251,7 +1251,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -2035,7 +2035,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -2591,7 +2591,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -3896,7 +3896,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -4488,7 +4488,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -6245,7 +6245,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -6945,7 +6945,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -7482,7 +7482,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -8191,7 +8191,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -8975,7 +8975,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -9531,7 +9531,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -10836,7 +10836,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -11428,7 +11428,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -13185,7 +13185,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     },
     {
@@ -13885,7 +13885,7 @@
         }
       },
       "technical_clearance_pass": true,
-      "visual_battle_approved": false,
+      "visual_battle_approved": true,
       "runtime_approved": false
     }
   ],
@@ -14155,5 +14155,11 @@
     ".tmp/remaining-142-production/battle-eight-review-v1/media/trumbeak-shiny-trumbeak-stadium-1-special_attack.webp": "0eecf6ee965c4086a73fe948cdded1618e974ba473e6d4bc1cdcfbf8e5d732ff",
     ".tmp/remaining-142-production/battle-eight-review-v1/media/trumbeak-shiny-trumbeak-stadium-1-sleep.webp": "a2a9e2dc5059f2ff2a81f8baf1c57c83836446b30f041db8c90613c5cd9b6c49",
     ".tmp/remaining-142-production/battle-eight-review-v1/media/trumbeak-shiny-trumbeak-stadium-1-faint_start.webp": "cb9517fb6bf68f7f03add841db2cc632b028fdac091f40674063f34a89073749"
+  },
+  "battle_user_approval": {
+    "answer": "de 8 zien er goed uit.",
+    "date": "2026-10-01",
+    "scope": "Eight exact normal/shiny battle pairs",
+    "page_sha256": "20640d64b5db6c0b1f2ff3fbf89728e5580fe3d7351ec832d2a603c74e0058d1"
   }
 }

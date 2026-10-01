@@ -1,7 +1,7 @@
 # Remaining 142 — source and normal-candidate recovery
 
-The 1 October intake matches the active registry: 883 ordinary species plus
-Mega Dragonite are ready and 142 ordinary species remain. The mounted external
+The opening 1 October intake recorded 883 ordinary species plus
+Mega Dragonite ready and 142 ordinary species remaining. The mounted external
 source drive is available. 127 remaining species have pinned Biochao archive
 members; 15 DLC model identities still have no native motion directory in the
 currently mounted SV Every File dump or matching paths in the ZA archive.
@@ -114,10 +114,28 @@ technical errors. They still need user appearance, shiny and battle approval.
 
 [Six normal appearances](http://127.0.0.1:8782/appearance-six-v1/index.html)
 
-There are now 18 technically converted normal candidates among the 142:
-eight have approved normal/shiny appearances, six await normal appearance
-review and four retain visual repair holds. None have been newly admitted.
+At the six-model recovery checkpoint there were 18 technically converted
+normal candidates among the 142: eight had approved normal/shiny appearances,
+six awaited normal appearance review and four retained visual repair holds.
+The subsequent admission of the first eight is recorded below.
 
 `catalog_remaining_142_battle_candidates.json` binds the 16 normal/shiny
 standalone scenes, placement/motion candidates and exact measurement reports.
 [Eight-pair battle review](http://127.0.0.1:8782/battle-eight-review-v1/index.html)
+
+## Eight pairs completed locally
+
+The user approved the exact eight-pair battle page (“de 8 zien er goed uit.”).
+All eight have individual versioned bundles, totaling 35,193,781 bytes
+(33.56 MiB), in `.tmp/remaining-142-production/approved-eight/bundles`.
+The unchanged transactional installer passed fresh install, no-op and restart
+checks for all eight bundles and 16 standalone scenes. The unchanged real-battle
+stress gate passed all three classic/stadium/classic rounds on installed scenes.
+The eight are admitted to identical game/launcher reviewed registries.
+`catalog_remaining_142_eight_bundle_qualification.json` binds these checks.
+
+The local approved total is now **891 ordinary species plus Mega Dragonite**
+(892 profiles; 1,784 normal/shiny records), with **134 ordinary species remaining**.
+The published R2 index still contains 884 profiles; these eight have not been
+uploaded or activated in a release. The six further appearance reviews remain
+pending, alongside four material repairs, 109 source/action holds and 15 DLC holds.
