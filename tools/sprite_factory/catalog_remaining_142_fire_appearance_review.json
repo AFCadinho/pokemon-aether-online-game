@@ -34,16 +34,23 @@
     "v8_sampled_pose_and_fire_pixels_identical_to_approved_v7": true
   },
   "review_v9": {
-    "pending": [
-      "ponyta",
-      "rapidash"
-    ],
+    "pending": [],
     "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v9/index.html",
     "changes": [
       "Rapidash FireCoreB extends through nearly the full source card",
       "Rapidash FireMaskB restored with source coverage and 0.8 opacity",
       "Matched side-camera comparison added"
     ],
-    "centiskorch_and_ponyta_unchanged": true
+    "centiskorch_and_ponyta_unchanged": true,
+    "accepted": [
+      "ponyta",
+      "rapidash"
+    ],
+    "answer": "akkoord",
+    "scope": "Normal fire appearance only; shiny and battle pending",
+    "accepted_scenes": {
+      "ponyta": "67be96bd0662614ceedf56bfbb8cf7585b101c15602412726a747f2f7fab9516",
+      "rapidash": "faa22c41818bd08caba4eb085843e164eb417fb2c66727d64145be0121e44dbb"
+    }
   }
 }

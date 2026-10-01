@@ -14,6 +14,8 @@ uniform float tongue_span = 0.5;
 uniform float layer_opacity = 1.0;
 uniform bool retain_coverage = false;
 uniform bool shape_flames = false;
+uniform vec3 fire_edge = vec3(1.0, 0.23, 0.015);
+uniform vec3 fire_core = vec3(1.0, 0.82, 0.08);
 uniform bool enabled = true;
 void fragment() {
 	vec2 uv = UV * uv_transform.xy + uv_transform.zw;
@@ -38,8 +40,8 @@ void fragment() {
 		coverage = 1.0-height;
 	}
 	if (!enabled || opacity < 0.025) { discard; }
-	vec3 edge = vec3(1.0, 0.23, 0.015);
-	vec3 core = vec3(1.0, 0.82, 0.08);
+	vec3 edge = fire_edge;
+	vec3 core = fire_core;
 	ALBEDO = mix(edge, core, clamp(coverage * 0.7 + density * 0.3, 0.0, 1.0));
 	ALPHA = opacity;
 }

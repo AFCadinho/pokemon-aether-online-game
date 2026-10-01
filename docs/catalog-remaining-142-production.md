@@ -405,3 +405,43 @@ Centiskorch's accepted normal fire scope is retained. No catalog admission,
 bundle creation or release occurred in this diagnostic step.
 
 [Rapidash tail before/after, plus all three previews](http://127.0.0.1:8782/fire-live-preview-v1/review-v9/index.html)
+
+### Accepted normal fire and authored shiny pairs
+
+The user accepted Ponyta/Rapidash v9 with “akkoord”; Centiskorch's earlier
+normal acceptance remains. The scope is normal appearance only. Source archives
+are mounted again. The matching Biochao archive members do not include separate
+shiny variants, so the proposals use the existing local HOME shiny references:
+blue Ponyta fire, grey/purple Rapidash fire with blue irises, and turquoise
+Centiskorch back/legs while retaining its central heated belly and fire. These
+are authored approximations, not recovered native shiny material tables.
+
+All six standalone candidates preserve source meshes, skin binds, skeleton
+rests and six native animation clips. Fresh reload verifies body albedo including
+the complete generated mip chain. An earlier validator incorrectly compared
+mipmapped data to a base-only PNG; that failed artifact is excluded. Material
+reload mismatch now propagates to a nonzero exit rather than continuing.
+The final runtime-verified-v2 pack passes, as do thirty pose captures and thirty
+fire-loop captures. All fifteen normal pose images are pixel-identical to the
+approved v9 renders. All six sampled fire loops move and match at their endpoints.
+
+The shiny review page and all 39 referenced/interactive image files return
+HTTP 200 after restarting the local server. Shiny visual review remains pending.
+The diagnostic battle measurement found that Centiskorch's entire source model
+uses centimeters; a 0.01 placement scale converts it to meters without altering
+meshes or native motion. Per-clip clearance profiles are measured separately.
+The fire shader remains outside the gameplay material whitelist: no gameplay,
+installed bundle or performance admission is claimed. Catalog counts remain
+898 ordinary species plus Mega Dragonite; 127 ordinary species remain.
+
+[Three fire normal/shiny pairs](http://127.0.0.1:8782/fire-shiny-v2/review/index.html)
+
+The corrected normal battle measurement completed: 48 images and six clips per
+species. Ponyta and Rapidash pass the unchanged 0.015 m minimum-clearance gate
+at independent 120 Hz samples (their minima are approximately 0.025 m).
+Centiskorch still fails faint_start (-0.164 m) and physical_attack (-0.137 m).
+The 60 Hz baker missed those sub-frame minima; its candidate is diagnostic and
+must not be admitted. Sleep clears at approximately 0.030 m for all three.
+`catalog_remaining_142_fire_battle_checkpoint.json` freezes this result, the
+failed profiles and capture hashes. Next work must repair Centiskorch's
+attack/faint placement and repeat the same gate, then obtain battle visual review.
