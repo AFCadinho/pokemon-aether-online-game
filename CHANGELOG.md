@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Doorgangen binnen dezelfde map, waaronder de kamers van SS Anne 1F, blijven bruikbaar nadat je heen en terug bent gegaan.
+
 - De S.S. Anne-verhaallijn begint met de gunst van de skipper: zoek de opschepperige Gary via aanwijzingen van gasten en bemanning, versla hem bij de captainhut en help daarna de zeezieke, uitgeputte captain met gemberthee voor HM Cut.
 
 - De S.S. Anne heeft acht extra passagiers en bemanningsleden met gelokaliseerde dialogen en zes optionele FRLG-trainers op level 17–21, verdeeld over de vier verdiepingen.

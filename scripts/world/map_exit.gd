@@ -129,8 +129,11 @@ func _enter_authorized_transition(
 		return
 
 	var apply_result: Dictionary = await world.call("apply_authorized_teleport_state", state)
-	if not bool(apply_result.get("success", false)):
+	# Room transitions can reuse the current map, so this exit stays alive.
+	# Release its guard after arrival so the same door can be used again.
+	if is_instance_valid(self):
 		is_transitioning = false
+	if not bool(apply_result.get("success", false)):
 		await _show_transition_error()
 
 
