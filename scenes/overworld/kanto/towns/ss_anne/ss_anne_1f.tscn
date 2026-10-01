@@ -321,7 +321,7 @@ position = Vector2(1712, 1776)
 [node name="Spawns" type="Node2D" parent="." unique_id=654725455]
 
 [node name="HealNPC" type="Marker2D" parent="Spawns" unique_id=1138760853]
-position = Vector2(816, 1936)
+position = Vector2(976, 1808)
 
 [node name="At_3_6" type="Marker2D" parent="Spawns" unique_id=1502237307]
 position = Vector2(112, 208)
