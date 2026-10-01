@@ -1,0 +1,156 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "runtime_approved": false,
+  "normal_appearance_approved": true,
+  "normal_approval_answer": "paras goed",
+  "shiny_appearance_approved": false,
+  "battle_approved": false,
+  "review_url": "http://127.0.0.1:8782/paras-pair-review-v1/index.html",
+  "entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 129.6,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 98.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 122.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Normal palette still resembles shiny; clear eye cover uses a reviewed-only physical approximation",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-normal-reference-v7/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-normal-reference-runtime-v7/paras.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
+      "source_sha256": "37bf19ab4e08dbf1a37d0195df33861c997c90ad262814e4c41e8bd436a0e026",
+      "species": "paras",
+      "status": "normal_review_candidate",
+      "variant": "normal"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 129.6,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 98.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 122.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Normal palette still resembles shiny; clear eye cover uses a reviewed-only physical approximation",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "31c1e6e18a81bf23f1ba7d4a0fd5979049163c334f0d2b9ca95d0664f25a1244",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-shiny-reference-v2/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-shiny-reference-runtime-v2/paras.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "cbb85d6541a8aec6f9b6c52aa0f68a303fc001b6b58993b7c6074fcb3a2c0d7c",
+      "source_sha256": "37bf19ab4e08dbf1a37d0195df33861c997c90ad262814e4c41e8bd436a0e026",
+      "species": "paras",
+      "status": "normal_review_candidate",
+      "variant": "shiny"
+    }
+  ],
+  "shiny_receipt": {
+    "species": "paras",
+    "variant": "shiny",
+    "runtime_approved": false,
+    "appearance_approved": false,
+    "method": "authored-local-home-reference-shiny-palette-v1",
+    "source_glb_sha256": "7bcd5125950e27f81b862823b7aa7e4afbd2935ef06c4cb2023c4723bf05eb51",
+    "glb_sha256": "31c1e6e18a81bf23f1ba7d4a0fd5979049163c334f0d2b9ca95d0664f25a1244",
+    "reference_sha256": "161a74e0a74ef25a280d4de444b117521e8c11f5e98ab1912e47bc16fd8ace22",
+    "worker_sha256": "ed3ad57bdaefc411ec5b4fe557f2ba2fb26240923da31a272151ef494eba6f4e",
+    "changed_skin_pixels": 123128,
+    "alpha_unchanged": true,
+    "mushroom_strip_unchanged": true,
+    "geometry_motion_sha256": "5985fe021a7af6715510d41161a29f8f2770328155698ecb7c1e8dc4977fc635"
+  },
+  "recipe_reproduced_byte_for_byte": true,
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_remaining_paras_shiny_review.py": "ed3ad57bdaefc411ec5b4fe557f2ba2fb26240923da31a272151ef494eba6f4e",
+    "tools/sprite_factory/catalog_remaining_142_material_repairs_review.json": "6931844127d8993a2637e04759163af1bd3ecc5e6d6b2b12549bc91e08e47d23",
+    ".tmp/remaining-142-production/paras-shiny-reference-v3/receipt.json": "4a83b04d1b2a3804c083830f5adf5b47b376a869673571f65c7413dc4053efd5",
+    ".tmp/remaining-142-production/paras-shiny-reference-runtime-v2/report.json": "d8be7ac29c8349ec26d381544232db472792e729a9dfcd64eff50ff187b12ac8",
+    ".tmp/remaining-142-production/paras-shiny-reference-captures-v2/review.json": "9c87bb9579d5e5905545b56ad09a0a5b25061d22a16f91637cda2585351af84e",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-paras-idle-50.webp": "dae86c102d49a2a47c95de235a3d449de298937e7cd5000950c5efdb5505dee2",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-paras-physical_attack-50.webp": "3b45ae4ba5cb306fbda3ab1b047febdde67303a2002738ef70190446951027d9",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-paras-special_attack-50.webp": "fa918a67ffa46fcac8b7b964a0d3c5915f06235bc624699d1bfc768f97ff1c4b",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-paras-sleep-50.webp": "e7bb3f3f9815e04c3457abebeb53fee9aaf4b3060a9a998e12ba859dfb78d6a0",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-paras-faint_start-100.webp": "13ec405e3b2814da8ad15c5e9832404fc421dc4723a738b4a05748d369991969",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-paras-idle-50.webp": "bc3f30d885f0a75669aaf6158dce021116c0b1518f71b09b438c0f3ec220e185",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-paras-physical_attack-50.webp": "dc30c6a295808539fd075390eacc691f178ae97ad4a8266a9f39d37f886a3bfa",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-paras-special_attack-50.webp": "8f46da19de9d68a9feed2a4b5a9984d8f3289043cc54cf0f9765bb8d0a3408be",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-paras-sleep-50.webp": "9482d9a3f13d4279518f8d68a53259398eed741722fb5c358a8b8c4d29243d08",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-paras-faint_start-100.webp": "8a55ebc640020849a3894dd438c1ada8ff94cdbcc3745544ad48b201d5c26331",
+    ".tmp/remaining-142-production/paras-pair-review-v1/normal-reference.png": "7e8b017b76d22e9cd4cf737ee61a20832c232e6bcb2d09df5b05545a31d94117",
+    ".tmp/remaining-142-production/paras-pair-review-v1/shiny-reference.png": "161a74e0a74ef25a280d4de444b117521e8c11f5e98ab1912e47bc16fd8ace22",
+    ".tmp/remaining-142-production/paras-pair-review-v1/index.html": "ec578f37c3b9794cf4e9c7081b6ae9494aaf87d9f6eda11783e26941c4159238"
+  }
+}

@@ -2,8 +2,8 @@
   "schema": 1,
   "date": "2026-10-01",
   "runtime_approved": false,
-  "appearance_approved": false,
-  "normal_user_review_pending": true,
+  "appearance_approved": true,
+  "normal_user_review_pending": false,
   "review_url": "http://127.0.0.1:8782/paras-normal-review-v7/index.html",
   "entries": [
     {
@@ -127,5 +127,10 @@
       "Missing clip: faint_loop"
     ],
     "status": "not a passed full-motion gate"
+  },
+  "normal_appearance_approval": {
+    "answer": "paras goed",
+    "scope": "Paras normal colours, eyes, teeth and shown native presentation poses",
+    "date": "2026-10-01"
   }
 }

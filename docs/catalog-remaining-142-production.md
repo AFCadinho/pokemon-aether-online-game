@@ -246,3 +246,15 @@ evidence. Counts remain **897 ordinary species plus Mega Dragonite**, with
 source/action holds and fifteen DLC motion holds).
 
 [Paras normal comparison](http://127.0.0.1:8782/paras-normal-review-v7/index.html)
+
+The user subsequently approved Paras normal (“paras goed”). Its shiny proposal
+keeps the embedded pink mushroom strip byte-for-byte and adapts only the orange
+skin towards the local shiny HOME reference. The committed shiny recipe
+reproduces the captured GLB byte-for-byte. Both standalone scene hashes, unchanged
+geometry/skin/animation and alpha checks pass. Ten quick presentation captures
+have no errors; shiny visual acceptance and battle qualification remain pending.
+The rejected broad RGB-anchor shiny trial is not used: it introduced pink edges
+into facial/body detail. `catalog_remaining_142_paras_shiny_candidates.json`
+pins the narrow skin-only proposal and the user's normal approval.
+
+[Paras normal/shiny comparison](http://127.0.0.1:8782/paras-pair-review-v1/index.html)
