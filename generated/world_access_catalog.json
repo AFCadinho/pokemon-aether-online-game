@@ -991,6 +991,16 @@
 						"x": 8,
 						"y": 13
 					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 23,
+						"y": 24
+					}
 				}
 			}
 		},
