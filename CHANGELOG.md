@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De oceaan rond SS Anne 3F beweegt nu met de vier wateranimatieframes uit Tiled.
+
 - De SS Anne 3F-visual is opnieuw geïmporteerd uit de bijgewerkte Tiled-bron.
 
 - Nog 112 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, gecontroleerde oogdetails en individuele downloadbundles.
