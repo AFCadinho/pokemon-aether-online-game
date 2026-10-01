@@ -76,6 +76,7 @@ const SIDE_QUESTS: Array[Dictionary] = [
 	},
 	{"id": "cerulean_cave_clearance", "label_key": "ui.staff.side_quest.cerulean_cave_clearance"},
 	{"id": "ss_anne_crew_report", "label_key": "ui.staff.side_quest.ss_anne_crew_report"},
+	{"id": "ss_anne_titanic_pose", "label_key": "ui.staff.side_quest.ss_anne_titanic_pose"},
 ]
 
 const UI_BG := Color("#050b14fa")

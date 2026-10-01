@@ -4,6 +4,8 @@
 
 - SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
 
+- Rose's Titanic-quest is nu beschikbaar in Trainer Progress bij Side Quests, met resetten, activeren en voltooien.
+
 - Vermilion City en Route 11 hebben nu aparte noordelijke en zuidelijke overgangen met spawns op het bijbehorende pad.
 
 - Rose en de speler draaien vóór de Titanic-pose weer naar de zee.
