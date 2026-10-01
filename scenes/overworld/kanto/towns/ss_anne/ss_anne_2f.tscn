@@ -1,21 +1,17 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://gh313v5ykx13"]
 
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="12_xs1ck"]
+[ext_resource type="SpriteFrames" uid="uid://bwxa4fpyvnrfx" path="res://assets/npcs/classes/blue_frames.tres" id="blue"]
+[ext_resource type="Script" uid="uid://gk866lq5fjrn" path="res://scripts/world/npcs/ss_anne_captain.gd" id="captain"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="population_gentleman"]
+[ext_resource type="SpriteFrames" uid="uid://yaxkjlx3spjb" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="population_poke_fan_f"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_2f/ss_anne_2f.visual.tscn" id="visual"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
-[ext_resource type="Script" path="res://scripts/world/npcs/ss_anne_captain.gd" id="captain"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="blue"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
-
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/poke_fan_f_frames.tres" id="population_poke_fan_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="population_gentleman"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
@@ -65,7 +61,72 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="shape_16"]
 size = Vector2(96, 32)
 
-[node name="SSAnne2F" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uhth6"]
+texture = ExtResource("12_xs1ck")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_eajbk"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_uhth6")
+
+[node name="SSAnne2F" type="Node2D" unique_id=1034563739]
 script = ExtResource("metadata")
 map_id = "kanto_ss_anne_2f"
 map_region_name = "Kanto"
@@ -80,11 +141,9 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.vermilion_city"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
-metadata/pao_generated_visual = true
-metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/ss_anne/SS Anne 2F.tmx"
+[node name="Visual" parent="." unique_id=918369431 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2034588026]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("mask")
@@ -101,51 +160,51 @@ floor_regions = {
 active_floor = &"room_17"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2021945442]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=620226100]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=584175865]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=775231199]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=1351205560]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=356720446]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=2066435953]
 
-[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="GaryOak" parent="Entities/NPCs" unique_id=1672257072 instance=ExtResource("dialogue")]
 position = Vector2(1680, 1008)
-preload_quest_markers = true
 npc_id = "kanto_ss_anne_rival"
 npc_definition_id = "trainer_class_blue"
+visibility_required_quest_id = "board_ss_anne"
 display_name = "Gary Oak"
 npc_sprite_frames = ExtResource("blue")
-visibility_required_quest_id = "board_ss_anne"
+preload_quest_markers = true
 
-[node name="RivalStoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
+[node name="RivalStoryHook" type="Node" parent="Entities/NPCs/GaryOak" unique_id=1545797851]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_rival_challenge"
 
-[node name="Captain" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="Captain" parent="Entities/NPCs" unique_id=817439938 instance=ExtResource("dialogue")]
 position = Vector2(2352, 1136)
-preload_quest_markers = true
+script = ExtResource("captain")
 npc_id = "kanto_ss_anne_captain"
 display_name = "S.S. Anne Captain"
-npc_sprite_frames = ExtResource("gentleman")
-script = ExtResource("captain")
+npc_sprite_frames = ExtResource("population_gentleman")
+preload_quest_markers = true
 
-[node name="MeetCaptainStoryHook" type="Node" parent="Entities/NPCs/Captain"]
+[node name="MeetCaptainStoryHook" type="Node" parent="Entities/NPCs/Captain" unique_id=1865481662]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_meet_captain"
 
-[node name="ReturnTeaStoryHook" type="Node" parent="Entities/NPCs/Captain"]
+[node name="ReturnTeaStoryHook" type="Node" parent="Entities/NPCs/Captain" unique_id=2109997207]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_return_tea"
 
-[node name="PopulationCollectorNoor" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="PopulationCollectorNoor" parent="Entities/NPCs" unique_id=1051106639 instance=ExtResource("dialogue")]
 position = Vector2(1040, 400)
 npc_id = "kanto_ss_anne_collector_noor"
 npc_definition_id = "trainer_class_poke_fan_f"
@@ -153,83 +212,83 @@ display_name = "Collector Noor"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_poke_fan_f")
 
-[node name="PopulationStewardOscar" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="PopulationStewardOscar" parent="Entities/NPCs" unique_id=1699666455 instance=ExtResource("dialogue")]
 position = Vector2(1168, 1232)
 npc_id = "kanto_ss_anne_steward_oscar"
 npc_definition_id = "trainer_class_elder"
-portrait_id = "showdown_gentleman_gen6"
 display_name = "Steward Oscar"
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("population_gentleman")
+portrait_id = "showdown_gentleman_gen6"
 
-[node name="PopulationGentlemanArthur" parent="Entities/NPCs" instance=ExtResource("trainer")]
+[node name="PopulationGentlemanArthur" parent="Entities/NPCs" unique_id=733806730 instance=ExtResource("trainer")]
 position = Vector2(272, 400)
+trainer_id = "kanto_ss_anne_gentleman_arthur"
+sight_range_tiles = 0
 npc_id = "kanto_ss_anne_gentleman_arthur"
 npc_definition_id = "trainer_class_elder"
-portrait_id = "showdown_gentleman_gen6"
 display_name = "Gentleman Arthur"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("population_gentleman")
-trainer_id = "kanto_ss_anne_gentleman_arthur"
-sight_range_tiles = 0
+portrait_id = "showdown_gentleman_gen6"
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1271797928]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1719977107]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=1467650998]
 
-[node name="At_4_34" type="Marker2D" parent="Spawns"]
+[node name="At_4_34" type="Marker2D" parent="Spawns" unique_id=1795910659]
 position = Vector2(144, 1104)
 
-[node name="At_4_40" type="Marker2D" parent="Spawns"]
+[node name="At_4_40" type="Marker2D" parent="Spawns" unique_id=688647992]
 position = Vector2(144, 1296)
 
-[node name="At_9_15" type="Marker2D" parent="Spawns"]
+[node name="At_9_15" type="Marker2D" parent="Spawns" unique_id=1572207773]
 position = Vector2(304, 496)
 
-[node name="At_9_61" type="Marker2D" parent="Spawns"]
+[node name="At_9_61" type="Marker2D" parent="Spawns" unique_id=1142140693]
 position = Vector2(304, 1968)
 
-[node name="At_11_37" type="Marker2D" parent="Spawns"]
+[node name="At_11_37" type="Marker2D" parent="Spawns" unique_id=1621653866]
 position = Vector2(368, 1200)
 
-[node name="At_18_37" type="Marker2D" parent="Spawns"]
+[node name="At_18_37" type="Marker2D" parent="Spawns" unique_id=636940901]
 position = Vector2(592, 1200)
 
-[node name="At_25_37" type="Marker2D" parent="Spawns"]
+[node name="At_25_37" type="Marker2D" parent="Spawns" unique_id=1084710845]
 position = Vector2(816, 1200)
 
-[node name="At_29_15" type="Marker2D" parent="Spawns"]
+[node name="At_29_15" type="Marker2D" parent="Spawns" unique_id=868948254]
 position = Vector2(944, 496)
 
-[node name="At_29_61" type="Marker2D" parent="Spawns"]
+[node name="At_29_61" type="Marker2D" parent="Spawns" unique_id=628063410]
 position = Vector2(944, 1968)
 
-[node name="At_32_37" type="Marker2D" parent="Spawns"]
+[node name="At_32_37" type="Marker2D" parent="Spawns" unique_id=813609094]
 position = Vector2(1040, 1200)
 
-[node name="At_39_37" type="Marker2D" parent="Spawns"]
+[node name="At_39_37" type="Marker2D" parent="Spawns" unique_id=1031184334]
 position = Vector2(1264, 1200)
 
-[node name="At_46_37" type="Marker2D" parent="Spawns"]
+[node name="At_46_37" type="Marker2D" parent="Spawns" unique_id=306673840]
 position = Vector2(1488, 1200)
 
-[node name="At_49_15" type="Marker2D" parent="Spawns"]
+[node name="At_49_15" type="Marker2D" parent="Spawns" unique_id=1118243788]
 position = Vector2(1584, 496)
 
-[node name="At_49_61" type="Marker2D" parent="Spawns"]
+[node name="At_49_61" type="Marker2D" parent="Spawns" unique_id=724413424]
 position = Vector2(1584, 1968)
 
-[node name="At_52_29" type="Marker2D" parent="Spawns"]
+[node name="At_52_29" type="Marker2D" parent="Spawns" unique_id=2124725416]
 position = Vector2(1680, 944)
 
-[node name="At_73_41" type="Marker2D" parent="Spawns"]
+[node name="At_73_41" type="Marker2D" parent="Spawns" unique_id=1902603501]
 position = Vector2(2352, 1328)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=184963164]
 
-[node name="2F_Corridor__stairs_to_1f" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__stairs_to_1f" type="Area2D" parent="Exits" unique_id=2033653941]
 position = Vector2(144, 1008)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
@@ -237,10 +296,10 @@ target_spawn_name = "At_12_36"
 transition_id = "kanto_ss_anne_2f__2f_corridor__stairs_to_1f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_1f"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_1f" unique_id=603489280]
 shape = SubResource("shape_1")
 
-[node name="2F_Corridor__cabin_01" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_01" type="Area2D" parent="Exits" unique_id=454770803]
 position = Vector2(368, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -248,10 +307,10 @@ target_spawn_name = "At_9_15"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_01"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_01"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_01" unique_id=136846345]
 shape = SubResource("shape_2")
 
-[node name="2F_Corridor__cabin_02" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_02" type="Area2D" parent="Exits" unique_id=732309974]
 position = Vector2(592, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -259,10 +318,10 @@ target_spawn_name = "At_29_15"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_02"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_02"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_02" unique_id=1711845947]
 shape = SubResource("shape_3")
 
-[node name="2F_Corridor__cabin_03" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_03" type="Area2D" parent="Exits" unique_id=1433659731]
 position = Vector2(816, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -270,10 +329,10 @@ target_spawn_name = "At_49_15"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_03"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_03"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_03" unique_id=1518065517]
 shape = SubResource("shape_4")
 
-[node name="2F_Corridor__cabin_04" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_04" type="Area2D" parent="Exits" unique_id=871247032]
 position = Vector2(1040, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -281,10 +340,10 @@ target_spawn_name = "At_9_61"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_04"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_04"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_04" unique_id=1247856483]
 shape = SubResource("shape_5")
 
-[node name="2F_Corridor__cabin_05" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_05" type="Area2D" parent="Exits" unique_id=296255312]
 position = Vector2(1264, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -292,10 +351,10 @@ target_spawn_name = "At_29_61"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_05"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_05"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_05" unique_id=150942608]
 shape = SubResource("shape_6")
 
-[node name="2F_Corridor__cabin_06" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__cabin_06" type="Area2D" parent="Exits" unique_id=833513952]
 position = Vector2(1488, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -303,10 +362,10 @@ target_spawn_name = "At_49_61"
 transition_id = "kanto_ss_anne_2f__2f_corridor__cabin_06"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_06"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__cabin_06" unique_id=1221458227]
 shape = SubResource("shape_7")
 
-[node name="2F_Corridor__captains_door" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__captains_door" type="Area2D" parent="Exits" unique_id=762672336]
 position = Vector2(1680, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -314,10 +373,10 @@ target_spawn_name = "At_73_41"
 transition_id = "kanto_ss_anne_2f__2f_corridor__captains_door"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__captains_door"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__captains_door" unique_id=1589003460]
 shape = SubResource("shape_8")
 
-[node name="2F_Corridor__stairs_to_3f" type="Area2D" parent="Exits"]
+[node name="2F_Corridor__stairs_to_3f" type="Area2D" parent="Exits" unique_id=1196756807]
 position = Vector2(144, 1168)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn"
@@ -325,10 +384,10 @@ target_spawn_name = "At_54_17"
 transition_id = "kanto_ss_anne_2f__2f_corridor__stairs_to_3f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_3f"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_3f" unique_id=194482653]
 shape = SubResource("shape_9")
 
-[node name="2F_Cabin_01__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_01__return_to_corridor" type="Area2D" parent="Exits" unique_id=389042542]
 position = Vector2(304, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -336,10 +395,10 @@ target_spawn_name = "At_11_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_01__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_01__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_01__return_to_corridor" unique_id=1624496907]
 shape = SubResource("shape_10")
 
-[node name="2F_Cabin_02__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_02__return_to_corridor" type="Area2D" parent="Exits" unique_id=1087011522]
 position = Vector2(944, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -347,10 +406,10 @@ target_spawn_name = "At_18_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_02__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_02__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_02__return_to_corridor" unique_id=1689494131]
 shape = SubResource("shape_11")
 
-[node name="2F_Cabin_03__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_03__return_to_corridor" type="Area2D" parent="Exits" unique_id=1854452805]
 position = Vector2(1584, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -358,10 +417,10 @@ target_spawn_name = "At_25_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_03__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_03__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_03__return_to_corridor" unique_id=1589236251]
 shape = SubResource("shape_12")
 
-[node name="2F_Cabin_04__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_04__return_to_corridor" type="Area2D" parent="Exits" unique_id=809829327]
 position = Vector2(304, 2000)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -369,10 +428,10 @@ target_spawn_name = "At_32_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_04__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_04__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_04__return_to_corridor" unique_id=1371146149]
 shape = SubResource("shape_13")
 
-[node name="2F_Cabin_05__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_05__return_to_corridor" type="Area2D" parent="Exits" unique_id=1212559844]
 position = Vector2(944, 2000)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -380,10 +439,10 @@ target_spawn_name = "At_39_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_05__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_05__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_05__return_to_corridor" unique_id=1132730626]
 shape = SubResource("shape_14")
 
-[node name="2F_Cabin_06__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="2F_Cabin_06__return_to_corridor" type="Area2D" parent="Exits" unique_id=409446413]
 position = Vector2(1584, 2000)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -391,10 +450,10 @@ target_spawn_name = "At_46_37"
 transition_id = "kanto_ss_anne_2f__2f_cabin_06__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_06__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Cabin_06__return_to_corridor" unique_id=1111464087]
 shape = SubResource("shape_15")
 
-[node name="Captains_Cabin__return_to_2f" type="Area2D" parent="Exits"]
+[node name="Captains_Cabin__return_to_2f" type="Area2D" parent="Exits" unique_id=1102581623]
 position = Vector2(2352, 1360)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn"
@@ -402,44 +461,30 @@ target_spawn_name = "At_52_29"
 transition_id = "kanto_ss_anne_2f__captains_cabin__return_to_2f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/Captains_Cabin__return_to_2f"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/Captains_Cabin__return_to_2f" unique_id=1025044240]
 shape = SubResource("shape_16")
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=881632636]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-visible = false
-tile_set = ExtResource("collision")
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=818360116]
+z_index = 4096
+tile_map_data = PackedByteArray("AAACABoAAAABAAEAAAADABoAAAABAAEAAAAEABoAAAABAAEAAAAFABoAAAABAAEAAAAGABoAAAABAAEAAAAHABoAAAABAAEAAAAHABsAAAABAAEAAAAHABwAAAABAAEAAAAHAB0AAAABAAEAAAAHAB4AAAABAAEAAAAHAB8AAAABAAEAAAAHACAAAAABAAEAAAAHACEAAAABAAEAAAAHACIAAAABAAEAAAAHACMAAAABAAEAAAAHACQAAAABAAEAAAAIACIAAAABAAEAAAAIACMAAAABAAEAAAAIACQAAAABAAEAAAAJACIAAAABAAEAAAAJACMAAAABAAEAAAAJACQAAAABAAEAAAAKACIAAAABAAEAAAAKACMAAAABAAEAAAAKACQAAAABAAEAAAALACIAAAABAAEAAAALACMAAAABAAEAAAAMACIAAAABAAEAAAAMACMAAAABAAEAAAANACIAAAABAAEAAAANACMAAAABAAEAAAAOACIAAAABAAEAAAAOACMAAAABAAEAAAAPACIAAAABAAEAAAAPACMAAAABAAEAAAAQACIAAAABAAEAAAAQACMAAAABAAEAAAARACIAAAABAAEAAAARACMAAAABAAEAAAASACIAAAABAAEAAAASACMAAAABAAEAAAATACIAAAABAAEAAAATACMAAAABAAEAAAAUACIAAAABAAEAAAAUACMAAAABAAEAAAAVACIAAAABAAEAAAAVACMAAAABAAEAAAAWACIAAAABAAEAAAAWACMAAAABAAEAAAAXACIAAAABAAEAAAAXACMAAAABAAEAAAAYACIAAAABAAEAAAAYACMAAAABAAEAAAAZACIAAAABAAEAAAAZACMAAAABAAEAAAAaACIAAAABAAEAAAAaACMAAAABAAEAAAAbACIAAAABAAEAAAAbACMAAAABAAEAAAAcACIAAAABAAEAAAAcACMAAAABAAEAAAAdACIAAAABAAEAAAAdACMAAAABAAEAAAAeACIAAAABAAEAAAAeACMAAAABAAEAAAAfACIAAAABAAEAAAAfACMAAAABAAEAAAAgACIAAAABAAEAAAAgACMAAAABAAEAAAAhACIAAAABAAEAAAAhACMAAAABAAEAAAAiACIAAAABAAEAAAAiACMAAAABAAEAAAAjACIAAAABAAEAAAAjACMAAAABAAEAAAAkACIAAAABAAEAAAAkACMAAAABAAEAAAAlACIAAAABAAEAAAAlACMAAAABAAEAAAAmACIAAAABAAEAAAAmACMAAAABAAEAAAAnACIAAAABAAEAAAAnACMAAAABAAEAAAAoACIAAAABAAEAAAAoACMAAAABAAEAAAApACIAAAABAAEAAAApACMAAAABAAEAAAAqACIAAAABAAEAAAAqACMAAAABAAEAAAArACIAAAABAAEAAAArACMAAAABAAEAAAAsACIAAAABAAEAAAAsACMAAAABAAEAAAAtACIAAAABAAEAAAAtACMAAAABAAEAAAAuACIAAAABAAEAAAAuACMAAAABAAEAAAAvACIAAAABAAEAAAAvACMAAAABAAEAAAAwACIAAAABAAEAAAAwACMAAAABAAEAAAAxACIAAAABAAEAAAAxACMAAAABAAEAAAAyACIAAAABAAEAAAAyACMAAAABAAEAAAAMACQAAAABAAEAAAANACQAAAABAAEAAAAOACQAAAABAAEAAAAPACQAAAABAAEAAAAQACQAAAABAAEAAAARACQAAAABAAEAAAATACQAAAABAAEAAAAUACQAAAABAAEAAAAVACQAAAABAAEAAAAWACQAAAABAAEAAAAXACQAAAABAAEAAAAYACQAAAABAAEAAAAaACQAAAABAAEAAAAbACQAAAABAAEAAAAcACQAAAABAAEAAAAdACQAAAABAAEAAAAeACQAAAABAAEAAAAfACQAAAABAAEAAAAhACQAAAABAAEAAAAiACQAAAABAAEAAAAjACQAAAABAAEAAAAkACQAAAABAAEAAAAlACQAAAABAAEAAAAmACQAAAABAAEAAAAoACQAAAABAAEAAAApACQAAAABAAEAAAAqACQAAAABAAEAAAArACQAAAABAAEAAAAsACQAAAABAAEAAAAtACQAAAABAAEAAAAvACQAAAABAAEAAAAwACQAAAABAAEAAAAxACQAAAABAAEAAAAyACQAAAABAAEAAAAyABoAAAABAAEAAAAyABsAAAABAAEAAAAyABwAAAABAAEAAAAyAB0AAAABAAEAAAAyAB4AAAABAAEAAAAyAB8AAAABAAEAAAAyACAAAAABAAEAAAAyACEAAAABAAEAAAAzABoAAAABAAEAAAAzABsAAAABAAEAAAAzABwAAAABAAEAAAA0ABoAAAABAAEAAAA0ABsAAAABAAEAAAA1ABoAAAABAAEAAAA1ABsAAAABAAEAAAA2ABoAAAABAAEAAAA2ABsAAAABAAEAAAA3ABoAAAABAAEAAAA3ABsAAAABAAEAAAA1ABwAAAABAAEAAAA2ABwAAAABAAEAAAA3ABwAAAABAAEAAAA3AB0AAAABAAEAAAA3AB4AAAABAAEAAAA3AB8AAAABAAEAAAA3ACAAAAABAAEAAAA3ACEAAAABAAEAAAA3ACIAAAABAAEAAAA3ACMAAAABAAEAAAA3ACQAAAABAAEAAAA3ACUAAAABAAEAAAA3ACYAAAABAAEAAAA3ACcAAAABAAEAAAA3ACgAAAABAAEAAAA3ACkAAAABAAEAAAACACkAAAABAAEAAAADACkAAAABAAEAAAAEACkAAAABAAEAAAAFACkAAAABAAEAAAAGACkAAAABAAEAAAAHACkAAAABAAEAAAAIACkAAAABAAEAAAAJACkAAAABAAEAAAAKACkAAAABAAEAAAALACkAAAABAAEAAAAMACkAAAABAAEAAAANACkAAAABAAEAAAAOACkAAAABAAEAAAAPACkAAAABAAEAAAAQACkAAAABAAEAAAARACkAAAABAAEAAAASACkAAAABAAEAAAATACkAAAABAAEAAAAUACkAAAABAAEAAAAVACkAAAABAAEAAAAWACkAAAABAAEAAAAXACkAAAABAAEAAAAYACkAAAABAAEAAAAZACkAAAABAAEAAAAaACkAAAABAAEAAAAbACkAAAABAAEAAAAcACkAAAABAAEAAAAdACkAAAABAAEAAAAeACkAAAABAAEAAAAfACkAAAABAAEAAAAgACkAAAABAAEAAAAhACkAAAABAAEAAAAiACkAAAABAAEAAAAjACkAAAABAAEAAAAkACkAAAABAAEAAAAlACkAAAABAAEAAAAmACkAAAABAAEAAAAnACkAAAABAAEAAAAoACkAAAABAAEAAAApACkAAAABAAEAAAAqACkAAAABAAEAAAArACkAAAABAAEAAAAsACkAAAABAAEAAAAtACkAAAABAAEAAAAuACkAAAABAAEAAAAvACkAAAABAAEAAAAwACkAAAABAAEAAAAxACkAAAABAAEAAAAyACkAAAABAAEAAAAzACkAAAABAAEAAAA0ACkAAAABAAEAAAA1ACkAAAABAAEAAAA2ACkAAAABAAEAAAACABsAAAABAAEAAAACABwAAAABAAEAAAACAB0AAAABAAEAAAACAB4AAAABAAEAAAACAB8AAAABAAEAAAACACAAAAABAAEAAAACACEAAAABAAEAAAACACIAAAABAAEAAAACACMAAAABAAEAAAACACQAAAABAAEAAAACACUAAAABAAEAAAACACYAAAABAAEAAAACACcAAAABAAEAAAACACgAAAABAAEAAAADACAAAAABAAEAAAADACEAAAABAAEAAAAEACEAAAABAAEAAAADACcAAAABAAEAAAAEACcAAAABAAEAAAADACYAAAABAAEAAAADACUAAAABAAEAAAAEACUAAAABAAEAAAADABsAAAABAAEAAAADABwAAAABAAEAAAAEABsAAAABAAEAAAAEABwAAAABAAEAAAAFABsAAAABAAEAAAAFABwAAAABAAEAAAAGABsAAAABAAEAAAAGABwAAAABAAEAAAACAAMAAAABAAEAAAACAAQAAAABAAEAAAACAAUAAAABAAEAAAACAAYAAAABAAEAAAACAAcAAAABAAEAAAACAAgAAAABAAEAAAACAAkAAAABAAEAAAACAAoAAAABAAEAAAACAAsAAAABAAEAAAACAAwAAAABAAEAAAACAA0AAAABAAEAAAACAA4AAAABAAEAAAACAA8AAAABAAEAAAACABAAAAABAAEAAAADABAAAAABAAEAAAAEABAAAAABAAEAAAAFABAAAAABAAEAAAAGABAAAAABAAEAAAAHABAAAAABAAEAAAAIABEAAAABAAEAAAAJABEAAAABAAEAAAAKABEAAAABAAEAAAALABEAAAABAAEAAAALABAAAAABAAEAAAAMABAAAAABAAEAAAANABAAAAABAAEAAAAOABAAAAABAAEAAAAPABAAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAPAA0AAAABAAEAAAAPAA4AAAABAAEAAAAPAA8AAAABAAEAAAADAAMAAAABAAEAAAAEAAMAAAABAAEAAAAFAAMAAAABAAEAAAAGAAMAAAABAAEAAAAHAAMAAAABAAEAAAAIAAMAAAABAAEAAAAJAAMAAAABAAEAAAAKAAMAAAABAAEAAAALAAMAAAABAAEAAAAMAAMAAAABAAEAAAANAAMAAAABAAEAAAAOAAMAAAABAAEAAAADAAQAAAABAAEAAAADAAUAAAABAAEAAAAEAAQAAAABAAEAAAAEAAUAAAABAAEAAAAFAAQAAAABAAEAAAAFAAUAAAABAAEAAAAGAAQAAAABAAEAAAAGAAUAAAABAAEAAAAHAAQAAAABAAEAAAAHAAUAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAAOAAQAAAABAAEAAAAOAAUAAAABAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAEAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAABAAEAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAGAAgAAAABAAEAAAAMAAgAAAABAAEAAAANAAgAAAABAAEAAAALAAsAAAABAAEAAAALAAwAAAABAAEAAAAMAAsAAAABAAEAAAAMAAwAAAABAAEAAAAKAAwAAAABAAEAAAAEAAwAAAABAAEAAAAFAAwAAAABAAEAAAAGAAwAAAABAAEAAAADAA8AAAABAAEAAAAXAA8AAAABAAEAAAAYAAwAAAABAAEAAAAWAAMAAAABAAEAAAAWAAQAAAABAAEAAAAWAAUAAAABAAEAAAAWAAYAAAABAAEAAAAWAAcAAAABAAEAAAAWAAgAAAABAAEAAAAWAAkAAAABAAEAAAAWAAoAAAABAAEAAAAWAAsAAAABAAEAAAAWAAwAAAABAAEAAAAWAA0AAAABAAEAAAAWAA4AAAABAAEAAAAWAA8AAAABAAEAAAAWABAAAAABAAEAAAAXABAAAAABAAEAAAAYABAAAAABAAEAAAAZABAAAAABAAEAAAAaABAAAAABAAEAAAAbABAAAAABAAEAAAAcABEAAAABAAEAAAAdABEAAAABAAEAAAAeABEAAAABAAEAAAAfABEAAAABAAEAAAAfABAAAAABAAEAAAAgABAAAAABAAEAAAAhABAAAAABAAEAAAAiABAAAAABAAEAAAAjABAAAAABAAEAAAAjAAMAAAABAAEAAAAjAAQAAAABAAEAAAAjAAUAAAABAAEAAAAjAAYAAAABAAEAAAAjAAcAAAABAAEAAAAjAAgAAAABAAEAAAAjAAkAAAABAAEAAAAjAAoAAAABAAEAAAAjAAsAAAABAAEAAAAjAAwAAAABAAEAAAAjAA0AAAABAAEAAAAjAA4AAAABAAEAAAAjAA8AAAABAAEAAAAXAAMAAAABAAEAAAAXAAQAAAABAAEAAAAXAAUAAAABAAEAAAAYAAMAAAABAAEAAAAYAAQAAAABAAEAAAAYAAUAAAABAAEAAAAZAAMAAAABAAEAAAAZAAQAAAABAAEAAAAZAAUAAAABAAEAAAAaAAMAAAABAAEAAAAaAAQAAAABAAEAAAAaAAUAAAABAAEAAAAbAAMAAAABAAEAAAAbAAQAAAABAAEAAAAbAAUAAAABAAEAAAAcAAMAAAABAAEAAAAcAAQAAAABAAEAAAAcAAUAAAABAAEAAAAdAAMAAAABAAEAAAAdAAQAAAABAAEAAAAdAAUAAAABAAEAAAAeAAMAAAABAAEAAAAeAAQAAAABAAEAAAAeAAUAAAABAAEAAAAfAAMAAAABAAEAAAAfAAQAAAABAAEAAAAfAAUAAAABAAEAAAAgAAMAAAABAAEAAAAgAAQAAAABAAEAAAAgAAUAAAABAAEAAAAhAAMAAAABAAEAAAAhAAQAAAABAAEAAAAhAAUAAAABAAEAAAAiAAMAAAABAAEAAAAiAAQAAAABAAEAAAAiAAUAAAABAAEAAAAYAAgAAAABAAEAAAAZAAgAAAABAAEAAAAfAAcAAAABAAEAAAAfAAgAAAABAAEAAAAgAAcAAAABAAEAAAAgAAgAAAABAAEAAAAhAAcAAAABAAEAAAAhAAgAAAABAAEAAAAZAAoAAAABAAEAAAAZAAsAAAABAAEAAAAZAAwAAAABAAEAAAAaAAoAAAABAAEAAAAaAAsAAAABAAEAAAAaAAwAAAABAAEAAAAbAAoAAAABAAEAAAAbAAsAAAABAAEAAAAbAAwAAAABAAEAAAAqAAMAAAABAAEAAAAqAAQAAAABAAEAAAAqAAUAAAABAAEAAAAqAAYAAAABAAEAAAAqAAcAAAABAAEAAAAqAAgAAAABAAEAAAAqAAkAAAABAAEAAAAqAAoAAAABAAEAAAAqAAsAAAABAAEAAAAqAAwAAAABAAEAAAAqAA0AAAABAAEAAAAqAA4AAAABAAEAAAAqAA8AAAABAAEAAAAqABAAAAABAAEAAAArABAAAAABAAEAAAAsABAAAAABAAEAAAAtABAAAAABAAEAAAAuABAAAAABAAEAAAAvABAAAAABAAEAAAAwABEAAAABAAEAAAAxABEAAAABAAEAAAAyABEAAAABAAEAAAAzABEAAAABAAEAAAAzABAAAAABAAEAAAA0ABAAAAABAAEAAAA1ABAAAAABAAEAAAA2ABAAAAABAAEAAAA3ABAAAAABAAEAAAA3AAMAAAABAAEAAAA3AAQAAAABAAEAAAA3AAUAAAABAAEAAAA3AAYAAAABAAEAAAA3AAcAAAABAAEAAAA3AAgAAAABAAEAAAA3AAkAAAABAAEAAAA3AAoAAAABAAEAAAA3AAsAAAABAAEAAAA3AAwAAAABAAEAAAA3AA0AAAABAAEAAAA3AA4AAAABAAEAAAA3AA8AAAABAAEAAAArAAMAAAABAAEAAAAsAAMAAAABAAEAAAAtAAMAAAABAAEAAAAuAAMAAAABAAEAAAAvAAMAAAABAAEAAAAwAAMAAAABAAEAAAAxAAMAAAABAAEAAAAyAAMAAAABAAEAAAAzAAMAAAABAAEAAAA0AAMAAAABAAEAAAA1AAMAAAABAAEAAAA2AAMAAAABAAEAAAArAAQAAAABAAEAAAArAAUAAAABAAEAAAAsAAQAAAABAAEAAAAsAAUAAAABAAEAAAAtAAQAAAABAAEAAAAtAAUAAAABAAEAAAAuAAQAAAABAAEAAAAuAAUAAAABAAEAAAAvAAQAAAABAAEAAAAvAAUAAAABAAEAAAAwAAQAAAABAAEAAAAwAAUAAAABAAEAAAAxAAQAAAABAAEAAAAxAAUAAAABAAEAAAAyAAQAAAABAAEAAAAyAAUAAAABAAEAAAAzAAQAAAABAAEAAAAzAAUAAAABAAEAAAA0AAQAAAABAAEAAAA0AAUAAAABAAEAAAA1AAQAAAABAAEAAAA1AAUAAAABAAEAAAA2AAQAAAABAAEAAAA2AAUAAAABAAEAAAAsAAYAAAABAAEAAAAsAAcAAAABAAEAAAAsAAgAAAABAAEAAAAtAAYAAAABAAEAAAAtAAcAAAABAAEAAAAtAAgAAAABAAEAAAAuAAYAAAABAAEAAAAuAAcAAAABAAEAAAAuAAgAAAABAAEAAAAzAAgAAAABAAEAAAA0AAgAAAABAAEAAAAsAAwAAAABAAEAAAAsAA0AAAABAAEAAAAtAAwAAAABAAEAAAAtAA0AAAABAAEAAAArAA8AAAABAAEAAAA2AA0AAAABAAEAAAAyAAsAAAABAAEAAAAzAAsAAAABAAEAAAA0AAsAAAABAAEAAABAABkAAAABAAEAAABAABoAAAABAAEAAABAABsAAAABAAEAAABAABwAAAABAAEAAABAAB0AAAABAAEAAABAAB4AAAABAAEAAABAAB8AAAABAAEAAABAACAAAAABAAEAAABAACEAAAABAAEAAABAACIAAAABAAEAAABAACMAAAABAAEAAABAACQAAAABAAEAAABAACUAAAABAAEAAABAACYAAAABAAEAAABAACcAAAABAAEAAABAACgAAAABAAEAAABAACkAAAABAAEAAABAACoAAAABAAEAAABBACoAAAABAAEAAABCACoAAAABAAEAAABDACoAAAABAAEAAABEACoAAAABAAEAAABFACoAAAABAAEAAABGACoAAAABAAEAAABHACoAAAABAAEAAABHACsAAAABAAEAAABIACsAAAABAAEAAABJACsAAAABAAEAAABKACsAAAABAAEAAABLACsAAAABAAEAAABLACoAAAABAAEAAABMACoAAAABAAEAAABNACoAAAABAAEAAABOACoAAAABAAEAAABPACoAAAABAAEAAABQACoAAAABAAEAAABRACoAAAABAAEAAABSACoAAAABAAEAAABTACoAAAABAAEAAABBABkAAAABAAEAAABBABoAAAABAAEAAABBABsAAAABAAEAAABCABkAAAABAAEAAABCABoAAAABAAEAAABCABsAAAABAAEAAABDABkAAAABAAEAAABDABoAAAABAAEAAABDABsAAAABAAEAAABEABkAAAABAAEAAABEABoAAAABAAEAAABEABsAAAABAAEAAABFABkAAAABAAEAAABFABoAAAABAAEAAABFABsAAAABAAEAAABGABkAAAABAAEAAABGABoAAAABAAEAAABGABsAAAABAAEAAABHABkAAAABAAEAAABHABoAAAABAAEAAABHABsAAAABAAEAAABIABkAAAABAAEAAABIABoAAAABAAEAAABIABsAAAABAAEAAABJABkAAAABAAEAAABJABoAAAABAAEAAABJABsAAAABAAEAAABKABkAAAABAAEAAABKABoAAAABAAEAAABKABsAAAABAAEAAABLABkAAAABAAEAAABLABoAAAABAAEAAABLABsAAAABAAEAAABMABkAAAABAAEAAABMABoAAAABAAEAAABMABsAAAABAAEAAABNABkAAAABAAEAAABNABoAAAABAAEAAABNABsAAAABAAEAAABOABkAAAABAAEAAABOABoAAAABAAEAAABOABsAAAABAAEAAABPABkAAAABAAEAAABPABoAAAABAAEAAABPABsAAAABAAEAAABQABkAAAABAAEAAABQABoAAAABAAEAAABQABsAAAABAAEAAABRABkAAAABAAEAAABRABoAAAABAAEAAABRABsAAAABAAEAAABSABkAAAABAAEAAABSABoAAAABAAEAAABSABsAAAABAAEAAABTABkAAAABAAEAAABTABoAAAABAAEAAABTABsAAAABAAEAAABTABwAAAABAAEAAABTAB0AAAABAAEAAABTAB4AAAABAAEAAABTAB8AAAABAAEAAABTACAAAAABAAEAAABTACEAAAABAAEAAABTACIAAAABAAEAAABTACMAAAABAAEAAABTACQAAAABAAEAAABTACUAAAABAAEAAABTACYAAAABAAEAAABTACcAAAABAAEAAABTACgAAAABAAEAAABTACkAAAABAAEAAABRACUAAAABAAEAAABCACQAAAABAAEAAABDACQAAAABAAEAAABEACQAAAABAAEAAABBAB8AAAABAAEAAABCAB8AAAABAAEAAABEAB4AAAABAAEAAABFAB4AAAABAAEAAABMACIAAAABAAEAAABHACAAAAABAAEAAABHACEAAAABAAEAAABHACIAAAABAAEAAABIACAAAAABAAEAAABIACEAAAABAAEAAABIACIAAAABAAEAAABJACAAAAABAAEAAABJACEAAAABAAEAAABJACIAAAABAAEAAABKACAAAAABAAEAAABKACEAAAABAAEAAABKACIAAAABAAEAAABIAB8AAAABAAEAAABIAB0AAAABAAEAAABJAB0AAAABAAEAAABPABwAAAABAAEAAABPAB0AAAABAAEAAABPAB4AAAABAAEAAABQABwAAAABAAEAAABQAB0AAAABAAEAAABQAB4AAAABAAEAAABRABwAAAABAAEAAABRAB0AAAABAAEAAABRAB4AAAABAAEAAAA3ADEAAAABAAEAAAA3ADIAAAABAAEAAAA3ADMAAAABAAEAAAA3ADQAAAABAAEAAAA3ADUAAAABAAEAAAA3ADYAAAABAAEAAAA3ADcAAAABAAEAAAA3ADgAAAABAAEAAAA3ADkAAAABAAEAAAA3ADoAAAABAAEAAAA3ADsAAAABAAEAAAA3ADwAAAABAAEAAAA3AD0AAAABAAEAAAA3AD4AAAABAAEAAAAqADEAAAABAAEAAAAqADIAAAABAAEAAAAqADMAAAABAAEAAAArADEAAAABAAEAAAArADIAAAABAAEAAAArADMAAAABAAEAAAAsADEAAAABAAEAAAAsADIAAAABAAEAAAAsADMAAAABAAEAAAAtADEAAAABAAEAAAAtADIAAAABAAEAAAAtADMAAAABAAEAAAAuADEAAAABAAEAAAAuADIAAAABAAEAAAAuADMAAAABAAEAAAAvADEAAAABAAEAAAAvADIAAAABAAEAAAAvADMAAAABAAEAAAAwADEAAAABAAEAAAAwADIAAAABAAEAAAAwADMAAAABAAEAAAAxADEAAAABAAEAAAAxADIAAAABAAEAAAAxADMAAAABAAEAAAAyADEAAAABAAEAAAAyADIAAAABAAEAAAAyADMAAAABAAEAAAAzADEAAAABAAEAAAAzADIAAAABAAEAAAAzADMAAAABAAEAAAA0ADEAAAABAAEAAAA0ADIAAAABAAEAAAA0ADMAAAABAAEAAAA1ADEAAAABAAEAAAA1ADIAAAABAAEAAAA1ADMAAAABAAEAAAA2ADEAAAABAAEAAAA2ADIAAAABAAEAAAA2ADMAAAABAAEAAAAqADQAAAABAAEAAAAqADUAAAABAAEAAAAqADYAAAABAAEAAAAqADcAAAABAAEAAAAqADgAAAABAAEAAAAqADkAAAABAAEAAAAqADoAAAABAAEAAAAqADsAAAABAAEAAAAqADwAAAABAAEAAAAqAD0AAAABAAEAAAAqAD4AAAABAAEAAAArAD4AAAABAAEAAAAsAD4AAAABAAEAAAAtAD4AAAABAAEAAAAuAD4AAAABAAEAAAAvAD4AAAABAAEAAAAvAD8AAAABAAEAAAAwAD8AAAABAAEAAAAxAD8AAAABAAEAAAAyAD8AAAABAAEAAAAzAD4AAAABAAEAAAA0AD4AAAABAAEAAAA1AD4AAAABAAEAAAA2AD4AAAABAAEAAAAzAD8AAAABAAEAAAArAD0AAAABAAEAAAAzADgAAAABAAEAAAAzADkAAAABAAEAAAAzADoAAAABAAEAAAA0ADgAAAABAAEAAAA0ADkAAAABAAEAAAA0ADoAAAABAAEAAAA1ADgAAAABAAEAAAA1ADkAAAABAAEAAAA1ADoAAAABAAEAAAAyADkAAAABAAEAAAA0ADYAAAABAAEAAAA1ADYAAAABAAEAAAAsADUAAAABAAEAAAAsADYAAAABAAEAAAAtADUAAAABAAEAAAAtADYAAAABAAEAAAAuADUAAAABAAEAAAAuADYAAAABAAEAAAAfADUAAAABAAEAAAAfADYAAAABAAEAAAAgADUAAAABAAEAAAAgADYAAAABAAEAAAAhADUAAAABAAEAAAAhADYAAAABAAEAAAAiADsAAAABAAEAAAAXAD0AAAABAAEAAAAfAD4AAAABAAEAAAAgAD4AAAABAAEAAAAhAD4AAAABAAEAAAAiAD4AAAABAAEAAAAjAD4AAAABAAEAAAAbAD8AAAABAAEAAAAcAD8AAAABAAEAAAAdAD8AAAABAAEAAAAeAD8AAAABAAEAAAAfAD8AAAABAAEAAAAWAD4AAAABAAEAAAAXAD4AAAABAAEAAAAYAD4AAAABAAEAAAAZAD4AAAABAAEAAAAaAD4AAAABAAEAAAAbAD4AAAABAAEAAAAWADEAAAABAAEAAAAWADIAAAABAAEAAAAWADMAAAABAAEAAAAWADQAAAABAAEAAAAWADUAAAABAAEAAAAWADYAAAABAAEAAAAWADcAAAABAAEAAAAWADgAAAABAAEAAAAWADkAAAABAAEAAAAWADoAAAABAAEAAAAWADsAAAABAAEAAAAWADwAAAABAAEAAAAWAD0AAAABAAEAAAAXADEAAAABAAEAAAAXADIAAAABAAEAAAAXADMAAAABAAEAAAAYADEAAAABAAEAAAAYADIAAAABAAEAAAAYADMAAAABAAEAAAAZADEAAAABAAEAAAAZADIAAAABAAEAAAAZADMAAAABAAEAAAAaADEAAAABAAEAAAAaADIAAAABAAEAAAAaADMAAAABAAEAAAAbADEAAAABAAEAAAAbADIAAAABAAEAAAAbADMAAAABAAEAAAAcADEAAAABAAEAAAAcADIAAAABAAEAAAAcADMAAAABAAEAAAAdADEAAAABAAEAAAAdADIAAAABAAEAAAAdADMAAAABAAEAAAAeADEAAAABAAEAAAAeADIAAAABAAEAAAAeADMAAAABAAEAAAAfADEAAAABAAEAAAAfADIAAAABAAEAAAAfADMAAAABAAEAAAAgADEAAAABAAEAAAAgADIAAAABAAEAAAAgADMAAAABAAEAAAAhADEAAAABAAEAAAAhADIAAAABAAEAAAAhADMAAAABAAEAAAAiADEAAAABAAEAAAAiADIAAAABAAEAAAAiADMAAAABAAEAAAAjADEAAAABAAEAAAAjADIAAAABAAEAAAAjADMAAAABAAEAAAAjADQAAAABAAEAAAAjADUAAAABAAEAAAAjADYAAAABAAEAAAAjADcAAAABAAEAAAAjADgAAAABAAEAAAAjADkAAAABAAEAAAAjADoAAAABAAEAAAAjADsAAAABAAEAAAAjADwAAAABAAEAAAAjAD0AAAABAAEAAAAYADYAAAABAAEAAAAZADYAAAABAAEAAAAPADEAAAABAAEAAAAPADIAAAABAAEAAAAPADMAAAABAAEAAAAPADQAAAABAAEAAAAPADUAAAABAAEAAAAPADYAAAABAAEAAAAPADcAAAABAAEAAAAPADgAAAABAAEAAAAPADkAAAABAAEAAAAPADoAAAABAAEAAAAPADsAAAABAAEAAAAPADwAAAABAAEAAAAPAD0AAAABAAEAAAAPAD4AAAABAAEAAAALAD4AAAABAAEAAAAMAD4AAAABAAEAAAANAD4AAAABAAEAAAAOAD4AAAABAAEAAAAHAD8AAAABAAEAAAAIAD8AAAABAAEAAAAJAD8AAAABAAEAAAAKAD8AAAABAAEAAAALAD8AAAABAAEAAAACAD4AAAABAAEAAAADAD4AAAABAAEAAAAEAD4AAAABAAEAAAAFAD4AAAABAAEAAAAGAD4AAAABAAEAAAAHAD4AAAABAAEAAAACADEAAAABAAEAAAACADIAAAABAAEAAAACADMAAAABAAEAAAACADQAAAABAAEAAAACADUAAAABAAEAAAACADYAAAABAAEAAAACADcAAAABAAEAAAACADgAAAABAAEAAAACADkAAAABAAEAAAACADoAAAABAAEAAAACADsAAAABAAEAAAACADwAAAABAAEAAAACAD0AAAABAAEAAAADADEAAAABAAEAAAADADIAAAABAAEAAAADADMAAAABAAEAAAAEADEAAAABAAEAAAAEADIAAAABAAEAAAAEADMAAAABAAEAAAAFADEAAAABAAEAAAAFADIAAAABAAEAAAAFADMAAAABAAEAAAAGADEAAAABAAEAAAAGADIAAAABAAEAAAAGADMAAAABAAEAAAAHADEAAAABAAEAAAAHADIAAAABAAEAAAAHADMAAAABAAEAAAAIADEAAAABAAEAAAAIADIAAAABAAEAAAAIADMAAAABAAEAAAAJADEAAAABAAEAAAAJADIAAAABAAEAAAAJADMAAAABAAEAAAAKADEAAAABAAEAAAAKADIAAAABAAEAAAAKADMAAAABAAEAAAALADEAAAABAAEAAAALADIAAAABAAEAAAALADMAAAABAAEAAAAMADEAAAABAAEAAAAMADIAAAABAAEAAAAMADMAAAABAAEAAAANADEAAAABAAEAAAANADIAAAABAAEAAAANADMAAAABAAEAAAAOADEAAAABAAEAAAAOADIAAAABAAEAAAAOADMAAAABAAEAAAALADUAAAABAAEAAAALADYAAAABAAEAAAAMADUAAAABAAEAAAAMADYAAAABAAEAAAANADUAAAABAAEAAAANADYAAAABAAEAAAALADQAAAABAAEAAAAMADQAAAABAAEAAAANADQAAAABAAEAAAAEADQAAAABAAEAAAAEADUAAAABAAEAAAAEADYAAAABAAEAAAAFADQAAAABAAEAAAAFADUAAAABAAEAAAAFADYAAAABAAEAAAAGADQAAAABAAEAAAAGADUAAAABAAEAAAAGADYAAAABAAEAAAAHADYAAAABAAEAAAAFADkAAAABAAEAAAAGADkAAAABAAEAAAAHADkAAAABAAEAAAAIADkAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_eajbk")
 
 [connection signal="body_entered" from="Exits/2F_Corridor__stairs_to_1f" to="Exits/2F_Corridor__stairs_to_1f" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_01" to="Exits/2F_Corridor__cabin_01" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_02" to="Exits/2F_Corridor__cabin_02" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_03" to="Exits/2F_Corridor__cabin_03" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_04" to="Exits/2F_Corridor__cabin_04" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_05" to="Exits/2F_Corridor__cabin_05" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__cabin_06" to="Exits/2F_Corridor__cabin_06" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__captains_door" to="Exits/2F_Corridor__captains_door" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Corridor__stairs_to_3f" to="Exits/2F_Corridor__stairs_to_3f" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_01__return_to_corridor" to="Exits/2F_Cabin_01__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_02__return_to_corridor" to="Exits/2F_Cabin_02__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_03__return_to_corridor" to="Exits/2F_Cabin_03__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_04__return_to_corridor" to="Exits/2F_Cabin_04__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_05__return_to_corridor" to="Exits/2F_Cabin_05__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/2F_Cabin_06__return_to_corridor" to="Exits/2F_Cabin_06__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/Captains_Cabin__return_to_2f" to="Exits/Captains_Cabin__return_to_2f" method="_on_body_entered"]
