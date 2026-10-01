@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual, inclusief bijgewerkte tilelagen.
+
 - Nog zes Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Lugia, Ho-Oh, Vibrava, Flygon, Swanna en Mandibuzz.
 
 - Story Progress in de devtools heeft Vermilion/S.S. Anne-checkpoints; de bemanningsquest is instelbaar via Side Quests.
