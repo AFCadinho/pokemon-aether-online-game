@@ -1,6 +1,6 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://clqs0cp8umx31"]
 
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_city/assets/vermilion_city.visual.tileset.compact_source_1_0.texture.res" id="1_ofehk"]
+[ext_resource type="Texture2D" uid="uid://btpuxqc0o5pu" path="res://generated/tiled_visuals/vermilion_city/assets/vermilion_city.visual.tileset.compact_source_1_0.texture.res" id="1_ofehk"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_city/assets/vermilion_city.visual.tileset.compact_source_10241_0.texture.res" id="2_urk1j"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_city/assets/vermilion_city.visual.tileset.compact_source_1025_0.texture.res" id="3_lashs"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/vermilion_city/assets/vermilion_city.visual.tileset.compact_source_12293_0.texture.res" id="4_3iytd"]
