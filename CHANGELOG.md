@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Pokémon Fan Club gebruikt de bijgewerkte artist-TMX-visual.
+
 - De drie huizen in Vermilion City gebruiken de opnieuw geïmporteerde gedeelde artist-TMX-visual.
 
 - De Pokemon Fan Club gebruikt de opnieuw geïmporteerde artist-TMX-visual.
