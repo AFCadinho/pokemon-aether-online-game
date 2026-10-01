@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_vciop"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_x3286"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_q2i8i"]
+[ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_awqls"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="center_door_hint"]
 [ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="life_ace_trainer_f"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="life_camper"]
@@ -19,7 +20,6 @@
 [ext_resource type="SpriteFrames" uid="uid://yluab5wp1usc" path="res://assets/npcs/classes/poke_fan_m_frames.tres" id="life_poke_fan_m"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="life_worker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="life_youngster"]
-
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="ss_anne_gym_tree"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
@@ -243,6 +243,71 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_d5l8s")
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_smn6a"]
+texture = ExtResource("4_vciop")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_awqls"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_smn6a")
+
 [node name="VermilionCity" type="Node2D" unique_id=1587146923]
 script = ExtResource("2_metadata")
 water_reference_tile = Vector2i(0, 50)
@@ -455,14 +520,14 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=240788903]
 
 [node name="VisitorIris" parent="Entities/NPCs" unique_id=1448718584 instance=ExtResource("life_dialogue")]
-position = Vector2(432, 528)
+position = Vector2(528, 464)
 npc_id = "kanto_vermilion_city_visitor_iris"
 npc_definition_id = "trainer_class_lass"
 display_name = "Harbor Visitor Iris"
 npc_sprite_frames = ExtResource("life_lass")
 
 [node name="FanClubHugo" parent="Entities/NPCs" unique_id=999073519 instance=ExtResource("life_dialogue")]
-position = Vector2(784, 720)
+position = Vector2(848, 752)
 npc_id = "kanto_vermilion_city_fan_club_hugo"
 npc_definition_id = "trainer_class_poke_fan_m"
 display_name = "Pokemon Fan Hugo"
@@ -478,26 +543,26 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("life_elder_f")
 
 [node name="WorkerOwen" parent="Entities/NPCs" unique_id=1349633595 instance=ExtResource("life_dialogue")]
-position = Vector2(1616, 560)
+position = Vector2(1840, 400)
 npc_id = "kanto_vermilion_city_worker_owen"
 npc_definition_id = "trainer_class_worker"
 display_name = "Worker Owen"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("life_worker")
 
 [node name="AceTrainerSienna" parent="Entities/NPCs" unique_id=1454817473 instance=ExtResource("life_dialogue")]
-position = Vector2(2032, 1040)
+position = Vector2(2032, 976)
 npc_id = "kanto_vermilion_city_ace_trainer_sienna"
 npc_definition_id = "trainer_class_ace_trainer_f"
 display_name = "Ace Trainer Sienna"
 npc_sprite_frames = ExtResource("life_ace_trainer_f")
 
 [node name="TrainerFelix" parent="Entities/NPCs" unique_id=942215298 instance=ExtResource("life_dialogue")]
-position = Vector2(432, 1296)
+position = Vector2(720, 1232)
 npc_id = "kanto_vermilion_city_trainer_felix"
 npc_definition_id = "trainer_class_camper"
 display_name = "Trainer Felix"
-facing_direction = Vector2(1, 0)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("life_camper")
 
 [node name="ChildToby" parent="Entities/NPCs" unique_id=1993487757 instance=ExtResource("life_dialogue")]
@@ -612,6 +677,10 @@ position = Vector2(496, 912)
 [node name="GuildBaseSign" parent="Entities/Interactables" unique_id=524634453 instance=ExtResource("4_obqe6")]
 position = Vector2(1776, 432)
 
+[node name="GymCutTree" parent="Entities/Interactables" unique_id=683514050 instance=ExtResource("ss_anne_gym_tree")]
+position = Vector2(688, 1264)
+interactable_id = "kanto_vermilion_gym_cut_tree"
+
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false
 
@@ -635,9 +704,165 @@ z_index = 100
 tile_map_data = PackedByteArray("AAAqABYAAAABAAEAAAAqABcAAAABAAEAAAArABYAAAABAAEAAAArABcAAAABAAEAAAAsABYAAAABAAEAAAAsABcAAAABAAEAAAAtABYAAAABAAEAAAAtABcAAAABAAEAAAAuABYAAAABAAEAAAAuABcAAAABAAEAAAAvABcAAAABAAEAAAAvABgAAAABAAEAAAAqABgAAAABAAEAAAArABgAAAABAAEAAAAsABgAAAABAAEAAAAtABgAAAABAAEAAAAuABgAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAASAAYAAAABAAEAAAASAAcAAAABAAEAAAATAAYAAAABAAEAAAATAAcAAAABAAEAAAAUAAYAAAABAAEAAAAUAAcAAAABAAEAAAAVAAYAAAABAAEAAAAVAAcAAAABAAEAAAAWAAYAAAABAAEAAAAWAAcAAAABAAEAAAAOAAUAAAABAAEAAAAPAAUAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAASAAUAAAABAAEAAAATAAUAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_e74de")
 
-[node name="GymCutTree" parent="Entities/Interactables" instance=ExtResource("ss_anne_gym_tree")]
-position = Vector2(464, 1296)
-interactable_id = "kanto_vermilion_gym_cut_tree"
+[node name="Stairs" type="Node2D" parent="Tiles" unique_id=1188315987]
+
+[node name="StairUpRight" type="TileMapLayer" parent="Tiles/Stairs" unique_id=1676093654]
+z_index = 100
+tile_map_data = PackedByteArray("AAAkABIAAAAEAAAAAAAkABMAAAAEAAAAAAAkABQAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_awqls")
+
+[node name="NightLights" type="Node2D" parent="." unique_id=771404804]
+
+[node name="Lanterns" type="Node2D" parent="NightLights" unique_id=1661291726]
+
+[node name="NightLight" parent="NightLights/Lanterns" unique_id=611384810 instance=ExtResource("21_awqls")]
+position = Vector2(720, 368)
+
+[node name="NightLight2" parent="NightLights/Lanterns" unique_id=398960172 instance=ExtResource("21_awqls")]
+position = Vector2(848, 624)
+
+[node name="NightLight3" parent="NightLights/Lanterns" unique_id=766866813 instance=ExtResource("21_awqls")]
+position = Vector2(1136, 624)
+
+[node name="NightLight4" parent="NightLights/Lanterns" unique_id=762522134 instance=ExtResource("21_awqls")]
+position = Vector2(848, 880)
+
+[node name="NightLight5" parent="NightLights/Lanterns" unique_id=1508643729 instance=ExtResource("21_awqls")]
+position = Vector2(1136, 880)
+
+[node name="NightLight6" parent="NightLights/Lanterns" unique_id=722418548 instance=ExtResource("21_awqls")]
+position = Vector2(1616, 880)
+
+[node name="NightLight7" parent="NightLights/Lanterns" unique_id=1914248302 instance=ExtResource("21_awqls")]
+position = Vector2(2032, 784)
+
+[node name="NightLight8" parent="NightLights/Lanterns" unique_id=1484031174 instance=ExtResource("21_awqls")]
+position = Vector2(2160, 784)
+
+[node name="NightLight9" parent="NightLights/Lanterns" unique_id=1907766726 instance=ExtResource("21_awqls")]
+position = Vector2(272, 1136)
+
+[node name="NightLight10" parent="NightLights/Lanterns" unique_id=797377680 instance=ExtResource("21_awqls")]
+position = Vector2(944, 1232)
+
+[node name="NightLight11" parent="NightLights/Lanterns" unique_id=36632859 instance=ExtResource("21_awqls")]
+position = Vector2(1200, 1232)
+
+[node name="NightLight12" parent="NightLights/Lanterns" unique_id=1377155182 instance=ExtResource("21_awqls")]
+position = Vector2(1168, 1456)
+
+[node name="NightLight13" parent="NightLights/Lanterns" unique_id=573278507 instance=ExtResource("21_awqls")]
+position = Vector2(1424, 1456)
+
+[node name="NightLight14" parent="NightLights/Lanterns" unique_id=1605409878 instance=ExtResource("21_awqls")]
+position = Vector2(1168, 1648)
+
+[node name="NightLight15" parent="NightLights/Lanterns" unique_id=1527532560 instance=ExtResource("21_awqls")]
+position = Vector2(1424, 1648)
+
+[node name="Buildings" type="Node2D" parent="NightLights" unique_id=801751444]
+
+[node name="NightLight" parent="NightLights/Buildings" unique_id=247985851 instance=ExtResource("21_awqls")]
+position = Vector2(304, 432)
+
+[node name="NightLight2" parent="NightLights/Buildings" unique_id=59963488 instance=ExtResource("21_awqls")]
+position = Vector2(496, 432)
+
+[node name="NightLight3" parent="NightLights/Buildings" unique_id=1746023460 instance=ExtResource("21_awqls")]
+position = Vector2(400, 432)
+
+[node name="NightLight4" parent="NightLights/Buildings" unique_id=1299820300 instance=ExtResource("21_awqls")]
+position = Vector2(976, 752)
+
+[node name="NightLight5" parent="NightLights/Buildings" unique_id=1409528925 instance=ExtResource("21_awqls")]
+position = Vector2(848, 496)
+
+[node name="NightLight6" parent="NightLights/Buildings" unique_id=18235971 instance=ExtResource("21_awqls")]
+position = Vector2(976, 496)
+
+[node name="NightLight7" parent="NightLights/Buildings" unique_id=2038740467 instance=ExtResource("21_awqls")]
+position = Vector2(1040, 496)
+
+[node name="NightLight8" parent="NightLights/Buildings" unique_id=222913235 instance=ExtResource("21_awqls")]
+position = Vector2(1136, 496)
+
+[node name="NightLight9" parent="NightLights/Buildings" unique_id=1676280866 instance=ExtResource("21_awqls")]
+position = Vector2(1424, 208)
+
+[node name="NightLight10" parent="NightLights/Buildings" unique_id=1769617216 instance=ExtResource("21_awqls")]
+position = Vector2(1456, 208)
+
+[node name="NightLight11" parent="NightLights/Buildings" unique_id=379387456 instance=ExtResource("21_awqls")]
+position = Vector2(1648, 272)
+
+[node name="NightLight12" parent="NightLights/Buildings" unique_id=359581878 instance=ExtResource("21_awqls")]
+position = Vector2(1744, 272)
+
+[node name="NightLight13" parent="NightLights/Buildings" unique_id=716721286 instance=ExtResource("21_awqls")]
+position = Vector2(1904, 208)
+
+[node name="NightLight14" parent="NightLights/Buildings" unique_id=1673663215 instance=ExtResource("21_awqls")]
+position = Vector2(1968, 208)
+
+[node name="NightLight15" parent="NightLights/Buildings" unique_id=888754395 instance=ExtResource("21_awqls")]
+position = Vector2(1424, 336)
+
+[node name="NightLight16" parent="NightLights/Buildings" unique_id=2050984608 instance=ExtResource("21_awqls")]
+position = Vector2(1456, 336)
+
+[node name="NightLight17" parent="NightLights/Buildings" unique_id=1105342229 instance=ExtResource("21_awqls")]
+position = Vector2(1552, 304)
+
+[node name="NightLight18" parent="NightLights/Buildings" unique_id=1322124285 instance=ExtResource("21_awqls")]
+position = Vector2(1616, 304)
+
+[node name="NightLight19" parent="NightLights/Buildings" unique_id=1432186853 instance=ExtResource("21_awqls")]
+position = Vector2(1776, 304)
+
+[node name="NightLight20" parent="NightLights/Buildings" unique_id=1090663391 instance=ExtResource("21_awqls")]
+position = Vector2(1840, 304)
+
+[node name="NightLight21" parent="NightLights/Buildings" unique_id=762997929 instance=ExtResource("21_awqls")]
+position = Vector2(1904, 336)
+
+[node name="NightLight22" parent="NightLights/Buildings" unique_id=1582737671 instance=ExtResource("21_awqls")]
+position = Vector2(1936, 336)
+
+[node name="NightLight23" parent="NightLights/Buildings" unique_id=1141534912 instance=ExtResource("21_awqls")]
+position = Vector2(2000, 336)
+
+[node name="NightLight24" parent="NightLights/Buildings" unique_id=1387842157 instance=ExtResource("21_awqls")]
+position = Vector2(1648, 336)
+
+[node name="NightLight25" parent="NightLights/Buildings" unique_id=1700554217 instance=ExtResource("21_awqls")]
+position = Vector2(1744, 336)
+
+[node name="NightLight26" parent="NightLights/Buildings" unique_id=1400475797 instance=ExtResource("21_awqls")]
+position = Vector2(336, 848)
+
+[node name="NightLight27" parent="NightLights/Buildings" unique_id=507716235 instance=ExtResource("21_awqls")]
+position = Vector2(432, 848)
+
+[node name="NightLight28" parent="NightLights/Buildings" unique_id=175067708 instance=ExtResource("21_awqls")]
+position = Vector2(624, 848)
+
+[node name="NightLight29" parent="NightLights/Buildings" unique_id=465808696 instance=ExtResource("21_awqls")]
+position = Vector2(688, 848)
+
+[node name="NightLight30" parent="NightLights/Buildings" unique_id=986714315 instance=ExtResource("21_awqls")]
+position = Vector2(464, 1232)
+
+[node name="NightLight31" parent="NightLights/Buildings" unique_id=2018200873 instance=ExtResource("21_awqls")]
+position = Vector2(368, 1200)
+
+[node name="NightLight32" parent="NightLights/Buildings" unique_id=1567586141 instance=ExtResource("21_awqls")]
+position = Vector2(560, 1200)
+
+[node name="NightLight33" parent="NightLights/Buildings" unique_id=2071325025 instance=ExtResource("21_awqls")]
+position = Vector2(1104, 1136)
+
+[node name="NightLight34" parent="NightLights/Buildings" unique_id=1625526275 instance=ExtResource("21_awqls")]
+position = Vector2(1168, 1136)
 
 [connection signal="body_entered" from="Exits/ToRoute6" to="Exits/ToRoute6" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11" to="Exits/ToRoute11" method="_on_body_entered"]
