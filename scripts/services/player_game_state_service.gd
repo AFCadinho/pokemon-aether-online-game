@@ -48,6 +48,7 @@ func load_player_profile() -> Dictionary:
 	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
 	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
 	var badges: Dictionary = _dictionary_from_value(body.get("badges", {}))
+	var pokedex: Dictionary = _dictionary_from_value(body.get("pokedex", {}))
 	var story: Dictionary = _dictionary_from_value(body.get("story", {}))
 	return {
 		"success": true,
@@ -68,6 +69,7 @@ func load_player_profile() -> Dictionary:
 			"stats": _dictionary_from_value(stats.get("stats", {})),
 		},
 		"badges": badges,
+		"pokedex": pokedex,
 		"story": story,
 	}
 

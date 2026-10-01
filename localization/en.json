@@ -6248,4 +6248,11 @@
   "story.kanto.ss_anne_titanic_pose.summary": "Help Rose recreate a famous pose on the S.S. Anne. Reward: 1 PP Up.",
   "story.kanto.ss_anne_pose_with_rose": "Do the Titanic pose with Rose on the 3F deck.",
   "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Titanic pose"
+,
+  "story.kanto.route_2_oak_assistant.title": "Oak’s Pokédex Research",
+  "story.kanto.route_2_oak_assistant.summary": "Help Professor Oak’s assistant by catching ten different Pokémon.",
+  "story.kanto.route_2_oak_assistant.objective": "Catch ten different Pokémon and return to Oak’s assistant.",
+  "story.kanto.route_2_oak_assistant.progress": "You have registered {caught} of {required} different Pokémon in your Pokédex.",
+  "story.kanto.route_2_oak_assistant.reward": "Excellent work! Professor Oak will be pleased with your research. Take this HM Flash.",
+  "story.kanto.route_2_oak_assistant.completed": "Thanks again for helping with Professor Oak’s Pokédex research. Use HM Flash to light up dark caves."
 }

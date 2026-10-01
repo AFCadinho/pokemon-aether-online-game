@@ -6247,4 +6247,11 @@
   "story.kanto.ss_anne_titanic_pose.summary": "Ajude Rose a recriar uma pose famosa no S.S. Anne. Recompensa: 1 PP Up.",
   "story.kanto.ss_anne_pose_with_rose": "Faça a pose de Titanic com Rose no convés do 3F.",
   "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Pose de Titanic"
+,
+  "story.kanto.route_2_oak_assistant.title": "A pesquisa da Pokédex do Professor Carvalho",
+  "story.kanto.route_2_oak_assistant.summary": "Ajude o assistente do Professor Carvalho capturando dez espécies diferentes de Pokémon.",
+  "story.kanto.route_2_oak_assistant.objective": "Capture dez espécies diferentes de Pokémon e volte ao assistente do Professor Carvalho.",
+  "story.kanto.route_2_oak_assistant.progress": "Você registrou {caught} de {required} espécies diferentes na Pokédex.",
+  "story.kanto.route_2_oak_assistant.reward": "Excelente trabalho! O Professor Carvalho ficará feliz com sua pesquisa. Aqui está o HM Flash.",
+  "story.kanto.route_2_oak_assistant.completed": "Obrigado por ajudar na pesquisa da Pokédex do Professor Carvalho. Use o HM Flash para iluminar cavernas escuras."
 }
