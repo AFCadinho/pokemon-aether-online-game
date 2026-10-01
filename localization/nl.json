@@ -6210,5 +6210,20 @@
   "ui.skills.thieving.target.vermilion_harbor_worker_bram": "Harbor Worker Bram",
   "ui.skills.thieving.target.vermilion_retired_sailor_abel": "Retired Sailor Abel",
   "ui.skills.thieving.target.vermilion_picnicker_june": "Picnicker June",
-  "ui.skills.thieving.location.vermilion_city": "Vermilion City"
+  "ui.skills.thieving.location.vermilion_city": "Vermilion City",
+  "story.kanto.ss_anne_rival.title": "Rival op de S.S. Anne",
+  "story.kanto.ss_anne_rival.summary": "Bezoek de captain op 2F. Je rival wacht in de gang.",
+  "story.kanto.ss_anne_defeat_rival": "Zoek Gary op 2F en win de rival battle.",
+  "story.kanto.help_ss_anne_captain.title": "Help de captain",
+  "story.kanto.help_ss_anne_captain.summary": "Haal gemberthee uit de keuken voor de zeezieke captain en ontvang HM Cut.",
+  "story.kanto.ss_anne_meet_captain": "Spreek de captain aan in zijn hut op 2F.",
+  "story.kanto.ss_anne_collect_tea": "Haal gemberthee bij chef Hugo in de keuken op 1F.",
+  "story.kanto.ss_anne_return_tea": "Breng de gemberthee terug naar de captain op 2F.",
+  "story.kanto.challenge_vermilion_gym.title": "Verdien de Thunder Badge",
+  "story.kanto.challenge_vermilion_gym.summary": "Gebruik Cut bij de Vermilion Gym en versla Lt. Surge.",
+  "story.kanto.vermilion_defeat_surge": "Ga de Vermilion Gym binnen en versla Lt. Surge.",
+  "story.kanto.ss_anne_crew_report.title": "Een bericht voor de bemanning",
+  "story.kanto.ss_anne_crew_report.summary": "Laat het onderhoudsrapport van Finn goedkeuren door officier Mara.",
+  "story.kanto.ss_anne_deliver_report": "Breng Finns rapport naar officier Mara op het dek op 3F.",
+  "story.kanto.ss_anne_return_report": "Keer terug naar Finn in de gang op B1F."
 }

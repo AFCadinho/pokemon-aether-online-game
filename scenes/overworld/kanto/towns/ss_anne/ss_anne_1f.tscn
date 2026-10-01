@@ -6,6 +6,13 @@
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_1f/ss_anne_1f.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/heal_npc.tscn" id="heal"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="sailor"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -114,6 +121,33 @@ z_index = 5
 [node name="Players" type="Node2D" parent="Entities"]
 
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="ChefHugo" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(2160, 1776)
+preload_quest_markers = true
+npc_id = "kanto_ss_anne_chef"
+display_name = "Chef Hugo"
+npc_sprite_frames = ExtResource("sailor")
+
+[node name="TeaStoryHook" type="Node" parent="Entities/NPCs/ChefHugo"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_ss_anne_collect_tea"
+
+[node name="RestAttendant" parent="Entities/NPCs" instance=ExtResource("heal")]
+position = Vector2(816, 1904)
+preload_quest_markers = true
+npc_id = "kanto_ss_anne_rest_attendant"
+npc_definition_id = ""
+display_name = "Rest Attendant"
+npc_sprite_frames = ExtResource("gentleman")
+
+[node name="PassengerEdwin" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(400, 432)
+npc_id = "kanto_ss_anne_passenger"
+trainer_id = "kanto_ss_anne_passenger"
+display_name = "Gentleman Edwin"
+npc_sprite_frames = ExtResource("gentleman")
+sight_range_tiles = 0
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

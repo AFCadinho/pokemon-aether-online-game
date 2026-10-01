@@ -6,6 +6,12 @@
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_2f/ss_anne_2f.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="Script" path="res://scripts/world/npcs/ss_anne_captain.gd" id="captain"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="blue"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -104,6 +110,35 @@ z_index = 5
 [node name="Players" type="Node2D" parent="Entities"]
 
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(1680, 1008)
+preload_quest_markers = true
+npc_id = "kanto_ss_anne_rival"
+npc_definition_id = "trainer_class_blue"
+display_name = "Gary Oak"
+npc_sprite_frames = ExtResource("blue")
+visibility_required_quest_id = "board_ss_anne"
+
+[node name="RivalStoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_ss_anne_rival_challenge"
+
+[node name="Captain" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+position = Vector2(2352, 1136)
+preload_quest_markers = true
+npc_id = "kanto_ss_anne_captain"
+display_name = "S.S. Anne Captain"
+npc_sprite_frames = ExtResource("gentleman")
+script = ExtResource("captain")
+
+[node name="MeetCaptainStoryHook" type="Node" parent="Entities/NPCs/Captain"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_ss_anne_meet_captain"
+
+[node name="ReturnTeaStoryHook" type="Node" parent="Entities/NPCs/Captain"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_ss_anne_return_tea"
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

@@ -20,6 +20,8 @@
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="life_worker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="life_youngster"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="ss_anne_gym_tree"]
+
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 32)
 
@@ -626,6 +628,10 @@ tile_set = SubResource("TileSet_o0vof")
 z_index = 100
 tile_map_data = PackedByteArray("AAAqABYAAAABAAEAAAAqABcAAAABAAEAAAArABYAAAABAAEAAAArABcAAAABAAEAAAAsABYAAAABAAEAAAAsABcAAAABAAEAAAAtABYAAAABAAEAAAAtABcAAAABAAEAAAAuABYAAAABAAEAAAAuABcAAAABAAEAAAAvABcAAAABAAEAAAAvABgAAAABAAEAAAAqABgAAAABAAEAAAArABgAAAABAAEAAAAsABgAAAABAAEAAAAtABgAAAABAAEAAAAuABgAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAASAAYAAAABAAEAAAASAAcAAAABAAEAAAATAAYAAAABAAEAAAATAAcAAAABAAEAAAAUAAYAAAABAAEAAAAUAAcAAAABAAEAAAAVAAYAAAABAAEAAAAVAAcAAAABAAEAAAAWAAYAAAABAAEAAAAWAAcAAAABAAEAAAAOAAUAAAABAAEAAAAPAAUAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAASAAUAAAABAAEAAAATAAUAAAABAAEAAAA=")
 tile_set = SubResource("TileSet_e74de")
+
+[node name="GymCutTree" parent="Entities/Interactables" instance=ExtResource("ss_anne_gym_tree")]
+position = Vector2(464, 1296)
+interactable_id = "kanto_vermilion_gym_cut_tree"
 
 [connection signal="body_entered" from="Exits/ToRoute6" to="Exits/ToRoute6" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11" to="Exits/ToRoute11" method="_on_body_entered"]

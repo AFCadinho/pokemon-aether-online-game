@@ -6209,5 +6209,20 @@
   "ui.skills.thieving.target.vermilion_harbor_worker_bram": "Harbor Worker Bram",
   "ui.skills.thieving.target.vermilion_retired_sailor_abel": "Retired Sailor Abel",
   "ui.skills.thieving.target.vermilion_picnicker_june": "Picnicker June",
-  "ui.skills.thieving.location.vermilion_city": "Vermilion City"
+  "ui.skills.thieving.location.vermilion_city": "Vermilion City",
+  "story.kanto.ss_anne_rival.title": "Rival no S.S. Anne",
+  "story.kanto.ss_anne_rival.summary": "Visite o capitão no 2F. Seu rival espera no corredor.",
+  "story.kanto.ss_anne_defeat_rival": "Encontre Gary no 2F e vença a batalha.",
+  "story.kanto.help_ss_anne_captain.title": "Ajude o capitão",
+  "story.kanto.help_ss_anne_captain.summary": "Busque chá de gengibre na cozinha para o capitão enjoado e receba HM Cut.",
+  "story.kanto.ss_anne_meet_captain": "Fale com o capitão em sua cabine no 2F.",
+  "story.kanto.ss_anne_collect_tea": "Peça chá de gengibre ao chef Hugo na cozinha do 1F.",
+  "story.kanto.ss_anne_return_tea": "Leve o chá ao capitão no 2F.",
+  "story.kanto.challenge_vermilion_gym.title": "Ganhe a Thunder Badge",
+  "story.kanto.challenge_vermilion_gym.summary": "Use Cut no Ginásio de Vermilion e derrote Lt. Surge.",
+  "story.kanto.vermilion_defeat_surge": "Entre no Ginásio de Vermilion e derrote Lt. Surge.",
+  "story.kanto.ss_anne_crew_report.title": "Uma entrega da tripulação",
+  "story.kanto.ss_anne_crew_report.summary": "Ajude Finn a aprovar seu relatório com a oficial Mara.",
+  "story.kanto.ss_anne_deliver_report": "Entregue o relatório à oficial Mara no convés do 3F.",
+  "story.kanto.ss_anne_return_report": "Volte para Finn no corredor do B1F."
 }

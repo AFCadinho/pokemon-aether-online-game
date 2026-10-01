@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De S.S. Anne heeft Gary op 2F, een captain-quest met HM Cut, keuken- en bemannings-NPCs, optionele trainers en een rustpunt. Bij de Vermilion Gym staat een Cut-boom; tile-collision blijft handmatig.
+
 - De Pokémon Fan Club gebruikt de bijgewerkte artist-TMX-visual.
 
 - De drie huizen in Vermilion City gebruiken de opnieuw geïmporteerde gedeelde artist-TMX-visual.
