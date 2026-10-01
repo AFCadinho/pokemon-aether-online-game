@@ -6,9 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="4_trainer"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_v0r3m"]
 [ext_resource type="TileSet" uid="uid://bw4ggkfn67bev" path="res://resources/world/collision_marker_tileset.tres" id="5_grass"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="6_e5jyj"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="6_gentleman"]
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="6_worker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="6_youngster"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_0510u"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vlm2t"]
 texture = ExtResource("4_v0r3m")
@@ -141,6 +143,11 @@ transition_facing_direction = "left"
 position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
+[node name="RouteTransitionHint" parent="Exits/ToVermilionNorth" unique_id=978581002 instance=ExtResource("6_e5jyj")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "left"
+
 [node name="ToVermilionSouth" type="Area2D" parent="Exits" unique_id=246849371]
 position = Vector2(16, 944)
 script = ExtResource("3_exit")
@@ -152,6 +159,12 @@ transition_facing_direction = "left"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionSouth" unique_id=1233225631]
 position = Vector2(-16, 32)
 shape = SubResource("shape_1")
+
+[node name="RouteTransitionHint" parent="Exits/ToVermilionSouth" unique_id=135696826 instance=ExtResource("6_e5jyj")]
+z_as_relative = false
+position = Vector2(0, 32)
+tile_footprint = Vector2i(1, 5)
+flow_direction = "left"
 
 [node name="ToRoute12West" type="Area2D" parent="Exits" unique_id=1886307383]
 position = Vector2(2448, 656)
@@ -165,6 +178,10 @@ transition_facing_direction = "right"
 position = Vector2(16, 0)
 shape = SubResource("shape_2")
 
+[node name="DoorTransitionHint" parent="Exits/ToRoute12West" unique_id=433157972 instance=ExtResource("7_0510u")]
+z_as_relative = false
+flow_direction = "right"
+
 [node name="ToDiglettCave" type="Area2D" parent="Exits" unique_id=678849447]
 position = Vector2(560, 400)
 script = ExtResource("3_exit")
@@ -176,6 +193,10 @@ transition_facing_direction = "up"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave" unique_id=363035727]
 position = Vector2(0, -16)
 shape = SubResource("shape_3")
+
+[node name="RouteTransitionHint" parent="Exits/ToDiglettCave" unique_id=1575569302 instance=ExtResource("6_e5jyj")]
+z_as_relative = false
+tile_footprint = Vector2i(2, 1)
 
 [node name="Entities" type="Node2D" parent="." unique_id=2014260382]
 z_index = 5
