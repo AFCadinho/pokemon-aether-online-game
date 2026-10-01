@@ -6,6 +6,8 @@
 
 - De beoordeelde vuureffecten van Ponyta, Rapidash en Centiskorch worden ondersteund door de 3D-battlerenderer.
 
+- De SS Anne 2F-visual is opnieuw geïmporteerd uit de bijgewerkte Tiled-bron.
+
 - Nurse Joy op SS Anne 1F stelt nu ook je terugkeerplek in op een spawnmarker naast haar.
 
 - De rustkamer op SS Anne 1F heeft nu Nurse Joy als genezer.
