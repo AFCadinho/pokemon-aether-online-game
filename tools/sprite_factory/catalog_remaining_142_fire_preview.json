@@ -1,0 +1,741 @@
+{
+  "schema": 1,
+  "stage": "authored fire prototype; appearance review pending",
+  "approval_counts_changed": false,
+  "review_url": "http://127.0.0.1:8782/fire-live-preview-v1/review-v7/index.html",
+  "shader_sha256": "198ea77b44ff112625153aa5f12d9ece8c517be502c2a5f1d068b8e85c3fe985",
+  "mesh_worker_sha256": "2d04b9b4ea7fc1a425ef59bd182dacc5f6666f1bacc817ed00aafe3d2298618d",
+  "pack_job_sha256": "525e28d8df7ccb4de0e5a384bbe570547ee2688e1881b890f0c6d3c854a321d7",
+  "entries": [
+    {
+      "species": "ponyta",
+      "runtime_sha256": "b82c748794261bf95e5c61881308424d5674ead0e97cc4481224bdff937cd699",
+      "source_scene_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
+      "native_geometry_skin_animation_unchanged": true,
+      "native_clips": 6,
+      "visible_fire_motion": true,
+      "loop_boundary_pixels_identical": true,
+      "appearance_approved": false,
+      "runtime_approved": false,
+      "captures": {
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/ponyta-faint_start-100.png": "effe5720d9745c6ac2ff34d58f070712c6b4d683f8d711e855fcb82240c2e572",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/ponyta-idle-50.png": "278bba8a94ac77688d48c33eaddefc6875b0906a6149d802b5edb60a910880e3",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/ponyta-physical_attack-50.png": "0b32e4fd7ff3e1c1ff59bbe5b2cf572a6c22c97a568f007c6dadcc93bfc29004",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/ponyta-sleep-50.png": "b1bdb908a64ae73591b0c062e4ec344e52c8f1a859e3f84badbf6fb58643be49",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/ponyta-special_attack-50.png": "f3212e519a897a16fe8800a1bb355e67bea2b39df1eee183fa074b3b6300363f",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/ponyta-idle-0.png": "6633179592ee742c25b25469b17a65996e1ebac49d6f6b6f1eee664a74513f09",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/ponyta-idle-100.png": "6633179592ee742c25b25469b17a65996e1ebac49d6f6b6f1eee664a74513f09",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/ponyta-idle-25.png": "f3021a10f45a407b47495a3f054ae0239dddad04154044367c1a484d7f44955a",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/ponyta-idle-50.png": "f304786f3e1a738eb4e403db1089cb99349f95f3c4558e7f85d4b9a563dc3170",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/ponyta-idle-75.png": "27031cec860574c1e3870b6a147e9f4a80e048b7c6c2c24e9f6e6bba855c5d0c"
+      },
+      "fire_inputs": [
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-0.png",
+            "sha256": "35a172dd2e31c3776644102913ada9425697275be1fc445b219725743ab457aa"
+          },
+          "coverage_gain": 1.13333333333333,
+          "enabled": true,
+          "material": "FireCoreA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-1.png",
+            "sha256": "a26a46ade7f4b0df5f0cb10206cb81c7ef40e9b766460d05f6de65c9aae86ee3"
+          },
+          "coverage_gain": 12.1428571428571,
+          "enabled": true,
+          "material": "FireCoreB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-2.png",
+            "sha256": "d42817b04e0d61d81bc4d590aa94984881ac0e8d620a324ffa7c14780ae202d0"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-3.png",
+            "sha256": "405af4358dc435a64620c6b7ea9d3d68737c2c52a382538a352a07ea9571a9f2"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreE",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-4.png",
+            "sha256": "366f9b9d39adf9d1391f527123792810a4bf2f9be0f550cae566a3c242f1f8a9"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-5.png",
+            "sha256": "77be1d49fef22526ea727b288e5a12549822338bcf6595b3fe280e255a8eed56"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.8
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-6.png",
+            "sha256": "993318daf89970e259e3b3f18b3b8a99666d1fbc4e8fe52de1170501d2933387"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.8
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-7.png",
+            "sha256": "065df9da89c643ee2e31ff06c535d776b88b3244ff828b83d58614b0221ec574"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.125,
+            0.0,
+            0.875
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-8.png",
+            "sha256": "91dbc15b8da7d471ab95e577abba463f2c5c960a5f7dd30ccad85b1f1ca75650"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskE",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.166666666666667,
+            0.0,
+            0.833333333333333
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/ponyta/colour-9.png",
+            "sha256": "3d300720b50b42f9365cf96af9faa62395edf0a4efd77049c5708baadce9e6db"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/ponyta/firecore_0077a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.8
+          ]
+        }
+      ],
+      "source_blend_sha256": "00fc87f759ac601ff840b09343be0a072d3b425bd524a39b2a73bd90efd90ceb",
+      "bake_job_sha256": "54b20c786a9def4fa366c36b644dc862ded7dd6c4b5b5ee7992a2d9bde11548e",
+      "bake_receipt_sha256": "515c294fcc83ee368fa6b4124ce424ae0a560b4e100763a0414e5180cf5c46b8"
+    },
+    {
+      "species": "rapidash",
+      "runtime_sha256": "1fb7ad2c4240092da4834a2bf72e31f957881bde9e1022a06b3a2f25b77eb1b7",
+      "source_scene_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
+      "native_geometry_skin_animation_unchanged": true,
+      "native_clips": 6,
+      "visible_fire_motion": true,
+      "loop_boundary_pixels_identical": true,
+      "appearance_approved": false,
+      "runtime_approved": false,
+      "captures": {
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/rapidash-faint_start-100.png": "db5cb93cc985a291ab8a5e844dfcef42ce47f006cc8061632d23b3cc6d612b62",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/rapidash-idle-50.png": "1a3b5712a3f3193f82cd6295c93312801a80a899f5065048f866b9409c7c6ee1",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/rapidash-physical_attack-50.png": "5d5f5b8a138ddc4d1e709e8ca130c4b63e2f8c89c69fc3afc62f8f816ff5a1d8",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/rapidash-sleep-50.png": "1212068b7ddf4e7ecbc18d183469a81434355eb39d04582174af8563638567a8",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/rapidash-special_attack-50.png": "c07e5d26c5b58b48588abaa343291ba0299eb062b2566e9868ad44458dbbe464",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/rapidash-idle-0.png": "4fabd1a1cdc2ea98032bb86bd7af191e1cf1837ca3edcd21f8423544a4ddd252",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/rapidash-idle-100.png": "4fabd1a1cdc2ea98032bb86bd7af191e1cf1837ca3edcd21f8423544a4ddd252",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/rapidash-idle-25.png": "e64fedc49fea1940712859b733ffe6bbbc3e5aebb7bddb94cec781c1337d3f09",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/rapidash-idle-50.png": "99e51236f45a7a7a1093ed838e56b45c46199c2bc015f949e9a0e47a0380a666",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/rapidash-idle-75.png": "858e25358d3e4221892e07a5c90a9f0822aad6f4265514cd98804db2152bf8f1"
+      },
+      "fire_inputs": [
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-0.png",
+            "sha256": "37b8cc8f42d1f32e6ac42365282a2c4bec478ca8ac885d58f467b00a396958fa"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-1.png",
+            "sha256": "b946c87547ed2c5ced17c12d1e0cd0f0315dc363cb8a89199eb406bc2ac5aa6d"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-2.png",
+            "sha256": "eba0a5b53a27895cc869c78b4c233053984cce6351a8efc27323ef33975ee6d1"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-3.png",
+            "sha256": "09274be73c0a6e476a7524152a2c0087f19563d54185441ec83e6a4afca03435"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-4.png",
+            "sha256": "e1b57aa5f11713e6c8cce8d6459f1d075feffeb79152d7a52f241af23f500a79"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreF",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-5.png",
+            "sha256": "b4359041af1ad69209720177891e2cb7c97099ae01df7f5689ece4e0b1d7612d"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreE",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-6.png",
+            "sha256": "023558356e8836b75c919ef9a909c9669c7924763b7bc73a2bf3369878dc9bd0"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreG",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.333333333333333,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-7.png",
+            "sha256": "c750d121ebc7505e9ca63ae42ba62f2227ccf04ee56a408c4ebfbf8852460834"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.125,
+            0.0,
+            0.875
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-8.png",
+            "sha256": "edd4153228600e4bb05b67474a09aa5941b9dd48cb98d3c576caf2418c62623f"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.125,
+            0.0,
+            0.875
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-9.png",
+            "sha256": "7b7fdd5fc93ac2a78227666543b9a2ee1ca81f75d77106f98dc83410367bf4ac"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            0.5,
+            0.125,
+            0.5,
+            0.875
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-10.png",
+            "sha256": "0ed0a0262c8b0d9042d5149aefcb8fcf9ed42496e5a5c36bec947e5a6bfc3afa"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.142857142857143,
+            0.0,
+            0.857142857142857
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-11.png",
+            "sha256": "010af869c0ee8e530e559cf7a6374edc922206a65a25a2676da261ae6c3d3247"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskF",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.142857142857143,
+            0.0,
+            0.857142857142857
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-12.png",
+            "sha256": "3383d60d733eb47dde64dd47d98a9ca18509f7fbf464f545d10fcea463e788c2"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskG",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.125,
+            0.0,
+            0.875
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v3/rapidash/colour-13.png",
+            "sha256": "4293deb6674d281a7551807a01ee2d926549502529135ad257f15a2699a7c92f"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskE",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/rapidash/firecore_0146a_msk.png.png",
+            "sha256": "e6ecdc5656a4c1a39258d6dc402a067516eab1ff9c1492c5eec5cab476050d83"
+          },
+          "shape_flames": true,
+          "transform": [
+            1.0,
+            0.125,
+            0.0,
+            0.875
+          ]
+        }
+      ],
+      "source_blend_sha256": "cff2c05d83910c81deaab592a808f4ab06ae105014ef5cca2a389dbdac8141b9",
+      "bake_job_sha256": "add4f5e4be6141921e45da0b814a45848effcbf72a66669b16982196a76723ed",
+      "bake_receipt_sha256": "7b643272872294538eca093e93baa8f41d24970260a039a36492ca59d4a671e3"
+    },
+    {
+      "species": "centiskorch",
+      "runtime_sha256": "a3f65ad779b197fe7dc7716bfa4dfa89d8e9940d4807026084f251c6165caba8",
+      "source_scene_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
+      "native_geometry_skin_animation_unchanged": true,
+      "native_clips": 6,
+      "visible_fire_motion": true,
+      "loop_boundary_pixels_identical": true,
+      "appearance_approved": false,
+      "runtime_approved": false,
+      "captures": {
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/centiskorch-faint_start-100.png": "dca639b195fc1b94ce588f3a1ff8c89b22db8f003097d163a1fdecdeb4a91398",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/centiskorch-idle-50.png": "ff087749b00091aa4886fd243633689cc64636da3a028a59f8191c74ff5b5bae",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/centiskorch-physical_attack-50.png": "420b2869868035b37661e8fd956fca8bdf288362795cac42eb1e8cf05bde314f",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/centiskorch-sleep-50.png": "8a284b0ccc965495bb34ac6463b3fe180bb964808427a22fe0962293315d26b2",
+        ".tmp/remaining-142-production/fire-live-preview-v1/poses-v7/centiskorch-special_attack-50.png": "828e34b924e238e9067e8f487ab59ea21129d066c3a3bf33867f9b7e0f9cbe8a",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/centiskorch-idle-0.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/centiskorch-idle-100.png": "e86b2da81cca7ec3850dbe7cbf7299e4eb8906a7e846d1b1be1d05228a677a45",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/centiskorch-idle-25.png": "10863ec0909af3470323780b9ded9c4d101b8db17ed4153c121eaa98a86c18f1",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/centiskorch-idle-50.png": "bbde20369e7569716834d795a40ad58162d901b4567fb3a0dc3111d9751efb6a",
+        ".tmp/remaining-142-production/fire-live-preview-v1/fire-only-v7/centiskorch-idle-75.png": "7fff3b63646a7931cc4c059c3c4e82129df0c567854902d719404181fff4f587"
+      },
+      "fire_inputs": [
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-0.png",
+            "sha256": "a41d2674b72b615bacb9dfed780c555d06b7a31feae06cd7b4f55a40dd2c9d72"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-1.png",
+            "sha256": "a6f2c5feff0ff4a411d1b033e6498086df0de9ae6f281830b8751c87a898856e"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-2.png",
+            "sha256": "2c8ba04a93b0a9adce400196d552325c6c6a9ecad9c6fc5b9d547bd0a64f68b8"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-3.png",
+            "sha256": "50d625d7b592a091d23ac499bc227d631354807d72e852943e0b9f1d1a6f1f44"
+          },
+          "coverage_gain": 1.0,
+          "enabled": true,
+          "material": "FireCoreA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-4.png",
+            "sha256": "97f8198d5e35ed8bcc444c540ce0168ddcbea6553c6472bd4afe7b39845564c2"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskA",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            0.25,
+            0.0,
+            0.25
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-5.png",
+            "sha256": "8eed63c5e4de3635360b39f2028c6b676693e268680660bb5e3ac3ca8141425e"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskB",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.4
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-6.png",
+            "sha256": "b04552b9d78f45ca3ba8c3032d410ae3c25e8997988e2f14a04c577e74705cc0"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskC",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.4
+          ]
+        },
+        {
+          "coverage": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/fire-live-mesh-v4/centiskorch/colour-7.png",
+            "sha256": "27b700ced6b7c08d89d8c0a32f84200af65c0c2df832df7e345e0dcd6f413184"
+          },
+          "coverage_gain": 1.0,
+          "enabled": false,
+          "material": "FireMaskD",
+          "noise": {
+            "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/material-four-probe-v1/centiskorch/firecore_0916a_msk.png.png",
+            "sha256": "de20ca93f14a46d49b33b7dc61ddd147d93d1b75bb0eb20281ed0402566fec94"
+          },
+          "shape_flames": false,
+          "transform": [
+            1.0,
+            0.2,
+            0.0,
+            0.4
+          ]
+        }
+      ],
+      "source_blend_sha256": "cbe104a8af833d33cb5e6ce9bc6e16d99a0e94dfad5986c9147533da08762e56",
+      "bake_job_sha256": "5938673b58c22c784cd889ebd59195da7cc3516d0d1324ef60dbd2dfb7160c16",
+      "bake_receipt_sha256": "6aad2eac2648685dca031b55f58c134ad436ba863b797e61f7041f2acf7a77cb"
+    }
+  ],
+  "limitations": [
+    "Authored reconstruction, not exact recovery of original source shaders",
+    "Horse flame cards use an authored UV cutout; outer fire masks are disabled",
+    "Only normal appearance preview; shiny, runtime whitelist, battle clearance and performance are not qualified",
+    "Four fire phases verify visible movement and exact sampled loop boundary; intermediate smoothness is not certified"
+  ]
+}
