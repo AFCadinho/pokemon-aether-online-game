@@ -92,6 +92,8 @@ func _init() -> void:
 			material.set_shader_parameter("enabled",entry.enabled)
 			material.set_shader_parameter("shape_flames",entry.get("shape_flames",false))
 			material.set_shader_parameter("coverage_gain",entry.get("coverage_gain",1.0))
+			for parameter in ["tongue_base", "tongue_span", "layer_opacity", "retain_coverage"]:
+				if entry.has(parameter): material.set_shader_parameter(parameter,entry[parameter])
 			materials[entry.material] = material
 		_bind(model,materials)
 		assert(bound.size() == materials.size())
