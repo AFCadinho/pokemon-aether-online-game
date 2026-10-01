@@ -4,6 +4,12 @@
 
 - Route 11 heeft tien FRLG-trainers en gameplay-gras dat de wild encounters aan de bestaande visual koppelt; tile-collision blijft handmatig.
 
+- De SS Anne B1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- De SS Anne 2F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- Paras is lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, aangepaste battle-grootte en een individuele downloadbundle.
+
 - Vermilion’s Aether Beacon and Keeper now join Aethernet Travel, with local attunement, Aether Anchor selection, and an arrival point beside the Beacon.
 
 - Vermilion Port gebruikt dezelfde geanimeerde zeewater- en kadetegels als Vermilion City; collision, NPCs en doorgangen blijven behouden.

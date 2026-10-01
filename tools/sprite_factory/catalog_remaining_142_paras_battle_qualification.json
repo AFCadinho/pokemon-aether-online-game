@@ -1,0 +1,70 @@
+{
+  "appearance_approved_pairs": 1,
+  "battle_approval_answer": "battle goed",
+  "battle_visual_approval": true,
+  "capture_sha256": {
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-0-faint_start.png": "2595a8b9e91c65ad3b2061b06ec75f0579b02156d992c9228794461dd02fbc59",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-0-idle.png": "2df394fe6a83b18afc765ef005a947d60a5ab8da010826cc50f92e4144bddf22",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-0-sleep.png": "72322f6106578e08b64f284bd0c6ac313f6e4441825d7d0ec65010a713915a96",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-0-special_attack.png": "366f28537dbeb229bc393b0265e0c897bffeb3b920f06fcfd5da442fce30d5ef",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-1-faint_start.png": "b46bd278bd1e8ccfdd53abde3c13bc127674b7c125c01760e813d4c015a81b44",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-1-idle.png": "ea0fbf562e8a914c28faced0975efcf7fd4a826a26fab249438cedd54f95b758",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-1-sleep.png": "609476e393d512758ff04166f388613d099100af482b2bed4488a35f3840e69f",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-classic-1-special_attack.png": "cbe614cb0eeb28fc1539b732f7020ecaca5a47a32b6f30d830d7862d284f4501",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-0-faint_start.png": "9f6d0d2343ffbc85ab1f53b756a2fef89db4dc465f3fbbc8396c872a40548bb0",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-0-idle.png": "808bc6a960a96c9dc85efb9d8e4b27b120ca2de076f6e523d60a3c3b034f6028",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-0-sleep.png": "edf822ce91572253ba04166248e57ef5f6856923eab685a5912f71f6805b4bf0",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-0-special_attack.png": "05623f2a621921f737137b4e2f35935282652d782f3e834d3beeb12c2a7fd8f6",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-1-faint_start.png": "98c64e19e3fb0220040378e8a08d9adfef58f7f031cfe1d9a3997434425cb72c",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-1-idle.png": "33b0729d73d4236365debe611bfdf116175dc020420effb920e91ae27f11264b",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-1-sleep.png": "5c377b39e195e658b42aeda85b6c3f17fb57635a207d23c09ce0ffe6db1bedba",
+    ".tmp/remaining-142-production/battle-paras-normal-v1/corrected/paras-stadium-1-special_attack.png": "b244b66f142f0bdeb9690bb446e8574f432a225ac689b2e465b37be4d65b7008",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-0-faint_start.png": "362fe22fe67d516a09e2f8a266d15a981721959684da39fd7473662c2b66829f",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-0-idle.png": "134764359b601f004b73940fd7aa80e5b9d4e342717db7a5e8319509782e2125",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-0-sleep.png": "ba55c3de094e62b59f6d76e0c0e28d79bc86e5425e36d0ab3597608ebd2ca8f9",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-0-special_attack.png": "c3e80643d8f6e67d72f00a8ab9c87ca5955a860da093e40ec056e7c9f966760f",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-1-faint_start.png": "5ac417bc1fd48c179b5ea78779ebf24717efb78939087d1d67d95ef1aa8b11fb",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-1-idle.png": "3c06dc5ce74e0e8c03240101d578fcac42bdb492fa344740a7a48c806d0c83f9",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-1-sleep.png": "aaa3d6a72083015aea35152d4a80e84cfe08494a360c5387e338dab54c44d82e",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-classic-1-special_attack.png": "7bdf6281ed4ab39a77f506ddee5b2bf5005fa369dd4c6979c6c671cf428d0c46",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-0-faint_start.png": "528725677ec3fc9e19db7b04ad84253105228bc13d880fe0b3b32538cb33710c",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-0-idle.png": "1d1586c6ce9ec901ee225c6fc21372af2e0f1a2ded82f40fcc4ba3699b49a1ff",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-0-sleep.png": "016d80ecfbe6720321d0bfc25334b0905288af39f1f57c01dd6976618012dd3c",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-0-special_attack.png": "d2dcdbf8496e221216c9ff26856976089df73c946e8c902d8bc3cec4ddb7b812",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-1-faint_start.png": "87a488bebc87e12d76a9286ef9baf91a23e80c76cfb7f9c4941722687d7b2d4a",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-1-idle.png": "e555b35a6af9a12c1cc8a681d6421b6240ae7ad1547e71e3307291ddb3eb386c",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-1-sleep.png": "287be12816a37db5f88d2653decc066566c7171b869e79a4ec310358a472d09e",
+    ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/paras-stadium-1-special_attack.png": "f5023d7607d247d024f57423226b73527e9863b52338f8840883101bfef686c4"
+  },
+  "date": "2026-10-01",
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/approved-paras/runtime-catalog-final.json": "07c1768030b7c6f4636243739f1a622f4553eb57a3fe4d56d73e6e4d85f4a63c",
+    ".tmp/remaining-142-production/approved-paras/runtime-fixture.json": "9ed23beaaf1a3f84846fb0c29f64f4621df3654e654ac4cc10c095bd2000b5a5",
+    "tools/sprite_factory/catalog_remaining_142_paras_battle_candidates.json": "1e535f914897b2946f4c6d06f910fa3c1b2995e5c131571a8bb086d298132175",
+    "tools/sprite_factory/catalog_remaining_142_paras_profiles.json": "9ed23beaaf1a3f84846fb0c29f64f4621df3654e654ac4cc10c095bd2000b5a5",
+    "tools/sprite_factory/catalog_remaining_142_paras_shiny_candidates.json": "9ab9890a71d9fd32d87904143e391b386e49a60479117e498e90ba22a8ecf7df",
+    "tools/sprite_factory/prepare_remaining_142_paras_admission.py": "fe0af1ba8d01a5996019180f28b12176fec290480d23f25812c8039bbde3a54c"
+  },
+  "profiles_sha256": "9ed23beaaf1a3f84846fb0c29f64f4621df3654e654ac4cc10c095bd2000b5a5",
+  "records": [
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
+      "runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
+      "species": "paras",
+      "variant": "normal"
+    },
+    {
+      "appearance_approved": true,
+      "battle_approved": true,
+      "glb_sha256": "31c1e6e18a81bf23f1ba7d4a0fd5979049163c334f0d2b9ca95d0664f25a1244",
+      "runtime_sha256": "cbb85d6541a8aec6f9b6c52aa0f68a303fc001b6b58993b7c6074fcb3a2c0d7c",
+      "species": "paras",
+      "variant": "shiny"
+    }
+  ],
+  "runtime_approved": false,
+  "schema": 1,
+  "scope": "2 exact standalone scenes; independent120Hz clearance and32 actual camera captures; user appearance/battle approved; bundle installation and performance gate pending"
+}
