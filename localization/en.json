@@ -6246,5 +6246,6 @@
   "ui.staff.side_quest.ss_anne_crew_report": "S.S. Anne crew report",
   "story.kanto.ss_anne_titanic_pose.title": "I’m flying, Jack!",
   "story.kanto.ss_anne_titanic_pose.summary": "Help Rose recreate a famous pose on the S.S. Anne. Reward: 1 PP Up.",
-  "story.kanto.ss_anne_pose_with_rose": "Do the Titanic pose with Rose on the 3F deck."
+  "story.kanto.ss_anne_pose_with_rose": "Do the Titanic pose with Rose on the 3F deck.",
+  "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Titanic pose"
 }

@@ -72,7 +72,7 @@ func _run() -> void:
 	var side_quest_select := popup.find_child("SideQuestSelect", true, false) as OptionButton
 	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
-	_check(side_quest_select != null and side_quest_select.item_count == 8, "trainer progress exposes all side-quest controls")
+	_check(side_quest_select != null and side_quest_select.item_count == 10, "trainer progress exposes all side-quest controls")
 	var side_quest_ids: Array[String] = []
 	if side_quest_select != null:
 		for index in side_quest_select.item_count:
@@ -82,6 +82,7 @@ func _run() -> void:
 		"trainer progress exposes the Pokemon Fan Club Chairman side quest"
 	)
 	_check("cerulean_cave_clearance" in side_quest_ids, "trainer progress exposes Cerulean Cave clearance")
+	_check("ss_anne_titanic_pose" in side_quest_ids, "trainer progress exposes Rose's Titanic pose quest")
 	_check(popup.find_child("ResetSideQuestButton", true, false) != null, "side quests can be restarted")
 	_check(popup.find_child("ActivateSideQuestButton", true, false) != null, "side quests can be given")
 	_check(popup.find_child("CompleteSideQuestButton", true, false) != null, "side quests can be completed with rewards")
@@ -96,13 +97,13 @@ func _run() -> void:
 		"resetting Rock Smash refreshes removed training-rock nodes in the open map"
 	)
 	if story_chapter_select != null and story_checkpoint_select != null:
-		_check(story_chapter_select.item_count == 5, "story checkpoints are divided into compact chapters")
+		_check(story_chapter_select.item_count == 6, "story checkpoints include all six chapters through Vermilion")
 		var largest_chapter_size := 0
 		for chapter_index in story_chapter_select.item_count:
 			story_chapter_select.select(chapter_index)
 			popup.call("_on_story_chapter_selected", chapter_index)
 			largest_chapter_size = maxi(largest_chapter_size, story_checkpoint_select.item_count)
-		_check(largest_chapter_size <= 5, "no story chapter opens an unbounded checkpoint list")
+		_check(largest_chapter_size <= 6, "no story chapter opens an unbounded checkpoint list")
 		var mt_moon_index := -1
 		for chapter_index in story_chapter_select.item_count:
 			if str(story_chapter_select.get_item_metadata(chapter_index)) == "mt_moon":
