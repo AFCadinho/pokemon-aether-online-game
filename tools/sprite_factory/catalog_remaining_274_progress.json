@@ -11,7 +11,7 @@
     "normal_candidate_visual_repair_pending": 3,
     "dlc_model_found_native_motion_missing": 15
   },
-  "review_url": "http://127.0.0.1:8782/battle-paras-review-v1/index.html",
+  "review_url": "http://127.0.0.1:8782/fire-shiny-v2/review/index.html",
   "diagnostic_root": ".tmp/remaining-274-production",
   "evidence": {
     "inventory.json": "69e410f3ecdd8609621fddc41ce53cc70e6cbf3e55b46bc212727ac2aa0b8f22",
@@ -475,7 +475,10 @@
       "normal_candidate_glb_sha256": "f0af3c62ad2959466ac7cfa05b79e085e7d3063e452d4773160048baa5db18e2",
       "normal_candidate_runtime_sha256": "6cbe12ffdbb7a0ac58503771c82e9ba9f88c60558598adb617883318a4424f52",
       "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
-      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json",
+      "normal_fire_appearance_approved": true,
+      "shiny_appearance_approved": false,
+      "fire_shiny_candidate_proof": "tools/sprite_factory/catalog_remaining_142_fire_shiny_candidates.json"
     },
     {
       "species": "rapidash",
@@ -487,7 +490,10 @@
       "normal_candidate_glb_sha256": "e6669b6be642bc82feb3b3c6e7cdab7e68fb7bc16eab91ba6dbc1aa01bd40cd6",
       "normal_candidate_runtime_sha256": "3ce8f2eb5371f0c21ebba3bc9bfc6279de6e4fd2297fcf9c6b9802df7b3279ef",
       "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
-      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json",
+      "normal_fire_appearance_approved": true,
+      "shiny_appearance_approved": false,
+      "fire_shiny_candidate_proof": "tools/sprite_factory/catalog_remaining_142_fire_shiny_candidates.json"
     },
     {
       "species": "doduo",
@@ -2998,7 +3004,10 @@
       "normal_candidate_glb_sha256": "c894d8bbbf79ddb1c490d7b0fe6cc6627d9778b12eb3b125a204ff2047f2c900",
       "normal_candidate_runtime_sha256": "4705ada4b039af7ef171e07d44abfc1f656f0c35d020c33c5b896faf4f746f94",
       "latest_attention": "Real source-mesh fire diagnosis recorded; static reconstruction trials not accepted; native material animation/visibility recovery remains",
-      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json"
+      "fire_material_diagnosis": "tools/sprite_factory/catalog_remaining_142_fire_mesh_diagnosis.json",
+      "normal_fire_appearance_approved": true,
+      "shiny_appearance_approved": false,
+      "fire_shiny_candidate_proof": "tools/sprite_factory/catalog_remaining_142_fire_shiny_candidates.json"
     },
     {
       "species": "clobbopus",
@@ -3250,7 +3259,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "Centiskorch normal fire accepted; Rapidash tail-only revision and fuller Ponyta await review; counts unchanged",
+  "current_stage": "Three normal fire appearances approved; authored shiny review pending; Ponyta/Rapidash diagnostic clearance passes; Centiskorch attack/faint clearance repair pending; gameplay/bundles not admitted",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,
@@ -3294,5 +3303,7 @@
     ]
   },
   "remaining_142_paras_bundle_qualification_sha256": "ee85aff0e6a280bf88d75a3f1ed43180d8ea6da15c8db21ca43ecc7054aa51b7",
-  "remaining_142_fire_preview_sha256": "1ae78cf0327ed9aa93f799967a16951498608fdc7ff7955ea5a5b00c5549e8ba"
+  "remaining_142_fire_preview_sha256": "1ae78cf0327ed9aa93f799967a16951498608fdc7ff7955ea5a5b00c5549e8ba",
+  "remaining_142_fire_shiny_candidates_sha256": "9d65c560a8dbd3ec403cf99464d1ad7c08759d3790ee7661eb4d16c8dc3c1279",
+  "remaining_142_fire_battle_checkpoint_sha256": "4c6ac1ba9a4145db98743cdae386cc866b3ebcab6e78a675e2ea334f78b72e6b"
 }
