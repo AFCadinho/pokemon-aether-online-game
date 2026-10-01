@@ -13,13 +13,14 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1121/pm1121_00_00/pm1121_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
-      "species": "poltchageist",
+      "species": "sinistcha",
       "resource_id": "pm1134",
-      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "identity_evidence": "Native model geometry and source icon inspected; bowl-and-whisk is Sinistcha (pm1134), tea-container is Poltchageist (pm1133). External animated bundle agrees with geometry.",
       "icon_sha256": "2f4831b700a87bb8b82b5e51bed2d9421d1b42e549c2c02f0092f76b7cae2165",
       "models": [
         "pm1134/pm1134_11_00/pm1134_11_00.trmdl",
@@ -28,13 +29,14 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1134/pm1134_11_00/pm1134_11_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
-      "species": "sinistcha",
+      "species": "poltchageist",
       "resource_id": "pm1133",
-      "identity_evidence": "Exact model-folder icon and geometry inspected in final batch; four earlier species/resource swaps corrected",
+      "identity_evidence": "Native model geometry and source icon inspected; bowl-and-whisk is Sinistcha (pm1134), tea-container is Poltchageist (pm1133). External animated bundle agrees with geometry.",
       "icon_sha256": "94fa9b6dee9f47b322a628f64d9db83bf7fc2eb56aa87b64368e617d5a876a85",
       "models": [
         "pm1133/pm1133_11_00/pm1133_11_00.trmdl",
@@ -43,8 +45,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1133/pm1133_11_00/pm1133_11_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "okidogi",
@@ -57,8 +60,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1123/pm1123_00_00/pm1123_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "munkidori",
@@ -71,8 +75,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1124/pm1124_00_00/pm1124_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "fezandipiti",
@@ -85,8 +90,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1125/pm1125_00_00/pm1125_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "ogerpon",
@@ -106,8 +112,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1120/pm1120_11_00/pm1120_11_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "archaludon",
@@ -120,8 +127,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1132/pm1132_00_00/pm1132_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "hydrapple",
@@ -134,8 +142,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1122/pm1122_00_00/pm1122_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "gouging-fire",
@@ -148,8 +157,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1126/pm1126_00_00/pm1126_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "raging-bolt",
@@ -162,8 +172,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1127/pm1127_00_00/pm1127_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "iron-boulder",
@@ -176,8 +187,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1129/pm1129_00_00/pm1129_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "iron-crown",
@@ -190,8 +202,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1128/pm1128_00_00/pm1128_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "terapagos",
@@ -206,11 +219,12 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1130/pm1130_11_00/pm1130_11_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review",
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
       "material_aliases": {
         "body_a_02": "body_a"
-      }
+      },
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
       "species": "pecharunt",
@@ -223,8 +237,9 @@
       "motion_folder_present": false,
       "runtime_approved": false,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1131/pm1131_00_00/pm1131_00_00_00.png",
-      "status": "held_missing_motion_and_baseline_pose",
-      "reason": "No native motion assets found; authored bind-pose prototype failed internal mesh visibility and pose review"
+      "status": "held_pending_motion_recovery_qualification",
+      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     }
   ]
 }

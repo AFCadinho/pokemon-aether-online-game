@@ -1,5 +1,10 @@
 # Remaining catalogue: one final review
 
+> Follow-up: the 112 pairs were subsequently approved, bundled and uploaded.
+> The 15 DLC motion sources were recovered on 2026-10-01; their model
+> qualification is still pending. See [DLC motion recovery](catalog-remaining-dlc-motion-recovery.md).
+> The checkpoint below describes the earlier review stage.
+
 ## Checkpoint — 2026-10-01
 
 All **127 remaining ordinary species** were inventoried and attempted in one
