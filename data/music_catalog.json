@@ -49,6 +49,10 @@
       "label": "Vermilion City Remastered - Zame",
       "path": "res://assets/music/overworld/kanto/towns/vermilion_city_remastered_zame.ogg"
     },
+    "overworld.kanto.lavender_town_remastered_zame": {
+      "label": "Lavender Town Remastered (HeartGold & SoulSilver) - Zame",
+      "path": "res://assets/music/overworld/kanto/towns/lavender_town_remastered_zame.ogg"
+    },
     "overworld.kanto.ss_anne_zame": {
       "label": "S.S. Anne Remastered - Zame",
       "path": "res://assets/music/overworld/kanto/towns/ss_anne.ogg"
@@ -87,6 +91,7 @@
     "kanto.pallet_town": "overworld.kanto.pallet_town",
     "kanto.viridian_city": "overworld.kanto.viridian_city",
     "kanto.vermilion_city": "overworld.kanto.vermilion_city_remastered_zame",
+    "kanto.lavender_town": "overworld.kanto.lavender_town_remastered_zame",
     "kanto.ss_anne": "overworld.kanto.ss_anne_zame",
     "kanto.pewter_city": "overworld.kanto.viridian_city",
     "kanto.routes_11_15": "overworld.kanto.routes_11_15_zame",

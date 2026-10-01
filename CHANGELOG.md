@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town en de noordelijke aansluiting gebruiken nu de remastered HeartGold/SoulSilver-soundtrack van Zame.
+
 - De laatste 15 DLC-Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny, rustposes en individuele downloadbundles.
 
 - Lavender Town heeft nu een eigen Tiled-visual en een overgang van en naar Route 10 via Lavender Town North; de collisionlaag staat klaar om in te vullen.

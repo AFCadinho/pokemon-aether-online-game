@@ -56,6 +56,10 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	var inherited_interior := MapMetadataScript.new()
 	inherited_interior.music_profile_id = "kanto.pallet_town"
 	_check_equal(inherited_interior.get_music_profile_id(), "kanto.pallet_town", "Map metadata exposes its music profile")
@@ -118,6 +122,20 @@ func _init() -> void:
 		var music_stream := load(track_path) as AudioStream
 		_check(music_stream != null and music_stream.get_length() > 120.0, "%s decodes as a complete audio stream" % track_path)
 
+	var lavender_track := "res://assets/music/overworld/kanto/towns/lavender_town_remastered_zame.ogg"
+	var lavender_stream := load(lavender_track) as AudioStreamOggVorbis
+	_check(lavender_stream != null and absf(lavender_stream.get_length() - 160.04) < 1.0,
+		"Lavender Town OGG decodes with the complete source duration")
+	var music_manager := load("res://scripts/services/music_manager.gd").new() as Node
+	for scene_path: String in [
+		"res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+		"res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn",
+	]:
+		var map := (load(scene_path) as PackedScene).instantiate()
+		_check_equal(music_manager.call("get_map_music_path", map), lavender_track,
+			"%s resolves Lavender Town music through the runtime manager" % scene_path)
+		map.free()
+	music_manager.free()
 	inherited_interior.free()
 	quit(1 if failed else 0)
 
