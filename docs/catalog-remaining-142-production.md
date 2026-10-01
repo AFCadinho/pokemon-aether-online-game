@@ -274,3 +274,19 @@ measurements and images. User battle review, installed bundle/performance checks
 and admission remain pending. Approved totals have not increased.
 
 [Paras battle comparison](http://127.0.0.1:8782/battle-paras-review-v1/index.html)
+
+## Paras battle approval and bundle installation
+
+The user approved Paras normal/shiny in battle (“battle goed”). The individual
+bundle contains two standalone scenes and twelve native clips, totaling
+1,440,744 bytes. The unchanged transactional installation gate passed fresh
+installation, no-op update and restart. `catalog_remaining_142_paras_battle_qualification.json`
+pins the exact scenes, shared calibration and 32 approved camera captures.
+
+The first installed real-battle stress run completed all three rounds with no
+functional errors, but p95 frame times were 58.599, 26.278 and 26.074 ms, exceeding
+the unchanged 20 ms admission gate. A separate Godot game and editor were running
+and another task was bootstrapping assets. The failed timing measurement is
+preserved as `approved-paras/installed-stress.{json,log}.first-run`; admission
+awaits an uncontended measurement. No gate or runtime code was relaxed. Catalog
+counts remain 897 ordinary species plus Mega Dragonite, with 128 remaining.

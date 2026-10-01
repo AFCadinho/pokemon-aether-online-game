@@ -4,7 +4,7 @@
   "runtime_approved": false,
   "normal_appearance_approved": true,
   "shiny_appearance_approved": true,
-  "visual_battle_review_pending": true,
+  "visual_battle_review_pending": false,
   "review_url": "http://127.0.0.1:8782/battle-paras-review-v1/index.html",
   "profiles": {
     "normal": {
@@ -1355,7 +1355,8 @@
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     },
     {
       "species": "paras",
@@ -1371,7 +1372,8 @@
       "all_camera_shots_in_view": true,
       "hud_proxy_overlap_shots": 0,
       "appearance_approved": true,
-      "battle_approved": false
+      "battle_approved": true,
+      "visual_battle_approved": true
     }
   ],
   "scope": "12 native clips; independent 120Hz clearance; 32 exact standalone scene camera captures; flat floor and HUD proxy; bundle install/performance not yet qualified",
@@ -1455,5 +1457,10 @@
     ".tmp/remaining-142-production/battle-paras-shiny-v1/scale-derivation.json": "d15ed1ea64e778cfaac8a6749a8d143768d6d666c8fefba2f918494d0e0c89db",
     ".tmp/remaining-142-production/battle-paras-shiny-v1/corrected/battle-review.json": "b6af6c5245fd3bc302ca61c60068730bfaadd233be92e296c03ca20cecdc5255",
     ".tmp/remaining-142-production/battle-paras-review-v1/index.html": "21acc5899a309eb27c9aa8d614d1a5da5b439cd970a836b4bf8465031fd6e396"
+  },
+  "battle_user_approval": {
+    "answer": "battle goed",
+    "date": "2026-10-01",
+    "scope": "Paras normal/shiny size and poses in both cameras and sides, including sleep and faint"
   }
 }
