@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import re
 import zipfile
 
 HERE = Path(__file__).resolve().parent
@@ -21,7 +22,10 @@ def write(path, data):
 def export(row, output):
     directory = output / row['species']
     directory.mkdir()
-    source = directory / Path(row['source']['member']).name
+    source_name = Path(row['source']['member']).name
+    if re.fullmatch(r'pm\d{4}\.blend', source_name):
+        source_name = source_name[:-6] + '_00.blend'
+    source = directory / source_name
     try:
         probe = Path(row['probe'])
         if sha(probe) != row['probe_sha256']:
@@ -44,6 +48,10 @@ def export(row, output):
         job = {'species': row['species'], 'source': str(source),
                'source_sha256': report['source_sha256'], 'actions': mapping,
                'output': str(directory), 'scvi_pbr_probe': False}
+        if row.get('diagnostic_rig_selection'):
+            job['diagnostic_rig_selection'] = row['diagnostic_rig_selection']
+        job['review_action_aliases'] = row.get('review_action_aliases', {})
+        job['authored_motion_review'] = row.get('authored_motion_review', [])
         write(directory / 'job.json', job)
         command = ['flatpak', 'run', '--unshare=network', '--nofilesystem=host',
                    '--filesystem=' + str(directory), '--filesystem=' + str(HERE) + ':ro',

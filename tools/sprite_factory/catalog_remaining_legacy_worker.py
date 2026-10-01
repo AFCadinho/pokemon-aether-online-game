@@ -19,7 +19,18 @@ def main(job_path):
     if hashlib.sha256(source.read_bytes()).hexdigest() != job["source_sha256"]:
         raise ValueError("Archived source hash changed before inspection")
     bpy.ops.wm.open_mainfile(filepath=str(source), load_ui=False, use_scripts=False)
-    rig, selection = isolate(source)
+    if job.get('diagnostic_variant_inventory'):
+        from source_review_rigs import material_images, image_identity
+        variants=[]
+        for rig in [o for o in bpy.context.scene.objects if o.type=='ARMATURE']:
+            meshes=[o for o in bpy.context.scene.objects if o.type=='MESH' and any(m.type=='ARMATURE' and m.object==rig for m in o.modifiers)]
+            images={n for o in meshes for m in o.data.materials if m for n in material_images(m.node_tree)}
+            variants.append({'rig':rig.name,'textures':sorted({image_identity(n) for n in images if image_identity(n)}),
+                             'meshes':[o.name for o in meshes],'parent':rig.parent.name if rig.parent else None,
+                             'constraints':[str(c.type) for c in rig.constraints]})
+        Path(job['output']).write_text(json.dumps({'source_sha256':job['source_sha256'],'variants':variants},indent=2)+'\n')
+        return
+    rig, selection = isolate(source, job.get('diagnostic_rig_selection'))
     names = equivalent_action_names(bpy.data.actions)
     possible = candidates(names, bank=job.get("animation_bank"))
     bank_candidates = {str(bank): candidates(names, bank=bank) for bank in range(3)}

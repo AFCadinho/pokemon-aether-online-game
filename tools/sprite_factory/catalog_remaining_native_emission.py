@@ -69,6 +69,10 @@ def recover(row, output):
         job = {'source': str(source), 'source_sha256': row['source_sha256'],
                'idle_action': row['actions']['idle'], 'materials': materials,
                'constant_colour_review': True, 'receipt': str(directory / 'shader-receipt.json')}
+        if row.get('diagnostic_rig_selection'):
+            job['diagnostic_rig_selection'] = row['diagnostic_rig_selection']
+        if row.get('static_fresnel_colour_review'):
+            job['static_fresnel_colour_review'] = True
         if row.get('official_shiny_review'):
             for key in ('normal_table', 'normal_table_sha256', 'rare_table', 'rare_table_sha256'):
                 job[key] = row['official_shiny_review'][key]

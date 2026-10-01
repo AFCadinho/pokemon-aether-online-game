@@ -4,7 +4,14 @@ func _init() -> void:
  _run.call_deferred()
 func signature(animation: Animation, track: int) -> Array:
  var keys=[]
- for j in animation.track_get_key_count(track):keys.append([animation.track_get_key_time(track,j),animation.track_get_key_value(track,j),animation.track_get_key_transition(track,j)])
+ for j in animation.track_get_key_count(track):
+  var value:Variant=animation.track_get_key_value(track,j)
+  if value is Texture2D:
+   var image:Image=value.get_image()
+   var hashing:=HashingContext.new()
+   hashing.start(HashingContext.HASH_SHA256);hashing.update(image.get_data())
+   value=["Texture2D",image.get_format(),image.get_size(),image.has_mipmaps(),hashing.finish().hex_encode()]
+  keys.append([animation.track_get_key_time(track,j),value,animation.track_get_key_transition(track,j)])
  return [animation.track_get_type(track),animation.track_get_path(track),animation.track_is_enabled(track),animation.track_get_interpolation_type(track),animation.track_get_interpolation_loop_wrap(track),keys]
 func pose(node: Node, player: AnimationPlayer, action: String, fraction: float) -> Array:
  player.stop()
