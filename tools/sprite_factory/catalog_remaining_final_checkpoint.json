@@ -8,7 +8,7 @@
   },
   "review_pairs": 112,
   "held_species": 15,
-  "visual_approval": false,
+  "visual_approval": true,
   "bundle_or_release_change": false,
   "evidence_root": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1",
   "review_manifest": {
@@ -89,7 +89,7 @@
     {
       "species": "bulbasaur",
       "national_dex": 1,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -241,7 +241,7 @@
     {
       "species": "caterpie",
       "national_dex": 10,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -335,7 +335,7 @@
     {
       "species": "rattata",
       "national_dex": 19,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -485,7 +485,7 @@
     {
       "species": "spearow",
       "national_dex": 21,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -604,7 +604,7 @@
     {
       "species": "fearow",
       "national_dex": 22,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -723,7 +723,7 @@
     {
       "species": "nidorina",
       "national_dex": 30,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -817,7 +817,7 @@
     {
       "species": "nidoqueen",
       "national_dex": 31,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -936,7 +936,7 @@
     {
       "species": "nidorino",
       "national_dex": 33,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1030,7 +1030,7 @@
     {
       "species": "nidoking",
       "national_dex": 34,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1149,7 +1149,7 @@
     {
       "species": "tentacool",
       "national_dex": 72,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1268,7 +1268,7 @@
     {
       "species": "tentacruel",
       "national_dex": 73,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1362,7 +1362,7 @@
     {
       "species": "ponyta",
       "national_dex": 77,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1456,7 +1456,7 @@
     {
       "species": "rapidash",
       "national_dex": 78,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1550,7 +1550,7 @@
     {
       "species": "doduo",
       "national_dex": 84,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1654,7 +1654,7 @@
     {
       "species": "krabby",
       "national_dex": 98,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1748,7 +1748,7 @@
     {
       "species": "kingler",
       "national_dex": 99,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1890,7 +1890,7 @@
     {
       "species": "rhyhorn",
       "national_dex": 111,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -1994,7 +1994,7 @@
     {
       "species": "rhydon",
       "national_dex": 112,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2098,7 +2098,7 @@
     {
       "species": "seaking",
       "national_dex": 119,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2217,7 +2217,7 @@
     {
       "species": "jynx",
       "national_dex": 124,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2311,7 +2311,7 @@
     {
       "species": "omanyte",
       "national_dex": 138,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2405,7 +2405,7 @@
     {
       "species": "omastar",
       "national_dex": 139,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2499,7 +2499,7 @@
     {
       "species": "kabuto",
       "national_dex": 140,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2593,7 +2593,7 @@
     {
       "species": "kabutops",
       "national_dex": 141,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2716,7 +2716,7 @@
     {
       "species": "ledyba",
       "national_dex": 165,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2810,7 +2810,7 @@
     {
       "species": "ledian",
       "national_dex": 166,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -2904,7 +2904,7 @@
     {
       "species": "bellossom",
       "national_dex": 182,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3008,7 +3008,7 @@
     {
       "species": "politoed",
       "national_dex": 186,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3112,7 +3112,7 @@
     {
       "species": "aipom",
       "national_dex": 190,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3216,7 +3216,7 @@
     {
       "species": "gligar",
       "national_dex": 207,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3320,7 +3320,7 @@
     {
       "species": "piloswine",
       "national_dex": 221,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3424,7 +3424,7 @@
     {
       "species": "corsola",
       "national_dex": 222,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3547,7 +3547,7 @@
     {
       "species": "remoraid",
       "national_dex": 223,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3641,7 +3641,7 @@
     {
       "species": "octillery",
       "national_dex": 224,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3764,7 +3764,7 @@
     {
       "species": "mantine",
       "national_dex": 226,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3858,7 +3858,7 @@
     {
       "species": "dustox",
       "national_dex": 269,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -3962,7 +3962,7 @@
     {
       "species": "nuzleaf",
       "national_dex": 274,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4066,7 +4066,7 @@
     {
       "species": "shiftry",
       "national_dex": 275,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4218,7 +4218,7 @@
     {
       "species": "taillow",
       "national_dex": 276,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4360,7 +4360,7 @@
     {
       "species": "swellow",
       "national_dex": 277,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4479,7 +4479,7 @@
     {
       "species": "nincada",
       "national_dex": 290,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4591,7 +4591,7 @@
     {
       "species": "ninjask",
       "national_dex": 291,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4685,7 +4685,7 @@
     {
       "species": "shedinja",
       "national_dex": 292,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4779,7 +4779,7 @@
     {
       "species": "whismur",
       "national_dex": 293,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4873,7 +4873,7 @@
     {
       "species": "loudred",
       "national_dex": 294,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -4967,7 +4967,7 @@
     {
       "species": "exploud",
       "national_dex": 295,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5061,7 +5061,7 @@
     {
       "species": "skitty",
       "national_dex": 300,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5155,7 +5155,7 @@
     {
       "species": "delcatty",
       "national_dex": 301,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5249,7 +5249,7 @@
     {
       "species": "wailmer",
       "national_dex": 320,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5372,7 +5372,7 @@
     {
       "species": "spinda",
       "national_dex": 327,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5476,7 +5476,7 @@
     {
       "species": "lunatone",
       "national_dex": 337,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5579,7 +5579,7 @@
     {
       "species": "solrock",
       "national_dex": 338,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5673,7 +5673,7 @@
     {
       "species": "baltoy",
       "national_dex": 343,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5767,7 +5767,7 @@
     {
       "species": "claydol",
       "national_dex": 344,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5870,7 +5870,7 @@
     {
       "species": "lileep",
       "national_dex": 345,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -5964,7 +5964,7 @@
     {
       "species": "cradily",
       "national_dex": 346,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6058,7 +6058,7 @@
     {
       "species": "anorith",
       "national_dex": 347,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6244,7 +6244,7 @@
     {
       "species": "armaldo",
       "national_dex": 348,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6363,7 +6363,7 @@
     {
       "species": "castform",
       "national_dex": 351,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6457,7 +6457,7 @@
     {
       "species": "sealeo",
       "national_dex": 364,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6580,7 +6580,7 @@
     {
       "species": "walrein",
       "national_dex": 365,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6674,7 +6674,7 @@
     {
       "species": "clamperl",
       "national_dex": 366,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6768,7 +6768,7 @@
     {
       "species": "huntail",
       "national_dex": 367,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -6887,7 +6887,7 @@
     {
       "species": "gorebyss",
       "national_dex": 368,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7006,7 +7006,7 @@
     {
       "species": "relicanth",
       "national_dex": 369,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7100,7 +7100,7 @@
     {
       "species": "deoxys",
       "national_dex": 386,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7204,7 +7204,7 @@
     {
       "species": "bidoof",
       "national_dex": 399,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7308,7 +7308,7 @@
     {
       "species": "bibarel",
       "national_dex": 400,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7412,7 +7412,7 @@
     {
       "species": "burmy",
       "national_dex": 412,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7516,7 +7516,7 @@
     {
       "species": "wormadam",
       "national_dex": 413,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7620,7 +7620,7 @@
     {
       "species": "cherrim",
       "national_dex": 421,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7724,7 +7724,7 @@
     {
       "species": "ambipom",
       "national_dex": 424,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7828,7 +7828,7 @@
     {
       "species": "rhyperior",
       "national_dex": 464,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -7980,7 +7980,7 @@
     {
       "species": "shaymin",
       "national_dex": 492,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8084,7 +8084,7 @@
     {
       "species": "liepard",
       "national_dex": 510,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8188,7 +8188,7 @@
     {
       "species": "tranquill",
       "national_dex": 520,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8282,7 +8282,7 @@
     {
       "species": "unfezant",
       "national_dex": 521,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8376,7 +8376,7 @@
     {
       "species": "roggenrola",
       "national_dex": 524,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8470,7 +8470,7 @@
     {
       "species": "boldore",
       "national_dex": 525,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8564,7 +8564,7 @@
     {
       "species": "gigalith",
       "national_dex": 526,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8658,7 +8658,7 @@
     {
       "species": "tympole",
       "national_dex": 535,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8752,7 +8752,7 @@
     {
       "species": "tirtouga",
       "national_dex": 564,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8846,7 +8846,7 @@
     {
       "species": "carracosta",
       "national_dex": 565,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -8940,7 +8940,7 @@
     {
       "species": "archeops",
       "national_dex": 567,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9034,7 +9034,7 @@
     {
       "species": "karrablast",
       "national_dex": 588,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9128,7 +9128,7 @@
     {
       "species": "escavalier",
       "national_dex": 589,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9222,7 +9222,7 @@
     {
       "species": "jellicent-male",
       "national_dex": 593,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9341,7 +9341,7 @@
     {
       "species": "ferroseed",
       "national_dex": 597,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9435,7 +9435,7 @@
     {
       "species": "elgyem",
       "national_dex": 605,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9545,7 +9545,7 @@
     {
       "species": "beheeyem",
       "national_dex": 606,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9648,7 +9648,7 @@
     {
       "species": "shelmet",
       "national_dex": 616,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9742,7 +9742,7 @@
     {
       "species": "accelgor",
       "national_dex": 617,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9836,7 +9836,7 @@
     {
       "species": "druddigon",
       "national_dex": 621,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -9959,7 +9959,7 @@
     {
       "species": "heatmor",
       "national_dex": 631,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10053,7 +10053,7 @@
     {
       "species": "durant",
       "national_dex": 632,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10147,7 +10147,7 @@
     {
       "species": "kyurem",
       "national_dex": 646,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10299,7 +10299,7 @@
     {
       "species": "keldeo-ordinary",
       "national_dex": 647,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10451,7 +10451,7 @@
     {
       "species": "genesect",
       "national_dex": 649,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10555,7 +10555,7 @@
     {
       "species": "furfrou",
       "national_dex": 676,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10659,7 +10659,7 @@
     {
       "species": "aegislash-shield",
       "national_dex": 681,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10772,7 +10772,7 @@
     {
       "species": "pumpkaboo-average",
       "national_dex": 710,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10876,7 +10876,7 @@
     {
       "species": "gourgeist-average",
       "national_dex": 711,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -10980,7 +10980,7 @@
     {
       "species": "zygarde-50",
       "national_dex": 718,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11084,7 +11084,7 @@
     {
       "species": "minior",
       "national_dex": 774,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11188,7 +11188,7 @@
     {
       "species": "necrozma",
       "national_dex": 800,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11292,7 +11292,7 @@
     {
       "species": "stakataka",
       "national_dex": 805,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11386,7 +11386,7 @@
     {
       "species": "dottler",
       "national_dex": 825,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11480,7 +11480,7 @@
     {
       "species": "cramorant",
       "national_dex": 845,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11584,7 +11584,7 @@
     {
       "species": "centiskorch",
       "national_dex": 851,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11678,7 +11678,7 @@
     {
       "species": "runerigus",
       "national_dex": 867,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11782,7 +11782,7 @@
     {
       "species": "alcremie",
       "national_dex": 869,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -11886,7 +11886,7 @@
     {
       "species": "morpeko",
       "national_dex": 877,
-      "status": "pending_final_visual_review",
+      "status": "visually_approved_pending_bundle_qualification",
       "runtime_approved": false,
       "variants": {
         "normal": {
@@ -12221,5 +12221,10 @@
     "runtime_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/runtime-reviewed-v5.json",
     "runtime_report_sha256": "2770b0534e0951fbc0f809032b211d8f0a7f187cbd7eb86a99bc1e440af8c6fe",
     "policy": "Material-only revisions; measured geometry reused only after exact old/new scene parity; 39 current battle image sets independently rendered; 224 current eye closeups"
+  },
+  "user_approval": {
+    "date": "2026-10-01",
+    "answer": "Zien er allemaal goed uit",
+    "scope": "All 112 normal/shiny pairs on final-review-v3, including revised eye details and battle views"
   }
 }

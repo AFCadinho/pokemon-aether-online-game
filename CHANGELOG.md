@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De beoordeelde vuureffecten van Ponyta, Rapidash en Centiskorch worden ondersteund door de 3D-battlerenderer.
+
 - Paras is lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, aangepaste battle-grootte en een individuele downloadbundle.
 
 - Vermilion’s Aether Beacon and Keeper now join Aethernet Travel, with local attunement, Aether Anchor selection, and an arrival point beside the Beacon.

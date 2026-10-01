@@ -126,3 +126,24 @@ JavaScript syntax and local HTTP checks pass. This audit records no human
 approval: the 112 pairs remain pending final review, counts and the released
 catalogue are unchanged, and no bundles were uploaded. The 15 DLC holds and
 fire gameplay integration described above still apply.
+
+
+## Explicit final approval and local packaging — 2026-10-01
+
+The user approved all pairs on final-review-v3: “Zien er allemaal goed uit”.
+This supersedes the earlier pending visual review status, for exactly 112 pairs
+and 224 pinned SCNs. The checkpoint records the answer and review-manifest hash.
+
+112 individually versioned bundles were prepared (513,060,767 bytes) and all
+were installed through the launcher store with no-op/restart verification.
+All 224 standalone scenes loaded without external dependencies, including 88
+supported shader surfaces. The existing material-effect regression and the
+new exact-fire-code/parameter rejection check passed. The reviewed fire shader
+is byte-identical to the preview code and now recognized by gameplay material
+validation; the approved fire SCNs have not been rewritten.
+
+The ordinary game must be closed for the installed rendered battle performance
+run. The runtime registry is not yet updated: 899 approved profiles remain the
+baseline until that qualification passes. The local preflight receipt records
+the generated bundles and successful installation, with runtime_approved=false.
+No additional human appearance review is required for these exact scenes.
