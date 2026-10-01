@@ -7057,13 +7057,13 @@
 		},
 		"kanto_ss_anne_1f__1f_corridor__stairs_to_2f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_2f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
 				"position": {
-					"x": 144.0,
-					"y": 1104.0
+					"x": 176.0,
+					"y": 1040.0
 				},
 				"spawnMarker": "At_4_34"
 			},
@@ -7072,13 +7072,13 @@
 		},
 		"kanto_ss_anne_1f__1f_corridor__stairs_to_b1f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_b1f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
 				"position": {
-					"x": 368.0,
-					"y": 1136.0
+					"x": 400.0,
+					"y": 1072.0
 				},
 				"spawnMarker": "At_11_35"
 			},
@@ -7312,13 +7312,13 @@
 		},
 		"kanto_ss_anne_2f__2f_corridor__stairs_to_1f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_1f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
 				"position": {
-					"x": 400.0,
-					"y": 1168.0
+					"x": 432.0,
+					"y": 1104.0
 				},
 				"spawnMarker": "At_12_36"
 			},
@@ -7327,13 +7327,13 @@
 		},
 		"kanto_ss_anne_2f__2f_corridor__stairs_to_3f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_3f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
 				"position": {
-					"x": 1744.0,
-					"y": 560.0
+					"x": 1776.0,
+					"y": 496.0
 				},
 				"spawnMarker": "At_54_17"
 			},
@@ -7372,13 +7372,13 @@
 		},
 		"kanto_ss_anne_3f__3f_landing__stairs_to_2f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_2f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
 				"position": {
-					"x": 144.0,
-					"y": 1296.0
+					"x": 176.0,
+					"y": 1232.0
 				},
 				"spawnMarker": "At_4_40"
 			},
@@ -7552,13 +7552,13 @@
 		},
 		"kanto_ss_anne_b1f__b1f_corridor__stairs_to_1f": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_ss_anne_1f",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
 				"position": {
-					"x": 2000.0,
-					"y": 1328.0
+					"x": 2032.0,
+					"y": 1264.0
 				},
 				"spawnMarker": "At_62_41"
 			},
