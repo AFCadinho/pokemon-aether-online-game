@@ -55,3 +55,9 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
 
 An already animated map is left unchanged. Preview with
 `tools/preview_animated_map.gd -- vermilion_city`.
+
+For the active Vermilion Port exterior visual, use the same command with
+`-- --apply --port`. Its separate `vermilion_port_water_animation_report.json`
+records 2,037 animated cells across eleven water/kade variants, with the same
+original-frame, geometry and animation checks. Preview with
+`tools/preview_animated_map.gd -- vermilion_port_exterior`.
