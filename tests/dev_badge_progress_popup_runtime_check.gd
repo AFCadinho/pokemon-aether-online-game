@@ -72,6 +72,18 @@ func _run() -> void:
 	var side_quest_select := popup.find_child("SideQuestSelect", true, false) as OptionButton
 	_check(story_chapter_select != null, "trainer progress exposes a story chapter selector")
 	_check(story_checkpoint_select != null, "trainer progress exposes a story checkpoint selector")
+	if story_chapter_select != null and story_checkpoint_select != null:
+		for index in story_chapter_select.item_count:
+			if str(story_chapter_select.get_item_metadata(index)) == "saffron":
+				story_chapter_select.select(index)
+				popup.call("_on_story_chapter_selected", index)
+				break
+	var story_checkpoint_ids: Array[String] = []
+	if story_checkpoint_select != null:
+		for index in story_checkpoint_select.item_count:
+			story_checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(index)))
+	_check("saffron_gate_closed" in story_checkpoint_ids, "trainer progress exposes the Saffron lockdown story checkpoint")
+	_check("oak_rock_tunnel_advice" in story_checkpoint_ids, "trainer progress exposes Oak's Rock Tunnel advice checkpoint")
 	_check(side_quest_select != null and side_quest_select.item_count == 10, "trainer progress exposes all side-quest controls")
 	var side_quest_ids: Array[String] = []
 	if side_quest_select != null:
@@ -97,7 +109,7 @@ func _run() -> void:
 		"resetting Rock Smash refreshes removed training-rock nodes in the open map"
 	)
 	if story_chapter_select != null and story_checkpoint_select != null:
-		_check(story_chapter_select.item_count == 6, "story checkpoints include all six chapters through Vermilion")
+		_check(story_chapter_select.item_count == 7, "story checkpoints include all seven chapters through Saffron")
 		var largest_chapter_size := 0
 		for chapter_index in story_chapter_select.item_count:
 			story_chapter_select.select(chapter_index)
@@ -118,6 +130,18 @@ func _run() -> void:
 			checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
 		for checkpoint_id in ["mt_moon_warning", "mt_moon_grunts", "mt_moon_miguel", "mt_moon_fossil", "mt_moon_rescue"]:
 			_check(checkpoint_id in checkpoint_ids, "story checkpoint selector includes %s" % checkpoint_id)
+		var saffron_index := -1
+		for chapter_index in story_chapter_select.item_count:
+			if str(story_chapter_select.get_item_metadata(chapter_index)) == "saffron":
+				saffron_index = chapter_index
+				break
+		_check(saffron_index >= 0, "story chapter selector includes Saffron and the return to Oak")
+		story_chapter_select.select(saffron_index)
+		popup.call("_on_story_chapter_selected", saffron_index)
+		var saffron_checkpoint_ids: Array[String] = []
+		for checkpoint_index in story_checkpoint_select.item_count:
+			saffron_checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
+		_check(saffron_checkpoint_ids == ["saffron_gate_closed", "oak_rock_tunnel_advice"], "Saffron chapter exposes both new main-story checkpoints")
 		var cerulean_index := -1
 		for chapter_index in story_chapter_select.item_count:
 			if str(story_chapter_select.get_item_metadata(chapter_index)) == "cerulean":
