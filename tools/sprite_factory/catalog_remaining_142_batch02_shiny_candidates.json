@@ -1,0 +1,1584 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "appearance_approved": false,
+  "battle_approved": false,
+  "review_url": "http://127.0.0.1:8782/appearance-six-pairs-v1/index.html",
+  "normal_user_review": "ja, ze zijn goed",
+  "shiny_entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 127.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 277.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 377.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 577.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 347.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "7afed143044dd8f5ca14fdd18efeaff13d7bac72826d6cce65a99aef2bde3a52",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/lugia/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/lugia.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "6a0c06ffa8c25944e1783ea3ebcc50d50d608d326580a84b958f018c4d24f444",
+      "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
+      "species": "lugia",
+      "variant": "shiny"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 152.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 302.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 252.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 302.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 377.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 502.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 407.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "1f184ebca29b91a85b0f22a94fb5b4c27d137420ef771b7a4594cc47e1436bbd",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/ho-oh/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/ho-oh.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "05dd861543ec56894665dc498238a0477b01c82236ac8d4fb8ac6fab1886f90f",
+      "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
+      "species": "ho-oh",
+      "variant": "shiny"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 102.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 202.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 402.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 227.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 277.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 252.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 302.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "33254aa67418dedebedf840c55dd47e2f0cdf9d6339857ff4f0366be72f1e18c",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/vibrava/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/vibrava.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "d21ee262679d15db603c2e5412676f6ae2f027d9c7284a0a9e0577d89afafdc5",
+      "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
+      "species": "vibrava",
+      "variant": "shiny"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 102.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 222.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 252.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 277.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 327.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 277.5,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 377.5,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 347.5,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "8c032ec9690bc21e51be9a8ccd3da05cf59a2aa2f2a26953347c79cf56200601",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/flygon/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/flygon.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "a805923c2b3cd10db6b09a3863fb4578e716231c19c16ca97c21842f62e4aaf1",
+      "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
+      "species": "flygon",
+      "variant": "shiny"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 60.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "c595ca55b22647c6c6f4a33adcb8a24fa19460cf9e0e61dd9b6172d0d5280862",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/swanna/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/swanna.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "b5b38b7e141fd11133a7efee2ceb234eebce8a68e6f8fab34a2d3c2bd721d90a",
+      "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
+      "species": "swanna",
+      "variant": "shiny"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 140.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "8ba1ad44f669fa75c711352e2f5f088ad964f3c9dbfbd71bc954bb942059e960",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-final-v1/mandibuzz/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/six-shiny-runtime-v1/mandibuzz.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "b0326215d845a3184077a5f930a42933b66993630963f597f97dce843a899ca1",
+      "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
+      "species": "mandibuzz",
+      "variant": "shiny"
+    }
+  ],
+  "glb_parity": [
+    {
+      "species": "lugia",
+      "normal_glb_sha256": "11d7dfb36ecf8ea4cf4976fb7e0027914df6f34daf8ed2cbfdb7df77eca351ce",
+      "shiny_glb_sha256": "7afed143044dd8f5ca14fdd18efeaff13d7bac72826d6cce65a99aef2bde3a52",
+      "geometry_motion_sha256": "a1709d47dac57ab7190e0536d4c29de5aebe5b82fa0d88381ae9c9ca14294597",
+      "official_rare_table_sha256": "c31864ea08b8be727c48219f9803287356f614e449aeac51eeae20707a44abfb",
+      "eye_repair": {
+        "eye_materials": [
+          "r_eye",
+          "l_eye"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    },
+    {
+      "species": "ho-oh",
+      "normal_glb_sha256": "1a78fbf0c2172612cc11a1c4dd2ad288daf1f2ed51e933f13131ef641fdaf625",
+      "shiny_glb_sha256": "1f184ebca29b91a85b0f22a94fb5b4c27d137420ef771b7a4594cc47e1436bbd",
+      "geometry_motion_sha256": "7c41e9533c8dc39bd9fd587a4fc15bfd6ea534552dd4b82e3f59e52a38cdd487",
+      "official_rare_table_sha256": "56cfab43b7f69bc22154161209cae3ea4b79369a61e736bfa17ffa57b88e07fd",
+      "eye_repair": {
+        "eye_materials": [
+          "r_eye",
+          "l_eye"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    },
+    {
+      "species": "vibrava",
+      "normal_glb_sha256": "102a226453e30c0fc724a126dc12adfe23b6c83bd4f2208ce9dcdffc97bfe260",
+      "shiny_glb_sha256": "33254aa67418dedebedf840c55dd47e2f0cdf9d6339857ff4f0366be72f1e18c",
+      "geometry_motion_sha256": "1d9de9221ad3bcbf9655a33e454cf4d279c6787651fe866e11f83b281bd28ff1",
+      "official_rare_table_sha256": "723704939bd7176270b1b04b2aaeb075c3d5b3aa37d4c6ac6fda61b9370e119c",
+      "eye_repair": {
+        "eye_materials": [
+          "eye_00",
+          "l_eye_01",
+          "r_eye_01"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    },
+    {
+      "species": "flygon",
+      "normal_glb_sha256": "c93325907a7dbf51036479abbfebcd42c358e5876d40155fd529779b1dda952d",
+      "shiny_glb_sha256": "8c032ec9690bc21e51be9a8ccd3da05cf59a2aa2f2a26953347c79cf56200601",
+      "geometry_motion_sha256": "11bf62f6d19d22d32dfa1bbabc0b12a81ec37967f0c7dd3e3fa41996d22b2dbd",
+      "official_rare_table_sha256": "11d1efa599685657a7e79c2b538c2476b304167051a1d285a1a026df165c0325",
+      "eye_repair": {
+        "eye_materials": [
+          "l_eye",
+          "r_eye"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    },
+    {
+      "species": "swanna",
+      "normal_glb_sha256": "5ecf3cd89604b03a8fdc4a80134c1008d0b72097931813f4eadf53935e9756e6",
+      "shiny_glb_sha256": "c595ca55b22647c6c6f4a33adcb8a24fa19460cf9e0e61dd9b6172d0d5280862",
+      "geometry_motion_sha256": "03a1b8918d5b87ebcd64d2ae43fba5ac4f44c1f6f2964c33f94c9f1c5bbcdf43",
+      "official_rare_table_sha256": "96f337a69e5f41bdb6c1d2f3e047b7ab701a6ebaeccc8f620aae92ebd48475df",
+      "eye_repair": {
+        "eye_materials": [
+          "l_eye",
+          "r_eye"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    },
+    {
+      "species": "mandibuzz",
+      "normal_glb_sha256": "ef249ccdabaababf53ef64427a56d67318fc2dc808a206a5506ea401c66760cb",
+      "shiny_glb_sha256": "8ba1ad44f669fa75c711352e2f5f088ad964f3c9dbfbd71bc954bb942059e960",
+      "geometry_motion_sha256": "28d91fbdca92f3667c262c9466babee9072abc131d21110861df680acf96cea6",
+      "official_rare_table_sha256": "456c262031c41372999b6d5fa524af6d4eac4e5ea13092c1f4736926ba6048a5",
+      "eye_repair": {
+        "eye_materials": [
+          "l_eye",
+          "r_eye"
+        ],
+        "cleared_false_emission": [],
+        "restored_body_albedo": []
+      },
+      "runtime_approved": false
+    }
+  ],
+  "official_shiny_jobs": [
+    {
+      "species": "lugia",
+      "national_dex": 249,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0249.blend",
+        "bytes": 45768948,
+        "crc32": "f97d7701"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0249-lugia/report.json",
+      "probe_sha256": "3be4a3789c92d0925c9f186949b0c876f31803ad3f5711d3b9b1de7ddb4ff746",
+      "actions": {
+        "idle": "pm0249_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0249_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0249_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0249_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0249_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0249_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0249_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0249_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/lugia/model.glb",
+      "normal_glb_sha256": "9c52f596372aff2c6aa2021be8c9363ef137a54942de5b97c29dfdd2ba68f54d",
+      "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00.trmtr",
+        "normal_table_sha256": "e1777fa2089af7da39d01f5211e1d944eed6b0c06e27ef95d91e74405b06ed4f",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_rare.trmtr",
+        "rare_table_sha256": "c31864ea08b8be727c48219f9803287356f614e449aeac51eeae20707a44abfb",
+        "materials": {
+          "body_c": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_c_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_c_rare_alb.png",
+                "normal_sha256": "a650e80a360c3574a95d2ba99d6c780ddd146cf8d8eb488d75198dba778a1c4e",
+                "rare_sha256": "89942ba85738e8eb78987627255710142346e5446ac73381c3393bfcbad6e9cc"
+              }
+            ]
+          },
+          "body_b": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_b_rare_alb.png",
+                "normal_sha256": "7f5e9491a3ee84ff934ae0f2c533277b2185d22180bbfe2b0778a982c3204ef5",
+                "rare_sha256": "7f5e9491a3ee84ff934ae0f2c533277b2185d22180bbfe2b0778a982c3204ef5"
+              }
+            ]
+          },
+          "body_a": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_body_a_rare_alb.png",
+                "normal_sha256": "47c15c6c49b111ff06263c8447cf0b13bde68d489452b4f6b94a4203f4f27a2d",
+                "rare_sha256": "5737e551551ac688749657142fad73959dbd3b8a77f97dab32a76e662cc36c39"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "ho-oh",
+      "national_dex": 250,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0250.blend",
+        "bytes": 32482900,
+        "crc32": "771cd544"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0250-ho-oh/report.json",
+      "probe_sha256": "8dad39cbb405c68c485bc1dbbefe81bbabc50ba43a8f47fadef0dce8128fdcd5",
+      "actions": {
+        "idle": "pm0250_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0250_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0250_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0250_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0250_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0250_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0250_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0250_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/ho-oh/model.glb",
+      "normal_glb_sha256": "0bbed26bf952693dc1fb8d59fe960e588e19770e284a4a59ac03bbb9e474a306",
+      "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00.trmtr",
+        "normal_table_sha256": "9d225362c3b6c8dc6161a0f45aad6a97917d92c2bf6f3a54357f945d4093ec2c",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_rare.trmtr",
+        "rare_table_sha256": "56cfab43b7f69bc22154161209cae3ea4b79369a61e736bfa17ffa57b88e07fd",
+        "materials": {
+          "body_a_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_a_rare_alb.png",
+                "normal_sha256": "dfec303d99c33bd45a28b5bebd11e3a31864f23ddde4e84e370614e4f480ea5e",
+                "rare_sha256": "8eef7ebb6cfd0167cc3b0864c16cd53c8aacc6d3b7db852f7e02c77726237902"
+              }
+            ]
+          },
+          "body_b_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_b_rare_alb.png",
+                "normal_sha256": "f418c62e1343f2eae3506a9ab17badd3ebd1beb46760819e1593e847388f4429",
+                "rare_sha256": "9e31eb8269620e287e91b81355537fd48797dddda732b3920c585f739c801357"
+              }
+            ]
+          },
+          "body_c_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_rare_alb.png",
+                "normal_sha256": "34ce3c982b10a310d28fc53c7b6c340298b3175f1e9c8e04a8629991963c9bf1",
+                "rare_sha256": "cc9eadc89dd5e6a8898c0daefb14ece93cb44f6dc33b113584712e6bee3d0195"
+              }
+            ],
+            "colour_overrides": [
+              {
+                "key": "IridescenceColor1",
+                "normal": [
+                  0.28315332531929016,
+                  0.6514173746109009,
+                  0.0,
+                  0.4000000059604645
+                ],
+                "rare": [
+                  0.745417594909668,
+                  0.08649884909391403,
+                  0.008023022674024105,
+                  0.4000000059604645
+                ]
+              },
+              {
+                "key": "IridescenceColor2",
+                "normal": [
+                  0.28315332531929016,
+                  0.6514173746109009,
+                  0.0,
+                  0.5
+                ],
+                "rare": [
+                  0.745417594909668,
+                  0.08649884909391403,
+                  0.008023022674024105,
+                  0.5
+                ]
+              },
+              {
+                "key": "IridescenceColor3",
+                "normal": [
+                  0.9911121129989624,
+                  0.0630112737417221,
+                  0.010960327461361885,
+                  0.6000000238418579
+                ],
+                "rare": [
+                  0.7758305072784424,
+                  0.4125385880470276,
+                  0.027321364730596542,
+                  0.6000000238418579
+                ]
+              },
+              {
+                "key": "EmissionColorLayer3",
+                "normal": [
+                  0.9911121129989624,
+                  0.5711221098899841,
+                  0.028426364064216614,
+                  1.0
+                ],
+                "rare": [
+                  0.4851408004760742,
+                  0.5583349466323853,
+                  0.5906200408935547,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer4",
+                "normal": [
+                  0.8796103596687317,
+                  0.8387937545776367,
+                  0.40197500586509705,
+                  1.0
+                ],
+                "rare": [
+                  0.7681611180305481,
+                  0.7991064786911011,
+                  0.8148465156555176,
+                  1.0
+                ]
+              }
+            ]
+          },
+          "body_c_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_rare_alb.png",
+                "normal_sha256": "34ce3c982b10a310d28fc53c7b6c340298b3175f1e9c8e04a8629991963c9bf1",
+                "rare_sha256": "cc9eadc89dd5e6a8898c0daefb14ece93cb44f6dc33b113584712e6bee3d0195"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "vibrava",
+      "national_dex": 329,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0329.blend",
+        "bytes": 16297564,
+        "crc32": "191d9bc5"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0329-vibrava/report.json",
+      "probe_sha256": "05a87694302fda22b43b13151cd2d0eade64215f93c015eaeed937241cc82b8a",
+      "actions": {
+        "idle": "pm0329_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0329_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0329_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0329_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0329_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0329_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0329_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0329_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/vibrava/model.glb",
+      "normal_glb_sha256": "c7da03dfa4068ea42441557e91963b3c5c6e2e74ede3e51a901ede5df80d8737",
+      "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00.trmtr",
+        "normal_table_sha256": "420a0b457eab28d520cad3ab80178a88067394eb07a08ffe0e18c5b18f262e74",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_rare.trmtr",
+        "rare_table_sha256": "723704939bd7176270b1b04b2aaeb075c3d5b3aa37d4c6ac6fda61b9370e119c",
+        "materials": {
+          "body_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7"
+              }
+            ]
+          },
+          "body_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7"
+              }
+            ]
+          },
+          "body_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7"
+              }
+            ],
+            "colour_overrides": [
+              {
+                "key": "BaseColorLayer1",
+                "normal": [
+                  0.11190000176429749,
+                  0.4968999922275543,
+                  0.14990000426769257,
+                  1.0
+                ],
+                "rare": [
+                  0.4451940059661865,
+                  0.16826599836349487,
+                  0.0630113035440445,
+                  1.0
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "flygon",
+      "national_dex": 330,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0330.blend",
+        "bytes": 22615364,
+        "crc32": "cbf31013"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0330-flygon/report.json",
+      "probe_sha256": "cc34fc266855879d2ff3f518746ad19232ec532054fef289ef114f9bb5f5f251",
+      "actions": {
+        "idle": "pm0330_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0330_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0330_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0330_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0330_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0330_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0330_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0330_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/flygon/model.glb",
+      "normal_glb_sha256": "214808ed69be1b6e93c0686d9568f61ed79e3778431abdc60f271cc6634b52b3",
+      "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00.trmtr",
+        "normal_table_sha256": "30175213ed874a3e990a5a2f7a46cd1f939fa41893a226c000aa6ff0510198ea",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_rare.trmtr",
+        "rare_table_sha256": "11d1efa599685657a7e79c2b538c2476b304167051a1d285a1a026df165c0325",
+        "materials": {
+          "body_a": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_a_rare_alb.png",
+                "normal_sha256": "1737f0f75fe33ae094caaff3774d92134faeb06b61cb5b2d05ab20fe55c6f2c3",
+                "rare_sha256": "43604fcec8c3c0ff5ba93544bec2f7f6af2610979e4c9f6f0c97b85c343654cb"
+              }
+            ]
+          },
+          "body_b_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_rare_alb.png",
+                "normal_sha256": "a572ba6e563d5be7f43e2c9ce40d2bf6c6b613632b6482723e701401530d745f",
+                "rare_sha256": "a09bfae142549ca870bc399eeffb2676a6d59a8a0e74fc9526a476ef671c3cb7"
+              }
+            ]
+          },
+          "body_b_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_rare_alb.png",
+                "normal_sha256": "a572ba6e563d5be7f43e2c9ce40d2bf6c6b613632b6482723e701401530d745f",
+                "rare_sha256": "a09bfae142549ca870bc399eeffb2676a6d59a8a0e74fc9526a476ef671c3cb7"
+              }
+            ]
+          },
+          "body_b_01": {
+            "colour_overrides": [
+              {
+                "key": "BaseColorLayer1",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer2",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer3",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer4",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer1",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer2",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer3",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer4",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "swanna",
+      "national_dex": 581,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0581.blend",
+        "bytes": 68328763,
+        "crc32": "e31ca5e1"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0581-swanna/report.json",
+      "probe_sha256": "377e486ed7bdbc78166f1a4845ffac4851d222361ce721178840814febe15584",
+      "actions": {
+        "idle": "pm0581_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0581_00_00_20400_attack01",
+        "physical_attack_2": "pm0581_00_00_20410_attack02",
+        "special_attack": "pm0581_00_00_20450_rangeattack01",
+        "damage": "pm0581_00_00_20500_damage01",
+        "faint_start": "pm0581_00_00_20520_down01_start",
+        "faint_loop": "pm0581_00_00_20521_down01_loop",
+        "sleep": "pm0581_00_00_00281_sleep01_loop"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/swanna/model.glb",
+      "normal_glb_sha256": "598d928ce9e5cf238b9402e578d1a6d709253c4cbf31906cb6133286ea632613",
+      "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00.trmtr",
+        "normal_table_sha256": "d73fec93090a0c7a67d501ad2f75df5e6c3377f6503852621c49e2055fd8cf15",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_rare.trmtr",
+        "rare_table_sha256": "96f337a69e5f41bdb6c1d2f3e047b7ab701a6ebaeccc8f620aae92ebd48475df",
+        "materials": {
+          "body_b": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_body_b_rare_alb.png",
+                "normal_sha256": "939e4cd8c039d191bdd2194a1f200aee6b03a78f0ca3d77383350dcea3c40f0a",
+                "rare_sha256": "040a0d07616748467adada21322d767c780316cd1f37fd7fffafc69c0555aca7"
+              }
+            ]
+          },
+          "body_a_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_body_a_rare_alb.png",
+                "normal_sha256": "bc6f2c7619a320f90d5f8552725cb073d1a4aca7f302eb77ab438fbe6a30a434",
+                "rare_sha256": "5564bbcc0037eeac02b817117e377a266d4204553a83bd35ca44ee1391f23910"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "mandibuzz",
+      "national_dex": 630,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0630.blend",
+        "bytes": 57433886,
+        "crc32": "3d4c2465"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0630-mandibuzz/report.json",
+      "probe_sha256": "cb139132da261a9cb45db20b05dee3e75b6401457227bc2ff0a2ab7357eea432",
+      "actions": {
+        "idle": "pm0630_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0630_00_00_20400_attack01",
+        "physical_attack_2": "pm0630_00_00_20410_attack02",
+        "special_attack": "pm0630_00_00_20450_rangeattack01",
+        "damage": "pm0630_00_00_20500_damage01",
+        "faint_start": "pm0630_00_00_20520_down01_start",
+        "faint_loop": "pm0630_00_00_20521_down01_loop",
+        "sleep": "pm0630_00_00_00281_sleep01_loop"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/mandibuzz/model.glb",
+      "normal_glb_sha256": "a131a51ef8cb64012561ae246a64d3dd578078d7416d44a4070c2960043c8aec",
+      "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00.trmtr",
+        "normal_table_sha256": "88001699e32c0fbcc88a67a589f5b8cc2d6f044b058abf82772fd791fff2219c",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00_rare.trmtr",
+        "rare_table_sha256": "456c262031c41372999b6d5fa524af6d4eac4e5ea13092c1f4736926ba6048a5",
+        "materials": {
+          "body_a_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00_body_a_rare_alb.png",
+                "normal_sha256": "2054971498419d0fea75474ac81bd385cae376b73497f2fbec8695cc5116460c",
+                "rare_sha256": "3e42389f7ed60f0b2df226fd391382ecc78f0c5812f712e0b778432ead563414"
+              }
+            ]
+          },
+          "body_b": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0630/pm0630_00_00/pm0630_00_00_body_b_rare_alb.png",
+                "normal_sha256": "89c5e61fd6bac048ccd0aeeba60dac05ffa68fb8374bfc64b97e132ad781a983",
+                "rare_sha256": "e90641cfba68a838dd6883b1e4a34b61cbfeb9637dd72f611078a9138a4ec432"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "recovered_three_jobs": [
+    {
+      "species": "ho-oh",
+      "national_dex": 250,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0250.blend",
+        "bytes": 32482900,
+        "crc32": "771cd544"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0250-ho-oh/report.json",
+      "probe_sha256": "8dad39cbb405c68c485bc1dbbefe81bbabc50ba43a8f47fadef0dce8128fdcd5",
+      "actions": {
+        "idle": "pm0250_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0250_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0250_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0250_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0250_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0250_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0250_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0250_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/ho-oh/model.glb",
+      "normal_glb_sha256": "0bbed26bf952693dc1fb8d59fe960e588e19770e284a4a59ac03bbb9e474a306",
+      "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00.trmtr",
+        "normal_table_sha256": "9d225362c3b6c8dc6161a0f45aad6a97917d92c2bf6f3a54357f945d4093ec2c",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_rare.trmtr",
+        "rare_table_sha256": "56cfab43b7f69bc22154161209cae3ea4b79369a61e736bfa17ffa57b88e07fd",
+        "materials": {
+          "body_a_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_a_rare_alb.png",
+                "normal_sha256": "dfec303d99c33bd45a28b5bebd11e3a31864f23ddde4e84e370614e4f480ea5e",
+                "rare_sha256": "8eef7ebb6cfd0167cc3b0864c16cd53c8aacc6d3b7db852f7e02c77726237902",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_b_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_b_rare_alb.png",
+                "normal_sha256": "f418c62e1343f2eae3506a9ab17badd3ebd1beb46760819e1593e847388f4429",
+                "rare_sha256": "9e31eb8269620e287e91b81355537fd48797dddda732b3920c585f739c801357",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_c_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_rare_alb.png",
+                "normal_sha256": "34ce3c982b10a310d28fc53c7b6c340298b3175f1e9c8e04a8629991963c9bf1",
+                "rare_sha256": "cc9eadc89dd5e6a8898c0daefb14ece93cb44f6dc33b113584712e6bee3d0195",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_c_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0250/pm0250_00_00/pm0250_00_00_body_c_rare_alb.png",
+                "normal_sha256": "34ce3c982b10a310d28fc53c7b6c340298b3175f1e9c8e04a8629991963c9bf1",
+                "rare_sha256": "cc9eadc89dd5e6a8898c0daefb14ece93cb44f6dc33b113584712e6bee3d0195",
+                "expected_authored_bindings": 1
+              }
+            ]
+          }
+        },
+        "unrepresented_colours": [
+          {
+            "key": "IridescenceColor1",
+            "normal": [
+              0.28315332531929016,
+              0.6514173746109009,
+              0.0,
+              0.4000000059604645
+            ],
+            "rare": [
+              0.745417594909668,
+              0.08649884909391403,
+              0.008023022674024105,
+              0.4000000059604645
+            ]
+          },
+          {
+            "key": "IridescenceColor2",
+            "normal": [
+              0.28315332531929016,
+              0.6514173746109009,
+              0.0,
+              0.5
+            ],
+            "rare": [
+              0.745417594909668,
+              0.08649884909391403,
+              0.008023022674024105,
+              0.5
+            ]
+          },
+          {
+            "key": "IridescenceColor3",
+            "normal": [
+              0.9911121129989624,
+              0.0630112737417221,
+              0.010960327461361885,
+              0.6000000238418579
+            ],
+            "rare": [
+              0.7758305072784424,
+              0.4125385880470276,
+              0.027321364730596542,
+              0.6000000238418579
+            ]
+          },
+          {
+            "key": "EmissionColorLayer3",
+            "normal": [
+              0.9911121129989624,
+              0.5711221098899841,
+              0.028426364064216614,
+              1.0
+            ],
+            "rare": [
+              0.4851408004760742,
+              0.5583349466323853,
+              0.5906200408935547,
+              1.0
+            ]
+          },
+          {
+            "key": "EmissionColorLayer4",
+            "normal": [
+              0.8796103596687317,
+              0.8387937545776367,
+              0.40197500586509705,
+              1.0
+            ],
+            "rare": [
+              0.7681611180305481,
+              0.7991064786911011,
+              0.8148465156555176,
+              1.0
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "species": "vibrava",
+      "national_dex": 329,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0329.blend",
+        "bytes": 16297564,
+        "crc32": "191d9bc5"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0329-vibrava/report.json",
+      "probe_sha256": "05a87694302fda22b43b13151cd2d0eade64215f93c015eaeed937241cc82b8a",
+      "actions": {
+        "idle": "pm0329_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0329_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0329_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0329_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0329_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0329_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0329_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0329_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/vibrava/model.glb",
+      "normal_glb_sha256": "c7da03dfa4068ea42441557e91963b3c5c6e2e74ede3e51a901ede5df80d8737",
+      "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00.trmtr",
+        "normal_table_sha256": "420a0b457eab28d520cad3ab80178a88067394eb07a08ffe0e18c5b18f262e74",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_rare.trmtr",
+        "rare_table_sha256": "723704939bd7176270b1b04b2aaeb075c3d5b3aa37d4c6ac6fda61b9370e119c",
+        "materials": {
+          "body_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7",
+                "expected_authored_bindings": 2
+              }
+            ]
+          },
+          "body_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_01": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0329/pm0329_00_00/pm0329_00_00_body_rare_alb.png",
+                "normal_sha256": "da2614e191bce80840190012908d3c61f109122f74f4be4196de4177699ac69f",
+                "rare_sha256": "2f4b89549a84e0dee16232fcd43c715748f935a531242b8e68ae6d929f1a65f7",
+                "expected_authored_bindings": 1
+              }
+            ],
+            "colour_overrides": [
+              {
+                "key": "BaseColorLayer1",
+                "normal": [
+                  0.11190000176429749,
+                  0.4968999922275543,
+                  0.14990000426769257,
+                  1.0
+                ],
+                "rare": [
+                  0.4451940059661865,
+                  0.16826599836349487,
+                  0.0630113035440445,
+                  1.0
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "species": "flygon",
+      "national_dex": 330,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0330.blend",
+        "bytes": 22615364,
+        "crc32": "cbf31013"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0330-flygon/report.json",
+      "probe_sha256": "cc34fc266855879d2ff3f518746ad19232ec532054fef289ef114f9bb5f5f251",
+      "actions": {
+        "idle": "pm0330_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0330_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0330_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0330_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0330_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0330_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0330_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0330_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2",
+      "normal_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-v1/flygon/model.glb",
+      "normal_glb_sha256": "214808ed69be1b6e93c0686d9568f61ed79e3778431abdc60f271cc6634b52b3",
+      "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
+      "official_shiny_review": {
+        "normal_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00.trmtr",
+        "normal_table_sha256": "30175213ed874a3e990a5a2f7a46cd1f939fa41893a226c000aa6ff0510198ea",
+        "rare_table": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_rare.trmtr",
+        "rare_table_sha256": "11d1efa599685657a7e79c2b538c2476b304167051a1d285a1a026df165c0325",
+        "materials": {
+          "body_a": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_a_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_a_rare_alb.png",
+                "normal_sha256": "1737f0f75fe33ae094caaff3774d92134faeb06b61cb5b2d05ab20fe55c6f2c3",
+                "rare_sha256": "43604fcec8c3c0ff5ba93544bec2f7f6af2610979e4c9f6f0c97b85c343654cb",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_b_02": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_rare_alb.png",
+                "normal_sha256": "a572ba6e563d5be7f43e2c9ce40d2bf6c6b613632b6482723e701401530d745f",
+                "rare_sha256": "a09bfae142549ca870bc399eeffb2676a6d59a8a0e74fc9526a476ef671c3cb7",
+                "expected_authored_bindings": 2
+              }
+            ]
+          },
+          "body_b_00": {
+            "texture_overrides": [
+              {
+                "normal": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_alb.png",
+                "rare": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0330/pm0330_00_00/pm0330_00_00_body_b_rare_alb.png",
+                "normal_sha256": "a572ba6e563d5be7f43e2c9ce40d2bf6c6b613632b6482723e701401530d745f",
+                "rare_sha256": "a09bfae142549ca870bc399eeffb2676a6d59a8a0e74fc9526a476ef671c3cb7",
+                "expected_authored_bindings": 1
+              }
+            ]
+          },
+          "body_b_01": {
+            "colour_overrides": [
+              {
+                "key": "BaseColorLayer1",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer2",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer3",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "BaseColorLayer4",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer1",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer2",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer3",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              },
+              {
+                "key": "EmissionColorLayer4",
+                "normal": [
+                  0.8389999866485596,
+                  0.2533779740333557,
+                  0.30948054790496826,
+                  1.0
+                ],
+                "rare": [
+                  0.7009999752044678,
+                  0.38981422781944275,
+                  0.09884097427129745,
+                  1.0
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "limitations": [
+    "Ho-Oh native source does not expose five official rare iridescence/emission colour fields as group inputs; original native graph retained while official rare albedo is applied. These fields remain explicit review limitations."
+  ],
+  "evidence_sha256": {
+    ".tmp/remaining-142-production/six-pair-captures-v2/review.json": "ee774e6cfb8377cc445d414fad50a7ec609403fb1435eaa1dfc23d583c94e0e9",
+    ".tmp/remaining-142-production/six-shiny-runtime-v1/report.json": "7da634d38c7199782c1519ae538531b794ecabf81d6a3f642c97add497e2b613",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/index.html": "68b613a700e4ccf72df775f362e5d00c5a3fb19a39dd30cdb568bd0004b07562",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-faint_start-100.webp": "625f62572f2de3399ee3c4c452726d8a2dfbae444c38300d1f2ab3de31ab1691",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-idle-50.webp": "253ed66b16471b2d5fe4e16e8eb9195574d315871752ff50363f7f1c7a387971",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-physical_attack-50.webp": "eb809f7d099cc92286a9561961113517d984e079d848469762c682952a06bdd2",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-physical_attack_2-50.webp": "0b0fa214de798caf276bb53642bdae81bf62f56ac4fe0a4283dd612ee98246e1",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-faint_start-100.webp": "eeb16b57f24967750c8851c241efe73114ba58d917e97aed978f9e2af1ade5b6",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-idle-50.webp": "5893e16a6d92d0a9a7e12f14450300b248d34d9cbadf379e1ba35d53dc9983bc",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-physical_attack-50.webp": "a70bd64a2299ac082425272c4648d2e2579ebadb48d8229673a71f5d58467da5",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-physical_attack_2-50.webp": "0da7cb1a110e25c9359f8988e9b5ceef27ec7bd58bc209d95279b1284fa1ff8f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-sleep-50.webp": "056e3a3ee6d5638f79a18fecbb8cf165a13a682bf6abe99831fc790cf02f4785",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-shiny-special_attack-50.webp": "0005560a7a28b806ff1dd4ca858845e722bcc4cbd8c1dc88901a78834a56b9d2",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-sleep-50.webp": "64f08230fd138d6fe099375286028ab9562bb550eaffa69af599359b3438fac5",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/flygon-special_attack-50.webp": "64633466d35e4788e9d9c09736cb2865b13f98c7f30a2f4b5c76898bb6e10068",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-faint_start-100.webp": "e85302701e58571e90af5359e8474d7c7143262978856b9a9d1377c1147e5de8",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-idle-50.webp": "178034aff1751cc59534e9a0c9be3e0702675f84dfef434ae0533baf27bc1a1f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-physical_attack-50.webp": "78f02fb5887d5a3f82874ea80062277b201f1234840e098787bd48e37c463d9d",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-physical_attack_2-50.webp": "3586ab2977e5144a318859bb04f81a5bbf8bfcab88a93d56a0fb902866ab038f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-faint_start-100.webp": "7b8abfa198db0c456aa9f2bc03fb0f6f056215535682afe2cf7a4e887c1e66d1",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-idle-50.webp": "e4d5505522073f33a75b0f2f7a86cc024b455f88965d8c0c7211c54f9c8c2de3",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-physical_attack-50.webp": "d683adf1e59c76016be129f73fda0385eb4376e9d2bf52443c5805495e264592",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-physical_attack_2-50.webp": "1b0b4f7fce532cb882d43dba64aab1e932ad67dc6225427b0bb5a3ad7c3eb5b0",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-sleep-50.webp": "d5163f4fe3252fc57bffac4a446ab87d77a1715ece554c1bd077e5a89d01b61f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-shiny-special_attack-50.webp": "ceea5d918776673aba09141aa8b74ba84e051462ac3623a5f7cb2e32ebc7a2bd",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-sleep-50.webp": "91169f60bfea1ec3796f5b69a68f942ee91fc48d149c609bad51307c1738ba8e",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/ho-oh-special_attack-50.webp": "adf782b57d3b754398bc7bbd5eff0c402a5c39d881703d291500cc04b12fb2fa",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-faint_start-100.webp": "d055eb5d2ce2e10dbbd674d00b3826c8c047dcd1a873e242929a6b54d58fe0b2",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-idle-50.webp": "7540fc018f2500ff31ba5802056ab896fab368404f1958e832b2891bc9a543c1",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-physical_attack-50.webp": "0f9d4ce6eb657f74ea3b435fa4550d316d91cb14b9a7f489a5971005e4171d17",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-physical_attack_2-50.webp": "bc9b6ca74255b3051ba6c4bc2d900c82891e4deee432b2822f43c794d0145acd",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-faint_start-100.webp": "da7d8acc3fe480ec92b9cf732c8b22382c59a84c52c47e487ed637f24cdfe89b",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-idle-50.webp": "d00aa48225d2d6c733999ca1d787253b5f72c055f0781547e95675f06f0fcf65",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-physical_attack-50.webp": "46a0c9356abea9b3cf9892fbc506b5f35524ec58a8e17c740d90b890b3c8ed1b",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-physical_attack_2-50.webp": "2c4a4fbbf253f00fb5fb015f0b2d2f40b652487de5517ca61c2aaf894494840d",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-sleep-50.webp": "ad31de25c11f7eb87ace54e9191158524e9b310ed8e03606acf6870e7ffe09f8",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-shiny-special_attack-50.webp": "d06f322fa4a3d1d750c5c0be5e1ddc46e20da609c787748fef9f1131c993acd9",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-sleep-50.webp": "88adbe7f2bf940f0cfdcb5651dbe90d417cd32b64620dee13b456b4ee222785c",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/lugia-special_attack-50.webp": "e9d244d4365c59c60af9de90cb330b1f22bfb8c5939b87cfd0d98041ae900bee",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-faint_start-100.webp": "a2cb69178ed728429b6dbdf9ee6daa6bbec299e5c570954300a612c7aefb10ca",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-idle-50.webp": "e3327f43c4aa77e528c5edbc4ae904ace093f065f198c694872ae147174a1b5c",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-physical_attack-50.webp": "3a9becd620e7e1b87a07e37a31a5a42bdd8f58d3875c576bfc7bbbcc1e9442f8",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-physical_attack_2-50.webp": "506e3934a4efef53fadf719a7be10d1e918b1baae2a194e18bd0d8b2031a8130",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-faint_start-100.webp": "920b096336b896697908db7b733708f747edced42f87488e2c5ce9ff3124db35",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-idle-50.webp": "cdd229e8d2ff45a22826d12d44dc91ea968a2d542b162835712cd8720c28878e",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-physical_attack-50.webp": "1707953576fae81c724edd2e171b9df48c79d60c8910bb34f5ac22981cc1d415",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-physical_attack_2-50.webp": "504eb2223470c9302b6d282126b7888748602d96f3a8fb108fb4f66c8cfa253b",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-sleep-50.webp": "c00152f29f2497c8b03f1b582b8dfb4e7b3c6569d7a2d2c19cb8ace1faf490c6",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-shiny-special_attack-50.webp": "34ea42ee386388938950c06de611190db02770dacdb22496baafbbff0c1527c9",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-sleep-50.webp": "ccde09692452eb75998136c3e064bdd37bc1718f2038f382e67d6a5ca3ca75e4",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/mandibuzz-special_attack-50.webp": "30604107feeb7501b9d072425ec79c478af45e4c9d4b977f13b520c022cc545f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-faint_start-100.webp": "e92271dec8efbe44bfbec4eed4a81b4448e505ade677dddc36fecc53fb7bf266",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-idle-50.webp": "e0358daffe01cdf04bc9a4aa2954f11b28ea8b780eb16abf96723bd031be591d",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-physical_attack-50.webp": "20600e34a413cdd4a9bc0db8ea8b02728225a4b6e17db375af1fec37dc03325f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-physical_attack_2-50.webp": "380d4b5db063451d7c2d188e6611c866903f0e73e1ad8fe25078d16b3143b124",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-faint_start-100.webp": "3d5f2d90ae6febaa68734957e47324f8ed4a9af70f3ac0fe465b108a825e07b1",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-idle-50.webp": "efbba6bc0f526be7ad930ed4786cd22a6c919e212d9097a1a358b040f2728234",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-physical_attack-50.webp": "57f9a865af14d83e1970a75d8750769b3a84a569f5435883fead8d43ef18c2d3",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-physical_attack_2-50.webp": "bed122bbc4d10b332b7fe691847209256435c8511890b75ca0fd2d624ee6450c",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-sleep-50.webp": "d72b8b8cc0efe514a5cdc8403d1ee345e6d07d6265af74de20a93b59c74a5e91",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-shiny-special_attack-50.webp": "2db5228611491b02ac1edf8b72ebb463ace35d05477ab726aec50e3bafd492f7",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-sleep-50.webp": "d7b38e969d3c060d2b3c7bf1a6ddbaddf90c1f09c5ed17bb73e2c1aad0737386",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/swanna-special_attack-50.webp": "b15e02506d3609eaa7c0a77238ca9e9548131f54e0bbd45077accf0bf794187d",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-faint_start-100.webp": "b30f60970c5ebe7e4cafcb614b46bbf03dfd17fe71bd95d9ad18729de1ad0206",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-idle-50.webp": "159781b03f3c831ac095292a0b7237cd708e927596465a6e8a3b1782e1862a77",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-physical_attack-50.webp": "00e4ca149c8a03d16a649ba975950b507a0d4f541e741d8657120da260800622",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-physical_attack_2-50.webp": "18022ae91ae23bdf4b8b0b221db72c1a86839e0866f42c432bf1e542e882af1e",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-faint_start-100.webp": "41ab26e855ae3ed852865003ab1eea09ea07d2ee90a263739775cc1f7a23f737",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-idle-50.webp": "e59d7899fb6dbd3bc4e4dfd9dd8d3801fc6ffa6f3340c7f63e4d589336301873",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-physical_attack-50.webp": "df9a9d3e5633246d951ba36923b29378af0878bf89a35b5b42f186de53efb40d",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-physical_attack_2-50.webp": "84ee288d4c4259d7e8d0b3f327a490fb14188c27e2de04d994f2b183564539e8",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-sleep-50.webp": "11dedbfc22c83774b86648e6f0c223ba2ccbfd97cd7573b57c97553171d41c4f",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-special_attack-50.webp": "a574e30b2c7d199e8fae81a105db8e290f29fa713a6d1a86a95331671622b228",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-sleep-50.webp": "c9b3c6a8982850b73220b791202085f7c83785442141f9c0f0ce3ad0e2fe9587",
+    ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-special_attack-50.webp": "d3111b9d9ff3c1116513484eef4b7c64294563c42dce9c179a1515182176fc2e"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "review_url": "http://127.0.0.1:8782/eyes-lugia-swanna-v1/index.html",
+  "entries": [
+    {
+      "species": "lugia",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/lugia/model.glb",
+      "source_sha256": "c0c102ee58b91af1858acbb91d3b0791a3278e0c7ca056d61a68bb644972d9b3",
+      "table": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00.trmtr",
+      "table_sha256": "e1777fa2089af7da39d01f5211e1d944eed6b0c06e27ef95d91e74405b06ed4f",
+      "target_sha256": "11d7dfb36ecf8ea4cf4976fb7e0027914df6f34daf8ed2cbfdb7df77eca351ce",
+      "eye_materials": [
+        "r_eye",
+        "l_eye"
+      ],
+      "cleared_false_emission": [],
+      "restored_body_albedo": [],
+      "official_input_sha256": {
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00.trmtr": "e1777fa2089af7da39d01f5211e1d944eed6b0c06e27ef95d91e74405b06ed4f",
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_eye_alb.png": "43a375d2a9d2ffacdd966c18cf725bf31f14d4988632844ce6b125385014c9a1",
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0249/pm0249_00_00/pm0249_00_00_eye_lym.png": "c609d203503cd8cfe9b52bcf6bfc27245d1bbe8b5b1d33ed7140519451f13457"
+      },
+      "geometry_skin_animation_signature": "a1709d47dac57ab7190e0536d4c29de5aebe5b82fa0d88381ae9c9ca14294597",
+      "method": "catalog_remaining_eye_bake.repair; official Eye-layer bake only; no body edits"
+    },
+    {
+      "species": "swanna",
+      "source": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/swanna/model.glb",
+      "source_sha256": "4d774c9d1584cc619264c9b727ed978afe36dcde7397f38e9a5c8c5073cd2725",
+      "table": "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00.trmtr",
+      "table_sha256": "d73fec93090a0c7a67d501ad2f75df5e6c3377f6503852621c49e2055fd8cf15",
+      "target_sha256": "5ecf3cd89604b03a8fdc4a80134c1008d0b72097931813f4eadf53935e9756e6",
+      "eye_materials": [
+        "l_eye",
+        "r_eye"
+      ],
+      "cleared_false_emission": [],
+      "restored_body_albedo": [],
+      "official_input_sha256": {
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00.trmtr": "d73fec93090a0c7a67d501ad2f75df5e6c3377f6503852621c49e2055fd8cf15",
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_eye_alb.png": "556672f36624355956997a672e8d4b842c416bb81eb42efeeb84c39b380a3bee",
+        "/home/adinho/Documents/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0581/pm0581_00_00/pm0581_00_00_eye_lym.png": "e5b41f26f6fd19f499d28d3398988219e27549351428893c4e5e162276be5d12"
+      },
+      "geometry_skin_animation_signature": "03a1b8918d5b87ebcd64d2ae43fba5ac4f44c1f6f2964c33f94c9f1c5bbcdf43",
+      "method": "catalog_remaining_eye_bake.repair; official Eye-layer bake only; no body edits"
+    }
+  ]
+}
