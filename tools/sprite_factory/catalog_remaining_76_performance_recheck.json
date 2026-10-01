@@ -372,8 +372,8 @@
   "evidence_sha256": {
     ".tmp/remaining-274-production/approved-76/control-isolated.json": "856887fa66ba1fb4c368ac811d906b5c3c9ead7c72ea062de6dd1d7337497f6d",
     ".tmp/remaining-274-production/approved-76/control-isolated.log": "c62e922cbdb5aa56a9874584af23cbfe0c507c3480f2452b28af9a73bf96d61d",
-    ".tmp/remaining-274-production/approved-76/installed-stress.json": "191b9a660fde9f647f1752dbaf257242b397ffad9f0ec4db3a86a58a027c48b6",
-    ".tmp/remaining-274-production/approved-76/installed-stress.log": "6f35b865516132ee75dda367e1205d12e834fadde29068e66f2bee9f111af544",
+    ".tmp/remaining-274-production/approved-76/installed-stress.json.isolated-failed": "191b9a660fde9f647f1752dbaf257242b397ffad9f0ec4db3a86a58a027c48b6",
+    ".tmp/remaining-274-production/approved-76/installed-stress.log.isolated-failed": "6f35b865516132ee75dda367e1205d12e834fadde29068e66f2bee9f111af544",
     ".tmp/remaining-274-production/approved-76/installed/installed-catalog.json": "09933ad2b41472873d5aeffca4eda9ef41c148bc9671be0c56af677f5aabeb28",
     ".tmp/remaining-274-production/approved-76/runtime_check.gd": "191cda0d95c027efae4108f6e9a4dfef3ce6f299ebeda991aad337be4b124235",
     "scripts/battle/battle_ui/immersive_hud.gd": "d350252caf7921ae0482b1e19ca7b951ce22b1c24089ca4d08cac7e659f5a36f",
