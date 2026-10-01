@@ -33,6 +33,13 @@ func _run() -> void:
 	await RenderingServer.frame_post_draw
 	DirAccess.make_dir_recursive_absolute(output)
 	root.get_texture().get_image().save_png(output.path_join("ss-anne-battle.png"))
+	for yaw in [90, 180, 270]:
+		var target := Arenas.camera_target("ss_anne")
+		camera.position = target + (Arenas.camera_home("ss_anne") - target).rotated(Vector3.UP, deg_to_rad(yaw))
+		camera.look_at(target)
+		await create_timer(0.5).timeout
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("ss-anne-angle-%d.png" % yaw))
 	camera.position = Vector3(32, 25, 40)
 	camera.look_at(Vector3(0, 2, -7))
 	await create_timer(0.5).timeout
