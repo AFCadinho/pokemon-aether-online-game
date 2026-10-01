@@ -219,3 +219,17 @@ POKEAETHER_FORM_BUNDLE_WORK="$PWD/.tmp/battle-forms-first-five-v1/approved-final
   --path "$PWD" --rendering-method gl_compatibility \
   --script tests/battle_3d_first_five_forms_check.gd
 ```
+
+## R2 publication — 2026-10-01
+
+All five form bundles and their immutable cohort content index are published
+on R2. `release/approved_3d_battle_forms_first_five_r2_upload.json` binds the
+publication to the exact approved registry and bundle qualification hashes.
+Public GET SHA-256 and HEAD size checks passed for all six objects. Five new
+bundle objects were uploaded, totalling 139,333,915 bytes.
+
+The existing active desktop manifest was verified unchanged. This publishes
+content; it does not activate a game/launcher release. The local qualification
+receipt remains a historical pre-publication snapshot. Remaining work is release
+content-index activation and release certification/publication, or the next
+alternate-form cohort if model production remains the priority.
