@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://bhiray1rstmo4"]
 
-[ext_resource type="TileSet" uid="uid://bw4ggkfn67bev" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="11_q37fg"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="gentleman"]
 [ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="heal"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="sailor"]
+[ext_resource type="SpriteFrames" uid="uid://bext5y1mblgc5" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="sailor"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_1f/ss_anne_1f.visual.tscn" id="visual"]
@@ -68,6 +68,71 @@ size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_19"]
 size = Vector2(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_efxiu"]
+texture = ExtResource("11_q37fg")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_hv7k4"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_efxiu")
 
 [node name="SSAnne1F" type="Node2D" unique_id=496611121]
 script = ExtResource("metadata")
@@ -421,11 +486,10 @@ transition_facing_direction = "up"
 shape = SubResource("shape_19")
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1152267334]
-visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=623724725]
-visible = false
-tile_set = ExtResource("collision")
+[node name="TileMapLayer" type="TileMapLayer" parent="Tiles" unique_id=762494813]
+z_index = 4096
+tile_set = SubResource("TileSet_hv7k4")
 
 [connection signal="body_entered" from="Exits/1F_Corridor__stairs_to_2f" to="Exits/1F_Corridor__stairs_to_2f" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/1F_Corridor__stairs_to_b1f" to="Exits/1F_Corridor__stairs_to_b1f" method="_on_body_entered"]
