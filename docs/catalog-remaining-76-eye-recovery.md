@@ -153,3 +153,18 @@ with already approved Abra, Skarmory and Venusaur also exceeded the stadium
 gate (20.462ms) while another normal game was running. Final performance
 qualification remains pending; no threshold has been changed, and the76 pairs
 have not yet been admitted to the game/launcher registry or uploaded.
+
+## Isolated performance recheck (2026-10-01)
+
+The user closed the other Godot game; no other Godot process was present before
+the check. All76 pairs completed classic/stadium/classic with normal/shiny
+swaps and faint replacement, without errors. Frame p95 was17.472/21.717/17.634ms;
+stadium still exceeds the unchanged20ms gate. Retained sources were2249075bytes
+in every round. Earlier logs/reports remain preserved.
+
+A sequential control using already approved Abra, Skarmory and Venusaur passed
+at16.825/19.172/16.893ms. The76 batch therefore remains pending performance
+qualification; functional completion is not runtime admission. The receipt
+`catalog_remaining_76_performance_recheck.json` binds both full reports, logs,
+installed catalog and executed scripts. No new registry admission or upload
+was made. Next: investigate stadium frame time for this batch.
