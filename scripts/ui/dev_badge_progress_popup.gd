@@ -48,6 +48,12 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "cerulean_nugget_bridge", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.cerulean_nugget_bridge"},
 	{"id": "help_bill", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.help_bill"},
 	{"id": "challenge_misty", "chapter_id": "cerulean", "label_key": "ui.staff.story_checkpoint.challenge_misty"},
+	{"id": "board_ss_anne", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.board_ss_anne"},
+	{"id": "ss_anne_rival", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_rival"},
+	{"id": "ss_anne_captain", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_captain"},
+	{"id": "ss_anne_collect_tea", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_collect_tea"},
+	{"id": "ss_anne_return_tea", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_return_tea"},
+	{"id": "challenge_surge", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.challenge_surge"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
@@ -55,6 +61,7 @@ const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pewter", "label_key": "ui.staff.story_chapter.pewter"},
 	{"id": "mt_moon", "label_key": "ui.staff.story_chapter.mt_moon"},
 	{"id": "cerulean", "label_key": "ui.staff.story_chapter.cerulean"},
+	{"id": "vermilion", "label_key": "ui.staff.story_chapter.vermilion"},
 ]
 const SIDE_QUESTS: Array[Dictionary] = [
 	{"id": "train_starter_to_level_10", "label_key": "ui.staff.side_quest.starter_training"},
@@ -68,6 +75,7 @@ const SIDE_QUESTS: Array[Dictionary] = [
 		"label_key": "ui.staff.side_quest.pokemon_fan_club_chairman",
 	},
 	{"id": "cerulean_cave_clearance", "label_key": "ui.staff.side_quest.cerulean_cave_clearance"},
+	{"id": "ss_anne_crew_report", "label_key": "ui.staff.side_quest.ss_anne_crew_report"},
 ]
 
 const UI_BG := Color("#050b14fa")
