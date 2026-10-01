@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 10 en Lavender Town zijn nu direct in beide richtingen verbonden; Lavender Town North is verwijderd uit de wereld en staff-teleportcatalogus.
+
 - Lavender Town en de noordelijke aansluiting gebruiken nu de remastered HeartGold/SoulSilver-soundtrack van Zame.
 
 - De laatste 15 DLC-Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny, rustposes en individuele downloadbundles.
