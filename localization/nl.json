@@ -6261,5 +6261,11 @@
   "story.kanto.return_to_oak_after_saffron_closed.title": "Een wegversperring in Saffron",
   "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron City is uit veiligheid gesloten. Ga terug naar Professor Oak en vraag hem waar je nu heen kunt.",
   "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "Probeer Saffron City via de poort op Route 6 te bereiken.",
-  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Ga terug naar Pallet Town en vraag Professor Oak om advies."
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Ga terug naar Pallet Town en vraag Professor Oak om advies.",
+  "story.kanto.travel_to_lavender_town.title": "Een waarschuwing in Lavender Town",
+  "story.kanto.travel_to_lavender_town.summary": "Steek Rock Tunnel over naar Lavender Town en ontdek wat er bij Pokémon Tower aan de hand is.",
+  "story.kanto.travel_to_lavender_town.cross_rock_tunnel": "Steek Rock Tunnel over om Lavender Town te bereiken.",
+  "story.kanto.travel_to_lavender_town.hear_lavender_warning": "Luister naar de waarschuwing van de inwoner van Lavender Town.",
+  "ui.staff.story_checkpoint.rock_tunnel_to_lavender": "Rock Tunnel · Bereik Lavender Town",
+  "ui.staff.story_checkpoint.lavender_warning": "Lavender Town · Hoor de waarschuwing"
 }
