@@ -87,6 +87,12 @@ func _review(entry: Dictionary, output: String) -> Dictionary:
 	if model == null:
 		record.errors.append("Runtime instantiate failed")
 		return record
+	var review_scale := float(entry.get("review_scale", 1.0))
+	if not is_finite(review_scale) or review_scale <= 0.0:
+		record.errors.append("Invalid review-only scale")
+		model.free()
+		return record
+	model.scale *= review_scale
 	world.add_child(model)
 	var players := model.find_children("*", "AnimationPlayer", true, false)
 	if players.size() != 1:

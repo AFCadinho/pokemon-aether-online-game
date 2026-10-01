@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "task": "battle-forms-next-seven",
+  "runtime_approved": false,
+  "appearance_approved": false,
+  "battle_approved": false,
+  "entries": [
+    {
+      "species": "mimikyu-busted",
+      "display_name": "Mimikyu Busted",
+      "format": "SCVI",
+      "identity": "pm0819_12_00",
+      "model_dir": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0819/pm0819_12_00",
+      "motion_dir": "/run/media/adinho/AFC_Adinho/3d_models/SV Every File/romfs/pokemon/data/pm0819/pm0819_12_00",
+      "has_model": true,
+      "has_normal_and_rare_material_tables": true,
+      "native_motion_count": 50,
+      "motion_directory_exists": true,
+      "note": "",
+      "model": "pm0819/pm0819_12_00/pm0819_12_00.trmdl"
+    },
+    {
+      "species": "palafin-hero",
+      "display_name": "Palafin Hero",
+      "format": "SCVI",
+      "identity": "pm1038_12_00",
+      "model_dir": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1038/pm1038_12_00",
+      "motion_dir": "/run/media/adinho/AFC_Adinho/3d_models/SV Every File/romfs/pokemon/data/pm1038/pm1038_12_00",
+      "has_model": true,
+      "has_normal_and_rare_material_tables": true,
+      "native_motion_count": 78,
+      "motion_directory_exists": true,
+      "note": "",
+      "model": "pm1038/pm1038_12_00/pm1038_12_00.trmdl"
+    },
+    {
+      "species": "eiscue-noice",
+      "display_name": "Eiscue Noice",
+      "format": "SCVI",
+      "identity": "pm0975_12_00",
+      "model_dir": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0975/pm0975_12_00",
+      "motion_dir": "/run/media/adinho/AFC_Adinho/3d_models/SV Every File/romfs/pokemon/data/pm0975/pm0975_12_00",
+      "has_model": true,
+      "has_normal_and_rare_material_tables": true,
+      "native_motion_count": 60,
+      "motion_directory_exists": true,
+      "note": "Eiscue sleep may borrow only the matching-skeleton base form clip.",
+      "model": "pm0975/pm0975_12_00/pm0975_12_00.trmdl"
+    },
+    {
+      "species": "morpeko-hangry",
+      "display_name": "Morpeko Hangry",
+      "format": "SCVI",
+      "identity": "pm0941_12_00",
+      "model_dir": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm0941/pm0941_12_00",
+      "motion_dir": "/run/media/adinho/AFC_Adinho/3d_models/SV Every File/romfs/pokemon/data/pm0941/pm0941_12_00",
+      "has_model": true,
+      "has_normal_and_rare_material_tables": true,
+      "native_motion_count": 0,
+      "motion_directory_exists": false,
+      "note": "Distinct _12_00 rig and dedicated clip bank; prefer this coherent source over mixing SCVI mesh with older rig clips.",
+      "fallback": "Biochao pm0941.blend",
+      "candidate": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/battle-forms-next-seven/sources/pm0941.blend",
+      "candidate_exists": true
+    },
+    {
+      "species": "aegislash-blade",
+      "display_name": "Aegislash Blade",
+      "format": "Biochao Blender",
+      "archive_member": "pm0746.blend",
+      "candidate": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/battle-forms-next-seven/sources/pm0746.blend",
+      "candidate_exists": true,
+      "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen6.zip",
+      "note": "one scene has separately textured _11_00 and _12_00 armatures; isolate the _12_00 rig"
+    },
+    {
+      "species": "wishiwashi-school",
+      "display_name": "Wishiwashi School",
+      "format": "Biochao Blender",
+      "archive_member": "pm0820_12.blend",
+      "candidate": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/battle-forms-next-seven/sources/pm0820_12.blend",
+      "candidate_exists": true,
+      "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen7.zip",
+      "note": "dedicated School form model and its native animation bank"
+    },
+    {
+      "species": "darmanitan-zen",
+      "display_name": "Darmanitan Zen",
+      "format": "Biochao Blender",
+      "archive_member": "pm0555_11_12.blend",
+      "candidate": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/battle-forms-next-seven/sources/pm0555_11_12.blend",
+      "candidate_exists": true,
+      "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+      "note": "contains separate standard and Zen rigs; Galar Zen is in a different _12_31 file"
+    }
+  ],
+  "source_root": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump"
+}
