@@ -4,6 +4,23 @@
 
 - Nog acht Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Arctovish, Lillipup, Mr. Rime, Noctowl, Palpitoad, Poipole, Seismitoad en Trumbeak.
 
+- De S.S. Anne heeft Gary op 2F, een captain-quest met HM Cut, keuken- en bemannings-NPCs, optionele trainers en een rustpunt. Bij de Vermilion Gym staat een Cut-boom; tile-collision blijft handmatig.
+
+- De Pokémon Fan Club gebruikt de bijgewerkte artist-TMX-visual.
+
+- De drie huizen in Vermilion City gebruiken de opnieuw geïmporteerde gedeelde artist-TMX-visual.
+
+- De Pokemon Fan Club gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
+- De hoofdquest na Misty verwijst naar de SS Anne-schipper in Vermilion Port. Het gesprek met de schipper toont je ticket en rondt de quest af, met een hoofdquestmarker bij de NPC.
+
+- The fishing start button uses a larger illustrated rod icon, a rounded navy surface, and clearer hover/press feedback.
+
+- S.S. Anne heeft vier geïmporteerde verdiepingen met verbonden hutten, keuken en dek. De schipper bij Vermilion Port controleert het S.S. Ticket; collisionlagen blijven leeg voor handmatige inrichting.
+- De botsingslagen van de Vermilion-huizen, Pokemon Fan Club en Gym zijn leeg voor handmatige inrichting.
+
 - Nog 76 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles.
 - De haven ten zuiden van Vermilion City gebruikt de nieuwe Port Exterior-visual, met aansluitende aankomstpunten en een lege collisionlaag voor handmatige inrichting.
 
