@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Pokemon Fan Club gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - De hoofdquest na Misty verwijst naar de SS Anne-schipper in Vermilion Port. Het gesprek met de schipper toont je ticket en rondt de quest af, met een hoofdquestmarker bij de NPC.
