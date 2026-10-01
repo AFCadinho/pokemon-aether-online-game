@@ -241,8 +241,7 @@ interaction_id = "kanto_ss_anne_collect_tea"
 position = Vector2(816, 1904)
 npc_id = "kanto_ss_anne_rest_attendant"
 npc_definition_id = ""
-display_name = "Rest Attendant"
-npc_sprite_frames = ExtResource("population_gentleman")
+display_name = "Nurse Joy"
 preload_quest_markers = true
 
 [node name="PassengerEdwin" parent="Entities/NPCs" unique_id=133059021 instance=ExtResource("trainer")]
