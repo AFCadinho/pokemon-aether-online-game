@@ -1,0 +1,131 @@
+{
+  "schema": 1,
+  "date": "2026-10-01",
+  "runtime_approved": false,
+  "appearance_approved": false,
+  "normal_user_review_pending": true,
+  "review_url": "http://127.0.0.1:8782/paras-normal-review-v7/index.html",
+  "entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 129.6,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 98.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 122.4,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 146.4,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 170.4,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "appearance_approved": false,
+      "attention": "Normal palette still resembles shiny; clear eye cover uses a reviewed-only physical approximation",
+      "battle_approved": false,
+      "converter_version": 2,
+      "glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-normal-reference-v7/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/paras-normal-reference-runtime-v7/paras.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "dcea44de0d93f05ffc4ce2a2b721456e38b277918553d35af8d8e366213c4a54",
+      "source_sha256": "37bf19ab4e08dbf1a37d0195df33861c997c90ad262814e4c41e8bd436a0e026",
+      "species": "paras",
+      "status": "normal_review_candidate",
+      "variant": "normal"
+    }
+  ],
+  "colour_receipt": {
+    "species": "paras",
+    "variant": "normal",
+    "runtime_approved": false,
+    "appearance_approved": false,
+    "method": "authored-local-home-reference-normal-palette-v1",
+    "limitation": "Colour adaptation; original glass cover remains a reviewed-only approximation",
+    "source_glb_sha256": "7bcd5125950e27f81b862823b7aa7e4afbd2935ef06c4cb2023c4723bf05eb51",
+    "glb_sha256": "bf45fd87612c19110ad540108ab0467d437d85bf6cc63182121612e7cee93fb7",
+    "reference_sha256": "7e8b017b76d22e9cd4cf737ee61a20832c232e6bcb2d09df5b05545a31d94117",
+    "worker_sha256": "6c93765642e3f042826c77f3ce76075b5e88b1b2a77ad52ebacbb42a64db2112",
+    "changed_pixels": {
+      "mushroom": 57000,
+      "body": 123128
+    },
+    "alpha_unchanged": true,
+    "geometry_motion_sha256": "5985fe021a7af6715510d41161a29f8f2770328155698ecb7c1e8dc4977fc635"
+  },
+  "evidence_sha256": {
+    "tools/sprite_factory/catalog_remaining_paras_normal_review.py": "6c93765642e3f042826c77f3ce76075b5e88b1b2a77ad52ebacbb42a64db2112",
+    ".tmp/remaining-142-production/paras-normal-reference-v7/receipt.json": "6e7b63fb43662028e5d264640434299320e1c51b91adfc5ce55751f60896d6fb",
+    ".tmp/remaining-142-production/paras-normal-reference-runtime-v7/report.json": "7db20dfcbf5081c65b403b13ffca740f6f871a42772f27f9b1f09e93732f2601",
+    ".tmp/remaining-142-production/paras-normal-reference-captures-v7/review.json": "19310564dc523dc5a86c0a3ab7b2f52e4da7eebdd4182ddf9d6268cc89cdc249",
+    ".tmp/remaining-142-production/paras-normal-review-v7/index.html": "5f6bb35f8d5b2d41190687fba96893ec4b06abdae212a8b7eb82e078b3795df0",
+    ".tmp/remaining-142-production/paras-normal-reference-quick-v7/review.json": "eff74c8b6feb8e42883930b0637b6ef1adc924c9e95bda70d72d25b5149e68c1",
+    ".tmp/remaining-142-production/paras-normal-review-v7/before-paras-idle-50.webp": "96d59eb54582884a457c157b3b15718a4b7b954311916b0a0585d8e067ed03de",
+    ".tmp/remaining-142-production/paras-normal-review-v7/before-paras-physical_attack-50.webp": "aba7de305340a35d7613680e35ae4ce72ab62f2102b140b3799b55dbc37cb4fd",
+    ".tmp/remaining-142-production/paras-normal-review-v7/before-paras-special_attack-50.webp": "dd0342d1ba06a77e0ac588daebd74a20c7d2b82ede837377c6f72caed8b14adc",
+    ".tmp/remaining-142-production/paras-normal-review-v7/before-paras-sleep-50.webp": "ff5fa34a79f17899cdef563ea4dfb4f5e71d8a690bc1b16935f8c8a1e7f1cdd5",
+    ".tmp/remaining-142-production/paras-normal-review-v7/before-paras-faint_start-100.webp": "42a1a69bc09adb023e99cfc92d39765e92786e4712d55a639d6dd45cdb20f67f",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-idle-0.webp": "2ab77968798f1a5688cde1b87922889e33c8312514169e781aa4dc010a7f5b26",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-idle-50.webp": "a947fc36316f35b84b5e6419c7f88f0eb2be8a663286cc1fec23893080020563",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-idle-100.webp": "2ab77968798f1a5688cde1b87922889e33c8312514169e781aa4dc010a7f5b26",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-physical_attack-0.webp": "b4af6a1e4d84d8193de6cc5c4166290d8e2eed5a059340249d8b15fee6f390fc",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-physical_attack-50.webp": "d140448b6224185b22907e0b716933ea66b9d7e4bd167420ada4aefd0ff1876c",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-physical_attack-100.webp": "b4af6a1e4d84d8193de6cc5c4166290d8e2eed5a059340249d8b15fee6f390fc",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-special_attack-0.webp": "b4af6a1e4d84d8193de6cc5c4166290d8e2eed5a059340249d8b15fee6f390fc",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-special_attack-50.webp": "4c2daac2b11535bcc30b423e92a4095afa05657401fef181d371726c4417b45f",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-special_attack-100.webp": "b4af6a1e4d84d8193de6cc5c4166290d8e2eed5a059340249d8b15fee6f390fc",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-damage-0.webp": "63f441fe14289852c4c4df8a8650e8399df40b78d3a23c327d8f3c1e71e565e4",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-damage-50.webp": "50c90a23e24e9528e4e1156a073abdc9c4d54f7a136056ab530037089ae51c30",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-damage-100.webp": "31a6ccf040c7b026fecc76d6366b1d101a84040104d2e1fb6139339030fe7b9d",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-sleep-0.webp": "33554e75c12dc9d66b30406d7a31d5af30e8220ddaf4a86275e92d664d3ff5d1",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-sleep-50.webp": "b38831e43053cff0f7022adf62f9a320176e95aad45d300cd18cbf4650862ee0",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-sleep-100.webp": "33554e75c12dc9d66b30406d7a31d5af30e8220ddaf4a86275e92d664d3ff5d1",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-faint_start-0.webp": "a610deea0fadf18335af963cc4afd405792c45fa4282a21a6913636333c3ea65",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-faint_start-50.webp": "73fb9885217fdba89d03f2d88bccd7a07ccba05a826db4ed5ee2f65bbcf02102",
+    ".tmp/remaining-142-production/paras-normal-review-v7/after-paras-faint_start-100.webp": "f7ef405c67a8951a8dc5d860c0004b27a7bd21eeeff677085f3a1cf0e563cf96",
+    ".tmp/remaining-142-production/paras-normal-review-v7/reference.png": "7e8b017b76d22e9cd4cf737ee61a20832c232e6bcb2d09df5b05545a31d94117"
+  },
+  "rejected_fire_trials": {
+    "ponyta": "v1 emission-only, v2 core-only and v3 unlit/mask-copy trials still show dark or polygonal flames",
+    "rapidash": "same trials retain hard polygonal shells",
+    "centiskorch": "v5 authored red/yellow source-ramp bake retains excess flame layers"
+  },
+  "approved_catalog_counts_unchanged": true,
+  "quick_presentation_check": {
+    "captures": 5,
+    "errors": []
+  },
+  "full_temporal_diagnostic": {
+    "captures": 18,
+    "errors": [
+      "Missing clip: faint_loop"
+    ],
+    "status": "not a passed full-motion gate"
+  }
+}

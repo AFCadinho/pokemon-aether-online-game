@@ -214,3 +214,35 @@ material-repair candidates, 109 source/action holds and fifteen DLC motion
 holds. The task’s 274-species intake now has 146 approved individual bundles.
 These six and the preceding eight are local bundle-ready; none of those
 fourteen has been uploaded to R2 or included in a new release.
+
+## Four material holds: source diagnosis and Paras proposal
+
+The four remaining material cases were inspected against their pinned Blend
+graphs and local HOME images. Paras's embedded albedo itself has pale skin and
+pink mushrooms. `catalog_remaining_paras_normal_review.py` proposes an authored
+normal palette, preserving yellow spots, neutral facial details, alpha and all
+geometry/skin/animation accessors. This is a reference-based colour adaptation,
+not a recovered official normal texture. The existing thin glass-eye-cover
+approximation still requires visual acceptance. Normal review is pending; shiny,
+battle qualification and bundles are not complete.
+
+Ponyta/Rapidash emission-only, core-only and unlit/mask-copy trials were rejected
+during self-review: dark outlines and polygonal fire shells remain. Their
+sources include opaque procedural fire layers and generated-coordinate shading;
+simple brightness adjustment is insufficient. Centiskorch's source-ramp colour
+trial retained excessive flame layers and was also rejected. These three remain
+material holds, and none of the trials was admitted to the game. Artifacts and
+source graph dumps are retained under `material-four-probe-v1` and the species'
+trial directories in `.tmp/remaining-142-production`.
+
+The full Paras temporal renderer produced 18 images but reported the legacy
+source's absent `faint_loop`. Its six native clips remain unchanged; the separate
+quick appearance profile checks only the available presentation poses. This
+does not qualify battle behaviour or silently add a missing native animation.
+
+`catalog_remaining_142_material_repairs_review.json` pins the proposal and review
+evidence. Counts remain **897 ordinary species plus Mega Dragonite**, with
+**128 remaining** (one normal appearance review, three material holds, 109
+source/action holds and fifteen DLC motion holds).
+
+[Paras normal comparison](http://127.0.0.1:8782/paras-normal-review-v7/index.html)
