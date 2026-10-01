@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trap- en doorgangsovergangen in Diglett Cave en Rock Tunnel laten spelers nu naar het gangpad op de aankomstverdieping kijken.
+
 - De visuals van SS Anne 1F, 2F en B1F zijn opnieuw geïmporteerd uit de bijgewerkte artist-TMX-bestanden.
 
 - Alle vier SS Anne-mappen gebruiken de scheepsarena nu ook voor PvP en gevechten met een meegegeven omgevingskeuze.

@@ -192,7 +192,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FA"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_a"
-transition_facing_direction = "down"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FA" unique_id=673753544]
 position = Vector2(16, 0)
@@ -204,7 +204,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FB"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_b"
-transition_facing_direction = "down"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FB" unique_id=340226381]
 position = Vector2(16, 0)
@@ -216,7 +216,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FC"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_c"
-transition_facing_direction = "down"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FC" unique_id=1527207657]
 position = Vector2(16, 0)
@@ -228,7 +228,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FD"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_d"
-transition_facing_direction = "down"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FD" unique_id=1091563312]
 position = Vector2(16, 0)
