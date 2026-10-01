@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De Route 10-visual is opnieuw geïmporteerd uit de bijgewerkte artist-TMX.
+
 - De S.S. Anne-captain gebruikt het Mr. Briney-zeemansportret; Gary verdwijnt na zijn nederlaag zodra SS Anne 2F opnieuw wordt geladen.
 
 - Trapovergangen in Diglett Cave en Rock Tunnel laten de speler recht vooruit uit de trap kijken; maps en server gebruiken dezelfde richting en aankomstpositie.
