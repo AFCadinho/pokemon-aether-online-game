@@ -7442,5 +7442,1010 @@
         "runtime_approved": false
       }
     }
+  },
+  "eye_detail_revisions": {
+    "anorith": {
+      "BodyAParasVco00": {
+        "alpha": true,
+        "method": "Authored compatibility white sclera shell with pupil window over the smaller source pupil sphere; source lens cannot refract in Compatibility; pupil window rasterised from the actual forward lens surface, not a guessed atlas centre",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/anorith-v4/anorith/BodyAParasVco00.png",
+          "sha256": "8274aac8747894ef2c3975977b5d1ac3d132bc019aff4e0809dcc4323c10ca46"
+        },
+        "source_eye_uv_domains": [
+          [
+            0.706584215164185,
+            0.0065615177154541,
+            0.886021077632904,
+            0.17784970998764
+          ],
+          [
+            0.113978900015354,
+            0.0065615177154541,
+            0.293415814638138,
+            0.17784970998764
+          ]
+        ]
+      },
+      "BodyAParasVco01": {
+        "alpha": true,
+        "method": "Authored compatibility white sclera shell with pupil window over the smaller source pupil sphere; source lens cannot refract in Compatibility; pupil window rasterised from the actual forward lens surface, not a guessed atlas centre",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/anorith-v4/anorith/BodyAParasVco01.png",
+          "sha256": "8274aac8747894ef2c3975977b5d1ac3d132bc019aff4e0809dcc4323c10ca46"
+        },
+        "source_eye_uv_domains": [
+          [
+            0.706584215164185,
+            0.0065615177154541,
+            0.886021077632904,
+            0.17784970998764
+          ],
+          [
+            0.113978900015354,
+            0.0065615177154541,
+            0.293415814638138,
+            0.17784970998764
+          ]
+        ]
+      }
+    },
+    "bulbasaur": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0001/pm0001_00_00/pm0001_00_00.trmtr",
+        "material_table_sha256": "c91769752df832d9954477584479c16f3d6e87a1b0a9419fe46588446f436491",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/bulbasaur/l_eye.png",
+          "sha256": "452fbd3cb23ffc5c644123ef5a355763565c68f7642e0d5f7e8ca6e6ee471c7f"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0001/pm0001_00_00/pm0001_00_00.trmtr",
+        "material_table_sha256": "c91769752df832d9954477584479c16f3d6e87a1b0a9419fe46588446f436491",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/bulbasaur/r_eye.png",
+          "sha256": "452fbd3cb23ffc5c644123ef5a355763565c68f7642e0d5f7e8ca6e6ee471c7f"
+        }
+      }
+    },
+    "keldeo-ordinary": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0647/pm0647_11_00/pm0647_11_00.trmtr",
+        "material_table_sha256": "7ce70c5f16d8d029133280cf8c7c187579ddf4a9593e32a2d8a64d1407bd757f",
+        "method": "source material Eye mask colours; removes flattened coat colour; authored blue iris and pupil using source mask and HOME colour reference",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/keldeo-ordinary/l_eye.png",
+          "sha256": "aa5084a2def611f6acc014139631ddc26a5c2294291c8de434121cfcded3e357"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0647/pm0647_11_00/pm0647_11_00.trmtr",
+        "material_table_sha256": "7ce70c5f16d8d029133280cf8c7c187579ddf4a9593e32a2d8a64d1407bd757f",
+        "method": "source material Eye mask colours; removes flattened coat colour; authored blue iris and pupil using source mask and HOME colour reference",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/keldeo-ordinary/r_eye.png",
+          "sha256": "aa5084a2def611f6acc014139631ddc26a5c2294291c8de434121cfcded3e357"
+        }
+      }
+    },
+    "kyurem": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0646/pm0646_11_00/pm0646_11_00.trmtr",
+        "material_table_sha256": "a511bf84c84414722b86720460f6571e6b7c93e58b5f0b092d80415856e2efb2",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kyurem/l_eye.png",
+          "sha256": "dd51038033470ea4f33504352cffcf448b47ef331d933277d6d6d66bf1297bc9"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0646/pm0646_11_00/pm0646_11_00.trmtr",
+        "material_table_sha256": "a511bf84c84414722b86720460f6571e6b7c93e58b5f0b092d80415856e2efb2",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kyurem/r_eye.png",
+          "sha256": "dd51038033470ea4f33504352cffcf448b47ef331d933277d6d6d66bf1297bc9"
+        }
+      }
+    },
+    "nincada": {
+      "Eye": {
+        "method": "Authored white glints on four open native atlas cells; blink cells retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/nincada/Eye.png",
+          "sha256": "d37f9924ec2e4b6969f3b24b45a25d96a73a9d47856f61bf125f3a2b6df7b39f"
+        }
+      }
+    },
+    "rhyperior": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0464/pm0464_00_00/pm0464_00_00.trmtr",
+        "material_table_sha256": "2f11d191c8f513417d22ff7b529c166ebb84e626fabe3a562719346584154728",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rhyperior/l_eye.png",
+          "sha256": "2e24effa08f2fa809a05702bd6b6b784d67586de7abe53192c9d5ec5ecec4018"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0464/pm0464_00_00/pm0464_00_00.trmtr",
+        "material_table_sha256": "2f11d191c8f513417d22ff7b529c166ebb84e626fabe3a562719346584154728",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rhyperior/r_eye.png",
+          "sha256": "2e24effa08f2fa809a05702bd6b6b784d67586de7abe53192c9d5ec5ecec4018"
+        }
+      }
+    },
+    "shiftry": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0275/pm0275_00_00/pm0275_00_00.trmtr",
+        "material_table_sha256": "c1f1e1e1f3b5a2a2723af62abcb74f552d085e3ae6d8906c160724206535f0be",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/shiftry/l_eye.png",
+          "sha256": "355316576f5835490431d5a4d567ba28b582236937754aed0c07e60d60be010d"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0275/pm0275_00_00/pm0275_00_00.trmtr",
+        "material_table_sha256": "c1f1e1e1f3b5a2a2723af62abcb74f552d085e3ae6d8906c160724206535f0be",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/shiftry/r_eye.png",
+          "sha256": "355316576f5835490431d5a4d567ba28b582236937754aed0c07e60d60be010d"
+        }
+      }
+    },
+    "aegislash-shield-shiny": {
+      "eye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/aegislash-shield-shiny/eye.png",
+          "sha256": "702ae5264246a3380a0110137b2bedcbfce5f322f15e36962f3d2ed7c7f3a9ad"
+        }
+      }
+    },
+    "anorith-shiny": {
+      "BodyAParasVco00": {
+        "alpha": true,
+        "method": "Authored compatibility white sclera shell with pupil window over the smaller source pupil sphere; source lens cannot refract in Compatibility; pupil window rasterised from the actual forward lens surface, not a guessed atlas centre",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/anorith-v4/anorith-shiny/BodyAParasVco00.png",
+          "sha256": "8274aac8747894ef2c3975977b5d1ac3d132bc019aff4e0809dcc4323c10ca46"
+        },
+        "source_eye_uv_domains": [
+          [
+            0.706584215164185,
+            0.0065615177154541,
+            0.886021077632904,
+            0.17784970998764
+          ],
+          [
+            0.113978900015354,
+            0.0065615177154541,
+            0.293415814638138,
+            0.17784970998764
+          ]
+        ]
+      },
+      "BodyAParasVco01": {
+        "alpha": true,
+        "method": "Authored compatibility white sclera shell with pupil window over the smaller source pupil sphere; source lens cannot refract in Compatibility; pupil window rasterised from the actual forward lens surface, not a guessed atlas centre",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/anorith-v4/anorith-shiny/BodyAParasVco01.png",
+          "sha256": "8274aac8747894ef2c3975977b5d1ac3d132bc019aff4e0809dcc4323c10ca46"
+        },
+        "source_eye_uv_domains": [
+          [
+            0.706584215164185,
+            0.0065615177154541,
+            0.886021077632904,
+            0.17784970998764
+          ],
+          [
+            0.113978900015354,
+            0.0065615177154541,
+            0.293415814638138,
+            0.17784970998764
+          ]
+        ]
+      }
+    },
+    "armaldo-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/armaldo-shiny/Eye.png",
+          "sha256": "1446c7546af9ad19c32e2758dd2e6c0a58e5143da868dcb761c3e93840e86c0d"
+        },
+        "paired_body_colour": {
+          "material": "BodyBSpcVco00",
+          "normal_body_pixel": [
+            136.0,
+            165.0,
+            201.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            201.0,
+            151.0,
+            154.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "beheeyem-shiny": {
+      "Eye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/extra-iris-v1/beheeyem-shiny/Eye.png",
+          "sha256": "ba1f9f8ab96597c021e6491194b639ef59ef5f9f4e50e727663a93cbeef074e4"
+        }
+      }
+    },
+    "bulbasaur-shiny": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0001/pm0001_00_00/pm0001_00_00.trmtr",
+        "material_table_sha256": "c91769752df832d9954477584479c16f3d6e87a1b0a9419fe46588446f436491",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/bulbasaur-shiny/l_eye.png",
+          "sha256": "452fbd3cb23ffc5c644123ef5a355763565c68f7642e0d5f7e8ca6e6ee471c7f"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0001/pm0001_00_00/pm0001_00_00.trmtr",
+        "material_table_sha256": "c91769752df832d9954477584479c16f3d6e87a1b0a9419fe46588446f436491",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/bulbasaur-shiny/r_eye.png",
+          "sha256": "452fbd3cb23ffc5c644123ef5a355763565c68f7642e0d5f7e8ca6e6ee471c7f"
+        }
+      }
+    },
+    "claydol-shiny": {
+      "Eye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/claydol-shiny/Eye.png",
+          "sha256": "7170395dee6401e0108ad9ce2b8bc50868037a948d5038c7a72fe524a92572c5"
+        }
+      }
+    },
+    "corsola-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/corsola-shiny/Eye-closed.png",
+          "sha256": "6628293c8b5ce616d2bdb53e9abc98f508b6667091c273afd216c18bd493e4d4"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/corsola-shiny/Eye.png",
+          "sha256": "949ecd51320764cccd78be6f3feae4bbff84d364744d4a7cc9a707877ee72477"
+        },
+        "paired_body_colour": {
+          "material": "BodyA",
+          "normal_body_pixel": [
+            239.0,
+            148.0,
+            163.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            133.0,
+            206.0,
+            220.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "druddigon-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/druddigon-shiny/Eye-closed.png",
+          "sha256": "a018dab6aa0ebf270bdcda81d2e1ba4d33588b0bdf38ece80e5d02ae98c3c8c3"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/druddigon-shiny/Eye.png",
+          "sha256": "8fb221a74fb5618cc5f37f602c3ae024f7d63b3cb1f0510cdae13ec9e38c6e28"
+        },
+        "paired_body_colour": {
+          "material": "Body00",
+          "normal_body_pixel": [
+            192.0,
+            62.0,
+            86.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            208.0,
+            212.0,
+            78.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "elgyem-shiny": {
+      "LEye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/extra-iris-v1/elgyem-shiny/LEye.png",
+          "sha256": "94c58197683b92cb0144bf66e39bb0d27406c676fcd61fe67889d162807dd7ba"
+        }
+      },
+      "REye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/extra-iris-v1/elgyem-shiny/REye.png",
+          "sha256": "6c58a5d3a69d21f205c233ee568c1f24dfe1c485476eeaada0b3af903966c29e"
+        }
+      }
+    },
+    "fearow-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/fearow-shiny/Eye.png",
+          "sha256": "64db71808d2357224e6762dd781efc0f0e02b08aec214c4ab42f862da36936c3"
+        },
+        "paired_body_colour": {
+          "material": "BodyA",
+          "normal_body_pixel": [
+            196.0,
+            135.0,
+            67.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            166.0,
+            168.0,
+            100.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "jellicent-male-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/jellicent-male-shiny/Eye.png",
+          "sha256": "ecc9fc07057afa12b42eda78539d8f6e59c66b4046c103999f0e2ba6f25cd8e7"
+        },
+        "paired_body_colour": {
+          "material": "BodyPururillVco",
+          "normal_body_pixel": [
+            121.0,
+            201.0,
+            239.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            137.0,
+            229.0,
+            212.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "kabutops-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kabutops-shiny/Eye-closed.png",
+          "sha256": "9951e65cb16d74a5e217bd51544fd11b691369f96f942e5b5a5e179645218773"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kabutops-shiny/Eye.png",
+          "sha256": "732c8a4f50ceb55b0c5cd0f74afe569923f22f426b60a1de5a1aeca74f748507"
+        },
+        "paired_body_colour": {
+          "material": "Body",
+          "normal_body_pixel": [
+            151.0,
+            109.0,
+            69.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            158.0,
+            169.0,
+            109.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "keldeo-ordinary-shiny": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0647/pm0647_11_00/pm0647_11_00.trmtr",
+        "material_table_sha256": "7ce70c5f16d8d029133280cf8c7c187579ddf4a9593e32a2d8a64d1407bd757f",
+        "method": "source material Eye mask colours; removes flattened coat colour; authored blue iris and pupil using source mask and HOME colour reference",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/keldeo-ordinary-shiny/l_eye.png",
+          "sha256": "aa5084a2def611f6acc014139631ddc26a5c2294291c8de434121cfcded3e357"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0647/pm0647_11_00/pm0647_11_00.trmtr",
+        "material_table_sha256": "7ce70c5f16d8d029133280cf8c7c187579ddf4a9593e32a2d8a64d1407bd757f",
+        "method": "source material Eye mask colours; removes flattened coat colour; authored blue iris and pupil using source mask and HOME colour reference",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/keldeo-ordinary-shiny/r_eye.png",
+          "sha256": "aa5084a2def611f6acc014139631ddc26a5c2294291c8de434121cfcded3e357"
+        }
+      }
+    },
+    "kingler-shiny": {
+      "EyeL": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kingler-shiny/EyeL.png",
+          "sha256": "8d6148e1666dbaa112f8b56a55006feda9e20a648eb5d50b986ec6dec21ce59a"
+        },
+        "paired_body_colour": {
+          "material": "BodyA",
+          "normal_body_pixel": [
+            237.0,
+            150.0,
+            92.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            178.0,
+            195.0,
+            164.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      },
+      "EyeR": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kingler-shiny/EyeR.png",
+          "sha256": "7d57f3c6f4ffa7f61eda6e3d1a779e03a8315626b82a56fdf50ce60b50c0f08e"
+        },
+        "paired_body_colour": {
+          "material": "BodyA",
+          "normal_body_pixel": [
+            237.0,
+            150.0,
+            92.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            178.0,
+            195.0,
+            164.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "kyurem-shiny": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0646/pm0646_11_00/pm0646_11_00.trmtr",
+        "material_table_sha256": "a511bf84c84414722b86720460f6571e6b7c93e58b5f0b092d80415856e2efb2",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kyurem-shiny/l_eye.png",
+          "sha256": "dd51038033470ea4f33504352cffcf448b47ef331d933277d6d6d66bf1297bc9"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0646/pm0646_11_00/pm0646_11_00.trmtr",
+        "material_table_sha256": "a511bf84c84414722b86720460f6571e6b7c93e58b5f0b092d80415856e2efb2",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/kyurem-shiny/r_eye.png",
+          "sha256": "dd51038033470ea4f33504352cffcf448b47ef331d933277d6d6d66bf1297bc9"
+        }
+      }
+    },
+    "lunatone-shiny": {
+      "Eye": {
+        "method": "Explicit shiny iris hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/lunatone-shiny/Eye.png",
+          "sha256": "2c7baa8c45e54f152c77c2fd76fe1d2df9a7ee769b4916561d49f52a3e0d426c"
+        }
+      }
+    },
+    "nidoking-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/nidoking-shiny/Eye.png",
+          "sha256": "acffd992daf2671146204953d08deacab23a5e8d02deb4254ba4e239f5afb33c"
+        },
+        "paired_body_colour": {
+          "material": "BodyB",
+          "normal_body_pixel": [
+            169.0,
+            110.0,
+            160.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            85.0,
+            101.0,
+            195.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "nidoqueen-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/nidoqueen-shiny/Eye.png",
+          "sha256": "aa691ac3673349d19fcf2a714cc5568a07a0c4888f9cd0140694bd6578044eef"
+        },
+        "paired_body_colour": {
+          "material": "Body",
+          "normal_body_pixel": [
+            137.0,
+            174.0,
+            201.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            173.0,
+            176.0,
+            147.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "nincada-shiny": {
+      "Eye": {
+        "method": "Authored white glints on four open native atlas cells; blink cells retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/nincada-shiny/Eye.png",
+          "sha256": "d37f9924ec2e4b6969f3b24b45a25d96a73a9d47856f61bf125f3a2b6df7b39f"
+        }
+      }
+    },
+    "octillery-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/octillery-shiny/Eye-closed.png",
+          "sha256": "1eeb5a566c77870b708a94fd407754dfac76cd1594be389aa0c5d19b0c9fa05e"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/octillery-shiny/Eye.png",
+          "sha256": "3794e6534da54aa18dca10c6071a79e89eac65109c642953caeffcc394fcefe0"
+        },
+        "paired_body_colour": {
+          "material": "Body01",
+          "normal_body_pixel": [
+            229.0,
+            87.0,
+            71.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            210.0,
+            190.0,
+            93.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "rattata-shiny": {
+      "EyeL": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rattata-shiny/EyeL-closed.png",
+          "sha256": "f07d2508da6d315f041c88f92349c61fec84297483659f92f009377a4dbe1b49"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rattata-shiny/EyeL.png",
+          "sha256": "f27258021ce3fae6db533dda230d8698a5fe745182d39802805a45ed7a671f68"
+        },
+        "paired_body_colour": {
+          "material": "Body",
+          "normal_body_pixel": [
+            159.0,
+            109.0,
+            187.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            132.0,
+            187.0,
+            123.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      },
+      "EyeR": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rattata-shiny/EyeR-closed.png",
+          "sha256": "aad8bd4b0923c76f340680fd8d8d8937668d6ac9298b3fc6b7ca4bd0240cfbf6"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rattata-shiny/EyeR.png",
+          "sha256": "23fcee5c927041d3c7ac9a6aeebf2014292ffeb24c2a1e0b86aea1f2c10f0fd9"
+        },
+        "paired_body_colour": {
+          "material": "Body",
+          "normal_body_pixel": [
+            159.0,
+            109.0,
+            187.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            132.0,
+            187.0,
+            123.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "rhyperior-shiny": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0464/pm0464_00_00/pm0464_00_00.trmtr",
+        "material_table_sha256": "2f11d191c8f513417d22ff7b529c166ebb84e626fabe3a562719346584154728",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rhyperior-shiny/l_eye.png",
+          "sha256": "2e24effa08f2fa809a05702bd6b6b784d67586de7abe53192c9d5ec5ecec4018"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0464/pm0464_00_00/pm0464_00_00.trmtr",
+        "material_table_sha256": "2f11d191c8f513417d22ff7b529c166ebb84e626fabe3a562719346584154728",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/rhyperior-shiny/r_eye.png",
+          "sha256": "2e24effa08f2fa809a05702bd6b6b784d67586de7abe53192c9d5ec5ecec4018"
+        }
+      }
+    },
+    "seaking-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/seaking-shiny/Eye.png",
+          "sha256": "72126ff1cc85ccd162971d86cb097fd74dbb5063ee16fcd101847f30e63a7756"
+        },
+        "paired_body_colour": {
+          "material": "Body01",
+          "normal_body_pixel": [
+            226.0,
+            117.0,
+            79.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            219.0,
+            146.0,
+            76.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "sealeo-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/sealeo-shiny/Eye-closed.png",
+          "sha256": "db504fa8007a3d378994f5461d2827e624045123d3f873a8a4bcd8292dce8e4f"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/sealeo-shiny/Eye.png",
+          "sha256": "ca70a9dd79ae200f121cb52c5e69a196ca4ac352603b6b9f6f632923da385a0a"
+        },
+        "paired_body_colour": {
+          "material": "BodyVco",
+          "normal_body_pixel": [
+            94.0,
+            181.0,
+            224.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            216.0,
+            173.0,
+            215.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "shiftry-shiny": {
+      "l_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0275/pm0275_00_00/pm0275_00_00.trmtr",
+        "material_table_sha256": "c1f1e1e1f3b5a2a2723af62abcb74f552d085e3ae6d8906c160724206535f0be",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/shiftry-shiny/l_eye.png",
+          "sha256": "355316576f5835490431d5a4d567ba28b582236937754aed0c07e60d60be010d"
+        }
+      },
+      "r_eye": {
+        "disable_false_emission": true,
+        "material_table": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0275/pm0275_00_00/pm0275_00_00.trmtr",
+        "material_table_sha256": "c1f1e1e1f3b5a2a2723af62abcb74f552d085e3ae6d8906c160724206535f0be",
+        "method": "source material Eye mask colours; removes flattened coat colour",
+        "opaque": true,
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/shiftry-shiny/r_eye.png",
+          "sha256": "355316576f5835490431d5a4d567ba28b582236937754aed0c07e60d60be010d"
+        }
+      }
+    },
+    "spearow-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/spearow-shiny/Eye.png",
+          "sha256": "5a6a6e0fa231364884ac3367902b97ba5dde5759c54e426696cd7df6dde03d33"
+        },
+        "paired_body_colour": {
+          "material": "BodyA",
+          "normal_body_pixel": [
+            186.0,
+            122.0,
+            74.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            179.0,
+            158.0,
+            93.0,
+            255.0
+          ],
+          "squared_distance": 1.0
+        }
+      }
+    },
+    "tentacool-shiny": {
+      "Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/tentacool-shiny/Eye.png",
+          "sha256": "d456137a0d78c948506255c084017d5d299851cca7d57e72a3e4c2853baae073"
+        },
+        "paired_body_colour": {
+          "material": "Body00",
+          "normal_body_pixel": [
+            152.0,
+            206.0,
+            235.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            211.0,
+            188.0,
+            235.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "wailmer-shiny": {
+      "Eye": {
+        "closed": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/wailmer-shiny/Eye-closed.png",
+          "sha256": "84457291d29cc2ad996d65dfce7fcd1f99b0b6e0ebdc4293e1d2ad9f26fecfc4"
+        },
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/wailmer-shiny/Eye.png",
+          "sha256": "347a1e37fbbcb5a9ca89f4d9b976cf7a7fc58cad2a5e0b6df1cfd147395e03ab"
+        },
+        "paired_body_colour": {
+          "material": "BodyTattuEnv",
+          "normal_body_pixel": [
+            48.0,
+            112.0,
+            160.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            173.0,
+            128.0,
+            199.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "gorebyss-shiny": {
+      "pm0368_00_00-Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/gorebyss-shiny/pm0368_00_00-Eye.png",
+          "sha256": "9ffb6be31a48cba064b8d3448bd5483e2c8baa209fa5ea6af931b2bc525fe465"
+        },
+        "paired_body_colour": {
+          "material": "pm0368_00_00-BodyTattuVco00",
+          "normal_body_pixel": [
+            245.0,
+            166.0,
+            214.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            231.0,
+            184.0,
+            64.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "huntail-shiny": {
+      "pm0367_00_00-Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/huntail-shiny/pm0367_00_00-Eye.png",
+          "sha256": "6ebef66bc07843fb916bf08ef36b4ccd4f235b792be847ca7d51ba8d35064e54"
+        },
+        "paired_body_colour": {
+          "material": "pm0367_00_00-BodyBBody01",
+          "normal_body_pixel": [
+            51.0,
+            181.0,
+            232.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            114.0,
+            213.0,
+            134.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "swellow-shiny": {
+      "pm0277_00_00-Eye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/swellow-shiny/pm0277_00_00-Eye.png",
+          "sha256": "15b54041547f7453be0e3df85f8d93d5aef045d2cd8302c5a8c1da87e5728a3d"
+        },
+        "paired_body_colour": {
+          "material": "pm0277_00_00-BodyA01",
+          "normal_body_pixel": [
+            24.0,
+            53.0,
+            93.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            47.0,
+            104.0,
+            72.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    },
+    "taillow-shiny": {
+      "pm0276_00_00-LEye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/taillow-shiny/pm0276_00_00-LEye.png",
+          "sha256": "d63cc3c4340114b03d9f7333e51676af6ad6028df291fae01014e428c47975ef"
+        },
+        "paired_body_colour": {
+          "material": "pm0276_00_00-BodyBVco",
+          "normal_body_pixel": [
+            30.0,
+            42.0,
+            69.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            45.0,
+            99.0,
+            68.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      },
+      "pm0276_00_00-REye": {
+        "method": "Explicit shiny skin on eye atlas hue; black/white pixels and alpha retained",
+        "open": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-final-batch-v1/eyes-review-v2/proposals-v3/taillow-shiny/pm0276_00_00-REye.png",
+          "sha256": "2c657c7525e08ec2ee8fa056e24a0df7960f795baf6e3ac93900e951785cb135"
+        },
+        "paired_body_colour": {
+          "material": "pm0276_00_00-BodyBVco",
+          "normal_body_pixel": [
+            30.0,
+            42.0,
+            69.0,
+            255.0
+          ],
+          "shiny_body_pixel": [
+            45.0,
+            99.0,
+            68.0,
+            255.0
+          ],
+          "squared_distance": 0.0
+        }
+      }
+    }
   }
 }
