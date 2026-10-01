@@ -15,6 +15,12 @@ const WATER_ENCOUNTER_TYPES := {
 
 
 static func resolve(context: Dictionary) -> StringName:
+	# Every battle aboard the S.S. Anne uses the ship, including PvP and
+	# encounters carrying a generic server-provided environment override.
+	match str(context.get("map_id", "")).strip_edges():
+		"kanto_ss_anne_b1f", "kanto_ss_anne_1f", "kanto_ss_anne_2f", "kanto_ss_anne_3f":
+			return &"ss_anne"
+
 	var explicit_id := _known_environment_id(context.get("explicit_environment_id", ""))
 	if explicit_id != &"":
 		return explicit_id
@@ -25,7 +31,7 @@ static func resolve(context: Dictionary) -> StringName:
 	if battle_kind == "wild" and str(context.get("map_id", "")).strip_edges() == "aether_clash_lobby":
 		return Catalog.PVP_STADIUM_ENVIRONMENT_ID
 
-	# Indoor gyms retain their hall even for a water encounter. Explicit/PvP wins.
+	# Indoor gyms retain their arena even for a water encounter. Explicit/PvP wins.
 	if battle_kind in ["wild", "trainer"]:
 		match str(context.get("map_id", "")).strip_edges():
 			"kanto_pewter_city_gym": return &"pewter_city_gym"

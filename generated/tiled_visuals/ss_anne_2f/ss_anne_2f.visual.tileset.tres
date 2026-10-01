@@ -1,8 +1,8 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://ciwfm03b3il1d"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_1_0.texture.res" id="1_4user"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_2049_0.texture.res" id="2_t448d"]
-[ext_resource type="Texture2D" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_3073_0.texture.res" id="3_iltus"]
+[ext_resource type="Texture2D" uid="uid://b8g74li1glrb0" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_3073_0.texture.res" id="3_iltus"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_4097_0.texture.res" id="4_s3lx3"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/ss_anne_2f/assets/ss_anne_2f.visual.tileset.compact_source_5817_0.texture.res" id="5_plils"]
 
@@ -105,6 +105,8 @@ texture_region_size = Vector2i(32, 32)
 6:6/0 = 0
 0:7/0 = 0
 1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ttffa"]
 texture = ExtResource("4_s3lx3")

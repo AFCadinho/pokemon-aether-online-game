@@ -7,6 +7,7 @@ preserve existing settings and environment resources.
 
 | Scope | Terrain/map | Stable ID | Lighting | Builder |
 | --- | --- | --- | --- | --- |
+| Map-specific | S.S. Anne, all four floors | `ss_anne` | Outdoor | `maps/ss_anne/arena.gd` |
 | Generic | Grassfield | `forest` | Outdoor | `generic/grassfield_arena.gd` |
 | Generic | Cave | `cave` | Enclosed | `generic/cave_arena.gd` |
 | Generic | Water / surf / fishing | `sea` | Outdoor | `generic/water_arena.gd` |
@@ -57,7 +58,7 @@ The existing `prepare_forest`/`forest_ready` API and saved `forest` selection ar
 compatibility names for the shared art loader. Art requests run sequentially in
 the background because the scenes share dependencies. Progress still reaches
 the map-loading and battle-preparation UI. Missing art retains the existing
-fallback behavior. Pure cave, water and stadium builds need no forest pack.
+fallback behavior. Pure cave, water, stadium and S.S. Anne builds need no forest pack.
 
 The environment pool retains one arena's main/material-response pair. Switching
 arenas retires the idle pair; it cannot evict a borrowed arena. Mesh/grass caches
@@ -65,6 +66,9 @@ hold weak references, sharing resources between passes without retaining every
 visited map. The shared source art remains reusable. Actor state is never cached.
 
 ## Focused checks
+
+- `ss_anne_arena_check.gd`: all four floor/NPC routes, overrides, both scenery passes, ground contact and full camera orbit.
+- `ss_anne_arena_preview.gd`: battle and overview captures; set `POKEAETHER_STAGE_OUTPUT` to the output directory.
 
 - `forest_art_pack_check.gd`: descriptor-free manifest, invalid input, progress,
   cached reuse and absence of the native module.

@@ -6242,5 +6242,9 @@
   "ui.staff.story_checkpoint.ss_anne_collect_tea": "Cozinha · Pegue chá de gengibre",
   "ui.staff.story_checkpoint.ss_anne_return_tea": "Capitão · Entregue o chá / receba HM Cut",
   "ui.staff.story_checkpoint.challenge_surge": "Ginásio de Vermilion · Enfrente Lt. Surge",
-  "ui.staff.side_quest.ss_anne_crew_report": "Relatório da tripulação do S.S. Anne"
+  "ui.staff.side_quest.ss_anne_crew_report": "Relatório da tripulação do S.S. Anne",
+  "story.kanto.ss_anne_titanic_pose.title": "Estou voando, Jack!",
+  "story.kanto.ss_anne_titanic_pose.summary": "Ajude Rose a recriar uma pose famosa no S.S. Anne. Recompensa: 1 PP Up.",
+  "story.kanto.ss_anne_pose_with_rose": "Faça a pose de Titanic com Rose no convés do 3F.",
+  "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Pose de Titanic"
 }

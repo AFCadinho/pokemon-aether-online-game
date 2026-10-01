@@ -4,6 +4,32 @@
 
 - De laatste 15 DLC-Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny, rustposes en individuele downloadbundles.
 
+- Trap- en doorgangsovergangen in Diglett Cave en Rock Tunnel laten spelers nu naar het gangpad op de aankomstverdieping kijken.
+
+- De visuals van SS Anne 1F, 2F en B1F zijn opnieuw geïmporteerd uit de bijgewerkte artist-TMX-bestanden.
+
+- Alle vier SS Anne-mappen gebruiken de scheepsarena nu ook voor PvP en gevechten met een meegegeven omgevingskeuze.
+
+- SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
+
+- Onverslagen trainers op de S.S. Anne dagen je nu automatisch uit binnen drie tegels van hun zichtlijn.
+
+- Rose's Titanic-quest is nu beschikbaar in Trainer Progress bij Side Quests, met resetten, activeren en voltooien.
+
+- Vermilion City en Route 11 hebben nu aparte noordelijke en zuidelijke overgangen met spawns op het bijbehorende pad.
+
+- Rose en de speler draaien vóór de Titanic-pose weer naar de zee.
+
+- Rose op de S.S. Anne gebruikt nu haar Beauty-portret en eigen dialoog; haar Titanic-posequest geeft eenmalig een PP Up.
+
+- De remastered soundtracks spelen nu in Vermilion City, de S.S. Anne en op Routes 11–15.
+
+- De SS Anne 1F-visual gebruikt opnieuw de bijgewerkte artist-TMX.
+
+- De oceaan rond SS Anne 3F beweegt nu met de vier wateranimatieframes uit Tiled.
+
+- Tourist Sana op SS Anne 3F is vervangen door Beauty Rose, met een korte Titanic-verwijzing.
+
 - De SS Anne 3F-visual is opnieuw geïmporteerd uit de bijgewerkte Tiled-bron.
 
 - Nog 112 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, gecontroleerde oogdetails en individuele downloadbundles.
