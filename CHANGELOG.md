@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rose op de S.S. Anne gebruikt nu haar Beauty-portret en eigen dialoog; haar Titanic-posequest geeft eenmalig een PP Up.
+
 - De remastered soundtracks spelen nu in Vermilion City, de S.S. Anne en op Routes 11–15.
 
 - De SS Anne 1F-visual gebruikt opnieuw de bijgewerkte artist-TMX.

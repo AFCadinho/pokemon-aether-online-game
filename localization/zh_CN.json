@@ -6239,5 +6239,8 @@
   "ui.staff.story_checkpoint.ss_anne_collect_tea": "厨房 · 领取姜茶",
   "ui.staff.story_checkpoint.ss_anne_return_tea": "船长 · 送回姜茶 / 获得居合斩秘传机",
   "ui.staff.story_checkpoint.challenge_surge": "枯叶道馆 · 挑战马志士",
-  "ui.staff.side_quest.ss_anne_crew_report": "圣安奴号船员报告"
+  "ui.staff.side_quest.ss_anne_crew_report": "圣安奴号船员报告",
+  "story.kanto.ss_anne_titanic_pose.title": "我在飞，杰克！",
+  "story.kanto.ss_anne_titanic_pose.summary": "与Rose在圣安努号重现经典姿势。奖励：1个PP提升剂。",
+  "story.kanto.ss_anne_pose_with_rose": "在3F甲板与Rose摆出泰坦尼克号的经典姿势。"
 }

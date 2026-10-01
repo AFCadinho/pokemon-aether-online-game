@@ -6243,5 +6243,8 @@
   "ui.staff.story_checkpoint.ss_anne_collect_tea": "Keuken · Haal gemberthee",
   "ui.staff.story_checkpoint.ss_anne_return_tea": "Captain · Breng thee / ontvang HM Cut",
   "ui.staff.story_checkpoint.challenge_surge": "Vermilion Gym · Daag Lt. Surge uit",
-  "ui.staff.side_quest.ss_anne_crew_report": "Bemanningsrapport S.S. Anne"
+  "ui.staff.side_quest.ss_anne_crew_report": "Bemanningsrapport S.S. Anne",
+  "story.kanto.ss_anne_titanic_pose.title": "Ik vlieg, Jack!",
+  "story.kanto.ss_anne_titanic_pose.summary": "Doe samen met Rose een beroemde pose op de S.S. Anne. Beloning: 1 PP Up.",
+  "story.kanto.ss_anne_pose_with_rose": "Doe de Titanic-pose met Rose op het dek op 3F."
 }
