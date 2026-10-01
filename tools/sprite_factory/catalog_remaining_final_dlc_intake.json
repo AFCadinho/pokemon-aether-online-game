@@ -221,10 +221,11 @@
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1130/pm1130_11_00/pm1130_11_00_00.png",
       "status": "held_pending_motion_recovery_qualification",
       "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json",
       "material_aliases": {
-        "body_a_02": "body_a"
+        "body_a_02": "body_a_02"
       },
-      "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
+      "material_review_note": "body_a_02 has a default_mega_flow source texture. The diagnostic uses its exactly named official albedo; animated flow/effect behavior remains unqualified."
     },
     {
       "species": "pecharunt",

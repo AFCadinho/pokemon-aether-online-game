@@ -56,3 +56,29 @@ normal/shiny materials and eyes, explicit reviewed sleep poses, standalone Godot
 pose/timing checks, battle scale/grounding and one collective user review. Only
 then produce individual bundles. Generated sources, images and logs stay under
 `.tmp/remaining-dlc-15-v1/` in the retained slot-a worktree.
+
+## Normal/shiny material checkpoint
+
+The source recovery commit `a7dc50b8d` was merged into local `development` after
+the user's SS Anne checkout cleanup. The assigned slot is retained for the
+remaining model work.
+
+All **15 normal/shiny GLB proposals (30 variants)** were reconstructed from their
+matched SCVI normal/rare tables. Each pair has exactly equal geometry, skins,
+transforms and animation data. A preliminary Godot GLTF diagnostic sampled the
+available clips and checked reverse-order pose isolation: **30 models, zero
+pose/timing errors**. Sleep and standalone battle qualification are still absent.
+Hashes, clocks, material limitations and the Godot report hash are pinned in
+`tools/sprite_factory/catalog_remaining_dlc_material_checkpoint.json`.
+
+Terapagos's old `body_a_02 -> body_a` alias referred to the wrong material name.
+The native table has an actual `body_a_02` entry. Its source Blender texture is
+`default_mega_flow`, so the proposal explicitly uses that entry's official
+albedo while leaving animated flow behavior unqualified. No validator/default
+translation was changed.
+
+Internal contact-sheet inspection identified follow-up work: layered emission
+and robot eye readability, Hydrapple's hidden-accessory/camera bounds, and
+Terapagos flow/transparency. The 30 proposals are not visual approvals. Complete
+these details and explicit sleep proposals before the one collective user
+review; the approved catalog count and R2 content are unchanged.
