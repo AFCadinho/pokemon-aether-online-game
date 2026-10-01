@@ -157,3 +157,65 @@ Then investigate Aegislash Blade, Palafin Hero, Wishiwashi School, Darmanitan
 Zen, Mimikyu Busted, Eiscue Noice and Morpeko Hangry, followed by the major
 legendary fused/rider/crowned forms. Desktop release certification remains a
 separate task.
+
+## Runtime admission — 2026-10-01
+
+The five approved v6 form pairs are now locally admitted. The authoritative
+receipt is `catalog_battle_forms_first_five_bundle_qualification.json`; the
+initial visual checkpoint remains an immutable pre-admission snapshot.
+`prepare_battle_forms_admission.py` binds measured placement, full-clock bounds
+and clearance curves to the exact standalone SCN hashes. Normal and shiny
+profiles must match apart from the scene hash. Ogerpon's directional clip is
+reviewed as the body-charge family; Ivy Cudgel retains the primary physical clip.
+
+The presenter anticipates exact Terastal/Stellar appearances for a public
+Terapagos combatant, including shiny. No opponent-held mask is guessed, and
+unreviewed giant Ogerpon Tera masks remain unsupported. The form test exercises
+the actual downloader, archive verification, catalog, threaded scene loading
+and swaps using local fixture archives instead of external HTTP. All required
+future identities are ensured before reveal; Stellar is already packed before
+the swap. A same-path catalog refresh bug found by this test is fixed: installed
+updates signal a catalog change, and missing demand also triggers reloading.
+
+Five independently versioned bundles total **139,333,915 bytes (132.88 MiB)**.
+The regular species keys used for these bundles are the exact form identities,
+such as `pokemon_3d:ogerpon-wellspring:base`; no downloader protocol change is
+required. Transactional installation loads all ten scenes, with no-op and
+restart checks. The upload-ready cohort index is
+`release/approved_3d_battle_forms_first_five_index.json`.
+
+The final three rendered real-battle passes achieved p95 frame times of
+**16.847 / 19.660 / 16.834 ms** (classic / stadium / classic). All existing gates
+pass: p95 <= 20 ms, no uncovered stalls > 100 ms, threaded load dispatch/collect
+within 16.67 ms, retained LRU source bytes <= 64 MiB, and < 1 MiB static-memory
+growth between the last two rounds (86,420 bytes). The LRU remains limited to
+two entries. The presenter may retain the explicitly anticipated forms while
+that combatant is needed; the stress check also rejects any packed resource
+outside current demand. Original failing same-path test output is retained.
+
+The installed registry check resolves all ten exact hashes and rejects wrong
+hashes; game and launcher registries match. Totals are **1,025 ordinary species,
+Mega Dragonite and five extra battle forms: 1,031 profiles / 2,062 appearances**.
+Evidence uses local AMD Compatibility rendering and does not certify other
+platforms. Public R2 upload, new release-index activation, and release
+certification/publication remain separate steps. The current active release
+manifest is unchanged.
+
+Admission recipe, after the existing local install and rendered checks:
+
+```sh
+python3 tools/sprite_factory/prepare_battle_forms_admission.py
+python3 tools/sprite_factory/admit_battle_forms_first_five.py admit
+# Run the installed registry check, then bind its successful log:
+python3 tools/sprite_factory/admit_battle_forms_first_five.py finalize
+```
+
+Focused form check:
+
+```sh
+POKEAETHER_FORM_BUNDLE_WORK="$PWD/.tmp/battle-forms-first-five-v1/approved-final" \
+  ../../../ops/worktrees/slot-env slot-a -- \
+  /home/adinho/Desktop/Godot_v4.6.2-stable_linux.x86_64 \
+  --path "$PWD" --rendering-method gl_compatibility \
+  --script tests/battle_3d_first_five_forms_check.gd
+```

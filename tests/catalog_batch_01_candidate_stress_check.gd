@@ -47,7 +47,9 @@ func _ready_pair(species: String, left_shiny: bool, right_shiny: bool) -> void:
 	await _frames(3)
 	for index in range(2, stage.identities.size()):
 		assert(stage.identities[index].is_empty())
-	assert(stage.failed_models.is_empty() and stage.packed.size() <= 2)
+	assert(stage.failed_models.is_empty() and stage.packed.size() <= stage._needed_species().size())
+	for key in stage.packed:
+		assert(key in stage._needed_species(), "Presenter retained an unneeded model")
 	assert(Cache.items.size() <= Cache.MAX_ENTRIES and Cache.source_bytes <= Cache.MAX_SOURCE_BYTES)
 	for identity in identities:
 		assert(stage.placements[identity].calibrated and not stage.motion_clips[identity].is_empty())
