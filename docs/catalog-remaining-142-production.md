@@ -387,3 +387,21 @@ normal fire review is pending here; all three still need shiny and production
 runtime/battle qualification. Approved catalog counts are unchanged.
 
 [Fuller Ponyta and longer Rapidash flames](http://127.0.0.1:8782/fire-live-preview-v1/review-v8/index.html)
+
+### Rapidash tail-only revision
+
+The user's next feedback specifically concerned Rapidash's tail. Source mesh
+positions and skin weights identify FireCoreB/FireMaskB as the TailB chain
+(with FireMaskB also influenced by Hips). Only those two material bindings
+change in v9: FireCoreB uses 0.95 + 0.1*density tongue height and FireMaskB is
+enabled with source coverage at 0.8 opacity. The mane bindings are unchanged.
+
+Both normal side-camera comparisons cover five real native poses and render
+without errors. The revised tail is shown from the side in the v9 page. All
+three fresh standalone reloads, fifteen ordinary pose captures and three fire
+loop checks pass. Ponyta and Centiskorch's ten pose/fire images each are
+pixel-identical to v8. Ponyta/Rapidash visual acceptance is still pending;
+Centiskorch's accepted normal fire scope is retained. No catalog admission,
+bundle creation or release occurred in this diagnostic step.
+
+[Rapidash tail before/after, plus all three previews](http://127.0.0.1:8782/fire-live-preview-v1/review-v9/index.html)
