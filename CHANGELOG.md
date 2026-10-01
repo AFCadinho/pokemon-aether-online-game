@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De hoofdquest na Misty verwijst naar de SS Anne-schipper in Vermilion Port. Het gesprek met de schipper toont je ticket en rondt de quest af, met een hoofdquestmarker bij de NPC.
+
 - The fishing start button uses a larger illustrated rod icon, a rounded navy surface, and clearer hover/press feedback.
 
 - S.S. Anne heeft vier geïmporteerde verdiepingen met verbonden hutten, keuken en dek. De schipper bij Vermilion Port controleert het S.S. Ticket; collisionlagen blijven leeg voor handmatige inrichting.
