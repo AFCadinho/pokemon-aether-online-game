@@ -12,7 +12,7 @@ Task: `battle-forms-first-five`, paired slot-a, 2026-10-01.
 | `terapagos-terastal` | `pm1130_12_00` |
 | `terapagos-stellar` | `pm1130_13_00` |
 
-These are ten **review candidates**, normal and shiny. They are not admitted
+These are ten **visually approved candidates**, normal and shiny. They are not admitted
 to the runtime catalog, bundled, or uploaded. The ordinary species count has
 not changed. User approval for earlier DLC species does not approve these forms.
 Ogerpon's giant Terastallized mask forms are a separate cohort.
@@ -97,8 +97,8 @@ fur transparency and hiding bodyfur were investigated and rejected.
 alpha settings, authored-palette provenance and the exact five-versus-six
 renderer difference. Material-only output retains geometry/skin/motion parity;
 final normal and shiny output also match each other. V6 standalone and fresh
-battle evidence use the corrected scene hashes. User visual approval is still
-required, including for the other four candidates.
+battle evidence use the corrected scene hashes. The user approved all five v6 normal/shiny pairs: "Alle vijf goed".
+Runtime admission and installed performance remain pending.
 
 ## Evidence and reproduction
 
@@ -146,7 +146,7 @@ python3 -m unittest discover -s tools/sprite_factory \
 
 ## Next admission steps
 
-1. Collect the user's visual approval for these exact candidates.
+1. Visual approval is complete for the exact v6 candidates.
 2. Integrate correct form identities, form switches and anticipated bundle
    preloading, so a battle does not first show an incorrect form or fallback.
 3. Check actual battle loading, installed content and performance using the
