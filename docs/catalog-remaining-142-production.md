@@ -170,3 +170,27 @@ images enlarge the models for inspection. Shiny and battle approval remain
 pending; catalog counts and runtime admission are unchanged.
 
 [Six normal/shiny pairs](http://127.0.0.1:8782/appearance-six-pairs-v1/index.html)
+
+## Six normal/shiny appearances approved
+
+The user approved all six pairs (“Diezien er goed uit”). Shiny appearance
+approval is recorded against the exact page and scene hashes. Battle
+qualification is in progress. The initial raw camera measurements required
+Lugia and Ho-Oh root scales of 0.50 and 0.45; Vibrava requires a 1.100563134
+readability factor. Uniform root scaling preserves native animation curves.
+Derived floor profiles are independently remeasured at 120 Hz on the exact
+normal and shiny standalone scenes before a battle review is shown.
+
+The twelve exact scenes passed the full 120 Hz clearance and 192 camera-shot
+checks. Lugia’s second physical attack needed an additional 16.8 mm visual-root
+offset; a focused independent check confirmed 30.1 mm clearance for both
+variants. Original full reports remain unchanged and pinned. Derived final
+reports combine that focused proof with unchanged camera-pose profiles and
+other clip proofs. Every variant stays at least 24.9 mm above the flat floor,
+remains in view, clears the bounds-based HUD proxy and exceeds 60 px idle height.
+The review renderer uses white ambient fill to make shaded body details visible.
+`catalog_remaining_142_batch02_battle_candidates.json` records profiles and all
+proof hashes. User battle approval, installed stress and individual bundles
+are still pending; approved catalog counts remain unchanged.
+
+[Six pairs in battle](http://127.0.0.1:8782/battle-six-review-v1/index.html)
