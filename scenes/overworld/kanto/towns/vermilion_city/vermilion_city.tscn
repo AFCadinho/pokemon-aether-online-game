@@ -707,6 +707,7 @@ position = Vector2(688, 1264)
 interactable_id = "kanto_vermilion_gym_cut_tree"
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1244201938 instance=ExtResource("20_6abko")]
+z_index = 144
 position = Vector2(848, 144)
 destination_id = "kanto_vermilion_city"
 interactable_id = "kanto_vermilion_city_aether_beacon"
