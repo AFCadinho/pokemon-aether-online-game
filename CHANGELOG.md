@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
+
 - Vermilion City en Route 11 hebben nu aparte noordelijke en zuidelijke overgangen met spawns op het bijbehorende pad.
 
 - Rose en de speler draaien vóór de Titanic-pose weer naar de zee.
