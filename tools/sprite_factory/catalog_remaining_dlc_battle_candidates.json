@@ -13,7 +13,7 @@
     },
     "poltchageist": {
       "schema": 1,
-      "sha256": "6a9836dbf48e15aebd4fde817cd3855bcf25c4af51cd8cf192859f8e86f8973a",
+      "sha256": "14b1e797cb1f0494a41b7ce03021bbe34c9361fd23e146c47eadd2965f84054b",
       "scale": 3.6901938647338,
       "yaw_degrees": 0.0,
       "lift": 0.0952275963127613,
@@ -3987,7 +3987,7 @@
     },
     "poltchageist-shiny": {
       "schema": 1,
-      "sha256": "a3be48850661d1e8b1e71cf79b8f643f8b61870070e3428472f679a338a1a5a4",
+      "sha256": "e7fa6277c438dd4b1ab192a92a8335818d6ed023997a17ba5bb868f1d9c27d49",
       "scale": 3.6901938647338,
       "yaw_degrees": 0.0,
       "lift": 0.0952275963127613,
@@ -7953,7 +7953,7 @@
     },
     "sinistcha": {
       "schema": 1,
-      "sha256": "89e6fc05995ab20671651d37a1601ef9b8e320d33ff738448c3beaac6832ccf3",
+      "sha256": "d9c6104acb4d97b86a98f1ca7daf51c38e36cdabbc74b8195d95c759063c084e",
       "scale": 2.43732612543209,
       "yaw_degrees": 0.0,
       "lift": 0.0935842813551426,
@@ -13216,7 +13216,7 @@
     },
     "sinistcha-shiny": {
       "schema": 1,
-      "sha256": "84e31d2c5a82f18359af00f1ba651b46a3ad1ed2e2a3d444fbd8015f715def5b",
+      "sha256": "2da3c4ae4d86e76c928c7dd075192d55fb2a31a6f8abbac0fbc80b3abd195b7b",
       "scale": 2.43732612543209,
       "yaw_degrees": 0.0,
       "lift": 0.0935842813551426,
