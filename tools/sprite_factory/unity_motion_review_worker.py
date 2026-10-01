@@ -60,13 +60,17 @@ def run(job):
         bpy.context.scene.render.fps_base = round(clip['fps']) / clip['fps']
         keyed = set()
         previous_rotations = {}
+        rest_overrides = set(job.get('rest_bone_overrides', {}).get(name, []))
+        if not rest_overrides <= set(rest):
+            raise ValueError('Unknown authored rest override bone')
         for frame in clip['frames']:
+            source_globals = {}
             key_frame = frame['time'] * clip['fps']
             bpy.context.scene.frame_set(int(key_frame), subframe=key_frame % 1)
             for bone in bone_order:
                 # Unity's model container can carry the FBX 100x unit scale.
                 # It is not the SCVI skeleton root animation.
-                track = frame['tracks'].get(bone.name) if bone.name != rig.name else None
+                track = frame['tracks'].get(bone.name) if bone.name != rig.name and bone.name not in rest_overrides else None
                 if track:
                     node = nodes[bone.name]
                     position = track.get('1', node['position'])
@@ -79,7 +83,20 @@ def run(job):
                 else:
                     matrix = rest[bone.name]
                 bone.rotation_mode = 'QUATERNION'
-                bone.matrix = bone.parent.matrix @ matrix if bone.parent else matrix
+                if job.get('explicit_source_hierarchy'):
+                    # Converted Unity local transforms include their own scale
+                    # inheritance. Do not compose against Blender's evaluated
+                    # parent, whose SCVI segment-scale policy can differ.
+                    source_globals[bone.name] = (source_globals[bone.parent.name] @ matrix
+                                                if bone.parent else matrix)
+                    kwargs = ({'parent_matrix': source_globals[bone.parent.name],
+                               'parent_matrix_local': bone.parent.bone.matrix_local}
+                              if bone.parent else {})
+                    bone.matrix_basis = bone.bone.convert_local_to_pose(
+                        source_globals[bone.name], bone.bone.matrix_local,
+                        invert=True, **kwargs)
+                else:
+                    bone.matrix = bone.parent.matrix @ matrix if bone.parent else matrix
                 if bone.name in previous_rotations:
                     bone.rotation_quaternion.make_compatible(previous_rotations[bone.name])
                 previous_rotations[bone.name] = bone.rotation_quaternion.copy()
@@ -89,6 +106,7 @@ def run(job):
                     keyed.add(bone.name)
         reports.append({'action': name, 'duration': clip['duration'],
                         'frames': len(clip['frames']), 'mapped_bones': sorted(keyed),
+                        'authored_rest_bones': sorted(rest_overrides),
                         'source': 'externally converted Unity transform clips'})
         print('Imported', name, len(keyed), flush=True)
     idle = next(action for action in bpy.data.actions
@@ -99,7 +117,8 @@ def run(job):
     bpy.ops.wm.save_as_mainfile(filepath=job['output'])
     Path(job['report']).write_text(json.dumps({'animations': reports, 'runtime_approved': False,
                                              'source_sha256': job['source_sha256'],
-                                             'motion_sha256': job['motion_sha256']}, indent=2) + '\n')
+                                             'motion_sha256': job['motion_sha256'],
+                                             'explicit_source_hierarchy': bool(job.get('explicit_source_hierarchy'))}, indent=2) + '\n')
 
 
 if __name__ == '__main__':

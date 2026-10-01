@@ -107,7 +107,7 @@ func _review(entry: Dictionary, output: String) -> Dictionary:
 		var initial: Array = []
 		for fraction in [0.0, 0.5, 1.0]:
 			var box: AABB = await _sample(model, player, action, fraction)
-			if not box.position.is_finite() or not box.size.is_finite() or box.size.length() <= 0:
+			if not box.position.is_finite() or not box.size.is_finite() or box.size.length() <= 0 or box.size.length() > float(entry.get("maximum_pose_extent", INF)):
 				record.errors.append("Invalid posed geometry: " + action)
 			if fraction == 0.0:
 				initial = _signature(model)
@@ -124,8 +124,8 @@ func _review(entry: Dictionary, output: String) -> Dictionary:
 		if not _same_pose(midpoints[action], _signature(model)):
 			record.errors.append("Pose depends on previous clip: " + action)
 	record["pose_policy"] = "reset_skeleton_before_clip; reverse-order midpoint regression"
-	var poses := [["idle", 0.0, "front"], ["idle", 0.5, "back"],
-		["special_attack", 0.5, "front"], ["sleep", 0.5, "front"], ["faint_start", 1.0, "front"]]
+	var poses: Array = entry.get("review_poses", [["idle", 0.0, "front"], ["idle", 0.5, "back"],
+		["special_attack", 0.5, "front"], ["sleep", 0.5, "front"], ["faint_start", 1.0, "front"]])
 	var framing := AABB()
 	var first := true
 	for pose in poses:
@@ -144,6 +144,10 @@ func _review(entry: Dictionary, output: String) -> Dictionary:
 		camera.size = maxf(pose_box.size.length() * 1.12, 0.1)
 		target = pose_box.get_center()
 		var direction := Vector3(3, 2, 7) if pose[2] == "front" else Vector3(-3, 2, -7)
+		if pose[2] == "eye":
+			direction = Vector3(2, 0.4, 7)
+		if pose[2] == "face":
+			direction = Vector3(0, 0.4, 7)
 		camera.position = target + direction.normalized() * camera.size * 3
 		camera.look_at(target)
 		var width := 0.0
