@@ -54,6 +54,8 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "ss_anne_collect_tea", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_collect_tea"},
 	{"id": "ss_anne_return_tea", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.ss_anne_return_tea"},
 	{"id": "challenge_surge", "chapter_id": "vermilion", "label_key": "ui.staff.story_checkpoint.challenge_surge"},
+	{"id": "saffron_gate_closed", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.saffron_gate_closed"},
+	{"id": "oak_rock_tunnel_advice", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.oak_rock_tunnel_advice"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
@@ -62,6 +64,7 @@ const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "mt_moon", "label_key": "ui.staff.story_chapter.mt_moon"},
 	{"id": "cerulean", "label_key": "ui.staff.story_chapter.cerulean"},
 	{"id": "vermilion", "label_key": "ui.staff.story_chapter.vermilion"},
+	{"id": "saffron", "label_key": "ui.staff.story_chapter.saffron"},
 ]
 const SIDE_QUESTS: Array[Dictionary] = [
 	{"id": "train_starter_to_level_10", "label_key": "ui.staff.side_quest.starter_training"},
