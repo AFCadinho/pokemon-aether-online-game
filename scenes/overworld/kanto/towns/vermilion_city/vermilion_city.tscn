@@ -330,6 +330,9 @@ region_id = "kanto"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=444944635]
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(848, 176)
+
 [node name="FromRoute6" type="Marker2D" parent="Spawns" unique_id=899854477]
 position = Vector2(688, 80)
 
@@ -617,7 +620,7 @@ npc_sprite_frames = ExtResource("life_picnicker")
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1599793774 instance=ExtResource("16_by6y8")]
 position = Vector2(784, 144)
-local_destination_id = ""
+local_destination_id = "kanto_vermilion_city"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=649267465]
 
@@ -705,6 +708,8 @@ interactable_id = "kanto_vermilion_gym_cut_tree"
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=1244201938 instance=ExtResource("20_6abko")]
 position = Vector2(848, 144)
+destination_id = "kanto_vermilion_city"
+interactable_id = "kanto_vermilion_city_aether_beacon"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false
