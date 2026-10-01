@@ -6246,5 +6246,6 @@
   "ui.staff.side_quest.ss_anne_crew_report": "Bemanningsrapport S.S. Anne",
   "story.kanto.ss_anne_titanic_pose.title": "Ik vlieg, Jack!",
   "story.kanto.ss_anne_titanic_pose.summary": "Doe samen met Rose een beroemde pose op de S.S. Anne. Beloning: 1 PP Up.",
-  "story.kanto.ss_anne_pose_with_rose": "Doe de Titanic-pose met Rose op het dek op 3F."
+  "story.kanto.ss_anne_pose_with_rose": "Doe de Titanic-pose met Rose op het dek op 3F.",
+  "ui.staff.side_quest.ss_anne_titanic_pose": "Rose · Titanic-pose"
 }
