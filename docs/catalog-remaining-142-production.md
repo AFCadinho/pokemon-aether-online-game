@@ -49,7 +49,7 @@ emission. 4 existing UV-domain tests and Python compilation passed.
 The first eight have source-pinned authored shiny candidates with unchanged
 geometry/skin/animation and alpha, captured in standalone Godot scenes. Their
 shiny appearance approval was received (“Alle acht goed”); the other four still need repair and
-shiny reconstruction. All 12 need final battle placement/qualification.
+shiny reconstruction. At that checkpoint all 12 still needed final battle placement/qualification.
 Current admission and published counts remain unchanged.
 
 ## Evidence and replay
@@ -96,9 +96,11 @@ without HUD-proxy overlap; minimum floor clearance is above 1.5 cm. These are
 technical candidates; user battle review and stress/qualification are pending.
 The first unsized report is preserved, with its exact original catalog restored as `catalog-unsized.json`.
 
-Model checkpoint commit `941fb1849` is not yet integrated: merge-task stopped
-on unrelated Vermilion Fan Club edits in the normal frontend checkout. They
-remain untouched by this task.
+The initial integration attempt for checkpoint `941fb1849` stopped on
+unrelated Vermilion Fan Club edits in the normal frontend checkout. They
+were left untouched. After the user confirmed a clean checkout, the model
+work was merged into local development; the changelog conflict was resolved
+by preserving both model and map entries.
 
 ## Six further native action recoveries
 
