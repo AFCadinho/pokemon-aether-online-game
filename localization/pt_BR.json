@@ -6234,5 +6234,13 @@
   "story.kanto.ss_anne_crew_report.title": "Uma entrega da tripulação",
   "story.kanto.ss_anne_crew_report.summary": "Ajude Finn a aprovar seu relatório com a oficial Mara.",
   "story.kanto.ss_anne_deliver_report": "Entregue o relatório à oficial Mara no convés do 3F.",
-  "story.kanto.ss_anne_return_report": "Volte para Finn no corredor do B1F."
+  "story.kanto.ss_anne_return_report": "Volte para Finn no corredor do B1F.",
+  "ui.staff.story_chapter.vermilion": "Vermilion City / S.S. Anne",
+  "ui.staff.story_checkpoint.board_ss_anne": "Porto · Mostre seu S.S. Ticket",
+  "ui.staff.story_checkpoint.ss_anne_rival": "S.S. Anne · Enfrente Gary",
+  "ui.staff.story_checkpoint.ss_anne_captain": "Capitão · Pergunte o que aconteceu",
+  "ui.staff.story_checkpoint.ss_anne_collect_tea": "Cozinha · Pegue chá de gengibre",
+  "ui.staff.story_checkpoint.ss_anne_return_tea": "Capitão · Entregue o chá / receba HM Cut",
+  "ui.staff.story_checkpoint.challenge_surge": "Ginásio de Vermilion · Enfrente Lt. Surge",
+  "ui.staff.side_quest.ss_anne_crew_report": "Relatório da tripulação do S.S. Anne"
 }
