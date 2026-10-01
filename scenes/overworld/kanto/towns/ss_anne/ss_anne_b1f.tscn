@@ -113,7 +113,7 @@ npc_id = "kanto_ss_anne_sailor"
 trainer_id = "kanto_ss_anne_sailor"
 display_name = "Sailor Kai"
 npc_sprite_frames = ExtResource("sailor")
-sight_range_tiles = 0
+sight_range_tiles = 3
 
 [node name="PopulationMechanicInez" parent="Entities/NPCs" instance=ExtResource("dialogue")]
 position = Vector2(1456, 400)
@@ -141,7 +141,7 @@ display_name = "Sailor Duncan"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_sailor")
 trainer_id = "kanto_ss_anne_sailor_duncan"
-sight_range_tiles = 0
+sight_range_tiles = 3
 
 [node name="Pokemon" type="Node2D" parent="Entities"]
 

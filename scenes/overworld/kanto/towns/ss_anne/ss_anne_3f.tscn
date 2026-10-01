@@ -240,7 +240,7 @@ interaction_id = "kanto_ss_anne_titanic_pose"
 [node name="PopulationSailorTrevor" parent="Entities/NPCs" unique_id=1253978292 instance=ExtResource("trainer")]
 position = Vector2(816, 496)
 trainer_id = "kanto_ss_anne_sailor_trevor"
-sight_range_tiles = 0
+sight_range_tiles = 3
 npc_id = "kanto_ss_anne_sailor_trevor"
 display_name = "Sailor Trevor"
 facing_direction = Vector2(0, -1)
