@@ -176,6 +176,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/players_house_story_intro_check.gd",
 	"res://tests/rivals_house_daisy_check.gd",
 	"res://tests/door_entrance_reachability_check.gd",
+	"res://tests/ss_anne_repeat_exit_check.gd",
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/tall_grass_character_depth_check.gd",
