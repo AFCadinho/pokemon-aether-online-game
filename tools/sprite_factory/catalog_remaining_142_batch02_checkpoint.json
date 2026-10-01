@@ -113,7 +113,7 @@
       "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
       "species": "lugia",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false,
       "superseded_runtime": {
@@ -182,7 +182,7 @@
       "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
       "species": "ho-oh",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false
     },
@@ -245,7 +245,7 @@
       "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
       "species": "vibrava",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false
     },
@@ -308,7 +308,7 @@
       "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
       "species": "flygon",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false
     },
@@ -371,7 +371,7 @@
       "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
       "species": "swanna",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false,
       "superseded_runtime": {
@@ -440,7 +440,7 @@
       "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
       "species": "mandibuzz",
       "variant": "normal",
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "normal_shiny_appearance_approved_battle_review_pending",
       "appearance_approved": true,
       "battle_approved": false
     }
@@ -448,5 +448,9 @@
   "normal_appearance_approved": 6,
   "user_review": "Ze zien er goed uit, ik kan alleen niet goed zien of lugia een pupil heeft of niet en of swanna's ogen open zijn",
   "eye_review_url": "http://127.0.0.1:8782/eyes-lugia-swanna-v1/index.html",
-  "corrected_eye_user_review": "ja, ze zijn goed"
+  "corrected_eye_user_review": "ja, ze zijn goed",
+  "shiny_appearance_approved": 6,
+  "shiny_user_review": "Diezien er goed uit",
+  "battle_review_url": "http://127.0.0.1:8782/battle-six-review-v1/index.html",
+  "battle_review_pending": 6
 }

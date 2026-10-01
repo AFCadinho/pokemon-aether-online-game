@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "runtime_approved": false,
-  "appearance_approved": false,
+  "appearance_approved": true,
   "battle_approved": false,
   "review_url": "http://127.0.0.1:8782/appearance-six-pairs-v1/index.html",
   "normal_user_review": "ja, ze zijn goed",
@@ -1580,5 +1580,6 @@
     ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-shiny-special_attack-50.webp": "a574e30b2c7d199e8fae81a105db8e290f29fa713a6d1a86a95331671622b228",
     ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-sleep-50.webp": "c9b3c6a8982850b73220b791202085f7c83785442141f9c0f0ce3ad0e2fe9587",
     ".tmp/remaining-142-production/appearance-six-pairs-v1/media/vibrava-special_attack-50.webp": "d3111b9d9ff3c1116513484eef4b7c64294563c42dce9c179a1515182176fc2e"
-  }
+  },
+  "normal_shiny_user_review": "Diezien er goed uit"
 }
