@@ -130,6 +130,7 @@ sources/0 = SubResource("TileSetAtlasSource_uhth6")
 [node name="SSAnne2F" type="Node2D" unique_id=1034563739]
 script = ExtResource("metadata")
 map_id = "kanto_ss_anne_2f"
+battle_environment_id = "ss_anne"
 map_region_name = "Kanto"
 map_display_name = "S.S. Anne 2F"
 world_access_group_id = "kanto_ss_anne"

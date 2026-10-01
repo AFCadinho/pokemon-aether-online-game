@@ -10,23 +10,29 @@ func _run() -> void:
 	assert(Profiles.get_profile(&"ss_anne").is_valid())
 	for floor_name in ["b1f", "1f", "2f", "3f"]:
 		var map_id: String = "kanto_ss_anne_" + floor_name
-		for kind in ["trainer", "wild"]:
+		for kind in ["trainer", "wild", "pvp", "coop", ""]:
 			var context := {"map_id": map_id, "battle_kind": kind, "player_on_water": true}
 			assert(Resolver.resolve(context) == &"ss_anne")
 			assert(Arenas.resolve("auto", Resolver.resolve(context), kind) == "ss_anne")
-			context.explicit_environment_id = "cave"
-			assert(Resolver.resolve(context) == &"cave")
-		assert(Resolver.resolve({"map_id": map_id, "battle_kind": "pvp"}) == &"pvp_stadium")
+			for override in ["grass", "water", "cave", "pvp_stadium"]:
+				context.explicit_environment_id = override
+				assert(Resolver.resolve(context) == &"ss_anne")
 		var scene: PackedScene = load("res://scenes/overworld/kanto/towns/ss_anne/ss_anne_" + floor_name + ".tscn")
 		var map := scene.instantiate()
 		root.add_child(map)
 		await process_frame
 		assert(map.map_id == map_id)
+		assert(map.get_battle_environment_id() == "ss_anne")
+		assert(map.get_location_metadata().battleEnvironmentId == "ss_anne")
 		for npc in map.get_node("Entities/NPCs").get_children():
 			if npc.has_method("build_battle_trainer_metadata"):
 				var metadata: Dictionary = npc.build_battle_trainer_metadata({})
 				assert(Resolver.resolve({"map_id": map.map_id, "battle_kind": "trainer", "explicit_environment_id": metadata.get("battleEnvironmentId", "")}) == &"ss_anne", str(npc.name))
 		map.free()
+	# The ship exception must not change other maps' PvP or explicit overrides.
+	for map_id in ["kanto_vermilion_city", "kanto_route_11", "kanto_ss_anne_unknown", ""]:
+		assert(Resolver.resolve({"map_id": map_id, "battle_kind": "pvp"}) == &"pvp_stadium")
+		assert(Resolver.resolve({"map_id": map_id, "battle_kind": "trainer", "explicit_environment_id": "cave"}) == &"cave")
 	assert(not Arenas.uses_forest_assets("ss_anne"))
 	assert(Arenas.resolve("sea", &"ss_anne", "trainer") == "sea")
 	var id := "ss_anne"
