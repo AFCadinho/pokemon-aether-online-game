@@ -94,14 +94,15 @@ func _check_lavender() -> void:
 	_check(arrival != null, "Lavender arrival warning trigger is present")
 	_check(town.get_node_or_null("Entities/NPCs/TowerWatcher") != null, "Lavender Tower watcher is present")
 	_check(town.get_node_or_null("Entities/NPCs/PokecenterVisitor") != null, "Lavender Pokémon Center visitor is present")
-	_check(town.get_node_or_null("Entities/Pokemon/Cubone") != null, "Cubone appears in Lavender Town")
+	_check(town.get_node_or_null("Entities/Pokemon/Meowth") != null, "Meowth appears in Lavender Town")
+	_check(town.get_node_or_null("Entities/Pokemon/Cubone") == null, "Cubone is reserved for Mr. Fuji's future home")
 	_check(town.get_node_or_null("Entities/Pokemon/Clefairy") != null, "Clefairy appears in Lavender Town")
 	var collision_layer := town.get_node("Tiles/Collision") as TileMapLayer
 	for node_path: NodePath in [
 		NodePath("Entities/NPCs/LavenderResident"),
 		NodePath("Entities/NPCs/TowerWatcher"),
 		NodePath("Entities/NPCs/PokecenterVisitor"),
-		NodePath("Entities/Pokemon/Cubone"),
+		NodePath("Entities/Pokemon/Meowth"),
 		NodePath("Entities/Pokemon/Clefairy"),
 	]:
 		var actor := town.get_node_or_null(node_path) as Node2D
@@ -115,6 +116,14 @@ func _check_lavender() -> void:
 		and center_exit.get("target_scene_path") == LAVENDER_CENTER_SCENE,
 		"Lavender Town exit connects to its Pokémon Center"
 	)
+	var beacon := town.get_node_or_null("Entities/Interactables/AetherBeacon")
+	var keeper := town.get_node_or_null("Entities/NPCs/TransitKeeperNPC")
+	var transit_arrival := town.get_node_or_null("Spawns/TransitArrival") as Marker2D
+	_check(beacon != null and beacon.get("destination_id") == "kanto_lavender_town", "Lavender Beacon attunes the Aethernet destination")
+	_check(keeper != null and keeper.get("local_destination_id") == "kanto_lavender_town", "Lavender Keeper opens the local Aethernet destination")
+	_check(transit_arrival != null and transit_arrival.position == Vector2(752, 784), "Lavender has the server-owned Aethernet arrival point")
+	if transit_arrival != null:
+		_check(collision_layer.get_cell_source_id(collision_layer.local_to_map(transit_arrival.position)) == -1, "Aethernet arrival point has no terrain collision")
 	if arrival != null:
 		_check(arrival.get("required_quest_id") == "travel_to_lavender_town", "arrival warning is tied to the Lavender quest")
 		var hook := arrival.get_node_or_null("StoryHook")
@@ -129,6 +138,7 @@ func _check_lavender_pokemon_center() -> void:
 		return
 	var center := packed.instantiate()
 	_check(center.get("map_id") == "kanto_lavender_town_pokemon_center", "center has its world map ID")
+	_check(center.get_node_or_null("Entities/Pokemon/Cubone") == null, "Cubone is not left in the Pokémon Center")
 	_check(
 		center.get_node_or_null("Exits/ToOutside") != null
 		and center.get_node("Exits/ToOutside").get("target_scene_path") == LAVENDER_SCENE,

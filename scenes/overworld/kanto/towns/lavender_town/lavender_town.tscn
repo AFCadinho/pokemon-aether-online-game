@@ -181,6 +181,9 @@ position = Vector2(720, 80)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=927047712]
 position = Vector2(272, 432)
 
+[node name="TransitArrival" type="Marker2D" parent="Spawns"]
+position = Vector2(752, 784)
+
 [node name="FromRoute8" type="Marker2D" parent="Spawns" unique_id=2103617432]
 editor_description = "Arrival from the future Route 8 map, facing right into Lavender Town."
 position = Vector2(80, 784)
@@ -299,21 +302,23 @@ npc_sprite_frames = ExtResource("10_lass")
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=247670401 instance=ExtResource("10_uwbxg")]
 position = Vector2(784, 720)
-local_destination_id = ""
+local_destination_id = "kanto_lavender_town"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=516271231]
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=469528135 instance=ExtResource("11_g4sx7")]
 position = Vector2(720, 784)
+destination_id = "kanto_lavender_town"
+interactable_id = "kanto_lavender_town_aether_beacon"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=676580131]
 
-[node name="Cubone" parent="Entities/Pokemon" unique_id=463204501 instance=ExtResource("11_overworld_pokemon")]
+[node name="Meowth" parent="Entities/Pokemon" unique_id=463204501 instance=ExtResource("11_overworld_pokemon")]
 position = Vector2(288, 640)
-overworld_pokemon_id = "kanto_lavender_town_cubone_1"
-species_id = "cubone"
-level = 17
-display_name = "Cubone"
+overworld_pokemon_id = "kanto_lavender_town_meowth_1"
+species_id = "meowth"
+level = 14
+display_name = "Meowth"
 facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1

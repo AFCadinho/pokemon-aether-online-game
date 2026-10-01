@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue_npc"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="3_lass"]
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="4_overworld_pokemon"]
 
 [node name="PokemonCenter" instance=ExtResource("1_template")]
 map_id = "kanto_lavender_town_pokemon_center"
@@ -24,17 +23,6 @@ npc_definition_id = "trainer_class_lass"
 display_name = "Lavender Visitor"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("3_lass")
-
-[node name="Cubone" parent="Entities/Pokemon" parent_id_path=PackedInt32Array(1761485951) index="0" instance=ExtResource("4_overworld_pokemon")]
-position = Vector2(560, 816)
-overworld_pokemon_id = "kanto_lavender_town_pokemon_center_cubone_1"
-species_id = "cubone"
-level = 16
-display_name = "Cubone"
-facing_direction = Vector2(-1, 0)
-movement_behavior = "pace_vertical"
-movement_tiles = 1
-movement_wait_seconds = 2.0
 
 [node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
