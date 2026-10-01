@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De SS Anne 1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - De SS Anne B1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - De SS Anne 2F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
