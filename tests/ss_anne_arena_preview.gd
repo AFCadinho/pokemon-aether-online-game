@@ -45,6 +45,12 @@ func _run() -> void:
 	await create_timer(0.5).timeout
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png(output.path_join("ss-anne-overview.png"))
+	for side in [-1, 1]:
+		camera.position = Vector3(side * 7, 2.8, -13)
+		camera.look_at(Vector3(side * 8, 1.25, -20))
+		await create_timer(0.5).timeout
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("ss-anne-passenger-%s.png" % ("male" if side < 0 else "female")))
 	root.get_node("WorldTimeService").clear_debug_time()
 	print("SS_ANNE_PREVIEW_OK")
 	quit()

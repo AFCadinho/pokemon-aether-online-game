@@ -46,9 +46,15 @@ func _run() -> void:
 		var audience := arena.get_node("DeckAudience")
 		assert(audience.get_child_count() == 6)
 		for spectator in audience.get_children():
-			var before: float = spectator.left_arm.rotation.z
+			assert(spectator.has_node("Character/CharacterArmature/Skeleton3D"))
+			assert(spectator.animation_player.has_animation("Wave"))
+			assert(spectator.animation_player.has_animation("Idle_Neutral"))
+			spectator.elapsed = 0.0
 			spectator._process(0.5)
-			assert(not is_equal_approx(spectator.left_arm.rotation.z, before), "Spectators cheer")
+			assert(spectator.animation_player.current_animation == "Wave")
+			spectator._process(4.0)
+			assert(spectator.animation_player.current_animation == "Idle_Neutral")
+			assert(spectator.get_node("Character").find_children("Pistol", "MeshInstance3D", true, false).is_empty())
 		var meshes: Array[MeshInstance3D] = []
 		_collect(arena, meshes)
 		assert(meshes.size() < 300)
