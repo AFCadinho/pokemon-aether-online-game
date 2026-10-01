@@ -6225,5 +6225,13 @@
   "story.kanto.ss_anne_crew_report.title": "A crew delivery",
   "story.kanto.ss_anne_crew_report.summary": "Help Finn get his maintenance report approved by Officer Mara.",
   "story.kanto.ss_anne_deliver_report": "Deliver Finn’s report to Officer Mara on the 3F deck.",
-  "story.kanto.ss_anne_return_report": "Return to Finn in the B1F corridor."
+  "story.kanto.ss_anne_return_report": "Return to Finn in the B1F corridor.",
+  "ui.staff.story_chapter.vermilion": "Vermilion City / S.S. Anne",
+  "ui.staff.story_checkpoint.board_ss_anne": "Port · Show your S.S. Ticket",
+  "ui.staff.story_checkpoint.ss_anne_rival": "S.S. Anne · Battle Gary",
+  "ui.staff.story_checkpoint.ss_anne_captain": "Captain · Ask what is wrong",
+  "ui.staff.story_checkpoint.ss_anne_collect_tea": "Kitchen · Collect ginger tea",
+  "ui.staff.story_checkpoint.ss_anne_return_tea": "Captain · Return with tea / receive HM Cut",
+  "ui.staff.story_checkpoint.challenge_surge": "Vermilion Gym · Challenge Lt. Surge",
+  "ui.staff.side_quest.ss_anne_crew_report": "S.S. Anne crew report"
 }

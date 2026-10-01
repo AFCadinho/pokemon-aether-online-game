@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Story Progress in de devtools heeft Vermilion/S.S. Anne-checkpoints; de bemanningsquest is instelbaar via Side Quests.
+
 - Thieving prompts have a larger hand-and-coin icon, a rounded violet surface, and clearer hover/press feedback matching the fishing button style.
 
 - Nog acht Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles: Arctovish, Lillipup, Mr. Rime, Noctowl, Palpitoad, Poipole, Seismitoad en Trumbeak.
