@@ -6558,7 +6558,7 @@
 		},
 		"kanto_vermilion_city_port_interior__to_city": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "down",
 				"mapId": "kanto_vermilion_city",
 				"mapSceneAliases": [
 					"uid://da65wnwy4dmid"
