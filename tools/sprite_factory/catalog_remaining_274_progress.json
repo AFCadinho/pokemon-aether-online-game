@@ -6,11 +6,12 @@
   "remaining_base_species": 142,
   "runtime_approved": false,
   "counts": {
-    "source_or_motion_recovery_pending": 115,
+    "appearance_pair_approved_battle_pending": 8,
     "approved_individual_bundle_ready": 132,
-    "normal_candidate_visual_repair_pending": 4,
     "dlc_model_found_native_motion_missing": 15,
-    "normal_appearance_approved_shiny_battle_pending": 8
+    "normal_appearance_review_pending": 6,
+    "normal_candidate_visual_repair_pending": 4,
+    "source_or_motion_recovery_pending": 109
   },
   "review_url": "http://127.0.0.1:8781/appearance-56-v1/index.html",
   "diagnostic_root": ".tmp/remaining-274-production",
@@ -729,7 +730,7 @@
       "species": "noctowl",
       "national_dex": 164,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "previous_status": "review_hold",
       "previous_reason": "missing_or_ambiguous_native_actions",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
@@ -987,17 +988,19 @@
       "species": "lugia",
       "national_dex": 249,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "ho-oh",
       "national_dex": 250,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "celebi",
@@ -1294,17 +1297,19 @@
       "species": "vibrava",
       "national_dex": 329,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "flygon",
       "national_dex": 330,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "lunatone",
@@ -1628,7 +1633,7 @@
       "species": "lillipup",
       "national_dex": 506,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Authored shader inputs changed while cloning the graph",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "3c81d090f0fc7f8e749f4315b85af7acfe75bbe9d6d007bc4358facba251a39a",
@@ -1883,7 +1888,7 @@
       "species": "palpitoad",
       "national_dex": 536,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Native Base Color is not connected unambiguously",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "9932c5121bfd4e078abdbe3764848031fcf0587e441aa0a8518405bd2ef0a9d7",
@@ -1893,7 +1898,7 @@
       "species": "seismitoad",
       "national_dex": 537,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Native Base Color is not connected unambiguously",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "9dcd8e76394c3d9ef79913128c51b7483b6365e786309ad905b6f8239cb050dc",
@@ -2124,9 +2129,10 @@
       "species": "swanna",
       "national_dex": 581,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "vanillite",
@@ -2318,9 +2324,10 @@
       "species": "mandibuzz",
       "national_dex": 630,
       "runtime_approved": false,
-      "status": "source_or_motion_recovery_pending",
+      "status": "normal_appearance_review_pending",
       "previous_status": "review_hold",
-      "previous_reason": "missing_or_ambiguous_native_actions"
+      "previous_reason": "missing_or_ambiguous_native_actions",
+      "recovery_checkpoint": "tools/sprite_factory/catalog_remaining_142_batch02_checkpoint.json"
     },
     {
       "species": "heatmor",
@@ -2423,7 +2430,7 @@
       "species": "trumbeak",
       "national_dex": 732,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "previous_status": "review_hold",
       "previous_reason": "missing_or_ambiguous_native_actions",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
@@ -2727,7 +2734,7 @@
       "species": "poipole",
       "national_dex": 803,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Native emission is active; separate reconstruction needed: Eye",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "7e36573310656384f81132817b6195e863e7f7a95d33389531ac69f583e161a3",
@@ -2962,7 +2969,7 @@
       "species": "mr-rime",
       "national_dex": 866,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Native emission is active; separate reconstruction needed: ice",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "2e35716fbe2133ad08e05f9ee328403b96e8e03e843b3aef995966e06e001dd4",
@@ -3035,7 +3042,7 @@
       "species": "arctovish",
       "national_dex": 883,
       "runtime_approved": false,
-      "status": "normal_appearance_approved_shiny_battle_pending",
+      "status": "appearance_pair_approved_battle_pending",
       "reason": "Material without baseColorTexture requires separate reconstruction",
       "normal_candidate_checkpoint": "tools/sprite_factory/catalog_remaining_142_checkpoint.json",
       "normal_candidate_glb_sha256": "8e965613267e0054332689e35f45ce06cf46ea23a188a78f8e608c5f8bd828bb",
@@ -3155,7 +3162,7 @@
     "final_correction_stage_sha256": "fa40bc8fe9a1b87a70038045ead38c77528ab256b45e6dd4fce3258ba9f69d8c",
     "corrected_venusaur_battle_approval_answer": "Allemaal goed"
   },
-  "current_stage": "remaining-142:8 normal appearances approved; shiny/battle pending,4 visual repairs pending, no new admissions",
+  "current_stage": "remaining-142:8 normal/shiny appearances approved with battle validation in progress;6 extra normal appearances awaiting review;4 material repairs;109 source/action holds;15 DLC holds;no admissions",
   "battle_checkpoint": {
     "clearance_passed_pairs": 56,
     "visual_battle_approved_pairs": 56,

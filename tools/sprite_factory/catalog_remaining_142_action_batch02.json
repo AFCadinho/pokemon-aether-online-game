@@ -1,0 +1,149 @@
+{
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "lugia",
+      "national_dex": 249,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0249.blend",
+        "bytes": 45768948,
+        "crc32": "f97d7701"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0249-lugia/report.json",
+      "probe_sha256": "3be4a3789c92d0925c9f186949b0c876f31803ad3f5711d3b9b1de7ddb4ff746",
+      "actions": {
+        "idle": "pm0249_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0249_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0249_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0249_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0249_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0249_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0249_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0249_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    },
+    {
+      "species": "ho-oh",
+      "national_dex": 250,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen2.zip",
+        "member": "pm0250.blend",
+        "bytes": 32482900,
+        "crc32": "771cd544"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0250-ho-oh/report.json",
+      "probe_sha256": "8dad39cbb405c68c485bc1dbbefe81bbabc50ba43a8f47fadef0dce8128fdcd5",
+      "actions": {
+        "idle": "pm0250_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0250_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0250_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0250_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0250_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0250_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0250_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0250_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    },
+    {
+      "species": "vibrava",
+      "national_dex": 329,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0329.blend",
+        "bytes": 16297564,
+        "crc32": "191d9bc5"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0329-vibrava/report.json",
+      "probe_sha256": "05a87694302fda22b43b13151cd2d0eade64215f93c015eaeed937241cc82b8a",
+      "actions": {
+        "idle": "pm0329_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0329_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0329_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0329_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0329_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0329_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0329_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0329_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    },
+    {
+      "species": "flygon",
+      "national_dex": 330,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen3.zip",
+        "member": "pm0330.blend",
+        "bytes": 22615364,
+        "crc32": "cbf31013"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0330-flygon/report.json",
+      "probe_sha256": "cc34fc266855879d2ff3f518746ad19232ec532054fef289ef114f9bb5f5f251",
+      "actions": {
+        "idle": "pm0330_00_00_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0330_00_00_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0330_00_00_20410_attack02.gfbanm",
+        "special_attack": "pm0330_00_00_20450_rangeattack01.gfbanm",
+        "damage": "pm0330_00_00_20500_damage01.gfbanm",
+        "faint_start": "pm0330_00_00_20520_down01_start.gfbanm",
+        "faint_loop": "pm0330_00_00_20521_down01_loop.gfbanm",
+        "sleep": "pm0330_00_00_00281_sleep01_loop.gfbanm"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    },
+    {
+      "species": "swanna",
+      "national_dex": 581,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0581.blend",
+        "bytes": 68328763,
+        "crc32": "e31ca5e1"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0581-swanna/report.json",
+      "probe_sha256": "377e486ed7bdbc78166f1a4845ffac4851d222361ce721178840814febe15584",
+      "actions": {
+        "idle": "pm0581_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0581_00_00_20400_attack01",
+        "physical_attack_2": "pm0581_00_00_20410_attack02",
+        "special_attack": "pm0581_00_00_20450_rangeattack01",
+        "damage": "pm0581_00_00_20500_damage01",
+        "faint_start": "pm0581_00_00_20520_down01_start",
+        "faint_loop": "pm0581_00_00_20521_down01_loop",
+        "sleep": "pm0581_00_00_00281_sleep01_loop"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    },
+    {
+      "species": "mandibuzz",
+      "national_dex": 630,
+      "source": {
+        "archive": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+        "member": "pm0630.blend",
+        "bytes": 57433886,
+        "crc32": "3d4c2465"
+      },
+      "probe": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-animation-recovery/probes/0630-mandibuzz/report.json",
+      "probe_sha256": "cb139132da261a9cb45db20b05dee3e75b6401457227bc2ff0a2ab7357eea432",
+      "actions": {
+        "idle": "pm0630_00_00_20000_defaultwait01_loop",
+        "physical_attack": "pm0630_00_00_20400_attack01",
+        "physical_attack_2": "pm0630_00_00_20410_attack02",
+        "special_attack": "pm0630_00_00_20450_rangeattack01",
+        "damage": "pm0630_00_00_20500_damage01",
+        "faint_start": "pm0630_00_00_20520_down01_start",
+        "faint_loop": "pm0630_00_00_20521_down01_loop",
+        "sleep": "pm0630_00_00_00281_sleep01_loop"
+      },
+      "policy": "Exact single default rig/form prefix; one complete battle bank2 and unique native sleep; review-only explicit mapping",
+      "battle_bank": "2"
+    }
+  ]
+}
