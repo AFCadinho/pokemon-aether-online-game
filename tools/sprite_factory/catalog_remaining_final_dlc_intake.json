@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "runtime_approved": false,
+  "runtime_approved": true,
   "entries": [
     {
       "species": "dipplin",
@@ -11,10 +11,10 @@
         "pm1121/pm1121_00_00/pm1121_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1121/pm1121_00_00/pm1121_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -27,10 +27,10 @@
         "pm1134/pm1134_12_00/pm1134_12_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1134/pm1134_11_00/pm1134_11_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -43,10 +43,10 @@
         "pm1133/pm1133_12_00/pm1133_12_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1133/pm1133_11_00/pm1133_11_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -58,10 +58,10 @@
         "pm1123/pm1123_00_00/pm1123_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1123/pm1123_00_00/pm1123_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -73,10 +73,10 @@
         "pm1124/pm1124_00_00/pm1124_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1124/pm1124_00_00/pm1124_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -88,10 +88,10 @@
         "pm1125/pm1125_00_00/pm1125_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1125/pm1125_00_00/pm1125_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -110,10 +110,10 @@
         "pm1120/pm1120_14_99/pm1120_14_99.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1120/pm1120_11_00/pm1120_11_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -125,10 +125,10 @@
         "pm1132/pm1132_00_00/pm1132_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1132/pm1132_00_00/pm1132_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -140,10 +140,10 @@
         "pm1122/pm1122_00_00/pm1122_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1122/pm1122_00_00/pm1122_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -155,10 +155,10 @@
         "pm1126/pm1126_00_00/pm1126_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1126/pm1126_00_00/pm1126_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -170,10 +170,10 @@
         "pm1127/pm1127_00_00/pm1127_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1127/pm1127_00_00/pm1127_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -185,10 +185,10 @@
         "pm1129/pm1129_00_00/pm1129_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1129/pm1129_00_00/pm1129_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -200,10 +200,10 @@
         "pm1128/pm1128_00_00/pm1128_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1128/pm1128_00_00/pm1128_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     },
     {
@@ -217,10 +217,10 @@
         "pm1130/pm1130_13_00/pm1130_13_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1130/pm1130_11_00/pm1130_11_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json",
       "material_aliases": {
         "body_a_02": "body_a_02"
@@ -236,11 +236,19 @@
         "pm1131/pm1131_00_00/pm1131_00_00.trmdl"
       ],
       "motion_folder_present": false,
-      "runtime_approved": false,
+      "runtime_approved": true,
       "icon_path": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump/pm1131/pm1131_00_00/pm1131_00_00_00.png",
-      "status": "held_pending_motion_recovery_qualification",
-      "reason": "An external animated source was recovered and converted on the source rig; material, sleep, Godot/battle and user qualification are still pending.",
+      "status": "runtime_qualified_using_recovered_motions",
+      "reason": "Normal/shiny appearance, authored rest, installed battle loading and performance approved; individually bundled. Original dump still has no native motion folder.",
       "motion_recovery_receipt": "catalog_remaining_dlc_motion_intake.json"
     }
-  ]
+  ],
+  "runtime_qualification": {
+    "path": "tools/sprite_factory/catalog_remaining_dlc_bundle_qualification.json",
+    "sha256": "d1261f6932e1c552647d9acdbfe9670ceb886744ad110a776866ac751a6c1160"
+  },
+  "r2_publication": {
+    "path": "release/approved_3d_dlc_15_r2_upload.json",
+    "sha256": "4d510055258ad035d8a971380aeb9e098f770c376d03b45034fca41e2a21be91"
+  }
 }

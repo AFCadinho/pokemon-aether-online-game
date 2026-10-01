@@ -277,3 +277,63 @@ page/manifest/image requests returned HTTP 200 and the URL was dispatched with
 `xdg-open`. User confirmation of this narrow follow-up remains pending. The
 battle checkpoint pins the four revised scenes and the unchanged placement
 curves with their new GLB hashes. No runtime admission or bundles yet.
+
+
+### Final visual approval and bundle preparation — 2026-10-01
+
+The user approved the three final shiny follow-ups: “ja die zijn goed”.
+This completes visual approval of all 15 normal/shiny pairs, including their
+authored rest, camera scale and battle poses. The checkpoint binds the exact
+final scenes and the narrow source-pot-paint correction proof.
+
+`prepare_dlc_15_admission.py` carries the measured grounding and motion curves
+into SCN-hash-bound runtime profiles. Fully airborne clips receive explicit
+zero-correction curves from their measured native clocks. The actual placement
+and motion validators accept all 30 candidates. No geometry, pose, texture or
+timing changes are made during admission preparation.
+
+Fifteen individual v1 bundles total 350,523,768 bytes (334.29 MiB). Transactional
+launcher installation loads all 30 scenes; no-op planning and restart pass.
+Runtime admission and R2 upload are gated on the existing rendered battle
+performance assertions. An initial pass with a second Godot editor running
+failed frame/stall limits and is retained as `installed-stress-with-editor.*`;
+it is not qualification evidence. The editor was then closed for a repeat.
+
+
+### Installed runtime qualification completed
+
+With the editor closed, the unchanged three-pass assertions passed for all 15
+pairs and 45 faint replacements. p95 frame times were 12.729 / 19.367 / 12.301 ms
+(classic / stadium / classic), below the existing 20 ms limit. No uncovered
+stall exceeded 100 ms. Retained model source data was 14,334,491 bytes; static
+memory grew 122,240 bytes between the second and third rounds, below 1 MiB.
+The check uses local AMD Compatibility rendering, without cross-platform or
+release certification. Existing asset UID warnings fall back to valid paths.
+
+`admit_dlc_15.py` admits only exact installed scene hashes after approval,
+transactional installation and performance proofs. Both game and launcher
+registries now match: **1,025 ordinary species plus Mega Dragonite**, totalling
+1,026 profiles and 2,052 normal/shiny records. A separate registry check resolves
+all 30 installed scenes to the approved timing, placement and motion profiles,
+and rejects incorrect hashes. The historical standalone checkpoint remains a
+pre-admission snapshot; `catalog_remaining_dlc_bundle_qualification.json` is
+the final runtime authority. All 15 are finished locally; no further human
+review is pending for these exact scenes.
+
+The recovered motion attribution remains Zyphex Skybreaker’s Gen IX models
+(Workshop item 3428100851). Rest is authored rather than claimed native sleep;
+static emission/flow approximations retain the reviewed limitations above.
+
+
+### R2 publication completed
+
+All 15 bundles and their immutable content index are now published on R2.
+`release/approved_3d_dlc_15_r2_upload.json` records public GET SHA-256 and HEAD
+size verification for all 16 objects, bound to the qualified runtime catalog.
+The existing desktop manifest remained unchanged; this publication does not
+activate a new game/launcher release. Final intake/material metadata points to
+the runtime qualification and public upload receipt. The original evidence
+checkpoints and local pre-publication receipt retain their historical scope.
+
+No DLC model remains pending visual review or local qualification in this task.
+Further alternate forms and Mega evolutions are separate catalog work.

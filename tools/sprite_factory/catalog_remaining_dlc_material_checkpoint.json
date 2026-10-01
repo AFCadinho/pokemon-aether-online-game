@@ -1,27 +1,23 @@
 {
   "schema": 1,
-  "runtime_approved": false,
-  "visual_approved": false,
+  "runtime_approved": true,
+  "visual_approved": true,
   "species": 15,
   "variants": 30,
-  "scope": "preliminary_GLTF_material_and_animation_diagnostic",
+  "scope": "Approved final standalone scenes are bound by runtime_qualification; original appearance GLB receipts retained as source history",
   "godot": "4.6.2-stable (official)",
   "godot_sampled_models": 30,
   "godot_pose_or_timing_errors": 0,
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
-  "pending": [
-    "three_shiny_followup_reviews",
-    "runtime_admission_and_loading_performance",
-    "individual_bundles"
-  ],
+  "pending": [],
   "entries": [
     {
       "species": "dipplin",
       "identity": "pm1121_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "73894978c3b77965795c0dffff5422696c630e18b99718691ce6d42d3e8ee67c",
@@ -119,14 +115,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "062662863ba609b0554c0f9646357667304ed12aa075c390816150bc0ea88d77",
+          "profile": "dipplin-normal",
+          "sha256": "a31025e66be5788797cd9078ca9935795797dc0dfd40d7186924844ed830d5df"
+        },
+        "shiny": {
+          "glb_sha256": "14dac7791b75f58f17d05634817b74d892ac668cb687bb45d73637ea9de8eafc",
+          "profile": "dipplin-shiny",
+          "sha256": "e12df949eed4b452a543511f96c58fa15a1cc72b6a0aae712cfedfd07a6706eb"
+        }
+      }
     },
     {
       "species": "sinistcha",
       "identity": "pm1134_11_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "a068b4ce1422d2728aa10f23eafd83d2c25d9f1788fc60da2f63c33d5e219dbc",
@@ -192,14 +200,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "d9c6104acb4d97b86a98f1ca7daf51c38e36cdabbc74b8195d95c759063c084e",
+          "profile": "sinistcha-normal",
+          "sha256": "c9b258ff0a3f6f2f8e3ebb6e2e792295a562f3eaeca80ca8f54a1965657f8115"
+        },
+        "shiny": {
+          "glb_sha256": "2da3c4ae4d86e76c928c7dd075192d55fb2a31a6f8abbac0fbc80b3abd195b7b",
+          "profile": "sinistcha-shiny",
+          "sha256": "3225e7f6835c7822599c9531f6cd988f40f4f1a274d5bfb2a687f43fce431f07"
+        }
+      }
     },
     {
       "species": "poltchageist",
       "identity": "pm1133_11_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "7ff894bc0564f0f438c0d2e7d9a0a2551fd6e65985b666734313cab7c0a7a0ed",
@@ -257,14 +277,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "14b1e797cb1f0494a41b7ce03021bbe34c9361fd23e146c47eadd2965f84054b",
+          "profile": "poltchageist-normal",
+          "sha256": "cf2a78a7307c2cfb18e87ebb8d7041e16415cfcac97bc28eea361998b56a8eaf"
+        },
+        "shiny": {
+          "glb_sha256": "e7fa6277c438dd4b1ab192a92a8335818d6ed023997a17ba5bb868f1d9c27d49",
+          "profile": "poltchageist-shiny",
+          "sha256": "9acab602467e17010cdeaffb425619ccdf3179ca3b7b51868f58792882afc329"
+        }
+      }
     },
     {
       "species": "okidogi",
       "identity": "pm1123_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "1ff505329ea759590cef88e1198fbbec1bc2c7ba0f7c11f98ad7b8122ce1b5e0",
@@ -348,14 +380,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "df59ddd2bd97a6afb82c2b63fa66ce81a7a17a3a91ea43def51ef04aa7690387",
+          "profile": "okidogi-normal",
+          "sha256": "69b84fa35da6d1de0539cb33ddb8c3b16af772e18b6a1107c0b199b79cd2408f"
+        },
+        "shiny": {
+          "glb_sha256": "5889e51cdeaa690a21321b16b171ebb1f0de3ff0d84b5636fcd7cf751931e41a",
+          "profile": "okidogi-shiny",
+          "sha256": "30e56407df0c7dada64aa05a8c963f73bd7fce2880b2c1114946a5cf5d6bf226"
+        }
+      }
     },
     {
       "species": "munkidori",
       "identity": "pm1124_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "aac1a90f4974e9ae7c8e5d5d1743439638d2425d503e46de328a88e2b758fe2f",
@@ -463,14 +507,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "f336bdcabe447d297d53da31e5e60097aed7ce3e7637b02acc267e941c6eb192",
+          "profile": "munkidori-normal",
+          "sha256": "2fcc16e047213927ec0dbb988f50d8b2471f7db7812ef12b2d31a6b15432dcbb"
+        },
+        "shiny": {
+          "glb_sha256": "bd76494e6dfd3a559f5feab7f224ef95263ed565c698b609030485273761e852",
+          "profile": "munkidori-shiny",
+          "sha256": "2f3abc95e045c242909131e4c9b173feb330dfd8ee56681fab0e25a6db67ae02"
+        }
+      }
     },
     {
       "species": "fezandipiti",
       "identity": "pm1125_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "ee80fcdbd022b05b45da19391ca6c4a677f85713859768f8f362987477e1ffa2",
@@ -554,14 +610,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "e9bc79e80e3b82c05d6a8c762b9bef08316708167fdc1a7676f60e5eb4bbf2c1",
+          "profile": "fezandipiti-normal",
+          "sha256": "f96812e5c7dfece5b1a1eb2fd89dfbaa44e56366ad8725a64502edb75b5e9c06"
+        },
+        "shiny": {
+          "glb_sha256": "fbb5509ddd80c651304fc4a6b1860a6729f04a9a9012feaadc6b3edb5763a422",
+          "profile": "fezandipiti-shiny",
+          "sha256": "a4819ffaa71da2b776189ae38de8393880b3dd01f91e7aa87bb8194c272c27f5"
+        }
+      }
     },
     {
       "species": "ogerpon",
       "identity": "pm1120_11_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "16b1019c558fe33f4d51442ed2792492ae05c66f1411cbfcd8e25e67737f9a5a",
@@ -645,14 +713,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "8c799faa3b543fe720d53d4ab6654b770dfb30790480da6fbf6abdee7d3133db",
+          "profile": "ogerpon-normal",
+          "sha256": "e7208d18abee2a047fd3c66adbafba75b31053750ff43bb2c01c654eedbec20d"
+        },
+        "shiny": {
+          "glb_sha256": "9ed1fc55f5d269db6edd4480e53887ead85fefeebda8b5e707b02637bf88486c",
+          "profile": "ogerpon-shiny",
+          "sha256": "3f4710460e3db2f3cf89afa5dcdd7377c3760133f3637d0279f4d0805c312643"
+        }
+      }
     },
     {
       "species": "archaludon",
       "identity": "pm1132_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "c5168979d5495b4265734bf6b7fac3f8e27be8c7c255d006fcd4fe222815d40c",
@@ -732,14 +812,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "34acbc1971020d854fc4f6fa78226a332592a98fff2f509cfe5074e6e8780962",
+          "profile": "archaludon-normal",
+          "sha256": "847525acfc94cb5ffed1184d2df100592b4a5823d83283bbf834857fc3e86dce"
+        },
+        "shiny": {
+          "glb_sha256": "81f2bc10213d2f3778c4208bd597815bf20a4375de20ed246a2bf3b97c9478a3",
+          "profile": "archaludon-shiny",
+          "sha256": "46781a4eaa1f4bde818fce73867607f72c243a2a938d2689bd78bb48df830c15"
+        }
+      }
     },
     {
       "species": "hydrapple",
       "identity": "pm1122_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "fb490286722fdb2611213bc987cdfbab9ffd50b058943d66d02dd0437013a7ac",
@@ -873,14 +965,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "ddd1eddb0593ffc3bf0e489cfd73b2547a8be12491fa9f421eb038d53bcfed13",
+          "profile": "hydrapple-normal",
+          "sha256": "f965a449e4959965fbf18028fe4b258377c1a072a212f2642163a08af4a6c7d6"
+        },
+        "shiny": {
+          "glb_sha256": "eb28627dd46696c6e31ef821be1113b133d5e37a9785e534d11a4b0f94fd7a31",
+          "profile": "hydrapple-shiny",
+          "sha256": "7dfba9f1061fb89d77c6dd062fbb9ac3711ed24fec0bf6c70dc1104f7a3ceb63"
+        }
+      }
     },
     {
       "species": "gouging-fire",
       "identity": "pm1126_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "7fde666d7645b84d2ac72010ac65c9caeea85456a27181774a91a701ed49c7ea",
@@ -988,14 +1092,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "8f6ba0b725fb3c459bcd50f17ea2efed5d34b0e3a50c274b3de12f4eb95b0b59",
+          "profile": "gouging-fire-normal",
+          "sha256": "844d55e20e48bc0e42bf66dc57d81b82c148abb004c265c7839bb3bb55a5b4f4"
+        },
+        "shiny": {
+          "glb_sha256": "d4392b95d1f850be2f0e3481154c9cca656e07148c204dde535714086adc2bac",
+          "profile": "gouging-fire-shiny",
+          "sha256": "346608c3978c7b6dc6dd05c0f9e1ce78bba6c616a568954d7662c37165700831"
+        }
+      }
     },
     {
       "species": "raging-bolt",
       "identity": "pm1127_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "79a4f883756486c6cc5f9a9e33f4ec6035b00340ff3ac21603093b37154d7a47",
@@ -1079,14 +1195,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "9c2795117a8c386b0a22ace408bfc425313eb2429020661d173901a6070921a3",
+          "profile": "raging-bolt-normal",
+          "sha256": "80f85f3b1fd56cf92cf48129f6887fa9fb92612dfcafd962d2c6badbcdb85393"
+        },
+        "shiny": {
+          "glb_sha256": "ec324038c5961b6d8ae6673c4cd4eda4fe28f8daa051849bafbeb154ca6c4ae8",
+          "profile": "raging-bolt-shiny",
+          "sha256": "16954d4d090bb1649a20723e177f1c581cdc723f65063aebad4555229a757e1b"
+        }
+      }
     },
     {
       "species": "iron-boulder",
       "identity": "pm1129_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "bf844fc4534385fac9980138ea398518a75f15d6204f0d9e10cc4b3244d988c5",
@@ -1188,14 +1316,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "d409595463cb676f44ec55a221eccb1bb02cf2b272956d23c3e110d5abe9a99d",
+          "profile": "iron-boulder-normal",
+          "sha256": "2e4e292abda46b361902d2df0b7eddb3e0847cfa13873f7b0dbe6a97ca20a159"
+        },
+        "shiny": {
+          "glb_sha256": "a29fdbbea48685caf7b2ecda6482ae2301518ea601e6658dd5cd0f5142296121",
+          "profile": "iron-boulder-shiny",
+          "sha256": "978c769eb96f9635f099304ce31f4b1ef1d74c8baa33ad73617f3b71158f2c17"
+        }
+      }
     },
     {
       "species": "iron-crown",
       "identity": "pm1128_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "7c196656ce3fdea0927db881147b973f124f0e5d9ea115d0a390cb19b57d33df",
@@ -1309,14 +1449,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "68f6d688f00e609719629f4f9b0c54798c5eee24a98932e5b010c214a31d9d2e",
+          "profile": "iron-crown-normal",
+          "sha256": "927be927fc4c7c0e99b62188b90440c507dfae7833e93151c3cd9dfc4ea74613"
+        },
+        "shiny": {
+          "glb_sha256": "9b2ee34c22e5475ee0359a8668296555b8772426dbddeecbd43676801465c728",
+          "profile": "iron-crown-shiny",
+          "sha256": "dc16c198129372473940bd0ad3170bd879b3cee267072da1d5ec38442911e58d"
+        }
+      }
     },
     {
       "species": "terapagos",
       "identity": "pm1130_11_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "8ab07733bb506aad618152a8afc78829c7c72998b808c5a4b0f8a597a39049f1",
@@ -1402,14 +1554,26 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "23065495756ae177da404ff49ae7059b5527445f56cbfd35bb9338d3e4ecd900",
+          "profile": "terapagos-normal",
+          "sha256": "580fdad8d7abcb9687afaa53134cd19f1210374543ee7d859c50cabaed7dcc44"
+        },
+        "shiny": {
+          "glb_sha256": "d3147c208d22e745ecb862d6c1890526b5c5ba36d1c8f1cdbd00a6f89b4bbe1e",
+          "profile": "terapagos-shiny",
+          "sha256": "20c7fe8a51ec046d4e4942acba77881a3be9376e130668c9b1acda03fa17e85c"
+        }
+      }
     },
     {
       "species": "pecharunt",
       "identity": "pm1131_00_00",
-      "runtime_approved": false,
-      "visual_approved": false,
-      "status": "material_pair_candidate",
+      "runtime_approved": true,
+      "visual_approved": true,
+      "status": "runtime_qualified_pair",
       "variants": {
         "normal": {
           "glb_sha256": "29efb637fcc8e82026a2fbfb02a23b93c05bf778c9e52a4e57271f0b175a2a57",
@@ -1469,7 +1633,19 @@
           "loop": false
         }
       },
-      "appearance_approved": true
+      "appearance_approved": true,
+      "approved_runtime_variants": {
+        "normal": {
+          "glb_sha256": "664bc6991c932caec6a4261f4efe17b1aaa202b82514ce346d1647206c7db011",
+          "profile": "pecharunt-normal",
+          "sha256": "71953625e278e4b552cbf0b80ccb137baace14915d4c13cbff78ee6b04efc5d7"
+        },
+        "shiny": {
+          "glb_sha256": "0f55780d8c2211a72c99b9e38b4ed16869caacbc0c2a70125819ba337d43de06",
+          "profile": "pecharunt-shiny",
+          "sha256": "b3804ffac4323d86bb19053569e3d5e75e7f281b4f03cd62bf72d77cfb1e034d"
+        }
+      }
     }
   ],
   "appearance_review_history": [
@@ -1556,13 +1732,18 @@
   },
   "standalone_battle_checkpoint": {
     "path": "tools/sprite_factory/catalog_remaining_dlc_battle_checkpoint.json",
-    "sha256": "3a9a4289aaefdddf4bee474bb2711bd3ccc30634413bad9136fcaf38becd0ec0",
+    "sha256": "03c7ce11a03ff1b5084846391413f46a5a07198df7220ce9c10292c85240aa44",
     "technical_pass": true,
     "user_battle_approved": true
   },
-  "pending_shiny_followup": [
-    "poltchageist",
-    "sinistcha",
-    "ogerpon"
-  ]
+  "pending_shiny_followup": [],
+  "shiny_followup_approved": true,
+  "runtime_qualification": {
+    "path": "tools/sprite_factory/catalog_remaining_dlc_bundle_qualification.json",
+    "sha256": "d1261f6932e1c552647d9acdbfe9670ceb886744ad110a776866ac751a6c1160"
+  },
+  "r2_publication": {
+    "path": "release/approved_3d_dlc_15_r2_upload.json",
+    "sha256": "4d510055258ad035d8a971380aeb9e098f770c376d03b45034fca41e2a21be91"
+  }
 }

@@ -2910,7 +2910,6 @@
     }
   ],
   "remaining": [
-    "three_shiny_followup_reviews",
     "runtime_admission_and_loading_performance",
     "individual_bundles_and_R2_upload"
   ],
@@ -2919,11 +2918,9 @@
     "Terapagos source flow animation not reconstructed"
   ],
   "user_battle_answer": "Allemaal goed, ik zie alleen geen verschil in shiny en normal bij Poltchageist en Ogerpon.",
-  "pending_shiny_followup": [
-    "poltchageist",
-    "sinistcha",
-    "ogerpon"
-  ],
+  "pending_shiny_followup": [],
   "shiny_followup_url": "http://127.0.0.1:8787/shiny-colours/",
-  "shiny_followup_http_200_files": 22
+  "shiny_followup_http_200_files": 22,
+  "shiny_followup_approved": true,
+  "shiny_followup_answer": "ja die zijn goed"
 }
