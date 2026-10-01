@@ -1,0 +1,77 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 10,
+  "bundle_bytes": 139333915,
+  "bundle_qualification_sha256": "f2e786eace702bda82015925175aab2fac35f0d656f79261b5963502be025de1",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:ogerpon-cornerstone:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-cornerstone/base/v1-bfc27e36a769754ddc63ae75d9dcca197f9ebe40493f48e5df85ec62928bfe28.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "bfc27e36a769754ddc63ae75d9dcca197f9ebe40493f48e5df85ec62928bfe28",
+      "size_bytes": 34754507,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ogerpon-hearthflame:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-hearthflame/base/v1-e4596919f49399a15051edbc257d2cb102109acfaa73e6ad9499591489e472cc.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e4596919f49399a15051edbc257d2cb102109acfaa73e6ad9499591489e472cc",
+      "size_bytes": 35048538,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ogerpon-wellspring:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-wellspring/base/v1-e9640799e37f3ad5b7af8921e274eabed0c63f26969fab5469122cd0ed12e8bd.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e9640799e37f3ad5b7af8921e274eabed0c63f26969fab5469122cd0ed12e8bd",
+      "size_bytes": 35149848,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:terapagos-stellar:base",
+      "object_key": "optional-assets/pokemon_3d/terapagos-stellar/base/v1-9e13872b13cdbe5f672123952e930b74138798dd6e465d4b66120128df409111.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "9e13872b13cdbe5f672123952e930b74138798dd6e465d4b66120128df409111",
+      "size_bytes": 17110501,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:terapagos-terastal:base",
+      "object_key": "optional-assets/pokemon_3d/terapagos-terastal/base/v1-19067d7c6cba3d2cf8d3303d2f35308ffe118b763857d68b469278a0ef40c1db.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "19067d7c6cba3d2cf8d3303d2f35308ffe118b763857d68b469278a0ef40c1db",
+      "size_bytes": 17270521,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "battle-forms-first-five-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/battle-forms-first-five-approved-v1-cef1bfa228fe9348caa0202f634407048a5f223d2cc170846cc5a61e46778348.json",
+    "sha256": "cef1bfa228fe9348caa0202f634407048a5f223d2cc170846cc5a61e46778348",
+    "size_bytes": 4901
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/battle-forms-first-five-approved-v1-cef1bfa228fe9348caa0202f634407048a5f223d2cc170846cc5a61e46778348.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "cef1bfa228fe9348caa0202f634407048a5f223d2cc170846cc5a61e46778348",
+    "size_bytes": 4901,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 5,
+  "profile_count": 5,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 6,
+  "public_head_size_verified_objects": 6,
+  "reviewed_catalog_sha256": "44a4f5c5fda9e0f9085d0e64b6858ce3fa08b9ef9d9d95d2caab8d1d423e0506",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-01T17:23:29.934319+00:00"
+}
