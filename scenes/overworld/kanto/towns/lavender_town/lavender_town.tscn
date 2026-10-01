@@ -18,7 +18,7 @@
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
 
 [sub_resource type="RectangleShape2D" id="shape_pokemon_center_door"]
-size = Vector2(48, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(160, 32)
@@ -195,13 +195,14 @@ position = Vector2(720, 784)
 [node name="Exits" type="Node2D" parent="." unique_id=1200942811]
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=1303593403]
-position = Vector2(272, 368)
+position = Vector2(272, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn"
 target_spawn_name = "FromOutside"
 transition_id = "kanto_lavender_town__to_pokemon_center"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=1132626392]
+position = Vector2(0, -16)
 shape = SubResource("shape_pokemon_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1811828563 instance=ExtResource("14_door_hint")]
@@ -290,7 +291,7 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("9_bug_catcher")
 
 [node name="PokecenterVisitor" parent="Entities/NPCs" unique_id=1858272260 instance=ExtResource("7_dialogue")]
-position = Vector2(304, 432)
+position = Vector2(368, 752)
 npc_id = "kanto_lavender_town_pokecenter_visitor"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lavender Visitor"
