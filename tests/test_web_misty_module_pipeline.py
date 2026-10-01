@@ -13,6 +13,20 @@ from build_web_asset_modules import build_module, import_project
 
 
 class MistyModulePipelineTests(unittest.TestCase):
+    def test_lavender_town_is_registered_in_extended_browser_maps(self):
+        map_id = "kanto_lavender_town"
+        scope = json.loads((ROOT / "docs/browser-full-world-scope.json").read_text())
+        catalog = json.loads((ROOT / "generated/world_access_catalog.json").read_text())
+        path = catalog["areas"][map_id]["scenePath"]
+        self.assertIn(map_id, scope["extendedMapIds"])
+        self.assertTrue((ROOT / path.removeprefix("res://")).is_file())
+        presets = (ROOT / "export_presets.cfg").read_text()
+        module = presets.split("[preset.8]\n")[1].split("[preset.8.options]")[0]
+        core = presets.split("[preset.3]\n")[1].split("[preset.3.options]")[0]
+        self.assertIn(path, module)
+        self.assertIn(path.removeprefix("res://"), core)
+        self.assertIn(path, (ROOT / "scripts/services/web_asset_module_service.gd").read_text())
+
     def test_asset_import_finishes_before_module_exports(self):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "modules"

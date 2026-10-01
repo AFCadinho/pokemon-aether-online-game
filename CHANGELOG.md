@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town heeft nu een eigen Tiled-visual en een overgang van en naar Route 10 via Lavender Town North; de collisionlaag staat klaar om in te vullen.
+
 - De visuals van SS Anne 1F, 2F en B1F zijn opnieuw geïmporteerd uit de bijgewerkte artist-TMX-bestanden.
 
 - Alle vier SS Anne-mappen gebruiken de scheepsarena nu ook voor PvP en gevechten met een meegegeven omgevingskeuze.
