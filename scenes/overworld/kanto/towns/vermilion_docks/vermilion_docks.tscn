@@ -32,9 +32,9 @@ position = Vector2(1008, 48)
 [node name="ToVermilionCity" type="Area2D" parent="Exits"]
 position = Vector2(1008, 16)
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn"
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
 target_spawn_name = "FromDocks"
-transition_id = "kanto_vermilion_docks__to_port_interior"
+transition_id = "kanto_vermilion_docks__to_city"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity"]

@@ -70,43 +70,43 @@ z_index = 5
 
 [node name="Spawns" type="Node2D" parent="." unique_id=638623167]
 
-[node name="FromCity" type="Marker2D" parent="Spawns" unique_id=1504231721]
+[node name="FromNorth" type="Marker2D" parent="Spawns" unique_id=1504231721]
 position = Vector2(368, 208)
 
-[node name="FromDocks" type="Marker2D" parent="Spawns" unique_id=246006100]
+[node name="FromSouth" type="Marker2D" parent="Spawns" unique_id=246006100]
 position = Vector2(368, 816)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1126730063]
 
-[node name="ToCity" type="Area2D" parent="Exits" unique_id=14612095]
+[node name="ToNorth" type="Area2D" parent="Exits" unique_id=14612095]
 position = Vector2(384, 112)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
-target_spawn_name = "FromDocks"
-transition_id = "kanto_vermilion_city_port_interior__to_city"
-transition_facing_direction = "down"
+target_spawn_name = "FromPortNorth"
+transition_id = "kanto_vermilion_city_port_interior__to_city_north"
+transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCity" unique_id=1325319438]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToNorth" unique_id=1325319438]
 shape = SubResource("exit_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToCity" unique_id=1043548287 instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="Exits/ToNorth" unique_id=1043548287 instance=ExtResource("hint")]
 z_index = 7
 z_as_relative = false
 script = ExtResource("6_u4rgq")
 tile_footprint = Vector2i(4, 1)
 
-[node name="ToDocks" type="Area2D" parent="Exits" unique_id=1736546814]
+[node name="ToSouth" type="Area2D" parent="Exits" unique_id=1736546814]
 position = Vector2(384, 848)
 script = ExtResource("exit")
-target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn"
-target_spawn_name = "FromVermilionCity"
-transition_id = "kanto_vermilion_city_port_interior__to_docks"
+target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
+target_spawn_name = "FromPortSouth"
+transition_id = "kanto_vermilion_city_port_interior__to_city_south"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDocks" unique_id=113206744]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSouth" unique_id=113206744]
 shape = SubResource("exit_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToDocks" unique_id=1315583975 instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="Exits/ToSouth" unique_id=1315583975 instance=ExtResource("hint")]
 z_index = 7
 z_as_relative = false
 script = ExtResource("6_u4rgq")
@@ -121,5 +121,5 @@ visible = false
 z_index = 4096
 tile_set = ExtResource("collision")
 
-[connection signal="body_entered" from="Exits/ToCity" to="Exits/ToCity" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToDocks" to="Exits/ToDocks" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToNorth" to="Exits/ToNorth" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToSouth" to="Exits/ToSouth" method="_on_body_entered"]

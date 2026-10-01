@@ -20,12 +20,12 @@ func _run() -> void:
 	var validator = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()
 	_check(validator.validate(port.get_node("Visual"), "res://generated/tiled_visuals/vermilion_port_interior/vermilion_port_interior.visual.tileset.tres").is_empty(), "compact atlas is valid")
 	var collision := port.get_node("Tiles/Collision") as TileMapLayer
-	for name in ["FromCity", "FromDocks"]:
+	for name in ["FromNorth", "FromSouth"]:
 		var spawn := port.get_node("Spawns/" + name) as Node2D
 		_check(collision.get_cell_source_id(collision.local_to_map(spawn.position)) == -1, name + " arrival is clear")
 		for exit_node in port.get_node("Exits").get_children():
 			_check(not exit_node.contains_world_position(spawn.global_position), name + " avoids immediate exit")
-	for entry in [[city, "ToDocks", PORT, "FromCity"], [docks, "ToVermilionCity", PORT, "FromDocks"], [port, "ToCity", CITY, "FromDocks"], [port, "ToDocks", DOCKS, "FromVermilionCity"]]:
+	for entry in [[city, "ToPortNorth", PORT, "FromNorth"], [city, "ToPortSouth", PORT, "FromSouth"], [city, "ToDocks", DOCKS, "FromVermilionCity"], [docks, "ToVermilionCity", CITY, "FromDocks"], [port, "ToNorth", CITY, "FromPortNorth"], [port, "ToSouth", CITY, "FromPortSouth"]]:
 		var exit_node: Node = entry[0].get_node("Exits/" + entry[1])
 		_check(exit_node.target_scene_path == entry[2] and exit_node.target_spawn_name == entry[3], "matching connection " + str(entry[1]))
 		var target: Node = port if entry[2] == PORT else (city if entry[2] == CITY else docks)
@@ -37,16 +37,20 @@ func _run() -> void:
 		var target_collision := target.get_node_or_null("Tiles/Collision") as TileMapLayer
 		if target_collision != null:
 			_check(target_collision.get_cell_source_id(target_collision.local_to_map(spawn.position)) == -1, "return arrival has no collision")
-	var city_exit: Node = city.get_node("Exits/ToDocks")
 	var city_collision := city.get_node("Tiles/Collision") as TileMapLayer
-	var entrance := Vector2(1040, 2128)
-	_check(city_exit.contains_world_position(entrance), "city entrance covers the visible port doorway")
-	_check(city_collision.get_cell_source_id(city_collision.local_to_map(entrance)) == -1, "city doorway is reachable without collision changes")
-	_check(not city.is_water_tile_for_actor(entrance, null), "city doorway is dry")
-	_check(port.get_node("Exits/ToCity").transition_facing_direction == "down", "return to city faces away from the doorway")
+	for entry in [["ToPortNorth", Vector2(1040, 1872), "down"], ["ToPortSouth", Vector2(1040, 2128), "up"], ["ToDocks", Vector2(1040, 2224), "down"]]:
+		var city_exit: Node = city.get_node("Exits/" + entry[0])
+		_check(city_exit.contains_world_position(entry[1]), "entrance covers " + str(entry[0]))
+		_check(city_collision.get_cell_source_id(city_collision.local_to_map(entry[1])) == -1, "entrance is walkable " + str(entry[0]))
+		_check(not city.is_water_tile_for_actor(entry[1], null), "entrance is dry " + str(entry[0]))
+		_check(city_exit.transition_facing_direction == entry[2], "arrival faces into destination " + str(entry[0]))
+	_check(port.get_node("Spawns/FromNorth").position == Vector2(368,208), "north entry arrives in north of room")
+	_check(port.get_node("Spawns/FromSouth").position == Vector2(368,816), "south entry arrives in south of room")
+	_check(port.get_node("Exits/ToNorth").transition_facing_direction == "up", "north return faces out")
+	_check(port.get_node("Exits/ToSouth").transition_facing_direction == "down", "south return faces out")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(catalog.areas.has(port.map_id), "port is registered")
-	for id in ["kanto_vermilion_city__to_port_interior", "kanto_vermilion_docks__to_port_interior", "kanto_vermilion_city_port_interior__to_city", "kanto_vermilion_city_port_interior__to_docks"]:
+	for id in ["kanto_vermilion_city__to_port_interior_north", "kanto_vermilion_city__to_port_interior_south", "kanto_vermilion_city_port_interior__to_city_north", "kanto_vermilion_city_port_interior__to_city_south", "kanto_vermilion_city__to_docks", "kanto_vermilion_docks__to_city"]:
 		_check(catalog.transitions.has(id), "authorized transition " + id)
 	for map in [port, city, docks]:
 		map.free()

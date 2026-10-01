@@ -2985,7 +2985,7 @@
 					"spawnMarker": "FromDocks",
 					"tile": {
 						"x": 32,
-						"y": 67
+						"y": 68
 					}
 				},
 				"from_fan_club": {
@@ -3046,6 +3046,26 @@
 					"tile": {
 						"x": 12,
 						"y": 16
+					}
+				},
+				"from_port_north": {
+					"facingDirection": "down",
+					"label": "Port North",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPortNorth",
+					"tile": {
+						"x": 32,
+						"y": 57
+					}
+				},
+				"from_port_south": {
+					"facingDirection": "down",
+					"label": "Port South",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPortSouth",
+					"tile": {
+						"x": 32,
+						"y": 67
 					}
 				},
 				"from_route_11": {
@@ -3222,21 +3242,21 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn",
 			"spawnPoints": {
-				"from_city": {
+				"from_north": {
 					"facingDirection": "down",
-					"label": "City",
+					"label": "North",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromCity",
+					"spawnMarker": "FromNorth",
 					"tile": {
 						"x": 11,
 						"y": 6
 					}
 				},
-				"from_docks": {
+				"from_south": {
 					"facingDirection": "down",
-					"label": "Docks",
+					"label": "South",
 					"safeForStaffTeleport": true,
-					"spawnMarker": "FromDocks",
+					"spawnMarker": "FromSouth",
 					"tile": {
 						"x": 11,
 						"y": 25
@@ -6317,6 +6337,21 @@
 			"destinationAreaId": "kanto_underground_path_route_6_entrance",
 			"sourceMapId": "kanto_underground_path_tunnel"
 		},
+		"kanto_vermilion_city__to_docks": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_vermilion_docks",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromVermilionCity"
+			},
+			"destinationAreaId": "kanto_vermilion_docks",
+			"sourceMapId": "kanto_vermilion_city"
+		},
 		"kanto_vermilion_city__to_gym": {
 			"destination": {
 				"facingDirection": "up",
@@ -6407,7 +6442,7 @@
 			"destinationAreaId": "kanto_vermilion_city_pokemon_fan_club",
 			"sourceMapId": "kanto_vermilion_city"
 		},
-		"kanto_vermilion_city__to_port_interior": {
+		"kanto_vermilion_city__to_port_interior_north": {
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_vermilion_city_port_interior",
@@ -6417,7 +6452,22 @@
 					"x": 368.0,
 					"y": 208.0
 				},
-				"spawnMarker": "FromCity"
+				"spawnMarker": "FromNorth"
+			},
+			"destinationAreaId": "kanto_vermilion_city_port_interior",
+			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city__to_port_interior_south": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_vermilion_city_port_interior",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 816.0
+				},
+				"spawnMarker": "FromSouth"
 			},
 			"destinationAreaId": "kanto_vermilion_city_port_interior",
 			"sourceMapId": "kanto_vermilion_city"
@@ -6556,7 +6606,24 @@
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_vermilion_city_pokemon_fan_club"
 		},
-		"kanto_vermilion_city_port_interior__to_city": {
+		"kanto_vermilion_city_port_interior__to_city_north": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 1040.0,
+					"y": 1840.0
+				},
+				"spawnMarker": "FromPortNorth"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "kanto_vermilion_city_port_interior"
+		},
+		"kanto_vermilion_city_port_interior__to_city_south": {
 			"destination": {
 				"facingDirection": "down",
 				"mapId": "kanto_vermilion_city",
@@ -6568,39 +6635,26 @@
 					"x": 1040.0,
 					"y": 2160.0
 				},
-				"spawnMarker": "FromDocks"
+				"spawnMarker": "FromPortSouth"
 			},
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_vermilion_city_port_interior"
 		},
-		"kanto_vermilion_city_port_interior__to_docks": {
-			"destination": {
-				"facingDirection": "down",
-				"mapId": "kanto_vermilion_docks",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
-				"position": {
-					"x": 1008.0,
-					"y": 48.0
-				},
-				"spawnMarker": "FromVermilionCity"
-			},
-			"destinationAreaId": "kanto_vermilion_docks",
-			"sourceMapId": "kanto_vermilion_city_port_interior"
-		},
-		"kanto_vermilion_docks__to_port_interior": {
+		"kanto_vermilion_docks__to_city": {
 			"destination": {
 				"facingDirection": "up",
-				"mapId": "kanto_vermilion_city_port_interior",
-				"mapSceneAliases": [],
-				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/port_interior.tscn",
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
 				"position": {
-					"x": 368.0,
-					"y": 816.0
+					"x": 1040.0,
+					"y": 2192.0
 				},
 				"spawnMarker": "FromDocks"
 			},
-			"destinationAreaId": "kanto_vermilion_city_port_interior",
+			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_vermilion_docks"
 		},
 		"kanto_viridian_city__to_house_1": {

@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+- Het havengebouw in Vermilion City is van noord en zuid toegankelijk, met aankomstpunten aan beide kanten van het interieur en doorgang naar de docks via de zuidelijke stadsrand.
+
 - Skarmory vliegt 70 cm hoger in 3D-battles; slaap en flauw blijven op de grond. HP-panelen schuiven direct omhoog bij hoger verschijnende 3D-modellen.
+
 - De ingang naar Vermilion Port zit nu op de zichtbare havendeur in Vermilion City; terugkeren plaatst je voor de deur met de juiste kijkrichting.
 
 - Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
