@@ -89,3 +89,40 @@ release certification and publishing are separate authorized tasks. The 15
 held DLC species need usable native motion assets or a separately developed
 and reviewed pose/visibility solution; do not mark them ready just to empty a
 queue.
+
+
+## General eye audit and material revisions (2026-10-01)
+
+The user flagged Nincada, shiny Wailmer, Anorith, shiny Sealeo, Rhyperior and
+Keldeo. All 112 pending pairs were then inspected in enlarged idle/sleep images
+and compared with their local colour references. 32 species received 39 variant
+material revisions; all 224 current scenes have eye views on the final page:
+`http://127.0.0.1:8783/final-review-v3/index.html`. Older review URLs redirect
+there. Select “Ogen dichtbij” and “Alle Pokémon” to inspect the whole list.
+
+Shiny eye atlases contain surrounding skin: copying the normal atlas had also
+copied blue skin onto Wailmer and Sealeo. Matched native normal/shiny body
+texels now supply the skin colour transfer while preserving black, white,
+alpha and eyelid shapes. Other affected shiny skin patches and iris colours
+were corrected, including Elgyem and Beheeyem. Native eye masks restored source
+detail where available. Nincada's glints, Keldeo's iris/pupil and Anorith's
+Compatibility lens are explicitly authored proposals. Anorith uses a white
+lens shell with a pupil opening derived from the actual forward lens UV
+triangles, retaining its native black core and highlight geometry; this is an
+approximation of source refraction, not an exact native shader reconstruction.
+
+The pinned checkpoint contains 112 normal/shiny scene parity proofs, 39 exact
+previous/revised geometry and animation parity proofs, and 224 pose-order
+checks with no recorded pose errors. Revised material PNGs were checked after
+fresh SCN reload in idle/sleep/idle order. All 39 revised variants have new
+16-image battle captures. Previous 60/120 Hz geometry measurements were reused
+only after exact old/new scene parity; current camera bounds and images were
+rendered independently. The headless dummy renderer emitted null-material
+cleanup messages on some inherited scenes; these are not reported as a clean
+engine log or FPS certification.
+
+The page has 5,138 resolvable pinned image files. Focused Python tests, page
+JavaScript syntax and local HTTP checks pass. This audit records no human
+approval: the 112 pairs remain pending final review, counts and the released
+catalogue are unchanged, and no bundles were uploaded. The 15 DLC holds and
+fire gameplay integration described above still apply.
