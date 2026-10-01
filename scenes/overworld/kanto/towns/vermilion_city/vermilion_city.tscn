@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="4_obqe6"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_vciop"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_vfovf"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_x3286"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_q2i8i"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="21_awqls"]
@@ -28,8 +29,11 @@ size = Vector2(96, 16)
 [sub_resource type="RectangleShape2D" id="shape_2"]
 size = Vector2(32, 96)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vfovf"]
+size = Vector2(32, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_docks"]
-size = Vector2(32, 16)
+size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_center_door"]
 size = Vector2(32, 32)
@@ -371,6 +375,10 @@ transition_facing_direction = "up"
 position = Vector2(0, -8)
 shape = SubResource("shape_1")
 
+[node name="RouteTransitionHint" parent="Exits/ToRoute6" unique_id=1418772973 instance=ExtResource("4_vfovf")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+
 [node name="ToRoute11" type="Area2D" parent="Exits" unique_id=1856636440]
 position = Vector2(2384, 720)
 script = ExtResource("3_exit")
@@ -383,6 +391,11 @@ transition_facing_direction = "right"
 position = Vector2(16, 0)
 shape = SubResource("shape_2")
 
+[node name="RouteTransitionHint" parent="Exits/ToRoute11" unique_id=1792135761 instance=ExtResource("4_vfovf")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "right"
+
 [node name="ToPortNorth" type="Area2D" parent="Exits" unique_id=461981205]
 position = Vector2(1040, 1904)
 script = ExtResource("3_exit")
@@ -391,8 +404,8 @@ target_spawn_name = "FromNorth"
 transition_id = "kanto_vermilion_city__to_port_interior_north"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPortNorth" unique_id=1293283582]
-shape = SubResource("shape_docks")
+[node name="CollisionShape2" type="CollisionShape2D" parent="Exits/ToPortNorth" unique_id=992592872]
+shape = SubResource("RectangleShape2D_vfovf")
 
 [node name="DoorTransitionHint" parent="Exits/ToPortNorth" unique_id=2042018947 instance=ExtResource("center_door_hint")]
 z_as_relative = false
@@ -422,7 +435,13 @@ transition_id = "kanto_vermilion_city__to_docks"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDocks" unique_id=2128302085]
+position = Vector2(0, 16)
 shape = SubResource("shape_docks")
+
+[node name="RouteTransitionHint" parent="Exits/ToDocks" unique_id=289361936 instance=ExtResource("4_vfovf")]
+z_as_relative = false
+tile_footprint = Vector2i(5, 1)
+flow_direction = "down"
 
 [node name="ToPokecenter" type="Area2D" parent="Exits" unique_id=949357627]
 position = Vector2(400, 464)
@@ -463,7 +482,6 @@ transition_id = "kanto_vermilion_city__to_pokemon_fan_club"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFanClub" unique_id=1006196329]
-position = Vector2(0, -16)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToFanClub" unique_id=124496704 instance=ExtResource("center_door_hint")]
@@ -478,7 +496,7 @@ transition_id = "kanto_vermilion_city__to_house_1"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse1" unique_id=1242285863]
-position = Vector2(0, -16)
+position = Vector2(0, -8)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse1" unique_id=570903684 instance=ExtResource("center_door_hint")]
@@ -493,7 +511,6 @@ transition_id = "kanto_vermilion_city__to_house_2"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse2" unique_id=1274053681]
-position = Vector2(0, -16)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse2" unique_id=1066027836 instance=ExtResource("center_door_hint")]
@@ -508,7 +525,6 @@ transition_id = "kanto_vermilion_city__to_house_3"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToHouse3" unique_id=1495354055]
-position = Vector2(0, -16)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse3" unique_id=1802667975 instance=ExtResource("center_door_hint")]
