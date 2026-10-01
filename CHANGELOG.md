@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De haven ten zuiden van Vermilion City gebruikt de nieuwe Port Exterior-visual, met aansluitende aankomstpunten en een lege collisionlaag voor handmatige inrichting.
+
 - Kanto Route 11 gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - Het havengebouw in Vermilion City is van noord en zuid toegankelijk, met aankomstpunten aan beide kanten van het interieur en doorgang naar de docks via de zuidelijke stadsrand.

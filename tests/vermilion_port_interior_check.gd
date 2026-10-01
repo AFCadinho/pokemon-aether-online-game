@@ -19,6 +19,13 @@ func _run() -> void:
 		_check(port.has_node(path), "required node " + path)
 	var validator = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()
 	_check(validator.validate(port.get_node("Visual"), "res://generated/tiled_visuals/vermilion_port_interior/vermilion_port_interior.visual.tileset.tres").is_empty(), "compact atlas is valid")
+	_check(docks.get_node("Visual").get_meta("tiled_visual_map").width == 75 and docks.get_node("Visual").get_meta("tiled_visual_map").height == 30, "new port exterior size")
+	_check(validator.validate(docks.get_node("Visual"), "res://generated/tiled_visuals/vermilion_port_exterior/vermilion_port_exterior.visual.tileset.tres").is_empty(), "port exterior compact atlas is valid")
+	_check(docks.get_node("Spawns/FromVermilionCity").position == Vector2(1040,48), "port arrival matches TMX tile 32,1")
+	_check(docks.get_node("Exits/ToVermilionCity").contains_world_position(Vector2(1040,16)), "port north exit matches TMX")
+	_check(not docks.is_water_tile_for_actor(Vector2(1424,624), null), "gangway approach tile is dry")
+	for path in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Tiles/Collision"]:
+		_check(docks.has_node(path), "port exterior required node " + path)
 	var collision := port.get_node("Tiles/Collision") as TileMapLayer
 	for name in ["FromNorth", "FromSouth"]:
 		var spawn := port.get_node("Spawns/" + name) as Node2D
