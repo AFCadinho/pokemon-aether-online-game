@@ -1,13 +1,19 @@
 extends Node3D
-## Quaternius passengers alternate a rigged wave with a quiet idle.
+## Shared Quaternius spectators alternate a rigged wave with a quiet idle.
+const MODELS := [
+	preload("res://assets/models/battle/ss_anne_audience/male_suit.glb"),
+	preload("res://assets/models/battle/ss_anne_audience/female_formal.glb"),
+	preload("res://assets/models/battle/ss_anne_audience/male_casual.glb"),
+	preload("res://assets/models/battle/ss_anne_audience/female_casual.glb"),
+]
 var elapsed := 0.0
 var animation_player: AnimationPlayer
 
-func configure(scene: PackedScene, phase: float) -> void:
+func configure(scene: PackedScene, phase: float, model_scale := 1.15) -> void:
 	elapsed = phase
 	var model := scene.instantiate() as Node3D
 	model.name = "Character"
-	model.scale = Vector3.ONE * 1.15
+	model.scale = Vector3.ONE * model_scale
 	add_child(model)
 	for accessory in model.find_children("Pistol", "MeshInstance3D", true, false):
 		accessory.free()
