@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het donkerblauwe water en de kusttegels in Vermilion City bewegen nu met dezelfde wateranimatie als Cerulean; oevers, collision en bestaande grasanimaties blijven behouden.
+
 - De gedeelde Vermilion-housevisual is opnieuw geïmporteerd met de opgeslagen TMX-laagindeling.
 
 - Vermilion Port Exterior gebruikt de opnieuw geïmporteerde artist-TMX-visual, inclusief bijgewerkte tilelagen.
