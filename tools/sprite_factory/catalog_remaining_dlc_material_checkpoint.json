@@ -1,0 +1,914 @@
+{
+  "schema": 1,
+  "runtime_approved": false,
+  "visual_approved": false,
+  "species": 15,
+  "variants": 30,
+  "scope": "preliminary_GLTF_material_and_animation_diagnostic",
+  "godot": "4.6.2-stable (official)",
+  "godot_sampled_models": 30,
+  "godot_pose_or_timing_errors": 0,
+  "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
+  "evidence_root": ".tmp/remaining-dlc-15-v1/",
+  "pending": [
+    "native_eye_and_layered_emission_review",
+    "Hydrapple_hidden_accessory_bounds_and_camera",
+    "Terapagos_flow_and_transparency",
+    "authored_sleep_poses",
+    "standalone_SCN_conversion_and_battle_qualification",
+    "collective_user_review",
+    "individual_bundles"
+  ],
+  "entries": [
+    {
+      "species": "dipplin",
+      "identity": "pm1121_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "29a792f76b882b6b45520fe5866dd355c740df6a11c2d87849629b7924cde7c3",
+          "material_table_sha256": "2e87aedd6c2d751dfd6c78df427ffd3ffbd1dfed36e7b1bd048d4c906de49b24",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "b34334951f8113ae6a11e5ea1974d802cf517613cb003c6ea67e7e8bc40a5a14",
+          "material_table_sha256": "6f8dbae6857f2750529b92cfbcff19f3901343f9842c3027c1fe8336132872cf",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "c79f8d01412ce83c78b0af9e66bd735b03e0b124c7c73ca5f36fcde44f87eab6",
+      "animations": {
+        "idle": {
+          "source_action": "pm1121_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1121_00_00_00400_attack01",
+          "duration": 3.7916666666666665,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1121_00_00_00450_rangeattack01",
+          "duration": 5.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1121_00_00_00500_damage01",
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1121_00_00_00520_down01_start",
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "sinistcha",
+      "identity": "pm1134_11_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "f9815ef23098c2001d46b05105ae5e8bb3ab74f47706f95309d0360bf9219fbb",
+          "material_table_sha256": "5450fe3efc83884cb84cc70ee92c296becda251f89b72c7b0a3b07ae62180e11",
+          "material_count": 5,
+          "limitations": [
+            "separate eyelid texture layers need pose review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "d408327cff508faf1af14584a8fcbdd1df7a3db225037cf7241abc5bf9a5d4f4",
+          "material_table_sha256": "64245316c8d55ce6f5d45688782c0d3bd0a0e09f718be08b46cf7354ebf84e33",
+          "material_count": 5,
+          "limitations": [
+            "separate eyelid texture layers need pose review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "390617321afcd256f33373ae7143f53aaa32b3fb0e611a58a1459c54c89b6772",
+      "animations": {
+        "idle": {
+          "source_action": "pm1134_11_00_20010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1134_11_00_20400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1134_11_00_20450_rangeattack01",
+          "duration": 5.041666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1134_11_00_20500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1134_11_00_20520_down01_start",
+          "duration": 3.375,
+          "fps": 24.0,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "source_action": "pm1134_11_00_20410_attack02",
+          "duration": 6.291666666666667,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "poltchageist",
+      "identity": "pm1133_11_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "5743bd3ed11c340286180218e880a85ef54435b0a3ddb1baab281e2f4524ac11",
+          "material_table_sha256": "28c3109f159054b4e4e18117ec8de020c47c13c88e686827ba0da608f5ffa457",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "948b7476bda786fd2ad8b692d1f71afd6ae8864ad61e858a60bb5cbbe6c097c6",
+          "material_table_sha256": "ca3ad7dd999eb2ac7c632e6e62ecc86cdac2ca963425ebd4ab85a40d61f99867",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "e80e70413274ef7c4617d6e5e250e1d1b43c71972e3ca19dede3d68d98cf5db9",
+      "animations": {
+        "idle": {
+          "source_action": "pm1133_11_00_20010_defaultidle01",
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1133_11_00_20400_attack01",
+          "duration": 2.1666666666666665,
+          "fps": 60.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1133_11_00_20450_rangeattack01",
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1133_11_00_20500_damage01",
+          "duration": 0.8333333333333334,
+          "fps": 60.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1133_11_00_20520_down01_start",
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "okidogi",
+      "identity": "pm1123_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "844ed83397be184cbaf384a339cfc806764ec1c9908e4e40937dffc8ca1cf2a3",
+          "material_table_sha256": "e792f6f92af7fda7f1ed19b9198946e934a3e18a0c08b3f2b5dd300b1ddae50d",
+          "material_count": 5,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "d2d86ab4a0ce77135e8686653effa9084e1c38a432320d06fb307e90802c66a8",
+          "material_table_sha256": "a1a09f82fdc0d61231d3a428a335d4b3998013ea21e16582abbbd444be29c23e",
+          "material_count": 5,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "7a1ba69aa28e44cd7dc4e402abe78f5d76bf830aafba5b3e36e83067002e2217",
+      "animations": {
+        "idle": {
+          "source_action": "pm1123_00_00_00010_defaultidle01",
+          "duration": 6.708333333333333,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1123_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1123_00_00_00450_rangeattack01",
+          "duration": 5.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1123_00_00_00500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1123_00_00_00520_down01_start",
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "munkidori",
+      "identity": "pm1124_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "7d0aa2933aa26527f8fb82f5e13f04b55ba692065f811e160f31ac520bd3e21c",
+          "material_table_sha256": "6ab88b1e6a45bd7e2b2e529f76784298384a05414d7b252769b72a5993cd2cc2",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "8612aed12f70f85997e4e72c36b3f8dc797f4181e9b66f4736605ec939910dee",
+          "material_table_sha256": "6c9b7e6bc682aa463fb1b1c22f51dea9e78f670193f42eaf8cc5273302af17db",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "20fd252c4fc7f754cc57c7434e584b0a87863b88583e9aed92e0f71245c030ea",
+      "animations": {
+        "idle": {
+          "source_action": "pm1124_00_00_00010_defaultidle01",
+          "duration": 6.708333333333333,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1124_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1124_00_00_00450_rangeattack01",
+          "duration": 5.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1124_00_00_00500_damage01",
+          "duration": 2.5416666666666665,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1124_00_00_00520_down01_start",
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "fezandipiti",
+      "identity": "pm1125_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "695c55cb67953ebdfef4004a49d907ae473ba2492a607d29491ebe71a9268ba9",
+          "material_table_sha256": "09a12780a0e4c9bd5e43f0d65e659c100743a3fba87bc0722da38879112bfa69",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "5e347e418fcaedca27f4792442753ae48b0f14eaaeec340d078ef840b092208f",
+          "material_table_sha256": "c42c638c80b6d7493aaedd3867204266253164191e4e2790da80771179c9f9fd",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "947024954c153f12641414f40c3a374206e7f350320db86ec2d3b97786785769",
+      "animations": {
+        "idle": {
+          "source_action": "pm1125_00_00_20010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1125_00_00_20400_attack01",
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1125_00_00_20450_rangeattack01",
+          "duration": 6.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1125_00_00_20500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1125_00_00_20520_down01_start",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "ogerpon",
+      "identity": "pm1120_11_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "ceaa99d2f4b446dc37f0eb70764530570e82dc99ba827c09babd3533724b464a",
+          "material_table_sha256": "3645471201b5ce6d2886aec0e4d4653b98c12036470d7618e71b9b3eaf6daec7",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "feb464f7897b08ab0b61189066da983b60c86cacc0a46a56bdc4ea60f92bb907",
+          "material_table_sha256": "37a45595d6383e0120fbf5a3f5c4328af800d507234f40ce2ebaf434a9f28824",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "06909b8c4f09295fb7c577017b0edeaab5d1134d0aaf80b2be9dc91c09d629c9",
+      "animations": {
+        "idle": {
+          "source_action": "pm1120_11_00_00001_battlewait01_loop",
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1120_11_00_00400_attack01",
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1120_11_00_00450_rangeattack01",
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1120_11_00_00500_damage01",
+          "duration": 0.6666666666666666,
+          "fps": 60.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1120_11_00_00520_down01_start",
+          "duration": 1.8333333333333333,
+          "fps": 60.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "archaludon",
+      "identity": "pm1132_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "cfca27b2a058a523dd9928346ab9cc10aab4ad52b7666346eb17ac910a86f195",
+          "material_table_sha256": "cdd90cc9c30a3f91a8ff76a57fa5014c5ba4f2dbeed841c856e94e4e6253ae25",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "c937b834fdd4de7d6280917d0f0e7fa92b1719433973566eb28d3214a6d77f15",
+          "material_table_sha256": "e0a18fefefa324924cde8776811e21ed82c3075caf81ceb05c2217aa6005702e",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "6debeb6c3f06ada41d3b164a5eb7618b60aa34ba21625fcfc6530d62c2ec0bfc",
+      "animations": {
+        "idle": {
+          "source_action": "pm1132_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1132_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1132_00_00_00450_rangeattack01",
+          "duration": 5.041666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1132_00_00_00520_down01_start",
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "hydrapple",
+      "identity": "pm1122_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "fdcff0522ff54efa565323135abedc09cb76c43b0f7b462bc79e19e51e9d56d3",
+          "material_table_sha256": "cca9721e2f9081aa19e83173346909c4ba8f27b40efebcc633580292ef334872",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "60ed714776cba1e614651f08f142a593713e871c896e4ccbdb7f7099e6e44759",
+          "material_table_sha256": "18e4eccd900329db851b4a0dac1710cb6231030fa1365e2b30fc6595d2309e3d",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "separate eyelid texture layers need pose review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "24df32fe1eca6429711d5af1b0a8e78ed7f6ec6ab1f9717dc79fb78c42c0d036",
+      "animations": {
+        "idle": {
+          "source_action": "pm1122_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1122_00_00_00400_attack01",
+          "duration": 4.625,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1122_00_00_00450_rangeattack01",
+          "duration": 5.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1122_00_00_00500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1122_00_00_00520_down01_start",
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "gouging-fire",
+      "identity": "pm1126_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "81a54a026620e22cf87665b94a6ebc39ba4baeb218307bbef7e054a330d29823",
+          "material_table_sha256": "3c9cafaf40793039eb4434b911f4fc3d5a4bb106bae84ca8a61b3adad25dc4c6",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "2bd52e50ee81eb2346c4cd40fb34482b06172abf3b65be062a6868f13750c310",
+          "material_table_sha256": "333fdca0ff9f6c8d34e8add4b7adf347be000ba47ce1d4e9399a84f673c93aba",
+          "material_count": 8,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "476c6f1ee059ffea7bdf5c222c19bf14ef04ec98b1ee8cb1aaaa0ce1106159f9",
+      "animations": {
+        "idle": {
+          "source_action": "pm1126_00_00_00010_defaultidle01",
+          "duration": 6.708333333333333,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1126_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1126_00_00_00450_rangeattack01",
+          "duration": 5.041666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1126_00_00_00500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1126_00_00_00520_down01_start",
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "raging-bolt",
+      "identity": "pm1127_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "daeb3f2a425f14c7866dbfecd154a79a9e5c90565a39c01ab45f02ac7a2a2ea4",
+          "material_table_sha256": "3e5a3d2c313cec725339f84f04ee999c6fc2caaada1a9e9b3683c1b3ad6d03e6",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "a94dacb451fc9500d8edc452efdeca71202738a87fa05235c6126bb79f75fdbf",
+          "material_table_sha256": "48dc27ec643ccbe265879aa3fb627d5ae788e830070f9fb4a395fd1b8e8d58e2",
+          "material_count": 7,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "34ffe10caa763c67c2dc247678454ce607bc7e86b8280eff9b655d0d865c2fdf",
+      "animations": {
+        "idle": {
+          "source_action": "pm1127_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1127_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1127_00_00_00450_rangeattack01",
+          "duration": 6.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1127_00_00_00500_damage01",
+          "duration": 2.5416666666666665,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1127_00_00_00520_down01_start",
+          "duration": 5.041666666666667,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "iron-boulder",
+      "identity": "pm1129_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "1294cee8a54015036ad6641825e83ad180399d33d44e420a3e373e2ae8141ee1",
+          "material_table_sha256": "ced970cded63c0561b618245d00e7828d5572a85994ddb971298ce6069f79cba",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "41f8eda544b3463c399337019c4dad07ec73a2af40386a326629c9ae86fd8146",
+          "material_table_sha256": "235a17512cf4d048a78820cbadd820a30ce1dc598b298a518d84a18eed38160c",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "5ebb574887e517c7b3b5407720cdcd633ec38f5c599bfba5eec5f699c9ca4a58",
+      "animations": {
+        "idle": {
+          "source_action": "pm1129_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1129_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1129_00_00_00450_rangeattack01",
+          "duration": 6.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1129_00_00_00500_damage01",
+          "duration": 2.5416666666666665,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1129_00_00_00520_down01_start",
+          "duration": 5.875,
+          "fps": 24.0,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "source_action": "pm1129_00_00_00410_attack02",
+          "duration": 6.291666666666667,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "iron-crown",
+      "identity": "pm1128_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "0157ab3573d786ae58225e9297a26c94983326c4021a338494aedb7eaba3738e",
+          "material_table_sha256": "d95bed35f0db2f0b751d638dc299301ac0e6abec39feeab1d208b7211cf81565",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "6bc25e9bc6965f58e599138a5d63d23cc4a6aac339c068e37361f34325ab13e7",
+          "material_table_sha256": "420725464e305ad43583addd984d38d7808f7eafe1a21a81f449cc2dadd85929",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "22d5e1b1b6784700d32f8e384dc74e8b7a0097ace87fb4854bbbcbd35e360b3c",
+      "animations": {
+        "idle": {
+          "source_action": "pm1128_00_00_00010_defaultidle01",
+          "duration": 7.541666666666667,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1128_00_00_00400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1128_00_00_00450_rangeattack01",
+          "duration": 6.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1128_00_00_00500_damage01",
+          "duration": 2.125,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1128_00_00_00520_down01_start",
+          "duration": 5.041666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "source_action": "pm1128_00_00_00410_attack02",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "terapagos",
+      "identity": "pm1130_11_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "e6341be05f7b27235ec67c02dc66f822d73c39d54d789caa09f093e6596f7a27",
+          "material_table_sha256": "fa3775f07b4abb7d1655147a05981be426447c37646cf0982f5061f715bf104f",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "source transparency/iridescence needs visual review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "f39dfaa841d554e1731adf2d2e67c289b4a012ae7b6732033a7d09a8bc76edd5",
+          "material_table_sha256": "960f515e3bc0bcb2e16275274fe701902d853242560b96f1090532866b5e3bac",
+          "material_count": 6,
+          "limitations": [
+            "layered emission is not reconstructed",
+            "source transparency/iridescence needs visual review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "2511f62a71679831cb1873169eceb684eba99569b0678009ebb6db31e0133e56",
+      "animations": {
+        "idle": {
+          "source_action": "pm1130_11_00_00001_battlewait01_loop",
+          "duration": 1.8333333333333333,
+          "fps": 60.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1130_11_00_00400_attack01",
+          "duration": 1.8333333333333333,
+          "fps": 60.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1130_11_00_00450_rangeattack01",
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1130_11_00_00500_damage01",
+          "duration": 0.8333333333333334,
+          "fps": 60.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1130_11_00_00520_down01_start",
+          "duration": 1.6666666666666667,
+          "fps": 60.0,
+          "loop": false
+        }
+      }
+    },
+    {
+      "species": "pecharunt",
+      "identity": "pm1131_00_00",
+      "runtime_approved": false,
+      "visual_approved": false,
+      "status": "material_pair_candidate",
+      "variants": {
+        "normal": {
+          "glb_sha256": "8c045588d49e0cbfd1ca817e311a9df37d7496b0e576f8408eb1be301988cb6a",
+          "material_table_sha256": "a1e657f85610feef9d7bc5f07da477b39a0d6e4547fa7307fd5776d60c13f0f0",
+          "material_count": 7,
+          "limitations": [
+            "separate eyelid texture layers need pose review"
+          ]
+        },
+        "shiny": {
+          "glb_sha256": "4dae9b8d418acf8b0aa0ce10bd8cb679af74a0935f3df822fb58aea2dd42ba91",
+          "material_table_sha256": "96c45ca2d35248f2a1ffdae9a8cb3bc40e44c1315edb0ad4a5874cf8d0ccf976",
+          "material_count": 7,
+          "limitations": [
+            "separate eyelid texture layers need pose review"
+          ]
+        }
+      },
+      "geometry_motion_sha256": "ae76fba4b7b269ac2058a4270d6d28ea4e0e07046791ab2b7806fc38de6cbe43",
+      "animations": {
+        "idle": {
+          "source_action": "pm1131_00_00_20001_battlewait01_loop",
+          "duration": 4.208333333333333,
+          "fps": 24.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "source_action": "pm1131_00_00_20400_attack01",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "special_attack": {
+          "source_action": "pm1131_00_00_20450_rangeattack01",
+          "duration": 5.791666666666667,
+          "fps": 24.0,
+          "loop": false
+        },
+        "damage": {
+          "source_action": "pm1131_00_00_20500_damage01",
+          "duration": 1.7083333333333333,
+          "fps": 24.0,
+          "loop": false
+        },
+        "faint_start": {
+          "source_action": "pm1131_00_00_20520_down01_start",
+          "duration": 5.458333333333333,
+          "fps": 24.0,
+          "loop": false
+        }
+      }
+    }
+  ]
+}
