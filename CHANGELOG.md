@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Het havengebouw in Vermilion City is van noord en zuid toegankelijk, met aankomstpunten aan beide kanten van het interieur en doorgang naar de docks via de zuidelijke stadsrand.
+
 - De ingang naar Vermilion Port zit nu op de zichtbare havendeur in Vermilion City; terugkeren plaatst je voor de deur met de juiste kijkrichting.
 
 - Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
