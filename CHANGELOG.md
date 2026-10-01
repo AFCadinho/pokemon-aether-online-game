@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Drie Ogerpon-maskers en Terapagos Terastal/Stellar zijn lokaal gekwalificeerd voor 3D, normal en shiny, met individuele bundles en vooraf geladen Terapagos-vormwissels. Nieuwe downloads op hetzelfde cataloguspad worden direct beschikbaar.
+
 - De SS Anne-passagiers en hun CC0-licentie worden meegenomen in het gamepakket; de desktop-release controleert de arena en animaties vanuit de geëxporteerde Windows- en Linux-pakketten.
 
 - Het publiek in de SS Anne-battlearena gebruikt geklede Quaternius-personages met skeletanimaties voor zwaaien en rusten.

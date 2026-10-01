@@ -317,6 +317,9 @@ func _ensure_downloaded_models() -> void:
 		var identity := _combatant_key(index)
 		if not identity.is_empty() and identity not in needed:
 			needed.append(identity)
+	for identity in _anticipated_form_keys():
+		if identity not in needed:
+			needed.append(identity)
 	for identity: String in staged_mega_species:
 		if not identity.is_empty() and identity not in needed:
 			needed.append(identity)
@@ -334,7 +337,10 @@ func _ensure_downloaded_models() -> void:
 		reason = str(result.error)
 		return
 	var new_path := str(result.get("path", ""))
-	if not new_path.is_empty() and new_path != old_path:
+	var refresh_catalog: bool = bool(result.get("catalog_changed", false))
+	for identity in needed:
+		refresh_catalog = refresh_catalog or not catalog_entries.has(identity)
+	if not new_path.is_empty() and (new_path != old_path or refresh_catalog):
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", new_path)
 		_load_catalog(new_path)
 var action_generation := [0, 0, 0, 0]
@@ -909,6 +915,23 @@ func _load_catalog(path: String) -> void:
 		catalog_problem = "Catalog has no valid reviewed 3D models"
 		reason = catalog_problem
 
+func _anticipated_form_keys() -> Array[String]:
+	# Tera Shift and Stellar reveal are public, deterministic Terapagos forms.
+	# Keep exact reviewed appearances ready without guessing an unseen enemy item.
+	var result: Array[String] = []
+	for index in _slot_count():
+		var species: String = combatants[index].species
+		var targets: Array[String] = []
+		if species == "terapagos":
+			targets.assign(["terapagos-terastal", "terapagos-stellar"])
+		elif species == "terapagos-terastal":
+			targets.assign(["terapagos-stellar"])
+		for target in targets:
+			var key := ReviewedModels.key(target, combatants[index].shiny)
+			if ReviewedModels.supports(key) and key not in result:
+				result.append(key)
+	return result
+
 func _needed_species() -> Array[String]:
 	var needed: Array[String] = []
 	for platform in platforms:
@@ -926,6 +949,9 @@ func _needed_species() -> Array[String]:
 		if not _supports_combatant(species, combatants[index].shiny, double, substitute):
 			return [] # Pair fallback must not import unused art.
 		var key := _combatant_key(index)
+		if key not in needed:
+			needed.append(key)
+	for key in _anticipated_form_keys():
 		if key not in needed:
 			needed.append(key)
 	for key in staged_mega_species:

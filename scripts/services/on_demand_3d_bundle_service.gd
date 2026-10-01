@@ -173,7 +173,8 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 			return installed
 		entries = _merge_entries(entries, installed.entries)
 	var path := _publish_catalog(entries)
-	return {"error": "Could not publish the 3D model catalog." if path.is_empty() else "", "path": path}
+	return {"error": "Could not publish the 3D model catalog." if path.is_empty() else "", "path": path,
+		"catalog_changed": not missing.is_empty()}
 
 
 func _asset_id(identity: String) -> String:
