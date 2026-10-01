@@ -50,17 +50,21 @@
     "kanto_saffron_city",
     "kanto_saffron_city_north",
     "kanto_saffron_city_south",
+    "kanto_ss_anne_1f",
+    "kanto_ss_anne_2f",
+    "kanto_ss_anne_3f",
+    "kanto_ss_anne_b1f",
     "kanto_underground_path_route_5_entrance",
     "kanto_underground_path_route_6_entrance",
     "kanto_underground_path_tunnel",
     "kanto_vermilion_city",
     "kanto_vermilion_city_gym",
-    "kanto_vermilion_city_port_interior",
     "kanto_vermilion_city_house_1",
     "kanto_vermilion_city_house_2",
     "kanto_vermilion_city_house_3",
     "kanto_vermilion_city_pokemon_center",
     "kanto_vermilion_city_pokemon_fan_club",
+    "kanto_vermilion_city_port_interior",
     "kanto_vermilion_docks"
   ]
 }

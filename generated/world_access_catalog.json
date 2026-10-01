@@ -2864,6 +2864,544 @@
 				}
 			}
 		},
+		"kanto_ss_anne_1f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "S.S. Anne 1F",
+			"locationGroupId": "kanto_ss_anne",
+			"locationGroupLabel": "S.S. Anne",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+			"spawnPoints": {
+				"at_12_36": {
+					"facingDirection": "down",
+					"label": "At 12 36",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_12_36",
+					"tile": {
+						"x": 12,
+						"y": 36
+					}
+				},
+				"at_12_43": {
+					"facingDirection": "down",
+					"label": "At 12 43",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_12_43",
+					"tile": {
+						"x": 12,
+						"y": 43
+					}
+				},
+				"at_19_33": {
+					"facingDirection": "down",
+					"label": "At 19 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_19_33",
+					"tile": {
+						"x": 19,
+						"y": 33
+					}
+				},
+				"at_23_54": {
+					"facingDirection": "down",
+					"label": "At 23 54",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_23_54",
+					"tile": {
+						"x": 23,
+						"y": 54
+					}
+				},
+				"at_23_6": {
+					"facingDirection": "down",
+					"label": "At 23 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_23_6",
+					"tile": {
+						"x": 23,
+						"y": 6
+					}
+				},
+				"at_25_33": {
+					"facingDirection": "down",
+					"label": "At 25 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_25_33",
+					"tile": {
+						"x": 25,
+						"y": 33
+					}
+				},
+				"at_31_33": {
+					"facingDirection": "down",
+					"label": "At 31 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_31_33",
+					"tile": {
+						"x": 31,
+						"y": 33
+					}
+				},
+				"at_37_33": {
+					"facingDirection": "down",
+					"label": "At 37 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_37_33",
+					"tile": {
+						"x": 37,
+						"y": 33
+					}
+				},
+				"at_3_54": {
+					"facingDirection": "down",
+					"label": "At 3 54",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_3_54",
+					"tile": {
+						"x": 3,
+						"y": 54
+					}
+				},
+				"at_3_6": {
+					"facingDirection": "down",
+					"label": "At 3 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_3_6",
+					"tile": {
+						"x": 3,
+						"y": 6
+					}
+				},
+				"at_43_33": {
+					"facingDirection": "down",
+					"label": "At 43 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_43_33",
+					"tile": {
+						"x": 43,
+						"y": 33
+					}
+				},
+				"at_43_54": {
+					"facingDirection": "down",
+					"label": "At 43 54",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_43_54",
+					"tile": {
+						"x": 43,
+						"y": 54
+					}
+				},
+				"at_43_6": {
+					"facingDirection": "down",
+					"label": "At 43 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_43_6",
+					"tile": {
+						"x": 43,
+						"y": 6
+					}
+				},
+				"at_48_23": {
+					"facingDirection": "down",
+					"label": "At 48 23",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_48_23",
+					"tile": {
+						"x": 48,
+						"y": 23
+					}
+				},
+				"at_53_33": {
+					"facingDirection": "down",
+					"label": "At 53 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_53_33",
+					"tile": {
+						"x": 53,
+						"y": 33
+					}
+				},
+				"at_58_33": {
+					"facingDirection": "down",
+					"label": "At 58 33",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_58_33",
+					"tile": {
+						"x": 58,
+						"y": 33
+					}
+				},
+				"at_62_41": {
+					"facingDirection": "down",
+					"label": "At 62 41",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_62_41",
+					"tile": {
+						"x": 62,
+						"y": 41
+					}
+				},
+				"at_63_6": {
+					"facingDirection": "down",
+					"label": "At 63 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_63_6",
+					"tile": {
+						"x": 63,
+						"y": 6
+					}
+				},
+				"at_76_52": {
+					"facingDirection": "down",
+					"label": "At 76 52",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_76_52",
+					"tile": {
+						"x": 76,
+						"y": 52
+					}
+				}
+			}
+		},
+		"kanto_ss_anne_2f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "S.S. Anne 2F",
+			"locationGroupId": "kanto_ss_anne",
+			"locationGroupLabel": "S.S. Anne",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+			"spawnPoints": {
+				"at_11_37": {
+					"facingDirection": "down",
+					"label": "At 11 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_11_37",
+					"tile": {
+						"x": 11,
+						"y": 37
+					}
+				},
+				"at_18_37": {
+					"facingDirection": "down",
+					"label": "At 18 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_18_37",
+					"tile": {
+						"x": 18,
+						"y": 37
+					}
+				},
+				"at_25_37": {
+					"facingDirection": "down",
+					"label": "At 25 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_25_37",
+					"tile": {
+						"x": 25,
+						"y": 37
+					}
+				},
+				"at_29_15": {
+					"facingDirection": "down",
+					"label": "At 29 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_29_15",
+					"tile": {
+						"x": 29,
+						"y": 15
+					}
+				},
+				"at_29_61": {
+					"facingDirection": "down",
+					"label": "At 29 61",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_29_61",
+					"tile": {
+						"x": 29,
+						"y": 61
+					}
+				},
+				"at_32_37": {
+					"facingDirection": "down",
+					"label": "At 32 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_32_37",
+					"tile": {
+						"x": 32,
+						"y": 37
+					}
+				},
+				"at_39_37": {
+					"facingDirection": "down",
+					"label": "At 39 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_39_37",
+					"tile": {
+						"x": 39,
+						"y": 37
+					}
+				},
+				"at_46_37": {
+					"facingDirection": "down",
+					"label": "At 46 37",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_46_37",
+					"tile": {
+						"x": 46,
+						"y": 37
+					}
+				},
+				"at_49_15": {
+					"facingDirection": "down",
+					"label": "At 49 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_49_15",
+					"tile": {
+						"x": 49,
+						"y": 15
+					}
+				},
+				"at_49_61": {
+					"facingDirection": "down",
+					"label": "At 49 61",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_49_61",
+					"tile": {
+						"x": 49,
+						"y": 61
+					}
+				},
+				"at_4_34": {
+					"facingDirection": "down",
+					"label": "At 4 34",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_4_34",
+					"tile": {
+						"x": 4,
+						"y": 34
+					}
+				},
+				"at_4_40": {
+					"facingDirection": "down",
+					"label": "At 4 40",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_4_40",
+					"tile": {
+						"x": 4,
+						"y": 40
+					}
+				},
+				"at_52_29": {
+					"facingDirection": "down",
+					"label": "At 52 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_52_29",
+					"tile": {
+						"x": 52,
+						"y": 29
+					}
+				},
+				"at_73_41": {
+					"facingDirection": "down",
+					"label": "At 73 41",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_73_41",
+					"tile": {
+						"x": 73,
+						"y": 41
+					}
+				},
+				"at_9_15": {
+					"facingDirection": "down",
+					"label": "At 9 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_9_15",
+					"tile": {
+						"x": 9,
+						"y": 15
+					}
+				},
+				"at_9_61": {
+					"facingDirection": "down",
+					"label": "At 9 61",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_9_61",
+					"tile": {
+						"x": 9,
+						"y": 61
+					}
+				}
+			}
+		},
+		"kanto_ss_anne_3f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "S.S. Anne 3F",
+			"locationGroupId": "kanto_ss_anne",
+			"locationGroupLabel": "S.S. Anne",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+			"spawnPoints": {
+				"at_28_13": {
+					"facingDirection": "down",
+					"label": "At 28 13",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_28_13",
+					"tile": {
+						"x": 28,
+						"y": 13
+					}
+				},
+				"at_39_16": {
+					"facingDirection": "down",
+					"label": "At 39 16",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_39_16",
+					"tile": {
+						"x": 39,
+						"y": 16
+					}
+				},
+				"at_54_17": {
+					"facingDirection": "down",
+					"label": "At 54 17",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_54_17",
+					"tile": {
+						"x": 54,
+						"y": 17
+					}
+				}
+			}
+		},
+		"kanto_ss_anne_b1f": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "S.S. Anne B1F",
+			"locationGroupId": "kanto_ss_anne",
+			"locationGroupLabel": "S.S. Anne",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+			"spawnPoints": {
+				"at_11_35": {
+					"facingDirection": "down",
+					"label": "At 11 35",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_11_35",
+					"tile": {
+						"x": 11,
+						"y": 35
+					}
+				},
+				"at_15_29": {
+					"facingDirection": "down",
+					"label": "At 15 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_15_29",
+					"tile": {
+						"x": 15,
+						"y": 29
+					}
+				},
+				"at_19_57": {
+					"facingDirection": "down",
+					"label": "At 19 57",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_19_57",
+					"tile": {
+						"x": 19,
+						"y": 57
+					}
+				},
+				"at_22_29": {
+					"facingDirection": "down",
+					"label": "At 22 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_22_29",
+					"tile": {
+						"x": 22,
+						"y": 29
+					}
+				},
+				"at_29_15": {
+					"facingDirection": "down",
+					"label": "At 29 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_29_15",
+					"tile": {
+						"x": 29,
+						"y": 15
+					}
+				},
+				"at_29_29": {
+					"facingDirection": "down",
+					"label": "At 29 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_29_29",
+					"tile": {
+						"x": 29,
+						"y": 29
+					}
+				},
+				"at_36_29": {
+					"facingDirection": "down",
+					"label": "At 36 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_36_29",
+					"tile": {
+						"x": 36,
+						"y": 29
+					}
+				},
+				"at_39_57": {
+					"facingDirection": "down",
+					"label": "At 39 57",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_39_57",
+					"tile": {
+						"x": 39,
+						"y": 57
+					}
+				},
+				"at_43_29": {
+					"facingDirection": "down",
+					"label": "At 43 29",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_43_29",
+					"tile": {
+						"x": 43,
+						"y": 29
+					}
+				},
+				"at_49_15": {
+					"facingDirection": "down",
+					"label": "At 49 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_49_15",
+					"tile": {
+						"x": 49,
+						"y": 15
+					}
+				},
+				"at_9_15": {
+					"facingDirection": "down",
+					"label": "At 9 15",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "At_9_15",
+					"tile": {
+						"x": 9,
+						"y": 15
+					}
+				}
+			}
+		},
 		"kanto_underground_path_route_5_entrance": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -3274,6 +3812,16 @@
 			"sceneAliases": [],
 			"scenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
 			"spawnPoints": {
+				"from_ss_anne": {
+					"facingDirection": "down",
+					"label": "Ss Anne",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromSSAnne",
+					"tile": {
+						"x": 43,
+						"y": 20
+					}
+				},
 				"from_vermilion_city": {
 					"facingDirection": "down",
 					"label": "Vermilion City",
@@ -6235,6 +6783,741 @@
 			"destinationAreaId": "kanto_route_6_saffron_gate",
 			"sourceMapId": "kanto_saffron_city_south"
 		},
+		"kanto_ss_anne_1f__1f_cabin_01__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_19_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_02__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 816.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_25_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_03__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1008.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_31_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_04__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1200.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_37_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_05__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_43_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_06__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1712.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_53_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_cabin_07__return_to_corridor": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1872.0,
+					"y": 1072.0
+				},
+				"spawnMarker": "At_58_33"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_01": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 208.0
+				},
+				"spawnMarker": "At_3_6"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_02": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 752.0,
+					"y": 208.0
+				},
+				"spawnMarker": "At_23_6"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_03": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 208.0
+				},
+				"spawnMarker": "At_43_6"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_04": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 2032.0,
+					"y": 208.0
+				},
+				"spawnMarker": "At_63_6"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_05": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 112.0,
+					"y": 1744.0
+				},
+				"spawnMarker": "At_3_54"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_06": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 752.0,
+					"y": 1744.0
+				},
+				"spawnMarker": "At_23_54"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__cabin_07": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 1744.0
+				},
+				"spawnMarker": "At_43_54"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__galley_door": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 2448.0,
+					"y": 1680.0
+				},
+				"spawnMarker": "At_76_52"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__stairs_to_2f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 1104.0
+				},
+				"spawnMarker": "At_4_34"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__1f_corridor__stairs_to_b1f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1136.0
+				},
+				"spawnMarker": "At_11_35"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__kitchen__return_to_1f": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 1392.0
+				},
+				"spawnMarker": "At_12_43"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_1f__to_port": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_vermilion_docks",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_docks/vermilion_docks.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 656.0
+				},
+				"spawnMarker": "FromSSAnne"
+			},
+			"destinationAreaId": "kanto_vermilion_docks",
+			"sourceMapId": "kanto_ss_anne_1f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_01__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_11_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_02__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 592.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_18_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_03__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 816.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_25_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_04__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1040.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_32_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_05__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_39_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_cabin_06__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1488.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "At_46_37"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_01": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_9_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_02": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_29_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_03": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1584.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_49_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_04": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 1968.0
+				},
+				"spawnMarker": "At_9_61"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_05": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 1968.0
+				},
+				"spawnMarker": "At_29_61"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__cabin_06": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1584.0,
+					"y": 1968.0
+				},
+				"spawnMarker": "At_49_61"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__captains_door": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 2352.0,
+					"y": 1328.0
+				},
+				"spawnMarker": "At_73_41"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__stairs_to_1f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 1168.0
+				},
+				"spawnMarker": "At_12_36"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__2f_corridor__stairs_to_3f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+				"position": {
+					"x": 1744.0,
+					"y": 560.0
+				},
+				"spawnMarker": "At_54_17"
+			},
+			"destinationAreaId": "kanto_ss_anne_3f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_2f__captains_cabin__return_to_2f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 1680.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_52_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_2f"
+		},
+		"kanto_ss_anne_3f__3f_landing__bow_access": {
+			"destination": {
+				"facingDirection": "left",
+				"mapId": "kanto_ss_anne_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+				"position": {
+					"x": 912.0,
+					"y": 432.0
+				},
+				"spawnMarker": "At_28_13"
+			},
+			"destinationAreaId": "kanto_ss_anne_3f",
+			"sourceMapId": "kanto_ss_anne_3f"
+		},
+		"kanto_ss_anne_3f__3f_landing__stairs_to_2f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_2f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_2f.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 1296.0
+				},
+				"spawnMarker": "At_4_40"
+			},
+			"destinationAreaId": "kanto_ss_anne_2f",
+			"sourceMapId": "kanto_ss_anne_3f"
+		},
+		"kanto_ss_anne_3f__promenade_deck__return_to_3f": {
+			"destination": {
+				"facingDirection": "right",
+				"mapId": "kanto_ss_anne_3f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 528.0
+				},
+				"spawnMarker": "At_39_16"
+			},
+			"destinationAreaId": "kanto_ss_anne_3f",
+			"sourceMapId": "kanto_ss_anne_3f"
+		},
+		"kanto_ss_anne_b1f__b1f_cabin_01__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_15_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_cabin_02__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 720.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_22_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_cabin_03__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_29_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_cabin_04__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 1168.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_36_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_cabin_05__return_to_corridor": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 1392.0,
+					"y": 944.0
+				},
+				"spawnMarker": "At_43_29"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__cabin_01": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_9_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__cabin_02": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 944.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_29_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__cabin_03": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 1584.0,
+					"y": 496.0
+				},
+				"spawnMarker": "At_49_15"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__cabin_04": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 624.0,
+					"y": 1840.0
+				},
+				"spawnMarker": "At_19_57"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__cabin_05": {
+			"destination": {
+				"facingDirection": "up",
+				"mapId": "kanto_ss_anne_b1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 1840.0
+				},
+				"spawnMarker": "At_39_57"
+			},
+			"destinationAreaId": "kanto_ss_anne_b1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
+		"kanto_ss_anne_b1f__b1f_corridor__stairs_to_1f": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 2000.0,
+					"y": 1328.0
+				},
+				"spawnMarker": "At_62_41"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_ss_anne_b1f"
+		},
 		"kanto_underground_path_route_5_entrance__to_route5": {
 			"destination": {
 				"facingDirection": "down",
@@ -6503,6 +7786,21 @@
 			},
 			"destinationAreaId": "kanto_route_6",
 			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city__to_ss_anne": {
+			"destination": {
+				"facingDirection": "down",
+				"mapId": "kanto_ss_anne_1f",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn",
+				"position": {
+					"x": 1552.0,
+					"y": 752.0
+				},
+				"spawnMarker": "At_48_23"
+			},
+			"destinationAreaId": "kanto_ss_anne_1f",
+			"sourceMapId": "kanto_vermilion_docks"
 		},
 		"kanto_vermilion_city_gym__to_outside": {
 			"destination": {

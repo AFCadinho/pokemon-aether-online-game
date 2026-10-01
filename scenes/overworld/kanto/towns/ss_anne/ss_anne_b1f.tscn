@@ -1,0 +1,280 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_b1f/ss_anne_b1f.visual.tscn" id="visual"]
+
+[sub_resource type="RectangleShape2D" id="shape_1"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_2"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_3"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_4"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_5"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_6"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_7"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_8"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_9"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_10"]
+size = Vector2(96, 32)
+
+[sub_resource type="RectangleShape2D" id="shape_11"]
+size = Vector2(96, 32)
+
+[node name="SSAnneB1F" type="Node2D"]
+script = ExtResource("metadata")
+map_id = "kanto_ss_anne_b1f"
+map_region_name = "Kanto"
+map_display_name = "S.S. Anne B1F"
+world_access_group_id = "kanto_ss_anne"
+world_access_group_label = "S.S. Anne"
+world_access_area_type = "interior"
+location_id = "kanto.ss_anne.b1f"
+location_name = "S.S. Anne B1F"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.vermilion_city"
+
+[node name="Visual" parent="." instance=ExtResource("visual")]
+metadata/pao_generated_visual = true
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/ss_anne/SS Anne B1F.tmx"
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("mask")
+floor_regions = {
+&"room_12": Rect2(192, 704, 1536, 576),
+&"room_13": Rect2(0, 0, 576, 640),
+&"room_14": Rect2(640, 0, 576, 640),
+&"room_15": Rect2(1280, 0, 576, 640),
+&"room_16": Rect2(320, 1344, 576, 640),
+&"room_17": Rect2(960, 1344, 576, 640)
+}
+active_floor = &"room_12"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="At_9_15" type="Marker2D" parent="Spawns"]
+position = Vector2(304, 496)
+
+[node name="At_11_35" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 1136)
+
+[node name="At_15_29" type="Marker2D" parent="Spawns"]
+position = Vector2(496, 944)
+
+[node name="At_19_57" type="Marker2D" parent="Spawns"]
+position = Vector2(624, 1840)
+
+[node name="At_22_29" type="Marker2D" parent="Spawns"]
+position = Vector2(720, 944)
+
+[node name="At_29_15" type="Marker2D" parent="Spawns"]
+position = Vector2(944, 496)
+
+[node name="At_29_29" type="Marker2D" parent="Spawns"]
+position = Vector2(944, 944)
+
+[node name="At_36_29" type="Marker2D" parent="Spawns"]
+position = Vector2(1168, 944)
+
+[node name="At_39_57" type="Marker2D" parent="Spawns"]
+position = Vector2(1264, 1840)
+
+[node name="At_43_29" type="Marker2D" parent="Spawns"]
+position = Vector2(1392, 944)
+
+[node name="At_49_15" type="Marker2D" parent="Spawns"]
+position = Vector2(1584, 496)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="B1F_Corridor__stairs_to_1f" type="Area2D" parent="Exits"]
+position = Vector2(368, 1008)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
+target_spawn_name = "At_62_41"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__stairs_to_1f"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__stairs_to_1f"]
+shape = SubResource("shape_1")
+
+[node name="B1F_Corridor__cabin_01" type="Area2D" parent="Exits"]
+position = Vector2(496, 912)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_9_15"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_01"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_01"]
+shape = SubResource("shape_2")
+
+[node name="B1F_Corridor__cabin_02" type="Area2D" parent="Exits"]
+position = Vector2(720, 912)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_29_15"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_02"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_02"]
+shape = SubResource("shape_3")
+
+[node name="B1F_Corridor__cabin_03" type="Area2D" parent="Exits"]
+position = Vector2(944, 912)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_49_15"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_03"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_03"]
+shape = SubResource("shape_4")
+
+[node name="B1F_Corridor__cabin_04" type="Area2D" parent="Exits"]
+position = Vector2(1168, 912)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_19_57"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_04"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_04"]
+shape = SubResource("shape_5")
+
+[node name="B1F_Corridor__cabin_05" type="Area2D" parent="Exits"]
+position = Vector2(1392, 912)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_39_57"
+transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_05"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_05"]
+shape = SubResource("shape_6")
+
+[node name="B1F_Cabin_01__return_to_corridor" type="Area2D" parent="Exits"]
+position = Vector2(304, 528)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_15_29"
+transition_id = "kanto_ss_anne_b1f__b1f_cabin_01__return_to_corridor"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_01__return_to_corridor"]
+shape = SubResource("shape_7")
+
+[node name="B1F_Cabin_02__return_to_corridor" type="Area2D" parent="Exits"]
+position = Vector2(944, 528)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_22_29"
+transition_id = "kanto_ss_anne_b1f__b1f_cabin_02__return_to_corridor"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_02__return_to_corridor"]
+shape = SubResource("shape_8")
+
+[node name="B1F_Cabin_03__return_to_corridor" type="Area2D" parent="Exits"]
+position = Vector2(1584, 528)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_29_29"
+transition_id = "kanto_ss_anne_b1f__b1f_cabin_03__return_to_corridor"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_03__return_to_corridor"]
+shape = SubResource("shape_9")
+
+[node name="B1F_Cabin_04__return_to_corridor" type="Area2D" parent="Exits"]
+position = Vector2(624, 1872)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_36_29"
+transition_id = "kanto_ss_anne_b1f__b1f_cabin_04__return_to_corridor"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_04__return_to_corridor"]
+shape = SubResource("shape_10")
+
+[node name="B1F_Cabin_05__return_to_corridor" type="Area2D" parent="Exits"]
+position = Vector2(1264, 1872)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
+target_spawn_name = "At_43_29"
+transition_id = "kanto_ss_anne_b1f__b1f_cabin_05__return_to_corridor"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_05__return_to_corridor"]
+shape = SubResource("shape_11")
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+visible = false
+tile_set = ExtResource("collision")
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__stairs_to_1f" to="Exits/B1F_Corridor__stairs_to_1f" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__cabin_01" to="Exits/B1F_Corridor__cabin_01" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__cabin_02" to="Exits/B1F_Corridor__cabin_02" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__cabin_03" to="Exits/B1F_Corridor__cabin_03" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__cabin_04" to="Exits/B1F_Corridor__cabin_04" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Corridor__cabin_05" to="Exits/B1F_Corridor__cabin_05" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Cabin_01__return_to_corridor" to="Exits/B1F_Cabin_01__return_to_corridor" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Cabin_02__return_to_corridor" to="Exits/B1F_Cabin_02__return_to_corridor" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Cabin_03__return_to_corridor" to="Exits/B1F_Cabin_03__return_to_corridor" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Cabin_04__return_to_corridor" to="Exits/B1F_Cabin_04__return_to_corridor" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/B1F_Cabin_05__return_to_corridor" to="Exits/B1F_Cabin_05__return_to_corridor" method="_on_body_entered"]
