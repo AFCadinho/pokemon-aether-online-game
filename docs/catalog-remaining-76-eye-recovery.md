@@ -168,3 +168,29 @@ qualification; functional completion is not runtime admission. The receipt
 `catalog_remaining_76_performance_recheck.json` binds both full reports, logs,
 installed catalog and executed scripts. No new registry admission or upload
 was made. Next: investigate stadium frame time for this batch.
+
+## Performance investigation and local admission (2026-10-01)
+
+The diagnostic rerun completed with p95 16.703/13.443/16.578ms but repeated
+a GLES3 null-material message during stadium transition; it is not admission
+evidence. The attempted per-context shutdown export did not run, so no
+per-Pokemon attribution is claimed. Logs identify the integrated AMD Radeon
+renderer despite an available RTX3070. The exact source of timing variation
+has not been established.
+
+A sequential unchanged original test then passed all76 pairs at
+16.891/18.872/16.843ms without errors. Source retention was2249075bytes,
+threaded dispatch peaked at2.57ms, no uncovered stall exceeded100ms,
+and post-stadium memory growth was279928bytes. The unchanged admission
+script checked every existing threshold and admitted152 scenes/76bundles.
+An additional Buzzwole stadium probe measured baseline p95 17.989ms,
+17.220ms without crowd,17.411ms without boxes,17.838ms without beams,
+17.322ms without arena and17.674ms on restored baseline. These are
+diagnostic visibility changes only; production visuals remain unchanged.
+
+`catalog_remaining_76_performance_diagnosis.json` preserves successful and
+unsuccessful investigation evidence. `catalog_remaining_76_bundle_qualification.json`
+binds the successful original full test and installed bundle evidence. No tests,
+performance limits or production render code changed. The catalog now has883
+ordinary species plus Mega Dragonite (884profiles/1768model records);142
+ordinary species remain. R2 upload and release remain pending.

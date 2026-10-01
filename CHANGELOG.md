@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Nog 76 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles.
 - De haven ten zuiden van Vermilion City gebruikt de nieuwe Port Exterior-visual, met aansluitende aankomstpunten en een lege collisionlaag voor handmatige inrichting.
 
 - Kanto Route 11 gebruikt de opnieuw geïmporteerde artist-TMX-visual.
