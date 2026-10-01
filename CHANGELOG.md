@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trapovergangen in Diglett Cave en Rock Tunnel laten de speler recht vooruit uit de trap kijken; maps en server gebruiken dezelfde richting en aankomstpositie.
+
 - Bij alle SS Anne-trappen kijkt de speler bij aankomst recht vooruit naar rechts, door de open zijde van de trap.
 
 - Lavender Town heeft voorbereidende exits en aankomstspawns voor Route 8 in het westen en Route 12 in het zuiden; de bestaande noordelijke verbinding met Route 10 blijft actief.
