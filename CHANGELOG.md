@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De botsingslagen van de Vermilion-huizen, Pokemon Fan Club en Gym zijn leeg voor handmatige inrichting.
+
 - Nog 76 Pokémon zijn lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen en individuele downloadbundles.
 - De haven ten zuiden van Vermilion City gebruikt de nieuwe Port Exterior-visual, met aansluitende aankomstpunten en een lege collisionlaag voor handmatige inrichting.
 
