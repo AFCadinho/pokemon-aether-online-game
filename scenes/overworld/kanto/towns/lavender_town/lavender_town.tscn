@@ -11,8 +11,6 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="9_bug_catcher"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="10_lass"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="11_overworld_pokemon"]
-[ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="12_story_trigger"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="13_story_hook"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="14_door_hint"]
 [ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="15_story_trigger"]
 [ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="16_story_hook"]
@@ -276,9 +274,10 @@ y_sort_enabled = true
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1361975311]
 
 [node name="LavenderResident" parent="Entities/NPCs" instance=ExtResource("7_dialogue")]
-position = Vector2(848, 144)
+position = Vector2(720, 176)
 npc_id = "kanto_lavender_town_resident"
 npc_definition_id = "trainer_class_elder_f"
+preload_quest_markers = true
 display_name = "Lavender Resident"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("8_elder_f")
@@ -292,7 +291,7 @@ facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("9_bug_catcher")
 
 [node name="PokecenterVisitor" parent="Entities/NPCs" instance=ExtResource("7_dialogue")]
-position = Vector2(336, 432)
+position = Vector2(304, 432)
 npc_id = "kanto_lavender_town_pokecenter_visitor"
 npc_definition_id = "trainer_class_lass"
 display_name = "Lavender Visitor"
@@ -304,7 +303,7 @@ npc_sprite_frames = ExtResource("10_lass")
 [node name="Pokemon" type="Node2D" parent="Entities"]
 
 [node name="Cubone" parent="Entities/Pokemon" instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(560, 784)
+position = Vector2(288, 640)
 overworld_pokemon_id = "kanto_lavender_town_cubone_1"
 species_id = "cubone"
 level = 17
@@ -315,7 +314,7 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 
 [node name="Clefairy" parent="Entities/Pokemon" instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(880, 912)
+position = Vector2(1280, 928)
 overworld_pokemon_id = "kanto_lavender_town_clefairy_1"
 species_id = "clefairy"
 level = 16
@@ -339,23 +338,6 @@ shape = SubResource("shape_arrival_story")
 
 [node name="StoryHook" type="Node" parent="StoryTriggers/LavenderArrival"]
 script = ExtResource("16_story_hook")
-interaction_id = "kanto_lavender_town_resident_warning"
-entity_id = "kanto_lavender_town_resident"
-
-[node name="StoryTriggers" type="Node2D" parent="."]
-
-[node name="LavenderArrival" type="Area2D" parent="StoryTriggers"]
-position = Vector2(720, 80)
-script = ExtResource("12_story_trigger")
-story_host_path = NodePath("../../Entities/NPCs/LavenderResident")
-required_quest_id = "travel_to_lavender_town"
-required_step_id = "hear_lavender_warning"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/LavenderArrival"]
-shape = SubResource("shape_arrival_story")
-
-[node name="StoryHook" type="Node" parent="StoryTriggers/LavenderArrival"]
-script = ExtResource("13_story_hook")
 interaction_id = "kanto_lavender_town_resident_warning"
 entity_id = "kanto_lavender_town_resident"
 
@@ -512,7 +494,6 @@ position = Vector2(1360, 816)
 position = Vector2(1296, 816)
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
-[connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]

@@ -2,6 +2,7 @@ extends SceneTree
 
 const OAK_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
 const LAVENDER_SCENE := "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
+const LAVENDER_CENTER_SCENE := "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn"
 const GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
 const ROUTE_5_GATE_SCENE := "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn"
 const STORY_HOOK_SCRIPT := "res://scripts/world/story/story_hook.gd"
@@ -19,6 +20,7 @@ func _run() -> void:
 	_check_route_5_gate()
 	_check_oak()
 	_check_lavender()
+	_check_lavender_pokemon_center()
 	quit(1 if failures > 0 else 0)
 
 
@@ -90,11 +92,53 @@ func _check_lavender() -> void:
 	var arrival := town.get_node_or_null("StoryTriggers/LavenderArrival")
 	_check(resident != null, "Lavender resident is present")
 	_check(arrival != null, "Lavender arrival warning trigger is present")
+	_check(town.get_node_or_null("Entities/NPCs/TowerWatcher") != null, "Lavender Tower watcher is present")
+	_check(town.get_node_or_null("Entities/NPCs/PokecenterVisitor") != null, "Lavender Pokémon Center visitor is present")
+	_check(town.get_node_or_null("Entities/Pokemon/Cubone") != null, "Cubone appears in Lavender Town")
+	_check(town.get_node_or_null("Entities/Pokemon/Clefairy") != null, "Clefairy appears in Lavender Town")
+	var collision_layer := town.get_node("Tiles/Collision") as TileMapLayer
+	for node_path: NodePath in [
+		NodePath("Entities/NPCs/LavenderResident"),
+		NodePath("Entities/NPCs/TowerWatcher"),
+		NodePath("Entities/NPCs/PokecenterVisitor"),
+		NodePath("Entities/Pokemon/Cubone"),
+		NodePath("Entities/Pokemon/Clefairy"),
+	]:
+		var actor := town.get_node_or_null(node_path) as Node2D
+		_check(
+			actor != null and collision_layer.get_cell_source_id(collision_layer.local_to_map(actor.position)) == -1,
+			"%s is placed on an unblocked Lavender tile" % node_path
+		)
+	var center_exit := town.get_node_or_null("Exits/ToPokecenter")
+	_check(
+		center_exit != null
+		and center_exit.get("target_scene_path") == LAVENDER_CENTER_SCENE,
+		"Lavender Town exit connects to its Pokémon Center"
+	)
 	if arrival != null:
 		_check(arrival.get("required_quest_id") == "travel_to_lavender_town", "arrival warning is tied to the Lavender quest")
 		var hook := arrival.get_node_or_null("StoryHook")
 		_check(hook != null and hook.get("interaction_id") == "kanto_lavender_town_resident_warning", "arrival trigger records the warning interaction")
 	town.free()
+
+
+func _check_lavender_pokemon_center() -> void:
+	var packed := load(LAVENDER_CENTER_SCENE) as PackedScene
+	_check(packed != null, "Lavender Pokémon Center scene loads")
+	if packed == null:
+		return
+	var center := packed.instantiate()
+	_check(center.get("map_id") == "kanto_lavender_town_pokemon_center", "center has its world map ID")
+	_check(
+		center.get_node_or_null("Exits/ToOutside") != null
+		and center.get_node("Exits/ToOutside").get("target_scene_path") == LAVENDER_SCENE,
+		"center return exit points back to Lavender Town"
+	)
+	_check(
+		center.get_node_or_null("Entities/NPCs/NurseJoy") != null,
+		"Lavender Pokémon Center has Nurse Joy"
+	)
+	center.free()
 
 
 func _check(condition: bool, label: String) -> void:
