@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De SS Anne B1F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
+
 - De SS Anne 2F gebruikt de opnieuw geïmporteerde artist-TMX-visual.
 
 - Paras is lokaal goedgekeurd voor 3D-battles, met normal/shiny-modellen, aangepaste battle-grootte en een individuele downloadbundle.
