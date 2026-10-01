@@ -252,3 +252,28 @@ and `catalog_remaining_dlc_battle_candidates.json` record the exact held scene
 hashes, placement/motion proposals and evidence hashes. Appearance approvals
 remain intact; sleep/battle approval is pending, and no runtime registry,
 individual bundle, R2 index or release has been changed by this step.
+
+
+### User battle approval and three shiny follow-ups
+
+The user approved the 15 sleep/battle pairs, but could not see the shiny
+variation of Poltchageist, Ogerpon, and subsequently Sinistcha. A low-angle
+front/rear enlargement reproduced the concern. Ogerpon's existing Teal Mask
+covers the orange → yellow-green face difference; the diagnostic hides that
+one exact mask instance without changing the runtime asset.
+
+Poltchageist's static graph-shadow bake crushed source dark-green pot paint to
+near-black. Sinistcha's green bowl was present but also darkened. The bounded
+`catalog_dlc_pot_colour.py` proposal restores official albedo RGB only in UV
+pixels whose source normal/rare pair changes dark paint to green. Original
+alpha, all other baked detail, emission/response maps, geometry, skinning and
+animation accessors are retained. Exact geometry/motion signatures match all
+four previous GLBs; the 60/120 Hz floor/camera measurements are reused explicitly
+on that proof, not rerun or weakened. All four revised SCN scenes passed the
+strict standalone converter and reloading check, with unchanged clip timings.
+
+The three enlarged pairs are at <http://127.0.0.1:8787/shiny-colours/>; all 22
+page/manifest/image requests returned HTTP 200 and the URL was dispatched with
+`xdg-open`. User confirmation of this narrow follow-up remains pending. The
+battle checkpoint pins the four revised scenes and the unchanged placement
+curves with their new GLB hashes. No runtime admission or bundles yet.

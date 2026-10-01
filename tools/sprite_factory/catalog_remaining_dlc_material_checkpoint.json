@@ -11,8 +11,7 @@
   "godot_report_sha256": "c22138445900303caf646408d8cb8f4485aa08337ff7a1feb65bb43a3bdb5647",
   "evidence_root": ".tmp/remaining-dlc-15-v1/",
   "pending": [
-    "material_effect_limitations_final_review",
-    "authored_rest_and_battle_visual_review",
+    "three_shiny_followup_reviews",
     "runtime_admission_and_loading_performance",
     "individual_bundles"
   ],
@@ -1557,8 +1556,13 @@
   },
   "standalone_battle_checkpoint": {
     "path": "tools/sprite_factory/catalog_remaining_dlc_battle_checkpoint.json",
-    "sha256": "953bed5e0131b35949024eab0437bfca8ca05eb904ec54f0727620d669e6d0c2",
+    "sha256": "3a9a4289aaefdddf4bee474bb2711bd3ccc30634413bad9136fcaf38becd0ec0",
     "technical_pass": true,
-    "user_battle_approved": false
-  }
+    "user_battle_approved": true
+  },
+  "pending_shiny_followup": [
+    "poltchageist",
+    "sinistcha",
+    "ogerpon"
+  ]
 }
