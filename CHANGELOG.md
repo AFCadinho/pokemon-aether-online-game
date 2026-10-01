@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De rustkamer op SS Anne 1F heeft nu Nurse Joy als genezer.
+
 - Doorgangen binnen dezelfde map, waaronder de kamers van SS Anne 1F, blijven bruikbaar nadat je heen en terug bent gegaan.
 
 - De S.S. Anne-verhaallijn begint met de gunst van de skipper: zoek de opschepperige Gary via aanwijzingen van gasten en bemanning, versla hem bij de captainhut en help daarna de zeezieke, uitgeputte captain met gemberthee voor HM Cut.
