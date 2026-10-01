@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Alle vier SS Anne-mappen gebruiken de scheepsarena nu ook voor PvP en gevechten met een meegegeven omgevingskeuze.
+
 - SS Anne-gevechten gebruiken nu een eigen 3D-scheepsdek met houten planken, relingen, reddingsboeien en bewegende zee.
 
 - Onverslagen trainers op de S.S. Anne dagen je nu automatisch uit binnen drie tegels van hun zichtlijn.

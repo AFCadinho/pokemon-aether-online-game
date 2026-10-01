@@ -50,6 +50,7 @@ size = Vector2(96, 32)
 [node name="SSAnneB1F" type="Node2D"]
 script = ExtResource("metadata")
 map_id = "kanto_ss_anne_b1f"
+battle_environment_id = "ss_anne"
 map_region_name = "Kanto"
 map_display_name = "S.S. Anne B1F"
 world_access_group_id = "kanto_ss_anne"

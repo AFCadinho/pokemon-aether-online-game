@@ -14,7 +14,7 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var mount_license_region_id := ""
 @export var encounter_area_id := ""
 @export_group("Battle")
-@export_enum("grass", "water", "cave") var battle_environment_id := "grass"
+@export_enum("grass", "water", "cave", "ss_anne") var battle_environment_id := "grass"
 @export_group("")
 @export_enum("outdoor", "indoor", "dark") var lighting_profile := "outdoor"
 @export_enum("outdoor", "disabled") var weather_profile := "outdoor"
