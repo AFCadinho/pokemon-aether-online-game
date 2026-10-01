@@ -222,6 +222,9 @@ size = Vector2(192, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_house_door"]
 size = Vector2(48, 16)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_diglett_cave"]
+size = Vector2(96, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j62p7"]
 texture = ExtResource("9_gac6d")
 texture_region_size = Vector2i(32, 32)
@@ -322,9 +325,6 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("TileSetAtlasSource_ohdj5")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_diglett_cave"]
-size = Vector2(96, 32)
-
 [node name="KantoRoute2" type="Node2D" unique_id=1334981567]
 script = ExtResource("8_metadata")
 map_id = "kanto_route_2"
@@ -394,6 +394,9 @@ position = Vector2(1376, 1136)
 
 [node name="FromHouse" type="Marker2D" parent="Spawns" unique_id=1370384655]
 position = Vector2(1424, 560)
+
+[node name="FromDiglettCave" type="Marker2D" parent="Spawns" unique_id=862016245]
+position = Vector2(976, 592)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1183129315]
 
@@ -489,6 +492,18 @@ shape = SubResource("RectangleShape2D_house_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToHouse" unique_id=27466854 instance=ExtResource("20_door_hint")]
 z_as_relative = false
+
+[node name="ToDiglettCave" type="Area2D" parent="Exits" unique_id=1362139130]
+position = Vector2(976, 560)
+script = ExtResource("6_3mgn4")
+target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn"
+target_spawn_name = "FromRoute2"
+transition_id = "kanto_route_2__to_diglett_cave"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave" unique_id=1842883208]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_diglett_cave")
 
 [node name="SandTiles" type="Node2D" parent="." unique_id=597055844]
 
@@ -613,20 +628,6 @@ tile_set = SubResource("TileSet_ywtea")
 [node name="StairUpRight" type="TileMapLayer" parent="Stairs" unique_id=1462988124]
 z_index = 100
 tile_set = SubResource("TileSet_ywtea")
-
-[node name="FromDiglettCave" type="Marker2D" parent="Spawns"]
-position = Vector2(976, 624)
-
-[node name="ToDiglettCave" type="Area2D" parent="Exits"]
-position = Vector2(976, 560)
-script = ExtResource("6_3mgn4")
-target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn"
-target_spawn_name = "FromRoute2"
-transition_id = "kanto_route_2__to_diglett_cave"
-transition_facing_direction = "up"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToDiglettCave"]
-shape = SubResource("RectangleShape2D_diglett_cave")
 
 [connection signal="body_entered" from="Exits/ToViridianCity" to="Exits/ToViridianCity" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPewterCity" to="Exits/ToPewterCity" method="_on_body_entered"]

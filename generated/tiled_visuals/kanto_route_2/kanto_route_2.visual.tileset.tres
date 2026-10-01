@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://cbgspssh47it8"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/kanto_route_2/assets/kanto_route_2.visual.tileset.compact_source_1_0.texture.res" id="1_eeq4p"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/kanto_route_2/assets/kanto_route_2.visual.tileset.compact_source_14049_0.texture.res" id="2_al5d1"]

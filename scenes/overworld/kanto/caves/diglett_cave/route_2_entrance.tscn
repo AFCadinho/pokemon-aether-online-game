@@ -3,6 +3,8 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/diglett_cave_route_2_entrance/diglett_cave_route_2_entrance.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_dnj7l"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_esaoq"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_g54s0"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_visibility_mask"]
 
@@ -88,12 +90,12 @@ world_access_area_type = "interior"
 location_id = "kanto.diglett.cave.route.2.entrance"
 location_name = "Diglett Cave Route 2 Entrance"
 region_id = "kanto"
-music_track_id = "overworld.kanto.viridian_forest"
 encounter_area_id = "kanto_digletts_cave"
 battle_environment_id = "cave"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 cave_encounter_chance = 0.07
+music_track_id = "overworld.kanto.viridian_forest"
 
 [node name="Visual" parent="." unique_id=1356986578 instance=ExtResource("1_visual")]
 
@@ -119,6 +121,10 @@ transition_facing_direction = "right"
 position = Vector2(16, 0)
 shape = SubResource("shape_1")
 
+[node name="DoorTransitionHint" parent="Exits/ToTunnel" unique_id=221670234 instance=ExtResource("4_dnj7l")]
+z_as_relative = false
+flow_direction = "right"
+
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=650805326]
 position = Vector2(368, 560)
 script = ExtResource("3_exit")
@@ -130,6 +136,12 @@ transition_facing_direction = "down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=1069537219]
 position = Vector2(16, 16)
 shape = SubResource("shape_2")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute2" unique_id=2084177923 instance=ExtResource("5_esaoq")]
+z_as_relative = false
+position = Vector2(16, 0)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1419086162]
 z_index = 5
