@@ -25,3 +25,29 @@ http://127.0.0.1:8781/skarmory-flight-v1/review-v1/index.html.
 Evidence and full authored recipes are bound in
 `tools/sprite_factory/catalog_skarmory_flight_height_candidate.json`.
 No active game/launcher registry or R2 bundle has been changed.
+
+## Approved local revision2
+
+The user approved the higher normal/shiny flight on2026-10-01. Final SCNs
+use the standard compressed delivery format; exact geometry/animation parity
+with the reviewed scenes passed. The v2 bundle is7146179bytes (6.82MiB).
+Fresh installation, actualv1-to-v2 update, no-op and restart passed. Three
+installed real-battle functional passes in classic/stadium/classic passed,
+including swaps and faint replacement, without errors.
+
+A first real-battle pass exposed brief HP overlap while the panel eased upward
+to the newly revealed higher model. `immersive_hud.gd` now moves upward
+immediately to its safe target while retaining downward easing. The original
+battle assertions and existing immersive layout check passed. No tests or
+clearance thresholds were weakened. Frame-rate certification remains separate
+under the current concurrent Godot load.
+
+The active local game and launcher registries now accept v2. Existing v1 hashes
+remain valid: placement, native timing and clearance offsets are unchanged,
+and conservative bounds enclose both revisions. A post-admission check verified
+both old/new hashes, matching registry files, exactly one123-bone skeleton,
+three meshes, non-null materials and rejection of unapproved hashes.
+The catalog count remains807 ordinary species plus Mega Dragonite.
+
+`catalog_skarmory_flight_height_qualification.json` binds the v2 bundle index
+and checks. R2 and release publication remain pending.
