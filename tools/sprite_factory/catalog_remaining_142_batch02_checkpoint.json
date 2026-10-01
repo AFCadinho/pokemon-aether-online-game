@@ -3,7 +3,7 @@
   "date": "2026-10-01",
   "runtime_approved": false,
   "review_url": "http://127.0.0.1:8782/appearance-six-v1/index.html",
-  "normal_review_pending": 6,
+  "normal_review_pending": 2,
   "shiny_qualified": 0,
   "battle_qualified": 0,
   "evidence_sha256": {
@@ -47,7 +47,11 @@
     ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-physical_attack_2-50.webp": "e247ae8453cd2c23be447cd73bc5aa31220fe9d06bac0a56bc441caa9db58de1",
     ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-special_attack-50.webp": "848f2b73128a8dae4530e68496aab267be3b12c564694baa5c76934cd2546170",
     ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-sleep-50.webp": "cac20e47a63f227622c58dfae0cb8385e50cfbb1ebe458123fb84d7ddc054b48",
-    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-faint_start-100.webp": "a9a4909286378c54bad27fe3356c30fba8eb538221c7af599c696c0f36fbeb01"
+    ".tmp/remaining-142-production/appearance-six-v1/media/vibrava-faint_start-100.webp": "a9a4909286378c54bad27fe3356c30fba8eb538221c7af599c696c0f36fbeb01",
+    ".tmp/remaining-142-production/eye-closeup-v3/report.json": "b3dbe14150ef8b014c816afba7e43e7772de7a2017251c3c534df65d053830e6",
+    ".tmp/remaining-142-production/eye-closeup-before-v3/report.json": "7278acc0f93c00065dbdf29456269f1fb11515f8f1e70718607e04334a5aec65",
+    ".tmp/remaining-142-production/action-batch02-eyes-runtime-v2/report.json": "d2820d02abed68ad6be7d15e26d886d0590b4fe86d2ac866074f5d37e7416b91",
+    ".tmp/remaining-142-production/eyes-lugia-swanna-v1/index.html": "2620027f423c2dbc8f3eae61e36f913b3c9f921237900b31fc8eda99a0691d21"
   },
   "entries": [
     {
@@ -94,24 +98,30 @@
         }
       },
       "converter_version": 2,
-      "glb_sha256": "c0c102ee58b91af1858acbb91d3b0791a3278e0c7ca056d61a68bb644972d9b3",
+      "glb_sha256": "11d7dfb36ecf8ea4cf4976fb7e0027914df6f34daf8ed2cbfdb7df77eca351ce",
       "godot_version": "4.6.2-stable (official)",
-      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/lugia/model.glb",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-v2/lugia/model.glb",
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
       "runtime_approved": false,
-      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/lugia.scn",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-runtime-v2/lugia.scn",
       "runtime_schema": 1,
-      "runtime_sha256": "5d2b1d168e2f759b12060649b97bf8762e64321edb662c1479fe2222fd4b92af",
+      "runtime_sha256": "4bf55bf184c02a780de92254eb38c083f34ae2224fdf4d517ed239644b7f62a1",
       "source_sha256": "4f06672dbbdbf83a0276466c83a5717a770e8f171347c614722241970916d317",
       "species": "lugia",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
+      "status": "corrected_eyes_review_pending",
       "appearance_approved": false,
-      "battle_approved": false
+      "battle_approved": false,
+      "superseded_runtime": {
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/lugia/model.glb",
+        "glb_sha256": "c0c102ee58b91af1858acbb91d3b0791a3278e0c7ca056d61a68bb644972d9b3",
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/lugia.scn",
+        "runtime_sha256": "5d2b1d168e2f759b12060649b97bf8762e64321edb662c1479fe2222fd4b92af"
+      }
     },
     {
       "action_timing": {
@@ -172,8 +182,8 @@
       "source_sha256": "bdeaae4454854eb536dd7208df91283d8421a138c4d90e91d387acb134782e48",
       "species": "ho-oh",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
-      "appearance_approved": false,
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "appearance_approved": true,
       "battle_approved": false
     },
     {
@@ -235,8 +245,8 @@
       "source_sha256": "99a006cf8095d7e061d822a9e0603cdf7cdc6751a39141066e2cbbdcb840fb9c",
       "species": "vibrava",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
-      "appearance_approved": false,
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "appearance_approved": true,
       "battle_approved": false
     },
     {
@@ -298,8 +308,8 @@
       "source_sha256": "3d14d5d72d4d2f33f9c846251173e1141e4c18180b4a1f09ede1a4e8cf36471d",
       "species": "flygon",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
-      "appearance_approved": false,
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "appearance_approved": true,
       "battle_approved": false
     },
     {
@@ -346,24 +356,30 @@
         }
       },
       "converter_version": 2,
-      "glb_sha256": "4d774c9d1584cc619264c9b727ed978afe36dcde7397f38e9a5c8c5073cd2725",
+      "glb_sha256": "5ecf3cd89604b03a8fdc4a80134c1008d0b72097931813f4eadf53935e9756e6",
       "godot_version": "4.6.2-stable (official)",
-      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/swanna/model.glb",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-v2/swanna/model.glb",
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
       },
       "provenance_schema": 1,
       "runtime_approved": false,
-      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/swanna.scn",
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-eyes-runtime-v2/swanna.scn",
       "runtime_schema": 1,
-      "runtime_sha256": "f7a456f00051cc2dd5874c9ef0ce87e07f09a21d5724fdf0b0bc68da1b3d22d2",
+      "runtime_sha256": "bfb3aa060eb472f5be00adfc3faf7be8e444dac3b92c7db825f4dda5ef303d2e",
       "source_sha256": "9861331f8122e5dbc291bc864b2cd48c2d5fe66c73ae78e482c707b71e6c7b8b",
       "species": "swanna",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
+      "status": "corrected_eyes_review_pending",
       "appearance_approved": false,
-      "battle_approved": false
+      "battle_approved": false,
+      "superseded_runtime": {
+        "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-colours-v1/swanna/model.glb",
+        "glb_sha256": "4d774c9d1584cc619264c9b727ed978afe36dcde7397f38e9a5c8c5073cd2725",
+        "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/remaining-142-production/action-batch02-runtime-v1/swanna.scn",
+        "runtime_sha256": "f7a456f00051cc2dd5874c9ef0ce87e07f09a21d5724fdf0b0bc68da1b3d22d2"
+      }
     },
     {
       "action_timing": {
@@ -424,9 +440,12 @@
       "source_sha256": "225a93876cd14fa67a3ecb1e3b5c454f13fcc87b08dbe4f36d1bc2bcf19b1ede",
       "species": "mandibuzz",
       "variant": "normal",
-      "status": "normal_appearance_review_pending",
-      "appearance_approved": false,
+      "status": "normal_appearance_approved_shiny_battle_pending",
+      "appearance_approved": true,
       "battle_approved": false
     }
-  ]
+  ],
+  "normal_appearance_approved": 4,
+  "user_review": "Ze zien er goed uit, ik kan alleen niet goed zien of lugia een pupil heeft of niet en of swanna's ogen open zijn",
+  "eye_review_url": "http://127.0.0.1:8782/eyes-lugia-swanna-v1/index.html"
 }

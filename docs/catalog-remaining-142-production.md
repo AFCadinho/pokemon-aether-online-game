@@ -141,3 +141,17 @@ The local approved total is now **891 ordinary species plus Mega Dragonite**
 The published R2 index still contains 884 profiles; these eight have not been
 uploaded or activated in a release. The six further appearance reviews remain
 pending, alongside four material repairs, 109 source/action holds and 15 DLC holds.
+
+## Six normal appearance review and eye repair
+
+The user approved Ho-Oh, Vibrava, Flygon and Mandibuzz, but could not clearly
+judge Lugia’s pupil or Swanna’s open eye. Close-ups confirmed pale missing
+eye colours. Both were rebuilt from their official SCVI Eye-layer tables,
+without body, geometry, skin or animation changes (exact parity passed).
+Two new standalone SCNs and 20 close-up renders passed. A matching-camera
+before/after page shows four idle moments and sleep. The two corrected eyes
+remain pending user review; all six still require shiny and battle qualification.
+`catalog_remaining_142_batch02_eye_repair.json` pins the official inputs and
+parity; the batch checkpoint records four approved normal appearances.
+
+[Eye close-ups](http://127.0.0.1:8782/eyes-lugia-swanna-v1/index.html)
