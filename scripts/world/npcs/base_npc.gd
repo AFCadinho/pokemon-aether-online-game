@@ -6,7 +6,6 @@ class_name BaseNPC
 # Service references are resolved from the scene tree at runtime. Keeping them
 # as members also lets isolated resource checks parse this script without
 # relying on autoload class-name registration.
-var CharacterAppearanceService: Node
 var CoopService: Node
 var GameErrorDialogService: Node
 var GameState: Node
@@ -21,10 +20,12 @@ var ThievingService: Node
 func _init() -> void:
 	_bind_services()
 
+const CharacterAppearanceService := preload("res://scripts/services/character_appearance_service.gd")
 const NpcDefinitionResource := preload("res://scripts/world/npcs/npc_definition.gd")
 const TrainerBattleMusicResolverScript := preload(
 	"res://scripts/world/npcs/trainer_battle_music_resolver.gd"
 )
+const ThievingAttemptFeedback := preload("res://scripts/ui/thieving_attempt_feedback.gd")
 const THIEVING_PROMPT_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 const MAIN_QUEST_MARKER_ICON: Texture2D = preload("res://assets/ui/main_quest_marker.svg")
 const SIDE_QUEST_MARKER_ICON: Texture2D = preload("res://assets/ui/side_quest_marker.svg")
@@ -167,7 +168,6 @@ func _ready_base_npc() -> void:
 
 
 func _bind_services() -> void:
-	CharacterAppearanceService = _root_service("CharacterAppearanceService")
 	CoopService = _root_service("CoopService")
 	GameErrorDialogService = _root_service("GameErrorDialogService")
 	GameState = _root_service("GameState")
@@ -1301,6 +1301,11 @@ func _start_pickpocket(body: Node2D) -> void:
 	elif ThievingService.is_npc_attempted_today(target_id):
 		_add_system_warning(LocalizationManager.text("ui.thieving.already_attempted"))
 	else:
+		var feedback := ThievingAttemptFeedback.new()
+		feedback.name = "ThievingAttemptFeedback"
+		add_child(feedback)
+		feedback.begin(self)
+		_sync_thieving_prompt()
 		if body.has_method("set_activity_style"):
 			body.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
 		await get_tree().create_timer(0.55).timeout
@@ -1309,6 +1314,8 @@ func _start_pickpocket(body: Node2D) -> void:
 				== CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
 			body.call("clear_activity_style")
 		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id, true)
+		if is_instance_valid(feedback):
+			feedback.finish(result)
 		if bool(result.get("success", false)):
 			if str(result.get("outcome", "")) == "caught":
 				_face_body(body)
