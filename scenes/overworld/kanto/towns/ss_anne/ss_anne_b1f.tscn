@@ -1,36 +1,34 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://xfi64xauhorl"]
 
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="10_4eqm3"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="10_b6yi2"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="mask"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="SpriteFrames" uid="uid://bext5y1mblgc5" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="population_sailor"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/ss_anne_b1f/ss_anne_b1f.visual.tscn" id="visual"]
 
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="sailor"]
-
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="population_worker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ss_anne_sailor_frames.tres" id="population_sailor"]
-
 [sub_resource type="RectangleShape2D" id="shape_1"]
-size = Vector2(96, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_3"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_4"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_5"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_6"]
-size = Vector2(32, 32)
+size = Vector2(32, 16)
 
 [sub_resource type="RectangleShape2D" id="shape_7"]
 size = Vector2(96, 32)
@@ -47,10 +45,74 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="shape_11"]
 size = Vector2(96, 32)
 
-[node name="SSAnneB1F" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b6yi2"]
+texture = ExtResource("10_4eqm3")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_vx8fg"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_b6yi2")
+
+[node name="SSAnneB1F" type="Node2D" unique_id=1829875071]
 script = ExtResource("metadata")
 map_id = "kanto_ss_anne_b1f"
-battle_environment_id = "ss_anne"
 map_region_name = "Kanto"
 map_display_name = "S.S. Anne B1F"
 world_access_group_id = "kanto_ss_anne"
@@ -59,15 +121,14 @@ world_access_area_type = "interior"
 location_id = "kanto.ss_anne.b1f"
 location_name = "S.S. Anne B1F"
 region_id = "kanto"
+battle_environment_id = "ss_anne"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.ss_anne"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
-metadata/pao_generated_visual = true
-metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/ss_anne/SS Anne B1F.tmx"
+[node name="Visual" parent="." unique_id=399171874 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1847035364]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("mask")
@@ -82,41 +143,41 @@ floor_regions = {
 active_floor = &"room_12"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=730218444]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=129510265]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=673594116]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1369636278]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=285499734]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1664427062]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=846128759]
 
-[node name="SailorFinn" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="SailorFinn" parent="Entities/NPCs" unique_id=1737164313 instance=ExtResource("dialogue")]
 position = Vector2(784, 1040)
-preload_quest_markers = true
 npc_id = "kanto_ss_anne_crew_worker"
 display_name = "Sailor Finn"
-npc_sprite_frames = ExtResource("sailor")
+npc_sprite_frames = ExtResource("population_sailor")
+preload_quest_markers = true
 
-[node name="ReportStoryHook" type="Node" parent="Entities/NPCs/SailorFinn"]
+[node name="ReportStoryHook" type="Node" parent="Entities/NPCs/SailorFinn" unique_id=826842759]
 script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_return_report"
 
-[node name="SailorKai" parent="Entities/NPCs" instance=ExtResource("trainer")]
+[node name="SailorKai" parent="Entities/NPCs" unique_id=834857912 instance=ExtResource("trainer")]
 position = Vector2(464, 400)
-npc_id = "kanto_ss_anne_sailor"
 trainer_id = "kanto_ss_anne_sailor"
-display_name = "Sailor Kai"
-npc_sprite_frames = ExtResource("sailor")
 sight_range_tiles = 3
+npc_id = "kanto_ss_anne_sailor"
+display_name = "Sailor Kai"
+npc_sprite_frames = ExtResource("population_sailor")
 
-[node name="PopulationMechanicInez" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="PopulationMechanicInez" parent="Entities/NPCs" unique_id=781538942 instance=ExtResource("dialogue")]
 position = Vector2(1456, 400)
 npc_id = "kanto_ss_anne_mechanic_inez"
 npc_definition_id = "trainer_class_worker"
@@ -124,79 +185,82 @@ display_name = "Mechanic Inez"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_worker")
 
-[node name="PopulationCrewRobin" parent="Entities/NPCs" instance=ExtResource("dialogue")]
+[node name="PopulationCrewRobin" parent="Entities/NPCs" unique_id=2121961511 instance=ExtResource("dialogue")]
 position = Vector2(560, 1744)
 npc_id = "kanto_ss_anne_crew_robin"
-npc_definition_id = ""
-portrait_id = "showdown_sailor_gen6"
 display_name = "Crew Member Robin"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_sailor")
-
-[node name="PopulationSailorDuncan" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(944, 400)
-npc_id = "kanto_ss_anne_sailor_duncan"
-npc_definition_id = ""
 portrait_id = "showdown_sailor_gen6"
+
+[node name="PopulationSailorDuncan" parent="Entities/NPCs" unique_id=335678979 instance=ExtResource("trainer")]
+position = Vector2(944, 400)
+trainer_id = "kanto_ss_anne_sailor_duncan"
+sight_range_tiles = 3
+npc_id = "kanto_ss_anne_sailor_duncan"
 display_name = "Sailor Duncan"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_sailor")
-trainer_id = "kanto_ss_anne_sailor_duncan"
-sight_range_tiles = 3
+portrait_id = "showdown_sailor_gen6"
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1903707644]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1892243616]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=1488774317]
 
-[node name="At_9_15" type="Marker2D" parent="Spawns"]
+[node name="At_9_15" type="Marker2D" parent="Spawns" unique_id=1705418889]
 position = Vector2(304, 496)
 
-[node name="At_11_35" type="Marker2D" parent="Spawns"]
-position = Vector2(368, 1136)
+[node name="At_11_35" type="Marker2D" parent="Spawns" unique_id=30491172]
+position = Vector2(400, 1072)
 
-[node name="At_15_29" type="Marker2D" parent="Spawns"]
+[node name="At_15_29" type="Marker2D" parent="Spawns" unique_id=1912853996]
 position = Vector2(496, 944)
 
-[node name="At_19_57" type="Marker2D" parent="Spawns"]
+[node name="At_19_57" type="Marker2D" parent="Spawns" unique_id=1344293434]
 position = Vector2(624, 1840)
 
-[node name="At_22_29" type="Marker2D" parent="Spawns"]
+[node name="At_22_29" type="Marker2D" parent="Spawns" unique_id=1602958398]
 position = Vector2(720, 944)
 
-[node name="At_29_15" type="Marker2D" parent="Spawns"]
+[node name="At_29_15" type="Marker2D" parent="Spawns" unique_id=1181508109]
 position = Vector2(944, 496)
 
-[node name="At_29_29" type="Marker2D" parent="Spawns"]
+[node name="At_29_29" type="Marker2D" parent="Spawns" unique_id=1734607760]
 position = Vector2(944, 944)
 
-[node name="At_36_29" type="Marker2D" parent="Spawns"]
+[node name="At_36_29" type="Marker2D" parent="Spawns" unique_id=739965807]
 position = Vector2(1168, 944)
 
-[node name="At_39_57" type="Marker2D" parent="Spawns"]
+[node name="At_39_57" type="Marker2D" parent="Spawns" unique_id=1555607703]
 position = Vector2(1264, 1840)
 
-[node name="At_43_29" type="Marker2D" parent="Spawns"]
+[node name="At_43_29" type="Marker2D" parent="Spawns" unique_id=1939759258]
 position = Vector2(1392, 944)
 
-[node name="At_49_15" type="Marker2D" parent="Spawns"]
+[node name="At_49_15" type="Marker2D" parent="Spawns" unique_id=1140437734]
 position = Vector2(1584, 496)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1057718015]
 
-[node name="B1F_Corridor__stairs_to_1f" type="Area2D" parent="Exits"]
-position = Vector2(368, 1008)
+[node name="B1F_Corridor__stairs_to_1f" type="Area2D" parent="Exits" unique_id=245749538]
+position = Vector2(368, 1072)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
 target_spawn_name = "At_62_41"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__stairs_to_1f"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__stairs_to_1f"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__stairs_to_1f" unique_id=400451004]
+position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
-[node name="B1F_Corridor__cabin_01" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__stairs_to_1f" unique_id=199212501 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+flow_direction = "left"
+
+[node name="B1F_Corridor__cabin_01" type="Area2D" parent="Exits" unique_id=1047461692]
 position = Vector2(496, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -204,10 +268,14 @@ target_spawn_name = "At_9_15"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_01"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_01"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_01" unique_id=1969832748]
+position = Vector2(0, -8)
 shape = SubResource("shape_2")
 
-[node name="B1F_Corridor__cabin_02" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__cabin_01" unique_id=1054247485 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+
+[node name="B1F_Corridor__cabin_02" type="Area2D" parent="Exits" unique_id=1077635622]
 position = Vector2(720, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -215,10 +283,14 @@ target_spawn_name = "At_29_15"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_02"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_02"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_02" unique_id=803692955]
+position = Vector2(0, -8)
 shape = SubResource("shape_3")
 
-[node name="B1F_Corridor__cabin_03" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__cabin_02" unique_id=163990905 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+
+[node name="B1F_Corridor__cabin_03" type="Area2D" parent="Exits" unique_id=1504662233]
 position = Vector2(944, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -226,10 +298,14 @@ target_spawn_name = "At_49_15"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_03"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_03"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_03" unique_id=779429826]
+position = Vector2(0, -8)
 shape = SubResource("shape_4")
 
-[node name="B1F_Corridor__cabin_04" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__cabin_03" unique_id=467893808 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+
+[node name="B1F_Corridor__cabin_04" type="Area2D" parent="Exits" unique_id=1568219061]
 position = Vector2(1168, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -237,10 +313,14 @@ target_spawn_name = "At_19_57"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_04"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_04"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_04" unique_id=1464495743]
+position = Vector2(0, -8)
 shape = SubResource("shape_5")
 
-[node name="B1F_Corridor__cabin_05" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__cabin_04" unique_id=2109973585 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+
+[node name="B1F_Corridor__cabin_05" type="Area2D" parent="Exits" unique_id=44186515]
 position = Vector2(1392, 912)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -248,10 +328,14 @@ target_spawn_name = "At_39_57"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__cabin_05"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_05"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__cabin_05" unique_id=2096633027]
+position = Vector2(0, -8)
 shape = SubResource("shape_6")
 
-[node name="B1F_Cabin_01__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="DoorTransitionHint" parent="Exits/B1F_Corridor__cabin_05" unique_id=892340397 instance=ExtResource("10_b6yi2")]
+z_as_relative = false
+
+[node name="B1F_Cabin_01__return_to_corridor" type="Area2D" parent="Exits" unique_id=632873187]
 position = Vector2(304, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -259,10 +343,10 @@ target_spawn_name = "At_15_29"
 transition_id = "kanto_ss_anne_b1f__b1f_cabin_01__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_01__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_01__return_to_corridor" unique_id=1424132579]
 shape = SubResource("shape_7")
 
-[node name="B1F_Cabin_02__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="B1F_Cabin_02__return_to_corridor" type="Area2D" parent="Exits" unique_id=1857014429]
 position = Vector2(944, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -270,10 +354,10 @@ target_spawn_name = "At_22_29"
 transition_id = "kanto_ss_anne_b1f__b1f_cabin_02__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_02__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_02__return_to_corridor" unique_id=1388130394]
 shape = SubResource("shape_8")
 
-[node name="B1F_Cabin_03__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="B1F_Cabin_03__return_to_corridor" type="Area2D" parent="Exits" unique_id=1747002547]
 position = Vector2(1584, 528)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -281,10 +365,10 @@ target_spawn_name = "At_29_29"
 transition_id = "kanto_ss_anne_b1f__b1f_cabin_03__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_03__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_03__return_to_corridor" unique_id=130528578]
 shape = SubResource("shape_9")
 
-[node name="B1F_Cabin_04__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="B1F_Cabin_04__return_to_corridor" type="Area2D" parent="Exits" unique_id=1333607429]
 position = Vector2(624, 1872)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -292,10 +376,10 @@ target_spawn_name = "At_36_29"
 transition_id = "kanto_ss_anne_b1f__b1f_cabin_04__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_04__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_04__return_to_corridor" unique_id=1165955852]
 shape = SubResource("shape_10")
 
-[node name="B1F_Cabin_05__return_to_corridor" type="Area2D" parent="Exits"]
+[node name="B1F_Cabin_05__return_to_corridor" type="Area2D" parent="Exits" unique_id=1306503648]
 position = Vector2(1264, 1872)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_b1f.tscn"
@@ -303,34 +387,25 @@ target_spawn_name = "At_43_29"
 transition_id = "kanto_ss_anne_b1f__b1f_cabin_05__return_to_corridor"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_05__return_to_corridor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Cabin_05__return_to_corridor" unique_id=1376458725]
 shape = SubResource("shape_11")
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=143310910]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-visible = false
-tile_set = ExtResource("collision")
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=405872827]
+z_index = 4096
+tile_map_data = PackedByteArray("AAACAAMAAAABAAEAAAACAAQAAAABAAEAAAACAAUAAAABAAEAAAACAAYAAAABAAEAAAACAAcAAAABAAEAAAACAAgAAAABAAEAAAACAAkAAAABAAEAAAACAAoAAAABAAEAAAACAAsAAAABAAEAAAACAAwAAAABAAEAAAACAA0AAAABAAEAAAACAA4AAAABAAEAAAACAA8AAAABAAEAAAACABAAAAABAAEAAAADABAAAAABAAEAAAAEABAAAAABAAEAAAAFABAAAAABAAEAAAAGABAAAAABAAEAAAAHABAAAAABAAEAAAAHAA8AAAABAAEAAAAHABEAAAABAAEAAAAIABEAAAABAAEAAAAJABEAAAABAAEAAAAKABEAAAABAAEAAAALABEAAAABAAEAAAALABAAAAABAAEAAAAMABAAAAABAAEAAAANABAAAAABAAEAAAAOABAAAAABAAEAAAAPABAAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAPAA0AAAABAAEAAAAPAA4AAAABAAEAAAAPAA8AAAABAAEAAAADAAMAAAABAAEAAAADAAQAAAABAAEAAAADAAUAAAABAAEAAAAEAAMAAAABAAEAAAAEAAQAAAABAAEAAAAEAAUAAAABAAEAAAAFAAMAAAABAAEAAAAFAAQAAAABAAEAAAAFAAUAAAABAAEAAAAGAAMAAAABAAEAAAAGAAQAAAABAAEAAAAGAAUAAAABAAEAAAAHAAMAAAABAAEAAAAHAAQAAAABAAEAAAAHAAUAAAABAAEAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAMAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAMAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAAMAAMAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAANAAMAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAAOAAMAAAABAAEAAAAOAAQAAAABAAEAAAAOAAUAAAABAAEAAAAEAAcAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAFAAcAAAABAAEAAAAFAAgAAAABAAEAAAAFAAkAAAABAAEAAAAGAAcAAAABAAEAAAAGAAgAAAABAAEAAAAGAAkAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAALAAgAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAAMAAgAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAANAAgAAAABAAEAAAAEAAYAAAABAAEAAAAFAAYAAAABAAEAAAAGAAYAAAABAAEAAAAKAAwAAAABAAEAAAALAAsAAAABAAEAAAALAAwAAAABAAEAAAALAA0AAAABAAEAAAAMAAsAAAABAAEAAAAMAAwAAAABAAEAAAAMAA0AAAABAAEAAAANAAsAAAABAAEAAAANAAwAAAABAAEAAAANAA0AAAABAAEAAAAWAAMAAAABAAEAAAAWAAQAAAABAAEAAAAWAAUAAAABAAEAAAAWAAYAAAABAAEAAAAWAAcAAAABAAEAAAAWAAgAAAABAAEAAAAWAAkAAAABAAEAAAAWAAoAAAABAAEAAAAWAAsAAAABAAEAAAAWAAwAAAABAAEAAAAWAA0AAAABAAEAAAAWAA4AAAABAAEAAAAWAA8AAAABAAEAAAAWABAAAAABAAEAAAAXABAAAAABAAEAAAAYABAAAAABAAEAAAAZABAAAAABAAEAAAAaABAAAAABAAEAAAAbABAAAAABAAEAAAAbAA8AAAABAAEAAAAcABEAAAABAAEAAAAdABEAAAABAAEAAAAeABEAAAABAAEAAAAfABEAAAABAAEAAAAfABAAAAABAAEAAAAgABAAAAABAAEAAAAhABAAAAABAAEAAAAiABAAAAABAAEAAAAjABAAAAABAAEAAAAjAAMAAAABAAEAAAAjAAQAAAABAAEAAAAjAAUAAAABAAEAAAAjAAYAAAABAAEAAAAjAAcAAAABAAEAAAAjAAgAAAABAAEAAAAjAAkAAAABAAEAAAAjAAoAAAABAAEAAAAjAAsAAAABAAEAAAAjAAwAAAABAAEAAAAjAA0AAAABAAEAAAAjAA4AAAABAAEAAAAjAA8AAAABAAEAAAAXAAMAAAABAAEAAAAXAAQAAAABAAEAAAAXAAUAAAABAAEAAAAYAAMAAAABAAEAAAAYAAQAAAABAAEAAAAYAAUAAAABAAEAAAAZAAMAAAABAAEAAAAZAAQAAAABAAEAAAAZAAUAAAABAAEAAAAaAAMAAAABAAEAAAAaAAQAAAABAAEAAAAaAAUAAAABAAEAAAAbAAMAAAABAAEAAAAbAAQAAAABAAEAAAAbAAUAAAABAAEAAAAcAAMAAAABAAEAAAAcAAQAAAABAAEAAAAcAAUAAAABAAEAAAAdAAMAAAABAAEAAAAdAAQAAAABAAEAAAAdAAUAAAABAAEAAAAeAAMAAAABAAEAAAAeAAQAAAABAAEAAAAeAAUAAAABAAEAAAAfAAMAAAABAAEAAAAfAAQAAAABAAEAAAAfAAUAAAABAAEAAAAgAAMAAAABAAEAAAAgAAQAAAABAAEAAAAgAAUAAAABAAEAAAAhAAMAAAABAAEAAAAhAAQAAAABAAEAAAAhAAUAAAABAAEAAAAiAAMAAAABAAEAAAAiAAQAAAABAAEAAAAiAAUAAAABAAEAAAAYAAYAAAABAAEAAAAYAAcAAAABAAEAAAAYAAgAAAABAAEAAAAZAAYAAAABAAEAAAAZAAcAAAABAAEAAAAZAAgAAAABAAEAAAAaAAYAAAABAAEAAAAaAAcAAAABAAEAAAAaAAgAAAABAAEAAAAgAAgAAAABAAEAAAAhAAgAAAABAAEAAAAfAAsAAAABAAEAAAAfAAwAAAABAAEAAAAfAA0AAAABAAEAAAAgAAsAAAABAAEAAAAgAAwAAAABAAEAAAAgAA0AAAABAAEAAAAhAAsAAAABAAEAAAAhAAwAAAABAAEAAAAhAA0AAAABAAEAAAAeAAwAAAABAAEAAAAYAAwAAAABAAEAAAAYAA0AAAABAAEAAAAZAAwAAAABAAEAAAAZAA0AAAABAAEAAAAqAAMAAAABAAEAAAAqAAQAAAABAAEAAAAqAAUAAAABAAEAAAAqAAYAAAABAAEAAAAqAAcAAAABAAEAAAAqAAgAAAABAAEAAAAqAAkAAAABAAEAAAAqAAoAAAABAAEAAAAqAAsAAAABAAEAAAAqAAwAAAABAAEAAAAqAA0AAAABAAEAAAAqAA4AAAABAAEAAAAqAA8AAAABAAEAAAAqABAAAAABAAEAAAArABAAAAABAAEAAAAsABAAAAABAAEAAAAtABAAAAABAAEAAAAuABAAAAABAAEAAAAvABAAAAABAAEAAAAvAA8AAAABAAEAAAAwABEAAAABAAEAAAAxABEAAAABAAEAAAAyABEAAAABAAEAAAAzABEAAAABAAEAAAAzABAAAAABAAEAAAA0ABAAAAABAAEAAAA1ABAAAAABAAEAAAA2ABAAAAABAAEAAAA3ABAAAAABAAEAAAA3AAMAAAABAAEAAAA3AAQAAAABAAEAAAA3AAUAAAABAAEAAAA3AAYAAAABAAEAAAA3AAcAAAABAAEAAAA3AAgAAAABAAEAAAA3AAkAAAABAAEAAAA3AAoAAAABAAEAAAA3AAsAAAABAAEAAAA3AAwAAAABAAEAAAA3AA0AAAABAAEAAAA3AA4AAAABAAEAAAA3AA8AAAABAAEAAAArAAMAAAABAAEAAAAsAAMAAAABAAEAAAAtAAMAAAABAAEAAAAuAAMAAAABAAEAAAAvAAMAAAABAAEAAAAwAAMAAAABAAEAAAAxAAMAAAABAAEAAAAyAAMAAAABAAEAAAAzAAMAAAABAAEAAAA0AAMAAAABAAEAAAA1AAMAAAABAAEAAAA2AAMAAAABAAEAAAArAAQAAAABAAEAAAArAAUAAAABAAEAAAAsAAQAAAABAAEAAAAsAAUAAAABAAEAAAAtAAQAAAABAAEAAAAtAAUAAAABAAEAAAAuAAQAAAABAAEAAAAuAAUAAAABAAEAAAAvAAQAAAABAAEAAAAvAAUAAAABAAEAAAAwAAQAAAABAAEAAAAwAAUAAAABAAEAAAAxAAQAAAABAAEAAAAxAAUAAAABAAEAAAAyAAQAAAABAAEAAAAyAAUAAAABAAEAAAAzAAQAAAABAAEAAAAzAAUAAAABAAEAAAA0AAQAAAABAAEAAAA0AAUAAAABAAEAAAA1AAQAAAABAAEAAAA1AAUAAAABAAEAAAA2AAQAAAABAAEAAAA2AAUAAAABAAEAAAAsAAcAAAABAAEAAAAsAAgAAAABAAEAAAAsAAkAAAABAAEAAAAtAAcAAAABAAEAAAAtAAgAAAABAAEAAAAtAAkAAAABAAEAAAAuAAcAAAABAAEAAAAuAAgAAAABAAEAAAAuAAkAAAABAAEAAAA0AAgAAAABAAEAAAA1AAgAAAABAAEAAAAzAAsAAAABAAEAAAAzAAwAAAABAAEAAAAzAA0AAAABAAEAAAA0AAsAAAABAAEAAAA0AAwAAAABAAEAAAA0AA0AAAABAAEAAAA1AAsAAAABAAEAAAA1AAwAAAABAAEAAAA1AA0AAAABAAEAAAAyAAwAAAABAAEAAAAIABoAAAABAAEAAAAIABsAAAABAAEAAAAIABwAAAABAAEAAAAIAB0AAAABAAEAAAAIAB4AAAABAAEAAAAIAB8AAAABAAEAAAAIACAAAAABAAEAAAAIACEAAAABAAEAAAAIACIAAAABAAEAAAAIACMAAAABAAEAAAAIACQAAAABAAEAAAAJACQAAAABAAEAAAAKACQAAAABAAEAAAALACQAAAABAAEAAAAMACQAAAABAAEAAAANACQAAAABAAEAAAAOACQAAAABAAEAAAAPACQAAAABAAEAAAAQACQAAAABAAEAAAARACQAAAABAAEAAAASACQAAAABAAEAAAATACQAAAABAAEAAAAUACQAAAABAAEAAAAVACQAAAABAAEAAAAWACQAAAABAAEAAAAXACQAAAABAAEAAAAYACQAAAABAAEAAAAZACQAAAABAAEAAAAaACQAAAABAAEAAAAbACQAAAABAAEAAAAcACQAAAABAAEAAAAdACQAAAABAAEAAAAeACQAAAABAAEAAAAfACQAAAABAAEAAAAgACQAAAABAAEAAAAhACQAAAABAAEAAAAiACQAAAABAAEAAAAjACQAAAABAAEAAAAkACQAAAABAAEAAAAlACQAAAABAAEAAAAmACQAAAABAAEAAAAnACQAAAABAAEAAAAoACQAAAABAAEAAAApACQAAAABAAEAAAAqACQAAAABAAEAAAArACQAAAABAAEAAAAsACQAAAABAAEAAAAtACQAAAABAAEAAAAuACQAAAABAAEAAAAvACQAAAABAAEAAAAwACQAAAABAAEAAAAxACQAAAABAAEAAAAyACQAAAABAAEAAAAzACQAAAABAAEAAAAJABoAAAABAAEAAAAJABsAAAABAAEAAAAJABwAAAABAAEAAAAKABoAAAABAAEAAAAKABsAAAABAAEAAAAKABwAAAABAAEAAAALABoAAAABAAEAAAALABsAAAABAAEAAAALABwAAAABAAEAAAAMABoAAAABAAEAAAAMABsAAAABAAEAAAAMABwAAAABAAEAAAANABoAAAABAAEAAAANABsAAAABAAEAAAANABwAAAABAAEAAAAOABoAAAABAAEAAAAOABsAAAABAAEAAAAOABwAAAABAAEAAAAPABoAAAABAAEAAAAPABsAAAABAAEAAAAPABwAAAABAAEAAAAQABoAAAABAAEAAAAQABsAAAABAAEAAAAQABwAAAABAAEAAAARABoAAAABAAEAAAARABsAAAABAAEAAAARABwAAAABAAEAAAASABoAAAABAAEAAAASABsAAAABAAEAAAASABwAAAABAAEAAAATABoAAAABAAEAAAATABsAAAABAAEAAAATABwAAAABAAEAAAAUABoAAAABAAEAAAAUABsAAAABAAEAAAAUABwAAAABAAEAAAAVABoAAAABAAEAAAAVABsAAAABAAEAAAAVABwAAAABAAEAAAAWABoAAAABAAEAAAAWABsAAAABAAEAAAAWABwAAAABAAEAAAAXABoAAAABAAEAAAAXABsAAAABAAEAAAAXABwAAAABAAEAAAAYABoAAAABAAEAAAAYABsAAAABAAEAAAAYABwAAAABAAEAAAAZABoAAAABAAEAAAAZABsAAAABAAEAAAAZABwAAAABAAEAAAAaABoAAAABAAEAAAAaABsAAAABAAEAAAAaABwAAAABAAEAAAAbABoAAAABAAEAAAAbABsAAAABAAEAAAAbABwAAAABAAEAAAAcABoAAAABAAEAAAAcABsAAAABAAEAAAAcABwAAAABAAEAAAAdABoAAAABAAEAAAAdABsAAAABAAEAAAAdABwAAAABAAEAAAAeABoAAAABAAEAAAAeABsAAAABAAEAAAAeABwAAAABAAEAAAAfABoAAAABAAEAAAAfABsAAAABAAEAAAAfABwAAAABAAEAAAAgABoAAAABAAEAAAAgABsAAAABAAEAAAAgABwAAAABAAEAAAAhABoAAAABAAEAAAAhABsAAAABAAEAAAAhABwAAAABAAEAAAAiABoAAAABAAEAAAAiABsAAAABAAEAAAAiABwAAAABAAEAAAAjABoAAAABAAEAAAAjABsAAAABAAEAAAAjABwAAAABAAEAAAAkABoAAAABAAEAAAAkABsAAAABAAEAAAAkABwAAAABAAEAAAAlABoAAAABAAEAAAAlABsAAAABAAEAAAAlABwAAAABAAEAAAAmABoAAAABAAEAAAAmABsAAAABAAEAAAAmABwAAAABAAEAAAAnABoAAAABAAEAAAAnABsAAAABAAEAAAAnABwAAAABAAEAAAAoABoAAAABAAEAAAAoABsAAAABAAEAAAAoABwAAAABAAEAAAApABoAAAABAAEAAAApABsAAAABAAEAAAApABwAAAABAAEAAAAqABoAAAABAAEAAAAqABsAAAABAAEAAAAqABwAAAABAAEAAAArABoAAAABAAEAAAArABsAAAABAAEAAAArABwAAAABAAEAAAAsABoAAAABAAEAAAAsABsAAAABAAEAAAAsABwAAAABAAEAAAAtABoAAAABAAEAAAAtABsAAAABAAEAAAAtABwAAAABAAEAAAAuABoAAAABAAEAAAAuABsAAAABAAEAAAAuABwAAAABAAEAAAAvABoAAAABAAEAAAAvABsAAAABAAEAAAAvABwAAAABAAEAAAAwABoAAAABAAEAAAAwABsAAAABAAEAAAAwABwAAAABAAEAAAAxABoAAAABAAEAAAAxABsAAAABAAEAAAAxABwAAAABAAEAAAAyABoAAAABAAEAAAAyABsAAAABAAEAAAAyABwAAAABAAEAAAAzABoAAAABAAEAAAAzABsAAAABAAEAAAAzABwAAAABAAEAAAAzAB0AAAABAAEAAAAzAB4AAAABAAEAAAAzAB8AAAABAAEAAAAzACAAAAABAAEAAAAzACEAAAABAAEAAAAzACIAAAABAAEAAAAzACMAAAABAAEAAAAmAB4AAAABAAEAAAAnAB4AAAABAAEAAAAoAB4AAAABAAEAAAApAB4AAAABAAEAAAATAB4AAAABAAEAAAAUAB4AAAABAAEAAAAVAB4AAAABAAEAAAAWAB4AAAABAAEAAAAKACIAAAABAAEAAAALACIAAAABAAEAAAAKACEAAAABAAEAAAALACAAAAABAAEAAAAKACAAAAABAAEAAAAMAC0AAAABAAEAAAAMAC4AAAABAAEAAAAMAC8AAAABAAEAAAAMADAAAAABAAEAAAAMADEAAAABAAEAAAAMADIAAAABAAEAAAAMADMAAAABAAEAAAAMADQAAAABAAEAAAAMADUAAAABAAEAAAAMADYAAAABAAEAAAAMADcAAAABAAEAAAAMADgAAAABAAEAAAAMADkAAAABAAEAAAAMADoAAAABAAEAAAANADoAAAABAAEAAAAOADoAAAABAAEAAAAPADoAAAABAAEAAAAQADoAAAABAAEAAAARADoAAAABAAEAAAARADsAAAABAAEAAAASADsAAAABAAEAAAATADsAAAABAAEAAAAUADsAAAABAAEAAAAVADsAAAABAAEAAAAVADoAAAABAAEAAAAWADoAAAABAAEAAAAXADoAAAABAAEAAAAYADoAAAABAAEAAAAZADoAAAABAAEAAAAZAC0AAAABAAEAAAAZAC4AAAABAAEAAAAZAC8AAAABAAEAAAAZADAAAAABAAEAAAAZADEAAAABAAEAAAAZADIAAAABAAEAAAAZADMAAAABAAEAAAAZADQAAAABAAEAAAAZADUAAAABAAEAAAAZADYAAAABAAEAAAAZADcAAAABAAEAAAAZADgAAAABAAEAAAAZADkAAAABAAEAAAANAC0AAAABAAEAAAANAC4AAAABAAEAAAANAC8AAAABAAEAAAAOAC0AAAABAAEAAAAOAC4AAAABAAEAAAAOAC8AAAABAAEAAAAPAC0AAAABAAEAAAAPAC4AAAABAAEAAAAPAC8AAAABAAEAAAAQAC0AAAABAAEAAAAQAC4AAAABAAEAAAAQAC8AAAABAAEAAAARAC0AAAABAAEAAAARAC4AAAABAAEAAAARAC8AAAABAAEAAAASAC0AAAABAAEAAAASAC4AAAABAAEAAAASAC8AAAABAAEAAAATAC0AAAABAAEAAAATAC4AAAABAAEAAAATAC8AAAABAAEAAAAUAC0AAAABAAEAAAAUAC4AAAABAAEAAAAUAC8AAAABAAEAAAAVAC0AAAABAAEAAAAVAC4AAAABAAEAAAAVAC8AAAABAAEAAAAWAC0AAAABAAEAAAAWAC4AAAABAAEAAAAWAC8AAAABAAEAAAAXAC0AAAABAAEAAAAXAC4AAAABAAEAAAAXAC8AAAABAAEAAAAYAC0AAAABAAEAAAAYAC4AAAABAAEAAAAYAC8AAAABAAEAAAAOADEAAAABAAEAAAAOADIAAAABAAEAAAAPADEAAAABAAEAAAAPADIAAAABAAEAAAAQADEAAAABAAEAAAAQADIAAAABAAEAAAAVADAAAAABAAEAAAAVADEAAAABAAEAAAAVADIAAAABAAEAAAAWADAAAAABAAEAAAAWADEAAAABAAEAAAAWADIAAAABAAEAAAAXADAAAAABAAEAAAAXADEAAAABAAEAAAAXADIAAAABAAEAAAAVADUAAAABAAEAAAAVADYAAAABAAEAAAAVADcAAAABAAEAAAAWADUAAAABAAEAAAAWADYAAAABAAEAAAAWADcAAAABAAEAAAAXADUAAAABAAEAAAAXADYAAAABAAEAAAAXADcAAAABAAEAAAAUADYAAAABAAEAAAARADkAAAABAAEAAAAgAC0AAAABAAEAAAAgAC4AAAABAAEAAAAgAC8AAAABAAEAAAAgADAAAAABAAEAAAAgADEAAAABAAEAAAAgADIAAAABAAEAAAAgADMAAAABAAEAAAAgADQAAAABAAEAAAAgADUAAAABAAEAAAAgADYAAAABAAEAAAAgADcAAAABAAEAAAAgADgAAAABAAEAAAAgADkAAAABAAEAAAAgADoAAAABAAEAAAAhADoAAAABAAEAAAAiADoAAAABAAEAAAAjADoAAAABAAEAAAAkADoAAAABAAEAAAAlADoAAAABAAEAAAAlADkAAAABAAEAAAAmADsAAAABAAEAAAAnADsAAAABAAEAAAAoADsAAAABAAEAAAApADsAAAABAAEAAAApADoAAAABAAEAAAAlADsAAAABAAEAAAAqADoAAAABAAEAAAArADoAAAABAAEAAAAsADoAAAABAAEAAAAtADoAAAABAAEAAAAtAC0AAAABAAEAAAAtAC4AAAABAAEAAAAtAC8AAAABAAEAAAAtADAAAAABAAEAAAAtADEAAAABAAEAAAAtADIAAAABAAEAAAAtADMAAAABAAEAAAAtADQAAAABAAEAAAAtADUAAAABAAEAAAAtADYAAAABAAEAAAAtADcAAAABAAEAAAAtADgAAAABAAEAAAAtADkAAAABAAEAAAAhAC0AAAABAAEAAAAhAC4AAAABAAEAAAAhAC8AAAABAAEAAAAiAC0AAAABAAEAAAAiAC4AAAABAAEAAAAiAC8AAAABAAEAAAAjAC0AAAABAAEAAAAjAC4AAAABAAEAAAAjAC8AAAABAAEAAAAkAC0AAAABAAEAAAAkAC4AAAABAAEAAAAkAC8AAAABAAEAAAAlAC0AAAABAAEAAAAlAC4AAAABAAEAAAAlAC8AAAABAAEAAAAmAC0AAAABAAEAAAAmAC4AAAABAAEAAAAmAC8AAAABAAEAAAAnAC0AAAABAAEAAAAnAC4AAAABAAEAAAAnAC8AAAABAAEAAAAoAC0AAAABAAEAAAAoAC4AAAABAAEAAAAoAC8AAAABAAEAAAApAC0AAAABAAEAAAApAC4AAAABAAEAAAApAC8AAAABAAEAAAAqAC0AAAABAAEAAAAqAC4AAAABAAEAAAAqAC8AAAABAAEAAAArAC0AAAABAAEAAAArAC4AAAABAAEAAAArAC8AAAABAAEAAAAsAC0AAAABAAEAAAAsAC4AAAABAAEAAAAsAC8AAAABAAEAAAAiADEAAAABAAEAAAAiADIAAAABAAEAAAAiADMAAAABAAEAAAAjADEAAAABAAEAAAAjADIAAAABAAEAAAAjADMAAAABAAEAAAAkADEAAAABAAEAAAAkADIAAAABAAEAAAAkADMAAAABAAEAAAAqADEAAAABAAEAAAAqADIAAAABAAEAAAArADEAAAABAAEAAAArADIAAAABAAEAAAAiADYAAAABAAEAAAAiADcAAAABAAEAAAAjADYAAAABAAEAAAAjADcAAAABAAEAAAApADUAAAABAAEAAAApADYAAAABAAEAAAApADcAAAABAAEAAAAqADUAAAABAAEAAAAqADYAAAABAAEAAAAqADcAAAABAAEAAAArADUAAAABAAEAAAArADYAAAABAAEAAAArADcAAAABAAEAAAAoADYAAAABAAEAAAAOADAAAAABAAEAAAAPADAAAAABAAEAAAAQADAAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_vx8fg")
 
 [connection signal="body_entered" from="Exits/B1F_Corridor__stairs_to_1f" to="Exits/B1F_Corridor__stairs_to_1f" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Corridor__cabin_01" to="Exits/B1F_Corridor__cabin_01" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Corridor__cabin_02" to="Exits/B1F_Corridor__cabin_02" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Corridor__cabin_03" to="Exits/B1F_Corridor__cabin_03" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Corridor__cabin_04" to="Exits/B1F_Corridor__cabin_04" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Corridor__cabin_05" to="Exits/B1F_Corridor__cabin_05" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Cabin_01__return_to_corridor" to="Exits/B1F_Cabin_01__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Cabin_02__return_to_corridor" to="Exits/B1F_Cabin_02__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Cabin_03__return_to_corridor" to="Exits/B1F_Cabin_03__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Cabin_04__return_to_corridor" to="Exits/B1F_Cabin_04__return_to_corridor" method="_on_body_entered"]
-
 [connection signal="body_entered" from="Exits/B1F_Cabin_05__return_to_corridor" to="Exits/B1F_Cabin_05__return_to_corridor" method="_on_body_entered"]

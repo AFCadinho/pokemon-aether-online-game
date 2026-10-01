@@ -10,7 +10,7 @@
 size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_2"]
-size = Vector2(128, 32)
+size = Vector2(64, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kctia"]
 texture = ExtResource("5_g54s0")
@@ -99,10 +99,10 @@ cave_encounter_chance = 0.07
 [node name="Spawns" type="Node2D" parent="." unique_id=1314032759]
 
 [node name="FromTunnel" type="Marker2D" parent="Spawns" unique_id=1992121945]
-position = Vector2(240, 336)
+position = Vector2(208, 272)
 
 [node name="FromRoute2" type="Marker2D" parent="Spawns" unique_id=359985165]
-position = Vector2(368, 464)
+position = Vector2(368, 528)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1668862510]
 
@@ -115,10 +115,11 @@ transition_id = "kanto_diglett_cave_route_2_entrance__to_tunnel"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnel" unique_id=379339118]
+position = Vector2(16, 0)
 shape = SubResource("shape_1")
 
 [node name="ToRoute2" type="Area2D" parent="Exits" unique_id=650805326]
-position = Vector2(384, 528)
+position = Vector2(368, 560)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn"
 target_spawn_name = "FromDiglettCave"
@@ -126,6 +127,7 @@ transition_id = "kanto_diglett_cave_route_2_entrance__to_route2"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2" unique_id=1069537219]
+position = Vector2(16, 16)
 shape = SubResource("shape_2")
 
 [node name="Entities" type="Node2D" parent="." unique_id=1419086162]
@@ -154,6 +156,7 @@ constrain_camera_to_active_floor = true
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=2036367961]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=293295366]
+visible = false
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=440683882]
 z_index = 4096
