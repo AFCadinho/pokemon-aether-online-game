@@ -4813,13 +4813,13 @@
 		},
 		"kanto_diglett_cave_route_11_entrance__to_tunnel": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "right",
 				"mapId": "kanto_diglett_cave_tunnel",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
 				"position": {
-					"x": 1104.0,
-					"y": 2416.0
+					"x": 1136.0,
+					"y": 2480.0
 				},
 				"spawnMarker": "FromRoute11Entrance"
 			},
@@ -4845,13 +4845,13 @@
 		},
 		"kanto_diglett_cave_route_2_entrance__to_tunnel": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_diglett_cave_tunnel",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/tunnel.tscn",
 				"position": {
-					"x": 400.0,
-					"y": 416.0
+					"x": 432.0,
+					"y": 368.0
 				},
 				"spawnMarker": "FromRoute2Entrance"
 			},
@@ -4860,13 +4860,13 @@
 		},
 		"kanto_diglett_cave_tunnel__to_route11_entrance": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "left",
 				"mapId": "kanto_diglett_cave_route_11_entrance",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn",
 				"position": {
-					"x": 464.0,
-					"y": 336.0
+					"x": 432.0,
+					"y": 272.0
 				},
 				"spawnMarker": "FromTunnel"
 			},
@@ -4875,13 +4875,13 @@
 		},
 		"kanto_diglett_cave_tunnel__to_route2_entrance": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "left",
 				"mapId": "kanto_diglett_cave_route_2_entrance",
 				"mapSceneAliases": [],
 				"mapScenePath": "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn",
 				"position": {
-					"x": 240.0,
-					"y": 336.0
+					"x": 208.0,
+					"y": 272.0
 				},
 				"spawnMarker": "FromTunnel"
 			},
@@ -5500,7 +5500,7 @@
 		},
 		"kanto_rock_tunnel_1f__to_b1_f_a": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_rock_tunnel_b1f",
 				"mapSceneAliases": [
 					"uid://b6uv3fbq8gdvi"
@@ -5517,7 +5517,7 @@
 		},
 		"kanto_rock_tunnel_1f__to_b1_f_b": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_rock_tunnel_b1f",
 				"mapSceneAliases": [
 					"uid://b6uv3fbq8gdvi"
@@ -5534,7 +5534,7 @@
 		},
 		"kanto_rock_tunnel_1f__to_b1_f_c": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_rock_tunnel_b1f",
 				"mapSceneAliases": [
 					"uid://b6uv3fbq8gdvi"
@@ -5551,7 +5551,7 @@
 		},
 		"kanto_rock_tunnel_1f__to_b1_f_d": {
 			"destination": {
-				"facingDirection": "down",
+				"facingDirection": "right",
 				"mapId": "kanto_rock_tunnel_b1f",
 				"mapSceneAliases": [
 					"uid://b6uv3fbq8gdvi"
@@ -5602,7 +5602,7 @@
 		},
 		"kanto_rock_tunnel_b1f__to1_f_a": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "left",
 				"mapId": "kanto_rock_tunnel_1f",
 				"mapSceneAliases": [
 					"uid://buo38hu0vgp7w"
@@ -5619,7 +5619,7 @@
 		},
 		"kanto_rock_tunnel_b1f__to1_f_b": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "left",
 				"mapId": "kanto_rock_tunnel_1f",
 				"mapSceneAliases": [
 					"uid://buo38hu0vgp7w"
@@ -5636,7 +5636,7 @@
 		},
 		"kanto_rock_tunnel_b1f__to1_f_c": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "left",
 				"mapId": "kanto_rock_tunnel_1f",
 				"mapSceneAliases": [
 					"uid://buo38hu0vgp7w"
@@ -5653,7 +5653,7 @@
 		},
 		"kanto_rock_tunnel_b1f__to1_f_d": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "left",
 				"mapId": "kanto_rock_tunnel_1f",
 				"mapSceneAliases": [
 					"uid://buo38hu0vgp7w"
