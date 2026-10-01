@@ -238,7 +238,7 @@ script = ExtResource("story_hook")
 interaction_id = "kanto_ss_anne_collect_tea"
 
 [node name="RestAttendant" parent="Entities/NPCs" unique_id=745067147 instance=ExtResource("heal")]
-position = Vector2(1616, 1776)
+position = Vector2(976, 1776)
 respawn_point_id = "kanto_ss_anne_rest_attendant"
 respawn_facing_direction = "up"
 npc_id = "kanto_ss_anne_rest_attendant"
