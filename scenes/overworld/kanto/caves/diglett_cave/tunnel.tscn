@@ -111,7 +111,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_11_entrance.tscn"
 target_spawn_name = "FromTunnel"
 transition_id = "kanto_diglett_cave_tunnel__to_route11_entrance"
-transition_facing_direction = "right"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute11Entrance" unique_id=608811151]
 position = Vector2(-16, 0)
@@ -123,7 +123,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/diglett_cave/route_2_entrance.tscn"
 target_spawn_name = "FromTunnel"
 transition_id = "kanto_diglett_cave_tunnel__to_route2_entrance"
-transition_facing_direction = "right"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute2Entrance" unique_id=460024720]
 position = Vector2(-16, 0)

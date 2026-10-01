@@ -296,7 +296,7 @@ script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
 target_spawn_name = "At_12_36"
 transition_id = "kanto_ss_anne_2f__2f_corridor__stairs_to_1f"
-transition_facing_direction = "right"
+transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_1f" unique_id=603489280]
 position = Vector2(-16, 16)
@@ -417,7 +417,7 @@ script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_3f.tscn"
 target_spawn_name = "At_54_17"
 transition_id = "kanto_ss_anne_2f__2f_corridor__stairs_to_3f"
-transition_facing_direction = "right"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/2F_Corridor__stairs_to_3f" unique_id=194482653]
 position = Vector2(-16, 0)

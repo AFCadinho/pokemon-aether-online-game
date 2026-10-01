@@ -250,7 +250,7 @@ script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/ss_anne/ss_anne_1f.tscn"
 target_spawn_name = "At_62_41"
 transition_id = "kanto_ss_anne_b1f__b1f_corridor__stairs_to_1f"
-transition_facing_direction = "right"
+transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/B1F_Corridor__stairs_to_1f" unique_id=400451004]
 position = Vector2(-16, 0)
