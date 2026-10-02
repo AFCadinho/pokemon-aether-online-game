@@ -275,6 +275,10 @@ target_floor = &"floor_1"
 position = Vector2(-16, 0)
 shape = SubResource("shape_exit")
 
+[node name="DoorTransitionHint" parent="FloorTransitions/Floor2To1" unique_id=269034340 instance=ExtResource("hint")]
+z_as_relative = false
+flow_direction = "left"
+
 [node name="Floor2To3" type="Area2D" parent="FloorTransitions" unique_id=231602318]
 position = Vector2(1040, 368)
 script = ExtResource("floor_transition")
