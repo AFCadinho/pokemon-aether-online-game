@@ -7,7 +7,6 @@ const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_def
 const FIRST_ENCOUNTER_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_first_encounter.png")
 const REMATCH_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_challenge.png")
 const INTRO_DIALOGUE_DELAY_SECONDS := 0.2
-const BATTLE_TRANSITION_DELAY_SECONDS := 0.35
 const SLEEPING_REFRESH_INTERVAL_MSEC := 60_000
 const REMATCH_MARKER_BASE_POSITION := Vector2(-24.0, -132.0)
 
@@ -156,7 +155,6 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 	
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
-	await get_tree().create_timer(BATTLE_TRANSITION_DELAY_SECONDS).timeout
 	var battle_metadata := trainer_metadata.duplicate(true)
 	battle_metadata["_is_rematch"] = is_rematch
 	var battle_result: Dictionary = await start_trainer_battle(battle_metadata)
@@ -650,6 +648,15 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 	return delta.x == 0 and delta.y == int(direction.y) * clampi(abs(delta.y), 1, range_tiles)
 
 func _configure_vision_area() -> void:
+	# Map exits can reposition a trainer from body_entered while physics is
+	# flushing queries. Apply the whole sensor update after that callback.
+	if is_inside_tree() and not Engine.is_editor_hint():
+		_apply_vision_area_configuration.call_deferred()
+	else:
+		_apply_vision_area_configuration()
+
+
+func _apply_vision_area_configuration() -> void:
 	if vision_collision_shape == null:
 		return
 	if not Engine.is_editor_hint() and (

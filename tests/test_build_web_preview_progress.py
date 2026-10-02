@@ -16,7 +16,61 @@ from tools.build_web_preview import (
     run_export,
     write_browser_audio_catalog,
     validate_external_audio_pack,
+    validate_world_map_export_partition,
 )
+
+
+class WebMapPartitionPreflightTests(unittest.TestCase):
+    def fixture(self, root, excluded=True, selected=True, uncatalogued=False):
+        (root / 'docs').mkdir()
+        (root / 'generated').mkdir()
+        scene = 'res://scenes/ss_anne.tscn'
+        catalog = {'areas': {'kanto_ss_anne_1f': {'scenePath': scene}}}
+        if uncatalogued:
+            catalog['areas']['kanto_new_map'] = {'scenePath': 'res://scenes/new.tscn'}
+        (root / 'generated/world_access_catalog.json').write_text(json.dumps(catalog))
+        (root / 'docs/browser-full-world-scope.json').write_text(json.dumps({
+            'coreMapIds': [], 'extendedMapIds': ['kanto_ss_anne_1f'],
+        }))
+        (root / 'docs/browser-misty-scope.json').write_text(json.dumps({'additionalMapIds': []}))
+        (root / 'export_presets.cfg').write_text(
+            '[preset.3]\nname="Web Local Preview"\nexclude_filter="%s"\n[preset.3.options]\n'
+            '[preset.5]\nname="Web Misty Maps Trial"\nexport_files=PackedStringArray()\n[preset.5.options]\n'
+            '[preset.8]\nname="Web Extended Kanto Maps"\nexport_files=PackedStringArray(%s)\n[preset.8.options]\n'
+            % ('scenes/**' if excluded else 'other/**', json.dumps(scene) if selected else '')
+        )
+
+    def test_wildcard_exclusions_and_selected_module_pass(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            validate_world_map_export_partition(root)
+
+    def test_core_leak_fails_before_asset_preparation(self):
+        from tools.build_web_preview import main
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root, excluded=False)
+            with patch('tools.build_web_preview.ROOT', root), patch.object(sys, 'argv', ['build_web_preview']), \
+                    patch('tools.build_web_preview.prepare_home_icons') as prepare:
+                with self.assertRaisesRegex(RuntimeError, 'core export exclusion.*kanto_ss_anne_1f'):
+                    main()
+                prepare.assert_not_called()
+                self.assertFalse((root / 'builds').exists())
+
+    def test_missing_module_selection_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root, selected=False)
+            with self.assertRaisesRegex(RuntimeError, 'export selection.*kanto_ss_anne_1f'):
+                validate_world_map_export_partition(root)
+
+    def test_new_catalog_map_requires_a_partition(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root, uncatalogued=True)
+            with self.assertRaisesRegex(RuntimeError, 'partition misses.*kanto_new_map'):
+                validate_world_map_export_partition(root)
 
 
 class BuildWebPreviewProgressTests(unittest.TestCase):

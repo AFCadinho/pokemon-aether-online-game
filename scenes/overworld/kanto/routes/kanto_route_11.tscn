@@ -1,4 +1,5 @@
 [gd_scene format=4 uid="uid://eybnpiu0571i"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_11/route_11.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -302,6 +303,37 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("6_worker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=329768349]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Awakening" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(560, 400)
+pickup_id = "kanto_route_11_awakening"
+item_id = "awakening"
+[node name="XDefend" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1840, 944)
+pickup_id = "kanto_route_11_xdefend"
+item_id = "x-defense"
+[node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(2128, 752)
+pickup_id = "kanto_route_11_greatball"
+item_id = "great-ball"
+[node name="EscapeRope" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(560, 432)
+pickup_id = "kanto_route_11_escaperope"
+item_id = "escape-rope"
+[node name="Revive" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(976, 400)
+pickup_id = "kanto_route_11_revive"
+item_id = "revive"
+[node name="GreenApricorn" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1584, 752)
+pickup_id = "kanto_route_11_greenapricorn"
+item_id = "green-apricorn"
+[node name="TMGrassKnot" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(2288, 432)
+pickup_id = "kanto_route_11_tmgrassknot"
+item_id = "tm-grass-knot"
 
 [connection signal="body_entered" from="Exits/ToVermilionNorth" to="Exits/ToVermilionNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToVermilionSouth" to="Exits/ToVermilionSouth" method="_on_body_entered"]

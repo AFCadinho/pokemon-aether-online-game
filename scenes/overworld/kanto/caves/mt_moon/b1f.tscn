@@ -1,4 +1,5 @@
 [gd_scene format=4 uid="uid://dmu7iwolokkl7"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/mt_moon_b1f/mt_moon_b1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -390,6 +391,37 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=868008222]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=563296912]
+
+
+[node name="TinyMushroomEast" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1456, 944)
+pickup_id = "kanto_mt_moon_b1f_tinymushroomeast"
+item_id = "tiny-mushroom"
+
+[node name="TinyMushroomNorth" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(2096, 496)
+pickup_id = "kanto_mt_moon_b1f_tinymushroomnorth"
+item_id = "tiny-mushroom"
+
+[node name="TinyMushroomWest" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(528, 1456)
+pickup_id = "kanto_mt_moon_b1f_tinymushroomwest"
+item_id = "tiny-mushroom"
+
+[node name="BigMushroomEast" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1328, 1008)
+pickup_id = "kanto_mt_moon_b1f_bigmushroomeast"
+item_id = "big-mushroom"
+
+[node name="BigMushroomCenter" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1840, 944)
+pickup_id = "kanto_mt_moon_b1f_bigmushroomcenter"
+item_id = "big-mushroom"
+
+[node name="BigMushroomWest" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(400, 1488)
+pickup_id = "kanto_mt_moon_b1f_bigmushroomwest"
+item_id = "big-mushroom"
 
 [node name="RockSmash01" parent="Entities/Interactables" unique_id=1034659227 instance=ExtResource("6_rock")]
 position = Vector2(208, 560)

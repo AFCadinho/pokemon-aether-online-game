@@ -6,6 +6,37 @@
 
 - Bij binnenkomst in Rock Tunnel vanaf Route 10 kijkt de speler nu de grot in.
 
+- Rock Tunnel now includes its supported FRLG and HGSS pickups; Diglett Cave includes HGSS pickups on the traversable tunnel floor.
+
+- Fullscreen NPC battles tonen arena en trainers tijdens het ophalen van battlegegevens en automatische lead-keuzes. De vaste pauze na trainerdialoog is verwijderd.
+
+- Routes 3, 4, 6, 9, 10, 11, 21, 24 and 25, Cerulean City, Mt. Moon B1F and Cerulean Cave now include the missing original-game overworld pickups; unsupported TM43, TM62 and TM69 are represented by Great Balls.
+- Immersive wild battles berekenen de uiteindelijke elementgroottes vóór de fade, zodat arena, Pokémon en HUD niet eerst groot verschijnen en daarna verkleinen.
+
+- Wild battles tonen hun arena en starten de fullscreen fade al tijdens het opslaan van de positie en ophalen van de battlegegevens. De tegenstander en acties verschijnen pas zodra de echte gegevens beschikbaar zijn.
+
+- De lokale browserpreview laadt de inlogvideo en Pokémon HOME-iconen correct via de verbonden previewserver.
+- Android-invulvelden blijven bij het typen zichtbaar: de toetsenbordcorrectie houdt nu ook rekening met de werkelijke viewport-schaling, zonder de oorspronkelijke UI-layout te wijzigen.
+
+- De game ondersteunt nu toegang voor alleen staff: toegestane accounts kunnen blijven inloggen terwijl gewone spelers een onderhoudsbericht krijgen.
+
+- De Android-app behoudt zijn eerdere login-, chat-, menu- en battle-layout; de compacte mobiele browserlayout blijft beperkt tot browsers. Invulvelden blijven zichtbaar boven het toetsenbord.
+
+- De browserexport houdt S.S. Anne, het haveninterieur en Lavender’s Pokémon Center in het aparte mappakket; verouderde mapselecties worden vóór de export gemeld.
+
+- Trainer-zichtsensoren worden veilig na physics-callbacks bijgewerkt, zodat de verplichte Rock Tunnel-battle geen physics-fout meer veroorzaakt.
+
+- Battles openen op desktop, browser en Android zonder op de eerste Pokémon-sprites te wachten; ontbrekende sprites laden op de achtergrond, ook bij een 2D-fallback.
+
+- Rock Tunnel’s Mysterious Trainer stays hidden until the C staircase, then appears behind the player through the same blue rift effect as Mt. Moon.
+
+- Fullscreen battle-entrees faden het volledige battlescherm als één laag boven de overworld, inclusief achtergrond, Pokémon en bediening.
+- Mapovergangen gebruiken nu de aankomstrichting uit de client-scène; de server valideert de richting en overschrijft die niet meer met dubbele catalogusmetadata.
+
+- De fullscreen battle-fade blijft zichtbaar na een zware laadframe en gebruikt ook zonder overworldsnapshot een fade in plaats van een abrupte schermwissel.
+
+- Rock Tunnel’s Mysterious Trainer now challenges at the fixed middle C staircase, instead of every exit; the opponent’s Pokémon level is displayed as ???.
+
 - After Oak’s advice, the main quest tracker and developer checkpoints now separate reaching Rock Tunnel, crossing it and meeting the masked trainer, and reaching Lavender Town.
 
 - Fullscreen battles schuiven nu vanuit het zichtbare overworldbeeld naar binnen zonder zwart laadscherm of flitsen; Android wacht op de eerste sprites voordat de slide begint.

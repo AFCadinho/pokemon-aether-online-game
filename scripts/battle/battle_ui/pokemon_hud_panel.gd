@@ -6,6 +6,7 @@ extends PanelContainer
 ]
 
 var experience_bar_enabled := false
+var level_hidden := false
 const DOUBLE_HUD_WIDTH := 460.0
 const SINGLE_HUD_WIDTH := 280.0
 
@@ -152,7 +153,7 @@ func _set_active_info_row_data(
 	_set_shiny_badge(row, is_shiny)
 	var level_label: Label = row.get_node_or_null("MarginContainer/VBoxContainer/TopRow/HBoxContainer/LevelLabel") as Label
 	if level_label != null:
-		level_label.text = _t("battle.hud.level", {"level": level})
+		level_label.text = _t("battle.hud.level", {"level": "???" if level_hidden else level})
 
 	var hp_bar: ProgressBar = row.get_node_or_null("MarginContainer/VBoxContainer/HPRow/HpBar") as ProgressBar
 	var visible_hp_percent := _to_visible_hp_percent(current_hp, max_hp)

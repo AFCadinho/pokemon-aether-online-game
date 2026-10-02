@@ -68,9 +68,13 @@ live UI and suspends UI input callbacks (not processing or network services).
 It scales the HUD uniformly to fit and expands the logical canvas for different
 aspect ratios. The snapshot stays visible while the battle prepares. Once the
 entry-ready callback and model/fallback preparation both complete, the world
-image dissolves into the prepared fullscreen battle over 180 ms. Both screens
+snapshot remains opaque underneath while the complete incoming battle (including
+its backdrop) fades in over 180 ms through the shared Content parent. Both screens
 stay stationary, with no black cover or flash. The battle intro waits for this
 fade.
+Normal encounter prefetch prioritizes the visible leads but never waits for sprite
+downloads, including the 2D fallback. Existing SpriteBox upgrades replace temporary
+art when ready; battle authority and intro input locks remain in place.
 Both snapshot references are released after entry or cancellation. Unsupported
 model situations retain the current fallback inside this same screen; changing
 renderer settings does not reparent a battle.

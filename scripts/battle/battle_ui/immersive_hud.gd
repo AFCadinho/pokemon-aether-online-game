@@ -11,6 +11,9 @@ func _ready() -> void:
 	process_priority = 100
 
 func _process(delta: float) -> void:
+	layout_now(delta)
+
+func layout_now(delta := 0.0, snap := false) -> void:
 	var stage: Control = battle.battle_stage
 	var area := stage.size
 	# Legacy visibility refreshes still run; the floating rail owns its bounds.
@@ -49,7 +52,7 @@ func _process(delta: float) -> void:
 	var settings := get_node("/root/SettingsManager")
 	var ui_factor := float(settings.get("ui_scale")) / 100.0
 	var window_fit := get_node("/root/WindowFit")
-	var touch_factor := 1.5 if window_fit.call("is_touch_ui") else 1.0
+	var touch_factor := 1.5 if window_fit.call("is_mobile_browser_ui") else 1.0
 	var move_scale := minf(0.8 * ui_factor * touch_factor, maxf(0.4, (area.x * 0.5) / 400.0))
 	var move_delta := Vector2(400, 188) * (move_scale - 0.8)
 	var moves_position := Vector2(area.x - 340, area.y - 170) - move_delta
@@ -154,7 +157,7 @@ func _process(delta: float) -> void:
 			target.y -= badge_height + 6
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
 		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
-		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] else target
+		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] and not snap else target
 		# Keep the HP panel above a newly revealed or rising 3D model.
 		# Easing upwards can otherwise leave it inside the model for a few frames.
 		if realtime_3d and anchored_to_sprite:
@@ -178,7 +181,8 @@ func _process(delta: float) -> void:
 		var effects_x := side_rail.position.x + rail_extent.x + 8 if index == 0 else side_rail.position.x - effects_extent.x - 8
 		effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
 		_place(effects, Vector2(effects_x, side_rail.position.y), effects.size, 0.5)
-	_update_coop_3d_huds(stage, presenter, area, battle.coop_mode and realtime_3d and presenter.double_mode)
+	if not battle.has_meta("battle_entry_pending"):
+		_update_coop_3d_huds(stage, presenter, area, battle.coop_mode and realtime_3d and presenter.double_mode)
 
 func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enabled: bool) -> void:
 	if not enabled:

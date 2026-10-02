@@ -8,6 +8,7 @@ const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
 const DEBUG_TRAINER_TEAM_DISPLAY := false
 const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 
+var opponent_levels_hidden := false
 var battle_state: BattleState
 var display_metadata := preload("res://scripts/battle/battle_display_metadata.gd").new()
 var event_text_formatter := preload("res://scripts/battle/battle_event_text_formatter.gd").new()
@@ -342,6 +343,7 @@ func _get_trainer_display_team_data(request_team: Array) -> Array:
 		_apply_request_battle_state_to_trainer_display(display_data, request_data)
 		_apply_public_mega_species_to_trainer_display(display_data, canonical_slot)
 		display_metadata.enrich_display_data("p2", display_data)
+		display_data["level_hidden"] = opponent_levels_hidden
 		display_team.append(display_data)
 
 	_debug_trainer_team_display("output", {
@@ -461,6 +463,7 @@ func _apply_condition_fields_from_display_data(display_data: Dictionary) -> void
 func get_display_pokemon_data(player_id: String, pokemon_data: Dictionary) -> Dictionary:
 	var display_data := pokemon_data.duplicate()
 	display_metadata.enrich_display_data(player_id, display_data)
+	display_data["level_hidden"] = player_id == "p2" and opponent_levels_hidden
 	return display_data
 
 func _enrich_player_display_slot_from_save(display_data: Dictionary, index: int) -> void:

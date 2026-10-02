@@ -6,10 +6,13 @@ class_name RockTunnelFutureSelfNPC
 const FutureSelfAppearance := preload("res://scripts/world/story/future_self_appearance.gd")
 const PlayerTrainerCatalog := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
 
+const RIFT_TEXTURE := preload("res://assets/npcs/Ultimate Gen 4 Overworlds Pack/Animations & Others/DistortionWorld_Portal.png")
+
 const FUTURE_SELF_TRAINER_ID := "kanto_rock_tunnel_future_self"
 
 var mysterious_appearance: Dictionary = {}
 var farewell_pending := false
+var arrival_started := false
 
 
 func _ready() -> void:
@@ -24,6 +27,7 @@ func _ready() -> void:
 		preview.play(_get_idle_animation_name(facing_direction))
 		preview.stop()
 		return
+	visible = false
 	trainer_id = FUTURE_SELF_TRAINER_ID
 	display_name = "Mysterious Trainer"
 	portrait_id = ""
@@ -46,6 +50,7 @@ func _resolve_battle_sprite_id() -> String:
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	var presentation := super.build_battle_trainer_metadata(metadata)
+	presentation["_hide_pokemon_level"] = true
 	presentation["_battle_appearance"] = mysterious_appearance.duplicate(true)
 	presentation.erase("_battle_sprite_frames")
 	return presentation
@@ -70,31 +75,68 @@ func start_mandatory_battle(player: Node2D) -> void:
 		return
 	triggered = true
 	GameState.lock_overworld_input()
-	_position_for_mandatory_battle(player)
+	if not _position_for_mandatory_battle(player):
+		_recover_overworld_after_failed_battle_start()
+		return
+	await _reveal_at_staircase()
 	if player.has_method("face_world_position"):
 		player.face_world_position(get_feet_position())
 	await show_intro_dialogue()
 
 
 func _position_for_mandatory_battle(player: Node2D) -> bool:
-	# Exit enforcement can happen on the other side of the cave. Bring the
-	# masked visitor into view on a nearby walkable, unoccupied tile.
 	var player_feet := _get_body_target_feet_position(player)
 	var player_tile := _to_tile(player_feet)
-	for distance: int in [1, 2]:
-		for direction: Vector2i in [Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP]:
-			var target := _tile_to_world(player_tile + direction * distance)
-			if not _can_story_npc_move_to(target):
-				continue
-			global_position += target - get_feet_position()
-			movement_origin_tile = _to_tile(target)
-			visible = true
-			modulate.a = 1.0
-			_set_idle_frame(player_feet - target)
-			_update_directional_sensors()
-			_update_sort_z()
-			return true
+	var direction_value: Variant = player.get("last_direction")
+	var approach := Vector2i(direction_value) if direction_value is Vector2 else Vector2i.RIGHT
+	if approach == Vector2i.ZERO:
+		approach = Vector2i.RIGHT
+	# Stay behind the player's approach to the staircase, even if a follower
+	# occupies the nearest tile. Never reveal him ahead of the player.
+	for distance: int in [1, 2, 3]:
+		var target := _tile_to_world(player_tile - approach * distance)
+		if not _can_story_npc_move_to(target):
+			continue
+		global_position += target - get_feet_position()
+		movement_origin_tile = _to_tile(target)
+		_set_idle_frame(player_feet - target)
+		_update_directional_sensors()
+		_update_sort_z()
+		return true
 	return false
+
+
+func _reveal_at_staircase() -> void:
+	# Match Mt. Moon's rift, blue fade and 16-pixel descent. Keep the rift a
+	# sibling so it can open while the trainer himself is still hidden.
+	var rift := Sprite2D.new()
+	rift.texture = RIFT_TEXTURE
+	rift.z_index = -1
+	rift.scale = Vector2(0.05, 0.05)
+	rift.modulate = Color(0.7, 0.82, 1.0, 0.0)
+	get_parent().add_child(rift)
+	rift.global_position = global_position + Vector2(0, -12)
+	var open_tween := create_tween().set_parallel(true)
+	open_tween.tween_property(rift, "scale", Vector2(0.72, 0.9), 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	open_tween.tween_property(rift, "modulate:a", 0.95, 0.28)
+	open_tween.tween_property(rift, "rotation", 0.5, 0.45)
+	await open_tween.finished
+	arrival_started = true
+	modulate = Color(0.5, 0.65, 1.0, 0.0)
+	visible = true
+	var look: Node2D = $Look
+	var look_origin := look.position
+	look.position.y -= 16.0
+	var reveal_tween := create_tween().set_parallel(true)
+	reveal_tween.tween_property(self, "modulate", Color(0.72, 0.82, 1.0, 0.95), 0.35)
+	reveal_tween.tween_property(look, "position", look_origin, 0.35)
+	await reveal_tween.finished
+	var close_tween := create_tween().set_parallel(true)
+	close_tween.tween_property(rift, "scale", Vector2(0.04, 0.1), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	close_tween.tween_property(rift, "modulate:a", 0.0, 0.24)
+	close_tween.tween_property(self, "modulate", Color.WHITE, 0.3)
+	await close_tween.finished
+	rift.queue_free()
 
 
 func _recover_overworld_after_failed_battle_start() -> void:
@@ -104,6 +146,9 @@ func _recover_overworld_after_failed_battle_start() -> void:
 	trainer_progress_state = STATE_FIRST_ENCOUNTER
 	battle_in_progress = false
 	triggered = false
+	arrival_started = false
+	visible = false
+	modulate = Color.WHITE
 	_refresh_rematch_marker()
 	_configure_vision_area()
 	var world := get_tree().get_first_node_in_group("world")
@@ -116,9 +161,9 @@ func _recover_overworld_after_failed_battle_start() -> void:
 func _load_trainer_progress() -> void:
 	await super._load_trainer_progress()
 	if not farewell_pending:
-		visible = trainer_progress_state not in [STATE_DEFEATED, STATE_COMPLETED]
-		if visible:
-			modulate.a = 1.0
+		if trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED] or not battle_in_progress:
+			arrival_started = false
+		visible = arrival_started and trainer_progress_state not in [STATE_DEFEATED, STATE_COMPLETED]
 
 
 func _can_start_manual_interaction() -> bool:
@@ -134,7 +179,8 @@ func interact_with_player(player: Node2D) -> void:
 
 
 func _can_auto_challenge() -> bool:
-	return not farewell_pending and is_visible_in_tree() and super._can_auto_challenge()
+	# The fixed C staircase owns the mandatory encounter, not line of sight.
+	return false
 
 
 func blocks_world_position(world_position: Vector2) -> bool:
@@ -147,8 +193,9 @@ func blocks_world_position(world_position: Vector2) -> bool:
 
 func _apply_story_visibility(allow_deferred_hide := false) -> void:
 	super._apply_story_visibility(allow_deferred_hide)
-	# Story refreshes must not resurrect a completed trainer at zero opacity.
-	if not farewell_pending and trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]:
+	# Story refreshes cannot reveal him before the staircase or resurrect him
+	# after completion. During the encounter, preserve the cinematic visibility.
+	if not farewell_pending and (not arrival_started or trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]):
 		visible = false
 
 
@@ -159,4 +206,5 @@ func finish_story_battle_presentation(finished_trainer_id: String) -> void:
 	tween.tween_property(self, "modulate:a", 0.0, 0.45)
 	await tween.finished
 	farewell_pending = false
+	arrival_started = false
 	visible = false

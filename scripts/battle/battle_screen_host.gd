@@ -12,7 +12,10 @@ var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
 const FADE_SECONDS := 0.18
+const MIN_FADE_FRAMES := 12
 var outgoing_snapshot: TextureRect
+@onready var content: Control = $Content
+@onready var backdrop: ColorRect = $Content/Backdrop
 var preparation_ready := false
 var reveal_requested := false
 var fade_progress := 0.0:
@@ -33,7 +36,8 @@ func _ready() -> void:
 	outgoing_snapshot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	outgoing_snapshot.stretch_mode = TextureRect.STRETCH_SCALE
 	outgoing_snapshot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$Cover.add_child(outgoing_snapshot)
+	add_child(outgoing_snapshot)
+	move_child(outgoing_snapshot, 0)
 	var stack := VBoxContainer.new()
 	stack.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	stack.position = Vector2(-260,-55)
@@ -62,7 +66,8 @@ func _prepare_2d_fallback() -> void:
 	if entries.is_empty():
 		return
 	loading_label.text = "Preparing 2D sprites…"
-	await get_node("/root/WebPokemonSpriteService").prefetch_and_wait(entries)
+	# Fallback downloads are presentation work, not an entry readiness gate.
+	get_node("/root/WebPokemonSpriteService").prefetch(entries, true)
 	if is_instance_valid(battle):
 		battle.player_sprite_box.allow_web_sprite_upgrades(true)
 		battle.enemy_sprite_box.allow_web_sprite_upgrades(true)
@@ -123,18 +128,19 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
-func prewarm_mobile_immersive_battle(instance: Control) -> void:
-	# Build the Android battle controls while the world is open. Keep the whole
+func prewarm_battle(instance: Control, immersive := true) -> void:
+	# Build battle controls while the world is open on any platform. Keep the whole
 	# tree dormant until mount() takes ownership of the active encounter.
 	process_mode = Node.PROCESS_MODE_DISABLED
 	hide()
 	battle = instance
 	battle.set_meta("dedicated_battle_screen", true)
-	preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
-	$Content.add_child(battle)
+	if immersive:
+		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
+	content.add_child(battle)
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false, snapshot: Texture2D = null) -> void:
-	var already_prepared := battle == instance and instance.get_parent() == $Content
+	var already_prepared := battle == instance and instance.get_parent() == content
 	process_mode = Node.PROCESS_MODE_INHERIT
 	show()
 	outgoing_snapshot.texture = snapshot if snapshot != null else WildEncounterTransition.capture_viewport(get_viewport())
@@ -158,7 +164,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	if not already_prepared and (force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive"):
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	if not already_prepared:
-		$Content.add_child(battle)
+		content.add_child(battle)
 	resized.connect(_fit_battle)
 	battle.battle_stage.minimum_size_changed.connect(_fit_battle)
 	_fit_battle()
@@ -187,7 +193,7 @@ func _fit_battle() -> void:
 	# displays, instead of stretching Pokémon or cropping controls on small ones.
 	var design := Vector2(1500, 780)
 	var window_fit := get_node_or_null("/root/WindowFit")
-	if window_fit != null and window_fit.call("is_touch_ui") and battle.has_meta("immersive_battle_ui") and not battle.coop_mode:
+	if window_fit != null and window_fit.call("is_mobile_browser_ui") and battle.has_meta("immersive_battle_ui") and not battle.coop_mode:
 		design.x = 960
 		battle.battle_stage.custom_minimum_size.x = 960
 		battle.get_node("%BattleStageViewport").design_size.x = 960
@@ -198,6 +204,7 @@ func _fit_battle() -> void:
 	battle.position = Vector2.ZERO
 	battle.size = size / factor
 	battle.scale = Vector2.ONE * factor
+	battle.update_entry_layout()
 	_apply_entry_fade()
 
 func _reveal_when_prepared(token: int) -> void:
@@ -222,12 +229,17 @@ func _reveal_when_prepared(token: int) -> void:
 	if released or token != generation or not is_inside_tree():
 		return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
-		await _prepare_2d_fallback()
+		_prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():
 			return
 	preparation_ready = true
 	if reveal_requested:
 		_reveal_cover()
+
+func reveal_pending_entry() -> void:
+	# The arena can already fade in while authoritative data/models are pending.
+	reveal_requested = true
+	_reveal_cover()
 
 func request_reveal() -> void:
 	reveal_requested = true
@@ -237,28 +249,32 @@ func request_reveal() -> void:
 func _apply_entry_fade() -> void:
 	if not is_node_ready():
 		return
-	$Backdrop.position.x = 0.0
-	$Content.position.x = 0.0
+	content.position = Vector2.ZERO
+	content.modulate.a = fade_progress
 	if outgoing_snapshot != null:
-		outgoing_snapshot.position.x = 0.0
-		# The opaque battle is underneath: dissolving this single world image
-		# gives an exact crossfade without separately fading dark UI layers.
-		outgoing_snapshot.modulate.a = 1.0 - fade_progress
-		if outgoing_snapshot.texture == null:
-			# Screenshot capture can be unavailable; retain the live world until
-			# reveal instead of displaying an unprepared opaque battle.
-			$Backdrop.visible = fade_progress > 0.0
-			$Content.visible = fade_progress > 0.0
+		outgoing_snapshot.position = Vector2.ZERO
+		outgoing_snapshot.modulate.a = 1.0
 
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	while reveal_tween.is_valid() and reveal_tween.is_running() and not released:
+	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_LINEAR)
+	# A slow mount/upload frame must not consume the whole entrance tween.
+	# Advance only after presenting a frame, with at least twelve blend steps.
+	reveal_tween.pause()
+	while not released and reveal_tween.is_valid() and fade_progress < 1.0:
 		await get_tree().process_frame
+		if released or not reveal_tween.is_valid():
+			return
+		var step := minf(get_process_delta_time(), FADE_SECONDS / float(MIN_FADE_FRAMES))
+		reveal_tween.custom_step(maxf(step, 0.0001))
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
 	if not released:
 		fade_progress = 1.0
+		content.modulate.a = 1.0
+		backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
 		$Cover.hide()
 		if is_instance_valid(battle):

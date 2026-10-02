@@ -363,6 +363,8 @@ func _set_pokemon_data(pokemon_data: Dictionary) -> void:
 
 func _get_name_and_level(pokemon_data: Dictionary) -> String:
 	var display_name := _get_display_species(pokemon_data)
+	if bool(pokemon_data.get("level_hidden", false)):
+		return "%s  ·  %s" % [display_name, _t("ui.storage.level", {"level": "???"}) if localization_manager != null else "Lv. ???"]
 	var level := int(pokemon_data.get("level", 0))
 	if level <= 0:
 		return display_name

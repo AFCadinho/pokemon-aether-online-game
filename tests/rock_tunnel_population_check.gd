@@ -70,8 +70,8 @@ func _run() -> void:
 			var exits := map.get_node("Exits")
 			for exit: Node in exits.get_children():
 				_check(
-					str(exit.get("required_trainer_id")) == "kanto_rock_tunnel_future_self",
-					"%s requires the Future Self battle before leaving 1F" % exit.name
+					str(exit.get("required_trainer_id")) == ("kanto_rock_tunnel_future_self" if exit.name == &"ToB1FC" else ""),
+					"%s uses only the fixed C staircase encounter" % exit.name
 				)
 		for trainer: Node2D in trainers:
 			var cell := collision.local_to_map(collision.to_local(trainer.global_position))
@@ -83,7 +83,10 @@ func _run() -> void:
 					"%s has a clear trainer sightline at step %s (%s)" % [trainer.name, step, cell + direction * step]
 				)
 			for spawn: Marker2D in map.get_node("Spawns").get_children():
-				_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn %s clear" % [trainer.name, spawn.name])
+				if str(trainer.get("trainer_id")) == "kanto_rock_tunnel_future_self":
+					_check(not trainer.visible and not trainer.blocks_world_position(spawn.global_position), "Hidden visitor leaves spawn %s clear" % spawn.name)
+				else:
+					_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn %s clear" % [trainer.name, spawn.name])
 		map.queue_free()
 		await process_frame
 

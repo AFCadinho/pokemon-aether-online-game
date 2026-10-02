@@ -149,7 +149,7 @@ func _run_checks() -> void:
 		trainer_default_gate_index > trainer_lead_index
 		and trainer_default_field_clear_index > trainer_default_gate_index
 		and trainer_default_ready_index > trainer_default_gate_index,
-		"regular NPC transition stays covered until automatic leads and the empty summon field are ready"
+		"regular NPC combatants wait for automatic leads while fullscreen arena entry can already be visible"
 	)
 	_check_true(
 		trainer_default_field_clear_index < trainer_default_ready_index,

@@ -300,6 +300,11 @@ position = Vector2(720, 720)
 position = Vector2(752, 688)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
+[node name="Ether" parent="Entities/Interactables" instance=ExtResource("8_item")]
+position = Vector2(2080, 512)
+pickup_id = "kanto_mt_moon_b2f_ether"
+item_id = "ether"
+
 
 [node name="HelixFossil" parent="Entities/Interactables" unique_id=37076334 instance=ExtResource("8_item")]
 position = Vector2(784, 560)
@@ -314,7 +319,7 @@ item_id = "dome-fossil"
 [node name="TMPayback" parent="Entities/Interactables" unique_id=1155255050 instance=ExtResource("8_item")]
 position = Vector2(2096, 464)
 pickup_id = "kanto_mt_moon_b2f_tm_thief"
-item_id = "tm-payback"
+item_id = "tm-thief"
 
 [node name="Revive" parent="Entities/Interactables" unique_id=1810450543 instance=ExtResource("8_item")]
 position = Vector2(464, 1232)

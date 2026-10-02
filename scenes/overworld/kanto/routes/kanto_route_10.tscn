@@ -1,4 +1,5 @@
 [gd_scene format=4 uid="uid://cwemdr3lxm8ws"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_10/route_10.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -371,6 +372,34 @@ display_name = "Poké Maniac Herman"
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1826864528]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="CheriBerry" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(688, 560)
+pickup_id = "kanto_route_10_cheriberry"
+item_id = "cheri-berry"
+[node name="PersimBerry" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(976, 560)
+pickup_id = "kanto_route_10_persimberry"
+item_id = "persim-berry"
+[node name="SuperPotion" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1360, 720)
+pickup_id = "kanto_route_10_superpotion"
+item_id = "super-potion"
+[node name="Carbos" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(816, 2704)
+pickup_id = "kanto_route_10_carbos"
+item_id = "carbos"
+[node name="GreatBallRockPolishSubstitute" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1232, 3056)
+pickup_id = "kanto_route_10_great_ball_tm_substitute"
+item_id = "great-ball"
+
+[node name="MaxEther" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(1200, 2800)
+pickup_id = "kanto_route_10_max_ether"
+item_id = "max-ether"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 
