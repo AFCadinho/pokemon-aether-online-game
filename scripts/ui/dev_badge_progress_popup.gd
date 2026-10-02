@@ -57,6 +57,8 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "saffron_gate_closed", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.saffron_gate_closed"},
 	{"id": "oak_rock_tunnel_advice", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.oak_rock_tunnel_advice"},
 	{"id": "rock_tunnel_to_lavender", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.rock_tunnel_to_lavender"},
+	{"id": "rock_tunnel_traverse", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.rock_tunnel_traverse"},
+	{"id": "reach_lavender_town", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.reach_lavender_town"},
 	{"id": "lavender_warning", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.lavender_warning"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [

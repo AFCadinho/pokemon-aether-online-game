@@ -6264,8 +6264,12 @@
   "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Return to Pallet Town and ask Professor Oak for advice.",
   "story.kanto.travel_to_lavender_town.title": "A Warning in Lavender Town",
   "story.kanto.travel_to_lavender_town.summary": "Cross Rock Tunnel to reach Lavender Town and learn what is happening at Pokémon Tower.",
-  "story.kanto.travel_to_lavender_town.cross_rock_tunnel": "Cross Rock Tunnel to reach Lavender Town.",
+  "story.kanto.travel_to_lavender_town.cross_rock_tunnel": "Travel through Rock Tunnel.",
   "story.kanto.travel_to_lavender_town.hear_lavender_warning": "Listen to the Lavender resident’s warning.",
-  "ui.staff.story_checkpoint.rock_tunnel_to_lavender": "Rock Tunnel · Reach Lavender Town",
-  "ui.staff.story_checkpoint.lavender_warning": "Lavender Town · Hear the warning"
+  "ui.staff.story_checkpoint.rock_tunnel_to_lavender": "Rock Tunnel · Reach the cave",
+  "ui.staff.story_checkpoint.lavender_warning": "Lavender Town · Hear the warning",
+  "story.kanto.travel_to_lavender_town.reach_rock_tunnel": "Reach Rock Tunnel.",
+  "story.kanto.travel_to_lavender_town.reach_lavender_town": "Reach Lavender Town.",
+  "ui.staff.story_checkpoint.rock_tunnel_traverse": "Rock Tunnel · Travel through the cave",
+  "ui.staff.story_checkpoint.reach_lavender_town": "Lavender Town · Reach the town"
 }
