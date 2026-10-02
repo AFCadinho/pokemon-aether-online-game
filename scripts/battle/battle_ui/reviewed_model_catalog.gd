@@ -7,6 +7,32 @@ static func key(species: String, shiny: bool) -> String:
 	var normalized := species.to_lower().replace(" ", "-")
 	return normalized + "@shiny" if shiny and not normalized.is_empty() else normalized
 
+static func canonical_identity(identity: String) -> String:
+	# Legends: Z-A gives both Meowstic genders the same Mega design. Keep the
+	# battle/catalog identities separate, but resolve both to the shared model.
+	var shiny := identity.ends_with("@shiny")
+	var base := identity.trim_suffix("@shiny") if shiny else identity
+	if base == "meowstic-f-mega":
+		base = "meowstic-m-mega"
+	return base + ("@shiny" if shiny else "")
+
+static func aliases_for(identity: String) -> Array[String]:
+	var base := identity.trim_suffix("@shiny")
+	if base == "meowstic-m-mega":
+		return ["meowstic-f-mega" + ("@shiny" if identity.ends_with("@shiny") else "")]
+	return []
+
+static func add_alias_entries(entries: Dictionary) -> void:
+	# Keep the downloaded/catalog row under its canonical identity, then expose
+	# a second lookup key for forms that intentionally share that exact model.
+	for identity: String in entries.keys():
+		for alias: String in aliases_for(identity):
+			if entries.has(alias):
+				continue
+			var entry: Dictionary = entries[identity].duplicate(true)
+			entry.species = alias
+			entries[alias] = entry
+
 static func entry_key(entry: Dictionary) -> String:
 	var species := str(entry.get("species", ""))
 	var variant := str(entry.get("variant", "normal"))
@@ -20,7 +46,8 @@ static func entry_key(entry: Dictionary) -> String:
 	return key(species, variant == "shiny")
 
 static func supports(identity: String) -> bool:
-	return DATA.data.models.has(identity) or SCREENED.data.models.has(identity)
+	var canonical := canonical_identity(identity)
+	return DATA.data.models.has(canonical) or SCREENED.data.models.has(canonical)
 
 static func approved_digest(model: Dictionary, digest: String) -> bool:
 	return not model.is_empty() and (digest == model.get("sha256", "") or digest in model.get("previous_sha256", []))
@@ -73,6 +100,7 @@ static func pack_entries(manifest: Dictionary, directory: String) -> Array:
 	return result
 
 static func resolve(identity: String, digest: String) -> Dictionary:
+	identity = canonical_identity(identity)
 	var model: Dictionary = DATA.data.models.get(identity, {})
 	var profiles: Dictionary = DATA.data.profiles
 	var accepted := approved_digest(model, digest)

@@ -153,16 +153,17 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 		var asset_id := _asset_id(identity)
 		if asset_id.is_empty():
 			continue
+		var runtime_identity := ReviewedModels.canonical_identity(identity)
 		var asset := _indexed_asset(index, asset_id)
 		if asset.is_empty():
 			return {"error": "Approved 3D model is missing from the content index."}
 		var expected_digest := ""
 		for appearance in asset.get("appearances", []):
-			if appearance is Dictionary and str(appearance.get("runtime_identity", "")) == identity:
+			if appearance is Dictionary and str(appearance.get("runtime_identity", "")) == runtime_identity:
 				expected_digest = str(appearance.get("runtime_sha256", ""))
 		if expected_digest.is_empty():
 			return {"error": "Approved 3D appearance is missing from the content index."}
-		if not _entry_available(entries, identity, expected_digest) and asset_id not in missing:
+		if not _entry_available(entries, runtime_identity, expected_digest) and asset_id not in missing:
 			missing.append(asset_id)
 	for asset_id in missing:
 		var asset: Dictionary = _indexed_asset(index, asset_id)
@@ -178,15 +179,20 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 
 
 func _asset_id(identity: String) -> String:
-	var species := identity.trim_suffix("@shiny")
+	var id := asset_id_for_identity(identity)
+	return id if id in RELEASE.data.requiredAssetIds else ""
+
+
+static func asset_id_for_identity(identity: String) -> String:
+	var runtime_identity := ReviewedModels.canonical_identity(identity)
+	var species := runtime_identity.trim_suffix("@shiny")
 	var form := "base"
 	for candidate: String in ["mega-x", "mega-y", "mega-z", "mega"]:
 		if species.ends_with("-" + candidate):
 			form = candidate
 			species = species.trim_suffix("-" + candidate)
 			break
-	var id := "pokemon_3d:%s:%s" % [species, form]
-	return id if id in RELEASE.data.requiredAssetIds else ""
+	return "pokemon_3d:%s:%s" % [species, form]
 
 
 func _catalog(path: String) -> Array:

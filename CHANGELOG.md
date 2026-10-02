@@ -3,10 +3,11 @@
 ## Unreleased
 
 - Pokémon Tower gebruikt de nieuwste TMX-visual met bijgewerkte grafstenen, vloeren en healing seal.
+- Female and male Mega Meowstic now resolve to the same reviewed 3D model, matching the shared in-game Mega design.
 
 - Added Rattata and Ekans to Route 9, and Spearow and Sandshrew to Route 10 as roaming overworld Pokémon.
 
-- 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
+- 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Mannelijke en vrouwelijke Mega Meowstic delen nu dezelfde beoordeelde modelbundel.
 - De HP-balk blijft boven hoge 3D-animaties zoals Mega Greninja's waterster, ook wanneer de gebruikelijke bovenmarge onvoldoende ruimte laat.
 
 - Pokémon Tower gebruikt nu de bijgewerkte artist-visual, met behoud van de vloermasks en handmatig geplaatste aankomstpunten.

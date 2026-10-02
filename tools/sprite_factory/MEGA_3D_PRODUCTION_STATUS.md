@@ -1,9 +1,12 @@
 # Mega 3D catalog production
 
-Updated 2026-10-02. **96 of 97 Mega catalog form pairs are locally qualified.**
+Updated 2026-10-02. **All 97 Mega form identities are covered by 96 unique qualified model pairs.**
 The latest 24 individual bundles are published to R2; the desktop manifest is
-not activated. The earlier 71 were also published. Female Mega Meowstic remains a source
-identity hold. Historical milestones below retain their original scope.
+not activated. The earlier 71 were also published. Male and female Mega
+Meowstic share the same in-game appearance and resolve to the existing approved
+bundle. The alias is implemented locally; a future desktop release must include
+the Mega content index and bundle ID before players can download it. Historical
+milestones below retain their original scope.
 
 ## Catalog coverage
 
@@ -327,14 +330,16 @@ is `release/approved_3d_mega_24_index.json`. The appearance/battle checkpoint
 retains its historical pre-performance flags; the qualification receipt and
 candidate-production record are the authority for completed runtime admission.
 
-This task has not uploaded these 24 bundles, activated a release content index,
-certified platforms or published a release. The qualification scope is local
+This task has not activated a release content index, certified platforms or
+published a release. The qualification scope is local
 AMD Compatibility. Native sleep and second physical attacks are absent in this
 cohort; approved own-Mega rest loops and the selected native attack are used.
 Static material approximations and the three Tatsugiri IDs sharing the authored
-three-fish source remain the visually accepted limitations. **Only female Mega
-Meowstic remains unqualified**, because its separate source identity is not
-confirmed; this is a count of Mega form entries, not base Pokédex species.
+three-fish source remain the visually accepted limitations. Female Mega Meowstic
+uses the shared model by design and does not need a second bundle. The game-side
+alias is in development; the active desktop manifest is unchanged, so this does
+not activate Mega downloads for players. The 97 count is Mega form identities,
+not base Pokédex species.
 
 
 ## Remaining 24 Mega pairs: R2 publication completed
