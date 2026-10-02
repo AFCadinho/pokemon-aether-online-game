@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 9, Route 10 en beide Rock Tunnel-verdiepingen bevatten nu zichtbare, aanspreekbare overworld-Pokémon.
+
 - Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterward and the encounter completes on either result.
 
 - De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
