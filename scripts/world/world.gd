@@ -4580,6 +4580,10 @@ func _on_battle_ended(result: Dictionary) -> void:
 			)
 		if reward_claimed and item_reward_awarded:
 			SfxManager.play("item_received")
+		if reward_claimed and is_future_self_battle:
+			for npc: Node in get_tree().get_nodes_in_group("trainer_npcs"):
+				if npc.has_method("finish_story_battle_presentation"):
+					await npc.call("finish_story_battle_presentation", reward_trainer_id)
 	if keep_locked_for_outro:
 		_unlock_overworld_after_battle()
 	if should_offer_shiny_replay_favorite:

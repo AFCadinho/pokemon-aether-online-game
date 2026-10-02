@@ -1,0 +1,59 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 6,
+  "bundle_bytes": 105024572,
+  "bundle_qualification_sha256": "d85826b6ee9422b2c12d4ebe13f7edc969143d37e60def0911ddf32c94360f56",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:ogerpon-cornerstone:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-cornerstone/base/v2-ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa",
+      "size_bytes": 34401736,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ogerpon-hearthflame:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-hearthflame/base/v2-590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1",
+      "size_bytes": 34658668,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ogerpon-wellspring:base",
+      "object_key": "optional-assets/pokemon_3d/ogerpon-wellspring/base/v2-0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32",
+      "size_bytes": 35964168,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "ogerpon-native-cloak-colours-v2",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/ogerpon-native-cloak-colours-v2-d84d2d3eb50846258e8de0733f7cd30f45c54bd0c13d13c9dc467e5d362c049a.json",
+    "sha256": "d84d2d3eb50846258e8de0733f7cd30f45c54bd0c13d13c9dc467e5d362c049a",
+    "size_bytes": 3028
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/ogerpon-native-cloak-colours-v2-d84d2d3eb50846258e8de0733f7cd30f45c54bd0c13d13c9dc467e5d362c049a.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "d84d2d3eb50846258e8de0733f7cd30f45c54bd0c13d13c9dc467e5d362c049a",
+    "size_bytes": 3028,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 3,
+  "profile_count": 3,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 4,
+  "public_head_size_verified_objects": 4,
+  "reviewed_catalog_sha256": "3dfc4d68f5104007942c3df9331493a4b4203afc30e50bd5c457fe18c8d143a8",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T04:04:03.823365+00:00"
+}
