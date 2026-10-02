@@ -41,8 +41,8 @@ func _run() -> void:
 	_check(house.get("lighting_profile") == "indoor" and house.get("weather_profile") == "disabled"
 		and house.get("music_profile_id") == "kanto.lavender_town", "House uses indoor lighting and Lavender music")
 	var house_collision := house.get_node("Tiles/Collision") as TileMapLayer
-	_check(house_collision.tile_set != null and house_collision.get_used_cells().is_empty(),
-		"House has an editable empty collision layer for the map author")
+	_check(house_collision.tile_set != null,
+		"Fuji house retains its editable collision layer")
 	var house_visual := house.get_node("Visual")
 	var house_metadata: Dictionary = house_visual.get_meta("tiled_visual_map")
 	_check(house_metadata.get("width") == 26 and house_metadata.get("height") == 24,

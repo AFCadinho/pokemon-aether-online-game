@@ -16,6 +16,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="15_m5ude"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="16_overworld_item"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="17_route_rock"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="18_overworld_pokemon"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jt1dn"]
 texture = ExtResource("3_3df0w")
@@ -413,6 +414,38 @@ npc_sprite_frames = ExtResource("11_firebreather")
 [node name="Players" type="Node2D" parent="Entities" unique_id=120000015]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=120000016]
+
+[node name="Spearow" parent="Entities/Pokemon" unique_id=1882296323 instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(1168, 880)
+overworld_pokemon_id = "kanto_route_3_spearow_1"
+species_id = "spearow"
+level = 6
+display_name = "Spearow"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.5
+movement_speed_pixels = 48.0
+
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=1295320210 instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(1040, 400)
+overworld_pokemon_id = "kanto_route_3_pidgey_1"
+species_id = "pidgey"
+level = 6
+display_name = "Pidgey"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 40.0
+
+[node name="Jigglypuff" parent="Entities/Pokemon" unique_id=939158028 instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(2352, 528)
+overworld_pokemon_id = "kanto_route_3_jigglypuff_1"
+species_id = "jigglypuff"
+display_name = "Jigglypuff"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 36.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
