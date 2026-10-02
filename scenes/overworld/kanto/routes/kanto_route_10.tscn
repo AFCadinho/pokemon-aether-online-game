@@ -10,6 +10,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
 size = Vector2(32, 32)
@@ -370,6 +371,33 @@ display_name = "Poké Maniac Herman"
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1826864528]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
+
+[node name="Voltorb" parent="Entities/Pokemon" unique_id=190000185 instance=ExtResource("pokemon")]
+position = Vector2(848, 496)
+overworld_pokemon_id = "kanto_route_10_voltorb_1"
+species_id = "voltorb"
+level = 14
+display_name = "Voltorb"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Ekans" parent="Entities/Pokemon" unique_id=190000569 instance=ExtResource("pokemon")]
+position = Vector2(1104, 2576)
+overworld_pokemon_id = "kanto_route_10_ekans_1"
+species_id = "ekans"
+level = 13
+display_name = "Ekans"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1241571794]
 visible = false

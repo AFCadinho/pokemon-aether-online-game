@@ -8,6 +8,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
@@ -286,6 +287,33 @@ display_name = "Poké Maniac Cooper"
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1513431613]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000003]
+
+[node name="Cubone" parent="Entities/Pokemon" unique_id=190000205 instance=ExtResource("pokemon")]
+position = Vector2(1712, 848)
+overworld_pokemon_id = "kanto_rock_tunnel_b1f_cubone_1"
+species_id = "cubone"
+level = 12
+display_name = "Cubone"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Onix" parent="Entities/Pokemon" unique_id=190000593 instance=ExtResource("pokemon")]
+position = Vector2(2032, 848)
+overworld_pokemon_id = "kanto_rock_tunnel_b1f_onix_1"
+species_id = "onix"
+level = 16
+display_name = "Onix"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1188324121]
 visible = false
