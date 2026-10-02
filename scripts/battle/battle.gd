@@ -8316,6 +8316,11 @@ func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
 func _show_npc_trainer(trainer_sprite: BattleTrainerSprite, trainer_data: Dictionary, facing_direction: Vector2) -> void:
 	if trainer_sprite == null:
 		return
+	var appearance_value: Variant = trainer_data.get("_battle_appearance", null)
+	if appearance_value is Dictionary and not (appearance_value as Dictionary).is_empty():
+		trainer_sprite.show_player(appearance_value as Dictionary, facing_direction)
+		_hide_trainer_between_non_immersive_callouts(trainer_sprite)
+		return
 	var sprite_offset := Vector2(0.0, -16.0)
 	var sprite_offset_value: Variant = trainer_data.get("_battle_sprite_offset", sprite_offset)
 	if sprite_offset_value is Vector2:
