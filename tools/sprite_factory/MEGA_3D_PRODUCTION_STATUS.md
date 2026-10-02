@@ -1,31 +1,33 @@
 # Mega 3D catalog production
 
-Updated 2026-10-02. The final section records local admission of 71 additional
-Mega pairs. This task does not upload, activate a release, or publish models.
+Updated 2026-10-02. The final sections record local admission and R2 publication
+of 71 additional Mega pairs, plus a source audit of the remaining 25 forms.
 
 ## Catalog coverage
 
 The Pokédex lists **97 Mega form variants across 87 base Pokémon**. Mega
 Dragonite was the only approved normal/shiny Mega bundle at intake. With this
-local admission there are now 72 qualified Mega pairs, with 25 source holds.
+local admission there are now 72 qualified Mega pairs. At that point 25 source
+mappings were held. The source audit at the end of this document has since
+identified candidates for 24 entries; one gender-specific mapping is still
+unconfirmed, and none of these candidates has been through production.
 
 The connected `LegendsZAPkmnModelDumpWithDLC.rar` contains matching model
 resources for **72 variants**. Mega Dragonite is already approved, so the
 production run produced **71 additional normal/shiny candidate pairs**. This
 includes Mega Hawlucha (`pm0701_11_00`), which was initially missed because its
-model uses an alternate resource code. The remaining **25 variants across 21
-Pokémon** still lack a safely confirmed Mega source mapping:
+model uses an alternate resource code. The original production intake left
+**25 variants across 21 Pokémon** without a safely confirmed Mega source map:
 
 - Chesnaught, Delphox, Greninja, Pyroar, Floette, Meowstic (male and female),
   Malamar, Barbaracle, Dragalge, Zygarde, Crabominable, Golisopod,
   Drampa, Magearna (both forms), Zeraora, Falinks, Scovillain, Glimmora,
   Tatsugiri (all three forms), and Baxcalibur, and Diancie.
 
-The local Scarlet/Violet dump and the attached Biochao packs were checked for
-matching Mega resource identities; that intake did not fill the 25-form gap.
-This is a mapping hold, not proof that every missing model is absent from the
-archive. Alternate resource codes and rejected source identities need further
-investigation before those forms can go through production.
+The local Scarlet/Violet dump and the attached Biochao packs did not fill the
+gap under the expected Pokédex resource IDs. This is a mapping hold, not proof
+that the models are absent from the archive. A later scan found alternate
+developer numbers; see the source audit below.
 
 ## Candidate run
 
@@ -213,3 +215,36 @@ historical local admission evidence.
 The active desktop manifest was unchanged. These bundles are staged for a
 future release; this publication does not activate them for current clients.
 The 25 unresolved source mappings remain outside this published cohort.
+
+## Audit of the remaining 25 Mega sources
+
+The 2026-10-02 audit found candidate ZA source resources for 24 of the 25
+remaining form entries. These resources use developer numbers rather than
+Pokédex numbers. The Gen 6–8 developer-number tables and visual comparison of
+normal-form and Mega source icons identify the alternate codes. A complete
+model-resource scan found 22 unique Mega resources for these entries.
+
+| Form entries | ZA source resource |
+| --- | --- |
+| Chesnaught, Delphox, Greninja, Pyroar, Floette | `pm0722_51_00`, `pm0719_51_00`, `pm0725_51_00`, `pm0705_51_00`, `pm0714_51_00` respectively |
+| Meowstic male and female | `pm0734_51_00` (male icon matches; female mapping needs its own gender check) |
+| Malamar, Barbaracle, Dragalge, Zygarde, Diancie | `pm0727_51_00`, `pm0748_51_00`, `pm0710_51_00`, `pm0770_51_00`, `pm0772_51_00` respectively |
+| Crabominable, Golisopod, Drampa | `pm0860_51_00`, `pm0867_51_00`, `pm0856_51_00` respectively |
+| Magearna, Magearna Original | `pm0882_51_00`, `pm0882_52_00` respectively |
+| Zeraora, Falinks | `pm0888_51_00`, `pm0923_51_00` respectively |
+| Scovillain, Glimmora, Tatsugiri (Curly, Droopy, Stretchy), Baxcalibur | `pm1043_51_00`, `pm1071_51_00`, `pm1056_51_00` (three icon variants), `pm1055_51_00` respectively |
+
+Each of the 22 unique resources contains a model, meshes, rig, normal and shiny
+material tables, and the selected idle, attack, special attack, damage and
+faint clips. The audit found no native sleep clip or second physical attack in
+these sources; the existing Mega rest-pose fallback can be considered during
+production. Meowstic female still needs a gender-specific match, and Tatsugiri
+needs a runtime check that all three shared-resource variants select the right
+geometry and materials.
+
+The sources are mapped but not processed or qualified. The current production
+adapter rejects a source resource whose developer number differs from the
+Pokédex number. Before running these candidates, update the adapter to accept
+the explicit mapped resource ID and keep source number separate from species
+number. The full evidence and per-form mapping are in
+`catalog_mega_25_source_audit.json`.
