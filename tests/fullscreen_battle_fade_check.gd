@@ -4,12 +4,12 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	await _check_fullscreen_slide(root.get_node("SettingsManager"))
+	await _check_fullscreen_fade(root.get_node("SettingsManager"))
 	await _check_world_handoff(root.get_node("SettingsManager"))
-	print("fullscreen_battle_slide_check: PASS")
+	print("fullscreen_battle_fade_check: PASS")
 	quit()
 
-func _check_fullscreen_slide(settings: Node) -> void:
+func _check_fullscreen_fade(settings: Node) -> void:
 	var previous_layout: String = settings.battle_ui_layout
 	settings.battle_ui_layout = "immersive"
 	settings.battle_presentation_mode = "2d"
@@ -19,7 +19,7 @@ func _check_fullscreen_slide(settings: Node) -> void:
 	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(host)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
-	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_SLIDE, false, snapshot)
+	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE, false, snapshot)
 	await create_timer(0.1).timeout
 	assert(host.preparation_ready and host.reveal_tween == null, "Scene readiness alone must not reveal unprepared battle data")
 	assert(host.get_node("Cover").color.a == 0.0, "Fullscreen loading never uses a black cover")
@@ -29,41 +29,43 @@ func _check_fullscreen_slide(settings: Node) -> void:
 		host.size = screen_size
 		host._fit_battle()
 		for progress in [0.0, 0.25, 0.5, 0.75, 1.0]:
-			host.slide_progress = progress
+			host.fade_progress = progress
 			var incoming := host.get_node("Content") as Control
 			var outgoing: TextureRect = host.outgoing_snapshot
-			assert(is_equal_approx(outgoing.position.x + outgoing.size.x, incoming.position.x), "Outgoing and incoming screens meet without gaps")
-			assert(is_equal_approx(host.get_node("Backdrop").position.x, incoming.position.x), "Battle background slides with its content")
-	# Capture the halfway seam on a rendered run.
+			assert(incoming.position == Vector2.ZERO and outgoing.position == Vector2.ZERO, "Fade keeps both screens stationary")
+			assert(outgoing.size.is_equal_approx(screen_size), "World image covers the complete viewport")
+			assert(is_equal_approx(outgoing.modulate.a, 1.0 - progress), "World image dissolves directly into the battle")
+			assert(host.get_node("Backdrop").position == Vector2.ZERO and incoming.modulate.a == 1.0, "Battle stays fully rendered underneath the world image")
+	# Capture the halfway blend on a rendered run.
 	host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	host._fit_battle()
-	host.slide_progress = 0.5
+	host.fade_progress = 0.5
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	if not output.is_empty() and DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png(output + "/fullscreen-slide-halfway.png")
-	host.slide_progress = 0.0
+		root.get_texture().get_image().save_png(output + "/fullscreen-fade-halfway.png")
+	host.fade_progress = 0.0
 	host.request_reveal()
 	await host.wait_until_revealed()
-	assert(host.slide_progress == 1.0 and host.outgoing_snapshot.texture == null, "Completed slide releases the outgoing image")
-	assert(not battle.has_meta("battle_screen_preparing"), "Battle input readiness is released after the slide")
+	assert(host.fade_progress == 1.0 and host.outgoing_snapshot.texture == null, "Completed fade releases the outgoing image")
+	assert(not battle.has_meta("battle_screen_preparing"), "Battle input readiness is released after the fade")
 	host.release()
 	host.queue_free()
 	await process_frame
-	# Cancel during the slide, as a disconnect/world teardown would.
+	# Cancel during the fade, as a disconnect/world teardown would.
 	host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(host)
 	battle = load("res://scenes/battle/battle.tscn").instantiate()
-	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_SLIDE, false, snapshot)
+	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE, false, snapshot)
 	host.request_reveal()
 	await process_frame
 	host.release()
 	await host.wait_until_revealed()
-	assert(host.outgoing_snapshot.texture == null, "Interrupted slides release their snapshot")
+	assert(host.outgoing_snapshot.texture == null, "Interrupted fades release their snapshot")
 	host.queue_free()
 	await process_frame
 	settings.battle_ui_layout = previous_layout
-	print("FULLSCREEN_SLIDE_COVERAGE_AND_CANCELLATION_OK")
+	print("FULLSCREEN_FADE_COVERAGE_AND_CANCELLATION_OK")
 
 
 func _check_world_handoff(settings: Node) -> void:
@@ -100,11 +102,11 @@ func _check_world_handoff(settings: Node) -> void:
 	assert(overlay.visible and overlay.is_processing_input(), "Battle teardown restores the world UI")
 	# An ended encounter must not make a replay/resume wait for an entry callback.
 	assert(world._mount_battle_ui())
-	assert(world.battle_screen_host.reveal_requested, "Inactive slide styles cannot block later mounts")
+	assert(world.battle_screen_host.reveal_requested, "Inactive fade styles cannot block later mounts")
 	world._clear_battle_ui_instance()
 	world.set_script(null)
 	world.queue_free()
 	transition.queue_free()
 	await process_frame
 	settings.battle_ui_layout = previous_layout
-	print("FULLSCREEN_SLIDE_WORLD_HANDOFF_OK")
+	print("FULLSCREEN_FADE_WORLD_HANDOFF_OK")
