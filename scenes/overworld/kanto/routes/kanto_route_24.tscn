@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://difpptfuv50c0" path="res://scripts/world/kanto/routes/nugget_bridge_recruiter.gd" id="14_recruiter"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="15_ewpku"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_path_exit"]
 size = Vector2(128, 32)
@@ -498,6 +499,16 @@ movement_wait_seconds = 1.6
 movement_speed_pixels = 38.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=185431822]
+[node name="TMAttract" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1376, 576)
+pickup_id = "kanto_route_24_tm_attract"
+item_id = "tm-attract"
+
+[node name="PechaBerry" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1376, 512)
+pickup_id = "kanto_route_24_pecha_berry"
+item_id = "pecha-berry"
+
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=348208063]
 

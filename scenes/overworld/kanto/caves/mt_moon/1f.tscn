@@ -433,6 +433,13 @@ npc_sprite_frames = ExtResource("13_bug_catcher")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1226891690]
 
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Revive" parent="Entities/Interactables" instance=ExtResource("14_item")]
+position = Vector2(2512, 848)
+pickup_id = "kanto_mt_moon_1f_revive"
+item_id = "revive"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]

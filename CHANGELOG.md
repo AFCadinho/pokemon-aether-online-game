@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Routes 3, 4, 6, 9, 10, 11, 21, 24 and 25, Cerulean City, Mt. Moon B1F and Cerulean Cave now include the missing original-game overworld pickups; unsupported TM43, TM62 and TM69 are represented by Great Balls.
 - Immersive wild battles berekenen de uiteindelijke elementgroottes vóór de fade, zodat arena, Pokémon en HUD niet eerst groot verschijnen en daarna verkleinen.
 
 - Wild battles tonen hun arena en starten de fullscreen fade al tijdens het opslaan van de positie en ophalen van de battlegegevens. De tegenstander en acties verschijnen pas zodra de echte gegevens beschikbaar zijn.
