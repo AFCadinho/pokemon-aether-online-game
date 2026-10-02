@@ -1,0 +1,148 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_house_1/assets/lavender_house_1.visual.tileset.compact_source_1_0.texture.res" id="1_jlcoc"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_house_1/assets/lavender_house_1.visual.tileset.compact_source_1025_0.texture.res" id="2_wdf56"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_house_1/assets/lavender_house_1.visual.tileset.compact_source_2049_0.texture.res" id="3_34au0"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_house_1/assets/lavender_house_1.visual.tileset.compact_source_3073_0.texture.res" id="4_bg8s3"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_house_1/assets/lavender_house_1.visual.tileset.compact_source_4097_0.texture.res" id="5_7x74q"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1rkv4"]
+texture = ExtResource("1_jlcoc")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjtaf"]
+texture = ExtResource("2_wdf56")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0e1pg"]
+texture = ExtResource("3_34au0")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p1rqo"]
+texture = ExtResource("4_bg8s3")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n26sd"]
+texture = ExtResource("5_7x74q")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/1 = SubResource("TileSetAtlasSource_1rkv4")
+sources/1025 = SubResource("TileSetAtlasSource_fjtaf")
+sources/2049 = SubResource("TileSetAtlasSource_0e1pg")
+sources/3073 = SubResource("TileSetAtlasSource_p1rqo")
+sources/4097 = SubResource("TileSetAtlasSource_n26sd")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/lavender_town/normal_house/Lavender Home.tmx"
+metadata/tiled_compact_atlas_version = 1

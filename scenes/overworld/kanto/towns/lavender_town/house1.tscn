@@ -1,0 +1,90 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_house_1/lavender_house_1.visual.tscn" id="visual"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+
+[sub_resource type="RectangleShape2D" id="shape_exit"]
+size = Vector2(96, 32)
+
+[sub_resource type="TileSetAtlasSource" id="collision_atlas"]
+texture = ExtResource("collision_marker")
+texture_region_size = Vector2i(32, 32)
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="collision_tileset"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("collision_atlas")
+
+[node name="House1" type="Node2D"]
+script = ExtResource("metadata")
+map_id = "kanto_lavender_town_house_1"
+map_region_name = "Kanto"
+map_display_name = "Lavender Town House 1"
+world_access_group_id = "kanto_lavender_town"
+world_access_group_label = "Lavender Town"
+world_access_area_type = "interior"
+location_id = "kanto.lavender_town.house_1"
+location_name = "Lavender Town House 1"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.lavender_town"
+
+[node name="Visual" parent="." instance=ExtResource("visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("floor_mask")
+floor_regions = {&"ground_floor": Rect2(0, 0, 832, 768)}
+follow_player_floor = false
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromLavenderTown" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 592)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToOutside" type="Area2D" parent="Exits"]
+position = Vector2(400, 624)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
+target_spawn_name = "FromHouse1"
+transition_id = "kanto_lavender_town_house_1__to_outside"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside"]
+shape = SubResource("shape_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("hint")]
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="Tiles" type="Node2D" parent="."]
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+editor_description = "Empty collision layer: paint the room boundaries and furniture here. Collision is intentionally left for the map author."
+visible = false
+z_index = 4096
+tile_set = SubResource("collision_tileset")
+
+[connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]
