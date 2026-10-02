@@ -242,9 +242,43 @@ production. Meowstic female still needs a gender-specific match, and Tatsugiri
 needs a runtime check that all three shared-resource variants select the right
 geometry and materials.
 
-The sources are mapped but not processed or qualified. The current production
-adapter rejects a source resource whose developer number differs from the
-Pokédex number. Before running these candidates, update the adapter to accept
-the explicit mapped resource ID and keep source number separate from species
-number. The full evidence and per-form mapping are in
-`catalog_mega_25_source_audit.json`.
+This source-mapping audit preceded the production step below. Its per-form
+identity evidence remains in `catalog_mega_25_source_audit.json`.
+
+
+## Remaining Mega production: 24 pairs visually accepted
+
+The assigned `slot-c` task produced 24 normal/shiny pairs: 48 standalone SCNs,
+336 native clips, and zero native pose/timing errors. The source adapter now
+separates audited developer numbers from catalog Pokédex numbers and rejects
+changed identity icons, incorrect species/form matches and unconfirmed gender
+mappings. Existing approved Mega entries were not rebuilt or replaced.
+
+Zygarde's duplicate exported energy/head surface was resolved with a strict
+native material binding. Magearna Original references 17 textures from the
+same Pokémon's other Mega source; staging and hashes are recorded. Greninja's
+small water palette needs a reviewed static blue surface translation.
+
+The user accepted 23 appearances on the combined native review page and then
+accepted revised Diancie separately. Diancie's authored crystal facet images
+were missing from the initial plain-colour conversion. The corrected static
+PBR translation restores them, and a two-sided thin material restores the
+white veil triangles that disappeared when facing away from the camera.
+Geometry, UV accessors, skins and animation data remain unchanged. Both fixed
+variants pass native pose/timing checks. Native camera-dependent crystal
+Fresnel/parallax is still a static approximation, explicitly reviewed.
+
+`catalog_mega_24_candidate_production.json` binds approvals to exact model,
+scene and review evidence hashes. Battle placement checks are underway; no
+battle, performance, bundle-install or runtime admission is claimed yet.
+The existing default 71-pair battle gates now also accept an explicit cohort
+size while still requiring unique, complete approved normal/shiny pairs and
+the unchanged 60/120 Hz, floor, camera and HUD checks.
+
+All sources lack a second physical attack and native sleep clip; the approved
+sleep proposal uses each Mega's own rest loop. Tatsugiri's three catalog form
+IDs share the source containing all three fish, rather than fabricated separate
+geometry or colours. Female Mega Meowstic remains outside this cohort because
+its gender-specific source identity is still unconfirmed. The qualified total
+therefore remains 72 Mega pairs until these 24 complete battle and runtime
+qualification. No publication or release activation was performed here.

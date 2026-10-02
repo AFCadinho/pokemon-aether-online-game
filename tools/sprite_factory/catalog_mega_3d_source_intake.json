@@ -6,10 +6,10 @@
   "summary": {
     "mega_form_variants": 97,
     "base_species": 87,
-    "source_available_forms": 72,
-    "source_missing_forms": 25,
-    "source_available_species": 66,
-    "source_missing_species": 21
+    "source_available_forms": 96,
+    "source_missing_forms": 1,
+    "source_available_species": 87,
+    "source_missing_species": 1
   },
   "entries": [
     {
@@ -1503,50 +1503,100 @@
       "name": "chesnaught-mega",
       "pokedex_number": 652,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0722_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 722
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "delphoxmega",
       "name": "delphox-mega",
       "pokedex_number": 655,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0719_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 719
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "greninjamega",
       "name": "greninja-mega",
       "pokedex_number": 658,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0725_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 725
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "pyroarmega",
       "name": "pyroar-mega",
       "pokedex_number": 668,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0705_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 705
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "floettemega",
       "name": "floette-mega",
       "pokedex_number": 670,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0714_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 714
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "meowsticfmega",
@@ -1563,40 +1613,80 @@
       "name": "meowstic-m-mega",
       "pokedex_number": 678,
       "forme": "M-Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0734_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 734
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "malamarmega",
       "name": "malamar-mega",
       "pokedex_number": 687,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0727_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 727
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "barbaraclemega",
       "name": "barbaracle-mega",
       "pokedex_number": 689,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0748_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 748
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "dragalgemega",
       "name": "dragalge-mega",
       "pokedex_number": 691,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0710_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 710
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "hawluchamega",
@@ -1627,158 +1717,301 @@
       "name": "zygarde-mega",
       "pokedex_number": 718,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0770_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 770
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "dianciemega",
       "name": "diancie-mega",
       "pokedex_number": 719,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_identity_mismatch",
+      "source_resource_id": "pm0772_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
       "production_approved": false,
       "source_identity_evidence": {
-        "status": "rejected_visual_identity_mismatch",
-        "archive_member": "pm0719/pm0719_51_00/icon/pm0719_51_00_00_0.png",
-        "sha256": "c909ce73440596a927d1e65f9195aacf09d6768c08f2902f06f519b96aea90df",
+        "status": "audited_candidate_identity_match",
         "not_final_appearance_approval": true,
-        "reason": "Archive icon and generated mesh show a fox with fire/stick meshes, not Mega Diancie."
+        "developer_number": 772
       },
-      "rejected_source_resource_id": "pm0719_51_00"
+      "rejected_source_resource_id": "pm0719_51_00",
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "crabominablemega",
       "name": "crabominable-mega",
       "pokedex_number": 740,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0860_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 860
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "golisopodmega",
       "name": "golisopod-mega",
       "pokedex_number": 768,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0867_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 867
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "drampamega",
       "name": "drampa-mega",
       "pokedex_number": 780,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0856_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 856
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "magearnamega",
       "name": "magearna-mega",
       "pokedex_number": 801,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0882_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 882
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "magearnaoriginalmega",
       "name": "magearna-original-mega",
       "pokedex_number": 801,
       "forme": "Original-Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0882_52_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 882
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "zeraoramega",
       "name": "zeraora-mega",
       "pokedex_number": 807,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0888_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 888
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "falinksmega",
       "name": "falinks-mega",
       "pokedex_number": 870,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm0923_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 923
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "scovillainmega",
       "name": "scovillain-mega",
       "pokedex_number": 952,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1043_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1043
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "glimmoramega",
       "name": "glimmora-mega",
       "pokedex_number": 970,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1071_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1071
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "tatsugiricurlymega",
       "name": "tatsugiri-curly-mega",
       "pokedex_number": 978,
       "forme": "Curly-Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1056_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1056
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "tatsugiridroopymega",
       "name": "tatsugiri-droopy-mega",
       "pokedex_number": 978,
       "forme": "Droopy-Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1056_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1056
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "tatsugiristretchymega",
       "name": "tatsugiri-stretchy-mega",
       "pokedex_number": 978,
       "forme": "Stretchy-Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1056_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1056
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     },
     {
       "showdown_id": "baxcaliburmega",
       "name": "baxcalibur-mega",
       "pokedex_number": 998,
       "forme": "Mega",
-      "source_resource_id": null,
-      "source_status": "source_missing",
+      "source_resource_id": "pm1055_51_00",
+      "source_status": "za_dump_produced_appearance_approved_battle_pending",
       "approved_3d_bundle": null,
-      "production_approved": false
+      "production_approved": false,
+      "source_mapping_audit": {
+        "path": "catalog_mega_25_source_audit.json",
+        "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+      },
+      "source_identity_evidence": {
+        "status": "audited_candidate_identity_match",
+        "not_final_appearance_approval": true,
+        "developer_number": 1055
+      },
+      "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json"
     }
   ]
 }

@@ -28,10 +28,16 @@ func _measure(entry: Dictionary, model: Node3D, player: AnimationPlayer) -> Dict
 		var source := OS.get_environment("POKEAETHER_PHASE5_REVIEW").path_join("catalog.json")
 		assert(report.catalog_sha256 == FileAccess.get_sha256(source))
 		assert(report.runtime_catalog_sha256 == FileAccess.get_sha256(OS.get_environment("POKEAETHER_PHASE5_RUNTIME_REPORT")))
+		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(source))
 		for row: Dictionary in report.entries:
 			if row.has("clips"):
+				assert(not source_measurements.has(row.species))
 				source_measurements[row.species] = row
-		assert(source_measurements.size() == 142)
+		assert(source_measurements.size() == catalog.entries.size() - 1)
+		for candidate: Dictionary in catalog.entries:
+			if candidate.species != "dragonite":
+				assert(source_measurements.has(candidate.species))
+				assert(source_measurements[candidate.species].glb_sha256 == candidate.glb_sha256)
 	# Uniformly scale the already-measured 60 Hz data. The inherited validator
 	# still samples every actual SCN at 120 Hz, including idle, independently.
 	var original: Dictionary = source_measurements[entry.species]

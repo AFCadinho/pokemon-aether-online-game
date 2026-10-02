@@ -22,6 +22,7 @@ from scvi_tracm import inspect_tracm, inspect_visibility
 from visibility_export import keys as visibility_keys
 from visibility_variants import mesh_name
 from catalog_mega_material_depth import repair as restore_material_depth
+from scvi_material_probe import inspect_materials
 
 HERE = Path(__file__).resolve().parent
 FRONTEND = HERE.parents[1]
@@ -54,12 +55,225 @@ def load_rows():
     return json.loads(INTAKE.read_text())["entries"]
 
 
+def source_number(row, root: Path) -> int:
+    """Keep catalog dex and source developer number separate, with audit evidence."""
+    ident = row["source_resource_id"]
+    if not re.fullmatch(r"pm\d{4}_\d{2}_\d{2}", ident):
+        raise ValueError("Malformed explicit source resource ID")
+    number = int(ident[2:6])
+    evidence = row.get("source_mapping_audit")
+    if evidence:
+        audit_path = HERE / "catalog_mega_25_source_audit.json"
+        if evidence.get("path") != audit_path.name or evidence.get("sha256") != sha(audit_path):
+            raise ValueError("Source mapping audit provenance mismatch")
+        audit = json.loads(audit_path.read_text())
+        matches = [r for r in audit["entries"] if r["showdown_id"] == row["showdown_id"]]
+        if len(matches) != 1:
+            raise ValueError("Source mapping audit does not uniquely identify this form")
+        match = matches[0]
+        if (match["source_mapping_status"] != "candidate_identity_match"
+                or match["source_resource_id"] != ident
+                or int(match["pokedex_number"]) != int(row["pokedex_number"])
+                or match["species"] != row["name"]
+                or match["dev_number_mapping_evidence"]["developer_number"] != number
+                or audit["source_archive"]["sha256"] != json.loads(INTAKE.read_text())["mega_model_source_archive_sha256"]):
+            raise ValueError("Source identity differs from the audited catalog form")
+        for icon in audit["source_resources"][ident]["normal_and_shiny_icon_evidence"]:
+            path = root / icon["archive_member"]
+            if not path.is_file() or sha(path) != icon["sha256"]:
+                raise ValueError("Audited source identity icon missing or changed")
+    elif number != int(row["pokedex_number"]):
+        raise ValueError("Alternate developer number requires an explicit source mapping audit")
+    return number
+
+
+def material_aliases(row, raw: Path, table: Path):
+    """Zygarde's shared energy/head surface exports twice for distinct UV sets."""
+    if row["showdown_id"] != "zygardemega" or row["source_resource_id"] != "pm0770_51_00":
+        return {}
+    document, _ = chunks(raw)
+    indices = [i for i, material in enumerate(document["materials"]) if material["name"] == "body_e"]
+    if len(indices) != 2:
+        raise ValueError("Zygarde shared surface does not match the investigated export")
+    uses = {mesh["name"] for mesh in document["meshes"]
+            for primitive in mesh["primitives"] if primitive.get("material") in indices}
+    if uses != {"pm0770_51_00_energy_mesh_shape", "pm0770_51_00_head_mesh_shape"}:
+        raise ValueError("Zygarde shared material has unexpected geometry bindings")
+    source = next(r for r in inspect_materials(table) if r["name"] == "body_e")
+    expected = Path(source["textures"]["BaseColorMap"]).stem
+    bindings = []
+    for index in indices:
+        binding = document["materials"][index]["pbrMetallicRoughness"]["baseColorTexture"]
+        texture = document["textures"][binding["index"]]
+        image = document["images"][texture["source"]]
+        if expected not in image.get("name", ""):
+            raise ValueError("Zygarde shared surface does not bind its native albedo")
+        bindings.append(binding)
+    if bindings[0] != bindings[1]:
+        raise ValueError("Zygarde shared surface albedo bindings differ")
+    return {"body_e": "body_e"}
+
+
+def prepare_source_dependencies(row, root: Path):
+    """Stage native shared textures from the same Pokémon's source resources."""
+    ident = row["source_resource_id"]
+    directory = root / ident[:6] / ident
+    dependencies = []
+    for suffix in ("", "_rare"):
+        table = directory / (ident + suffix + ".trmtr")
+        for material in inspect_materials(table):
+            for texture in material["textures"].values():
+                filename = Path(texture).with_suffix(".png").name
+                target = directory / filename
+                if target.is_file():
+                    continue
+                match = re.match(r"(pm\d{4}_\d{2}_\d{2})_", filename)
+                # Common importer-provided defaults are not model resources.
+                if not match:
+                    continue
+                dependency_id = match.group(1)
+                if dependency_id[:6] != ident[:6]:
+                    raise ValueError("Shared texture points to a different Pokémon source number")
+                origin = root / ident[:6] / dependency_id / filename
+                if not origin.is_file():
+                    raise ValueError("Native shared texture dependency missing: " + filename)
+                expected = sha(origin)
+                target.write_bytes(origin.read_bytes())
+                if sha(target) != expected:
+                    raise ValueError("Shared texture staging hash mismatch")
+                dependencies.append({"filename": filename,
+                    "source_resource": dependency_id, "sha256": expected})
+    receipt = directory / "source-dependencies.json"
+    if dependencies:
+        write(receipt, {"identity": ident, "policy": "native_same_species_texture_references",
+                        "dependencies": dependencies})
+    if receipt.is_file():
+        previous = json.loads(receipt.read_text())
+        if previous["identity"] != ident:
+            raise ValueError("Shared texture receipt identity mismatch")
+        for item in previous["dependencies"]:
+            origin = root / ident[:6] / item["source_resource"] / item["filename"]
+            if sha(origin) != item["sha256"] or sha(directory / item["filename"]) != item["sha256"]:
+                raise ValueError("Native shared texture dependency changed")
+        return {"path": str(receipt), "sha256": sha(receipt),
+                "count": len(previous["dependencies"])}
+    return None
+
+
+def restore_water_palette(row, target: Path, table: Path):
+    """Review-only Greninja water palette translation; no native shader claim."""
+    if row["showdown_id"] != "greninjamega" or row["source_resource_id"] != "pm0725_51_00":
+        return None
+    from io import BytesIO
+    from PIL import Image
+    from catalog_remaining_eye_bake import append_png, linear_to_srgb, write_glb
+    from phase5_variant_parity import signature
+    before = signature(target)
+    document, binary = chunks(target)
+    source = {r["name"]: r for r in inspect_materials(table)}
+    restored = []
+    for material in document["materials"]:
+        if material["name"] not in ("body_c_00", "body_c_01"):
+            continue
+        native = source[material["name"]]
+        albedo = table.parent / Path(native["textures"]["BaseColorMap"]).with_suffix(".png").name
+        with Image.open(albedo) as palette:
+            if palette.size != (16, 2) or native["alpha_type"] != "Opaque":
+                raise ValueError("Greninja native water palette differs from the investigated source")
+        # This tiny palette is not a complete UV-square albedo. A direct bake
+        # otherwise paints its empty palette cells black across the water mesh.
+        # Preserve the native blue layer as a static surface proposal instead.
+        tint = native["colors"]["BaseColorLayer1"]
+        colour = tuple(linear_to_srgb(v) for v in tint[:3]) + (255,)
+        image = Image.new("RGBA", (2, 2), colour)
+        output = BytesIO()
+        image.save(output, format="PNG")
+        binding = material["pbrMetallicRoughness"]["baseColorTexture"]
+        previous = document["textures"][binding["index"]]
+        binding["index"] = append_png(document, binary, output.getvalue(),
+                                     material["name"] + "_native_water_colour", previous.get("sampler", 0))
+        material["alphaMode"] = "OPAQUE"
+        material["doubleSided"] = True
+        restored.append(material["name"])
+    if set(restored) != {"body_c_00", "body_c_01"}:
+        raise ValueError("Greninja water surface coverage is incomplete")
+    write_glb(target, document, binary)
+    if signature(target) != before:
+        raise ValueError("Water palette translation changed mesh, UV, skin or motion")
+    return {"policy": "native_palette_colour_as_static_water", "materials": restored,
+            "limitation": "Native tiny albedo palette/UV shader is represented by its source blue layer colour; visual approval required."}
+
+
+def restore_crystal_detail(row, target: Path, table: Path):
+    """Diancie review proposal: retain authored facets as a static PBR surface."""
+    if row["showdown_id"] != "dianciemega" or row["source_resource_id"] != "pm0772_51_00":
+        return None
+    from io import BytesIO
+    from PIL import Image, ImageChops
+    from catalog_remaining_eye_bake import append_png, linear_to_srgb, write_glb
+    from phase5_variant_parity import signature
+    before = signature(target)
+    document, binary = chunks(target)
+    source = {r["name"]: r for r in inspect_materials(table)}
+    records = []
+    expected = {"body_d_00": "fresnel_a", "body_d_01": "fresnel_b",
+                "body_d_02": "fresnel_b"}
+    for material in document["materials"]:
+        name = material["name"]
+        if name not in expected:
+            continue
+        native = source[name]
+        texture_name = Path(native["textures"]["BaseColorMap1"]).with_suffix(".png").name
+        texture = table.parent / texture_name
+        if (texture_name != row["source_resource_id"] + "_" + expected[name] + "_alb.png"
+                or not any(s["name"] == "FresnelEffect" for s in native["shaders"])
+                or native["alpha_type"] != "Opaque"
+                or native["colors"]["UVScaleOffset1"] != [1, 1, 0, 0]):
+            raise ValueError("Diancie native crystal layer differs from the investigated source")
+        with Image.open(texture) as image:
+            if image.size != (512, 512):
+                raise ValueError("Unexpected Diancie crystal detail texture size")
+            tint = tuple(linear_to_srgb(v) for v in native["colors"]["BaseColorLayer1"][:3])
+            colour = ImageChops.multiply(image.convert("RGB"), Image.new("RGB", image.size, tint))
+        packed = BytesIO()
+        colour.save(packed, format="PNG")
+        pbr = material["pbrMetallicRoughness"]
+        previous = document["textures"][pbr["baseColorTexture"]["index"]]
+        index = append_png(document, binary, packed.getvalue(), name + "_native_crystal_facets",
+                           previous.get("sampler", 0))
+        # UV1 contains the exporter's atlas, whereas this authored 512-square
+        # image is a full crystal pattern. Use the original mesh UV0 for this
+        # static approximation; native camera parallax is not reproduced.
+        pbr["baseColorTexture"] = {"index": index, "texCoord": 0}
+        pbr["baseColorFactor"] = [1, 1, 1, 1]
+        material["alphaMode"] = "OPAQUE"
+        records.append({"material": name, "texture": texture_name, "sha256": sha(texture)})
+    if {r["material"] for r in records} != set(expected):
+        raise ValueError("Diancie crystal detail coverage is incomplete")
+    veil_index = next(i for i, m in enumerate(document["materials"]) if m["name"] == "body_c")
+    veil_meshes = {mesh["name"] for mesh in document["meshes"]
+                   for primitive in mesh["primitives"] if primitive.get("material") == veil_index}
+    prefix = row["source_resource_id"]
+    if (veil_meshes != {prefix + "_innerskirt_a_mesh_shape", prefix + "_veil_left_a_mesh_shape",
+                       prefix + "_veil_right_a_mesh_shape"}
+            or source["body_c"]["alpha_type"] != "Opaque"):
+        raise ValueError("Diancie thin veil surface differs from the investigated export")
+    # The veil is a thin sheet; culling its reverse-facing triangles leaves
+    # apparently broken ribbons as the native animation bends each sheet.
+    document["materials"][veil_index]["doubleSided"] = True
+    write_glb(target, document, binary)
+    if signature(target) != before:
+        raise ValueError("Crystal detail translation changed mesh, UV, skin or motion")
+    return {"policy": "native_facet_texture_static_pbr_uv0", "materials": records,
+            "two_sided_thin_surface": {"material": "body_c", "meshes": sorted(veil_meshes)},
+            "limitation": "Authored facet textures and layer colour retained; native view-dependent Fresnel/parallax is approximated statically. Visual approval required."}
+
+
 def import_and_export(row, root: Path, folder: Path):
     ident = row["source_resource_id"]
-    dex = int(row["pokedex_number"])
-    if not re.fullmatch(rf"pm{dex:04d}_\d{{2}}_\d{{2}}", ident):
-        raise ValueError("Explicit source ID does not match the intake's base dex number")
-    entry = source_entry({"species": row["showdown_id"], "pm": dex,
+    number = source_number(row, root)
+    dependencies = prepare_source_dependencies(row, root)
+    entry = source_entry({"species": row["showdown_id"], "pm": number,
                           "resource_id": ident, "target_game_height_px": 100}, root, root)
     fatal = [w for w in entry["warnings"]
              if w.startswith("motion_bank_hold:") and ":sleep:" not in w
@@ -147,6 +361,8 @@ def import_and_export(row, root: Path, folder: Path):
         raise ValueError("Review GLB receipt mismatch")
 
     variants = {}
+    water_translation = None
+    crystal_translation = None
     for variant, suffix in (("normal", ""), ("shiny", "_rare")):
         table = model_dir / (ident + suffix + ".trmtr")
         if not table.is_file():
@@ -155,9 +371,12 @@ def import_and_export(row, root: Path, folder: Path):
         target_dir.mkdir(exist_ok=True)
         target = target_dir / "model.glb"
         if not target.is_file():
-            rebuild(raw, target, table)
+            aliases = material_aliases(row, raw, table)
+            rebuild(raw, target, table, aliases=aliases)
             restore_fresnel(target, table)
             restore_material_depth(target, target, table)
+            water_translation = restore_water_palette(row, target, table)
+            crystal_translation = restore_crystal_detail(row, target, table)
         compare(raw, target)
         variants[variant] = {"path": str(target), "sha256": sha(target),
                              "table": str(table), "table_sha256": sha(table)}
@@ -171,6 +390,14 @@ def import_and_export(row, root: Path, folder: Path):
             "cross_bank_sleep_review_required": cross_bank_sleep,
             "native_rest_sleep_review_required": native_rest_sleep,
             "warnings": imported.get("channel_warnings", []) + imported.get("facial_inheritance_warnings", [])}
+    if row["showdown_id"] == "zygardemega":
+        result["shared_material_binding"] = {"body_e": "native energy/head surface; two exported UV variants"}
+    if dependencies:
+        result["native_shared_texture_dependencies"] = dependencies
+    if water_translation:
+        result["water_surface_translation"] = water_translation
+    if crystal_translation:
+        result["crystal_surface_translation"] = crystal_translation
     result["visibility"] = visibility_manifest(raw, exported, job, ident)
     return result
 
@@ -286,7 +513,9 @@ def convert_pair(row, result, root: Path, slot_env: Path, folder: Path,
     write(stage_path, stage)
     runtime = folder / runtime_name
     report_path = runtime / "report.json"
-    command = [str(slot_env), "slot-a", "--", "godot", "--headless", "--path",
+    if SLOT.name not in ("slot-a", "slot-b", "slot-c"):
+        raise ValueError("Mega runtime conversion requires an assigned task slot")
+    command = [str(slot_env), SLOT.name, "--", "godot", "--headless", "--path",
                str(FRONTEND), "--script", "tools/sprite_factory/prepare_battle_3d_runtime.gd"]
     env = os.environ.copy()
     env.update(POKEAETHER_3D_STAGE_REPORT=str(stage_path), POKEAETHER_3D_RUNTIME_OUTPUT=str(runtime))

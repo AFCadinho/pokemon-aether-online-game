@@ -1,0 +1,1388 @@
+{
+  "schema": 1,
+  "production_date": "2026-10-02",
+  "status": "24_pairs_appearance_approved_battle_qualification_pending",
+  "source_audit": {
+    "path": "catalog_mega_25_source_audit.json",
+    "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
+  },
+  "source_archive_sha256": "1436f8d94c390a2ceb9f60a44596023c1c79ea911f10c3eacf80e7ed02223ccc",
+  "summary": {
+    "candidate_pairs": 24,
+    "standalone_scenes": 48,
+    "native_clips": 336,
+    "native_pose_timing_errors": 0,
+    "native_pose_captures": 384,
+    "qualified_mega_pairs_unchanged": 72,
+    "source_identity_holds": [
+      "meowsticfmega"
+    ],
+    "appearance_approved_pairs": 24,
+    "appearance_review_pending_pairs": []
+  },
+  "native_check_scope": "Hash-bound SCN loading, action durations, finite posed geometry at beginning/middle/end, reverse-order pose independence, rendered poses with neutral reflection sky. No battle scale/floor/HUD/performance or install qualification claimed.",
+  "local_artifacts": {
+    "slot": "slot-c",
+    "production_status": ".tmp/mega-24-production/production-final-v3/status.json",
+    "production_status_sha256": "b33a9cc554643326909f5922c186ff3e45fcaecbba32a2a23a63d64406424052",
+    "native_review": ".tmp/mega-24-production/native-review-v2/index.html",
+    "native_catalog_sha256": "da1df7367607a41f57018339012be21707c289df3bb7c267d684cc5e292847e4",
+    "native_pose_report_sha256": "5203040111db618060318b5eda93347d496b7a69549793868de04e149e53ca6b",
+    "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+    "animation_review": ".tmp/mega-24-production/animated-review-v2/index.html",
+    "review_url": "http://127.0.0.1:8796/native-review-v2/",
+    "native_review_scope": "Original joint review binds the 23 unchanged accepted pairs. Diancie acceptance binds its separately corrected v2 scenes and comparison evidence below."
+  },
+  "production_tools_sha256": {
+    "catalog_mega_3d_production.py": "3475f4d4645fbbb44c892d09306916e8759e5ca151956b06615f373753d06484",
+    "catalog_mega_candidate_review.py": "53e4659b609337871f9d717d1fdc54b78a2879ee896ce20fd5bf4e38a848add0",
+    "catalog_mega_candidate_runtime_review.gd": "15b120493f0cb1eb7da8812c1fb24dc342fa491112ac6e150bacb21507a4eefe",
+    "catalog_mega_3d_review_page.py": "d52697a84ac8fd7e35134d63fd31cafb4d0c4bf558c7ec697fad75dfabec0f5a",
+    "catalog_mega_battle_stage.py": "88b5321822a1333c52e8eb1f6d3ac0413ba6f2ec28f8999eae2689cb981eaf4d",
+    "catalog_mega_battle_calibrate.py": "408b4110f4f03a68ca09d4fe78831a3f2ff56666745e6866f45a0773af0dc241",
+    "catalog_mega_battle_page.py": "ff0396e45327366f92145b09177ea26ccdbb28da9ad8bdb7da30c69d3a1b842b",
+    "catalog_mega_battle_review.gd": "364a76558a9812678723c3381ba3e08fcd43e52ffc55f4120107a1a3aae17a6f",
+    "catalog_mega_battle_qualification.py": "bfe5ef4eb7da37de245eece0b8ce04502bf2761faddcca9e479b86599f24c231",
+    "catalog_mega_battle_final_evidence.py": "a87ce2156f933e569625dad29f829b31e431e7819ef10107494c619360ef43f2"
+  },
+  "appearance_approved": true,
+  "battle_approved": false,
+  "runtime_approved": false,
+  "published": false,
+  "entries": [
+    {
+      "showdown_id": "chesnaughtmega",
+      "source_resource_id": "pm0722_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "d7c342ad116e91ce11f693b206e7d0d8b2dd09880ba337ead7e64b5ce869b9aa",
+      "export_report_sha256": "ef346e4932f1b86b06874a08e52a7007917157efbaa67c5e2133f53d5ecd83df",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:10",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:10",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:10",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:10",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:10",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:10",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:10"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "230b24bb7b1e45c5012a5616857602e7bc5fc6ba360b1320586ac44c4fcf5cc0",
+          "material_table_sha256": "0db5d4bf73fe097e1a13270ed2586eb573143395cc4b65f3f272823d65d4ae75",
+          "runtime_sha256": "74aa1b3c0ed13e411bc34dd1ad20c97ebc92539aa74b093100bebe2e9382b951"
+        },
+        "shiny": {
+          "glb_sha256": "a0986ac609141ba9c86a1d2cb83fbd48fec6626b777892a181393a4273a83bac",
+          "material_table_sha256": "25f60304710c512069fe4165a135d80daba5589dad5ebae6066f99bb9eb5a109",
+          "runtime_sha256": "1878b2f8968497b3169ce12260689f318b36a24d6850d3974c3d86d17593cb3b"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "delphoxmega",
+      "source_resource_id": "pm0719_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "3ef11bc1bd10ed1ba898f3c5ab7f169895cc4d6b581c8256f84ff4c848a5fce9",
+      "export_report_sha256": "383827772224fcd86e10a1c9aac5b52a57ef51fa37b6688ba1466f4fb4cc9f71",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:5",
+        "unapplied_tracm_visibility:idle:14",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:14",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:14",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:14",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:14",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:14",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:14"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "8f5118b54b05977162933c2ea5c73120e32e7887bf70e3a6c32f4804dbd4b038",
+          "material_table_sha256": "88089bad7b9b1f9bdf62d28a183956b3a72274890584fa03269f3c4f598334e7",
+          "runtime_sha256": "934c869ea812ce38a81c5d3be0e9666e64df131da52a69305161def2de3633e3"
+        },
+        "shiny": {
+          "glb_sha256": "f2f960246acfc43658cba4f8fd0108aefb8dad1a57ff70d24d5df85dc52c6863",
+          "material_table_sha256": "ffae009e67d31db1d2768953acf318aec72602966003529adebc1df1fedbbce8",
+          "runtime_sha256": "d0442e7aa7d25dc3b3e8c39c8b3dfd2cf537fdddd1bc0a0ee7a133cfee3c9d2d"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "greninjamega",
+      "source_resource_id": "pm0725_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "b89a0ea41b3c95646fc165d61ccde41feb4204e8164b87643c60e287ed7cd569",
+      "export_report_sha256": "1540190a796a8118c54a0196ccf98d013fe02b2920e9983247abdfbd2812adb5",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:8",
+        "unapplied_tracm_visibility:idle:32",
+        "unapplied_tracm_material:physical_attack:8",
+        "unapplied_tracm_visibility:physical_attack:32",
+        "unapplied_tracm_material:special_attack:8",
+        "unapplied_tracm_visibility:special_attack:32",
+        "unapplied_tracm_material:damage:8",
+        "unapplied_tracm_visibility:damage:32",
+        "unapplied_tracm_material:sleep:8",
+        "unapplied_tracm_visibility:sleep:32",
+        "unapplied_tracm_material:faint_start:8",
+        "unapplied_tracm_visibility:faint_start:32",
+        "unapplied_tracm_material:faint_loop:8",
+        "unapplied_tracm_visibility:faint_loop:32",
+        "inherited_eyelid_pose:idle:left_lower_eyelid,left_lower_eyelid_sub,right_lower_eyelid,right_lower_eyelid_sub",
+        "inherited_eyelid_pose:physical_attack:left_lower_eyelid,left_lower_eyelid_sub,right_lower_eyelid,right_lower_eyelid_sub",
+        "inherited_eyelid_pose:special_attack:left_lower_eyelid,left_lower_eyelid_sub,right_lower_eyelid,right_lower_eyelid_sub",
+        "inherited_eyelid_pose:sleep:left_upper_eyelid",
+        "inherited_eyelid_pose:faint_start:left_upper_eyelid",
+        "inherited_eyelid_pose:faint_loop:left_upper_eyelid"
+      ],
+      "material_notes": {
+        "water_surface_translation": {
+          "policy": "native_palette_colour_as_static_water",
+          "materials": [
+            "body_c_00",
+            "body_c_01"
+          ],
+          "limitation": "Native tiny albedo palette/UV shader is represented by its source blue layer colour; visual approval required."
+        }
+      },
+      "variants": {
+        "normal": {
+          "glb_sha256": "8b4d1ab50c6b9849591192b54664d7fd6c6c32b0d48288d96f3dc9ddba8bf57a",
+          "material_table_sha256": "cd48097e746c5cdb43ae8ffcde383aaa38a6b78f6617ddc2a68f8fca29c804a6",
+          "runtime_sha256": "1149cf54c0dd799f4ecdd4585ea44e79158947ed83bf429e77177fb25293260d"
+        },
+        "shiny": {
+          "glb_sha256": "c314e47c9de95d0555e086d351005b59240c43d098145bff62fbee63fc374e15",
+          "material_table_sha256": "fbfd2d8964affad93527e48616f3cac0f72aa4eea5eb4133a232bf4bcff3867f",
+          "runtime_sha256": "1cb822ea1affd2be296225e1baa891665db7a4092c6669dd1dc3c382277dd363"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "pyroarmega",
+      "source_resource_id": "pm0705_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "98bee0e7d6f6345461620c8df7855dd923b6cd1d8bc0c850d3056930509a0e5a",
+      "export_report_sha256": "8cbbdcc982b5701d2ca79dc38ea2093c6486d653e778a3013b1579a9c0bf48b0",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:12",
+        "unapplied_tracm_visibility:idle:32",
+        "unapplied_tracm_material:physical_attack:12",
+        "unapplied_tracm_visibility:physical_attack:32",
+        "unapplied_tracm_material:special_attack:12",
+        "unapplied_tracm_visibility:special_attack:32",
+        "unapplied_tracm_material:damage:12",
+        "unapplied_tracm_visibility:damage:32",
+        "unapplied_tracm_material:sleep:12",
+        "unapplied_tracm_visibility:sleep:32",
+        "unapplied_tracm_material:faint_start:12",
+        "unapplied_tracm_visibility:faint_start:32",
+        "unapplied_tracm_material:faint_loop:12",
+        "unapplied_tracm_visibility:faint_loop:32",
+        "inherited_eyelid_pose:idle:left_lower_eyelid_e_02,right_lower_eyelid_e_02",
+        "inherited_eyelid_pose:physical_attack:left_lower_eyelid_e_02,right_lower_eyelid_e_02",
+        "inherited_eyelid_pose:special_attack:left_lower_eyelid_e_02,right_lower_eyelid_e_02",
+        "inherited_eyelid_pose:sleep:left_lower_eyelid_f_02,right_lower_eyelid_f_02",
+        "inherited_eyelid_pose:faint_loop:left_lower_eyelid_f_02,right_lower_eyelid_f_02"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "e79b6f83a80f37cb50f8de526661bd84c59a2c55149c46dd8618e4a2d7f578ee",
+          "material_table_sha256": "f0faa5497ce602b67e830bb557125da4f4eb11ff27cb4ca1a7fd47aa98ad5464",
+          "runtime_sha256": "0db5e44c226f347b4005095684544395574eb308e3ae400355f49bfef8ecde0d"
+        },
+        "shiny": {
+          "glb_sha256": "8ec90f9ac7df6152276b17a6c331c42a7035d89cb34466120eaba9fc2e183369",
+          "material_table_sha256": "88e001810589c93ccc0e56512077ad19dad6af6e0e281aec2454824e2b56494a",
+          "runtime_sha256": "c5256bca335c03da50748ef20fb0764eddfd6e5312a6f85a38f9a453f82bc92b"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "floettemega",
+      "source_resource_id": "pm0714_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "efc9a615259b6302ace4fe8649efbc70cce029e98a10321d59136b3917290f60",
+      "export_report_sha256": "613de20c300ab254b7ec49c5771203ea13f4c41357fdc37864f1441dca757b69",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:8",
+        "unapplied_tracm_visibility:idle:21",
+        "unapplied_tracm_material:physical_attack:8",
+        "unapplied_tracm_visibility:physical_attack:21",
+        "unapplied_tracm_material:special_attack:8",
+        "unapplied_tracm_visibility:special_attack:21",
+        "unapplied_tracm_material:damage:8",
+        "unapplied_tracm_visibility:damage:21",
+        "unapplied_tracm_material:sleep:8",
+        "unapplied_tracm_visibility:sleep:21",
+        "unapplied_tracm_material:faint_start:8",
+        "unapplied_tracm_visibility:faint_start:21",
+        "unapplied_tracm_material:faint_loop:8",
+        "unapplied_tracm_visibility:faint_loop:21",
+        "inherited_eyelid_pose:idle:left_lower_eyelid_a_01,left_lower_eyelid_a_02,left_lower_eyelid_b_01,left_lower_eyelid_b_02,left_lower_eyelid_c_01,left_lower_eyelid_c_02,left_lower_eyelid_d_01,left_lower_eyelid_e_01,left_upper_eyelid_d_01,left_upper_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_a_01,right_lower_eyelid_a_02,right_lower_eyelid_b_01,right_lower_eyelid_b_02,right_lower_eyelid_c_01,right_lower_eyelid_c_02,right_lower_eyelid_d_01,right_lower_eyelid_e_01,right_upper_eyelid_d_01,right_upper_eyelid_e_01",
+        "inherited_eyelid_pose:physical_attack:left_lower_eyelid_a_01,left_lower_eyelid_a_02,left_lower_eyelid_b_01,left_lower_eyelid_b_02,left_lower_eyelid_c_01,left_lower_eyelid_c_02,left_lower_eyelid_d_01,left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_a_01,right_lower_eyelid_a_02,right_lower_eyelid_b_01,right_lower_eyelid_b_02,right_lower_eyelid_c_01,right_lower_eyelid_c_02,right_lower_eyelid_d_01,right_lower_eyelid_e_01",
+        "inherited_eyelid_pose:special_attack:left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_e_01",
+        "inherited_eyelid_pose:damage:left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_e_01",
+        "inherited_eyelid_pose:sleep:left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_e_01",
+        "inherited_eyelid_pose:faint_start:left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_e_01",
+        "inherited_eyelid_pose:faint_loop:left_lower_eyelid_e_01,pm0714_51_00_eyelid_mesh,pm0714_51_00_eyelid_mesh_lod1,pm0714_51_00_eyelid_mesh_lod2,right_lower_eyelid_e_01"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "db516caa8fa209fb1ace7b5c339c7815ee7adc1822626092af917542cc01d2e3",
+          "material_table_sha256": "d87a605cd9bc2f2ac63f19ec26288d6f4e6dd84598a5c8ddd248deceb2127ffe",
+          "runtime_sha256": "8007b79a00c3c9314be4e5087f0398dfc6d19cea37bb8a90697a2c60be7e1633"
+        },
+        "shiny": {
+          "glb_sha256": "216329a542a43df76ea9d846da63b059c70f59aef092ebb15348c7db696764dd",
+          "material_table_sha256": "7bc789048427fc9ebdcf3155e032cf534ae312c51b5e64a77d250b338bda8726",
+          "runtime_sha256": "9cfd80f01ebaed451d7bc39cf01e171ece6cfbabe19cc77a15a789bdfbd4033c"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "meowsticmmega",
+      "source_resource_id": "pm0734_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "c982482ecdbe1f51dc5123643c55595c377bc273c6ba7466da6a6444c64c83a4",
+      "export_report_sha256": "d932a5137c6e14531309d42c952773866deab1c5c1f3119beedd8a126535d8c3",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:8",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:8",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:8",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:8",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:8",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:8",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:8"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "4085a285e3392597a61748b9b72e7065e395e50f0b9521b5d56381846523b722",
+          "material_table_sha256": "54c86ae23aa03669aec1572bee299de64629263569cf06a8e9041d78b08a0b8d",
+          "runtime_sha256": "f4f027b533389eb806e9244f7a208f949e10824e1be0149c1bdbf1db94dd4e19"
+        },
+        "shiny": {
+          "glb_sha256": "af193b476bbae39803db34ee2b5dc8b00b2f7748bba66a6083921ef3dee577e6",
+          "material_table_sha256": "63823b847e312a81f460300431d586efed16e234fa419d5c1b8a9619ad0acdda",
+          "runtime_sha256": "cb37f417093ad6bbd60b9d3bac02e26a7c8c05f525ac9a4c0ff902ee500a5285"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "malamarmega",
+      "source_resource_id": "pm0727_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "e8bf4f21e675c89e46005929a4b962e91c685d43ed974f975f52af32480363a7",
+      "export_report_sha256": "8a6430a29036f378e66efc5daceaaeafa8c29dd58a86ddb97e5303203847a2ba",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:10",
+        "unapplied_tracm_visibility:idle:8",
+        "unapplied_tracm_material:physical_attack:10",
+        "unapplied_tracm_visibility:physical_attack:8",
+        "unapplied_tracm_material:special_attack:10",
+        "unapplied_tracm_visibility:special_attack:8",
+        "unapplied_tracm_material:damage:10",
+        "unapplied_tracm_visibility:damage:8",
+        "unapplied_tracm_material:sleep:10",
+        "unapplied_tracm_visibility:sleep:8",
+        "unapplied_tracm_material:faint_start:10",
+        "unapplied_tracm_visibility:faint_start:8",
+        "unapplied_tracm_material:faint_loop:10",
+        "unapplied_tracm_visibility:faint_loop:8",
+        "inherited_eyelid_pose:idle:pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:physical_attack:pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:special_attack:pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:damage:pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:sleep:left_lower_eyelid,left_lower_eyelid_01,left_lower_eyelid_02,left_lower_eyelid_03,left_upper_eyelid,left_upper_eyelid_01,left_upper_eyelid_02,left_upper_eyelid_03,pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3,right_lower_eyelid,right_lower_eyelid_01,right_lower_eyelid_02,right_lower_eyelid_03,right_upper_eyelid,right_upper_eyelid_01,right_upper_eyelid_02,right_upper_eyelid_03",
+        "inherited_eyelid_pose:faint_start:pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_loop:left_lower_eyelid,left_lower_eyelid_01,left_lower_eyelid_02,left_lower_eyelid_03,left_upper_eyelid,left_upper_eyelid_01,left_upper_eyelid_02,left_upper_eyelid_03,pm0727_51_00_eyelid_mesh,pm0727_51_00_eyelid_mesh_lod1,pm0727_51_00_eyelid_mesh_lod2,pm0727_51_00_eyelid_mesh_lod3,right_lower_eyelid,right_lower_eyelid_01,right_lower_eyelid_02,right_lower_eyelid_03,right_upper_eyelid,right_upper_eyelid_01,right_upper_eyelid_02,right_upper_eyelid_03"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "2a85b9ab44b0eab9966eefc1d3c78423c221547637d73bf65782317c54eb6716",
+          "material_table_sha256": "4fe24eff0c058a47681910faa1df367ecb9a1c0e549809dd28d219493e8bea46",
+          "runtime_sha256": "6a5af46440490e16ad2d72672ff39d74c898bd07191ec3c59fa9e1726c07da23"
+        },
+        "shiny": {
+          "glb_sha256": "e9cc5ab0e25a85067fdfa0bd4b2b43c1deebfbefde823cd17c7fb00ab36c7802",
+          "material_table_sha256": "74261f7901c9092eaaa617eed97a069079a4553425911e44a10d36c09acf4955",
+          "runtime_sha256": "725435a9ca1c413e74e2e9567c54cefc01720be994a798872ca220a0ebae076b"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "barbaraclemega",
+      "source_resource_id": "pm0748_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "cf8d88d228f9c036f25fb46641826aa84c3fb1863fba97ec17b378db6cb984b4",
+      "export_report_sha256": "39ba98c6342e49f008124bb3e53c346316fe6a635f7f38560cb86b36463cfb64",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:31",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:31",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:31",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:31",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:31",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:31",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:31"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "44a35ab6e7bd9267e1390c5f8bdc86b90f7d89d3d2a8330ca5575e1f99dd6fa2",
+          "material_table_sha256": "f08d327bf28c30d92900547ecc28d093321ea42dfd4803bdbb07aeacd065b591",
+          "runtime_sha256": "8b26d45e06b9b0d8baacd412dd51004388f6c37a4a93b4679751761fdd1c1ea2"
+        },
+        "shiny": {
+          "glb_sha256": "32a2712ad65a8c2fc25b80d2a90d4f1c8412663bc4161228dd408b083a49bc55",
+          "material_table_sha256": "acce375dc916c25000a2060ff54158b2c0eee53f431aa1c7cc3b966f90618e4c",
+          "runtime_sha256": "60281ef2a6368164ae64212b839180af63145b44bf966f85c742ed291177a3c1"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "dragalgemega",
+      "source_resource_id": "pm0710_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "20f59f56d9b15424dfc95d1fc70b417c63659ee926bd8ccc6cdf893f16c9c505",
+      "export_report_sha256": "e1546a835cce33ed84ba6a0e925d4bf16ae84d1bc8f1765930cc130c012379b6",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:7",
+        "unapplied_tracm_visibility:idle:32",
+        "unapplied_tracm_material:physical_attack:7",
+        "unapplied_tracm_visibility:physical_attack:32",
+        "unapplied_tracm_material:special_attack:7",
+        "unapplied_tracm_visibility:special_attack:32",
+        "unapplied_tracm_material:damage:7",
+        "unapplied_tracm_visibility:damage:32",
+        "unapplied_tracm_material:sleep:7",
+        "unapplied_tracm_visibility:sleep:32",
+        "unapplied_tracm_material:faint_start:7",
+        "unapplied_tracm_visibility:faint_start:32",
+        "unapplied_tracm_material:faint_loop:7",
+        "unapplied_tracm_visibility:faint_loop:32"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "f073edf3b3eea8d22c9583297e3d298cc49debbaaeb096d8dfa62a4ed8c3a525",
+          "material_table_sha256": "eba6d3a11a92914554eff1afd22721d82b400c645eccc700373318853711a539",
+          "runtime_sha256": "2655cc0d553d230a625c8a825f641dd89b04bdc81369f3b11f9f9a85b6812ae4"
+        },
+        "shiny": {
+          "glb_sha256": "c904a9ec36a7c2664961c71ac8c3b0d1c07a919168bfafdd3914051fbc3979ce",
+          "material_table_sha256": "dda31ca3c34bc94535b19127bcb5d292f3ad0fdf39ca159ed6ef8fb0823355ff",
+          "runtime_sha256": "9f6aa142a9a9cfd25ec440248650b46d878c74379f93d6cb18824440db27eb9b"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "zygardemega",
+      "source_resource_id": "pm0770_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "048df1371c5e65763902100c7358fee0c7967dc7d9fb63706c9b0148223c1589",
+      "export_report_sha256": "08b2d2a4d58983a1cd850a3bb74b5507deb94b6dc20670ecff909764e226b885",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:12",
+        "unapplied_tracm_visibility:idle:9",
+        "unapplied_tracm_material:physical_attack:12",
+        "unapplied_tracm_visibility:physical_attack:9",
+        "unapplied_tracm_material:special_attack:12",
+        "unapplied_tracm_visibility:special_attack:9",
+        "unapplied_tracm_material:damage:12",
+        "unapplied_tracm_visibility:damage:9",
+        "unapplied_tracm_material:sleep:12",
+        "unapplied_tracm_visibility:sleep:9",
+        "unapplied_tracm_material:faint_start:12",
+        "unapplied_tracm_visibility:faint_start:9",
+        "unapplied_tracm_material:faint_loop:12",
+        "unapplied_tracm_visibility:faint_loop:9"
+      ],
+      "material_notes": {
+        "shared_material_binding": {
+          "body_e": "native energy/head surface; two exported UV variants"
+        }
+      },
+      "variants": {
+        "normal": {
+          "glb_sha256": "c4f64469dc2a1917c065492860abb3f1b6f05268e3806952b0d5adca98007168",
+          "material_table_sha256": "540500834158c3f1c519faf798360bded5ba2a6bdd70b4364ffad954d96830c5",
+          "runtime_sha256": "d48541e0db89f02bc395329b043e3a4db19847b0ded6a44c4eacceeb05f272ac"
+        },
+        "shiny": {
+          "glb_sha256": "2388ce1728cfe6759f2deca833630cbe1429f38a1262a9aca6290f8091ede8a9",
+          "material_table_sha256": "77a14ca5b9b8bd6739cdd205e7c8a8b59f9d1b9ef40d0ffbdeac41e9a5594360",
+          "runtime_sha256": "bb16e72d6cd56f5b5b86db46511aecd02748536da166e54db9744231df36a557"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "dianciemega",
+      "source_resource_id": "pm0772_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "bf7787a9a26092f5363a0814fa82b937c604a497fa5e7f995d7a60e30e6694df",
+      "export_report_sha256": "7ffc77edcb8ff363f65885cc4311d935955b01798d080278165941ef31bb4e76",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:15",
+        "unapplied_tracm_visibility:idle:12",
+        "unapplied_tracm_material:physical_attack:15",
+        "unapplied_tracm_visibility:physical_attack:12",
+        "unapplied_tracm_material:special_attack:15",
+        "unapplied_tracm_visibility:special_attack:12",
+        "unapplied_tracm_material:damage:15",
+        "unapplied_tracm_visibility:damage:12",
+        "unapplied_tracm_material:sleep:15",
+        "unapplied_tracm_visibility:sleep:12",
+        "unapplied_tracm_material:faint_start:15",
+        "unapplied_tracm_visibility:faint_start:12",
+        "unapplied_tracm_material:faint_loop:15",
+        "unapplied_tracm_visibility:faint_loop:12"
+      ],
+      "material_notes": {
+        "crystal_surface_translation": {
+          "policy": "native_facet_texture_static_pbr_uv0",
+          "materials": [
+            {
+              "material": "body_d_01",
+              "texture": "pm0772_51_00_fresnel_b_alb.png",
+              "sha256": "95af9b16210b1aaab07aa4f5abf76d965202fd71337fb85b582e27d8dc15d76c"
+            },
+            {
+              "material": "body_d_00",
+              "texture": "pm0772_51_00_fresnel_a_alb.png",
+              "sha256": "443394c1fed643dde19654b6437e9c8beaa0df7c1e6353a7c94adfedfc2c87f9"
+            },
+            {
+              "material": "body_d_02",
+              "texture": "pm0772_51_00_fresnel_b_alb.png",
+              "sha256": "95af9b16210b1aaab07aa4f5abf76d965202fd71337fb85b582e27d8dc15d76c"
+            }
+          ],
+          "two_sided_thin_surface": {
+            "material": "body_c",
+            "meshes": [
+              "pm0772_51_00_innerskirt_a_mesh_shape",
+              "pm0772_51_00_veil_left_a_mesh_shape",
+              "pm0772_51_00_veil_right_a_mesh_shape"
+            ]
+          },
+          "limitation": "Authored facet textures and layer colour retained; native view-dependent Fresnel/parallax is approximated statically. Visual approval required."
+        }
+      },
+      "variants": {
+        "normal": {
+          "glb_sha256": "33a8a8ce0cb5d0aba631822a21c3ee32c55aa337989310b7f93e721d6641706e",
+          "material_table_sha256": "87e7e474278bce97de53e3744637f414cc9d077114cf928cb07127ab10164baa",
+          "runtime_sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8"
+        },
+        "shiny": {
+          "glb_sha256": "8e254b793e255276445fe06decc581bff28bc06e8cc76e11748553d51a5691b5",
+          "material_table_sha256": "3ec62d9a224b85d4f3c9b361d6d00f2a19354b4605c9a7083447bd8d6800ab13",
+          "runtime_sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "user_response": "Diancie goed",
+        "review_url": "http://127.0.0.1:8796/diancie-detail-review-v2/",
+        "review_manifest_sha256": "8eeba26c85e7125173131f215e8c391be7ec877089e070679d9639add76c5b58",
+        "comparison_manifest_sha256": "f116718be05173627df4e02e8eaf00ce274217bfa8bec223336b4c0f3fa421cc",
+        "scope": "Normal/shiny appearance and native poses including complete two-sided veil; battle remains pending."
+      }
+    },
+    {
+      "showdown_id": "crabominablemega",
+      "source_resource_id": "pm0860_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "75cf331e8c2151983dfef7898cafaff11e54fb2c155f47e056441f37eccb9b88",
+      "export_report_sha256": "17349daf6853a61378d50ecf52164bbf3a151ae1af31790c7ea73a30cba167fb",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:8",
+        "unapplied_tracm_visibility:idle:24",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:6",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:6",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:6",
+        "unapplied_tracm_material:sleep:8",
+        "unapplied_tracm_visibility:sleep:24",
+        "unapplied_tracm_material:faint_start:8",
+        "unapplied_tracm_visibility:faint_start:24",
+        "unapplied_tracm_material:faint_loop:8",
+        "unapplied_tracm_visibility:faint_loop:24"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "d829ac10b7427356ceecce0cf9e3600facdc5e90256d18d7bac610c6f264e5a1",
+          "material_table_sha256": "2fdd263fd37f6d4ac2204bcf2d4eebbd1b44f600a7d66dabe1a193c5d5701049",
+          "runtime_sha256": "ae55c76683c5ec339aabea76f2392f0bd307961b5abc6a4525e276a3314a957d"
+        },
+        "shiny": {
+          "glb_sha256": "bdf1faa5cb9f83dc4d6c45e1820b12ef866d11049b8a2cf359c1eb40a103f11b",
+          "material_table_sha256": "6c93ec8560bc21e126891628706ee644b92d7284584765a0ec743f8484308a72",
+          "runtime_sha256": "6d6e6e989c4539141ab209632e74a2518e5f1dc4f03321fdeda96e83f631d28c"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "golisopodmega",
+      "source_resource_id": "pm0867_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "6ccd8797d2974c3c178a55426ba6c5e47d437649794dca20d038f968e26f388e",
+      "export_report_sha256": "424df84a93d51076f69a2a28a395a177c00f27741acdba3250ee498d2ce3d6cc",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:11",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:11",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:11",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:11",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:11",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:11",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:11",
+        "inherited_eyelid_pose:idle:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:physical_attack:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:special_attack:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:damage:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:sleep:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_start:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_loop:pm0867_51_00_eyelid_mesh,pm0867_51_00_eyelid_mesh_lod1,pm0867_51_00_eyelid_mesh_lod2,pm0867_51_00_eyelid_mesh_lod3"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "01a92f68f77e59c4c4b6907f2b6a7cdea7e1318c037ca02f9d47c378378d5a28",
+          "material_table_sha256": "9fac1909b884a108b99dfe469abaa6afd051efcf7d411bd5441bcad4d780b9a4",
+          "runtime_sha256": "9ac5e95f94a6d8045bdd8ec41aa787c1495ca09ea9d69402fb965ccb0206f01a"
+        },
+        "shiny": {
+          "glb_sha256": "afd14f73d314841a33dbe788cd072818360d14061bf01a6766cf67135f05b2b3",
+          "material_table_sha256": "374193d9150242671c20bc4c58ccd0a0a12500f2f6816133056e37d37bd38bee",
+          "runtime_sha256": "56f5af6e51323c2c28067b0b9cb20b1be6a3e18bfe9c574430cd7aee7c59a908"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "drampamega",
+      "source_resource_id": "pm0856_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "5a0d87ea0e2d12b78c603435df189fb963b8e76bd5cb6fceac257a9e43f556c4",
+      "export_report_sha256": "6652c841672d4d15b027c64bbf0c5f3913bb5d65e42183867435c511177f2f41",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_visibility:idle:7",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:7",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:7",
+        "unapplied_tracm_visibility:damage:7",
+        "unapplied_tracm_visibility:sleep:7",
+        "unapplied_tracm_visibility:faint_start:7",
+        "unapplied_tracm_visibility:faint_loop:7"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "b4f22ee6d5213b87afac11d28384ffe2335d5d91ddb4fdb5af47b904eb0b9a00",
+          "material_table_sha256": "f0cd056cf88f24d3a838086951f646b14e71166d017f0d12a78eb995a6e2d2f4",
+          "runtime_sha256": "c33d251dc567b5e7e8d01bf5c194910d9b5f39f7823679672a9250080b971c18"
+        },
+        "shiny": {
+          "glb_sha256": "dd66c4e311d3da74e9bc406f0806d68bf6a30af7eab533df9b8fd07c70d47d14",
+          "material_table_sha256": "c4c6731fa8a9ad1080b2fcc3b30798b201210003867afd1c37ac7a910a8b828f",
+          "runtime_sha256": "4a3338f05e111b186afdfdd8725148b0c52314750fb98e4038122ff4cb63b1fa"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "magearnamega",
+      "source_resource_id": "pm0882_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "312686d65f23e9f4c996fb63d554461f0a8b583872caf61a61657a0062606da7",
+      "export_report_sha256": "c0dafc5b98744c0288eda86579c11f4290a905a504a60878cb416630e12022c0",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:11",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:11",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:11",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:11",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:11",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:11",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:11",
+        "inherited_eyelid_pose:idle:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:physical_attack:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:special_attack:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:damage:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:sleep:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_start:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_loop:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "f2ecd40bd0c3d4bf13b1de8823f76a02cc83d862c0b52a1b3a05d0f0a30dbc96",
+          "material_table_sha256": "c3dfdaa6655598e4dbcda26c8c5133ea6157dfee8500e23f39b7353bf78d6ef6",
+          "runtime_sha256": "bde30414e72a34edd7abe8c72bc972cfa2064a85bad9d3ee163331a083362551"
+        },
+        "shiny": {
+          "glb_sha256": "1a8b7c6799c655df449a18286353e286843d3789e402c811d8b08cd75af22ee8",
+          "material_table_sha256": "862fbacbe6b8568d3c88f23a0023b3b0f72446dc06dae909f2e1455999dd99a8",
+          "runtime_sha256": "818e7826a3b3989453c4e477b7444e7206579b1cc9314776b589fec289cf9c7d"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "magearnaoriginalmega",
+      "source_resource_id": "pm0882_52_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "063a8e3f842eb2276ad4d3bca6e12acb3b8f0043ae50fcfae92e708acca65380",
+      "export_report_sha256": "3716a93ef995502cc667140452778d650964903388285ef1294407e2f3e1bada",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:11",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:11",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:11",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:11",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:11",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:11",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:11",
+        "inherited_eyelid_pose:idle:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:physical_attack:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:special_attack:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:damage:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:sleep:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_start:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_loop:pm0882_51_00_eyelid_mesh,pm0882_51_00_eyelid_mesh_lod1,pm0882_51_00_eyelid_mesh_lod2,pm0882_51_00_eyelid_mesh_lod3"
+      ],
+      "material_notes": {
+        "native_shared_texture_dependencies": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/source/pm0882/pm0882_52_00/source-dependencies.json",
+          "sha256": "b06db4cca6871f2b90e85e80171bd086c991c9a9912c375101c33d4afa0de668",
+          "count": 17
+        }
+      },
+      "variants": {
+        "normal": {
+          "glb_sha256": "76f8e4429096c1d6d899b30298e00bf8bcefad50fed01120ea4e12ff50e55493",
+          "material_table_sha256": "4a92294514296448403fe82bc84cf00ab528e83b7aed39f20546989602bb47be",
+          "runtime_sha256": "35720b25a7cf498d8790021dcb2f902716af963d3366e3e46b1b28e48b491ae4"
+        },
+        "shiny": {
+          "glb_sha256": "cf9e382342cd6df2fb0beda8dfec9e0381e8b2389fc211c5c43275dac282106b",
+          "material_table_sha256": "42293b45b6fda16cd1ecf25fe63ea5e99ecdff176fc822e1dc484f6649607341",
+          "runtime_sha256": "5da6a542a52cdb0700c5862462839e98889f05c6109f65d51d46c65a28c2fdea"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "zeraoramega",
+      "source_resource_id": "pm0888_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "8769aa2eb72b67292b95fe7d69609a50b6c1be4a4f5d0b65f7181bea0471a5e1",
+      "export_report_sha256": "cd5e9fe21beb21b83ae19ac7e6240608583ca6929ebd721e4eae3a1864bc45a9",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:36",
+        "unapplied_tracm_visibility:idle:36",
+        "unapplied_tracm_material:physical_attack:36",
+        "unapplied_tracm_visibility:physical_attack:36",
+        "unapplied_tracm_material:special_attack:36",
+        "unapplied_tracm_visibility:special_attack:36",
+        "unapplied_tracm_material:damage:36",
+        "unapplied_tracm_visibility:damage:36",
+        "unapplied_tracm_material:sleep:36",
+        "unapplied_tracm_visibility:sleep:36",
+        "unapplied_tracm_material:faint_start:36",
+        "unapplied_tracm_visibility:faint_start:36",
+        "unapplied_tracm_material:faint_loop:36",
+        "unapplied_tracm_visibility:faint_loop:36"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "c34eaffdfa45176cca5781a04919f6d6631e3ac40c5786991a393f560bd6eb23",
+          "material_table_sha256": "4f5bfbba8769fdea7c6ba07c5ff156c4723c8b9093c0bdfc1f23895454361e5d",
+          "runtime_sha256": "987c1b087f8b36ccc8850c09ba596c009b42aacee15d0b807023a15f2c3abd63"
+        },
+        "shiny": {
+          "glb_sha256": "35679f063db1bc1d2c38d1043e529c4f2d8330cf85882fed066ff3623072e9c7",
+          "material_table_sha256": "b920921085867a9f24161c49275adae01522cc4313ddced45e8ee61855cce971",
+          "runtime_sha256": "2a21d294ca72c2b791a4eb3f5d941fc4de25b276823f9bfd6a26777a06f73bc5"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "falinksmega",
+      "source_resource_id": "pm0923_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "a6a1f9c27b48c71fbc8feb0c6d4a59ba17e1c03c04f41c4436da163691b645b4",
+      "export_report_sha256": "5b9287a605e5896d90e131068b2479c4722fc17bc9bc4ecd801ff37304c77144",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:28",
+        "unapplied_tracm_visibility:idle:72",
+        "unapplied_tracm_material:physical_attack:28",
+        "unapplied_tracm_visibility:physical_attack:72",
+        "unapplied_tracm_material:special_attack:28",
+        "unapplied_tracm_visibility:special_attack:72",
+        "unapplied_tracm_material:damage:28",
+        "unapplied_tracm_visibility:damage:72",
+        "unapplied_tracm_material:sleep:28",
+        "unapplied_tracm_visibility:sleep:72",
+        "unapplied_tracm_material:faint_start:28",
+        "unapplied_tracm_visibility:faint_start:72",
+        "unapplied_tracm_material:faint_loop:28",
+        "unapplied_tracm_visibility:faint_loop:72"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "2e625155d6d96f4a159c52dcdefe14565aba9c21a587da850a4bcf3175c7c54d",
+          "material_table_sha256": "50b8c1e185f84cb601300f900714f36958d382cef8df828cd3565328746235d9",
+          "runtime_sha256": "a8d28e840c6dff21b080af54b5d670007941b63dcce6e68780d609ed1f92c1e0"
+        },
+        "shiny": {
+          "glb_sha256": "cfeba86f7559c381e3d1fe741f41b341fea71ecdd5786e749d3c2b7fa4395860",
+          "material_table_sha256": "554165ef2c9b791f187826b6c8b9f3b39174cecd5ac316bf4b3e5de5a519bbff",
+          "runtime_sha256": "7bb56c20d42f236ce3a297f5464e6380c7757161723ed03f89a04e55ac8e8205"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "scovillainmega",
+      "source_resource_id": "pm1043_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "eb5cec2549219672f4736e38fcc32cae2c3ee2622556ad4c8f4ceb60c3ba54d8",
+      "export_report_sha256": "73ae186b52e5f8ba4e9729e5f08be4ca9093480be1370c2d027a1f802e949176",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:5",
+        "unapplied_tracm_visibility:idle:12",
+        "unapplied_tracm_material:physical_attack:5",
+        "unapplied_tracm_visibility:physical_attack:12",
+        "unapplied_tracm_material:special_attack:5",
+        "unapplied_tracm_visibility:special_attack:12",
+        "unapplied_tracm_material:damage:5",
+        "unapplied_tracm_visibility:damage:12",
+        "unapplied_tracm_material:sleep:5",
+        "unapplied_tracm_visibility:sleep:12",
+        "unapplied_tracm_material:faint_start:5",
+        "unapplied_tracm_visibility:faint_start:12",
+        "unapplied_tracm_material:faint_loop:5",
+        "unapplied_tracm_visibility:faint_loop:12"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "c69800dbd765d47f1ec246f4eb1f848b21c40ddb8ae725279ed8f08a10c4ff4e",
+          "material_table_sha256": "67ab20fd51ce534696632b8e21fad325286992bdbf997a00957ff3eaa9843151",
+          "runtime_sha256": "3c0c93f6c639518657514ab7e2f09093b7b94816223b11e2afaae26017dbf4f5"
+        },
+        "shiny": {
+          "glb_sha256": "7704a5e51d7a7ad2e78e1cfba575ae5fa74e94b557fe69c1f815b8f7ae95f45d",
+          "material_table_sha256": "82f5c66b57b33519ad5662331d2cd0c53b2424563254a446872099b571fe05c4",
+          "runtime_sha256": "352a1156f4207a77683ef8bd350a1f3885c6e9f99bd4a3c9429967f1587ad8c4"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "glimmoramega",
+      "source_resource_id": "pm1071_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "777f73c6118f1dcee09970527e3ad8afdd1901724d0dba4c43dabcfed724860c",
+      "export_report_sha256": "fa5cfbdb539dcdc1936393baeb83299b43c38167ac8184738f75b7524036f82c",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_visibility:idle:9",
+        "unapplied_tracm_visibility:physical_attack:9",
+        "unapplied_tracm_visibility:special_attack:9",
+        "unapplied_tracm_visibility:damage:9",
+        "unapplied_tracm_visibility:sleep:9",
+        "unapplied_tracm_visibility:faint_start:9",
+        "unapplied_tracm_visibility:faint_loop:9",
+        "inherited_eyelid_pose:idle:left_eyelid,left_root_lower_eyelid,left_root_upper_eyelid,right_eyelid,right_root_lower_eyelid,right_root_upper_eyelid",
+        "inherited_eyelid_pose:sleep:left_eyelid,left_root_lower_eyelid,left_root_upper_eyelid,right_eyelid,right_root_lower_eyelid,right_root_upper_eyelid",
+        "inherited_eyelid_pose:faint_start:left_eyelid,left_root_lower_eyelid,left_root_upper_eyelid,right_eyelid,right_root_lower_eyelid,right_root_upper_eyelid",
+        "inherited_eyelid_pose:faint_loop:left_eyelid,left_root_lower_eyelid,left_root_upper_eyelid,right_eyelid,right_root_lower_eyelid,right_root_upper_eyelid"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "622a45c507dcadffd4d02c3aa0c58caf93ba9638e18b1a7c42ec9fcc88c25d2d",
+          "material_table_sha256": "afae188c10a683c21efa202f1b6978f1e273b7d1fa6f9371e2e9ef862e451b32",
+          "runtime_sha256": "c63f99e17422ecf8d70148af76ae27f589884228799e699443d4243fadaf9e7f"
+        },
+        "shiny": {
+          "glb_sha256": "badf1a5a612f53c2f6addae1612457011adb324419fa58e9c7d6fa6c88902f2f",
+          "material_table_sha256": "c4bb3d486c8ad59c68acb928e52b0023af9c63c7dd123ecc808c35b51ea1facd",
+          "runtime_sha256": "cee9f6534371df6c9678e09b68e42b4de14a8bceeac4dd24644df40adb52710d"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "tatsugiricurlymega",
+      "source_resource_id": "pm1056_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "ef5cdb669208792484e12a0148a1655ca1e8a993288a2fb4b61786441dd38864",
+      "export_report_sha256": "8ebf15f731f76559299787fbe89e656d41be4bd874505cac1a85054c91e83f78",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:24",
+        "unapplied_tracm_visibility:idle:28",
+        "unapplied_tracm_visibility:physical_attack:28",
+        "unapplied_tracm_visibility:special_attack:28",
+        "unapplied_tracm_material:damage:24",
+        "unapplied_tracm_visibility:damage:28",
+        "unapplied_tracm_visibility:sleep:28",
+        "unapplied_tracm_visibility:faint_start:28",
+        "unapplied_tracm_visibility:faint_loop:28"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "bae63b257d85aae4c0fb1ffdd7841df5a74ab95f045dd74a1e011df8e8f07996",
+          "material_table_sha256": "a672b9d8ded00297031eed05290d201751bdf6fb0d369f71a0920193a7bd24a5",
+          "runtime_sha256": "c475980ac1fa7ffc29d738bd982ac046ce7ee430c9fbe26a6084a3a596595039"
+        },
+        "shiny": {
+          "glb_sha256": "6d830a1dd6374121a205d6b567d6c18c2beffed9d78a1d8a815ce77b5a9d82bf",
+          "material_table_sha256": "5b2909eb5a503ea6072441c28a9cc355326547f3535dcec11dc234873f5cc159",
+          "runtime_sha256": "55030edcf0018c5ca5b1f65aba2247534bfacb53a992ae35ee78d420be86e9f5"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "tatsugiridroopymega",
+      "source_resource_id": "pm1056_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "0d49d34960de2136788b4e17904f3d6926482c0deb906cf167145b7cf5907c74",
+      "export_report_sha256": "b98b7c866ce3dc25c1d1ffc670d788334385768e4c6adba0dd24c07941ab8541",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:24",
+        "unapplied_tracm_visibility:idle:28",
+        "unapplied_tracm_visibility:physical_attack:28",
+        "unapplied_tracm_visibility:special_attack:28",
+        "unapplied_tracm_material:damage:24",
+        "unapplied_tracm_visibility:damage:28",
+        "unapplied_tracm_visibility:sleep:28",
+        "unapplied_tracm_visibility:faint_start:28",
+        "unapplied_tracm_visibility:faint_loop:28"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "bae63b257d85aae4c0fb1ffdd7841df5a74ab95f045dd74a1e011df8e8f07996",
+          "material_table_sha256": "a672b9d8ded00297031eed05290d201751bdf6fb0d369f71a0920193a7bd24a5",
+          "runtime_sha256": "047d1969168c107528986940ed0b3bd262483b16c11a084d72ebd548b178fe5a"
+        },
+        "shiny": {
+          "glb_sha256": "6d830a1dd6374121a205d6b567d6c18c2beffed9d78a1d8a815ce77b5a9d82bf",
+          "material_table_sha256": "5b2909eb5a503ea6072441c28a9cc355326547f3535dcec11dc234873f5cc159",
+          "runtime_sha256": "6eeed03f01334e846d20e91f97f86a3bf08c265db58632137b01a6bb85f75ed8"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "tatsugiristretchymega",
+      "source_resource_id": "pm1056_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "8c26d7746643a779e4b8e6c14b792fc586465c6417f12f555cab91286520494a",
+      "export_report_sha256": "10e2297d8ffa85ba1fe6b146376bdcce06efabc942f2ddfe957b1b14315a1910",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:24",
+        "unapplied_tracm_visibility:idle:28",
+        "unapplied_tracm_visibility:physical_attack:28",
+        "unapplied_tracm_visibility:special_attack:28",
+        "unapplied_tracm_material:damage:24",
+        "unapplied_tracm_visibility:damage:28",
+        "unapplied_tracm_visibility:sleep:28",
+        "unapplied_tracm_visibility:faint_start:28",
+        "unapplied_tracm_visibility:faint_loop:28"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "bae63b257d85aae4c0fb1ffdd7841df5a74ab95f045dd74a1e011df8e8f07996",
+          "material_table_sha256": "a672b9d8ded00297031eed05290d201751bdf6fb0d369f71a0920193a7bd24a5",
+          "runtime_sha256": "93c4da6f2dfdd2d88994fe3769a7275c5501a23114fb5e848237bef7fa943529"
+        },
+        "shiny": {
+          "glb_sha256": "6d830a1dd6374121a205d6b567d6c18c2beffed9d78a1d8a815ce77b5a9d82bf",
+          "material_table_sha256": "5b2909eb5a503ea6072441c28a9cc355326547f3535dcec11dc234873f5cc159",
+          "runtime_sha256": "2567e0c8273d6c3046961f35c910aad7a29c0e031142a9b5178d84be36e748d4"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    },
+    {
+      "showdown_id": "baxcaliburmega",
+      "source_resource_id": "pm1055_51_00",
+      "status": "review_candidate",
+      "appearance_approved": true,
+      "battle_approved": false,
+      "runtime_approved": false,
+      "published": false,
+      "import_report_sha256": "09e84e45b418541651993bd64421a890de20d43eacb4d2255c8ee157884baf33",
+      "export_report_sha256": "6e342dcb8fbfa1abd3e02df15cef5ff76dea88ad0a7bc297759393538e4cfe03",
+      "native_rest_sleep_review_required": true,
+      "native_action_count": 7,
+      "warnings": [
+        "unapplied_tracm_material:idle:2",
+        "unapplied_tracm_visibility:idle:7",
+        "unapplied_tracm_material:physical_attack:2",
+        "unapplied_tracm_visibility:physical_attack:7",
+        "unapplied_tracm_material:special_attack:2",
+        "unapplied_tracm_visibility:special_attack:7",
+        "unapplied_tracm_material:damage:2",
+        "unapplied_tracm_visibility:damage:7",
+        "unapplied_tracm_material:sleep:2",
+        "unapplied_tracm_visibility:sleep:7",
+        "unapplied_tracm_material:faint_start:2",
+        "unapplied_tracm_visibility:faint_start:7",
+        "unapplied_tracm_material:faint_loop:2",
+        "unapplied_tracm_visibility:faint_loop:7",
+        "inherited_eyelid_pose:idle:pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:physical_attack:pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:special_attack:pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:damage:pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:sleep:left_lower_eyelid,left_upper_eyelid_a,left_upper_eyelid_b,left_upper_eyelid_c,pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3,right_lower_eyelid,right_upper_eyelid_a,right_upper_eyelid_b,right_upper_eyelid_c",
+        "inherited_eyelid_pose:faint_start:pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3",
+        "inherited_eyelid_pose:faint_loop:left_lower_eyelid,left_upper_eyelid_a,left_upper_eyelid_b,left_upper_eyelid_c,pm1055_51_00_lower_eyelid_mesh,pm1055_51_00_lower_eyelid_mesh_lod1,pm1055_51_00_lower_eyelid_mesh_lod2,pm1055_51_00_lower_eyelid_mesh_lod3,pm1055_51_00_upper_eyelid_mesh,pm1055_51_00_upper_eyelid_mesh_lod1,pm1055_51_00_upper_eyelid_mesh_lod2,pm1055_51_00_upper_eyelid_mesh_lod3,right_lower_eyelid,right_upper_eyelid_a,right_upper_eyelid_b,right_upper_eyelid_c"
+      ],
+      "material_notes": {},
+      "variants": {
+        "normal": {
+          "glb_sha256": "89ebb9c4e44a074e1e3e5f4322616aa0b0823caa33b399af8e9363fafb6f69ad",
+          "material_table_sha256": "d6c717bf07a67f39c05a7b39de5d3f9853e0f180efbee36297d31a22bc57f463",
+          "runtime_sha256": "be43036a1dba3a7856a6b8dbd4fb9a80d63623f8f5de02c696edfdd14a90f65d"
+        },
+        "shiny": {
+          "glb_sha256": "06a9ae9e5fadf90cdb5f6263aa37e509caaadbe7c4b4ce9f3e1f3e9d6117f098",
+          "material_table_sha256": "02a133424b986bf51601f4f079e710d396e44ca806eeb9d0a2fdf07536e534ea",
+          "runtime_sha256": "8462572366a2df40272550bc9afae53ee2793007723cc8bbc548f7307ad14530"
+        }
+      },
+      "appearance_review": {
+        "date": "2026-10-02",
+        "review_url": "http://127.0.0.1:8796/native-review-v2/",
+        "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
+        "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
+        "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
+      }
+    }
+  ],
+  "diancie_detail_proposal": {
+    "status": "human_appearance_approved",
+    "production_status": ".tmp/mega-24-production/diancie-detail-v2/status.json",
+    "production_status_sha256": "78443a4a2e36920a65f0082140542025bcfcc6f063e63924897a5ff4716581c9",
+    "review_url": "http://127.0.0.1:8796/diancie-detail-review-v2/",
+    "native_pose_report_sha256": "938fad42a3cbf95f2fc926a6dec608ff510cb9db5ebe0fbe3f0ba75b950c2fb3",
+    "comparison_manifest_sha256": "f116718be05173627df4e02e8eaf00ce274217bfa8bec223336b4c0f3fa421cc",
+    "crystal_surface_translation": {
+      "policy": "native_facet_texture_static_pbr_uv0",
+      "materials": [
+        {
+          "material": "body_d_01",
+          "texture": "pm0772_51_00_fresnel_b_alb.png",
+          "sha256": "95af9b16210b1aaab07aa4f5abf76d965202fd71337fb85b582e27d8dc15d76c"
+        },
+        {
+          "material": "body_d_00",
+          "texture": "pm0772_51_00_fresnel_a_alb.png",
+          "sha256": "443394c1fed643dde19654b6437e9c8beaa0df7c1e6353a7c94adfedfc2c87f9"
+        },
+        {
+          "material": "body_d_02",
+          "texture": "pm0772_51_00_fresnel_b_alb.png",
+          "sha256": "95af9b16210b1aaab07aa4f5abf76d965202fd71337fb85b582e27d8dc15d76c"
+        }
+      ],
+      "two_sided_thin_surface": {
+        "material": "body_c",
+        "meshes": [
+          "pm0772_51_00_innerskirt_a_mesh_shape",
+          "pm0772_51_00_veil_left_a_mesh_shape",
+          "pm0772_51_00_veil_right_a_mesh_shape"
+        ]
+      },
+      "limitation": "Authored facet textures and layer colour retained; native view-dependent Fresnel/parallax is approximated statically. Visual approval required."
+    },
+    "variants": {
+      "normal": {
+        "glb_sha256": "33a8a8ce0cb5d0aba631822a21c3ee32c55aa337989310b7f93e721d6641706e",
+        "material_table_sha256": "87e7e474278bce97de53e3744637f414cc9d077114cf928cb07127ab10164baa",
+        "runtime_sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8"
+      },
+      "shiny": {
+        "glb_sha256": "8e254b793e255276445fe06decc581bff28bc06e8cc76e11748553d51a5691b5",
+        "material_table_sha256": "3ec62d9a224b85d4f3c9b361d6d00f2a19354b4605c9a7083447bd8d6800ab13",
+        "runtime_sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990"
+      }
+    }
+  },
+  "battle_preparation": {
+    "pair_count": 24,
+    "native_measurement_variants": 48,
+    "motion_placement_proposals": 48,
+    "motion_placement_holds": {},
+    "independent_native_validation_pending": true,
+    "runtime_approved": false,
+    "battle_approved": false,
+    "catalog": ".tmp/mega-24-production/battle-24-v1/catalog.json",
+    "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+    "approval_sha256": "caa691fa98f55deb415e0365e6bb7dcb9437317d19a16e1daef7c17d54d7c049",
+    "baseline_sha256": "8cc947d4af5d3527b989ca9a13029cf6a0b923a22238f4175ea5f00114e830ed",
+    "baseline_composition_script_sha256": "d2fb4d3cc2e3def42c9d5bd72ca09e1c6ae8382f6358f787fa2e871b5459e957",
+    "candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+    "visual_capture_variants": 48,
+    "visual_captures": 1152,
+    "captured_framing_holds": [],
+    "visual_capture_report_sha256": "2c1ac31f2cb158db14bc9997c7e9487ba00979853d2c5290980995142b58f22a",
+    "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+    "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+    "native_clearance_followup_pending": {
+      "barbaraclemega": {
+        "physical_attack_root_added_m": 0.03247631391882896
+      },
+      "barbaraclemega-shiny": {
+        "physical_attack_root_added_m": 0.03247631391882896
+      }
+    }
+  }
+}

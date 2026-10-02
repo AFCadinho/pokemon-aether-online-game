@@ -8,12 +8,15 @@ from catalog_remaining_eye_bake import chunks
 from catalog_dlc_flat_motion import values
 
 
-def stage(status, approval, control_catalog, output):
+def stage(status, approval, control_catalog, output, expected_pairs=71):
     batch = json.loads(status.read_text())
     accepted = json.loads(approval.read_text())
     approvals = {r['species']: r for r in accepted['entries']}
-    if not accepted['appearance_approved'] or len(approvals) != 71:
-        raise ValueError('Complete 71-pair appearance acceptance required')
+    if (expected_pairs < 1 or not accepted['appearance_approved']
+            or len(approvals) != expected_pairs or len(accepted['entries']) != expected_pairs
+            or len(batch['entries']) != expected_pairs
+            or {r['showdown_id'] for r in batch['entries']} != set(approvals)):
+        raise ValueError(f'Complete {expected_pairs}-pair appearance acceptance required')
     rows, runtime = [], []
     for candidate in batch['entries']:
         if candidate['status'] != 'runtime_candidate':
@@ -50,8 +53,8 @@ def stage(status, approval, control_catalog, output):
                 animations=clips, battle_review_poses=poses, review_notes=notes,
                 appearance_approved=True, runtime_approved=False, battle_approved=False))
             runtime.append(scene)
-    if len(rows) != 142:
-        raise ValueError('Expected 142 standalone Mega variants')
+    if len(rows) != expected_pairs * 2:
+        raise ValueError(f'Expected {expected_pairs * 2} standalone Mega variants')
     control = next(r for r in json.loads(control_catalog.read_text())['entries'] if r['species'] == 'dragonite')
     if sha(Path(control['path'])) != control['glb_sha256']:
         raise ValueError('Dragonite control changed')
@@ -65,12 +68,13 @@ def stage(status, approval, control_catalog, output):
         '[display]\nwindow/size/viewport_width=1152\nwindow/size/viewport_height=648\nwindow/vsync/vsync_mode=0\n'
         '[rendering]\nrenderer/rendering_method="gl_compatibility"\n')
     (project / 'tools').symlink_to(Path(__file__).resolve().parents[1], target_is_directory=True)
-    print('Staged 71 accepted normal/shiny pairs and Dragonite control', flush=True)
+    print(f'Staged {expected_pairs} accepted normal/shiny pairs and Dragonite control', flush=True)
 
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for key in ('status', 'approval', 'control-catalog', 'output'):
         p.add_argument('--' + key, type=Path, required=True)
+    p.add_argument('--expected-pairs', type=int, default=71)
     a = p.parse_args()
-    stage(a.status.resolve(), a.approval.resolve(), a.control_catalog.resolve(), a.output.resolve())
+    stage(a.status.resolve(), a.approval.resolve(), a.control_catalog.resolve(), a.output.resolve(), a.expected_pairs)
