@@ -712,17 +712,9 @@ func _player_mugshot() -> Texture2D:
 
 
 func _future_self_mugshot() -> Texture2D:
-	var appearance := PlayerSave.to_appearance_state()
-	appearance.merge({
-		"top": "Mysterious_Shirt",
-		"bottom": "Mysterious_Trousers",
-		"shoes": "Mysterious_Shoes",
-		"facegear": "Mysterious_Mask",
-		"hair": "",
-		"headgear": "",
-		"facial_hair": "",
-		"cape": "",
-	}, true)
+	var appearance := preload("res://scripts/world/story/future_self_appearance.gd").build_state(
+		PlayerSave.to_appearance_state()
+	)
 	return BattlePlayerTrainerCatalog.build_dialogue_portrait(appearance)
 
 

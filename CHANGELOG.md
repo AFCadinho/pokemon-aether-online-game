@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Route 9, Route 10 en beide Rock Tunnel-verdiepingen bevatten nu zichtbare, aanspreekbare overworld-Pokémon.
+- Future Self in Rock Tunnel now wears the same player-derived Mysterious outfit and dialogue portrait as in Mt. Moon, including during battle.
 
 - Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterward and the encounter completes on either result.
 

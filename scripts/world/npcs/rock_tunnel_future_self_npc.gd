@@ -3,14 +3,31 @@ extends TrainerNPC
 
 class_name RockTunnelFutureSelfNPC
 
+const FutureSelfAppearance := preload("res://scripts/world/story/future_self_appearance.gd")
+const PlayerTrainerCatalog := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
+
 const FUTURE_SELF_TRAINER_ID := "kanto_rock_tunnel_future_self"
 
 
 func _ready() -> void:
 	trainer_id = FUTURE_SELF_TRAINER_ID
 	display_name = "Future Self"
-	portrait_id = "trainer_class_ace_trainer_m"
+	portrait_id = ""
+	var save := get_node_or_null("/root/PlayerSave")
+	var appearance := FutureSelfAppearance.build_state(save.to_appearance_state() if save != null else {})
+	npc_sprite_frames = FutureSelfAppearance.build_overworld_frames(appearance)
+	mugshot = PlayerTrainerCatalog.build_dialogue_portrait(appearance)
 	super._ready()
+
+
+func _resolve_catalog_mugshot() -> void:
+	# This portrait follows the player, rather than a trainer class catalog entry.
+	pass
+
+
+func _resolve_battle_sprite_id() -> String:
+	# Battle staging must use the same composed Mysterious frames as the map.
+	return ""
 
 
 func start_mandatory_battle(player: Node2D) -> void:
