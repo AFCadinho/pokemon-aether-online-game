@@ -35,10 +35,10 @@ func _init() -> void:
 					box_count+=1
 		assert(expected.is_empty())
 	assert(batch_count==16 and box_count>600)
-	assert(original.get_node("StadiumAudience").get_child_count()==160)
-	assert(batched.get_node("StadiumAudience").get_child_count()==160)
+	assert(original.get_node("StadiumAudience").get_child_count()==320)
+	assert(batched.get_node("StadiumAudience").get_child_count()==320)
 	original.free()
 	batched.free()
 	world.free()
-	print("STADIUM_STATIC_BATCH_OK boxes=",box_count," batches=",batch_count," geometry_and_materials_preserved=true rigged_spectators=160")
+	print("STADIUM_STATIC_BATCH_OK boxes=",box_count," batches=",batch_count," geometry_and_materials_preserved=true rigged_spectators=320")
 	quit()
