@@ -1059,6 +1059,7 @@
   "ui.login.world_status": "世界现状",
   "ui.login.server_online": "服务器在线",
   "ui.login.server_offline": "服务器离线",
+  "ui.login.server_staff_only": "仅限工作人员",
   "ui.login.server_maintenance": "服务器维护中",
   "ui.login.checking_server": "正在检查服务器...",
   "ui.login.checking_players": "正在检查玩家在线...",

@@ -1059,6 +1059,7 @@
   "ui.login.world_status": "STATUS DO MUNDO",
   "ui.login.server_online": "Servidor online",
   "ui.login.server_offline": "Servidor offline",
+  "ui.login.server_staff_only": "Apenas equipe",
   "ui.login.server_maintenance": "Servidor em manutenção",
   "ui.login.checking_server": "Verificando servidor...",
   "ui.login.checking_players": "Verificando jogadores online...",
