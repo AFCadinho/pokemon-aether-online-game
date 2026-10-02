@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish hash-bound approved base-form bundles and their immutable index."""
+"""Publish hash-bound approved bundles and their immutable index."""
 import argparse
 import concurrent.futures
 import datetime
@@ -82,6 +82,8 @@ def main():
     parser.add_argument('--qualification', type=Path, default=QUALIFICATION)
     parser.add_argument('--expected-count', type=int, required=True)
     parser.add_argument('--receipt-prefix', required=True)
+    parser.add_argument('--allowed-forms', nargs='+', choices=('base', 'mega', 'mega-x', 'mega-y', 'mega-z'),
+                        default=['base'], help='Explicit permitted forms; defaults to base only.')
     parser.add_argument('--apply', action='store_true')
     args = parser.parse_args()
     directory = args.directory.resolve()
@@ -97,8 +99,13 @@ def main():
     assert index == qualification['bundle_index'] and len(index['assets']) == args.expected_count and args.expected_count > 0
     rows = []
     for asset in index['assets']:
-        assert asset['asset_id'] == 'pokemon_3d:' + asset['species_id'] + ':base'
-        assert asset['object_key'].startswith('optional-assets/pokemon_3d/' + asset['species_id'] + '/base/')
+        form = asset['form_id']
+        assert form in args.allowed_forms
+        assert re.fullmatch(r'[a-z0-9-]+', asset['species_id'])
+        assert asset['asset_id'] == 'pokemon_3d:' + asset['species_id'] + ':' + form
+        assert asset['object_key'].startswith('optional-assets/pokemon_3d/' + asset['species_id'] + '/' + form + '/')
+        identity = asset['species_id'] + ('' if form == 'base' else '-' + form)
+        assert {a['runtime_identity'] for a in asset['appearances']} == {identity, identity + '@shiny'}
         path = directory / Path(asset['object_key']).name
         assert path.is_file() and not path.is_symlink()
         assert file_digest(path) == (asset['size_bytes'], asset['sha256'])
@@ -150,7 +157,8 @@ def main():
     index_verification = publish(config, published_index, content_index)
     with urllib.request.urlopen(manifest_request, timeout=60) as response:
         assert digest(response) == active_manifest_before, 'Active manifest changed concurrently'
-    receipt = {'schema': 1, 'scope': 'Qualified base-form pairs only; immutable content publication',
+    receipt = {'schema': 1, 'scope': 'Qualified pairs only; immutable content publication',
+               'permitted_forms': sorted(set(args.allowed_forms)),
                'verified_at_utc': datetime.datetime.now(datetime.UTC).isoformat(),
                'catalog_revision': index['catalog_revision'], 'public_base_url': BASE.rstrip('/'),
                'bundle_qualification_sha256': file_digest(qualification_path)[1],
