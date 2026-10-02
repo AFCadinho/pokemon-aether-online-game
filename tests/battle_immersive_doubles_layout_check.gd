@@ -21,7 +21,7 @@ func _run() -> void:
 	presenter._apply_positions({
 		"participant": "p1",
 		"turn": 4,
-		"opponentPartySize": 2,
+		"opponentPartySize": 6,
 		"positions": [
 			{"controller": "p1", "details": "Bulbasaur, L50, M", "hpPercent": 77},
 			{"controller": "p3", "details": "Squirtle, L50, M", "hpPercent": 100},
@@ -38,6 +38,7 @@ func _run() -> void:
 		for frame in 8:
 			await process_frame
 		_settle_immersive_hud(battle)
+		_check_party_rails(battle)
 		_check_doubles_field_spacing(battle, presenter)
 		_check_hud_clearance(battle)
 		_check_concrete_anchors(battle, presenter)
@@ -54,6 +55,25 @@ func _run() -> void:
 		quit(1)
 	print("IMMERSIVE_DOUBLES_LAYOUT_OK")
 	quit()
+
+
+func _check_party_rails(battle: Control) -> void:
+	var allies: PartyGrid = battle.player_stage_party_grid
+	_expect(allies.trainer_groups_enabled and allies.get_child_count() == 6,
+		"Adventure Party keeps six stable slots in two Trainer sections")
+	var first: Control = allies.get_child(0)
+	var third: Control = allies.get_child(2)
+	var fourth: Control = allies.get_child(3)
+	_expect(first.position.x == fourth.position.x and fourth.position.y > third.position.y + third.size.y + 20,
+		"player 1 is above player 2 with a visible gap between their panels")
+	_expect(allies.get_pokemon_data_for_visual_slot(1).get("species") == "Bulbasaur"
+		and allies.get_pokemon_data_for_visual_slot(4).get("species") == "Squirtle",
+		"short rosters retain their respective Trainer's slots")
+	var opponents: PartyGrid = battle.opponent_party_grid
+	_expect(not opponents.trainer_groups_enabled and opponents.columns == 1,
+		"two active NPC Pokémon do not imply two opposing Trainers")
+	_expect(opponents.current_party_data.size() == 6 and opponents.get_child(5).visible,
+		"a solo NPC retains all six Pokémon in its team rail")
 
 
 func _settle_immersive_hud(battle: Control) -> void:
