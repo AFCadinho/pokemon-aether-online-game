@@ -1,5 +1,7 @@
 [gd_scene format=4 uid="uid://buo38hu0vgp7w"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
+
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rock_tunnel_1f/rock_tunnel_1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -356,6 +358,34 @@ display_name = "Mysterious Trainer"
 facing_direction = Vector2(1, 0)
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=175204022]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Pearl" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(2352, 1616)
+pickup_id = "kanto_rock_tunnel_1f_pearl"
+item_id = "pearl"
+
+[node name="XAccuracy" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(592, 976)
+pickup_id = "kanto_rock_tunnel_1f_xaccuracy"
+item_id = "x-accuracy"
+
+[node name="Elixir" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(752, 2224)
+pickup_id = "kanto_rock_tunnel_1f_elixir"
+item_id = "elixir"
+
+[node name="XDefend" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(944, 2192)
+pickup_id = "kanto_rock_tunnel_1f_xdefend"
+item_id = "x-defense"
+
+[node name="TMFling" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(976, 2128)
+pickup_id = "kanto_rock_tunnel_1f_tmfling"
+item_id = "tm-fling"
+
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000002]
 

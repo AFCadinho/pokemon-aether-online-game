@@ -313,7 +313,7 @@ item_id = "awakening"
 [node name="XDefend" parent="Entities/Interactables" instance=ExtResource("99_item")]
 position = Vector2(1840, 944)
 pickup_id = "kanto_route_11_xdefend"
-item_id = "x-defend"
+item_id = "x-defense"
 [node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("99_item")]
 position = Vector2(2128, 752)
 pickup_id = "kanto_route_11_greatball"

@@ -1,5 +1,7 @@
 [gd_scene format=4 uid="uid://xiledkw6snc2"]
 
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
+
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/diglett_cave_tunnel/diglett_cave_tunnel.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
@@ -143,6 +145,29 @@ flow_direction = "left"
 z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=575797736]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="MaxRevive" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(816, 480)
+pickup_id = "kanto_diglett_cave_tunnel_maxrevive"
+item_id = "max-revive"
+
+[node name="Calcium" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(688, 928)
+pickup_id = "kanto_diglett_cave_tunnel_calcium"
+item_id = "calcium"
+
+[node name="PPMax" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(752, 1456)
+pickup_id = "kanto_diglett_cave_tunnel_ppmax"
+item_id = "pp-max"
+
+[node name="RockIncense" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(816, 2224)
+pickup_id = "kanto_diglett_cave_tunnel_rockincense"
+item_id = "rock-incense"
+
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1101823855]
 visible = false
