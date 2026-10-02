@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Calyrex Ice Rider en Shadow Rider, Zacian Crowned en Zamazenta Crowned zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met individuele downloadbundles en vooraf geladen modellen.
+
 - De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
 
 - Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.

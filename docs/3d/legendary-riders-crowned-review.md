@@ -108,6 +108,36 @@ The repeated `battle-validated-v2` report is complete: eight appearances,
 2.4 cm (idle target 2.5 cm, action target 3 cm), and all measured silhouettes
 clear the HUD proxy in both camera presets and both sides. The four-pair
 `battle-review-v1` page has 449 pinned files; page and image HTTP 200 checks
-passed at http://127.0.0.1:8793/. Joint user battle approval remains pending.
+passed at http://127.0.0.1:8793/. The user approved all four battle pairs on 2026-10-02 (“Alle vier goed”).
 These flat-floor/HUD-proxy measurements do not replace the later installed
 runtime, arena, performance and bundle qualification gates.
+
+## Installed runtime and bundles
+
+`catalog_legendary_riders_crowned_admission.py prepare` binds the exact approved
+GLB/SCN hashes, calibrated timings, placement, visibility and shared normal/shiny
+motion profiles into four separate bundles (eight standalone scenes), totalling
+98.76 MiB. Transactional installation, no-op planning and restart checks pass.
+`battle_3d_legendary_forms_check.gd` passes all four exact runtime identities,
+normal/shiny swaps without new downloads, sleep, two physical attacks and
+complete preloading before reveal. The new stress wrapper reuses the existing
+real battle lifecycle/cache/loading/20 ms limits and prepared observation
+period. Performance qualification and final registry admission are pending.
+The failed installer invocation in the game project is retained separately;
+the successful installer uses the launcher project containing bundle storage.
+
+All three installed real-battle stress rounds pass the existing 20 ms p95 gate:
+17.278 ms (classic), 17.198 ms (stadium), 17.126 ms (classic again). Prepared
+steady-frame, load-span, covered-stall, cache budget, retained-object and memory
+checks also pass. The fixture is admitted into identical game/launcher reviewed
+registries and rechecked using actual admitted runtime identities. The final
+restart test initially required exactly four downloads despite a valid cache;
+its assertion now matches the existing Kyurem at-most-one-download-per-form
+rule. Exact SHA/identity, preloading and no-swap-download checks are unchanged;
+that failed log remains evidence. Final admitted runtime verification passes.
+
+`catalog_legendary_riders_crowned_bundle_qualification.json` and
+`release/approved_3d_legendary_riders_crowned_index.json` bind the four bundles.
+Local qualification is complete. R2 publication, active release-index selection
+and desktop release certification remain separate; no public content or active
+release manifest has been changed by this task.
