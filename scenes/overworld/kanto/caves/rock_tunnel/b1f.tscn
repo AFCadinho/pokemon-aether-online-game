@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rock_tunnel_b1f/rock_tunnel_b1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
-[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
-[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_gvjat"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_ew7gd"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
@@ -132,11 +132,11 @@ location_id = "kanto.rock.tunnel.b1f"
 location_name = "Rock Tunnel B1F"
 region_id = "kanto"
 encounter_area_id = "kanto_rock_tunnel_b1f"
-cave_encounter_chance = 0.07
-music_track_id = "overworld.kanto.cave.mt_moon"
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"
+cave_encounter_chance = 0.07
+music_track_id = "overworld.kanto.cave.mt_moon"
 
 [node name="Visual" parent="." unique_id=825217878 instance=ExtResource("1_visual")]
 
@@ -207,39 +207,39 @@ shape = SubResource("shape_4")
 [node name="Entities" type="Node2D" parent="." unique_id=2067038040]
 z_index = 5
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=472226421]
 
-[node name="PokemaniacWinston" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1808, 752)
+[node name="PokemaniacWinston" parent="Entities/NPCs" unique_id=151658950 instance=ExtResource("trainer")]
+position = Vector2(2352, 560)
 trainer_id = "kanto_rock_tunnel_b1f_pokemaniac_winston"
 sight_range_tiles = 2
 npc_id = "kanto_rock_tunnel_b1f_pokemaniac_winston"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Poké Maniac Winston"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
-[node name="PicnickerMartha" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(656, 1040)
+[node name="PicnickerMartha" parent="Entities/NPCs" unique_id=918825918 instance=ExtResource("trainer")]
+position = Vector2(528, 1392)
 trainer_id = "kanto_rock_tunnel_b1f_picnicker_martha"
 sight_range_tiles = 2
-facing_direction = Vector2(1, 0)
 npc_id = "kanto_rock_tunnel_b1f_picnicker_martha"
 npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Martha"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("picnicker")
 
-[node name="PokemaniacSteve" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1168, 368)
+[node name="PokemaniacSteve" parent="Entities/NPCs" unique_id=160959700 instance=ExtResource("trainer")]
+position = Vector2(880, 304)
 trainer_id = "kanto_rock_tunnel_b1f_pokemaniac_steve"
 sight_range_tiles = 2
-facing_direction = Vector2(-1, 0)
 npc_id = "kanto_rock_tunnel_b1f_pokemaniac_steve"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Poké Maniac Steve"
 npc_sprite_frames = ExtResource("hiker")
 
-[node name="HikerAllen" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1616, 1552)
+[node name="HikerAllen" parent="Entities/NPCs" unique_id=1187564987 instance=ExtResource("trainer")]
+position = Vector2(1904, 2032)
 trainer_id = "kanto_rock_tunnel_b1f_hiker_allen"
 sight_range_tiles = 2
 npc_id = "kanto_rock_tunnel_b1f_hiker_allen"
@@ -247,17 +247,18 @@ npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Allen"
 npc_sprite_frames = ExtResource("hiker")
 
-[node name="HikerEric" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(2160, 1648)
+[node name="HikerEric" parent="Entities/NPCs" unique_id=949524934 instance=ExtResource("trainer")]
+position = Vector2(2352, 1872)
 trainer_id = "kanto_rock_tunnel_b1f_hiker_eric"
 sight_range_tiles = 2
 npc_id = "kanto_rock_tunnel_b1f_hiker_eric"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Eric"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
-[node name="PicnickerSofia" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(432, 1872)
+[node name="PicnickerSofia" parent="Entities/NPCs" unique_id=1762995818 instance=ExtResource("trainer")]
+position = Vector2(688, 1520)
 trainer_id = "kanto_rock_tunnel_b1f_picnicker_sofia"
 sight_range_tiles = 2
 npc_id = "kanto_rock_tunnel_b1f_picnicker_sofia"
@@ -265,18 +266,18 @@ npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Sofia"
 npc_sprite_frames = ExtResource("picnicker")
 
-[node name="HikerDudley" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(912, 1808)
+[node name="HikerDudley" parent="Entities/NPCs" unique_id=661760717 instance=ExtResource("trainer")]
+position = Vector2(1104, 1648)
 trainer_id = "kanto_rock_tunnel_b1f_hiker_dudley"
 sight_range_tiles = 2
-facing_direction = Vector2(1, 0)
 npc_id = "kanto_rock_tunnel_b1f_hiker_dudley"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Hiker Dudley"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
-[node name="PokemaniacCooper" parent="Entities/NPCs" instance=ExtResource("trainer")]
-position = Vector2(1424, 1872)
+[node name="PokemaniacCooper" parent="Entities/NPCs" unique_id=1784598213 instance=ExtResource("trainer")]
+position = Vector2(1616, 1648)
 trainer_id = "kanto_rock_tunnel_b1f_pokemaniac_cooper"
 sight_range_tiles = 2
 npc_id = "kanto_rock_tunnel_b1f_pokemaniac_cooper"
