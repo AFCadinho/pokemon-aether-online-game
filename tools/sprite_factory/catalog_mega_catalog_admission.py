@@ -183,13 +183,64 @@ def finalize():
     print('MEGA_71_FINALIZED admitted_registry_check=true published=false')
 
 
+def post_merge_hud():
+    """Pin the actual admitted-registry replay after incorporating newer HUD code."""
+    report = WORK / 'post-merge-hud.json'
+    log = WORK / 'post-merge-hud.log'
+    stress = read(report)
+    assert 'BATCH01_STRESS_OK' in log.read_text() and 'ERROR:' not in log.read_text()
+    catalog = WORK / 'on-demand-installed-catalog.json'
+    assert stress['complete'] and stress['catalog_sha256'] == sha(catalog)
+    expected = {key: row['sha256'] for key, row in read(WORK / 'runtime-fixture.json')['models'].items()}
+    assert {identity(row): row['runtime_sha256'] for row in read(catalog)} == expected
+    assert [r['arena'] for r in stress['rounds']] == ['classic', 'stadium', 'classic']
+    for cycle in stress['rounds']:
+        assert cycle['pairs'] == cycle['faint_replacements'] == 71
+        assert math.isfinite(cycle['frame_p95_ms']) and 0 < cycle['frame_p95_ms'] <= 20
+        assert cycle['retained_source_bytes'] <= 64 * 1024 * 1024
+        assert not any(s['ms'] > 100 and not s['covered'] for s in cycle['stalls_over_50ms'])
+        assert max((s['ms'] for s in cycle['load_spans'] if s['operation'] == 'threaded load dispatch/collect'), default=0) <= 1000 / 60
+    assert stress['rounds'][2]['static_bytes'] - stress['rounds'][1]['static_bytes'] < 1024 * 1024
+    game = ROOT / 'scripts/battle/battle_ui/reviewed_model_catalog.json'
+    launcher = ROOT / 'launcher/data/reviewed_model_catalog.json'
+    assert game.read_bytes() == launcher.read_bytes()
+    registry = read(game)
+    receipt = read(RECEIPT)
+    old_digest = sha(RECEIPT)
+    assert receipt['admitted_registry_check_passed'] and registry['mega_71_bundle_qualification_sha256'] == old_digest
+    assert all(registry['models'][key]['sha256'] == digest for key, digest in expected.items())
+    receipt['post_merge_hud_check_passed'] = True
+    receipt['post_merge_hud_rounds'] = stress['rounds']
+    evidence = [report, log, Path(__file__), ROOT / 'tests/catalog_batch_01_candidate_stress_check.gd',
+        ROOT / 'scenes/battle/battle_screen_host.tscn', ROOT / 'scripts/battle/battle.gd',
+        ROOT / 'scripts/battle/battle_screen_host.gd', ROOT / 'scripts/battle/battle_display_data_presenter.gd']
+    evidence.extend(ROOT / 'scripts/battle/battle_ui' / name for name in (
+        'battle_damage_calc_panel.gd', 'immersive_hud.gd', 'immersive_layout.gd',
+        'party_hover_card.gd', 'pokemon_hud_panel.gd'))
+    receipt['evidence_sha256'].update({str(p.relative_to(ROOT)): sha(p) for p in evidence})
+    intake_path = HERE / 'catalog_mega_3d_source_intake.json'
+    intake = read(intake_path)
+    qualified = [row for row in intake['entries'] if row.get('bundle_qualification_sha256') == old_digest]
+    assert len(qualified) == 71
+    RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
+    registry['mega_71_bundle_qualification_sha256'] = sha(RECEIPT)
+    payload = json.dumps(registry, indent='\t', sort_keys=True) + '\n'
+    game.write_text(payload); launcher.write_text(payload)
+    for row in qualified:
+        row['bundle_qualification_sha256'] = sha(RECEIPT)
+    intake_path.write_text(json.dumps(intake, indent=2, ensure_ascii=False) + '\n')
+    print('MEGA_71_POST_MERGE_HUD_OK pairs=71 rounds=3 published=false')
+
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('phase', choices=('validate', 'admit', 'finalize'))
+    p.add_argument('phase', choices=('validate', 'admit', 'finalize', 'post-merge-hud'))
     phase = p.parse_args().phase
     if phase == 'admit':
         admit()
     elif phase == 'finalize':
         finalize()
+    elif phase == 'post-merge-hud':
+        post_merge_hud()
     else:
         validate(); print('MEGA_71_GATES_OK')

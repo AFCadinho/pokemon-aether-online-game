@@ -190,3 +190,13 @@ The 71 individual bundle archives remain outside the base build. Their local
 index is tracked in `release/approved_3d_mega_71_index.json`. Publication and
 release content-index activation are separate steps requiring authorization.
 The 25 source-mapping holds remain; this does not claim all 97 Megas are ready.
+
+## Compatibility with the updated battle HUD
+
+The task incorporated the newer development battle layout before integration.
+A focused actual-registry replay passed all 71 pairs and faint replacements in
+three classic/stadium/classic rounds. Full-round p95 was 16.852 / 16.876 /
+16.834 ms; final static memory growth was 373,124 bytes. The existing limits
+were unchanged. This supplements the longer prepared-steady performance run;
+it does not replace that measurement. The qualification receipt pins the replay
+and the updated battle layout sources.
