@@ -12,7 +12,13 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CHECKS = ["trainer_vision_physics_flush_check", "fullscreen_battle_fade_check", "battle_entry_slow_sprite_check", "wild_entry_before_response_check"]
+CHECKS = ["trainer_vision_physics_flush_check", "fullscreen_battle_fade_check", "battle_entry_slow_sprite_check", "wild_entry_before_response_check", "trainer_entry_before_response_check"]
+FIXTURES = ["trainer_vision_probe", "wild_entry_request_probe", "trainer_entry_request_probe", "trainer_entry_lead_probe"]
+
+def rewrite_fixture_paths(source):
+    for name in FIXTURES:
+        source = source.replace(f"res://tests/fixtures/{name}.gd", f"res://scripts/battle_entry_qa_generated/{name}.gd")
+    return source
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
@@ -41,16 +47,16 @@ def main():
     editor_settings = None
     generated.mkdir()
     try:
-        shutil.copyfile(ROOT / "tests/fixtures/trainer_vision_probe.gd", generated / "trainer_vision_probe.gd")
-        shutil.copyfile(ROOT / "tests/fixtures/wild_entry_request_probe.gd", generated / "wild_entry_request_probe.gd")
+        for name in FIXTURES:
+            source = (ROOT / f"tests/fixtures/{name}.gd").read_text()
+            (generated / f"{name}.gd").write_text(rewrite_fixture_paths(source))
         for name in CHECKS:
             source = (ROOT / f"tests/{name}.gd").read_text()
             source = source.replace("extends SceneTree", "extends Node\nsignal completed(code: int)\n@onready var root = get_tree().root\nfunc quit(code := 0) -> void:\n\tcompleted.emit.call_deferred(code)")
             source = source.replace("func _init()", "func _ready()")
             source = re.sub(r"(?<![\w.])(process_frame|physics_frame)\b", r"get_tree().\1", source)
             source = re.sub(r"(?<![\w.])create_timer\(", "get_tree().create_timer(", source)
-            source = source.replace("res://tests/fixtures/trainer_vision_probe.gd", "res://scripts/battle_entry_qa_generated/trainer_vision_probe.gd")
-            source = source.replace("res://tests/fixtures/wild_entry_request_probe.gd", "res://scripts/battle_entry_qa_generated/wild_entry_request_probe.gd")
+            source = rewrite_fixture_paths(source)
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
