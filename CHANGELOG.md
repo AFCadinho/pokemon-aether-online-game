@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Classic-battles gebruiken vanaf het eerste frame de uiteindelijke speelveldgrootte; de onzichtbare bediening behoudt tijdens het laden haar ruimte, zodat arena en elementen niet meer verkleinen wanneer Pokémon verschijnen.
+
 - Added a resident and an overworld Pokémon to each of Lavender Town's three previously empty houses.
 
 - Name Mr. Fuji’s helper Reina in her overworld label, quest tracker and Trainer Progress checkpoints.
