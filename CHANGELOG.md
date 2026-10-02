@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rock Tunnel’s Mysterious Trainer stays hidden until the C staircase, then appears behind the player through the same blue rift effect as Mt. Moon.
+
 - Fullscreen battle-entrees faden het volledige battlescherm als één laag boven de overworld, inclusief achtergrond, Pokémon en bediening.
 - Mapovergangen gebruiken nu de aankomstrichting uit de client-scène; de server valideert de richting en overschrijft die niet meer met dubbele catalogusmetadata.
 

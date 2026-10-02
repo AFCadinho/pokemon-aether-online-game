@@ -34,6 +34,7 @@ func _run() -> void:
 		var npc: Node = load("res://scenes/npcs/rock_tunnel_future_self_npc.tscn").instantiate()
 		root.add_child(npc)
 		await process_frame
+		_check(not npc.visible and not npc.blocks_world_position(npc.get_feet_position()), "%s visitor stays hidden and passable before the staircase" % gender)
 		var frames: SpriteFrames = npc.npc_sprite_frames
 		_check(frames != null, "%s Future Self has composed frames" % gender)
 		for direction: String in ["up", "down", "left", "right"]:
@@ -85,7 +86,7 @@ func _run() -> void:
 		reloaded.queue_free()
 		progress.fixture_completed = false
 		await npc._load_trainer_progress()
-		_check(npc.visible and npc.modulate.a == 1.0, "%s progress reset restores the visitor" % gender)
+		_check(not npc.visible and not npc.arrival_started, "%s progress reset restores the hidden staircase encounter" % gender)
 		mt_moon.free()
 		npc.queue_free()
 		await process_frame
@@ -103,6 +104,10 @@ func _run() -> void:
 			visitor_count += 1
 	_check(visitor_count == 1, "Rock Tunnel has one masked visitor")
 	var player := Node2D.new()
+	var player_fixture := GDScript.new()
+	player_fixture.source_code = "extends Node2D\nvar last_direction := Vector2.RIGHT\n"
+	_check(player_fixture.reload() == OK, "staircase player fixture compiles")
+	player.set_script(player_fixture)
 	map.add_child(player)
 	for exit: Node2D in map.get_node("Exits").get_children():
 		_check(str(exit.required_trainer_id) == ("kanto_rock_tunnel_future_self" if exit.name == &"ToB1FC" else ""), "%s has the correct staircase requirement" % exit.name)
@@ -112,6 +117,15 @@ func _run() -> void:
 		_check(visitor._position_for_mandatory_battle(player), "%s has a safe nearby visitor position" % exit.name)
 		_check(visitor.global_position.distance_to(player.global_position) <= 96.0, "%s keeps the visitor in view" % exit.name)
 		_check(visitor._can_story_npc_move_to(visitor.get_feet_position()), "%s visitor avoids collision and other NPCs" % exit.name)
+		_check(visitor.get_feet_position().x < player.global_position.x and is_equal_approx(visitor.get_feet_position().y, player.global_position.y), "Visitor appears behind the player's staircase approach")
+		_check(not visitor.visible, "Positioning cannot reveal the visitor before the rift opens")
+		await visitor._reveal_at_staircase()
+		_check(visitor.visible and visitor.modulate == Color.WHITE, "Rift reveal leaves the visitor fully visible")
+		_check(visitor.get_node("Look").position == Vector2.ZERO, "Rift descent restores the original sprite offset")
+		visitor._apply_story_visibility()
+		_check(visitor.visible, "Story refresh preserves the revealed encounter")
+		visitor._recover_overworld_after_failed_battle_start()
+		_check(not visitor.visible and not visitor.arrival_started and not visitor.battle_in_progress, "Failed battle returns to a hidden, retryable staircase encounter")
 	state.current_map = original_map
 	map.queue_free()
 	await process_frame

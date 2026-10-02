@@ -34,7 +34,7 @@ func _run() -> void:
 		if floor_name == "1f":
 			var visitor: Node2D = map.get_node("Entities/NPCs/FutureSelf")
 			_check(not visitor._can_auto_challenge(), "Visitor does not challenge from line of sight")
-			_check(visitor.position.distance_to(map.get_node("Spawns/FromB1FC").position) >= 96.0, "Visitor leaves the C spawn clear")
+			_check(not visitor.visible and not visitor.blocks_world_position(map.get_node("Spawns/FromB1FC").global_position), "Hidden visitor leaves the C spawn clear")
 			_check(collision.get_cell_source_id(collision.local_to_map(visitor.position)) < 0, "Visitor starts on a walkable tile")
 		map.free()
 	var north: String = components["1f/FromRoute10North"]
