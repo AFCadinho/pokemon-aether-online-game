@@ -8,8 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/npcs/rock_tunnel_future_self_npc.tscn" id="future_self"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(64, 32)
@@ -341,7 +341,6 @@ overworld_pokemon_id = "kanto_rock_tunnel_1f_geodude_1"
 species_id = "geodude"
 level = 15
 display_name = "Geodude"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
@@ -353,12 +352,10 @@ overworld_pokemon_id = "kanto_rock_tunnel_1f_zubat_1"
 species_id = "zubat"
 level = 15
 display_name = "Zubat"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
-
 
 [node name="Tiles" type="Node2D" parent="." unique_id=2051444940]
 visible = false

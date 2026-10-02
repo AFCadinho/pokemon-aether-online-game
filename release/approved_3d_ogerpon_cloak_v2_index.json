@@ -1,0 +1,83 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "ogerpon-wellspring",
+          "runtime_sha256": "01bd9248ea7b32ec88b6ff3b6202e6c1dddd6ab10ec5db56b2d3d49876864d16",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "ogerpon-wellspring@shiny",
+          "runtime_sha256": "0943af98c83ff2591d72800c0e916f5f5af125870f5899d25dfb6001ec7336d5",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:ogerpon-wellspring:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1017,
+      "object_key": "optional-assets/pokemon_3d/ogerpon-wellspring/base/v2-0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32.zip",
+      "sha256": "0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32",
+      "size_bytes": 35964168,
+      "species_id": "ogerpon-wellspring",
+      "version": 2
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "ogerpon-hearthflame",
+          "runtime_sha256": "441eae2beb784c0fada221139d344f7a6a4a442abe0a15e2f1328952fd42d5e3",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "ogerpon-hearthflame@shiny",
+          "runtime_sha256": "cfede451127a78c77534ff893488e0ba3e58c967a3eea51331d4681dac2eebb1",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:ogerpon-hearthflame:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1017,
+      "object_key": "optional-assets/pokemon_3d/ogerpon-hearthflame/base/v2-590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1.zip",
+      "sha256": "590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1",
+      "size_bytes": 34658668,
+      "species_id": "ogerpon-hearthflame",
+      "version": 2
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "ogerpon-cornerstone",
+          "runtime_sha256": "04571721da5a26cfaf0ba3112ebda08a210566ff5b59ea87e2067c8b72813e54",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "ogerpon-cornerstone@shiny",
+          "runtime_sha256": "699d680bf3bdb36715a74cead81827c7ae3d2c5ae5661895d504ee199851d433",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:ogerpon-cornerstone:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 1017,
+      "object_key": "optional-assets/pokemon_3d/ogerpon-cornerstone/base/v2-ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa.zip",
+      "sha256": "ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa",
+      "size_bytes": 34401736,
+      "species_id": "ogerpon-cornerstone",
+      "version": 2
+    }
+  ],
+  "catalog_revision": "ogerpon-native-cloak-colours-v2",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}
