@@ -447,6 +447,32 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 36.0
 
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+
+[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(752, 176)
+overworld_pokemon_id = "kanto_route_3_mountain_geodude_1"
+species_id = "geodude"
+level = 6
+display_name = "Geodude"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 32.0
+ambient_movement_ignores_map_collision = true
+
+[node name="Onix" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(2224, 176)
+overworld_pokemon_id = "kanto_route_3_mountain_onix_1"
+species_id = "onix"
+level = 8
+display_name = "Onix"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.4
+movement_speed_pixels = 28.0
+ambient_movement_ignores_map_collision = true
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=80218861]
