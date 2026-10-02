@@ -74,23 +74,353 @@
     ".tmp/legendary-kyurem-forms-v2/approved-v1/runtime-check-v3.log": "241c8da31cb53031a4589abbd7590c3b6d32a89221879d4259083fd61fa4cdd6",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/runtime-check.log": "050999e0202f9f842ba5a5b5f1c8ab761d3f10fe3da2e97d486cdc4c251a6366",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/runtime-fixture.json": "ffbd03e23f81e4481a5a116f58c7c0f6aeca7fc93292c1d98e0c6c4cdafdce32",
+    ".tmp/legendary-kyurem-forms-v2/approved-v1/stress-integrated.json": "df6d0062a2a35358384bbabb85a4b8b49c17d91d8c7641dcfa3aad98228d6d7d",
+    ".tmp/legendary-kyurem-forms-v2/approved-v1/stress-integrated.log": "98bd202d49258b124c52441c0bf598e5986620b1b49593bf9955504fa7f9cd22",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/stress-v2.json": "7ce7c1177878f0a5789c1085ac3027ff48eccebaa7430ac17d175fa2af0197b6",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/stress-v2.log": "41ac9e22988b935a05c06d7b60340360665d8fb04df5db6e2183e2a9ba954f83",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/stress.json": "11f0ab7bbabe804351ced63bd0f18139f93dc5499740aecd5bcde3a7b8ef533b",
     ".tmp/legendary-kyurem-forms-v2/approved-v1/stress.log": "e5baf5957e3c3544369110e72e299517e4632e57cd534419ba1025bca4143f80",
-    "scripts/battle/arenas/generic/stadium_arena.gd": "b410d6b355568d7fd0c3b874088771d73fe2e943174c6d91fabfdcb351ed5ceb",
+    "scripts/battle/arenas/generic/stadium_arena.gd": "5c817ba5e76d70c59e35ad8c03253ea9562a6a7cb9e90c07617c6599a3e5e2bb",
+    "scripts/battle/arenas/generic/stadium_crowd.gdshader": "27b95ddebb5847d23e57e735eb30de380bca1afeea43dbff9493bd8200c49a8a",
+    "scripts/battle/arenas/shared/animated_spectator.gd": "7fa13f279ae597ae56e92281c9c2a6af097507ec6bfdffbfef9c970ea5f82066",
     "tests/battle_3d_kyurem_forms_check.gd": "12a3f70185285a06583c6da7c5f587b96b6a5c3c1030c52b5e6f07849e386964",
     "tests/battle_3d_kyurem_stress_check.gd": "d3c60a9dd6cb056905b673ee933a7650f048de43f9bff155b47d43f39bf6125f",
     "tests/catalog_batch_01_candidate_stress_check.gd": "fdb9a5c6c4392c655ef4c3dc830f8ff1dac3e91199ef7d2d83b3f03d5d627e8a",
-    "tools/sprite_factory/catalog_kyurem_forms_admission.py": "f126e7d1432df9e5e204eeb1370d16f69d8a9b7b597a9c825a65b8e0bd9c0329"
+    "tools/sprite_factory/catalog_kyurem_forms_admission.py": "1f86e6aaef150f32b5e19a213336369eb954683cac9870b52e999a0bf43fbed8"
   },
   "forms": [
     "kyurem-black",
     "kyurem-white"
   ],
   "installed_runtime_check_passed": true,
+  "integrated_runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 2.0,
+      "frame_max_ms": 631.153,
+      "frame_p95_ms": 17.346,
+      "frame_samples": 644.0,
+      "load_spans": [
+        {
+          "frame": 0.0,
+          "ms": 3.122,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0.0,
+          "ms": 3.218,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9.0,
+          "ms": 3.168,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9.0,
+          "ms": 3.308,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 32.0,
+          "ms": 2.749,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 32.0,
+          "ms": 2.897,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 43.0,
+          "ms": 3.056,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 187.0,
+          "ms": 2.212,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 328.0,
+          "ms": 2.773,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 328.0,
+          "ms": 2.906,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 348.0,
+          "ms": 2.535,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 348.0,
+          "ms": 2.659,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 363.0,
+          "ms": 1.782,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 507.0,
+          "ms": 1.877,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2.0,
+      "retained_source_bytes": 34313470.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 78.303
+        },
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 631.153
+        },
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 137.78
+        }
+      ],
+      "static_bytes": 293760570.0
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 2.0,
+      "frame_max_ms": 579.789,
+      "frame_p95_ms": 17.348,
+      "frame_samples": 630.0,
+      "load_spans": [
+        {
+          "frame": 648.0,
+          "ms": 1.611,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 648.0,
+          "ms": 1.823,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 654.0,
+          "ms": 2.815,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 654.0,
+          "ms": 2.931,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 666.0,
+          "ms": 1.014,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 666.0,
+          "ms": 1.129,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 670.0,
+          "ms": 2.704,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 670.0,
+          "ms": 2.827,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 680.0,
+          "ms": 1.317,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 680.0,
+          "ms": 406.751,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 825.0,
+          "ms": 2.659,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 965.0,
+          "ms": 2.293,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 965.0,
+          "ms": 2.423,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 983.0,
+          "ms": 2.425,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 983.0,
+          "ms": 2.56,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 998.0,
+          "ms": 1.696,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1142.0,
+          "ms": 2.086,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2.0,
+      "retained_source_bytes": 34313470.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 138.735
+        },
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 579.789
+        }
+      ],
+      "static_bytes": 297713460.0
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 2.0,
+      "frame_max_ms": 119.171,
+      "frame_p95_ms": 17.314,
+      "frame_samples": 630.0,
+      "load_spans": [
+        {
+          "frame": 1283.0,
+          "ms": 1.06,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 1283.0,
+          "ms": 1.152,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1289.0,
+          "ms": 2.327,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1289.0,
+          "ms": 2.44,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1301.0,
+          "ms": 1.095,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1301.0,
+          "ms": 1.218,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1305.0,
+          "ms": 3.112,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1305.0,
+          "ms": 3.249,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1315.0,
+          "ms": 1.155,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1315.0,
+          "ms": 4.191,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1459.0,
+          "ms": 2.092,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1599.0,
+          "ms": 2.173,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1599.0,
+          "ms": 2.302,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1619.0,
+          "ms": 2.746,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1619.0,
+          "ms": 2.874,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1633.0,
+          "ms": 2.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1777.0,
+          "ms": 1.781,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 2.0,
+      "retained_source_bytes": 34313470.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load kyurem-black",
+          "covered": true,
+          "ms": 119.171
+        }
+      ],
+      "static_bytes": 297716096.0
+    }
+  ],
+  "integrated_steady_frame_p95_ms": {
+    "classic": {
+      "p95_ms": 17.312,
+      "samples": 960
+    },
+    "stadium": {
+      "p95_ms": 17.348,
+      "samples": 480
+    }
+  },
+  "integration_note": "Requalified on current development mixed stadium crowd; original arena and failed runs retained.",
   "models": 4,
   "performance_diagnosis": "Initial short two-pair test failed p95; approved base controls also failed stadium. Two-second prepared battle observations per pair preserve all loading/lifecycle checks and unchanged 20 ms gate; original evidence retained.",
+  "previous_arena_sha256": "b410d6b355568d7fd0c3b874088771d73fe2e943174c6d91fabfdcb351ed5ceb",
   "published": false,
   "release_approved": false,
   "remaining": [

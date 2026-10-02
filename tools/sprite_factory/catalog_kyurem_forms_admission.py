@@ -90,6 +90,20 @@ def prepare():
     print('KYUREM_PREPARED pairs=2 scenes=4 bundles=2')
 
 
+def validate_stress(stress):
+    assert set(stress['steady_frame_p95_ms']) == {'classic', 'stadium'}
+    assert all(v['samples'] >= 480 and 0 < v['p95_ms'] <= 20 for v in stress['steady_frame_p95_ms'].values())
+    assert stress['complete'] and stress['catalog_sha256'] == sha(WORK / 'installed/installed-catalog.json')
+    assert [r['arena'] for r in stress['rounds']] == ['classic', 'stadium', 'classic']
+    for cycle in stress['rounds']:
+        assert cycle['pairs'] == cycle['faint_replacements'] == 2
+        assert 0 < cycle['frame_p95_ms'] <= 20
+        assert cycle['retained_source_bytes'] <= 64 * 1024 * 1024
+        assert not any(s['ms'] > 100 and not s['covered'] for s in cycle['stalls_over_50ms'])
+        assert max((s['ms'] for s in cycle['load_spans'] if s['operation'] == 'threaded load dispatch/collect'), default=0) <= 1000 / 60
+    assert stress['rounds'][2]['static_bytes'] - stress['rounds'][1]['static_bytes'] < 1024 * 1024
+
+
 def admit():
     approved()
     fixture = read(WORK / 'runtime-fixture.json')
@@ -103,17 +117,7 @@ def admit():
         log = (WORK / name).read_text()
         assert marker in log and 'ERROR:' not in log, name
     stress = read(WORK / 'stress-v2.json')
-    assert set(stress['steady_frame_p95_ms']) == {'classic', 'stadium'}
-    assert all(v['samples'] >= 480 and 0 < v['p95_ms'] <= 20 for v in stress['steady_frame_p95_ms'].values())
-    assert stress['complete'] and stress['catalog_sha256'] == sha(WORK / 'installed/installed-catalog.json')
-    assert [r['arena'] for r in stress['rounds']] == ['classic', 'stadium', 'classic']
-    for cycle in stress['rounds']:
-        assert cycle['pairs'] == cycle['faint_replacements'] == 2
-        assert 0 < cycle['frame_p95_ms'] <= 20
-        assert cycle['retained_source_bytes'] <= 64 * 1024 * 1024
-        assert not any(s['ms'] > 100 and not s['covered'] for s in cycle['stalls_over_50ms'])
-        assert max((s['ms'] for s in cycle['load_spans'] if s['operation'] == 'threaded load dispatch/collect'), default=0) <= 1000 / 60
-    assert stress['rounds'][2]['static_bytes'] - stress['rounds'][1]['static_bytes'] < 1024 * 1024
+    validate_stress(stress)
     index = read(WORK / 'bundles/asset-index.json')
     assert len(index['assets']) == 2
     for asset in index['assets']:
@@ -155,6 +159,26 @@ def admit():
     print('KYUREM_ADMITTED pairs=2 scenes=4 bundles=2 published=false')
 
 
+def requalify():
+    report = WORK / 'stress-integrated.json'
+    log = WORK / 'stress-integrated.log'
+    assert 'BATCH01_STRESS_OK' in log.read_text() and 'ERROR:' not in log.read_text()
+    stress = read(report)
+    validate_stress(stress)
+    receipt = read(RECEIPT)
+    assert receipt['admitted_registry_check_passed']
+    arena = ROOT / 'scripts/battle/arenas/generic/stadium_arena.gd'
+    receipt['previous_arena_sha256'] = receipt['evidence_sha256'][str(arena.relative_to(ROOT))]
+    receipt['integrated_runtime_rounds'] = stress['rounds']
+    receipt['integrated_steady_frame_p95_ms'] = stress['steady_frame_p95_ms']
+    for path in (Path(__file__), arena, ROOT / 'scripts/battle/arenas/generic/stadium_crowd.gdshader',
+                 ROOT / 'scripts/battle/arenas/shared/animated_spectator.gd', report, log):
+        receipt['evidence_sha256'][str(path.relative_to(ROOT))] = sha(path)
+    receipt['integration_note'] = 'Requalified on current development mixed stadium crowd; original arena and failed runs retained.'
+    RECEIPT.write_bytes(encoded(receipt))
+    finalize()
+
+
 def finalize():
     log = WORK / 'admitted-check.log'
     assert 'KYUREM_RUNTIME_OK' in log.read_text() and 'ERROR:' not in log.read_text()
@@ -180,5 +204,5 @@ def finalize():
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=('prepare', 'admit', 'finalize'))
-    {'prepare': prepare, 'admit': admit, 'finalize': finalize}[parser.parse_args().phase]()
+    parser.add_argument('phase', choices=('prepare', 'admit', 'finalize', 'requalify'))
+    {'prepare': prepare, 'admit': admit, 'finalize': finalize, 'requalify': requalify}[parser.parse_args().phase]()

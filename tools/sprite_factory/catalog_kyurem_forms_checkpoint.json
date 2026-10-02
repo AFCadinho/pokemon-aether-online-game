@@ -878,7 +878,7 @@
   "runtime_approved": true,
   "runtime_qualification": {
     "receipt": "tools/sprite_factory/catalog_kyurem_forms_bundle_qualification.json",
-    "sha256": "8570bd9c0d9cfe48761f64a1c0f9c4b7f63fab70bb41f4678e3ab69b86980f94"
+    "sha256": "ccbf1f7d314c373e5b131960b4dec84356236e511f0202d4f1e4ef691c293b66"
   },
   "schema": 1,
   "scope": "four_neutral_form_appearances_for_user_review_not_runtime_admission",

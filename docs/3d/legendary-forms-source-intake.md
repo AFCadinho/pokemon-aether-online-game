@@ -136,3 +136,9 @@ requires the exact approved assets, installed hashes, all runtime logs and
 both unchanged performance gates. The final test runs without fixture overrides.
 The next source-confirmed models are Calyrex Ice/Shadow Rider and crowned
 Zacian/Zamazenta. Charged Kyurem accessory visibility remains separate work.
+
+Integration caught a concurrent stadium crowd change. The slot merged current
+`development` and repeated the exact installed stress gate on the new mixed
+crowd. This also passes: 17.346 / 17.348 / 17.314 ms p95. The
+receipt preserves the previous arena digest and pins the current arena, crowd
+shader, spectator code and additional integrated reports.
