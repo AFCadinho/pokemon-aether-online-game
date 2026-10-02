@@ -1,0 +1,41 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 2,
+  "bundle_bytes": 1440744,
+  "bundle_qualification_sha256": "ee85aff0e6a280bf88d75a3f1ed43180d8ea6da15c8db21ca43ecc7054aa51b7",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:paras:base",
+      "object_key": "optional-assets/pokemon_3d/paras/base/v1-3bdbc33fb9459d5b33a6ad127c109b1b3a11456e01a3680f151b4fb4f7a72cbb.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "3bdbc33fb9459d5b33a6ad127c109b1b3a11456e01a3680f151b4fb4f7a72cbb",
+      "size_bytes": 1440744,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "remaining-142-paras-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/remaining-142-paras-approved-v1-ca5669eb67be221d9c227b4801a126961e21bce2ea8759824f4bc656ff8029e9.json",
+    "sha256": "ca5669eb67be221d9c227b4801a126961e21bce2ea8759824f4bc656ff8029e9",
+    "size_bytes": 1076
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/remaining-142-paras-approved-v1-ca5669eb67be221d9c227b4801a126961e21bce2ea8759824f4bc656ff8029e9.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "ca5669eb67be221d9c227b4801a126961e21bce2ea8759824f4bc656ff8029e9",
+    "size_bytes": 1076,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 1,
+  "profile_count": 1,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 2,
+  "public_head_size_verified_objects": 2,
+  "reviewed_catalog_sha256": "9612c5a41392e29ecde575b6b41cab07a9ffcc4e276ca58054ab24f1204bc5a5",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T04:41:21.203817+00:00"
+}
