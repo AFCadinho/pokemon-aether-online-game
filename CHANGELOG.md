@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De on-demand 3D-contentroute kan de volledige goedgekeurde catalogus met 1.139 bundels gebruiken, inclusief geregistreerde alternatieve en Mega-vormen; modellen blijven per benodigde Pokémon downloadbaar.
+
 - Name Mr. Fuji’s helper Reina in her overworld label, quest tracker and Trainer Progress checkpoints.
 
 - Lavender’s story continues through Mr. Fuji’s helper and Cubone to Gary’s Pokémon Tower battle and Silph Co. hint, with new Trainer Progress checkpoints.

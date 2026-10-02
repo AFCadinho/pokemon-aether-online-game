@@ -6,6 +6,7 @@ const Approval = preload("model_pack_manifest.gd")
 const V5 = preload("res://data/approved_3d_release_v5.json")
 const V6 = preload("res://data/approved_3d_release_v6.json")
 const V7 = preload("res://data/approved_3d_release_v7.json")
+const V8 = preload("res://data/approved_3d_release_v8.json")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
@@ -71,7 +72,9 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 	v6.sort()
 	var v7 := _v7_ids()
 	v7.sort()
-	if normalized != original and normalized != expanded and normalized != v5 and normalized != v6 and normalized != v7:
+	var v8 := _v8_ids()
+	v8.sort()
+	if normalized != original and normalized != expanded and normalized != v5 and normalized != v6 and normalized != v7 and normalized != v8:
 		return "Asset bundle release set is not approved."
 	if normalized == v5:
 		var pinned: Dictionary = V5.data.index
@@ -91,6 +94,12 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 				or descriptor.sizeBytes != pinned.size_bytes
 				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
 			return "Catalog v7 release index differs from the approved index."
+	if normalized == v8:
+		var pinned: Dictionary = V8.data.index
+		if (descriptor.revision != V8.data.revision or descriptor.sha256 != pinned.sha256
+				or descriptor.sizeBytes != pinned.size_bytes
+				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
+			return "Catalog v8 release index differs from the approved index."
 	return ""
 
 
@@ -111,6 +120,13 @@ static func _v6_ids() -> Array[String]:
 static func _v7_ids() -> Array[String]:
 	var result: Array[String] = []
 	for asset_id: String in V7.data.requiredAssetIds:
+		result.append(asset_id)
+	return result
+
+
+static func _v8_ids() -> Array[String]:
+	var result: Array[String] = []
+	for asset_id: String in V8.data.requiredAssetIds:
 		result.append(asset_id)
 	return result
 
@@ -188,7 +204,8 @@ func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String)
 	var error := _release_index_error(index)
 	if not error.is_empty():
 		return {"error": error}
-	if asset_id not in RELEASE_ASSET_IDS and asset_id not in _v5_ids() and asset_id not in _v6_ids() and asset_id not in _v7_ids():
+	if (asset_id not in RELEASE_ASSET_IDS and asset_id not in _v5_ids() and asset_id not in _v6_ids()
+			and asset_id not in _v7_ids() and asset_id not in _v8_ids()):
 		return {"error": "Asset bundle is outside the approved release set."}
 	return store.install_archive(index, asset_id, downloaded_path)
 
@@ -261,6 +278,8 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 			expected = _v5_ids()
 		elif assets is Array and assets.size() == _v6_ids().size():
 			expected = _v6_ids()
+		elif assets is Array and assets.size() == _v8_ids().size():
+			expected = _v8_ids()
 		else:
 			expected = _v7_ids()
 	if not assets is Array or assets.size() != expected.size():
@@ -270,8 +289,8 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 		if not asset is Dictionary:
 			return "Asset bundle index contains an invalid asset."
 		var asset_id := str(asset.get("asset_id", ""))
-		var form := "mega" if asset_id == MEGA_ID else "base"
-		if asset_id not in expected or asset_id in seen or asset.get("form_id") != form:
+		var form := str(asset.get("form_id", ""))
+		if asset_id not in expected or asset_id in seen or form not in ["base", "mega", "mega-x", "mega-y", "mega-z"]:
 			return "Asset bundle index contains an unapproved asset."
 		seen.append(asset_id)
 		var appearances: Variant = asset.get("appearances")
@@ -283,7 +302,7 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 				return "Asset bundle appearance is invalid."
 			var variant := str(appearance.get("variant", ""))
 			var identity := str(appearance.get("runtime_identity", ""))
-			var expected_identity := str(asset.species_id) + ("-mega" if form == "mega" else "") + ("@shiny" if variant == "shiny" else "")
+			var expected_identity := str(asset.species_id) + ("-" + form if form != "base" else "") + ("@shiny" if variant == "shiny" else "")
 			var approved: Dictionary = Approval.DATA.data.models.get(identity, {})
 			if variant not in ["normal", "shiny"] or variant in variants or identity != expected_identity:
 				return "Asset bundle appearance identity is not approved."
