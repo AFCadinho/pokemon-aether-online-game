@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 	var settings := get_node("/root/SettingsManager")
 	var ui_factor := float(settings.get("ui_scale")) / 100.0
 	var window_fit := get_node("/root/WindowFit")
-	var touch_factor := 1.5 if window_fit.call("is_touch_ui") else 1.0
+	var touch_factor := 1.5 if window_fit.call("is_mobile_browser_ui") else 1.0
 	var move_scale := minf(0.8 * ui_factor * touch_factor, maxf(0.4, (area.x * 0.5) / 400.0))
 	var move_delta := Vector2(400, 188) * (move_scale - 0.8)
 	var moves_position := Vector2(area.x - 340, area.y - 170) - move_delta

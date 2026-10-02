@@ -6,10 +6,15 @@ const WINDOWED_SAFE_MARGIN := Vector2i(80, 128)
 const MOBILE_CONTENT_SCALE_FACTOR := 1.25
 
 var _touch_ui := false
+var _mobile_browser_ui := false
 
 
 func is_touch_ui() -> bool:
 	return _touch_ui
+
+
+func is_mobile_browser_ui() -> bool:
+	return _mobile_browser_ui
 
 
 func _ready() -> void:
@@ -19,6 +24,8 @@ func _ready() -> void:
 	if OS.has_feature("web"):
 		# iPadOS may use a desktop user agent; include touch-first browsers.
 		_touch_ui = _touch_ui or bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0 && matchMedia('(pointer: coarse)').matches", true))
+	# Browser-responsive layouts must not replace the native Android UI.
+	_mobile_browser_ui = OS.has_feature("web") and _touch_ui
 	get_window().size_changed.connect(apply_ui_scale)
 	apply_ui_scale.call_deferred()
 	if OS.has_feature("mobile") or OS.has_feature("web"):

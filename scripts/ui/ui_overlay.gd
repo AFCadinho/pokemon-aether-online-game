@@ -2076,13 +2076,15 @@ func _apply_mobile_right_quick_buttons() -> void:
 		my_powers_button,
 	]
 	var bottom := -104.0
+	var extent := 64.0 if WindowFit.is_mobile_browser_ui() else 50.0
+	var gap := 4.0 if WindowFit.is_mobile_browser_ui() else 5.0
 	for button in buttons:
-		button.custom_minimum_size = Vector2(64, 64)
-		button.offset_left = -68.0
+		button.custom_minimum_size = Vector2.ONE * extent
+		button.offset_left = -extent - 4.0
 		button.offset_right = -4.0
-		button.offset_top = bottom - 64.0
+		button.offset_top = bottom - extent
 		button.offset_bottom = bottom
-		bottom -= 68.0
+		bottom -= extent + gap
 
 
 func _apply_mobile_global_buff_buttons() -> void:
@@ -2098,6 +2100,9 @@ func _apply_mobile_global_buff_buttons() -> void:
 
 
 func _apply_mobile_chat_controls() -> void:
+	if not WindowFit.is_mobile_browser_ui():
+		_apply_native_mobile_chat_controls()
+		return
 	var scroll := ScrollContainer.new()
 	scroll.name = "TouchChatTabsScroll"
 	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -2121,6 +2126,26 @@ func _apply_mobile_chat_controls() -> void:
 	if chat_context_selector_button != null:
 		chat_context_selector_button.custom_minimum_size = Vector2(chat_context_selector_button.custom_minimum_size.x, 64.0)
 		chat_context_selector_button.add_theme_font_size_override("font_size", 20)
+	_position_chat_tabs_panel.call_deferred()
+
+
+func _apply_native_mobile_chat_controls() -> void:
+	var tab_row := $Control/ChatTabsPanel/TabRow as HBoxContainer
+	for child in tab_row.get_children():
+		var button := child as Button
+		if button == null:
+			continue
+		button.custom_minimum_size = Vector2(button.custom_minimum_size.x, 38.0)
+		button.add_theme_font_size_override("font_size", 15)
+	if chat_settings_button != null:
+		chat_settings_button.custom_minimum_size = Vector2(38.0, 38.0)
+	chat_input.custom_minimum_size = Vector2(chat_input.custom_minimum_size.x, 44.0)
+	chat_input.add_theme_font_size_override("font_size", 16)
+	send_button.custom_minimum_size = Vector2(send_button.custom_minimum_size.x, 44.0)
+	send_button.add_theme_font_size_override("font_size", 15)
+	if chat_context_selector_button != null:
+		chat_context_selector_button.custom_minimum_size = Vector2(chat_context_selector_button.custom_minimum_size.x, 44.0)
+		chat_context_selector_button.add_theme_font_size_override("font_size", 15)
 	_position_chat_tabs_panel.call_deferred()
 
 
@@ -4122,7 +4147,7 @@ func _setup_normal_ui_focus_groups() -> void:
 			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock",
 			^"ChatPanel/MarginContainer/VBoxContainer/ChatInputDock/MarginContainer/InputRow",
 			^"ChatTabsPanel",
-			^"ChatTabsPanel/TouchChatTabsScroll/TabRow" if WindowFit.is_touch_ui() else ^"ChatTabsPanel/TabRow",
+			^"ChatTabsPanel/TouchChatTabsScroll/TabRow" if WindowFit.is_mobile_browser_ui() else ^"ChatTabsPanel/TabRow",
 		],
 		party_panel: [
 			^"PartyPanel",
@@ -12543,7 +12568,7 @@ func _position_pokedex_popup() -> void:
 	pokedex_popup.offset_bottom = popup_size.y * 0.5
 
 func _process(delta: float) -> void:
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		_fit_touch_popups()
 	if has_meta("battle_chat_active"):
 		_refresh_session_logout_countdown()
@@ -31197,7 +31222,7 @@ func _setup_collapsible_panels() -> void:
 	_register_collapsible_panel("options", options_panel, "right")
 	_register_collapsible_panel("actions", actions_panel, "action_bar", toggle_actions_collapse_button)
 	_register_collapsible_panel("dex_actions", dex_actions_panel, "action_bar", dex_actions_collapse_button)
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		for panel_id: String in ["party", "chat", "location", "dex_actions", "hotkey_sidebar", "options", "actions", "player_status"]:
 			collapsible_panels[panel_id]["collapsed"] = true
 			_apply_collapsible_panel_state(panel_id)
@@ -31318,7 +31343,7 @@ func _register_collapsible_panel(
 	if button == null:
 		button = Button.new()
 		root_control.add_child(button)
-	button.custom_minimum_size = Vector2(44, 44) if WindowFit.is_touch_ui() else COLLAPSE_BUTTON_SIZE
+	button.custom_minimum_size = Vector2(44, 44) if WindowFit.is_mobile_browser_ui() else COLLAPSE_BUTTON_SIZE
 	button.size = button.custom_minimum_size
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	button.z_index = UI_BASE_Z_INDEX
@@ -31347,7 +31372,7 @@ func _on_collapsible_panel_button_pressed(panel_id: String) -> void:
 	_focus_normal_ui_group(panel)
 
 	var collapsed := not bool(state.get("collapsed", false))
-	if WindowFit.is_touch_ui() and not collapsed:
+	if WindowFit.is_mobile_browser_ui() and not collapsed:
 		for other_id: String in collapsible_panels:
 			if other_id != panel_id:
 				collapsible_panels[other_id]["collapsed"] = true
@@ -31384,7 +31409,7 @@ func _apply_collapsible_panel_state(panel_id: String) -> void:
 		var companion := companion_value as Control
 		if companion != null:
 			companion.visible = group_visible and bool(companion.get_meta("group_available", true))
-	if WindowFit.is_touch_ui() and panel_id == "player_status":
+	if WindowFit.is_mobile_browser_ui() and panel_id == "player_status":
 		settings_button.visible = true
 	button.visible = available
 	button.text = _collapsible_button_glyph(str(state.get("side", "right")), collapsed)
@@ -31517,8 +31542,8 @@ func _position_collapsible_button(panel_id: String) -> void:
 			position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
 			position.y = rect.position.y + rect.size.y - COLLAPSE_BUTTON_SIZE.y
 
-	var button_size := Vector2(64, 64) if WindowFit.is_touch_ui() else COLLAPSE_BUTTON_SIZE
-	if WindowFit.is_touch_ui():
+	var button_size := Vector2(64, 64) if WindowFit.is_mobile_browser_ui() else COLLAPSE_BUTTON_SIZE
+	if WindowFit.is_mobile_browser_ui():
 		var order: Array[String] = ["options", "actions", "party", "chat", "location", "dex_actions", "hotkey_sidebar", "player_status"]
 		var index := order.find(panel_id)
 		var columns := maxi(1, int((root_control.size.x - 8) / 68))
@@ -31531,7 +31556,7 @@ func _position_collapsible_button(panel_id: String) -> void:
 func _position_chat_resize_button() -> void:
 	if chat_resize_button == null:
 		return
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		chat_resize_button.hide()
 		return
 
@@ -31578,7 +31603,7 @@ func _position_chat_tabs_panel() -> void:
 		var row_minimum_size := tab_row.get_combined_minimum_size()
 		tabs_size.x = maxf(tabs_size.x, row_minimum_size.x)
 		tabs_size.y = maxf(tabs_size.y, row_minimum_size.y)
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		var tab_scroll := chat_tabs_panel.get_node("TouchChatTabsScroll") as ScrollContainer
 		tabs_size.y += tab_scroll.get_h_scroll_bar().get_combined_minimum_size().y
 	var max_tabs_width: float = max(0.0, viewport_size.x)
