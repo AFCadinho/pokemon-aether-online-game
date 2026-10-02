@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Black Kyurem en White Kyurem zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met acht native animaties en individuele downloadbundles.
+
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
 
 - Het 3D-stadium groepeert vaste tribunedelen en pauzeert publieksanimaties buiten beeld. Verre toeschouwers animeren op 30 Hz; Pokémon houden hun bestaande animatietempo.
