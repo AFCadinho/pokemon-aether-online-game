@@ -169,32 +169,34 @@ flow_direction = "down"
 z_index = 5
 
 [node name="Interactables" type="Node2D" parent="Entities"]
-[node name="Nugget" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Nugget" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(256, 400)
 pickup_id = "kanto_cerulean_cave_nugget"
 item_id = "nugget"
 
-[node name="UltraBall" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="UltraBall" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(320, 720)
 pickup_id = "kanto_cerulean_cave_ultra_ball"
 item_id = "ultra-ball"
 
-[node name="MaxElixir" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="MaxElixir" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(2928, 720)
 pickup_id = "kanto_cerulean_cave_max_elixir"
 item_id = "max-elixir"
 
-[node name="FullRestore" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="FullRestore" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(496, 1744)
 pickup_id = "kanto_cerulean_cave_full_restore"
 item_id = "full-restore"
 
-[node name="HyperPotion" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="HyperPotion" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(208, 1904)
 pickup_id = "kanto_cerulean_cave_hyper_potion"
 item_id = "hyper-potion"
 
-[node name="Revive" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(2000, 1200)
 pickup_id = "kanto_cerulean_cave_revive"
 item_id = "revive"

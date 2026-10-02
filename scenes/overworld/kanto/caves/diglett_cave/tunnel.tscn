@@ -148,22 +148,24 @@ z_index = 5
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="MaxRevive" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="MaxRevive" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(816, 480)
 pickup_id = "kanto_diglett_cave_tunnel_maxrevive"
 item_id = "max-revive"
 
-[node name="Calcium" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Calcium" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(688, 928)
 pickup_id = "kanto_diglett_cave_tunnel_calcium"
 item_id = "calcium"
 
-[node name="PPMax" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="PPMax" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(752, 1456)
 pickup_id = "kanto_diglett_cave_tunnel_ppmax"
 item_id = "pp-max"
 
-[node name="RockIncense" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="RockIncense" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(816, 2224)
 pickup_id = "kanto_diglett_cave_tunnel_rockincense"
 item_id = "rock-incense"

@@ -578,7 +578,9 @@ movement_speed_pixels = 42.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=208040012]
 
-[node name="TM05Roar" parent="Entities/Interactables" unique_id=260838565 instance=ExtResource("6_overworld_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="TM05Roar" parent="Entities/Interactables/Items" unique_id=260838565 instance=ExtResource("6_overworld_item")]
 position = Vector2(1296, 976)
 pickup_id = "kanto_route_4_tm_roar"
 item_id = "tm-roar"
@@ -610,32 +612,32 @@ rock_variant = 3
 rock_visual_style = 2
 required_rock_smash_level = 50
 
-[node name="PersimBerry" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="PersimBerry" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(160, 928)
 pickup_id = "kanto_route_4_persim_berry"
 item_id = "persim-berry"
 
-[node name="GreatBallRoute4" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="GreatBallRoute4" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(1280, 1216)
 pickup_id = "kanto_route_4_great_ball"
 item_id = "great-ball"
 
-[node name="RazzBerry" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="RazzBerry" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(1952, 1280)
 pickup_id = "kanto_route_4_razz_berry"
 item_id = "razz-berry"
 
-[node name="BigMushroom" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="BigMushroom" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(2048, 1248)
 pickup_id = "kanto_route_4_big_mushroom"
 item_id = "big-mushroom"
 
-[node name="HPUp" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="HPUp" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(2944, 1184)
 pickup_id = "kanto_route_4_hp_up"
 item_id = "hp-up"
 
-[node name="UltraBall" parent="Entities/Interactables" instance=ExtResource("6_overworld_item")]
+[node name="UltraBall" parent="Entities/Interactables/Items" instance=ExtResource("6_overworld_item")]
 position = Vector2(832, 1088)
 pickup_id = "kanto_route_4_ultra_ball"
 item_id = "ultra-ball"

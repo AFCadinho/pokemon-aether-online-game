@@ -416,12 +416,14 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
-[node name="Awakening" parent="Entities/Interactables" unique_id=2131154250 instance=ExtResource("16_overworld_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Awakening" parent="Entities/Interactables/Items" unique_id=2131154250 instance=ExtResource("16_overworld_item")]
 position = Vector2(1744, 400)
 pickup_id = "kanto_route_3_awakening"
 item_id = "awakening"
 
-[node name="OranBerry" parent="Entities/Interactables" unique_id=1612219391 instance=ExtResource("16_overworld_item")]
+[node name="OranBerry" parent="Entities/Interactables/Items" unique_id=1612219391 instance=ExtResource("16_overworld_item")]
 position = Vector2(1520, 1136)
 pickup_id = "kanto_route_3_oran_berry"
 item_id = "oran-berry"
@@ -458,22 +460,22 @@ rock_variant = 3
 rock_visual_style = 2
 required_rock_smash_level = 20
 
-[node name="StarPieceSouth" parent="Entities/Interactables" unique_id=1159141877 instance=ExtResource("16_overworld_item")]
+[node name="StarPieceSouth" parent="Entities/Interactables/Items" unique_id=1159141877 instance=ExtResource("16_overworld_item")]
 position = Vector2(1184, 1184)
 pickup_id = "kanto_route_3_star_piece_south"
 item_id = "star-piece"
 
-[node name="StarPieceNorth" parent="Entities/Interactables" unique_id=1594929112 instance=ExtResource("16_overworld_item")]
+[node name="StarPieceNorth" parent="Entities/Interactables/Items" unique_id=1594929112 instance=ExtResource("16_overworld_item")]
 position = Vector2(2336, 384)
 pickup_id = "kanto_route_3_star_piece_north"
 item_id = "star-piece"
 
-[node name="BigRoot" parent="Entities/Interactables" unique_id=1685856312 instance=ExtResource("16_overworld_item")]
+[node name="BigRoot" parent="Entities/Interactables/Items" unique_id=1685856312 instance=ExtResource("16_overworld_item")]
 position = Vector2(2784, 1056)
 pickup_id = "kanto_route_3_big_root"
 item_id = "big-root"
 
-[node name="HyperPotion" parent="Entities/Interactables" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
+[node name="HyperPotion" parent="Entities/Interactables/Items" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
 position = Vector2(352, 1056)
 pickup_id = "kanto_route_3_hyper_potion"
 item_id = "hyper-potion"
