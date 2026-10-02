@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender’s story continues through Mr. Fuji’s helper and Cubone to Gary’s Pokémon Tower battle and Silph Co. hint, with new Trainer Progress checkpoints.
+
 - Adventure Party-dubbels tonen twee aparte partysecties: speler 1 boven en speler 2 onder, elk met drie slots. Het volledige team van een solo-NPC blijft bij elkaar in de tegenstanderrail.
 
 - Lavender Resident gebruikt nu een passend portret van een oudere vrouw tijdens haar main-questdialoog en gewone gesprekken.

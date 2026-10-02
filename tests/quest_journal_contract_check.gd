@@ -2,6 +2,12 @@ extends SceneTree
 
 const QUEST_JOURNAL_VIEW := preload("res://scripts/ui/quest_journal_view.gd")
 const QUEST_LOCALIZATION_KEYS: Array[String] = [
+	"story.kanto.investigate_pokemon_tower.title",
+	"story.kanto.investigate_pokemon_tower.summary",
+	"story.kanto.investigate_pokemon_tower.speak_to_fuji_helper",
+	"story.kanto.investigate_pokemon_tower.reach_pokemon_tower",
+	"story.kanto.investigate_pokemon_tower.battle_gary",
+
 	"ui.quest.open_log",
 	"ui.quest.log_title",
 	"ui.quest.log_subtitle",

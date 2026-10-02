@@ -6272,5 +6272,13 @@
   "story.kanto.travel_to_lavender_town.reach_rock_tunnel": "Bereik Rock Tunnel.",
   "story.kanto.travel_to_lavender_town.reach_lavender_town": "Bereik Lavender Town.",
   "ui.staff.story_checkpoint.rock_tunnel_traverse": "Rock Tunnel · Reis door de grot",
-  "ui.staff.story_checkpoint.reach_lavender_town": "Lavender Town · Bereik de stad"
+  "ui.staff.story_checkpoint.reach_lavender_town": "Lavender Town · Bereik de stad",
+  "story.kanto.investigate_pokemon_tower.title": "Op zoek naar Mr. Fuji",
+  "story.kanto.investigate_pokemon_tower.summary": "Praat met de helper van Mr. Fuji en onderzoek zijn verdwijning in Pokémon Tower.",
+  "story.kanto.investigate_pokemon_tower.speak_to_fuji_helper": "Praat met de helper van Mr. Fuji in zijn huis.",
+  "story.kanto.investigate_pokemon_tower.reach_pokemon_tower": "Onderzoek Pokémon Tower.",
+  "story.kanto.investigate_pokemon_tower.battle_gary": "Versla Gary in Pokémon Tower.",
+  "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Fuji's helper",
+  "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Ga de toren in",
+  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle met Gary"
 }
