@@ -1,0 +1,642 @@
+{
+  "admitted_registry_check_passed": true,
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "calyrex-ice",
+            "runtime_sha256": "fbb6995001d349c781b30502f8a38bdea7ed34e3ff6f0c9eba70ae464921d2fb",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "calyrex-ice@shiny",
+            "runtime_sha256": "6bfd598beff086e62917c5826fc8c60511951e7c5a7d0e64969419df5b1c177e",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:calyrex-ice:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 898,
+        "object_key": "optional-assets/pokemon_3d/calyrex-ice/base/v1-b45bfab71aca8199168a3c18bee0f7767af37d9c2c2993b37d3ddcc113aa886f.zip",
+        "sha256": "b45bfab71aca8199168a3c18bee0f7767af37d9c2c2993b37d3ddcc113aa886f",
+        "size_bytes": 24984713,
+        "species_id": "calyrex-ice",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "calyrex-shadow",
+            "runtime_sha256": "ac2c6ef02d6ab56d2f2875f36b0012065ba2e465b7812b8f07f04080459c0cae",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "calyrex-shadow@shiny",
+            "runtime_sha256": "bd8bfad5a86219ff78302bc36fa2b1a50244be4775ba18dbde02a8b0ae525ed2",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:calyrex-shadow:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 898,
+        "object_key": "optional-assets/pokemon_3d/calyrex-shadow/base/v1-fa92a11b04c425c59f87e6730cab91c3ee1be1efe2b6163824fc54205dad19c9.zip",
+        "sha256": "fa92a11b04c425c59f87e6730cab91c3ee1be1efe2b6163824fc54205dad19c9",
+        "size_bytes": 28609661,
+        "species_id": "calyrex-shadow",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zacian-crowned",
+            "runtime_sha256": "e5c7fe3042f3ad5f82cced6a422181ceffe8c9d73089e5c9c2da3358916f9bf0",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zacian-crowned@shiny",
+            "runtime_sha256": "2ef9afbc1eb4310dd2d543ec7cd93bb0720e621460b5025a4fb966f95a6f7cbb",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zacian-crowned:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 888,
+        "object_key": "optional-assets/pokemon_3d/zacian-crowned/base/v1-d6a87251199355f05b2595082801edcdcc8fd4b45075e46990ea297b41b7c536.zip",
+        "sha256": "d6a87251199355f05b2595082801edcdcc8fd4b45075e46990ea297b41b7c536",
+        "size_bytes": 24137511,
+        "species_id": "zacian-crowned",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zamazenta-crowned",
+            "runtime_sha256": "90c9aae15ddc25ed3847f1bd2e24cff4b4a01cd6895032933ffbf34d73e054bf",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zamazenta-crowned@shiny",
+            "runtime_sha256": "b4de97f01a173f95dd0907edb9cb3f9148cfd7ae473769fe4c122633b3b909cd",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zamazenta-crowned:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 889,
+        "object_key": "optional-assets/pokemon_3d/zamazenta-crowned/base/v1-59c9847c6b5bd78f1fb934300e6fecd39cb1032d755edbd0b240992c9739938e.zip",
+        "sha256": "59c9847c6b5bd78f1fb934300e6fecd39cb1032d755edbd0b240992c9739938e",
+        "size_bytes": 25829626,
+        "species_id": "zamazenta-crowned",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "legendary-riders-crowned-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 103561511,
+  "evidence_sha256": {
+    ".tmp/legendary-riders-crowned-v1/approved-v1/admitted-check-cached-download-assertion.log": "79f81ea8b64db773be7596aa167bba2a86c1e4bbc13245fe25d33fcd6f394381",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/admitted-check.log": "a7bd80331c57b6b669b830950123f5c5d52d17c439b6861de1b1f3700cd07d7e",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/approval-checkpoint.json": "83d4db56b56b2158b5c67543ee43d9604113c352d1227e149673774f3a3187a3",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/install.log": "644d35473b9fa58d05fc65a0af44ce60f547483cdf17d9f4c88aac4379eeb563",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/installed/installed-catalog.json": "94c15fdffe7e40e26fce4163d0e58150ae9be27b62b5fb4bccc20fbcec772dd4",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/runtime-catalog.json": "d97d9a03168042b3fae969ee56f6262c2bffc212fc40b8de02948414908cf5df",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/runtime-check.log": "a7bd80331c57b6b669b830950123f5c5d52d17c439b6861de1b1f3700cd07d7e",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/runtime-fixture.json": "b67185a80ff339c68069271fa614542b24306ccb1839543dc06debeb37882223",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/stress.json": "b04166c21e0bd1d5d2eee84a2319aa0b22427a9bd0f427600e469e86d3fe8ba2",
+    ".tmp/legendary-riders-crowned-v1/approved-v1/stress.log": "3c69675be897cb46db6c4fab379c40baffcda7ea3c6fc18d29099b7430487da7",
+    "scripts/battle/arenas/generic/stadium_arena.gd": "5c817ba5e76d70c59e35ad8c03253ea9562a6a7cb9e90c07617c6599a3e5e2bb",
+    "tests/battle_3d_legendary_forms_check.gd": "3be68c50bf0b8e3e60e1fc17a0f0565d4202686c6da35e9226f8bb5acdb5a545",
+    "tests/battle_3d_legendary_stress_check.gd": "6bafb87e10a636ae427ea364911b0553edc2bbbf3680dc6e49dcfd8c82d675af",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "fdb9a5c6c4392c655ef4c3dc830f8ff1dac3e91199ef7d2d83b3f03d5d627e8a",
+    "tools/sprite_factory/catalog_legendary_riders_crowned_admission.py": "ec269bcc78b2edc113b26a50643b6b8157027c3be29b3d64cc6e237224a4c9eb"
+  },
+  "forms": [
+    "calyrex-ice",
+    "calyrex-shadow",
+    "zacian-crowned",
+    "zamazenta-crowned"
+  ],
+  "installed_runtime_check_passed": true,
+  "models": 8,
+  "performance_diagnosis": "Prepared observations use the existing steady and full-round 20 ms gates.",
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release content-index activation",
+    "release certification"
+  ],
+  "restart_check_note": "An initial final-check assertion incorrectly required four downloads despite valid cached bundles. Restored the existing at-most-one-download-per-form rule; exact loaded identities, hashes, preloading and swap checks are unchanged. Failed log retained.",
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 4.0,
+      "frame_max_ms": 490.998,
+      "frame_p95_ms": 17.278,
+      "frame_samples": 1233.0,
+      "load_spans": [
+        {
+          "frame": 0.0,
+          "ms": 1.703,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0.0,
+          "ms": 1.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2.0,
+          "ms": 4.149,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2.0,
+          "ms": 4.321,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 22.0,
+          "ms": 2.723,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 22.0,
+          "ms": 2.845,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 32.0,
+          "ms": 2.685,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 175.0,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 314.0,
+          "ms": 2.55,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 314.0,
+          "ms": 2.684,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 329.0,
+          "ms": 2.867,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 329.0,
+          "ms": 2.996,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 339.0,
+          "ms": 2.317,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 483.0,
+          "ms": 2.493,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 622.0,
+          "ms": 2.216,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 622.0,
+          "ms": 2.329,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 636.0,
+          "ms": 2.175,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 636.0,
+          "ms": 2.285,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 645.0,
+          "ms": 1.863,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 789.0,
+          "ms": 2.899,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 806.0,
+          "ms": 1.551,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 928.0,
+          "ms": 2.229,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 928.0,
+          "ms": 2.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 942.0,
+          "ms": 2.237,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 942.0,
+          "ms": 2.345,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 952.0,
+          "ms": 1.908,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1096.0,
+          "ms": 1.721,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 4.0,
+      "retained_source_bytes": 25828537.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load calyrex-ice",
+          "covered": true,
+          "ms": 490.998
+        },
+        {
+          "context": "load calyrex-ice",
+          "covered": true,
+          "ms": 105.774
+        }
+      ],
+      "static_bytes": 293760380.0
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 4.0,
+      "frame_max_ms": 273.268,
+      "frame_p95_ms": 17.198,
+      "frame_samples": 1234.0,
+      "load_spans": [
+        {
+          "frame": 1237.0,
+          "ms": 1.462,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 1237.0,
+          "ms": 1.515,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1243.0,
+          "ms": 2.806,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1243.0,
+          "ms": 2.916,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1255.0,
+          "ms": 1.035,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1259.0,
+          "ms": 2.451,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1259.0,
+          "ms": 2.549,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1269.0,
+          "ms": 221.723,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1412.0,
+          "ms": 2.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1551.0,
+          "ms": 2.217,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1551.0,
+          "ms": 2.329,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1567.0,
+          "ms": 2.679,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1567.0,
+          "ms": 2.797,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1578.0,
+          "ms": 1.825,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1722.0,
+          "ms": 1.561,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1861.0,
+          "ms": 2.241,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1861.0,
+          "ms": 2.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1875.0,
+          "ms": 1.891,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1875.0,
+          "ms": 1.996,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1884.0,
+          "ms": 1.631,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2028.0,
+          "ms": 1.571,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2167.0,
+          "ms": 1.931,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2167.0,
+          "ms": 2.036,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2180.0,
+          "ms": 1.917,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2180.0,
+          "ms": 2.023,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2191.0,
+          "ms": 1.849,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2335.0,
+          "ms": 1.475,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 4.0,
+      "retained_source_bytes": 25828537.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load calyrex-ice",
+          "covered": true,
+          "ms": 114.635
+        },
+        {
+          "context": "load calyrex-ice",
+          "covered": true,
+          "ms": 273.268
+        }
+      ],
+      "static_bytes": 297804274.0
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 4.0,
+      "frame_max_ms": 109.892,
+      "frame_p95_ms": 17.126,
+      "frame_samples": 1227.0,
+      "load_spans": [
+        {
+          "frame": 2476.0,
+          "ms": 1.575,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 2476.0,
+          "ms": 1.642,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2482.0,
+          "ms": 2.853,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2482.0,
+          "ms": 2.986,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2493.0,
+          "ms": 1.054,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2497.0,
+          "ms": 2.448,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2497.0,
+          "ms": 2.543,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2506.0,
+          "ms": 1.029,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2506.0,
+          "ms": 3.641,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2650.0,
+          "ms": 1.795,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2789.0,
+          "ms": 2.342,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2789.0,
+          "ms": 2.431,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2803.0,
+          "ms": 2.485,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2803.0,
+          "ms": 2.605,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2813.0,
+          "ms": 2.39,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2957.0,
+          "ms": 1.74,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3096.0,
+          "ms": 2.362,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3096.0,
+          "ms": 2.502,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3109.0,
+          "ms": 1.938,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3109.0,
+          "ms": 2.033,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3118.0,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3262.0,
+          "ms": 1.662,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3401.0,
+          "ms": 2.14,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3401.0,
+          "ms": 2.243,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3414.0,
+          "ms": 2.117,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3414.0,
+          "ms": 2.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3423.0,
+          "ms": 1.674,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3567.0,
+          "ms": 1.95,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 4.0,
+      "retained_source_bytes": 25828537.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load calyrex-ice",
+          "covered": true,
+          "ms": 109.892
+        }
+      ],
+      "static_bytes": 297842042.0
+    }
+  ],
+  "schema": 1,
+  "scope": "Local AMD Compatibility; installed exact bundles; no public R2 or cross-platform certification",
+  "source_limitations": [
+    "Crowned wolf sleep is an authored own-rig rest pose; native material animation side channels are not replayed"
+  ],
+  "steady_frame_p95_ms": {
+    "classic": {
+      "p95_ms": 17.169,
+      "samples": 1920
+    },
+    "stadium": {
+      "p95_ms": 17.198,
+      "samples": 960
+    }
+  }
+}
