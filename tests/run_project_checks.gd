@@ -207,7 +207,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/future_self_appearance_check.gd",
 	"res://tests/rock_tunnel_encounter_check.gd",
 	"res://tests/mt_moon_ambush_recovery_check.gd",
-	"res://tests/mt_moon_transition_facing_check.gd",
+	"res://tests/world_transition_facing_authority_check.gd",
 	"res://tests/route_4_mt_moon_transition_check.gd",
 	"res://tests/route_24_gary_encounter_check.gd",
 	"res://tests/cerulean_exterior_connections_check.gd",

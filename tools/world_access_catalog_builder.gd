@@ -117,11 +117,6 @@ func build(
 				},
 				"spawnMarker": spawn_marker,
 			}
-			var facing_override := str(
-				exit_record.get("transitionFacingDirection", "")
-			).strip_edges()
-			if not facing_override.is_empty():
-				destination["facingDirection"] = facing_override
 			transitions[transition_id] = {
 				"sourceMapId": str(source_record.get("mapId", "")),
 				"destinationAreaId": str(target_record.get("mapId", "")),
@@ -290,7 +285,6 @@ func _load_scene_record(scene_path: String, staff_teleport_overrides: Dictionary
 				"targetScenePath": target_scene_path,
 				"targetSpawnName": target_spawn_name,
 				"transitionId": str(_property_value(child, "transition_id", "")),
-				"transitionFacingDirection": transition_facing_direction,
 			})
 
 	var area := {
