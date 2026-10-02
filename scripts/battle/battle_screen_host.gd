@@ -204,6 +204,7 @@ func _fit_battle() -> void:
 	battle.position = Vector2.ZERO
 	battle.size = size / factor
 	battle.scale = Vector2.ONE * factor
+	battle.update_entry_layout()
 	_apply_entry_fade()
 
 func _reveal_when_prepared(token: int) -> void:

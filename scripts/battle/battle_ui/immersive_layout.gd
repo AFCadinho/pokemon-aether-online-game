@@ -16,9 +16,11 @@ static func apply(battle: Control) -> void:
 	typography.battle = battle
 	battle.add_child(typography)
 	var hud_tracker := preload("res://scripts/battle/battle_ui/immersive_hud.gd").new()
+	hud_tracker.name = "ImmersiveHud"
 	hud_tracker.battle = battle
 	battle.add_child(hud_tracker)
 	var portraits := preload("res://scripts/battle/battle_ui/immersive_portraits.gd").new()
+	portraits.name = "ImmersivePortraits"
 	portraits.battle = battle
 	battle.add_child(portraits)
 	var social_menu := preload("res://scripts/battle/battle_ui/immersive_social_menu.gd").new()

@@ -7696,6 +7696,7 @@ func prepare_wild_battle_from_response(
 		enemy_pokemon.shiny,
 		wild_owned_request_id
 	)
+	update_entry_layout()
 	return true
 
 func _refresh_wild_opponent_owned_icon(species: String, is_shiny: bool, request_id: int) -> void:
@@ -8222,6 +8223,20 @@ func _set_pvp_party_hud_display_override() -> void:
 func _clear_pvp_party_hud_display_override() -> void:
 	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
+func update_entry_layout() -> void:
+	if not has_meta("immersive_battle_ui") or not is_node_ready():
+		return
+	# Container sorting and frame-based HUD work must precede the first reveal.
+	# This is presentation work only, including while authoritative data waits.
+	var stage_view := get_node("%BattleStageViewport")
+	var stage_margin := stage_view.get_parent() as Container
+	stage_margin.notification(Container.NOTIFICATION_SORT_CHILDREN)
+	stage_view._update_stage_transform()
+	get_node("ImmersivePortraits")._process(0.0)
+	get_node("ImmersiveHud").layout_now(0.0, true)
+	get_node("ImmersiveTypography")._process(0.0)
+
+
 var _pending_entry_visibility: Array[Dictionary] = []
 
 func prepare_pending_entry(environment_id: StringName) -> void:
@@ -8244,8 +8259,10 @@ func prepare_pending_entry(environment_id: StringName) -> void:
 		_pending_entry_visibility.append({"control": control, "visible": control.visible})
 		control.hide()
 	_show_local_player_trainer()
+	update_entry_layout()
 
 func _finish_pending_entry() -> void:
+	update_entry_layout()
 	remove_meta("battle_entry_pending")
 	for state: Dictionary in _pending_entry_visibility:
 		var control: Control = state.control
@@ -8332,6 +8349,7 @@ func _prepare_battle_setup(
 	battle_voice_director.reset()
 	pending_mega_species_by_ident.clear()
 	animation_router.prewarm_effect_animations([SHINY_ENTRANCE_EFFECT_KEY, MEGA_EVOLUTION_EFFECT_KEY])
+	update_entry_layout()
 
 
 func _clear_battle_trainer_sprites() -> void:
