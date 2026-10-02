@@ -40,6 +40,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="34_i2u7v"]
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="35_bug_catcher"]
 [ext_resource type="Script" uid="uid://bokcw1q7hoc1w" path="res://scripts/world/kanto/routes/nugget_bridge_trainer.gd" id="36_bridge_trainer"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_route_4_exit"]
 size = Vector2(32, 160)
@@ -1064,6 +1065,16 @@ display_name = "Pikachu"
 facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
+[node name="RareCandy" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(416, 192)
+pickup_id = "kanto_cerulean_city_rare_candy"
+item_id = "rare-candy"
+
+[node name="Nugget" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(640, 224)
+pickup_id = "kanto_cerulean_city_nugget"
+item_id = "nugget"
+
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=239659690 instance=ExtResource("20_aether_beacon")]
 z_index = 912
