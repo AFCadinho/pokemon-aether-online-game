@@ -6273,11 +6273,11 @@
   "ui.staff.story_checkpoint.rock_tunnel_traverse": "Rock Tunnel · Atravesse a caverna",
   "ui.staff.story_checkpoint.reach_lavender_town": "Lavender Town · Chegue à cidade",
   "story.kanto.investigate_pokemon_tower.title": "Encontrando o Sr. Fuji",
-  "story.kanto.investigate_pokemon_tower.summary": "Fale com a ajudante do Sr. Fuji e investigue seu desaparecimento na Pokémon Tower.",
-  "story.kanto.investigate_pokemon_tower.speak_to_fuji_helper": "Fale com a ajudante do Sr. Fuji na casa dele.",
+  "story.kanto.investigate_pokemon_tower.summary": "Fale com Reina, ajudante do Sr. Fuji, e investigue seu desaparecimento na Pokémon Tower.",
+  "story.kanto.investigate_pokemon_tower.speak_to_fuji_helper": "Fale com Reina na casa do Sr. Fuji.",
   "story.kanto.investigate_pokemon_tower.reach_pokemon_tower": "Investigue a Pokémon Tower.",
   "story.kanto.investigate_pokemon_tower.battle_gary": "Derrote Gary na Pokémon Tower.",
-  "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Ajudante do Sr. Fuji",
+  "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Fale com Reina",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Entre na torre",
   "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Enfrente Gary"
 }
