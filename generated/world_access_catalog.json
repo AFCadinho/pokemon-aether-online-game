@@ -5798,7 +5798,7 @@
 		},
 		"kanto_route_10__to_rock_tunnel_north": {
 			"destination": {
-				"facingDirection": "up",
+				"facingDirection": "down",
 				"mapId": "kanto_rock_tunnel_1f",
 				"mapSceneAliases": [
 					"uid://buo38hu0vgp7w"

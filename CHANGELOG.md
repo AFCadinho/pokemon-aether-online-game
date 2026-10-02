@@ -4,8 +4,6 @@
 
 - Rock Tunnel’s Mysterious Trainer now challenges at the fixed middle C staircase, instead of every exit; the opponent’s Pokémon level is displayed as ???.
 
-- Bij binnenkomst in Rock Tunnel vanaf Route 10 kijkt de speler nu de grot in.
-
 - After Oak’s advice, the main quest tracker and developer checkpoints now separate reaching Rock Tunnel, crossing it and meeting the masked trainer, and reaching Lavender Town.
 
 - Fullscreen battles schuiven nu vanuit het zichtbare overworldbeeld naar binnen zonder zwart laadscherm of flitsen; Android wacht op de eerste sprites voordat de slide begint.
