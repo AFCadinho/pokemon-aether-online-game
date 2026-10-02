@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fullscreen battles schuiven nu vanuit het zichtbare overworldbeeld naar binnen zonder zwart laadscherm of flitsen; Android wacht op de eerste sprites voordat de slide begint.
+
 - Ogerpon Wellspring, Hearthflame en Cornerstone hebben nu de juiste schouder- en mantelkleuren, normal en shiny, met bijgewerkte individuele 3D-bundles.
 - De Classic-overlay opent wilde battles zonder overgangswachttijd of entree-fade; sprite-downloads houden het tonen van het battlescherm niet meer tegen.
 

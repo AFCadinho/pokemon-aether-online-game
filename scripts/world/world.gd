@@ -1538,17 +1538,20 @@ func _ensure_map_transition_overlay() -> void:
 	layout.add_child(label)
 
 
-func _begin_wild_encounter_transition() -> int:
-	var classic_overlay := SettingsManager.battle_ui_layout == "classic" and not (
+func _uses_fullscreen_battle() -> bool:
+	return SettingsManager.battle_ui_layout == "immersive" or (
 		SettingsManager.battle_presentation_mode in ["2.5d", "3d"]
 		and not OS.has_feature("web") and not OS.has_feature("mobile")
 	)
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_CLASSIC_WILD if classic_overlay else WildEncounterTransition.STYLE_WILD)
+
+
+func _begin_wild_encounter_transition() -> int:
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_CLASSIC_WILD)
 	return Time.get_ticks_msec()
 
 
 func _begin_trainer_battle_transition(trainer_data: Dictionary) -> int:
-	wild_encounter_transition.begin(_trainer_battle_transition_style(trainer_data))
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else _trainer_battle_transition_style(trainer_data))
 	return Time.get_ticks_msec()
 
 
@@ -1583,7 +1586,7 @@ func begin_pvp_battle_transition() -> void:
 	if wild_encounter_transition == null or not is_instance_valid(wild_encounter_transition):
 		return
 	pvp_battle_transition_started_at_msec = Time.get_ticks_msec()
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_RANKED)
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_RANKED)
 
 
 func cancel_pvp_battle_transition() -> void:
@@ -1603,7 +1606,7 @@ func _reveal_prepared_pvp_battle() -> void:
 
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
-	if wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD:
+	if wild_encounter_transition.transition_style in [WildEncounterTransition.STYLE_CLASSIC_WILD, WildEncounterTransition.STYLE_FULLSCREEN_SLIDE]:
 		return
 	var elapsed_seconds := float(Time.get_ticks_msec() - started_at_msec) / 1000.0
 	var minimum_seconds := WILD_ENCOUNTER_MINIMUM_COVER_SECONDS
@@ -1633,6 +1636,7 @@ func _prepare_battle_instance_reveal() -> void:
 
 func _reveal_prepared_wild_battle() -> void:
 	if is_instance_valid(battle_screen_host):
+		battle_screen_host.request_reveal()
 		await wild_encounter_transition.reveal()
 		# The screen may still be preparing 3D or its fallback behind its own
 		# cover. Do not play the battle intro until that reveal has finished.
@@ -3734,8 +3738,8 @@ func _mount_mobile_wild_battle_ui(started_at_msec: int) -> bool:
 		battle_screen_host = prepared_mobile_wild_host
 		prepared_mobile_wild_battle = null
 		prepared_mobile_wild_host = null
-		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD
-		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style)
+		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.visible else WildEncounterTransition.STYLE_WILD
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, false, wild_encounter_transition.overworld_snapshot)
 		battle_ui_host.visible = true
 		if battle_instance.has_signal("battle_ended"):
 			battle_instance.battle_ended.connect(_on_battle_ended)
@@ -3840,8 +3844,8 @@ func _attach_battle_ui(force_immersive := false) -> bool:
 	if use_immersive_screen or use_desktop_3d_screen:
 		battle_screen_host = preload("res://scenes/battle/battle_screen_host.tscn").instantiate()
 		battle_ui_host.add_child(battle_screen_host)
-		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD
-		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, use_immersive_screen)
+		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.visible else WildEncounterTransition.STYLE_WILD
+		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, use_immersive_screen, wild_encounter_transition.overworld_snapshot if is_instance_valid(wild_encounter_transition) else null)
 	else:
 		if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD and active_battle_kind == "wild":
 			classic_wild_backdrop = ColorRect.new()
@@ -4064,7 +4068,7 @@ func start_triggered_wild_battle_for_area(
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_replay_shiny = wild_pokemon.shiny
 	await _prefetch_web_battle_sprites(
-		response, false, true,
+		response, false, false,
 		wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD
 	)
 	_trace_mobile_wild_transition("sprites_queued", transition_started_at_msec)

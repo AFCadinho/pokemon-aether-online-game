@@ -212,9 +212,11 @@ func _check_classic_overlay(transition: WildEncounterTransition) -> void:
 	_check_true(world.classic_wild_backdrop == null, "Repeated teardown releases the dimming layer")
 	settings.battle_ui_layout = "immersive"
 	world._begin_wild_encounter_transition()
-	_check_true(transition.transition_style == WildEncounterTransition.STYLE_WILD, "Immersive wild entry keeps its existing transition")
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_FULLSCREEN_SLIDE, "Immersive wild entry keeps the world visible for the fullscreen slide")
+	_check_true(transition.active_tween == null and is_zero_approx(transition.encounter_flash_alpha()), "Fullscreen entry has no pre-battle wipe or flash")
 	await transition.wait_until_covered()
 	await transition.reveal()
+	_check_true(transition.overworld_snapshot == null, "Fullscreen reveal releases its snapshot reference")
 	settings.battle_ui_layout = previous_layout
 	settings.battle_presentation_mode = previous_mode
 	world.set_script(null)
