@@ -265,3 +265,29 @@ window resizing runs; the fixture assertions and captured images passed.
 gameplay were not rerun. No APK was installed, and no build was published.
 The co-op state/admission request can still cause a short wait before entry;
 this change moves the longer creation/automatic-lead waits into the visible arena.
+
+## Classic NPC entry — 2026-10-02
+
+Classic NPC entry now opens the real arena above the overworld before position
+save and trainer battle creation, and keeps it visible during automatic lead
+requests. It uses the same immediate dimming overlay as Classic wild battles;
+ordinary and special NPCs no longer wait behind the cinematic cover. The arena
+retains its scale during authoritative setup. Actions and unknown combatants
+remain hidden until ready; interactive Team Preview still opens before selection.
+Classic trainer art retains its existing command-only presentation.
+
+The trainer entry regression now runs real world entry and lead orchestration
+in both Classic and Immersive. The old Classic path failed the early arena,
+transparent transition, dimming and pending creation checks. The fixed test
+passed headless and in the rendered desktop runtime. Pending creation and lead
+screenshots were inspected; no Godot runtime errors occurred in the final run.
+The wild entry, encounter transition and NPC team reveal regressions passed.
+
+The offline Web diagnostic now includes the trainer regression and its two
+fixtures. Real Chromium/WebGL exports passed all five diagnostic checks in
+fresh contexts at 1280×720 and 844×390, with no external requests, failed
+resource requests or Godot/browser runtime errors. Reports are retained under
+`.tmp/classic-battle-web-qa/` in the task slot. Intentional fixture rejection
+warnings are expected. Android and authenticated NPC gameplay were not rerun.
+The co-op admission refresh still precedes the early arena. No full release
+certification, publication or deployment was performed.

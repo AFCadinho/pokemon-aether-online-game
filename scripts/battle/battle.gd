@@ -7827,9 +7827,8 @@ func setup_trainer_battle_from_response(
 			prepare_pending_entry(environment_id, BattleType.TRAINER, trainer_data)
 
 	# Interactive Team Preview must be revealed before the player can choose.
-	# Early fullscreen entry keeps only the arena/trainers visible while automatic
-	# lead requests run; the mechanical preview phase stays hidden. Classic retains
-	# its covered transition until the authoritative leads are ready.
+	# Early entry keeps the arena visible while automatic lead requests run in
+	# both layouts; the mechanical preview phase stays hidden.
 	if team_preview_enabled:
 		await _notify_trainer_entry_ready(entry_ready_callback)
 
