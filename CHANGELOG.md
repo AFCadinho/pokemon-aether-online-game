@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
+
 - Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.
 
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
