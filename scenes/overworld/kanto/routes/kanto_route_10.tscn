@@ -314,7 +314,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1867281248]
 
 [node name="PicnickerHeidi" parent="Entities/NPCs" unique_id=584268297 instance=ExtResource("trainer")]
-position = Vector2(944, 560)
+position = Vector2(656, 592)
 trainer_id = "kanto_route_10_picnicker_heidi"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_picnicker_heidi"
@@ -324,17 +324,16 @@ facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("picnicker")
 
 [node name="PokemaniacMark" parent="Entities/NPCs" unique_id=1754850179 instance=ExtResource("trainer")]
-position = Vector2(1136, 944)
+position = Vector2(1232, 1040)
 trainer_id = "kanto_route_10_pokemaniac_mark"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_pokemaniac_mark"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Poké Maniac Mark"
-facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="PicnickerCarol" parent="Entities/NPCs" unique_id=1374717115 instance=ExtResource("trainer")]
-position = Vector2(1456, 1248)
+position = Vector2(1360, 1808)
 trainer_id = "kanto_route_10_picnicker_carol"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_picnicker_carol"
@@ -343,7 +342,7 @@ display_name = "Picnicker Carol"
 npc_sprite_frames = ExtResource("picnicker")
 
 [node name="HikerClark" parent="Entities/NPCs" unique_id=561669527 instance=ExtResource("trainer")]
-position = Vector2(1792, 1392)
+position = Vector2(1488, 2864)
 trainer_id = "kanto_route_10_hiker_clark"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_hiker_clark"
@@ -353,7 +352,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="HikerTrent" parent="Entities/NPCs" unique_id=568952290 instance=ExtResource("trainer")]
-position = Vector2(1968, 1104)
+position = Vector2(848, 2640)
 trainer_id = "kanto_route_10_hiker_trent"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_hiker_trent"
@@ -362,13 +361,12 @@ display_name = "Hiker Trent"
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="PokemaniacHerman" parent="Entities/NPCs" unique_id=1439916942 instance=ExtResource("trainer")]
-position = Vector2(2400, 848)
+position = Vector2(1136, 3024)
 trainer_id = "kanto_route_10_pokemaniac_herman"
 sight_range_tiles = 3
 npc_id = "kanto_route_10_pokemaniac_herman"
 npc_definition_id = "trainer_class_hiker"
 display_name = "Poké Maniac Herman"
-facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1826864528]
