@@ -201,6 +201,7 @@
     ".tmp/battle-forms-next-seven-v1/approved-final/installed-stress-final.log": "db04df89a5414aaa72b8045cd562a23feae2d10565086b2dbec39a5d5885b3d9",
     ".tmp/battle-forms-next-seven-v1/approved-final/installed-stress.json": "d0963342df3426f381cd3d941ac851d607b2f7326b5ec4904c61028ba674ba1f",
     ".tmp/battle-forms-next-seven-v1/approved-final/installed/installed-catalog.json": "43c18015e6f627a4e18d9cb8a5a0ab7c479ba9ac1723615562f5dc44646ec024",
+    ".tmp/battle-forms-next-seven-v1/approved-final/integrated-forms-check.log": "cc2635498c889fcd3ad491b408ad17e7378d3fb5eefc340cb6966c79632062c1",
     ".tmp/battle-forms-next-seven-v1/approved-final/legacy-crowd-passed-stress.json": "0792e31ad74c5b875b7e079b961cfef539b734950bf2a4f860f46c096f167456",
     ".tmp/battle-forms-next-seven-v1/approved-final/per-context.json": "c53a5bcfd24c418e6f5bb1ac24b2a979b2d0bbfad73fbd566ff33a3a65edaeb8",
     ".tmp/battle-forms-next-seven-v1/approved-final/pre-batching-stress.json": "7f36a555cb2a799154b6932e34cd1a5b7d93c8e53331cf33e83095a8626da13f",
@@ -213,6 +214,7 @@
     ".tmp/battle-forms-next-seven-v1/approved-final/runtime-catalog-final.json": "f9ded0086cc32df3dcf4060465fae0ec6f0f8e60eff7498cbf2101709d2b13af",
     ".tmp/battle-forms-next-seven-v1/approved-final/runtime-fixture.json": "18328ac19d5fdd5f1686b096e3cb0ad4e6c19987d0fc86c79d05c95529e4498a",
     ".tmp/battle-forms-next-seven-v1/approved-final/spectator-visibility-check.log": "c92ae8bc5682964257597611d087ae1a9e5b81f002266bb659b193b3ec37fbd5",
+    ".tmp/battle-forms-next-seven-v1/approved-final/stadium-320-batch-check.log": "5325586823f3d2135b2fa2796c09bd54a28cdfe89bbfc1eb8dccf816a11caad5",
     ".tmp/battle-forms-next-seven-v1/approved-final/stadium-batch-check.log": "d0698e26329d08e44169817b8e67d14aae68b543a12a649c6db94c82d2a43348",
     "scripts/battle/arenas/generic/stadium_arena.gd": "a8e6cfeed7ee137a74f0309519cefe6a5c7e7ac26e1c377bf95e4f186427f716",
     "scripts/battle/arenas/shared/animated_spectator.gd": "98dd41aaca3a72df3872b36d7f433396e442162b8ea5b43e5ae92c27ea607dd3",
@@ -239,6 +241,14 @@
     "wishiwashi-school"
   ],
   "installed_runtime_check_passed": true,
+  "integrated_environment": {
+    "form_loading_and_swap_check_passed": true,
+    "introduced_by": "eb0db8704",
+    "performance_certified": false,
+    "reason": "Independent stadium audience expansion after pinned model qualification; requires its own pre-release performance certification",
+    "stadium_supporters": 320,
+    "static_stand_geometry_check_passed": true
+  },
   "models": 14,
   "no_op_restart_check_passed": true,
   "performance_diagnosis": {
@@ -325,8 +335,15 @@
     ]
   },
   "published": false,
+  "qualification_environment": {
+    "model_bundle_digests_unchanged_after_integration": true,
+    "renderer": "AMD Compatibility",
+    "source_commit": "43d233ff2",
+    "stadium_supporters": 160
+  },
   "release_approved": false,
   "remaining": [
+    "Performance certification of independently expanded 320-supporter stadium",
     "R2 publication",
     "release content-index activation",
     "release certification and publication"
@@ -1382,7 +1399,7 @@
     }
   ],
   "schema": 1,
-  "scope": "Local AMD Compatibility; fixture uses local archives, no public R2 or cross-platform certification",
+  "scope": "Local AMD Compatibility, exact model bundles qualified against pinned 160-supporter arena in 43d233ff2; integrated 320-supporter arena is not performance-certified. No public R2 or cross-platform release certification.",
   "source_limitations": [
     "Wishiwashi sleep uses swimming idle; faint uses own-rig damage and an authored endpoint hold",
     "Darmanitan native faint start ends in an authored constant hold",

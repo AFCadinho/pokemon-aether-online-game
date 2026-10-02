@@ -6,12 +6,15 @@ The user approved all seven normal/shiny appearances and their final battle
 presentation on 2026-10-02, including Eiscue's corrected bare head. The seven
 individual bundles pass local install, no-op and restart checks. Exact base
 and battle forms are loaded before reveal, and five reversible forms switch
-back without a download during the transition. Local performance admission passed the unchanged 20 ms p95 gate:
+back without a download during the transition. Local model performance admission passed the unchanged 20 ms p95 gate
+on the pinned 160-supporter arena version in commit `43d233ff2`:
 16.972 / 19.453 / 16.910 ms in classic / stadium / classic. The game and
 launcher registries now contain seven additional profiles and 14 exact runtime
 digests. Earlier failed runs and the approved-base control remain pinned in
 the qualification receipt. The stadium now batches 624 fixed boxes and
-retains the current development rigged crowd. Performance was requalified after merging the newer stadium crowd. Offscreen
+retains the current development rigged crowd. Performance was requalified with 160 supporters. A later independent
+`development` change expanded the audience to 320; that newer arena is
+retained and needs its own performance certification before release. Offscreen
 supporters pause their animations; visible distant supporters update at
 staggered 30 Hz while Pokémon animation timing is unchanged. The geometry
 check verifies that all static box transforms and colors are preserved.
@@ -82,6 +85,7 @@ The on-demand check uses real approved base bundles as controls and verifies
 all four normal/shiny base/form identities are ready before battle reveal.
 No form-switch archive download is needed.
 
-Next: explicitly authorized R2 publication, followed by release content-index
+Next: explicitly authorized R2 publication, followed by separate certification
+of the current expanded arena, release content-index
 activation and release certification. Local admission covers AMD Compatibility;
 it is not a cross-platform release certificate.
