@@ -3,7 +3,7 @@ extends SceneTree
 const FLOORS := {
 	"1f": {
 		"scene": "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn",
-		"trainer_count": 7,
+		"trainer_count": 8,
 		"trainer_ids": [
 			"kanto_rock_tunnel_1f_pokemaniac_ashton",
 			"kanto_rock_tunnel_1f_hiker_lenny",
@@ -12,6 +12,7 @@ const FLOORS := {
 			"kanto_rock_tunnel_1f_picnicker_leah",
 			"kanto_rock_tunnel_1f_picnicker_ariana",
 			"kanto_rock_tunnel_1f_picnicker_dana",
+			"kanto_rock_tunnel_future_self",
 		],
 	},
 	"b1f": {
@@ -62,9 +63,16 @@ func _run() -> void:
 		var collision := map.get_node("Tiles/Collision") as TileMapLayer
 		var scene_text := FileAccess.get_file_as_string(scene_path)
 		var trainers := npcs.get_children()
-		_check(trainers.size() == int(config["trainer_count"]), "%s has all FRLG trainers" % floor_name)
+		_check(trainers.size() == int(config["trainer_count"]), "%s has the expected trainers" % floor_name)
 		for trainer_id: String in config["trainer_ids"]:
 			_check(scene_text.contains('trainer_id = "%s"' % trainer_id), "%s is registered in the scene" % trainer_id)
+		if floor_name == "1f":
+			var exits := map.get_node("Exits")
+			for exit: Node in exits.get_children():
+				_check(
+					str(exit.get("required_trainer_id")) == "kanto_rock_tunnel_future_self",
+					"%s requires the Future Self battle before leaving 1F" % exit.name
+				)
 		for trainer: Node2D in trainers:
 			var cell := collision.local_to_map(collision.to_local(trainer.global_position))
 			_check(collision.get_cell_source_id(cell) < 0, "%s stands on a walkable tile" % trainer.name)
@@ -72,10 +80,10 @@ func _run() -> void:
 			for step in range(1, int(trainer.get("sight_range_tiles")) + 1):
 				_check(
 					collision.get_cell_source_id(cell + direction * step) < 0,
-					"%s has a clear trainer sightline" % trainer.name
+					"%s has a clear trainer sightline at step %s (%s)" % [trainer.name, step, cell + direction * step]
 				)
 			for spawn: Marker2D in map.get_node("Spawns").get_children():
-				_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn points clear" % trainer.name)
+				_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn %s clear" % [trainer.name, spawn.name])
 		map.queue_free()
 		await process_frame
 
