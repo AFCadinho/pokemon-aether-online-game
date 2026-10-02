@@ -435,7 +435,7 @@ func _notification(what: int) -> void:
 
 
 func _apply_responsive_layout() -> void:
-	if not WindowFit.is_touch_ui():
+	if not WindowFit.is_mobile_browser_ui():
 		return
 	var shell := $Background/Shell as PanelContainer
 	if _touch_login_scroll == null:

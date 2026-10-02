@@ -19,6 +19,7 @@ func _run() -> void:
 	var previous_text := FileAccess.get_file_as_string(settings.SETTINGS_PATH)
 	var old_scale: float = settings.ui_scale
 	var old_touch: bool = window_fit.is_touch_ui()
+	var old_browser: bool = window_fit.is_mobile_browser_ui()
 	check(settings._validated_ui_scale("invalid") == 100.0, "invalid persisted scale defaults safely")
 	check(settings._validated_ui_scale(INF) == 100.0, "non-finite scale defaults safely")
 	settings.set_ui_scale(200)
@@ -29,6 +30,9 @@ func _run() -> void:
 	var pixel_policy := load("res://scripts/services/pixel_perfect_rendering.gd")
 	var world_output: float = pixel_policy.browser_output_scale(Vector2i(844,390))
 	window_fit.set("_touch_ui", true)
+	window_fit.set("_mobile_browser_ui", false)
+	await _check_native_touch_layout(settings, window_fit)
+	window_fit.set("_mobile_browser_ui", true)
 	var login := load("res://scenes/interface/login_screen.tscn").instantiate() as Control
 	root.add_child(login)
 	var menu: Control = login.settings_menu
@@ -105,9 +109,58 @@ func _run() -> void:
 	settings.battle_presentation_mode = old_presentation
 	settings.battle_ui_layout = old_layout
 	window_fit.set("_touch_ui", old_touch)
+	window_fit.set("_mobile_browser_ui", old_browser)
 	settings.set_ui_scale(old_scale)
 	var saved := FileAccess.open(settings.SETTINGS_PATH, FileAccess.WRITE)
 	saved.store_string(previous_text)
 	saved.close()
 	print("mobile_browser_ui_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(0 if failures == 0 else 1)
+
+
+func _check_native_touch_layout(settings: Node, window_fit: Node) -> void:
+	# Native Android is still a touch device, with its existing scene layout.
+	settings.ui_scale = 100
+	check(window_fit.is_touch_ui() and not window_fit.is_mobile_browser_ui(), "native touch keeps keyboard support without browser layout")
+	var login = load("res://scenes/interface/login_screen.tscn").instantiate()
+	root.add_child(login)
+	for frame in 5:
+		await process_frame
+	check(login.find_child("BrandPanel", true, false).visible, "native login retains the brand panel")
+	check(login.get_node("Background/Shell").has_node("MainSplit"), "native login retains its original split layout")
+	check(login.username_input.custom_minimum_size.y < 64, "native login retains its original field sizing")
+	check(login.settings_menu.compact_navigation == null, "native settings retain their original navigation")
+	login.queue_free()
+	await process_frame
+	var overlay = load("res://scenes/interface/ui_overlay.tscn").instantiate()
+	root.add_child(overlay)
+	for frame in 5:
+		await process_frame
+	for panel_id: String in ["party", "chat", "location", "dex_actions", "hotkey_sidebar"]:
+		check(not bool(overlay.collapsible_panels[panel_id]["collapsed"]), "native HUD panel starts expanded: " + panel_id)
+	check(not overlay.chat_tabs_panel.has_node("TouchChatTabsScroll"), "native chat retains its original tabs")
+	check(overlay.chat_input.custom_minimum_size.y == 44, "native chat retains its 44-unit input")
+	check(overlay.settings_button.custom_minimum_size == Vector2(50,50), "native quick buttons retain their 50-unit size")
+	overlay._on_collapsible_panel_button_pressed("chat")
+	overlay._on_collapsible_panel_button_pressed("chat")
+	check(not bool(overlay.collapsible_panels["party"]["collapsed"]), "opening native chat leaves other panels expanded")
+	overlay.queue_free()
+	await process_frame
+	var old_presentation: String = settings.battle_presentation_mode
+	var old_layout: String = settings.battle_ui_layout
+	settings.battle_presentation_mode = "2d"
+	settings.battle_ui_layout = "immersive"
+	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var battle = load("res://scenes/battle/battle.tscn").instantiate()
+	battle.active_enemy_pokemon = Pokemon.new("Garchomp",50)
+	root.add_child(host)
+	host.mount(battle)
+	for frame in 5:
+		await process_frame
+	check(battle.custom_minimum_size.x == 1500, "native battle retains the original 1500-unit design")
+	check(battle.get_node("%MovesGrid").scale.is_equal_approx(Vector2.ONE * 0.8), "native moves retain original scale")
+	host.release()
+	host.queue_free()
+	await process_frame
+	settings.battle_presentation_mode = old_presentation
+	settings.battle_ui_layout = old_layout

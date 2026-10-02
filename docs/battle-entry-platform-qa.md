@@ -75,8 +75,57 @@ passed. `adb install --no-incremental -r` succeeded; package metadata confirmed
 code 8, the intended display version, the unchanged signature and the same
 existing app data directory identity after installation.
 
-This USB candidate retains the installed official asset build ID and declares
-compatibility with that official build; no assets or APK were published. It was
+This first USB candidate retained the installed 0.3.90 candidate's asset build
+ID and declared compatibility with that build; no assets or APK were published. It was
 not automatically launched for a logged-in encounter. Installation verification
 does not establish the full game's battle behavior or performance; the player
 can now try those changes in the installed game.
+
+### Login compatibility correction
+
+Player testing found that login still required an update to 0.3.89. The public
+gateway Android version endpoint requires build
+`bf5d0bbc63e1e99575891c8558329d4e2f63b6ca-36708144268-1`, rather than the
+installed 0.3.90 candidate's identity. The installed APK's signature/version
+checks did not establish which build the gateway accepts. USB candidates must
+use the gateway's required identity for compatibility and independently verified
+published assets, while retaining their own source/build/version identity.
+
+The 0.3.89 build does not expose the new Android mobile asset catalog. The
+0.3.90 candidate's published catalog is available with 4,025 entries under
+`4166209c9ad0a7b10afaabe0b40443421d9fb61a-36723315492-1`. The corrected USB
+candidate therefore uses the required 0.3.89 identity for login compatibility
+and the verified 0.3.90 identity for assets. Both IDs remain explicitly pinned;
+candidate compatibility is not broadened to arbitrary server requirements.
+
+The replacement full game uses display version `0.3.90-usb-fix2-875441a`,
+Android code 10 and local build ID `usb-875441a40436-20261002-fix2`. APK
+inspection confirmed both pinned IDs inside the exported `project.binary`;
+the compatibility ID was compared with the current public gateway response
+and the asset catalog was fetched successfully before USB installation.
+The full export, certificate/version checks, seven Android release tests and
+Godot `client_version_contract_check` passed. In-place USB installation
+succeeded and package metadata confirmed code 10 and unchanged app data
+directory/signature. Logged-in gameplay remains for the player to verify.
+
+## Native Android layout restoration — 2026-10-02
+
+The mobile-browser responsive layout is now selected independently from touch
+input. Native Android keeps its original login split, settings navigation,
+expanded HUD panels, independent panel toggles, chat sizing/tabs, 50-unit quick
+buttons and 1500-unit immersive battle design. Keyboard avoidance still uses
+touch capability; fullscreen battle fading remains enabled.
+
+`mobile_browser_ui_check` now checks the native touch layout before exercising
+the compact browser layout. It passed, as did `mobile_keyboard_avoidance_check`
+(41 checks) and `fullscreen_battle_fade_check`. The signed full export passed
+package/version/certificate and asset partition checks.
+
+The full client from `b50337e5cffe8c6ba0673597f75396ccb0a08a23` was installed
+over the existing game on the Samsung SM-G780F by USB. Display version:
+`0.3.90-usb-ui-b50337e`; Android version code: 11. Package metadata confirmed
+the intended version and retained signature/app data directory. The login
+compatibility and available asset IDs from the corrected candidate remain
+explicitly pinned and were checked inside the APK before installation.
+Automated layout checks use real scenes in the desktop Godot runtime; the
+player can now verify the presentation in the installed Android game.

@@ -192,7 +192,7 @@ func _fit_battle() -> void:
 	# displays, instead of stretching Pokémon or cropping controls on small ones.
 	var design := Vector2(1500, 780)
 	var window_fit := get_node_or_null("/root/WindowFit")
-	if window_fit != null and window_fit.call("is_touch_ui") and battle.has_meta("immersive_battle_ui") and not battle.coop_mode:
+	if window_fit != null and window_fit.call("is_mobile_browser_ui") and battle.has_meta("immersive_battle_ui") and not battle.coop_mode:
 		design.x = 960
 		battle.battle_stage.custom_minimum_size.x = 960
 		battle.get_node("%BattleStageViewport").design_size.x = 960

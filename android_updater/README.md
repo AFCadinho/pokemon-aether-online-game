@@ -98,9 +98,15 @@ permanent release signing environment variables. Pass explicit SDK, JDK 17,
 Godot template and output paths, a distinct display version/build ID, a higher
 Android version code, and the expected certificate fingerprint.
 
-Use the installed official build ID for `--compatible-build-id` and
-`--asset-build-id` when testing new client code against the existing asset
-package. This requires no asset publication. Project/export settings and the
+Use the Android build ID currently required by the gateway's public
+`/client-version?platform=android` endpoint for `--compatible-build-id` and
+a verified published asset build ID for `--asset-build-id`. Check that its
+`android/releases/BUILD_ID/mobile-assets/catalog.json` is available and matches
+the candidate's asset layout. Login compatibility and asset identity may differ
+when a newer candidate's assets are published before its APK. An installed
+signed APK may itself be an unpublished candidate; its build ID is not proof
+that the gateway accepts it. Verify the required identity before building.
+This requires no asset publication. Project/export settings and the
 slot's editor settings are restored after export. The helper never installs,
 launches or publishes the APK.
 

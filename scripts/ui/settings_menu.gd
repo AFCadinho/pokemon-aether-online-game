@@ -144,7 +144,7 @@ func _ready() -> void:
 	_setup_tabs()
 	_setup_logout_confirm_dialog()
 	_apply_premium_styles()
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		_apply_touch_style(self)
 	LanguageSelectorStyle.configure(language_options_button)
 	LanguageSelectorStyle.configure(terminology_options_button)
@@ -412,7 +412,7 @@ func _setup_tabs() -> void:
 	)
 	account_tab_root = account_tab.get_parent().get_parent().get_parent() as Control
 	_build_navigation()
-	if WindowFit.is_touch_ui():
+	if WindowFit.is_mobile_browser_ui():
 		settings_navigation_panel.hide()
 		compact_navigation = OptionButton.new()
 		compact_navigation.name = "CompactSettingsNavigation"
@@ -811,8 +811,8 @@ func _create_labeled_control_row(
 	margin.add_theme_constant_override("margin_bottom", 9)
 	panel.add_child(margin)
 
-	var row: BoxContainer = VBoxContainer.new() if WindowFit.is_touch_ui() else HBoxContainer.new()
-	row.add_theme_constant_override("separation", 10 if WindowFit.is_touch_ui() else 18)
+	var row: BoxContainer = VBoxContainer.new() if WindowFit.is_mobile_browser_ui() else HBoxContainer.new()
+	row.add_theme_constant_override("separation", 10 if WindowFit.is_mobile_browser_ui() else 18)
 	margin.add_child(row)
 
 	var copy := VBoxContainer.new()
