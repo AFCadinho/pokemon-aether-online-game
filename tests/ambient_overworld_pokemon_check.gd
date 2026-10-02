@@ -33,6 +33,18 @@ const MAP_POKEMON := {
 		"Geodude": "geodude",
 		"Pidgey": "pidgey",
 	},
+	"res://scenes/overworld/kanto/caves/mt_moon/1f.tscn": {
+		"Geodude": "geodude",
+		"Zubat": "zubat",
+	},
+	"res://scenes/overworld/kanto/caves/mt_moon/b1f.tscn": {
+		"Paras": "paras",
+	},
+	"res://scenes/overworld/kanto/caves/mt_moon/b2f.tscn": {
+		"Geodude": "geodude",
+		"Zubat": "zubat",
+		"Clefairy": "clefairy",
+	},
 }
 
 var failed := false
@@ -46,7 +58,7 @@ func _init() -> void:
 func _run() -> void:
 	for scene_path: String in MAP_POKEMON:
 		_check_map(scene_path, MAP_POKEMON[scene_path])
-	_check(pokemon_ids.size() == 18, "all ambient Pokemon use unique metadata ids")
+	_check(pokemon_ids.size() == 24, "all ambient Pokemon use unique metadata ids")
 	quit(1 if failed else 0)
 
 
@@ -63,7 +75,10 @@ func _check_map(scene_path: String, expected: Dictionary) -> void:
 	if pokemon_root == null:
 		map.free()
 		return
-	_check(pokemon_root.get_child_count() >= 2, "%s contains multiple ambient Pokemon" % scene_path.get_file())
+	_check(
+		pokemon_root.get_child_count() >= expected.size(),
+		"%s contains all expected ambient Pokemon" % scene_path.get_file()
+	)
 	var occupied_cells: Dictionary = {}
 	var npc_cells := _collect_npc_cells(map, collision)
 	for node_name: String in expected:
