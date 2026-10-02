@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fullscreen battle-entrees faden het volledige battlescherm als één laag boven de overworld, inclusief achtergrond, Pokémon en bediening.
+
 - De fullscreen battle-fade blijft zichtbaar na een zware laadframe en gebruikt ook zonder overworldsnapshot een fade in plaats van een abrupte schermwissel.
 
 - Rock Tunnel’s Mysterious Trainer now challenges at the fixed middle C staircase, instead of every exit; the opponent’s Pokémon level is displayed as ???.
