@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town House 3 heeft nu het blauwe artist-interieur en een doorgang van en naar het huis in het zuidoosten.
+
 - Mr. Fuji’s House in Lavender Town heeft nu het artist-interieur en een doorgang van en naar het huis met het paarse dak in het noordoosten.
 
 - Classic NPC-battles tonen de arena direct boven de overworld, ook tijdens battle-aanmaak en automatische Pokémon-keuzes, zonder schermvullende overgang of entree-zoom.
