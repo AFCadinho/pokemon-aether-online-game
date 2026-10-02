@@ -1,0 +1,95 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 14,
+  "bundle_bytes": 93394399,
+  "bundle_qualification_sha256": "814bb6330417dbc312056a7380560c7332f4d1c35900b3c2276192eb14748e23",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:aegislash-blade:base",
+      "object_key": "optional-assets/pokemon_3d/aegislash-blade/base/v1-08b0334f74feb3ef139f169b74f2586415c58d2feb22af0178747a599ebac029.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "08b0334f74feb3ef139f169b74f2586415c58d2feb22af0178747a599ebac029",
+      "size_bytes": 9229279,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:darmanitan-zen:base",
+      "object_key": "optional-assets/pokemon_3d/darmanitan-zen/base/v1-cbc752518f62e28bef19fc7a1f14e74e9f3d35a35881aa3f83e27c73e76072ac.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "cbc752518f62e28bef19fc7a1f14e74e9f3d35a35881aa3f83e27c73e76072ac",
+      "size_bytes": 1850736,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:eiscue-noice:base",
+      "object_key": "optional-assets/pokemon_3d/eiscue-noice/base/v1-a499a851742b6c30d3674da59ed651fcca11fe455fec99f5ef5a4c2988eb38cb.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "a499a851742b6c30d3674da59ed651fcca11fe455fec99f5ef5a4c2988eb38cb",
+      "size_bytes": 9340033,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:mimikyu-busted:base",
+      "object_key": "optional-assets/pokemon_3d/mimikyu-busted/base/v1-ea6a3214af7714f4913fb5a4c96957c04788a70dd34c8f327bfa302a6bdd6062.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ea6a3214af7714f4913fb5a4c96957c04788a70dd34c8f327bfa302a6bdd6062",
+      "size_bytes": 20034247,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:morpeko-hangry:base",
+      "object_key": "optional-assets/pokemon_3d/morpeko-hangry/base/v1-19ddfe174216604d5e3e6b837c940fd089bfecccba473f92218f480009348ffc.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "19ddfe174216604d5e3e6b837c940fd089bfecccba473f92218f480009348ffc",
+      "size_bytes": 18603983,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:palafin-hero:base",
+      "object_key": "optional-assets/pokemon_3d/palafin-hero/base/v1-8db3a66c3cdef111291f7751c7cf64f44aa6d9ae7924a9925bf6d16d5afb07ea.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "8db3a66c3cdef111291f7751c7cf64f44aa6d9ae7924a9925bf6d16d5afb07ea",
+      "size_bytes": 16418230,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:wishiwashi-school:base",
+      "object_key": "optional-assets/pokemon_3d/wishiwashi-school/base/v1-0850145f4b8d48fff9038ca34aae4123eee7b7593df8f8446f829736d8821805.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "0850145f4b8d48fff9038ca34aae4123eee7b7593df8f8446f829736d8821805",
+      "size_bytes": 17917891,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "battle-forms-next-seven-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/battle-forms-next-seven-approved-v1-2307ecd353cb0b1f1a0b639b2ac6035dadd20a08f0c158707b1e67e0464bdfd4.json",
+    "sha256": "2307ecd353cb0b1f1a0b639b2ac6035dadd20a08f0c158707b1e67e0464bdfd4",
+    "size_bytes": 6620
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/battle-forms-next-seven-approved-v1-2307ecd353cb0b1f1a0b639b2ac6035dadd20a08f0c158707b1e67e0464bdfd4.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "2307ecd353cb0b1f1a0b639b2ac6035dadd20a08f0c158707b1e67e0464bdfd4",
+    "size_bytes": 6620,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 7,
+  "profile_count": 7,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 8,
+  "public_head_size_verified_objects": 8,
+  "reviewed_catalog_sha256": "66de6e15ff83a34d37f85cc41ce7e8a59f89c8c5a1eec114d556df80c6ffe945",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T00:45:12.864529+00:00"
+}
