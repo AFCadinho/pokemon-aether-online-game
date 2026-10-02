@@ -57,6 +57,21 @@ const MAP_POKEMON := {
 		"Spearow": "spearow",
 		"Sandshrew": "sandshrew",
 	},
+	"res://scenes/overworld/kanto/towns/lavender_town/house1.tscn": {
+		"Growlithe": "growlithe",
+	},
+	"res://scenes/overworld/kanto/towns/lavender_town/house2.tscn": {
+		"Clefairy": "clefairy",
+	},
+	"res://scenes/overworld/kanto/towns/lavender_town/house3.tscn": {
+		"Pidgey": "pidgey",
+	},
+}
+
+const HOUSE_NPCS := {
+	"res://scenes/overworld/kanto/towns/lavender_town/house1.tscn": "kanto_lavender_house_1_name_rater",
+	"res://scenes/overworld/kanto/towns/lavender_town/house2.tscn": "kanto_lavender_house_2_caretaker",
+	"res://scenes/overworld/kanto/towns/lavender_town/house3.tscn": "kanto_lavender_house_3_young_trainer",
 }
 
 var failed := false
@@ -70,7 +85,7 @@ func _init() -> void:
 func _run() -> void:
 	for scene_path: String in MAP_POKEMON:
 		_check_map(scene_path, MAP_POKEMON[scene_path])
-	_check(pokemon_ids.size() == 32, "all ambient Pokemon use unique metadata ids")
+	_check(pokemon_ids.size() == 35, "all ambient Pokemon use unique metadata ids")
 	quit(1 if failed else 0)
 
 
@@ -95,6 +110,16 @@ func _check_map(scene_path: String, expected: Dictionary) -> void:
 	)
 	var occupied_cells: Dictionary = {}
 	var npc_cells := _collect_npc_cells(map, collision)
+	if HOUSE_NPCS.has(scene_path):
+		var npc_root := map.get_node_or_null("Entities/NPCs")
+		var house_npc := npc_root.get_child(0) if npc_root != null and npc_root.get_child_count() == 1 else null
+		_check(house_npc != null, "%s has one resident" % scene_path.get_file())
+		if house_npc != null:
+			_check(
+				str(house_npc.get("npc_id")) == str(HOUSE_NPCS[scene_path]),
+				"%s resident identity is registered" % scene_path.get_file()
+			)
+			_check_house_actor_clear(map, house_npc as Node2D)
 	for node_name: String in expected:
 		var pokemon := pokemon_root.get_node_or_null(node_name) as Node2D
 		_check(pokemon != null, "%s places %s" % [scene_path.get_file(), node_name])
@@ -116,9 +141,27 @@ func _check_map(scene_path: String, expected: Dictionary) -> void:
 		_check(collision.get_cell_source_id(cell) == -1, "%s stands on a walkable tile" % node_name)
 		_check(not occupied_cells.has(cell), "%s does not overlap another ambient Pokemon" % node_name)
 		_check(not npc_cells.has(cell), "%s does not overlap a human NPC" % node_name)
+		if HOUSE_NPCS.has(scene_path):
+			_check_house_actor_clear(map, pokemon)
 		occupied_cells[cell] = true
 		_check_movement_lane(pokemon, collision, cell)
 	map.free()
+
+
+func _check_house_actor_clear(map: Node, actor: Node2D) -> void:
+	var visual := map.get_node_or_null("Visual")
+	if visual == null:
+		_check(false, "%s visual layers load for actor placement" % actor.name)
+		return
+	for node: Node in visual.find_children("*", "TileMapLayer", true, false):
+		var layer := node as TileMapLayer
+		if layer.name == "Ground":
+			continue
+		var cell := layer.local_to_map(layer.to_local(actor.global_position))
+		_check(
+			layer.get_cell_source_id(cell) == -1,
+			"%s does not overlap house decor in %s" % [actor.name, layer.name]
+		)
 
 
 func _collect_npc_cells(map: Node, collision: TileMapLayer) -> Dictionary:
