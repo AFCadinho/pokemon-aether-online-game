@@ -181,8 +181,8 @@ position = Vector2(720, 80)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=927047712]
 position = Vector2(272, 432)
 
-[node name="FromMrFujiHouse" type="Marker2D" parent="Spawns"]
-position = Vector2(1296, 880)
+[node name="FromMrFujiHouse" type="Marker2D" parent="Spawns" unique_id=2055577171]
+position = Vector2(272, 1040)
 
 [node name="TransitArrival" type="Marker2D" parent="Spawns" unique_id=1678584388]
 position = Vector2(752, 784)
@@ -215,21 +215,20 @@ shape = SubResource("shape_pokemon_center_door")
 z_as_relative = false
 position = Vector2(0, -16)
 
-[node name="ToMrFujiHouse" type="Area2D" parent="Exits"]
-position = Vector2(1296, 848)
+[node name="ToMrFujiHouse" type="Area2D" parent="Exits" unique_id=1276767203]
+position = Vector2(272, 1008)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn"
 target_spawn_name = "FromLavenderTown"
 transition_id = "kanto_lavender_town__to_mr_fuji_house"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMrFujiHouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMrFujiHouse" unique_id=1203026663]
 position = Vector2(0, -16)
 shape = SubResource("shape_pokemon_center_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToMrFujiHouse" instance=ExtResource("14_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToMrFujiHouse" unique_id=324095205 instance=ExtResource("14_door_hint")]
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToRoute10" type="Area2D" parent="Exits" unique_id=1932513659]
 position = Vector2(720, 16)
@@ -527,8 +526,7 @@ position = Vector2(1360, 816)
 position = Vector2(1296, 816)
 
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToMrFujiHouse" to="Exits/ToMrFujiHouse" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
-
-[connection signal="body_entered" from="Exits/ToMrFujiHouse" to="Exits/ToMrFujiHouse" method="_on_body_entered"]
