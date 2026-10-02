@@ -1,0 +1,179 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "aegislash-blade",
+          "runtime_sha256": "a9930c5d4b84d82131bbc1dba0e2d5aa48771326d04f36e3cba3c27c78b7f9e2",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "aegislash-blade@shiny",
+          "runtime_sha256": "ff5f93fee6b3b8097cc208433ec0833611cf9b9898e5db65d67e4a3340c537d5",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:aegislash-blade:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 681,
+      "object_key": "optional-assets/pokemon_3d/aegislash-blade/base/v1-08b0334f74feb3ef139f169b74f2586415c58d2feb22af0178747a599ebac029.zip",
+      "sha256": "08b0334f74feb3ef139f169b74f2586415c58d2feb22af0178747a599ebac029",
+      "size_bytes": 9229279,
+      "species_id": "aegislash-blade",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "darmanitan-zen",
+          "runtime_sha256": "f6c9e9566b156d4cd1bc09a041f1b1092075f5dd4e732a4b52d0e31ca3459e70",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "darmanitan-zen@shiny",
+          "runtime_sha256": "81f44adadaccc1cefb7863a90f6d80496411bf2aae097a50684a1305b99ace35",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:darmanitan-zen:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 555,
+      "object_key": "optional-assets/pokemon_3d/darmanitan-zen/base/v1-cbc752518f62e28bef19fc7a1f14e74e9f3d35a35881aa3f83e27c73e76072ac.zip",
+      "sha256": "cbc752518f62e28bef19fc7a1f14e74e9f3d35a35881aa3f83e27c73e76072ac",
+      "size_bytes": 1850736,
+      "species_id": "darmanitan-zen",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "eiscue-noice",
+          "runtime_sha256": "58d141eda2d38444ba696db6cd6e8cb8e869e75607e14713a365e35999bb2b04",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "eiscue-noice@shiny",
+          "runtime_sha256": "fd669cffba100db3dd99d068f1a8ac703794b06e06236ab6b027b747c7e92796",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:eiscue-noice:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 875,
+      "object_key": "optional-assets/pokemon_3d/eiscue-noice/base/v1-a499a851742b6c30d3674da59ed651fcca11fe455fec99f5ef5a4c2988eb38cb.zip",
+      "sha256": "a499a851742b6c30d3674da59ed651fcca11fe455fec99f5ef5a4c2988eb38cb",
+      "size_bytes": 9340033,
+      "species_id": "eiscue-noice",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "mimikyu-busted",
+          "runtime_sha256": "4c57250aaa2c1b559bd6d195e787c282dda8d464abdabca5e5cf2923a5d75c87",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "mimikyu-busted@shiny",
+          "runtime_sha256": "0223a94875248460f503c207c3415f4c8b67ba15eb408566231d57c5b4d26629",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:mimikyu-busted:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 778,
+      "object_key": "optional-assets/pokemon_3d/mimikyu-busted/base/v1-ea6a3214af7714f4913fb5a4c96957c04788a70dd34c8f327bfa302a6bdd6062.zip",
+      "sha256": "ea6a3214af7714f4913fb5a4c96957c04788a70dd34c8f327bfa302a6bdd6062",
+      "size_bytes": 20034247,
+      "species_id": "mimikyu-busted",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "morpeko-hangry",
+          "runtime_sha256": "ba8b23150c0cbbd7de885528cf89d1e18f5b7f75bc38075c43b9c326520e5f47",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "morpeko-hangry@shiny",
+          "runtime_sha256": "8716759b281eafa96e4cf68d5b4fbf86edbfa05dfd060038300f49cc82688be7",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:morpeko-hangry:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 877,
+      "object_key": "optional-assets/pokemon_3d/morpeko-hangry/base/v1-19ddfe174216604d5e3e6b837c940fd089bfecccba473f92218f480009348ffc.zip",
+      "sha256": "19ddfe174216604d5e3e6b837c940fd089bfecccba473f92218f480009348ffc",
+      "size_bytes": 18603983,
+      "species_id": "morpeko-hangry",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "palafin-hero",
+          "runtime_sha256": "46debb580c21eb8a4dd09df6de51c5b5dabe0f60dd74df7b5c2d00a7dbe86413",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "palafin-hero@shiny",
+          "runtime_sha256": "27880f412f54cb2a10218582e7e8e1d9aa0560b2c431bdf158a1e6da5a2e6cae",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:palafin-hero:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 964,
+      "object_key": "optional-assets/pokemon_3d/palafin-hero/base/v1-8db3a66c3cdef111291f7751c7cf64f44aa6d9ae7924a9925bf6d16d5afb07ea.zip",
+      "sha256": "8db3a66c3cdef111291f7751c7cf64f44aa6d9ae7924a9925bf6d16d5afb07ea",
+      "size_bytes": 16418230,
+      "species_id": "palafin-hero",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "wishiwashi-school",
+          "runtime_sha256": "51c60439bed9e71a4be78742cee51cb948446ba23472e24cb60401ea232a12c8",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "wishiwashi-school@shiny",
+          "runtime_sha256": "d1a223952a4f5e0f28e086e407dd63a7b8b193cbbeadea7d73a629c8d887cea3",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:wishiwashi-school:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 746,
+      "object_key": "optional-assets/pokemon_3d/wishiwashi-school/base/v1-0850145f4b8d48fff9038ca34aae4123eee7b7593df8f8446f829736d8821805.zip",
+      "sha256": "0850145f4b8d48fff9038ca34aae4123eee7b7593df8f8446f829736d8821805",
+      "size_bytes": 17917891,
+      "species_id": "wishiwashi-school",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "battle-forms-next-seven-approved-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}

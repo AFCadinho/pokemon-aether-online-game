@@ -1,0 +1,851 @@
+{
+  "schema": 1,
+  "task": "battle-forms-next-seven",
+  "date": "2026-10-02",
+  "appearance_approved": true,
+  "battle_approved": true,
+  "runtime_approved": true,
+  "published": false,
+  "approval_basis": "User approved the seven appearance pairs, Morpeko correction and Darmanitan two-eye/normal-shiny correction; battle scale and poses pending. Final image audit found Ice Face meshes enabled in Eiscue Noice; corrected bare-head selection requires renewed appearance review.",
+  "entries": [
+    {
+      "species": "mimikyu-busted",
+      "path": ".tmp/battle-forms-next-seven-v1/materials/mimikyu-busted/normal/model.glb",
+      "glb_sha256": "f65b74d95ff16c90b11992a21eb2a0a4f8da7e6667103b9d7500e068630f7567",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.3630237652866,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.3333333730697632,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 1.8333333730697632,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.299999952316284,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "mimikyu-busted-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/materials/mimikyu-busted/shiny/model.glb",
+      "glb_sha256": "aa2121f2ffb3eb709c710e40a2a7f791646c77a3153d8823b82ec867c415192b",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.3630237652866,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.3333333730697632,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 1.8333333730697632,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.299999952316284,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "palafin-hero",
+      "path": ".tmp/battle-forms-next-seven-v1/materials/palafin-hero/normal/model.glb",
+      "glb_sha256": "d4ece9f7bbd75e07cbbb46a2c4f3812103f0eb3f3cbab3a5445c1c7dc0a9a57c",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.142333345295525,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.6666666269302368,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 2.1666667461395264,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.299999952316284,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.6666667461395264,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.8333333730697632,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "palafin-hero-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/materials/palafin-hero/shiny/model.glb",
+      "glb_sha256": "c1587c1ce97dcf1f6d3e50e7160c801eb087ee5cc6dbf0d36dfc9031c69589c0",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.142333345295525,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.6666666269302368,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 2.1666667461395264,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.299999952316284,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.6666667461395264,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.8333333730697632,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "eiscue-noice",
+      "path": ".tmp/battle-forms-next-seven-v1/eiscue-noice-selection-v1/normal/model.glb",
+      "glb_sha256": "2437793d22cf053f736adb04047bfd295e70bb055d1909e3131406bb7614e52a",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.5,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 2.1666667461395264,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.0,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.6666667461395264,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.3333333730697632,
+          "loop": true
+        }
+      },
+      "source_limitations": [],
+      "appearance_source_sha256": "5b71f835c344b661bee9c3cc3cd4ace9222436e9d42ee35cf422a38ada745487",
+      "appearance_proposal": "Explicit Noice form mesh selection from shared source; animation, rig and material data unchanged; appearance review required"
+    },
+    {
+      "species": "eiscue-noice-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/eiscue-noice-selection-v1/shiny/model.glb",
+      "glb_sha256": "22f7362c0014948a6920b1c7deedc4fe9940a0bb4d3afce064646e5258f0102f",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.5,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.5,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 2.1666667461395264,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.0,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 2.6666667461395264,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.3333333730697632,
+          "loop": true
+        }
+      },
+      "source_limitations": [],
+      "appearance_source_sha256": "c36e7b83199e3cd7d6cf7286b1702936e76c3491ac36257ec693495cce3f730b",
+      "appearance_proposal": "Explicit Noice form mesh selection from shared source; animation, rig and material data unchanged; appearance review required"
+    },
+    {
+      "species": "aegislash-blade",
+      "path": ".tmp/battle-forms-next-seven-v1/legacy-colors/aegislash-blade/normal.glb",
+      "glb_sha256": "51461bc887314d06972c0f5f55cb372eda0f5060e50aaf7c3e10ced2f4ecff3e",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.9,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.9666666984558105,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.4666666984558105,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 3.3333332538604736,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "aegislash-blade-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/legacy-colors/aegislash-blade/shiny.glb",
+      "glb_sha256": "6e48e75abb4df56abfde22c1fbca9d164828954fdb83803d1337b7b212c7e101",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.9,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 2.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.9666666984558105,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 2.4666666984558105,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.8333333134651184,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 3.3333332538604736,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "wishiwashi-school",
+      "path": ".tmp/battle-forms-next-seven-v1/wishiwashi-faint-hold-v1/normal/model.glb",
+      "glb_sha256": "1de0d35f7a14352499bcd9ec6ddb37f23e347088d7c2e672ff74809ca2d3af91",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.006,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 7.333333492279053,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 5.333333492279053,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 5.333333492279053,
+          "loop": false
+        },
+        "damage": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 7.333333492279053,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        }
+      },
+      "source_limitations": [
+        "native_sleep",
+        "native_faint_start",
+        "native_faint_loop"
+      ],
+      "appearance_source_sha256": "8e43088e35d46cfdcdc72a2c380f51cec2587d296fef82799990373926419606",
+      "battle_proposal": "Own-rig damage-derived faint proposal; constant hold at exact faint_start endpoint; battle review required"
+    },
+    {
+      "species": "wishiwashi-school-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/wishiwashi-faint-hold-v1/shiny/model.glb",
+      "glb_sha256": "94d22653e133e1dc3ac32df2e9bcfb81272ae79d866e46f7742ccb0f0808a786",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.006,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 7.333333492279053,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 5.333333492279053,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 5.333333492279053,
+          "loop": false
+        },
+        "damage": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 7.333333492279053,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        }
+      },
+      "source_limitations": [
+        "native_sleep",
+        "native_faint_start",
+        "native_faint_loop"
+      ],
+      "appearance_source_sha256": "e321d5050cc50f2bf8ce40ab1e7651088ddf35214df025f2682ae6aa7c3fdc96",
+      "battle_proposal": "Own-rig damage-derived faint proposal; constant hold at exact faint_start endpoint; battle review required"
+    },
+    {
+      "species": "darmanitan-zen",
+      "path": ".tmp/battle-forms-next-seven-v1/darmanitan-faint-hold-v1/normal/model.glb",
+      "glb_sha256": "b4aeae1f9b425f5fb1c0e3227486912d67b693ab4333cc1919d4cea90e831fd6",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.6666666865348816,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 0.5,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        }
+      },
+      "source_limitations": [],
+      "appearance_source_sha256": "8faeae584fbad094b2cd9d5219bd4985c85ac2a7634d57e7f61d5728f2657fc9",
+      "battle_proposal": "Constant own-rig hold at exact faint_start endpoint; battle review required"
+    },
+    {
+      "species": "darmanitan-zen-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/darmanitan-faint-hold-v1/shiny/model.glb",
+      "glb_sha256": "e1ebe26fd59de8c567f9dcea5e9ae200650958f40e8d0d4c1229294e90c82fe0",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "clips": {
+        "idle": {
+          "duration": 1.0,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 1.3333333730697632,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "damage": {
+          "duration": 0.6666666865348816,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 0.5,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 1.0,
+          "loop": true
+        }
+      },
+      "source_limitations": [],
+      "appearance_source_sha256": "f4e79f94a7bb23cf35ceafd77ef244d13cd96fe81292634af0092ce6202119f6",
+      "battle_proposal": "Constant own-rig hold at exact faint_start endpoint; battle review required"
+    },
+    {
+      "species": "morpeko-hangry",
+      "path": ".tmp/battle-forms-next-seven-v1/morpeko-scvi-native-probe-v1/selected-export/normal/materialized.glb",
+      "glb_sha256": "856288969bfaa5efb3890ec37e71cae314a1151bdf634e4f47fa1e4a005ad6e3",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.83,
+        "yaw_degrees": 0
+      },
+      "clips": {
+        "idle": {
+          "duration": 3.1666667461395264,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 3.75,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 4.583333492279053,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 5.0,
+          "loop": false
+        },
+        "damage": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 6.666666507720947,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.9166667461395264,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 3.3333332538604736,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    },
+    {
+      "species": "morpeko-hangry-shiny",
+      "path": ".tmp/battle-forms-next-seven-v1/morpeko-scvi-native-probe-v1/selected-export/shiny/materialized.glb",
+      "glb_sha256": "f6234c2de4456fa0bf840f581f273ca4de8350b248d3cfccfcd4235d20a71754",
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
+      "placement": {
+        "scale": 0.83,
+        "yaw_degrees": 0
+      },
+      "clips": {
+        "idle": {
+          "duration": 3.1666667461395264,
+          "loop": true
+        },
+        "physical_attack": {
+          "duration": 3.75,
+          "loop": false
+        },
+        "physical_attack_2": {
+          "duration": 4.583333492279053,
+          "loop": false
+        },
+        "special_attack": {
+          "duration": 5.0,
+          "loop": false
+        },
+        "damage": {
+          "duration": 1.6666666269302368,
+          "loop": false
+        },
+        "sleep": {
+          "duration": 6.666666507720947,
+          "loop": true
+        },
+        "faint_start": {
+          "duration": 3.9166667461395264,
+          "loop": false
+        },
+        "faint_loop": {
+          "duration": 3.3333332538604736,
+          "loop": true
+        }
+      },
+      "source_limitations": []
+    }
+  ],
+  "appearance_reports_sha256": {
+    ".tmp/battle-forms-next-seven-v1/appearance-review-v3/manifest.json": "270f36d72d56a622c6c9a81fe58713277aebcb4418793a4c8e65e89e64a23e29",
+    ".tmp/battle-forms-next-seven-v1/morpeko-review-v1/manifest.json": "c382c44168258468453f94270448c5ca0fe25a98629ed1b4dd0eaaeb942a10c1",
+    ".tmp/battle-forms-next-seven-v1/darmanitan-zen-review-v3/manifest.json": "5ccbf4037aa25ee202470dd125c8d6c597e5f7c842effffab8350c8755953824"
+  },
+  "darmanitan_bake_inputs_sha256": {
+    "legacy-export/darmanitan-zen/flat/model.glb": "e12d3acc851e412bc73aa2cf6b5e850a511d68878637fc39e9e1760c54794c53",
+    "legacy-material-bakes/darmanitan-zen-uv1/BodyVco-colour.png": "5ae7054d3f82d1ca0f001ee1d66e8f1929d80e6c1abd4e0ef6e31c2f36f9f9ca",
+    "legacy-material-bakes/darmanitan-zen-uv1/Body-colour.png": "8198d4d458183044e27c26f6f374648b7d006b5f9a41c68956b258816dd24238"
+  },
+  "darmanitan_bake_recipe": {
+    "source_sha256": "2bd48db021316e0ca499d9a569d9dbf4b34b03c514df5ed7de7367f76e9ac27d",
+    "rig": "pm0555_12",
+    "source_uv_domain": [
+      0,
+      0,
+      1,
+      1
+    ],
+    "resolution": 1024,
+    "constant_colour_review": true,
+    "static_fresnel_colour_review": true,
+    "policy": "Bake mirrored source shader over UV 0..1; remove exported doubled UV transform only from replaced albedo bindings. Shiny hue proposal visually approved."
+  },
+  "source_fix_scripts_sha256": {
+    "morpeko-scvi-native-probe-v1/copy_actions.py": "72ee9a2aef21831540da58e156e7fbd10bccdfa1246f6e718048f7950da5102b",
+    "morpeko-scvi-native-probe-v1/select_hangry_meshes.py": "1260351df460c67495734eb9bc27a2bc0ef59acbb32b0040f0a46f39ca86fa9e"
+  },
+  "battle_measurement": {
+    "technical_passed": true,
+    "human_approved": true,
+    "scope": "flat_floor_two_runtime_camera_presets; HUD proxy only; not full UI or arena collision certification",
+    "combination_policy": "Twelve unchanged models retained from verified full-group render; corrected Eiscue pair separately rendered and independently checked at 120 Hz with identical framing/renderer",
+    "evidence_sha256": {
+      ".tmp/battle-forms-next-seven-v1/final-stage-v4/catalog.json": "8ab7c788d4c5da63bac447cce324a07a2860d090b1d1b2d8617e38aac186161a",
+      ".tmp/battle-forms-next-seven-v1/final-stage-v4/candidates.json": "b17c9540b83fc15dc1a3709e7d638162affe86b746b312c5d8900730d6a2d12a",
+      ".tmp/battle-forms-next-seven-v1/final-runtime-combined-v4/report.json": "c0647c611f7e73df6f8eb21422b3ff23d61ab2e609deef5e1cbe7ad7531d1334",
+      ".tmp/battle-forms-next-seven-v1/final-battle-combined-v4/battle-review.json": "bc22f228ceb85f68fd2269d6a6e0327a454bcb1b45f0d80cde3f5bcbf60a90f2"
+    },
+    "entries": [
+      {
+        "species": "mimikyu-busted",
+        "effective_scale": 2.1970696305567,
+        "lift": 0.0387724366411567,
+        "minimum_idle_pixels": 65.69921875,
+        "minimum_clearance": 0.0299999564886093,
+        "independently_sampled_poses": 1626,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "mimikyu-busted-shiny",
+        "effective_scale": 2.1970696305567,
+        "lift": 0.0387724366411567,
+        "minimum_idle_pixels": 65.69921875,
+        "minimum_clearance": 0.0299999564886093,
+        "independently_sampled_poses": 1626,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "palafin-hero",
+        "effective_scale": 1.14233334529553,
+        "lift": 0.0367175973625854,
+        "minimum_idle_pixels": 191.86181640625,
+        "minimum_clearance": 0.0299915075302124,
+        "independently_sampled_poses": 1927,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "palafin-hero-shiny",
+        "effective_scale": 1.14233334529553,
+        "lift": 0.0367175973625854,
+        "minimum_idle_pixels": 191.86181640625,
+        "minimum_clearance": 0.0299915075302124,
+        "independently_sampled_poses": 1927,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "aegislash-blade",
+        "effective_scale": 0.9,
+        "lift": 0.323146376609802,
+        "minimum_idle_pixels": 141.24072265625,
+        "minimum_clearance": 0.0299999713897705,
+        "independently_sampled_poses": 1721,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "aegislash-blade-shiny",
+        "effective_scale": 0.9,
+        "lift": 0.323146376609802,
+        "minimum_idle_pixels": 141.24072265625,
+        "minimum_clearance": 0.0299999713897705,
+        "independently_sampled_poses": 1721,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "wishiwashi-school",
+        "effective_scale": 0.006,
+        "lift": 0.0,
+        "minimum_idle_pixels": 234.330291748047,
+        "minimum_clearance": 0.167722418904305,
+        "independently_sampled_poses": 3493,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "wishiwashi-school-shiny",
+        "effective_scale": 0.006,
+        "lift": 0.0,
+        "minimum_idle_pixels": 234.330291748047,
+        "minimum_clearance": 0.167722418904305,
+        "independently_sampled_poses": 3493,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "darmanitan-zen",
+        "effective_scale": 1.0,
+        "lift": 0.0350555419901502,
+        "minimum_idle_pixels": 83.5448608398438,
+        "minimum_clearance": 0.0299999844282866,
+        "independently_sampled_poses": 949,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "darmanitan-zen-shiny",
+        "effective_scale": 1.0,
+        "lift": 0.0350555419901502,
+        "minimum_idle_pixels": 83.5448608398438,
+        "minimum_clearance": 0.0299999844282866,
+        "independently_sampled_poses": 949,
+        "reviewed_shots": 24
+      },
+      {
+        "species": "morpeko-hangry",
+        "effective_scale": 2.31282071633068,
+        "lift": 0.0368113438272849,
+        "minimum_idle_pixels": 65.7350463867188,
+        "minimum_clearance": 0.0296306293457747,
+        "independently_sampled_poses": 3861,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "morpeko-hangry-shiny",
+        "effective_scale": 2.31282071633068,
+        "lift": 0.0368113438272849,
+        "minimum_idle_pixels": 65.7350463867188,
+        "minimum_clearance": 0.0296306293457747,
+        "independently_sampled_poses": 3861,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "eiscue-noice",
+        "effective_scale": 1.0,
+        "lift": 0.0364953017234802,
+        "minimum_idle_pixels": 107.179382324219,
+        "minimum_clearance": 0.0299999862909317,
+        "independently_sampled_poses": 1651,
+        "reviewed_shots": 28
+      },
+      {
+        "species": "eiscue-noice-shiny",
+        "effective_scale": 1.0,
+        "lift": 0.0364953017234802,
+        "minimum_idle_pixels": 107.179382324219,
+        "minimum_clearance": 0.0299999862909317,
+        "independently_sampled_poses": 1651,
+        "reviewed_shots": 28
+      }
+    ]
+  },
+  "runtime_pose_order_check": {
+    "passed": true,
+    "clips": 106,
+    "report": ".tmp/battle-forms-next-seven-v1/final-runtime-combined-v4/godot-review.json",
+    "sha256": "744b1fd524e0738d505daafe3255acfcab2c6031a444b696fe94e06ec4142e95"
+  },
+  "battle_review_page": {
+    "path": ".tmp/battle-forms-next-seven-v1/final-battle-review-v4/index.html",
+    "manifest_sha256": "fdee47b305a82b3fa9d2ec6625a0cfda41582bd26fee5559042ce1cb5f41763c",
+    "human_approved": true
+  },
+  "user_final_approval": {
+    "date": "2026-10-02",
+    "answer": "Zien er goed uit",
+    "review_manifest_sha256": "fdee47b305a82b3fa9d2ec6625a0cfda41582bd26fee5559042ce1cb5f41763c"
+  },
+  "bundle_qualification": "tools/sprite_factory/catalog_battle_forms_next_seven_bundle_qualification.json"
+}

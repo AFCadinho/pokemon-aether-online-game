@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
+
+- Het 3D-stadium groepeert vaste tribunedelen en pauzeert publieksanimaties buiten beeld. Verre toeschouwers animeren op 30 Hz; Pokémon houden hun bestaande animatietempo.
 - Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
 - De Vermilion City-visual is opnieuw geïmporteerd vanuit de bijgewerkte Tiled-bron.
 

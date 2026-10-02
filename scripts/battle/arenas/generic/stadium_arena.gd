@@ -17,6 +17,30 @@ func _box(parent: Node3D, material: Material, pos: Vector3, size: Vector3) -> Me
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return node
 
+func _batch_stand_boxes(stand: Node3D) -> void:
+	# Static seating shares four materials; preserve each box's local transform.
+	var groups: Dictionary = {}
+	for child in stand.get_children():
+		if child is MeshInstance3D and child.mesh is BoxMesh:
+			var material: Material = child.material_override
+			if not groups.has(material):
+				groups[material] = []
+			groups[material].append(child)
+	for material in groups:
+		var boxes: Array = groups[material]
+		var batch := MultiMesh.new()
+		batch.transform_format = MultiMesh.TRANSFORM_3D
+		batch.mesh = boxes[0].mesh
+		batch.instance_count = boxes.size()
+		for index in boxes.size():
+			batch.set_instance_transform(index, boxes[index].transform)
+			boxes[index].free()
+		var node := MultiMeshInstance3D.new()
+		node.multimesh = batch
+		node.material_override = material
+		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		stand.add_child(node)
+
 func _wordmark(parent: Node3D, pos: Vector3, width: float) -> void:
 	var texture: Texture2D = load("res://assets/ui/pokeaether_text_logo.png")
 	var material := ShaderMaterial.new()
@@ -70,6 +94,7 @@ func _crowd(parent: Node3D) -> void:
 				spectator.position = Vector3(seat, 2.0 + row * 0.65, -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2)
 				spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
 				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.84)
+				spectator.throttle_outside_camera(0.84)
 				audience.add_child(spectator)
 				index += 1
 
@@ -119,6 +144,7 @@ func build() -> Node3D:
 		for x in [-21,-14,-7,0,7,14,21]:
 			_box(stand,dark,Vector3(x,17,-18),Vector3(0.5,0.5,27))
 			_box(stand,purple,Vector3(x,16.7,-11),Vector3(0.15,0.1,1.5))
+		_batch_stand_boxes(stand)
 	_box(arena,dark,Vector3(0,20,0),Vector3(65,0.5,65))
 	var beam_material := ShaderMaterial.new()
 	beam_material.shader = load("res://scripts/battle/arenas/generic/stadium_beam.gdshader")
