@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De fullscreen battle-fade blijft zichtbaar na een zware laadframe en gebruikt ook zonder overworldsnapshot een fade in plaats van een abrupte schermwissel.
+
 - Rock Tunnel’s Mysterious Trainer now challenges at the fixed middle C staircase, instead of every exit; the opponent’s Pokémon level is displayed as ???.
 
 - After Oak’s advice, the main quest tracker and developer checkpoints now separate reaching Rock Tunnel, crossing it and meeting the masked trainer, and reaching Lavender Town.
