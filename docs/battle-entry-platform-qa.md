@@ -159,3 +159,41 @@ on-demand partition checks passed; exported compatibility/asset IDs were
 verified before installation. Package metadata confirmed the intended version,
 unchanged signing identity and the retained app data directory. No app data was
 cleared, and no APK or assets were published.
+
+## Start the arena before wild encounter requests — 2026-10-02
+
+Normal wild encounters previously saved the position and awaited battle creation
+before mounting the arena. The shared entry path now mounts a prewarmed arena
+and starts its fade before either request. Prewarming covers fullscreen desktop
+and browser layouts as well as Android. A layout/presentation change invalidates
+the cached screen. Unknown combatants, party cards, status and actions remain
+hidden; authoritative preparation restores their visibility. Input stays locked
+while the response is pending. Server rejection tears down the pending arena and
+restores the overworld. Trainer/PvP/co-op entry paths are unchanged.
+
+Focused checks:
+
+- `wild_entry_before_response_check`: passed headless and in the rendered Linux
+  desktop client (Immersive 2D). The real world entry method reuses its prewarmed
+  scene and starts fading while the position request is deliberately blocked.
+  The arena remains fully visible through the subsequent blocked battle request;
+  authoritative preparation clears pending state and rejection restores the world.
+  Screenshots inspected after the final visibility change show the arena and
+  local trainer portrait without default Pokémon/party cards or action controls.
+- `fullscreen_battle_fade_check`: passed headless and rendered, with nine actual
+  intermediate pixel levels after a simulated 250 ms loading stall.
+- `wild_encounter_transition_check`: passed, including Classic overlay coverage.
+- Offline Chromium diagnostics passed all four entry checks at 1280×720 and
+  844×390, without external requests or Godot/browser runtime errors. That export
+  preceded the final hiding of the pending utility/status/party containers; the
+  final visibility behavior was verified in the rendered desktop check.
+
+An additional `battle_arena_kind_integration_check` hit its existing line-41
+expectation: the test requests 2.5D but expects environment-specific 3D arenas.
+The unchanged renderer in the task base intentionally returns `classic` for
+2.5D. This unrelated test contract was not changed as part of the entry fix.
+
+The phone was not connected; the player requested desktop testing first. No
+Android APK was built or installed for this change. These offline checks do not
+certify logged-in gameplay or guarantee zero CPU/GPU stalls on every device;
+they verify that position/battle responses no longer gate the wild arena fade.

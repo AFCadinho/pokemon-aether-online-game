@@ -11,6 +11,8 @@ func _ready() -> void:
 	process_priority = 100
 
 func _process(delta: float) -> void:
+	if battle.has_meta("battle_entry_pending"):
+		return
 	var stage: Control = battle.battle_stage
 	var area := stage.size
 	# Legacy visibility refreshes still run; the floating rail owns its bounds.
