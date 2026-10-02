@@ -266,7 +266,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/1f.tscn"
 target_spawn_name = "FromRoute10North"
 transition_id = "kanto_route_10__to_rock_tunnel_north"
-transition_facing_direction = "up"
+transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRockTunnelNorth" unique_id=752522854]
 position = Vector2(0, -16)
