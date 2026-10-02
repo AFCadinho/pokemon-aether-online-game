@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De browserexport houdt S.S. Anne, het haveninterieur en Lavender’s Pokémon Center in het aparte mappakket; verouderde mapselecties worden vóór de export gemeld.
+
 - Trainer-zichtsensoren worden veilig na physics-callbacks bijgewerkt, zodat de verplichte Rock Tunnel-battle geen physics-fout meer veroorzaakt.
 
 - Battles openen op desktop, browser en Android zonder op de eerste Pokémon-sprites te wachten; ontbrekende sprites laden op de achtergrond, ook bij een 2D-fallback.
