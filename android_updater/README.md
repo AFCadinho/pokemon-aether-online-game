@@ -89,6 +89,28 @@ Use JDK 17 for the slot's Godot Android export setting. The script adds the
 install permission and Java handoff to the generated template. Do not commit
 the generated template, APKs, or signing credentials.
 
+## Local USB game updates
+
+`tools/build_android_usb_candidate.py` builds the full signed game in an
+assigned slot, checks its package, version, certificate and on-demand asset
+partition, and writes a local build record. Run it through `slot-env` with the
+permanent release signing environment variables. Pass explicit SDK, JDK 17,
+Godot template and output paths, a distinct display version/build ID, a higher
+Android version code, and the expected certificate fingerprint.
+
+Use the installed official build ID for `--compatible-build-id` and
+`--asset-build-id` when testing new client code against the existing asset
+package. This requires no asset publication. Project/export settings and the
+slot's editor settings are restored after export. The helper never installs,
+launches or publishes the APK.
+
+Before USB installation, compare the installed package's signing identity
+with the candidate and retain its data directory identity for verification.
+Install the verified APK with `adb install --no-incremental -r APK`, then check
+the installed package's version code/name and retained data directory. Do not
+uninstall or clear the existing game. This is a local development test update;
+publishing an official release remains a separate operation.
+
 For an isolated phone test, a debug build may place
 `http://127.0.0.1:PORT/manifest-android.json` in
 `user://android_apk_manifest_url.txt` and use `adb reverse` to a local fixture
