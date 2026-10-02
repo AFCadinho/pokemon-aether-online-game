@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town House 3 heeft nu het blauwe artist-interieur en een doorgang van en naar het huis in het zuidoosten.
+
 - Route 3’s mountain ridges now have roaming Geodude and Onix.
 
 - Route 3 now has roaming overworld Spearow, Pidgey and Jigglypuff, matching its FireRed/LeafGreen wild encounter pool.
