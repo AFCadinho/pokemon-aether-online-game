@@ -183,6 +183,9 @@ position = Vector2(720, 80)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=927047712]
 position = Vector2(272, 432)
 
+[node name="FromPokemonTower" type="Marker2D" parent="Spawns"]
+position = Vector2(1072, 528)
+
 [node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=390131023]
 position = Vector2(1296, 880)
 
@@ -225,6 +228,21 @@ shape = SubResource("shape_pokemon_center_door")
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=1811828563 instance=ExtResource("14_door_hint")]
 z_as_relative = false
 position = Vector2(0, -16)
+
+[node name="ToPokemonTower" type="Area2D" parent="Exits"]
+position = Vector2(1072, 496)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn"
+target_spawn_name = "FromLavenderTown"
+transition_id = "kanto_lavender_town__to_pokemon_tower"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonTower"]
+position = Vector2(0, -16)
+shape = SubResource("shape_pokemon_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToPokemonTower" instance=ExtResource("14_door_hint")]
+z_as_relative = false
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=1454774441]
 position = Vector2(1296, 848)
@@ -597,3 +615,5 @@ position = Vector2(1296, 816)
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
+
+[connection signal="body_entered" from="Exits/ToPokemonTower" to="Exits/ToPokemonTower" method="_on_body_entered"]

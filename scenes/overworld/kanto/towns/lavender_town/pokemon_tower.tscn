@@ -1,0 +1,270 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tscn" id="visual"]
+[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
+[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+
+[ext_resource type="Script" path="res://scripts/world/internal_floor_transition.gd" id="floor_transition"]
+
+[sub_resource type="RectangleShape2D" id="shape_exit"]
+size = Vector2(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="collision_atlas"]
+texture = ExtResource("collision_marker")
+texture_region_size = Vector2i(32, 32)
+1:1/0 = 0
+
+[sub_resource type="TileSet" id="collision_tileset"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("collision_atlas")
+
+[node name="PokemonTower" type="Node2D"]
+script = ExtResource("metadata")
+map_id = "kanto_lavender_town_pokemon_tower"
+map_region_name = "Kanto"
+map_display_name = "Pokémon Tower"
+world_access_group_id = "kanto_lavender_town"
+world_access_group_label = "Lavender Town"
+world_access_area_type = "interior"
+location_id = "kanto.lavender_town.pokemon_tower"
+location_name = "Pokémon Tower"
+region_id = "kanto"
+battle_environment_id = "cave"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.lavender_town"
+
+[node name="Visual" parent="." instance=ExtResource("visual")]
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("floor_mask")
+floor_regions = {
+&"floor_1": Rect2(0, 0, 768, 704),
+&"floor_2": Rect2(896, 0, 768, 704),
+&"floor_3": Rect2(1792, 0, 768, 704),
+&"floor_4": Rect2(0, 832, 768, 704),
+&"floor_5": Rect2(896, 832, 768, 704),
+&"floor_6": Rect2(1792, 832, 768, 704),
+&"floor_7": Rect2(0, 1664, 768, 704)
+}
+floor_display_names = {
+&"floor_1": "Pokémon Tower 1F",
+&"floor_2": "Pokémon Tower 2F",
+&"floor_3": "Pokémon Tower 3F",
+&"floor_4": "Pokémon Tower 4F",
+&"floor_5": "Pokémon Tower 5F",
+&"floor_6": "Pokémon Tower 6F",
+&"floor_7": "Pokémon Tower 7F"
+}
+active_floor = &"floor_1"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromLavenderTown" type="Marker2D" parent="Spawns"]
+position = Vector2(368, 592)
+
+[node name="Floor1From2" type="Marker2D" parent="Spawns"]
+position = Vector2(592, 432)
+
+[node name="Floor2From1" type="Marker2D" parent="Spawns"]
+position = Vector2(1520, 400)
+
+[node name="Floor2From3" type="Marker2D" parent="Spawns"]
+position = Vector2(1072, 432)
+
+[node name="Floor3From2" type="Marker2D" parent="Spawns"]
+position = Vector2(1936, 400)
+
+[node name="Floor3From4" type="Marker2D" parent="Spawns"]
+position = Vector2(2384, 432)
+
+[node name="Floor4From3" type="Marker2D" parent="Spawns"]
+position = Vector2(624, 1232)
+
+[node name="Floor4From5" type="Marker2D" parent="Spawns"]
+position = Vector2(176, 1264)
+
+[node name="Floor5From4" type="Marker2D" parent="Spawns"]
+position = Vector2(1040, 1232)
+
+[node name="Floor5From6" type="Marker2D" parent="Spawns"]
+position = Vector2(1488, 1264)
+
+[node name="Floor6From5" type="Marker2D" parent="Spawns"]
+position = Vector2(2416, 1232)
+
+[node name="Floor6From7" type="Marker2D" parent="Spawns"]
+position = Vector2(2224, 1424)
+
+[node name="Floor7From6" type="Marker2D" parent="Spawns"]
+position = Vector2(432, 2256)
+
+[node name="FloorTransitions" type="Node2D" parent="."]
+
+[node name="Floor1To2" type="Area2D" parent="FloorTransitions"]
+position = Vector2(592, 400)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor2From1")
+target_floor = &"floor_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor1To2"]
+shape = SubResource("shape_exit")
+
+[node name="Floor2To1" type="Area2D" parent="FloorTransitions"]
+position = Vector2(1520, 368)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor1From2")
+target_floor = &"floor_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor2To1"]
+shape = SubResource("shape_exit")
+
+[node name="Floor2To3" type="Area2D" parent="FloorTransitions"]
+position = Vector2(1072, 400)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor3From2")
+target_floor = &"floor_3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor2To3"]
+shape = SubResource("shape_exit")
+
+[node name="Floor3To2" type="Area2D" parent="FloorTransitions"]
+position = Vector2(1936, 368)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor2From3")
+target_floor = &"floor_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor3To2"]
+shape = SubResource("shape_exit")
+
+[node name="Floor3To4" type="Area2D" parent="FloorTransitions"]
+position = Vector2(2384, 400)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor4From3")
+target_floor = &"floor_4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor3To4"]
+shape = SubResource("shape_exit")
+
+[node name="Floor4To3" type="Area2D" parent="FloorTransitions"]
+position = Vector2(624, 1200)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor3From4")
+target_floor = &"floor_3"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor4To3"]
+shape = SubResource("shape_exit")
+
+[node name="Floor4To5" type="Area2D" parent="FloorTransitions"]
+position = Vector2(176, 1232)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor5From4")
+target_floor = &"floor_5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor4To5"]
+shape = SubResource("shape_exit")
+
+[node name="Floor5To4" type="Area2D" parent="FloorTransitions"]
+position = Vector2(1040, 1200)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor4From5")
+target_floor = &"floor_4"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor5To4"]
+shape = SubResource("shape_exit")
+
+[node name="Floor5To6" type="Area2D" parent="FloorTransitions"]
+position = Vector2(1488, 1232)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor6From5")
+target_floor = &"floor_6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor5To6"]
+shape = SubResource("shape_exit")
+
+[node name="Floor6To5" type="Area2D" parent="FloorTransitions"]
+position = Vector2(2416, 1200)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor5From6")
+target_floor = &"floor_5"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor6To5"]
+shape = SubResource("shape_exit")
+
+[node name="Floor6To7" type="Area2D" parent="FloorTransitions"]
+position = Vector2(2192, 1424)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor7From6")
+target_floor = &"floor_7"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor6To7"]
+shape = SubResource("shape_exit")
+
+[node name="Floor7To6" type="Area2D" parent="FloorTransitions"]
+position = Vector2(400, 2256)
+script = ExtResource("floor_transition")
+destination_marker_path = NodePath("../../Spawns/Floor6From7")
+target_floor = &"floor_6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor7To6"]
+shape = SubResource("shape_exit")
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToOutside" type="Area2D" parent="Exits"]
+position = Vector2(368, 624)
+script = ExtResource("exit")
+target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
+target_spawn_name = "FromPokemonTower"
+transition_id = "kanto_lavender_town_pokemon_tower__to_outside"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside"]
+shape = SubResource("shape_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("hint")]
+tile_footprint = Vector2i(1, 1)
+flow_direction = "down"
+
+[node name="Tiles" type="Node2D" parent="."]
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+editor_description = "Empty collision layer: paint the room boundaries and furniture here. Collision is intentionally left for the map author."
+visible = false
+z_index = 4096
+tile_set = SubResource("collision_tileset")
+
+[connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]
+
+[connection signal="body_entered" from="FloorTransitions/Floor1To2" to="FloorTransitions/Floor1To2" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor2To1" to="FloorTransitions/Floor2To1" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor2To3" to="FloorTransitions/Floor2To3" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor3To2" to="FloorTransitions/Floor3To2" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor3To4" to="FloorTransitions/Floor3To4" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor4To3" to="FloorTransitions/Floor4To3" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor4To5" to="FloorTransitions/Floor4To5" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor5To4" to="FloorTransitions/Floor5To4" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor5To6" to="FloorTransitions/Floor5To6" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor6To5" to="FloorTransitions/Floor6To5" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor6To7" to="FloorTransitions/Floor6To7" method="_on_body_entered"]
+[connection signal="body_entered" from="FloorTransitions/Floor7To6" to="FloorTransitions/Floor7To6" method="_on_body_entered"]
