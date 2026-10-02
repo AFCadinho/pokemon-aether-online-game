@@ -650,6 +650,15 @@ func _is_body_in_sight_range(body: Node2D) -> bool:
 	return delta.x == 0 and delta.y == int(direction.y) * clampi(abs(delta.y), 1, range_tiles)
 
 func _configure_vision_area() -> void:
+	# Map exits can reposition a trainer from body_entered while physics is
+	# flushing queries. Apply the whole sensor update after that callback.
+	if is_inside_tree() and not Engine.is_editor_hint():
+		_apply_vision_area_configuration.call_deferred()
+	else:
+		_apply_vision_area_configuration()
+
+
+func _apply_vision_area_configuration() -> void:
 	if vision_collision_shape == null:
 		return
 	if not Engine.is_editor_hint() and (
