@@ -13,6 +13,42 @@ var hover_enabled := false
 var empty_slots_visible := false
 var intrinsic_disabled_by_slot: Dictionary = {}
 var current_party_data: Array = []
+var trainer_groups_enabled := false
+var trainer_group_style: StyleBoxFlat
+
+func set_trainer_groups_enabled(enabled: bool) -> void:
+	trainer_groups_enabled = enabled
+	if enabled:
+		trainer_group_style = StyleBoxFlat.new()
+		trainer_group_style.bg_color = Color("#111e30e6")
+		trainer_group_style.border_color = Color("#456582")
+		trainer_group_style.set_border_width_all(1)
+		trainer_group_style.set_corner_radius_all(8)
+		custom_minimum_size = Vector2(56, 392)
+	else:
+		custom_minimum_size = Vector2.ZERO
+	queue_sort()
+	queue_redraw()
+
+func _notification(what: int) -> void:
+	if what != NOTIFICATION_SORT_CHILDREN or not trainer_groups_enabled:
+		return
+	# Keep the six direct children and their original visual-slot indices so
+	# party updates, hover cards and Trainer callouts retain their ownership.
+	for index in range(mini(6, get_child_count())):
+		var slot := get_child(index) as Control
+		if slot != null:
+			fit_child_in_rect(slot, Rect2(2, (index / 3) * 202 + 24 + (index % 3) * 55, 52, 52))
+	queue_redraw()
+
+func _draw() -> void:
+	if not trainer_groups_enabled or trainer_group_style == null:
+		return
+	var font := get_theme_default_font()
+	for group in range(2):
+		var top := group * 202.0
+		draw_style_box(trainer_group_style, Rect2(0, top, 56, 190))
+		draw_string(font, Vector2(2, top + 17), "P%d" % (group + 1), HORIZONTAL_ALIGNMENT_CENTER, 52, 12, Color("#b7d4ed"))
 
 static func should_allow_selection(
 	battle_mode_active: bool,

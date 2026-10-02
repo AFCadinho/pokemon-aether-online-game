@@ -849,6 +849,8 @@ func setup_coop_battle() -> bool:
 	if not is_node_ready():
 		return false
 	coop_mode = true
+	player_stage_party_grid.set_trainer_groups_enabled(true)
+	(player_stage_party_grid.get_parent() as PanelContainer).add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	# Only doubles uses this compact, uncropped logical canvas.
 	var coop_viewport := battle_stage.get_parent() as BattleStageViewport
 	coop_viewport.crop_to_fill = false
@@ -885,9 +887,9 @@ func setup_coop_battle() -> bool:
 	enemy_sprite_box.offset_right -= 25.0
 	enemy_sprite_box.offset_top += 54.0
 	enemy_sprite_box.offset_bottom += 54.0
-	# Leave the full six-slot side rail clear of the battle prompt below it.
+	# Leave both labelled Trainer sections clear of the battle prompt below.
 	var coop_player_rail := player_stage_party_grid.get_parent() as Control
-	coop_player_rail.position.y -= 40.0
+	coop_player_rail.position.y = 90.0
 	battle_status_panel.hide_timer()
 	battle_status_panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	battle_status_panel.offset_left = 12.0
