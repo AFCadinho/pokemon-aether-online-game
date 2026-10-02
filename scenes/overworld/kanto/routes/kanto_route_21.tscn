@@ -1,4 +1,5 @@
 [gd_scene format=3]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_21/route_21.visual.tscn" id="1_visual"]
 [ext_resource type="Script" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
@@ -62,6 +63,25 @@ shape = SubResource("shape_cinnabar")
 z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Pearl" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(720, 1456)
+pickup_id = "kanto_route_21_pearl"
+item_id = "pearl"
+[node name="WaterStone" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(624, 2224)
+pickup_id = "kanto_route_21_waterstone"
+item_id = "water-stone"
+[node name="PPUp" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(832, 2784)
+pickup_id = "kanto_route_21_ppup"
+item_id = "pp-up"
+[node name="Stardust" parent="Entities/Interactables" instance=ExtResource("99_item")]
+position = Vector2(464, 480)
+pickup_id = "kanto_route_21_stardust"
+item_id = "stardust"
 
 [connection signal="body_entered" from="Exits/ToPalletTown" to="Exits/ToPalletTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToCinnabarIsland" to="Exits/ToCinnabarIsland" method="_on_body_entered"]
