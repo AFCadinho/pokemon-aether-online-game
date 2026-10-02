@@ -46,6 +46,16 @@ func _check_fullscreen_fade(settings: Node) -> void:
 		root.get_texture().get_image().save_png(output + "/fullscreen-fade-halfway.png")
 	host.fade_progress = 0.0
 	host.request_reveal()
+	# Simulate a scene/texture upload stall at the first reveal frame.
+	OS.delay_msec(250)
+	await process_frame
+	await process_frame
+	assert(host.fade_progress < 0.5, "A slow loading frame cannot skip the visible fade")
+	var blend_frames := 0
+	while host.get_node("Cover").visible:
+		await process_frame
+		blend_frames += 1
+	assert(blend_frames >= 8, "Fade renders multiple intermediate frames after a stall")
 	await host.wait_until_revealed()
 	assert(host.fade_progress == 1.0 and host.outgoing_snapshot.texture == null, "Completed fade releases the outgoing image")
 	assert(not battle.has_meta("battle_screen_preparing"), "Battle input readiness is released after the fade")
@@ -103,6 +113,9 @@ func _check_world_handoff(settings: Node) -> void:
 	# An ended encounter must not make a replay/resume wait for an entry callback.
 	assert(world._mount_battle_ui())
 	assert(world.battle_screen_host.reveal_requested, "Inactive fade styles cannot block later mounts")
+	world.battle_screen_host.outgoing_snapshot.texture = null
+	world.battle_screen_host.fade_progress = 0.5
+	assert(is_equal_approx(world.battle_screen_host.get_node("Content").modulate.a, 0.5), "Missing snapshots still fade the battle over the live world")
 	world._clear_battle_ui_instance()
 	world.set_script(null)
 	world.queue_free()
