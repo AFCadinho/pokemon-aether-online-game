@@ -41,6 +41,7 @@ func _check_world_entry() -> void:
 	world._prewarm_wild_battle_ui()
 	var warmed: Control = world.prepared_wild_battle
 	world.run_trainer_entry()
+	var classic_entry_scale: Vector2 = world.battle_instance.battle_stage.get_global_transform().get_scale() if not immersive and is_instance_valid(world.battle_instance) else Vector2.ZERO
 	for frame in 3:
 		await process_frame
 	check(world.position_waiting and is_instance_valid(world.battle_instance), "NPC arena mounts before position response in both layouts")
@@ -49,6 +50,7 @@ func _check_world_entry() -> void:
 		check(world.battle_screen_host.fade_progress > 0.0, "NPC fade starts while the position request is blocked")
 		await world.battle_screen_host.wait_until_revealed()
 	else:
+		check(world.battle_instance.battle_stage.get_global_transform().get_scale().is_equal_approx(classic_entry_scale), "Classic NPC battlefield scale is final before its first frame")
 		check(world.battle_screen_host == null, "Classic NPC entry keeps its overworld overlay")
 		check(transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD and not transition.visible and transition.active_tween == null, "Classic NPC entry has no cinematic cover or minimum wait")
 		check(is_instance_valid(world.classic_wild_backdrop), "Classic NPC dimming remains behind the arena")
@@ -91,6 +93,7 @@ func _check_leads(preview: bool) -> void:
 	if immersive:
 		host.reveal_pending_entry()
 		await host.wait_until_revealed()
+	var classic_entry_scale: Vector2 = battle.battle_stage.get_global_transform().get_scale()
 	battle.run_setup(preview)
 	await process_frame
 	if preview:
@@ -113,6 +116,10 @@ func _check_leads(preview: bool) -> void:
 	await process_frame
 	check(not battle.has_meta("battle_entry_pending") and battle._pending_entry_visibility.is_empty(), "Finished/failed lead setup releases pending masks")
 	check(battle.enemy_sprite_box.modulate.a == 1.0, "Pending alpha masks are restored")
+	if not immersive:
+		for frame in 3:
+			await process_frame
+			check(battle.battle_stage.get_global_transform().get_scale().is_equal_approx(classic_entry_scale), "Classic NPC field keeps its size through pending leads and restored controls")
 	if immersive:
 		host.release()
 	host.queue_free()
