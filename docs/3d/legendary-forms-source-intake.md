@@ -144,3 +144,11 @@ Integration caught a concurrent stadium crowd change. The slot merged current
 crowd. This also passes: 17.346 / 17.348 / 17.314 ms p95. The
 receipt preserves the previous arena digest and pins the current arena, crowd
 shader, spectator code and additional integrated reports.
+
+## R2 publication
+
+On 2026-10-02 the two approved Kyurem bundles and their immutable content-index
+were uploaded to `pokemon-aether-updates`. Public GET SHA-256 and HEAD size
+checks passed for all three objects. The active desktop manifest was unchanged.
+The tracked audit is `release/approved_3d_kyurem_forms_r2_upload.json`; release
+content-index activation and desktop publication remain separate work.
