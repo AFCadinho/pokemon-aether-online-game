@@ -4,11 +4,12 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_gvjat"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_o5fgx"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_ew7gd"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
@@ -169,6 +170,10 @@ transition_facing_direction = "left"
 position = Vector2(-16, 0)
 shape = SubResource("shape_1")
 
+[node name="DoorTransitionHint" parent="Exits/To1FA" unique_id=1035854961 instance=ExtResource("4_o5fgx")]
+z_as_relative = false
+flow_direction = "left"
+
 [node name="To1FB" type="Area2D" parent="Exits" unique_id=1728575520]
 position = Vector2(432, 368)
 script = ExtResource("3_exit")
@@ -180,6 +185,10 @@ transition_facing_direction = "left"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1FB" unique_id=183765133]
 position = Vector2(-16, 0)
 shape = SubResource("shape_2")
+
+[node name="DoorTransitionHint" parent="Exits/To1FB" unique_id=256093592 instance=ExtResource("4_o5fgx")]
+z_as_relative = false
+flow_direction = "left"
 
 [node name="To1FC" type="Area2D" parent="Exits" unique_id=1820042214]
 position = Vector2(1136, 976)
@@ -193,6 +202,10 @@ transition_facing_direction = "left"
 position = Vector2(-16, 0)
 shape = SubResource("shape_3")
 
+[node name="DoorTransitionHint" parent="Exits/To1FC" unique_id=626454466 instance=ExtResource("4_o5fgx")]
+z_as_relative = false
+flow_direction = "left"
+
 [node name="To1FD" type="Area2D" parent="Exits" unique_id=1734030270]
 position = Vector2(2512, 1520)
 script = ExtResource("3_exit")
@@ -204,6 +217,10 @@ transition_facing_direction = "left"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/To1FD" unique_id=1808909033]
 position = Vector2(-16, 0)
 shape = SubResource("shape_4")
+
+[node name="DoorTransitionHint" parent="Exits/To1FD" unique_id=541691434 instance=ExtResource("4_o5fgx")]
+z_as_relative = false
+flow_direction = "left"
 
 [node name="Entities" type="Node2D" parent="." unique_id=2067038040]
 z_index = 5
@@ -296,7 +313,6 @@ overworld_pokemon_id = "kanto_rock_tunnel_b1f_cubone_1"
 species_id = "cubone"
 level = 12
 display_name = "Cubone"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
@@ -308,12 +324,10 @@ overworld_pokemon_id = "kanto_rock_tunnel_b1f_onix_1"
 species_id = "onix"
 level = 16
 display_name = "Onix"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
-
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1188324121]
 visible = false
