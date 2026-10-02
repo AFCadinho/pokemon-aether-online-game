@@ -2,10 +2,11 @@
 
 ## Unreleased
 
+- Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterward and the encounter completes on either result.
+
 - De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
 
 - Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.
-
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
 
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.

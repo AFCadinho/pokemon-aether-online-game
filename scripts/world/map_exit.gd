@@ -3,6 +3,7 @@ extends Area2D
 @export_file("*.tscn") var target_scene_path := ""
 @export var target_spawn_name := ""
 @export var transition_id := ""
+@export var required_trainer_id := ""
 @export_enum("up", "down", "left", "right") var transition_facing_direction := ""
 @export var player_node_name := "Player"
 
@@ -35,6 +36,8 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.name != player_node_name:
 		return
 	if _is_route_gate_interaction_active(body):
+		return
+	if await _handle_required_trainer(body):
 		return
 
 	if target_scene_path.strip_edges() == "":
@@ -73,6 +76,37 @@ func _on_body_entered(body: Node2D) -> void:
 		normalized_transition_id,
 		arrival_facing_direction
 	)
+
+
+func _handle_required_trainer(body: Node2D) -> bool:
+	var required_id := required_trainer_id.strip_edges()
+	if required_id.is_empty():
+		return false
+	is_transitioning = true
+	var trainer: Node
+	for candidate: Node in get_tree().get_nodes_in_group("trainer_npcs"):
+		if str(candidate.get("trainer_id")).strip_edges() == required_id:
+			trainer = candidate
+			break
+	if trainer == null:
+		is_transitioning = false
+		push_warning("MapExit requires trainer %s, but that trainer is not present." % required_id)
+		return true
+	if not bool(trainer.get("trainer_progress_loaded")):
+		while bool(trainer.get("trainer_progress_request_active")):
+			await get_tree().process_frame
+		if not bool(trainer.get("trainer_progress_loaded")) and trainer.has_method("_load_trainer_progress"):
+			await trainer.call("_load_trainer_progress")
+	var state := str(trainer.get("trainer_progress_state")).strip_edges().to_lower()
+	if state in ["defeated", "completed"]:
+		is_transitioning = false
+		return false
+	if trainer.has_method("start_mandatory_battle"):
+		await trainer.call("start_mandatory_battle", body)
+	else:
+		push_warning("MapExit required trainer %s cannot start its mandatory battle." % required_id)
+	is_transitioning = false
+	return true
 
 
 func _enter_authorized_transition(

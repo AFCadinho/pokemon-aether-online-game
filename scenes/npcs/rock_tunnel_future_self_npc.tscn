@@ -1,0 +1,41 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/npcs/rock_tunnel_future_self_npc.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_m_frames.tres" id="2_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/mugshots/trainer_red_mugshot.png" id="3_mugshot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_interaction"]
+size = Vector2(96, 97)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vision"]
+size = Vector2(32, 144.5)
+
+[node name="RockTunnelFutureSelfNPC" type="Node2D"]
+script = ExtResource("1_script")
+npc_sprite_frames = ExtResource("2_frames")
+mugshot = ExtResource("3_mugshot")
+
+[node name="Look" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Look"]
+position = Vector2(0, -16)
+sprite_frames = ExtResource("2_frames")
+animation = &"default"
+
+[node name="InteractionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea"]
+shape = SubResource("RectangleShape2D_interaction")
+
+[node name="VisionArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="VisionArea"]
+position = Vector2(0, 64)
+shape = SubResource("RectangleShape2D_vision")
+
+[node name="FeetMarker" type="Marker2D" parent="."]
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]
+[connection signal="body_exited" from="InteractionArea" to="." method="_on_interaction_area_body_exited"]
+[connection signal="body_entered" from="VisionArea" to="." method="_on_vision_area_body_entered"]
+[connection signal="body_exited" from="VisionArea" to="." method="_on_vision_area_body_exited"]
