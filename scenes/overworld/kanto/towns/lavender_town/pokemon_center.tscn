@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://bfy37wf81vi6g" path="res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn" id="1_template"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="2_dialogue_npc"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="3_lass"]
+
+[node name="PokemonCenter" instance=ExtResource("1_template")]
+map_id = "kanto_lavender_town_pokemon_center"
+map_display_name = "Lavender Town Pokémon Center"
+world_access_group_id = "kanto_lavender_town"
+world_access_group_label = "Lavender Town"
+world_access_area_type = "interior"
+location_id = "kanto.lavender_town.pokemon_center"
+location_name = "Lavender Town Pokémon Center"
+
+[node name="NurseJoy" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="0" unique_id=1839105410]
+respawn_point_id = "kanto_lavender_town_pokemon_center"
+
+[node name="LavenderVisitor" parent="Entities/NPCs" parent_id_path=PackedInt32Array(1229880396) index="5" instance=ExtResource("2_dialogue_npc")]
+position = Vector2(320, 816)
+npc_id = "kanto_lavender_town_pokemon_center_tourist"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lavender Visitor"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("3_lass")
+
+[node name="ToOutside" parent="Exits" parent_id_path=PackedInt32Array(1112148501) index="0" unique_id=1126740257]
+target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
+target_spawn_name = "FromPokecenter"
+transition_id = "kanto_lavender_town_pokemon_center__to_outside"

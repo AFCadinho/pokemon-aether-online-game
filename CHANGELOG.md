@@ -4,7 +4,18 @@
 
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
 
-- Het 3D-stadium groepeert vaste tribunedelen en publiek per tribune om minder tekenwerk te doen, met behoud van de aankleding en bewegingen.
+- Het 3D-stadium groepeert vaste tribunedelen om minder tekenwerk te doen, met behoud van de aankleding.
+- Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
+- De Vermilion City-visual is opnieuw geïmporteerd vanuit de bijgewerkte Tiled-bron.
+
+- Lavender Town heeft nu een actieve Aethernet Beacon, een Keeper en veilige aankomstpositie; Meowth vervangt de voor Fuji's huis gereserveerde Cubone.
+- Het Pokémon Center in Lavender Town bevat niet langer Cubone; die Pokémon wordt bewaard voor Mr. Fuji's huis.
+
+- Na Oaks advies over Rock Tunnel activeert de hoofdquest de route naar Lavender Town. Daar waarschuwt een inwoner automatisch voor Pokémon Tower, Team Rocket en de vermiste Mr. Fuji.
+
+- De PvP 3D-arena gebruikt 160 geanimeerde Quaternius-supporters op alle vier de tribunes, met dezelfde NPC-modellen als SS Anne.
+- De bewakers bij beide Saffron-poorten tonen zelf de lockdown-dialoog wanneer servertoegang de doorgang blokkeert.
+
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
 
 - Drie Ogerpon-maskers en Terapagos Terastal/Stellar zijn lokaal gekwalificeerd voor 3D, normal en shiny, met individuele bundles en vooraf geladen Terapagos-vormwissels. Nieuwe downloads op hetzelfde cataloguspad worden direct beschikbaar.

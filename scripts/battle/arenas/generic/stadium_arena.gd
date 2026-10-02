@@ -76,114 +76,24 @@ func _screen(parent: Node3D, pos: Vector3, rotation_y: float) -> void:
 		_box(panel, neon, Vector3(side*8.4, 0, 0.4), Vector3(0.08, 9, 0.08))
 		_box(panel, neon, Vector3(0, side*4.4, 0.4), Vector3(17, 0.08, 0.08))
 
-func _spectator_mesh() -> ArrayMesh:
-	var combined := SurfaceTool.new()
-	var torso := CapsuleMesh.new()
-	torso.radius = 0.13
-	torso.height = 0.40
-	torso.radial_segments = 6
-	torso.rings = 2
-	var head := SphereMesh.new()
-	head.radius = 0.115
-	head.height = 0.23
-	head.radial_segments = 8
-	head.rings = 4
-	var arm := BoxMesh.new()
-	arm.size = Vector3(0.085,0.33,0.085)
-	for part in [[torso,Vector3.ZERO,0.0],[head,Vector3(0,0.29,0),0.0],
-		[arm,Vector3(-0.20,0.01,0),-1.0],[arm,Vector3(0.20,0.01,0),1.0]]:
-		var primitive: PrimitiveMesh = part[0]
-		var arrays := primitive.get_mesh_arrays()
-		var tags := PackedVector2Array()
-		tags.resize(arrays[Mesh.ARRAY_VERTEX].size())
-		tags.fill(Vector2(part[2],0))
-		arrays[Mesh.ARRAY_TEX_UV2] = tags
-		var piece := ArrayMesh.new()
-		piece.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
-		combined.append_from(piece,0,Transform3D(Basis.IDENTITY,part[1]))
-	return combined.commit()
-
-func _add_crowd_batches(parent: Node3D, source: MultiMesh, material: Material) -> void:
-	# Separate stands can be culled outside the camera, unlike one arena-wide AABB.
-	var per_stand := source.instance_count / 4
-	for side in 4:
-		var batch := MultiMesh.new()
-		batch.transform_format = source.transform_format
-		batch.use_colors = source.use_colors
-		batch.use_custom_data = source.use_custom_data
-		batch.mesh = source.mesh
-		batch.instance_count = per_stand
-		var bounds := AABB()
-		for index in per_stand:
-			var original := side * per_stand + index
-			var pose := source.get_instance_transform(original)
-			batch.set_instance_transform(index, pose)
-			batch.set_instance_color(index, source.get_instance_color(original))
-			batch.set_instance_custom_data(index, source.get_instance_custom_data(original))
-			var instance_bounds: AABB = pose * source.mesh.get_aabb()
-			bounds = instance_bounds if index == 0 else bounds.merge(instance_bounds)
-		# Include the crowd shader's waving and supporter-light displacement.
-		batch.custom_aabb = bounds.grow(0.6)
-		var node := MultiMeshInstance3D.new()
-		node.multimesh = batch
-		node.material_override = material
-		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		parent.add_child(node)
-
 func _crowd(parent: Node3D) -> void:
-	var batch := MultiMesh.new()
-	batch.transform_format = MultiMesh.TRANSFORM_3D
-	batch.use_colors = true
-	batch.use_custom_data = true
-	batch.mesh = _spectator_mesh()
-	batch.instance_count = 4*9*65
-	var rng := RandomNumberGenerator.new()
-	rng.seed = 77912
+	var audience := Node3D.new()
+	audience.name = "StadiumAudience"
+	parent.add_child(audience)
+	var spectator_script = preload("res://scripts/battle/arenas/shared/animated_spectator.gd")
+	# A bounded rigged crowd: keep stair aisles clear and face the battle court.
+	# Rear tiers keep the full zoomed-out camera orbit ahead of the audience.
 	var index := 0
 	for side in 4:
-		var rotation_y := side*PI/2
-		for row in 9:
-			for seat in 65:
-				var x := (seat-32)*0.65
-				var pos := Vector3(x+rng.randf_range(-0.10,0.10), 2.28+row*0.65+rng.randf_range(0,0.12), -20.0-row*1.05).rotated(Vector3.UP, rotation_y)
-				var transform := Transform3D(Basis.IDENTITY, pos)
-				if absf(fposmod(x+4.5,9.0)-4.5)<0.6 or rng.randf()<0.12:
-					transform.basis = Basis.from_scale(Vector3.ONE*0.001)
-				batch.set_instance_transform(index, transform)
-				batch.set_instance_custom_data(index,Color(rng.randf(),rng.randf(),0,1))
-				var tint := Color.from_hsv(rng.randf_range(0.55,0.8), 0.4, rng.randf_range(0.008,0.065))
-				if rng.randf() < 0.08:
-					tint = Color("50436d")
-				batch.set_instance_color(index, tint)
+		for row in [4, 5, 6, 7, 8]:
+			for seat in [-16.0, -12.0, -7.0, -3.0, 3.0, 7.0, 12.0, 16.0]:
+				var spectator: Node3D = spectator_script.new()
+				spectator.name = "Supporter%d" % index
+				spectator.position = Vector3(seat, 2.0 + row * 0.65, -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2)
+				spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
+				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.7)
+				audience.add_child(spectator)
 				index += 1
-	assert(batch.use_custom_data and batch.instance_count == 4*9*65)
-	assert(batch.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV2].size() > 0)
-	var mat := ShaderMaterial.new()
-	mat.shader = load("res://scripts/battle/arenas/generic/stadium_crowd.gdshader")
-	_add_crowd_batches(parent, batch, mat)
-	# Tiny supporter lights share the crowd transforms; no individual light nodes.
-	var lights := MultiMesh.new()
-	lights.transform_format = batch.transform_format
-	lights.use_colors = batch.use_colors
-	lights.use_custom_data = batch.use_custom_data
-	var bulb := SphereMesh.new()
-	bulb.radius = 0.035
-	bulb.height = 0.07
-	bulb.radial_segments = 6
-	bulb.rings = 2
-	lights.mesh = bulb
-	lights.instance_count = batch.instance_count
-	for i in lights.instance_count:
-		var pose := batch.get_instance_transform(i)
-		pose.origin.y += 0.3
-		if i % 4 != 0:
-			pose.basis = Basis.from_scale(Vector3.ONE*0.001)
-		lights.set_instance_transform(i, pose)
-		lights.set_instance_color(i, batch.get_instance_color(i))
-		lights.set_instance_custom_data(i, batch.get_instance_custom_data(i))
-	var sparkle: ShaderMaterial = mat.duplicate()
-	sparkle.set_shader_parameter("supporter_light", true)
-	_add_crowd_batches(parent, lights, sparkle)
 
 func build() -> Node3D:
 	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
@@ -252,5 +162,5 @@ func build() -> Node3D:
 	_screen(arena,Vector3(0,11,-28.5),0.0)
 	_screen(arena,Vector3(0,11,28.5),PI)
 	_crowd(arena)
-	print("STADIUM_GEOMETRY_OK spectators=",4*9*65)
+	print("STADIUM_GEOMETRY_OK spectators=", arena.get_node("StadiumAudience").get_child_count())
 	return arena

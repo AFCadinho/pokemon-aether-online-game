@@ -957,7 +957,9 @@
 			"locationGroupId": "kanto_lavender_town",
 			"locationGroupLabel": "Lavender Town",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://c4d77ryf5shti"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 			"spawnPoints": {
 				"from_route_10": {
@@ -978,6 +980,58 @@
 					"tile": {
 						"x": 22,
 						"y": 24
+					}
+				},
+				"from_pokecenter": {
+					"facingDirection": "down",
+					"label": "Pokémon Center",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokecenter",
+					"tile": {
+						"x": 8,
+						"y": 13
+					}
+				},
+				"transit_arrival": {
+					"facingDirection": "down",
+					"label": "Transit Arrival",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "TransitArrival",
+					"tile": {
+						"x": 23,
+						"y": 24
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_pokemon_center": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Lavender Town Pokémon Center",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn",
+			"spawnPoints": {
+				"from_outside": {
+					"facingDirection": "down",
+					"label": "Outside",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromOutside",
+					"tile": {
+						"x": 14,
+						"y": 31
+					}
+				},
+				"heal_npc": {
+					"facingDirection": "down",
+					"label": "Heal NPC",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "HealNPC",
+					"tile": {
+						"x": 14,
+						"y": 23
 					}
 				}
 			}
@@ -4888,6 +4942,20 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_lavender_town__to_pokemon_center": {
+			"destination": {
+				"mapId": "kanto_lavender_town_pokemon_center",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 1008.0
+				},
+				"spawnMarker": "FromOutside"
+			},
+			"destinationAreaId": "kanto_lavender_town_pokemon_center",
+			"sourceMapId": "kanto_lavender_town"
+		},
 		"kanto_lavender_town__to_route10": {
 			"destination": {
 				"facingDirection": "up",
@@ -4904,6 +4972,22 @@
 			},
 			"destinationAreaId": "kanto_route_10",
 			"sourceMapId": "kanto_lavender_town"
+		},
+		"kanto_lavender_town_pokemon_center__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 272.0,
+					"y": 432.0
+				},
+				"spawnMarker": "FromPokecenter"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_pokemon_center"
 		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {

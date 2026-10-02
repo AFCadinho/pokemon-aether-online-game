@@ -6236,12 +6236,15 @@
   "story.kanto.ss_anne_deliver_report": "Entregue o relatório à oficial Mara no convés do 3F.",
   "story.kanto.ss_anne_return_report": "Volte para Finn no corredor do B1F.",
   "ui.staff.story_chapter.vermilion": "Vermilion City / S.S. Anne",
+  "ui.staff.story_chapter.saffron": "Saffron e a volta ao Professor Oak",
   "ui.staff.story_checkpoint.board_ss_anne": "Porto · Mostre seu S.S. Ticket",
   "ui.staff.story_checkpoint.ss_anne_rival": "S.S. Anne · Encontre e vença Gary",
   "ui.staff.story_checkpoint.ss_anne_captain": "Capitão · Pergunte o que aconteceu",
   "ui.staff.story_checkpoint.ss_anne_collect_tea": "Cozinha · Pegue chá de gengibre",
   "ui.staff.story_checkpoint.ss_anne_return_tea": "Capitão · Entregue o chá / receba HM Cut",
   "ui.staff.story_checkpoint.challenge_surge": "Ginásio de Vermilion · Enfrente Lt. Surge",
+  "ui.staff.story_checkpoint.saffron_gate_closed": "Portão da Rota 6 · Saffron está fechada",
+  "ui.staff.story_checkpoint.oak_rock_tunnel_advice": "Laboratório do Professor Oak · Pergunte sobre o Rock Tunnel",
   "ui.staff.side_quest.ss_anne_crew_report": "Relatório da tripulação do S.S. Anne",
   "story.kanto.ss_anne_titanic_pose.title": "Estou voando, Jack!",
   "story.kanto.ss_anne_titanic_pose.summary": "Ajude Rose a recriar uma pose famosa no S.S. Anne. Recompensa: 1 PP Up.",
@@ -6257,5 +6260,11 @@
   "story.kanto.return_to_oak_after_saffron_closed.title": "Um bloqueio em Saffron",
   "story.kanto.return_to_oak_after_saffron_closed.summary": "Saffron está fechada por segurança. Volte ao Professor Oak e peça orientação.",
   "story.kanto.return_to_oak_after_saffron_closed.visit_saffron_gate": "Tente chegar a Saffron pelo portão da Rota 6.",
-  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Volte para Pallet e peça conselhos ao Professor Oak."
+  "story.kanto.return_to_oak_after_saffron_closed.ask_oak_for_advice": "Volte para Pallet e peça conselhos ao Professor Oak.",
+  "story.kanto.travel_to_lavender_town.title": "Um aviso em Lavender Town",
+  "story.kanto.travel_to_lavender_town.summary": "Atravesse a Rock Tunnel até Lavender Town e descubra o que está acontecendo na Pokémon Tower.",
+  "story.kanto.travel_to_lavender_town.cross_rock_tunnel": "Atravesse a Rock Tunnel para chegar a Lavender Town.",
+  "story.kanto.travel_to_lavender_town.hear_lavender_warning": "Ouça o aviso da moradora de Lavender Town.",
+  "ui.staff.story_checkpoint.rock_tunnel_to_lavender": "Rock Tunnel · Chegue a Lavender Town",
+  "ui.staff.story_checkpoint.lavender_warning": "Lavender · Ouça o aviso"
 }
