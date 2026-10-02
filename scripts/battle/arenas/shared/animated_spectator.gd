@@ -8,6 +8,30 @@ const MODELS := [
 ]
 var elapsed := 0.0
 var animation_player: AnimationPlayer
+var visibility_throttled := false
+var on_screen := true
+var animation_budget_time := 0.0
+var animation_elapsed_delta := 0.0
+func throttle_outside_camera(model_scale: float) -> void:
+	visibility_throttled = true
+	on_screen = false
+	animation_player.active = false
+	animation_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+	animation_budget_time = fmod(elapsed, 1.0 / 30.0)
+	var notifier := VisibleOnScreenNotifier3D.new()
+	# Conservative envelope includes the raised arms throughout Wave.
+	notifier.aabb = AABB(Vector3(-1.2, -0.2, -1.2) * model_scale, Vector3(2.4, 3.8, 2.4) * model_scale)
+	notifier.screen_entered.connect(func():
+		on_screen = true
+		animation_elapsed_delta = 0.0
+		animation_budget_time = fmod(elapsed, 1.0 / 30.0)
+		animation_player.active = true
+		_update_animation()
+		animation_player.seek(fmod(elapsed, animation_player.current_animation_length), true))
+	notifier.screen_exited.connect(func():
+		on_screen = false
+		animation_player.active = false)
+	add_child(notifier)
 
 func configure(scene: PackedScene, phase: float, model_scale := 1.15) -> void:
 	elapsed = phase
@@ -33,7 +57,16 @@ func configure(scene: PackedScene, phase: float, model_scale := 1.15) -> void:
 
 func _process(delta: float) -> void:
 	elapsed += delta
-	_update_animation()
+	if not visibility_throttled or on_screen:
+		_update_animation()
+	if visibility_throttled and on_screen:
+		# Distant stadium supporters animate at 30 Hz, staggered by their phases.
+		animation_budget_time += delta
+		animation_elapsed_delta += delta
+		if animation_budget_time >= 1.0 / 30.0:
+			animation_player.advance(animation_elapsed_delta)
+			animation_elapsed_delta = 0.0
+			animation_budget_time = fmod(animation_budget_time, 1.0 / 30.0)
 
 func _update_animation() -> void:
 	var next := "Wave" if fmod(elapsed, 7.0) < 3.2 else "Idle_Neutral"

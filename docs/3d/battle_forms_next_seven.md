@@ -7,12 +7,14 @@ presentation on 2026-10-02, including Eiscue's corrected bare head. The seven
 individual bundles pass local install, no-op and restart checks. Exact base
 and battle forms are loaded before reveal, and five reversible forms switch
 back without a download during the transition. Local performance admission passed the unchanged 20 ms p95 gate:
-16.894 / 16.959 / 16.918 ms in classic / stadium / classic. The game and
+16.972 / 19.453 / 16.910 ms in classic / stadium / classic. The game and
 launcher registries now contain seven additional profiles and 14 exact runtime
 digests. Earlier failed runs and the approved-base control remain pinned in
 the qualification receipt. The stadium now batches 624 fixed boxes and
-splits the unchanged crowd per stand for camera culling; the rendered
-geometry check verifies transforms, colors and animation parameters.
+retains the current development rigged crowd. Performance was requalified after merging the newer stadium crowd. Offscreen
+supporters pause their animations; visible distant supporters update at
+staggered 30 Hz while Pokémon animation timing is unchanged. The geometry
+check verifies that all static box transforms and colors are preserved.
 Nothing in this task has been published.
 
 ## Resume from accepted assets

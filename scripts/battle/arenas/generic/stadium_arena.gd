@@ -92,6 +92,7 @@ func _crowd(parent: Node3D) -> void:
 				spectator.position = Vector3(seat, 2.0 + row * 0.65, -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2)
 				spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
 				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.7)
+				spectator.throttle_outside_camera(0.7)
 				audience.add_child(spectator)
 				index += 1
 
