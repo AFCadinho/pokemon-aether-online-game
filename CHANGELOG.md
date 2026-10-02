@@ -4,7 +4,7 @@
 
 - Classic NPC-battles tonen de arena direct boven de overworld, ook tijdens battle-aanmaak en automatische Pokémon-keuzes, zonder schermvullende overgang of entree-zoom.
 
-- 71 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels en ondersteuning voor Mega X, Y en Z.
+- 71 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels en ondersteuning voor Mega X, Y en Z. De bundles staan geverifieerd op R2 voor een volgende release.
 
 - Bij binnenkomst in Rock Tunnel vanaf Route 10 kijkt de speler nu de grot in.
 

@@ -361,27 +361,29 @@ facing_direction = Vector2(1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="Pearl" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Pearl" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(2352, 1616)
 pickup_id = "kanto_rock_tunnel_1f_pearl"
 item_id = "pearl"
 
-[node name="XAccuracy" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="XAccuracy" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(592, 976)
 pickup_id = "kanto_rock_tunnel_1f_xaccuracy"
 item_id = "x-accuracy"
 
-[node name="Elixir" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Elixir" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(752, 2224)
 pickup_id = "kanto_rock_tunnel_1f_elixir"
 item_id = "elixir"
 
-[node name="XDefend" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="XDefend" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(944, 2192)
 pickup_id = "kanto_rock_tunnel_1f_xdefend"
 item_id = "x-defense"
 
-[node name="TMFling" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="TMFling" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(976, 2128)
 pickup_id = "kanto_rock_tunnel_1f_tmfling"
 item_id = "tm-fling"

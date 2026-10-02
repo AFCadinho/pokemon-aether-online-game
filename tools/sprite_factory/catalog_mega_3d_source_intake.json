@@ -28,8 +28,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "charizardmegax",
@@ -47,8 +49,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "charizardmegay",
@@ -66,8 +70,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "blastoisemega",
@@ -85,8 +91,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "beedrillmega",
@@ -104,8 +112,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "pidgeotmega",
@@ -123,8 +133,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "raichumegax",
@@ -142,8 +154,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "raichumegay",
@@ -161,8 +175,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "clefablemega",
@@ -180,8 +196,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "alakazammega",
@@ -199,8 +217,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "victreebelmega",
@@ -218,8 +238,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "slowbromega",
@@ -237,8 +259,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "gengarmega",
@@ -256,8 +280,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "kangaskhanmega",
@@ -275,8 +301,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "starmiemega",
@@ -294,8 +322,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "pinsirmega",
@@ -313,8 +343,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "gyaradosmega",
@@ -332,8 +364,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "aerodactylmega",
@@ -351,8 +385,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "dragonitemega",
@@ -386,8 +422,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "mewtwomegay",
@@ -405,8 +443,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "meganiummega",
@@ -424,8 +464,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "feraligatrmega",
@@ -443,8 +485,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "ampharosmega",
@@ -462,8 +506,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "steelixmega",
@@ -481,8 +527,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "scizormega",
@@ -500,8 +548,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "heracrossmega",
@@ -519,8 +569,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "skarmorymega",
@@ -538,8 +590,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "houndoommega",
@@ -557,8 +611,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "tyranitarmega",
@@ -576,8 +632,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "sceptilemega",
@@ -595,8 +653,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "blazikenmega",
@@ -614,8 +674,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "swampertmega",
@@ -633,8 +695,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "gardevoirmega",
@@ -652,8 +716,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "sableyemega",
@@ -671,8 +737,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "mawilemega",
@@ -690,8 +758,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "aggronmega",
@@ -709,8 +779,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "medichammega",
@@ -728,8 +800,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "manectricmega",
@@ -747,8 +821,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "sharpedomega",
@@ -766,8 +842,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "cameruptmega",
@@ -785,8 +863,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "altariamega",
@@ -804,8 +884,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "banettemega",
@@ -823,8 +905,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "chimechomega",
@@ -842,8 +926,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "absolmega",
@@ -861,8 +947,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "absolmegaz",
@@ -880,8 +968,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "glaliemega",
@@ -899,8 +989,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "salamencemega",
@@ -918,8 +1010,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "metagrossmega",
@@ -937,8 +1031,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "latiasmega",
@@ -956,8 +1052,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "latiosmega",
@@ -975,8 +1073,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "rayquazamega",
@@ -994,8 +1094,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "staraptormega",
@@ -1013,8 +1115,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "lopunnymega",
@@ -1032,8 +1136,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "garchompmega",
@@ -1051,8 +1157,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "garchompmegaz",
@@ -1070,8 +1178,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "lucariomega",
@@ -1089,8 +1199,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "lucariomegaz",
@@ -1108,8 +1220,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "abomasnowmega",
@@ -1127,8 +1241,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "gallademega",
@@ -1146,8 +1262,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "froslassmega",
@@ -1165,8 +1283,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "heatranmega",
@@ -1184,8 +1304,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "darkraimega",
@@ -1203,8 +1325,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "emboarmega",
@@ -1222,8 +1346,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "excadrillmega",
@@ -1241,8 +1367,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "audinomega",
@@ -1260,8 +1388,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "scolipedemega",
@@ -1279,8 +1409,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "scraftymega",
@@ -1298,8 +1430,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "eelektrossmega",
@@ -1317,8 +1451,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "chandeluremega",
@@ -1336,8 +1472,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "golurkmega",
@@ -1355,8 +1493,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "chesnaughtmega",
@@ -1477,8 +1617,10 @@
         "not_final_appearance_approval": true
       },
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029"
+      "published": true,
+      "bundle_qualification_sha256": "76c37f5cb7c71db271b0fe5f338555c50a00c93433be5ec62452bd053f249029",
+      "publication_receipt": "release/approved_3d_mega_71_r2_upload.json",
+      "publication_receipt_sha256": "653d6f5ae8d3da3dca176b9ccd2a7e6f526a79bf6396fb858d3c3cd1251fb83e"
     },
     {
       "showdown_id": "zygardemega",

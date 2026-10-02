@@ -200,3 +200,16 @@ three classic/stadium/classic rounds. Full-round p95 was 16.852 / 16.876 /
 were unchanged. This supplements the longer prepared-steady performance run;
 it does not replace that measurement. The qualification receipt pins the replay
 and the updated battle layout sources.
+
+## R2 publication completed
+
+On 2026-10-02, all 71 approved Mega bundles (142 appearances, 840,998,387
+bytes) and their immutable content index were published to R2. Fresh public
+GET SHA-256 and HEAD size checks passed for all 72 objects. Publication evidence
+is in `release/approved_3d_mega_71_r2_upload.json`; the intake rows bind that
+receipt and now record publication. The qualification receipt remains the
+historical local admission evidence.
+
+The active desktop manifest was unchanged. These bundles are staged for a
+future release; this publication does not activate them for current clients.
+The 25 unresolved source mappings remain outside this published cohort.

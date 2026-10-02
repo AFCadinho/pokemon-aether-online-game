@@ -62,17 +62,19 @@ shape = SubResource("shape_32_32")
 z_index = 5
 
 [node name="Interactables" type="Node2D" parent="Entities"]
-[node name="UltraBall" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="UltraBall" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(3100, 600)
 pickup_id = "kanto_cerulean_cave_b1f_ultra_ball"
 item_id = "ultra-ball"
 
-[node name="MaxRevive" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="MaxRevive" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(3600, 1200)
 pickup_id = "kanto_cerulean_cave_b1f_max_revive"
 item_id = "max-revive"
 
-[node name="Nugget" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="Nugget" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(1800, 1000)
 pickup_id = "kanto_cerulean_cave_b1f_nugget"
 item_id = "nugget"

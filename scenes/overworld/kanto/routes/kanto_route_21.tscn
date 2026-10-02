@@ -66,19 +66,21 @@ z_index = 5
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="Pearl" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Pearl" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(720, 1456)
 pickup_id = "kanto_route_21_pearl"
 item_id = "pearl"
-[node name="WaterStone" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="WaterStone" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(624, 2224)
 pickup_id = "kanto_route_21_waterstone"
 item_id = "water-stone"
-[node name="PPUp" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="PPUp" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(832, 2784)
 pickup_id = "kanto_route_21_ppup"
 item_id = "pp-up"
-[node name="Stardust" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Stardust" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(464, 480)
 pickup_id = "kanto_route_21_stardust"
 item_id = "stardust"

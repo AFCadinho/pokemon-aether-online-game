@@ -375,28 +375,30 @@ npc_sprite_frames = ExtResource("hiker")
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="CheriBerry" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="CheriBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(688, 560)
 pickup_id = "kanto_route_10_cheriberry"
 item_id = "cheri-berry"
-[node name="PersimBerry" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="PersimBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(976, 560)
 pickup_id = "kanto_route_10_persimberry"
 item_id = "persim-berry"
-[node name="SuperPotion" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="SuperPotion" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1360, 720)
 pickup_id = "kanto_route_10_superpotion"
 item_id = "super-potion"
-[node name="Carbos" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Carbos" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(816, 2704)
 pickup_id = "kanto_route_10_carbos"
 item_id = "carbos"
-[node name="GreatBallRockPolishSubstitute" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="GreatBallRockPolishSubstitute" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1232, 3056)
 pickup_id = "kanto_route_10_great_ball_tm_substitute"
 item_id = "great-ball"
 
-[node name="MaxEther" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="MaxEther" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1200, 2800)
 pickup_id = "kanto_route_10_max_ether"
 item_id = "max-ether"

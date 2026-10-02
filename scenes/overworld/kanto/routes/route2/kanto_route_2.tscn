@@ -589,12 +589,14 @@ movement_speed_pixels = 50.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=2096619694]
 
-[node name="Ether" parent="Entities/Interactables" unique_id=265507974 instance=ExtResource("19_overworld_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Ether" parent="Entities/Interactables/Items" unique_id=265507974 instance=ExtResource("19_overworld_item")]
 position = Vector2(848, 1616)
 pickup_id = "kanto_route_2_ether"
 item_id = "ether"
 
-[node name="ParalyzeHeal" parent="Entities/Interactables" unique_id=1734849859 instance=ExtResource("19_overworld_item")]
+[node name="ParalyzeHeal" parent="Entities/Interactables/Items" unique_id=1734849859 instance=ExtResource("19_overworld_item")]
 position = Vector2(688, 1296)
 pickup_id = "kanto_route_2_paralyze_heal"
 item_id = "paralyze-heal"
