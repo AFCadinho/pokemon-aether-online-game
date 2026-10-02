@@ -392,11 +392,12 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=868008222]
 
 [node name="Paras" parent="Entities/Pokemon" unique_id=190001201 instance=ExtResource("100_pokemon")]
-position = Vector2(1456, 1040)
+position = Vector2(1648, 2064)
 overworld_pokemon_id = "kanto_mt_moon_b1f_paras_1"
 species_id = "paras"
 level = 8
 display_name = "Paras"
+facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.0

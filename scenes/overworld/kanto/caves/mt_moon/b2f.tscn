@@ -315,7 +315,7 @@ movement_wait_seconds = 1.6
 movement_speed_pixels = 38.0
 
 [node name="Clefairy" parent="Entities/Pokemon" unique_id=190001303 instance=ExtResource("15_pokemon")]
-position = Vector2(400, 1488)
+position = Vector2(752, 1424)
 overworld_pokemon_id = "kanto_mt_moon_b2f_clefairy_1"
 species_id = "clefairy"
 level = 11
