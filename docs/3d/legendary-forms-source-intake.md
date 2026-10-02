@@ -63,7 +63,8 @@ Godot 4.6.2 AMD Compatibility reports zero clip timing, geometry, reload or
 reverse-order pose errors for all four appearances (32 native clips). These
 checks do not qualify battle scale, floor clearance, switching or performance.
 `catalog_kyurem_forms_checkpoint.json` pins this exact review state and keeps
-appearance, battle and runtime approvals false until their respective gates.
+the user appearance approval (2026-10-02, “Allebei goed”) for these exact
+neutral assets. Battle and runtime approvals remain false until their gates.
 
 Reproduce candidates in a new evidence root after preserving existing work:
 
@@ -76,3 +77,22 @@ python3 tools/sprite_factory/catalog_kyurem_forms.py stage --work .tmp/kyurem-fr
 After user appearance approval: battle calibration and review, runtime form
 identity/preloading, performance admission, individual bundles, then explicitly
 authorized R2 publication. The other four source-confirmed forms follow next.
+
+## Battle calibration checkpoint
+
+The exact user-approved neutral assets are staged with the hash-pinned Dragonite
+comparison control. Full native clips are sampled at 60 Hz, including damage.
+Both forms retain scale 1.0; all four idle camera/side views exceed the existing
+66-pixel readability minimum. Normal and shiny receive identical placement.
+Faint endpoints match exactly. Clearance-only profiles add at most 3.46 cm
+(Black) and 2.46 cm (White), with steady offsets for the resting faint loop.
+There are no calibration holds. Independent 120 Hz verification passes all
+32 native clips: minima remain at least 2.5 cm above the floor. All 112 final
+pose images (seven poses, two cameras, two sides, four appearances) fit in
+view. The user battle review is pending. Switching and performance admission
+are still required; this checkpoint does not activate runtime forms.
+
+Evidence: `battle-stage-v1/`, `battle-measure-v1/`,
+`battle-candidates-v1.json`, `battle-validated-v1/`, and
+`review-neutral-v1/battle-review-v1/`. Exact report/catalog/profile hashes
+are recorded in the tracked checkpoint.

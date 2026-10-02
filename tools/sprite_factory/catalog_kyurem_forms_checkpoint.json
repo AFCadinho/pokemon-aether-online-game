@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "scope": "four_neutral_form_appearances_for_user_review_not_runtime_admission",
-  "appearance_approved": false,
+  "appearance_approved": true,
   "battle_approved": false,
   "runtime_approved": false,
   "source_sha256": "006b391145c8c720e8cabf0109d3e30947846495f91ac5f1d7c8301c0c86195a",
@@ -100,7 +100,7 @@
           "source_action": "pm0646_13_00_00450_rangeattack01"
         }
       },
-      "appearance_approved": false,
+      "appearance_approved": true,
       "complete_pose_channels": true,
       "converter_version": 2,
       "glb_sha256": "19ff5f2826c438bbd49cfbaef20a8a395ca2766b92ce30bc3458f6be134e3b41",
@@ -315,7 +315,7 @@
           "source_action": "pm0646_13_00_00450_rangeattack01"
         }
       },
-      "appearance_approved": false,
+      "appearance_approved": true,
       "complete_pose_channels": true,
       "converter_version": 2,
       "glb_sha256": "6f3c11d62ec10d198549fbc6d592faf6a4c98e4e23ba60a7c862adb65ace7bde",
@@ -530,7 +530,7 @@
           "source_action": "pm0646_12_00_00450_rangeattack01"
         }
       },
-      "appearance_approved": false,
+      "appearance_approved": true,
       "complete_pose_channels": true,
       "converter_version": 2,
       "glb_sha256": "f79b78d6d8dd313932ce49e65a7874e3c9756d63793f101df63fee9c0d42b981",
@@ -739,7 +739,7 @@
           "source_action": "pm0646_12_00_00450_rangeattack01"
         }
       },
-      "appearance_approved": false,
+      "appearance_approved": true,
       "complete_pose_channels": true,
       "converter_version": 2,
       "glb_sha256": "898c5cb1530590e75338c5c387ec71a828b97cf0c1d60198948707482afad2c0",
@@ -855,5 +855,23 @@
         "pm0646_12_00_tube_c_mesh"
       ]
     }
-  ]
+  ],
+  "appearance_approval": {
+    "user_response": "Allebei goed",
+    "date": "2026-10-02",
+    "scope": "Exact four neutral appearances pinned below; battle approval pending"
+  },
+  "battle_measurement": {
+    "report": ".tmp/legendary-kyurem-forms-v2/battle-validated-v1/battle-review.json",
+    "sha256": "adc5fb1442246ace2870c1e96e1e0f8ed641158a60fde15057358f381e59b8b6",
+    "catalog": ".tmp/legendary-kyurem-forms-v2/battle-stage-v1/catalog.json",
+    "catalog_sha256": "aee866c04d9ef4e16c1a9214751e97f6d0c34bdd6c80765593d0e3e5a83443ab",
+    "candidates": ".tmp/legendary-kyurem-forms-v2/battle-candidates-v1.json",
+    "candidates_sha256": "d8837251797edf0219c37d3af0f88598b1d92d906f3c41c33e61424b512ea24c",
+    "independent_clearance_hz": 120,
+    "native_clips": 32,
+    "battle_images": 112,
+    "all_shots_in_view": true,
+    "user_battle_approval_pending": true
+  }
 }
