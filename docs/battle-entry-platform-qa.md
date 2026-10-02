@@ -197,3 +197,32 @@ The phone was not connected; the player requested desktop testing first. No
 Android APK was built or installed for this change. These offline checks do not
 certify logged-in gameplay or guarantee zero CPU/GPU stalls on every device;
 they verify that position/battle responses no longer gate the wild arena fade.
+
+## Final element sizes from the first fade frame — 2026-10-02
+
+The early arena reveal exposed a layout issue: `ImmersiveHud` skipped all work
+while entry was pending, so platforms/sprite boxes and HUD controls retained
+their original scene scales until the response arrived. The HUD now computes
+geometry during pending entry while combatants/actions remain hidden. The host
+also settles the stage's margin layout and transform, portraits, HUD and fonts
+synchronously before reveal; pending setup and authoritative wild preparation
+refresh that geometry before controls become visible. No timer or network
+readiness gate was added. Classic presentation is unchanged.
+
+The expanded `wild_entry_before_response_check` reproduced 21 scale failures
+with the task base. With the fix it passed headless and rendered on Linux. It
+checks final component scales before the first frame, across the first fade
+frames and after authoritative setup; global scales for the battle, stage,
+platforms, sprite boxes, HP panels and moves remain unchanged throughout.
+Rendered pending/after-setup screenshots were inspected: platforms retain their
+final size and position when the hidden HUD is restored.
+
+`fullscreen_battle_fade_check` passed headless and rendered, observing ten
+intermediate pixel levels after a 250 ms loading stall.
+`wild_encounter_transition_check`, `battle_immersive_2d_hud_check`, and
+`battle_immersive_layout_check` passed. The layout check covers Classic and
+Immersive at six desktop dimensions. Existing asset UID fallback warnings and
+the layout check's exit-time ObjectDB warning remain.
+
+This follow-up was tested first on desktop as requested. Browser/Android and
+logged-in player encounters were not rerun; no APK was installed or published.
