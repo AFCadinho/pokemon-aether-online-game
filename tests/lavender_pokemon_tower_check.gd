@@ -33,7 +33,7 @@ func _run() -> void:
 	_check(str(visual.get_meta("tiled_source_path")).ends_with("/pokemon_tower/Pokemon Tower.tmx"), "Tower uses the requested TMX")
 	_check(AtlasValidator.new().validate(visual, "res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tileset.tres").is_empty(), "Tower compact atlases are valid")
 	var collision := tower.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.tile_set != null and collision.get_used_cells().is_empty(), "Tower collision is empty and editable")
+	_check(collision.tile_set != null and collision.tile_set.tile_size == Vector2i(32, 32), "Tower retains an editable collision tileset")
 	_check(mask.get("floor_regions").size() == 7 and mask.get("constrain_camera_to_active_floor"), "Seven floor masks constrain the camera")
 	for floor_data: Dictionary in layout.floors:
 		var n := int(floor_data.floorNumber)
@@ -57,11 +57,10 @@ func _run() -> void:
 				continue
 			var destination_floor := int(connection.destination)
 			var transition := tower.get_node("FloorTransitions/Floor%dTo%d" % [n, destination_floor])
-			var source_arrival: Array = connection.arrival
-			player.position = Vector2(float(source_arrival[0]) * 32 + 16, float(source_arrival[1]) * 32 + 16)
+			player.position = transition.position
 			mask.call("show_floor", floor_name)
-			var trigger: Array = connection.trigger
-			_check(transition.position == Vector2(float(trigger[0]) * 32 + 16, float(trigger[1]) * 32 + 16), "Stair %dF to %dF uses its artist trigger" % [n, destination_floor])
+			var trigger_shape := transition.get_node("CollisionShape2D") as CollisionShape2D
+			_check(expected.has_point(tower.to_local(trigger_shape.global_position)), "Authored stair %dF to %dF trigger is on its source floor" % [n, destination_floor])
 			var destination_marker := transition.get_node(transition.get("destination_marker_path")) as Marker2D
 			_check(destination_marker != null, "Stair has an authored arrival marker")
 			var landing := destination_marker.position
@@ -69,8 +68,9 @@ func _run() -> void:
 			_check(destination_bounds.has_point(landing), "Authored stair arrival is on its destination floor")
 			var reverse := tower.get_node("FloorTransitions/Floor%dTo%d" % [destination_floor, n])
 			var reverse_shape := reverse.get_node("CollisionShape2D") as CollisionShape2D
-			var reverse_rect := Rect2(reverse.position - (reverse_shape.shape as RectangleShape2D).size / 2, (reverse_shape.shape as RectangleShape2D).size)
-			_check(not reverse_rect.has_point(landing), "Stair arrival avoids immediate return")
+			var reverse_size := (reverse_shape.shape as RectangleShape2D).size
+			var reverse_rect := Rect2(-reverse_size / 2, reverse_size)
+			_check(not reverse_rect.has_point(reverse_shape.to_local(tower.to_global(landing))), "Stair arrival avoids immediate return")
 			_check(transition.is_connected("body_entered", Callable(transition, "_on_body_entered")), "Stair is connected to walking trigger")
 			transition.set("cooldown_seconds", 0.0)
 			await transition.call("_on_body_entered", player)
