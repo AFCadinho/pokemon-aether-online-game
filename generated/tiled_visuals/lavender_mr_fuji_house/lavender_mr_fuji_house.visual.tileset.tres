@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dngmik56p4t72"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_mr_fuji_house/assets/lavender_mr_fuji_house.visual.tileset.compact_source_1_0.texture.res" id="1_55a2j"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/lavender_mr_fuji_house/assets/lavender_mr_fuji_house.visual.tileset.compact_source_1025_0.texture.res" id="2_x85nb"]

@@ -1,25 +1,81 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://3mw652hbm06g"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_mr_fuji_house/lavender_mr_fuji_house.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_mr_fuji_house/lavender_mr_fuji_house.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
-[sub_resource type="TileSetAtlasSource" id="collision_atlas"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iatbe"]
 texture = ExtResource("collision_marker")
 texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
 1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
 
-[sub_resource type="TileSet" id="collision_tileset"]
+[sub_resource type="TileSet" id="TileSet_b3aje"]
 tile_size = Vector2i(32, 32)
-sources/0 = SubResource("collision_atlas")
+sources/0 = SubResource("TileSetAtlasSource_iatbe")
 
-[node name="MrFujiHouse" type="Node2D"]
+[node name="MrFujiHouse" type="Node2D" unique_id=1198580597]
 script = ExtResource("metadata")
 map_id = "kanto_lavender_town_mr_fuji_house"
 map_region_name = "Kanto"
@@ -34,37 +90,45 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.lavender_town"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=1745816800 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1269086240]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
-floor_regions = {&"ground_floor": Rect2(0, 0, 832, 768)}
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 832, 768)
+}
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=231491674]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1183190929]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1214029148]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=325920616]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1999435898]
 z_index = 5
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
-[node name="NPCs" type="Node2D" parent="Entities"]
-[node name="Pokemon" type="Node2D" parent="Entities"]
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1909174879]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1156296835]
 
-[node name="FromLavenderTown" type="Marker2D" parent="Spawns"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=266126023]
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1097780851]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1890895946]
+
+[node name="FromLavenderTown" type="Marker2D" parent="Spawns" unique_id=2096943025]
 position = Vector2(400, 592)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=630883987]
 
-[node name="ToOutside" type="Area2D" parent="Exits"]
+[node name="ToOutside" type="Area2D" parent="Exits" unique_id=727297677]
 position = Vector2(400, 624)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
@@ -72,19 +136,20 @@ target_spawn_name = "FromMrFujiHouse"
 transition_id = "kanto_lavender_town_mr_fuji_house__to_outside"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside" unique_id=1277889376]
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="Exits/ToOutside" unique_id=1371864460 instance=ExtResource("hint")]
+z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 flow_direction = "down"
 
-[node name="Tiles" type="Node2D" parent="."]
-
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-editor_description = "Empty collision layer: paint the room boundaries and furniture here. Collision is intentionally left for the map author."
+[node name="Tiles" type="Node2D" parent="." unique_id=1976495609]
 visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=885246326]
 z_index = 4096
-tile_set = SubResource("collision_tileset")
+tile_map_data = PackedByteArray("AAADAAYAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAADAAkAAAABAAEAAAADAAoAAAABAAEAAAADAAsAAAABAAEAAAADAAwAAAABAAEAAAADAA0AAAABAAEAAAADAA4AAAABAAEAAAADAA8AAAABAAEAAAADABAAAAABAAEAAAADABEAAAABAAEAAAADABIAAAABAAEAAAADABMAAAABAAEAAAAEABMAAAABAAEAAAAFABMAAAABAAEAAAAGABMAAAABAAEAAAAHABMAAAABAAEAAAAIABMAAAABAAEAAAAJABMAAAABAAEAAAAKABMAAAABAAEAAAALABQAAAABAAEAAAAMABQAAAABAAEAAAANABQAAAABAAEAAAAOABQAAAABAAEAAAAKABQAAAABAAEAAAAOABMAAAABAAEAAAAPABMAAAABAAEAAAAQABMAAAABAAEAAAARABMAAAABAAEAAAASABMAAAABAAEAAAATABMAAAABAAEAAAAUABMAAAABAAEAAAAVABMAAAABAAEAAAAVAAYAAAABAAEAAAAVAAcAAAABAAEAAAAVAAgAAAABAAEAAAAVAAkAAAABAAEAAAAVAAoAAAABAAEAAAAVAAsAAAABAAEAAAAVAAwAAAABAAEAAAAVAA0AAAABAAEAAAAVAA4AAAABAAEAAAAVAA8AAAABAAEAAAAVABAAAAABAAEAAAAVABEAAAABAAEAAAAVABIAAAABAAEAAAAUAAYAAAABAAEAAAAUAAUAAAABAAEAAAAEAAUAAAABAAEAAAAFAAUAAAABAAEAAAAGAAUAAAABAAEAAAAHAAUAAAABAAEAAAAIAAUAAAABAAEAAAAJAAUAAAABAAEAAAAKAAUAAAABAAEAAAALAAUAAAABAAEAAAAMAAUAAAABAAEAAAANAAUAAAABAAEAAAAOAAUAAAABAAEAAAAPAAUAAAABAAEAAAAQAAUAAAABAAEAAAARAAUAAAABAAEAAAASAAUAAAABAAEAAAATAAUAAAABAAEAAAAEAAYAAAABAAEAAAAEAAcAAAABAAEAAAAFAAYAAAABAAEAAAAFAAcAAAABAAEAAAAGAAYAAAABAAEAAAAGAAcAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAQAAYAAAABAAEAAAAQAAcAAAABAAEAAAARAAYAAAABAAEAAAARAAcAAAABAAEAAAASAAYAAAABAAEAAAASAAcAAAABAAEAAAATAAYAAAABAAEAAAATAAcAAAABAAEAAAAUAAcAAAABAAEAAAAUAAgAAAABAAEAAAAEAAgAAAABAAEAAAAEAAkAAAABAAEAAAAFAAkAAAABAAEAAAAGAAkAAAABAAEAAAAHAAkAAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAGABAAAAABAAEAAAAGABEAAAABAAEAAAAHABAAAAABAAEAAAAHABEAAAABAAEAAAAIABAAAAABAAEAAAAIABEAAAABAAEAAAAJABEAAAABAAEAAAAJABAAAAABAAEAAAAFABEAAAABAAEAAAAFABAAAAABAAEAAAAOAAsAAAABAAEAAAAOAAwAAAABAAEAAAAOAA0AAAABAAEAAAAOAA4AAAABAAEAAAAOAA8AAAABAAEAAAAPAA8AAAABAAEAAAAQAA8AAAABAAEAAAAPAAsAAAABAAEAAAAQAAsAAAABAAEAAAARAAsAAAABAAEAAAASAAsAAAABAAEAAAATAAsAAAABAAEAAAAUAAsAAAABAAEAAAATAA8AAAABAAEAAAAUAA8AAAABAAEAAAATAA0AAAABAAEAAAATAA4AAAABAAEAAAAUABIAAAABAAEAAAAGAAsAAAABAAEAAAAHAAsAAAABAAEAAAAIAAsAAAABAAEAAAAMAAkAAAABAAEAAAASAAgAAAABAAEAAAATAAgAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_b3aje")
 
 [connection signal="body_entered" from="Exits/ToOutside" to="Exits/ToOutside" method="_on_body_entered"]

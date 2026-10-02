@@ -415,7 +415,7 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=120000016]
 
-[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("18_overworld_pokemon")]
+[node name="Spearow" parent="Entities/Pokemon" unique_id=1882296323 instance=ExtResource("18_overworld_pokemon")]
 position = Vector2(1168, 880)
 overworld_pokemon_id = "kanto_route_3_spearow_1"
 species_id = "spearow"
@@ -426,8 +426,8 @@ movement_tiles = 1
 movement_wait_seconds = 1.5
 movement_speed_pixels = 48.0
 
-[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("18_overworld_pokemon")]
-position = Vector2(1936, 1120)
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=1295320210 instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(1040, 400)
 overworld_pokemon_id = "kanto_route_3_pidgey_1"
 species_id = "pidgey"
 level = 6
@@ -437,11 +437,10 @@ movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 40.0
 
-[node name="Jigglypuff" parent="Entities/Pokemon" instance=ExtResource("18_overworld_pokemon")]
-position = Vector2(2352, 560)
+[node name="Jigglypuff" parent="Entities/Pokemon" unique_id=939158028 instance=ExtResource("18_overworld_pokemon")]
+position = Vector2(2352, 528)
 overworld_pokemon_id = "kanto_route_3_jigglypuff_1"
 species_id = "jigglypuff"
-level = 5
 display_name = "Jigglypuff"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
