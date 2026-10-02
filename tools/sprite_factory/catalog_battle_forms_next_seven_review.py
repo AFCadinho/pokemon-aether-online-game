@@ -109,6 +109,12 @@ const pose=document.querySelector('#pose'),view=document.querySelector('#view'),
         page = page.replace('Battle-vormen — uiterlijkcontrole', 'Battle-vormen — battlecontrole')
         page = page.replace('Controleer normal en shiny op ogen, kleuren, details en poses. Dit zijn offline modellen ter review; battle-grootte volgt hierna.', 'Controleer grootte en poses naast Dragonite, voor normal en shiny. Bekijk ook slaap, flauw, beide camera’s en beide kanten.')
         page = page.replace('<option value="front">Voorkant</option><option value="back">Achterkant</option>', '<option value="classic-0">Klassiek · eigen kant</option><option value="classic-1">Klassiek · tegenstander</option><option value="stadium-0">Stadium · eigen kant</option><option value="stadium-1">Stadium · tegenstander</option>')
+    if not battle:
+        available_views = {pose['view'] for row in entries.values() for pose in row['poses']}
+        extra_views = ''.join(f'<option value="{view}">{label}</option>'
+                              for view, label in [('face', 'Gezicht · lage camera'), ('side', 'Schuin zijaanzicht'), ('eye', 'Ogen · lage camera')]
+                              if view in available_views)
+        page = page.replace('</select><input id="search"', extra_views + '</select><input id="search"')
     if detail_report_path:
         page = page.replace('</select><input id="search"', '<option value="detail">Model dichtbij</option></select><input id="search"')
     (output / 'index.html').write_text(page)
