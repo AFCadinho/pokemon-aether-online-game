@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 3 now has roaming overworld Spearow, Pidgey and Jigglypuff, matching its FireRed/LeafGreen wild encounter pool.
+
 - Mr. Fuji’s House in Lavender Town heeft nu het artist-interieur en een doorgang van en naar het huis met het paarse dak in het noordoosten.
 
 - Classic NPC-battles tonen de arena direct boven de overworld, ook tijdens battle-aanmaak en automatische Pokémon-keuzes, zonder schermvullende overgang of entree-zoom.
