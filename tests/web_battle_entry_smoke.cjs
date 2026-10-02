@@ -70,7 +70,7 @@ const assert = require('node:assert/strict');
       assert.deepEqual(errors, [], 'Godot/browser runtime errors');
       assert.deepEqual(external, [], 'Diagnostic must remain offline');
       assert.deepEqual(failedRequests, [], 'All diagnostic resources must load');
-      assert.deepEqual(Object.keys(results).sort(), ['battle_entry_slow_sprite_check.gd', 'fullscreen_battle_fade_check.gd', 'trainer_vision_physics_flush_check.gd', 'wild_entry_before_response_check.gd'].sort());
+      assert.deepEqual(Object.keys(results).sort(), ['battle_entry_slow_sprite_check.gd', 'fullscreen_battle_fade_check.gd', 'trainer_vision_physics_flush_check.gd', 'wild_entry_before_response_check.gd', 'trainer_entry_before_response_check.gd'].sort());
       assert(Object.values(results).every(code => code === 0), 'Every focused check must pass');
       assert(consoleLines.some(line => /FULLSCREEN_FADE_RENDERED_LEVELS=[4-9]|FULLSCREEN_FADE_RENDERED_LEVELS=\d{2}/.test(line)), 'Actual pixels must show fade levels');
       await context.close();

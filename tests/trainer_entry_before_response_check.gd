@@ -16,14 +16,17 @@ func _run() -> void:
 	var pokemon := Pokemon.new("Pikachu", 5)
 	pokemon.current_hp = maxi(1, pokemon.max_hp)
 	save.party.assign([pokemon])
-	await _check_world_entry()
-	await _check_leads(false)
-	await _check_leads(true)
+	for layout in ["immersive", "classic"]:
+		settings.battle_ui_layout = layout
+		await _check_world_entry()
+		await _check_leads(false)
+		await _check_leads(true)
 	save.party.assign(previous_party)
 	print("trainer_entry_before_response_check: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
 func _check_world_entry() -> void:
+	var immersive: bool = root.get_node("SettingsManager").battle_ui_layout == "immersive"
 	var world: Variant = Node2D.new()
 	root.add_child(world)
 	world.set_script(load("res://tests/fixtures/trainer_entry_request_probe.gd"))
@@ -40,15 +43,28 @@ func _check_world_entry() -> void:
 	world.run_trainer_entry()
 	for frame in 3:
 		await process_frame
-	check(world.position_waiting and world.battle_instance == warmed, "NPC entry reuses the arena before position response")
-	check(world.battle_screen_host.fade_progress > 0.0, "NPC fade starts while the position request is blocked")
-	await world.battle_screen_host.wait_until_revealed()
+	check(world.position_waiting and is_instance_valid(world.battle_instance), "NPC arena mounts before position response in both layouts")
+	if immersive:
+		check(world.battle_instance == warmed, "NPC entry reuses the prewarmed arena")
+		check(world.battle_screen_host.fade_progress > 0.0, "NPC fade starts while the position request is blocked")
+		await world.battle_screen_host.wait_until_revealed()
+	else:
+		check(world.battle_screen_host == null, "Classic NPC entry keeps its overworld overlay")
+		check(transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD and not transition.visible and transition.active_tween == null, "Classic NPC entry has no cinematic cover or minimum wait")
+		check(is_instance_valid(world.classic_wild_backdrop), "Classic NPC dimming remains behind the arena")
+		if is_instance_valid(world.battle_instance):
+			var scale_before: Vector2 = world.battle_instance.scale
+			world._prepare_battle_instance_reveal()
+			check(world.battle_instance.is_visible_in_tree() and world.battle_instance.scale.is_equal_approx(scale_before) and is_equal_approx(world.battle_instance.modulate.a, 1.0), "Classic NPC setup does not hide or resize the visible arena")
 	world.continue_position.emit()
 	await process_frame
-	check(world.response_waiting and world.battle_screen_host.content.modulate.a == 1.0, "NPC arena stays visible while creation is blocked")
+	check(world.response_waiting and is_instance_valid(world.battle_instance) and world.battle_instance.is_visible_in_tree() and is_equal_approx(world.battle_instance.modulate.a, 1.0), "NPC arena stays visible while creation is blocked")
 	await _capture("npc-creation-pending")
-	check(world.battle_instance.battle_stage.get_node("TrainerPortrait1").visible, "Known NPC portrait is visible while its battle response waits")
-	check(world.battle_instance.battle_type == world.battle_instance.BattleType.TRAINER, "Pending arena keeps the trainer battle context")
+	if is_instance_valid(world.battle_instance):
+		check(world.battle_instance.has_meta("battle_entry_pending") and not world.battle_instance.moves_grid.visible, "Pending NPC actions remain hidden")
+		if immersive:
+			check(world.battle_instance.battle_stage.get_node("TrainerPortrait1").visible, "Known NPC portrait is visible while its battle response waits")
+		check(world.battle_instance.battle_type == world.battle_instance.BattleType.TRAINER, "Pending arena keeps the trainer battle context")
 	world.continue_response.emit()
 	await process_frame
 	await process_frame
@@ -61,14 +77,20 @@ func _check_world_entry() -> void:
 	await process_frame
 
 func _check_leads(preview: bool) -> void:
+	var immersive: bool = root.get_node("SettingsManager").battle_ui_layout == "immersive"
 	var battle: Variant = load("res://scenes/battle/battle.tscn").instantiate()
 	battle.set_script(load("res://tests/fixtures/trainer_entry_lead_probe.gd"))
-	var host: Variant = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	var host: Variant = load("res://scenes/battle/battle_screen_host.tscn").instantiate() if immersive else Control.new()
 	root.add_child(host)
-	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)
+	if immersive:
+		host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)
+	else:
+		host.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		host.add_child(battle)
 	battle.prepare_pending_entry(&"route_1", battle.BattleType.TRAINER, {"name": "Fixture Trainer", "_battle_sprite_frames": preload("res://assets/npcs/generic_npc_fallback_frames.tres")})
-	host.reveal_pending_entry()
-	await host.wait_until_revealed()
+	if immersive:
+		host.reveal_pending_entry()
+		await host.wait_until_revealed()
 	battle.run_setup(preview)
 	await process_frame
 	if preview:
@@ -79,17 +101,20 @@ func _check_leads(preview: bool) -> void:
 		check(battle.battle_input_locked and not battle.moves_grid.visible, "Actions remain locked while leads wait")
 		battle.continue_player_lead.emit()
 		await process_frame
-		check(battle.battle_stage.get_node("TrainerPortrait1").visible, "Known NPC portrait remains visible during automatic lead selection")
-		check(battle.npc_lead_waiting and host.content.modulate.a == 1.0, "Automatic NPC lead does not cover the arena")
+		if immersive:
+			check(battle.battle_stage.get_node("TrainerPortrait1").visible, "Known NPC portrait remains visible during automatic lead selection")
+		check(battle.npc_lead_waiting and battle.is_visible_in_tree() and is_equal_approx(battle.modulate.a, 1.0), "Automatic NPC lead does not cover the arena")
 		check(battle.enemy_sprite_box.modulate.a == 0.0 and battle.enemy_team_preview_layer.modulate.a == 0.0, "Lead response visibility changes cannot flash mechanical combatants/preview")
 		await _capture("npc-leads-pending")
-		var card: Control = battle.battle_stage.get_node("TrainerPortrait1")
-		check(card.is_visible_in_tree() and host.get_global_rect().encloses(card.get_global_rect()), "NPC portrait remains inside the visible arena")
+		if immersive:
+			var card: Control = battle.battle_stage.get_node("TrainerPortrait1")
+			check(card.is_visible_in_tree() and host.get_global_rect().encloses(card.get_global_rect()), "NPC portrait remains inside the visible arena")
 		battle.continue_npc_lead.emit()
 	await process_frame
 	check(not battle.has_meta("battle_entry_pending") and battle._pending_entry_visibility.is_empty(), "Finished/failed lead setup releases pending masks")
 	check(battle.enemy_sprite_box.modulate.a == 1.0, "Pending alpha masks are restored")
-	host.release()
+	if immersive:
+		host.release()
 	host.queue_free()
 	await process_frame
 
@@ -99,4 +124,4 @@ func _capture(name: String) -> void:
 		for frame in 2:
 			await process_frame
 			await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png(output.path_join(name + ".png"))
+		root.get_texture().get_image().save_png(output.path_join(root.get_node("SettingsManager").battle_ui_layout + "-" + name + ".png"))

@@ -1546,8 +1546,8 @@ func _begin_wild_encounter_transition() -> int:
 	return Time.get_ticks_msec()
 
 
-func _begin_trainer_battle_transition(trainer_data: Dictionary) -> int:
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE if _uses_fullscreen_battle() else _trainer_battle_transition_style(trainer_data))
+func _begin_trainer_battle_transition(_trainer_data: Dictionary) -> int:
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_CLASSIC_WILD)
 	return Time.get_ticks_msec()
 
 
@@ -3743,7 +3743,10 @@ func _begin_pending_trainer_entry(trainer_data: Dictionary, started_at_msec: int
 		battle_instance.BattleType.TRAINER,
 		trainer_data
 	)
-	battle_screen_host.reveal_pending_entry()
+	if is_instance_valid(battle_screen_host):
+		battle_screen_host.reveal_pending_entry()
+	elif is_instance_valid(classic_wild_backdrop):
+		classic_wild_backdrop.color.a = WildEncounterTransition.CLASSIC_DIM_ALPHA
 	wild_encounter_transition.reveal()
 	return true
 
@@ -3873,7 +3876,7 @@ func _attach_battle_ui(force_immersive := false) -> bool:
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.visible else WildEncounterTransition.STYLE_WILD
 		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, use_immersive_screen, wild_encounter_transition.overworld_snapshot if is_instance_valid(wild_encounter_transition) else null)
 	else:
-		if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD and active_battle_kind == "wild":
+		if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD:
 			classic_wild_backdrop = ColorRect.new()
 			classic_wild_backdrop.name = "ClassicWildBackdrop"
 			classic_wild_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -4224,7 +4227,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_trainer_is_rematch = bool(trainer_data.get("_is_rematch", false))
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
-	if _uses_fullscreen_battle() and not _begin_pending_trainer_entry(battle_trainer_data, transition_started_at_msec):
+	if not _begin_pending_trainer_entry(battle_trainer_data, transition_started_at_msec):
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()
 		return {"success": false, "code": "battle_ui_unavailable"}
