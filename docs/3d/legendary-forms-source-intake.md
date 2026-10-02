@@ -2,8 +2,9 @@
 
 Task: `legendary-kyurem-forms`, paired slot-b, 2026-10-02.
 
-The four base species already have approved normal/shiny bundles. None of
-the six alternate forms below has a separate approved runtime bundle yet.
+The four base species already have approved normal/shiny bundles. Black and
+White Kyurem now also have locally qualified individual normal/shiny bundles.
+The four other alternate forms below are still at source-intake status.
 All six alternate model resources are present on the connected source drive.
 
 | Runtime species | Model resource | Animation evidence |
@@ -64,7 +65,8 @@ reverse-order pose errors for all four appearances (32 native clips). These
 checks do not qualify battle scale, floor clearance, switching or performance.
 `catalog_kyurem_forms_checkpoint.json` pins this exact review state and keeps
 the user appearance approval (2026-10-02, “Allebei goed”) for these exact
-neutral assets. Battle and runtime approvals remain false until their gates.
+neutral assets. Battle and runtime approvals were subsequently granted after their gates
+(documented below).
 
 Reproduce candidates in a new evidence root after preserving existing work:
 
@@ -89,10 +91,56 @@ Faint endpoints match exactly. Clearance-only profiles add at most 3.46 cm
 There are no calibration holds. Independent 120 Hz verification passes all
 32 native clips: minima remain at least 2.5 cm above the floor. All 112 final
 pose images (seven poses, two cameras, two sides, four appearances) fit in
-view. The user battle review is pending. Switching and performance admission
-are still required; this checkpoint does not activate runtime forms.
+view. The user approved both battle pairs on 2026-10-02 (“goedgekeurd”). Installed
+runtime identity and performance gates subsequently passed (see below).
 
 Evidence: `battle-stage-v1/`, `battle-measure-v1/`,
 `battle-candidates-v1.json`, `battle-validated-v1/`, and
 `review-neutral-v1/battle-review-v1/`. Exact report/catalog/profile hashes
 are recorded in the tracked checkpoint.
+
+## Installed bundle qualification
+
+Two bundles contain the four exact approved standalone scenes, total
+60,650,556 bytes (57.84 MiB). The tracked index is
+`release/approved_3d_kyurem_forms_index.json`; receipts are in
+`catalog_kyurem_forms_bundle_qualification.json`. No R2 upload or release
+content-index activation was performed in this step.
+
+The launcher store passes clean install, no-op update, restart and scene hash
+checks. The real on-demand service (using exact local archives instead of HTTP)
+loads the two combatants before reveal; normal/shiny swaps make no further
+requests. Fusion forms do not require anticipated mid-battle transformations.
+The admitted game and launcher registries share identical model hashes and
+placement profiles. Runtime tests confirm both physical-attack routing paths.
+
+The original short two-pair stress run failed the unchanged 20 ms p95 gate
+(21.03, 25.20, 20.67 ms). Already-approved base controls also failed in stadium
+(28.97 ms). The two-pair wrapper now observes 120 additional prepared frames
+per normal/shiny arrangement, retaining the existing full-battle lifecycle,
+load-span, covered-stall, memory and teardown checks. The gate remains 20 ms
+for both full rounds and explicitly recorded prepared-battle observations.
+Final full-round p95: 17.36 / 17.51 / 17.28 ms; prepared classic/stadium:
+17.30 / 17.36 ms. Cache and leak limits pass. This measures this machine's AMD
+Compatibility renderer; it does not certify other devices or release builds.
+All original failed reports are retained alongside the passing reports.
+
+An initial new runtime test incorrectly required a sleep correction for every
+form. White Kyurem's native sleep already clears the floor, so it intentionally
+has no corrective sleep offset. The corrected test checks that sleep exists
+and the calibrated motion profile is valid rather than requiring an unnecessary
+offset. No model or animation was altered for that correction.
+
+Reproduction: `catalog_kyurem_forms_admission.py prepare`, the launcher bundle
+install check, `battle_3d_kyurem_forms_check.gd`, and
+`battle_3d_kyurem_stress_check.gd` with the saved fixture/catalog. Admission
+requires the exact approved assets, installed hashes, all runtime logs and
+both unchanged performance gates. The final test runs without fixture overrides.
+The next source-confirmed models are Calyrex Ice/Shadow Rider and crowned
+Zacian/Zamazenta. Charged Kyurem accessory visibility remains separate work.
+
+Integration caught a concurrent stadium crowd change. The slot merged current
+`development` and repeated the exact installed stress gate on the new mixed
+crowd. This also passes: 17.346 / 17.348 / 17.314 ms p95. The
+receipt preserves the previous arena digest and pins the current arena, crowd
+shader, spectator code and additional integrated reports.

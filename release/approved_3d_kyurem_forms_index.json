@@ -1,0 +1,59 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "kyurem-black",
+          "runtime_sha256": "2f479e2c48ba1bfc68f352b89bd2c1782f92b146f5392b97d236a48e718bd067",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "kyurem-black@shiny",
+          "runtime_sha256": "dcf492f13cce20645d28e3399357d3f38c9ac04bf37a0e6eafd6a49679c1ae71",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:kyurem-black:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 646,
+      "object_key": "optional-assets/pokemon_3d/kyurem-black/base/v1-fa3c7874b99b4192d33ee8c173515aa27f341d8a63858cdcbca5b1e32d2724d7.zip",
+      "sha256": "fa3c7874b99b4192d33ee8c173515aa27f341d8a63858cdcbca5b1e32d2724d7",
+      "size_bytes": 26336017,
+      "species_id": "kyurem-black",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "kyurem-white",
+          "runtime_sha256": "8d6bd986238c092be99c7ba3774e8e7df3aeb2fbe255e82c10d36ae755b551c8",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "kyurem-white@shiny",
+          "runtime_sha256": "d252245259457a7ec84f14d7feb020fa51947fb8501291d35b4681055bf20e58",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:kyurem-white:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 646,
+      "object_key": "optional-assets/pokemon_3d/kyurem-white/base/v1-5c8b53ed7169a82b447eb5f8fdf5f23accf24a8386525bd6ff55bbe3766ed5ca.zip",
+      "sha256": "5c8b53ed7169a82b447eb5f8fdf5f23accf24a8386525bd6ff55bbe3766ed5ca",
+      "size_bytes": 34314539,
+      "species_id": "kyurem-white",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "kyurem-forms-approved-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}
