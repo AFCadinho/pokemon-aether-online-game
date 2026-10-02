@@ -89,7 +89,7 @@ func _add_spectators(arena: Node3D) -> void:
 		spectator.name = "Passenger%d" % i
 		spectator.position = positions[i]
 		spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
-		spectator.configure(models[i % models.size()], i * 1.37)
+		spectator.configure(models[i % models.size()], i * 1.37, 1.15, true)
 		audience.add_child(spectator)
 
 func _add_deck_details(arena: Node3D, ivory: Material, navy: Material, brass: Material, red: Material, wood: Material, glass: Material) -> void:

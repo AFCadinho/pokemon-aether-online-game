@@ -2,8 +2,9 @@
 
 Task: `legendary-kyurem-forms`, paired slot-b, 2026-10-02.
 
-The four base species already have approved normal/shiny bundles. None of
-the six alternate forms below has a separate approved runtime bundle yet.
+The four base species already have approved normal/shiny bundles. Black and
+White Kyurem now also have locally qualified individual normal/shiny bundles.
+The four other alternate forms below are still at source-intake status.
 All six alternate model resources are present on the connected source drive.
 
 | Runtime species | Model resource | Animation evidence |
@@ -64,7 +65,8 @@ reverse-order pose errors for all four appearances (32 native clips). These
 checks do not qualify battle scale, floor clearance, switching or performance.
 `catalog_kyurem_forms_checkpoint.json` pins this exact review state and keeps
 the user appearance approval (2026-10-02, “Allebei goed”) for these exact
-neutral assets. Battle and runtime approvals remain false until their gates.
+neutral assets. Battle and runtime approvals were subsequently granted after their gates
+(documented below).
 
 Reproduce candidates in a new evidence root after preserving existing work:
 

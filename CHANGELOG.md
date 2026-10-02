@@ -2,13 +2,15 @@
 
 ## Unreleased
 
-- Black Kyurem en White Kyurem zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met acht native animaties en individuele downloadbundles.
+- De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
 
 - Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.
 
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
 
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
+
+- Black Kyurem en White Kyurem zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met acht native animaties en individuele downloadbundles.
 
 - Het 3D-stadium groepeert vaste tribunedelen en pauzeert publieksanimaties buiten beeld. Verre toeschouwers animeren op 30 Hz; Pokémon houden hun bestaande animatietempo.
 - Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
