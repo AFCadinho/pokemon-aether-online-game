@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "appearance_pair_count": 24,
+  "variant_count": 48,
+  "appearance_approved": true,
+  "battle_visual_approved": true,
+  "runtime_approved": false,
+  "performance_qualification_pending": true,
+  "independent_native_validation_pending": false,
+  "battle_visual_review": {
+    "date": "2026-10-02",
+    "user_response": "Alle 24 goed",
+    "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+    "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+    "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+    "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+    "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+  },
+  "technical_qualification": {
+    "schema": 1,
+    "runtime_approved": false,
+    "battle_visual_approved": false,
+    "technical_variant_count": 48,
+    "expected_variant_count": 48,
+    "independent_native_sample_hz": 120,
+    "held": {},
+    "technical_passed": [
+      "barbaraclemega",
+      "barbaraclemega-shiny",
+      "baxcaliburmega",
+      "baxcaliburmega-shiny",
+      "chesnaughtmega",
+      "chesnaughtmega-shiny",
+      "crabominablemega",
+      "crabominablemega-shiny",
+      "delphoxmega",
+      "delphoxmega-shiny",
+      "dianciemega",
+      "dianciemega-shiny",
+      "dragalgemega",
+      "dragalgemega-shiny",
+      "drampamega",
+      "drampamega-shiny",
+      "falinksmega",
+      "falinksmega-shiny",
+      "floettemega",
+      "floettemega-shiny",
+      "glimmoramega",
+      "glimmoramega-shiny",
+      "golisopodmega",
+      "golisopodmega-shiny",
+      "greninjamega",
+      "greninjamega-shiny",
+      "magearnamega",
+      "magearnamega-shiny",
+      "magearnaoriginalmega",
+      "magearnaoriginalmega-shiny",
+      "malamarmega",
+      "malamarmega-shiny",
+      "meowsticmmega",
+      "meowsticmmega-shiny",
+      "pyroarmega",
+      "pyroarmega-shiny",
+      "scovillainmega",
+      "scovillainmega-shiny",
+      "tatsugiricurlymega",
+      "tatsugiricurlymega-shiny",
+      "tatsugiridroopymega",
+      "tatsugiridroopymega-shiny",
+      "tatsugiristretchymega",
+      "tatsugiristretchymega-shiny",
+      "zeraoramega",
+      "zeraoramega-shiny",
+      "zygardemega",
+      "zygardemega-shiny"
+    ],
+    "battle_report_sha256": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b",
+    "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+    "scope": "Native SCN full-clock floor clearance plus captured poses in four camera/side combinations. Full UI, arena collision and performance qualification remain separate."
+  },
+  "evidence": {
+    "catalog": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/catalog.json",
+      "sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd"
+    },
+    "runtime_catalog": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/runtime.json",
+      "sha256": "1da8df01a21e6cc4576b53f186a94da724591240062d5001609cdcd00a60fbaa"
+    },
+    "native_60hz_baseline": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/native-baseline.json",
+      "sha256": "8cc947d4af5d3527b989ca9a13029cf6a0b923a22238f4175ea5f00114e830ed"
+    },
+    "review_manifest": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/review-v1/manifest.json",
+      "sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda"
+    },
+    "native_120hz_report": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/final-native-v2/battle-review.json",
+      "sha256": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b"
+    },
+    "profiles": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/candidates-v3.json",
+      "sha256": "202525d8202c517a233b3dca1b45a83e8a66e421d343f39ccb9575fb666d4e00"
+    }
+  },
+  "floor_followups": {
+    "barbaraclemega": {
+      "action": "physical_attack",
+      "root_added_m": 0.03247631391882896
+    },
+    "barbaraclemega-shiny": {
+      "action": "physical_attack",
+      "root_added_m": 0.03247631391882896
+    },
+    "zeraoramega": {
+      "action": "physical_attack",
+      "root_added_m": 0.0114445039480925
+    },
+    "zeraoramega-shiny": {
+      "action": "physical_attack",
+      "root_added_m": 0.0114445039480925
+    }
+  },
+  "floor_followup_scope": "Only constant upward root-clearance corrections after user battle acceptance; source poses, scale, materials, geometry and clips unchanged. All final profiles independently remeasured at 120 Hz.",
+  "technical_placement_followup": {
+    "original_profiles": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/candidates-v1.json",
+    "original_profiles_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+    "native_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/final-native-v2/battle-review.json",
+    "native_report_sha256": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b",
+    "profiles": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/candidates-v3.json",
+    "profiles_sha256": "202525d8202c517a233b3dca1b45a83e8a66e421d343f39ccb9575fb666d4e00",
+    "review_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/review-final-v2/manifest.json",
+    "scope": "Self-reviewed bounded upward floor-clearance fixes; user approval binds the unchanged scale, source poses and materials. No new user visual approval claimed.",
+    "review_manifest_sha256": "732c024e77c61ff5e75249cb094d6d52272f7b7c23e5d77f8b5503b42240bfea"
+  },
+  "source_limitations": [
+    "All 24 forms use the visually approved own-Mega down loop as resting sleep; no native second physical attack.",
+    "Static source material tables; native material animations are not replayed.",
+    "Greninja tiny water palette translated to its source blue layer colour.",
+    "Diancie authored crystal facets retained as a reviewed static PBR approximation; thin veil is two-sided.",
+    "Three Tatsugiri form IDs share the native combined three-fish source."
+  ],
+  "actual_hud_review": {
+    "report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-c/frontend/.tmp/mega-24-production/battle-24-v1/local-candidates-v1/hud-diagnostic-final/report.json",
+    "report_sha256": "1fac9825a664b0ee0c976cc8566651988f535a6c73ab00c746f97125005852d4",
+    "script": "tools/sprite_factory/catalog_mega_hud_review.gd",
+    "script_sha256": "51c437436bbb6367506306325ef0daaff2020f636036c4a1152d2e39f4ce4334",
+    "observations": 48,
+    "scope": "Actual battle interface; both arenas, normal and shiny, own/cross model and HP-panel overlaps. No replacement of performance measurement."
+  }
+}

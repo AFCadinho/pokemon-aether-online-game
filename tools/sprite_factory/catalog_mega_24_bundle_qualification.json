@@ -1,0 +1,2998 @@
+{
+  "admitted_registry_check_passed": true,
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "barbaracle-mega",
+            "runtime_sha256": "8b26d45e06b9b0d8baacd412dd51004388f6c37a4a93b4679751761fdd1c1ea2",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "barbaracle-mega@shiny",
+            "runtime_sha256": "60281ef2a6368164ae64212b839180af63145b44bf966f85c742ed291177a3c1",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:barbaracle:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 689,
+        "object_key": "optional-assets/pokemon_3d/barbaracle/mega/v1-392d64398771187288ae35dbf807f3161d063604cd986d56606d33be23b0cadb.zip",
+        "sha256": "392d64398771187288ae35dbf807f3161d063604cd986d56606d33be23b0cadb",
+        "size_bytes": 14269252,
+        "species_id": "barbaracle",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "baxcalibur-mega",
+            "runtime_sha256": "be43036a1dba3a7856a6b8dbd4fb9a80d63623f8f5de02c696edfdd14a90f65d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "baxcalibur-mega@shiny",
+            "runtime_sha256": "8462572366a2df40272550bc9afae53ee2793007723cc8bbc548f7307ad14530",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:baxcalibur:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 998,
+        "object_key": "optional-assets/pokemon_3d/baxcalibur/mega/v1-621f9a201cbc6e0a4345eeaba5a56f7152769dbb0e924c00b732b6f8f5da6097.zip",
+        "sha256": "621f9a201cbc6e0a4345eeaba5a56f7152769dbb0e924c00b732b6f8f5da6097",
+        "size_bytes": 12372854,
+        "species_id": "baxcalibur",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "chesnaught-mega",
+            "runtime_sha256": "74aa1b3c0ed13e411bc34dd1ad20c97ebc92539aa74b093100bebe2e9382b951",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "chesnaught-mega@shiny",
+            "runtime_sha256": "1878b2f8968497b3169ce12260689f318b36a24d6850d3974c3d86d17593cb3b",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:chesnaught:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 652,
+        "object_key": "optional-assets/pokemon_3d/chesnaught/mega/v1-fac9d476faf73b2304c786984412724454df7cf15367fb3d0366eee0a58478fb.zip",
+        "sha256": "fac9d476faf73b2304c786984412724454df7cf15367fb3d0366eee0a58478fb",
+        "size_bytes": 16291923,
+        "species_id": "chesnaught",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "crabominable-mega",
+            "runtime_sha256": "ae55c76683c5ec339aabea76f2392f0bd307961b5abc6a4525e276a3314a957d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "crabominable-mega@shiny",
+            "runtime_sha256": "6d6e6e989c4539141ab209632e74a2518e5f1dc4f03321fdeda96e83f631d28c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:crabominable:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 740,
+        "object_key": "optional-assets/pokemon_3d/crabominable/mega/v1-4c35bdef967c0f6ff4fcf859d49698077f565d04596da1d3023bb8b465bb4993.zip",
+        "sha256": "4c35bdef967c0f6ff4fcf859d49698077f565d04596da1d3023bb8b465bb4993",
+        "size_bytes": 14689123,
+        "species_id": "crabominable",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "delphox-mega",
+            "runtime_sha256": "934c869ea812ce38a81c5d3be0e9666e64df131da52a69305161def2de3633e3",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "delphox-mega@shiny",
+            "runtime_sha256": "d0442e7aa7d25dc3b3e8c39c8b3dfd2cf537fdddd1bc0a0ee7a133cfee3c9d2d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:delphox:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 655,
+        "object_key": "optional-assets/pokemon_3d/delphox/mega/v1-a0956306500bed897b296f0d2d8210bee0a27214d167dbac012180057db86815.zip",
+        "sha256": "a0956306500bed897b296f0d2d8210bee0a27214d167dbac012180057db86815",
+        "size_bytes": 14462395,
+        "species_id": "delphox",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "diancie-mega",
+            "runtime_sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "diancie-mega@shiny",
+            "runtime_sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:diancie:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 719,
+        "object_key": "optional-assets/pokemon_3d/diancie/mega/v1-30fe80bc8caeb9803d4450256e747820c082122f29be05cdb8d0595588ed7689.zip",
+        "sha256": "30fe80bc8caeb9803d4450256e747820c082122f29be05cdb8d0595588ed7689",
+        "size_bytes": 13979621,
+        "species_id": "diancie",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "dragalge-mega",
+            "runtime_sha256": "2655cc0d553d230a625c8a825f641dd89b04bdc81369f3b11f9f9a85b6812ae4",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "dragalge-mega@shiny",
+            "runtime_sha256": "9f6aa142a9a9cfd25ec440248650b46d878c74379f93d6cb18824440db27eb9b",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:dragalge:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 691,
+        "object_key": "optional-assets/pokemon_3d/dragalge/mega/v1-ce053b209bb43082402acdaf45b36ba999715203a6943e645935589e849ab69a.zip",
+        "sha256": "ce053b209bb43082402acdaf45b36ba999715203a6943e645935589e849ab69a",
+        "size_bytes": 15255508,
+        "species_id": "dragalge",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "drampa-mega",
+            "runtime_sha256": "c33d251dc567b5e7e8d01bf5c194910d9b5f39f7823679672a9250080b971c18",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "drampa-mega@shiny",
+            "runtime_sha256": "4a3338f05e111b186afdfdd8725148b0c52314750fb98e4038122ff4cb63b1fa",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:drampa:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 780,
+        "object_key": "optional-assets/pokemon_3d/drampa/mega/v1-e6dd8d1924bbf9ea27bbf64a8239096e05286a826146a46c302a36ce7759fd1f.zip",
+        "sha256": "e6dd8d1924bbf9ea27bbf64a8239096e05286a826146a46c302a36ce7759fd1f",
+        "size_bytes": 13438972,
+        "species_id": "drampa",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "falinks-mega",
+            "runtime_sha256": "a8d28e840c6dff21b080af54b5d670007941b63dcce6e68780d609ed1f92c1e0",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "falinks-mega@shiny",
+            "runtime_sha256": "7bb56c20d42f236ce3a297f5464e6380c7757161723ed03f89a04e55ac8e8205",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:falinks:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 870,
+        "object_key": "optional-assets/pokemon_3d/falinks/mega/v1-a87e7ce73e162c1081c03f57b0d9d591658e1b00edbb16d63c276825f7c13c6f.zip",
+        "sha256": "a87e7ce73e162c1081c03f57b0d9d591658e1b00edbb16d63c276825f7c13c6f",
+        "size_bytes": 8439599,
+        "species_id": "falinks",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "floette-mega",
+            "runtime_sha256": "8007b79a00c3c9314be4e5087f0398dfc6d19cea37bb8a90697a2c60be7e1633",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "floette-mega@shiny",
+            "runtime_sha256": "9cfd80f01ebaed451d7bc39cf01e171ece6cfbabe19cc77a15a789bdfbd4033c",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:floette:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 670,
+        "object_key": "optional-assets/pokemon_3d/floette/mega/v1-af5e6296b7e66862ea131f536a35e202d6dee57c7b3d1c024da1945d4bad06f2.zip",
+        "sha256": "af5e6296b7e66862ea131f536a35e202d6dee57c7b3d1c024da1945d4bad06f2",
+        "size_bytes": 10626422,
+        "species_id": "floette",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "glimmora-mega",
+            "runtime_sha256": "c63f99e17422ecf8d70148af76ae27f589884228799e699443d4243fadaf9e7f",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "glimmora-mega@shiny",
+            "runtime_sha256": "cee9f6534371df6c9678e09b68e42b4de14a8bceeac4dd24644df40adb52710d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:glimmora:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 970,
+        "object_key": "optional-assets/pokemon_3d/glimmora/mega/v1-4bde63a616bedd7aa4c3090059aa508e5042fa627ff9e5a16dfdbb84c39f4e19.zip",
+        "sha256": "4bde63a616bedd7aa4c3090059aa508e5042fa627ff9e5a16dfdbb84c39f4e19",
+        "size_bytes": 10373357,
+        "species_id": "glimmora",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "golisopod-mega",
+            "runtime_sha256": "9ac5e95f94a6d8045bdd8ec41aa787c1495ca09ea9d69402fb965ccb0206f01a",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "golisopod-mega@shiny",
+            "runtime_sha256": "56f5af6e51323c2c28067b0b9cb20b1be6a3e18bfe9c574430cd7aee7c59a908",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:golisopod:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 768,
+        "object_key": "optional-assets/pokemon_3d/golisopod/mega/v1-944fe823826057055b57b3b0007f2667caf1d1b4dc608b6c277e5e3db5d1bc66.zip",
+        "sha256": "944fe823826057055b57b3b0007f2667caf1d1b4dc608b6c277e5e3db5d1bc66",
+        "size_bytes": 14891534,
+        "species_id": "golisopod",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "greninja-mega",
+            "runtime_sha256": "1149cf54c0dd799f4ecdd4585ea44e79158947ed83bf429e77177fb25293260d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "greninja-mega@shiny",
+            "runtime_sha256": "1cb822ea1affd2be296225e1baa891665db7a4092c6669dd1dc3c382277dd363",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:greninja:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 658,
+        "object_key": "optional-assets/pokemon_3d/greninja/mega/v1-1d1dd7dc6386c55de8a30489b4f9eb968045a8ba03ad94bbe4d1441b9b7ea537.zip",
+        "sha256": "1d1dd7dc6386c55de8a30489b4f9eb968045a8ba03ad94bbe4d1441b9b7ea537",
+        "size_bytes": 9297639,
+        "species_id": "greninja",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "magearna-mega",
+            "runtime_sha256": "bde30414e72a34edd7abe8c72bc972cfa2064a85bad9d3ee163331a083362551",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "magearna-mega@shiny",
+            "runtime_sha256": "818e7826a3b3989453c4e477b7444e7206579b1cc9314776b589fec289cf9c7d",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:magearna:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 801,
+        "object_key": "optional-assets/pokemon_3d/magearna/mega/v1-6a682b55fc00f0df1d1096c38eb5c73b5d2c7caa5cb2b054cfa812c1a917714f.zip",
+        "sha256": "6a682b55fc00f0df1d1096c38eb5c73b5d2c7caa5cb2b054cfa812c1a917714f",
+        "size_bytes": 12784588,
+        "species_id": "magearna",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "magearna-original-mega",
+            "runtime_sha256": "35720b25a7cf498d8790021dcb2f902716af963d3366e3e46b1b28e48b491ae4",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "magearna-original-mega@shiny",
+            "runtime_sha256": "5da6a542a52cdb0700c5862462839e98889f05c6109f65d51d46c65a28c2fdea",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:magearna-original:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 801,
+        "object_key": "optional-assets/pokemon_3d/magearna-original/mega/v1-49222b7cbb5d756bde5d241110274f27d395f457db06ed9fb808dee1c0cb9a97.zip",
+        "sha256": "49222b7cbb5d756bde5d241110274f27d395f457db06ed9fb808dee1c0cb9a97",
+        "size_bytes": 12779217,
+        "species_id": "magearna-original",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "malamar-mega",
+            "runtime_sha256": "6a5af46440490e16ad2d72672ff39d74c898bd07191ec3c59fa9e1726c07da23",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "malamar-mega@shiny",
+            "runtime_sha256": "725435a9ca1c413e74e2e9567c54cefc01720be994a798872ca220a0ebae076b",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:malamar:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 687,
+        "object_key": "optional-assets/pokemon_3d/malamar/mega/v1-83af370e4c0d305d07b5210eb78052e3e2c2a194edebbce833fc2d8142e6d00e.zip",
+        "sha256": "83af370e4c0d305d07b5210eb78052e3e2c2a194edebbce833fc2d8142e6d00e",
+        "size_bytes": 9992897,
+        "species_id": "malamar",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "meowstic-m-mega",
+            "runtime_sha256": "f4f027b533389eb806e9244f7a208f949e10824e1be0149c1bdbf1db94dd4e19",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "meowstic-m-mega@shiny",
+            "runtime_sha256": "cb37f417093ad6bbd60b9d3bac02e26a7c8c05f525ac9a4c0ff902ee500a5285",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:meowstic-m:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 678,
+        "object_key": "optional-assets/pokemon_3d/meowstic-m/mega/v1-873c6f7aaf94280a3f5eab7f7a832bccbe4d8b0955ff4f305574cbcb9569b4fa.zip",
+        "sha256": "873c6f7aaf94280a3f5eab7f7a832bccbe4d8b0955ff4f305574cbcb9569b4fa",
+        "size_bytes": 11075300,
+        "species_id": "meowstic-m",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "pyroar-mega",
+            "runtime_sha256": "0db5e44c226f347b4005095684544395574eb308e3ae400355f49bfef8ecde0d",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "pyroar-mega@shiny",
+            "runtime_sha256": "c5256bca335c03da50748ef20fb0764eddfd6e5312a6f85a38f9a453f82bc92b",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:pyroar:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 668,
+        "object_key": "optional-assets/pokemon_3d/pyroar/mega/v1-7fcaae3531b23caa5b779afdda292caf4293d9dd060c24c702cfe22a99f9d144.zip",
+        "sha256": "7fcaae3531b23caa5b779afdda292caf4293d9dd060c24c702cfe22a99f9d144",
+        "size_bytes": 9466028,
+        "species_id": "pyroar",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "scovillain-mega",
+            "runtime_sha256": "3c0c93f6c639518657514ab7e2f09093b7b94816223b11e2afaae26017dbf4f5",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "scovillain-mega@shiny",
+            "runtime_sha256": "352a1156f4207a77683ef8bd350a1f3885c6e9f99bd4a3c9429967f1587ad8c4",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:scovillain:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 952,
+        "object_key": "optional-assets/pokemon_3d/scovillain/mega/v1-7d2e96222aea81a8ae8168cd4d550aa2059464c69feaf758d3b3b9c65be2d389.zip",
+        "sha256": "7d2e96222aea81a8ae8168cd4d550aa2059464c69feaf758d3b3b9c65be2d389",
+        "size_bytes": 14035743,
+        "species_id": "scovillain",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "tatsugiri-curly-mega",
+            "runtime_sha256": "c475980ac1fa7ffc29d738bd982ac046ce7ee430c9fbe26a6084a3a596595039",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "tatsugiri-curly-mega@shiny",
+            "runtime_sha256": "55030edcf0018c5ca5b1f65aba2247534bfacb53a992ae35ee78d420be86e9f5",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:tatsugiri-curly:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 978,
+        "object_key": "optional-assets/pokemon_3d/tatsugiri-curly/mega/v1-c615175341ed7439026217cac3a4cde34cf34c4ae88978717060d0eb2c3b569b.zip",
+        "sha256": "c615175341ed7439026217cac3a4cde34cf34c4ae88978717060d0eb2c3b569b",
+        "size_bytes": 11486606,
+        "species_id": "tatsugiri-curly",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "tatsugiri-droopy-mega",
+            "runtime_sha256": "047d1969168c107528986940ed0b3bd262483b16c11a084d72ebd548b178fe5a",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "tatsugiri-droopy-mega@shiny",
+            "runtime_sha256": "6eeed03f01334e846d20e91f97f86a3bf08c265db58632137b01a6bb85f75ed8",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:tatsugiri-droopy:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 978,
+        "object_key": "optional-assets/pokemon_3d/tatsugiri-droopy/mega/v1-c7f52ec3f7ac7059b6329e2392f9ec45359b51921f7bc0107b0b690b6b66844c.zip",
+        "sha256": "c7f52ec3f7ac7059b6329e2392f9ec45359b51921f7bc0107b0b690b6b66844c",
+        "size_bytes": 11486613,
+        "species_id": "tatsugiri-droopy",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "tatsugiri-stretchy-mega",
+            "runtime_sha256": "93c4da6f2dfdd2d88994fe3769a7275c5501a23114fb5e848237bef7fa943529",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "tatsugiri-stretchy-mega@shiny",
+            "runtime_sha256": "2567e0c8273d6c3046961f35c910aad7a29c0e031142a9b5178d84be36e748d4",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:tatsugiri-stretchy:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 978,
+        "object_key": "optional-assets/pokemon_3d/tatsugiri-stretchy/mega/v1-1b68f4483709a3d741f4ff33efa6ba5cb7615ff6e3ac64ef6008d955f145e277.zip",
+        "sha256": "1b68f4483709a3d741f4ff33efa6ba5cb7615ff6e3ac64ef6008d955f145e277",
+        "size_bytes": 11486618,
+        "species_id": "tatsugiri-stretchy",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zeraora-mega",
+            "runtime_sha256": "987c1b087f8b36ccc8850c09ba596c009b42aacee15d0b807023a15f2c3abd63",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zeraora-mega@shiny",
+            "runtime_sha256": "2a21d294ca72c2b791a4eb3f5d941fc4de25b276823f9bfd6a26777a06f73bc5",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zeraora:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 807,
+        "object_key": "optional-assets/pokemon_3d/zeraora/mega/v1-8c98f89ce3b67be3538cdc426580d93b4905a97c3b33dcf977125b195b23e9c4.zip",
+        "sha256": "8c98f89ce3b67be3538cdc426580d93b4905a97c3b33dcf977125b195b23e9c4",
+        "size_bytes": 12517327,
+        "species_id": "zeraora",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zygarde-mega",
+            "runtime_sha256": "d48541e0db89f02bc395329b043e3a4db19847b0ded6a44c4eacceeb05f272ac",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zygarde-mega@shiny",
+            "runtime_sha256": "bb16e72d6cd56f5b5b86db46511aecd02748536da166e54db9744231df36a557",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zygarde:mega",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "mega",
+        "national_dex": 718,
+        "object_key": "optional-assets/pokemon_3d/zygarde/mega/v1-b7aca2fa9625f0d5ff27b0cdbb87d8b0372ccedb3b29749508e263781e61236d.zip",
+        "sha256": "b7aca2fa9625f0d5ff27b0cdbb87d8b0372ccedb3b29749508e263781e61236d",
+        "size_bytes": 12076039,
+        "species_id": "zygarde",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "mega-24-local-candidates-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 297575175,
+  "date": "2026-10-02",
+  "evidence_sha256": {
+    ".tmp/mega-24-production/battle-24-v1/candidates-v3.json": "202525d8202c517a233b3dca1b45a83e8a66e421d343f39ccb9575fb666d4e00",
+    ".tmp/mega-24-production/battle-24-v1/final-native-v2/battle-review.json": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/admitted-check-v2.log": "58cddc2471cb3b59869ace56e08e00bc528d63747486e1a2e3651c22ed5e20d1",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/admitted-installed-catalog.json": "172df4138ac2483d4b62417eb4ee8b51488cb73321a33e9617588de4d74a1c8e",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/hud-diagnostic-final/report.json": "1fac9825a664b0ee0c976cc8566651988f535a6c73ab00c746f97125005852d4",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/install-megas.log": "c92a8fc31e3736e21fead16ed04782f2884f20a0f76bc95c13687b133732fd22",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/installed-megas/installed-catalog.json": "44fee87fb34da4b38d69c41a9dd04fe54ac2222e1f727a7f238a3113427c30e1",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/on-demand-installed-catalog.json": "172df4138ac2483d4b62417eb4ee8b51488cb73321a33e9617588de4d74a1c8e",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/preparation.json": "07531466abf7cf59f11ec7f58c7766a3237e7627dc6102fe77604765b296ed1b",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/runtime-catalog.json": "4a9ad96e757c260fe21c07727d8dfdc01577d07a71c3bd5d6fe0a687474c1568",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/runtime-final.log": "c3e7c8a52c4e4e77b0ed081481e6c9f8578823f3cbd347c6d4d38a36c4fec2b4",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/runtime-fixture.json": "2dd4180baa500659d60b18c61ed51402494a22b6ae12b70e62075dcc28477c72",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/stress-v1.json": "ce103a0bfdc9da6b6c0c81cdddabe678b4f7576e0698f5acf7d88f3147c30e87",
+    ".tmp/mega-24-production/battle-24-v1/local-candidates-v1/stress-v1.log": "7c314a6a257e358f5114180d6369840ee319bb9568ca7b92ab8ee51240c2de88",
+    "scripts/battle/battle_ui/immersive_hud.gd": "e360f964248add2b727e3addec037667fc1e5eca1847f53d3c7e4f1e0e51d92c",
+    "scripts/services/on_demand_3d_bundle_service.gd": "5312c4c2829a926b95e5c56dec39eb2053ecf6e1ea980cd8ea2d0c30e01b71e2",
+    "tests/battle_3d_legendary_stress_check.gd": "6bafb87e10a636ae427ea364911b0553edc2bbbf3680dc6e49dcfd8c82d675af",
+    "tests/battle_3d_mega_catalog_check.gd": "95cea0f3f287b352df454b3e3ee71cc60bb1c6a25c579a6b516928427e635436",
+    "tests/battle_3d_mega_catalog_stress_check.gd": "dfdc201f42de454b831df08e1a0625dc5413cd59307284dbb7f25c4e5866e946",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "fdb9a5c6c4392c655ef4c3dc830f8ff1dac3e91199ef7d2d83b3f03d5d627e8a",
+    "tools/sprite_factory/catalog_mega_24_battle_checkpoint.json": "18e7d95e97e5a808f1c09354808fc1aaaea49e7ee0372105e19dc3dda964fabf",
+    "tools/sprite_factory/catalog_mega_battle_qualification.py": "bfe5ef4eb7da37de245eece0b8ce04502bf2761faddcca9e479b86599f24c231",
+    "tools/sprite_factory/catalog_mega_bundle_install_check.gd": "372e403b3a77049c8b66e883851ef6a943a8b1147d3ca4a1455cc4546e81de7c",
+    "tools/sprite_factory/catalog_mega_catalog_admission.py": "66b12327263b96c788102f55e80e31a769e02475185e12438328888cccdfe27f",
+    "tools/sprite_factory/catalog_mega_hud_review.gd": "51c437436bbb6367506306325ef0daaff2020f636036c4a1152d2e39f4ce4334"
+  },
+  "inherited_catalog_precision_sync": {
+    "game_sha256": "9d961498979039065608894721d521e4105251c7f589736b19e213ed8cd4be7b",
+    "launcher_sha256": "9d961498979039065608894721d521e4105251c7f589736b19e213ed8cd4be7b",
+    "numeric_tolerance": 1e-09,
+    "policy": "Preserve game values; keys, hashes, strings and booleans must match exactly"
+  },
+  "installed_runtime_check_passed": true,
+  "local_download_before_reveal_check_passed": true,
+  "models": 48,
+  "pairs": 24,
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release content-index activation",
+    "release certification"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 24.0,
+      "frame_max_ms": 66.584,
+      "frame_p95_ms": 16.85,
+      "frame_samples": 7116.0,
+      "load_spans": [
+        {
+          "frame": 0.0,
+          "ms": 7.204,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0.0,
+          "ms": 7.275,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4.0,
+          "ms": 3.749,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4.0,
+          "ms": 3.872,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14.0,
+          "ms": 2.564,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14.0,
+          "ms": 2.689,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 21.0,
+          "ms": 13.781,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 165.0,
+          "ms": 3.19,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 303.0,
+          "ms": 1.622,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 303.0,
+          "ms": 1.727,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 312.0,
+          "ms": 1.585,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 312.0,
+          "ms": 1.685,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 318.0,
+          "ms": 1.706,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 462.0,
+          "ms": 1.513,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 600.0,
+          "ms": 2.455,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 600.0,
+          "ms": 2.619,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 610.0,
+          "ms": 2.457,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 610.0,
+          "ms": 2.608,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 618.0,
+          "ms": 2.742,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 762.0,
+          "ms": 2.135,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 900.0,
+          "ms": 2.096,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 900.0,
+          "ms": 2.217,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 909.0,
+          "ms": 1.845,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 909.0,
+          "ms": 1.951,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 916.0,
+          "ms": 2.313,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1060.0,
+          "ms": 1.828,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1198.0,
+          "ms": 2.44,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1198.0,
+          "ms": 2.563,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1208.0,
+          "ms": 2.544,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1208.0,
+          "ms": 2.655,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1214.0,
+          "ms": 2.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1358.0,
+          "ms": 2.02,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1497.0,
+          "ms": 2.743,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1497.0,
+          "ms": 2.881,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1506.0,
+          "ms": 2.437,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1506.0,
+          "ms": 2.573,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1512.0,
+          "ms": 2.897,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1656.0,
+          "ms": 2.396,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1795.0,
+          "ms": 2.056,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1795.0,
+          "ms": 2.173,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1805.0,
+          "ms": 2.112,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1805.0,
+          "ms": 2.214,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1811.0,
+          "ms": 2.599,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1955.0,
+          "ms": 2.207,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2093.0,
+          "ms": 2.321,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2093.0,
+          "ms": 2.444,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2102.0,
+          "ms": 2.182,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2102.0,
+          "ms": 2.306,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2108.0,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2252.0,
+          "ms": 2.159,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2390.0,
+          "ms": 2.137,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2390.0,
+          "ms": 2.245,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2396.0,
+          "ms": 1.792,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2396.0,
+          "ms": 1.939,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2400.0,
+          "ms": 2.024,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2544.0,
+          "ms": 2.096,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2682.0,
+          "ms": 2.133,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2682.0,
+          "ms": 2.25,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2690.0,
+          "ms": 1.903,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2690.0,
+          "ms": 2.013,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2695.0,
+          "ms": 1.994,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2839.0,
+          "ms": 1.829,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2977.0,
+          "ms": 2.261,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2977.0,
+          "ms": 2.384,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2985.0,
+          "ms": 2.091,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2985.0,
+          "ms": 2.194,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2990.0,
+          "ms": 2.079,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3134.0,
+          "ms": 1.615,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3272.0,
+          "ms": 1.994,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3272.0,
+          "ms": 2.111,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3283.0,
+          "ms": 1.874,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3283.0,
+          "ms": 1.976,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3289.0,
+          "ms": 2.092,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3433.0,
+          "ms": 1.779,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3571.0,
+          "ms": 1.956,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3571.0,
+          "ms": 2.11,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3578.0,
+          "ms": 1.778,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3578.0,
+          "ms": 1.941,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3582.0,
+          "ms": 2.434,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3726.0,
+          "ms": 1.571,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3864.0,
+          "ms": 2.313,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3864.0,
+          "ms": 2.455,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3873.0,
+          "ms": 2.108,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 3873.0,
+          "ms": 2.242,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 3880.0,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4024.0,
+          "ms": 2.082,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4162.0,
+          "ms": 2.289,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4162.0,
+          "ms": 2.409,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4172.0,
+          "ms": 2.41,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4172.0,
+          "ms": 2.579,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4179.0,
+          "ms": 2.394,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4323.0,
+          "ms": 2.108,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4461.0,
+          "ms": 2.023,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4461.0,
+          "ms": 2.178,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4469.0,
+          "ms": 1.886,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4469.0,
+          "ms": 2.0,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4473.0,
+          "ms": 2.005,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4617.0,
+          "ms": 1.36,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4755.0,
+          "ms": 1.956,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4755.0,
+          "ms": 2.057,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4763.0,
+          "ms": 2.754,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4763.0,
+          "ms": 2.909,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4768.0,
+          "ms": 2.501,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4912.0,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5050.0,
+          "ms": 2.065,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5050.0,
+          "ms": 2.171,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5057.0,
+          "ms": 2.113,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5057.0,
+          "ms": 2.24,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5062.0,
+          "ms": 1.898,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5206.0,
+          "ms": 1.547,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5344.0,
+          "ms": 2.767,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5344.0,
+          "ms": 2.904,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5353.0,
+          "ms": 2.696,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5353.0,
+          "ms": 2.811,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5359.0,
+          "ms": 2.251,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5503.0,
+          "ms": 2.561,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5641.0,
+          "ms": 2.016,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5641.0,
+          "ms": 2.247,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5649.0,
+          "ms": 2.181,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5649.0,
+          "ms": 2.291,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5654.0,
+          "ms": 1.949,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5798.0,
+          "ms": 1.696,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5936.0,
+          "ms": 2.055,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5936.0,
+          "ms": 2.159,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5944.0,
+          "ms": 2.059,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 5944.0,
+          "ms": 2.165,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5949.0,
+          "ms": 1.842,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6093.0,
+          "ms": 1.787,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6231.0,
+          "ms": 1.982,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6231.0,
+          "ms": 2.084,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6239.0,
+          "ms": 2.262,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6239.0,
+          "ms": 2.368,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6244.0,
+          "ms": 1.892,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6388.0,
+          "ms": 1.746,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6527.0,
+          "ms": 2.115,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6527.0,
+          "ms": 2.216,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6535.0,
+          "ms": 2.107,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6535.0,
+          "ms": 2.242,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6540.0,
+          "ms": 2.503,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6684.0,
+          "ms": 2.027,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6822.0,
+          "ms": 2.114,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6822.0,
+          "ms": 2.231,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6830.0,
+          "ms": 2.387,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 6830.0,
+          "ms": 2.55,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6835.0,
+          "ms": 2.383,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 6979.0,
+          "ms": 1.945,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 24.0,
+      "retained_source_bytes": 12074982.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load barbaracle-mega",
+          "covered": true,
+          "ms": 66.584
+        }
+      ],
+      "static_bytes": 256678106.0
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 24.0,
+      "frame_max_ms": 254.708,
+      "frame_p95_ms": 19.891,
+      "frame_samples": 7087.0,
+      "load_spans": [
+        {
+          "frame": 7120.0,
+          "ms": 8.044,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 7120.0,
+          "ms": 8.097,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7123.0,
+          "ms": 2.823,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7123.0,
+          "ms": 2.953,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7129.0,
+          "ms": 1.033,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7132.0,
+          "ms": 2.903,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7132.0,
+          "ms": 3.035,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7138.0,
+          "ms": 1.357,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7138.0,
+          "ms": 178.904,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7281.0,
+          "ms": 2.646,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7419.0,
+          "ms": 1.906,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7419.0,
+          "ms": 2.094,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7427.0,
+          "ms": 2.675,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7427.0,
+          "ms": 2.923,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7433.0,
+          "ms": 2.129,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7470.0,
+          "ms": 1.031,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7577.0,
+          "ms": 1.298,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7715.0,
+          "ms": 2.878,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7715.0,
+          "ms": 3.018,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7716.0,
+          "ms": 1.675,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7725.0,
+          "ms": 2.607,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 7725.0,
+          "ms": 2.731,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7732.0,
+          "ms": 3.391,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 7876.0,
+          "ms": 3.273,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8014.0,
+          "ms": 3.274,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8014.0,
+          "ms": 3.504,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8023.0,
+          "ms": 2.106,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8023.0,
+          "ms": 2.212,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8029.0,
+          "ms": 2.378,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8173.0,
+          "ms": 1.799,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8311.0,
+          "ms": 2.855,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8311.0,
+          "ms": 3.041,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8320.0,
+          "ms": 3.112,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8320.0,
+          "ms": 3.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8326.0,
+          "ms": 3.369,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8470.0,
+          "ms": 2.935,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8608.0,
+          "ms": 2.321,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8608.0,
+          "ms": 2.44,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8617.0,
+          "ms": 3.797,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8617.0,
+          "ms": 3.924,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8623.0,
+          "ms": 2.797,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8767.0,
+          "ms": 2.781,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8905.0,
+          "ms": 2.471,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8905.0,
+          "ms": 2.587,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8914.0,
+          "ms": 1.872,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 8914.0,
+          "ms": 1.971,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 8920.0,
+          "ms": 2.031,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9064.0,
+          "ms": 2.158,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9202.0,
+          "ms": 2.915,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9202.0,
+          "ms": 3.084,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9210.0,
+          "ms": 2.137,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9210.0,
+          "ms": 2.235,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9215.0,
+          "ms": 2.197,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9359.0,
+          "ms": 1.958,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9496.0,
+          "ms": 2.167,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9496.0,
+          "ms": 2.281,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9502.0,
+          "ms": 2.278,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9502.0,
+          "ms": 2.386,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9506.0,
+          "ms": 2.669,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9650.0,
+          "ms": 2.038,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9787.0,
+          "ms": 1.926,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9787.0,
+          "ms": 2.045,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9794.0,
+          "ms": 1.721,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 9794.0,
+          "ms": 1.82,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9799.0,
+          "ms": 1.563,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 9943.0,
+          "ms": 1.754,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10080.0,
+          "ms": 1.901,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10080.0,
+          "ms": 2.007,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10086.0,
+          "ms": 2.037,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10086.0,
+          "ms": 2.144,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10090.0,
+          "ms": 1.523,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10234.0,
+          "ms": 2.66,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10372.0,
+          "ms": 2.341,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10372.0,
+          "ms": 2.453,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10382.0,
+          "ms": 1.847,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10382.0,
+          "ms": 1.954,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10389.0,
+          "ms": 1.538,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10533.0,
+          "ms": 2.167,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10671.0,
+          "ms": 1.835,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10671.0,
+          "ms": 1.943,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10677.0,
+          "ms": 1.878,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10677.0,
+          "ms": 1.992,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10682.0,
+          "ms": 1.78,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10826.0,
+          "ms": 1.973,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10964.0,
+          "ms": 2.449,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10964.0,
+          "ms": 2.605,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10973.0,
+          "ms": 2.306,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 10973.0,
+          "ms": 2.481,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 10980.0,
+          "ms": 1.799,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11124.0,
+          "ms": 1.691,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11262.0,
+          "ms": 3.091,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11262.0,
+          "ms": 3.204,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11270.0,
+          "ms": 2.763,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11270.0,
+          "ms": 2.963,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11275.0,
+          "ms": 2.368,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11419.0,
+          "ms": 1.864,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11557.0,
+          "ms": 1.815,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11557.0,
+          "ms": 1.921,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11563.0,
+          "ms": 1.737,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11563.0,
+          "ms": 1.84,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11568.0,
+          "ms": 2.312,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11712.0,
+          "ms": 1.458,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11850.0,
+          "ms": 1.796,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11850.0,
+          "ms": 1.913,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11858.0,
+          "ms": 2.595,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 11858.0,
+          "ms": 2.773,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 11863.0,
+          "ms": 2.458,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12007.0,
+          "ms": 1.594,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12144.0,
+          "ms": 2.5,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12144.0,
+          "ms": 2.634,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12151.0,
+          "ms": 2.116,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12151.0,
+          "ms": 2.235,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12156.0,
+          "ms": 2.05,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12300.0,
+          "ms": 1.732,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12438.0,
+          "ms": 2.152,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12438.0,
+          "ms": 2.263,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12447.0,
+          "ms": 2.271,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12447.0,
+          "ms": 2.429,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12453.0,
+          "ms": 2.821,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12597.0,
+          "ms": 2.322,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12735.0,
+          "ms": 3.647,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12735.0,
+          "ms": 3.85,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12743.0,
+          "ms": 1.95,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 12743.0,
+          "ms": 2.051,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12748.0,
+          "ms": 1.897,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 12892.0,
+          "ms": 1.946,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13030.0,
+          "ms": 1.855,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13030.0,
+          "ms": 1.955,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13038.0,
+          "ms": 2.103,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13038.0,
+          "ms": 2.218,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13043.0,
+          "ms": 2.012,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13187.0,
+          "ms": 1.78,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13325.0,
+          "ms": 1.994,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13325.0,
+          "ms": 2.106,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13333.0,
+          "ms": 2.787,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13333.0,
+          "ms": 2.964,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13338.0,
+          "ms": 2.094,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13482.0,
+          "ms": 2.145,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13620.0,
+          "ms": 1.911,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13620.0,
+          "ms": 2.037,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13628.0,
+          "ms": 1.999,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13628.0,
+          "ms": 2.105,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13633.0,
+          "ms": 1.954,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13777.0,
+          "ms": 1.984,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13915.0,
+          "ms": 2.478,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13915.0,
+          "ms": 2.588,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13923.0,
+          "ms": 2.441,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 13923.0,
+          "ms": 2.599,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 13928.0,
+          "ms": 2.441,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14071.0,
+          "ms": 2.66,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 24.0,
+      "retained_source_bytes": 12074982.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load barbaracle-mega",
+          "covered": true,
+          "ms": 254.708
+        }
+      ],
+      "static_bytes": 257827270.0
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 24.0,
+      "frame_max_ms": 41.232,
+      "frame_p95_ms": 16.846,
+      "frame_samples": 7091.0,
+      "load_spans": [
+        {
+          "frame": 14212.0,
+          "ms": 7.74,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 14212.0,
+          "ms": 7.793,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14215.0,
+          "ms": 2.772,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14215.0,
+          "ms": 2.887,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14221.0,
+          "ms": 1.036,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14221.0,
+          "ms": 1.159,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14224.0,
+          "ms": 2.597,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14224.0,
+          "ms": 2.71,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14230.0,
+          "ms": 1.481,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14230.0,
+          "ms": 9.108,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14374.0,
+          "ms": 3.165,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14512.0,
+          "ms": 1.9,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14512.0,
+          "ms": 2.015,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14520.0,
+          "ms": 1.724,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14520.0,
+          "ms": 1.82,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14525.0,
+          "ms": 1.626,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14669.0,
+          "ms": 1.545,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14807.0,
+          "ms": 2.612,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14807.0,
+          "ms": 2.733,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14816.0,
+          "ms": 2.864,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14816.0,
+          "ms": 3.003,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14822.0,
+          "ms": 2.592,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14966.0,
+          "ms": 1.952,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15104.0,
+          "ms": 2.267,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15104.0,
+          "ms": 2.38,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15114.0,
+          "ms": 2.298,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15114.0,
+          "ms": 2.418,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15120.0,
+          "ms": 1.733,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15264.0,
+          "ms": 1.722,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15402.0,
+          "ms": 2.297,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15402.0,
+          "ms": 2.398,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15411.0,
+          "ms": 2.242,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15411.0,
+          "ms": 2.349,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15417.0,
+          "ms": 2.388,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15561.0,
+          "ms": 2.49,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15699.0,
+          "ms": 2.29,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15699.0,
+          "ms": 2.397,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15708.0,
+          "ms": 2.15,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15708.0,
+          "ms": 2.25,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15714.0,
+          "ms": 2.753,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15858.0,
+          "ms": 2.437,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 15996.0,
+          "ms": 2.719,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 15996.0,
+          "ms": 2.846,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16005.0,
+          "ms": 2.612,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16005.0,
+          "ms": 2.757,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16011.0,
+          "ms": 3.528,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16155.0,
+          "ms": 2.451,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16293.0,
+          "ms": 2.304,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16293.0,
+          "ms": 2.413,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16301.0,
+          "ms": 2.547,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16301.0,
+          "ms": 2.665,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16306.0,
+          "ms": 2.204,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16450.0,
+          "ms": 1.697,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16587.0,
+          "ms": 2.578,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16587.0,
+          "ms": 2.708,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16593.0,
+          "ms": 2.369,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16593.0,
+          "ms": 2.509,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16597.0,
+          "ms": 2.374,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16741.0,
+          "ms": 1.886,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16879.0,
+          "ms": 2.183,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16879.0,
+          "ms": 2.292,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16886.0,
+          "ms": 1.952,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 16886.0,
+          "ms": 2.106,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 16891.0,
+          "ms": 1.728,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17035.0,
+          "ms": 1.888,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17173.0,
+          "ms": 2.078,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17173.0,
+          "ms": 2.188,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17181.0,
+          "ms": 2.437,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17181.0,
+          "ms": 2.572,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17186.0,
+          "ms": 2.059,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17330.0,
+          "ms": 1.618,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17468.0,
+          "ms": 2.205,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17468.0,
+          "ms": 2.355,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17477.0,
+          "ms": 2.007,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17477.0,
+          "ms": 2.114,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17484.0,
+          "ms": 1.644,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17628.0,
+          "ms": 1.63,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17765.0,
+          "ms": 1.931,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17765.0,
+          "ms": 2.082,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17772.0,
+          "ms": 2.679,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 17772.0,
+          "ms": 2.783,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17775.0,
+          "ms": 1.821,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 17919.0,
+          "ms": 1.505,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18057.0,
+          "ms": 2.353,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18057.0,
+          "ms": 2.453,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18066.0,
+          "ms": 2.497,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18066.0,
+          "ms": 2.622,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18072.0,
+          "ms": 2.001,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18216.0,
+          "ms": 1.707,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18354.0,
+          "ms": 2.479,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18354.0,
+          "ms": 2.58,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18363.0,
+          "ms": 2.712,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18363.0,
+          "ms": 2.814,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18369.0,
+          "ms": 2.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18513.0,
+          "ms": 2.006,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18651.0,
+          "ms": 2.095,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18651.0,
+          "ms": 2.226,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18659.0,
+          "ms": 1.965,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18659.0,
+          "ms": 2.102,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18664.0,
+          "ms": 1.982,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18808.0,
+          "ms": 1.412,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18946.0,
+          "ms": 1.94,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18946.0,
+          "ms": 2.055,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18954.0,
+          "ms": 1.864,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 18954.0,
+          "ms": 1.983,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 18959.0,
+          "ms": 2.182,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19103.0,
+          "ms": 1.729,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19240.0,
+          "ms": 2.168,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19240.0,
+          "ms": 2.273,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19247.0,
+          "ms": 2.569,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19247.0,
+          "ms": 2.685,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19251.0,
+          "ms": 1.914,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19395.0,
+          "ms": 1.708,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19533.0,
+          "ms": 2.316,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19533.0,
+          "ms": 2.442,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19542.0,
+          "ms": 2.536,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19542.0,
+          "ms": 2.647,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19548.0,
+          "ms": 2.975,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19692.0,
+          "ms": 2.868,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19830.0,
+          "ms": 2.04,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19830.0,
+          "ms": 2.141,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19838.0,
+          "ms": 2.23,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 19838.0,
+          "ms": 2.344,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19843.0,
+          "ms": 1.85,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 19987.0,
+          "ms": 1.887,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20125.0,
+          "ms": 2.161,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20125.0,
+          "ms": 2.269,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20133.0,
+          "ms": 2.448,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20133.0,
+          "ms": 2.571,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20138.0,
+          "ms": 1.823,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20282.0,
+          "ms": 1.749,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20420.0,
+          "ms": 2.482,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20420.0,
+          "ms": 2.603,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20428.0,
+          "ms": 2.481,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20428.0,
+          "ms": 2.583,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20433.0,
+          "ms": 2.098,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20577.0,
+          "ms": 1.953,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20715.0,
+          "ms": 2.093,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20715.0,
+          "ms": 2.21,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20723.0,
+          "ms": 2.167,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 20723.0,
+          "ms": 2.289,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20728.0,
+          "ms": 2.556,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 20872.0,
+          "ms": 2.079,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 21010.0,
+          "ms": 2.29,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 21010.0,
+          "ms": 2.407,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 21018.0,
+          "ms": 2.183,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 21018.0,
+          "ms": 2.292,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 21023.0,
+          "ms": 2.062,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 21167.0,
+          "ms": 1.676,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 24.0,
+      "retained_source_bytes": 12074982.0,
+      "stalls_over_50ms": [],
+      "static_bytes": 258017954.0
+    }
+  ],
+  "schema": 1,
+  "scope": "Local AMD Compatibility, exact installed SCNs; no production, R2 or cross-platform certification",
+  "source_limitations": [
+    "All 24 forms use the visually approved own-Mega down loop as resting sleep; no native second physical attack.",
+    "Static source material tables; native material animations are not replayed.",
+    "Greninja tiny water palette translated to its source blue layer colour.",
+    "Diancie authored crystal facets retained as a reviewed static PBR approximation; thin veil is two-sided.",
+    "Three Tatsugiri form IDs share the native combined three-fish source."
+  ],
+  "steady_frame_p95_ms": {
+    "classic": {
+      "p95_ms": 16.845,
+      "samples": 11520
+    },
+    "stadium": {
+      "p95_ms": 19.856,
+      "samples": 5760
+    }
+  },
+  "technical_qualification": {
+    "battle_report_sha256": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b",
+    "battle_visual_approved": false,
+    "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+    "expected_variant_count": 48,
+    "held": {},
+    "independent_native_sample_hz": 120,
+    "runtime_approved": false,
+    "schema": 1,
+    "scope": "Native SCN full-clock floor clearance plus captured poses in four camera/side combinations. Full UI, arena collision and performance qualification remain separate.",
+    "technical_passed": [
+      "barbaraclemega",
+      "barbaraclemega-shiny",
+      "baxcaliburmega",
+      "baxcaliburmega-shiny",
+      "chesnaughtmega",
+      "chesnaughtmega-shiny",
+      "crabominablemega",
+      "crabominablemega-shiny",
+      "delphoxmega",
+      "delphoxmega-shiny",
+      "dianciemega",
+      "dianciemega-shiny",
+      "dragalgemega",
+      "dragalgemega-shiny",
+      "drampamega",
+      "drampamega-shiny",
+      "falinksmega",
+      "falinksmega-shiny",
+      "floettemega",
+      "floettemega-shiny",
+      "glimmoramega",
+      "glimmoramega-shiny",
+      "golisopodmega",
+      "golisopodmega-shiny",
+      "greninjamega",
+      "greninjamega-shiny",
+      "magearnamega",
+      "magearnamega-shiny",
+      "magearnaoriginalmega",
+      "magearnaoriginalmega-shiny",
+      "malamarmega",
+      "malamarmega-shiny",
+      "meowsticmmega",
+      "meowsticmmega-shiny",
+      "pyroarmega",
+      "pyroarmega-shiny",
+      "scovillainmega",
+      "scovillainmega-shiny",
+      "tatsugiricurlymega",
+      "tatsugiricurlymega-shiny",
+      "tatsugiridroopymega",
+      "tatsugiridroopymega-shiny",
+      "tatsugiristretchymega",
+      "tatsugiristretchymega-shiny",
+      "zeraoramega",
+      "zeraoramega-shiny",
+      "zygardemega",
+      "zygardemega-shiny"
+    ],
+    "technical_variant_count": 48
+  }
+}

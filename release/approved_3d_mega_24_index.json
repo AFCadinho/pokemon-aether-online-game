@@ -1,0 +1,587 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "barbaracle-mega",
+          "runtime_sha256": "8b26d45e06b9b0d8baacd412dd51004388f6c37a4a93b4679751761fdd1c1ea2",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "barbaracle-mega@shiny",
+          "runtime_sha256": "60281ef2a6368164ae64212b839180af63145b44bf966f85c742ed291177a3c1",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:barbaracle:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 689,
+      "object_key": "optional-assets/pokemon_3d/barbaracle/mega/v1-392d64398771187288ae35dbf807f3161d063604cd986d56606d33be23b0cadb.zip",
+      "sha256": "392d64398771187288ae35dbf807f3161d063604cd986d56606d33be23b0cadb",
+      "size_bytes": 14269252,
+      "species_id": "barbaracle",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "baxcalibur-mega",
+          "runtime_sha256": "be43036a1dba3a7856a6b8dbd4fb9a80d63623f8f5de02c696edfdd14a90f65d",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "baxcalibur-mega@shiny",
+          "runtime_sha256": "8462572366a2df40272550bc9afae53ee2793007723cc8bbc548f7307ad14530",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:baxcalibur:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 998,
+      "object_key": "optional-assets/pokemon_3d/baxcalibur/mega/v1-621f9a201cbc6e0a4345eeaba5a56f7152769dbb0e924c00b732b6f8f5da6097.zip",
+      "sha256": "621f9a201cbc6e0a4345eeaba5a56f7152769dbb0e924c00b732b6f8f5da6097",
+      "size_bytes": 12372854,
+      "species_id": "baxcalibur",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "chesnaught-mega",
+          "runtime_sha256": "74aa1b3c0ed13e411bc34dd1ad20c97ebc92539aa74b093100bebe2e9382b951",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "chesnaught-mega@shiny",
+          "runtime_sha256": "1878b2f8968497b3169ce12260689f318b36a24d6850d3974c3d86d17593cb3b",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:chesnaught:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 652,
+      "object_key": "optional-assets/pokemon_3d/chesnaught/mega/v1-fac9d476faf73b2304c786984412724454df7cf15367fb3d0366eee0a58478fb.zip",
+      "sha256": "fac9d476faf73b2304c786984412724454df7cf15367fb3d0366eee0a58478fb",
+      "size_bytes": 16291923,
+      "species_id": "chesnaught",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "crabominable-mega",
+          "runtime_sha256": "ae55c76683c5ec339aabea76f2392f0bd307961b5abc6a4525e276a3314a957d",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "crabominable-mega@shiny",
+          "runtime_sha256": "6d6e6e989c4539141ab209632e74a2518e5f1dc4f03321fdeda96e83f631d28c",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:crabominable:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 740,
+      "object_key": "optional-assets/pokemon_3d/crabominable/mega/v1-4c35bdef967c0f6ff4fcf859d49698077f565d04596da1d3023bb8b465bb4993.zip",
+      "sha256": "4c35bdef967c0f6ff4fcf859d49698077f565d04596da1d3023bb8b465bb4993",
+      "size_bytes": 14689123,
+      "species_id": "crabominable",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "delphox-mega",
+          "runtime_sha256": "934c869ea812ce38a81c5d3be0e9666e64df131da52a69305161def2de3633e3",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "delphox-mega@shiny",
+          "runtime_sha256": "d0442e7aa7d25dc3b3e8c39c8b3dfd2cf537fdddd1bc0a0ee7a133cfee3c9d2d",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:delphox:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 655,
+      "object_key": "optional-assets/pokemon_3d/delphox/mega/v1-a0956306500bed897b296f0d2d8210bee0a27214d167dbac012180057db86815.zip",
+      "sha256": "a0956306500bed897b296f0d2d8210bee0a27214d167dbac012180057db86815",
+      "size_bytes": 14462395,
+      "species_id": "delphox",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "diancie-mega",
+          "runtime_sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "diancie-mega@shiny",
+          "runtime_sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:diancie:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 719,
+      "object_key": "optional-assets/pokemon_3d/diancie/mega/v1-30fe80bc8caeb9803d4450256e747820c082122f29be05cdb8d0595588ed7689.zip",
+      "sha256": "30fe80bc8caeb9803d4450256e747820c082122f29be05cdb8d0595588ed7689",
+      "size_bytes": 13979621,
+      "species_id": "diancie",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "dragalge-mega",
+          "runtime_sha256": "2655cc0d553d230a625c8a825f641dd89b04bdc81369f3b11f9f9a85b6812ae4",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "dragalge-mega@shiny",
+          "runtime_sha256": "9f6aa142a9a9cfd25ec440248650b46d878c74379f93d6cb18824440db27eb9b",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:dragalge:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 691,
+      "object_key": "optional-assets/pokemon_3d/dragalge/mega/v1-ce053b209bb43082402acdaf45b36ba999715203a6943e645935589e849ab69a.zip",
+      "sha256": "ce053b209bb43082402acdaf45b36ba999715203a6943e645935589e849ab69a",
+      "size_bytes": 15255508,
+      "species_id": "dragalge",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "drampa-mega",
+          "runtime_sha256": "c33d251dc567b5e7e8d01bf5c194910d9b5f39f7823679672a9250080b971c18",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "drampa-mega@shiny",
+          "runtime_sha256": "4a3338f05e111b186afdfdd8725148b0c52314750fb98e4038122ff4cb63b1fa",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:drampa:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 780,
+      "object_key": "optional-assets/pokemon_3d/drampa/mega/v1-e6dd8d1924bbf9ea27bbf64a8239096e05286a826146a46c302a36ce7759fd1f.zip",
+      "sha256": "e6dd8d1924bbf9ea27bbf64a8239096e05286a826146a46c302a36ce7759fd1f",
+      "size_bytes": 13438972,
+      "species_id": "drampa",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "falinks-mega",
+          "runtime_sha256": "a8d28e840c6dff21b080af54b5d670007941b63dcce6e68780d609ed1f92c1e0",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "falinks-mega@shiny",
+          "runtime_sha256": "7bb56c20d42f236ce3a297f5464e6380c7757161723ed03f89a04e55ac8e8205",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:falinks:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 870,
+      "object_key": "optional-assets/pokemon_3d/falinks/mega/v1-a87e7ce73e162c1081c03f57b0d9d591658e1b00edbb16d63c276825f7c13c6f.zip",
+      "sha256": "a87e7ce73e162c1081c03f57b0d9d591658e1b00edbb16d63c276825f7c13c6f",
+      "size_bytes": 8439599,
+      "species_id": "falinks",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "floette-mega",
+          "runtime_sha256": "8007b79a00c3c9314be4e5087f0398dfc6d19cea37bb8a90697a2c60be7e1633",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "floette-mega@shiny",
+          "runtime_sha256": "9cfd80f01ebaed451d7bc39cf01e171ece6cfbabe19cc77a15a789bdfbd4033c",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:floette:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 670,
+      "object_key": "optional-assets/pokemon_3d/floette/mega/v1-af5e6296b7e66862ea131f536a35e202d6dee57c7b3d1c024da1945d4bad06f2.zip",
+      "sha256": "af5e6296b7e66862ea131f536a35e202d6dee57c7b3d1c024da1945d4bad06f2",
+      "size_bytes": 10626422,
+      "species_id": "floette",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "glimmora-mega",
+          "runtime_sha256": "c63f99e17422ecf8d70148af76ae27f589884228799e699443d4243fadaf9e7f",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "glimmora-mega@shiny",
+          "runtime_sha256": "cee9f6534371df6c9678e09b68e42b4de14a8bceeac4dd24644df40adb52710d",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:glimmora:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 970,
+      "object_key": "optional-assets/pokemon_3d/glimmora/mega/v1-4bde63a616bedd7aa4c3090059aa508e5042fa627ff9e5a16dfdbb84c39f4e19.zip",
+      "sha256": "4bde63a616bedd7aa4c3090059aa508e5042fa627ff9e5a16dfdbb84c39f4e19",
+      "size_bytes": 10373357,
+      "species_id": "glimmora",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "golisopod-mega",
+          "runtime_sha256": "9ac5e95f94a6d8045bdd8ec41aa787c1495ca09ea9d69402fb965ccb0206f01a",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "golisopod-mega@shiny",
+          "runtime_sha256": "56f5af6e51323c2c28067b0b9cb20b1be6a3e18bfe9c574430cd7aee7c59a908",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:golisopod:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 768,
+      "object_key": "optional-assets/pokemon_3d/golisopod/mega/v1-944fe823826057055b57b3b0007f2667caf1d1b4dc608b6c277e5e3db5d1bc66.zip",
+      "sha256": "944fe823826057055b57b3b0007f2667caf1d1b4dc608b6c277e5e3db5d1bc66",
+      "size_bytes": 14891534,
+      "species_id": "golisopod",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "greninja-mega",
+          "runtime_sha256": "1149cf54c0dd799f4ecdd4585ea44e79158947ed83bf429e77177fb25293260d",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "greninja-mega@shiny",
+          "runtime_sha256": "1cb822ea1affd2be296225e1baa891665db7a4092c6669dd1dc3c382277dd363",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:greninja:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 658,
+      "object_key": "optional-assets/pokemon_3d/greninja/mega/v1-1d1dd7dc6386c55de8a30489b4f9eb968045a8ba03ad94bbe4d1441b9b7ea537.zip",
+      "sha256": "1d1dd7dc6386c55de8a30489b4f9eb968045a8ba03ad94bbe4d1441b9b7ea537",
+      "size_bytes": 9297639,
+      "species_id": "greninja",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "magearna-mega",
+          "runtime_sha256": "bde30414e72a34edd7abe8c72bc972cfa2064a85bad9d3ee163331a083362551",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "magearna-mega@shiny",
+          "runtime_sha256": "818e7826a3b3989453c4e477b7444e7206579b1cc9314776b589fec289cf9c7d",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:magearna:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 801,
+      "object_key": "optional-assets/pokemon_3d/magearna/mega/v1-6a682b55fc00f0df1d1096c38eb5c73b5d2c7caa5cb2b054cfa812c1a917714f.zip",
+      "sha256": "6a682b55fc00f0df1d1096c38eb5c73b5d2c7caa5cb2b054cfa812c1a917714f",
+      "size_bytes": 12784588,
+      "species_id": "magearna",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "magearna-original-mega",
+          "runtime_sha256": "35720b25a7cf498d8790021dcb2f902716af963d3366e3e46b1b28e48b491ae4",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "magearna-original-mega@shiny",
+          "runtime_sha256": "5da6a542a52cdb0700c5862462839e98889f05c6109f65d51d46c65a28c2fdea",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:magearna-original:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 801,
+      "object_key": "optional-assets/pokemon_3d/magearna-original/mega/v1-49222b7cbb5d756bde5d241110274f27d395f457db06ed9fb808dee1c0cb9a97.zip",
+      "sha256": "49222b7cbb5d756bde5d241110274f27d395f457db06ed9fb808dee1c0cb9a97",
+      "size_bytes": 12779217,
+      "species_id": "magearna-original",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "malamar-mega",
+          "runtime_sha256": "6a5af46440490e16ad2d72672ff39d74c898bd07191ec3c59fa9e1726c07da23",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "malamar-mega@shiny",
+          "runtime_sha256": "725435a9ca1c413e74e2e9567c54cefc01720be994a798872ca220a0ebae076b",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:malamar:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 687,
+      "object_key": "optional-assets/pokemon_3d/malamar/mega/v1-83af370e4c0d305d07b5210eb78052e3e2c2a194edebbce833fc2d8142e6d00e.zip",
+      "sha256": "83af370e4c0d305d07b5210eb78052e3e2c2a194edebbce833fc2d8142e6d00e",
+      "size_bytes": 9992897,
+      "species_id": "malamar",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "meowstic-m-mega",
+          "runtime_sha256": "f4f027b533389eb806e9244f7a208f949e10824e1be0149c1bdbf1db94dd4e19",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "meowstic-m-mega@shiny",
+          "runtime_sha256": "cb37f417093ad6bbd60b9d3bac02e26a7c8c05f525ac9a4c0ff902ee500a5285",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:meowstic-m:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 678,
+      "object_key": "optional-assets/pokemon_3d/meowstic-m/mega/v1-873c6f7aaf94280a3f5eab7f7a832bccbe4d8b0955ff4f305574cbcb9569b4fa.zip",
+      "sha256": "873c6f7aaf94280a3f5eab7f7a832bccbe4d8b0955ff4f305574cbcb9569b4fa",
+      "size_bytes": 11075300,
+      "species_id": "meowstic-m",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "pyroar-mega",
+          "runtime_sha256": "0db5e44c226f347b4005095684544395574eb308e3ae400355f49bfef8ecde0d",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "pyroar-mega@shiny",
+          "runtime_sha256": "c5256bca335c03da50748ef20fb0764eddfd6e5312a6f85a38f9a453f82bc92b",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:pyroar:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 668,
+      "object_key": "optional-assets/pokemon_3d/pyroar/mega/v1-7fcaae3531b23caa5b779afdda292caf4293d9dd060c24c702cfe22a99f9d144.zip",
+      "sha256": "7fcaae3531b23caa5b779afdda292caf4293d9dd060c24c702cfe22a99f9d144",
+      "size_bytes": 9466028,
+      "species_id": "pyroar",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "scovillain-mega",
+          "runtime_sha256": "3c0c93f6c639518657514ab7e2f09093b7b94816223b11e2afaae26017dbf4f5",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "scovillain-mega@shiny",
+          "runtime_sha256": "352a1156f4207a77683ef8bd350a1f3885c6e9f99bd4a3c9429967f1587ad8c4",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:scovillain:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 952,
+      "object_key": "optional-assets/pokemon_3d/scovillain/mega/v1-7d2e96222aea81a8ae8168cd4d550aa2059464c69feaf758d3b3b9c65be2d389.zip",
+      "sha256": "7d2e96222aea81a8ae8168cd4d550aa2059464c69feaf758d3b3b9c65be2d389",
+      "size_bytes": 14035743,
+      "species_id": "scovillain",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "tatsugiri-curly-mega",
+          "runtime_sha256": "c475980ac1fa7ffc29d738bd982ac046ce7ee430c9fbe26a6084a3a596595039",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "tatsugiri-curly-mega@shiny",
+          "runtime_sha256": "55030edcf0018c5ca5b1f65aba2247534bfacb53a992ae35ee78d420be86e9f5",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:tatsugiri-curly:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 978,
+      "object_key": "optional-assets/pokemon_3d/tatsugiri-curly/mega/v1-c615175341ed7439026217cac3a4cde34cf34c4ae88978717060d0eb2c3b569b.zip",
+      "sha256": "c615175341ed7439026217cac3a4cde34cf34c4ae88978717060d0eb2c3b569b",
+      "size_bytes": 11486606,
+      "species_id": "tatsugiri-curly",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "tatsugiri-droopy-mega",
+          "runtime_sha256": "047d1969168c107528986940ed0b3bd262483b16c11a084d72ebd548b178fe5a",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "tatsugiri-droopy-mega@shiny",
+          "runtime_sha256": "6eeed03f01334e846d20e91f97f86a3bf08c265db58632137b01a6bb85f75ed8",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:tatsugiri-droopy:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 978,
+      "object_key": "optional-assets/pokemon_3d/tatsugiri-droopy/mega/v1-c7f52ec3f7ac7059b6329e2392f9ec45359b51921f7bc0107b0b690b6b66844c.zip",
+      "sha256": "c7f52ec3f7ac7059b6329e2392f9ec45359b51921f7bc0107b0b690b6b66844c",
+      "size_bytes": 11486613,
+      "species_id": "tatsugiri-droopy",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "tatsugiri-stretchy-mega",
+          "runtime_sha256": "93c4da6f2dfdd2d88994fe3769a7275c5501a23114fb5e848237bef7fa943529",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "tatsugiri-stretchy-mega@shiny",
+          "runtime_sha256": "2567e0c8273d6c3046961f35c910aad7a29c0e031142a9b5178d84be36e748d4",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:tatsugiri-stretchy:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 978,
+      "object_key": "optional-assets/pokemon_3d/tatsugiri-stretchy/mega/v1-1b68f4483709a3d741f4ff33efa6ba5cb7615ff6e3ac64ef6008d955f145e277.zip",
+      "sha256": "1b68f4483709a3d741f4ff33efa6ba5cb7615ff6e3ac64ef6008d955f145e277",
+      "size_bytes": 11486618,
+      "species_id": "tatsugiri-stretchy",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "zeraora-mega",
+          "runtime_sha256": "987c1b087f8b36ccc8850c09ba596c009b42aacee15d0b807023a15f2c3abd63",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "zeraora-mega@shiny",
+          "runtime_sha256": "2a21d294ca72c2b791a4eb3f5d941fc4de25b276823f9bfd6a26777a06f73bc5",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:zeraora:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 807,
+      "object_key": "optional-assets/pokemon_3d/zeraora/mega/v1-8c98f89ce3b67be3538cdc426580d93b4905a97c3b33dcf977125b195b23e9c4.zip",
+      "sha256": "8c98f89ce3b67be3538cdc426580d93b4905a97c3b33dcf977125b195b23e9c4",
+      "size_bytes": 12517327,
+      "species_id": "zeraora",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "zygarde-mega",
+          "runtime_sha256": "d48541e0db89f02bc395329b043e3a4db19847b0ded6a44c4eacceeb05f272ac",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "zygarde-mega@shiny",
+          "runtime_sha256": "bb16e72d6cd56f5b5b86db46511aecd02748536da166e54db9744231df36a557",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:zygarde:mega",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "mega",
+      "national_dex": 718,
+      "object_key": "optional-assets/pokemon_3d/zygarde/mega/v1-b7aca2fa9625f0d5ff27b0cdbb87d8b0372ccedb3b29749508e263781e61236d.zip",
+      "sha256": "b7aca2fa9625f0d5ff27b0cdbb87d8b0372ccedb3b29749508e263781e61236d",
+      "size_bytes": 12076039,
+      "species_id": "zygarde",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "mega-24-local-candidates-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}

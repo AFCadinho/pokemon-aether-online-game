@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
+- De HP-balk blijft boven hoge 3D-animaties zoals Mega Greninja's waterster, ook wanneer de gebruikelijke bovenmarge onvoldoende ruimte laat.
+
 - Route 3 now has roaming overworld Spearow, Pidgey and Jigglypuff, matching its FireRed/LeafGreen wild encounter pool.
 
 - Mr. Fuji’s House in Lavender Town heeft nu het artist-interieur en een doorgang van en naar het huis met het paarse dak in het noordoosten.

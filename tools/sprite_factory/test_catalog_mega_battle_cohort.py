@@ -1,14 +1,17 @@
 """A smaller Mega cohort must not bypass complete, matching pair approval."""
 import json
+import copy
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from catalog_mega_battle_stage import stage
 from catalog_mega_battle_calibrate import calibrate
 from catalog_mega_battle_page import page
 from catalog_mega_battle_qualification import qualify
 from catalog_mega_3d_production import sha
+import catalog_mega_catalog_admission as admission
 
 
 class CohortGateTests(unittest.TestCase):
@@ -95,6 +98,64 @@ class CohortGateTests(unittest.TestCase):
         self.assertIn("floor clearance", " ".join(result["held"][names[0]]))
         self.assertIn("incomplete 120 Hz", " ".join(result["held"][names[1]]))
         self.assertIn("overlaps HUD", " ".join(result["held"][names[1]]))
+
+
+class ClearanceAcceptanceTests(unittest.TestCase):
+    def test_actual_hud_requires_both_arenas_and_no_cross_overlap(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            catalog, report, script = [root / name for name in ('catalog.json', 'hud.json', 'check.gd')]
+            catalog.write_text('[]')
+            script.write_text('fixture')
+            expected = {'example': {}, 'example@shiny': {}}
+            rows = [{'species': 'example', 'arena': arena, 'own_overlap': False,
+                     'enemy_overlap': False, 'cross_overlap': False, 'hud_overlap': False}
+                    for arena in ('classic', 'stadium')]
+            def approval(entries):
+                report.write_text(json.dumps({'complete': True, 'catalog_sha256': sha(catalog), 'entries': entries}))
+                return {'actual_hud_review': {'report': str(report), 'report_sha256': sha(report),
+                                             'script': str(script), 'script_sha256': sha(script)}}
+            admission.validate_actual_hud(approval(rows), expected, catalog)
+            for invalid in (rows[:1], [rows[0], rows[0]],
+                            [dict(rows[0], cross_overlap=True), rows[1]]):
+                with self.assertRaises(AssertionError):
+                    admission.validate_actual_hud(approval(invalid), expected, catalog)
+
+    def test_art_acceptance_cannot_authorize_arbitrary_motion_changes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            original_path, final_path = root / "original.json", root / "final.json"
+            original = {"readability": {"example": 1}, "motion": {"example": {
+                "scale": 1, "lift": .025, "sha256": "same-model",
+                "clips": {"physical_attack": {"times": [0, 1], "offsets": [0, 0]},
+                          "idle": {"times": [0, 1], "offsets": [0, 0]}}}}}
+            original_path.write_text(json.dumps(original))
+            approval = {"technical_placement_followup": {
+                "original_profiles": str(original_path), "original_profiles_sha256": sha(original_path)},
+                "battle_visual_review": {"placement_candidates_sha256": sha(original_path)},
+                "floor_followups": {"example": {}}}
+            final = copy.deepcopy(original)
+            final["motion"]["example"]["clips"]["physical_attack"]["offsets"] = [.03, .03]
+            with patch.object(admission, "PROFILES", final_path):
+                final_path.write_text(json.dumps(final))
+                admission.validate_clearance_followup(approval)
+                for offsets in ([.06, .06], [-.01, -.01], [.01, .02]):
+                    with self.subTest(offsets=offsets):
+                        invalid = copy.deepcopy(final)
+                        invalid["motion"]["example"]["clips"]["physical_attack"]["offsets"] = offsets
+                        final_path.write_text(json.dumps(invalid))
+                        with self.assertRaises(AssertionError):
+                            admission.validate_clearance_followup(approval)
+                for changed in ("scale", "idle"):
+                    with self.subTest(changed=changed):
+                        invalid = copy.deepcopy(final)
+                        if changed == "scale":
+                            invalid["motion"]["example"]["scale"] = 1.2
+                        else:
+                            invalid["motion"]["example"]["clips"]["idle"]["offsets"] = [.03, .03]
+                        final_path.write_text(json.dumps(invalid))
+                        with self.assertRaises(AssertionError):
+                            admission.validate_clearance_followup(approval)
 
 
 if __name__ == "__main__":

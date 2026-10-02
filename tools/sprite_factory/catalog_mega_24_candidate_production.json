@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "production_date": "2026-10-02",
-  "status": "24_pairs_appearance_approved_battle_qualification_pending",
+  "status": "24_pairs_locally_qualified_bundles_ready",
   "source_audit": {
     "path": "catalog_mega_25_source_audit.json",
     "sha256": "84dd1104e92401a7d14372d66c64ad5f6b3f8a3a1ed3c74be35bacdb96d9d022"
@@ -13,12 +13,18 @@
     "native_clips": 336,
     "native_pose_timing_errors": 0,
     "native_pose_captures": 384,
-    "qualified_mega_pairs_unchanged": 72,
     "source_identity_holds": [
       "meowsticfmega"
     ],
     "appearance_approved_pairs": 24,
-    "appearance_review_pending_pairs": []
+    "appearance_review_pending_pairs": [],
+    "independent_native_battle_variants": 48,
+    "independent_native_battle_sample_hz": 120,
+    "independent_native_battle_holds": 0,
+    "bundles_prepared": 24,
+    "bundle_bytes": 297575175,
+    "qualified_mega_pairs": 96,
+    "runtime_approved_pairs": 24
   },
   "native_check_scope": "Hash-bound SCN loading, action durations, finite posed geometry at beginning/middle/end, reverse-order pose independence, rendered poses with neutral reflection sky. No battle scale/floor/HUD/performance or install qualification claimed.",
   "local_artifacts": {
@@ -46,21 +52,21 @@
     "catalog_mega_battle_final_evidence.py": "a87ce2156f933e569625dad29f829b31e431e7819ef10107494c619360ef43f2"
   },
   "appearance_approved": true,
-  "battle_approved": false,
-  "runtime_approved": false,
+  "battle_approved": true,
+  "runtime_approved": true,
   "published": false,
   "entries": [
     {
       "showdown_id": "chesnaughtmega",
       "source_resource_id": "pm0722_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "d7c342ad116e91ce11f693b206e7d0d8b2dd09880ba337ead7e64b5ce869b9aa",
       "export_report_sha256": "ef346e4932f1b86b06874a08e52a7007917157efbaa67c5e2133f53d5ecd83df",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -97,19 +103,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:chesnaught:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "delphoxmega",
       "source_resource_id": "pm0719_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "3ef11bc1bd10ed1ba898f3c5ab7f169895cc4d6b581c8256f84ff4c848a5fce9",
       "export_report_sha256": "383827772224fcd86e10a1c9aac5b52a57ef51fa37b6688ba1466f4fb4cc9f71",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:5",
@@ -146,19 +166,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:delphox:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "greninjamega",
       "source_resource_id": "pm0725_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "b89a0ea41b3c95646fc165d61ccde41feb4204e8164b87643c60e287ed7cd569",
       "export_report_sha256": "1540190a796a8118c54a0196ccf98d013fe02b2920e9983247abdfbd2812adb5",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:8",
@@ -210,19 +244,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:greninja:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "pyroarmega",
       "source_resource_id": "pm0705_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "98bee0e7d6f6345461620c8df7855dd923b6cd1d8bc0c850d3056930509a0e5a",
       "export_report_sha256": "8cbbdcc982b5701d2ca79dc38ea2093c6486d653e778a3013b1579a9c0bf48b0",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:12",
@@ -264,19 +312,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:pyroar:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "floettemega",
       "source_resource_id": "pm0714_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "efc9a615259b6302ace4fe8649efbc70cce029e98a10321d59136b3917290f60",
       "export_report_sha256": "613de20c300ab254b7ec49c5771203ea13f4c41357fdc37864f1441dca757b69",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:8",
@@ -320,19 +382,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:floette:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "meowsticmmega",
       "source_resource_id": "pm0734_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "c982482ecdbe1f51dc5123643c55595c377bc273c6ba7466da6a6444c64c83a4",
       "export_report_sha256": "d932a5137c6e14531309d42c952773866deab1c5c1f3119beedd8a126535d8c3",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -369,19 +445,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:meowstic-m:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "malamarmega",
       "source_resource_id": "pm0727_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "e8bf4f21e675c89e46005929a4b962e91c685d43ed974f975f52af32480363a7",
       "export_report_sha256": "8a6430a29036f378e66efc5daceaaeafa8c29dd58a86ddb97e5303203847a2ba",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:10",
@@ -425,19 +515,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:malamar:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "barbaraclemega",
       "source_resource_id": "pm0748_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "cf8d88d228f9c036f25fb46641826aa84c3fb1863fba97ec17b378db6cb984b4",
       "export_report_sha256": "39ba98c6342e49f008124bb3e53c346316fe6a635f7f38560cb86b36463cfb64",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -474,19 +578,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:barbaracle:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "dragalgemega",
       "source_resource_id": "pm0710_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "20f59f56d9b15424dfc95d1fc70b417c63659ee926bd8ccc6cdf893f16c9c505",
       "export_report_sha256": "e1546a835cce33ed84ba6a0e925d4bf16ae84d1bc8f1765930cc130c012379b6",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:7",
@@ -523,19 +641,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:dragalge:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "zygardemega",
       "source_resource_id": "pm0770_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "048df1371c5e65763902100c7358fee0c7967dc7d9fb63706c9b0148223c1589",
       "export_report_sha256": "08b2d2a4d58983a1cd850a3bb74b5507deb94b6dc20670ecff909764e226b885",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:12",
@@ -576,19 +708,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:zygarde:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "dianciemega",
       "source_resource_id": "pm0772_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "bf7787a9a26092f5363a0814fa82b937c604a497fa5e7f995d7a60e30e6694df",
       "export_report_sha256": "7ffc77edcb8ff363f65885cc4311d935955b01798d080278165941ef31bb4e76",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:15",
@@ -656,19 +802,33 @@
         "review_manifest_sha256": "8eeba26c85e7125173131f215e8c391be7ec877089e070679d9639add76c5b58",
         "comparison_manifest_sha256": "f116718be05173627df4e02e8eaf00ce274217bfa8bec223336b4c0f3fa421cc",
         "scope": "Normal/shiny appearance and native poses including complete two-sided veil; battle remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:diancie:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "crabominablemega",
       "source_resource_id": "pm0860_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "75cf331e8c2151983dfef7898cafaff11e54fb2c155f47e056441f37eccb9b88",
       "export_report_sha256": "17349daf6853a61378d50ecf52164bbf3a151ae1af31790c7ea73a30cba167fb",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:8",
@@ -705,19 +865,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:crabominable:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "golisopodmega",
       "source_resource_id": "pm0867_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "6ccd8797d2974c3c178a55426ba6c5e47d437649794dca20d038f968e26f388e",
       "export_report_sha256": "424df84a93d51076f69a2a28a395a177c00f27741acdba3250ee498d2ce3d6cc",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -761,19 +935,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:golisopod:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "drampamega",
       "source_resource_id": "pm0856_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "5a0d87ea0e2d12b78c603435df189fb963b8e76bd5cb6fceac257a9e43f556c4",
       "export_report_sha256": "6652c841672d4d15b027c64bbf0c5f3913bb5d65e42183867435c511177f2f41",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_visibility:idle:7",
@@ -805,19 +993,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:drampa:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "magearnamega",
       "source_resource_id": "pm0882_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "312686d65f23e9f4c996fb63d554461f0a8b583872caf61a61657a0062606da7",
       "export_report_sha256": "c0dafc5b98744c0288eda86579c11f4290a905a504a60878cb416630e12022c0",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -861,19 +1063,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:magearna:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "magearnaoriginalmega",
       "source_resource_id": "pm0882_52_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "063a8e3f842eb2276ad4d3bca6e12acb3b8f0043ae50fcfae92e708acca65380",
       "export_report_sha256": "3716a93ef995502cc667140452778d650964903388285ef1294407e2f3e1bada",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -923,19 +1139,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:magearna-original:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "zeraoramega",
       "source_resource_id": "pm0888_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "8769aa2eb72b67292b95fe7d69609a50b6c1be4a4f5d0b65f7181bea0471a5e1",
       "export_report_sha256": "cd5e9fe21beb21b83ae19ac7e6240608583ca6929ebd721e4eae3a1864bc45a9",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:36",
@@ -972,19 +1202,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:zeraora:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "falinksmega",
       "source_resource_id": "pm0923_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "a6a1f9c27b48c71fbc8feb0c6d4a59ba17e1c03c04f41c4436da163691b645b4",
       "export_report_sha256": "5b9287a605e5896d90e131068b2479c4722fc17bc9bc4ecd801ff37304c77144",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:28",
@@ -1021,19 +1265,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:falinks:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "scovillainmega",
       "source_resource_id": "pm1043_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "eb5cec2549219672f4736e38fcc32cae2c3ee2622556ad4c8f4ceb60c3ba54d8",
       "export_report_sha256": "73ae186b52e5f8ba4e9729e5f08be4ca9093480be1370c2d027a1f802e949176",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:5",
@@ -1070,19 +1328,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:scovillain:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "glimmoramega",
       "source_resource_id": "pm1071_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "777f73c6118f1dcee09970527e3ad8afdd1901724d0dba4c43dabcfed724860c",
       "export_report_sha256": "fa5cfbdb539dcdc1936393baeb83299b43c38167ac8184738f75b7524036f82c",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_visibility:idle:9",
@@ -1116,19 +1388,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:glimmora:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "tatsugiricurlymega",
       "source_resource_id": "pm1056_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "ef5cdb669208792484e12a0148a1655ca1e8a993288a2fb4b61786441dd38864",
       "export_report_sha256": "8ebf15f731f76559299787fbe89e656d41be4bd874505cac1a85054c91e83f78",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:24",
@@ -1160,19 +1446,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:tatsugiri-curly:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "tatsugiridroopymega",
       "source_resource_id": "pm1056_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "0d49d34960de2136788b4e17904f3d6926482c0deb906cf167145b7cf5907c74",
       "export_report_sha256": "b98b7c866ce3dc25c1d1ffc670d788334385768e4c6adba0dd24c07941ab8541",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:24",
@@ -1204,19 +1504,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:tatsugiri-droopy:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "tatsugiristretchymega",
       "source_resource_id": "pm1056_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "8c26d7746643a779e4b8e6c14b792fc586465c6417f12f555cab91286520494a",
       "export_report_sha256": "10e2297d8ffa85ba1fe6b146376bdcce06efabc942f2ddfe957b1b14315a1910",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:24",
@@ -1248,19 +1562,33 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:tatsugiri-stretchy:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     },
     {
       "showdown_id": "baxcaliburmega",
       "source_resource_id": "pm1055_51_00",
-      "status": "review_candidate",
+      "status": "admitted_runtime",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "published": false,
       "import_report_sha256": "09e84e45b418541651993bd64421a890de20d43eacb4d2255c8ee157884baf33",
       "export_report_sha256": "6e342dcb8fbfa1abd3e02df15cef5ff76dea88ad0a7bc297759393538e4cfe03",
-      "native_rest_sleep_review_required": true,
+      "native_rest_sleep_review_required": false,
       "native_action_count": 7,
       "warnings": [
         "unapplied_tracm_material:idle:2",
@@ -1304,7 +1632,21 @@
         "review_manifest_sha256": "3c79268125c57c36585dabb12abd55ae0309f7dd21344fd292b27af88ceda571",
         "user_response": "Diancie lijkt detail te missen. Derest ziet er goed uit",
         "scope": "Normal/shiny appearance and native poses only; battle qualification remains pending."
-      }
+      },
+      "battle_visual_approved": true,
+      "battle_visual_review": {
+        "date": "2026-10-02",
+        "user_response": "Alle 24 goed",
+        "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+        "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+        "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+        "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+        "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+      },
+      "approved_3d_bundle": "pokemon_3d:baxcalibur:mega",
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "native_rest_sleep_review_required_at_production": true,
+      "native_rest_sleep_review_approved": true
     }
   ],
   "diancie_detail_proposal": {
@@ -1361,9 +1703,9 @@
     "native_measurement_variants": 48,
     "motion_placement_proposals": 48,
     "motion_placement_holds": {},
-    "independent_native_validation_pending": true,
-    "runtime_approved": false,
-    "battle_approved": false,
+    "independent_native_validation_pending": false,
+    "runtime_approved": true,
+    "battle_approved": true,
     "catalog": ".tmp/mega-24-production/battle-24-v1/catalog.json",
     "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
     "approval_sha256": "caa691fa98f55deb415e0365e6bb7dcb9437317d19a16e1daef7c17d54d7c049",
@@ -1376,13 +1718,29 @@
     "visual_capture_report_sha256": "2c1ac31f2cb158db14bc9997c7e9487ba00979853d2c5290980995142b58f22a",
     "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
     "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
-    "native_clearance_followup_pending": {
-      "barbaraclemega": {
-        "physical_attack_root_added_m": 0.03247631391882896
-      },
-      "barbaraclemega-shiny": {
-        "physical_attack_root_added_m": 0.03247631391882896
-      }
-    }
+    "native_qualification_sha256": "b72222e325f02e967047085add7e1f5fcd0bc0f19b482cf8cc15921a149517ab",
+    "final_native_report_sha256": "c2a1ce6fce447bd12e96944074fc5549ea1578b3a6559dc7352aad82e1b3853b",
+    "final_profiles_sha256": "202525d8202c517a233b3dca1b45a83e8a66e421d343f39ccb9575fb666d4e00"
+  },
+  "battle_visual_approved": true,
+  "battle_visual_review": {
+    "date": "2026-10-02",
+    "user_response": "Alle 24 goed",
+    "review_url": "http://127.0.0.1:8796/battle-24-v1/review-v1/",
+    "review_manifest_sha256": "639a4db1011f29e3dc411bf9fff4400781fb8d62f2ac358569a6c9f76d528bda",
+    "catalog_sha256": "9187ea2878e87fccc81c0e4f4c2a1013412280da044de894c2a51af83ee068cd",
+    "placement_candidates_sha256": "6703ace3df1455356f199011ecb1640d375ba3234e219cd115fd60a08a8cfd76",
+    "scope": "Normal/shiny scale and poses in both cameras and both sides. Independent 120 Hz technical correction and qualification remains separate."
+  },
+  "runtime_qualification": {
+    "receipt": "tools/sprite_factory/catalog_mega_24_bundle_qualification.json",
+    "receipt_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+    "index": "release/approved_3d_mega_24_index.json",
+    "index_sha256": "50b3c3a821d2cd94e8d67c72be9ecc34c5b07b15f80c983721aca12bfad7eb32",
+    "bundle_count": 24,
+    "bundle_bytes": 297575175,
+    "admitted_registry_check_passed": true,
+    "scope": "Local AMD Compatibility, exact installed SCNs; no production, R2 or cross-platform certification",
+    "published": false
   }
 }
