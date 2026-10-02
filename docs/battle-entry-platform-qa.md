@@ -129,3 +129,33 @@ compatibility and available asset IDs from the corrected candidate remain
 explicitly pinned and were checked inside the APK before installation.
 Automated layout checks use real scenes in the desktop Godot runtime; the
 player can now verify the presentation in the installed Android game.
+
+## Keyboard avoidance in the original Android layout — 2026-10-02
+
+Device testing reproduced that the field position from
+`CanvasItem.get_screen_transform()` omitted the root viewport stretch. With
+Android's 125% content scale, the helper shifted the field insufficiently even
+though the reported Samsung keyboard height (594 physical pixels) was correct.
+The helper now combines the viewport screen transform with the control's
+global canvas transform, both for measuring the field and converting the
+required movement back to parent coordinates.
+
+The expanded keyboard regression runs at viewport factors 1, 1.25 and 1.5 and
+multiple parent scales. It produced 24 failures with the previous helper and
+passed all 101 checks with the fix. The native/browser UI layout check passed.
+
+An isolated, offline Android probe (`com.pokeaether.keyboardqa`) used the actual
+helper on the Samsung SM-G780F with its native keyboard. The corrected field
+occupied physical y=395..470 while the keyboard began at y=486: the full field
+was visible with a 16-pixel margin. Synthetic typing succeeded. Closing the
+keyboard restored the original position and zero translation. Screenshot
+inspection confirmed the visible field. The diagnostic was stopped and removed;
+the existing game data was not accessed or cleared. The probe tests the real
+Android transform/keyboard behavior; it is not a logged-in chat gameplay test.
+
+The full signed game from `c690519e0de1` was installed in place by USB as
+`0.3.90-usb-keyboard-c690519`, Android code 12. Export/certificate/version and
+on-demand partition checks passed; exported compatibility/asset IDs were
+verified before installation. Package metadata confirmed the intended version,
+unchanged signing identity and the retained app data directory. No app data was
+cleared, and no APK or assets were published.
