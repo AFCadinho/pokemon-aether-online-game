@@ -426,6 +426,28 @@ movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
 
+[node name="Rattata" parent="Entities/Pokemon" unique_id=190000600 instance=ExtResource("pokemon")]
+position = Vector2(912, 656)
+overworld_pokemon_id = "kanto_route_9_rattata_1"
+species_id = "rattata"
+level = 14
+display_name = "Rattata"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Ekans" parent="Entities/Pokemon" unique_id=190000601 instance=ExtResource("pokemon")]
+position = Vector2(2064, 1040)
+overworld_pokemon_id = "kanto_route_9_ekans_1"
+species_id = "ekans"
+level = 14
+display_name = "Ekans"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=678217890]
 
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1146792404]

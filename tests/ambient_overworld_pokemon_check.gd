@@ -45,6 +45,18 @@ const MAP_POKEMON := {
 		"Zubat": "zubat",
 		"Clefairy": "clefairy",
 	},
+	"res://scenes/overworld/kanto/routes/kanto_route_9.tscn": {
+		"Spearow": "spearow",
+		"Sandshrew": "sandshrew",
+		"Rattata": "rattata",
+		"Ekans": "ekans",
+	},
+	"res://scenes/overworld/kanto/routes/kanto_route_10.tscn": {
+		"Voltorb": "voltorb",
+		"Ekans": "ekans",
+		"Spearow": "spearow",
+		"Sandshrew": "sandshrew",
+	},
 }
 
 var failed := false
@@ -58,7 +70,7 @@ func _init() -> void:
 func _run() -> void:
 	for scene_path: String in MAP_POKEMON:
 		_check_map(scene_path, MAP_POKEMON[scene_path])
-	_check(pokemon_ids.size() == 24, "all ambient Pokemon use unique metadata ids")
+	_check(pokemon_ids.size() == 32, "all ambient Pokemon use unique metadata ids")
 	quit(1 if failed else 0)
 
 
@@ -70,6 +82,8 @@ func _check_map(scene_path: String, expected: Dictionary) -> void:
 	var map := packed.instantiate()
 	var pokemon_root := map.get_node_or_null("Entities/Pokemon")
 	var collision := map.get_node_or_null("Collision") as TileMapLayer
+	if collision == null:
+		collision = map.get_node_or_null("Tiles/Collision") as TileMapLayer
 	_check(pokemon_root != null, "%s has an ambient Pokemon group" % scene_path.get_file())
 	_check(collision != null, "%s exposes collision data" % scene_path.get_file())
 	if pokemon_root == null:
