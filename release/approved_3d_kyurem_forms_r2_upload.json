@@ -1,0 +1,50 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 4,
+  "bundle_bytes": 60650556,
+  "bundle_qualification_sha256": "ccbf1f7d314c373e5b131960b4dec84356236e511f0202d4f1e4ef691c293b66",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:kyurem-black:base",
+      "object_key": "optional-assets/pokemon_3d/kyurem-black/base/v1-fa3c7874b99b4192d33ee8c173515aa27f341d8a63858cdcbca5b1e32d2724d7.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "fa3c7874b99b4192d33ee8c173515aa27f341d8a63858cdcbca5b1e32d2724d7",
+      "size_bytes": 26336017,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:kyurem-white:base",
+      "object_key": "optional-assets/pokemon_3d/kyurem-white/base/v1-5c8b53ed7169a82b447eb5f8fdf5f23accf24a8386525bd6ff55bbe3766ed5ca.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "5c8b53ed7169a82b447eb5f8fdf5f23accf24a8386525bd6ff55bbe3766ed5ca",
+      "size_bytes": 34314539,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "kyurem-forms-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/kyurem-forms-approved-v1-aa37e8dfb76c0582ea0f61e97e19d819e9909b00f82593f2116f07f3541261c0.json",
+    "sha256": "aa37e8dfb76c0582ea0f61e97e19d819e9909b00f82593f2116f07f3541261c0",
+    "size_bytes": 2012
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/kyurem-forms-approved-v1-aa37e8dfb76c0582ea0f61e97e19d819e9909b00f82593f2116f07f3541261c0.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "aa37e8dfb76c0582ea0f61e97e19d819e9909b00f82593f2116f07f3541261c0",
+    "size_bytes": 2012,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 2,
+  "profile_count": 2,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 3,
+  "public_head_size_verified_objects": 3,
+  "reviewed_catalog_sha256": "7d8b324e3da9563528d71b4cb8aadd7b26218d0f4c8a5492ff9a00f5daa7c356",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T01:48:28.923156+00:00"
+}
