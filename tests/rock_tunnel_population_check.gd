@@ -83,7 +83,10 @@ func _run() -> void:
 					"%s has a clear trainer sightline at step %s (%s)" % [trainer.name, step, cell + direction * step]
 				)
 			for spawn: Marker2D in map.get_node("Spawns").get_children():
-				_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn %s clear" % [trainer.name, spawn.name])
+				if str(trainer.get("trainer_id")) == "kanto_rock_tunnel_future_self":
+					_check(not trainer.visible and not trainer.blocks_world_position(spawn.global_position), "Hidden visitor leaves spawn %s clear" % spawn.name)
+				else:
+					_check(trainer.position.distance_to(spawn.position) >= 96.0, "%s leaves spawn %s clear" % [trainer.name, spawn.name])
 		map.queue_free()
 		await process_frame
 
