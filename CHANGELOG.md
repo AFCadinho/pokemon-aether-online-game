@@ -5,6 +5,20 @@
 - 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
 - De HP-balk blijft boven hoge 3D-animaties zoals Mega Greninja's waterster, ook wanneer de gebruikelijke bovenmarge onvoldoende ruimte laat.
 
+- Pokémon Tower gebruikt nu de bijgewerkte artist-visual, met behoud van de vloermasks en handmatig geplaatste aankomstpunten.
+
+- Pokémon Tower in Lavender Town heeft nu zeven verbonden verdiepingen met vloermasks en cameragrenzen die de andere verdiepingen verbergen.
+
+- Mt. Moon 1F, B1F and B2F now have overworld Pokémon matching their cave encounter pools.
+
+- Lavender Town House 1 heeft nu het Lavender Home-interieur en een doorgang van en naar het paarse huis in het noordoosten.
+
+- Lavender Town House 2 heeft nu het Mauve-interieur en een doorgang van en naar het kleine blauwe huis in het zuidwesten.
+
+- Lavender Town House 3 heeft nu het blauwe artist-interieur en een doorgang van en naar het huis in het zuidoosten.
+
+- Route 3’s mountain ridges now have roaming Geodude and Onix.
+
 - Route 3 now has roaming overworld Spearow, Pidgey and Jigglypuff, matching its FireRed/LeafGreen wild encounter pool.
 
 - Mr. Fuji’s House in Lavender Town heeft nu het artist-interieur en een doorgang van en naar het huis met het paarse dak in het noordoosten.

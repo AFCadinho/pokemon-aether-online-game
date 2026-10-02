@@ -968,14 +968,44 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 			"spawnPoints": {
+				"from_house_1": {
+					"facingDirection": "down",
+					"label": "House 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse1",
+					"tile": {
+						"x": 40,
+						"y": 27
+					}
+				},
+				"from_house_2": {
+					"facingDirection": "down",
+					"label": "House 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse2",
+					"tile": {
+						"x": 13,
+						"y": 32
+					}
+				},
+				"from_house_3": {
+					"facingDirection": "down",
+					"label": "House 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse3",
+					"tile": {
+						"x": 41,
+						"y": 37
+					}
+				},
 				"from_mr_fuji_house": {
 					"facingDirection": "down",
 					"label": "Mr Fuji House",
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromMrFujiHouse",
 					"tile": {
-						"x": 40,
-						"y": 27
+						"x": 8,
+						"y": 32
 					}
 				},
 				"from_pokecenter": {
@@ -986,6 +1016,16 @@
 					"tile": {
 						"x": 8,
 						"y": 13
+					}
+				},
+				"from_pokemon_tower": {
+					"facingDirection": "down",
+					"label": "Pokemon Tower",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromPokemonTower",
+					"tile": {
+						"x": 33,
+						"y": 16
 					}
 				},
 				"from_route_10": {
@@ -1040,6 +1080,72 @@
 				}
 			}
 		},
+		"kanto_lavender_town_house_1": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Lavender Town House 1",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
+			"spawnPoints": {
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 12,
+						"y": 18
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_house_2": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Lavender Town House 2",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn",
+			"spawnPoints": {
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_house_3": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Lavender Town House 3",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
+			"spawnPoints": {
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 9,
+						"y": 14
+					}
+				}
+			}
+		},
 		"kanto_lavender_town_mr_fuji_house": {
 			"areaType": "interior",
 			"defaultMode": "open",
@@ -1047,7 +1153,9 @@
 			"locationGroupId": "kanto_lavender_town",
 			"locationGroupLabel": "Lavender Town",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://3mw652hbm06g"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
 			"spawnPoints": {
 				"from_lavender_town": {
@@ -1090,6 +1198,150 @@
 					"tile": {
 						"x": 14,
 						"y": 23
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_pokemon_tower": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Pokémon Tower",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [
+				"uid://dy70wkcs4i0uk"
+			],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+			"spawnPoints": {
+				"floor_1_from_2": {
+					"facingDirection": "down",
+					"label": "Floor 1 From 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor1From2",
+					"tile": {
+						"x": 18,
+						"y": 10
+					}
+				},
+				"floor_2_from_1": {
+					"facingDirection": "down",
+					"label": "Floor 2 From 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor2From1",
+					"tile": {
+						"x": 48,
+						"y": 10
+					}
+				},
+				"floor_2_from_3": {
+					"facingDirection": "down",
+					"label": "Floor 2 From 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor2From3",
+					"tile": {
+						"x": 33,
+						"y": 13
+					}
+				},
+				"floor_3_from_2": {
+					"facingDirection": "down",
+					"label": "Floor 3 From 2",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor3From2",
+					"tile": {
+						"x": 60,
+						"y": 12
+					}
+				},
+				"floor_3_from_4": {
+					"facingDirection": "down",
+					"label": "Floor 3 From 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor3From4",
+					"tile": {
+						"x": 74,
+						"y": 13
+					}
+				},
+				"floor_4_from_3": {
+					"facingDirection": "down",
+					"label": "Floor 4 From 3",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor4From3",
+					"tile": {
+						"x": 19,
+						"y": 38
+					}
+				},
+				"floor_4_from_5": {
+					"facingDirection": "down",
+					"label": "Floor 4 From 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor4From5",
+					"tile": {
+						"x": 5,
+						"y": 39
+					}
+				},
+				"floor_5_from_4": {
+					"facingDirection": "down",
+					"label": "Floor 5 From 4",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor5From4",
+					"tile": {
+						"x": 32,
+						"y": 38
+					}
+				},
+				"floor_5_from_6": {
+					"facingDirection": "down",
+					"label": "Floor 5 From 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor5From6",
+					"tile": {
+						"x": 46,
+						"y": 39
+					}
+				},
+				"floor_6_from_5": {
+					"facingDirection": "down",
+					"label": "Floor 6 From 5",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor6From5",
+					"tile": {
+						"x": 75,
+						"y": 38
+					}
+				},
+				"floor_6_from_7": {
+					"facingDirection": "down",
+					"label": "Floor 6 From 7",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor6From7",
+					"tile": {
+						"x": 69,
+						"y": 44
+					}
+				},
+				"floor_7_from_6": {
+					"facingDirection": "down",
+					"label": "Floor 7 From 6",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "Floor7From6",
+					"tile": {
+						"x": 13,
+						"y": 70
+					}
+				},
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 11,
+						"y": 18
 					}
 				}
 			}
@@ -5003,10 +5255,54 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_lavender_town__to_house_1": {
+			"destination": {
+				"mapId": "kanto_lavender_town_house_1",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_lavender_town_house_1",
+			"sourceMapId": "kanto_lavender_town"
+		},
+		"kanto_lavender_town__to_house_2": {
+			"destination": {
+				"mapId": "kanto_lavender_town_house_2",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_lavender_town_house_2",
+			"sourceMapId": "kanto_lavender_town"
+		},
+		"kanto_lavender_town__to_house_3": {
+			"destination": {
+				"mapId": "kanto_lavender_town_house_3",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_lavender_town_house_3",
+			"sourceMapId": "kanto_lavender_town"
+		},
 		"kanto_lavender_town__to_mr_fuji_house": {
 			"destination": {
 				"mapId": "kanto_lavender_town_mr_fuji_house",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://3mw652hbm06g"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn",
 				"position": {
 					"x": 400.0,
@@ -5031,6 +5327,22 @@
 			"destinationAreaId": "kanto_lavender_town_pokemon_center",
 			"sourceMapId": "kanto_lavender_town"
 		},
+		"kanto_lavender_town__to_pokemon_tower": {
+			"destination": {
+				"mapId": "kanto_lavender_town_pokemon_tower",
+				"mapSceneAliases": [
+					"uid://dy70wkcs4i0uk"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
+				"position": {
+					"x": 368.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_lavender_town_pokemon_tower",
+			"sourceMapId": "kanto_lavender_town"
+		},
 		"kanto_lavender_town__to_route10": {
 			"destination": {
 				"mapId": "kanto_route_10",
@@ -5047,7 +5359,7 @@
 			"destinationAreaId": "kanto_route_10",
 			"sourceMapId": "kanto_lavender_town"
 		},
-		"kanto_lavender_town_mr_fuji_house__to_outside": {
+		"kanto_lavender_town_house_1__to_outside": {
 			"destination": {
 				"mapId": "kanto_lavender_town",
 				"mapSceneAliases": [
@@ -5057,6 +5369,54 @@
 				"position": {
 					"x": 1296.0,
 					"y": 880.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_house_1"
+		},
+		"kanto_lavender_town_house_2__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 432.0,
+					"y": 1040.0
+				},
+				"spawnMarker": "FromHouse2"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_house_2"
+		},
+		"kanto_lavender_town_house_3__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 1328.0,
+					"y": 1200.0
+				},
+				"spawnMarker": "FromHouse3"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_house_3"
+		},
+		"kanto_lavender_town_mr_fuji_house__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 272.0,
+					"y": 1040.0
 				},
 				"spawnMarker": "FromMrFujiHouse"
 			},
@@ -5078,6 +5438,22 @@
 			},
 			"destinationAreaId": "kanto_lavender_town",
 			"sourceMapId": "kanto_lavender_town_pokemon_center"
+		},
+		"kanto_lavender_town_pokemon_tower__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 1072.0,
+					"y": 528.0
+				},
+				"spawnMarker": "FromPokemonTower"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_pokemon_tower"
 		},
 		"kanto_mt_moon_1f__to_b1f_1": {
 			"destination": {

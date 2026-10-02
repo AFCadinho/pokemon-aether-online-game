@@ -15,6 +15,7 @@
 [ext_resource type="Script" uid="uid://cejfjhq3lc1ju" path="res://scripts/world/story/mt_moon_ambush_trigger.gd" id="12_ambush_trigger"]
 [ext_resource type="Script" uid="uid://ds673r25jssgd" path="res://scripts/world/story/mt_moon_ambush_controller.gd" id="13_ambush_controller"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="14_story_hook"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="15_pokemon"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0vl8t"]
 texture = ExtResource("2_4qmrm")
@@ -291,6 +292,39 @@ npc_sprite_frames = ExtResource("7_scientist")
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=494345931]
 
+[node name="Geodude" parent="Entities/Pokemon" unique_id=190001301 instance=ExtResource("15_pokemon")]
+position = Vector2(1456, 880)
+overworld_pokemon_id = "kanto_mt_moon_b2f_geodude_1"
+species_id = "geodude"
+level = 10
+display_name = "Geodude"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 34.0
+
+[node name="Zubat" parent="Entities/Pokemon" unique_id=190001302 instance=ExtResource("15_pokemon")]
+position = Vector2(1648, 752)
+overworld_pokemon_id = "kanto_mt_moon_b2f_zubat_1"
+species_id = "zubat"
+level = 10
+display_name = "Zubat"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 38.0
+
+[node name="Clefairy" parent="Entities/Pokemon" unique_id=190001303 instance=ExtResource("15_pokemon")]
+position = Vector2(400, 1488)
+overworld_pokemon_id = "kanto_mt_moon_b2f_clefairy_1"
+species_id = "clefairy"
+level = 11
+display_name = "Clefairy"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.2
+movement_speed_pixels = 28.0
+
 [node name="StoryMarkers" type="Node2D" parent="Entities" unique_id=680190816]
 
 [node name="MiguelCleared" type="Marker2D" parent="Entities/StoryMarkers" unique_id=1849205268]
@@ -301,12 +335,12 @@ position = Vector2(752, 688)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
-[node name="Ether" parent="Entities/Interactables/Items" instance=ExtResource("8_item")]
-position = Vector2(2080, 512)
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=272177116]
+
+[node name="Ether" parent="Entities/Interactables/Items" unique_id=1367018048 instance=ExtResource("8_item")]
+position = Vector2(1616, 464)
 pickup_id = "kanto_mt_moon_b2f_ether"
 item_id = "ether"
-
 
 [node name="HelixFossil" parent="Entities/Interactables/Items" unique_id=37076334 instance=ExtResource("8_item")]
 position = Vector2(784, 560)
@@ -324,7 +358,7 @@ pickup_id = "kanto_mt_moon_b2f_tm_thief"
 item_id = "tm-thief"
 
 [node name="Revive" parent="Entities/Interactables/Items" unique_id=1810450543 instance=ExtResource("8_item")]
-position = Vector2(464, 1232)
+position = Vector2(464, 1200)
 pickup_id = "kanto_mt_moon_b2f_revive"
 item_id = "revive"
 
@@ -334,7 +368,7 @@ pickup_id = "kanto_mt_moon_b2f_star_piece"
 item_id = "star-piece"
 
 [node name="Antidote" parent="Entities/Interactables/Items" unique_id=33676360 instance=ExtResource("8_item")]
-position = Vector2(2192, 2160)
+position = Vector2(560, 2288)
 pickup_id = "kanto_mt_moon_b2f_antidote"
 item_id = "antidote"
 
