@@ -7,7 +7,6 @@ const TrainerDefinitionResource := preload("res://scripts/world/npcs/trainer_def
 const FIRST_ENCOUNTER_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_first_encounter.png")
 const REMATCH_MARKER_TEXTURE := preload("res://assets/ui/icons/trainer_challenge.png")
 const INTRO_DIALOGUE_DELAY_SECONDS := 0.2
-const BATTLE_TRANSITION_DELAY_SECONDS := 0.35
 const SLEEPING_REFRESH_INTERVAL_MSEC := 60_000
 const REMATCH_MARKER_BASE_POSITION := Vector2(-24.0, -132.0)
 
@@ -156,7 +155,6 @@ func _show_battle_dialogue(is_rematch: bool) -> void:
 	
 	dialogue_box.start_dialogue(dialogue_lines, speaker_name, mugshot)
 	await dialogue_box.dialogue_finished
-	await get_tree().create_timer(BATTLE_TRANSITION_DELAY_SECONDS).timeout
 	var battle_metadata := trainer_metadata.duplicate(true)
 	battle_metadata["_is_rematch"] = is_rematch
 	var battle_result: Dictionary = await start_trainer_battle(battle_metadata)

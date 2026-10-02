@@ -226,3 +226,42 @@ the layout check's exit-time ObjectDB warning remain.
 
 This follow-up was tested first on desktop as requested. Browser/Android and
 logged-in player encounters were not rerun; no APK was installed or published.
+
+## NPC battle entrance latency — 2026-10-02
+
+The trainer path still had a fixed 350 ms pause after closing intro dialogue,
+then awaited position saving and battle creation before mounting the screen.
+Normal NPC setup also held the screen behind two sequential automatic lead
+requests. Metadata/dialogue retrieval and a fresh co-op admission check happen
+earlier; those authority/story checks remain unchanged. This investigation
+identified the code gates, rather than measuring live server timings.
+
+The fixed post-dialogue pause is removed. Fullscreen solo trainer entry now
+reuses the prewarmed arena, sets the real trainer/environment context and begins
+fading before position/battle responses. Known trainer portraits stay visible.
+During automatic leads, combatants, party/action/status controls and mechanical
+preview layers remain hidden and transparent; response-driven `show()` calls
+cannot expose them prematurely. Pending visibility/alpha is restored when the
+lead flow finishes, including lead errors. Configured interactive Team Preview
+leaves pending state before its input phase. Classic trainer transition styles,
+co-op admission, server request ordering, lead choices and summon animations
+remain intact.
+
+`trainer_entry_before_response_check` passed headless and in the rendered Linux
+desktop client. Controlled fixtures block position, battle creation, player
+lead and NPC lead requests; the arena is visible during those waits. They check
+cached scene reuse, trainer context/portrait, action locks, alpha protection
+against intermediate response visibility, failed-start cleanup and interactive
+preview readiness. Lead tests use the real default lead orchestration with
+fixture transport responses; they do not measure actual AI/network latency.
+The rendered creation-pending and leads-pending screenshots were inspected and
+are pixel-identical, retaining both trainer portraits and final platform sizes.
+The X11 window manager reported a transient BadMatch during some diagnostic
+window resizing runs; the fixture assertions and captured images passed.
+
+`wild_entry_before_response_check`, `wild_encounter_transition_check`,
+`npc_battle_team_reveal_check`, `dialogue_metadata_service_check` and
+`trainer_dialogue_cleanup_check` passed. Browser/Android and logged-in NPC
+gameplay were not rerun. No APK was installed, and no build was published.
+The co-op state/admission request can still cause a short wait before entry;
+this change moves the longer creation/automatic-lead waits into the visible arena.

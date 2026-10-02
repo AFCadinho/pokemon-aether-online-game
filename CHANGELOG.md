@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fullscreen NPC battles tonen arena en trainers tijdens het ophalen van battlegegevens en automatische lead-keuzes. De vaste pauze na trainerdialoog is verwijderd.
+
 - Routes 3, 4, 6, 9, 10, 11, 21, 24 and 25, Cerulean City, Mt. Moon B1F and Cerulean Cave now include the missing original-game overworld pickups; unsupported TM43, TM62 and TM69 are represented by Great Balls.
 - Immersive wild battles berekenen de uiteindelijke elementgroottes vóór de fade, zodat arena, Pokémon en HUD niet eerst groot verschijnen en daarna verkleinen.
 

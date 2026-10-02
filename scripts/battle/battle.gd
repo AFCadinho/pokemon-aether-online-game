@@ -7799,6 +7799,7 @@ func setup_trainer_battle_from_response(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID,
 	is_training_ai: bool = false
 ) -> void:
+	var early_arena := has_meta("battle_entry_pending")
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
 	training_ai_battle = is_training_ai
 	if training_ai_battle:
@@ -7822,14 +7823,20 @@ func setup_trainer_battle_from_response(
 
 	if not team_preview_enabled:
 		_show_default_trainer_leads_before_selection(player_pokemon, api_response)
+		if early_arena:
+			prepare_pending_entry(environment_id, BattleType.TRAINER, trainer_data)
 
 	# Interactive Team Preview must be revealed before the player can choose.
-	# Regular NPC battles stay covered while both automatic lead requests finish,
-	# preventing the server's mechanical preview phase from flashing on screen.
+	# Early fullscreen entry keeps only the arena/trainers visible while automatic
+	# lead requests run; the mechanical preview phase stays hidden. Classic retains
+	# its covered transition until the authoritative leads are ready.
 	if team_preview_enabled:
 		await _notify_trainer_entry_ready(entry_ready_callback)
 
 	var lead_response := await _run_trainer_lead_selection(api_response)
+	if has_meta("battle_entry_pending"):
+		_finish_pending_entry()
+	update_entry_layout()
 	if not team_preview_enabled:
 		if not lead_response.is_empty():
 			await _prepare_team_preview_lead_summon_transition()
@@ -8239,35 +8246,46 @@ func update_entry_layout() -> void:
 
 var _pending_entry_visibility: Array[Dictionary] = []
 
-func prepare_pending_entry(environment_id: StringName) -> void:
+func prepare_pending_entry(
+	environment_id: StringName,
+	type: BattleType = BattleType.WILD,
+	trainer_data: Dictionary = {}
+) -> void:
 	set_meta("battle_entry_pending", true)
-	battle_type = BattleType.WILD
+	battle_type = type
 	_apply_battle_environment(environment_id)
 	_set_battle_actions_ready(false)
 	_set_battle_input_locked(true)
-	var controls: Array[Control] = [player_sprite_box, enemy_sprite_box,
+	var controls: Array[CanvasItem] = [player_sprite_box, enemy_sprite_box,
 		player_hud_panel, enemy_hud_panel, moves_grid, action_buttons,
 		current_action_panel, mechanics_panel, field_timers_panel,
 		player_stage_party_grid, opponent_party_grid, battle_party_rail, player_party_grid,
 		get_node("%ActionsDock"), get_node("%UtilityActions"),
 		get_node("%VSPanelContainer"), get_node("%BattleStatusPanel"),
-		get_node("%PlayerStagePartyRail"), get_node("%OpponentStagePartyRail")]
+		get_node("%PlayerStagePartyRail"), get_node("%OpponentStagePartyRail"),
+		player_team_preview_layer, enemy_team_preview_layer]
 	var presenter := battle_stage.get_node_or_null("ExperimentalBattle3D") as Control
 	if presenter != null:
 		controls.append(presenter)
-	for control: Control in controls:
-		_pending_entry_visibility.append({"control": control, "visible": control.visible})
+	for control: CanvasItem in controls:
+		_pending_entry_visibility.append({"control": control, "visible": control.visible, "modulate": control.modulate})
 		control.hide()
+		# Authoritative response refreshes may show a control while leads wait.
+		# Keep it transparent until entry owns the final, authoritative display.
+		control.modulate.a = 0.0
 	_show_local_player_trainer()
+	if type == BattleType.TRAINER:
+		_show_npc_opponent_trainer(trainer_data)
 	update_entry_layout()
 
 func _finish_pending_entry() -> void:
 	update_entry_layout()
 	remove_meta("battle_entry_pending")
 	for state: Dictionary in _pending_entry_visibility:
-		var control: Control = state.control
+		var control: CanvasItem = state.control
 		if is_instance_valid(control):
 			control.visible = state.visible
+			control.modulate = state.modulate
 	_pending_entry_visibility.clear()
 
 func _prepare_battle_setup(
