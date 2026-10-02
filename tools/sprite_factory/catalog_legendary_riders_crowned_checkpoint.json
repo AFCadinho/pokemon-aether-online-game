@@ -1,0 +1,1498 @@
+{
+  "schema": 1,
+  "task": "legendary-riders-crowned",
+  "date": "2026-10-02",
+  "appearance_approved": false,
+  "battle_approved": false,
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "zacian-crowned",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/zacian-crowned/normal/model.glb",
+      "glb_sha256": "1b2df8e2548f4da0cb5884fcf1767d18e8df2acabbe529ce144c8640fc776e3e",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/zacian-crowned.scn",
+      "runtime_sha256": "e5c7fe3042f3ad5f82cced6a422181ceffe8c9d73089e5c9c2da3358916f9bf0",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0938_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.4,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0938_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "authored_own_idle_with_own_faint_eyelids"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 144.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "zacian-crowned-shiny",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/zacian-crowned/shiny/model.glb",
+      "glb_sha256": "87d08e0ff2c5b17680e19870e8afe36c9f598c8ec20494e8a5880653a5e00ceb",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/zacian-crowned-shiny.scn",
+      "runtime_sha256": "2ef9afbc1eb4310dd2d543ec7cd93bb0720e621460b5025a4fb966f95a6f7cbb",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0938_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.4,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0938_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "authored_own_idle_with_own_faint_eyelids"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0938_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 90.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 144.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "zamazenta-crowned",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/zamazenta-crowned/normal/model.glb",
+      "glb_sha256": "a4c715dc63d09b3cd91b4d42e710cebcf00110d152bfa7984567462326d34490",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/zamazenta-crowned.scn",
+      "runtime_sha256": "90c9aae15ddc25ed3847f1bd2e24cff4b4a01cd6895032933ffbf34d73e054bf",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0939_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.4,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0939_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "authored_own_idle_with_own_faint_eyelids"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 144.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "zamazenta-crowned-shiny",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/zamazenta-crowned/shiny/model.glb",
+      "glb_sha256": "c99b8630bac890abe2d22d24cae87918bccfdd288995229469b458d8fc83fb32",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/zamazenta-crowned-shiny.scn",
+      "runtime_sha256": "b4de97f01a173f95dd0907edb9cb3f9148cfd7ae473769fe4c122633b3b909cd",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0939_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.4,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0939_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "authored_own_idle_with_own_faint_eyelids"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0939_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 144.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "calyrex-ice",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/calyrex-ice/normal/model.glb",
+      "glb_sha256": "76c8b6dd0954a3f5df7cb9f7e343122eed8b170dadf6ff359029dfc7d5191b08",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/calyrex-ice.scn",
+      "runtime_sha256": "fbb6995001d349c781b30502f8a38bdea7ed34e3ff6f0c9eba70ae464921d2fb",
+      "clips": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 4.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "calyrex-ice-shiny",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/calyrex-ice/shiny/model.glb",
+      "glb_sha256": "27a0a8b79193d9daadcff98e1b4d672016658337efc184c515d265b0d76d89ee",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/calyrex-ice-shiny.scn",
+      "runtime_sha256": "6bfd598beff086e62917c5826fc8c60511951e7c5a7d0e64969419df5b1c177e",
+      "clips": {
+        "damage": {
+          "duration": 0.833333333333333,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 4.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_12_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 100.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 240.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "calyrex-shadow",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/calyrex-shadow/normal/model.glb",
+      "glb_sha256": "ca977f1c37120bcc242e7aa841eda66d387eeda16b2b07cda62920712f2d6c17",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/calyrex-shadow.scn",
+      "runtime_sha256": "ac2c6ef02d6ab56d2f2875f36b0012065ba2e465b7812b8f07f04080459c0cae",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    },
+    {
+      "species": "calyrex-shadow-shiny",
+      "path": ".tmp/legendary-riders-crowned-v1/materials/calyrex-shadow/shiny/model.glb",
+      "glb_sha256": "6c708ee074f91f332a8620054a725433e6ed52e54b76c7df062497df56090b48",
+      "runtime_path": ".tmp/legendary-riders-crowned-v1/runtime-v2/calyrex-shadow-shiny.scn",
+      "runtime_sha256": "bd8bfad5a86219ff78302bc36fa2b1a50244be4775ba18dbde02a8b0ae525ed2",
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 1.66666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 2.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.66666666666667,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0986_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.7,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0986_13_00_00450_rangeattack01"
+        }
+      },
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 100.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 162.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "complete_pose_channels": true,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ],
+        [
+          "idle",
+          0.0,
+          "face"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "face"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "face"
+        ],
+        [
+          "sleep",
+          0.5,
+          "face"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "face"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "face"
+        ]
+      ],
+      "appearance_approved": false,
+      "battle_approved": false,
+      "runtime_approved": false
+    }
+  ],
+  "evidence_sha256": {
+    ".tmp/legendary-riders-crowned-v1/export-status.json": "90e89f2a9cdd8eac5f2d1feb74aa80266311ed667c622a4d01692f9827ba445f",
+    ".tmp/legendary-riders-crowned-v1/material-status.json": "3bb600c2cafc384069e09b433383d0bb239807171f38191b08d3ecd9172e74a4",
+    ".tmp/legendary-riders-crowned-v1/stage-visibility-v2.json": "f168ee67ca11b82936cc6a11e9c07171b500b34e8953f13be94c2d1208814210",
+    ".tmp/legendary-riders-crowned-v1/runtime-v2/report.json": "286857fa6c5eb0f8e01458bb89116c479737dace442dc1b92708298140863898",
+    ".tmp/legendary-riders-crowned-v1/appearance-captures-v3/catalog.json": "4d1f1852a023bab38f0e70ce00ad7c77da34b8345c517cd013704386dd48955a",
+    ".tmp/legendary-riders-crowned-v1/appearance-captures-v3/godot-review.json": "64169a3a9f3d2ce3ba3646659a5fc2bb624d1d8edc45f4c8d3b36f079490be6a",
+    ".tmp/legendary-riders-crowned-v1/visibility-check.json": "50e6feb07cbec2a08cd7f71a4df278ab10f471f5b6cfe371581951d1c8d39812",
+    ".tmp/legendary-riders-crowned-v1/review-v1/manifest.json": "e472fbd50aee8c2b68ee74bd5f58655005563610fec610a00e8dd19dd849191e"
+  },
+  "review_page": ".tmp/legendary-riders-crowned-v1/review-v1/index.html",
+  "source_limitations": [
+    "Zacian and Zamazenta sleep is an own-rig authored rest; native faint loops preserved",
+    "Native material animation tracks are not applied; exact layered albedo and emission are reviewed",
+    "Inherited eyelid warnings are retained in original import reports; faces included in low and side camera captures"
+  ]
+}

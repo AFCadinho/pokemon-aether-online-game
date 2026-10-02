@@ -152,6 +152,8 @@ func _review(entry: Dictionary, output: String) -> Dictionary:
 		var direction := Vector3(3, 2, 7) if pose[2] == "front" else Vector3(-3, 2, -7)
 		if pose[2] == "eye":
 			direction = Vector3(2, 0.4, 7)
+		if pose[2] == "side":
+			direction = Vector3(7, 0.8, 3)
 		if pose[2] == "face":
 			direction = Vector3(0, 0.4, 7)
 		camera.position = target + direction.normalized() * camera.size * 3
