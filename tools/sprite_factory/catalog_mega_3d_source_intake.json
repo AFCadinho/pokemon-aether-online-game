@@ -1518,8 +1518,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "delphoxmega",
@@ -1541,8 +1543,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "greninjamega",
@@ -1564,8 +1568,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "pyroarmega",
@@ -1587,8 +1593,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "floettemega",
@@ -1610,8 +1618,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "meowsticfmega",
@@ -1643,8 +1653,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "malamarmega",
@@ -1666,8 +1678,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "barbaraclemega",
@@ -1689,8 +1703,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "dragalgemega",
@@ -1712,8 +1728,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "hawluchamega",
@@ -1759,8 +1777,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "dianciemega",
@@ -1783,8 +1803,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "crabominablemega",
@@ -1806,8 +1828,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "golisopodmega",
@@ -1829,8 +1853,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "drampamega",
@@ -1852,8 +1878,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "magearnamega",
@@ -1875,8 +1903,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "magearnaoriginalmega",
@@ -1898,8 +1928,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "zeraoramega",
@@ -1921,8 +1953,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "falinksmega",
@@ -1944,8 +1978,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "scovillainmega",
@@ -1967,8 +2003,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "glimmoramega",
@@ -1990,8 +2028,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "tatsugiricurlymega",
@@ -2013,8 +2053,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "tatsugiridroopymega",
@@ -2036,8 +2078,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "tatsugiristretchymega",
@@ -2059,8 +2103,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     },
     {
       "showdown_id": "baxcaliburmega",
@@ -2082,8 +2128,10 @@
       },
       "candidate_production_checkpoint": "catalog_mega_24_candidate_production.json",
       "local_runtime_approved": true,
-      "published": false,
-      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3"
+      "published": true,
+      "bundle_qualification_sha256": "19874143e1738e01ae877e57bbfb7d52a14304607f4d630736e41c4c14f4b3e3",
+      "publication_receipt": "release/approved_3d_mega_24_r2_upload.json",
+      "publication_receipt_sha256": "eeea35acc4f6fd0c443e04c276af6ad4025957537f35c6b36058ae5e47571340"
     }
   ]
 }
