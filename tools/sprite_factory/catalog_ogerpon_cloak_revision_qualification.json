@@ -1,0 +1,130 @@
+{
+  "admitted_registry_check_passed": true,
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "ogerpon-wellspring",
+            "runtime_sha256": "01bd9248ea7b32ec88b6ff3b6202e6c1dddd6ab10ec5db56b2d3d49876864d16",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "ogerpon-wellspring@shiny",
+            "runtime_sha256": "0943af98c83ff2591d72800c0e916f5f5af125870f5899d25dfb6001ec7336d5",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:ogerpon-wellspring:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 1017,
+        "object_key": "optional-assets/pokemon_3d/ogerpon-wellspring/base/v2-0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32.zip",
+        "sha256": "0c3f9fa4c7a87cb32efb2cefde02a8c976c185d073af66b33ea78f70724aeb32",
+        "size_bytes": 35964168,
+        "species_id": "ogerpon-wellspring",
+        "version": 2
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "ogerpon-hearthflame",
+            "runtime_sha256": "441eae2beb784c0fada221139d344f7a6a4a442abe0a15e2f1328952fd42d5e3",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "ogerpon-hearthflame@shiny",
+            "runtime_sha256": "cfede451127a78c77534ff893488e0ba3e58c967a3eea51331d4681dac2eebb1",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:ogerpon-hearthflame:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 1017,
+        "object_key": "optional-assets/pokemon_3d/ogerpon-hearthflame/base/v2-590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1.zip",
+        "sha256": "590bafd38ca267215b45e1b7136fd6a234e8d4066ccf8d6a06beb7f01770bff1",
+        "size_bytes": 34658668,
+        "species_id": "ogerpon-hearthflame",
+        "version": 2
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "ogerpon-cornerstone",
+            "runtime_sha256": "04571721da5a26cfaf0ba3112ebda08a210566ff5b59ea87e2067c8b72813e54",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "ogerpon-cornerstone@shiny",
+            "runtime_sha256": "699d680bf3bdb36715a74cead81827c7ae3d2c5ae5661895d504ee199851d433",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:ogerpon-cornerstone:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 1017,
+        "object_key": "optional-assets/pokemon_3d/ogerpon-cornerstone/base/v2-ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa.zip",
+        "sha256": "ce3f573573f8d5c5431b53e49f4d9b9a746573c75c938a1649bf6d4d8e0e83fa",
+        "size_bytes": 34401736,
+        "species_id": "ogerpon-cornerstone",
+        "version": 2
+      }
+    ],
+    "catalog_revision": "ogerpon-native-cloak-colours-v2",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 105024572,
+  "date": "2026-10-02",
+  "evidence_sha256": {
+    ".tmp/ogerpon-cloak-colors-v6/approved/battle-check.log": "c1e3a99b492bb66b69f236a865b5b53576e6c2bac0c181fbadeceb375a63659e",
+    ".tmp/ogerpon-cloak-colors-v6/approved/bundles/asset-index.json": "d84d2d3eb50846258e8de0733f7cd30f45c54bd0c13d13c9dc467e5d362c049a",
+    ".tmp/ogerpon-cloak-colors-v6/approved/install.log": "91c6dc4516ff3be98eba60b6738224bbd65d8a9bcd1d479a98685dd0a9306b9e",
+    ".tmp/ogerpon-cloak-colors-v6/approved/installed/installed-catalog.json": "ba5cec81b1239f94ee65e68c0afeae78a7724fe2b115b8b68cbb1f003515950f",
+    ".tmp/ogerpon-cloak-colors-v6/approved/parity-input.json": "d8dc29babb8c9e79ed4528fdd7692757c0ac7542a61c11cbc345ec5aaec7dfdd",
+    ".tmp/ogerpon-cloak-colors-v6/approved/previous-registry.json": "9d16efd78b24bfa8c5b3047392190f3f68c04c3b8eea44da63680ff0573399a8",
+    ".tmp/ogerpon-cloak-colors-v6/approved/registry-check.log": "99a0c4759ab010ec2142d2ab5c2238e4e1cfb7410834873d2110361a6fa71608",
+    ".tmp/ogerpon-cloak-colors-v6/approved/runtime-catalog-final.json": "e83ed5ef2cfae8cb969eeb695b30e15ba682cba6f01855eba20bfb1a4e94f322",
+    ".tmp/ogerpon-cloak-colors-v6/approved/runtime-fixture.json": "34f9dc8660c13c327a06f547c9633d88a117b66ab0747859b728cdabf064edce",
+    ".tmp/ogerpon-cloak-colors-v6/approved/runtime-parity.json": "86187fcd6b5faff69cfce62ad00c27c2ded486725a230a5bf219cab125e2fa93",
+    ".tmp/ogerpon-cloak-colors-v6/approved/update.log": "ba783ec5e031dfd04bf1a3a2cd42ce89d4723c19a65b60321a1989ce7562427f",
+    ".tmp/ogerpon-cloak-colors-v6/captures/godot-review.json": "df5e06fdc8bae683ef6a0e5d864df433c1bf7e684ba47d4d533696d1af5eb567",
+    ".tmp/ogerpon-cloak-colors-v6/maskless/godot-review.json": "9820e5957c09392feea32479c6b2ad99172afd59861b8d9f72a126360b443179",
+    "tests/battle_3d_ogerpon_bundle_update_check.gd": "95da0b9fb0ac975c0ad535839115ef450633eb1515926fa424717787e4be2e52",
+    "tests/battle_3d_ogerpon_cloak_revision_check.gd": "ee68613ac06d867538c4ca79e4d67faca71d497ce777afe9a284c6535f86afe3",
+    "tests/battle_3d_ogerpon_registry_revision_check.gd": "e6817f991e85b437395411cda0294175e8ffe3cddeaeae9f767652379adc4abd",
+    "tools/sprite_factory/admit_ogerpon_cloak_revision.py": "d328313712ae1583f3d7839d17960f46717790917a52261206f2a949203a1ac7",
+    "tools/sprite_factory/catalog_animation_material_worker.py": "fe44d14221d8f1cf6dc1c4a8bea0e42de57c86911f5b049ecc6b8c97f5984755",
+    "tools/sprite_factory/catalog_ogerpon_form_palette_checkpoint.json": "7867e531177375228e2ef2d9f208e97832b1156439d69f3e40215a7c743facc7",
+    "tools/sprite_factory/catalog_ogerpon_form_palette_review.py": "51329fd2d646c799df81124de5bbf40f812b80c64f9eab1dade040750eb95203",
+    "tools/sprite_factory/scvi_form_material.py": "8cd09510b7f21bc2adcb5c4fab4157c2f86036325cfbcd55750a372f10d09e71"
+  },
+  "models": 6,
+  "previous_qualification_sha256": "f2e786eace702bda82015925175aab2fac35f0d656f79261b5963502be025de1",
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release content-index activation",
+    "release certification/publication"
+  ],
+  "runtime_approved": true,
+  "schema": 1,
+  "scope": "Native mesh-bound TRMMT cloak palettes; exact previous/new scene geometry/skin/motion parity; approved profiles preserved; six standalone pose checks; native shiny faces confirmed; local fresh install and v1-to-v2 update/no-op/restart; real battle normal/shiny loading and attacks. Previous geometry, camera clearance and performance qualifications reused for material-only revision.",
+  "species": [
+    "ogerpon-wellspring",
+    "ogerpon-hearthflame",
+    "ogerpon-cornerstone"
+  ]
+}

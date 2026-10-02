@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Ogerpon Wellspring, Hearthflame en Cornerstone hebben nu de juiste schouder- en mantelkleuren, normal en shiny, met bijgewerkte individuele 3D-bundles.
+
 - Calyrex Ice Rider en Shadow Rider, Zacian Crowned en Zamazenta Crowned zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met individuele downloadbundles en vooraf geladen modellen.
 
 - Route 9, Route 10 en beide Rock Tunnel-verdiepingen bevatten nu zichtbare, aanspreekbare overworld-Pokémon.

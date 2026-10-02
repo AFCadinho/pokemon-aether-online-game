@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "status": "cloak_colours_visually_approved_shiny_verified_from_native_sources",
-  "visual_approved": false,
-  "runtime_approved": false,
+  "status": "locally_qualified_bundles_v2_pending_publication",
+  "visual_approved": true,
+  "runtime_approved": true,
   "issue": "Native TRMMT form palette was omitted; all mask forms retained green cloak layers.",
   "review_url": "http://127.0.0.1:8794/ogerpon-cloak-colors-v6/review.html",
   "palette_sampling": "discrete form index; sparse channels retain previous value",
@@ -562,5 +562,6 @@
   "cloak_visual_approved": true,
   "user_feedback": "Dit is inderdaad goed. Ik zie alleen geen verschil tussen shiny en non shiny.",
   "shiny_note": "Native normal and rare tables use different face albedo and eye layer 4; masks and form cloak palette are unchanged between variants.",
-  "shiny_face_review_url": "http://127.0.0.1:8794/ogerpon-cloak-colors-v6/shiny-face.html"
+  "shiny_face_review_url": "http://127.0.0.1:8794/ogerpon-cloak-colors-v6/shiny-face.html",
+  "user_approval": "Oke, akkoord"
 }
