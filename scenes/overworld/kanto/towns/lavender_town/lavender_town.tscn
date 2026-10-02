@@ -183,7 +183,7 @@ position = Vector2(720, 80)
 [node name="FromPokecenter" type="Marker2D" parent="Spawns" unique_id=927047712]
 position = Vector2(272, 432)
 
-[node name="FromPokemonTower" type="Marker2D" parent="Spawns"]
+[node name="FromPokemonTower" type="Marker2D" parent="Spawns" unique_id=336902216]
 position = Vector2(1072, 528)
 
 [node name="FromHouse1" type="Marker2D" parent="Spawns" unique_id=390131023]
@@ -229,7 +229,7 @@ shape = SubResource("shape_pokemon_center_door")
 z_as_relative = false
 position = Vector2(0, -16)
 
-[node name="ToPokemonTower" type="Area2D" parent="Exits"]
+[node name="ToPokemonTower" type="Area2D" parent="Exits" unique_id=1888596360]
 position = Vector2(1072, 496)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn"
@@ -237,11 +237,11 @@ target_spawn_name = "FromLavenderTown"
 transition_id = "kanto_lavender_town__to_pokemon_tower"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonTower"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokemonTower" unique_id=96666641]
 position = Vector2(0, -16)
 shape = SubResource("shape_pokemon_center_door")
 
-[node name="DoorTransitionHint" parent="Exits/ToPokemonTower" instance=ExtResource("14_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToPokemonTower" unique_id=1073120372 instance=ExtResource("14_door_hint")]
 z_as_relative = false
 
 [node name="ToHouse1" type="Area2D" parent="Exits" unique_id=1454774441]
@@ -608,6 +608,7 @@ position = Vector2(1360, 816)
 position = Vector2(1296, 816)
 
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToPokemonTower" to="Exits/ToPokemonTower" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse1" to="Exits/ToHouse1" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse2" to="Exits/ToHouse2" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToHouse3" to="Exits/ToHouse3" method="_on_body_entered"]
@@ -615,5 +616,3 @@ position = Vector2(1296, 816)
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
-
-[connection signal="body_entered" from="Exits/ToPokemonTower" to="Exits/ToPokemonTower" method="_on_body_entered"]
