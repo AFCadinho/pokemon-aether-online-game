@@ -57,17 +57,19 @@ func _crowd(parent: Node3D) -> void:
 	audience.name = "StadiumAudience"
 	parent.add_child(audience)
 	var spectator_script = preload("res://scripts/battle/arenas/shared/animated_spectator.gd")
-	# A bounded rigged crowd: keep stair aisles clear and face the battle court.
-	# Rear tiers keep the full zoomed-out camera orbit ahead of the audience.
+	# Spread a modest number of rigged spectators over every tier and side.
+	var seats: Array[float] = []
+	for seat in 16:
+		seats.append(-17.0 + float(seat) * (34.0 / 15.0))
 	var index := 0
 	for side in 4:
-		for row in [4, 5, 6, 7, 8]:
-			for seat in [-16.0, -12.0, -7.0, -3.0, 3.0, 7.0, 12.0, 16.0]:
+		for row in [0, 2, 4, 6, 8]:
+			for seat in seats:
 				var spectator: Node3D = spectator_script.new()
 				spectator.name = "Supporter%d" % index
 				spectator.position = Vector3(seat, 2.0 + row * 0.65, -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2)
 				spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
-				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.7)
+				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.84)
 				audience.add_child(spectator)
 				index += 1
 
