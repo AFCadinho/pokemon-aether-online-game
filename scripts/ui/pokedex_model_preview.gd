@@ -95,7 +95,10 @@ func show_species(species: String, shiny: bool) -> bool:
 		if not raw is Array:
 			continue
 		for candidate: Variant in raw:
-			if not candidate is Dictionary or ReviewedModels.entry_key(candidate) != requested_key:
+			if not candidate is Dictionary:
+				continue
+			var candidate_identity := ReviewedModels.canonical_identity(ReviewedModels.entry_key(candidate))
+			if candidate_identity != ReviewedModels.canonical_identity(requested_key):
 				continue
 			var digest := str(candidate.get("runtime_sha256", ""))
 			var model_path := str(candidate.get("runtime_path", ""))

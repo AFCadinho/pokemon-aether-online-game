@@ -906,6 +906,7 @@ func _load_catalog(path: String) -> void:
 			continue
 		if not catalog_entries.has(entry.species):
 			catalog_entries[entry.species] = entry.duplicate(true)
+	ReviewedModels.add_alias_entries(catalog_entries)
 	catalog_read_ms = (Time.get_ticks_usec() - catalog_started) / 1000.0
 	if not catalog_entries.is_empty():
 		catalog_problem = ""
