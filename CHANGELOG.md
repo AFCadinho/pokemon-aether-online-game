@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Tower gebruikt de nieuwste artist-visual, met behoud van de handmatig ingestelde trapovergangen en richtingsblokkades.
+
 - Pokémon Tower gebruikt de nieuwste TMX-visual met bijgewerkte grafstenen, vloeren en healing seal.
 
 - Added Rattata and Ekans to Route 9, and Spearow and Sandshrew to Route 10 as roaming overworld Pokémon.
