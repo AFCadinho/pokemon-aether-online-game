@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_cfsv4"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_ksvxp"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_arbqj"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_gw8qs"]
 [ext_resource type="PackedScene" path="res://scenes/npcs/rock_tunnel_future_self_npc.tscn" id="future_self"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
@@ -182,6 +184,11 @@ transition_facing_direction = "down"
 position = Vector2(16, -16)
 shape = SubResource("shape_1")
 
+[node name="RouteTransitionHint" parent="Exits/ToRoute10North" unique_id=1684134529 instance=ExtResource("4_ksvxp")]
+z_as_relative = false
+position = Vector2(16, 0)
+tile_footprint = Vector2i(3, 1)
+
 [node name="ToRoute10South" type="Area2D" parent="Exits" unique_id=784171144]
 position = Vector2(816, 2288)
 script = ExtResource("3_exit")
@@ -193,6 +200,12 @@ transition_facing_direction = "down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10South" unique_id=395263969]
 position = Vector2(16, 8)
 shape = SubResource("shape_2")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute10South" unique_id=641539279 instance=ExtResource("4_ksvxp")]
+z_as_relative = false
+position = Vector2(16, 0)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="ToB1FA" type="Area2D" parent="Exits" unique_id=1735986171]
 position = Vector2(2448, 368)
@@ -206,6 +219,10 @@ transition_facing_direction = "right"
 position = Vector2(16, 0)
 shape = SubResource("shape_3")
 
+[node name="DoorTransitionHint" parent="Exits/ToB1FA" unique_id=1922774590 instance=ExtResource("5_arbqj")]
+z_as_relative = false
+flow_direction = "right"
+
 [node name="ToB1FB" type="Area2D" parent="Exits" unique_id=1654654914]
 position = Vector2(368, 368)
 script = ExtResource("3_exit")
@@ -217,6 +234,10 @@ transition_facing_direction = "right"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FB" unique_id=340226381]
 position = Vector2(16, 0)
 shape = SubResource("shape_4")
+
+[node name="DoorTransitionHint" parent="Exits/ToB1FB" unique_id=640915252 instance=ExtResource("5_arbqj")]
+z_as_relative = false
+flow_direction = "right"
 
 [node name="ToB1FC" type="Area2D" parent="Exits" unique_id=1989092696]
 position = Vector2(1072, 976)
@@ -231,6 +252,10 @@ transition_facing_direction = "right"
 position = Vector2(16, 0)
 shape = SubResource("shape_5")
 
+[node name="DoorTransitionHint" parent="Exits/ToB1FC" unique_id=220916246 instance=ExtResource("5_arbqj")]
+z_as_relative = false
+flow_direction = "right"
+
 [node name="ToB1FD" type="Area2D" parent="Exits" unique_id=2038914846]
 position = Vector2(2448, 1520)
 script = ExtResource("3_exit")
@@ -242,6 +267,10 @@ transition_facing_direction = "right"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FD" unique_id=1091563312]
 position = Vector2(16, 0)
 shape = SubResource("shape_6")
+
+[node name="DoorTransitionHint" parent="Exits/ToB1FD" unique_id=153582337 instance=ExtResource("5_arbqj")]
+z_as_relative = false
+flow_direction = "right"
 
 [node name="Entities" type="Node2D" parent="." unique_id=522512150]
 z_index = 5
@@ -318,13 +347,13 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("picnicker")
 
 [node name="FutureSelf" parent="Entities/NPCs" unique_id=449111069 instance=ExtResource("future_self")]
-position = Vector2(944, 976)
+position = Vector2(992, 976)
 trainer_id = "kanto_rock_tunnel_future_self"
 sight_range_tiles = 0
 npc_id = "kanto_rock_tunnel_future_self"
 npc_definition_id = "kanto_rock_tunnel_future_self"
 display_name = "Mysterious Trainer"
-facing_direction = Vector2(-1, 0)
+facing_direction = Vector2(1, 0)
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=175204022]
 
