@@ -156,7 +156,10 @@ func _run_checks() -> void:
 		"regular NPC transition reveals the empty field before either lead is summoned"
 	)
 
+	await _check_classic_overlay(transition)
 	transition.queue_free()
+	if not failed:
+		print("wild_encounter_transition_check: PASS")
 	quit(1 if failed else 0)
 
 
@@ -165,3 +168,51 @@ func _check_true(value: bool, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _check_classic_overlay(transition: WildEncounterTransition) -> void:
+	var settings := root.get_node("SettingsManager")
+	var previous_layout: String = settings.battle_ui_layout
+	var previous_mode: String = settings.battle_presentation_mode
+	settings.battle_ui_layout = "classic"
+	settings.battle_presentation_mode = "2d"
+	var world: Variant = Node2D.new()
+	root.add_child(world)
+	world.set_script(load(WORLD_PATH))
+	world.set_process(false)
+	world.wild_encounter_transition = transition
+	world.battle_ui_host = Control.new()
+	world.add_child(world.battle_ui_host)
+	world.active_battle_kind = "wild"
+	var started: int = world._begin_wild_encounter_transition()
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD, "Classic overlay selects transparent wild transition")
+	await world._wait_for_wild_encounter_cover(started)
+	_check_true(is_zero_approx(transition.encounter_flash_alpha()), "Classic wild encounters have no fullscreen flash")
+	world.battle_instance = Control.new()
+	world.battle_instance.size = Vector2(640, 400)
+	_check_true(world._attach_battle_ui(), "Classic battle mounts directly over the world")
+	_check_true(world.battle_screen_host == null, "Classic 2D overlay has no opaque screen host")
+	_check_true(world.classic_wild_backdrop.get_index() < world.battle_instance.get_index(), "Dimming stays behind the battle controls")
+	world._prepare_battle_instance_reveal()
+	_check_true(is_zero_approx(world.battle_instance.modulate.a), "Battle starts transparent")
+	await world._reveal_prepared_wild_battle()
+	_check_true(is_equal_approx(world.battle_instance.modulate.a, 1.0), "Battle fades fully into view")
+	_check_true(world.battle_instance.scale.is_equal_approx(Vector2.ONE), "Battle finishes at its normal size")
+	_check_true(is_equal_approx(world.classic_wild_backdrop.color.a, WildEncounterTransition.CLASSIC_DIM_ALPHA), "Overworld remains softly dimmed during battle")
+	_check_true(not transition.visible, "Entry effect clears after reveal")
+	_check_true(await world._fade_classic_wild_battle_out(), "Normal Classic exit completes")
+	_check_true(is_zero_approx(world.battle_instance.modulate.a) and is_zero_approx(world.classic_wild_backdrop.color.a), "Exit clears the battle and dimming together")
+	world._clear_battle_ui_instance.call_deferred()
+	_check_true(not await world._fade_classic_wild_battle_out(), "Teardown cancels a pending exit without waiting on a killed tween")
+	world._clear_battle_ui_instance()
+	_check_true(world.classic_wild_backdrop == null, "Repeated teardown releases the dimming layer")
+	settings.battle_ui_layout = "immersive"
+	world._begin_wild_encounter_transition()
+	_check_true(transition.transition_style == WildEncounterTransition.STYLE_WILD, "Immersive wild entry keeps its existing transition")
+	await transition.wait_until_covered()
+	await transition.reveal()
+	settings.battle_ui_layout = previous_layout
+	settings.battle_presentation_mode = previous_mode
+	world.set_script(null)
+	world.queue_free()
+	await process_frame
