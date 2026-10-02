@@ -62,8 +62,11 @@ func _run() -> void:
 			mask.call("show_floor", floor_name)
 			var trigger: Array = connection.trigger
 			_check(transition.position == Vector2(float(trigger[0]) * 32 + 16, float(trigger[1]) * 32 + 16), "Stair %dF to %dF uses its artist trigger" % [n, destination_floor])
-			var destination: Array = connection.destinationArrival
-			var landing := Vector2(float(destination[0]) * 32 + 16, float(destination[1]) * 32 + 16)
+			var destination_marker := transition.get_node(transition.get("destination_marker_path")) as Marker2D
+			_check(destination_marker != null, "Stair has an authored arrival marker")
+			var landing := destination_marker.position
+			var destination_bounds := mask.get("floor_regions")[StringName("floor_%d" % destination_floor)] as Rect2
+			_check(destination_bounds.has_point(landing), "Authored stair arrival is on its destination floor")
 			var reverse := tower.get_node("FloorTransitions/Floor%dTo%d" % [destination_floor, n])
 			var reverse_shape := reverse.get_node("CollisionShape2D") as CollisionShape2D
 			var reverse_rect := Rect2(reverse.position - (reverse_shape.shape as RectangleShape2D).size / 2, (reverse_shape.shape as RectangleShape2D).size)
