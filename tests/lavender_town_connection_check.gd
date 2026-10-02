@@ -3,6 +3,7 @@ extends SceneTree
 const TOWN := "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
 const HOUSE := "res://scenes/overworld/kanto/towns/lavender_town/mr_fuji_house.tscn"
 const HOUSE3 := "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn"
+const HOUSE2 := "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn"
 const ROUTE := "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 const AtlasValidator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd")
 var failures := 0
@@ -16,6 +17,7 @@ func _run() -> void:
 	var town := (load(TOWN) as PackedScene).instantiate()
 	var house := (load(HOUSE) as PackedScene).instantiate()
 	var house3 := (load(HOUSE3) as PackedScene).instantiate()
+	var house2 := (load(HOUSE2) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
 	_check(town.get("map_id") == "kanto_lavender_town", "Lavender Town has its own map identity")
 	_check(town.has_node("Entities/Players") and town.has_node("Entities/NPCs")
@@ -74,6 +76,29 @@ func _run() -> void:
 		"House 3 arrivals align with the interior entrance and southeast exterior door")
 	_check(house3.get("lighting_profile") == "indoor" and house3.get("weather_profile") == "disabled"
 		and house3.get("music_profile_id") == "kanto.lavender_town", "House 3 uses indoor lighting and Lavender music")
+	_check_connection(town, "ToHouse2", house2, HOUSE2)
+	_check_connection(house2, "ToOutside", town, TOWN)
+	_check(house2.get("map_id") == "kanto_lavender_town_house_2"
+		and house2.get("world_access_group_id") == town.get("map_id"), "House 2 belongs to Lavender Town")
+	var house2_visual := house2.get_node("Visual")
+	var house2_metadata: Dictionary = house2_visual.get_meta("tiled_visual_map")
+	_check(house2_metadata.get("width") == 20 and house2_metadata.get("height") == 20
+		and str(house2_visual.get_meta("tiled_source_path")).ends_with("/Lavender House 1 - Mauve.tmx"),
+		"House 2 preserves the requested Mauve artist template")
+	_check(AtlasValidator.new().validate(house2_visual,
+		"res://generated/tiled_visuals/lavender_house_2/lavender_house_2.visual.tileset.tres").is_empty(),
+		"House 2 uses valid compact atlases")
+	var house2_collision := house2.get_node("Tiles/Collision") as TileMapLayer
+	_check(house2_collision.tile_set != null and house2_collision.get_used_cells().is_empty(),
+		"House 2 collision stays empty and editable")
+	_check(house2.get_node("Spawns/FromLavenderTown").position == Vector2(304, 464)
+		and town.get_node("Spawns/FromHouse2").position == Vector2(432, 1040),
+		"House 2 arrivals align with the interior entrance and southwest exterior door")
+	_check(collision.get_cell_source_id(Vector2i(13, 31)) == -1
+		and collision.get_cell_source_id(Vector2i(13, 32)) == -1,
+		"House 2 exterior door and return tile are traversable")
+	_check(house2.get("lighting_profile") == "indoor" and house2.get("weather_profile") == "disabled"
+		and house2.get("music_profile_id") == "kanto.lavender_town", "House 2 uses indoor lighting and Lavender music")
 	for route_number in [8, 12]:
 		var planned_exit := town.get_node("Exits/ToRoute%d" % route_number) as Area2D
 		var planned_shape := planned_exit.get_node("CollisionShape2D") as CollisionShape2D
@@ -89,8 +114,8 @@ func _run() -> void:
 			"Future Route %d spawn arrives inside town, outside its exit" % route_number)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
-	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 4,
-		"Catalog builder registers Route 10, Pokémon Center, Fuji house and House 3 exits")
+	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 5,
+		"Catalog builder registers Route 10, Pokémon Center, Fuji house, House 2 and House 3 exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(not catalog.areas.has("kanto_lavender_town_north"), "Removed north map is absent from staff catalog")
 	_check(not ResourceLoader.exists("res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"),
@@ -103,6 +128,11 @@ func _run() -> void:
 		and catalog.transitions.has("kanto_lavender_town__to_house_3")
 		and catalog.transitions.has("kanto_lavender_town_house_3__to_outside"),
 		"Catalog registers House 3 and both authorized transitions")
+	_check(catalog.areas.has("kanto_lavender_town_house_2")
+		and catalog.transitions.has("kanto_lavender_town__to_house_2")
+		and catalog.transitions.has("kanto_lavender_town_house_2__to_outside"),
+		"Catalog registers House 2 and both authorized transitions")
+	house2.free()
 	house3.free()
 	house.free()
 	town.free()
