@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer-zichtsensoren worden veilig na physics-callbacks bijgewerkt, zodat de verplichte Rock Tunnel-battle geen physics-fout meer veroorzaakt.
+
 - Battles openen op desktop, browser en Android zonder op de eerste Pokémon-sprites te wachten; ontbrekende sprites laden op de achtergrond, ook bij een 2D-fallback.
 
 - Rock Tunnel’s Mysterious Trainer stays hidden until the C staircase, then appears behind the player through the same blue rift effect as Mt. Moon.
