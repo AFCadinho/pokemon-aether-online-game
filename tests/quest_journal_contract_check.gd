@@ -78,6 +78,8 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.travel_to_lavender_town.title",
 	"story.kanto.travel_to_lavender_town.summary",
 	"story.kanto.travel_to_lavender_town.cross_rock_tunnel",
+	"story.kanto.travel_to_lavender_town.reach_rock_tunnel",
+	"story.kanto.travel_to_lavender_town.reach_lavender_town",
 	"story.kanto.travel_to_lavender_town.hear_lavender_warning",
 	"story.kanto.challenge_pewter_gym.title",
 	"story.kanto.challenge_pewter_gym.summary",

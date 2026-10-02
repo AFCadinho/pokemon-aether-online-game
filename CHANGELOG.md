@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- After Oak’s advice, the main quest tracker and developer checkpoints now separate reaching Rock Tunnel, crossing it and meeting the masked trainer, and reaching Lavender Town.
+
 - Fullscreen battles schuiven nu vanuit het zichtbare overworldbeeld naar binnen zonder zwart laadscherm of flitsen; Android wacht op de eerste sprites voordat de slide begint.
 - Rock Tunnel's masked visitor is identified as Mysterious Trainer, uses layered trainer art in battle, appears beside the player at mandatory exit encounters, remains visible until his farewell ends, and leaves no invisible blocking tile afterward.
 
