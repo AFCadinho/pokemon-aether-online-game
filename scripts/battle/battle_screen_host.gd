@@ -12,6 +12,7 @@ var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
 const FADE_SECONDS := 0.18
+const MIN_FADE_FRAMES := 12
 var outgoing_snapshot: TextureRect
 var preparation_ready := false
 var reveal_requested := false
@@ -249,16 +250,29 @@ func _apply_entry_fade() -> void:
 			# reveal instead of displaying an unprepared opaque battle.
 			$Backdrop.visible = fade_progress > 0.0
 			$Content.visible = fade_progress > 0.0
+			$Content.modulate.a = fade_progress
+			$Backdrop.color.a = fade_progress
 
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
 	reveal_tween = create_tween()
 	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
-	while reveal_tween.is_valid() and reveal_tween.is_running() and not released:
+	# A slow mount/upload frame must not consume the whole entrance tween.
+	# Advance only after presenting a frame, with at least twelve blend steps.
+	reveal_tween.pause()
+	while not released and reveal_tween.is_valid() and fade_progress < 1.0:
 		await get_tree().process_frame
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+		if released or not reveal_tween.is_valid():
+			return
+		var step := minf(get_process_delta_time(), FADE_SECONDS / float(MIN_FADE_FRAMES))
+		reveal_tween.custom_step(maxf(step, 0.0001))
 	if not released:
 		fade_progress = 1.0
+		$Content.modulate.a = 1.0
+		$Backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
 		$Cover.hide()
 		if is_instance_valid(battle):
