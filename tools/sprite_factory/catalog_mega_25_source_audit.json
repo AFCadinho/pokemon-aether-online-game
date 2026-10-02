@@ -1,0 +1,1275 @@
+{
+  "audit_date": "2026-10-02",
+  "entries": [
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 722,
+        "pokedex_name": "Chesnaught",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "652,722,Chesnaught",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 652,
+      "shared_resource_variants": [],
+      "showdown_id": "chesnaughtmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0722_51_00",
+      "species": "chesnaught-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 719,
+        "pokedex_name": "Delphox",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "655,719,Delphox",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 655,
+      "shared_resource_variants": [],
+      "showdown_id": "delphoxmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0719_51_00",
+      "species": "delphox-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 725,
+        "pokedex_name": "Greninja",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "658,725,Greninja",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 658,
+      "shared_resource_variants": [],
+      "showdown_id": "greninjamega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0725_51_00",
+      "species": "greninja-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 705,
+        "pokedex_name": "Pyroar",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "668,705,Pyroar",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 668,
+      "shared_resource_variants": [],
+      "showdown_id": "pyroarmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0705_51_00",
+      "species": "pyroar-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 714,
+        "pokedex_name": "Floette",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "670,714,Floette",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 670,
+      "shared_resource_variants": [],
+      "showdown_id": "floettemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0714_51_00",
+      "species": "floette-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 734,
+        "pokedex_name": "Meowstic",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "678,734,Meowstic",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 678,
+      "shared_resource_variants": [
+        "meowsticmmega",
+        "meowsticfmega"
+      ],
+      "showdown_id": "meowsticfmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "needs_gender_specific_confirmation",
+      "source_resource_id": "pm0734_51_00",
+      "species": "meowstic-f-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 734,
+        "pokedex_name": "Meowstic",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "678,734,Meowstic",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 678,
+      "shared_resource_variants": [
+        "meowsticmmega",
+        "meowsticfmega"
+      ],
+      "showdown_id": "meowsticmmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0734_51_00",
+      "species": "meowstic-m-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 727,
+        "pokedex_name": "Malamar",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "687,727,Malamar",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 687,
+      "shared_resource_variants": [],
+      "showdown_id": "malamarmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0727_51_00",
+      "species": "malamar-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 748,
+        "pokedex_name": "Barbaracle",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "689,748,Barbaracle",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 689,
+      "shared_resource_variants": [],
+      "showdown_id": "barbaraclemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0748_51_00",
+      "species": "barbaracle-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 710,
+        "pokedex_name": "Dragalge",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "691,710,Dragalge",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 691,
+      "shared_resource_variants": [],
+      "showdown_id": "dragalgemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0710_51_00",
+      "species": "dragalge-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 770,
+        "pokedex_name": "Zygarde",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "718,770,Zygarde",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 718,
+      "shared_resource_variants": [],
+      "showdown_id": "zygardemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0770_51_00",
+      "species": "zygarde-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 772,
+        "pokedex_name": "Diancie",
+        "table": "Biochao/Gen6.zip::_pokemon_dev_numbers.csv",
+        "table_row": "719,772,Diancie",
+        "table_sha256": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 719,
+      "shared_resource_variants": [],
+      "showdown_id": "dianciemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0772_51_00",
+      "species": "diancie-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 860,
+        "pokedex_name": "Crabominable",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "740,860,Crabominable,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 740,
+      "shared_resource_variants": [],
+      "showdown_id": "crabominablemega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0860_51_00",
+      "species": "crabominable-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 867,
+        "pokedex_name": "Golisopod",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "768,867,Golisopod,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 768,
+      "shared_resource_variants": [],
+      "showdown_id": "golisopodmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0867_51_00",
+      "species": "golisopod-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 856,
+        "pokedex_name": "Drampa",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "780,856,Drampa,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 780,
+      "shared_resource_variants": [],
+      "showdown_id": "drampamega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0856_51_00",
+      "species": "drampa-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 882,
+        "pokedex_name": "Magearna",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "801,882,Magearna,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 801,
+      "shared_resource_variants": [],
+      "showdown_id": "magearnamega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0882_51_00",
+      "species": "magearna-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 882,
+        "pokedex_name": "Magearna",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "801,882,Magearna,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 801,
+      "shared_resource_variants": [],
+      "showdown_id": "magearnaoriginalmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0882_52_00",
+      "species": "magearna-original-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 888,
+        "pokedex_name": "Zeraora",
+        "table": "Biochao/Gen7.zip::_pokemon_dev_numbers.csv",
+        "table_row": "807,888,Zeraora,",
+        "table_sha256": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 807,
+      "shared_resource_variants": [],
+      "showdown_id": "zeraoramega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0888_51_00",
+      "species": "zeraora-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "developer_number": 923,
+        "pokedex_name": "Falinks",
+        "table": "Biochao/Gen8.zip::_pokemon_dev_numbers.csv",
+        "table_row": "870,923,Falinks",
+        "table_sha256": "a9c5ee92648ad1f62da079ed687ee24ae5618cc0a583c16928e6103150a8886e"
+      },
+      "mapping_method": "biochao_dev_number_table",
+      "pokedex_number": 870,
+      "shared_resource_variants": [],
+      "showdown_id": "falinksmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm0923_51_00",
+      "species": "falinks-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1043,
+        "mega_icon_resource": "pm1043_51_00",
+        "pokedex_name": "scovillain-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1043/pm1043_00_00/icon/pm1043_00_00_00_big.png",
+        "source_base_form_icon_sha256": "c7efd30e8595bfdc1c39ca8cf485a688da4c0d87edce82cf957a870d25e2df35"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 952,
+      "shared_resource_variants": [],
+      "showdown_id": "scovillainmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1043_51_00",
+      "species": "scovillain-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1071,
+        "mega_icon_resource": "pm1071_51_00",
+        "pokedex_name": "glimmora-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1071/pm1071_00_00/icon/pm1071_00_00_00_big.png",
+        "source_base_form_icon_sha256": "2701c8a55afc165d28883ce3f0b49684976c92bce5b71640bdb846e6979f0994"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 970,
+      "shared_resource_variants": [],
+      "showdown_id": "glimmoramega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1071_51_00",
+      "species": "glimmora-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1056,
+        "mega_icon_resource": "pm1056_51_00",
+        "pokedex_name": "tatsugiri-curly-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1056/pm1056_11_00/icon/pm1056_11_00_00_big.png",
+        "source_base_form_icon_sha256": "fea54d8ba1cc39018046edadb4d7dfcd8f4a67af18b9fe79ec5434e00835fcb1"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 978,
+      "shared_resource_variants": [
+        "tatsugiricurlymega",
+        "tatsugiridroopymega",
+        "tatsugiristretchymega"
+      ],
+      "showdown_id": "tatsugiricurlymega",
+      "source_icon_variant_marker": "_3",
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1056_51_00",
+      "species": "tatsugiri-curly-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1056,
+        "mega_icon_resource": "pm1056_51_00",
+        "pokedex_name": "tatsugiri-droopy-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1056/pm1056_12_00/icon/pm1056_12_00_00_big.png",
+        "source_base_form_icon_sha256": "f27a0959f7e0490eee5d4a62437583e0534017b4c71240c523da0156b30b6bff"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 978,
+      "shared_resource_variants": [
+        "tatsugiricurlymega",
+        "tatsugiridroopymega",
+        "tatsugiristretchymega"
+      ],
+      "showdown_id": "tatsugiridroopymega",
+      "source_icon_variant_marker": "_4",
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1056_51_00",
+      "species": "tatsugiri-droopy-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1056,
+        "mega_icon_resource": "pm1056_51_00",
+        "pokedex_name": "tatsugiri-stretchy-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1056/pm1056_13_00/icon/pm1056_13_00_00_big.png",
+        "source_base_form_icon_sha256": "8394ebc876d617722733236f7932a78d665d301f9501e640dd3e1b7996af408b"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 978,
+      "shared_resource_variants": [
+        "tatsugiricurlymega",
+        "tatsugiridroopymega",
+        "tatsugiristretchymega"
+      ],
+      "showdown_id": "tatsugiristretchymega",
+      "source_icon_variant_marker": "_5",
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1056_51_00",
+      "species": "tatsugiri-stretchy-mega"
+    },
+    {
+      "dev_number_mapping_evidence": {
+        "basis": "visual match between Mega and corresponding SV base-form icon",
+        "developer_number": 1055,
+        "mega_icon_resource": "pm1055_51_00",
+        "pokedex_name": "baxcalibur-mega",
+        "source_base_form_icon": "/home/adinho/Documents/3d_models/Pokémon SCVI Base + DLC Model Dump/pm1055/pm1055_00_00/icon/pm1055_00_00_00_big.png",
+        "source_base_form_icon_sha256": "2e192627c72f1815544e3d011cf495d4f73813fa079337bc8e99a85ce291296d"
+      },
+      "mapping_method": "visual_match_to_za_mega_icon_and_scvi_base_form_icon",
+      "pokedex_number": 998,
+      "shared_resource_variants": [],
+      "showdown_id": "baxcaliburmega",
+      "source_icon_variant_marker": null,
+      "source_mapping_status": "candidate_identity_match",
+      "source_resource_id": "pm1055_51_00",
+      "species": "baxcalibur-mega"
+    }
+  ],
+  "mapping_reference_tables": {
+    "/home/adinho/Documents/3d_models/Biochao/Gen6.zip": "4c007ca3997c182e60ec8c4c12bbf87575bd4a4225b798ff10536f306185fd70",
+    "/home/adinho/Documents/3d_models/Biochao/Gen7.zip": "f76dab0b2f9bd387ebe73ae181bc6e9b25cb61d56a3d98a5d4499cff50e409b7",
+    "/home/adinho/Documents/3d_models/Biochao/Gen8.zip": "a9c5ee92648ad1f62da079ed687ee24ae5618cc0a583c16928e6103150a8886e"
+  },
+  "pipeline_blocker": "catalog_mega_3d_production.py currently requires source_resource_id PM prefix to equal pokedex_number; accept the audited explicit source developer number before processing.",
+  "research_notes": [
+    "Gen 6, Gen 7 and Gen 8 source IDs follow local developer-number CSVs.",
+    "Gen 9 Mega IDs were matched against their form icons and Scarlet/Violet base-form icons; Tatsugiri source has distinct Curly/Droopy/Stretchy icon variants.",
+    "Meowstic has one Mega source resource and its normal icon matches the male appearance; the female Mega mapping remains unconfirmed.",
+    "Diancie maps to pm0772_51_00. pm0719_51_00 is Delphox, explaining the earlier rejected Diancie candidate.",
+    "Each unique source resource contains 39–47 animation banks; selected native action set lacks sleep and a second physical attack."
+  ],
+  "schema": 1,
+  "source_archive": {
+    "name": "LegendsZAPkmnModelDumpWithDLC.rar",
+    "sha256": "1436f8d94c390a2ceb9f60a44596023c1c79ea911f10c3eacf80e7ed02223ccc"
+  },
+  "source_resources": {
+    "pm0705_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0705/pm0705_51_00/icon/pm0705_51_00_00_0.png",
+          "sha256": "fef8a6f2ea81d9d6e641632fccff21060c4bb77880dcb5df305a51ae24a46494"
+        },
+        {
+          "archive_member": "pm0705/pm0705_51_00/icon/pm0705_51_00_00_1.png",
+          "sha256": "c2eaa4d6bcaa85a4bf0c257f9698822c2b1192f2c3e5690ebb3fb614b6233d6d"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0705_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0705_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0705_51_00_00520_down01_start.tranm",
+        "idle": "pm0705_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0705_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0705_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0705_51_00"
+    },
+    "pm0710_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0710/pm0710_51_00/icon/pm0710_51_00_00_0.png",
+          "sha256": "6c9f657db5ac9c4747133f624e6a3e1f3f976a85e974f72f9a8727f4f6852937"
+        },
+        {
+          "archive_member": "pm0710/pm0710_51_00/icon/pm0710_51_00_00_1.png",
+          "sha256": "42dd001478ca6e344bb04f2def48c340c1d3fb3a6f4191eb3ca3c828604518bb"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0710_51_00_10500_damage01.tranm",
+        "faint_loop": "pm0710_51_00_10521_down01_loop.tranm",
+        "faint_start": "pm0710_51_00_10520_down01_start.tranm",
+        "idle": "pm0710_51_00_10001_battlewait01_loop.tranm",
+        "physical_attack": "pm0710_51_00_10400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0710_51_00_10450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0710_51_00"
+    },
+    "pm0714_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0714/pm0714_51_00/icon/pm0714_51_00_00_0.png",
+          "sha256": "003366b72c548d223e68f7feb79233fc83fc848f782ac4e0c15bcd4438470cce"
+        },
+        {
+          "archive_member": "pm0714/pm0714_51_00/icon/pm0714_51_00_00_1.png",
+          "sha256": "7f05763f854ba7bf1339fa5b68003aad38ec3f3c4d5e2ad38ff9d8ebfca8a3d3"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0714_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0714_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0714_51_00_20520_down01_start.tranm",
+        "idle": "pm0714_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0714_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0714_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0714_51_00"
+    },
+    "pm0719_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 40,
+        ".tranm": 40,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0719/pm0719_51_00/icon/pm0719_51_00_00_0.png",
+          "sha256": "c909ce73440596a927d1e65f9195aacf09d6768c08f2902f06f519b96aea90df"
+        },
+        {
+          "archive_member": "pm0719/pm0719_51_00/icon/pm0719_51_00_00_1.png",
+          "sha256": "38db9e90d20c8ba7c4d7f4cb12cbd648c797787e22995135afb3b37e17f6c0df"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0719_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0719_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0719_51_00_20520_down01_start.tranm",
+        "idle": "pm0719_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0719_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0719_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0719_51_00"
+    },
+    "pm0722_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0722/pm0722_51_00/icon/pm0722_51_00_00_0.png",
+          "sha256": "184dab1646f942c3a30a0d0ff86936223ab0f21ae3a800432133f9d96e718d63"
+        },
+        {
+          "archive_member": "pm0722/pm0722_51_00/icon/pm0722_51_00_00_1.png",
+          "sha256": "1f593660d7789e455c16bddd4eaed1e1188838d4f585d62a581fc1c9e4175696"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0722_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0722_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0722_51_00_00520_down01_start.tranm",
+        "idle": "pm0722_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0722_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0722_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0722_51_00"
+    },
+    "pm0725_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 42,
+        ".tranm": 42,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0725/pm0725_51_00/icon/pm0725_51_00_00_0.png",
+          "sha256": "8eb803398ea730edc215444b9773e52f7fd7f4f3cb9c6a2b553a6d352693e9b9"
+        },
+        {
+          "archive_member": "pm0725/pm0725_51_00/icon/pm0725_51_00_00_1.png",
+          "sha256": "46bbe5b24a8a751deb4b08426a80a9fdf9776fe67f2c2d11fd657c769d6cac0b"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0725_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0725_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0725_51_00_20520_down01_start.tranm",
+        "idle": "pm0725_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0725_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0725_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0725_51_00"
+    },
+    "pm0727_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 42,
+        ".tranm": 42,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0727/pm0727_51_00/icon/pm0727_51_00_00_0.png",
+          "sha256": "4a4493202a3b0fedf30cf698ffb89b35a8bcb3576a812d61ca518fa2b3723827"
+        },
+        {
+          "archive_member": "pm0727/pm0727_51_00/icon/pm0727_51_00_00_1.png",
+          "sha256": "a8bfd457bb75009453d956cd62ebf87bbc4d70941c8aeca0064a255e0723d319"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0727_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0727_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0727_51_00_20520_down01_start.tranm",
+        "idle": "pm0727_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0727_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0727_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0727_51_00"
+    },
+    "pm0734_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 84,
+        ".tranm": 84,
+        ".trmdl": 2,
+        ".trmsh": 8,
+        ".trskl": 4
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0734/pm0734_51_00/icon/pm0734_51_00_00_0.png",
+          "sha256": "f3f3b5cd25ffb2fc22b37b916a7e12118879cbda0eb098a0885446bfad9a2cec"
+        },
+        {
+          "archive_member": "pm0734/pm0734_51_00/icon/pm0734_51_00_00_1.png",
+          "sha256": "75619e4c906c40553da7afdbf355364aa03e98f55975a914bcd10e6dbcbcf7f2"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0734_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0734_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0734_51_00_20520_down01_start.tranm",
+        "idle": "pm0734_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0734_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0734_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0734_51_00"
+    },
+    "pm0748_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 46,
+        ".tranm": 46,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0748/pm0748_51_00/icon/pm0748_51_00_00_0.png",
+          "sha256": "804260f551d8ca17abb5189669e229e7b0911e50bd3598c15e2b33b9390ad126"
+        },
+        {
+          "archive_member": "pm0748/pm0748_51_00/icon/pm0748_51_00_00_1.png",
+          "sha256": "e98b9395043b770416db1f860bca3bad5ea6d09fd4287dbfe64cb43c0d3e9502"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0748_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0748_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0748_51_00_00520_down01_start.tranm",
+        "idle": "pm0748_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0748_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0748_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0748_51_00"
+    },
+    "pm0770_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 41,
+        ".tranm": 41,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0770/pm0770_51_00/icon/pm0770_51_00_00_0.png",
+          "sha256": "135d04ede5b1caa1a2200556aa3468f5a11c5e5c9ea44b684091bdb9ee2f05c3"
+        },
+        {
+          "archive_member": "pm0770/pm0770_51_00/icon/pm0770_51_00_00_1.png",
+          "sha256": "826427a8d3af2772e09650f5bb52d6820299388b5bc84bed9d6ae9dd03cc2fd6"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0770_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0770_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0770_51_00_20520_down01_start.tranm",
+        "idle": "pm0770_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0770_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0770_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0770_51_00"
+    },
+    "pm0772_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0772/pm0772_51_00/icon/pm0772_51_00_00_0.png",
+          "sha256": "1f4f24accf3df87710288bcc3001858355eb6be069e0e6e88a21ddbcef4f2327"
+        },
+        {
+          "archive_member": "pm0772/pm0772_51_00/icon/pm0772_51_00_00_1.png",
+          "sha256": "a657f66b8ee824b66a7cefa210997d8b69b5d85e58fa3b207517ec15b1e4ed6e"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0772_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0772_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0772_51_00_20520_down01_start.tranm",
+        "idle": "pm0772_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0772_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0772_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0772_51_00"
+    },
+    "pm0856_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0856/pm0856_51_00/icon/pm0856_51_00_00_0.png",
+          "sha256": "f5b0aa2752c9a2247b6f4b1862152e3e2b05c9ffe2856692caee082bca8211f5"
+        },
+        {
+          "archive_member": "pm0856/pm0856_51_00/icon/pm0856_51_00_00_1.png",
+          "sha256": "365b584c2c223183948b2bf6aa4aff6c7306160acafb035b342c555f370b5244"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0856_51_00_20500_damage01.tranm",
+        "faint_loop": "pm0856_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm0856_51_00_20520_down01_start.tranm",
+        "idle": "pm0856_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm0856_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0856_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0856_51_00"
+    },
+    "pm0860_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0860/pm0860_51_00/icon/pm0860_51_00_00_0.png",
+          "sha256": "62b11855997cc68215210d6aa25d7504bf19c16fb3affe249866d34097c33a08"
+        },
+        {
+          "archive_member": "pm0860/pm0860_51_00/icon/pm0860_51_00_00_1.png",
+          "sha256": "6f01147594e25ab9e6c14f44ed4b1f9de6bc517f62096ba4b5ae6d050e8d3d8d"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0860_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0860_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0860_51_00_00520_down01_start.tranm",
+        "idle": "pm0860_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0860_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0860_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0860_51_00"
+    },
+    "pm0867_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 40,
+        ".tranm": 40,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0867/pm0867_51_00/icon/pm0867_51_00_00_0.png",
+          "sha256": "fc0b3f72f887023866b10ec61cc74827a2480c2c72224a9fb2e6f476cfabd90c"
+        },
+        {
+          "archive_member": "pm0867/pm0867_51_00/icon/pm0867_51_00_00_1.png",
+          "sha256": "22df1c8f5fa17fbae3c1b5d8ea8da1e1ad094ac5a608ade98008122bbbe0f3f1"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0867_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0867_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0867_51_00_00520_down01_start.tranm",
+        "idle": "pm0867_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0867_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0867_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0867_51_00"
+    },
+    "pm0882_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 40,
+        ".tranm": 40,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0882/pm0882_51_00/icon/pm0882_51_00_00_0.png",
+          "sha256": "d0c69d4d316941266facb857e544dd15777dd8f10ac322c47726197e4855c852"
+        },
+        {
+          "archive_member": "pm0882/pm0882_51_00/icon/pm0882_51_00_00_1.png",
+          "sha256": "e53cfeb8a161d762330083e0bf984ca9f061dd1078c2130300637deb47c86637"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0882_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0882_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0882_51_00_00520_down01_start.tranm",
+        "idle": "pm0882_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0882_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0882_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0882_51_00"
+    },
+    "pm0882_52_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 40,
+        ".tranm": 40,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0882/pm0882_52_00/icon/pm0882_52_00_00_0.png",
+          "sha256": "027f7658ba6872808cf17357c2d24a49ea6a484e1b6a6416ba54e2b525451c5b"
+        },
+        {
+          "archive_member": "pm0882/pm0882_52_00/icon/pm0882_52_00_00_1.png",
+          "sha256": "44418bec69eabbcf999fb884cfdf9c5f98de0a4ae4cc3ceda7dcf8103b9ae2ca"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0882_52_00_00500_damage01.tranm",
+        "faint_loop": "pm0882_52_00_00521_down01_loop.tranm",
+        "faint_start": "pm0882_52_00_00520_down01_start.tranm",
+        "idle": "pm0882_52_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0882_52_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0882_52_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0882_52_00"
+    },
+    "pm0888_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 45,
+        ".tranm": 45,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0888/pm0888_51_00/icon/pm0888_51_00_00_0.png",
+          "sha256": "2cab0b59f50d3ff92b9dd95cc7e616b23f4e31c87765d7ee9cbfb506ec9f2e15"
+        },
+        {
+          "archive_member": "pm0888/pm0888_51_00/icon/pm0888_51_00_00_1.png",
+          "sha256": "b92d5c7611a8e97525f9fa9ae8157bf5747dd1daa90d9b27a3cb985a89a76be3"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0888_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0888_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0888_51_00_00520_down01_start.tranm",
+        "idle": "pm0888_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0888_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0888_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0888_51_00"
+    },
+    "pm0923_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 40,
+        ".tranm": 40,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm0923/pm0923_51_00/icon/pm0923_51_00_00_0.png",
+          "sha256": "bfbda672fd35e4cf6bd7af671a60d4ab168d6118014ffc36bccc191d05db8e06"
+        },
+        {
+          "archive_member": "pm0923/pm0923_51_00/icon/pm0923_51_00_00_1.png",
+          "sha256": "0388ccf6ff54a80be2091d57dcb7159538a3da9a0479d71c265b51b1b67d3286"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm0923_51_00_00500_damage01.tranm",
+        "faint_loop": "pm0923_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm0923_51_00_00520_down01_start.tranm",
+        "idle": "pm0923_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm0923_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm0923_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm0923_51_00"
+    },
+    "pm1043_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm1043/pm1043_51_00/icon/pm1043_51_00_00_0.png",
+          "sha256": "e6a44976abf72aac694f635e618eb9ccd568094e46f997d127486ed201a3d8ef"
+        },
+        {
+          "archive_member": "pm1043/pm1043_51_00/icon/pm1043_51_00_00_1.png",
+          "sha256": "8c416939a06675e04ab4ef55433d7a3a35bc48d9ec8f313da9cc82f5ea4235f4"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm1043_51_00_00500_damage01.tranm",
+        "faint_loop": "pm1043_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm1043_51_00_00520_down01_start.tranm",
+        "idle": "pm1043_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm1043_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm1043_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm1043_51_00"
+    },
+    "pm1055_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 39,
+        ".tranm": 39,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm1055/pm1055_51_00/icon/pm1055_51_00_00_0.png",
+          "sha256": "6c5d24b976d698c456ed38c6db32d3673abd11347007a887cd6cf38e5ce91142"
+        },
+        {
+          "archive_member": "pm1055/pm1055_51_00/icon/pm1055_51_00_00_1.png",
+          "sha256": "48ddd415eca43fc12d5603d333c59393bb440a42a432fbdfdba0fae82d25f13b"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm1055_51_00_00500_damage01.tranm",
+        "faint_loop": "pm1055_51_00_00521_down01_loop.tranm",
+        "faint_start": "pm1055_51_00_00520_down01_start.tranm",
+        "idle": "pm1055_51_00_00001_battlewait01_loop.tranm",
+        "physical_attack": "pm1055_51_00_00400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm1055_51_00_00450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm1055_51_00"
+    },
+    "pm1056_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 141,
+        ".tranm": 141,
+        ".trmdl": 3,
+        ".trmsh": 12,
+        ".trskl": 6
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_0_3.png",
+          "sha256": "8149453218a6a6c32c0909017bf41373bd5aec2cdb20ebb93dcce26c074d478b"
+        },
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_0_4.png",
+          "sha256": "2d8e19b5ab0a5b2a9dcb077b3a460265791aecd6ca72f68c215264d6ad361aa5"
+        },
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_0_5.png",
+          "sha256": "02c2a2ef6e70a1ade1e1cd3c07e170e4c51e9e23145a77103fc78880aa545c12"
+        },
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_1_3.png",
+          "sha256": "1f9c294166b27cf2cb7e7f15b4ff36cca3b6122e39bcbfe42937ea7f854d4f4c"
+        },
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_1_4.png",
+          "sha256": "686cb80290d37c226aad4ac0ffc2c8ebb4f0049370c89fc27dfed5acc834c916"
+        },
+        {
+          "archive_member": "pm1056/pm1056_51_00/icon/pm1056_51_00_00_1_5.png",
+          "sha256": "1e228583a34132e5b30b4e395db355534bde6bb86091ab46b69db76f6bb0943c"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm1056_51_00_20500_damage01.tranm",
+        "faint_loop": "pm1056_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm1056_51_00_20520_down01_start.tranm",
+        "idle": "pm1056_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm1056_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm1056_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm1056_51_00"
+    },
+    "pm1071_51_00": {
+      "model_present": true,
+      "model_resource_file_counts": {
+        ".tracm": 41,
+        ".tranm": 41,
+        ".trmdl": 1,
+        ".trmsh": 4,
+        ".trskl": 2
+      },
+      "native_sleep_available": false,
+      "normal_and_shiny_icon_evidence": [
+        {
+          "archive_member": "pm1071/pm1071_51_00/icon/pm1071_51_00_00_0.png",
+          "sha256": "65e4feb33f0631cbc00e5cb53412f46c41fbd92e11912401c8d3938149d9b3e5"
+        },
+        {
+          "archive_member": "pm1071/pm1071_51_00/icon/pm1071_51_00_00_1.png",
+          "sha256": "afb2f723dbf5592e51d323a096c05f7024095a26ba94697df3bb7bb4d74e666b"
+        }
+      ],
+      "normal_material_table_present": true,
+      "second_physical_attack_available": false,
+      "selected_native_actions": {
+        "damage": "pm1071_51_00_20500_damage01.tranm",
+        "faint_loop": "pm1071_51_00_20521_down01_loop.tranm",
+        "faint_start": "pm1071_51_00_20520_down01_start.tranm",
+        "idle": "pm1071_51_00_20001_battlewait01_loop.tranm",
+        "physical_attack": "pm1071_51_00_20400_attack01.tranm",
+        "physical_attack_2": null,
+        "sleep": null,
+        "special_attack": "pm1071_51_00_20450_rangeattack01.tranm"
+      },
+      "shiny_material_table_present": true,
+      "source_resource_id": "pm1071_51_00"
+    }
+  },
+  "status": "source_discovery_only_pipeline_and_visual_qualification_pending",
+  "summary": {
+    "all_22_resources_have_model_normal_and_shiny_material_tables": true,
+    "base_species": 21,
+    "form_entries": 25,
+    "gender_specific_mapping_holds": 1,
+    "meowstic_gender_variant_runtime_check_pending": true,
+    "native_sleep_found": false,
+    "production_adapter_accepts_alternate_dev_number": false,
+    "required_attack_damage_faint_action_sets_present": true,
+    "second_physical_attack_found": false,
+    "tatsugiri_three_way_variant_runtime_check_pending": true,
+    "unique_source_resources": 22,
+    "visually_confirmed_candidate_forms": 24
+  }
+}
