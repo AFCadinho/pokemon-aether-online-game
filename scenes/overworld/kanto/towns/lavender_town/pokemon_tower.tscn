@@ -223,7 +223,7 @@ position = Vector2(1584, 368)
 position = Vector2(1072, 368)
 
 [node name="Floor3From2" type="Marker2D" parent="Spawns" unique_id=564977972]
-position = Vector2(1968, 368)
+position = Vector2(1872, 368)
 
 [node name="Floor3From4" type="Marker2D" parent="Spawns" unique_id=770427137]
 position = Vector2(2384, 368)
@@ -235,7 +235,7 @@ position = Vector2(688, 1200)
 position = Vector2(176, 1200)
 
 [node name="Floor5From4" type="Marker2D" parent="Spawns" unique_id=1667984521]
-position = Vector2(1072, 1200)
+position = Vector2(976, 1200)
 
 [node name="Floor5From6" type="Marker2D" parent="Spawns" unique_id=1484233504]
 position = Vector2(1488, 1200)
@@ -247,7 +247,7 @@ position = Vector2(2480, 1200)
 position = Vector2(2224, 1360)
 
 [node name="Floor7From6" type="Marker2D" parent="Spawns" unique_id=1004188911]
-position = Vector2(432, 2192)
+position = Vector2(336, 2192)
 
 [node name="FloorTransitions" type="Node2D" parent="." unique_id=548824322]
 
@@ -294,18 +294,18 @@ z_as_relative = false
 flow_direction = "left"
 
 [node name="Floor3To2" type="Area2D" parent="FloorTransitions" unique_id=1484628751]
-position = Vector2(1936, 368)
+position = Vector2(1904, 368)
 script = ExtResource("floor_transition")
 destination_marker_path = NodePath("../../Spawns/Floor2From3")
 target_floor = &"floor_2"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor3To2" unique_id=2089899982]
-position = Vector2(-16, 0)
+position = Vector2(16, 0)
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="FloorTransitions/Floor3To2" unique_id=673288603 instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="FloorTransitions/Floor3To2" unique_id=688213201 instance=ExtResource("hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="Floor3To4" type="Area2D" parent="FloorTransitions" unique_id=1768197833]
 position = Vector2(2416, 368)
@@ -350,18 +350,18 @@ z_as_relative = false
 flow_direction = "left"
 
 [node name="Floor5To4" type="Area2D" parent="FloorTransitions" unique_id=1678642169]
-position = Vector2(1040, 1200)
+position = Vector2(1008, 1200)
 script = ExtResource("floor_transition")
 destination_marker_path = NodePath("../../Spawns/Floor4From5")
 target_floor = &"floor_4"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor5To4" unique_id=583450745]
-position = Vector2(-16, 0)
+position = Vector2(16, 0)
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="FloorTransitions/Floor5To4" unique_id=1776876916 instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="FloorTransitions/Floor5To4" unique_id=2060911230 instance=ExtResource("hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="Floor5To6" type="Area2D" parent="FloorTransitions" unique_id=931265628]
 position = Vector2(1520, 1200)
@@ -406,18 +406,18 @@ z_as_relative = false
 flow_direction = "left"
 
 [node name="Floor7To6" type="Area2D" parent="FloorTransitions" unique_id=1667145226]
-position = Vector2(400, 2192)
+position = Vector2(368, 2192)
 script = ExtResource("floor_transition")
 destination_marker_path = NodePath("../../Spawns/Floor6From7")
 target_floor = &"floor_6"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor7To6" unique_id=662980650]
-position = Vector2(-16, 0)
+position = Vector2(16, 0)
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="FloorTransitions/Floor7To6" unique_id=515504373 instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="FloorTransitions/Floor7To6" unique_id=682104203 instance=ExtResource("hint")]
 z_as_relative = false
-flow_direction = "left"
+flow_direction = "right"
 
 [node name="Exits" type="Node2D" parent="." unique_id=1811431710]
 
