@@ -1,8 +1,8 @@
 # Mega 3D catalog production
 
 Updated 2026-10-02. **96 of 97 Mega catalog form pairs are locally qualified.**
-The latest 24 individual bundles are ready locally; their R2 publication is
-pending. The earlier 71 were published. Female Mega Meowstic remains a source
+The latest 24 individual bundles are published to R2; the desktop manifest is
+not activated. The earlier 71 were also published. Female Mega Meowstic remains a source
 identity hold. Historical milestones below retain their original scope.
 
 ## Catalog coverage
@@ -335,3 +335,14 @@ Static material approximations and the three Tatsugiri IDs sharing the authored
 three-fish source remain the visually accepted limitations. **Only female Mega
 Meowstic remains unqualified**, because its separate source identity is not
 confirmed; this is a count of Mega form entries, not base Pokédex species.
+
+
+## Remaining 24 Mega pairs: R2 publication completed
+
+All 24 approved individual bundles and the immutable Mega 24 content index are
+published. Public GET SHA-256 and HEAD size checks passed for all 25 objects.
+The 24 archives total 297,575,175 bytes. The active desktop manifest remained
+unchanged, so publication alone does not make these pairs available to clients.
+The receipt is `release/approved_3d_mega_24_r2_upload.json`; the catalog intake
+rows bind that receipt. Release content-index activation and desktop release
+certification are still separate tasks.
