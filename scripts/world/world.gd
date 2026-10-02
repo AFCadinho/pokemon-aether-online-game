@@ -399,7 +399,7 @@ func _append_current_map_trainer_models(identities: Array[String]) -> void:
 				identities.append(identity)
 
 
-func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false, skip_lead_wait := false) -> void:
+func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false) -> void:
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
 		return
 	if not WebPokemonSpriteService.is_available():
@@ -421,9 +421,9 @@ func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := 
 		await WebPokemonSpriteService.prefetch_and_wait(entries)
 		return
 
-	# Normal wild and NPC battles only block on the two Pokémon that appear
-	# immediately. The remaining roster keeps warming in the background instead
-	# of extending the encounter transition by several sprite downloads.
+	# Queue the visible leads first, then warm the roster in the background.
+	# A cold cache must never hold the encounter on the overworld. SpriteBox
+	# adopts downloaded frames through its existing guarded upgrade path.
 	var priority_entries: Array = []
 	var priority_seen: Dictionary = {}
 	_append_player_lead_web_sprite_entry(priority_entries, priority_seen)
@@ -442,11 +442,6 @@ func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := 
 	# filling spare slots with the rest of the roster.
 	WebPokemonSpriteService.prefetch(priority_entries, true)
 	WebPokemonSpriteService.prefetch(entries)
-	if skip_lead_wait or (OS.has_feature("mobile") and skip_mobile_wait):
-		# SpriteBox replaces its temporary HOME icon when a download completes.
-		# Keep mobile and instant Classic entry responsive on a cold sprite cache.
-		return
-	await WebPokemonSpriteService.prefetch_and_wait(priority_entries)
 
 
 func _append_player_party_web_sprite_entries(entries: Array, seen: Dictionary) -> void:
@@ -4067,10 +4062,7 @@ func start_triggered_wild_battle_for_area(
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_replay_shiny = wild_pokemon.shiny
-	await _prefetch_web_battle_sprites(
-		response, false, false,
-		wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD
-	)
+	await _prefetch_web_battle_sprites(response)
 	_trace_mobile_wild_transition("sprites_queued", transition_started_at_msec)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)

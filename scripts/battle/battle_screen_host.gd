@@ -66,7 +66,8 @@ func _prepare_2d_fallback() -> void:
 	if entries.is_empty():
 		return
 	loading_label.text = "Preparing 2D sprites…"
-	await get_node("/root/WebPokemonSpriteService").prefetch_and_wait(entries)
+	# Fallback downloads are presentation work, not an entry readiness gate.
+	get_node("/root/WebPokemonSpriteService").prefetch(entries, true)
 	if is_instance_valid(battle):
 		battle.player_sprite_box.allow_web_sprite_upgrades(true)
 		battle.enemy_sprite_box.allow_web_sprite_upgrades(true)
@@ -226,7 +227,7 @@ func _reveal_when_prepared(token: int) -> void:
 	if released or token != generation or not is_inside_tree():
 		return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
-		await _prepare_2d_fallback()
+		_prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():
 			return
 	preparation_ready = true
