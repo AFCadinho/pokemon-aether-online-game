@@ -11,14 +11,14 @@ var generation := 0
 var reveal_tween: Tween
 var chat_bridge: Node
 var loading_label: Label
-const SLIDE_SECONDS := 0.24
+const FADE_SECONDS := 0.18
 var outgoing_snapshot: TextureRect
 var preparation_ready := false
 var reveal_requested := false
-var slide_progress := 0.0:
+var fade_progress := 0.0:
 	set(value):
-		slide_progress = clampf(value, 0.0, 1.0)
-		_apply_slide_positions()
+		fade_progress = clampf(value, 0.0, 1.0)
+		_apply_entry_fade()
 var battle_unhandled_input_before_settings := true
 var battle_settings_menu: PanelContainer
 @onready var settings_overlay: ColorRect = $SettingsOverlay
@@ -140,10 +140,10 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	outgoing_snapshot.texture = snapshot if snapshot != null else WildEncounterTransition.capture_viewport(get_viewport())
 	$Cover.color.a = 0.0
 	loading_label.get_parent().hide()
-	# Entry callbacks release the slide only after authoritative scene setup.
+	# Entry callbacks release the fade only after authoritative scene setup.
 	# Replay/resume paths without an encounter transition retain auto reveal.
-	reveal_requested = transition_style != WildEncounterTransition.STYLE_FULLSCREEN_SLIDE
-	slide_progress = 0.0
+	reveal_requested = transition_style != WildEncounterTransition.STYLE_FULLSCREEN_FADE
+	fade_progress = 0.0
 	battle = instance
 	overlay = overworld_overlay
 	if is_instance_valid(overlay):
@@ -198,7 +198,7 @@ func _fit_battle() -> void:
 	battle.position = Vector2.ZERO
 	battle.size = size / factor
 	battle.scale = Vector2.ONE * factor
-	_apply_slide_positions()
+	_apply_entry_fade()
 
 func _reveal_when_prepared(token: int) -> void:
 	if released or not is_instance_valid(battle):
@@ -234,24 +234,31 @@ func request_reveal() -> void:
 	if preparation_ready:
 		_reveal_cover()
 
-func _apply_slide_positions() -> void:
+func _apply_entry_fade() -> void:
 	if not is_node_ready():
 		return
-	var incoming_x := size.x * (1.0 - slide_progress)
-	$Backdrop.position.x = incoming_x
-	$Content.position.x = incoming_x
+	$Backdrop.position.x = 0.0
+	$Content.position.x = 0.0
 	if outgoing_snapshot != null:
-		outgoing_snapshot.position.x = -size.x * slide_progress
+		outgoing_snapshot.position.x = 0.0
+		# The opaque battle is underneath: dissolving this single world image
+		# gives an exact crossfade without separately fading dark UI layers.
+		outgoing_snapshot.modulate.a = 1.0 - fade_progress
+		if outgoing_snapshot.texture == null:
+			# Screenshot capture can be unavailable; retain the live world until
+			# reveal instead of displaying an unprepared opaque battle.
+			$Backdrop.visible = fade_progress > 0.0
+			$Content.visible = fade_progress > 0.0
 
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(self, "slide_progress", 1.0, SLIDE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	while reveal_tween.is_valid() and reveal_tween.is_running() and not released:
 		await get_tree().process_frame
 	if not released:
-		slide_progress = 1.0
+		fade_progress = 1.0
 		outgoing_snapshot.texture = null
 		$Cover.hide()
 		if is_instance_valid(battle):
