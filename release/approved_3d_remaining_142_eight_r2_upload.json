@@ -1,0 +1,104 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 16,
+  "bundle_bytes": 35193781,
+  "bundle_qualification_sha256": "6e982e7f499fee5546ddfe48cd3b8ba786cfded9256ff0a64c1db71a2bddf4a3",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:arctovish:base",
+      "object_key": "optional-assets/pokemon_3d/arctovish/base/v1-f07663a9bc5d3a236b27d15c16a61fd85471d7ec3a991ad543101d7f196af165.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "f07663a9bc5d3a236b27d15c16a61fd85471d7ec3a991ad543101d7f196af165",
+      "size_bytes": 1925550,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:lillipup:base",
+      "object_key": "optional-assets/pokemon_3d/lillipup/base/v1-5a4d0aa1bb3de315a1b12a575c3f679bab7f39e78d85696bdc4a3553f5da34c3.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "5a4d0aa1bb3de315a1b12a575c3f679bab7f39e78d85696bdc4a3553f5da34c3",
+      "size_bytes": 1656810,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:mr-rime:base",
+      "object_key": "optional-assets/pokemon_3d/mr-rime/base/v1-e1a6280076acc72e33818f62bc5369dd5f7a25b1d7a36420d919af6044e9de04.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e1a6280076acc72e33818f62bc5369dd5f7a25b1d7a36420d919af6044e9de04",
+      "size_bytes": 5731832,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:noctowl:base",
+      "object_key": "optional-assets/pokemon_3d/noctowl/base/v1-8679e84c018e041935bb56dc745546213658c60620460ef77bf662f4041a99e7.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "8679e84c018e041935bb56dc745546213658c60620460ef77bf662f4041a99e7",
+      "size_bytes": 11104949,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:palpitoad:base",
+      "object_key": "optional-assets/pokemon_3d/palpitoad/base/v1-6b2b08dcfa9963ecee52dbcf08f6c7368f22649a29919f3d920840ce4a3308c5.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "6b2b08dcfa9963ecee52dbcf08f6c7368f22649a29919f3d920840ce4a3308c5",
+      "size_bytes": 1909906,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:poipole:base",
+      "object_key": "optional-assets/pokemon_3d/poipole/base/v1-7ab32e77df531cae8d700140bcd0533e9dc3237e098161ecbaa2fd3a0874aa87.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "7ab32e77df531cae8d700140bcd0533e9dc3237e098161ecbaa2fd3a0874aa87",
+      "size_bytes": 2786366,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:seismitoad:base",
+      "object_key": "optional-assets/pokemon_3d/seismitoad/base/v1-487fd024fe4d41a364e4ab873c7270ba2a15bb6c9c24c54ad3c53ff21af21746.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "487fd024fe4d41a364e4ab873c7270ba2a15bb6c9c24c54ad3c53ff21af21746",
+      "size_bytes": 2240506,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:trumbeak:base",
+      "object_key": "optional-assets/pokemon_3d/trumbeak/base/v1-04b66bb3321e9d131492dda171cc1693b92d0519c24e3163969620ef1d5d25d5.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "04b66bb3321e9d131492dda171cc1693b92d0519c24e3163969620ef1d5d25d5",
+      "size_bytes": 7837862,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "remaining-142-eight-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/remaining-142-eight-approved-v1-362dfaa18ad4e2d7b9185a2d0f1ac0e5ee50c493c548d42637aae18f8c43d669.json",
+    "sha256": "362dfaa18ad4e2d7b9185a2d0f1ac0e5ee50c493c548d42637aae18f8c43d669",
+    "size_bytes": 7293
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/remaining-142-eight-approved-v1-362dfaa18ad4e2d7b9185a2d0f1ac0e5ee50c493c548d42637aae18f8c43d669.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "362dfaa18ad4e2d7b9185a2d0f1ac0e5ee50c493c548d42637aae18f8c43d669",
+    "size_bytes": 7293,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 8,
+  "profile_count": 8,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 9,
+  "public_head_size_verified_objects": 9,
+  "reviewed_catalog_sha256": "9612c5a41392e29ecde575b6b41cab07a9ffcc4e276ca58054ab24f1204bc5a5",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T04:41:14.582429+00:00"
+}
