@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Ogerpon Wellspring, Hearthflame en Cornerstone hebben nu de juiste schouder- en mantelkleuren, normal en shiny, met bijgewerkte individuele 3D-bundles.
 - De Classic-overlay opent wilde battles zonder overgangswachttijd of entree-fade; sprite-downloads houden het tonen van het battlescherm niet meer tegen.
 
 - Wilde battles in de Classic-overlay houden de overworld zichtbaar, met korte dimming, een zachte entree en een fade bij terugkeer.

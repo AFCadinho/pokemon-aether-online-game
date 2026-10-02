@@ -223,11 +223,38 @@ def bake(job):
     if not {item['name'] for item in job['materials']} <= used:
         raise ValueError('Requested material is not owned by the selected source rig')
     receipts = []
+    mesh_bindings = {name: {obj.name for obj in bpy.context.scene.objects
+                          if obj.type == 'MESH' and any(m and m.name == name
+                                                      for m in obj.data.materials)}
+                     for name in used}
     for item in job['materials']:
         material = bpy.data.materials[item['name']].copy()
         if not material.use_nodes:
             raise ValueError('Native material has no shader graph')
         tree = material.node_tree
+        if item.get('form_palette'):
+            from scvi_form_material import palette
+            spec = item['form_palette']
+            table = Path(spec['path'])
+            if hashlib.sha256(table.read_bytes()).hexdigest() != spec['sha256']:
+                raise ValueError('Native form palette changed')
+            changes = [r for r in palette(table, spec['variant'], spec['index'])
+                       if r['material'] == item['name']]
+            bound = mesh_bindings[item['name']]
+            if bound != {r['mesh'].removesuffix('_shape') for r in changes}:
+                raise ValueError('Form palette does not cover exact material mesh bindings: '
+                                 + repr(bound) + ' != ' + repr({r['mesh'] for r in changes}))
+            grouped = {}
+            for change in changes:
+                key = change['key']
+                if key in grouped and grouped[key] != change['value']:
+                    raise ValueError('Mesh palettes require separate materials')
+                grouped[key] = change['value']
+            for key, value in grouped.items():
+                nodes = [n for n in tree.nodes if n.type == 'GROUP' and key in n.inputs]
+                if len(nodes) != 1 or nodes[0].inputs[key].is_linked:
+                    raise ValueError('Form colour has no unique authored input')
+                nodes[0].inputs[key].default_value = value
         for change in item.get('colour_overrides', []):
             if any(rows[item['name']]['colors'].get(change['key']) != change[variant]
                    for rows, variant in zip(official, ('normal', 'rare'))):
