@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rock_tunnel_1f/rock_tunnel_1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_cfsv4"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_gw8qs"]
 
@@ -134,6 +137,8 @@ world_access_area_type = "wilderness"
 location_id = "kanto.rock.tunnel.1f"
 location_name = "Rock Tunnel 1F"
 region_id = "kanto"
+encounter_area_id = "kanto_rock_tunnel_1f"
+cave_encounter_chance = 0.07
 music_track_id = "overworld.kanto.cave.mt_moon"
 battle_environment_id = "cave"
 lighting_profile = "dark"
@@ -237,6 +242,73 @@ shape = SubResource("shape_6")
 
 [node name="Entities" type="Node2D" parent="." unique_id=522512150]
 z_index = 5
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="PokemaniacAshton" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(2320, 464)
+trainer_id = "kanto_rock_tunnel_1f_pokemaniac_ashton"
+sight_range_tiles = 2
+npc_id = "kanto_rock_tunnel_1f_pokemaniac_ashton"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Poké Maniac Ashton"
+npc_sprite_frames = ExtResource("hiker")
+
+[node name="HikerLenny" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(432, 720)
+trainer_id = "kanto_rock_tunnel_1f_hiker_lenny"
+sight_range_tiles = 2
+npc_id = "kanto_rock_tunnel_1f_hiker_lenny"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Lenny"
+npc_sprite_frames = ExtResource("hiker")
+
+[node name="HikerOliver" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(816, 624)
+trainer_id = "kanto_rock_tunnel_1f_hiker_oliver"
+sight_range_tiles = 2
+facing_direction = Vector2(0, -1)
+npc_id = "kanto_rock_tunnel_1f_hiker_oliver"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Oliver"
+npc_sprite_frames = ExtResource("hiker")
+
+[node name="HikerLucas" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1712, 912)
+trainer_id = "kanto_rock_tunnel_1f_hiker_lucas"
+sight_range_tiles = 2
+facing_direction = Vector2(1, 0)
+npc_id = "kanto_rock_tunnel_1f_hiker_lucas"
+npc_definition_id = "trainer_class_hiker"
+display_name = "Hiker Lucas"
+npc_sprite_frames = ExtResource("hiker")
+
+[node name="PicnickerLeah" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(432, 1776)
+trainer_id = "kanto_rock_tunnel_1f_picnicker_leah"
+sight_range_tiles = 2
+npc_id = "kanto_rock_tunnel_1f_picnicker_leah"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Leah"
+npc_sprite_frames = ExtResource("picnicker")
+
+[node name="PicnickerAriana" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(912, 1776)
+trainer_id = "kanto_rock_tunnel_1f_picnicker_ariana"
+sight_range_tiles = 2
+npc_id = "kanto_rock_tunnel_1f_picnicker_ariana"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Ariana"
+npc_sprite_frames = ExtResource("picnicker")
+
+[node name="PicnickerDana" parent="Entities/NPCs" instance=ExtResource("trainer")]
+position = Vector2(1328, 1808)
+trainer_id = "kanto_rock_tunnel_1f_picnicker_dana"
+sight_range_tiles = 2
+npc_id = "kanto_rock_tunnel_1f_picnicker_dana"
+npc_definition_id = "trainer_class_picnicker"
+display_name = "Picnicker Dana"
+npc_sprite_frames = ExtResource("picnicker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=175204022]
 
