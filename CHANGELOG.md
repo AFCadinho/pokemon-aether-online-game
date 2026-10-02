@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Wild battles tonen hun arena en starten de fullscreen fade al tijdens het opslaan van de positie en ophalen van de battlegegevens. De tegenstander en acties verschijnen pas zodra de echte gegevens beschikbaar zijn.
+
 - De lokale browserpreview laadt de inlogvideo en Pokémon HOME-iconen correct via de verbonden previewserver.
 - Android-invulvelden blijven bij het typen zichtbaar: de toetsenbordcorrectie houdt nu ook rekening met de werkelijke viewport-schaling, zonder de oorspronkelijke UI-layout te wijzigen.
 

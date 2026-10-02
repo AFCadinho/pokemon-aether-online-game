@@ -73,8 +73,8 @@ var battle_instance: Node
 var classic_wild_backdrop: ColorRect
 var classic_wild_tween: Tween
 var battle_screen_host: Control
-var prepared_mobile_wild_battle: Control
-var prepared_mobile_wild_host: Control
+var prepared_wild_battle: Control
+var prepared_wild_host: Control
 var replay_return_callback: Callable
 var coop_controls: Control
 var coop_world_ready := false
@@ -235,6 +235,7 @@ func _ready() -> void:
 		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
+		_prewarm_wild_battle_ui()
 		await _setup_web_demo_world()
 		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
 			player.process_mode = web_player_process_mode_before_load
@@ -245,12 +246,12 @@ func _ready() -> void:
 		_show_pending_coop_battle_result.call_deferred()
 		return
 	_ensure_map_transition_overlay()
-	_prewarm_mobile_wild_battle_ui()
+	_prewarm_wild_battle_ui()
 	await _setup_initial_world_state()
 	if is_in_battle:
-		_discard_prepared_mobile_wild_battle_ui()
+		_discard_prepared_wild_battle_ui()
 	else:
-		_prewarm_mobile_wild_battle_ui()
+		_prewarm_wild_battle_ui()
 	_setup_coop_controls()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
@@ -2782,11 +2783,10 @@ func _get_remote_players_parent(map: Node = null) -> Node:
 func _on_settings_changed() -> void:
 	_sync_remote_players_visibility()
 	_sync_local_player_nameplate_visibility()
-	if OS.has_feature("mobile"):
-		if SettingsManager.battle_ui_layout != "immersive":
-			_discard_prepared_mobile_wild_battle_ui()
-		else:
-			_prewarm_mobile_wild_battle_ui.call_deferred()
+	if not _uses_fullscreen_battle():
+		_discard_prepared_wild_battle_ui()
+	else:
+		_prewarm_wild_battle_ui.call_deferred()
 	if not OS.has_feature("web"):
 		_prefetch_current_map_desktop_arena.call_deferred()
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and last_desktop_presentation_mode != SettingsManager.battle_presentation_mode:
@@ -3723,16 +3723,30 @@ func _mount_battle_ui(force_immersive := false) -> bool:
 	return _attach_battle_ui(force_immersive)
 
 
-func _mount_mobile_wild_battle_ui(started_at_msec: int) -> bool:
+func _begin_pending_wild_entry(encounter_type: String, started_at_msec: int) -> bool:
+	if not _mount_prepared_wild_battle_ui(started_at_msec):
+		return false
+	battle_instance.prepare_pending_entry(_resolve_battle_environment_id("wild", {}, encounter_type))
+	if is_instance_valid(battle_screen_host):
+		battle_screen_host.reveal_pending_entry()
+	elif is_instance_valid(classic_wild_backdrop):
+		classic_wild_backdrop.color.a = WildEncounterTransition.CLASSIC_DIM_ALPHA
+	wild_encounter_transition.reveal()
+	return true
+
+
+func _mount_prepared_wild_battle_ui(started_at_msec: int) -> bool:
 	if (
-		is_instance_valid(prepared_mobile_wild_battle)
-		and is_instance_valid(prepared_mobile_wild_host)
-		and SettingsManager.battle_ui_layout == "immersive"
+		is_instance_valid(prepared_wild_battle)
+		and is_instance_valid(prepared_wild_host)
+		and prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout
+		and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode
+		and _uses_fullscreen_battle()
 	):
-		battle_instance = prepared_mobile_wild_battle
-		battle_screen_host = prepared_mobile_wild_host
-		prepared_mobile_wild_battle = null
-		prepared_mobile_wild_host = null
+		battle_instance = prepared_wild_battle
+		battle_screen_host = prepared_wild_host
+		prepared_wild_battle = null
+		prepared_wild_host = null
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.visible else WildEncounterTransition.STYLE_WILD
 		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, false, wild_encounter_transition.overworld_snapshot)
 		battle_ui_host.visible = true
@@ -3740,22 +3754,24 @@ func _mount_mobile_wild_battle_ui(started_at_msec: int) -> bool:
 			battle_instance.battle_ended.connect(_on_battle_ended)
 		_trace_mobile_wild_transition("ui_reused", started_at_msec)
 		return true
-	_discard_prepared_mobile_wild_battle_ui()
+	_discard_prepared_wild_battle_ui()
 	if not _instantiate_battle_ui():
 		return false
 	_trace_mobile_wild_transition("ui_instantiated", started_at_msec)
-	# Let the encounter animation draw between scene creation and node setup.
-	await get_tree().process_frame
 	if not is_instance_valid(battle_instance) or not is_in_battle:
 		return false
 	return _attach_battle_ui()
 
 
-func _prewarm_mobile_wild_battle_ui() -> void:
-	if not OS.has_feature("mobile") or SettingsManager.battle_ui_layout != "immersive":
+func _prewarm_wild_battle_ui() -> void:
+	if not _uses_fullscreen_battle():
 		return
-	if is_in_battle or wild_battle_resume_pending or is_instance_valid(prepared_mobile_wild_battle):
+	if is_in_battle or wild_battle_resume_pending:
 		return
+	if is_instance_valid(prepared_wild_battle) and is_instance_valid(prepared_wild_host):
+		if prepared_wild_host.get_meta("prewarm_layout", "") == SettingsManager.battle_ui_layout and prepared_wild_host.get_meta("prewarm_mode", "") == SettingsManager.battle_presentation_mode:
+			return
+		_discard_prepared_wild_battle_ui()
 	if not is_inside_tree() or battle_ui_host == null or BATTLE_SCENE == null:
 		return
 	var started_at_msec := Time.get_ticks_msec()
@@ -3770,20 +3786,22 @@ func _prewarm_mobile_wild_battle_ui() -> void:
 		return
 	host.visible = false
 	battle_ui_host.add_child(host)
-	host.prewarm_mobile_immersive_battle(prepared)
-	prepared_mobile_wild_battle = prepared
-	prepared_mobile_wild_host = host
+	host.prewarm_battle(prepared, SettingsManager.battle_ui_layout == "immersive")
+	host.set_meta("prewarm_layout", SettingsManager.battle_ui_layout)
+	host.set_meta("prewarm_mode", SettingsManager.battle_presentation_mode)
+	prepared_wild_battle = prepared
+	prepared_wild_host = host
 	if OS.is_debug_build():
-		print("Mobile wild transition: UI prewarmed in %d ms" % (Time.get_ticks_msec() - started_at_msec))
+		print("Wild battle UI prewarmed in %d ms" % (Time.get_ticks_msec() - started_at_msec))
 
 
-func _discard_prepared_mobile_wild_battle_ui() -> void:
-	if is_instance_valid(prepared_mobile_wild_host):
-		prepared_mobile_wild_host.queue_free()
-	elif is_instance_valid(prepared_mobile_wild_battle):
-		prepared_mobile_wild_battle.queue_free()
-	prepared_mobile_wild_battle = null
-	prepared_mobile_wild_host = null
+func _discard_prepared_wild_battle_ui() -> void:
+	if is_instance_valid(prepared_wild_host):
+		prepared_wild_host.queue_free()
+	elif is_instance_valid(prepared_wild_battle):
+		prepared_wild_battle.queue_free()
+	prepared_wild_battle = null
+	prepared_wild_host = null
 
 
 func _instantiate_battle_ui() -> bool:
@@ -3987,6 +4005,13 @@ func start_triggered_wild_battle_for_area(
 	active_wild_encounter_type = ""
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_wild_encounter_transition()
+	# Open the real battle arena before the two authoritative network requests.
+	# Unknown combatants/actions remain hidden until the response is prepared.
+	if not _begin_pending_wild_entry(encounter_type, transition_started_at_msec):
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		await GameErrorDialogService.show_report_to_staff_message()
+		return
 
 	# Persist the encounter tile before the server creates the resumable battle.
 	# Closing the client cannot reliably finish an asynchronous position save.
@@ -4067,11 +4092,9 @@ func start_triggered_wild_battle_for_area(
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
-	var battle_mounted := false
-	if OS.has_feature("mobile"):
-		battle_mounted = await _mount_mobile_wild_battle_ui(transition_started_at_msec)
-	else:
-		battle_mounted = _mount_battle_ui()
+	var battle_mounted := is_instance_valid(battle_instance)
+	if not battle_mounted:
+		battle_mounted = _mount_prepared_wild_battle_ui(transition_started_at_msec)
 	if not battle_mounted:
 		push_error("World.start_triggered_wild_battle_for_area failed: could not load battle scene.")
 		await _cancel_wild_encounter_transition()
@@ -4488,7 +4511,7 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	else:
 		_unlock_overworld_after_battle()
 	MusicManager.play_overworld_music()
-	_prewarm_mobile_wild_battle_ui.call_deferred()
+	_prewarm_wild_battle_ui.call_deferred()
 	
 func _fade_classic_wild_battle_out() -> bool:
 	if not is_instance_valid(classic_wild_backdrop) or not is_instance_valid(battle_instance):

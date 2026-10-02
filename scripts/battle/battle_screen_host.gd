@@ -128,14 +128,15 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
 
-func prewarm_mobile_immersive_battle(instance: Control) -> void:
-	# Build the Android battle controls while the world is open. Keep the whole
+func prewarm_battle(instance: Control, immersive := true) -> void:
+	# Build battle controls while the world is open on any platform. Keep the whole
 	# tree dormant until mount() takes ownership of the active encounter.
 	process_mode = Node.PROCESS_MODE_DISABLED
 	hide()
 	battle = instance
 	battle.set_meta("dedicated_battle_screen", true)
-	preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
+	if immersive:
+		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	content.add_child(battle)
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false, snapshot: Texture2D = null) -> void:
@@ -234,6 +235,11 @@ func _reveal_when_prepared(token: int) -> void:
 	if reveal_requested:
 		_reveal_cover()
 
+func reveal_pending_entry() -> void:
+	# The arena can already fade in while authoritative data/models are pending.
+	reveal_requested = true
+	_reveal_cover()
+
 func request_reveal() -> void:
 	reveal_requested = true
 	if preparation_ready:
@@ -252,18 +258,18 @@ func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
 	reveal_tween = create_tween()
-	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_LINEAR)
 	# A slow mount/upload frame must not consume the whole entrance tween.
 	# Advance only after presenting a frame, with at least twelve blend steps.
 	reveal_tween.pause()
 	while not released and reveal_tween.is_valid() and fade_progress < 1.0:
 		await get_tree().process_frame
-		if DisplayServer.get_name() != "headless":
-			await RenderingServer.frame_post_draw
 		if released or not reveal_tween.is_valid():
 			return
 		var step := minf(get_process_delta_time(), FADE_SECONDS / float(MIN_FADE_FRAMES))
 		reveal_tween.custom_step(maxf(step, 0.0001))
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
 	if not released:
 		fade_progress = 1.0
 		content.modulate.a = 1.0

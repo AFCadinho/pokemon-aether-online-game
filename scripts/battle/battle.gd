@@ -1179,6 +1179,8 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	if has_meta("battle_entry_pending"):
+		return
 	animation_router.poll_threaded_resource_requests()
 	var calcdex_active := current_action_panel_mode == BattleActionsPanelMode.CALC
 	if not calcdex_active and hover_state.should_poll_sprite_hover():
@@ -2755,11 +2757,13 @@ func _stop_z_move_pulse() -> void:
 		z_move_button.scale = Vector2.ONE
 
 func _input(event: InputEvent) -> void:
+	if has_meta("battle_entry_pending"):
+		return
 	if _try_focus_battle_from_background_click(event):
 		return
 
 func _unhandled_input(event: InputEvent) -> void:
-	if has_meta("battle_screen_preparing"):
+	if has_meta("battle_screen_preparing") or has_meta("battle_entry_pending"):
 		return
 	if _is_ui_typing():
 		return
@@ -8218,12 +8222,45 @@ func _set_pvp_party_hud_display_override() -> void:
 func _clear_pvp_party_hud_display_override() -> void:
 	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
+var _pending_entry_visibility: Array[Dictionary] = []
+
+func prepare_pending_entry(environment_id: StringName) -> void:
+	set_meta("battle_entry_pending", true)
+	battle_type = BattleType.WILD
+	_apply_battle_environment(environment_id)
+	_set_battle_actions_ready(false)
+	_set_battle_input_locked(true)
+	var controls: Array[Control] = [player_sprite_box, enemy_sprite_box,
+		player_hud_panel, enemy_hud_panel, moves_grid, action_buttons,
+		current_action_panel, mechanics_panel, field_timers_panel,
+		player_stage_party_grid, opponent_party_grid, battle_party_rail, player_party_grid,
+		get_node("%ActionsDock"), get_node("%UtilityActions"),
+		get_node("%VSPanelContainer"), get_node("%BattleStatusPanel"),
+		get_node("%PlayerStagePartyRail"), get_node("%OpponentStagePartyRail")]
+	var presenter := battle_stage.get_node_or_null("ExperimentalBattle3D") as Control
+	if presenter != null:
+		controls.append(presenter)
+	for control: Control in controls:
+		_pending_entry_visibility.append({"control": control, "visible": control.visible})
+		control.hide()
+	_show_local_player_trainer()
+
+func _finish_pending_entry() -> void:
+	remove_meta("battle_entry_pending")
+	for state: Dictionary in _pending_entry_visibility:
+		var control: Control = state.control
+		if is_instance_valid(control):
+			control.visible = state.visible
+	_pending_entry_visibility.clear()
+
 func _prepare_battle_setup(
 	type: BattleType,
 	player_pokemon: Pokemon,
 	enemy_pokemon: Pokemon,
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
+	if has_meta("battle_entry_pending"):
+		_finish_pending_entry()
 	battle_type = type
 	enemy_hud_panel.level_hidden = false
 	display_data_presenter.opponent_levels_hidden = false
