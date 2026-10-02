@@ -25,7 +25,7 @@ static func build_overworld_frames(state: Dictionary) -> SpriteFrames:
 	if body == null:
 		return null
 	# Match Mt. Moon's layer order, then flatten it so BaseNPC movement and
-	# battle staging can use the same synchronized directional animations.
+	# sensors can use synchronized directional animations.
 	var layers: Array[SpriteFrames] = [body]
 	for category: String in ["bottom", "shoes", "top"]:
 		layers.append(Appearance.get_part_frames(category, str(state[category]), gender))
