@@ -10,8 +10,28 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for scale_factor: float in [0.5, 1.0, 1.5]:
-		await _check_layout(scale_factor)
+	await process_frame
+	await process_frame
+	var old_window_size := root.size
+	var window_fit := root.get_node("WindowFit")
+	root.size_changed.disconnect(window_fit.apply_ui_scale)
+	root.min_size = Vector2i.ZERO
+	root.size = Vector2i(1920,1080)
+	var old_mode := root.content_scale_mode
+	var old_size := root.content_scale_size
+	var old_factor := root.content_scale_factor
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_size = root.size
+	for viewport_factor: float in [1.0, 1.25, 1.5]:
+		root.content_scale_factor = viewport_factor
+		await process_frame
+		for scale_factor: float in [0.5, 1.0, 1.5]:
+			await _check_layout(scale_factor)
+	root.content_scale_factor = old_factor
+	root.content_scale_size = old_size
+	root.content_scale_mode = old_mode
+	root.size = old_window_size
+	root.size_changed.connect(window_fit.apply_ui_scale)
 	await _check_scene("res://scenes/interface/login_screen.tscn", "Background/Shell", [
 		"MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/UsernameInput",
 		"MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/PasswordInput",
@@ -82,7 +102,7 @@ func _check_layout(scale_factor: float) -> void:
 	username.text = "trainer"
 	username.grab_focus()
 	username.caret_column = 3
-	var keyboard_top := (username.get_screen_transform() * Vector2.ZERO).y + 20.0
+	var keyboard_top := ((username.get_viewport().get_screen_transform() * username.get_global_transform_with_canvas()) * Vector2.ZERO).y + 20.0
 	helper.update_layout(300.0, keyboard_top + 300.0)
 	_check_field_visible(username, keyboard_top, "Username at scale %s" % scale_factor)
 	var shifted_position := surface.position
@@ -116,8 +136,8 @@ func _check_layout(scale_factor: float) -> void:
 
 
 func _check_field_visible(input: LineEdit, keyboard_top: float, message: String) -> void:
-	var rect := input.get_screen_transform() * Rect2(Vector2.ZERO, input.size)
-	_check(rect.end.y <= keyboard_top - Avoidance.MARGIN_PIXELS + 0.1 and rect.position.y >= 0.0, message)
+	var rect := (input.get_viewport().get_screen_transform() * input.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, input.size)
+	_check(rect.end.y <= keyboard_top - Avoidance.MARGIN_PIXELS + 0.1 and rect.position.y >= 0.0, message + " rect=" + str(rect) + " keyboard_top=" + str(keyboard_top))
 
 
 func _check(condition: bool, message: String) -> void:

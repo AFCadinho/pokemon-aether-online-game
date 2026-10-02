@@ -36,12 +36,12 @@ func update_layout(keyboard_height: float, window_bottom: float) -> void:
 		for input: LineEdit in inputs:
 			if not is_instance_valid(input) or not input.has_focus() or not input.is_visible_in_tree():
 				continue
-			# get_screen_transform includes CanvasLayer and canvas_items stretch:
-			# the keyboard height is in physical screen pixels, not UI units.
-			var input_rect := input.get_screen_transform() * Rect2(Vector2.ZERO, input.size)
+			# CanvasItem.get_screen_transform omits root viewport stretch.
+			# Include it explicitly: keyboard height is in physical screen pixels.
+			var input_rect := screen_transform(input) * Rect2(Vector2.ZERO, input.size)
 			var pixels_up := required_shift(input_rect, window_bottom - keyboard_height)
-			var screen_transform := surface.get_screen_transform()
-			var parent_transform := screen_transform * surface.get_transform().affine_inverse()
+			var surface_transform := screen_transform(surface)
+			var parent_transform := surface_transform * surface.get_transform().affine_inverse()
 			_shift = parent_transform.affine_inverse().basis_xform(Vector2(0.0, -pixels_up))
 			break
 	surface.position += _shift
@@ -55,3 +55,7 @@ static func required_shift(input_rect: Rect2, keyboard_top: float) -> float:
 	var bottom_overlap := maxf(0.0, input_rect.end.y + MARGIN_PIXELS - keyboard_top)
 	var top_limit := maxf(0.0, input_rect.position.y - MARGIN_PIXELS)
 	return minf(bottom_overlap, top_limit)
+
+
+static func screen_transform(control: Control) -> Transform2D:
+	return control.get_viewport().get_screen_transform() * control.get_global_transform_with_canvas()
