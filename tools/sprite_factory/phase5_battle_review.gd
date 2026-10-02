@@ -236,7 +236,13 @@ func _run() -> void:
 	var control_player: AnimationPlayer = control.find_children("*", "AnimationPlayer", true, false)[0]
 	var control_measure: Dictionary = await _measure(control_entry, control, control_player)
 	control.visible = false
+	var selected_text := OS.get_environment("POKEAETHER_BATTLE_REVIEW_ONLY")
+	var selected := selected_text.split(",", false)
+	report["selected_variants"] = Array(selected)
 	for entry: Dictionary in catalog.entries:
+		if not selected.is_empty() and entry.species not in selected:
+			report.entries.append({"species": entry.species, "status": "not_selected_for_followup"})
+			continue
 		if entry.status != "exported_for_review":
 			report.entries.append({"species": entry.species, "status": entry.status})
 			continue

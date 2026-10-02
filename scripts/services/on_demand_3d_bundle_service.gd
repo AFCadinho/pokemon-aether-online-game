@@ -179,9 +179,12 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 
 func _asset_id(identity: String) -> String:
 	var species := identity.trim_suffix("@shiny")
-	var form := "mega" if species.ends_with("-mega") else "base"
-	if form == "mega":
-		species = species.trim_suffix("-mega")
+	var form := "base"
+	for candidate: String in ["mega-x", "mega-y", "mega-z", "mega"]:
+		if species.ends_with("-" + candidate):
+			form = candidate
+			species = species.trim_suffix("-" + candidate)
+			break
 	var id := "pokemon_3d:%s:%s" % [species, form]
 	return id if id in RELEASE.data.requiredAssetIds else ""
 
@@ -283,7 +286,10 @@ func _unpack_asset(asset: Dictionary, zip_path: String) -> Dictionary:
 			reader.close()
 			return {"error": "Approved 3D appearance is invalid."}
 		var variant := str(appearance.variant)
-		var identity := parts[1] + ("-mega" if parts[2] == "mega" else "") + ("@shiny" if variant == "shiny" else "")
+		if parts[2] not in ["base", "mega", "mega-x", "mega-y", "mega-z"]:
+			reader.close()
+			return {"error": "Approved 3D form is unsupported."}
+		var identity := parts[1] + ("-" + parts[2] if parts[2] != "base" else "") + ("@shiny" if variant == "shiny" else "")
 		if appearance.get("runtime_identity") != identity:
 			reader.close()
 			return {"error": "Approved 3D identity is invalid."}

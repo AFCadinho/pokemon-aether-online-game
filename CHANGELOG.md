@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- 71 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels en ondersteuning voor Mega X, Y en Z.
+
+- Bij binnenkomst in Rock Tunnel vanaf Route 10 kijkt de speler nu de grot in.
+
 - Rock Tunnel now includes its supported FRLG and HGSS pickups; Diglett Cave includes HGSS pickups on the traversable tunnel floor.
 
 - Fullscreen NPC battles tonen arena en trainers tijdens het ophalen van battlegegevens en automatische lead-keuzes. De vaste pauze na trainerdialoog is verwijderd.

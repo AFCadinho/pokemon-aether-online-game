@@ -1,0 +1,1367 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "user_feedback": "Ze zien er allemaal goed uit. Mega Steelix is alleen van erg ver, dus ik weet niet of dit te klein is",
+  "review_manifest_sha256": "1c65f43fe76df413942b1393202cb254b9e4a1a485e3f02ac49c56a43047cf33",
+  "appearance_approved": true,
+  "battle_approved": false,
+  "runtime_approved": false,
+  "entries": [
+    {
+      "species": "abomasnowmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/abomasnowmega/normal/model.glb",
+          "sha256": "2a396c9fb9dad9940b4960e6a269b74e5aa06f35d89e89bde3d30a1bb0f5965b",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0460/pm0460_51_00/pm0460_51_00.trmtr",
+          "table_sha256": "4b41e72a780e3f7cd239b0fa97a4a00437c2f507b7bb9756de1754b74014d0ae"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/abomasnowmega/shiny/model.glb",
+          "sha256": "c2e547f59d587bb5013a81594d6840dd63bbb9390cfe439402c782e431153b69",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0460/pm0460_51_00/pm0460_51_00_rare.trmtr",
+          "table_sha256": "ea7f98b6338fa9ddfc8c4886922cc3cdcce078362327122011c29e43d4352a9c"
+        }
+      }
+    },
+    {
+      "species": "absolmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/absolmega/normal/model.glb",
+          "sha256": "71cd5a7a909715f68e75a62b2f77f3a11ed35da14935452d89796ec08e64ecc7",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0359/pm0359_51_00/pm0359_51_00.trmtr",
+          "table_sha256": "05f5c0b0e6a6de649545c14c933528a41dbf3a2dd45cb265aabc9db286ef243b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/absolmega/shiny/model.glb",
+          "sha256": "66ba318eb66eba19a3c8fad580ec9c9cfe069c7be05e96217068c9153714cdc1",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0359/pm0359_51_00/pm0359_51_00_rare.trmtr",
+          "table_sha256": "f9358cac50f81962266185d5529903d02176b1134bb02fdf91d622aab20deaf1"
+        }
+      }
+    },
+    {
+      "species": "absolmegaz",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/absolmegaz/normal/model.glb",
+          "sha256": "c754dcfc9b1b69bf63778c00e8e2422536ebad64c7d559f8fba1f33ab6fa62da",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0359/pm0359_52_00/pm0359_52_00.trmtr",
+          "table_sha256": "b8eda8cb77a93bc2b101e6891d5668271198db0a89b7b185fd7abd146fe23e2a"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/absolmegaz/shiny/model.glb",
+          "sha256": "1d580796999f649ba08c310d51457a1ac3cf966f5273c5268d5301529d833152",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0359/pm0359_52_00/pm0359_52_00_rare.trmtr",
+          "table_sha256": "1318c420ae5abdecb965b08a23852251e86c973723f64faa875944fd753183af"
+        }
+      }
+    },
+    {
+      "species": "aerodactylmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/aerodactylmega/normal/model.glb",
+          "sha256": "49187315e1d9ad6073e45f6f6e4138e2a2d6fb8ab1648cd7feb521399576ff5a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0142/pm0142_51_00/pm0142_51_00.trmtr",
+          "table_sha256": "8dbaea5595a0893c3af998f1614068b8450bae22034014cbdfceeb54d30f6537"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/aerodactylmega/shiny/model.glb",
+          "sha256": "a28c1255a6901dbe800afbc4295746356f680d3401624e8c7a7c1b7854fa25aa",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0142/pm0142_51_00/pm0142_51_00_rare.trmtr",
+          "table_sha256": "b3275b1cc1d91ad4f7e4eab2324bc91f49e1494411461bc080cb279c1b277e47"
+        }
+      }
+    },
+    {
+      "species": "aggronmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/aggronmega/normal/model.glb",
+          "sha256": "4c088cd301b2126759c1f43146a5d1c8aeeb2de7c93a84494f620f004beafd3d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0306/pm0306_51_00/pm0306_51_00.trmtr",
+          "table_sha256": "517a29bd2ce10fb11eb586dfee5623572998316cd82ff60e2543daeccea910b1"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/aggronmega/shiny/model.glb",
+          "sha256": "64d4a13d6a6d7631a77d295112f3f8823bbc1725624a8d1170f187b2af72c6ce",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0306/pm0306_51_00/pm0306_51_00_rare.trmtr",
+          "table_sha256": "0d07ce47352459491e105bad4cb0f6ca2f6f4145e7cbdaa6ac278a89fbb3107a"
+        }
+      }
+    },
+    {
+      "species": "alakazammega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/alakazammega/normal/model.glb",
+          "sha256": "d9d372969e6b1ffadf7fc5808ba0723e8fc84b25b26242a47ab0f2bd45638e91",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0065/pm0065_51_00/pm0065_51_00.trmtr",
+          "table_sha256": "5b9c60209b97383b0eb461174c0eb5d0fa90057d81699cdfe5e07568961d712c"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/alakazammega/shiny/model.glb",
+          "sha256": "251b11ac99db1df512bf80f8eb548f10cdd6b2f508ab848ff5c75ed0d0ff30d6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0065/pm0065_51_00/pm0065_51_00_rare.trmtr",
+          "table_sha256": "d0c2e96f7432cade38ad44d5346a415be6594aed635a721d530578ef6ddf11ff"
+        }
+      }
+    },
+    {
+      "species": "altariamega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/altariamega/normal/model.glb",
+          "sha256": "41dac10836c2c30ae6e5056a3fab925f3d66c84768dac1778f86ee8a0db91704",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0334/pm0334_51_00/pm0334_51_00.trmtr",
+          "table_sha256": "04d8a8fa11ded759145f06c690f555b5109a7c26c09296c9c131d5d26c12ba8e"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/altariamega/shiny/model.glb",
+          "sha256": "d856d56181d1c27a4880d2d8b8a8e0e891bf11b4f1d7a063c2a63e2a43d6e3cd",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0334/pm0334_51_00/pm0334_51_00_rare.trmtr",
+          "table_sha256": "b1232b92ba786245b828f953440ae526bcc4ed3adbbd8409bfb58b901e1bbc5b"
+        }
+      }
+    },
+    {
+      "species": "ampharosmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/ampharosmega/normal/model.glb",
+          "sha256": "b32a077e7c9c81b56369ef409c1a901c544f10731528fa56fe44edb5f3a628fb",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0181/pm0181_51_00/pm0181_51_00.trmtr",
+          "table_sha256": "c911c01c4a2093f036d0fe69ece779031b7a694155f00ef1945e16a26efd7223"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/ampharosmega/shiny/model.glb",
+          "sha256": "758f7464fbdba475ef4e516c8b0ffc7da1abd0416113e6d6b2e635fd6a0f8a60",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0181/pm0181_51_00/pm0181_51_00_rare.trmtr",
+          "table_sha256": "47503ea9b65da0e04e6bdfdb7b3adaafeec4c355e92a28a1602edba2f2121296"
+        }
+      }
+    },
+    {
+      "species": "audinomega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/audinomega/normal/model.glb",
+          "sha256": "dd705d878dea17eace5c55df37e1492bfbb865a6a78e80950191c31dd7efd9f2",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0531/pm0531_51_00/pm0531_51_00.trmtr",
+          "table_sha256": "80b4288f68d7d2535cb3fc0bfe901554447ca3d0e6b7ce3fe41d31ba9c37ac3e"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/audinomega/shiny/model.glb",
+          "sha256": "05eb5441597976bb378f7e4234a274f723894951b14a5848ca0a351e49f61bbc",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0531/pm0531_51_00/pm0531_51_00_rare.trmtr",
+          "table_sha256": "fd70b8253543b954f160fe357a4479d5d7f84675cc7388de57bed25337a35903"
+        }
+      }
+    },
+    {
+      "species": "banettemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/banettemega/normal/model.glb",
+          "sha256": "c8fb277cb95470090f6764f9c4ca4897ee6a892f91614e3b9def39a83481cd91",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0354/pm0354_51_00/pm0354_51_00.trmtr",
+          "table_sha256": "b09c195f1647aed847c90dbc375a129186692677f93fe446561408ffa9242829"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/banettemega/shiny/model.glb",
+          "sha256": "999173f27887addb1272838afba269a085b4d5a32e8586b60a2713e9a687514f",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0354/pm0354_51_00/pm0354_51_00_rare.trmtr",
+          "table_sha256": "7f1f31613c610141755e582cc0e0f8e2a0741c1415ae4e3e18287dc0e35dfd43"
+        }
+      }
+    },
+    {
+      "species": "beedrillmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/beedrillmega/normal/model.glb",
+          "sha256": "643505ddcb6daebe69fb11dfcf2074952005ec3b7d9397ae1514055666886282",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0015/pm0015_51_00/pm0015_51_00.trmtr",
+          "table_sha256": "cb0e5d8e3c3fabd0a3ede9a765bc7e748baf072e8cb94d735b94f04e27af87d6"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/beedrillmega/shiny/model.glb",
+          "sha256": "9d82328e72e50778ebd474bb63e48aae2acf1f4ae3aefef884a4036bc6779454",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0015/pm0015_51_00/pm0015_51_00_rare.trmtr",
+          "table_sha256": "52ae97d157ba7b466cf1a55f6b933710bc46f975a87173fe7596166f4b19630c"
+        }
+      }
+    },
+    {
+      "species": "blastoisemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/blastoisemega/normal/model.glb",
+          "sha256": "f3c8fabc26ae283874df8498b2e698cd4e09202541dc74203093a31b15660758",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0009/pm0009_51_00/pm0009_51_00.trmtr",
+          "table_sha256": "2a2385c0f1f2e36dabb8dc5dec7a0131f025a1db5e9929ec007d33a4760a57c8"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/blastoisemega/shiny/model.glb",
+          "sha256": "b8c38c42fd130a8b2a1c507a7628195046b0dba7b9d99271af26fbae6fc3188e",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0009/pm0009_51_00/pm0009_51_00_rare.trmtr",
+          "table_sha256": "27d33650235f76f13349fca2838def8a871ed5b0776f36f23f561930005aed81"
+        }
+      }
+    },
+    {
+      "species": "blazikenmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/blazikenmega/normal/model.glb",
+          "sha256": "77e4f22a8216d43df8c65b2abee4008b3be1f1818c11806b5324f0baf9e69577",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0257/pm0257_51_00/pm0257_51_00.trmtr",
+          "table_sha256": "cb3407bf33c94f453dd5541df080327bbdfdb5723625d16f552d50918108419c"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/blazikenmega/shiny/model.glb",
+          "sha256": "4199a9e208ad0af160b131c4cf106abe434b7b47a971b3c486cd6aec896db3f7",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0257/pm0257_51_00/pm0257_51_00_rare.trmtr",
+          "table_sha256": "7bf422c4dc39415cd86f1e96bcc7726d43255b4992516263b406f1509b8410e1"
+        }
+      }
+    },
+    {
+      "species": "cameruptmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/cameruptmega/normal/model.glb",
+          "sha256": "0857d1411ab4d3eceaf9f52c3e00d7d01875ac2119ac908ae696fb844d8ab909",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0323/pm0323_51_00/pm0323_51_00.trmtr",
+          "table_sha256": "4c7398d3fade67a8b861515abd5ff5ada4b553c8375f5ea41ab92656acc0e8ea"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/cameruptmega/shiny/model.glb",
+          "sha256": "30bc402da5551d5e065726fa0d7edcd4323370af3348e451e0ececf9aac4c51d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0323/pm0323_51_00/pm0323_51_00_rare.trmtr",
+          "table_sha256": "c1ff5ca74ce645db2310d094946ec9e9bb13edab04d66bdb035bd5d3d0408b11"
+        }
+      }
+    },
+    {
+      "species": "chandeluremega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/chandeluremega/normal/model.glb",
+          "sha256": "a57473acce23c16e8ebb28045e054010c72f069ea4770cf195c104002a8933ff",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0609/pm0609_51_00/pm0609_51_00.trmtr",
+          "table_sha256": "2cda6e85ed88a7e1ef015994c09ddbdf44a68b21a709d0543e4c9f4def6edae0"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/chandeluremega/shiny/model.glb",
+          "sha256": "237b2ceb68d53599feb9d3ab421fea01db3a9b1a82f252b90ee3dc3bd2ef1d86",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0609/pm0609_51_00/pm0609_51_00_rare.trmtr",
+          "table_sha256": "bef33df56a6083744572d7e055a1976138d568b0cadde5155e52ad0665b5193f"
+        }
+      }
+    },
+    {
+      "species": "charizardmegax",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/charizardmegax/normal/model.glb",
+          "sha256": "0e344947dd5e418e82b99194ad4e430e73a64c6b560a5e5c2cc67bbf303ee364",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0006/pm0006_51_00/pm0006_51_00.trmtr",
+          "table_sha256": "d7a72d7c7687250f2dfeefe725c8d85fb3afe825188baefa6edd4544f85c8de2"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/charizardmegax/shiny/model.glb",
+          "sha256": "355905898d9e0e2fc61a6095187e9137d0b7f9e4234e520c9473cf8c074d18f5",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0006/pm0006_51_00/pm0006_51_00_rare.trmtr",
+          "table_sha256": "cd884506d8edc10ed22204ababf69b9afc3d84e7a1e135dae8e35d7d0f0975d2"
+        }
+      }
+    },
+    {
+      "species": "charizardmegay",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/charizardmegay/normal/model.glb",
+          "sha256": "1c78195a50dca24a1ce84b2bc6e8f5e6168515795cc11b567b9f3a8ab384f0c6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0006/pm0006_52_00/pm0006_52_00.trmtr",
+          "table_sha256": "5aaab21ecb2a5830d7e9498910eadce2c7458c474edeea5e4cee3fefa274b150"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/charizardmegay/shiny/model.glb",
+          "sha256": "a1d80c26d505ac1099fe2f27799cf195c45a70f147f8cdb5532fd58dd3354e56",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0006/pm0006_52_00/pm0006_52_00_rare.trmtr",
+          "table_sha256": "a0ea12bf6675d24a8e922d37bfe7ad6d1211f2a883d51744cae4279fe687910a"
+        }
+      }
+    },
+    {
+      "species": "chimechomega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/chimechomega/normal/model.glb",
+          "sha256": "75f0a8ad1ee235e588d6b495db29beba630db592fd8bb871e5686458272610e6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0358/pm0358_51_00/pm0358_51_00.trmtr",
+          "table_sha256": "e23df439f9eaa2adee38eb7a15d1af7a28c507c7954c1d392e50977accb6b7b3"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/chimechomega/shiny/model.glb",
+          "sha256": "34f06be6282da3c3a671be741956aca3f2ca59c61fc6b29b057e0343d25dfd53",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0358/pm0358_51_00/pm0358_51_00_rare.trmtr",
+          "table_sha256": "840223aafddfe565ea3d12cc2df8e5b9c835671002e5350fd997dee8903a7e94"
+        }
+      }
+    },
+    {
+      "species": "clefablemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/clefablemega/normal/model.glb",
+          "sha256": "bb76447ab43e717db90780db3ddf76f32554d035fdf2cb5c3ce10d785ad867eb",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0036/pm0036_51_00/pm0036_51_00.trmtr",
+          "table_sha256": "15a0631e4d1fc6e5ff4ade9548b91416861133d0e210164952bbc2c10058c627"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/clefablemega/shiny/model.glb",
+          "sha256": "21da5e8bd1fc5ba8063ed3dc814ecbf290c3bf00b7c2df519842ec8c769fb547",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0036/pm0036_51_00/pm0036_51_00_rare.trmtr",
+          "table_sha256": "a1833c4bf9d9203d49b45cda6bbd7e74852f04f2218dd8a5d90dbfd7d51e5953"
+        }
+      }
+    },
+    {
+      "species": "darkraimega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/darkraimega/normal/model.glb",
+          "sha256": "d6399530bc2836e30e7d55456e797d0c78bec6137e306da49d1681ba11fc3d49",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0491/pm0491_51_00/pm0491_51_00.trmtr",
+          "table_sha256": "a5c04f39076f31f8eaa3851fef6a9958e72f33a621e9db09d231dc0f9af80025"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/darkraimega/shiny/model.glb",
+          "sha256": "ead245c109aa38a8a73fee423b71f0de424c4f3083454e5733eca7db60db7def",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0491/pm0491_51_00/pm0491_51_00_rare.trmtr",
+          "table_sha256": "3d995455bcb8161afc5c675b8654c2aaa00b17b755163ea7da01181e52135cab"
+        }
+      }
+    },
+    {
+      "species": "eelektrossmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/eelektrossmega/normal/model.glb",
+          "sha256": "cec976f2cf1588f61d21a2c855641ca02b8016117ac4665ac809b36c9d9ef9e9",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0604/pm0604_51_00/pm0604_51_00.trmtr",
+          "table_sha256": "d26e3b5b99664670e949c9e50977e55cb00ff18d3c5463ffdfff68a09dc0eca7"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/eelektrossmega/shiny/model.glb",
+          "sha256": "d68085382fb17b34ba096e7f1b0ef1ac375f4394da6ae5330f557a0dbe6d62b0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0604/pm0604_51_00/pm0604_51_00_rare.trmtr",
+          "table_sha256": "e8bf7bbd42973e236fa0711ed0239ec71e7f39fb0117732c64e5a84d2a675c25"
+        }
+      }
+    },
+    {
+      "species": "emboarmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/emboarmega/normal/model.glb",
+          "sha256": "514e01980a3a6aa3efbdd0c2e6649d09a51d17960a861003104db7b0e8e21825",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0500/pm0500_51_00/pm0500_51_00.trmtr",
+          "table_sha256": "858aaf123c05a90715dd7aef3ac08b97aff9adaf9c003a04ed2ce7d121848ed6"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/emboarmega/shiny/model.glb",
+          "sha256": "dc4f9d53c1a1e23054df79b4e6006ec8d0886a4da3f4a50349a9538352969bcf",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0500/pm0500_51_00/pm0500_51_00_rare.trmtr",
+          "table_sha256": "bfccdeea623b1505c0aee39d3829db15e31069fb1304a7529cc558e2235ae0cc"
+        }
+      }
+    },
+    {
+      "species": "excadrillmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/excadrillmega/normal/model.glb",
+          "sha256": "541255d1d3a645c5805be37d1e89ec9c49e1df46d31cee24da72b3e05d68fd23",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0530/pm0530_51_00/pm0530_51_00.trmtr",
+          "table_sha256": "2e9161c91b79d7aa498c2e5c112c34eaaddb5c8bac0da7865e252bba25e9c245"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/excadrillmega/shiny/model.glb",
+          "sha256": "02d6c345117eddef9b8e617e1656e74892619c6de4cd295ab0862a32970d22db",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0530/pm0530_51_00/pm0530_51_00_rare.trmtr",
+          "table_sha256": "3447357ab683557c8ef2eb95e748762980d5b3becbef5bcb212ebdb789e775b9"
+        }
+      }
+    },
+    {
+      "species": "feraligatrmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/feraligatrmega/normal/model.glb",
+          "sha256": "09e76a19a5ed7e56259a1ff2af159c43d30f6df42eafe4bfe0a209917fe6d6f6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0160/pm0160_51_00/pm0160_51_00.trmtr",
+          "table_sha256": "c4c95dcb1bf437dcec45edc2f24eea34cc5ff74ff640f1af004876d2df0ad2d0"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/feraligatrmega/shiny/model.glb",
+          "sha256": "aa6748f178aa3f118bb1d9a760bc747e35c2732c9d524f00bf04a2df7e9fdbc1",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0160/pm0160_51_00/pm0160_51_00_rare.trmtr",
+          "table_sha256": "3c4da69569608b19a64c5a543bbae8d542ed6f4c496cc0ab36805eab10a45e0a"
+        }
+      }
+    },
+    {
+      "species": "froslassmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/froslassmega/normal/model.glb",
+          "sha256": "cb551a4e3681e498de61950edbf641aaba052f039291b4808a3b395cad747a6e",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0478/pm0478_51_00/pm0478_51_00.trmtr",
+          "table_sha256": "b104cea6f15df28020c3865343b72053dc7e730a43df752553fb1e4cfc49af67"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/froslassmega/shiny/model.glb",
+          "sha256": "475990ffcab502da2079052c7e419f1c9f0afcee28680b011794ec0c85025e2d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0478/pm0478_51_00/pm0478_51_00_rare.trmtr",
+          "table_sha256": "aee073348ca358e97791712932cb9f47fdafb631e5d172559bfe004beb6077a6"
+        }
+      }
+    },
+    {
+      "species": "gallademega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gallademega/normal/model.glb",
+          "sha256": "6763cae185db084cd03e59fca51565d460c36849cfba3792959211bd1b222138",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0475/pm0475_51_00/pm0475_51_00.trmtr",
+          "table_sha256": "32946c970aabaf0cdef5133adc971b7c243f81c1b9a72143a8c5e67e80447461"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gallademega/shiny/model.glb",
+          "sha256": "0babb48df6cf7400c8ac262d5857c090afca45cb16eb8134ef7ca724773e8a89",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0475/pm0475_51_00/pm0475_51_00_rare.trmtr",
+          "table_sha256": "c6d859d72aa7f5738e2192a61d2e0c6cebb4b3d25e6c90f134064b1214d98be6"
+        }
+      }
+    },
+    {
+      "species": "garchompmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/garchompmega/normal/model.glb",
+          "sha256": "e184f5feeabf86944379e8e7258dfd6f266511d45aac5f45a99065bead7260d4",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0445/pm0445_51_00/pm0445_51_00.trmtr",
+          "table_sha256": "30e8423ea9701edfa694da51d2e265628930f8cda209900c61613436f3262661"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/garchompmega/shiny/model.glb",
+          "sha256": "91ec50254ea49ca47ee37649a3490beba6d17fdec91a03250e1ada6683b70db2",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0445/pm0445_51_00/pm0445_51_00_rare.trmtr",
+          "table_sha256": "5c0a945d1aecdc4dc167ad8aad8c8b620a89262f1f5e8dbdacef736d0c402462"
+        }
+      }
+    },
+    {
+      "species": "garchompmegaz",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/garchompmegaz/normal/model.glb",
+          "sha256": "39aaa8cc81e8e70cf7c117f57f7f1a7d794b630ba67aba6354371eaba944fb4c",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0445/pm0445_52_00/pm0445_52_00.trmtr",
+          "table_sha256": "e1551017a2fc01264e4984766d87f3bc9fb9043c8e31aa20c402a7c8987fc120"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/garchompmegaz/shiny/model.glb",
+          "sha256": "0cafbc71092242252d6b19a99bec0b9b1f196ccbe8b93d3a4c9b29eabe5de81f",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0445/pm0445_52_00/pm0445_52_00_rare.trmtr",
+          "table_sha256": "b706706a6a2425188c37271682f2e23d24130df22c11ce2829ffe779d6627024"
+        }
+      }
+    },
+    {
+      "species": "gardevoirmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gardevoirmega/normal/model.glb",
+          "sha256": "29d6f76d2eb97acc595e9b5254d0bd03d0d290da783fdf7116df3ab9fd0d2e43",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0282/pm0282_51_00/pm0282_51_00.trmtr",
+          "table_sha256": "84de96e828e2243858aca3886845119a5abb657638fd5c09ab0013c8e2487189"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gardevoirmega/shiny/model.glb",
+          "sha256": "d2e2c64f6d4305405e3b4a9143a759dda958ada120439dbd482d2f665837b701",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0282/pm0282_51_00/pm0282_51_00_rare.trmtr",
+          "table_sha256": "361f51f5a0521c3a1c2e4b43488e29b701cc55a4cf6f7f20ccc741389b906d2a"
+        }
+      }
+    },
+    {
+      "species": "gengarmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gengarmega/normal/model.glb",
+          "sha256": "0cbeb362141219cf7bb925ea4e8cac92f0e0f41820fbbb66220efa609bfb2f27",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0094/pm0094_51_00/pm0094_51_00.trmtr",
+          "table_sha256": "2552bc93cea7f7465eedb6be4df5baef1d0108880080808cb3bf754283a06b85"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gengarmega/shiny/model.glb",
+          "sha256": "eddfaeeaded0ab65e394d53b3eb5587f86d9e2e4f71ba6e0c4c61680edf7c105",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0094/pm0094_51_00/pm0094_51_00_rare.trmtr",
+          "table_sha256": "9357d108db9e3208d91ed25d162ab1422a5dbf6a63034771e2c8a13258410a1c"
+        }
+      }
+    },
+    {
+      "species": "glaliemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/glaliemega/normal/model.glb",
+          "sha256": "88e418a42222c4f580187be7da39988558545412ec717a037f77a4836ff9e351",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0362/pm0362_51_00/pm0362_51_00.trmtr",
+          "table_sha256": "1f8bad8fa650afea95f5bc8955c0d39316c4195973c1c22490eac53799358d54"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/glaliemega/shiny/model.glb",
+          "sha256": "6b8f46d34e4b77513149478f669939c82b8de863e1dd1a91a087af808a553421",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0362/pm0362_51_00/pm0362_51_00_rare.trmtr",
+          "table_sha256": "14679c9eebaca146550bad1138cb30bb01f1197fd9015e072ee2719951c538e1"
+        }
+      }
+    },
+    {
+      "species": "golurkmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/golurkmega/normal/model.glb",
+          "sha256": "e4a20740ea967cd5c651b3963d1903010a65002cc23d74639713deba35a83f52",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0623/pm0623_51_00/pm0623_51_00.trmtr",
+          "table_sha256": "c57228be959ec3cf684d9edcf331fa85c6b971f19a7c75f2a5f185e6740e7c36"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/golurkmega/shiny/model.glb",
+          "sha256": "8bf09d9c8b1a33a7a839b1f0870be52d7fb0ffe19e94c5aaa01a3e3966f9ee14",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0623/pm0623_51_00/pm0623_51_00_rare.trmtr",
+          "table_sha256": "adce309a10a78535aca46c725afc8d13f768fc45f2a5adfe770f7940daba720f"
+        }
+      }
+    },
+    {
+      "species": "gyaradosmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gyaradosmega/normal/model.glb",
+          "sha256": "26b45e8090b8f3df8a55414ea7d2bdaa37a3fe2e5f475b826aaf5898f9730eec",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0130/pm0130_51_00/pm0130_51_00.trmtr",
+          "table_sha256": "d08d393aec5ab169a3b45a03b3e57d7b84c0289bcd022496ae19e13142cc7466"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/gyaradosmega/shiny/model.glb",
+          "sha256": "ff3e4268cd95c5f5bb09bdb3bd5e24d7b59a6276acf550da4d04935e1c9131aa",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0130/pm0130_51_00/pm0130_51_00_rare.trmtr",
+          "table_sha256": "4318ed93aae1f4f133262d35df4eacceb1bdf901ac57c07071e691a36918a41d"
+        }
+      }
+    },
+    {
+      "species": "hawluchamega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-depth-corrected-v1/hawluchamega/normal/model.glb",
+          "sha256": "4de077892a711fe8762430892ae13e0741dcf40a9bbc329fd509208409d953f6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0701/pm0701_11_00/pm0701_11_00.trmtr",
+          "table_sha256": "841d7796a22bdbba5dd525af1fa01e67cd4d8a9f5ca3e99009495b6fbffab5a5"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-depth-corrected-v1/hawluchamega/shiny/model.glb",
+          "sha256": "6b48aea0f5c47ac77bbaa46140eaba49331161205f810e3f51fb31bde215a6f9",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0701/pm0701_11_00/pm0701_11_00_rare.trmtr",
+          "table_sha256": "7649a51674ee25ae0b2b2569c39fbd278f90cfbe317b0249f77065d75e004b50"
+        }
+      }
+    },
+    {
+      "species": "heatranmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/heatranmega/normal/model.glb",
+          "sha256": "4c33c48c6cce80e62490f6e7a2130680adcc1a9a7654c62fef0a6995f00cb87b",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0485/pm0485_51_00/pm0485_51_00.trmtr",
+          "table_sha256": "a6de96dd6073801c196ad3730062760283e9570c13be715037384972259fa14d"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/heatranmega/shiny/model.glb",
+          "sha256": "a2ef6815ab8c327070cde2b6d2bfecabb13475fffd9f3ac9882f913b08fc80a0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0485/pm0485_51_00/pm0485_51_00_rare.trmtr",
+          "table_sha256": "f207bba5b4526d756d7de9dba1b6f043fd88889f9a335f15429ca26ea450a5cf"
+        }
+      }
+    },
+    {
+      "species": "heracrossmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/heracrossmega/normal/model.glb",
+          "sha256": "730874cf3cb0be3f91c64fb0257ca122cebc061b3f66797dcca041e0b3a1eb0a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0214/pm0214_51_00/pm0214_51_00.trmtr",
+          "table_sha256": "f7b57e975689e67ac368d414cdfb3649dc55c05ebf9f4af561e83b35f1cf95d1"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/heracrossmega/shiny/model.glb",
+          "sha256": "916cba9e18bd2bfc3d6d322d0f732208b601518650310956d4da25f6eeb6a221",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0214/pm0214_51_00/pm0214_51_00_rare.trmtr",
+          "table_sha256": "99e40bfa06e2043e1239439b75c98e453ef555289fb00e2d5354cefb1cc0235d"
+        }
+      }
+    },
+    {
+      "species": "houndoommega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/houndoommega/normal/model.glb",
+          "sha256": "8c5e8338919c48eafd531c70142755c20de1e3d3d87429bac622a4ed77435120",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0229/pm0229_51_00/pm0229_51_00.trmtr",
+          "table_sha256": "a620c4f9f5b687b1f17d11090fb337fa88fab819331a670e652c403fd5617a98"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/houndoommega/shiny/model.glb",
+          "sha256": "ffa5465f3e2846f121b7cc6d4e50bde524139c8e2aad6ef216fa69e50da6be85",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0229/pm0229_51_00/pm0229_51_00_rare.trmtr",
+          "table_sha256": "3ee7c0b3f268de660b9158d074fffd53799b3a299de26059cfa72f4aee654e50"
+        }
+      }
+    },
+    {
+      "species": "kangaskhanmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/kangaskhanmega/normal/model.glb",
+          "sha256": "5dfc2990452e7dc580b9d8f31799a5fcff43a5f31ca8d911067f502b933ba084",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0115/pm0115_51_00/pm0115_51_00.trmtr",
+          "table_sha256": "cb7c544d0f49088849d1c27b47b549d8bfcc1c3c78be6ba2570e34ba2b5cba9f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/kangaskhanmega/shiny/model.glb",
+          "sha256": "d36edc003f2b4bfbde8154ff496fdaadedf582c9b5e6ea015aa735aa2721b69a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0115/pm0115_51_00/pm0115_51_00_rare.trmtr",
+          "table_sha256": "f0cf13ff6f6fd1962a02e484e25fe35da9422c02b509c543f7c80f130c7b4f1d"
+        }
+      }
+    },
+    {
+      "species": "latiasmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/latiasmega/normal/model.glb",
+          "sha256": "1561a910ab483011eeccf77bbf46f8b25b6ad980065bf3a2ac2dff5ba4d5df51",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0380/pm0380_51_00/pm0380_51_00.trmtr",
+          "table_sha256": "24e80f4084148785f11d7529ac1834231ec94a0b3e503293c9c7b64872ab4456"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/latiasmega/shiny/model.glb",
+          "sha256": "c0d2a6bdee7eb32f47585e46d911c9c284e4749bf09b7d326e91ed4b17755bb5",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0380/pm0380_51_00/pm0380_51_00_rare.trmtr",
+          "table_sha256": "4b8afd1bb961d57cc17c1ef2eb35c6c7bcb4f2cf5dfaad2488f87b8f1838daef"
+        }
+      }
+    },
+    {
+      "species": "latiosmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/latiosmega/normal/model.glb",
+          "sha256": "d2d0fc8d96f1c465023a83ba16fcaf8cab06654615e8053ed32ab2a91d5d95bf",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0381/pm0381_51_00/pm0381_51_00.trmtr",
+          "table_sha256": "cccc6d32a1692a46af0610fd07e526fbd109f879b536125d22b6d39a55d4c7f3"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/latiosmega/shiny/model.glb",
+          "sha256": "7efb20e6dbf7d464d143c564c7db5a04a7c34d3c154aad6be1e44a1e5790bdb2",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0381/pm0381_51_00/pm0381_51_00_rare.trmtr",
+          "table_sha256": "b7c9e5d36f18f649dd064bae2b1a0bbf5d46f35a1e49f01f460c0753e102c76d"
+        }
+      }
+    },
+    {
+      "species": "lopunnymega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lopunnymega/normal/model.glb",
+          "sha256": "928c78a6e3a23d30659df1cac7778a1e25229528496391ec3f0c0b94fead00d1",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0428/pm0428_51_00/pm0428_51_00.trmtr",
+          "table_sha256": "bc8f956ecdb712970ec875b8d6967813bae16cabcf7625ff75cc37713155104e"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lopunnymega/shiny/model.glb",
+          "sha256": "f5b1d9dab9028344076c0d558a8135785f91ab0867a220e5ecc01e64978df006",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0428/pm0428_51_00/pm0428_51_00_rare.trmtr",
+          "table_sha256": "3288a94644225765c662555be517e34effb9fe23a9f8696a783972f8d78cb436"
+        }
+      }
+    },
+    {
+      "species": "lucariomega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lucariomega/normal/model.glb",
+          "sha256": "c58be234e3a0b25d149e6a4c933c558d63269914b53d37d02b1693be7703f8ad",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0448/pm0448_51_00/pm0448_51_00.trmtr",
+          "table_sha256": "d90d7bab6e50df9c36fe844003a0d4f4e2dfdfa04729f23b661fb2d48a30dac4"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lucariomega/shiny/model.glb",
+          "sha256": "253f434160256f3b63857baf370ec37e3bb7cdb43467473f1cf0c5d2ba3a8645",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0448/pm0448_51_00/pm0448_51_00_rare.trmtr",
+          "table_sha256": "62d9a3f3aa813a711f4d9ee953b056f3d85d70c1bb362f43235b3fcdf3edc37c"
+        }
+      }
+    },
+    {
+      "species": "lucariomegaz",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lucariomegaz/normal/model.glb",
+          "sha256": "35562a66ab91e21cf08795292cc9d46c072cabf1f6de4ea43575371cc9841081",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0448/pm0448_52_00/pm0448_52_00.trmtr",
+          "table_sha256": "29376f2880e83314eef0d417876d5541778e1acd929d8a253c316238bbea1425"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/lucariomegaz/shiny/model.glb",
+          "sha256": "44467b641ef86d91570dc8d8da0fc07162edfb91eb210addfe9d1b5636041f41",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0448/pm0448_52_00/pm0448_52_00_rare.trmtr",
+          "table_sha256": "14e2cbb767f820e5235a87a5528ceac9d217afe6c7b09e00f772d45659aa188f"
+        }
+      }
+    },
+    {
+      "species": "manectricmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/manectricmega/normal/model.glb",
+          "sha256": "b6cba35e4a108d854b9b1e0924f3d76a54dd3322c746527ce3ee5a0479e04d4b",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0310/pm0310_51_00/pm0310_51_00.trmtr",
+          "table_sha256": "033b4b7e49d6f51310dc563df55cf9667b2c3bf3eaabdd05fde038e26ddaf7dc"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/manectricmega/shiny/model.glb",
+          "sha256": "2aa26d59cfde440702ccdeb693efc0ff92d834aad0cc8027da4b07a94603f17f",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0310/pm0310_51_00/pm0310_51_00_rare.trmtr",
+          "table_sha256": "f9efb99069f64dd3e1ea216e6423813eea3119d40a1bcb64f7b683ec28b805f1"
+        }
+      }
+    },
+    {
+      "species": "mawilemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mawilemega/normal/model.glb",
+          "sha256": "9a7a7200cabf766dbea5ac3c16272e218d730deb8c080c14311233f09ffd237a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0303/pm0303_51_00/pm0303_51_00.trmtr",
+          "table_sha256": "3ec98ad988727e6d235c92fd1392b2d995314d4731317f89ea3e62d89392d010"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mawilemega/shiny/model.glb",
+          "sha256": "82db731befbee1698f49a088ffaac71044747badce07d52c9efc7b5b9ea99011",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0303/pm0303_51_00/pm0303_51_00_rare.trmtr",
+          "table_sha256": "740ff36b7507691f9cf5fe4a126713be14884d985fee518915f75fb4de15d6af"
+        }
+      }
+    },
+    {
+      "species": "medichammega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/medichammega/normal/model.glb",
+          "sha256": "62119bd62a4f722834d5b6656247500315446b3de40f321fed10eea7d86dd703",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0308/pm0308_51_00/pm0308_51_00.trmtr",
+          "table_sha256": "0dca8bbfd30e0f46f1a7b9669451bf9aa78780e693c4091d976b717634d73efc"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/medichammega/shiny/model.glb",
+          "sha256": "0f3e5b7e5a08dde4552512106af4ce6b1276a4a440ede23fabfd232790b1a3f4",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0308/pm0308_51_00/pm0308_51_00_rare.trmtr",
+          "table_sha256": "976a89589b3968ddb6444970f22036916ccdfd623c3e88756e642d35db645867"
+        }
+      }
+    },
+    {
+      "species": "meganiummega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/meganiummega/normal/model.glb",
+          "sha256": "40865a58d61a274c3beef812d683f9cc15de04197e0e3b6086d656e5efbf52b6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0154/pm0154_51_00/pm0154_51_00.trmtr",
+          "table_sha256": "851204953a48fcd24cff22f53a1f2a78aed753f71506cc5f1f04df10c30a280b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/meganiummega/shiny/model.glb",
+          "sha256": "5974a79d9ad18a6d51b75f1e997593f74d34beb602788b77496d8c591ab6e59c",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0154/pm0154_51_00/pm0154_51_00_rare.trmtr",
+          "table_sha256": "9b16f8dc1748ad3b16efc214d9d0fa961164d90007176b0053ed5eb4804c5714"
+        }
+      }
+    },
+    {
+      "species": "metagrossmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/metagrossmega/normal/model.glb",
+          "sha256": "40e7d525da4d0fb149c9de924196d5d233e59af0cde5f20c6862021badb45daa",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0376/pm0376_51_00/pm0376_51_00.trmtr",
+          "table_sha256": "addc314d3ba11588ee4ef9e92ab03d6b0bb376f11fc538f6076dbeb01d87c7e2"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/metagrossmega/shiny/model.glb",
+          "sha256": "c6d305d698901902f82b8444c43105802b2a1e143ac88cac40a8fa84c993f1fc",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0376/pm0376_51_00/pm0376_51_00_rare.trmtr",
+          "table_sha256": "aa73ad96ea52918d404feb97976975e0c1651f1389cf3bc79b5a532ef9d76d23"
+        }
+      }
+    },
+    {
+      "species": "mewtwomegax",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mewtwomegax/normal/model.glb",
+          "sha256": "7c2b48fda2d9f399876b426abf6d7440917983207dbfa17ab06acdbaec5d8d1a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0150/pm0150_51_00/pm0150_51_00.trmtr",
+          "table_sha256": "c0ea192a44802728405d8c2ea4f17861ec7b0e0252fe03bff23374ea00cc2766"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mewtwomegax/shiny/model.glb",
+          "sha256": "e4c9722560a49445537b1546dc4228a8a0b3182fa32eba03bd35f6edd4106feb",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0150/pm0150_51_00/pm0150_51_00_rare.trmtr",
+          "table_sha256": "a049c6eb901907a5e7e544f818be6f2650cbbd97fac077d0ba2031a343b90dd8"
+        }
+      }
+    },
+    {
+      "species": "mewtwomegay",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mewtwomegay/normal/model.glb",
+          "sha256": "fff5c8c29e42b5096f55df38b36402b451ddf92530f898603c08e0f2467be16d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0150/pm0150_52_00/pm0150_52_00.trmtr",
+          "table_sha256": "b701d887b14269d4a88fadd5113626c9b89df88eedb592f5b47ac9d357a4481a"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/mewtwomegay/shiny/model.glb",
+          "sha256": "a327806b9a3852a810ad0a4dd0e38ae07ef4b629f8dfdc9aa2ea689e2e1cbdeb",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0150/pm0150_52_00/pm0150_52_00_rare.trmtr",
+          "table_sha256": "3137cfebbc4ae4d4b4b310852b9a16724858f79704fbc56ac3bd192ab26b9e22"
+        }
+      }
+    },
+    {
+      "species": "pidgeotmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/pidgeotmega/normal/model.glb",
+          "sha256": "c4929479365e384b658c69cb7f0eea7c4f78f77bb51f2c31ca98a2835c889ed0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0018/pm0018_51_00/pm0018_51_00.trmtr",
+          "table_sha256": "635e22aca011f2ca55edcf2ceeed2c687d605a48ce703bd8d61452d039002709"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/pidgeotmega/shiny/model.glb",
+          "sha256": "3445d48af73c0159f4bea55be6fe6a442b8d558c06baacd99424479ae4dfa8bb",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0018/pm0018_51_00/pm0018_51_00_rare.trmtr",
+          "table_sha256": "3e0e8e6e58f4d3f699b8f83861a2ee37b7492c94dd21010980dd3033d10ec391"
+        }
+      }
+    },
+    {
+      "species": "pinsirmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/pinsirmega/normal/model.glb",
+          "sha256": "3a650fe4bc8337a6692a68316e198dbf1a31be62895ceba4583f1c39d42b8be0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0127/pm0127_51_00/pm0127_51_00.trmtr",
+          "table_sha256": "8d475e65bde6472ab75de80704c1f3700cf1a183aae4463365451ba16776110a"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/pinsirmega/shiny/model.glb",
+          "sha256": "ef2067700b217197e2912ac15bdc2fbe9ff8897d91db129362a766d9814877e5",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0127/pm0127_51_00/pm0127_51_00_rare.trmtr",
+          "table_sha256": "4ea928ba2120e7a3b40cc4b3ccc5075549d0de99517d2cb8ca1364e898475cc7"
+        }
+      }
+    },
+    {
+      "species": "raichumegax",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/raichumegax/normal/model.glb",
+          "sha256": "ad6482facac76b7fc4ae36e446480f05daff58af9b81b0e90b228a39231fabcd",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0026/pm0026_51_00/pm0026_51_00.trmtr",
+          "table_sha256": "57037e7fe8039dd422c6464ebba5380e245de7d69f58556c8881bf7fb8e49194"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/raichumegax/shiny/model.glb",
+          "sha256": "f63454e2e585772c2b974d4ebc4103a0e32c932f3d4aa13defdbf6ea00992b6f",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0026/pm0026_51_00/pm0026_51_00_rare.trmtr",
+          "table_sha256": "27299f05984d9d659e1619453d06b58d50b880cff10b7e01b4edc7e738fd4c9d"
+        }
+      }
+    },
+    {
+      "species": "raichumegay",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/raichumegay/normal/model.glb",
+          "sha256": "ca353abf886893aa350d4ec1babd67175acf6db90702f16a702839b873fc0164",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0026/pm0026_52_00/pm0026_52_00.trmtr",
+          "table_sha256": "11cb578e2494066acff1a9ee55d1a84a53c873508b757a855a4bfe10002c8025"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/raichumegay/shiny/model.glb",
+          "sha256": "e86c51fa41b03b87c0e1cb05a31a24c909876204c9a55fd4933eb16784b667e0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0026/pm0026_52_00/pm0026_52_00_rare.trmtr",
+          "table_sha256": "8ab5028f68eb211f9782fa8bd887638ef8b6fc82c886162dfd252baf8847b66f"
+        }
+      }
+    },
+    {
+      "species": "rayquazamega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/rayquazamega/normal/model.glb",
+          "sha256": "467453c0dac22d3f3e797b737619868ae6d64a05ff53d07e9470a595b6f17f78",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0384/pm0384_51_00/pm0384_51_00.trmtr",
+          "table_sha256": "aecaba5327c72072a7cf8a39a111cd0b716ad5cffb257d14280c7a4d7e3c3a39"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/rayquazamega/shiny/model.glb",
+          "sha256": "c5b6807eaedcb6bb820aceaba68b330245d755c86038a50993b797b18bb4e396",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0384/pm0384_51_00/pm0384_51_00_rare.trmtr",
+          "table_sha256": "d4fe89e36ac9b5d660babef9b6876948cfa24db4def5c5e0c8551b31591a9c5a"
+        }
+      }
+    },
+    {
+      "species": "sableyemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sableyemega/normal/model.glb",
+          "sha256": "3a65014131ba87d394090aa4f948b8ea75cd626d0181b106af30704dd45320c3",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0302/pm0302_51_00/pm0302_51_00.trmtr",
+          "table_sha256": "9da9eb45eef452fbf40c6a520f7a2b7cc522a2dd3c09a572d648a2edd758d79f"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sableyemega/shiny/model.glb",
+          "sha256": "08dd299dadc556dab1525aab87d88000219559247c6c71759f0da288f9c06ba2",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0302/pm0302_51_00/pm0302_51_00_rare.trmtr",
+          "table_sha256": "565cce36b3e5465c7c6738598578c9c7e5a297d04c71a62bd39ff8f5e4e0db58"
+        }
+      }
+    },
+    {
+      "species": "salamencemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/salamencemega/normal/model.glb",
+          "sha256": "02db6f65ca93b4e91c0c272c5debe4b6957f2b871e4ed495a6dcd49d1e83a59a",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0373/pm0373_51_00/pm0373_51_00.trmtr",
+          "table_sha256": "7260c3cfc9863c9551d3e2e3671b8136b1701bd5eba0085b5aaf260173063cbc"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/salamencemega/shiny/model.glb",
+          "sha256": "ec2a6aafb41d3a4ef3c68d02a56cea30cea09a3665a8a8427692dd3e94071f1b",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0373/pm0373_51_00/pm0373_51_00_rare.trmtr",
+          "table_sha256": "eaf970da45424403a9b0872b8f75cb0940bc40e5b02b5123dd0136861af02291"
+        }
+      }
+    },
+    {
+      "species": "sceptilemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sceptilemega/normal/model.glb",
+          "sha256": "71694743c19bb4ef25d8bb9349a44a39dd9dbcd2a6f094acd119332cf70f16d0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0254/pm0254_51_00/pm0254_51_00.trmtr",
+          "table_sha256": "0cd2113aaaf9410def7edadfc140a88dd9ee850adec24b9b7e14364399020a26"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sceptilemega/shiny/model.glb",
+          "sha256": "7da77fc151fdf7e4fe3faf7e244cb7415a2b9f07d0229a734e68d92f79dea9b6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0254/pm0254_51_00/pm0254_51_00_rare.trmtr",
+          "table_sha256": "6cdc3c07ebd3626c8845c8d17655e27cdd31c7b01539e30463145a99d3e4639f"
+        }
+      }
+    },
+    {
+      "species": "scizormega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scizormega/normal/model.glb",
+          "sha256": "37e717b90660439341ef105ebdd965758c2bce24398a475868302f7497cd318d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0212/pm0212_51_00/pm0212_51_00.trmtr",
+          "table_sha256": "225d4a00f9207074c38411a18f3a9203019779f5b7e4c294170017a2e641b254"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scizormega/shiny/model.glb",
+          "sha256": "368ab6bbd6a981095a390dfa6ef63fee5d887205c9a05c1371b4a8b525412a15",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0212/pm0212_51_00/pm0212_51_00_rare.trmtr",
+          "table_sha256": "838d96aaed73566998eb9e416aeb098ccdfa8c7ac083f4d0356ebf0b17364259"
+        }
+      }
+    },
+    {
+      "species": "scolipedemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scolipedemega/normal/model.glb",
+          "sha256": "7878bd173cbf30fc6883ef570b4a4d2b797c479dcce5eeb57cf5c97b1c3430ca",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0545/pm0545_51_00/pm0545_51_00.trmtr",
+          "table_sha256": "489aaaf984bc9922057a45b602f4f4f6cc9f43797226ebeac6d23b43a0092f4a"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scolipedemega/shiny/model.glb",
+          "sha256": "1002be4c853434c04e0de3da96d63175d7092f98e8166a139f9dfc3b223d3989",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0545/pm0545_51_00/pm0545_51_00_rare.trmtr",
+          "table_sha256": "0f58fdddfa9ee7d96905f9a582e5a39212f478ed83e426b7771771d383302df4"
+        }
+      }
+    },
+    {
+      "species": "scraftymega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scraftymega/normal/model.glb",
+          "sha256": "628e55806d80f9e39a64986ff144f8695c6f82f141368d458f875188a0376963",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0560/pm0560_51_00/pm0560_51_00.trmtr",
+          "table_sha256": "48e2b07d7b12b7c0369701c259164a2288b437de634d8b4b89baafa228c5153d"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/scraftymega/shiny/model.glb",
+          "sha256": "904649b8a8d5413ca9da170a6408f5e02f97f6a5947d6b27c515dafbc8bb5b4c",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0560/pm0560_51_00/pm0560_51_00_rare.trmtr",
+          "table_sha256": "5fbc4f41b3ca63fcdac18e883ccc1e4886333bff2af7d4874679e4b3c097f919"
+        }
+      }
+    },
+    {
+      "species": "sharpedomega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sharpedomega/normal/model.glb",
+          "sha256": "f51edd9239d86057e2bbab32bdb9c1914216c2ab034b96fdd0ee47f58ffe3991",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0319/pm0319_51_00/pm0319_51_00.trmtr",
+          "table_sha256": "9c1d058f000161eaf73a394f101edb1e412c94c7d915bd7991604ed6e23a5d1b"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/sharpedomega/shiny/model.glb",
+          "sha256": "43f79ed0929cfbe658683e5622591e325809a2bf267002aa5f7cda8c13340dc0",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0319/pm0319_51_00/pm0319_51_00_rare.trmtr",
+          "table_sha256": "64e612281332b7f7110ac9657cdb729dc5c388d56e151ba5680e69a0287223d6"
+        }
+      }
+    },
+    {
+      "species": "skarmorymega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/skarmorymega/normal/model.glb",
+          "sha256": "cf918845dac5871afa50048db4cc946aaac2eed6882ecc18d94eadd3a2174750",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0227/pm0227_51_00/pm0227_51_00.trmtr",
+          "table_sha256": "c4dcc2afebe545636950c1fbe18718175c8e0a85956f54c8be59289204e9c9ee"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/skarmorymega/shiny/model.glb",
+          "sha256": "dc4a3159dadaf6b2545b3a929d2ac8f00ea2f1e4a3d3808f8dc87c35ac30fe61",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0227/pm0227_51_00/pm0227_51_00_rare.trmtr",
+          "table_sha256": "8d954efdf9ed39addf8ba2140db90547804a4b72dd5a6211126b46a29e505c3b"
+        }
+      }
+    },
+    {
+      "species": "slowbromega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/slowbromega/normal/model.glb",
+          "sha256": "75e82a7c7e425c75d9bf17f8196fee6e13feab5f170bc61b142d5d04164b4d5e",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0080/pm0080_51_00/pm0080_51_00.trmtr",
+          "table_sha256": "25ca2552ef386f84f9dc941b8527dbd3b93bc5ac0e195ce48400c5714b346ca2"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/slowbromega/shiny/model.glb",
+          "sha256": "70ce750c0a4612a6bd3826afbc971da8834c91f3237ed5d8c82d496575423bae",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0080/pm0080_51_00/pm0080_51_00_rare.trmtr",
+          "table_sha256": "39f6569812e613c4c822b2eb0fd04b3e2772e368948b3c873b57955f5daa7f16"
+        }
+      }
+    },
+    {
+      "species": "staraptormega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/staraptormega/normal/model.glb",
+          "sha256": "2017d9f0fcb82f983fadd4a45a4076a6531fd067b981d711ba8e27e04249c84e",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0398/pm0398_51_00/pm0398_51_00.trmtr",
+          "table_sha256": "4053c83b5cb2e0f0d5176e463b17d4d6e970656a06fd58a47902effe0304929c"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/staraptormega/shiny/model.glb",
+          "sha256": "5862bdb612e5264edf27a28960697400945dcc6de4a53a1b530faad1a870f7b6",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0398/pm0398_51_00/pm0398_51_00_rare.trmtr",
+          "table_sha256": "02ec5c4bbbf86bf73fbb74264353bb4349d40383f9e3020d794ff0dcf1c6c47e"
+        }
+      }
+    },
+    {
+      "species": "starmiemega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/starmiemega/normal/model.glb",
+          "sha256": "6fefb07f3a29fc7ff3ac7f0eb79c35e4989e20312fd9995ebe69a4813f9fa537",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0121/pm0121_51_00/pm0121_51_00.trmtr",
+          "table_sha256": "50c46ca5e76fa89090807c1fedfdbf51e45f63f024615726d1fc297b7075a4fb"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/starmiemega/shiny/model.glb",
+          "sha256": "aab951b60c98473164fbc9149df0b0bb11ea775661af74ed8127b1c7fa566f72",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0121/pm0121_51_00/pm0121_51_00_rare.trmtr",
+          "table_sha256": "24820efdf6186b6bae9723bec2ccadb034631bd3ca6a1488a9bddd766c0d74a5"
+        }
+      }
+    },
+    {
+      "species": "steelixmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/normal/model.glb",
+          "sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00.trmtr",
+          "table_sha256": "59aed9878bab40ce13a28d91a3041bdaa3287db02d0f50f78f5dc3f7d98413c6"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/shiny/model.glb",
+          "sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00_rare.trmtr",
+          "table_sha256": "22b96e286d1b9909c5ee45539846f8439cbde3334c36b2a0d8258dae8ef61b03"
+        }
+      },
+      "size_approved": true,
+      "approved_scale": 0.7,
+      "detail_review_pending": false,
+      "followup_feedback": "oke de grote klopt, Maar de details voelen niet compleet",
+      "detail_feedback": "deze zijn goed",
+      "surface_checkpoint_sha256": "04b739995e7628bb58cd2cb50c0dcccf5bc9ce673008b80138ae925830bd504d"
+    },
+    {
+      "species": "swampertmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/swampertmega/normal/model.glb",
+          "sha256": "5bae27c911711c25b2b19bb80ba1a5b02f8094290b458643d7ae534ac277d12d",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0260/pm0260_51_00/pm0260_51_00.trmtr",
+          "table_sha256": "c0f55e1a446ed91f8344e90e55d82957accecc242a095709a90127c2f6d797e7"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/swampertmega/shiny/model.glb",
+          "sha256": "7d82cc9ac27b18a58b4094ec3843e588e2781f964719d31716c7042afc552254",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0260/pm0260_51_00/pm0260_51_00_rare.trmtr",
+          "table_sha256": "20cc3925d2deefaf89f3eb1e5c5d11189e5ca6315a1681f7c38b783b5321c160"
+        }
+      }
+    },
+    {
+      "species": "tyranitarmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/tyranitarmega/normal/model.glb",
+          "sha256": "bbaa28938d2bc07dfc2fa3f3271c45284b227de3d046ff7c79c9c2dc717772fa",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0248/pm0248_51_00/pm0248_51_00.trmtr",
+          "table_sha256": "1e42cb76645a07bcd13da8ecc8ef00d1f45988b58a8de524b75bfd36609bc3d3"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/tyranitarmega/shiny/model.glb",
+          "sha256": "b65305c6fa52f9ecdcb6f7909a96564293599e8ff4bd6f2e6d560b1d0ef5a4ec",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0248/pm0248_51_00/pm0248_51_00_rare.trmtr",
+          "table_sha256": "0921c1d7715b9bbfe5951ff21f58a202bef3769d9262bc6d2cb47b51ddb8e536"
+        }
+      }
+    },
+    {
+      "species": "venusaurmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/venusaurmega/normal/model.glb",
+          "sha256": "cb4ca330abe2243d048858212710a27381c8808fa118ab7b704f0205be8044ff",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0003/pm0003_51_00/pm0003_51_00.trmtr",
+          "table_sha256": "ced8ddb633ec863f567735e9654455a8ed9b21bcaa4c0f6e64fd0f5a1ab94d16"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/venusaurmega/shiny/model.glb",
+          "sha256": "a20da6b9ee8138c0dbb1c85c170be779f56daf3fdac3c8614e9ff27a75e3a408",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0003/pm0003_51_00/pm0003_51_00_rare.trmtr",
+          "table_sha256": "0b3b162bad2f45924dd9120e2e942ab57a982cfc82615dbb16dfbd3d3acce452"
+        }
+      }
+    },
+    {
+      "species": "victreebelmega",
+      "appearance_approved": true,
+      "scale_review_pending": false,
+      "variants": {
+        "normal": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/victreebelmega/normal/model.glb",
+          "sha256": "dc9fc0f8e266040e980f068a4578ca496cad852ae3877dad426c5e575d7087b9",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0071/pm0071_51_00/pm0071_51_00.trmtr",
+          "table_sha256": "e156b9aca1f6cfa41188c8c3b53e4f13df61727ad49cce4716d2e12f1d1aaa10"
+        },
+        "shiny": {
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/victreebelmega/shiny/model.glb",
+          "sha256": "6989f099382a5a8353f182640551d1d3425ecc95bd9f9329604a36a27f1846c8",
+          "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0071/pm0071_51_00/pm0071_51_00_rare.trmtr",
+          "table_sha256": "441676c4f11c5aefbf897b95bdfcb22924cda6679d6d497ff0c68db04ec474bb"
+        }
+      }
+    }
+  ],
+  "approved_pair_count": 71
+}
