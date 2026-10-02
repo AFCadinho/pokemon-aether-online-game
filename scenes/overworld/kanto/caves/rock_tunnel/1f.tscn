@@ -176,7 +176,6 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromRockTunnelNorth"
 transition_id = "kanto_rock_tunnel_1f__to_route10_north"
-required_trainer_id = "kanto_rock_tunnel_future_self"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10North" unique_id=667195643]
@@ -189,7 +188,6 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromRockTunnelSouth"
 transition_id = "kanto_rock_tunnel_1f__to_route10_south"
-required_trainer_id = "kanto_rock_tunnel_future_self"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10South" unique_id=395263969]
@@ -202,7 +200,6 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FA"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_a"
-required_trainer_id = "kanto_rock_tunnel_future_self"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FA" unique_id=673753544]
@@ -215,7 +212,6 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FB"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_b"
-required_trainer_id = "kanto_rock_tunnel_future_self"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FB" unique_id=340226381]
@@ -241,7 +237,6 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/caves/rock_tunnel/b1f.tscn"
 target_spawn_name = "From1FD"
 transition_id = "kanto_rock_tunnel_1f__to_b1_f_d"
-required_trainer_id = "kanto_rock_tunnel_future_self"
 transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToB1FD" unique_id=1091563312]
@@ -323,9 +318,9 @@ facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("picnicker")
 
 [node name="FutureSelf" parent="Entities/NPCs" unique_id=449111069 instance=ExtResource("future_self")]
-position = Vector2(1040, 976)
+position = Vector2(944, 976)
 trainer_id = "kanto_rock_tunnel_future_self"
-sight_range_tiles = 4
+sight_range_tiles = 0
 npc_id = "kanto_rock_tunnel_future_self"
 npc_definition_id = "kanto_rock_tunnel_future_self"
 display_name = "Mysterious Trainer"

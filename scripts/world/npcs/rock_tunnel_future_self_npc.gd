@@ -46,6 +46,7 @@ func _resolve_battle_sprite_id() -> String:
 
 func build_battle_trainer_metadata(metadata: Dictionary) -> Dictionary:
 	var presentation := super.build_battle_trainer_metadata(metadata)
+	presentation["_hide_pokemon_level"] = true
 	presentation["_battle_appearance"] = mysterious_appearance.duplicate(true)
 	presentation.erase("_battle_sprite_frames")
 	return presentation
@@ -134,7 +135,8 @@ func interact_with_player(player: Node2D) -> void:
 
 
 func _can_auto_challenge() -> bool:
-	return not farewell_pending and is_visible_in_tree() and super._can_auto_challenge()
+	# The fixed C staircase owns the mandatory encounter, not line of sight.
+	return false
 
 
 func blocks_world_position(world_position: Vector2) -> bool:

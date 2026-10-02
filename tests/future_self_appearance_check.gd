@@ -40,6 +40,7 @@ func _run() -> void:
 			_check(frames.has_animation("idle_" + direction), "%s idle %s exists" % [gender, direction])
 			_check(frames.get_frame_count("walk_" + direction) == 4, "%s walk %s has four frames" % [gender, direction])
 		var metadata: Dictionary = npc.build_battle_trainer_metadata({})
+		_check(bool(metadata.get("_hide_pokemon_level", false)), "%s trainer hides the Pokemon level" % gender)
 		_check(not metadata.has("_battle_sprite_id"), "%s battle avoids a catalog trainer fallback" % gender)
 		_check(not metadata.has("_battle_sprite_frames"), "%s battle avoids the overworld sprite" % gender)
 		_check(npc.display_name == "Mysterious Trainer", "%s name keeps the identity concealed" % gender)
@@ -104,6 +105,9 @@ func _run() -> void:
 	var player := Node2D.new()
 	map.add_child(player)
 	for exit: Node2D in map.get_node("Exits").get_children():
+		_check(str(exit.required_trainer_id) == ("kanto_rock_tunnel_future_self" if exit.name == &"ToB1FC" else ""), "%s has the correct staircase requirement" % exit.name)
+		if exit.name != &"ToB1FC":
+			continue
 		player.global_position = exit.get_node("CollisionShape2D").global_position
 		_check(visitor._position_for_mandatory_battle(player), "%s has a safe nearby visitor position" % exit.name)
 		_check(visitor.global_position.distance_to(player.global_position) <= 96.0, "%s keeps the visitor in view" % exit.name)
