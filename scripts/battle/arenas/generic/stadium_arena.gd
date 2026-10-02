@@ -17,6 +17,30 @@ func _box(parent: Node3D, material: Material, pos: Vector3, size: Vector3) -> Me
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return node
 
+func _batch_stand_boxes(stand: Node3D) -> void:
+	# Static seating shares four materials; preserve each box's local transform.
+	var groups: Dictionary = {}
+	for child in stand.get_children():
+		if child is MeshInstance3D and child.mesh is BoxMesh:
+			var material: Material = child.material_override
+			if not groups.has(material):
+				groups[material] = []
+			groups[material].append(child)
+	for material in groups:
+		var boxes: Array = groups[material]
+		var batch := MultiMesh.new()
+		batch.transform_format = MultiMesh.TRANSFORM_3D
+		batch.mesh = boxes[0].mesh
+		batch.instance_count = boxes.size()
+		for index in boxes.size():
+			batch.set_instance_transform(index, boxes[index].transform)
+			boxes[index].free()
+		var node := MultiMeshInstance3D.new()
+		node.multimesh = batch
+		node.material_override = material
+		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		stand.add_child(node)
+
 func _wordmark(parent: Node3D, pos: Vector3, width: float) -> void:
 	var texture: Texture2D = load("res://assets/ui/pokeaether_text_logo.png")
 	var material := ShaderMaterial.new()
@@ -79,6 +103,33 @@ func _spectator_mesh() -> ArrayMesh:
 		combined.append_from(piece,0,Transform3D(Basis.IDENTITY,part[1]))
 	return combined.commit()
 
+func _add_crowd_batches(parent: Node3D, source: MultiMesh, material: Material) -> void:
+	# Separate stands can be culled outside the camera, unlike one arena-wide AABB.
+	var per_stand := source.instance_count / 4
+	for side in 4:
+		var batch := MultiMesh.new()
+		batch.transform_format = source.transform_format
+		batch.use_colors = source.use_colors
+		batch.use_custom_data = source.use_custom_data
+		batch.mesh = source.mesh
+		batch.instance_count = per_stand
+		var bounds := AABB()
+		for index in per_stand:
+			var original := side * per_stand + index
+			var pose := source.get_instance_transform(original)
+			batch.set_instance_transform(index, pose)
+			batch.set_instance_color(index, source.get_instance_color(original))
+			batch.set_instance_custom_data(index, source.get_instance_custom_data(original))
+			var instance_bounds: AABB = pose * source.mesh.get_aabb()
+			bounds = instance_bounds if index == 0 else bounds.merge(instance_bounds)
+		# Include the crowd shader's waving and supporter-light displacement.
+		batch.custom_aabb = bounds.grow(0.6)
+		var node := MultiMeshInstance3D.new()
+		node.multimesh = batch
+		node.material_override = material
+		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		parent.add_child(node)
+
 func _crowd(parent: Node3D) -> void:
 	var batch := MultiMesh.new()
 	batch.transform_format = MultiMesh.TRANSFORM_3D
@@ -105,15 +156,11 @@ func _crowd(parent: Node3D) -> void:
 					tint = Color("50436d")
 				batch.set_instance_color(index, tint)
 				index += 1
-	var crowd := MultiMeshInstance3D.new()
 	assert(batch.use_custom_data and batch.instance_count == 4*9*65)
 	assert(batch.mesh.surface_get_arrays(0)[Mesh.ARRAY_TEX_UV2].size() > 0)
-	crowd.multimesh = batch
 	var mat := ShaderMaterial.new()
 	mat.shader = load("res://scripts/battle/arenas/generic/stadium_crowd.gdshader")
-	crowd.material_override = mat
-	crowd.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	parent.add_child(crowd)
+	_add_crowd_batches(parent, batch, mat)
 	# Tiny supporter lights share the crowd transforms; no individual light nodes.
 	var lights := MultiMesh.new()
 	lights.transform_format = batch.transform_format
@@ -134,13 +181,9 @@ func _crowd(parent: Node3D) -> void:
 		lights.set_instance_transform(i, pose)
 		lights.set_instance_color(i, batch.get_instance_color(i))
 		lights.set_instance_custom_data(i, batch.get_instance_custom_data(i))
-	var points := MultiMeshInstance3D.new()
-	points.multimesh = lights
 	var sparkle: ShaderMaterial = mat.duplicate()
 	sparkle.set_shader_parameter("supporter_light", true)
-	points.material_override = sparkle
-	points.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	parent.add_child(points)
+	_add_crowd_batches(parent, lights, sparkle)
 
 func build() -> Node3D:
 	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_HIGH)
@@ -188,6 +231,7 @@ func build() -> Node3D:
 		for x in [-21,-14,-7,0,7,14,21]:
 			_box(stand,dark,Vector3(x,17,-18),Vector3(0.5,0.5,27))
 			_box(stand,purple,Vector3(x,16.7,-11),Vector3(0.15,0.1,1.5))
+		_batch_stand_boxes(stand)
 	_box(arena,dark,Vector3(0,20,0),Vector3(65,0.5,65))
 	var beam_material := ShaderMaterial.new()
 	beam_material.shader = load("res://scripts/battle/arenas/generic/stadium_beam.gdshader")

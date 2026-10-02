@@ -2,12 +2,18 @@
 
 Task: `battle-forms-next-seven`, assigned paired slot `slot-a`.
 
-The user approved the appearances of Mimikyu Busted, Palafin Hero,
-Eiscue Noice, Aegislash Blade, Wishiwashi School, Morpeko Hangry and
-Darmanitan Zen, including normal and shiny. Their final battle presentation
-still requires user approval. A final image audit found Ice Face meshes
-enabled in Eiscue Noice; its corrected bare-head selection needs renewed
-appearance approval. Nothing in this task has been activated or published.
+The user approved all seven normal/shiny appearances and their final battle
+presentation on 2026-10-02, including Eiscue's corrected bare head. The seven
+individual bundles pass local install, no-op and restart checks. Exact base
+and battle forms are loaded before reveal, and five reversible forms switch
+back without a download during the transition. Local performance admission passed the unchanged 20 ms p95 gate:
+16.894 / 16.959 / 16.918 ms in classic / stadium / classic. The game and
+launcher registries now contain seven additional profiles and 14 exact runtime
+digests. Earlier failed runs and the approved-base control remain pinned in
+the qualification receipt. The stadium now batches 624 fixed boxes and
+splits the unchanged crowd per stand for camera culling; the rendered
+geometry check verifies transforms, colors and animation parameters.
+Nothing in this task has been published.
 
 ## Resume from accepted assets
 
@@ -35,7 +41,7 @@ an admission tool and does not include all later appearance corrections.
 - Wishiwashi has no identified native sleep or faint bank in this export.
   Its reviewed sleep is the swimming idle; its faint proposal is own-rig
   damage followed by an authored constant endpoint hold. Keep that limitation
-  explicit. Its scale is reduced for battle framing, pending visual approval.
+  explicit. Its reduced battle scale has been visually approved.
 - Darmanitan retains its native faint start and gets a constant endpoint hold
   instead of looping the entire down animation. The reusable
   `catalog_battle_forms_faint_hold.py SOURCE NEW_GLB` preserves materials,
@@ -63,3 +69,17 @@ an admission tool and does not include all later appearance corrections.
    R2 publication needs explicit user authorization.
 
 Use new output directories; preserve earlier evidence and rejected previews.
+
+## Bundle handoff
+
+The seven individual bundles total 89.07 MiB and are stored beneath
+`.tmp/battle-forms-next-seven-v1/approved-final/bundles`. Their index is tracked
+in `release/approved_3d_battle_forms_next_seven_index.json`; the local admission
+receipt is `tools/sprite_factory/catalog_battle_forms_next_seven_bundle_qualification.json`.
+The on-demand check uses real approved base bundles as controls and verifies
+all four normal/shiny base/form identities are ready before battle reveal.
+No form-switch archive download is needed.
+
+Next: explicitly authorized R2 publication, followed by release content-index
+activation and release certification. Local admission covers AMD Compatibility;
+it is not a cross-platform release certificate.

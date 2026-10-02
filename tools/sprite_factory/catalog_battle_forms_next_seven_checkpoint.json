@@ -2,9 +2,9 @@
   "schema": 1,
   "task": "battle-forms-next-seven",
   "date": "2026-10-02",
-  "appearance_approved": false,
-  "battle_approved": false,
-  "runtime_approved": false,
+  "appearance_approved": true,
+  "battle_approved": true,
+  "runtime_approved": true,
   "published": false,
   "approval_basis": "User approved the seven appearance pairs, Morpeko correction and Darmanitan two-eye/normal-shiny correction; battle scale and poses pending. Final image audit found Ice Face meshes enabled in Eiscue Noice; corrected bare-head selection requires renewed appearance review.",
   "entries": [
@@ -13,8 +13,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/materials/mimikyu-busted/normal/model.glb",
       "glb_sha256": "f65b74d95ff16c90b11992a21eb2a0a4f8da7e6667103b9d7500e068630f7567",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.3630237652866,
         "yaw_degrees": 0.0
@@ -60,8 +60,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/materials/mimikyu-busted/shiny/model.glb",
       "glb_sha256": "aa2121f2ffb3eb709c710e40a2a7f791646c77a3153d8823b82ec867c415192b",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.3630237652866,
         "yaw_degrees": 0.0
@@ -107,8 +107,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/materials/palafin-hero/normal/model.glb",
       "glb_sha256": "d4ece9f7bbd75e07cbbb46a2c4f3812103f0eb3f3cbab3a5445c1c7dc0a9a57c",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.142333345295525,
         "yaw_degrees": 0.0
@@ -154,8 +154,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/materials/palafin-hero/shiny/model.glb",
       "glb_sha256": "c1587c1ce97dcf1f6d3e50e7160c801eb087ee5cc6dbf0d36dfc9031c69589c0",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.142333345295525,
         "yaw_degrees": 0.0
@@ -200,9 +200,9 @@
       "species": "eiscue-noice",
       "path": ".tmp/battle-forms-next-seven-v1/eiscue-noice-selection-v1/normal/model.glb",
       "glb_sha256": "2437793d22cf053f736adb04047bfd295e70bb055d1909e3131406bb7614e52a",
-      "appearance_approved": false,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
@@ -249,9 +249,9 @@
       "species": "eiscue-noice-shiny",
       "path": ".tmp/battle-forms-next-seven-v1/eiscue-noice-selection-v1/shiny/model.glb",
       "glb_sha256": "22f7362c0014948a6920b1c7deedc4fe9940a0bb4d3afce064646e5258f0102f",
-      "appearance_approved": false,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "appearance_approved": true,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
@@ -299,8 +299,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/legacy-colors/aegislash-blade/normal.glb",
       "glb_sha256": "51461bc887314d06972c0f5f55cb372eda0f5060e50aaf7c3e10ced2f4ecff3e",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.9,
         "yaw_degrees": 0.0
@@ -342,8 +342,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/legacy-colors/aegislash-blade/shiny.glb",
       "glb_sha256": "6e48e75abb4df56abfde22c1fbca9d164828954fdb83803d1337b7b212c7e101",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.9,
         "yaw_degrees": 0.0
@@ -385,8 +385,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/wishiwashi-faint-hold-v1/normal/model.glb",
       "glb_sha256": "1de0d35f7a14352499bcd9ec6ddb37f23e347088d7c2e672ff74809ca2d3af91",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.006,
         "yaw_degrees": 0.0
@@ -434,8 +434,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/wishiwashi-faint-hold-v1/shiny/model.glb",
       "glb_sha256": "94d22653e133e1dc3ac32df2e9bcfb81272ae79d866e46f7742ccb0f0808a786",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.006,
         "yaw_degrees": 0.0
@@ -483,8 +483,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/darmanitan-faint-hold-v1/normal/model.glb",
       "glb_sha256": "b4aeae1f9b425f5fb1c0e3227486912d67b693ab4333cc1919d4cea90e831fd6",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
@@ -528,8 +528,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/darmanitan-faint-hold-v1/shiny/model.glb",
       "glb_sha256": "e1ebe26fd59de8c567f9dcea5e9ae200650958f40e8d0d4c1229294e90c82fe0",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 1.0,
         "yaw_degrees": 0.0
@@ -573,8 +573,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/morpeko-scvi-native-probe-v1/selected-export/normal/materialized.glb",
       "glb_sha256": "856288969bfaa5efb3890ec37e71cae314a1151bdf634e4f47fa1e4a005ad6e3",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.83,
         "yaw_degrees": 0
@@ -620,8 +620,8 @@
       "path": ".tmp/battle-forms-next-seven-v1/morpeko-scvi-native-probe-v1/selected-export/shiny/materialized.glb",
       "glb_sha256": "f6234c2de4456fa0bf840f581f273ca4de8350b248d3cfccfcd4235d20a71754",
       "appearance_approved": true,
-      "battle_approved": false,
-      "runtime_approved": false,
+      "battle_approved": true,
+      "runtime_approved": true,
       "placement": {
         "scale": 0.83,
         "yaw_degrees": 0
@@ -693,7 +693,7 @@
   },
   "battle_measurement": {
     "technical_passed": true,
-    "human_approved": false,
+    "human_approved": true,
     "scope": "flat_floor_two_runtime_camera_presets; HUD proxy only; not full UI or arena collision certification",
     "combination_policy": "Twelve unchanged models retained from verified full-group render; corrected Eiscue pair separately rendered and independently checked at 120 Hz with identical framing/renderer",
     "evidence_sha256": {
@@ -840,6 +840,12 @@
   "battle_review_page": {
     "path": ".tmp/battle-forms-next-seven-v1/final-battle-review-v4/index.html",
     "manifest_sha256": "fdee47b305a82b3fa9d2ec6625a0cfda41582bd26fee5559042ce1cb5f41763c",
-    "human_approved": false
-  }
+    "human_approved": true
+  },
+  "user_final_approval": {
+    "date": "2026-10-02",
+    "answer": "Zien er goed uit",
+    "review_manifest_sha256": "fdee47b305a82b3fa9d2ec6625a0cfda41582bd26fee5559042ce1cb5f41763c"
+  },
+  "bundle_qualification": "tools/sprite_factory/catalog_battle_forms_next_seven_bundle_qualification.json"
 }

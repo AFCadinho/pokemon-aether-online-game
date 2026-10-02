@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+
+- Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
+
+- Het 3D-stadium groepeert vaste tribunedelen en publiek per tribune om minder tekenwerk te doen, met behoud van de aankleding en bewegingen.
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
 
 - Drie Ogerpon-maskers en Terapagos Terastal/Stellar zijn lokaal gekwalificeerd voor 3D, normal en shiny, met individuele bundles en vooraf geladen Terapagos-vormwissels. Nieuwe downloads op hetzelfde cataloguspad worden direct beschikbaar.
