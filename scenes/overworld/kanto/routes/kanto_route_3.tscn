@@ -416,10 +416,10 @@ npc_sprite_frames = ExtResource("11_firebreather")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=120000017]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=80218861]
 
 [node name="Awakening" parent="Entities/Interactables/Items" unique_id=2131154250 instance=ExtResource("16_overworld_item")]
-position = Vector2(1744, 400)
+position = Vector2(1488, 368)
 pickup_id = "kanto_route_3_awakening"
 item_id = "awakening"
 
@@ -427,6 +427,26 @@ item_id = "awakening"
 position = Vector2(1520, 1136)
 pickup_id = "kanto_route_3_oran_berry"
 item_id = "oran-berry"
+
+[node name="StarPieceSouth" parent="Entities/Interactables/Items" unique_id=1159141877 instance=ExtResource("16_overworld_item")]
+position = Vector2(1168, 1296)
+pickup_id = "kanto_route_3_star_piece_south"
+item_id = "star-piece"
+
+[node name="StarPieceNorth" parent="Entities/Interactables/Items" unique_id=1594929112 instance=ExtResource("16_overworld_item")]
+position = Vector2(2336, 384)
+pickup_id = "kanto_route_3_star_piece_north"
+item_id = "star-piece"
+
+[node name="BigRoot" parent="Entities/Interactables/Items" unique_id=1685856312 instance=ExtResource("16_overworld_item")]
+position = Vector2(2288, 912)
+pickup_id = "kanto_route_3_big_root"
+item_id = "big-root"
+
+[node name="HyperPotion" parent="Entities/Interactables/Items" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
+position = Vector2(752, 1168)
+pickup_id = "kanto_route_3_hyper_potion"
+item_id = "hyper-potion"
 
 [node name="MtMoonSign" parent="Entities/Interactables" unique_id=764906515 instance=ExtResource("10_pprsw")]
 position = Vector2(2512, 976)
@@ -459,26 +479,6 @@ rock_id = "kanto_route_3_rock_east"
 rock_variant = 3
 rock_visual_style = 2
 required_rock_smash_level = 20
-
-[node name="StarPieceSouth" parent="Entities/Interactables/Items" unique_id=1159141877 instance=ExtResource("16_overworld_item")]
-position = Vector2(1184, 1184)
-pickup_id = "kanto_route_3_star_piece_south"
-item_id = "star-piece"
-
-[node name="StarPieceNorth" parent="Entities/Interactables/Items" unique_id=1594929112 instance=ExtResource("16_overworld_item")]
-position = Vector2(2336, 384)
-pickup_id = "kanto_route_3_star_piece_north"
-item_id = "star-piece"
-
-[node name="BigRoot" parent="Entities/Interactables/Items" unique_id=1685856312 instance=ExtResource("16_overworld_item")]
-position = Vector2(2784, 1056)
-pickup_id = "kanto_route_3_big_root"
-item_id = "big-root"
-
-[node name="HyperPotion" parent="Entities/Interactables/Items" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
-position = Vector2(352, 1056)
-pickup_id = "kanto_route_3_hyper_potion"
-item_id = "hyper-potion"
 
 [node name="Spawns" type="Node2D" parent="." unique_id=120000001]
 
