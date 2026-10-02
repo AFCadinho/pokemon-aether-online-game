@@ -4472,10 +4472,15 @@ func _on_battle_ended(result: Dictionary) -> void:
 		and not reward_battle_id.is_empty()
 	)
 	var reward_trainer_id := active_trainer_id
+	var is_future_self_battle := reward_trainer_id == "kanto_rock_tunnel_future_self"
 	var reward_trainer_name := active_trainer_name
 	var trainer_outro_dialogue_id := active_trainer_outro_dialogue_id
 	var trainer_mugshot := active_trainer_mugshot
 	var trainer_is_rematch := active_trainer_is_rematch
+	if is_future_self_battle:
+		# This story fight records its one-time completion on either outcome.
+		should_claim_trainer_reward = true
+		should_respawn_after_loss = false
 	var keep_locked_for_outro := (
 		should_claim_trainer_reward
 		and not trainer_is_rematch
@@ -4485,7 +4490,10 @@ func _on_battle_ended(result: Dictionary) -> void:
 		_begin_blackout_respawn_transition()
 	end_wild_battle(should_respawn_after_loss)
 	if not should_respawn_after_loss:
-		_finish_trainer_battle_npc(reward_trainer_id, should_claim_trainer_reward)
+		_finish_trainer_battle_npc(
+			reward_trainer_id,
+			should_claim_trainer_reward and not is_future_self_battle
+		)
 	if keep_locked_for_outro:
 		_lock_overworld_for_battle()
 	_notify_caught_pokemon_if_needed(result)
@@ -4494,6 +4502,10 @@ func _on_battle_ended(result: Dictionary) -> void:
 		_finish_blackout_respawn_transition()
 		_finish_trainer_battle_npc(reward_trainer_id, false)
 		return
+	if is_future_self_battle:
+		var party_heal_result: Dictionary = await PartyHealService.heal_current_party_and_save({}, false)
+		if bool(party_heal_result.get("success", false)) and bool(party_heal_result.get("changed", false)):
+			SfxManager.play("pokemon_recovery")
 	if should_claim_wild_reward and reward_battle_id != "":
 		await _award_wild_battle_money(reward_battle_id, reward_species)
 	if should_claim_trainer_reward and reward_battle_id != "":

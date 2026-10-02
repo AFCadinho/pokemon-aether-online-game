@@ -4,10 +4,14 @@
 
 - Calyrex Ice Rider en Shadow Rider, Zacian Crowned en Zamazenta Crowned zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met individuele downloadbundles en vooraf geladen modellen.
 
+- Route 9, Route 10 en beide Rock Tunnel-verdiepingen bevatten nu zichtbare, aanspreekbare overworld-Pokémon.
+- Future Self in Rock Tunnel now wears the same player-derived Mysterious outfit and dialogue portrait as in Mt. Moon, including during battle.
+
+- Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterward and the encounter completes on either result.
+
 - De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
 
 - Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.
-
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
 
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.

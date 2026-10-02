@@ -12,6 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 176)
@@ -399,6 +400,33 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("picnicker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1115842656]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000000]
+
+[node name="Spearow" parent="Entities/Pokemon" unique_id=190000175 instance=ExtResource("pokemon")]
+position = Vector2(1136, 656)
+overworld_pokemon_id = "kanto_route_9_spearow_1"
+species_id = "spearow"
+level = 13
+display_name = "Spearow"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Sandshrew" parent="Entities/Pokemon" unique_id=190000559 instance=ExtResource("pokemon")]
+position = Vector2(1872, 1008)
+overworld_pokemon_id = "kanto_route_9_sandshrew_1"
+species_id = "sandshrew"
+level = 13
+display_name = "Sandshrew"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=678217890]
 
