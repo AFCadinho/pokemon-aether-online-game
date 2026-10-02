@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Rock Tunnel's masked visitor is identified as Mysterious Trainer, uses layered trainer art in battle, appears beside the player at mandatory exit encounters, and remains visible until his farewell ends.
+- Rock Tunnel's masked visitor is identified as Mysterious Trainer, uses layered trainer art in battle, appears beside the player at mandatory exit encounters, remains visible until his farewell ends, and leaves no invisible blocking tile afterward.
 
 - De Classic-overlay opent wilde battles zonder overgangswachttijd of entree-fade; sprite-downloads houden het tonen van het battlescherm niet meer tegen.
 

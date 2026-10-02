@@ -71,10 +71,16 @@ func _run() -> void:
 		_check(npc.visible and npc.modulate.a == 1.0, "%s stays visible throughout the farewell" % gender)
 		await npc.finish_story_battle_presentation(npc.trainer_id)
 		_check(not npc.visible, "%s disappears after the farewell" % gender)
+		_check(not npc.blocks_world_position(npc.get_feet_position()), "%s vanished visitor no longer blocks the entrance" % gender)
+		_check(not npc._can_start_manual_interaction() and not npc._can_auto_challenge(), "%s vanished visitor cannot trigger a second encounter" % gender)
+		await npc.interact_with_player(null)
+		npc._apply_story_visibility(true)
+		_check(not npc.visible and not npc.blocks_world_position(npc.get_feet_position()), "%s story refresh cannot restore an invisible blocker" % gender)
 		var reloaded: Node = load("res://scenes/npcs/rock_tunnel_future_self_npc.tscn").instantiate()
 		root.add_child(reloaded)
 		await process_frame
 		_check(not reloaded.visible, "%s completed encounter stays absent on map reload" % gender)
+		_check(not reloaded.blocks_world_position(reloaded.get_feet_position()), "%s completed encounter leaves its old tile passable on reload" % gender)
 		reloaded.queue_free()
 		progress.fixture_completed = false
 		await npc._load_trainer_progress()
@@ -90,6 +96,11 @@ func _run() -> void:
 	var original_map: Node = state.current_map
 	state.current_map = map
 	var visitor := map.get_node("Entities/NPCs/FutureSelf")
+	var visitor_count := 0
+	for trainer: Node in map.get_node("Entities/NPCs").get_children():
+		if str(trainer.get("trainer_id")) == "kanto_rock_tunnel_future_self":
+			visitor_count += 1
+	_check(visitor_count == 1, "Rock Tunnel has one masked visitor")
 	var player := Node2D.new()
 	map.add_child(player)
 	for exit: Node2D in map.get_node("Exits").get_children():

@@ -121,6 +121,37 @@ func _load_trainer_progress() -> void:
 			modulate.a = 1.0
 
 
+func _can_start_manual_interaction() -> bool:
+	if not is_visible_in_tree() or trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]:
+		return false
+	return super._can_start_manual_interaction()
+
+
+func interact_with_player(player: Node2D) -> void:
+	if not is_visible_in_tree() or trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]:
+		return
+	await super.interact_with_player(player)
+
+
+func _can_auto_challenge() -> bool:
+	return not farewell_pending and is_visible_in_tree() and super._can_auto_challenge()
+
+
+func blocks_world_position(world_position: Vector2) -> bool:
+	if not is_visible_in_tree() or modulate.a <= 0.0:
+		return false
+	if not farewell_pending and trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]:
+		return false
+	return super.blocks_world_position(world_position)
+
+
+func _apply_story_visibility(allow_deferred_hide := false) -> void:
+	super._apply_story_visibility(allow_deferred_hide)
+	# Story refreshes must not resurrect a completed trainer at zero opacity.
+	if not farewell_pending and trainer_progress_state in [STATE_DEFEATED, STATE_COMPLETED]:
+		visible = false
+
+
 func finish_story_battle_presentation(finished_trainer_id: String) -> void:
 	if finished_trainer_id != FUTURE_SELF_TRAINER_ID or not farewell_pending:
 		return
