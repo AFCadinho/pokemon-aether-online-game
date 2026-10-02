@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "appearance_pair_count": 71,
+  "variant_count": 142,
+  "battle_visual_approved": false,
+  "runtime_approved": false,
+  "performance_qualification_pending": true,
+  "independent_native_validation_pending": true,
+  "independent_native_variant_count_snapshot": 42,
+  "snapshot_is_final": false,
+  "review_url": "http://127.0.0.1:8795/mega-battle-71-v1/review-v1/index.html",
+  "captured_framing_holds": [
+    [
+      "steelixmega",
+      "special_attack",
+      "classic",
+      0
+    ],
+    [
+      "steelixmega",
+      "special_attack",
+      "classic",
+      1
+    ],
+    [
+      "steelixmega-shiny",
+      "special_attack",
+      "classic",
+      0
+    ],
+    [
+      "steelixmega-shiny",
+      "special_attack",
+      "classic",
+      1
+    ]
+  ],
+  "evidence": {
+    "appearance_checkpoint": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/tools/sprite_factory/catalog_mega_appearance_checkpoint.json",
+      "sha256": "988a84a59920b63155be2198a022992cf0273cc53bf01c1f26ca5c31c9f17648"
+    },
+    "catalog": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/catalog.json",
+      "sha256": "6b2b9112cc91379a845a072c693a298f355acd5fa2b6bb713aa35cf80d710cd4"
+    },
+    "runtime_catalog": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/runtime.json",
+      "sha256": "a3b8eee42aa8ec0c906fc74b83b6d6035104f0d45666c2616021f2828581ea46"
+    },
+    "native_60hz_baseline": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/baseline/battle-review.json",
+      "sha256": "9e1425a00d565ea1e79e7c671efc4b8b6c41bbc584cb12e8be3fe9b7f5599d09"
+    },
+    "placement_proposals": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/placement-proposals.json",
+      "sha256": "fce1b9c8c890d20402e38e9a25a491dc1c7e8499a11a1e6f16eeda336ec0d05e"
+    },
+    "visual_captures": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/visual-captures/battle-review.json",
+      "sha256": "af1eb8cb55f836e3dda2111d2a453c80989d7910f714312b9237276b6c6bca2c"
+    },
+    "review_manifest": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/review-v1/manifest.json",
+      "sha256": "247580064683d38b4a8924dc303bbe81240a06eef09ebcd028de7be823a39729"
+    }
+  },
+  "focused_checks": [
+    "Staged GLB/SCN SHA and source animation duration checks passed for 142 variants",
+    "Native 60Hz measurement complete; zero faint endpoint holds",
+    "Complete visual captures for 142 variants in four camera/side views",
+    "Incomplete native qualification report rejected",
+    "Capture-only report holds all 142 variants; cannot grant technical approval",
+    "Python review/stage/calibration/qualification modules compile"
+  ],
+  "remaining": [
+    "User battle size/pose review",
+    "Independent native 120Hz completion and technical holds",
+    "Steelix special attack classic-camera HUD proxy overlap",
+    "Full runtime/UI and performance qualification",
+    "Individual bundles and catalog admission"
+  ]
+}

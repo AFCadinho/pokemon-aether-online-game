@@ -107,3 +107,26 @@ normal/shiny appearance pairs are accepted; full-pose battle qualification
 remains outstanding. The combined, source-pinned follow-up input is
 `.tmp/mega-native-rest-v1/appearance-approved-status.json`, which selects the
 corrected Steelix GLBs and SCNs rather than its superseded first export.
+
+## Joint Mega battle review prepared
+
+The 71 accepted appearance pairs (142 variants) are staged with hash-pinned
+GLBs, native scenes and source animation durations. A complete native 60 Hz
+baseline supplied 115,582 source-clock samples. Proposed placement preserves
+source geometry and motion, with a uniform readable scale and per-action
+floor correction. No faint-start/faint-loop endpoint holds were found.
+
+All 142 variants have visual captures in both runtime camera presets and both
+battle sides. The joint review is at
+`http://127.0.0.1:8795/mega-battle-71-v1/review-v1/index.html`.
+Mega Steelix retains its accepted 0.7 scale, but its special attack overlaps
+the classic-camera HUD proxy by about 7 pixels. This is explicitly marked on
+the page and remains a technical hold; no qualification threshold was relaxed.
+The other captured poses fit their cameras without HUD-proxy conflicts.
+
+The independent full-clock 120 Hz native animation validation is still running.
+The visual capture report deliberately has no 120 Hz clearance evidence and
+cannot qualify any variant. The checker rejects incomplete native reports and
+holds all 142 capture-only variants. User battle approval, full runtime/UI and
+performance checks, bundles and catalog admission remain pending. The 25 source
+holds are unchanged. This checkpoint does not authorize publication or R2 upload.
