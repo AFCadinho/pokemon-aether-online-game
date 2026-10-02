@@ -70,8 +70,8 @@ func _run() -> void:
 			var exits := map.get_node("Exits")
 			for exit: Node in exits.get_children():
 				_check(
-					str(exit.get("required_trainer_id")) == "kanto_rock_tunnel_future_self",
-					"%s requires the Future Self battle before leaving 1F" % exit.name
+					str(exit.get("required_trainer_id")) == ("kanto_rock_tunnel_future_self" if exit.name == &"ToB1FC" else ""),
+					"%s uses only the fixed C staircase encounter" % exit.name
 				)
 		for trainer: Node2D in trainers:
 			var cell := collision.local_to_map(collision.to_local(trainer.global_position))

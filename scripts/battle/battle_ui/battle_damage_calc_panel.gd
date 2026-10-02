@@ -156,6 +156,7 @@ var last_error := ""
 var last_notice := ""
 var defender_assumptions: Dictionary = {}
 var edited_assumption_fields: Dictionary = {}
+var opponent_levels_hidden := false
 var knowledge_snapshot: Dictionary = {}
 var live_ev_inputs: Dictionary = {}
 var live_ev_bars: Dictionary = {}
@@ -521,7 +522,7 @@ func _add_snapshot_profile_summary() -> void:
 		viewer_name,
 		opponent_name,
 		_get_hp_percent_label(opponent),
-		_get_level_label(opponent),
+		_get_level_label(opponent, opponent_levels_hidden),
 		"",
 		_get_hp_percent_label(viewer),
 		_get_level_label(viewer),
@@ -555,7 +556,7 @@ func _render_your_damage_response(response: Dictionary) -> void:
 		_get_pokemon_label(viewer, _t("battle.calc.your_pokemon")),
 		_get_pokemon_label(opponent, _t("battle.calc.opponent")),
 		_get_hp_percent_label(opponent),
-		_get_level_label(opponent),
+		_get_level_label(opponent, opponent_levels_hidden),
 		_get_boosts_label(viewer),
 		_get_hp_percent_label(viewer),
 		_get_level_label(viewer),
@@ -6230,7 +6231,9 @@ func _get_hp_percent_label(pokemon: Dictionary) -> String:
 	return _t("battle.calc.hp_percent", {"percent": _format_percent_value(percent)})
 
 
-func _get_level_label(pokemon: Dictionary) -> String:
+func _get_level_label(pokemon: Dictionary, hidden := false) -> String:
+	if hidden:
+		return _t("battle.calc.level", {"level": "???"})
 	var level_value: Variant = pokemon.get("level", "")
 	if level_value is Dictionary:
 		level_value = (level_value as Dictionary).get("value", "")

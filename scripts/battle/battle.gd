@@ -8225,6 +8225,9 @@ func _prepare_battle_setup(
 	environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 ) -> void:
 	battle_type = type
+	enemy_hud_panel.level_hidden = false
+	display_data_presenter.opponent_levels_hidden = false
+	calc_panel.opponent_levels_hidden = false
 	npc_trainer_display_name = ""
 	opponent_party_reveal_policy.reset(false)
 	var show_full_trainer_rails := battle_type == BattleType.TRAINER
@@ -8310,6 +8313,10 @@ func _show_local_player_trainer() -> void:
 
 
 func _show_npc_opponent_trainer(trainer_data: Dictionary) -> void:
+	var hide_level := bool(trainer_data.get("_hide_pokemon_level", false))
+	enemy_hud_panel.level_hidden = hide_level
+	display_data_presenter.opponent_levels_hidden = hide_level
+	calc_panel.opponent_levels_hidden = hide_level
 	_show_npc_trainer(enemy_trainer_sprite, trainer_data, Vector2.LEFT)
 
 
