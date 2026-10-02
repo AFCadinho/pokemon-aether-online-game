@@ -8,7 +8,7 @@ import os
 import subprocess
 import tempfile
 from pathlib import Path
-from build_web_preview import run_export
+from build_web_preview import run_export, validate_world_map_export_partition
 
 ROOT = Path(__file__).resolve().parents[1]
 MAX_MODULE_BYTES = 64 * 1024 * 1024
@@ -69,6 +69,7 @@ def main():
     args = parser.parse_args()
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run through ops/worktrees/slot-env SLOT -- COMMAND.")
+    validate_world_map_export_partition(ROOT)
     output = ROOT / "builds/web/modules"
     output.mkdir(parents=True, exist_ok=True)
     import_project(args.godot, output)

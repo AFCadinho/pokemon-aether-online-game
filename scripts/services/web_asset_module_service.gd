@@ -28,6 +28,7 @@ const MISTY_MAP_SCENES := {
 	"kanto_route_25_bills_house": "res://scenes/overworld/kanto/routes/route25/bills_house.tscn",
 }
 const EXTENDED_MAP_SCENES := {
+	"kanto_lavender_town_pokemon_center": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_center.tscn",
 	"kanto_cerulean_cave": "res://scenes/overworld/kanto/caves/cerulean_cave/cerulean_cave.tscn",
 	"kanto_cerulean_cave_2f": "res://scenes/overworld/kanto/caves/cerulean_cave/2f.tscn",
 	"kanto_cerulean_cave_b1f": "res://scenes/overworld/kanto/caves/cerulean_cave/b1f.tscn",

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from fnmatch import fnmatchcase
 import hashlib
 import json
 import os
@@ -35,6 +36,36 @@ WEB_SHELL_ASSETS = (
 )
 ANSI_ESCAPE = re.compile(r'\x1b\[[0-?]*[ -/]*[@-~]')
 EXPORT_PROGRESS = re.compile(r'^\[\s*(\d+)%\s*\]\s*([A-Za-z0-9_-]+)')
+
+
+def validate_world_map_export_partition(root: Path) -> None:
+    """Reject stale map presets before preparing assets or running Godot."""
+    presets = {}
+    source = (root / 'export_presets.cfg').read_text()
+    for match in re.finditer(r'\[preset\.(\d+)\]\n(.*?)\n\[preset\.\1\.options\]', source, re.S):
+        fields = dict(re.findall(r'^(\w+)=(.*)$', match[2], re.M))
+        presets[json.loads(fields['name'])] = fields
+    catalog = json.loads((root / 'generated/world_access_catalog.json').read_text())
+    full_scope = json.loads((root / 'docs/browser-full-world-scope.json').read_text())
+    misty_scope = json.loads((root / 'docs/browser-misty-scope.json').read_text())
+    covered = set(full_scope['coreMapIds'] + full_scope['extendedMapIds'] + misty_scope['additionalMapIds'])
+    missing = [map_id for map_id, area in catalog['areas'].items()
+               if map_id.startswith('kanto_') and area.get('scenePath') and map_id not in covered]
+    if missing:
+        raise RuntimeError(f'Browser map partition misses current Kanto maps: {missing}')
+    core = presets['Web Local Preview']
+    excluded = json.loads(core['exclude_filter']).split(',')
+    for preset_name, map_ids in (
+        ('Web Misty Maps Trial', misty_scope['additionalMapIds']),
+        ('Web Extended Kanto Maps', full_scope['extendedMapIds']),
+    ):
+        selected = {json.loads(value) for value in re.findall(r'"[^"\n]*"', presets[preset_name]['export_files'])}
+        for map_id in map_ids:
+            path = catalog['areas'][map_id]['scenePath']
+            if not any(fnmatchcase(path.removeprefix('res://'), pattern) for pattern in excluded):
+                raise RuntimeError(f'Web core export exclusion missing for on-demand world map: {map_id}')
+            if path not in selected:
+                raise RuntimeError(f'{preset_name} export selection missing on-demand world map: {map_id}')
 
 
 def parse_export_progress(line: str) -> tuple[int, str] | None:
@@ -181,6 +212,7 @@ def main():
         parser.error(str(error))
     if ROOT.parent.name.startswith('slot-') and os.environ.get('POKEAETHER_SLOT') != ROOT.parent.name:
         parser.error('Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.')
+    validate_world_map_export_partition(ROOT)
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
     browser_audio_files = copy_browser_audio(output)
