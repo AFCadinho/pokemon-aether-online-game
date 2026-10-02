@@ -17,7 +17,7 @@
 
 - Na Oaks advies over Rock Tunnel activeert de hoofdquest de route naar Lavender Town. Daar waarschuwt een inwoner automatisch voor Pokémon Tower, Team Rocket en de vermiste Mr. Fuji.
 
-- De PvP 3D-arena vult vijf tribunerijen rondom met 320 geanimeerde Quaternius-supporters.
+- De PvP 3D-arena mengt een volle, eenvoudige tribune met enkele Quaternius-NPC’s die met beide armen juichen.
 - De bewakers bij beide Saffron-poorten tonen zelf de lockdown-dialoog wanneer servertoegang de doorgang blokkeert.
 
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.
