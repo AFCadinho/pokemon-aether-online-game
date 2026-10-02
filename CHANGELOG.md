@@ -3,9 +3,15 @@
 ## Unreleased
 
 - Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterward and the encounter completes on either result.
+
+- De zes passagiers in de S.S. Anne juichen nu met beide armen, net als het publiek in de PvP-arena.
+
+- Route 10 gebruikt opnieuw de visual uit de bijgewerkte Tiled-kaart.
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
 
 - Zeven extra battlevormen zijn lokaal gekwalificeerd voor 3D, normal en shiny: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero en Wishiwashi School. De bijbehorende vormen worden vóór de battle geladen voor een directe vormwissel.
+
+- Black Kyurem en White Kyurem zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met acht native animaties en individuele downloadbundles.
 
 - Het 3D-stadium groepeert vaste tribunedelen en pauzeert publieksanimaties buiten beeld. Verre toeschouwers animeren op 30 Hz; Pokémon houden hun bestaande animatietempo.
 - Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
@@ -16,7 +22,7 @@
 
 - Na Oaks advies over Rock Tunnel activeert de hoofdquest de route naar Lavender Town. Daar waarschuwt een inwoner automatisch voor Pokémon Tower, Team Rocket en de vermiste Mr. Fuji.
 
-- De PvP 3D-arena vult vijf tribunerijen rondom met 320 geanimeerde Quaternius-supporters.
+- De PvP 3D-arena mengt een volle, eenvoudige tribune met enkele Quaternius-NPC’s die met beide armen juichen.
 - De bewakers bij beide Saffron-poorten tonen zelf de lockdown-dialoog wanneer servertoegang de doorgang blokkeert.
 
 - Na het verslaan van Lt. Surge stuurt de verhaallijn de speler naar de afgesloten Saffron-poort en daarna terug naar Oak voor advies over Route 9, Route 10 en Rock Tunnel. Saffron blijft server-side gesloten tot de latere Celadon-theequest.

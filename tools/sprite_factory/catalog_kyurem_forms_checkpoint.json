@@ -1,0 +1,886 @@
+{
+  "appearance_approval": {
+    "date": "2026-10-02",
+    "scope": "Exact four neutral appearances pinned below; battle approval pending",
+    "user_response": "Allebei goed"
+  },
+  "appearance_approved": true,
+  "battle_approved": true,
+  "battle_measurement": {
+    "all_shots_in_view": true,
+    "battle_images": 112,
+    "candidates": ".tmp/legendary-kyurem-forms-v2/battle-candidates-v1.json",
+    "candidates_sha256": "d8837251797edf0219c37d3af0f88598b1d92d906f3c41c33e61424b512ea24c",
+    "catalog": ".tmp/legendary-kyurem-forms-v2/battle-stage-v1/catalog.json",
+    "catalog_sha256": "aee866c04d9ef4e16c1a9214751e97f6d0c34bdd6c80765593d0e3e5a83443ab",
+    "independent_clearance_hz": 120,
+    "native_clips": 32,
+    "report": ".tmp/legendary-kyurem-forms-v2/battle-validated-v1/battle-review.json",
+    "sha256": "adc5fb1442246ace2870c1e96e1e0f8ed641158a60fde15057358f381e59b8b6",
+    "user_battle_approval_pending": false
+  },
+  "battle_user_approval": {
+    "date": "2026-10-02",
+    "manifest_sha256": "1c804bed20e518597b8b3297ea0fed54f77149dabb21729f43a906d65c3323c8",
+    "user_response": "goedgekeurd"
+  },
+  "capture_report_sha256": "c9fc20015fb56bc670932476d0b6e1306e8be55fbff992bc981be4b137841279",
+  "entries": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00450_rangeattack01"
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": true,
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00450_rangeattack01"
+        }
+      },
+      "complete_pose_channels": true,
+      "converter_version": 2,
+      "glb_sha256": "19ff5f2826c438bbd49cfbaef20a8a395ca2766b92ce30bc3458f6be134e3b41",
+      "godot_version": "4.6.2-stable (official)",
+      "neutral_visibility_proposal": [
+        "pm0646_13_00_lightning_a_mesh",
+        "pm0646_13_00_lightning_b_00_mesh",
+        "pm0646_13_00_lightning_b_01_mesh",
+        "pm0646_13_00_lightning_b_02_mesh",
+        "pm0646_13_00_lightning_b_03_mesh",
+        "pm0646_13_00_lightning_b_04_mesh",
+        "pm0646_13_00_tube_a_mesh",
+        "pm0646_13_00_tube_b_mesh",
+        "pm0646_13_00_tube_c_mesh"
+      ],
+      "path": ".tmp/legendary-kyurem-forms-v2/neutral/kyurem-black/normal/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ]
+      ],
+      "runtime_approved": true,
+      "runtime_path": ".tmp/legendary-kyurem-forms-v2/runtime-neutral-v1/kyurem-black.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "2f479e2c48ba1bfc68f352b89bd2c1782f92b146f5392b97d236a48e718bd067",
+      "species": "kyurem-black",
+      "status": "exported_for_review"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00450_rangeattack01"
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": true,
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_13_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_13_00_00450_rangeattack01"
+        }
+      },
+      "complete_pose_channels": true,
+      "converter_version": 2,
+      "glb_sha256": "6f3c11d62ec10d198549fbc6d592faf6a4c98e4e23ba60a7c862adb65ace7bde",
+      "godot_version": "4.6.2-stable (official)",
+      "neutral_visibility_proposal": [
+        "pm0646_13_00_lightning_a_mesh",
+        "pm0646_13_00_lightning_b_00_mesh",
+        "pm0646_13_00_lightning_b_01_mesh",
+        "pm0646_13_00_lightning_b_02_mesh",
+        "pm0646_13_00_lightning_b_03_mesh",
+        "pm0646_13_00_lightning_b_04_mesh",
+        "pm0646_13_00_tube_a_mesh",
+        "pm0646_13_00_tube_b_mesh",
+        "pm0646_13_00_tube_c_mesh"
+      ],
+      "path": ".tmp/legendary-kyurem-forms-v2/neutral/kyurem-black/shiny/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ]
+      ],
+      "runtime_approved": true,
+      "runtime_path": ".tmp/legendary-kyurem-forms-v2/runtime-neutral-v1/kyurem-black-shiny.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "dcf492f13cce20645d28e3399357d3f38c9ac04bf37a0e6eafd6a49679c1ae71",
+      "species": "kyurem-black-shiny",
+      "status": "exported_for_review"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 104.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.73333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00450_rangeattack01"
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": true,
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.73333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00450_rangeattack01"
+        }
+      },
+      "complete_pose_channels": true,
+      "converter_version": 2,
+      "glb_sha256": "f79b78d6d8dd313932ce49e65a7874e3c9756d63793f101df63fee9c0d42b981",
+      "godot_version": "4.6.2-stable (official)",
+      "neutral_visibility_proposal": [
+        "pm0646_12_00_tube_a_mesh",
+        "pm0646_12_00_tube_b_mesh",
+        "pm0646_12_00_tube_c_mesh"
+      ],
+      "path": ".tmp/legendary-kyurem-forms-v2/neutral/kyurem-white/normal/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ]
+      ],
+      "runtime_approved": true,
+      "runtime_path": ".tmp/legendary-kyurem-forms-v2/runtime-neutral-v1/kyurem-white.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "8d6bd986238c092be99c7ba3774e8e7df3aeb2fbe255e82c10d36ae755b551c8",
+      "species": "kyurem-white",
+      "status": "exported_for_review"
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 40.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 104.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 180.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 130.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "physical_attack_2": {
+          "frames": 150.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 138.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "animations": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.73333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00450_rangeattack01"
+        }
+      },
+      "appearance_approved": true,
+      "battle_approved": true,
+      "clips": {
+        "damage": {
+          "duration": 0.666666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00500_damage01"
+        },
+        "faint_loop": {
+          "duration": 1.73333333333333,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00521_down01_loop"
+        },
+        "faint_start": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00520_down01_start"
+        },
+        "idle": {
+          "duration": 3.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00001_battlewait01_loop"
+        },
+        "physical_attack": {
+          "duration": 2.16666666666667,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00400_attack01"
+        },
+        "physical_attack_2": {
+          "duration": 2.5,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00410_attack02"
+        },
+        "sleep": {
+          "duration": 2.0,
+          "fps": 60.0,
+          "loop": true,
+          "source_action": "pm0646_12_00_00281_sleep01_loop"
+        },
+        "special_attack": {
+          "duration": 2.3,
+          "fps": 60.0,
+          "loop": false,
+          "source_action": "pm0646_12_00_00450_rangeattack01"
+        }
+      },
+      "complete_pose_channels": true,
+      "converter_version": 2,
+      "glb_sha256": "898c5cb1530590e75338c5c387ec71a828b97cf0c1d60198948707482afad2c0",
+      "godot_version": "4.6.2-stable (official)",
+      "neutral_visibility_proposal": [
+        "pm0646_12_00_tube_a_mesh",
+        "pm0646_12_00_tube_b_mesh",
+        "pm0646_12_00_tube_c_mesh"
+      ],
+      "path": ".tmp/legendary-kyurem-forms-v2/neutral/kyurem-white/shiny/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "review_poses": [
+        [
+          "idle",
+          0.0,
+          "front"
+        ],
+        [
+          "idle",
+          0.5,
+          "back"
+        ],
+        [
+          "physical_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "physical_attack_2",
+          0.5,
+          "front"
+        ],
+        [
+          "special_attack",
+          0.5,
+          "front"
+        ],
+        [
+          "sleep",
+          0.5,
+          "front"
+        ],
+        [
+          "faint_start",
+          1.0,
+          "front"
+        ],
+        [
+          "faint_loop",
+          0.5,
+          "front"
+        ]
+      ],
+      "runtime_approved": true,
+      "runtime_path": ".tmp/legendary-kyurem-forms-v2/runtime-neutral-v1/kyurem-white-shiny.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "d252245259457a7ec84f14d7feb020fa51947fb8501291d35b4681055bf20e58",
+      "species": "kyurem-white-shiny",
+      "status": "exported_for_review"
+    }
+  ],
+  "runtime_approved": true,
+  "runtime_qualification": {
+    "receipt": "tools/sprite_factory/catalog_kyurem_forms_bundle_qualification.json",
+    "sha256": "ccbf1f7d314c373e5b131960b4dec84356236e511f0202d4f1e4ef691c293b66"
+  },
+  "schema": 1,
+  "scope": "four_neutral_form_appearances_for_user_review_not_runtime_admission",
+  "source_sha256": "006b391145c8c720e8cabf0109d3e30947846495f91ac5f1d7c8301c0c86195a"
+}

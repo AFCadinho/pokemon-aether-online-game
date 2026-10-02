@@ -1,0 +1,92 @@
+{
+  "schema": 1,
+  "source_root": "/run/media/adinho/AFC_Adinho/3d_models/Pok\u00e9mon SCVI Base + DLC Model Dump",
+  "scope": "source_inventory_and_review_candidates_no_runtime_admission",
+  "kyurem_archive": {
+    "path": "/run/media/adinho/AFC_Adinho/3d_models/Biochao/Gen5.zip",
+    "member": "pm0646.blend",
+    "bytes": 211568441,
+    "crc32": "12059736",
+    "sha256": "006b391145c8c720e8cabf0109d3e30947846495f91ac5f1d7c8301c0c86195a"
+  },
+  "entries": [
+    {
+      "species": "kyurem-black",
+      "identity": "pm0646_13_00",
+      "model": "pm0646/pm0646_13_00/pm0646_13_00.trmdl",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model_sha256": "96e3910a27f2efa6785131c4bda58a5481389d2bf7e3306861dd5154daf12e36",
+      "icon_sha256": "13499b8174e4d974003b3045018f8699ce97af2a4bb996e48785ac8af5710832",
+      "normal_material_sha256": "67d8b2d805fa968ff0f344c8cb20be01854d67f93bb6feab9fb8263a0159f51b",
+      "shiny_material_sha256": "c034eed9e9436c356420454dbab9b4156c4fdbd04a7f6a78b5c0c70dadc6b674",
+      "raw_native_motion_count": 0,
+      "runtime_approved": false,
+      "appearance_approved": false
+    },
+    {
+      "species": "kyurem-white",
+      "identity": "pm0646_12_00",
+      "model": "pm0646/pm0646_12_00/pm0646_12_00.trmdl",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model_sha256": "cb7423d5b08b08bb3c8150748d53688c681ab4b2e1bf4e46afa638d560b8ac80",
+      "icon_sha256": "9e736db749c10b08e969af0eff78858b024f1fc9ad0e301c223d453589c6873a",
+      "normal_material_sha256": "02b25ad42cd7e24a2c057c8713ac9ec51c1f8b1a3f84146d7435276df83b9f90",
+      "shiny_material_sha256": "91bb11c0b02158c23380bffaec3da0f8318e61d6de8701a270330376683b2f94",
+      "raw_native_motion_count": 0,
+      "runtime_approved": false,
+      "appearance_approved": false
+    },
+    {
+      "species": "zacian-crowned",
+      "identity": "pm0938_12_00",
+      "model": "pm0938/pm0938_12_00/pm0938_12_00.trmdl",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model_sha256": "fcc6ce42cd43c65c7e8be341f44922794b1195ab069fc89d78a2a97d5b2c5b1b",
+      "icon_sha256": "5b8628ce13c9030c559a529f065b0291708459bbe5070b7ee542980ae2e64673",
+      "normal_material_sha256": "2ad4672744965575b4263427a16f6847b315633d085811dd739f7bbf135f887d",
+      "shiny_material_sha256": "e30170887ac4f14e6c78ee5d27988110ad916ac2908045051470a369fbd0eaf4",
+      "raw_native_motion_count": 30,
+      "runtime_approved": false,
+      "appearance_approved": false
+    },
+    {
+      "species": "zamazenta-crowned",
+      "identity": "pm0939_12_00",
+      "model": "pm0939/pm0939_12_00/pm0939_12_00.trmdl",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model_sha256": "5f741965eca2902d7034a824b8e75cb31ea94e87a34ee3a1a26e838457397ced",
+      "icon_sha256": "461921df952b443e1c1bba1fc79670f7c26c6abd856c8c67ca6b9d0f2b5e73d8",
+      "normal_material_sha256": "c77aa5d26b327ac28b459ab5d0a632ec971370e3a33bd9df23260c787745cbf6",
+      "shiny_material_sha256": "74ccd618a19149eda905015bae647b139ef1e8fa973e4f35e9549be66093c756",
+      "raw_native_motion_count": 31,
+      "runtime_approved": false,
+      "appearance_approved": false
+    },
+    {
+      "species": "calyrex-ice",
+      "identity": "pm0986_12_00",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model": "pm0986/pm0986_12_00/pm0986_12_00.trmdl",
+      "model_sha256": "05a83285820219bdca24a3574d5784afcf3c71673fc74445698d5b90cb24a62d",
+      "icon_sha256": "dd727997b040f32a6f92ae61a50b1fd9ad6a3870e6e2a911d80ed88ccc151d03",
+      "normal_material_sha256": "bcc5a8df9ad8914997fde53f964b58ee533c300b1685c708dc21f8a5329afc87",
+      "shiny_material_sha256": "9f1589ba1df6b61fbf9375436afe2393fc69fb68ac16363d31f00b2e8f50eca9",
+      "raw_native_motion_count": 43,
+      "runtime_approved": false,
+      "appearance_approved": false
+    },
+    {
+      "species": "calyrex-shadow",
+      "identity": "pm0986_13_00",
+      "mapping_evidence": "Source icon visually inspected; resource number matched to species developer mapping where renumbered.",
+      "model": "pm0986/pm0986_13_00/pm0986_13_00.trmdl",
+      "model_sha256": "0bc45e73eee0f2be17fba38f6c22529c040b10b963d351af277c1abe2091250f",
+      "icon_sha256": "e27907f80841a921e08ba93042eb609c99f6c81a971beef6a51ed25259f8e580",
+      "normal_material_sha256": "02951e590a5448498b663c1552df1e5839f1f4b56e07bf618fb7043e8eb8b38d",
+      "shiny_material_sha256": "4891898c008461c919f23e20c90bc453d2d693b78e086e472a9557728fa139bc",
+      "raw_native_motion_count": 43,
+      "runtime_approved": false,
+      "appearance_approved": false
+    }
+  ]
+}

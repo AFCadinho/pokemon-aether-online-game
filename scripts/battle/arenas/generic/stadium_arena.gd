@@ -80,23 +80,87 @@ func _crowd(parent: Node3D) -> void:
 	var audience := Node3D.new()
 	audience.name = "StadiumAudience"
 	parent.add_child(audience)
+	var background := MultiMeshInstance3D.new()
+	background.name = "BackgroundCrowd"
+	var crowd_mesh := _silhouette_crowd_mesh()
+	var batch := MultiMesh.new()
+	batch.transform_format = MultiMesh.TRANSFORM_3D
+	batch.use_colors = true
+	batch.use_custom_data = true
+	batch.mesh = crowd_mesh
+	batch.instance_count = 4 * 9 * 65
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 77912
+	var detailed_seats: Array[Dictionary] = []
+	for side in 4:
+		for row in [1, 4, 7]:
+			for seat_x in [-15.6, -11.7, -7.8, -3.9, 3.9, 7.8, 11.7, 15.6]:
+				detailed_seats.append({"side": side, "row": row, "x": seat_x})
+	var crowd_index := 0
+	for side in 4:
+		for row in 9:
+			for seat in 65:
+				var x := (seat - 32) * 0.65
+				var pos := Vector3(x + rng.randf_range(-0.10, 0.10), 2.28 + row * 0.65 + rng.randf_range(0.0, 0.12), -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2.0)
+				var pose := Transform3D(Basis.IDENTITY, pos)
+				if absf(fposmod(x + 4.5, 9.0) - 4.5) < 0.6 or rng.randf() < 0.12:
+					pose.basis = Basis.from_scale(Vector3.ONE * 0.001)
+				for detailed in detailed_seats:
+					if detailed.side == side and detailed.row == row and absf(detailed.x - x) < 0.43:
+						pose.basis = Basis.from_scale(Vector3.ONE * 0.001)
+				batch.set_instance_transform(crowd_index, pose)
+				batch.set_instance_custom_data(crowd_index, Color(rng.randf(), rng.randf(), 0.0, 1.0))
+				batch.set_instance_color(crowd_index, _background_crowd_tint(rng))
+				crowd_index += 1
+	background.multimesh = batch
+	var background_material := ShaderMaterial.new()
+	background_material.shader = load("res://scripts/battle/arenas/generic/stadium_crowd.gdshader")
+	background.material_override = background_material
+	background.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	audience.add_child(background)
 	var spectator_script = preload("res://scripts/battle/arenas/shared/animated_spectator.gd")
-	# Spread a modest number of rigged spectators over every tier and side.
-	var seats: Array[float] = []
-	for seat in 16:
-		seats.append(-17.0 + float(seat) * (34.0 / 15.0))
+	# Quaternius models replace selected simple silhouettes as visual focal points.
 	var index := 0
 	for side in 4:
-		for row in [0, 2, 4, 6, 8]:
-			for seat in seats:
+		for row in [1, 4, 7]:
+			for seat in [-15.6, -11.7, -7.8, -3.9, 3.9, 7.8, 11.7, 15.6]:
 				var spectator: Node3D = spectator_script.new()
 				spectator.name = "Supporter%d" % index
 				spectator.position = Vector3(seat, 2.0 + row * 0.65, -20.0 - row * 1.05).rotated(Vector3.UP, side * PI / 2)
 				spectator.rotation.y = atan2(-spectator.position.x, -spectator.position.z)
-				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.84)
-				spectator.throttle_outside_camera(0.84)
+				spectator.configure(spectator_script.MODELS[(index + row + side) % 4], index * 1.37, 0.76, true)
+				spectator.throttle_outside_camera(0.76)
 				audience.add_child(spectator)
 				index += 1
+
+func _background_crowd_tint(rng: RandomNumberGenerator) -> Color:
+	return Color.from_hsv(rng.randf_range(0.56, 0.82), 0.4, rng.randf_range(0.008, 0.065))
+
+func _silhouette_crowd_mesh() -> ArrayMesh:
+	var combined := SurfaceTool.new()
+	var torso := CapsuleMesh.new()
+	torso.radius = 0.13
+	torso.height = 0.40
+	torso.radial_segments = 6
+	torso.rings = 2
+	var head := SphereMesh.new()
+	head.radius = 0.115
+	head.height = 0.23
+	head.radial_segments = 8
+	head.rings = 4
+	var arm := BoxMesh.new()
+	arm.size = Vector3(0.085, 0.33, 0.085)
+	for part in [[torso, Vector3.ZERO, 0.0], [head, Vector3(0, 0.29, 0), 0.0], [arm, Vector3(-0.20, 0.01, 0), -1.0], [arm, Vector3(0.20, 0.01, 0), 1.0]]:
+		var primitive: PrimitiveMesh = part[0]
+		var arrays := primitive.get_mesh_arrays()
+		var tags := PackedVector2Array()
+		tags.resize(arrays[Mesh.ARRAY_VERTEX].size())
+		tags.fill(Vector2(part[2], 0))
+		arrays[Mesh.ARRAY_TEX_UV2] = tags
+		var piece := ArrayMesh.new()
+		piece.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		combined.append_from(piece, 0, Transform3D(Basis.IDENTITY, part[1]))
+	return combined.commit()
 
 func build() -> Node3D:
 	RenderingServer.directional_soft_shadow_filter_set_quality(RenderingServer.SHADOW_QUALITY_SOFT_HIGH)

@@ -12,7 +12,7 @@ void vertex() {
 		float side = sign(UV2.x);
 		vec2 shoulder = vec2(side*0.13,0.16);
 		vec2 arm = VERTEX.xy-shoulder;
-		float angle = side*(0.25+cheer*(1.65+0.30*wave));
+		float angle = side*(0.25+cheer*(2.55+0.20*wave));
 		VERTEX.xy = shoulder+mat2(vec2(cos(angle),sin(angle)),vec2(-sin(angle),cos(angle)))*arm;
 	}
 	VERTEX.x += 0.07*wave;
