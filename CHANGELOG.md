@@ -4,6 +4,8 @@
 
 - Adventure Party-dubbels tonen twee aparte partysecties: speler 1 boven en speler 2 onder, elk met drie slots. Het volledige team van een solo-NPC blijft bij elkaar in de tegenstanderrail.
 
+- Lavender Resident gebruikt nu een passend portret van een oudere vrouw tijdens haar main-questdialoog en gewone gesprekken.
+
 - Pokémon Tower gebruikt de nieuwste artist-visual, met behoud van de handmatig ingestelde trapovergangen en richtingsblokkades.
 
 - Pokémon Tower gebruikt de nieuwste TMX-visual met bijgewerkte grafstenen, vloeren en healing seal.
