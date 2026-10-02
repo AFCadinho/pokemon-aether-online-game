@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Android-invulvelden blijven bij het typen zichtbaar: de toetsenbordcorrectie houdt nu ook rekening met de werkelijke viewport-schaling, zonder de oorspronkelijke UI-layout te wijzigen.
+
 - De game ondersteunt nu toegang voor alleen staff: toegestane accounts kunnen blijven inloggen terwijl gewone spelers een onderhoudsbericht krijgen.
 
 - De Android-app behoudt zijn eerdere login-, chat-, menu- en battle-layout; de compacte mobiele browserlayout blijft beperkt tot browsers. Invulvelden blijven zichtbaar boven het toetsenbord.
