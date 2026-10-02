@@ -33,7 +33,7 @@ func throttle_outside_camera(model_scale: float) -> void:
 		animation_player.active = false)
 	add_child(notifier)
 
-func configure(scene: PackedScene, phase: float, model_scale := 1.15) -> void:
+func configure(scene: PackedScene, phase: float, model_scale := 1.15, cheer_with_both_arms := false) -> void:
 	elapsed = phase
 	var model := scene.instantiate() as Node3D
 	model.name = "Character"
@@ -49,11 +49,39 @@ func configure(scene: PackedScene, phase: float, model_scale := 1.15) -> void:
 	for animation_name in ["Idle_Neutral", "Wave"]:
 		var animation: Animation = animation_player.get_animation(animation_name).duplicate()
 		animation.loop_mode = Animation.LOOP_LINEAR
+		if cheer_with_both_arms and animation_name == "Wave":
+			_animation_mirrors_arm_gesture(animation)
 		library.add_animation(animation_name, animation)
 	animation_player.remove_animation_library("")
 	animation_player.add_animation_library("", library)
 	_update_animation()
 	animation_player.seek(fmod(phase, animation_player.current_animation_length), true)
+
+func _animation_mirrors_arm_gesture(animation: Animation) -> void:
+	# Quaternius Wave animates only the left arm. Mirror those pose tracks onto
+	# the right so the stadium reads as a shared cheer instead of a greeting wave.
+	var source_tracks := animation.get_track_count()
+	for track in source_tracks:
+		var source_path := str(animation.track_get_path(track))
+		if not source_path.contains("Skeleton3D:") or not source_path.contains(".L"):
+			continue
+		var bone_name := source_path.get_slice(":", 1)
+		var arm_bone := false
+		for prefix in ["Shoulder.", "UpperArm.", "LowerArm.", "Wrist.", "Thumb", "Index", "Middle", "Ring", "Pinky"]:
+			arm_bone = arm_bone or bone_name.begins_with(prefix)
+		if not arm_bone:
+			continue
+		var mirrored_path := source_path.replace(".L", ".R")
+		var mirrored_track := animation.add_track(animation.track_get_type(track))
+		animation.track_set_path(mirrored_track, NodePath(mirrored_path))
+		animation.track_set_interpolation_type(mirrored_track, animation.track_get_interpolation_type(track))
+		for key in animation.track_get_key_count(track):
+			var value = animation.track_get_key_value(track, key)
+			if animation.track_get_type(track) == Animation.TYPE_ROTATION_3D:
+				value = Quaternion(value.x, -value.y, -value.z, value.w)
+			elif animation.track_get_type(track) == Animation.TYPE_POSITION_3D:
+				value = Vector3(-value.x, value.y, value.z)
+			animation.track_insert_key(mirrored_track, animation.track_get_key_time(track, key), value, animation.track_get_key_transition(track, key))
 
 func _process(delta: float) -> void:
 	elapsed += delta
