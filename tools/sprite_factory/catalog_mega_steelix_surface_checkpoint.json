@@ -2,7 +2,7 @@
   "schema": 1,
   "date": "2026-10-02",
   "species": "steelixmega",
-  "appearance_approved": false,
+  "appearance_approved": true,
   "runtime_approved": false,
   "battle_approved": false,
   "size_approved": true,
@@ -1369,5 +1369,8 @@
     "Static PBR approximation of native metal layers and crystal light; view-dependent refraction not reproduced",
     "Neutral reflection lighting in diagnostic previews only",
     "Full-pose battle calibration remains pending"
-  ]
+  ],
+  "appearance_feedback": "deze zijn goed",
+  "appearance_approval_date": "2026-10-02",
+  "accepted_review_page_sha256": "2a8c7d12dffb440f370b1917f197dcf2764709b5bb97578137fd508417e456ab"
 }

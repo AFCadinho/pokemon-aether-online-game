@@ -3,7 +3,7 @@
   "date": "2026-10-02",
   "user_feedback": "Ze zien er allemaal goed uit. Mega Steelix is alleen van erg ver, dus ik weet niet of dit te klein is",
   "review_manifest_sha256": "1c65f43fe76df413942b1393202cb254b9e4a1a485e3f02ac49c56a43047cf33",
-  "appearance_approved": false,
+  "appearance_approved": true,
   "battle_approved": false,
   "runtime_approved": false,
   "entries": [
@@ -1263,26 +1263,28 @@
     },
     {
       "species": "steelixmega",
-      "appearance_approved": false,
+      "appearance_approved": true,
       "scale_review_pending": false,
       "variants": {
         "normal": {
-          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/steelixmega/normal/model.glb",
-          "sha256": "e7bea46da4e953e928c6d3c59823dd5a53860c3dceb315e0323dbb951686dc25",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/normal/model.glb",
+          "sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
           "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00.trmtr",
           "table_sha256": "59aed9878bab40ce13a28d91a3041bdaa3287db02d0f50f78f5dc3f7d98413c6"
         },
         "shiny": {
-          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-native-rest-v1/steelixmega/shiny/model.glb",
-          "sha256": "fb1d64215da1656f4b9f379dd619b7ac18c3e64cdb36ee009ea51ef79e4dc7f3",
+          "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/shiny/model.glb",
+          "sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
           "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00_rare.trmtr",
           "table_sha256": "22b96e286d1b9909c5ee45539846f8439cbde3334c36b2a0d8258dae8ef61b03"
         }
       },
       "size_approved": true,
       "approved_scale": 0.7,
-      "detail_review_pending": true,
-      "followup_feedback": "oke de grote klopt, Maar de details voelen niet compleet"
+      "detail_review_pending": false,
+      "followup_feedback": "oke de grote klopt, Maar de details voelen niet compleet",
+      "detail_feedback": "deze zijn goed",
+      "surface_checkpoint_sha256": "04b739995e7628bb58cd2cb50c0dcccf5bc9ce673008b80138ae925830bd504d"
     },
     {
       "species": "swampertmega",
@@ -1361,5 +1363,5 @@
       }
     }
   ],
-  "approved_pair_count": 70
+  "approved_pair_count": 71
 }

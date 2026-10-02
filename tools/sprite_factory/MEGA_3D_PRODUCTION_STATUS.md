@@ -87,21 +87,23 @@ This is appearance acceptance only: battle and runtime approval remain false.
 
 A focused native Godot idle check shows Mega Steelix is not undersized: scale
 1.0 clips above the classic camera, whereas the review proposal 0.7 fits all
-four camera/side views for normal and shiny. Full-pose calibration and visual
-scale acceptance are still pending. The overview now frames visible posed
+four camera/side views for normal and shiny. The user has accepted the 0.7 scale; full-pose calibration remains pending. The overview now frames visible posed
 geometry rather than the unanimated mesh bounds.
 
 ## Steelix surface follow-up
 
 The user accepted the proposed 0.7 size but reported incomplete-looking detail.
-Steelix appearance is therefore held again; the other 70 appearance acceptances
-remain pinned. All seven source meshes are present. A separate review-only
+Steelix appearance was held again; the other 70 appearance acceptances
+remained pinned. All seven source meshes are present. A separate review-only
 recovery restores the source-masked metallic values for body_a/body_b/body_c
 and the body_d crystal layer light. Geometry, UV, rig and animation signatures
 are unchanged; both new standalone scenes convert and reload.
 
 Neutral reflection lighting is identical before/after in the new diagnostic.
 This is a static PBR approximation, not native view-dependent refraction parity.
-The new models and pending review are pinned in
-`catalog_mega_steelix_surface_checkpoint.json`. Full-pose battle qualification
-and model-detail acceptance remain outstanding.
+The new models and accepted detail review are pinned in
+`catalog_mega_steelix_surface_checkpoint.json`. The user then accepted normal and shiny with “deze zijn goed”. All 71
+normal/shiny appearance pairs are accepted; full-pose battle qualification
+remains outstanding. The combined, source-pinned follow-up input is
+`.tmp/mega-native-rest-v1/appearance-approved-status.json`, which selects the
+corrected Steelix GLBs and SCNs rather than its superseded first export.
