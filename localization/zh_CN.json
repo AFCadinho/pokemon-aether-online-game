@@ -6270,11 +6270,11 @@
   "ui.staff.story_checkpoint.rock_tunnel_traverse": "岩山隧道 · 穿过洞窟",
   "ui.staff.story_checkpoint.reach_lavender_town": "紫苑镇 · 抵达城镇",
   "story.kanto.investigate_pokemon_tower.title": "寻找富士老人",
-  "story.kanto.investigate_pokemon_tower.summary": "与富士老人的助手交谈，前往宝可梦塔调查他的失踪。",
-  "story.kanto.investigate_pokemon_tower.speak_to_fuji_helper": "在富士老人的家中与助手交谈。",
+  "story.kanto.investigate_pokemon_tower.summary": "与富士老人的助手Reina交谈，前往宝可梦塔调查他的失踪。",
+  "story.kanto.investigate_pokemon_tower.speak_to_fuji_helper": "在富士老人的家中与Reina交谈。",
   "story.kanto.investigate_pokemon_tower.reach_pokemon_tower": "调查宝可梦塔。",
   "story.kanto.investigate_pokemon_tower.battle_gary": "在宝可梦塔击败小茂。",
-  "ui.staff.story_checkpoint.fuji_helper": "紫苑镇 · 富士老人的助手",
+  "ui.staff.story_checkpoint.fuji_helper": "紫苑镇 · 与Reina交谈",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "宝可梦塔 · 进入塔内",
   "ui.staff.story_checkpoint.pokemon_tower_gary": "宝可梦塔 · 与小茂对战"
 }
