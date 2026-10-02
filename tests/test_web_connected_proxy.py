@@ -16,6 +16,39 @@ spec.loader.exec_module(proxy)
 
 
 class ConnectedProxyTests(unittest.TestCase):
+    def test_login_media_and_home_icons_are_served_on_demand(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "home-icons").mkdir()
+            (root / "login-media").mkdir()
+            (root / "home-icons/catalog.json").write_text('{"normal":{"pikachu":"home-icons/icon.png"},"shiny":{}}')
+            (root / "home-icons/icon.png").write_bytes(b"icon")
+            (root / "login-media/world.mp4").write_bytes(b"0123456789")
+            (root / "login-media/poster.webp").write_bytes(b"poster")
+            (root / "web-release-config.json").write_text('{"buildId":"test"}')
+            (root / "login-media/private.mp4").write_bytes(b"private")
+            (root / "home-icons/private.json").write_text('{}')
+            client = TestClient(proxy.create_app("http://127.0.0.1:8000", build=root), base_url="http://localhost")
+            catalog = client.get("/home-icons/catalog.json")
+            self.assertEqual(catalog.status_code, 200)
+            icon = client.get("/" + catalog.json()["normal"]["pikachu"])
+            self.assertEqual(icon.content, b"icon")
+            self.assertEqual(icon.headers["content-type"], "image/png")
+            video = client.get("/login-media/world.mp4")
+            self.assertEqual(video.status_code, 200)
+            self.assertEqual(video.headers["content-type"], "video/mp4")
+            partial = client.get("/login-media/world.mp4", headers={"range": "bytes=2-5"})
+            self.assertEqual(partial.status_code, 206)
+            self.assertEqual(partial.content, b"2345")
+            self.assertEqual(partial.headers["content-range"], "bytes 2-5/10")
+            head = client.head("/login-media/world.mp4")
+            self.assertEqual(head.status_code, 200)
+            self.assertEqual(head.content, b"")
+            self.assertEqual(client.get("/login-media/poster.webp").status_code, 200)
+            self.assertEqual(client.get("/web-release-config.json").json()["buildId"], "test")
+            self.assertEqual(client.get("/login-media/private.mp4").status_code, 404)
+            self.assertEqual(client.get("/home-icons/private.json").status_code, 404)
+
     def test_team_export_accepts_full_party_payload(self):
         calls = []
         def upstream(request):

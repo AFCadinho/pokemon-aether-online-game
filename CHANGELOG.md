@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- De lokale browserpreview laadt de inlogvideo en Pokémon HOME-iconen correct via de verbonden previewserver.
 - Android-invulvelden blijven bij het typen zichtbaar: de toetsenbordcorrectie houdt nu ook rekening met de werkelijke viewport-schaling, zonder de oorspronkelijke UI-layout te wijzigen.
 
 - De game ondersteunt nu toegang voor alleen staff: toegestane accounts kunnen blijven inloggen terwijl gewone spelers een onderhoudsbericht krijgen.
