@@ -301,12 +301,12 @@ position = Vector2(752, 688)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=976601731]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
-[node name="Ether" parent="Entities/Interactables/Items" instance=ExtResource("8_item")]
-position = Vector2(2080, 512)
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=272177116]
+
+[node name="Ether" parent="Entities/Interactables/Items" unique_id=1367018048 instance=ExtResource("8_item")]
+position = Vector2(1616, 464)
 pickup_id = "kanto_mt_moon_b2f_ether"
 item_id = "ether"
-
 
 [node name="HelixFossil" parent="Entities/Interactables/Items" unique_id=37076334 instance=ExtResource("8_item")]
 position = Vector2(784, 560)
@@ -324,7 +324,7 @@ pickup_id = "kanto_mt_moon_b2f_tm_thief"
 item_id = "tm-thief"
 
 [node name="Revive" parent="Entities/Interactables/Items" unique_id=1810450543 instance=ExtResource("8_item")]
-position = Vector2(464, 1232)
+position = Vector2(464, 1200)
 pickup_id = "kanto_mt_moon_b2f_revive"
 item_id = "revive"
 
@@ -334,7 +334,7 @@ pickup_id = "kanto_mt_moon_b2f_star_piece"
 item_id = "star-piece"
 
 [node name="Antidote" parent="Entities/Interactables/Items" unique_id=33676360 instance=ExtResource("8_item")]
-position = Vector2(2192, 2160)
+position = Vector2(560, 2288)
 pickup_id = "kanto_mt_moon_b2f_antidote"
 item_id = "antidote"
 

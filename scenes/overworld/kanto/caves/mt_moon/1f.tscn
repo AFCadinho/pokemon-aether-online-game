@@ -433,18 +433,14 @@ npc_sprite_frames = ExtResource("13_bug_catcher")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1226891690]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1978967661]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1072335339]
 
-[node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("14_item")]
-position = Vector2(2512, 848)
+[node name="Revive" parent="Entities/Interactables/Items" unique_id=578964336 instance=ExtResource("14_item")]
+position = Vector2(2640, 1552)
 pickup_id = "kanto_mt_moon_1f_revive"
 item_id = "revive"
-
-[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
-
-[node name="Interactables" type="Node2D" parent="Entities" unique_id=306408256]
 
 [node name="TMBulletSeed" parent="Entities/Interactables/Items" unique_id=1438863947 instance=ExtResource("14_item")]
 position = Vector2(176, 2192)
@@ -495,6 +491,10 @@ rock_id = "kanto_mt_moon_1f_rock_east"
 rock_variant = 2
 rock_visual_style = 1
 required_rock_smash_level = 5
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1758895057]
+
+[node name="Interactables2" type="Node2D" parent="Entities" unique_id=306408256]
 
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=1676346445]
 
