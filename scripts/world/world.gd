@@ -1546,12 +1546,12 @@ func _uses_fullscreen_battle() -> bool:
 
 
 func _begin_wild_encounter_transition() -> int:
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_CLASSIC_WILD)
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_CLASSIC_WILD)
 	return Time.get_ticks_msec()
 
 
 func _begin_trainer_battle_transition(trainer_data: Dictionary) -> int:
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else _trainer_battle_transition_style(trainer_data))
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE if _uses_fullscreen_battle() else _trainer_battle_transition_style(trainer_data))
 	return Time.get_ticks_msec()
 
 
@@ -1586,7 +1586,7 @@ func begin_pvp_battle_transition() -> void:
 	if wild_encounter_transition == null or not is_instance_valid(wild_encounter_transition):
 		return
 	pvp_battle_transition_started_at_msec = Time.get_ticks_msec()
-	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_SLIDE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_RANKED)
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_FULLSCREEN_FADE if _uses_fullscreen_battle() else WildEncounterTransition.STYLE_RANKED)
 
 
 func cancel_pvp_battle_transition() -> void:
@@ -1606,7 +1606,7 @@ func _reveal_prepared_pvp_battle() -> void:
 
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
-	if wild_encounter_transition.transition_style in [WildEncounterTransition.STYLE_CLASSIC_WILD, WildEncounterTransition.STYLE_FULLSCREEN_SLIDE]:
+	if wild_encounter_transition.transition_style in [WildEncounterTransition.STYLE_CLASSIC_WILD, WildEncounterTransition.STYLE_FULLSCREEN_FADE]:
 		return
 	var elapsed_seconds := float(Time.get_ticks_msec() - started_at_msec) / 1000.0
 	var minimum_seconds := WILD_ENCOUNTER_MINIMUM_COVER_SECONDS

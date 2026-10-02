@@ -7,7 +7,7 @@ const COVER_SECONDS := 0.38
 const REVEAL_SECONDS := 0.24
 const BAND_COUNT := 12
 const BAND_STAGGER_SHARE := 0.28
-const STYLE_FULLSCREEN_SLIDE := "fullscreen_slide"
+const STYLE_FULLSCREEN_FADE := "fullscreen_fade"
 const STYLE_WILD := "wild"
 const STYLE_CLASSIC_WILD := "classic_wild"
 const CLASSIC_DIM_ALPHA := 0.18
@@ -48,14 +48,14 @@ func begin(style: String = STYLE_WILD) -> void:
 	_stop_active_tween()
 	transition_style = style if style in [
 		STYLE_WILD,
-		STYLE_FULLSCREEN_SLIDE,
+		STYLE_FULLSCREEN_FADE,
 		STYLE_CLASSIC_WILD,
 		STYLE_RANKED,
 		STYLE_TRAINER,
 		STYLE_SPECIAL_TRAINER,
 	] else STYLE_WILD
 	overworld_snapshot = null
-	if transition_style == STYLE_FULLSCREEN_SLIDE:
+	if transition_style == STYLE_FULLSCREEN_FADE:
 		overworld_snapshot = capture_viewport(get_viewport())
 	animation_elapsed = 0.0
 	is_revealing = false
@@ -63,7 +63,7 @@ func begin(style: String = STYLE_WILD) -> void:
 	visible = true
 	set_process(true)
 
-	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_SLIDE]:
+	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_FADE]:
 		cover_progress = 1.0
 		set_process(false)
 		covered.emit()
@@ -88,7 +88,7 @@ func reveal() -> void:
 
 	_stop_active_tween()
 	is_revealing = true
-	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_SLIDE]:
+	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_FADE]:
 		overworld_snapshot = null
 		cover_progress = 0.0
 		hide()
@@ -112,7 +112,7 @@ func _draw() -> void:
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
 		return
 
-	if transition_style == STYLE_FULLSCREEN_SLIDE:
+	if transition_style == STYLE_FULLSCREEN_FADE:
 		if overworld_snapshot != null:
 			draw_texture_rect(overworld_snapshot, Rect2(Vector2.ZERO, viewport_size), false)
 		return
@@ -288,7 +288,7 @@ func _draw_moving_streaks(viewport_size: Vector2) -> void:
 
 
 func encounter_flash_alpha() -> float:
-	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_SLIDE]:
+	if transition_style in [STYLE_CLASSIC_WILD, STYLE_FULLSCREEN_FADE]:
 		return 0.0
 	if transition_style == STYLE_WILD and is_revealing:
 		return 0.0
