@@ -13,6 +13,17 @@ var farewell_pending := false
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		# Unowned preview nodes stay out of the saved scene. Runtime-generated
+		# resources must never be assigned to exported NPC properties here.
+		var preview := AnimatedSprite2D.new()
+		preview.name = "MysteriousEditorPreview"
+		preview.position = sprite_offset
+		preview.sprite_frames = FutureSelfAppearance.build_overworld_frames(FutureSelfAppearance.build_state({}))
+		$Look.add_child(preview)
+		preview.play(_get_idle_animation_name(facing_direction))
+		preview.stop()
+		return
 	trainer_id = FUTURE_SELF_TRAINER_ID
 	display_name = "Mysterious Trainer"
 	portrait_id = ""
