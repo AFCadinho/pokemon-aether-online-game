@@ -11,6 +11,7 @@ const REQUIRED_NPC_IDS: Array[String] = [
 	"kanto_cerulean_city_gym_swimmer_briana",
 	"kanto_cerulean_city_gym_swimmer_luis",
 	"kanto_cerulean_city_patrol_officer",
+	"kanto_lavender_town_resident",
 	"kanto_oaklab_oak_1",
 	"kanto_oaks_lab_gary",
 	"kanto_pallet_town_fishing_guru",
@@ -41,6 +42,10 @@ var failed := false
 
 
 func _init() -> void:
+	_run.call_deferred()
+
+
+func _run() -> void:
 	var catalog := PortraitCatalogScript.new()
 	root.add_child(catalog)
 	var assignments := catalog.get_assignments()
@@ -63,6 +68,23 @@ func _init() -> void:
 		"showdown_oak",
 		"Named NPC resolves its exact portrait"
 	)
+	var lavender := (load("res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn") as PackedScene).instantiate()
+	var resident := lavender.get_node("Entities/NPCs/LavenderResident")
+	_check_equal(
+		catalog.resolve_portrait_id(resident.get("portrait_id"), resident.get("npc_id"), resident.get("npc_definition_id")),
+		"showdown_madame_gen6",
+		"Lavender Resident resolves the elderly female Madame portrait"
+	)
+	_check_true(
+		lavender.get_node("StoryTriggers/LavenderArrival").call("_resolve_story_host") == resident,
+		"Lavender arrival quest uses the Resident and her assigned portrait"
+	)
+	var resident_texture := catalog.get_texture("showdown_madame_gen6")
+	_check_true(
+		resident_texture != null and resident_texture.get_size() == Vector2(80, 80),
+		"Lavender Resident portrait loads at its catalog dimensions"
+	)
+	lavender.free()
 	_check_equal(
 		catalog.resolve_portrait_id("", "", "pokemon_center_move_mentor"),
 		"showdown_pokemaniac_gen6",
