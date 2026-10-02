@@ -494,7 +494,7 @@ pickup_id = "kanto_route_3_star_piece_south"
 item_id = "star-piece"
 
 [node name="StarPieceNorth" parent="Entities/Interactables/Items" unique_id=1594929112 instance=ExtResource("16_overworld_item")]
-position = Vector2(2336, 384)
+position = Vector2(2352, 400)
 pickup_id = "kanto_route_3_star_piece_north"
 item_id = "star-piece"
 
