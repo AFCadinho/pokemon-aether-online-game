@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Tower gebruikt de nieuwste TMX-visual met bijgewerkte grafstenen, vloeren en healing seal.
+
 - Added Rattata and Ekans to Route 9, and Spearow and Sandshrew to Route 10 as roaming overworld Pokémon.
 
 - 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
