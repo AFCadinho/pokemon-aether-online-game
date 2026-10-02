@@ -345,17 +345,19 @@ def create_app(upstream, build=None, *, transport=None):
             return Response(status_code=404)
         return FileResponse(target)
 
-    @app.get("/{path:path}")
+    @app.api_route("/{path:path}", methods=["GET", "HEAD"])
     async def static(path: str):
         target = (build / (path or "index.html")).resolve()
         if (not target.is_relative_to(build) or any(part.startswith(".") for part in Path(path).parts)
                 or not target.is_file() or (target.suffix not in {".html", ".js", ".wasm", ".pck", ".png", ".webp", ".svg", ".ico", ".ogg", ".wav", ".mp3"}
-                                          and path != "modules/manifest.json")):
+                                          and path not in {"modules/manifest.json", "home-icons/catalog.json", "web-release-config.json"}
+                                          and path not in {"login-media/world.mp4"})):
             return Response(status_code=404)
         mime = {
             ".wasm": "application/wasm", ".pck": "application/octet-stream",
             ".json": "application/json",
             ".webp": "image/webp",
+            ".mp4": "video/mp4",
             ".ogg": "audio/ogg", ".wav": "audio/wav", ".mp3": "audio/mpeg",
         }.get(target.suffix)
         return FileResponse(target, media_type=mime)

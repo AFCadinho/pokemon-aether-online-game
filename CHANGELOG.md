@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De lokale browserpreview laadt de inlogvideo en Pokémon HOME-iconen correct via de verbonden previewserver.
+
 - De game ondersteunt nu toegang voor alleen staff: toegestane accounts kunnen blijven inloggen terwijl gewone spelers een onderhoudsbericht krijgen.
 
 - De Android-app behoudt zijn eerdere login-, chat-, menu- en battle-layout; de compacte mobiele browserlayout blijft beperkt tot browsers. Invulvelden blijven zichtbaar boven het toetsenbord.
