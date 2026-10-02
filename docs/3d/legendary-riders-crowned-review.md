@@ -122,7 +122,7 @@ motion profiles into four separate bundles (eight standalone scenes), totalling
 normal/shiny swaps without new downloads, sleep, two physical attacks and
 complete preloading before reveal. The new stress wrapper reuses the existing
 real battle lifecycle/cache/loading/20 ms limits and prepared observation
-period. Performance qualification and final registry admission are pending.
+period. Performance qualification and final registry admission subsequently passed, as recorded below.
 The failed installer invocation in the game project is retained separately;
 the successful installer uses the launcher project containing bundle storage.
 
@@ -141,3 +141,19 @@ that failed log remains evidence. Final admitted runtime verification passes.
 Local qualification is complete. R2 publication, active release-index selection
 and desktop release certification remain separate; no public content or active
 release manifest has been changed by this task.
+
+## R2 publication
+
+On 2026-10-02T02:42:05.450393+00:00, the explicitly authorized follow-up task
+`legendary-riders-crowned-r2` published all four qualified bundles
+(103,561,511 bytes total) and their immutable content index to
+`pokemon-aether-updates`. All four bundle objects were new. Public GET SHA-256
+and HEAD size checks passed for every bundle and the index (five objects).
+The publication tool verified qualification binding to the reviewed registry,
+archive contents, all eight runtime scene hashes and R2 bucket access before
+uploading. The active desktop manifest hash stayed unchanged.
+
+Receipt: `release/approved_3d_legendary_riders_crowned_r2_upload.json`.
+The existing qualification receipt is retained unchanged so its hash remains
+bound to both reviewed registries. Release content-index activation and release
+certification are still separate steps; this upload did not activate a release.

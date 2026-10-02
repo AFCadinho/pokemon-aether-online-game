@@ -1,0 +1,68 @@
+{
+  "active_manifest_sha256_unchanged": "9e750ee7309bd34cefdc0ed786f74416cefaf60aabb9b1ff4ac6cd1785ffd193",
+  "appearance_count": 8,
+  "bundle_bytes": 103561511,
+  "bundle_qualification_sha256": "63ccbe823b260a7523c14c2bbc95aba5311746c9a640b1ec188a160a01551346",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:calyrex-ice:base",
+      "object_key": "optional-assets/pokemon_3d/calyrex-ice/base/v1-b45bfab71aca8199168a3c18bee0f7767af37d9c2c2993b37d3ddcc113aa886f.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "b45bfab71aca8199168a3c18bee0f7767af37d9c2c2993b37d3ddcc113aa886f",
+      "size_bytes": 24984713,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:calyrex-shadow:base",
+      "object_key": "optional-assets/pokemon_3d/calyrex-shadow/base/v1-fa92a11b04c425c59f87e6730cab91c3ee1be1efe2b6163824fc54205dad19c9.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "fa92a11b04c425c59f87e6730cab91c3ee1be1efe2b6163824fc54205dad19c9",
+      "size_bytes": 28609661,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zacian-crowned:base",
+      "object_key": "optional-assets/pokemon_3d/zacian-crowned/base/v1-d6a87251199355f05b2595082801edcdcc8fd4b45075e46990ea297b41b7c536.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "d6a87251199355f05b2595082801edcdcc8fd4b45075e46990ea297b41b7c536",
+      "size_bytes": 24137511,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zamazenta-crowned:base",
+      "object_key": "optional-assets/pokemon_3d/zamazenta-crowned/base/v1-59c9847c6b5bd78f1fb934300e6fecd39cb1032d755edbd0b240992c9739938e.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "59c9847c6b5bd78f1fb934300e6fecd39cb1032d755edbd0b240992c9739938e",
+      "size_bytes": 25829626,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "legendary-riders-crowned-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/legendary-riders-crowned-approved-v1-71659f639bbdb6d56b687aef87af48fd1c075917aeae8f7e34d07291578507f8.json",
+    "sha256": "71659f639bbdb6d56b687aef87af48fd1c075917aeae8f7e34d07291578507f8",
+    "size_bytes": 3876
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/legendary-riders-crowned-approved-v1-71659f639bbdb6d56b687aef87af48fd1c075917aeae8f7e34d07291578507f8.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "71659f639bbdb6d56b687aef87af48fd1c075917aeae8f7e34d07291578507f8",
+    "size_bytes": 3876,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 4,
+  "profile_count": 4,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 5,
+  "public_head_size_verified_objects": 5,
+  "reviewed_catalog_sha256": "1dbcefe352ae1165e16d5f233d79641b5f2abcfa32a1b62ae9f8d23c4a340cc1",
+  "schema": 1,
+  "scope": "Qualified base-form pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-02T02:42:05.450393+00:00"
+}
