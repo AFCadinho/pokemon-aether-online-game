@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Pokémon Tower gebruikt nu de bijgewerkte artist-visual, met behoud van de vloermasks en handmatig geplaatste aankomstpunten.
+
 - Pokémon Tower in Lavender Town heeft nu zeven verbonden verdiepingen met vloermasks en cameragrenzen die de andere verdiepingen verbergen.
 
 - Mt. Moon 1F, B1F and B2F now have overworld Pokémon matching their cave encounter pools.

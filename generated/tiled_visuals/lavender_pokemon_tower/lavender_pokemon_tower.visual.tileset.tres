@@ -182,14 +182,6 @@ texture_region_size = Vector2i(32, 32)
 3:24/0 = 0
 4:24/0 = 0
 5:24/0 = 0
-6:24/0 = 0
-0:25/0 = 0
-1:25/0 = 0
-2:25/0 = 0
-3:25/0 = 0
-4:25/0 = 0
-5:25/0 = 0
-6:25/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ie0w1"]
 texture = ExtResource("2_uergx")
@@ -203,6 +195,18 @@ texture_region_size = Vector2i(32, 32)
 4:0/0 = 0
 5:0/0 = 0
 6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
 
 [resource]
 tile_size = Vector2i(32, 32)

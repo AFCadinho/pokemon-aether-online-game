@@ -1209,7 +1209,9 @@
 			"locationGroupId": "kanto_lavender_town",
 			"locationGroupLabel": "Lavender Town",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dy70wkcs4i0uk"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 			"spawnPoints": {
 				"floor_1_from_2": {
@@ -1219,7 +1221,7 @@
 					"spawnMarker": "Floor1From2",
 					"tile": {
 						"x": 18,
-						"y": 13
+						"y": 10
 					}
 				},
 				"floor_2_from_1": {
@@ -1228,8 +1230,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor2From1",
 					"tile": {
-						"x": 47,
-						"y": 12
+						"x": 48,
+						"y": 10
 					}
 				},
 				"floor_2_from_3": {
@@ -5328,7 +5330,9 @@
 		"kanto_lavender_town__to_pokemon_tower": {
 			"destination": {
 				"mapId": "kanto_lavender_town_pokemon_tower",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dy70wkcs4i0uk"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn",
 				"position": {
 					"x": 368.0,
