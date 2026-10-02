@@ -38,7 +38,7 @@ catalog entry, or R2 object has been created for these candidates.
 
 The review page is at:
 
-`http://127.0.0.1:8795/mega-native-rest-v1/review-v4/index.html`
+`http://127.0.0.1:8795/mega-native-rest-v1/review-v5/index.html`
 
 It displays normal and shiny side by side and lets the reviewer inspect idle,
 attacks, sleep, damage, and faint poses. It is framed for appearance review;
@@ -77,3 +77,16 @@ on 2.5D until matching Mega sources are available.
 The exact form-to-source map, source identity evidence, and source archive
 SHA-256 are recorded in
 [`catalog_mega_3d_source_intake.json`](catalog_mega_3d_source_intake.json).
+
+## Appearance review accepted
+
+On 2026-10-02 the user accepted the appearance of all 71 review pairs, with
+Mega Steelix size left uncertain because the overview camera was distant.
+The hash-pinned acceptance is in `catalog_mega_appearance_checkpoint.json`.
+This is appearance acceptance only: battle and runtime approval remain false.
+
+A focused native Godot idle check shows Mega Steelix is not undersized: scale
+1.0 clips above the classic camera, whereas the review proposal 0.7 fits all
+four camera/side views for normal and shiny. Full-pose calibration and visual
+scale acceptance are still pending. The overview now frames visible posed
+geometry rather than the unanimated mesh bounds.
