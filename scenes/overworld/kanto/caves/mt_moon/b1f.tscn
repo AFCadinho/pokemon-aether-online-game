@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/daily_smashable_rock.tscn" id="6_rock"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="7_route_hint"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="100_pokemon"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3x5y3"]
 texture = ExtResource("2_w2lc3")
@@ -389,6 +390,17 @@ z_index = 5
 [node name="Players" type="Node2D" parent="Entities" unique_id=295000111]
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=868008222]
+
+[node name="Paras" parent="Entities/Pokemon" unique_id=190001201 instance=ExtResource("100_pokemon")]
+position = Vector2(1456, 1040)
+overworld_pokemon_id = "kanto_mt_moon_b1f_paras_1"
+species_id = "paras"
+level = 8
+display_name = "Paras"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 30.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=563296912]
 

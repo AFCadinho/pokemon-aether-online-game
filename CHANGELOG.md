@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Mt. Moon 1F, B1F and B2F now have overworld Pokémon matching their cave encounter pools.
+
 - Lavender Town House 1 heeft nu het Lavender Home-interieur en een doorgang van en naar het paarse huis in het noordoosten.
 
 - Lavender Town House 2 heeft nu het Mauve-interieur en een doorgang van en naar het kleine blauwe huis in het zuidwesten.
