@@ -6,7 +6,10 @@ func _run() -> void:
 	var output := OS.get_environment("POKEAETHER_CANDIDATE_INSTALL_OUTPUT")
 	assert(directory.is_absolute_path() and output.is_absolute_path())
 	var index: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("asset-index.json")))
-	assert(Index.validate(index).is_empty() and index.assets.size() == 71)
+	var count_text := OS.get_environment("POKEAETHER_MEGA_EXPECTED_PAIRS")
+	var count := 71 if count_text.is_empty() else int(count_text)
+	assert(count > 0 and (count_text.is_empty() or count_text.is_valid_int()))
+	assert(Index.validate(index).is_empty() and index.assets.size() == count)
 	assert(FileAccess.get_sha256(directory.path_join("asset-index.json")) == OS.get_environment("POKEAETHER_CANDIDATE_INDEX_SHA256"))
 	var store := Store.new(output.path_join("content"))
 	var resumed := 0
@@ -27,7 +30,7 @@ func _run() -> void:
 		assert(Store.new(output.path_join("content")).plan(index, requested).downloads.is_empty())
 		print("MEGA_BUNDLE_OK ", asset.asset_id)
 	var catalog: Array = JSON.parse_string(FileAccess.get_file_as_string(store.catalog_path()))
-	assert(catalog.size() == 142 and store.state().assets.size() == 71)
+	assert(catalog.size() == count * 2 and store.state().assets.size() == count)
 	var expected := {}
 	for asset in index.assets:
 		for appearance in asset.appearances:
@@ -44,5 +47,5 @@ func _run() -> void:
 	assert(aggregate != null)
 	aggregate.store_string(JSON.stringify(catalog, "\t") + "\n")
 	aggregate.close()
-	print("MEGA_BUNDLES_OK bundles=71 scenes=142 resumed=", resumed, " coexist=true no_op=true restart=true")
+	print("MEGA_BUNDLES_OK bundles=", count, " scenes=", count * 2, " resumed=", resumed, " coexist=true no_op=true restart=true")
 	quit()

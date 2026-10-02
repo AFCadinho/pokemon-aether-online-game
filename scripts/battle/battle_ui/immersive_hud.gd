@@ -7,6 +7,14 @@ var initialized := [false, false]
 var coop_huds: Dictionary = {}
 var coop_huds_active := false
 
+static func clear_model_hud(target: Vector2, extent: Vector2, bounds: Rect2) -> Vector2:
+	# The sprite HUD's 62px top margin can intersect a tall 3D animation.
+	# Use the available space above that model, preserving the screen margin.
+	if not bounds.has_area() or not Rect2(target, extent).intersects(bounds):
+		return target
+	var candidate := Vector2(target.x, maxf(16.0, bounds.position.y - extent.y - 12.0))
+	return candidate if not Rect2(candidate, extent).intersects(bounds) else target
+
 func _ready() -> void:
 	process_priority = 100
 
@@ -131,10 +139,13 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		var badge_height := badges.size.y * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
 		var target := Vector2(area.x * (0.27 if index == 0 else 0.73) - extent.x * 0.5, 160)
 		var anchored_to_sprite := false
+		var model_bounds := Rect2()
 		if is_instance_valid(presenter) and presenter.active:
 			var bounds: Rect2 = presenter._visual_rect(index)
 			if bounds.has_area():
-				var top := stage.get_global_transform().affine_inverse() * Vector2(bounds.get_center().x, bounds.position.y)
+				var inverse := stage.get_global_transform().affine_inverse()
+				model_bounds = Rect2(inverse * bounds.position, inverse * bounds.end - inverse * bounds.position)
+				var top := Vector2(model_bounds.get_center().x, model_bounds.position.y)
 				target = top - Vector2(extent.x * 0.5, extent.y + 12)
 				anchored_to_sprite = true
 		else:
@@ -157,6 +168,8 @@ func layout_now(delta := 0.0, snap := false) -> void:
 			target.y -= badge_height + 6
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
 		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
+		if realtime_3d and anchored_to_sprite:
+			target = clear_model_hud(target, extent, model_bounds)
 		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] and not snap else target
 		# Keep the HP panel above a newly revealed or rising 3D model.
 		# Easing upwards can otherwise leave it inside the model for a few frames.

@@ -5,7 +5,10 @@ func _run() -> void:
 	var directory := OS.get_environment("POKEAETHER_FORM_BUNDLE_WORK")
 	assert(directory.is_absolute_path())
 	fixture = JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("runtime-fixture.json")))
-	assert(fixture.models.size() == 142)
+	var count_text := OS.get_environment("POKEAETHER_MEGA_EXPECTED_PAIRS")
+	var count := 71 if count_text.is_empty() else int(count_text)
+	assert(count > 0 and (count_text.is_empty() or count_text.is_valid_int()))
+	assert(fixture.models.size() == count * 2)
 	var admitted := OS.get_environment("POKEAETHER_MEGA_CATALOG_ADMITTED") == "1"
 	if admitted:
 		for key in fixture.models:
@@ -19,7 +22,7 @@ func _run() -> void:
 		Registry.DATA.data.profiles.merge(fixture.profiles, true)
 	var service := LocalBundles.new()
 	service.local_index = JSON.parse_string(FileAccess.get_file_as_string(directory.path_join("bundles/asset-index.json")))
-	assert(service.local_index.assets.size() == 71)
+	assert(service.local_index.assets.size() == count)
 	for asset in service.local_index.assets:
 		Service.RELEASE.data.requiredAssetIds.append(asset.asset_id)
 		service.archives[asset.object_key] = directory.path_join("bundles").path_join(str(asset.object_key).get_file())
@@ -78,10 +81,10 @@ func _run() -> void:
 		assert(stage.active and not stage._models_pending() and service.requested.size() == requests)
 		checked += 1
 		print("MEGA_RUNTIME_PAIR_OK ", species)
-	assert(service.requested.size() <= 71)
-	assert(checked == (71 if selected.is_empty() else selected.size()))
+	assert(service.requested.size() <= count)
+	assert(checked == (count if selected.is_empty() else selected.size()))
 	if selected.is_empty():
-		assert(installed_entries.size() == 142)
+		assert(installed_entries.size() == count * 2)
 		var catalog_name := "admitted-installed-catalog.json" if admitted else "on-demand-installed-catalog.json"
 		var catalog_file := FileAccess.open(directory.path_join(catalog_name), FileAccess.WRITE)
 		assert(catalog_file != null)

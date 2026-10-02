@@ -13,6 +13,12 @@ HERE = Path(__file__).resolve().parent
 COHORT = ROOT / '.tmp/mega-battle-71-v1'
 WORK = COHORT / 'local-candidates-v1'
 RECEIPT = HERE / 'catalog_mega_71_bundle_qualification.json'
+PAIR_COUNT = 71
+APPROVAL = HERE / 'catalog_mega_battle_checkpoint.json'
+PROFILES = COHORT / 'placement-followup-v2.json'
+NATIVE = COHORT / 'final-native-v2/battle-review.json'
+INDEX_PATH = ROOT / 'release/approved_3d_mega_71_index.json'
+REGISTRY_RECEIPT_KEY = 'mega_71_bundle_qualification_sha256'
 
 
 def read(path):
@@ -36,10 +42,57 @@ def precision_compatible(a, b):
     return type(a) is type(b) and a == b
 
 
+def validate_clearance_followup(approval):
+    """Allow only bounded upward clearance fixes after accepted battle poses."""
+    followup = approval['technical_placement_followup']
+    original = read(Path(followup['original_profiles']))
+    assert sha(Path(followup['original_profiles'])) == followup['original_profiles_sha256']
+    assert approval['battle_visual_review']['placement_candidates_sha256'] == followup['original_profiles_sha256']
+    final = read(PROFILES)
+    assert original['readability'] == final['readability']
+    assert original['motion'].keys() == final['motion'].keys()
+    corrections = {}
+    for species, old in original['motion'].items():
+        new = final['motion'][species]
+        assert {k: v for k, v in old.items() if k != 'clips'} == {k: v for k, v in new.items() if k != 'clips'}
+        assert old['clips'].keys() == new['clips'].keys()
+        for action, before in old['clips'].items():
+            after = new['clips'][action]
+            if before == after:
+                continue
+            assert action not in ('idle', 'faint_start', 'faint_loop')
+            assert {k: v for k, v in before.items() if k != 'offsets'} == {k: v for k, v in after.items() if k != 'offsets'}
+            assert len(before['offsets']) == len(after['offsets'])
+            deltas = [b - a for a, b in zip(before['offsets'], after['offsets'])]
+            assert deltas and 0 < min(deltas) <= max(deltas) <= .05
+            assert max(deltas) - min(deltas) < 1e-6
+            corrections.setdefault(species, {})[action] = min(deltas)
+    assert set(corrections) == set(approval['floor_followups'])
+    return followup
+
+
+def validate_actual_hud(approval, expected, catalog):
+    review = approval['actual_hud_review']
+    report_path = Path(review['report'])
+    assert sha(report_path) == review['report_sha256']
+    assert sha(ROOT / review['script']) == review['script_sha256']
+    report = read(report_path)
+    assert report['complete'] and report['catalog_sha256'] == sha(catalog)
+    names = {name.removesuffix('@shiny') for name in expected}
+    required = {(name, arena) for name in names for arena in ('classic', 'stadium')}
+    assert len(report['entries']) == len(required)
+    assert {(row['species'], row['arena']) for row in report['entries']} == required
+    assert not any(row[key] for row in report['entries']
+                   for key in ('own_overlap', 'enemy_overlap', 'cross_overlap', 'hud_overlap'))
+    return report_path
+
+
 def validate():
-    approval = read(HERE / 'catalog_mega_battle_checkpoint.json')
-    assert approval['battle_visual_approved'] and approval['appearance_pair_count'] == 71
-    followup = approval['focused_placement_approval']
+    approval = read(APPROVAL)
+    assert approval['battle_visual_approved'] and approval['appearance_pair_count'] == PAIR_COUNT
+    followup = approval.get('focused_placement_approval')
+    if followup is None:
+        followup = validate_clearance_followup(approval)
     for key, digest_key in [('review_manifest', 'review_manifest_sha256'),
                             ('native_report', 'native_report_sha256'), ('profiles', 'profiles_sha256')]:
         assert sha(Path(followup[key])) == followup[digest_key]
@@ -49,17 +102,17 @@ def validate():
     for manifest_path in (Path(approval['evidence']['review_manifest']['path']), Path(followup['review_manifest'])):
         for name, digest in read(manifest_path)['files'].items():
             assert sha(manifest_path.parent / name) == digest
-    native = COHORT / 'final-native-v2/battle-review.json'
-    gate = qualify(native, COHORT / 'catalog.json')
-    assert gate['technical_variant_count'] == 142 and not gate['held']
-    profiles = COHORT / 'placement-followup-v2.json'
+    native = NATIVE
+    gate = qualify(native, COHORT / 'catalog.json', PAIR_COUNT)
+    assert gate['technical_variant_count'] == PAIR_COUNT * 2 and not gate['held']
+    profiles = PROFILES
     assert read(native)['candidates_sha256'] == sha(profiles)
     preparation = read(WORK / 'preparation.json')
     assert preparation['profiles_sha256'] == sha(profiles)
     assert preparation['bundle_index_sha256'] == sha(WORK / 'bundles/asset-index.json')
     fixture = read(WORK / 'runtime-fixture.json')
     expected = {name: row['sha256'] for name, row in fixture['models'].items()}
-    assert len(expected) == 142
+    assert len(expected) == PAIR_COUNT * 2
     mapping = {r['showdown_id']: r['name'] for r in read(HERE / 'catalog_mega_3d_source_intake.json')['entries']}
     final_profiles = read(profiles)['motion']
     native_rows = {r['species']: r for r in read(native)['entries']}
@@ -77,11 +130,11 @@ def validate():
     # Both transactional launcher and on-demand game installation are required.
     for catalog in (WORK / 'installed-megas/installed-catalog.json', WORK / 'on-demand-installed-catalog.json'):
         rows = read(catalog)
-        assert len(rows) == 142 and {identity(r): r['runtime_sha256'] for r in rows} == expected
+        assert len(rows) == PAIR_COUNT * 2 and {identity(r): r['runtime_sha256'] for r in rows} == expected
         for row in rows:
             assert sha(Path(row['runtime_path'])) == row['runtime_sha256']
-    for name, marker in [('install-megas.log', 'MEGA_BUNDLES_OK bundles=71 scenes=142'),
-                         ('runtime-final.log', 'MEGA_RUNTIME_OK pairs=71'), ('stress-v1.log', 'BATCH01_STRESS_OK')]:
+    for name, marker in [('install-megas.log', f'MEGA_BUNDLES_OK bundles={PAIR_COUNT} scenes={PAIR_COUNT * 2}'),
+                         ('runtime-final.log', f'MEGA_RUNTIME_OK pairs={PAIR_COUNT}'), ('stress-v1.log', 'BATCH01_STRESS_OK')]:
         log = (WORK / name).read_text()
         assert marker in log and 'ERROR:' not in log, name
     stress = read(WORK / 'stress-v1.json')
@@ -91,36 +144,41 @@ def validate():
     for value in stress['steady_frame_p95_ms'].values():
         assert value['samples'] >= 960 and 0 < value['p95_ms'] <= 20
     for cycle in stress['rounds']:
-        assert cycle['pairs'] == cycle['faint_replacements'] == 71
+        assert cycle['pairs'] == cycle['faint_replacements'] == PAIR_COUNT
         assert 0 < cycle['frame_p95_ms'] <= 20
         assert cycle['retained_source_bytes'] <= 64 * 1024 * 1024
         assert not any(s['ms'] > 100 and not s['covered'] for s in cycle['stalls_over_50ms'])
         assert max((s['ms'] for s in cycle['load_spans'] if s['operation'] == 'threaded load dispatch/collect'), default=0) <= 1000 / 60
     assert stress['rounds'][2]['static_bytes'] - stress['rounds'][1]['static_bytes'] < 1024 * 1024
     index = read(WORK / 'bundles/asset-index.json')
-    assert len(index['assets']) == 71
+    assert len(index['assets']) == PAIR_COUNT
     for asset in index['assets']:
         archive = WORK / 'bundles' / Path(asset['object_key']).name
         assert sha(archive) == asset['sha256'] and archive.stat().st_size == asset['size_bytes']
         assert {a['runtime_identity']: a['runtime_sha256'] for a in asset['appearances']} == {
             name: digest for name, digest in expected.items()
             if name.removesuffix('@shiny') == asset['species_id'] + '-' + asset['form_id']}
-    evidence = [HERE / 'catalog_mega_battle_checkpoint.json', native, profiles,
+    evidence = [APPROVAL, native, profiles,
         WORK / 'preparation.json', WORK / 'runtime-fixture.json', WORK / 'runtime-catalog.json',
         WORK / 'on-demand-installed-catalog.json', WORK / 'installed-megas/installed-catalog.json',
         WORK / 'install-megas.log', WORK / 'runtime-final.log', WORK / 'stress-v1.log', WORK / 'stress-v1.json',
         ROOT / 'tests/battle_3d_mega_catalog_check.gd', ROOT / 'tests/battle_3d_mega_catalog_stress_check.gd',
         ROOT / 'tests/battle_3d_legendary_stress_check.gd', ROOT / 'tests/catalog_batch_01_candidate_stress_check.gd',
+        ROOT / 'scripts/battle/battle_ui/immersive_hud.gd',
         ROOT / 'scripts/services/on_demand_3d_bundle_service.gd', HERE / 'catalog_mega_bundle_install_check.gd',
         HERE / 'catalog_mega_battle_qualification.py', Path(__file__)]
-    receipt = dict(schema=1, date='2026-10-02', pairs=71, models=142,
+    if 'actual_hud_review' in approval:
+        evidence.append(validate_actual_hud(approval, expected, WORK / 'on-demand-installed-catalog.json'))
+        evidence.append(ROOT / approval['actual_hud_review']['script'])
+    receipt = dict(schema=1, date='2026-10-02', pairs=PAIR_COUNT, models=PAIR_COUNT * 2,
         appearance_approved=True, battle_approved=True, runtime_approved=True,
         published=False, release_approved=False, technical_qualification=gate, bundle_index=index,
         bundle_size_bytes=sum(a['size_bytes'] for a in index['assets']),
         runtime_rounds=stress['rounds'], steady_frame_p95_ms=stress['steady_frame_p95_ms'],
-        source_limitations=['70 forms use the visually approved own-Mega down loop as resting sleep; Hawlucha has native sleep',
-                           'Static source material tables; native material animations are not replayed',
-                           'Steelix metallic/crystal surfaces are a reviewed static PBR approximation'],
+        source_limitations=approval.get('source_limitations', [
+            '70 forms use the visually approved own-Mega down loop as resting sleep; Hawlucha has native sleep',
+            'Static source material tables; native material animations are not replayed',
+            'Steelix metallic/crystal surfaces are a reviewed static PBR approximation']),
         evidence_sha256={str(p.relative_to(ROOT)): sha(p) for p in evidence},
         installed_runtime_check_passed=True, local_download_before_reveal_check_passed=True,
         scope='Local AMD Compatibility, exact installed SCNs; no production, R2 or cross-platform certification',
@@ -141,7 +199,7 @@ def admit():
     receipt['inherited_catalog_precision_sync'] = dict(game_sha256=sha(game), launcher_sha256=sha(launcher),
         numeric_tolerance=1e-9, policy='Preserve game values; keys, hashes, strings and booleans must match exactly')
     names = sorted({name.removesuffix('@shiny') for name in fixture['models']})
-    assert len(names) == 71
+    assert len(names) == PAIR_COUNT
     for name in names:
         normal = copy.deepcopy(fixture['profiles'][name + '-normal'])
         shiny = copy.deepcopy(fixture['profiles'][name + '-shiny'])
@@ -153,16 +211,16 @@ def admit():
             assert key not in registry['models']
             registry['models'][key] = dict(fixture['models'][key], profile=name)
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
-    registry['mega_71_bundle_qualification_sha256'] = sha(RECEIPT)
+    registry[REGISTRY_RECEIPT_KEY] = sha(RECEIPT)
     payload = json.dumps(registry, indent='\t', sort_keys=True) + '\n'
     game.write_text(payload); launcher.write_text(payload)
-    (ROOT / 'release/approved_3d_mega_71_index.json').write_text(json.dumps(receipt['bundle_index'], indent=2, sort_keys=True) + '\n')
-    print('MEGA_71_ADMITTED pairs=71 models=142 bundles=71 published=false')
+    INDEX_PATH.write_text(json.dumps(receipt['bundle_index'], indent=2, sort_keys=True) + '\n')
+    print(f'MEGA_{PAIR_COUNT}_ADMITTED pairs={PAIR_COUNT} models={PAIR_COUNT * 2} bundles={PAIR_COUNT} published=false')
 
 
 def finalize():
     log = WORK / 'admitted-check-v2.log'
-    assert 'MEGA_RUNTIME_OK pairs=71' in log.read_text() and 'ERROR:' not in log.read_text()
+    assert f'MEGA_RUNTIME_OK pairs={PAIR_COUNT}' in log.read_text() and 'ERROR:' not in log.read_text()
     fixture = read(WORK / 'runtime-fixture.json')
     installed = read(WORK / 'admitted-installed-catalog.json')
     assert {identity(r): r['runtime_sha256'] for r in installed} == {
@@ -177,10 +235,10 @@ def finalize():
     receipt['admitted_registry_check_passed'] = True
     receipt['evidence_sha256'].update({str(p.relative_to(ROOT)): sha(p) for p in (log, WORK / 'admitted-installed-catalog.json', Path(__file__))})
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
-    registry['mega_71_bundle_qualification_sha256'] = sha(RECEIPT)
+    registry[REGISTRY_RECEIPT_KEY] = sha(RECEIPT)
     payload = json.dumps(registry, indent='\t', sort_keys=True) + '\n'
     game.write_text(payload); launcher.write_text(payload)
-    print('MEGA_71_FINALIZED admitted_registry_check=true published=false')
+    print(f'MEGA_{PAIR_COUNT}_FINALIZED admitted_registry_check=true published=false')
 
 
 def post_merge_hud():
@@ -195,7 +253,7 @@ def post_merge_hud():
     assert {identity(row): row['runtime_sha256'] for row in read(catalog)} == expected
     assert [r['arena'] for r in stress['rounds']] == ['classic', 'stadium', 'classic']
     for cycle in stress['rounds']:
-        assert cycle['pairs'] == cycle['faint_replacements'] == 71
+        assert cycle['pairs'] == cycle['faint_replacements'] == PAIR_COUNT
         assert math.isfinite(cycle['frame_p95_ms']) and 0 < cycle['frame_p95_ms'] <= 20
         assert cycle['retained_source_bytes'] <= 64 * 1024 * 1024
         assert not any(s['ms'] > 100 and not s['covered'] for s in cycle['stalls_over_50ms'])
@@ -207,7 +265,7 @@ def post_merge_hud():
     registry = read(game)
     receipt = read(RECEIPT)
     old_digest = sha(RECEIPT)
-    assert receipt['admitted_registry_check_passed'] and registry['mega_71_bundle_qualification_sha256'] == old_digest
+    assert receipt['admitted_registry_check_passed'] and registry[REGISTRY_RECEIPT_KEY] == old_digest
     assert all(registry['models'][key]['sha256'] == digest for key, digest in expected.items())
     receipt['post_merge_hud_check_passed'] = True
     receipt['post_merge_hud_rounds'] = stress['rounds']
@@ -221,21 +279,33 @@ def post_merge_hud():
     intake_path = HERE / 'catalog_mega_3d_source_intake.json'
     intake = read(intake_path)
     qualified = [row for row in intake['entries'] if row.get('bundle_qualification_sha256') == old_digest]
-    assert len(qualified) == 71
+    assert len(qualified) == PAIR_COUNT
     RECEIPT.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n')
-    registry['mega_71_bundle_qualification_sha256'] = sha(RECEIPT)
+    registry[REGISTRY_RECEIPT_KEY] = sha(RECEIPT)
     payload = json.dumps(registry, indent='\t', sort_keys=True) + '\n'
     game.write_text(payload); launcher.write_text(payload)
     for row in qualified:
         row['bundle_qualification_sha256'] = sha(RECEIPT)
     intake_path.write_text(json.dumps(intake, indent=2, ensure_ascii=False) + '\n')
-    print('MEGA_71_POST_MERGE_HUD_OK pairs=71 rounds=3 published=false')
+    print(f'MEGA_{PAIR_COUNT}_POST_MERGE_HUD_OK pairs={PAIR_COUNT} rounds=3 published=false')
 
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('phase', choices=('validate', 'admit', 'finalize', 'post-merge-hud'))
-    phase = p.parse_args().phase
+    p.add_argument('--pair-count', type=int, default=71)
+    for key in ('cohort', 'work', 'receipt', 'approval', 'profiles', 'native', 'index'):
+        p.add_argument('--' + key, type=Path)
+    args = p.parse_args()
+    assert args.pair_count > 0
+    PAIR_COUNT = args.pair_count
+    for key, variable in [('cohort', 'COHORT'), ('work', 'WORK'), ('receipt', 'RECEIPT'),
+                          ('approval', 'APPROVAL'), ('profiles', 'PROFILES'), ('native', 'NATIVE'), ('index', 'INDEX_PATH')]:
+        value = getattr(args, key)
+        if value is not None:
+            globals()[variable] = value.resolve()
+    REGISTRY_RECEIPT_KEY = f'mega_{PAIR_COUNT}_bundle_qualification_sha256'
+    phase = args.phase
     if phase == 'admit':
         admit()
     elif phase == 'finalize':
@@ -243,4 +313,4 @@ if __name__ == '__main__':
     elif phase == 'post-merge-hud':
         post_merge_hud()
     else:
-        validate(); print('MEGA_71_GATES_OK')
+        validate(); print(f'MEGA_{PAIR_COUNT}_GATES_OK')

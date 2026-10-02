@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
+- De HP-balk blijft boven hoge 3D-animaties zoals Mega Greninja's waterster, ook wanneer de gebruikelijke bovenmarge onvoldoende ruimte laat.
+
 - Pokémon Tower gebruikt nu de bijgewerkte artist-visual, met behoud van de vloermasks en handmatig geplaatste aankomstpunten.
 
 - Pokémon Tower in Lavender Town heeft nu zeven verbonden verdiepingen met vloermasks en cameragrenzen die de andere verdiepingen verbergen.

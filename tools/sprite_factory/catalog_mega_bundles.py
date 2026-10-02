@@ -16,9 +16,9 @@ def read(path):
     return json.loads(path.read_text())
 
 
-def prepare(cohort, profiles_path, output):
-    acceptance = read(Path(__file__).with_name('catalog_mega_battle_checkpoint.json'))
-    assert acceptance['battle_visual_approved'] and acceptance['appearance_pair_count'] == 71
+def prepare(cohort, profiles_path, output, *, expected_pairs=71, approval_path=None, baseline_path=None):
+    acceptance = read(approval_path or Path(__file__).with_name('catalog_mega_battle_checkpoint.json'))
+    assert expected_pairs > 0 and acceptance['battle_visual_approved'] and acceptance['appearance_pair_count'] == expected_pairs
     for key in ('catalog', 'runtime_catalog', 'native_60hz_baseline', 'review_manifest'):
         evidence = acceptance['evidence'][key]
         assert sha(Path(evidence['path'])) == evidence['sha256']
@@ -26,9 +26,13 @@ def prepare(cohort, profiles_path, output):
     assert not profiles['runtime_approved'] and not profiles['motion_holds']
     assert profiles['catalog_sha256'] == sha(cohort / 'catalog.json')
     raw = {r['species']: r for r in read(cohort / 'runtime.json')}
-    measured = {r['species']: r for r in read(cohort / 'baseline/battle-review.json')['entries'] if 'clips' in r}
+    baseline_path = baseline_path or cohort / 'baseline/battle-review.json'
+    baseline = read(baseline_path)
+    assert baseline['complete'] and baseline['catalog_sha256'] == sha(cohort / 'catalog.json')
+    measured = {r['species']: r for r in baseline['entries'] if 'clips' in r}
     intake = {r['showdown_id']: r for r in read(Path(__file__).with_name('catalog_mega_3d_source_intake.json'))['entries']}
-    assert len(raw) == len(profiles['motion']) == 142
+    assert len(raw) == len(profiles['motion']) == expected_pairs * 2
+    assert set(raw) == set(profiles['motion']) == set(measured)
     fixture, rows, names = {'models': {}, 'profiles': {}}, [], {}
     for identifier, source in sorted(raw.items()):
         showdown = identifier.removesuffix('-shiny')
@@ -59,7 +63,7 @@ def prepare(cohort, profiles_path, output):
             profile['attack_family_actions'] = {'body_charge': 'physical_attack_2'}
         fixture['profiles'][target + '-' + variant] = profile
         rows.append(dict(source, species=target, variant=variant, placement=placement))
-    assert len(names) == 71
+    assert len(names) == expected_pairs
     for name in names:
         normal = copy.deepcopy(fixture['profiles'][name + '-normal'])
         shiny = copy.deepcopy(fixture['profiles'][name + '-shiny'])
@@ -73,7 +77,7 @@ def prepare(cohort, profiles_path, output):
     hashes = {key: row['sha256'] for key, row in fixture['models'].items()}
     for name, info in sorted(names.items()):
         part = build(output / 'runtime-catalog.json', bundles / name,
-            revision='mega-71-local-candidates-v1', species_set=(info['base'],),
+            revision=f'mega-{expected_pairs}-local-candidates-v1', species_set=(info['base'],),
             dex={info['base']: info['dex']}, candidate_hashes=hashes,
             form_id=info['form'], runtime_suffix='-' + info['form'])
         asset = part['assets'][0]
@@ -82,18 +86,23 @@ def prepare(cohort, profiles_path, output):
         assets.append(asset); index = part
     index = dict(index, assets=assets)
     (bundles / 'asset-index.json').write_bytes(encoded(index))
-    (output / 'preparation.json').write_bytes(encoded(dict(schema=1, pair_count=71,
+    (output / 'preparation.json').write_bytes(encoded(dict(schema=1, pair_count=expected_pairs,
         runtime_approved=False, published=False, independent_native_validation_pending=True,
         focused_placement_visual_acceptance_pending=True, catalog_sha256=sha(cohort / 'catalog.json'),
         runtime_source_sha256=sha(cohort / 'runtime.json'), profiles_sha256=sha(profiles_path),
         bundle_index_sha256=sha(bundles / 'asset-index.json'),
         total_bytes=sum(a['size_bytes'] for a in assets))))
-    print('MEGA_LOCAL_CANDIDATES pairs=71 scenes=142 bundles=71 runtime_approved=false', flush=True)
+    print(f'MEGA_LOCAL_CANDIDATES pairs={expected_pairs} scenes={expected_pairs * 2} bundles={expected_pairs} runtime_approved=false', flush=True)
 
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('cohort', 'profiles', 'output'):
         p.add_argument('--' + name, type=Path, required=True)
+    p.add_argument('--expected-pairs', type=int, default=71)
+    p.add_argument('--approval', type=Path)
+    p.add_argument('--baseline', type=Path)
     a = p.parse_args()
-    prepare(a.cohort.resolve(), a.profiles.resolve(), a.output.resolve())
+    prepare(a.cohort.resolve(), a.profiles.resolve(), a.output.resolve(), expected_pairs=a.expected_pairs,
+            approval_path=a.approval.resolve() if a.approval else None,
+            baseline_path=a.baseline.resolve() if a.baseline else None)

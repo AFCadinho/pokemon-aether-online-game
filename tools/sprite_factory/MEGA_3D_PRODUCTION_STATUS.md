@@ -1,16 +1,19 @@
 # Mega 3D catalog production
 
-Updated 2026-10-02. The final sections record local admission and R2 publication
-of 71 additional Mega pairs, plus a source audit of the remaining 25 forms.
+Updated 2026-10-02. **96 of 97 Mega catalog form pairs are locally qualified.**
+The latest 24 individual bundles are ready locally; their R2 publication is
+pending. The earlier 71 were published. Female Mega Meowstic remains a source
+identity hold. Historical milestones below retain their original scope.
 
 ## Catalog coverage
 
 The Pokédex lists **97 Mega form variants across 87 base Pokémon**. Mega
 Dragonite was the only approved normal/shiny Mega bundle at intake. With this
-local admission there are now 72 qualified Mega pairs. At that point 25 source
+initial local admission there were 72 qualified Mega pairs. At that point 25 source
 mappings were held. The source audit at the end of this document has since
 identified candidates for 24 entries; one gender-specific mapping is still
-unconfirmed, and none of these candidates has been through production.
+unconfirmed. The final section records production and qualification of the 24
+confirmed candidates, bringing the current qualified total to 96.
 
 The connected `LegendsZAPkmnModelDumpWithDLC.rar` contains matching model
 resources for **72 variants**. Mega Dragonite is already approved, so the
@@ -242,9 +245,93 @@ production. Meowstic female still needs a gender-specific match, and Tatsugiri
 needs a runtime check that all three shared-resource variants select the right
 geometry and materials.
 
-The sources are mapped but not processed or qualified. The current production
-adapter rejects a source resource whose developer number differs from the
-Pokédex number. Before running these candidates, update the adapter to accept
-the explicit mapped resource ID and keep source number separate from species
-number. The full evidence and per-form mapping are in
-`catalog_mega_25_source_audit.json`.
+This source-mapping audit preceded the production step below. Its per-form
+identity evidence remains in `catalog_mega_25_source_audit.json`.
+
+
+## Remaining Mega production: 24 pairs visually accepted
+
+The assigned `slot-c` task produced 24 normal/shiny pairs: 48 standalone SCNs,
+336 native clips, and zero native pose/timing errors. The source adapter now
+separates audited developer numbers from catalog Pokédex numbers and rejects
+changed identity icons, incorrect species/form matches and unconfirmed gender
+mappings. Existing approved Mega entries were not rebuilt or replaced.
+
+Zygarde's duplicate exported energy/head surface was resolved with a strict
+native material binding. Magearna Original references 17 textures from the
+same Pokémon's other Mega source; staging and hashes are recorded. Greninja's
+small water palette needs a reviewed static blue surface translation.
+
+The user accepted 23 appearances on the combined native review page and then
+accepted revised Diancie separately. Diancie's authored crystal facet images
+were missing from the initial plain-colour conversion. The corrected static
+PBR translation restores them, and a two-sided thin material restores the
+white veil triangles that disappeared when facing away from the camera.
+Geometry, UV accessors, skins and animation data remain unchanged. Both fixed
+variants pass native pose/timing checks. Native camera-dependent crystal
+Fresnel/parallax is still a static approximation, explicitly reviewed.
+
+`catalog_mega_24_candidate_production.json` binds approvals to exact model,
+scene and review evidence hashes. Battle placement checks are underway; no
+battle, performance, bundle-install or runtime admission is claimed yet.
+The existing default 71-pair battle gates now also accept an explicit cohort
+size while still requiring unique, complete approved normal/shiny pairs and
+the unchanged 60/120 Hz, floor, camera and HUD checks.
+
+All sources lack a second physical attack and native sleep clip; the approved
+sleep proposal uses each Mega's own rest loop. Tatsugiri's three catalog form
+IDs share the source containing all three fish, rather than fabricated separate
+geometry or colours. Female Mega Meowstic remains outside this cohort because
+its gender-specific source identity is still unconfirmed. The qualified total
+therefore remains 72 Mega pairs until these 24 complete battle and runtime
+qualification. No publication or release activation was performed here.
+
+
+## Remaining 24 Mega pairs: local admission completed
+
+The user accepted all 24 normal/shiny pairs in battle. Complete independent
+120 Hz evidence passes for all 48 exact final scenes. Barbaracle's physical
+attack has a 32.48 mm upward root correction and Zeraora's has an 11.44 mm
+correction; source geometry, materials, scale and animation channels are
+unchanged. The acceptance check allows only bounded, uniform upward clearance
+changes, and rejects changed scale, timing, idle poses or arbitrary offsets.
+
+24 individual bundles total **297,575,175 bytes (283.79 MiB)**. Transactional
+launcher installation verifies all 48 scene hashes, multi-form coexistence,
+no-op planning and restart. The on-demand game check loads every pair before
+reveal, preserves exact shiny identity and final timing/motion, and requests no
+extra download when switching variants. A final run against the actual admitted
+registry passes all 24 pairs without injecting fixture approval.
+
+The real battle interface exposed a Mega Greninja HUD conflict missed by the
+pose-based proxy: the whole idle animation envelope reaches the sprite HUD's
+62-pixel top margin. The HUD now uses available space above the 3D envelope,
+keeping the model's accepted scale and pose. Actual checks of all 24 pairs in
+both arenas have no own-model, cross-model or HP-panel overlaps. Focused HUD
+checks also preserve the existing 2D behavior. A side-placement experiment was
+superseded after image inspection and is not the admitted implementation.
+
+The final unchanged three-round performance gates pass: classic/stadium/classic
+full-round p95 **16.850 / 19.891 / 16.846 ms**, prepared steady p95
+**16.845 / 19.856 ms**, and final static memory growth **190,684 bytes**. The
+20 ms p95, 64 MiB source-retention, covered-stall, threaded dispatch and 1 MiB
+memory-growth limits were retained. An earlier stadium measurement exceeded
+the gate at 21.111 ms; it is preserved as a failed attempt, not qualifying
+proof. A short diagnostic control and the complete final rerun are retained,
+with per-Pokémon prepared-frame observations for attribution.
+
+`catalog_mega_24_bundle_qualification.json` binds the native, installed, runtime,
+HUD and performance evidence. Game and launcher registries are byte-identical,
+with 1,139 shared profiles and 2,278 normal/shiny appearances. The local index
+is `release/approved_3d_mega_24_index.json`. The appearance/battle checkpoint
+retains its historical pre-performance flags; the qualification receipt and
+candidate-production record are the authority for completed runtime admission.
+
+This task has not uploaded these 24 bundles, activated a release content index,
+certified platforms or published a release. The qualification scope is local
+AMD Compatibility. Native sleep and second physical attacks are absent in this
+cohort; approved own-Mega rest loops and the selected native attack are used.
+Static material approximations and the three Tatsugiri IDs sharing the authored
+three-fish source remain the visually accepted limitations. **Only female Mega
+Meowstic remains unqualified**, because its separate source identity is not
+confirmed; this is a count of Mega form entries, not base Pokédex species.

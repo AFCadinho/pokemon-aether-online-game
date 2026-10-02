@@ -40,7 +40,7 @@ def floor_followup(original_path, current_path, observed_path):
     return result
 
 
-def compose(report_path, original_path, final_path, followups, output):
+def compose(report_path, original_path, final_path, followups, output, expected_pairs=71):
     original, final = read(original_path), read(final_path)
     report = read(report_path)
     assert report['complete'] and report['candidates_sha256'] == sha(original_path)
@@ -75,7 +75,7 @@ def compose(report_path, original_path, final_path, followups, output):
             selected[name] = adopted
             evidence[name] = dict(report=str(source_file.resolve()), report_sha256=sha(source_file),
                                   profiles=str(profile_file.resolve()), profiles_sha256=sha(profile_file))
-    assert set(selected) == set(final['motion']) and len(selected) == 142, 'Missing final native evidence'
+    assert expected_pairs > 0 and set(selected) == set(final['motion']) and len(selected) == expected_pairs * 2, 'Missing final native evidence'
     combined = dict(report, entries=[selected[n] for n in sorted(selected)],
         candidates_sha256=sha(final_path), composed_native_evidence=evidence,
         runtime_approved=False, battle_visual_approved=False,
@@ -94,6 +94,7 @@ if __name__ == '__main__':
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--followup', action='append', nargs=2, type=Path, default=[])
     p.add_argument('--catalog', type=Path)
+    p.add_argument('--expected-pairs', type=int, default=71)
     a = p.parse_args()
     if a.phase == 'floor-followup':
         result = floor_followup(a.original, a.current, a.report)
@@ -101,10 +102,10 @@ if __name__ == '__main__':
             json.dump(result, f, indent=2, allow_nan=False); f.write('\n')
         print('Native clearance follow-ups:', list(result['subframe_followup']['changes']))
     else:
-        compose(a.report, a.original, a.current, a.followup, a.output)
+        compose(a.report, a.original, a.current, a.followup, a.output, a.expected_pairs)
         assert a.catalog
-        gate = qualify(a.output, a.catalog)
-        assert gate['technical_variant_count'] == 142 and not gate['held'], gate['held']
+        gate = qualify(a.output, a.catalog, a.expected_pairs)
+        assert gate['technical_variant_count'] == a.expected_pairs * 2 and not gate['held'], gate['held']
         receipt = a.output.with_name('technical-qualification-final.json')
         with receipt.open('x') as f:
             json.dump(gate, f, indent=2); f.write('\n')

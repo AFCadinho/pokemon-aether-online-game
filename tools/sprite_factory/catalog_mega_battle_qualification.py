@@ -7,13 +7,17 @@ from pathlib import Path
 from catalog_mega_3d_production import sha
 
 
-def qualify(report_path, catalog_path):
+def qualify(report_path, catalog_path, expected_pairs=71):
     report = json.loads(report_path.read_text())
     catalog = json.loads(catalog_path.read_text())
     rows = {r['species']: r for r in report['entries'] if 'clips' in r}
     expected = {r['species'] for r in catalog['entries'] if r['species'] != 'dragonite'}
-    if not report.get('complete') or len(expected) != 142 or set(rows) != expected:
-        raise ValueError('Complete 71-pair native battle report required')
+    normal = {n for n in expected if not n.endswith('-shiny')}
+    if (expected_pairs < 1 or not report.get('complete') or len(expected) != expected_pairs * 2
+            or set(rows) != expected or len(normal) != expected_pairs
+            or expected != normal | {n + '-shiny' for n in normal}
+            or len([r for r in report['entries'] if 'clips' in r]) != len(rows)):
+        raise ValueError(f'Complete {expected_pairs}-pair native battle report required')
     if report['catalog_sha256'] != sha(catalog_path):
         raise ValueError('Battle catalog changed')
     held, passed = {}, []
@@ -41,7 +45,7 @@ def qualify(report_path, catalog_path):
         else:
             passed.append(name)
     return dict(schema=1, runtime_approved=False, battle_visual_approved=False,
-        technical_variant_count=len(passed), expected_variant_count=142,
+        technical_variant_count=len(passed), expected_variant_count=expected_pairs * 2,
         independent_native_sample_hz=120, held=held, technical_passed=passed,
         battle_report_sha256=sha(report_path), catalog_sha256=sha(catalog_path),
         scope='Native SCN full-clock floor clearance plus captured poses in four camera/side combinations. Full UI, arena collision and performance qualification remain separate.')
@@ -52,7 +56,8 @@ if __name__ == '__main__':
     p.add_argument('--report', type=Path, required=True)
     p.add_argument('--catalog', type=Path, required=True)
     p.add_argument('--output', type=Path, required=True)
-    a = p.parse_args(); data = qualify(a.report, a.catalog)
+    p.add_argument('--expected-pairs', type=int, default=71)
+    a = p.parse_args(); data = qualify(a.report, a.catalog, a.expected_pairs)
     with a.output.open('x') as f:
         json.dump(data, f, indent=2); f.write('\n')
     print('Technical variants:', data['technical_variant_count'], 'held:', data['held'])

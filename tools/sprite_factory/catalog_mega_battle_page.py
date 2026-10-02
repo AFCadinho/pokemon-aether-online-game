@@ -7,11 +7,15 @@ from catalog_battle_forms_next_seven_review import build
 from catalog_mega_3d_production import sha
 
 
-def page(report, catalog, output):
+def page(report, catalog, output, expected_pairs=71):
     data = json.loads(report.read_text())
     rows = [r for r in data['entries'] if 'shots' in r]
-    if not data.get('complete') or len(rows) != 142:
-        raise ValueError('All 71 normal/shiny visual capture pairs required')
+    if expected_pairs < 1 or not data.get('complete') or len(rows) != expected_pairs * 2:
+        raise ValueError(f'All {expected_pairs} normal/shiny visual capture pairs required')
+    names = {r['species'] for r in rows}
+    normal = {n for n in names if not n.endswith('-shiny')}
+    if len(names) != len(rows) or len(normal) != expected_pairs or names != normal | {n + '-shiny' for n in normal}:
+        raise ValueError('Unique complete normal/shiny capture pairs required')
     framing = [(r['species'], s['action'], s['arena_camera'], s['side'])
                for r in rows for s in r['shots']
                if not s['in_view'] or s['model_overlaps_hud_proxy']]
@@ -21,7 +25,9 @@ def page(report, catalog, output):
         raise ValueError('Resolve off-screen captures before visual review: ' + str(outside))
     build(report, output, catalog)
     target = output / 'index.html'
-    content = target.read_text().replace('Battle-vormen — battlecontrole', '71 Mega-paren — battlecontrole')
+    content = target.read_text().replace('Battle-vormen — battlecontrole', f'{expected_pairs} Mega-paren — battlecontrole')
+    if not any(s['action'] == 'physical_attack_2' for r in rows for s in r['shots']):
+        content = content.replace('<option value="physical_attack_2">Tweede fysieke aanval</option>', '')
     content = content.replace('</header>', '<p>De uitgebreide technische controle loopt apart. '
         'Deze pagina beoordeelt grootte en poses; er zijn nog geen modellen toegelaten of geüpload. '
         'Niet iedere Mega heeft een tweede fysieke aanval.</p></header>')
@@ -50,4 +56,5 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     for name in ('report', 'catalog', 'output'):
         p.add_argument('--' + name, type=Path, required=True)
-    a = p.parse_args(); page(a.report.resolve(), a.catalog.resolve(), a.output.resolve())
+    p.add_argument('--expected-pairs', type=int, default=71)
+    a = p.parse_args(); page(a.report.resolve(), a.catalog.resolve(), a.output.resolve(), a.expected_pairs)

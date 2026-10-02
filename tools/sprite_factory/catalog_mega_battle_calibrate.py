@@ -11,11 +11,13 @@ from pathlib import Path
 from bake_motion_placement import bake
 
 
-def calibrate(report):
+def calibrate(report, expected_pairs=71):
     rows = {r['species']: r for r in report['entries'] if 'clips' in r}
-    if not report.get('complete') or len(rows) != 142:
-        raise ValueError('Complete native measurements for 71 pairs required')
+    if expected_pairs < 1 or not report.get('complete') or len(rows) != expected_pairs * 2:
+        raise ValueError(f'Complete native measurements for {expected_pairs} pairs required')
     names = sorted(n for n in rows if not n.endswith('-shiny'))
+    if len(names) != expected_pairs or any(n + '-shiny' not in rows for n in names):
+        raise ValueError('Complete normal/shiny pairs required')
     result = dict(schema=1, runtime_approved=False, battle_approved=False,
         independent_motion_validation_pending=True, catalog_sha256=report['catalog_sha256'],
         readability={}, motion={}, motion_holds={},
@@ -59,7 +61,8 @@ def calibrate(report):
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('report', type=Path); p.add_argument('output', type=Path)
-    a = p.parse_args(); result = calibrate(json.loads(a.report.read_text()))
+    p.add_argument('--expected-pairs', type=int, default=71)
+    a = p.parse_args(); result = calibrate(json.loads(a.report.read_text()), a.expected_pairs)
     with a.output.open('x') as f:
         json.dump(result, f, indent=2, allow_nan=False); f.write('\n')
     print('Placement proposals:', len(result['motion']), 'holds:', result['motion_holds'])
