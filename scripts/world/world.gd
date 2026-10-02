@@ -399,7 +399,7 @@ func _append_current_map_trainer_models(identities: Array[String]) -> void:
 				identities.append(identity)
 
 
-func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false) -> void:
+func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false, skip_mobile_wait := false, skip_lead_wait := false) -> void:
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
 		return
 	if not WebPokemonSpriteService.is_available():
@@ -442,9 +442,9 @@ func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := 
 	# filling spare slots with the rest of the roster.
 	WebPokemonSpriteService.prefetch(priority_entries, true)
 	WebPokemonSpriteService.prefetch(entries)
-	if OS.has_feature("mobile") and skip_mobile_wait:
+	if skip_lead_wait or (OS.has_feature("mobile") and skip_mobile_wait):
 		# SpriteBox replaces its temporary HOME icon when a download completes.
-		# Keep the Android cover short even on a cold sprite cache or slow network.
+		# Keep mobile and instant Classic entry responsive on a cold sprite cache.
 		return
 	await WebPokemonSpriteService.prefetch_and_wait(priority_entries)
 
@@ -1603,8 +1603,10 @@ func _reveal_prepared_pvp_battle() -> void:
 
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
+	if wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD:
+		return
 	var elapsed_seconds := float(Time.get_ticks_msec() - started_at_msec) / 1000.0
-	var minimum_seconds := WildEncounterTransition.CLASSIC_COVER_SECONDS if wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD else WILD_ENCOUNTER_MINIMUM_COVER_SECONDS
+	var minimum_seconds := WILD_ENCOUNTER_MINIMUM_COVER_SECONDS
 	var remaining_seconds := maxf(minimum_seconds - elapsed_seconds, 0.0)
 	if remaining_seconds > 0.0:
 		await get_tree().create_timer(remaining_seconds).timeout
@@ -1622,6 +1624,8 @@ func _prepare_battle_instance_reveal() -> void:
 	if battle_instance == null or not (battle_instance is Control):
 		return
 	var battle_control := battle_instance as Control
+	if is_instance_valid(classic_wild_backdrop):
+		return # Classic is visible immediately; no entrance animation to prepare.
 	battle_control.pivot_offset = battle_control.size * 0.5
 	battle_control.modulate.a = 0.0
 	battle_control.scale = Vector2(0.965, 0.965)
@@ -1640,11 +1644,13 @@ func _reveal_prepared_wild_battle() -> void:
 		return
 
 	var battle_control := battle_instance as Control
-	var classic_wild := is_instance_valid(classic_wild_backdrop)
+	if is_instance_valid(classic_wild_backdrop):
+		battle_control.modulate.a = 1.0
+		battle_control.scale = Vector2.ONE
+		classic_wild_backdrop.color.a = WildEncounterTransition.CLASSIC_DIM_ALPHA
+		await wild_encounter_transition.reveal()
+		return
 	var reveal_tween := create_tween().set_parallel(true)
-	if classic_wild:
-		classic_wild_tween = reveal_tween
-		reveal_tween.tween_property(classic_wild_backdrop, "color:a", WildEncounterTransition.CLASSIC_DIM_ALPHA, WILD_BATTLE_REVEAL_SECONDS)
 	reveal_tween.tween_property(
 		battle_control,
 		"modulate:a",
@@ -1656,7 +1662,7 @@ func _reveal_prepared_wild_battle() -> void:
 		"scale",
 		Vector2.ONE,
 		WILD_BATTLE_REVEAL_SECONDS
-	).set_trans(Tween.TRANS_QUAD if classic_wild else Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	await wild_encounter_transition.reveal()
 	# Both tweens may finish in the same slow frame. A completed tween can
@@ -4057,7 +4063,10 @@ func start_triggered_wild_battle_for_area(
 		return
 	active_wild_pokemon_species = wild_pokemon.species
 	active_wild_replay_shiny = wild_pokemon.shiny
-	await _prefetch_web_battle_sprites(response, false, true)
+	await _prefetch_web_battle_sprites(
+		response, false, true,
+		wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD
+	)
 	_trace_mobile_wild_transition("sprites_queued", transition_started_at_msec)
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
@@ -4092,9 +4101,9 @@ func start_triggered_wild_battle_for_area(
 
 	MusicManager.play_wild_battle_music()
 	_trace_mobile_wild_transition("music_selected", transition_started_at_msec)
-	# Warm the first battle frame behind the cover on every rendered platform.
-	# Headless checks have no rendered frame to wait for.
-	if DisplayServer.get_name() != "headless":
+	# Covered layouts warm their first frame before revealing. Classic shows
+	# immediately, and headless checks have no rendered frame to wait for.
+	if DisplayServer.get_name() != "headless" and not is_instance_valid(classic_wild_backdrop):
 		await RenderingServer.frame_post_draw
 		_trace_mobile_wild_transition("battle_frame_drawn", transition_started_at_msec)
 	await _reveal_prepared_wild_battle()

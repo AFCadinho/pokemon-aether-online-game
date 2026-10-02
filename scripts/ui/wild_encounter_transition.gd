@@ -9,8 +9,6 @@ const BAND_COUNT := 12
 const BAND_STAGGER_SHARE := 0.28
 const STYLE_WILD := "wild"
 const STYLE_CLASSIC_WILD := "classic_wild"
-const CLASSIC_COVER_SECONDS := 0.15
-const CLASSIC_REVEAL_SECONDS := 0.20
 const CLASSIC_DIM_ALPHA := 0.18
 const STYLE_RANKED := "ranked"
 const STYLE_TRAINER := "trainer"
@@ -59,8 +57,14 @@ func begin(style: String = STYLE_WILD) -> void:
 	visible = true
 	set_process(true)
 
+	if transition_style == STYLE_CLASSIC_WILD:
+		cover_progress = 1.0
+		set_process(false)
+		covered.emit()
+		return
+
 	active_tween = create_tween()
-	active_tween.tween_property(self, "cover_progress", 1.0, CLASSIC_COVER_SECONDS if transition_style == STYLE_CLASSIC_WILD else COVER_SECONDS) \
+	active_tween.tween_property(self, "cover_progress", 1.0, COVER_SECONDS) \
 		.set_trans(Tween.TRANS_LINEAR if transition_style == STYLE_WILD else Tween.TRANS_QUAD) \
 		.set_ease(Tween.EASE_IN_OUT)
 	active_tween.finished.connect(_on_cover_finished, CONNECT_ONE_SHOT)
@@ -78,8 +82,13 @@ func reveal() -> void:
 
 	_stop_active_tween()
 	is_revealing = true
+	if transition_style == STYLE_CLASSIC_WILD:
+		cover_progress = 0.0
+		hide()
+		set_process(false)
+		return
 	active_tween = create_tween()
-	active_tween.tween_property(self, "cover_progress", 0.0, CLASSIC_REVEAL_SECONDS if transition_style == STYLE_CLASSIC_WILD else REVEAL_SECONDS) \
+	active_tween.tween_property(self, "cover_progress", 0.0, REVEAL_SECONDS) \
 		.set_trans(Tween.TRANS_LINEAR if transition_style == STYLE_WILD else Tween.TRANS_QUAD) \
 		.set_ease(Tween.EASE_OUT)
 	await active_tween.finished
