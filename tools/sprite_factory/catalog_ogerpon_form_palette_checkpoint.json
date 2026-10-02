@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "awaiting_visual_review",
+  "status": "cloak_colours_visually_approved_shiny_verified_from_native_sources",
   "visual_approved": false,
   "runtime_approved": false,
   "issue": "Native TRMMT form palette was omitted; all mask forms retained green cloak layers.",
@@ -11,7 +11,8 @@
     "6 GLBs exact geometry, skins and animations preserved",
     "all other materials unchanged",
     "6 self-contained SCNs converted",
-    "Godot: 6 models, zero pose/timing errors"
+    "Godot: 6 models, zero pose/timing errors",
+    "Six maskless runtime captures: no errors; normal orange and shiny light-green face confirmed"
   ],
   "entries": [
     {
@@ -557,5 +558,9 @@
   ],
   "captures/godot-review.json_sha256": "df5e06fdc8bae683ef6a0e5d864df433c1bf7e684ba47d4d533696d1af5eb567",
   "runtime/report.json_sha256": "01919465613e68c9705fddd39db42a0b30c7b341d3da152588109053e27a3158",
-  "review-manifest.json_sha256": "24632389fb21a49a1b7e1fd73a8ebfa0119baf02afc6fb413affa3dd608f2776"
+  "review-manifest.json_sha256": "24632389fb21a49a1b7e1fd73a8ebfa0119baf02afc6fb413affa3dd608f2776",
+  "cloak_visual_approved": true,
+  "user_feedback": "Dit is inderdaad goed. Ik zie alleen geen verschil tussen shiny en non shiny.",
+  "shiny_note": "Native normal and rare tables use different face albedo and eye layer 4; masks and form cloak palette are unchanged between variants.",
+  "shiny_face_review_url": "http://127.0.0.1:8794/ogerpon-cloak-colors-v6/shiny-face.html"
 }
