@@ -1,0 +1,426 @@
+{
+  "source": "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/lavender_town/pokemon_tower/Pokemon Tower.tmx",
+  "tileSize": 32,
+  "floors": [
+    {
+      "floorNumber": 1,
+      "tileBounds": [
+        0,
+        0,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            576,
+            288,
+            96,
+            128
+          ],
+          "trigger": [
+            18,
+            12
+          ],
+          "arrival": [
+            18,
+            13
+          ],
+          "direction": "up",
+          "bay": "right",
+          "destination": 2,
+          "pairId": "tower_1f_2f",
+          "connection": "1F_stairs_to_2F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            47,
+            12
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "connection": "1F_exit_to_Lavender_Town",
+          "trigger": [
+            11,
+            19
+          ],
+          "arrival": [
+            11,
+            18
+          ],
+          "destinationMap": "../../../exterior/towns/Lavander Town.tmx",
+          "destinationArrival": [
+            33,
+            16
+          ],
+          "direction": "door",
+          "pairId": "lavender_pokemon_tower_entrance",
+          "isLocalTransition": false
+        }
+      ]
+    },
+    {
+      "floorNumber": 2,
+      "tileBounds": [
+        28,
+        0,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            1504,
+            320,
+            64,
+            64
+          ],
+          "trigger": [
+            47,
+            11
+          ],
+          "arrival": [
+            47,
+            12
+          ],
+          "direction": "down",
+          "bay": "right",
+          "destination": 1,
+          "pairId": "tower_1f_2f",
+          "connection": "2F_stairs_to_1F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            18,
+            13
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "rect": [
+            992,
+            288,
+            96,
+            128
+          ],
+          "trigger": [
+            33,
+            12
+          ],
+          "arrival": [
+            33,
+            13
+          ],
+          "direction": "up",
+          "bay": "left",
+          "destination": 3,
+          "pairId": "tower_2f_3f",
+          "connection": "2F_stairs_to_3F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            60,
+            12
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    },
+    {
+      "floorNumber": 3,
+      "tileBounds": [
+        56,
+        0,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            1888,
+            320,
+            64,
+            64
+          ],
+          "trigger": [
+            60,
+            11
+          ],
+          "arrival": [
+            60,
+            12
+          ],
+          "direction": "down",
+          "bay": "left",
+          "destination": 2,
+          "pairId": "tower_2f_3f",
+          "connection": "3F_stairs_to_2F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            33,
+            13
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "rect": [
+            2368,
+            288,
+            96,
+            128
+          ],
+          "trigger": [
+            74,
+            12
+          ],
+          "arrival": [
+            74,
+            13
+          ],
+          "direction": "up",
+          "bay": "right",
+          "destination": 4,
+          "pairId": "tower_3f_4f",
+          "connection": "3F_stairs_to_4F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            19,
+            38
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    },
+    {
+      "floorNumber": 4,
+      "tileBounds": [
+        0,
+        26,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            608,
+            1152,
+            64,
+            64
+          ],
+          "trigger": [
+            19,
+            37
+          ],
+          "arrival": [
+            19,
+            38
+          ],
+          "direction": "down",
+          "bay": "right",
+          "destination": 3,
+          "pairId": "tower_3f_4f",
+          "connection": "4F_stairs_to_3F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            74,
+            13
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "rect": [
+            96,
+            1120,
+            96,
+            128
+          ],
+          "trigger": [
+            5,
+            38
+          ],
+          "arrival": [
+            5,
+            39
+          ],
+          "direction": "up",
+          "bay": "left",
+          "destination": 5,
+          "pairId": "tower_4f_5f",
+          "connection": "4F_stairs_to_5F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            32,
+            38
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    },
+    {
+      "floorNumber": 5,
+      "tileBounds": [
+        28,
+        26,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            992,
+            1152,
+            64,
+            64
+          ],
+          "trigger": [
+            32,
+            37
+          ],
+          "arrival": [
+            32,
+            38
+          ],
+          "direction": "down",
+          "bay": "left",
+          "destination": 4,
+          "pairId": "tower_4f_5f",
+          "connection": "5F_stairs_to_4F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            5,
+            39
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "rect": [
+            1472,
+            1120,
+            96,
+            128
+          ],
+          "trigger": [
+            46,
+            38
+          ],
+          "arrival": [
+            46,
+            39
+          ],
+          "direction": "up",
+          "bay": "right",
+          "destination": 6,
+          "pairId": "tower_5f_6f",
+          "connection": "5F_stairs_to_6F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            75,
+            38
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    },
+    {
+      "floorNumber": 6,
+      "tileBounds": [
+        56,
+        26,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            2400,
+            1152,
+            64,
+            64
+          ],
+          "trigger": [
+            75,
+            37
+          ],
+          "arrival": [
+            75,
+            38
+          ],
+          "direction": "down",
+          "bay": "right",
+          "destination": 5,
+          "pairId": "tower_5f_6f",
+          "connection": "6F_stairs_to_5F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            46,
+            39
+          ],
+          "isLocalTransition": true
+        },
+        {
+          "rect": [
+            2128,
+            1312,
+            96,
+            128
+          ],
+          "trigger": [
+            68,
+            44
+          ],
+          "arrival": [
+            69,
+            44
+          ],
+          "direction": "up",
+          "bay": "center",
+          "destination": 7,
+          "pairId": "tower_6f_7f",
+          "connection": "6F_stairs_to_7F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            13,
+            70
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    },
+    {
+      "floorNumber": 7,
+      "tileBounds": [
+        0,
+        52,
+        24,
+        22
+      ],
+      "connections": [
+        {
+          "rect": [
+            352,
+            2208,
+            64,
+            64
+          ],
+          "trigger": [
+            12,
+            70
+          ],
+          "arrival": [
+            13,
+            70
+          ],
+          "direction": "down",
+          "bay": "center",
+          "destination": 6,
+          "pairId": "tower_6f_7f",
+          "connection": "7F_stairs_to_6F",
+          "destinationMap": "Pokemon Tower.tmx",
+          "destinationArrival": [
+            69,
+            44
+          ],
+          "isLocalTransition": true
+        }
+      ]
+    }
+  ]
+}

@@ -139,8 +139,8 @@ func _run() -> void:
 			"Future Route %d spawn arrives inside town, outside its exit" % route_number)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
-	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 6,
-		"Catalog builder registers Route 10, Pokémon Center, Fuji house and all three residential house exits")
+	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 7,
+		"Catalog builder registers Route 10, Pokémon Center, Fuji house, all three houses and Pokémon Tower exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	_check(not catalog.areas.has("kanto_lavender_town_north"), "Removed north map is absent from staff catalog")
 	_check(not ResourceLoader.exists("res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"),
