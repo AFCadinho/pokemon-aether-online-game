@@ -8,6 +8,8 @@ const REVEAL_SECONDS := 0.24
 const BAND_COUNT := 12
 const BAND_STAGGER_SHARE := 0.28
 const STYLE_WILD := "wild"
+const STYLE_CLASSIC_WILD := "classic_wild"
+const CLASSIC_DIM_ALPHA := 0.18
 const STYLE_RANKED := "ranked"
 const STYLE_TRAINER := "trainer"
 const STYLE_SPECIAL_TRAINER := "special_trainer"
@@ -44,6 +46,7 @@ func begin(style: String = STYLE_WILD) -> void:
 	_stop_active_tween()
 	transition_style = style if style in [
 		STYLE_WILD,
+		STYLE_CLASSIC_WILD,
 		STYLE_RANKED,
 		STYLE_TRAINER,
 		STYLE_SPECIAL_TRAINER,
@@ -53,6 +56,12 @@ func begin(style: String = STYLE_WILD) -> void:
 	cover_progress = 0.0
 	visible = true
 	set_process(true)
+
+	if transition_style == STYLE_CLASSIC_WILD:
+		cover_progress = 1.0
+		set_process(false)
+		covered.emit()
+		return
 
 	active_tween = create_tween()
 	active_tween.tween_property(self, "cover_progress", 1.0, COVER_SECONDS) \
@@ -73,6 +82,11 @@ func reveal() -> void:
 
 	_stop_active_tween()
 	is_revealing = true
+	if transition_style == STYLE_CLASSIC_WILD:
+		cover_progress = 0.0
+		hide()
+		set_process(false)
+		return
 	active_tween = create_tween()
 	active_tween.tween_property(self, "cover_progress", 0.0, REVEAL_SECONDS) \
 		.set_trans(Tween.TRANS_LINEAR if transition_style == STYLE_WILD else Tween.TRANS_QUAD) \
@@ -89,6 +103,10 @@ func _draw() -> void:
 
 	var viewport_size := size
 	if viewport_size.x <= 0.0 or viewport_size.y <= 0.0:
+		return
+
+	if transition_style == STYLE_CLASSIC_WILD:
+		draw_rect(Rect2(Vector2.ZERO, viewport_size), Color(0.006, 0.012, 0.035, CLASSIC_DIM_ALPHA * cover_progress))
 		return
 
 	draw_rect(
@@ -259,6 +277,8 @@ func _draw_moving_streaks(viewport_size: Vector2) -> void:
 
 
 func encounter_flash_alpha() -> float:
+	if transition_style == STYLE_CLASSIC_WILD:
+		return 0.0
 	if transition_style == STYLE_WILD and is_revealing:
 		return 0.0
 	var flash_phase := clampf(cover_progress / 0.46, 0.0, 1.0)
