@@ -4,6 +4,10 @@
 
 - De on-demand 3D-contentroute kan de volledige goedgekeurde catalogus met 1.139 bundels gebruiken, inclusief geregistreerde alternatieve en Mega-vormen; modellen blijven per benodigde Pokémon downloadbaar.
 
+- Classic-battles gebruiken vanaf het eerste frame de uiteindelijke speelveldgrootte; de onzichtbare bediening behoudt tijdens het laden haar ruimte, zodat arena en elementen niet meer verkleinen wanneer Pokémon verschijnen.
+
+- Added a resident and an overworld Pokémon to each of Lavender Town's three previously empty houses.
+
 - Name Mr. Fuji’s helper Reina in her overworld label, quest tracker and Trainer Progress checkpoints.
 
 - Lavender’s story continues through Mr. Fuji’s helper and Cubone to Gary’s Pokémon Tower battle and Silph Co. hint, with new Trainer Progress checkpoints.

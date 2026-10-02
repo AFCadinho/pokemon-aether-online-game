@@ -291,3 +291,35 @@ resource requests or Godot/browser runtime errors. Reports are retained under
 warnings are expected. Android and authenticated NPC gameplay were not rerun.
 The co-op admission refresh still precedes the early arena. No full release
 certification, publication or deployment was performed.
+
+## Classic initial battlefield scale — 2026-10-03
+
+The pending mask hid the Classic ActionsDock, removing its 120-unit space from
+the same VBox as the battlefield. The viewport expanded while requests waited,
+then shrank when authoritative setup restored the dock. A reproduced headless
+case changed the stage scale from 1.123457 while waiting to 0.984375 afterward.
+The first synchronous entry geometry was also still the scene's default scale.
+
+Classic now retains the dock in layout while keeping it transparent and its
+subtree's processing/input disabled. Original opacity and processing mode return
+when pending entry finishes. Classic entry synchronously sorts its outer row,
+central column and stage margin before calculating the stage transform; final
+restoration also refreshes that geometry before rendering.
+
+The extended wild-entry regression checks actual global scales of the stage,
+platforms, sprite boxes, HP panels and move grid before the first frame, through
+blocked position/create requests, and across authoritative setup plus later
+frames. Both open and closed battle-log layouts pass. The NPC regression also
+checks the first Classic frame and scale through automatic lead requests and
+interactive preview. The old code failed the new scale checks; the fix passed
+headless and in the rendered desktop wild-entry run. Before/after screenshots
+were inspected and retain identical battlefield bounds and platform sizes.
+The encounter transition and battle UI layout regressions also pass.
+
+Fresh Chromium contexts at 1280×720 and 844×390 passed all five offline Web
+battle-entry diagnostics, including the expanded wild and NPC checks, without
+Godot/browser runtime errors, failed resource requests or external requests.
+Reports are in `.tmp/classic-scale-web-qa/` in the task slot. Intentional fixture
+rejection warnings remain expected. These tests do not cover an authenticated
+server encounter; Android was not rerun. No release certification, publication
+or production deployment was performed.

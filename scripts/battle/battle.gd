@@ -8232,14 +8232,19 @@ func _clear_pvp_party_hud_display_override() -> void:
 	get_tree().call_group("ui_overlay", "clear_party_display_override")
 
 func update_entry_layout() -> void:
-	if not has_meta("immersive_battle_ui") or not is_node_ready():
+	if not is_node_ready():
 		return
 	# Container sorting and frame-based HUD work must precede the first reveal.
 	# This is presentation work only, including while authoritative data waits.
+	if not has_meta("immersive_battle_ui"):
+		get_node("%HBoxContainer").notification(Container.NOTIFICATION_SORT_CHILDREN)
+		get_node("%CenterColumn").notification(Container.NOTIFICATION_SORT_CHILDREN)
 	var stage_view := get_node("%BattleStageViewport")
 	var stage_margin := stage_view.get_parent() as Container
 	stage_margin.notification(Container.NOTIFICATION_SORT_CHILDREN)
 	stage_view._update_stage_transform()
+	if not has_meta("immersive_battle_ui"):
+		return
 	get_node("ImmersivePortraits")._process(0.0)
 	get_node("ImmersiveHud").layout_now(0.0, true)
 	get_node("ImmersiveTypography")._process(0.0)
@@ -8269,8 +8274,15 @@ func prepare_pending_entry(
 	if presenter != null:
 		controls.append(presenter)
 	for control: CanvasItem in controls:
-		_pending_entry_visibility.append({"control": control, "visible": control.visible, "modulate": control.modulate})
-		control.hide()
+		var reserve_layout := control == action_side_panel and not has_meta("immersive_battle_ui")
+		_pending_entry_visibility.append({"control": control, "visible": control.visible, "modulate": control.modulate,
+			"reserve_layout": reserve_layout, "process_mode": control.process_mode})
+		if reserve_layout:
+			# Classic's dock occupies space in the same VBox as the battlefield.
+			# Preserve that space while masking its contents and disabling input.
+			control.process_mode = Node.PROCESS_MODE_DISABLED
+		else:
+			control.hide()
 		# Authoritative response refreshes may show a control while leads wait.
 		# Keep it transparent until entry owns the final, authoritative display.
 		control.modulate.a = 0.0
@@ -8287,7 +8299,10 @@ func _finish_pending_entry() -> void:
 		if is_instance_valid(control):
 			control.visible = state.visible
 			control.modulate = state.modulate
+			if state.reserve_layout:
+				control.process_mode = state.process_mode
 	_pending_entry_visibility.clear()
+	update_entry_layout()
 
 func _prepare_battle_setup(
 	type: BattleType,
