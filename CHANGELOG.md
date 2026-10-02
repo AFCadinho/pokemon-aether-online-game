@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added Rattata and Ekans to Route 9, and Spearow and Sandshrew to Route 10 as roaming overworld Pokémon.
+
 - 24 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels. Daarmee zijn 96 van de 97 Mega-catalogusvormen klaar; de vrouwelijke Mega Meowstic-bronkoppeling staat nog open.
 - De HP-balk blijft boven hoge 3D-animaties zoals Mega Greninja's waterster, ook wanneer de gebruikelijke bovenmarge onvoldoende ruimte laat.
 

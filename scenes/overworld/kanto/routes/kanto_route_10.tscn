@@ -431,6 +431,28 @@ movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
 
+[node name="Spearow" parent="Entities/Pokemon" unique_id=190000602 instance=ExtResource("pokemon")]
+position = Vector2(880, 592)
+overworld_pokemon_id = "kanto_route_10_spearow_1"
+species_id = "spearow"
+level = 14
+display_name = "Spearow"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Sandshrew" parent="Entities/Pokemon" unique_id=190000603 instance=ExtResource("pokemon")]
+position = Vector2(880, 3152)
+overworld_pokemon_id = "kanto_route_10_sandshrew_1"
+species_id = "sandshrew"
+level = 14
+display_name = "Sandshrew"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
 [node name="Tiles" type="Node2D" parent="." unique_id=1241571794]
 visible = false
 
