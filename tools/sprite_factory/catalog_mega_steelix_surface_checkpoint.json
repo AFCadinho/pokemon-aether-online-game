@@ -1,0 +1,1373 @@
+{
+  "schema": 1,
+  "date": "2026-10-02",
+  "species": "steelixmega",
+  "appearance_approved": false,
+  "runtime_approved": false,
+  "battle_approved": false,
+  "size_approved": true,
+  "scale": 0.7,
+  "user_feedback": "oke de grote klopt, Maar de details voelen niet compleet",
+  "variants": {
+    "normal": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/normal/model.glb",
+      "sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
+      "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00.trmtr",
+      "table_sha256": "59aed9878bab40ce13a28d91a3041bdaa3287db02d0f50f78f5dc3f7d98413c6"
+    },
+    "shiny": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/shiny/model.glb",
+      "sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
+      "table": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-production-v1/source/pm0208/pm0208_51_00/pm0208_51_00_rare.trmtr",
+      "table_sha256": "22b96e286d1b9909c5ee45539846f8439cbde3334c36b2a0d8258dae8ef61b03"
+    }
+  },
+  "runtime_scenes": [
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/normal/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/runtime/steelixmega.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "85593f06072c48eb53e2e8969162d65ccc1e6d183ba0737aebeaa1795f0bbca8",
+      "source_sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
+      "species": "steelixmega",
+      "visibility": {
+        "clips": {
+          "damage": {
+            "duration": 0.833333333333333,
+            "loop": false,
+            "source_sha256": "011542834cf74af64995b74e8fae7bc5dfdd401ee273598159515a77d2fd274d",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "faint_loop": {
+            "duration": 2.0,
+            "loop": true,
+            "source_sha256": "bc0b47af7e162c6e59bc9705c3adedd5554d6776bfe69f34633abf3b1d9deaa4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "faint_start": {
+            "duration": 2.0,
+            "loop": false,
+            "source_sha256": "56fd0d3eb28f91979de6e2e3cc595e99d2989a1c0d37950529afd57fa473eb96",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "idle": {
+            "duration": 2.66666666666667,
+            "loop": true,
+            "source_sha256": "8b8e35a50364328e005ff9777be093d3caf9b101a939d3c43c75ad4cad8a2ec4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "physical_attack": {
+            "duration": 2.23333333333333,
+            "loop": false,
+            "source_sha256": "b10715eeae9e6f6959bb878123002dcef40abeae6a04b7a215bef8e76003ea95",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "sleep": {
+            "duration": 2.0,
+            "loop": true,
+            "source_sha256": "bc0b47af7e162c6e59bc9705c3adedd5554d6776bfe69f34633abf3b1d9deaa4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "special_attack": {
+            "duration": 2.46666666666667,
+            "loop": false,
+            "source_sha256": "046de3ce9e09599d9926f5b5c986b7794df708a98e956d26cf70184c242e8290",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          }
+        },
+        "dynamic_visibility_review_required": false,
+        "dynamic_visibility_tracks": [],
+        "glb_sha256": "1db21a835a56f2b8587a81bf3110e39ccba1cd1a5071972f09a8a44ced56a2c3",
+        "schema": 1.0
+      }
+    },
+    {
+      "action_timing": {
+        "damage": {
+          "frames": 50.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "faint_loop": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "faint_start": {
+          "frames": 120.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "idle": {
+          "frames": 160.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "physical_attack": {
+          "frames": 134.0,
+          "loop": false,
+          "speed": 1.0
+        },
+        "sleep": {
+          "frames": 120.0,
+          "loop": true,
+          "speed": 1.0
+        },
+        "special_attack": {
+          "frames": 148.0,
+          "loop": false,
+          "speed": 1.0
+        }
+      },
+      "converter_version": 2,
+      "glb_sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
+      "godot_version": "4.6.2-stable (official)",
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/shiny/model.glb",
+      "placement": {
+        "scale": 1.0,
+        "yaw_degrees": 0.0
+      },
+      "provenance_schema": 1,
+      "runtime_approved": false,
+      "runtime_path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-steelix-detail-v1/steelixmega/runtime/steelixmega-shiny.scn",
+      "runtime_schema": 1,
+      "runtime_sha256": "1f8d5a23ffac38c687957bf76739ebb5ee8a49272744a0686ff439e804c3ea97",
+      "source_sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
+      "species": "steelixmega-shiny",
+      "visibility": {
+        "clips": {
+          "damage": {
+            "duration": 0.833333333333333,
+            "loop": false,
+            "source_sha256": "011542834cf74af64995b74e8fae7bc5dfdd401ee273598159515a77d2fd274d",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "faint_loop": {
+            "duration": 2.0,
+            "loop": true,
+            "source_sha256": "bc0b47af7e162c6e59bc9705c3adedd5554d6776bfe69f34633abf3b1d9deaa4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "faint_start": {
+            "duration": 2.0,
+            "loop": false,
+            "source_sha256": "56fd0d3eb28f91979de6e2e3cc595e99d2989a1c0d37950529afd57fa473eb96",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "idle": {
+            "duration": 2.66666666666667,
+            "loop": true,
+            "source_sha256": "8b8e35a50364328e005ff9777be093d3caf9b101a939d3c43c75ad4cad8a2ec4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "physical_attack": {
+            "duration": 2.23333333333333,
+            "loop": false,
+            "source_sha256": "b10715eeae9e6f6959bb878123002dcef40abeae6a04b7a215bef8e76003ea95",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "sleep": {
+            "duration": 2.0,
+            "loop": true,
+            "source_sha256": "bc0b47af7e162c6e59bc9705c3adedd5554d6776bfe69f34633abf3b1d9deaa4",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          },
+          "special_attack": {
+            "duration": 2.46666666666667,
+            "loop": false,
+            "source_sha256": "046de3ce9e09599d9926f5b5c986b7794df708a98e956d26cf70184c242e8290",
+            "tracks": [
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_body_mesh",
+                "original_source_target": "pm0208_51_00_body_mesh_shape",
+                "source_target": "pm0208_51_00_body_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_bodydia_mesh",
+                "original_source_target": "pm0208_51_00_bodydia_mesh_shape",
+                "source_target": "pm0208_51_00_bodydia_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eye_mesh",
+                "original_source_target": "pm0208_51_00_eye_mesh_shape",
+                "source_target": "pm0208_51_00_eye_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_eyelid_mesh",
+                "original_source_target": "pm0208_51_00_eyelid_mesh_shape",
+                "source_target": "pm0208_51_00_eyelid_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_feeler_mesh",
+                "original_source_target": "pm0208_51_00_feeler_mesh_shape",
+                "source_target": "pm0208_51_00_feeler_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_head_mesh",
+                "original_source_target": "pm0208_51_00_head_mesh_shape",
+                "source_target": "pm0208_51_00_head_mesh_shape"
+              },
+              {
+                "keys": [
+                  [
+                    0.0,
+                    true
+                  ]
+                ],
+                "mesh": "pm0208_51_00_tooth_mesh",
+                "original_source_target": "pm0208_51_00_tooth_mesh_shape",
+                "source_target": "pm0208_51_00_tooth_mesh_shape"
+              }
+            ]
+          }
+        },
+        "dynamic_visibility_review_required": false,
+        "dynamic_visibility_tracks": [],
+        "glb_sha256": "55b47dbd20b87ac9e5b6c1ece76d74302a5a77acf1537afdab2caf0682855b6e",
+        "schema": 1.0
+      }
+    }
+  ],
+  "surface_correction": {
+    "normal": [
+      {
+        "material": "body_b",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_a",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_c",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_d",
+        "policy": "native_fresnel_layer1_static_emission",
+        "limitation": "view-dependent refraction and probe reflection not reproduced"
+      }
+    ],
+    "shiny": [
+      {
+        "material": "body_b",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_a",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_c",
+        "policy": "native_layer_mask_metallic_static_pbr"
+      },
+      {
+        "material": "body_d",
+        "policy": "native_fresnel_layer1_static_emission",
+        "limitation": "view-dependent refraction and probe reflection not reproduced"
+      }
+    ]
+  },
+  "review_url": "http://127.0.0.1:8795/mega-steelix-detail-v1/appearance/index.html",
+  "limitations": [
+    "Static PBR approximation of native metal layers and crystal light; view-dependent refraction not reproduced",
+    "Neutral reflection lighting in diagnostic previews only",
+    "Full-pose battle calibration remains pending"
+  ]
+}

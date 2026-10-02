@@ -90,3 +90,18 @@ A focused native Godot idle check shows Mega Steelix is not undersized: scale
 four camera/side views for normal and shiny. Full-pose calibration and visual
 scale acceptance are still pending. The overview now frames visible posed
 geometry rather than the unanimated mesh bounds.
+
+## Steelix surface follow-up
+
+The user accepted the proposed 0.7 size but reported incomplete-looking detail.
+Steelix appearance is therefore held again; the other 70 appearance acceptances
+remain pinned. All seven source meshes are present. A separate review-only
+recovery restores the source-masked metallic values for body_a/body_b/body_c
+and the body_d crystal layer light. Geometry, UV, rig and animation signatures
+are unchanged; both new standalone scenes convert and reload.
+
+Neutral reflection lighting is identical before/after in the new diagnostic.
+This is a static PBR approximation, not native view-dependent refraction parity.
+The new models and pending review are pinned in
+`catalog_mega_steelix_surface_checkpoint.json`. Full-pose battle qualification
+and model-detail acceptance remain outstanding.
