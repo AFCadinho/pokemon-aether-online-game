@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Immersive wild battles berekenen de uiteindelijke elementgroottes vóór de fade, zodat arena, Pokémon en HUD niet eerst groot verschijnen en daarna verkleinen.
+
 - Wild battles tonen hun arena en starten de fullscreen fade al tijdens het opslaan van de positie en ophalen van de battlegegevens. De tegenstander en acties verschijnen pas zodra de echte gegevens beschikbaar zijn.
 
 - De lokale browserpreview laadt de inlogvideo en Pokémon HOME-iconen correct via de verbonden previewserver.
