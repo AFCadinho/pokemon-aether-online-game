@@ -60,6 +60,9 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "rock_tunnel_traverse", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.rock_tunnel_traverse"},
 	{"id": "reach_lavender_town", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.reach_lavender_town"},
 	{"id": "lavender_warning", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.lavender_warning"},
+	{"id": "fuji_helper", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.fuji_helper"},
+	{"id": "pokemon_tower_entry", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.pokemon_tower_entry"},
+	{"id": "pokemon_tower_gary", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.pokemon_tower_gary"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},

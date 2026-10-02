@@ -295,6 +295,15 @@ func _run_dialogue(action: Dictionary, host: Node) -> Dictionary:
 	var lines := _string_array(metadata.get("lines", []))
 	if lines.is_empty():
 		return {"success": false, "status": "dialogue_empty"}
+	if str(metadata.get("speakerRole", "npc")) == "player":
+		var dialogue_box := get_tree().current_scene.get_node("DialogueBox/Box")
+		var player_name := str(PlayerSave.player_name).strip_edges()
+		if player_name.is_empty():
+			player_name = LocalizationManager.text("story.mt_moon.cutscene.player_speaker")
+		var portrait := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd").build_dialogue_portrait(PlayerSave.to_appearance_state())
+		dialogue_box.call("start_dialogue", lines, player_name, portrait, true)
+		await dialogue_box.dialogue_finished
+		return {"success": true, "status": "completed"}
 	var presented: Variant = await host.call(
 		"show_dialogue",
 		lines,

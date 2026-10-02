@@ -7,6 +7,11 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_mr_fuji_house/lavender_mr_fuji_house.visual.tscn" id="visual"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="story_npc"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="story_hook"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="helper_frames"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="cubone"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
 
@@ -117,9 +122,30 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1156296835]
 
+[node name="FujiHelper" parent="Entities/NPCs" instance=ExtResource("story_npc")]
+position = Vector2(432, 432)
+npc_id = "kanto_lavender_fuji_helper"
+npc_definition_id = "trainer_class_lass"
+display_name = "Fuji's Helper"
+npc_sprite_frames = ExtResource("helper_frames")
+facing_direction = Vector2(0, 1)
+preload_quest_markers = true
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/FujiHelper"]
+script = ExtResource("story_hook")
+interaction_id = "kanto_lavender_fuji_helper_request"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=266126023]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1097780851]
+
+[node name="Cubone" parent="Entities/Pokemon" instance=ExtResource("cubone")]
+position = Vector2(560, 432)
+overworld_pokemon_id = "kanto_lavender_fuji_house_cubone_1"
+species_id = "cubone"
+level = 16
+display_name = "Cubone"
+facing_direction = Vector2(-1, 0)
 
 [node name="Spawns" type="Node2D" parent="." unique_id=1890895946]
 
