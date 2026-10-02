@@ -968,6 +968,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
 			"spawnPoints": {
+				"from_house_1": {
+					"facingDirection": "down",
+					"label": "House 1",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHouse1",
+					"tile": {
+						"x": 40,
+						"y": 27
+					}
+				},
 				"from_house_2": {
 					"facingDirection": "down",
 					"label": "House 2",
@@ -1056,6 +1066,28 @@
 					"tile": {
 						"x": 23,
 						"y": 24
+					}
+				}
+			}
+		},
+		"kanto_lavender_town_house_1": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Lavender Town House 1",
+			"locationGroupId": "kanto_lavender_town",
+			"locationGroupLabel": "Lavender Town",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
+			"spawnPoints": {
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 12,
+						"y": 18
 					}
 				}
 			}
@@ -5069,6 +5101,20 @@
 			"destinationAreaId": "kanto_diglett_cave_route_2_entrance",
 			"sourceMapId": "kanto_diglett_cave_tunnel"
 		},
+		"kanto_lavender_town__to_house_1": {
+			"destination": {
+				"mapId": "kanto_lavender_town_house_1",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn",
+				"position": {
+					"x": 400.0,
+					"y": 592.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_lavender_town_house_1",
+			"sourceMapId": "kanto_lavender_town"
+		},
 		"kanto_lavender_town__to_house_2": {
 			"destination": {
 				"mapId": "kanto_lavender_town_house_2",
@@ -5142,6 +5188,22 @@
 			},
 			"destinationAreaId": "kanto_route_10",
 			"sourceMapId": "kanto_lavender_town"
+		},
+		"kanto_lavender_town_house_1__to_outside": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 1296.0,
+					"y": 880.0
+				},
+				"spawnMarker": "FromHouse1"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_lavender_town_house_1"
 		},
 		"kanto_lavender_town_house_2__to_outside": {
 			"destination": {
