@@ -281,6 +281,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/wild_encounter_error_rules_check.gd",
 	"res://tests/wild_encounter_transition_check.gd",
 	"res://tests/wild_entry_before_response_check.gd",
+	"res://tests/trainer_entry_before_response_check.gd",
 	"res://tests/fullscreen_battle_fade_check.gd",
 	"res://tests/explicit_sprite_preview_check.gd",
 	"res://tests/transit_menu_runtime_check.gd",

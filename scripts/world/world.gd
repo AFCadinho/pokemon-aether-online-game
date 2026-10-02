@@ -3735,6 +3735,19 @@ func _begin_pending_wild_entry(encounter_type: String, started_at_msec: int) -> 
 	return true
 
 
+func _begin_pending_trainer_entry(trainer_data: Dictionary, started_at_msec: int) -> bool:
+	if not _mount_prepared_wild_battle_ui(started_at_msec):
+		return false
+	battle_instance.prepare_pending_entry(
+		_resolve_battle_environment_id("trainer", trainer_data),
+		battle_instance.BattleType.TRAINER,
+		trainer_data
+	)
+	battle_screen_host.reveal_pending_entry()
+	wild_encounter_transition.reveal()
+	return true
+
+
 func _mount_prepared_wild_battle_ui(started_at_msec: int) -> bool:
 	if (
 		is_instance_valid(prepared_wild_battle)
@@ -4211,6 +4224,10 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_trainer_is_rematch = bool(trainer_data.get("_is_rematch", false))
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_trainer_battle_transition(battle_trainer_data)
+	if _uses_fullscreen_battle() and not _begin_pending_trainer_entry(battle_trainer_data, transition_started_at_msec):
+		await _cancel_wild_encounter_transition()
+		_abort_battle_start()
+		return {"success": false, "code": "battle_ui_unavailable"}
 
 	var position_result := await sync_player_position_for_world_action()
 	if not bool(position_result.get("success", false)):
@@ -4256,7 +4273,7 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 
 	await _wait_for_wild_encounter_cover(transition_started_at_msec)
 
-	if not _mount_battle_ui():
+	if not is_instance_valid(battle_instance) and not _mount_battle_ui():
 		push_error("World.start_trainer_battle failed: could not load battle scene.")
 		await _cancel_wild_encounter_transition()
 		_abort_battle_start()

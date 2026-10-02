@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fullscreen NPC battles tonen arena en trainers tijdens het ophalen van battlegegevens en automatische lead-keuzes. De vaste pauze na trainerdialoog is verwijderd.
+
 - Immersive wild battles berekenen de uiteindelijke elementgroottes vóór de fade, zodat arena, Pokémon en HUD niet eerst groot verschijnen en daarna verkleinen.
 
 - Wild battles tonen hun arena en starten de fullscreen fade al tijdens het opslaan van de positie en ophalen van de battlegegevens. De tegenstander en acties verschijnen pas zodra de echte gegevens beschikbaar zijn.

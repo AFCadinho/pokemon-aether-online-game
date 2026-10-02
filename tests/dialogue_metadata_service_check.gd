@@ -186,8 +186,8 @@ func _check_trainer_battle_behavior_unchanged() -> void:
 	_check_true(text.contains("func start_trainer_battle(trainer_metadata: Dictionary) -> Dictionary:"), "TrainerNPC returns structured battle start errors")
 	_check_true(
 		text.contains("INTRO_DIALOGUE_DELAY_SECONDS")
-		and text.contains("BATTLE_TRANSITION_DELAY_SECONDS"),
-		"trainer dialogue and battle transition include readable pauses"
+		and not text.contains("BATTLE_TRANSITION_DELAY_SECONDS"),
+		"trainer dialogue keeps its readable pause without a fixed delay after closing"
 	)
 
 
