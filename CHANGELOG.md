@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fullscreen battle-entrees faden het volledige battlescherm als één laag boven de overworld, inclusief achtergrond, Pokémon en bediening.
 - Mapovergangen gebruiken nu de aankomstrichting uit de client-scène; de server valideert de richting en overschrijft die niet meer met dubbele catalogusmetadata.
 
 - De fullscreen battle-fade blijft zichtbaar na een zware laadframe en gebruikt ook zonder overworldsnapshot een fade in plaats van een abrupte schermwissel.

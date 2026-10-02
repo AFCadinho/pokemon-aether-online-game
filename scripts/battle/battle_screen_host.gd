@@ -14,6 +14,8 @@ var loading_label: Label
 const FADE_SECONDS := 0.18
 const MIN_FADE_FRAMES := 12
 var outgoing_snapshot: TextureRect
+@onready var content: Control = $Content
+@onready var backdrop: ColorRect = $Content/Backdrop
 var preparation_ready := false
 var reveal_requested := false
 var fade_progress := 0.0:
@@ -34,7 +36,8 @@ func _ready() -> void:
 	outgoing_snapshot.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	outgoing_snapshot.stretch_mode = TextureRect.STRETCH_SCALE
 	outgoing_snapshot.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	$Cover.add_child(outgoing_snapshot)
+	add_child(outgoing_snapshot)
+	move_child(outgoing_snapshot, 0)
 	var stack := VBoxContainer.new()
 	stack.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	stack.position = Vector2(-260,-55)
@@ -132,10 +135,10 @@ func prewarm_mobile_immersive_battle(instance: Control) -> void:
 	battle = instance
 	battle.set_meta("dedicated_battle_screen", true)
 	preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
-	$Content.add_child(battle)
+	content.add_child(battle)
 
 func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_style := WildEncounterTransition.STYLE_WILD, force_immersive := false, snapshot: Texture2D = null) -> void:
-	var already_prepared := battle == instance and instance.get_parent() == $Content
+	var already_prepared := battle == instance and instance.get_parent() == content
 	process_mode = Node.PROCESS_MODE_INHERIT
 	show()
 	outgoing_snapshot.texture = snapshot if snapshot != null else WildEncounterTransition.capture_viewport(get_viewport())
@@ -159,7 +162,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	if not already_prepared and (force_immersive or get_node("/root/SettingsManager").battle_ui_layout == "immersive"):
 		preload("res://scripts/battle/battle_ui/immersive_layout.gd").apply(battle)
 	if not already_prepared:
-		$Content.add_child(battle)
+		content.add_child(battle)
 	resized.connect(_fit_battle)
 	battle.battle_stage.minimum_size_changed.connect(_fit_battle)
 	_fit_battle()
@@ -238,20 +241,11 @@ func request_reveal() -> void:
 func _apply_entry_fade() -> void:
 	if not is_node_ready():
 		return
-	$Backdrop.position.x = 0.0
-	$Content.position.x = 0.0
+	content.position = Vector2.ZERO
+	content.modulate.a = fade_progress
 	if outgoing_snapshot != null:
-		outgoing_snapshot.position.x = 0.0
-		# The opaque battle is underneath: dissolving this single world image
-		# gives an exact crossfade without separately fading dark UI layers.
-		outgoing_snapshot.modulate.a = 1.0 - fade_progress
-		if outgoing_snapshot.texture == null:
-			# Screenshot capture can be unavailable; retain the live world until
-			# reveal instead of displaying an unprepared opaque battle.
-			$Backdrop.visible = fade_progress > 0.0
-			$Content.visible = fade_progress > 0.0
-			$Content.modulate.a = fade_progress
-			$Backdrop.color.a = fade_progress
+		outgoing_snapshot.position = Vector2.ZERO
+		outgoing_snapshot.modulate.a = 1.0
 
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
@@ -271,8 +265,8 @@ func _reveal_cover() -> void:
 		reveal_tween.custom_step(maxf(step, 0.0001))
 	if not released:
 		fade_progress = 1.0
-		$Content.modulate.a = 1.0
-		$Backdrop.color.a = 1.0
+		content.modulate.a = 1.0
+		backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
 		$Cover.hide()
 		if is_instance_valid(battle):
