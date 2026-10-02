@@ -1,5 +1,4 @@
 [gd_scene format=4 uid="uid://cwemdr3lxm8ws"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_10/route_10.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -8,10 +7,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_kkef3"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_lrh64"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="5_rrflk"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
 size = Vector2(32, 32)
@@ -373,45 +373,48 @@ npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1826864528]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=2053619967]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=274674876]
 
-[node name="CheriBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(688, 560)
+[node name="CheriBerry" parent="Entities/Interactables/Items" unique_id=1863317340 instance=ExtResource("99_item")]
+position = Vector2(624, 432)
 pickup_id = "kanto_route_10_cheriberry"
 item_id = "cheri-berry"
-[node name="PersimBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(976, 560)
+
+[node name="PersimBerry" parent="Entities/Interactables/Items" unique_id=625248393 instance=ExtResource("99_item")]
+position = Vector2(1680, 592)
 pickup_id = "kanto_route_10_persimberry"
 item_id = "persim-berry"
-[node name="SuperPotion" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(1360, 720)
+
+[node name="SuperPotion" parent="Entities/Interactables/Items" unique_id=2039351117 instance=ExtResource("99_item")]
+position = Vector2(976, 432)
 pickup_id = "kanto_route_10_superpotion"
 item_id = "super-potion"
-[node name="Carbos" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(816, 2704)
+
+[node name="Carbos" parent="Entities/Interactables/Items" unique_id=1933388711 instance=ExtResource("99_item")]
+position = Vector2(560, 2992)
 pickup_id = "kanto_route_10_carbos"
 item_id = "carbos"
-[node name="GreatBallRockPolishSubstitute" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(1232, 3056)
+
+[node name="GreatBallRockPolishSubstitute" parent="Entities/Interactables/Items" unique_id=1411923646 instance=ExtResource("99_item")]
+position = Vector2(880, 3024)
 pickup_id = "kanto_route_10_great_ball_tm_substitute"
 item_id = "great-ball"
 
-[node name="MaxEther" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(1200, 2800)
+[node name="MaxEther" parent="Entities/Interactables/Items" unique_id=943237088 instance=ExtResource("99_item")]
+position = Vector2(1200, 2512)
 pickup_id = "kanto_route_10_max_ether"
 item_id = "max-ether"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 
 [node name="Voltorb" parent="Entities/Pokemon" unique_id=190000185 instance=ExtResource("pokemon")]
-position = Vector2(848, 496)
+position = Vector2(1552, 1648)
 overworld_pokemon_id = "kanto_route_10_voltorb_1"
 species_id = "voltorb"
 level = 14
 display_name = "Voltorb"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
@@ -423,12 +426,10 @@ overworld_pokemon_id = "kanto_route_10_ekans_1"
 species_id = "ekans"
 level = 13
 display_name = "Ekans"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
-
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1241571794]
 visible = false

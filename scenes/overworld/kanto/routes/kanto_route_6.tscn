@@ -1,5 +1,4 @@
 [gd_scene format=4 uid="uid://byyelt2dffj6y"]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_6/route_6.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -12,6 +11,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="8_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="9_camper"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 16)
@@ -379,20 +379,22 @@ npc_sprite_frames = ExtResource("9_camper")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=851574945]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1476137668]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1027107141]
 
-[node name="RareCandy" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(1168, 368)
+[node name="RareCandy" parent="Entities/Interactables/Items" unique_id=1785240985 instance=ExtResource("99_item")]
+position = Vector2(1200, 208)
 pickup_id = "kanto_route_6_rarecandy"
 item_id = "rare-candy"
-[node name="SitrusBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(560, 400)
+
+[node name="SitrusBerry" parent="Entities/Interactables/Items" unique_id=682547724 instance=ExtResource("99_item")]
+position = Vector2(336, 1232)
 pickup_id = "kanto_route_6_sitrusberry"
 item_id = "sitrus-berry"
-[node name="GreatBallSilverWindSubstitute" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(752, 1552)
+
+[node name="GreatBallSilverWindSubstitute" parent="Entities/Interactables/Items" unique_id=928122428 instance=ExtResource("99_item")]
+position = Vector2(1168, 1264)
 pickup_id = "kanto_route_6_great_ball_tm_substitute"
 item_id = "great-ball"
 

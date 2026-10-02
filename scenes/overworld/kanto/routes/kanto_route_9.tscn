@@ -10,10 +10,10 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="camper"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
-[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="overworld_pickup_extra"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 176)
@@ -410,7 +410,6 @@ overworld_pokemon_id = "kanto_route_9_spearow_1"
 species_id = "spearow"
 level = 13
 display_name = "Spearow"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
@@ -422,61 +421,59 @@ overworld_pokemon_id = "kanto_route_9_sandshrew_1"
 species_id = "sandshrew"
 level = 13
 display_name = "Sandshrew"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
 
-
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=678217890]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
-[node name="Ether" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1792, 320)
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1146792404]
+
+[node name="Ether" parent="Entities/Interactables/Items" unique_id=606242223 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1296, 592)
 pickup_id = "kanto_route_9_ether"
 item_id = "ether"
 
-[node name="TMAerialAce" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(640, 640)
+[node name="TMAerialAce" parent="Entities/Interactables/Items" unique_id=1046463500 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(624, 944)
 pickup_id = "kanto_route_9_tm_aerial_ace"
 item_id = "tm-aerial-ace"
 
-[node name="BurnHeal" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2080, 832)
+[node name="BurnHeal" parent="Entities/Interactables/Items" unique_id=1182005327 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1648, 1168)
 pickup_id = "kanto_route_9_burn_heal"
 item_id = "burn-heal"
 
-[node name="ChestoBerry" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2688, 320)
+[node name="ChestoBerry" parent="Entities/Interactables/Items" unique_id=632717337 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(2832, 400)
 pickup_id = "kanto_route_9_chesto_berry"
 item_id = "chesto-berry"
 
-[node name="RareCandy" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2592, 1280)
+[node name="RareCandy" parent="Entities/Interactables/Items" unique_id=1643991500 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(2672, 1328)
 pickup_id = "kanto_route_9_rare_candy"
 item_id = "rare-candy"
 
-[node name="MaxPotion" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
+[node name="MaxPotion" parent="Entities/Interactables/Items" unique_id=1662453611 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(640, 1280)
 pickup_id = "kanto_route_9_max_potion"
 item_id = "max-potion"
 
-[node name="LightClay" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1984, 544)
+[node name="LightClay" parent="Entities/Interactables/Items" unique_id=2065702826 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(2384, 1328)
 pickup_id = "kanto_route_9_light_clay"
 item_id = "light-clay"
 
-[node name="TMFlashCannon" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2304, 1088)
+[node name="TMFlashCannon" parent="Entities/Interactables/Items" unique_id=557232406 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(2480, 1072)
 pickup_id = "kanto_route_9_tm_flash_cannon"
 item_id = "tm-flash-cannon"
 
-[node name="FullRestore" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2240, 1280)
+[node name="FullRestore" parent="Entities/Interactables/Items" unique_id=1010164862 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1904, 560)
 pickup_id = "kanto_route_9_full_restore"
 item_id = "full-restore"
-
 
 [node name="LargeSignInteractable" parent="Entities/Interactables" unique_id=547856318 instance=ExtResource("4_t3cr7")]
 position = Vector2(2704, 784)

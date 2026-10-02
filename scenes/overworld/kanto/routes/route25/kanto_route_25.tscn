@@ -500,42 +500,42 @@ movement_speed_pixels = 34.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=39924103]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
-[node name="Elixir" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(160, 288)
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1221158431]
+
+[node name="Elixir" parent="Entities/Interactables/Items" unique_id=536013992 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(336, 400)
 pickup_id = "kanto_route_25_elixir"
 item_id = "elixir"
 
-[node name="GreatBall" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1184, 448)
+[node name="GreatBall" parent="Entities/Interactables/Items" unique_id=2037100545 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1360, 464)
 pickup_id = "kanto_route_25_great_ball"
 item_id = "great-ball"
 
-[node name="OranBerry" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1504, 992)
+[node name="OranBerry" parent="Entities/Interactables/Items" unique_id=792142886 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(880, 944)
 pickup_id = "kanto_route_25_oran_berry"
 item_id = "oran-berry"
 
-[node name="BlukBerry" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1632, 992)
+[node name="BlukBerry" parent="Entities/Interactables/Items" unique_id=1476144820 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(880, 1232)
 pickup_id = "kanto_route_25_bluk_berry"
 item_id = "bluk-berry"
 
-[node name="Ether" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(2112, 1088)
+[node name="Ether" parent="Entities/Interactables/Items" unique_id=1844119967 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1776, 784)
 pickup_id = "kanto_route_25_ether"
 item_id = "ether"
 
-[node name="Protein" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(1376, 800)
+[node name="Protein" parent="Entities/Interactables/Items" unique_id=178889116 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(1200, 944)
 pickup_id = "kanto_route_25_protein"
 item_id = "protein"
 
-[node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
-position = Vector2(384, 128)
+[node name="Revive" parent="Entities/Interactables/Items" unique_id=222204882 instance=ExtResource("overworld_pickup_extra")]
+position = Vector2(784, 400)
 pickup_id = "kanto_route_25_revive"
 item_id = "revive"
-
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1894774309]
 
