@@ -59,3 +59,24 @@ remove the reverse port and stop the fixture server after testing.
 
 Local reports were generated under the slot's `.tmp/web-battle-entry` directory;
 these are diagnostic artifacts, not a deployable candidate or certification.
+
+## Full game USB update — 2026-10-02
+
+The same Samsung SM-G780F received the full `com.pokeaether.game` development
+client from source commit `742cc50f7929a6242ac900a690ab090e829a6766` by USB.
+Its display version is `0.3.90-usb-742cc50`, Android version code 8 and local
+build ID `usb-742cc50f7929-20261002`. This includes the battle fade, removal of
+the normal-encounter sprite wait, and deferred trainer vision updates.
+
+The release certificate matched the installed 0.3.90/code 7 game. The full
+Gradle export passed package/version/certificate checks and the Android
+on-demand asset partition check. The seven Android release tooling tests also
+passed. `adb install --no-incremental -r` succeeded; package metadata confirmed
+code 8, the intended display version, the unchanged signature and the same
+existing app data directory identity after installation.
+
+This USB candidate retains the installed official asset build ID and declares
+compatibility with that official build; no assets or APK were published. It was
+not automatically launched for a logged-in encounter. Installation verification
+does not establish the full game's battle behavior or performance; the player
+can now try those changes in the installed game.
