@@ -64,8 +64,9 @@ existing pose controls and extra camera choices. HTTP 200 checks passed for
 the page and an image at `http://127.0.0.1:8792/`. Browser control is unavailable
 in this session, so the link must be opened by the user. The exact source,
 stage, runtime, capture, visibility and page hashes are saved in
-`catalog_legendary_riders_crowned_checkpoint.json`. Appearance, battle and
-runtime admission remain false pending their respective gates.
+`catalog_legendary_riders_crowned_checkpoint.json`. The user approved all four normal/shiny pairs on 2026-10-02
+(“Alle vier goed”). Appearance approval is recorded against this exact
+checkpoint; battle and runtime admission remain false pending their gates.
 
 After appearance approval: stage the eight exact assets beside Dragonite,
 measure native full-clip clearance, calibrate and verify at 120 Hz, then obtain
@@ -83,3 +84,30 @@ new output directory. The isolated capture project uses
 views of each front pose. Run `catalog_legendary_visibility_check.gd` with
 `POKEAETHER_LEGENDARY_WORK` set to the cohort evidence root. Preserve all
 completed captures and choose a new directory when repeating a review.
+
+## Battle calibration in progress
+
+The approved eight appearances are staged beside the pinned Dragonite control.
+All eight use source scale 1.0; their silhouettes meet the existing readability
+threshold without enlargement. Native 60 Hz clearance measurements yielded
+matching normal/shiny profiles and no faint-start/loop endpoint holds.
+
+The first independent 120 Hz validation exposed brief floor intersections in
+both crowned wolves' second physical attack. `catalog_legendary_clearance_refine.py`
+uses the exact fine measurements and their pinned previous profile to raise
+both adjacent 60 Hz offset keys around each dip. Maximum extra corrections are
+3.69 cm for Zacian and 8.70 cm for Zamazenta; Ice Rider also receives sub-mm
+clearance refinements. Native geometry, skeletal clips and timing remain
+unchanged. Paired variants share identical offset arrays. Sleep/loop profiles
+remain constant and faint endpoint continuity is asserted. The original
+measurement and unsuccessful first validation are retained. A new independent
+validation must pass before the final battle page and admission.
+
+The repeated `battle-validated-v2` report is complete: eight appearances,
+64 full clips and 224 battle shots. Every 120 Hz clearance minimum is at least
+2.4 cm (idle target 2.5 cm, action target 3 cm), and all measured silhouettes
+clear the HUD proxy in both camera presets and both sides. The four-pair
+`battle-review-v1` page has 449 pinned files; page and image HTTP 200 checks
+passed at http://127.0.0.1:8793/. Joint user battle approval remains pending.
+These flat-floor/HUD-proxy measurements do not replace the later installed
+runtime, arena, performance and bundle qualification gates.
