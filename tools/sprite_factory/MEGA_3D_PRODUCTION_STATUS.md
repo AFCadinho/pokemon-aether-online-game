@@ -1,19 +1,20 @@
 # Mega 3D catalog production
 
-Updated 2026-10-02. This is a local production checkpoint; it does not approve,
-activate, upload, or publish any new model.
+Updated 2026-10-02. The final section records local admission of 71 additional
+Mega pairs. This task does not upload, activate a release, or publish models.
 
 ## Catalog coverage
 
 The Pokédex lists **97 Mega form variants across 87 base Pokémon**. Mega
-Dragonite is the only one with an already-approved normal/shiny bundle.
+Dragonite was the only approved normal/shiny Mega bundle at intake. With this
+local admission there are now 72 qualified Mega pairs, with 25 source holds.
 
 The connected `LegendsZAPkmnModelDumpWithDLC.rar` contains matching model
 resources for **72 variants**. Mega Dragonite is already approved, so the
 production run produced **71 additional normal/shiny candidate pairs**. This
 includes Mega Hawlucha (`pm0701_11_00`), which was initially missed because its
 model uses an alternate resource code. The remaining **25 variants across 21
-Pokémon** have no matching Mega resource in this dump:
+Pokémon** still lack a safely confirmed Mega source mapping:
 
 - Chesnaught, Delphox, Greninja, Pyroar, Floette, Meowstic (male and female),
   Malamar, Barbaracle, Dragalge, Zygarde, Crabominable, Golisopod,
@@ -21,9 +22,10 @@ Pokémon** have no matching Mega resource in this dump:
   Tatsugiri (all three forms), and Baxcalibur, and Diancie.
 
 The local Scarlet/Violet dump and the attached Biochao packs were checked for
-matching Mega resource identities; they do not fill this 25-form gap. Those
-forms need suitable Mega-specific rigged sources before they can go through
-this pipeline.
+matching Mega resource identities; that intake did not fill the 25-form gap.
+This is a mapping hold, not proof that every missing model is absent from the
+archive. Alternate resource codes and rejected source identities need further
+investigation before those forms can go through production.
 
 ## Candidate run
 
@@ -130,3 +132,61 @@ cannot qualify any variant. The checker rejects incomplete native reports and
 holds all 142 capture-only variants. User battle approval, full runtime/UI and
 performance checks, bundles and catalog admission remain pending. The 25 source
 holds are unchanged. This checkpoint does not authorize publication or R2 upload.
+
+## Battle acceptance and final native clearance
+
+The user accepted all 71 battle pairs, then also accepted the focused Steelix
+and Gyarados placement follow-up. Steelix's final proposed scale is 0.65; its
+special attack no longer overlaps the classic HUD proxy. Gyarados's second
+physical attack and Pidgeot's physical attack have small constant root-clearance
+corrections after actual 120 Hz subframe failures. The Pidgeot comparison in all
+four views shows the same accepted pose with a 9.45 mm root addition. Source
+geometry, materials and animation channels remain unchanged.
+
+All 142 final variants pass the native gate with complete 120 Hz action clocks,
+finite sample arrays, source duration parity and valid captured framing. Original
+failed measurements and filtered native reruns remain available per variant;
+`catalog_mega_battle_final_evidence.py` accepts only measurements made with the
+exact final per-form profile. Native evidence and user acceptance are pinned in
+`catalog_mega_battle_checkpoint.json`.
+
+71 independently versioned local Mega bundles total about 802.04 MiB. The
+transactional launcher check installs all 71 into one content store, including
+several Mega forms of the same species, and verifies all 142 scene hashes,
+no-op planning and restart. The older species-only review harness assumed one
+asset per species; its failed attempt is retained and the new Mega check tests
+actual multi-form coexistence without changing the store or relaxing integrity.
+The on-demand game check verifies all 71 pairs before reveal, exact normal/shiny
+identities, final motion and timing, and no new fetch when swapping variants.
+The download service now recognizes Mega X/Y/Z as distinct form assets.
+
+The three-round actual battle performance gate is still running, with the
+existing 20 ms steady/full-round p95, 64 MiB source-retention, uncovered-stall,
+threaded dispatch and memory-growth limits. Catalog admission remains pending
+until that complete gate passes; preparation alone grants no runtime approval.
+
+## Local catalog admission completed
+
+All 71 additional normal/shiny pairs have passed the unchanged three-round
+performance and memory/load gates. Classic/stadium/classic full-round p95 was
+17.241 / 18.233 / 17.164 ms; prepared steady p95 was 17.168 / 18.192 ms. Maximum
+threaded dispatch/collect spans were 3.078 / 3.121 / 2.616 ms. Final-round static
+memory growth was 811,684 bytes, below the existing 1 MiB gate. All 71 pairs
+passed actual HUD checks and faint replacement in each arena round.
+
+`catalog_mega_71_bundle_qualification.json` records exact scene/bundle hashes,
+installed catalogs, native evidence, runtime tests and performance observations.
+The game and launcher registries now contain all 142 new appearances with 71
+shared normal/shiny profiles. A further runtime pass checks the actual admitted
+registry without injecting fixture approval, loads every pair before reveal,
+checks exact final motion/timing and confirms no variant-swap download.
+
+The inherited registries had identical keys/hashes but different float spelling
+from commit 99c22a443 (maximum numeric difference 1.17e-10). Admission rejects any
+non-numeric difference or delta above 1e-9, preserves the game's values and tab
+format, and mirrors the result to the launcher. Both files are now byte-identical.
+
+The 71 individual bundle archives remain outside the base build. Their local
+index is tracked in `release/approved_3d_mega_71_index.json`. Publication and
+release content-index activation are separate steps requiring authorization.
+The 25 source-mapping holds remain; this does not claim all 97 Megas are ready.

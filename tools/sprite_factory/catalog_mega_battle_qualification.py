@@ -1,6 +1,7 @@
 """Check native Mega battle evidence; technical success never grants art approval."""
 import argparse
 import json
+import math
 from pathlib import Path
 
 from catalog_mega_3d_production import sha
@@ -22,6 +23,12 @@ def qualify(report_path, catalog_path):
         if set(measured) != set(row['clips']):
             errors.append('Missing independent 120 Hz action coverage')
         for action, clip in measured.items():
+            expected_samples = math.ceil(row['clips'][action]['duration'] * 120) + 1
+            minima = clip.get('minimum_y_samples', [])
+            if clip.get('samples') != expected_samples or len(minima) != expected_samples:
+                errors.append(f'{action}: incomplete 120 Hz sample clock')
+            if not minima or not math.isfinite(clip['minimum_y']) or any(not math.isfinite(v) for v in minima) or abs(min(minima) - clip['minimum_y']) > 1e-6:
+                errors.append(f'{action}: invalid native clearance samples')
             if clip['minimum_y'] < .024:
                 errors.append(f'{action}: floor clearance {clip["minimum_y"]:.6f} m')
         for shot in row['shots']:

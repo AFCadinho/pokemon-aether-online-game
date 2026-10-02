@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- 71 extra Mega-vormen zijn lokaal gekwalificeerd voor 3D-battles, normal en shiny, met afzonderlijke downloadbundels en ondersteuning voor Mega X, Y en Z.
+
 - Bij binnenkomst in Rock Tunnel vanaf Route 10 kijkt de speler nu de grot in.
 
 - After Oak’s advice, the main quest tracker and developer checkpoints now separate reaching Rock Tunnel, crossing it and meeting the masked trainer, and reaching Lavender Town.

@@ -19,14 +19,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0003_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:venusaur:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0003/pm0003_51_00/icon/pm0003_51_00_00_0.png",
         "sha256": "f147f79beab0348c0d0e027e84f61de199e7588d15d366807d3e6e6daa959797",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "charizardmegax",
@@ -35,14 +38,17 @@
       "forme": "Mega-X",
       "source_resource_id": "pm0006_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:charizard:mega-x",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0006/pm0006_51_00/icon/pm0006_51_00_00_0.png",
         "sha256": "ed1e3ed06a9e7bd5249cd05846bafc0f143c0710324a93db8044e902b14aa02c",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "charizardmegay",
@@ -51,14 +57,17 @@
       "forme": "Mega-Y",
       "source_resource_id": "pm0006_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:charizard:mega-y",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0006/pm0006_52_00/icon/pm0006_52_00_00_0.png",
         "sha256": "66eaaea7fafc1ee84be7f1a97945b3c99b9ba8138bd4a8f6c4b94cc8d76cba60",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "blastoisemega",
@@ -67,14 +76,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0009_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:blastoise:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0009/pm0009_51_00/icon/pm0009_51_00_00_0.png",
         "sha256": "f0ae0b69254e47632f8c91de133d033b50426557cf6637c1870986c690920bca",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "beedrillmega",
@@ -83,14 +95,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0015_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:beedrill:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0015/pm0015_51_00/icon/pm0015_51_00_00_0.png",
         "sha256": "f9f213f08c18b136cef49defe723ba5774ba58a2ac0cb0a94c1722fcc7873e5d",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "pidgeotmega",
@@ -99,14 +114,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0018_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:pidgeot:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0018/pm0018_51_00/icon/pm0018_51_00_00_0.png",
         "sha256": "2354004f900a0d1994c169956a40bbd1710c3a903c15b2545f3d4013394b3035",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "raichumegax",
@@ -115,14 +133,17 @@
       "forme": "Mega-X",
       "source_resource_id": "pm0026_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:raichu:mega-x",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0026/pm0026_51_00/icon/pm0026_51_00_00_0.png",
         "sha256": "81e35e2ef0a3a2e5f405f62cd9e4703cf1e3d72dd65c9496ad720775945df395",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "raichumegay",
@@ -131,14 +152,17 @@
       "forme": "Mega-Y",
       "source_resource_id": "pm0026_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:raichu:mega-y",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0026/pm0026_52_00/icon/pm0026_52_00_00_0.png",
         "sha256": "1046ab6cf205cf9435873d5318623d2fa2a7f4311c08b1487f74b55cda645f04",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "clefablemega",
@@ -147,14 +171,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0036_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:clefable:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0036/pm0036_51_00/icon/pm0036_51_00_00_0.png",
         "sha256": "e37d50e31a799014b4187149d64536cd21255e6fb3ede9ae916a7f2972c456a7",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "alakazammega",
@@ -163,14 +190,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0065_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:alakazam:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0065/pm0065_51_00/icon/pm0065_51_00_00_0.png",
         "sha256": "7b6e84c2679425b02b2c4a702360392d6c6c06044c58e22c60fd5f4ad1a51d69",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "victreebelmega",
@@ -179,14 +209,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0071_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:victreebel:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0071/pm0071_51_00/icon/pm0071_51_00_00_0.png",
         "sha256": "7522cd6bc394015664880694558c3fb02094470d6197555b3d3a8ca0f9f61217",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "slowbromega",
@@ -195,14 +228,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0080_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:slowbro:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0080/pm0080_51_00/icon/pm0080_51_00_00_0.png",
         "sha256": "34e99403f332accea65b5005bf345f93fd33f9c2ab3afbdfa99f7b1760df5617",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "gengarmega",
@@ -211,14 +247,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0094_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:gengar:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0094/pm0094_51_00/icon/pm0094_51_00_00_0.png",
         "sha256": "caba41b7de3d5b08236a726cf7cef4fb993de2f06dcd9963c4488818309e25d1",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "kangaskhanmega",
@@ -227,14 +266,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0115_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:kangaskhan:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0115/pm0115_51_00/icon/pm0115_51_00_00_0.png",
         "sha256": "9680dce85ea922d6c1198c251ae17cb1fa41f0703192a2170a543caa47bd2ad3",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "starmiemega",
@@ -243,14 +285,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0121_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:starmie:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0121/pm0121_51_00/icon/pm0121_51_00_00_0.png",
         "sha256": "708e67a758a225982a10f74a55b6480bcde208e6cf945f0b7ea3f0b970ffe39f",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "pinsirmega",
@@ -259,14 +304,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0127_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:pinsir:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0127/pm0127_51_00/icon/pm0127_51_00_00_0.png",
         "sha256": "8a18a81d81a928836f3c7c704b214cca563385004312de1f0307dde06572aa81",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "gyaradosmega",
@@ -275,14 +323,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0130_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:gyarados:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0130/pm0130_51_00/icon/pm0130_51_00_00_0.png",
         "sha256": "20e7f399e328232a95199fe76cc0c2edc18a76da86ac372fbed8138541cb62bc",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "aerodactylmega",
@@ -291,14 +342,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0142_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:aerodactyl:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0142/pm0142_51_00/icon/pm0142_51_00_00_0.png",
         "sha256": "09b2083c118cf074568d4f47925c402e68d957e1762a242de6df334186e5444a",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "dragonitemega",
@@ -323,14 +377,17 @@
       "forme": "Mega-X",
       "source_resource_id": "pm0150_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:mewtwo:mega-x",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0150/pm0150_51_00/icon/pm0150_51_00_00_0.png",
         "sha256": "c49ff716d6aacd80c081f6dbac38e61051774716db567224414ad0a7587e8817",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "mewtwomegay",
@@ -339,14 +396,17 @@
       "forme": "Mega-Y",
       "source_resource_id": "pm0150_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:mewtwo:mega-y",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0150/pm0150_52_00/icon/pm0150_52_00_00_0.png",
         "sha256": "91473d9ec8473d3db84dc14d3675183623bbca00372b67c5d5e68fe32bac8fbb",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "meganiummega",
@@ -355,14 +415,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0154_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:meganium:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0154/pm0154_51_00/icon/pm0154_51_00_00_0.png",
         "sha256": "1f3034466e56c4ea1698be52f664958b41e02b13c0b68934cba187c76e8e33b4",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "feraligatrmega",
@@ -371,14 +434,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0160_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:feraligatr:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0160/pm0160_51_00/icon/pm0160_51_00_00_0.png",
         "sha256": "eacb4070d80b958b68f0c59c17a6d904e464aabfb97bf8fa4e54dcc8fa33feff",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "ampharosmega",
@@ -387,14 +453,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0181_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:ampharos:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0181/pm0181_51_00/icon/pm0181_51_00_00_0.png",
         "sha256": "8c873c96dbb6a84583c4e4df6a1af69f2899af945cf4d064940d3121855c6e44",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "steelixmega",
@@ -403,14 +472,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0208_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:steelix:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0208/pm0208_51_00/icon/pm0208_51_00_00_0.png",
         "sha256": "3804a3b7dd5a94d55a914d972263861a4e1541a3adf1ae4f466223ecb0c330f0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "scizormega",
@@ -419,14 +491,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0212_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:scizor:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0212/pm0212_51_00/icon/pm0212_51_00_00_0.png",
         "sha256": "5700dd012e5d425c93d14ce976cfa6803f48d66a0c81e956754c3820a02135c0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "heracrossmega",
@@ -435,14 +510,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0214_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:heracross:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0214/pm0214_51_00/icon/pm0214_51_00_00_0.png",
         "sha256": "7fd58ca6a038c615d4700891b65bc74381256cfe613c86c0b722c13fedcef7fd",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "skarmorymega",
@@ -451,14 +529,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0227_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:skarmory:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0227/pm0227_51_00/icon/pm0227_51_00_00_0.png",
         "sha256": "4574249b5e1319d6d819773c439da89ada1663a18e5182a02198bf2bd191d23b",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "houndoommega",
@@ -467,14 +548,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0229_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:houndoom:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0229/pm0229_51_00/icon/pm0229_51_00_00_0.png",
         "sha256": "a89be1192ae784640be7d42d98d4d38d2de038918ff858fad82abae92be8b237",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "tyranitarmega",
@@ -483,14 +567,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0248_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:tyranitar:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0248/pm0248_51_00/icon/pm0248_51_00_00_0.png",
         "sha256": "e55a59b5664d313fccfbd0a9bf8c27aedc205983027e17af3f0c83629f48479f",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "sceptilemega",
@@ -499,14 +586,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0254_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:sceptile:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0254/pm0254_51_00/icon/pm0254_51_00_00_0.png",
         "sha256": "26971867945050e1c4e9f3e74d068d55fa719e0344b0c97521dfdf00b1824f39",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "blazikenmega",
@@ -515,14 +605,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0257_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:blaziken:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0257/pm0257_51_00/icon/pm0257_51_00_00_0.png",
         "sha256": "952e17d42a7c90436fa03d08a1ec7e67726309b195b7c61040125c882c461e7e",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "swampertmega",
@@ -531,14 +624,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0260_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:swampert:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0260/pm0260_51_00/icon/pm0260_51_00_00_0.png",
         "sha256": "1be762841e652d025cca226ed6680f515e739cbd656c16876f37cc00fd59e7e2",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "gardevoirmega",
@@ -547,14 +643,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0282_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:gardevoir:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0282/pm0282_51_00/icon/pm0282_51_00_00_0.png",
         "sha256": "feb8091125c5a0815d307b2a425713b2c6d4ce88baf0cc22ab4c654a67df8e0a",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "sableyemega",
@@ -563,14 +662,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0302_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:sableye:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0302/pm0302_51_00/icon/pm0302_51_00_00_0.png",
         "sha256": "044019510ad51b0c399f8874404a856f894ecc3c39cf55dd7d96982009f42fc0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "mawilemega",
@@ -579,14 +681,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0303_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:mawile:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0303/pm0303_51_00/icon/pm0303_51_00_00_0.png",
         "sha256": "95f610c8dc64cb631bc6123b18137164545467f58501bfdb234adb69e2e850b4",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "aggronmega",
@@ -595,14 +700,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0306_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:aggron:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0306/pm0306_51_00/icon/pm0306_51_00_00_0.png",
         "sha256": "be855ea7cb56bec974937b1749b6b49b3eb3ba0ee261b0e6a723d3a0f8904ac5",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "medichammega",
@@ -611,14 +719,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0308_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:medicham:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0308/pm0308_51_00/icon/pm0308_51_00_00_0.png",
         "sha256": "ff46aa341877a0070e05641bfb58ad7a6f7adfde63e535ae6e244d5ebfe95716",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "manectricmega",
@@ -627,14 +738,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0310_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:manectric:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0310/pm0310_51_00/icon/pm0310_51_00_00_0.png",
         "sha256": "6a51f480e5873646a9bf24fe2d95535da76bd5c4c48b5db884b6bfea4649f7bc",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "sharpedomega",
@@ -643,14 +757,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0319_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:sharpedo:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0319/pm0319_51_00/icon/pm0319_51_00_00_0.png",
         "sha256": "381ed57a7675c1ed0c3c21d3314a135dce3892110041eb25a97135ef1463e209",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "cameruptmega",
@@ -659,14 +776,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0323_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:camerupt:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0323/pm0323_51_00/icon/pm0323_51_00_00_0.png",
         "sha256": "52e9a5e05dbdf2c63308ff0169069af6084187cfb7770aa9edc76bc01d96294f",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "altariamega",
@@ -675,14 +795,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0334_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:altaria:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0334/pm0334_51_00/icon/pm0334_51_00_00_0.png",
         "sha256": "aa78f564b29cd29c36da7fc53c6ef1bac72d660a448b57f0666d1f7fb6ee42f6",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "banettemega",
@@ -691,14 +814,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0354_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:banette:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0354/pm0354_51_00/icon/pm0354_51_00_00_0.png",
         "sha256": "d2563c95e57860972553e5e440624df440046f686fc0d2ea562c7b3c5ac570b9",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "chimechomega",
@@ -707,14 +833,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0358_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:chimecho:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0358/pm0358_51_00/icon/pm0358_51_00_00_0.png",
         "sha256": "776d264901381bf965131c163d4e9881f555b61966e6ad7fbf8acc24cdf0755b",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "absolmega",
@@ -723,14 +852,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0359_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:absol:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0359/pm0359_51_00/icon/pm0359_51_00_00_0.png",
         "sha256": "4d9686c57640371e1dbcc16fac2ac3fe706f3f354f20778c0ba2d6ad6bd93d47",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "absolmegaz",
@@ -739,14 +871,17 @@
       "forme": "Mega-Z",
       "source_resource_id": "pm0359_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:absol:mega-z",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0359/pm0359_52_00/icon/pm0359_52_00_00_0.png",
         "sha256": "27f42ac5ee6c184530b8349bd19b26bab9d71d972f28d797e4217840807b02b3",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "glaliemega",
@@ -755,14 +890,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0362_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:glalie:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0362/pm0362_51_00/icon/pm0362_51_00_00_0.png",
         "sha256": "25369348faa16fe10f21757c6615b3ba932bc554ffdd49b2e4ab1341cdc5f46d",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "salamencemega",
@@ -771,14 +909,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0373_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:salamence:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0373/pm0373_51_00/icon/pm0373_51_00_00_0.png",
         "sha256": "4ac4ea3fee148a5bd6e607fddb98b93f6748f14a11d468d2fb281553606ac03a",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "metagrossmega",
@@ -787,14 +928,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0376_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:metagross:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0376/pm0376_51_00/icon/pm0376_51_00_00_0.png",
         "sha256": "dce100b4e3c8380e4eccf6813e13f7aff304d67f017b7fe6b108c439fe316e9e",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "latiasmega",
@@ -803,14 +947,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0380_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:latias:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0380/pm0380_51_00/icon/pm0380_51_00_00_0.png",
         "sha256": "88ba9addb0762cea26872817e38eb0b424bb1c7cfed3004d51e8fa6370b4bbb0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "latiosmega",
@@ -819,14 +966,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0381_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:latios:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0381/pm0381_51_00/icon/pm0381_51_00_00_0.png",
         "sha256": "47365bb951ea269ead95d96c08286a0857fdd53cea0ccb3b1efef78d73c5d7d4",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "rayquazamega",
@@ -835,14 +985,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0384_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:rayquaza:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0384/pm0384_51_00/icon/pm0384_51_00_00_0.png",
         "sha256": "261a63cfb616e386c0fe409882dcaed41de3a1bd10fa55f6ccb6059d0467bab0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "staraptormega",
@@ -851,14 +1004,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0398_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:staraptor:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0398/pm0398_51_00/icon/pm0398_51_00_00_0.png",
         "sha256": "454e37ee9134e2f6c2fe84fd019302f6fd4bffadd50b3157317736af9546a182",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "lopunnymega",
@@ -867,14 +1023,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0428_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:lopunny:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0428/pm0428_51_00/icon/pm0428_51_00_00_0.png",
         "sha256": "b7532cac24c2e43f0e660bbdd0b240ade160f7133b4ef80d883f2672ebcbe4ba",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "garchompmega",
@@ -883,14 +1042,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0445_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:garchomp:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0445/pm0445_51_00/icon/pm0445_51_00_00_0.png",
         "sha256": "385b9a9c66faed0626c5cc63c3663e3630505d01df25a5fd31accdaa359fb2c7",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "garchompmegaz",
@@ -899,14 +1061,17 @@
       "forme": "Mega-Z",
       "source_resource_id": "pm0445_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:garchomp:mega-z",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0445/pm0445_52_00/icon/pm0445_52_00_00_0.png",
         "sha256": "4cfb70f92165332de0c0484fddeabcb6bfaa1b327239d9a526589923f45002f0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "lucariomega",
@@ -915,14 +1080,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0448_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:lucario:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0448/pm0448_51_00/icon/pm0448_51_00_00_0.png",
         "sha256": "01509256311a18efc4129ee8abc8390ba894692937838b953fe022e129c405c0",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "lucariomegaz",
@@ -931,14 +1099,17 @@
       "forme": "Mega-Z",
       "source_resource_id": "pm0448_52_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:lucario:mega-z",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0448/pm0448_52_00/icon/pm0448_52_00_00_0.png",
         "sha256": "08b55656f88776aea2a94c8f00d3d4cce293e6ab2b6a2aa5c93ea75d7b4d25d5",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "abomasnowmega",
@@ -947,14 +1118,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0460_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:abomasnow:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0460/pm0460_51_00/icon/pm0460_51_00_00_0.png",
         "sha256": "efcd9a33f787acd9619913540e1577daa988174e48f1b75ea8addac9b6370461",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "gallademega",
@@ -963,14 +1137,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0475_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:gallade:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0475/pm0475_51_00/icon/pm0475_51_00_00_0.png",
         "sha256": "18292ef09d373a11ac7f2124e4554c64f650cf9ea50e9061b9916807eb789a6b",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "froslassmega",
@@ -979,14 +1156,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0478_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:froslass:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0478/pm0478_51_00/icon/pm0478_51_00_00_0.png",
         "sha256": "1e5f4087dfc67d2885440a3db5528a08a4605d8745369e969d166dd8b3b7c51f",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "heatranmega",
@@ -995,14 +1175,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0485_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:heatran:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0485/pm0485_51_00/icon/pm0485_51_00_00_0.png",
         "sha256": "dfe8728af3a2f212c11eb07d3d81106d45860d0a0ed70ae83c926fc5fd865658",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "darkraimega",
@@ -1011,14 +1194,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0491_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:darkrai:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0491/pm0491_51_00/icon/pm0491_51_00_00_0.png",
         "sha256": "78947fb773d1e11b390bee1a65f98fb8453c3189774c698b398c7f849271c39e",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "emboarmega",
@@ -1027,14 +1213,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0500_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:emboar:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0500/pm0500_51_00/icon/pm0500_51_00_00_0.png",
         "sha256": "73b3ae38c85190e5d460d933a199712b2de8f4fe61c928ea8e934ea9acb202a7",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "excadrillmega",
@@ -1043,14 +1232,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0530_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:excadrill:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0530/pm0530_51_00/icon/pm0530_51_00_00_0.png",
         "sha256": "71bf847b54d9bd96e6186c4b1a0c5bf04a6bbc0016c8e102f9dfbc3f7e1a4c99",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "audinomega",
@@ -1059,14 +1251,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0531_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:audino:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0531/pm0531_51_00/icon/pm0531_51_00_00_0.png",
         "sha256": "161edcbc8efccfaf8abce94f9611f9b35d7852195770ad4b2760e02eead27f6c",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "scolipedemega",
@@ -1075,14 +1270,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0545_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:scolipede:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0545/pm0545_51_00/icon/pm0545_51_00_00_0.png",
         "sha256": "3ff457f1feeffed3fca190df8aef59396ca92dd50de76c6d3205dab2481b17d4",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "scraftymega",
@@ -1091,14 +1289,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0560_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:scrafty:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0560/pm0560_51_00/icon/pm0560_51_00_00_0.png",
         "sha256": "e9578b27711f2504bae3356798bb9aa2dcdbacf4f637a01884a2725c3e828cb5",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "eelektrossmega",
@@ -1107,14 +1308,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0604_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:eelektross:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0604/pm0604_51_00/icon/pm0604_51_00_00_0.png",
         "sha256": "f607f388039e7255255c6a41a072ad704f86f9d129b693bbb2bb437d9d98fa04",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "chandeluremega",
@@ -1123,14 +1327,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0609_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:chandelure:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0609/pm0609_51_00/icon/pm0609_51_00_00_0.png",
         "sha256": "e7d075a128b3bad2a7090652a39803f5173a4a47692cda10dc8a5b53f0342301",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "golurkmega",
@@ -1139,14 +1346,17 @@
       "forme": "Mega",
       "source_resource_id": "pm0623_51_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:golurk:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0623/pm0623_51_00/icon/pm0623_51_00_00_0.png",
         "sha256": "136e5cc3008423ac3e778e218785227d33759af5684101350220219a7a2132d5",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "chesnaughtmega",
@@ -1255,8 +1465,8 @@
       "forme": "Mega",
       "source_resource_id": "pm0701_11_00",
       "source_status": "za_dump_available",
-      "approved_3d_bundle": null,
-      "production_approved": false,
+      "approved_3d_bundle": "pokemon_3d:hawlucha:mega",
+      "production_approved": true,
       "source_identity_evidence": {
         "status": "assistant_visual_icon_match",
         "archive_member": "pm0701/pm0701_11_00/icon/pm0701_11_00_00_0.png",
@@ -1265,7 +1475,10 @@
         "shiny_sha256": "d34acfc628a6f8424aba2ef4879e616d16087209756b883f44c3aa70a0a5b46f",
         "official_identity_reference": "https://www.pokemon.com/us/pokemon-news/mega-hawlucha-enters-the-ring-in-pokemon-legends-z-a",
         "not_final_appearance_approval": true
-      }
+      },
+      "local_runtime_approved": true,
+      "published": false,
+      "bundle_qualification_sha256": "1448aad420455858aeca0b482a3aded4cb64aaa59c012e4f6987062db80f32a5"
     },
     {
       "showdown_id": "zygardemega",

@@ -3,12 +3,12 @@
   "date": "2026-10-02",
   "appearance_pair_count": 71,
   "variant_count": 142,
-  "battle_visual_approved": false,
+  "battle_visual_approved": true,
   "runtime_approved": false,
   "performance_qualification_pending": true,
-  "independent_native_validation_pending": true,
-  "independent_native_variant_count_snapshot": 42,
-  "snapshot_is_final": false,
+  "independent_native_validation_pending": false,
+  "independent_native_variant_count_snapshot": 142,
+  "snapshot_is_final": true,
   "review_url": "http://127.0.0.1:8795/mega-battle-71-v1/review-v1/index.html",
   "captured_framing_holds": [
     [
@@ -75,10 +75,52 @@
     "Python review/stage/calibration/qualification modules compile"
   ],
   "remaining": [
-    "User battle size/pose review",
-    "Independent native 120Hz completion and technical holds",
-    "Steelix special attack classic-camera HUD proxy overlap",
+    "Transactional install gate completion",
     "Full runtime/UI and performance qualification",
-    "Individual bundles and catalog admission"
-  ]
+    "Catalog admission",
+    "R2 publication and release activation (separate authorization)"
+  ],
+  "user_final_approval": {
+    "feedback": "Zien er allemaal goed uit",
+    "date": "2026-10-02",
+    "review_manifest_sha256": "247580064683d38b4a8924dc303bbe81240a06eef09ebcd028de7be823a39729",
+    "scope": "71 normal/shiny pairs in reviewed battle views and poses. Technical holds remain blocking; later changed placement requires focused visual acceptance."
+  },
+  "focused_placement_approval": {
+    "date": "2026-10-02",
+    "feedback": "allebei goed",
+    "review_manifest": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/followup-review-v1/manifest.json",
+    "review_manifest_sha256": "e70f27b3600b173fbe03aad393cbf16e4bce9a649f31e07902beb7f2040a627e",
+    "native_report": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/followup-native-v1/battle-review.json",
+    "native_report_sha256": "55ebf51e4068faa7222106204d5f180be4d20a20e0b1192796766386bc6bfc01",
+    "profiles": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/placement-followup-v1.json",
+    "profiles_sha256": "a7b378f8222001f7090b137493b6999118a46b2f56b82b8254a399a938f13cab",
+    "forms": [
+      "steelixmega",
+      "gyaradosmega"
+    ],
+    "steelix_accepted_scale": 0.65
+  },
+  "final_native_technical_variants": 142,
+  "final_captured_framing_holds": [],
+  "final_native_evidence": {
+    "report": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/final-native-v2/battle-review.json",
+      "sha256": "ed0e2e38030b096c710e7f9b214986daf6258d4170e29753dbbd41cdce8d0a4a"
+    },
+    "profiles": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/placement-followup-v2.json",
+      "sha256": "df912e8e927bdbdadeba038b686fed8a8b80b94b322d39441c4680c6b19127b1"
+    },
+    "technical_qualification": {
+      "path": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/final-native-v2/technical-qualification-final.json",
+      "sha256": "e187a42ff9ad23b225acc7a76f0b47bbe7cc6aeac9e90bccfe97ae63d3dd1026"
+    }
+  },
+  "pidgeot_subframe_followup": {
+    "root_clearance_addition_m": 0.009447437286377001,
+    "visual_check": "Assistant comparison in both cameras and sides confirms unchanged appearance/pose; uniform 9.45mm root addition. Source geometry, material and animation channels unchanged. Original full user battle acceptance retained.",
+    "contact_sheet": "/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-a/frontend/.tmp/mega-battle-71-v1/pidgeot-placement-contact.jpg",
+    "contact_sheet_sha256": "b00d5650506d6b0597477be3f6d92aebb81c466d71ab61a8ad6584b62356ffac"
+  }
 }
