@@ -63,13 +63,16 @@ This is a separate presentation scene, **not** `change_scene_to_file`: the
 overworld instance, connection and map services remain alive. The renderer
 already owns its SubViewport/World3D/Camera3D; the map Camera2D is not mutated.
 
-The host covers the overworld with an opaque backdrop, hides its UI and
-suspends UI input callbacks (not processing or network services). It scales
-the HUD uniformly to fit and expands the logical canvas for different aspect
-ratios. A loading cover yields while prepared models load, then fades away.
-The existing encounter cover can finish independently without resizing the
-full-screen battle. Unsupported model situations retain the current fallback
-inside this same screen; changing renderer settings does not reparent a battle.
+The host retains one transient viewport snapshot of the overworld, hides its
+live UI and suspends UI input callbacks (not processing or network services).
+It scales the HUD uniformly to fit and expands the logical canvas for different
+aspect ratios. The snapshot stays visible while the battle prepares. Once the
+entry-ready callback and model/fallback preparation both complete, the world
+image slides left and the fullscreen battle slides in from the right over
+240 ms, with no black cover or flash. The battle intro waits for this slide.
+Both snapshot references are released after entry or cancellation. Unsupported
+model situations retain the current fallback inside this same screen; changing
+renderer settings does not reparent a battle.
 
 World remains the sole owner of player input/activity locks. Normal end,
 failed setup, replay close and replacement use its central cleanup method.

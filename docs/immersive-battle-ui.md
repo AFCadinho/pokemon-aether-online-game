@@ -128,6 +128,9 @@ Immersive. Central battle messages remain visible independently of the log tab.
 - `battle_immersive_layout_check.gd`: Classic/Immersive, four aspect/resolution
   cases, log toggle stability, control bounds and forest discovery/explicit priority.
 - Existing `battle_ui_layout_check.gd`: unchanged Classic contracts and controls.
+- `fullscreen_battle_slide_check.gd`: gap-free slide geometry, preparation gate,
+  world snapshot handoff, UI restoration and cancellation; optional rendered
+  midpoint capture through `POKEAETHER_STAGE_OUTPUT`.
 - `battle_screen_host_check.tscn`: screen lifecycle, overworld restoration and
   real switch clicks with hover cards (no network submission).
 - `battle_3d_presentation_check.gd`: select `POKEAETHER_TEST_UI_LAYOUT=immersive`

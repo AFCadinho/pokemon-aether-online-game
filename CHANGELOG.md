@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fullscreen battles schuiven nu vanuit het zichtbare overworldbeeld naar binnen zonder zwart laadscherm of flitsen; Android wacht op de eerste sprites voordat de slide begint.
 - Rock Tunnel's masked visitor is identified as Mysterious Trainer, uses layered trainer art in battle, appears beside the player at mandatory exit encounters, remains visible until his farewell ends, and leaves no invisible blocking tile afterward.
 
 - Ogerpon Wellspring, Hearthflame en Cornerstone hebben nu de juiste schouder- en mantelkleuren, normal en shiny, met bijgewerkte individuele 3D-bundles.
