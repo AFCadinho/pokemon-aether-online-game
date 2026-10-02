@@ -34,6 +34,34 @@ func _run() -> void:
 		"maintenance status preserves the public player message"
 	)
 
+	for mode in ["staff_draining", "staff_only"]:
+		var staff_status := StatusParser.parse({
+			"available": false, "mode": mode, "message": "Only staff can enter.",
+		})
+		_check(bool(staff_status.get("valid", false)), "staff-only status is valid")
+		_check(bool(staff_status.get("online", false)), "staff-only status permits authenticated login attempts")
+		_check(bool(staff_status.get("staff_only", false)), "staff-only status retains the restriction")
+		_check(not bool(staff_status.get("maintenance", true)), "staff-only status does not disable all login attempts")
+		_check(staff_status.get("message") == "Only staff can enter.", "staff-only status preserves the notice")
+		_check(not bool(StatusParser.parse({"available": true, "mode": mode}).get("valid", true)),
+			"staff-only status cannot claim unrestricted public access")
+
+	var login: Control = load("res://scripts/ui/login_screen.gd").new()
+	var login_button := Button.new()
+	var continue_button := Button.new()
+	login.add_child(login_button)
+	login.add_child(continue_button)
+	login.set("login_button", login_button)
+	login.set("continue_button", continue_button)
+	for mode in ["open", "closed", "draining", "staff_draining", "staff_only"]:
+		var parsed := StatusParser.parse({"mode": mode, "available": mode == "open"})
+		login.set("server_online", bool(parsed.get("online", false)))
+		login.call("_apply_server_access_controls")
+		var expected_disabled: bool = mode in ["closed", "draining"]
+		_check(login_button.disabled == expected_disabled, "login control respects " + mode)
+		_check(continue_button.disabled == expected_disabled, "saved-session control respects " + mode)
+	login.free()
+
 	var inconsistent_status := StatusParser.parse({
 		"available": true,
 		"mode": "closed",

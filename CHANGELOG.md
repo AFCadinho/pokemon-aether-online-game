@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- De game ondersteunt nu toegang voor alleen staff: toegestane accounts kunnen blijven inloggen terwijl gewone spelers een onderhoudsbericht krijgen.
+
 - De browserexport houdt S.S. Anne, het haveninterieur en Lavender’s Pokémon Center in het aparte mappakket; verouderde mapselecties worden vóór de export gemeld.
 
 - Trainer-zichtsensoren worden veilig na physics-callbacks bijgewerkt, zodat de verplichte Rock Tunnel-battle geen physics-fout meer veroorzaakt.

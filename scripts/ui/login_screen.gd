@@ -56,6 +56,7 @@ var _touch_login_scroll: ScrollContainer
 
 var server_online := false
 var server_in_maintenance := false
+var server_staff_only := false
 var server_health_check_in_progress := false
 var server_health_retry_timer: Timer
 var last_server_health_error := ""
@@ -654,10 +655,15 @@ func _refresh_server_health() -> void:
 	var result: Dictionary = await ServerHealthService.check_async(self)
 	server_online = bool(result.get("online", false))
 	server_in_maintenance = bool(result.get("maintenance", false))
+	server_staff_only = bool(result.get("staff_only", false))
 	if server_online:
 		last_server_health_error = ""
-		_set_server_status("ui.login.server_online", ONLINE_COLOR)
-		_clear_server_access_notice()
+		if server_staff_only:
+			_set_server_status("ui.login.server_staff_only", CHECKING_COLOR)
+			_set_server_access_notice(str(result.get("message", "")).strip_edges())
+		else:
+			_set_server_status("ui.login.server_online", ONLINE_COLOR)
+			_clear_server_access_notice()
 		await _refresh_online_players()
 	elif server_in_maintenance:
 		# A valid closed/draining access status is an expected server state, not
@@ -678,7 +684,7 @@ func _refresh_server_health() -> void:
 		_set_server_access_notice("", "ui.login.error.offline")
 	_apply_server_access_controls()
 	server_health_check_in_progress = false
-	if not server_online and is_inside_tree() and is_instance_valid(server_health_retry_timer):
+	if (not server_online or server_staff_only) and is_inside_tree() and is_instance_valid(server_health_retry_timer):
 		server_health_retry_timer.start()
 
 
@@ -760,6 +766,7 @@ func _set_online_players_status(key: String, values: Dictionary, color: Color) -
 func _set_server_status_checking() -> void:
 	server_online = false
 	server_in_maintenance = false
+	server_staff_only = false
 	_set_server_status("ui.login.checking_server", CHECKING_COLOR)
 	_set_online_players_status("ui.login.checking_players", {}, CHECKING_COLOR)
 	_apply_server_access_controls()

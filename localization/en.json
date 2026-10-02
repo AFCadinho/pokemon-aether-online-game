@@ -1091,6 +1091,7 @@
   "ui.login.world_status": "WORLD STATUS",
   "ui.login.server_online": "Server Online",
   "ui.login.server_offline": "Server Offline",
+  "ui.login.server_staff_only": "Staff Only",
   "ui.login.server_maintenance": "Server Maintenance",
   "ui.login.checking_server": "Checking server...",
   "ui.login.checking_players": "Checking players online...",
