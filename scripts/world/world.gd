@@ -70,6 +70,8 @@ const WEB_BATTLE_SPRITE_PREFETCH_ALIASES := {
 
 var is_in_battle := false
 var battle_instance: Node
+var classic_wild_backdrop: ColorRect
+var classic_wild_tween: Tween
 var battle_screen_host: Control
 var prepared_mobile_wild_battle: Control
 var prepared_mobile_wild_host: Control
@@ -1537,7 +1539,11 @@ func _ensure_map_transition_overlay() -> void:
 
 
 func _begin_wild_encounter_transition() -> int:
-	wild_encounter_transition.begin()
+	var classic_overlay := SettingsManager.battle_ui_layout == "classic" and not (
+		SettingsManager.battle_presentation_mode in ["2.5d", "3d"]
+		and not OS.has_feature("web") and not OS.has_feature("mobile")
+	)
+	wild_encounter_transition.begin(WildEncounterTransition.STYLE_CLASSIC_WILD if classic_overlay else WildEncounterTransition.STYLE_WILD)
 	return Time.get_ticks_msec()
 
 
@@ -1598,7 +1604,8 @@ func _reveal_prepared_pvp_battle() -> void:
 
 func _wait_for_wild_encounter_cover(started_at_msec: int) -> void:
 	var elapsed_seconds := float(Time.get_ticks_msec() - started_at_msec) / 1000.0
-	var remaining_seconds := maxf(WILD_ENCOUNTER_MINIMUM_COVER_SECONDS - elapsed_seconds, 0.0)
+	var minimum_seconds := WildEncounterTransition.CLASSIC_COVER_SECONDS if wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD else WILD_ENCOUNTER_MINIMUM_COVER_SECONDS
+	var remaining_seconds := maxf(minimum_seconds - elapsed_seconds, 0.0)
 	if remaining_seconds > 0.0:
 		await get_tree().create_timer(remaining_seconds).timeout
 	await wild_encounter_transition.wait_until_covered()
@@ -1633,7 +1640,11 @@ func _reveal_prepared_wild_battle() -> void:
 		return
 
 	var battle_control := battle_instance as Control
+	var classic_wild := is_instance_valid(classic_wild_backdrop)
 	var reveal_tween := create_tween().set_parallel(true)
+	if classic_wild:
+		classic_wild_tween = reveal_tween
+		reveal_tween.tween_property(classic_wild_backdrop, "color:a", WildEncounterTransition.CLASSIC_DIM_ALPHA, WILD_BATTLE_REVEAL_SECONDS)
 	reveal_tween.tween_property(
 		battle_control,
 		"modulate:a",
@@ -1645,13 +1656,13 @@ func _reveal_prepared_wild_battle() -> void:
 		"scale",
 		Vector2.ONE,
 		WILD_BATTLE_REVEAL_SECONDS
-	).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	).set_trans(Tween.TRANS_QUAD if classic_wild else Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 	await wild_encounter_transition.reveal()
 	# Both tweens may finish in the same slow frame. A completed tween can
 	# still be valid during that processing pass, but its signal already fired.
-	if reveal_tween.is_running():
-		await reveal_tween.finished
+	while reveal_tween.is_valid() and reveal_tween.is_running():
+		await get_tree().process_frame
 
 
 func _cancel_wild_encounter_transition() -> void:
@@ -3826,6 +3837,13 @@ func _attach_battle_ui(force_immersive := false) -> bool:
 		var entry_style := wild_encounter_transition.transition_style if is_instance_valid(wild_encounter_transition) else WildEncounterTransition.STYLE_WILD
 		battle_screen_host.mount(battle_instance, get_node_or_null("UIOverlay"), entry_style, use_immersive_screen)
 	else:
+		if is_instance_valid(wild_encounter_transition) and wild_encounter_transition.transition_style == WildEncounterTransition.STYLE_CLASSIC_WILD and active_battle_kind == "wild":
+			classic_wild_backdrop = ColorRect.new()
+			classic_wild_backdrop.name = "ClassicWildBackdrop"
+			classic_wild_backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			classic_wild_backdrop.color = Color(0.006, 0.012, 0.035, 0.0)
+			classic_wild_backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+			battle_ui_host.add_child(classic_wild_backdrop)
 		battle_ui_host.add_child(battle_instance)
 	battle_ui_host.visible = true
 
@@ -3836,6 +3854,13 @@ func _attach_battle_ui(force_immersive := false) -> bool:
 
 
 func _clear_battle_ui_instance() -> void:
+	if classic_wild_tween != null and classic_wild_tween.is_valid():
+		classic_wild_tween.kill()
+	classic_wild_tween = null
+	if is_instance_valid(classic_wild_backdrop):
+		classic_wild_backdrop.get_parent().remove_child(classic_wild_backdrop)
+		classic_wild_backdrop.queue_free()
+	classic_wild_backdrop = null
 	if is_instance_valid(battle_screen_host):
 		battle_screen_host.release()
 		battle_screen_host.get_parent().remove_child(battle_screen_host)
@@ -4460,6 +4485,22 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	MusicManager.play_overworld_music()
 	_prewarm_mobile_wild_battle_ui.call_deferred()
 	
+func _fade_classic_wild_battle_out() -> bool:
+	if not is_instance_valid(classic_wild_backdrop) or not is_instance_valid(battle_instance):
+		return true
+	var ending_battle: Node = battle_instance
+	if classic_wild_tween != null and classic_wild_tween.is_valid():
+		classic_wild_tween.kill()
+	var fade := create_tween().set_parallel(true)
+	classic_wild_tween = fade
+	fade.tween_property(battle_instance, "modulate:a", 0.0, WILD_BATTLE_REVEAL_SECONDS)
+	fade.tween_property(classic_wild_backdrop, "color:a", 0.0, WILD_BATTLE_REVEAL_SECONDS)
+	# Teardown/disconnect can cancel the animation without emitting finished.
+	while fade.is_valid() and fade.is_running():
+		await get_tree().process_frame
+	return is_instance_valid(ending_battle) and battle_instance == ending_battle
+
+
 func _on_battle_ended(result: Dictionary) -> void:
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
 	var should_claim_trainer_reward := _should_claim_trainer_battle_reward(result)
@@ -4486,6 +4527,8 @@ func _on_battle_ended(result: Dictionary) -> void:
 		and not trainer_is_rematch
 		and not trainer_outro_dialogue_id.is_empty()
 	)
+	if not should_respawn_after_loss and not await _fade_classic_wild_battle_out():
+		return
 	if should_respawn_after_loss:
 		_begin_blackout_respawn_transition()
 	end_wild_battle(should_respawn_after_loss)
