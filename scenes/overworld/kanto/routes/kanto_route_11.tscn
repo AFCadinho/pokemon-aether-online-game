@@ -306,31 +306,33 @@ npc_sprite_frames = ExtResource("6_worker")
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="Awakening" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Awakening" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(560, 400)
 pickup_id = "kanto_route_11_awakening"
 item_id = "awakening"
-[node name="XDefend" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="XDefend" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1840, 944)
 pickup_id = "kanto_route_11_xdefend"
 item_id = "x-defense"
-[node name="GreatBall" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="GreatBall" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(2128, 752)
 pickup_id = "kanto_route_11_greatball"
 item_id = "great-ball"
-[node name="EscapeRope" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="EscapeRope" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(560, 432)
 pickup_id = "kanto_route_11_escaperope"
 item_id = "escape-rope"
-[node name="Revive" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(976, 400)
 pickup_id = "kanto_route_11_revive"
 item_id = "revive"
-[node name="GreenApricorn" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="GreenApricorn" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1584, 752)
 pickup_id = "kanto_route_11_greenapricorn"
 item_id = "green-apricorn"
-[node name="TMGrassKnot" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="TMGrassKnot" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(2288, 432)
 pickup_id = "kanto_route_11_tmgrassknot"
 item_id = "tm-grass-knot"

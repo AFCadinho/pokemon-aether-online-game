@@ -381,15 +381,17 @@ npc_sprite_frames = ExtResource("9_camper")
 
 [node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="RareCandy" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="RareCandy" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1168, 368)
 pickup_id = "kanto_route_6_rarecandy"
 item_id = "rare-candy"
-[node name="SitrusBerry" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="SitrusBerry" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(560, 400)
 pickup_id = "kanto_route_6_sitrusberry"
 item_id = "sitrus-berry"
-[node name="GreatBallSilverWindSubstitute" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="GreatBallSilverWindSubstitute" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(752, 1552)
 pickup_id = "kanto_route_6_great_ball_tm_substitute"
 item_id = "great-ball"

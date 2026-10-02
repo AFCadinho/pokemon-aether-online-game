@@ -958,7 +958,9 @@ movement_speed_pixels = 48.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=841850023]
 
-[node name="Potion" parent="Entities/Interactables" unique_id=1548415673 instance=ExtResource("43_overworld_item")]
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="Potion" parent="Entities/Interactables/Items" unique_id=1548415673 instance=ExtResource("43_overworld_item")]
 position = Vector2(528, 1520)
 pickup_id = "kanto_viridian_city_potion"
 item_id = "potion"

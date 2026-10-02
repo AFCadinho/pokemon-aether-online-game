@@ -499,12 +499,14 @@ movement_wait_seconds = 1.6
 movement_speed_pixels = 38.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=185431822]
-[node name="TMAttract" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="TMAttract" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(1376, 576)
 pickup_id = "kanto_route_24_tm_attract"
 item_id = "tm-attract"
 
-[node name="PechaBerry" parent="Entities/Interactables" instance=ExtResource("overworld_pickup_extra")]
+[node name="PechaBerry" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(1376, 512)
 pickup_id = "kanto_route_24_pecha_berry"
 item_id = "pecha-berry"

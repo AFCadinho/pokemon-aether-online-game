@@ -392,33 +392,35 @@ z_index = 5
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=563296912]
 
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
 
-[node name="TinyMushroomEast" parent="Entities/Interactables" instance=ExtResource("99_item")]
+
+[node name="TinyMushroomEast" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1456, 944)
 pickup_id = "kanto_mt_moon_b1f_tinymushroomeast"
 item_id = "tiny-mushroom"
 
-[node name="TinyMushroomNorth" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="TinyMushroomNorth" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(2096, 496)
 pickup_id = "kanto_mt_moon_b1f_tinymushroomnorth"
 item_id = "tiny-mushroom"
 
-[node name="TinyMushroomWest" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="TinyMushroomWest" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(528, 1456)
 pickup_id = "kanto_mt_moon_b1f_tinymushroomwest"
 item_id = "tiny-mushroom"
 
-[node name="BigMushroomEast" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="BigMushroomEast" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1328, 1008)
 pickup_id = "kanto_mt_moon_b1f_bigmushroomeast"
 item_id = "big-mushroom"
 
-[node name="BigMushroomCenter" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="BigMushroomCenter" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(1840, 944)
 pickup_id = "kanto_mt_moon_b1f_bigmushroomcenter"
 item_id = "big-mushroom"
 
-[node name="BigMushroomWest" parent="Entities/Interactables" instance=ExtResource("99_item")]
+[node name="BigMushroomWest" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
 position = Vector2(400, 1488)
 pickup_id = "kanto_mt_moon_b1f_bigmushroomwest"
 item_id = "big-mushroom"
