@@ -16,6 +16,7 @@
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "25号道路", "lines": ["25号道路", "沿道路向东前往正辉的家。"]},
     {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "11号道路", "lines": ["11号道路", "枯叶市 ↔ 12号道路。地鼠洞穴通往2号道路。"]},
     {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "地鼠洞穴", "lines": ["地鼠洞穴", "连接11号道路与2号道路的地下通道。"]},
-    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "9号道路", "lines": ["9号道路", "向西通往华蓝市，向东通往10号道路和岩山隧道。"]}
+    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "9号道路", "lines": ["9号道路", "向西通往华蓝市，向东通往10号道路和岩山隧道。"]},
+    {"id": "kanto_route_10_rock_tunnel_sign", "type": "road", "mapId": "kanto_route_10", "title": "岩山隧道", "lines": ["岩山隧道","这条昏暗的隧道穿过群山。记得带上照明，并小心脚下。"]}
   ]
 }

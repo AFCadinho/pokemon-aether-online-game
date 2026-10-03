@@ -8,6 +8,7 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/routes/kanto_route_5.tscn": "kanto_route_5",
 	"res://scenes/overworld/kanto/routes/kanto_route_6.tscn": "kanto_route_6",
 	"res://scenes/overworld/kanto/routes/kanto_route_9.tscn": "kanto_route_9",
+	"res://scenes/overworld/kanto/routes/kanto_route_10.tscn": "kanto_route_10",
 	"res://scenes/overworld/kanto/routes/kanto_route_11.tscn": "kanto_route_11",
 	"res://scenes/overworld/kanto/routes/kanto_route_24.tscn": "kanto_route_24",
 	"res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn": "kanto_route_25",

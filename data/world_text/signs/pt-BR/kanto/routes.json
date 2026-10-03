@@ -16,6 +16,7 @@
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Rota 25", "lines": ["Rota 25", "Siga a estrada para leste até a casa de Bill."]},
     {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "Rota 11", "lines": ["Rota 11", "Cidade de Vermilion ↔ Rota 12. A Caverna dos Diglett leva à Rota 2."]},
     {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "Caverna dos Diglett", "lines": ["Caverna dos Diglett", "Um túnel subterrâneo que conecta a Rota 11 à Rota 2."]},
-    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "Rota 9", "lines": ["Rota 9", "A oeste fica a Cidade de Cerulean. A leste ficam a Rota 10 e o Túnel Rochoso."]}
+    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "Rota 9", "lines": ["Rota 9", "A oeste fica a Cidade de Cerulean. A leste ficam a Rota 10 e o Túnel Rochoso."]},
+    {"id": "kanto_route_10_rock_tunnel_sign", "type": "road", "mapId": "kanto_route_10", "title": "Túnel Rochoso", "lines": ["Túnel Rochoso","Um túnel escuro atravessa as montanhas. Leve uma luz e preste atenção por onde pisa."]}
   ]
 }
