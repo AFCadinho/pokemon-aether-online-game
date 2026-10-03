@@ -27,10 +27,9 @@ func _run() -> void:
 		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras"],
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
-	_check(
-		["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny"].all(func(id: String) -> bool: return id in MountServiceScript.get_mount_ids_for_mode("land")),
-		"land catalog contains Cyclizar and normal/shiny Rayquaza, Shadow Lugia and Mega Alakazam"
-	)
+	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
+	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol_z"]:
+		_check(land_mounts.has(mount_id), "land catalog exposes " + mount_id)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
 		and MountServiceScript.get_unlocked_mount_ids_for_mode(
@@ -237,6 +236,18 @@ func _run() -> void:
 	])
 	panel.call("_open_selector", "land")
 	_check(selector_options.get_child_count() == 2, "both owned Rayquaza variants remain separate selector entries")
+	panel.call("_on_inventory_changed", [{"itemId": "mega-absol-z-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Mega Absol Z"),
+		"Mega Absol Z ownership unlocks its selector entry"
+	)
+	panel.call("_select_mount", "land", "mega_absol_z")
+	_check(
+		str(settings_manager.call("get_selected_mount_id", "land")) == "mega_absol_z",
+		"owned Mega Absol Z can be selected as the active land mount"
+	)
 	var fake_player := FakeMountPlayer.new()
 	fake_player.add_to_group("player")
 	root.add_child(fake_player)

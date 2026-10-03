@@ -415,6 +415,10 @@
     "name": "Montaria Shiny Shadow Lugia",
     "shortDesc": "Desbloqueia Shiny Shadow Lugia como montaria terrestre."
   },
+  "mega-absol-z-mount": {
+    "name": "Montaria Mega Absol Z",
+    "shortDesc": "Desbloqueia Mega Absol Z como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "Crédito de voucher disponível: {amount}. Use em cosméticos e montarias elegíveis da Gift Store. Compras e conteúdo das caixas são inegociáveis. Somente a equipe PokeAether pode adicionar crédito."

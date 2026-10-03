@@ -273,6 +273,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/rayquaza_mount_check.gd",
 	"res://tests/shadow_lugia_mount_check.gd",
 	"res://tests/mega_alakazam_mount_check.gd",
+	"res://tests/mega_absol_z_mount_check.gd",
 	"res://tests/mount_world_depth_check.gd",
 	"res://tests/mount_switch_rider_check.gd",
 	"res://tests/skills_ui_check.gd",

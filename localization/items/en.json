@@ -415,6 +415,10 @@
     "name": "Shiny Shadow Lugia Mount",
     "shortDesc": "Unlocks Shiny Shadow Lugia as a land mount."
   },
+  "mega-absol-z-mount": {
+    "name": "Mega Absol Z Mount",
+    "shortDesc": "Unlocks Mega Absol Z as a land mount. Requires a Mount License for the current region."
+  },
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "Available voucher credit: {amount}. Spend it on eligible Gift Store cosmetics and mounts. Purchases and all box contents are untradeable. Only PokeAether staff can add credit."
