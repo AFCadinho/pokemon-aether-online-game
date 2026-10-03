@@ -49,10 +49,24 @@ func _check_animation_and_overlap() -> void:
 			_check(body.get_size() == Vector2i(128, 128) and front.get_size() == Vector2i(128, 128), "mount layers stay 128px")
 			images.append(body)
 			if direction == "down":
-				_check(front.get_pixel(62, 58).a == 0.0, "foreground does not redraw the tail near the head tip")
+				_check(front.get_pixel(56, 58).a == 0.0, "foreground does not redraw the tail beside the head tip")
+				_check(front.get_pixel(62, 58) == body.get_pixel(62, 58) and front.get_pixel(62, 58).a > 0.0, "head tip is drawn above every rider layer")
+				for seam_y in range(64, 72):
+					_check(front.get_pixel(62, seam_y) == body.get_pixel(62, seam_y) and front.get_pixel(62, seam_y).a > 0.0, "head foreground is continuous across the former mask/foreground seam")
 				_check(front.get_pixel(62, 78) == body.get_pixel(62, 78) and front.get_pixel(62, 78).a > 0.0, "lower face remains in front of the rider")
+			elif direction in ["left", "right"]:
+				var wing := Vector2i(68, 64) if index % 2 == 0 else Vector2i(60, 112)
+				var neck := Vector2i(40, 64)
+				if direction == "right":
+					wing.x = 127 - wing.x
+					neck.x = 127 - neck.x
+				_check(front.get_pixelv(wing) == body.get_pixelv(wing) and front.get_pixelv(wing).a > 0.0, "near wing is in front in both flight poses")
+				_check(front.get_pixelv(neck).a == 0.0, "neck remains behind the rider")
 			else:
-				_check(front.get_used_rect().size == Vector2i.ZERO, "only down-facing head has a foreground layer")
+				_check(front.get_used_rect().size == Vector2i.ZERO, "rear view retains its rider layering")
+		var idle_front := Mounts._get_texture_image(foreground.get_frame_texture(StringName("idle_" + direction), 0))
+		var first_front := Mounts._get_texture_image(foreground.get_frame_texture(walk, 0))
+		_check(idle_front.get_data() == first_front.get_data(), "idle retains the raised wing and head foreground")
 		_check(images[0].get_data() == images[2].get_data() and images[1].get_data() == images[3].get_data(), "approved A-B-A-B wing loop is preserved")
 		_check(images[0].get_data() != images[1].get_data(), "two distinct wing poses animate")
 	var mask := Mounts._get_mask_image(mount_id)
@@ -190,7 +204,7 @@ func _check_variant_rigs() -> void:
 	var normal_definition := Mounts.get_mount_definition("shadow_lugia")
 	var shiny_definition := Mounts.get_mount_definition("shadow_lugia_shiny")
 	for key: String in normal_definition:
-		if key not in ["displayName", "unlockItemId", "spriteSheet", "riderMaskSheet"]:
+		if key not in ["displayName", "unlockItemId", "spriteSheet", "riderMaskSheet", "foregroundSheet"]:
 			_check(normal_definition[key] == shiny_definition.get(key), "normal and shiny share %s" % key)
 	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shadow-lugia-mount"]) == ["shadow_lugia"], "normal item does not unlock shiny")
 	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shiny-shadow-lugia-mount"]) == ["shadow_lugia_shiny"], "shiny item does not unlock normal")
