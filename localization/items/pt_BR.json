@@ -450,5 +450,13 @@
   "cobalion-mount": {
     "name": "Montaria Cobalion",
     "shortDesc": "Desbloqueia Cobalion como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-cobalion-mount": {
+    "name": "Montaria Cobalion Brilhante",
+    "shortDesc": "Desbloqueia Cobalion Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "cobalion-mount-box": {
+    "name": "Caixa de montaria Cobalion",
+    "shortDesc": "Contém uma montaria Cobalion. Chance shiny inicial: 50%."
   }
 }

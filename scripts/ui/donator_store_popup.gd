@@ -549,6 +549,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "cobalion-mount-box",
+		"name": "Cobalion Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_cobalion",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["featured", "mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",

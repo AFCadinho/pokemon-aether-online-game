@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Cobalion and its 500-Gem Mount Box to the Gift Store, with mounted normal/shiny previews, preserved rider masking and Shiny Tracker support.
+
 - Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
 
 - Preserve the player's head when riding Cobalion by masking only pixels covered by the mount foreground, removing the oversized front head mask.

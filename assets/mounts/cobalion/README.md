@@ -12,6 +12,15 @@ Side frames follow the source's two-pixel animation bob.
 Rebuild with `python tools/build_cobalion_mount.py` (Pillow required).
 `icon.png` uses the unpadded front cell.
 
+The same builder creates `../cobalion_shiny/` using an explicit RGB palette
+based on the bundled shiny follower: deep blue, light green horns and pale mint
+accents. Extra shade steps preserve the supplied mount's details. All source
+positions, alpha, foreground contours and rider masks are identical between
+normal and shiny; the follower's different side pose is not substituted.
+
 Grant `cobalion-mount` through the existing administration reward controls,
 then select Cobalion in the land mount slot. Ownership and a regional Mount
 License are required.
+
+The Gift Store's Cobalion Mount Box costs 500 Aether Gems and grants one normal
+or shiny entitlement through the shared mount-box pity system.
