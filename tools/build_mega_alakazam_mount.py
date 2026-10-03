@@ -1,4 +1,4 @@
-"""Build the smaller Mega Alakazam with the approved seated/levitating pose.
+"""Build original-size Mega Alakazam with the approved seated/levitating pose.
 
 The supplied source and unchanged player ride pose use exact 2x pixels.
 Only the creature and psychic support are baked into runtime sheets.
@@ -13,14 +13,14 @@ from import_player_layered_sprites import write_texture_import
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets/mounts/mega_alakazam"
 FRAME = 112
-CREATURE_SIZE = 40
+CREATURE_SIZE = 32
 NEAREST = Image.Resampling.NEAREST
 DIRECTIONS = ("down", "left", "right", "up")
 # Center the unchanged 32px logical player frame in every direction. The
 # player's normal ground position anchors the rig; Alakazam and the ring move
-# around it. These translations retain the approved creature/rider spacing.
+# around it. Keep the creature centered and its rear head at the approved height.
 RIDER_POS = ((40, 40),) * 4
-MOUNT_POS = ((36, 26), (63, 34), (9, 34), (36, 41))
+MOUNT_POS = ((40, 28), (67, 38), (13, 38), (40, 43))
 
 
 def build() -> None:
@@ -38,6 +38,7 @@ def build() -> None:
             normalized.alpha_composite(original, (0, -2 if col % 2 else 0))
             assert normalized.getchannel("A").histogram()[255] == original.getchannel("A").histogram()[255]
             sprite = normalized.resize((CREATURE_SIZE, CREATURE_SIZE), NEAREST)
+            assert sprite.tobytes() == normalized.tobytes(), "Retain the original creature pixel grid."
             creature = Image.new("RGBA", (FRAME, FRAME))
             mx, my = MOUNT_POS[row]
             mount_bob = round(math.sin(phase * math.tau / 16))
