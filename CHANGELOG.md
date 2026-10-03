@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bring Mega Alakazam closer to its rider and replace the solid purple levitation ring with subtle, translucent psychic wisps.
+
 - Give Rock Tunnel 1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
 
 - Restore Mega Alakazam's original 64×64 sprite scale to keep its pixels even, retaining the rider's foot anchor and levitation pose.

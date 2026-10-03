@@ -17,10 +17,10 @@ CREATURE_SIZE = 32
 NEAREST = Image.Resampling.NEAREST
 DIRECTIONS = ("down", "left", "right", "up")
 # Center the unchanged 32px logical player frame in every direction. The
-# player's normal ground position anchors the rig; Alakazam and the ring move
-# around it. Keep the creature centered and its rear head at the approved height.
+# player's normal ground position anchors the rig; Alakazam and psychic wisps
+# move around it. Close the side gap while retaining the approved rear height.
 RIDER_POS = ((40, 40),) * 4
-MOUNT_POS = ((40, 28), (67, 38), (13, 38), (40, 43))
+MOUNT_POS = ((40, 31), (59, 38), (21, 38), (40, 43))
 
 
 def build() -> None:
@@ -57,16 +57,17 @@ def build() -> None:
             cx, cy = rx + 16, ry + 30 + rider_bob
             ring = Image.new("RGBA", creature.size)
             draw = ImageDraw.Draw(ring)
-            draw.ellipse((cx - 12, cy - 3, cx + 12, cy + 3), outline=(77, 44, 125, 255), width=2)
-            draw.arc((cx - 11, cy - 3, cx + 11, cy + 2), 5, 160, fill=(165, 97, 230, 255), width=1)
-            draw.arc((cx - 11, cy - 3, cx + 11, cy + 2), 185, 285, fill=(222, 187, 255, 255), width=1)
+            # Broken translucent arcs suggest psychic lift rather than a platform.
+            bounds = (cx - 10, cy - 2, cx + 10, cy + 2)
+            for start, end in ((25, 75), (105, 155)):
+                draw.arc(bounds, start, end, fill=(164, 126, 206, 170), width=1)
+            draw.arc(bounds, 210, 315, fill=(194, 167, 226, 110), width=1)
             for side in (-1, 1):
-                draw.point((cx + side * 13, cy - 6 - phase % 4), fill=(165, 97, 230, 255))
-            for angle in (phase * math.tau / 16, phase * math.tau / 16 + math.pi):
-                draw.point((round(cx + 14 * math.cos(angle)), round(cy + 4 * math.sin(angle))), fill=(222, 187, 255, 255))
-            creature.alpha_composite(ring)
-            if row == 3:
-                creature.alpha_composite(foreground)
+                spark_y = cy - 5 - (col + (side + 1) // 2) % 3
+                draw.point((cx + side * 11, spark_y), fill=(194, 167, 226, 145))
+            # Keep the energy behind Alakazam, preserving the source pixels.
+            ring.alpha_composite(creature)
+            creature = ring
             for name, frame in (("mount", creature), ("foreground", foreground), ("rider_mask", mask)):
                 sheets[name].alpha_composite(frame, (col * FRAME, row * FRAME))
     for name, sheet in sheets.items():
