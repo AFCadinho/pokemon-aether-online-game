@@ -168,5 +168,13 @@
       "level": 30,
       "generation": 7
     }
+  ],
+  "storyNPCs": [
+    {
+      "id": "kanto_pokemon_tower_gary",
+      "floor": 2,
+      "position": [1328, 432],
+      "interactionId": "kanto_pokemon_tower_gary_challenge"
+    }
   ]
 }

@@ -54,6 +54,7 @@ func _run() -> void:
 	var occupied := {}
 	var trainer_count := 0
 	var dialogue_count := 0
+	var story_rival_count := 0
 	var healer_count := 0
 	var catalog := root.get_node("TrainerPortraitCatalog")
 	for entity in entities:
@@ -98,6 +99,8 @@ func _run() -> void:
 					_check(_walkable(map, cell + Vector2i(direction) * step), "Trainer challenge approach stays clear: " + entity.name)
 			elif entity.get_script().resource_path.ends_with("heal_npc.gd"):
 				healer_count += 1
+			elif entity.npc_id == "kanto_pokemon_tower_gary":
+				story_rival_count += 1
 			else:
 				dialogue_count += 1
 	for entity in entities:
@@ -144,6 +147,13 @@ func _run() -> void:
 			_check(_floor_for(map, entity.position) == StringName("floor_%d" % int(trainer.floor)), "Trainer is on assigned floor")
 	for visitor: Dictionary in manifest.dialogueNPCs:
 		_check(by_id.has(visitor.id) and _floor_for(map, by_id[visitor.id].position) == StringName("floor_%d" % int(visitor.floor)), "Visitor is on assigned floor")
+	for rival: Dictionary in manifest.storyNPCs:
+		var entity: Node2D = by_id.get(rival.id)
+		_check(entity != null, "Story rival exists: " + rival.id)
+		if entity != null:
+			_check(entity.position == Vector2(rival.position[0], rival.position[1]), "Story rival position matches manifest")
+			_check(_floor_for(map, entity.position) == StringName("floor_%d" % int(rival.floor)), "Story rival is on assigned floor")
+			_check(entity.get_node("StoryHook").interaction_id == rival.interactionId, "Story rival uses its main quest battle")
 	var generations := {}
 	for entry: Dictionary in manifest.pokemon:
 		var entity: Node2D = by_id.get(entry.id)
@@ -167,11 +177,11 @@ func _run() -> void:
 		state.current_map = previous
 		_check(payload.get("mapId") == "kanto_lavender_town_pokemon_tower" and payload.get("mapScenePath") == TOWER, "Healing respawn targets Tower")
 		_check(payload.get("spawnMarker") == "FromHealingSeal" and payload.get("position") == {"x": spawn.position.x, "y": spawn.position.y}, "Healing respawn payload is correct")
-	_check(trainer_count == 8 and dialogue_count == 4 and healer_count == 1 and pokemon.size() == 7, "Population counts match requested design")
+	_check(trainer_count == 8 and dialogue_count == 4 and story_rival_count == 1 and healer_count == 1 and pokemon.size() == 7, "Population counts match requested design")
 	_check(generations.size() == 7, "Ghost Pokémon span seven generations")
 	map.free()
 	if failures == 0:
-		print("POKEMON_TOWER_POPULATION PASS: 8 Hex Maniacs, 4 visitors, 5F healer, 7 Ghost Pokémon; clear placement, artwork and respawn")
+		print("POKEMON_TOWER_POPULATION PASS: 8 Hex Maniacs, 4 visitors, 2F Gary, 5F healer, 7 Ghost Pokémon; clear placement, artwork and respawn")
 	quit(1 if failures else 0)
 
 func _walkable(map: Node, cell: Vector2i) -> bool:

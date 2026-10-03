@@ -37,6 +37,30 @@ func _run() -> void:
 	_check(gary.visibility_required_quest_step_id == "speak_to_fuji_helper", "Gary appears after the helper conversation")
 	_check(gary.visibility_hidden_quest_id == "investigate_pokemon_tower" and gary.defer_story_hide_until_reload, "Gary disappears on refresh after the battle advice")
 	_check(tower.get_node("FloorVisibilityMask").floor_regions[&"floor_2"].has_point(gary.position), "Gary stands on Tower 2F")
+	_check(gary.get_node("StoryHook").interaction_id == "kanto_pokemon_tower_gary_challenge", "Gary starts the Tower story battle")
+	# Mount the shared battle presenter without the DialogueNPC startup requests.
+	var battle_host := (load("res://scenes/npcs/dialogue_npc.tscn") as PackedScene).instantiate() as Node2D
+	battle_host.set_script(load("res://scripts/world/npcs/base_npc.gd"))
+	for key: String in ["npc_id", "npc_definition_id", "portrait_id", "battle_sprite_id", "npc_sprite_frames"]:
+		battle_host.set(key, gary.get(key))
+	root.add_child(battle_host)
+	var battle_metadata: Dictionary = battle_host.call("build_battle_trainer_metadata", {"id": "kanto_pokemon_tower_gary_bulbasaur"})
+	battle_host.queue_free()
+	_check(battle_metadata.get("_battle_sprite_id") == "showdown_blue_lgpe", "Gary uses a trainer sprite in battle")
+	var story_service := root.get_node("StoryService")
+	var revision := int(story_service.get_story().get("revision", 0))
+	for state: Dictionary in [
+		{"status": "active", "helper": "active", "visible": false},
+		{"status": "active", "helper": "completed", "visible": true},
+		{"status": "completed", "helper": "completed", "visible": false},
+	]:
+		revision += 1
+		story_service.apply_story({"revision": revision, "quests": [{
+			"questId": "investigate_pokemon_tower", "status": state.status,
+			"steps": [{"stepId": "speak_to_fuji_helper", "status": state.helper}],
+		}]})
+		_check(gary.call("_is_story_visibility_active") == state.visible,
+			"Gary visibility follows Reina and battle completion: " + str(state))
 	_check_walkable(tower, gary)
 	for spawn: Node2D in tower.get_node("Spawns").get_children():
 		_check(gary.position.distance_to(spawn.position) > 96, "Gary leaves tower spawns clear")

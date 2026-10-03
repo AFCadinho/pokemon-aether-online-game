@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Gary on Pokémon Tower 2F after Reina’s conversation, with the existing story battle, Gary artwork and post-victory Silph Co. hint.
+
 - Power Plant toont nu de opnieuw geïmporteerde Tiled-visual.
 
 - Route 10 heeft nu drie overworld-Pokémon in de rivier: Wooper, Buizel en Ducklett.
