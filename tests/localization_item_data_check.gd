@@ -65,7 +65,7 @@ func _check_catalogs() -> void:
 		catalogs[locale] = parsed as Dictionary if parsed is Dictionary else {}
 
 	var english: Dictionary = catalogs.get("en", {})
-	_check(english.size() == 102, "item overlay covers 102 item IDs including the current outfit boxes and components")
+	_check(english.size() >= 102, "item overlay retains the existing item coverage as new items are added")
 	var english_item_ids: Array = english.keys()
 	english_item_ids.sort()
 	for locale: String in CATALOG_PATHS:
@@ -90,7 +90,7 @@ func _check_catalogs() -> void:
 		_check(parsed is Dictionary, "generated %s item catalog is valid JSON" % locale)
 		var catalog: Dictionary = parsed as Dictionary if parsed is Dictionary else {}
 		generated_catalogs[locale] = catalog
-		_check(catalog.size() == 1384, "generated %s item catalog covers the cleaned source index" % locale)
+		_check(catalog.size() >= 1384, "generated %s item catalog retains the cleaned source index coverage" % locale)
 		for item_id_value: Variant in catalog.keys():
 			var item_id := str(item_id_value)
 			var entry: Dictionary = catalog.get(item_id, {})
@@ -152,10 +152,14 @@ func _check_catalogs() -> void:
 		var localized_ids: Array = catalog.keys()
 		localized_ids.sort()
 		_check(localized_ids == expected_generated_ids, "generated %s item IDs match English" % locale)
-		_check(
-			(item_localization.call("get_catalog", locale) as Dictionary).size() == 1418,
-			"%s complete item catalog plus virtual Escape Rope action loads into the runtime resolver" % locale
-		)
+		var expected_runtime_ids: Dictionary = catalog.duplicate()
+		expected_runtime_ids.merge(catalogs.get(locale, {}) as Dictionary, true)
+		expected_runtime_ids["escape-rope-action"] = {}
+		var expected_ids: Array = expected_runtime_ids.keys()
+		expected_ids.sort()
+		var runtime_ids: Array = (item_localization.call("get_catalog", locale) as Dictionary).keys()
+		runtime_ids.sort()
+		_check(runtime_ids == expected_ids, "%s runtime includes every generated, override and virtual item ID" % locale)
 
 
 func _check_resolver_fallback_and_mechanics() -> void:

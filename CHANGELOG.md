@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Mega Absol Z as a land mount with four-direction animation, fitted riders, foreground masks and a dedicated Bag icon.
+
 - Refresh rider body and clothing masks when switching mounts so the previous mount cannot leave missing body parts.
 
 - Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.

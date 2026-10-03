@@ -415,6 +415,10 @@
     "name": "Shiny Shadow Lugia-mount",
     "shortDesc": "Ontgrendelt Shiny Shadow Lugia als landmount."
   },
+  "mega-absol-z-mount": {
+    "name": "Mega Absol Z-mount",
+    "shortDesc": "Ontgrendelt Mega Absol Z als land-mount. Vereist een Mount License voor de huidige regio."
+  },
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "Beschikbaar vouchertegoed: {amount}. Te besteden aan geschikte cosmetics en mounts in de Gift Store. Aankopen en alle boxinhoud zijn untradeable. Alleen PokeAether kan tegoed toevoegen."
