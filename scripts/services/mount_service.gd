@@ -18,6 +18,7 @@ static var _mount_frames_cache: Dictionary = {}
 static var _mount_foreground_frames_cache: Dictionary = {}
 static var _rider_frames_cache: Dictionary = {}
 static var _mask_image_cache: Dictionary = {}
+static var _texture_cache: Dictionary = {}
 
 
 static func get_default_mount_id(movement_mode: String) -> String:
@@ -114,10 +115,9 @@ static func resolve_mount_id_for_mode(
 
 static func get_mount_icon_texture(mount_id: String) -> Texture2D:
 	var icon_path := str(get_mount_definition(mount_id).get("iconTexture", ""))
-	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
-		var icon := ResourceLoader.load(icon_path) as Texture2D
-		if icon != null:
-			return icon
+	var icon := _load_mount_texture(icon_path)
+	if icon != null:
+		return icon
 	var frames := get_mount_frames(mount_id)
 	if frames == null or not frames.has_animation(&"idle_down"):
 		return null
@@ -150,9 +150,7 @@ static func get_mount_frames(mount_id: String) -> SpriteFrames:
 
 	var definition := get_mount_definition(normalized_id)
 	var texture_path := str(definition.get("spriteSheet", ""))
-	if texture_path == "" or not ResourceLoader.exists(texture_path):
-		return null
-	var texture := ResourceLoader.load(texture_path) as Texture2D
+	var texture := _load_mount_texture(texture_path)
 	var frame_size := _get_mount_frame_size(definition)
 	if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
 		return null
@@ -175,9 +173,7 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 	var definition := get_mount_definition(normalized_id)
 	var foreground_path := str(definition.get("foregroundSheet", ""))
 	if not foreground_path.is_empty():
-		if not ResourceLoader.exists(foreground_path):
-			return null
-		var texture := ResourceLoader.load(foreground_path) as Texture2D
+		var texture := _load_mount_texture(foreground_path)
 		var frame_size := _get_mount_frame_size(definition)
 		if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
 			return null
@@ -336,9 +332,7 @@ static func _get_mask_image(mount_id: String) -> Image:
 		return _mask_image_cache[mount_id] as Image
 	var definition := get_mount_definition(mount_id)
 	var mask_path := str(definition.get("riderMaskSheet", ""))
-	if mask_path == "" or not ResourceLoader.exists(mask_path):
-		return null
-	var texture := ResourceLoader.load(mask_path) as Texture2D
+	var texture := _load_mount_texture(mask_path)
 	if texture == null:
 		return null
 	var image := texture.get_image()
@@ -349,6 +343,26 @@ static func _get_mask_image(mount_id: String) -> Image:
 		image.convert(Image.FORMAT_RGBA8)
 	_mask_image_cache[mount_id] = image
 	return image
+
+
+static func _load_mount_texture(path: String) -> Texture2D:
+	if path.is_empty():
+		return null
+	if _texture_cache.has(path):
+		return _texture_cache[path] as Texture2D
+	var texture: Texture2D = null
+	if ResourceLoader.exists(path, "Texture2D"):
+		texture = ResourceLoader.load(path, "Texture2D") as Texture2D
+	# A Git merge can add PNGs while the editor is open. Load the source until
+	# that checkout has imported it; exported builds still prefer their imports.
+	if texture == null and path.get_extension().to_lower() == "png" and FileAccess.file_exists(path):
+		var bytes := FileAccess.get_file_as_bytes(path)
+		var image := Image.new()
+		if not bytes.is_empty() and image.load_png_from_buffer(bytes) == OK and not image.is_empty():
+			texture = ImageTexture.create_from_image(image)
+	if texture != null:
+		_texture_cache[path] = texture
+	return texture
 
 
 static func _transform_rider_frame(
