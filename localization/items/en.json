@@ -446,5 +446,9 @@
   "glaceon-mount-box": {
     "name": "Glaceon Mount Box",
     "shortDesc": "Contains a Glaceon mount. Base shiny chance: 50%."
+  },
+  "cobalion-mount": {
+    "name": "Cobalion Mount",
+    "shortDesc": "Unlocks Cobalion as a land mount. Requires a Mount License for the current region."
   }
 }

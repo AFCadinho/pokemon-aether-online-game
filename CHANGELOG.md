@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Cobalion as a native-size four-direction land mount using the supplied sheet and original player riding pose.
+
 - Set Rayquaza, Shadow Lugia and Mega Alakazam Mount Boxes to 750 Aether Gems; Glaceon remains 500 Gems, with unchanged rewards and shiny pity.
 
 - Remove the stray inner paw silhouettes in Mega Absol Z side-walking contact frames so its overlapping legs read clearly.

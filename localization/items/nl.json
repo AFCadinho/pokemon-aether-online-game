@@ -446,5 +446,9 @@
   "glaceon-mount-box": {
     "name": "Glaceon-mountbox",
     "shortDesc": "Bevat een Glaceon-mount. Shiny-basiskans: 50%."
+  },
+  "cobalion-mount": {
+    "name": "Cobalion-mount",
+    "shortDesc": "Ontgrendelt Cobalion als landmount. Vereist een Mount License voor de huidige regio."
   }
 }

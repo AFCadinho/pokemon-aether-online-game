@@ -446,5 +446,9 @@
   "glaceon-mount-box": {
     "name": "Caixa de montaria Glaceon",
     "shortDesc": "Contém uma montaria Glaceon. Chance shiny inicial: 50%."
+  },
+  "cobalion-mount": {
+    "name": "Montaria Cobalion",
+    "shortDesc": "Desbloqueia Cobalion como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }
