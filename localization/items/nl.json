@@ -446,5 +446,9 @@
   "shiny-glaceon-mount": {
     "name": "Shiny Glaceon-mount",
     "shortDesc": "Ontgrendelt Shiny Glaceon als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "glaceon-mount-box": {
+    "name": "Glaceon-mountbox",
+    "shortDesc": "Bevat een Glaceon-mount. Shiny-basiskans: 50%."
   }
 }

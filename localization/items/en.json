@@ -446,5 +446,9 @@
   "shiny-glaceon-mount": {
     "name": "Shiny Glaceon Mount",
     "shortDesc": "Unlocks Shiny Glaceon as a land mount. Requires a Mount License for the current region."
+  },
+  "glaceon-mount-box": {
+    "name": "Glaceon Mount Box",
+    "shortDesc": "Contains a Glaceon mount. Base shiny chance: 50%."
   }
 }

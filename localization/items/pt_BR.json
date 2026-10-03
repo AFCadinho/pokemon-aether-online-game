@@ -446,5 +446,9 @@
   "shiny-glaceon-mount": {
     "name": "Montaria Glaceon Brilhante",
     "shortDesc": "Desbloqueia Glaceon Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "glaceon-mount-box": {
+    "name": "Caixa de montaria Glaceon",
+    "shortDesc": "Contém uma montaria Glaceon. Chance shiny inicial: 50%."
   }
 }

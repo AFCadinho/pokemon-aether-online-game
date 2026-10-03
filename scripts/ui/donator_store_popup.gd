@@ -540,6 +540,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "glaceon-mount-box",
+		"name": "Glaceon Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_glaceon",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["featured", "mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",

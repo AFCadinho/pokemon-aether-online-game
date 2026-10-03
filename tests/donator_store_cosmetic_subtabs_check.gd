@@ -419,6 +419,7 @@ func _run() -> void:
 		"rayquaza-mount-box": 500,
 		"shadow-lugia-mount-box": 500,
 		"mega-alakazam-mount-box": 500,
+		"glaceon-mount-box": 500,
 		"surf-charm": 350,
 		"cut-charm": 250,
 		"strength-charm": 300,
