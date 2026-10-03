@@ -368,20 +368,20 @@ position = Vector2(2224, 2224)
 pickup_id = "kanto_rock_tunnel_1f_pearl"
 item_id = "pearl"
 
-[node name="XAccuracy" parent="Entities/Interactables/Items" unique_id=142575714 instance=ExtResource("99_item")]
+[node name="SuperPotion" parent="Entities/Interactables/Items" unique_id=142575714 instance=ExtResource("99_item")]
 position = Vector2(272, 1264)
 pickup_id = "kanto_rock_tunnel_1f_xaccuracy"
-item_id = "x-accuracy"
+item_id = "super-potion"
 
 [node name="Elixir" parent="Entities/Interactables/Items" unique_id=1954490877 instance=ExtResource("99_item")]
 position = Vector2(624, 2000)
 pickup_id = "kanto_rock_tunnel_1f_elixir"
 item_id = "elixir"
 
-[node name="XDefend" parent="Entities/Interactables/Items" unique_id=1217111342 instance=ExtResource("99_item")]
+[node name="GreatBall" parent="Entities/Interactables/Items" unique_id=1217111342 instance=ExtResource("99_item")]
 position = Vector2(656, 2160)
 pickup_id = "kanto_rock_tunnel_1f_xdefend"
-item_id = "x-defense"
+item_id = "great-ball"
 
 [node name="TMFling" parent="Entities/Interactables/Items" unique_id=848313557 instance=ExtResource("99_item")]
 position = Vector2(688, 1552)
