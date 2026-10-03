@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Route 13's overworld visual from the artist TMX.
+
 - Add Route 14 from the artist Tiled visual and connect it bidirectionally with Routes 13 and 15; add the matching Route 15 scene.
 
 - Add a framed location preview to the Town Map, sharing existing sign artwork and new illustrations for every remaining settlement, route, and special location.

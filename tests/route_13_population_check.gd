@@ -23,7 +23,7 @@ func run() -> void:
 	check(is_equal_approx(map.grass_encounter_chance, 0.21), "Grass chance is configured")
 	check(is_equal_approx(map.surf_encounter_chance, 0.02), "Surf chance is configured")
 	var grass := map.get_node("Tiles/TallGrass") as TileMapLayer
-	check(not grass.visible and not grass.get_used_cells().is_empty(), "Encounter grass exists")
+	check(not grass.is_visible_in_tree() and not grass.get_used_cells().is_empty(), "Encounter grass exists")
 	for cell in grass.get_used_cells():
 		check(map.get_node("Visual/Grass").get_cell_source_id(cell) != -1, "Encounter grass has artwork")
 	var npcs := map.get_node("Entities/NPCs").get_children()
