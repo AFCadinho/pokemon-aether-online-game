@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Mega Garchomp clearly alternating walking strides and lifted feet while retaining the approved head, riding position and standing pose.
+
 - Add Shiny Glaceon using the existing shiny follower palette, preserving the fitted riding pose, native scale and side-ear layering.
 
 - Lower the Glaceon rider slightly to sit against its back, preserving native sprite scale, side-ear layering and synchronized walking motion.

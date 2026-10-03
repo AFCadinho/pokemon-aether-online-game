@@ -26,7 +26,7 @@ func capture() -> void:
 	background.z_index = -100
 	view.add_child(background)
 	add_label(view,"MEGA GARCHOMP",Vector2(28,18),30)
-	add_label(view,"V7 in de game · echte avatarrenderer · beide spelersmodellen",Vector2(28,60),18)
+	add_label(view,"Loopanimatie · afwisselende passen · originele V7-zithouding",Vector2(28,60),18)
 	for gender_index in range(2):
 		var gender := "male" if gender_index == 0 else "female"
 		for row in range(4):
