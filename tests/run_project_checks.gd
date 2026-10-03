@@ -409,6 +409,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/wild_battle_experience_reward_check.gd",
 	"res://tests/boss_battle_npc_check.gd",
 	"res://tests/weekly_boss_base_check.gd",
+	"res://tests/power_plant_weekly_boss_check.gd",
 ]
 
 const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"

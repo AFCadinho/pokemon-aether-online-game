@@ -6305,5 +6305,16 @@
   "story.kanto.find_a_way_to_saffron.title": "Een weg naar Saffron",
   "story.kanto.find_a_way_to_saffron.summary": "Vind een weg naar Saffron City om een apparaat te zoeken waarmee je de geest bij de trap in Pokémon Tower kunt zien.",
   "story.kanto.find_a_way_to_saffron.find_saffron_route": "Vind een weg naar Saffron City.",
-  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Vind een weg naar de stad"
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Vind een weg naar de stad",
+  "weekly_boss.close": "Sluiten",
+  "weekly_boss.choose": "Kies een moeilijkheid. Eén overwinning per week voor alle moeilijkheden samen. Na verlies kun je opnieuw proberen. Versla Hard één keer om wilde Zapdos te ontgrendelen.",
+  "weekly_boss.easy": "Easy",
+  "weekly_boss.intermediate": "Intermediate",
+  "weekly_boss.hard": "Hard",
+  "weekly_boss.completed": "Deze week al verslagen. Volgende reset: {reset} (UTC).",
+  "weekly_boss.in_battle": "Je hebt een actieve challenge. Verbind opnieuw om die te hervatten.",
+  "weekly_boss.unavailable": "De boss is tijdelijk niet beschikbaar. Probeer het opnieuw.",
+  "weekly_boss.reward_pending": "Je resultaat wordt opgeslagen. Verbind opnieuw om openstaande beloningen te ontvangen.",
+  "weekly_boss.reward_received": "Weekly boss-beloningen ontvangen!",
+  "weekly_boss.zapdos_unlocked": "Wilde Zapdos ontgrendeld in de Power Plant! Je kunt hem zonder weeklimiet vangen."
 }

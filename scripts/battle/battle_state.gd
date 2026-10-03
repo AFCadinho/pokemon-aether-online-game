@@ -795,7 +795,7 @@ func _parse_public_pokemon_level(value: Variant) -> int:
 		if text.is_valid_int():
 			parsed_level = text.to_int()
 
-	return parsed_level if parsed_level >= 1 and parsed_level <= 100 else -1
+	return parsed_level if parsed_level >= 1 and (parsed_level <= 100 or parsed_level == 120) else -1
 
 func _get_switch_event_ident(event: Dictionary) -> String:
 	for key in ["toIdent", "target", "pokemon", "ident"]:

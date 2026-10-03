@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_kw2uo"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/weekly_boss.tscn" id="7_boss"]
+[ext_resource type="Resource" path="res://resources/weekly_bosses/zapdos.tres" id="8_zapdos"]
+
 [sub_resource type="RectangleShape2D" id="shape_96_32"]
 size = Vector2(96, 32)
 
@@ -90,6 +93,7 @@ location_id = "kanto.power_plant"
 location_name = "Power Plant"
 region_id = "kanto"
 encounter_area_id = "kanto_power_plant"
+step_encounter_type = "grass"
 battle_environment_id = "building"
 weather_profile = "disabled"
 grass_encounter_chance = 0.21
@@ -211,3 +215,8 @@ tile_set = SubResource("TileSet_t6e2u")
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10Northwest" to="Exits/ToRoute10Northwest" method="_on_body_entered"]
+
+
+[node name="ZapdosWeeklyBoss" parent="Entities/Pokemon" instance=ExtResource("7_boss")]
+position = Vector2(272, 240)
+boss_definition = ExtResource("8_zapdos")

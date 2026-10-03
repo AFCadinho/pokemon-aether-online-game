@@ -3,7 +3,7 @@ extends RefCounted
 
 static func from_pokemon_data(pokemon_data: Dictionary) -> int:
 	var parsed_level := _parse_level(pokemon_data.get("level", null))
-	if parsed_level >= 1 and parsed_level <= 100:
+	if parsed_level >= 1 and (parsed_level <= 100 or parsed_level == 120):
 		return parsed_level
 
 	return 100

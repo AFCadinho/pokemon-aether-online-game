@@ -14,6 +14,7 @@ func _init() -> void:
 	_check(HoverLevel.from_pokemon_data({"level": 50.5}) == 100, "Hover level rejects fractional values")
 	_check(HoverLevel.from_pokemon_data({"level": 0}) == 100, "Hover level rejects zero")
 	_check(HoverLevel.from_pokemon_data({"level": 101}) == 100, "Hover level rejects values above the level cap")
+	_check(HoverLevel.from_pokemon_data({"level": 120}) == 120, "Hover level accepts the Hard boss level")
 	_check(HoverLevel.from_pokemon_data({}) == 100, "Hover level defaults missing values")
 
 	if not failed:

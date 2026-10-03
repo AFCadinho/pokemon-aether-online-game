@@ -171,6 +171,8 @@ var active_wild_encounter_type := ""
 var active_wild_replay_shiny := false
 var wild_battle_resume_pending := false
 var trainer_resume_request_in_progress := false
+var active_weekly_boss_id := ""
+var active_weekly_boss_difficulty := ""
 var active_trainer_id := ""
 var active_trainer_name := ""
 var active_trainer_outro_dialogue_id := ""
@@ -2193,6 +2195,8 @@ func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
 		_show_trainer_resume_retry(saved_state)
 		return {"resumed": false, "retryable": true}
 	if not bool(response.get("resumable", false)):
+		if response.has("weeklyBossResult"):
+			await _recover_weekly_boss_result(str(context["battleId"]))
 		var recovery := _dictionary_from_value(response.get("recovery", {}))
 		if bool(recovery.get("hasState", false)):
 			await _load_player_party_state()
@@ -2216,6 +2220,9 @@ func _resume_saved_trainer_battle(saved_state: Dictionary) -> Dictionary:
 	if PlayerSave.party.is_empty() or str(trainer_data.get("id", "")).is_empty():
 		_show_trainer_resume_retry(saved_state)
 		return {"resumed": false, "retryable": true}
+	active_weekly_boss_id = str(response.get("weeklyBossId", ""))
+	if not active_weekly_boss_id.is_empty():
+		trainer_data["_battle_sprite_frames"] = FollowerSpriteService.get_sprite_frames(str(response.get("trainerData", {}).get("speciesId", "zapdos")), false)
 	var lead_slot := maxi(PlayerSave.get_first_usable_party_slot() - 1, 0)
 	var player_pokemon := PlayerSave.party[lead_slot] as Pokemon
 	active_trainer_id = str(trainer_data["id"])
@@ -3329,10 +3336,10 @@ func _get_current_activity_context() -> Dictionary:
 		if CoopService.activity.get("status") == "active":
 			context["battleId"] = active_battle_id
 		return context
-	return {
-		"kind": active_battle_kind,
-		"battleId": active_battle_id,
-	}
+	var context := {"kind": active_battle_kind, "battleId": active_battle_id}
+	if not active_weekly_boss_id.is_empty():
+		context["weeklyBossId"] = active_weekly_boss_id
+	return context
 
 
 func _get_current_battle_spectate_presence() -> Dictionary:
@@ -3706,12 +3713,11 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 	add_child(battle_request)
 	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
 
-	var response: Dictionary = await BattleApiClient.create_trainer_battle(
-		battle_request,
-		player_payload,
-		trainer_id,
-		is_rematch
-	)
+	var response: Dictionary
+	if not active_weekly_boss_id.is_empty():
+		response = await BattleApiClient.create_weekly_boss_battle(battle_request, player_payload, active_weekly_boss_id, active_weekly_boss_difficulty)
+	else:
+		response = await BattleApiClient.create_trainer_battle(battle_request, player_payload, trainer_id, is_rematch)
 
 	battle_request.queue_free()
 	return response
@@ -4199,9 +4205,11 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 			"code": "trainer_battle_configuration_invalid",
 		}
 
-	var coop_result: Dictionary = await CoopService.try_start(trainer_id)
-	if coop_result.get("handled", false):
-		return coop_result
+	var weekly_boss_id := str(trainer_data.get("weeklyBossId", ""))
+	if weekly_boss_id.is_empty():
+		var coop_result: Dictionary = await CoopService.try_start(trainer_id)
+		if coop_result.get("handled", false):
+			return coop_result
 
 	var player_lead_slot := PlayerSave.get_first_usable_party_slot()
 	if player_lead_slot <= 0:
@@ -4220,6 +4228,8 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
 	active_wild_replay_shiny = false
+	active_weekly_boss_id = weekly_boss_id
+	active_weekly_boss_difficulty = str(trainer_data.get("difficulty", ""))
 	active_trainer_id = trainer_id
 	active_trainer_name = str(trainer_data.get("name", "Trainer"))
 	active_trainer_outro_dialogue_id = str(trainer_data.get("outroDialogueId", "")).strip_edges()
@@ -4375,6 +4385,8 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_weekly_boss_id = ""
+	active_weekly_boss_difficulty = ""
 	active_trainer_id = ""
 	active_trainer_name = trainer_name
 	active_trainer_outro_dialogue_id = ""
@@ -4424,6 +4436,8 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	active_battle_id = str(response.get("battleId", ""))
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_weekly_boss_id = ""
+	active_weekly_boss_difficulty = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -4512,6 +4526,8 @@ func end_wild_battle(keep_overworld_locked := false) -> void:
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
 	active_wild_replay_shiny = false
+	active_weekly_boss_id = ""
+	active_weekly_boss_difficulty = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -4551,7 +4567,8 @@ func _fade_classic_wild_battle_out() -> bool:
 
 func _on_battle_ended(result: Dictionary) -> void:
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
-	var should_claim_trainer_reward := _should_claim_trainer_battle_reward(result)
+	var is_weekly_boss := not active_weekly_boss_id.is_empty()
+	var should_claim_trainer_reward := not is_weekly_boss and _should_claim_trainer_battle_reward(result)
 	var should_respawn_after_loss := _should_respawn_after_battle_loss(result, active_battle_kind)
 	var reward_battle_id := active_battle_id
 	var reward_species := active_wild_pokemon_species
@@ -4588,6 +4605,8 @@ func _on_battle_ended(result: Dictionary) -> void:
 	if keep_locked_for_outro:
 		_lock_overworld_for_battle()
 	_notify_caught_pokemon_if_needed(result)
+	if is_weekly_boss:
+		await _recover_weekly_boss_result(reward_battle_id)
 	if should_respawn_after_loss:
 		await _respawn_after_battle_loss()
 		_finish_blackout_respawn_transition()
@@ -5590,6 +5609,8 @@ func _abort_battle_start(preserve_activity := false) -> void:
 	active_battle_id = ""
 	active_wild_pokemon_species = ""
 	active_wild_encounter_type = ""
+	active_weekly_boss_id = ""
+	active_weekly_boss_difficulty = ""
 	active_trainer_id = ""
 	active_trainer_name = ""
 	active_trainer_outro_dialogue_id = ""
@@ -5836,3 +5857,28 @@ func _can_resume_coop_wild_battle_in_place(saved_state: Dictionary, current_map_
 	if typeof(position["x"]) not in [TYPE_INT, TYPE_FLOAT] or typeof(position["y"]) not in [TYPE_INT, TYPE_FLOAT]:
 		return false
 	return current_position.distance_to(Vector2(float(position["x"]), float(position["y"]))) <= 2.0
+
+
+func _recover_weekly_boss_result(battle_id: String) -> void:
+	var request := HTTPRequest.new()
+	add_child(request)
+	var response: Dictionary = await BattleApiClient.get_weekly_boss_result(request, battle_id)
+	request.queue_free()
+	if not bool(response.get("success", false)) or bool(response.get("pending", false)):
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("weekly_boss.reward_pending"))
+		return
+	var receipt: Dictionary = response.get("result", {})
+	if str(receipt.get("outcome", "")) != "won":
+		return
+	var wallet: Dictionary = await PlayerWalletService.load_wallet()
+	PlayerWalletService.apply_wallet_result(wallet)
+	await InventoryService.load_inventory()
+	get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("weekly_boss.reward_received"))
+	for reward: Dictionary in receipt.get("rewards", []):
+		if str(reward.get("type", "")) == "item":
+			get_tree().call_group("ui_overlay", "add_item_reward_notification", str(reward.get("itemId", "")), int(reward.get("quantity", 0)))
+		elif str(reward.get("type", "")) == "currency":
+			get_tree().call_group("ui_overlay", "add_currency_reward_notification", str(reward.get("currency", "")), int(reward.get("amount", 0)))
+	SfxManager.play("item_received")
+	if bool(receipt.get("firstHardVictory", false)):
+		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("weekly_boss.zapdos_unlocked"))
