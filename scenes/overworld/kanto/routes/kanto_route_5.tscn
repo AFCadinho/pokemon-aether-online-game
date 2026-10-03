@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_20p23"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vd24t"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_seajf"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="10_cqsk1"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="camper_frames"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="daycare_door_hint"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc_scene"]
@@ -425,6 +426,14 @@ movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 36.0
+
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1975202907]
+
+[node name="KantoDaycareSign" parent="Entities/Interactables" unique_id=403732623 instance=ExtResource("10_cqsk1")]
+position = Vector2(432, 1360)
+
+[node name="Route5UndergroundPassageSign" parent="Entities/Interactables" unique_id=1379898734 instance=ExtResource("10_cqsk1")]
+position = Vector2(1200, 1520)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=318081660]
 visible = false
