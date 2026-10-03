@@ -1066,17 +1066,17 @@ facing_direction = Vector2(-1, 0)
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=757893626]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
-[node name="RareCandy" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=6600728]
+
+[node name="RareCandy" parent="Entities/Interactables/Items" unique_id=347782446 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(416, 192)
 pickup_id = "kanto_cerulean_city_rare_candy"
 item_id = "rare-candy"
 
-[node name="Nugget" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
+[node name="Nugget" parent="Entities/Interactables/Items" unique_id=1382983676 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(640, 224)
 pickup_id = "kanto_cerulean_city_nugget"
 item_id = "nugget"
-
 
 [node name="AetherBeacon" parent="Entities/Interactables" unique_id=239659690 instance=ExtResource("20_aether_beacon")]
 z_index = 912
