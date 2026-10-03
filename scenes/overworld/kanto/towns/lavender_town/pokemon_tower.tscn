@@ -5,22 +5,20 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="Script" uid="uid://dcir531aqivcy" path="res://scripts/world/internal_floor_transition.gd" id="floor_transition"]
+[ext_resource type="SpriteFrames" uid="uid://bwxa4fpyvnrfx" path="res://assets/npcs/classes/blue_frames.tres" id="gary_frames"]
+[ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="gary_story_hook"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/lavender_town/pokemon_tower.gd" id="metadata"]
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tscn" id="visual"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="population_dialogue"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/heal_npc.tscn" id="population_heal"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_overworld_pokemon"]
+[ext_resource type="Script" uid="uid://pfh6g475h1q8" path="res://scripts/world/kanto/towns/lavender_town/pokemon_tower.gd" id="metadata"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="population_dialogue"]
+[ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="population_elder_frames"]
+[ext_resource type="SpriteFrames" uid="uid://bgqk8ppq1uqlf" path="res://assets/npcs/classes/elder_f_frames.tres" id="population_elder_f_frames"]
+[ext_resource type="PackedScene" uid="uid://br7n6hywfrl2a" path="res://scenes/npcs/heal_npc.tscn" id="population_heal"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hex_maniac_frames.tres" id="population_hex_maniac_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_frames.tres" id="population_elder_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="population_lass_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="population_scientist_f_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="population_elder_f_frames"]
-
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="gary_frames"]
-[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="gary_story_hook"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="population_lass_frames"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="population_overworld_pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="population_scientist_f_frames"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(32, 32)
@@ -262,8 +260,7 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=425547871]
 
-
-[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+[node name="GaryOak" parent="Entities/NPCs" unique_id=280174493 instance=ExtResource("population_dialogue")]
 position = Vector2(1328, 432)
 npc_id = "kanto_pokemon_tower_gary"
 npc_definition_id = "trainer_class_blue"
@@ -275,232 +272,207 @@ display_name = "Gary Oak"
 npc_sprite_frames = ExtResource("gary_frames")
 portrait_id = "showdown_blue_lgpe"
 battle_sprite_id = "showdown_blue_lgpe"
-facing_direction = Vector2(0, 1)
-movement_behavior = "idle"
 preload_quest_markers = true
 
-[node name="StoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
+[node name="StoryHook" type="Node" parent="Entities/NPCs/GaryOak" unique_id=1876203356]
 script = ExtResource("gary_story_hook")
 interaction_id = "kanto_pokemon_tower_gary_challenge"
 
-[node name="HexManiacAster" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacAster" parent="Entities/NPCs" unique_id=1122245138 instance=ExtResource("population_trainer")]
 position = Vector2(2160, 240)
+trainer_id = "kanto_pokemon_tower_hex_maniac_aster"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_aster"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Aster"
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_aster"
-sight_range_tiles = 3
-facing_direction = Vector2(0, 1)
-movement_behavior = "idle"
 
-[node name="HexManiacNora" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacNora" parent="Entities/NPCs" unique_id=1302242404 instance=ExtResource("population_trainer")]
 position = Vector2(2192, 496)
+trainer_id = "kanto_pokemon_tower_hex_maniac_nora"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_nora"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Nora"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_nora"
-sight_range_tiles = 3
-facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="HexManiacLiora" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacLiora" parent="Entities/NPCs" unique_id=457064372 instance=ExtResource("population_trainer")]
 position = Vector2(368, 1168)
+trainer_id = "kanto_pokemon_tower_hex_maniac_liora"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_liora"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Liora"
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_liora"
-sight_range_tiles = 3
-facing_direction = Vector2(0, -1)
-movement_behavior = "idle"
 
-[node name="HexManiacVera" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacVera" parent="Entities/NPCs" unique_id=208760231 instance=ExtResource("population_trainer")]
 position = Vector2(592, 1296)
+trainer_id = "kanto_pokemon_tower_hex_maniac_vera"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_vera"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Vera"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_vera"
-sight_range_tiles = 3
-facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="HexManiacMira" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacMira" parent="Entities/NPCs" unique_id=380123147 instance=ExtResource("population_trainer")]
 position = Vector2(1488, 1072)
+trainer_id = "kanto_pokemon_tower_hex_maniac_mira"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_mira"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Mira"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_mira"
-sight_range_tiles = 3
-facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="HexManiacIris" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacIris" parent="Entities/NPCs" unique_id=962839750 instance=ExtResource("population_trainer")]
 position = Vector2(2192, 1168)
+trainer_id = "kanto_pokemon_tower_hex_maniac_iris"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_iris"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Iris"
+facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_iris"
-sight_range_tiles = 3
-facing_direction = Vector2(1, 0)
-movement_behavior = "idle"
 
-[node name="HexManiacNyx" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacNyx" parent="Entities/NPCs" unique_id=1559287763 instance=ExtResource("population_trainer")]
 position = Vector2(1936, 1328)
+trainer_id = "kanto_pokemon_tower_hex_maniac_nyx"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_nyx"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Nyx"
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_nyx"
-sight_range_tiles = 3
-facing_direction = Vector2(0, -1)
-movement_behavior = "idle"
 
-[node name="HexManiacRhea" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
+[node name="HexManiacRhea" parent="Entities/NPCs" unique_id=1516073090 instance=ExtResource("population_trainer")]
 position = Vector2(592, 2032)
+trainer_id = "kanto_pokemon_tower_hex_maniac_rhea"
+sight_range_tiles = 3
 npc_id = "kanto_pokemon_tower_hex_maniac_rhea"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Hex Maniac Rhea"
+facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
 battle_sprite_id = "showdown_hexmaniac_gen6"
-trainer_id = "kanto_pokemon_tower_hex_maniac_rhea"
-sight_range_tiles = 3
-facing_direction = Vector2(-1, 0)
-movement_behavior = "idle"
 
-[node name="CaretakerElias" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+[node name="CaretakerElias" parent="Entities/NPCs" unique_id=95893944 instance=ExtResource("population_dialogue")]
 position = Vector2(144, 336)
 npc_id = "kanto_pokemon_tower_caretaker_elias"
 npc_definition_id = "trainer_class_elder"
 display_name = "Caretaker Elias"
 npc_sprite_frames = ExtResource("population_elder_frames")
 portrait_id = "showdown_gentleman_gen6"
-movement_behavior = "idle"
 
-[node name="MournerMara" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+[node name="MournerMara" parent="Entities/NPCs" unique_id=1519211246 instance=ExtResource("population_dialogue")]
 position = Vector2(432, 496)
 npc_id = "kanto_pokemon_tower_mourner_mara"
 npc_definition_id = "trainer_class_lass"
 display_name = "Mourner Mara"
 npc_sprite_frames = ExtResource("population_lass_frames")
 portrait_id = "showdown_lass_gen6"
-movement_behavior = "idle"
 
-[node name="ResearcherNoor" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+[node name="ResearcherNoor" parent="Entities/NPCs" unique_id=988674165 instance=ExtResource("population_dialogue")]
 position = Vector2(1296, 336)
 npc_id = "kanto_pokemon_tower_researcher_noor"
 npc_definition_id = "trainer_class_scientist_f"
 display_name = "Researcher Noor"
 npc_sprite_frames = ExtResource("population_scientist_f_frames")
 portrait_id = "showdown_scientistf_gen6"
-movement_behavior = "idle"
 
-[node name="PilgrimRen" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+[node name="PilgrimRen" parent="Entities/NPCs" unique_id=1254552624 instance=ExtResource("population_dialogue")]
 position = Vector2(400, 2000)
 npc_id = "kanto_pokemon_tower_pilgrim_ren"
 npc_definition_id = "trainer_class_elder_f"
 display_name = "Pilgrim Ren"
 npc_sprite_frames = ExtResource("population_elder_f_frames")
 portrait_id = "showdown_madame_gen6"
-movement_behavior = "idle"
 
-[node name="HealingSealSelene" parent="Entities/NPCs" instance=ExtResource("population_heal")]
+[node name="HealingSealSelene" parent="Entities/NPCs" unique_id=359167029 instance=ExtResource("population_heal")]
 position = Vector2(1296, 1168)
+heal_animation_name = &"idle_down"
+respawn_point_id = "kanto_pokemon_tower_healer_selene"
+respawn_spawn_marker = "FromHealingSeal"
 npc_id = "kanto_pokemon_tower_healer_selene"
 npc_definition_id = "trainer_class_hex_maniac"
 display_name = "Channeler Selene"
 npc_sprite_frames = ExtResource("population_hex_maniac_frames")
 portrait_id = "showdown_hexmaniac_gen6"
-heal_animation_name = &"idle_down"
-respawn_point_id = "kanto_pokemon_tower_healer_selene"
-respawn_spawn_marker = "FromHealingSeal"
-respawn_facing_direction = "down"
-movement_behavior = "idle"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=224325708]
 
-
-[node name="Gastly" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Gastly" parent="Entities/Pokemon" unique_id=120911884 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(1008, 496)
-npc_id = "kanto_pokemon_tower_gastly_1"
 overworld_pokemon_id = "kanto_pokemon_tower_gastly_1"
 species_id = "gastly"
-display_name = "Gastly"
 level = 22
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_gastly_1"
+display_name = "Gastly"
 
-[node name="Misdreavus" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Misdreavus" parent="Entities/Pokemon" unique_id=504406898 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(1936, 240)
-npc_id = "kanto_pokemon_tower_misdreavus_1"
 overworld_pokemon_id = "kanto_pokemon_tower_misdreavus_1"
 species_id = "misdreavus"
-display_name = "Misdreavus"
 level = 24
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_misdreavus_1"
+display_name = "Misdreavus"
 
-[node name="Shuppet" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Shuppet" parent="Entities/Pokemon" unique_id=1613272466 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(144, 1296)
-npc_id = "kanto_pokemon_tower_shuppet_1"
 overworld_pokemon_id = "kanto_pokemon_tower_shuppet_1"
 species_id = "shuppet"
-display_name = "Shuppet"
 level = 25
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_shuppet_1"
+display_name = "Shuppet"
 
-[node name="Drifloon" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Drifloon" parent="Entities/Pokemon" unique_id=982381940 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(592, 1072)
-npc_id = "kanto_pokemon_tower_drifloon_1"
 overworld_pokemon_id = "kanto_pokemon_tower_drifloon_1"
 species_id = "drifloon"
-display_name = "Drifloon"
 level = 26
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_drifloon_1"
+display_name = "Drifloon"
 
-[node name="Litwick" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Litwick" parent="Entities/Pokemon" unique_id=1488308949 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(1040, 1328)
-npc_id = "kanto_pokemon_tower_litwick_1"
 overworld_pokemon_id = "kanto_pokemon_tower_litwick_1"
 species_id = "litwick"
-display_name = "Litwick"
 level = 27
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_litwick_1"
+display_name = "Litwick"
 
-[node name="Phantump" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Phantump" parent="Entities/Pokemon" unique_id=121939279 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(2384, 1296)
-npc_id = "kanto_pokemon_tower_phantump_1"
 overworld_pokemon_id = "kanto_pokemon_tower_phantump_1"
 species_id = "phantump"
-display_name = "Phantump"
 level = 28
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_phantump_1"
+display_name = "Phantump"
 
-[node name="Mimikyu" parent="Entities/Pokemon" instance=ExtResource("population_overworld_pokemon")]
+[node name="Mimikyu" parent="Entities/Pokemon" unique_id=1477652308 instance=ExtResource("population_overworld_pokemon")]
 position = Vector2(144, 2128)
-npc_id = "kanto_pokemon_tower_mimikyu_1"
 overworld_pokemon_id = "kanto_pokemon_tower_mimikyu_1"
 species_id = "mimikyu"
-display_name = "Mimikyu"
 level = 30
-movement_behavior = "idle"
+npc_id = "kanto_pokemon_tower_mimikyu_1"
+display_name = "Mimikyu"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1599473425]
 
@@ -545,7 +517,7 @@ position = Vector2(2224, 1360)
 [node name="Floor7From6" type="Marker2D" parent="Spawns" unique_id=1004188911]
 position = Vector2(336, 2192)
 
-[node name="FromHealingSeal" type="Marker2D" parent="Spawns"]
+[node name="FromHealingSeal" type="Marker2D" parent="Spawns" unique_id=737998814]
 position = Vector2(1296, 1200)
 
 [node name="FloorTransitions" type="Node2D" parent="." unique_id=548824322]
