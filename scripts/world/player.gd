@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
+const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 
 const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
 
@@ -368,6 +369,8 @@ func _sync_mount_visual() -> void:
 	if mount_sprite == null:
 		return
 	var normalized_mount_id := MountService.normalize_mount_id(active_mount_id)
+	if MountVisualDepth.configure(look_node, normalized_mount_id != ""):
+		visual_sort_depth_cache = -1
 	if normalized_mount_id == "":
 		mount_sprite.stop()
 		mount_sprite.sprite_frames = null
@@ -3113,12 +3116,13 @@ func _apply_directional_appearance_layer_order(direction: Vector2) -> void:
 	if facegear_sprite == null:
 		return
 	var direction_id := "up" if direction == Vector2.UP else "down"
-	facegear_sprite.z_index = CharacterAppearanceService.get_directional_part_z_index(
+	var layer_z := CharacterAppearanceService.get_directional_part_z_index(
 		"facegear",
 		PlayerSave.appearance_facegear_id,
 		direction_id,
 		8
 	)
+	MountVisualDepth.set_layer_z(facegear_sprite, layer_z)
 	visual_sort_depth_cache = -1
 
 func _get_player_appearance_part_id(category: String) -> String:
