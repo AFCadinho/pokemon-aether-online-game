@@ -207,6 +207,23 @@
         "right": [[-4, -58], [-4, -58], [-4, -58], [-4, -58]],
         "up": [[0, -52], [0, -52], [0, -54], [0, -52]]
       }
+    },
+    "glaceon": {
+      "displayName": "Glaceon",
+      "movementMode": "land",
+      "unlockItemId": "glaceon-mount",
+      "iconTexture": "res://assets/mounts/glaceon/icon.png",
+      "spriteSheet": "res://assets/mounts/glaceon/mount.png",
+      "riderMaskSheet": "res://assets/mounts/glaceon/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/glaceon/foreground.png",
+      "frameSize": [224, 224],
+      "movementAnimationSpeed": 5.0,
+      "riderOffsets": {
+        "down": [[0, -34], [0, -34], [0, -34], [0, -34]],
+        "left": [[14, -30], [14, -28], [14, -30], [14, -28]],
+        "right": [[-14, -30], [-14, -28], [-14, -30], [-14, -28]],
+        "up": [[0, -24], [0, -24], [0, -24], [0, -24]]
+      }
     }
   }
 }

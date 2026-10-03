@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the native-size Glaceon land mount with the approved riding pose, corrected side-ear layering and a compact Bag icon.
+
 - Lower the front-facing rider on both Absol mounts for a closer seated fit while preserving synchronized walking motion.
 
 - Move both Absol riders forward over the shoulders in side views, preserving the complete seated pose and synchronized walking motion.
