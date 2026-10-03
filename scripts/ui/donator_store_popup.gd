@@ -678,6 +678,11 @@ var character_preview_direction := "down"
 var character_preview_direction_buttons: Dictionary = {}
 var character_preview_color_buttons: Dictionary = {}
 var character_preview_colors: Dictionary = {}
+var mount_preview_controls: HBoxContainer
+var mount_preview_shiny_toggle: CheckButton
+var mount_preview_animation_toggle: CheckButton
+var mount_preview_shiny := false
+var mount_preview_animated := true
 
 
 func _ready() -> void:
@@ -1327,6 +1332,23 @@ func _create_character_preview_panel() -> Control:
 		character_preview_direction_row.add_child(direction_button)
 		character_preview_direction_buttons[direction_id] = direction_button
 
+	mount_preview_controls = HBoxContainer.new()
+	mount_preview_controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	mount_preview_controls.add_theme_constant_override("separation", 8)
+	mount_preview_controls.visible = false
+	layout.add_child(mount_preview_controls)
+	mount_preview_shiny_toggle = CheckButton.new()
+	_set_localized_property(mount_preview_shiny_toggle, "text", "ui.store.preview.shiny")
+	mount_preview_shiny_toggle.focus_mode = Control.FOCUS_NONE
+	mount_preview_shiny_toggle.toggled.connect(_on_mount_preview_shiny_toggled)
+	mount_preview_controls.add_child(mount_preview_shiny_toggle)
+	mount_preview_animation_toggle = CheckButton.new()
+	_set_localized_property(mount_preview_animation_toggle, "text", "ui.store.preview.animation")
+	mount_preview_animation_toggle.focus_mode = Control.FOCUS_NONE
+	mount_preview_animation_toggle.button_pressed = mount_preview_animated
+	mount_preview_animation_toggle.toggled.connect(_on_mount_preview_animation_toggled)
+	mount_preview_controls.add_child(mount_preview_animation_toggle)
+
 	character_preview_palette = VBoxContainer.new()
 	character_preview_palette.visible = false
 	character_preview_palette.add_theme_constant_override("separation", 4)
@@ -1895,7 +1917,11 @@ func _refresh_character_preview() -> void:
 		character_preview_viewport.remove_child(child)
 		child.queue_free()
 
+	mount_preview_controls.visible = false
 	var item := _catalog_item(selected_item_id)
+	if not _mount_box_mount_id(selected_item_id).is_empty():
+		_refresh_mount_rider_preview(item)
+		return
 	if item.is_empty():
 		var base_preview := _create_character_preview_visual(_current_character_preview_appearance())
 		if base_preview != null:
@@ -2237,6 +2263,9 @@ func _select_character_preview_direction(direction: String) -> void:
 		return
 	character_preview_direction = direction
 	_refresh_character_preview_direction_buttons()
+	if not _mount_box_mount_id(selected_item_id).is_empty():
+		_update_mount_rider_preview()
+		return
 	if character_preview_viewport != null:
 		for child: Node in character_preview_viewport.get_children():
 			_set_character_preview_direction(child)
@@ -2823,9 +2852,50 @@ func _mount_box_mount_id(item_id: String) -> String:
 
 
 func _mount_box_price_text(gems: int) -> String:
-	var localization_manager := get_node_or_null("/root/LocalizationManager")
-	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
-	var euros := "%.2f" % (float(gems) / 100.0)
-	if locale in ["nl", "pt_BR"]:
-		euros = euros.replace(".", ",")
-	return _t("ui.shiny_tracker.mounts.store_price", {"gems": _format_number(gems), "euros": euros})
+	return _t("ui.shiny_tracker.mounts.store_price", {"gems": _format_number(gems)})
+
+
+func _mount_preview_id() -> String:
+	var unlock_item_id := selected_item_id.trim_suffix("-box")
+	if mount_preview_shiny:
+		unlock_item_id = "shiny-" + unlock_item_id
+	return Mounts.get_mount_id_for_unlock_item(unlock_item_id)
+
+
+func _mount_preview_appearance() -> Dictionary:
+	var appearance := CharacterAppearanceService.get_default_appearance(trainer_gender)
+	appearance.merge(trainer_appearance, true)
+	appearance["gender"] = trainer_gender
+	return appearance
+
+
+func _refresh_mount_rider_preview(item: Dictionary) -> void:
+	var preview := load("res://scripts/ui/mount_rider_preview.gd").new() as Node2D
+	preview.name = "MountRiderPreview"
+	character_preview_viewport.add_child(preview)
+	preview.position = Vector2(129, 111)
+	preview.scale = Vector2(1.5, 1.5)
+	_update_mount_rider_preview()
+	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
+	character_preview_title_label.text = _item_name(item)
+	character_preview_note_label.text = _badge_text(str(item.get("badge", "")))
+	character_preview_direction_row.visible = true
+	_refresh_character_preview_direction_buttons()
+	mount_preview_controls.visible = true
+	character_preview_palette.visible = false
+
+
+func _update_mount_rider_preview() -> void:
+	var preview := character_preview_viewport.get_node_or_null("MountRiderPreview")
+	if preview != null:
+		preview.configure(_mount_preview_id(), _mount_preview_appearance(), character_preview_direction, mount_preview_animated)
+
+
+func _on_mount_preview_shiny_toggled(enabled: bool) -> void:
+	mount_preview_shiny = enabled
+	_update_mount_rider_preview()
+
+
+func _on_mount_preview_animation_toggled(enabled: bool) -> void:
+	mount_preview_animated = enabled
+	_update_mount_rider_preview()

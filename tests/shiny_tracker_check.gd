@@ -110,21 +110,20 @@ func _run() -> void:
 	store.call("_select_category", "mounts")
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
-	_check(store.selection_price_label.text.contains("500") and store.selection_price_label.text.contains("€5.00"), "Box price includes Gems and euro value")
+	_check(store.selection_price_label.text == "500 Aether Gems", "Box price shows currency only")
 	_check(store.selection_description_label.text.contains("50%") and store.selection_description_label.text.contains("80%") and store.selection_description_label.text.contains("Duplicates"), "Store discloses chance rules before purchase")
 	_check(store.call("_catalog_item", "nimbus_mount").is_empty() and store.call("_catalog_item", "aether_board_mount").is_empty(), "Removed Nimbus and Aether Board previews are absent from the Store")
 	store.call("_select_product", "shadow-lugia-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative Shadow Lugia box purchase")
 	_check(store.selection_title_label.text.contains("Shadow Lugia") and store.selection_description_label.text.contains("Shadow Lugia") and not store.selection_description_label.text.contains("Rayquaza"), "Shadow Lugia box shows the correct localized reward description")
-	_check(store.selection_price_label.text.contains("500") and store.selection_price_label.text.contains("€5.00"), "Shadow Lugia box displays Gems and the matching euro value")
-	var correct_preview := false
-	for child: Node in store.character_preview_viewport.get_children():
-		if child is Sprite2D and child.texture == load("res://scripts/services/mount_service.gd").get_mount_icon_texture("shadow_lugia"):
-			correct_preview = true
-	_check(correct_preview, "Shadow Lugia Store detail preview shows Shadow Lugia")
+	_check(store.selection_price_label.text == "500 Aether Gems", "Shadow Lugia box displays currency only")
+	await _check_mount_preview(store, "shadow_lugia")
+	store.call("_select_product", "rayquaza-mount-box")
+	await _check_mount_preview(store, "rayquaza")
+	store.call("_select_product", "shadow-lugia-mount-box")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
-		_check(store.selection_price_label.text.contains("€5,00"), "Dutch Store uses the approved €5,00 price")
+		_check(store.selection_price_label.text == "500 Aether Gems", "Dutch Store shows currency only")
 		_check(store.selection_description_label.text.contains("Dubbele mounts"), "Dutch Store discloses duplicate outcomes")
 	if "--preview-mounts" in OS.get_cmdline_user_args():
 		store.visible = true
@@ -160,3 +159,35 @@ func _check(condition: bool, label: String) -> void:
 	else:
 		failures += 1
 		push_error("FAIL %s" % label)
+
+
+func _check_mount_preview(store: Node, normal_mount_id: String) -> void:
+	var appearance := load("res://scripts/services/character_appearance_service.gd").get_default_appearance("female") as Dictionary
+	appearance["gender"] = "female"
+	appearance["hair_color"] = "#dd66aa"
+	store.set_trainer_appearance(appearance)
+	var preview: Node2D = store.character_preview_viewport.get_node("MountRiderPreview")
+	_check(preview.current_gender == "female" and preview.current_appearance_state["hair_color"] == "#dd66aa", "Mount preview uses the player's appearance")
+	_check(preview.current_mount_id == normal_mount_id and preview.mount_sprite.visible and preview.call("_get_body_sprite").visible, "Mount preview includes both rider and mount")
+	_check(not preview.is_in_group("remote_player_avatar") and preview.interaction_hit_area == null, "Preview stays separate from world players and interaction")
+	_check(store.mount_preview_controls.visible and store.character_preview_direction_row.visible and not store.character_preview_palette.visible, "Mount controls replace cosmetic color controls")
+	store.mount_preview_shiny_toggle.button_pressed = true
+	_check(preview.current_mount_id == normal_mount_id + "_shiny", "Shiny toggle displays the correct alternate reward")
+	_check(store.selected_item_id.ends_with("-mount-box") and store.selection_price_label.text == "500 Aether Gems", "Shiny preview keeps the box and purchase price unchanged")
+	for direction: String in ["down", "left", "right", "up"]:
+		store.character_preview_direction_buttons[direction].pressed.emit()
+		_check(preview.mount_sprite.animation == StringName("walk_" + direction), "Direction buttons turn the mounted rider: " + direction)
+		preview.mount_sprite.frame = 1
+		_check(preview.call("_get_body_sprite").frame == 1 and preview.mount_foreground_sprite.frame == 1, "Rider mask and foreground follow the animated mount")
+	store.mount_preview_animation_toggle.button_pressed = false
+	_check(not preview.mount_sprite.is_playing() and preview.mount_sprite.animation == &"idle_up", "Animation toggle stops in the selected direction")
+	var position_before: Vector2 = preview.look_node.position
+	await create_timer(0.3).timeout
+	_check(preview.mount_sprite.frame == 0 and preview.look_node.position == position_before, "Disabled animation freezes both flight and hover")
+	store.mount_preview_animation_toggle.button_pressed = true
+	await create_timer(0.3).timeout
+	_check(preview.mount_sprite.is_playing() and preview.mount_sprite.frame != 0, "Enabled animation advances the flight loop")
+	store.mount_preview_shiny_toggle.button_pressed = false
+	store.call("_select_character_preview_direction", "down")
+	store.call("_select_product", "surf-charm")
+	_check(not store.mount_preview_controls.visible and not store.character_preview_direction_row.visible and store.character_preview_viewport.get_node_or_null("MountRiderPreview") == null, "Mount controls and renderer disappear for other products")
