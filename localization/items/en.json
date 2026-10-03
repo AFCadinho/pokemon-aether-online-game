@@ -450,5 +450,13 @@
   "cobalion-mount": {
     "name": "Cobalion Mount",
     "shortDesc": "Unlocks Cobalion as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-cobalion-mount": {
+    "name": "Shiny Cobalion Mount",
+    "shortDesc": "Unlocks Shiny Cobalion as a land mount. Requires a Mount License for the current region."
+  },
+  "cobalion-mount-box": {
+    "name": "Cobalion Mount Box",
+    "shortDesc": "Contains a Cobalion mount. Base shiny chance: 50%."
   }
 }

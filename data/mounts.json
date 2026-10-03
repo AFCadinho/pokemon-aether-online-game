@@ -211,6 +211,23 @@
         "up": [[0, -8], [0, -8], [0, -8], [0, -8]]
       }
     },
+    "cobalion_shiny": {
+      "displayName": "Shiny Cobalion",
+      "movementMode": "land",
+      "unlockItemId": "shiny-cobalion-mount",
+      "iconTexture": "res://assets/mounts/cobalion_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/cobalion_shiny/mount.png",
+      "riderMaskSheet": "res://assets/mounts/cobalion_shiny/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/cobalion_shiny/foreground.png",
+      "frameSize": [224, 224],
+      "movementAnimationSpeed": 5.0,
+      "riderOffsets": {
+        "down": [[0, -18], [0, -18], [0, -18], [0, -18]],
+        "left": [[14, -14], [14, -12], [14, -14], [14, -12]],
+        "right": [[-14, -14], [-14, -12], [-14, -14], [-14, -12]],
+        "up": [[0, -8], [0, -8], [0, -8], [0, -8]]
+      }
+    },
     "glaceon": {
       "displayName": "Glaceon",
       "movementMode": "land",

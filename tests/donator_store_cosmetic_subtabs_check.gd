@@ -420,6 +420,7 @@ func _run() -> void:
 		"shadow-lugia-mount-box": 750,
 		"mega-alakazam-mount-box": 750,
 		"glaceon-mount-box": 500,
+		"cobalion-mount-box": 500,
 		"surf-charm": 350,
 		"cut-charm": 250,
 		"strength-charm": 300,

@@ -450,5 +450,13 @@
   "cobalion-mount": {
     "name": "Cobalion-mount",
     "shortDesc": "Ontgrendelt Cobalion als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-cobalion-mount": {
+    "name": "Shiny Cobalion-mount",
+    "shortDesc": "Ontgrendelt Shiny Cobalion als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "cobalion-mount-box": {
+    "name": "Cobalion-mountbox",
+    "shortDesc": "Bevat een Cobalion-mount. Shiny-basiskans: 50%."
   }
 }
