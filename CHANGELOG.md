@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move both Absol riders forward over the shoulders in side views, preserving the complete seated pose and synchronized walking motion.
+
 - Preserve the complete seated player silhouette on both Absol mounts in side views, including hips, trousers and shoes, through every walking phase.
 
 - Replace unused Razz/Bluk Berries, Green Apricorn, X items and Route 11 Escape Rope pickups with progression-appropriate berries, healing items and Great Balls; preserve collected pickup progress.
