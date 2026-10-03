@@ -1,5 +1,32 @@
 # Native map animations
 
+## Recovering water after reimports
+
+`restore_map_water_animations.gd` audits every current generated visual against
+the approved water artwork catalog. It detects missing water even when grass
+or other tiles still animate. Run without `--apply` to inspect, or with
+`-- --apply` to restore matching water animations in the assigned slot:
+
+```sh
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend --script res://tools/restore_map_water_animations.gd -- --apply
+```
+
+The recovery stages each map and verifies its original frame, geometry, cell
+transforms and TileData before saving. Existing animation frames and timing
+are compared exactly before writing. An unchanged rerun preserves the recovery
+report. No authoring TMX files are reimported.
+
+The recovery reviewed 79 current visuals and restored 1,955 water cells in
+Vermilion City and 66 in Route 6. Route 11 previously contained animated water,
+but its current artwork has no water. Its current layout is retained.
+`water_animation_recovery_report.json` records the repaired maps' original
+fingerprints and pre-existing animation signatures. Run
+`tests/water_animation_recovery_check.gd` to verify matching water frame artwork
+and timing across the reviewed maps and preserved geometry/animations in the
+repaired maps. `tests/vermilion_water_edges_check.gd` covers gameplay water,
+shore artwork and Surf coverage; `tests/generated_map_atlas_layout_check.gd`
+checks the generated atlas layouts.
+
 The approved water/leaf/flower animation approach now runs in 17 existing generated visuals, including the three Mt. Moon maps. All remaining visuals were inspected; maps without matching artwork stay static. The two previous demonstration maps retain their own previews.
 
 ## Preview
