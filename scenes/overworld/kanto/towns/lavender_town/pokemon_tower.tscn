@@ -8,7 +8,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bwxa4fpyvnrfx" path="res://assets/npcs/classes/blue_frames.tres" id="gary_frames"]
 [ext_resource type="Script" uid="uid://bbl2ecb3px31p" path="res://scripts/world/story/story_hook.gd" id="gary_story_hook"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
-[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Script" uid="uid://pfh6g475h1q8" path="res://scripts/world/kanto/towns/lavender_town/pokemon_tower.gd" id="metadata"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="population_dialogue"]
 [ext_resource type="SpriteFrames" uid="uid://ctgjk0yaqmm8o" path="res://assets/npcs/classes/elder_frames.tres" id="population_elder_frames"]
 [ext_resource type="SpriteFrames" uid="uid://bgqk8ppq1uqlf" path="res://assets/npcs/classes/elder_f_frames.tres" id="population_elder_f_frames"]
@@ -168,6 +168,7 @@ location_id = "kanto.lavender_town.pokemon_tower"
 location_name = "Pokémon Tower"
 region_id = "kanto"
 battle_environment_id = "cave"
+cave_encounter_chance = 0.07
 lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.lavender_town"
@@ -206,6 +207,50 @@ constrain_camera_to_active_floor = true
 [node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1635454980]
 
 [node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=244733338]
+
+[node name="EncounterRegions" type="Node2D" parent="."]
+
+[node name="HealingSeal" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_healing_seal"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_5f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(1216, 1152, 128, 128)
+
+[node name="Floor3" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_3f"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_3f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(1792, 0, 768, 704)
+
+[node name="Floor4" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_4f"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_4f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(0, 832, 768, 704)
+
+[node name="Floor5" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_5f"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_5f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(896, 832, 768, 704)
+
+[node name="Floor6" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_6f"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_6f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(1792, 832, 768, 704)
+
+[node name="Floor7" type="Node2D" parent="EncounterRegions"]
+metadata/pao_placeholder_type = "encounter_region"
+metadata/pao_resource_id = "pokemon_tower_7f"
+metadata/pao_encounter_area_id = "kanto_pokemon_tower_7f"
+metadata/pao_encounter_type = "cave"
+metadata/pao_region_rect = Rect2(0, 1664, 768, 704)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1793800638]
 z_index = 5
