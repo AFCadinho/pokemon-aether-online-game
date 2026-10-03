@@ -4,6 +4,8 @@
 
 - Set Rayquaza, Shadow Lugia and Mega Alakazam Mount Boxes to 750 Aether Gems; Glaceon remains 500 Gems, with unchanged rewards and shiny pity.
 
+- Remove the stray inner paw silhouettes in Mega Absol Z side-walking contact frames so its overlapping legs read clearly.
+
 - Remove the Mega Garchomp mount, its selection entry, item text and bundled mount assets.
 
 - Add the 500-Gem Glaceon Mount Box to the Gift Store with player-mounted normal/shiny previews and Shiny Tracker support.
