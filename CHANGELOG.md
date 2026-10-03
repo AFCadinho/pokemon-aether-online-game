@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 5 heeft zes overworld-Pokémon bij de rotshellingen, daycare-tuin en route en twee NPC’s met dialoog.
+
 - Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
 
 - Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
