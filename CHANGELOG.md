@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Er zwemt nu een Magikarp in de vijver van de daycare-tuin op Route 5.
+
 - Route 5 heeft zes overworld-Pokémon bij de rotshellingen, daycare-tuin en route en twee NPC’s met dialoog.
 
 - Rayquaza now hovers above a ground shadow while moving and standing still, with a calmer flight animation and no sand footprints.
