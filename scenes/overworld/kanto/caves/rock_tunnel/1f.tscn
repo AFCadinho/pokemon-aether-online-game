@@ -398,8 +398,9 @@ level = 15
 display_name = "Geodude"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.4
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.55
 
 [node name="Zubat" parent="Entities/Pokemon" unique_id=190000585 instance=ExtResource("pokemon")]
 position = Vector2(2032, 848)
@@ -409,8 +410,9 @@ level = 15
 display_name = "Zubat"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 2.1
+movement_speed_pixels = 38.0
+movement_wait_jitter_seconds = 0.7
 
 [node name="Onix" parent="Entities/Pokemon" unique_id=190000610 instance=ExtResource("pokemon")]
 position = Vector2(2448, 592)
@@ -420,8 +422,9 @@ level = 15
 display_name = "Onix"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.7
+movement_speed_pixels = 30.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="Mankey" parent="Entities/Pokemon" unique_id=190000611 instance=ExtResource("pokemon")]
 position = Vector2(1392, 1712)
@@ -431,8 +434,9 @@ level = 14
 display_name = "Mankey"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 2.4
+movement_speed_pixels = 40.0
+movement_wait_jitter_seconds = 0.8
 
 [node name="Machop" parent="Entities/Pokemon" unique_id=190000612 instance=ExtResource("pokemon")]
 position = Vector2(1520, 528)
@@ -442,8 +446,9 @@ level = 15
 display_name = "Machop"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.9
+movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.65
 
 [node name="Cubone" parent="Entities/Pokemon" unique_id=190000613 instance=ExtResource("pokemon")]
 position = Vector2(368, 1648)
@@ -453,8 +458,9 @@ level = 14
 display_name = "Cubone"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 2.2
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.75
 
 [node name="Machoke" parent="Entities/Pokemon" unique_id=190000614 instance=ExtResource("pokemon")]
 position = Vector2(944, 1296)
@@ -464,8 +470,9 @@ level = 17
 display_name = "Machoke"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.5
+movement_speed_pixels = 42.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="Geodude2" parent="Entities/Pokemon" unique_id=190000615 instance=ExtResource("pokemon")]
 position = Vector2(2576, 848)
@@ -475,8 +482,9 @@ level = 14
 display_name = "Geodude"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
+movement_wait_seconds = 2.6
 movement_speed_pixels = 36.0
+movement_wait_jitter_seconds = 0.9
 
 [node name="Zubat2" parent="Entities/Pokemon" unique_id=190000616 instance=ExtResource("pokemon")]
 position = Vector2(1776, 624)
@@ -486,8 +494,9 @@ level = 16
 display_name = "Zubat"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.6
+movement_speed_pixels = 33.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="Tiles" type="Node2D" parent="." unique_id=2051444940]
 visible = false
