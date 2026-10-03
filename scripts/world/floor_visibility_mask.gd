@@ -1,6 +1,8 @@
 extends Node2D
 class_name FloorVisibilityMask
 
+signal floor_changed(previous_floor: StringName, current_floor: StringName)
+
 @export var floor_regions: Dictionary = {}
 @export var floor_display_names: Dictionary = {}
 @export var active_floor: StringName = &"ground_floor"
@@ -46,9 +48,12 @@ func show_floor(floor_name: StringName) -> void:
 		push_warning("FloorVisibilityMask: unknown floor '%s'." % floor_name)
 		return
 
+	var previous_floor := active_floor
 	active_floor = floor_name
 	_apply_active_floor()
 	_sync_camera_limits_to_active_floor()
+	if previous_floor != active_floor:
+		floor_changed.emit(previous_floor, active_floor)
 
 
 func get_active_floor_region() -> Rect2:
