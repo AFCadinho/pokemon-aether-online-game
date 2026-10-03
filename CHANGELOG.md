@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
+
 - Adventure Party-dubbels gebruiken nu het type-icoon van de beschikbare Z-Move, zoals gewone battles; specifieke Z-Moves behouden het generieke Z-symbool.
 
 - De on-demand 3D-contentroute kan de volledige goedgekeurde catalogus met 1.139 bundels gebruiken, inclusief geregistreerde alternatieve en Mega-vormen; modellen blijven per benodigde Pokémon downloadbaar.
