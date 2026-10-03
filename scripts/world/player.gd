@@ -1745,6 +1745,10 @@ func _advance_tile_movement(delta: float) -> void:
 					check_for_grass_encounter()
 				elif _is_cave_encounter_map():
 					check_for_wild_encounter(ENCOUNTER_TYPE_CAVE)
+				else:
+					var map_step_encounter_type := _get_map_step_encounter_type()
+					if not map_step_encounter_type.is_empty():
+						check_for_wild_encounter(map_step_encounter_type)
 
 			if _can_accept_movement_input():
 				var next_direction := _get_next_movement_direction()
@@ -2680,6 +2684,13 @@ func _is_cave_encounter_map() -> bool:
 	if not current_map.has_method("get_wild_encounter_area_id"):
 		return false
 	return not str(current_map.call("get_wild_encounter_area_id")).strip_edges().is_empty()
+
+
+func _get_map_step_encounter_type() -> String:
+	var current_map := _resolve_current_map()
+	if current_map == null or not current_map.has_method("get_step_encounter_type"):
+		return ""
+	return str(current_map.call("get_step_encounter_type")).strip_edges().to_lower()
 
 func _spawn_tall_grass_rustle_effect() -> void:
 	var current_map := _resolve_current_map()

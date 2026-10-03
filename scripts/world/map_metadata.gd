@@ -13,6 +13,7 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var region_id := ""
 @export var mount_license_region_id := ""
 @export var encounter_area_id := ""
+@export var step_encounter_type := ""
 @export_group("Battle")
 @export_enum("grass", "water", "cave", "ss_anne") var battle_environment_id := "grass"
 @export_group("")
@@ -106,6 +107,10 @@ func get_actor_sort_z_floor(_world_position: Vector2) -> int:
 
 func get_wild_encounter_area_id() -> String:
 	return encounter_area_id
+
+
+func get_step_encounter_type() -> String:
+	return step_encounter_type.strip_edges().to_lower()
 
 
 func should_trigger_wild_encounter(encounter_type: String = "grass") -> bool:

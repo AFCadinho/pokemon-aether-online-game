@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- Add FireRed/LeafGreen Power Plant Pokémon and nearby HeartGold/SoulSilver Route 10 species as ambient overworld encounters.
+- Add FireRed/LeafGreen Power Plant Pokémon and nearby HeartGold/SoulSilver Route 10 species as ambient overworld Pokémon.
+- Enable walk encounters inside the Power Plant, using its linked wild Pokémon table.
 
 - Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
 
