@@ -10,6 +10,8 @@
     {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "Mt. Moon Entrance", "lines": ["Mt. Moon Entrance", "Cerulean City lies beyond the cave. Travelers should heal at the nearby Pokémon Center before entering."]},
     {"id": "kanto_route_5_daycare_sign", "type": "building", "mapId": "kanto_route_5", "title": "Pokémon Day Care", "lines": ["Pokémon Day Care", "We look after Trainers' Pokémon while they are away."]},
     {"id": "kanto_route_5_underground_path_sign", "type": "road", "mapId": "kanto_route_5", "title": "Underground Path", "lines": ["Underground Path", "A quiet tunnel connecting Route 5 and Route 6."]},
+    {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "Route 6", "lines": ["Route 6", "North to Saffron City. South to Vermilion City."]},
+    {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "Underground Path", "lines": ["Underground Path", "A quiet tunnel connecting Route 6 and Route 5."]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Route 24", "lines": ["Route 24", "Nugget Bridge links Cerulean City with Route 25."]},
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Follow the road east to Bill's house."]}
   ]

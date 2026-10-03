@@ -10,6 +10,8 @@
     {"id": "kanto_route_3_mt_moon_sign", "type": "road", "mapId": "kanto_route_3", "title": "月见山入口", "lines": ["月见山入口", "穿过洞穴即可抵达华蓝市。进入前，旅行者应先在附近的宝可梦中心恢复队伍。"]},
     {"id": "kanto_route_5_daycare_sign", "type": "building", "mapId": "kanto_route_5", "title": "宝可梦寄放屋", "lines": ["宝可梦寄放屋", "训练家外出旅行时，我们会帮忙照看他们的宝可梦。"]},
     {"id": "kanto_route_5_underground_path_sign", "type": "road", "mapId": "kanto_route_5", "title": "地下通道", "lines": ["地下通道", "连接5号道路和6号道路的安静隧道。"]},
+    {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "6号道路", "lines": ["6号道路", "北边通往金黄市，南边通往枯叶市。"]},
+    {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "地下通道", "lines": ["地下通道", "连接6号道路与5号道路的安静隧道。"]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "24号道路", "lines": ["24号道路", "金块大桥连接华蓝市与25号道路。"]},
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "25号道路", "lines": ["25号道路", "沿道路向东前往正辉的家。"]}
   ]
