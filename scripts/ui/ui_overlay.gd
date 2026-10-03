@@ -535,6 +535,7 @@ const AETHER_ATELIER_POPUP_SCENE := preload("res://scenes/interface/aether_ateli
 const BANK_POPUP_SCENE := preload("res://scenes/interface/bank_popup.tscn")
 const MOVE_MENTOR_POPUP_SCENE := preload("res://scenes/interface/move_mentor_popup.tscn")
 const MOVE_DELETER_POPUP_SCENE := preload("res://scenes/interface/move_deleter_popup.tscn")
+const GIFT_VOUCHER_BALANCE_DIALOG_SCENE := preload("res://scenes/interface/gift_voucher_balance_dialog.tscn")
 const SHINY_TRACKER_POPUP_SCENE := preload("res://scenes/interface/shiny_tracker_popup.tscn")
 const ITEM_DEX_ICON := preload("res://assets/ui/item_dex.svg")
 const BAG_CATEGORIES := [
@@ -1335,6 +1336,7 @@ var aether_atelier_popup: AetherAtelierPopup
 var bank_popup: BankPopup
 var move_mentor_popup
 var move_deleter_popup
+var gift_voucher_balance_dialog: GiftVoucherBalanceDialog
 var shiny_tracker_popup: ShinyTrackerPopup
 var market_popup: PanelContainer
 var market_title_label: Label
@@ -23164,6 +23166,24 @@ func _hide_aether_exchange_pokemon_hover() -> void:
 	if aether_exchange_pokemon_hover_card != null:
 		aether_exchange_pokemon_hover_card.hide_card()
 
+func _show_gift_voucher_balance() -> void:
+	if gift_voucher_balance_dialog == null:
+		gift_voucher_balance_dialog = GIFT_VOUCHER_BALANCE_DIALOG_SCENE.instantiate() as GiftVoucherBalanceDialog
+		root_control.add_child(gift_voucher_balance_dialog)
+		gift_voucher_balance_dialog.confirmed.connect(_hide_gift_voucher_balance)
+		gift_voucher_balance_dialog.canceled.connect(_hide_gift_voucher_balance)
+		gift_voucher_balance_dialog.accent_icon.texture = _load_item_icon("aether-gift-voucher")
+	gift_voucher_balance_dialog.open_balance()
+	_activate_ui_panel(gift_voucher_balance_dialog)
+
+
+func _hide_gift_voucher_balance() -> void:
+	if gift_voucher_balance_dialog == null:
+		return
+	gift_voucher_balance_dialog.hide_dialog()
+	_deactivate_ui_panel(gift_voucher_balance_dialog)
+
+
 func _setup_shiny_tracker_popup() -> void:
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
 	if shiny_tracker_popup == null:
@@ -24599,7 +24619,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24608,7 +24628,7 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 	var item_id := _normalize_item_id(str(item.get("id", "")))
 	if item_id == "escape-rope-action":
 		return true
-	if str(item.get("useAction", "")).strip_edges() == "open_shiny_tracker":
+	if str(item.get("useAction", "")).strip_edges() in ["open_shiny_tracker", "open_gift_voucher"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24640,6 +24660,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "activate_shiny_charm":
 		return LocalizationManager.text("ui.bag.action.activate")
+	if use_action == "open_gift_voucher":
+		return LocalizationManager.text("ui.voucher.view_balance")
 	if use_action == "open_shiny_tracker":
 		return LocalizationManager.text("ui.bag.action.open_tracker")
 	if use_action == "open_mount_license":
@@ -24896,6 +24918,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_add_chat_message(LocalizationManager.text("ui.bag.message.shiny_charm_activated", {
 			"days": int(activate_result.get("durationDays", 0)),
 		}))
+		return
+	if use_action == "open_gift_voucher":
+		_show_gift_voucher_balance()
 		return
 	if use_action == "open_shiny_tracker":
 		_show_shiny_tracker()
@@ -31690,6 +31715,7 @@ func _get_escape_close_candidates() -> Array[Dictionary]:
 		{"panel": bag_item_use_popup, "close": Callable(self, "_hide_bag_item_use_popup_for_escape")},
 		{"panel": donator_store_popup, "close": Callable(self, "_hide_donator_store_popup")},
 		{"panel": shiny_tracker_popup, "close": Callable(self, "_hide_shiny_tracker")},
+		{"panel": gift_voucher_balance_dialog, "close": Callable(self, "_hide_gift_voucher_balance")},
 		{"panel": mail_compose_popup, "close": Callable(self, "_on_mail_compose_close_button_pressed")},
 		{"panel": staff_impersonate_popup, "close": Callable(self, "_hide_staff_impersonate_popup")},
 		{"panel": staff_teleport_popup, "close": Callable(self, "_hide_staff_teleport_popup")},
@@ -34401,13 +34427,13 @@ func _refresh_hotbar_ui() -> void:
 			continue
 		var entry_type := str(entry.get("entryType", ""))
 		var entry_id := str(entry.get("entryId", ""))
-		if entry_type == "key_item_action" and entry_id == "shiny-tracker":
-			button.texture_normal = _load_item_icon("shiny-tracker")
+		if entry_type == "key_item_action" and entry_id in ["shiny-tracker", "aether-gift-voucher"]:
+			button.texture_normal = _load_item_icon(entry_id)
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE
 			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
 			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
-				"item": ItemLocalization.display_name("shiny-tracker", "Shiny Tracker"),
+				"item": ItemLocalization.display_name(entry_id, entry_id.replace("-", " ").capitalize()),
 			})
 		elif entry_type == "player_action" and entry_id == "escape-rope":
 			button.texture_normal = _load_item_icon("escape-rope")
@@ -34491,6 +34517,9 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 		return
 	var entry_type := str(entry.get("entryType", ""))
 	var entry_id := str(entry.get("entryId", ""))
+	if entry_type == "key_item_action" and entry_id == "aether-gift-voucher":
+		_show_gift_voucher_balance()
+		return
 	if entry_type == "key_item_action" and entry_id == "shiny-tracker":
 		_show_shiny_tracker()
 		return
@@ -34626,9 +34655,9 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 	elif item_id == "escape-rope-action":
 		entry_type = "player_action"
 		entry_id = "escape-rope"
-	elif str(item.get("useAction", "")).strip_edges() == "open_shiny_tracker":
+	elif str(item.get("useAction", "")).strip_edges() in ["open_shiny_tracker", "open_gift_voucher"]:
 		entry_type = "key_item_action"
-		entry_id = "shiny-tracker"
+		entry_id = item_id
 	elif not _is_pokemon_usable_item_id(item_id):
 		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_not_assignable"))
 		return

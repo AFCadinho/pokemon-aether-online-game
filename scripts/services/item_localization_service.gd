@@ -65,7 +65,7 @@ func localize_item(item: Dictionary, locale: String = "") -> Dictionary:
 		translated_description = LocalizationManager.text("ui.store.voucher.bound_item")
 	if item_id == "aether-gift-voucher" and localized.get("voucherBalance") != null:
 		translated_description = LocalizationManager.text("ui.store.voucher.bag_description", {
-			"amount": str(localized.get("voucherBalance", 0))
+			"amount": str(maxi(int(localized.get("voucherBalance", 0)), 0))
 		})
 	if localized.has("shortDesc") or not translated_description.is_empty():
 		localized["shortDesc"] = translated_description

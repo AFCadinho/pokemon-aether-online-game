@@ -6343,5 +6343,9 @@
   "ui.store.voucher.success": "{item} toegevoegd (untradeable). Resterend vouchertegoed: {amount}.",
   "ui.store.voucher.bound_item": "Accountgebonden promotie-item. Niet verhandelbaar of weg te geven, ook na terugplaatsen vanuit je wardrobe.",
   "ui.store.voucher.bag_description": "Beschikbaar vouchertegoed: {amount}. Te besteden aan geschikte cosmetics en mounts in de Gift Store. Aankopen en alle boxinhoud zijn untradeable. Alleen PokeAether kan tegoed toevoegen.",
-  "ui.store.voucher.price": "{amount} tegoed"
+  "ui.store.voucher.price": "{amount} tegoed",
+  "ui.voucher.view_balance": "Saldo bekijken",
+  "ui.voucher.loading": "Vouchertegoed laden…",
+  "ui.voucher.load_failed": "Het vouchertegoed kon niet worden geladen. Sluit dit venster en probeer opnieuw.",
+  "ui.voucher.balance": "Beschikbaar vouchertegoed: {balance}\n\nBesteed het aan geschikte cosmetics en mounts in de Aether Gift Store. Aankopen en alle inhoud van boxen zijn niet verhandelbaar. Alleen PokeAether-staff kan tegoed toevoegen."
 }

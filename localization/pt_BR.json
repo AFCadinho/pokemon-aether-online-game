@@ -6342,5 +6342,9 @@
   "ui.store.voucher.success": "{item} adicionado (inegociável). Crédito de voucher restante: {amount}.",
   "ui.store.voucher.bound_item": "Item promocional vinculado à conta. Não pode ser negociado ou presenteado, mesmo após retornar do guarda-roupa.",
   "ui.store.voucher.bag_description": "Crédito de voucher disponível: {amount}. Use em cosméticos e montarias elegíveis da Gift Store. Compras e conteúdo das caixas são inegociáveis. Somente a equipe PokeAether pode adicionar crédito.",
-  "ui.store.voucher.price": "{amount} crédito"
+  "ui.store.voucher.price": "{amount} crédito",
+  "ui.voucher.view_balance": "Ver saldo",
+  "ui.voucher.loading": "Carregando saldo do voucher…",
+  "ui.voucher.load_failed": "Não foi possível carregar seu saldo. Feche esta janela e tente novamente.",
+  "ui.voucher.balance": "Crédito de voucher disponível: {balance}\n\nUse em cosméticos e montarias elegíveis na Aether Gift Store. As compras e todo o conteúdo das caixas não podem ser trocados. Apenas a equipe PokeAether pode adicionar crédito."
 }

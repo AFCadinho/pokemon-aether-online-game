@@ -54,8 +54,8 @@ func _run() -> void:
 		"category": "cosmetics", "shortDesc": "Tradeable cosmetic", "tradable": false,
 	})
 	_check(str(localized.shortDesc).contains("Cannot be traded"), "Bound Bag descriptions cannot claim an item is tradeable")
-	var key: Dictionary = item_localization.localize_item({"id": "aether-gift-voucher", "voucherBalance": 150})
-	_check(str(key.shortDesc).contains("150"), "Key Item displays the player's voucher balance")
+	var key: Dictionary = item_localization.localize_item({"id": "aether-gift-voucher", "voucherBalance": 150.0})
+	_check(str(key.shortDesc).contains("150") and not str(key.shortDesc).contains("150.0"), "Key Item displays whole voucher credit without JSON decimals")
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization_manager.set_locale(locale)
 		await process_frame

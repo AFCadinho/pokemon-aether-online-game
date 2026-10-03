@@ -6343,5 +6343,9 @@
   "ui.store.voucher.success": "{item} added (untradeable). Voucher credit remaining: {amount}.",
   "ui.store.voucher.bound_item": "Account-bound promotional item. Cannot be traded or gifted, including after returning it from your wardrobe.",
   "ui.store.voucher.bag_description": "Available voucher credit: {amount}. Spend it on eligible Gift Store cosmetics and mounts. Purchases and all box contents are untradeable. Only PokeAether staff can add credit.",
-  "ui.store.voucher.price": "{amount} credit"
+  "ui.store.voucher.price": "{amount} credit",
+  "ui.voucher.view_balance": "View balance",
+  "ui.voucher.loading": "Loading voucher balance…",
+  "ui.voucher.load_failed": "Could not load your voucher balance. Close this dialog and try again.",
+  "ui.voucher.balance": "Available voucher credit: {balance}\n\nSpend it on eligible cosmetics and mounts in the Aether Gift Store. Purchases and all box contents are untradeable. Only PokeAether staff can add credit."
 }

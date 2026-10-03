@@ -16,6 +16,7 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	var field_move_id := str(hotbar_item.get("fieldMove", "")).strip_edges()
 	var hotbar_eligible := (
 		item_id == "escape-rope-action"
+		or str(hotbar_item.get("useAction", "")) in ["open_shiny_tracker", "open_gift_voucher"]
 		or field_move_id != ""
 		or (gameplay is Dictionary and not (gameplay as Dictionary).is_empty())
 	)

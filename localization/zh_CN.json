@@ -6339,5 +6339,9 @@
   "ui.store.voucher.success": "已获得 {item}（不可交易）。剩余礼券余额：{amount}。",
   "ui.store.voucher.bound_item": "账号绑定的推广物品。不可交易或赠送，从衣柜取回后仍不可交易。",
   "ui.store.voucher.bag_description": "可用礼券余额：{amount}。可用于 Gift Store 中符合条件的外观和坐骑。购买的物品及所有箱内物品不可交易。只有 PokeAether 工作人员可以充值。",
-  "ui.store.voucher.price": "{amount} 礼券余额"
+  "ui.store.voucher.price": "{amount} 礼券余额",
+  "ui.voucher.view_balance": "查看余额",
+  "ui.voucher.loading": "正在加载礼券余额…",
+  "ui.voucher.load_failed": "无法加载礼券余额。请关闭此窗口后重试。",
+  "ui.voucher.balance": "可用礼券额度：{balance}\n\n可在 Aether Gift Store 购买符合条件的外观和坐骑。购买物品及箱内所有物品均不可交易。只有 PokeAether 工作人员可以增加额度。"
 }
