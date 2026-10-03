@@ -29,6 +29,9 @@ func _check_mount() -> void:
 	var dimensions: Array = definition["frameSize"]
 	var expected_size := Vector2i(dimensions[0], dimensions[1])
 	var keys := {"iconTexture": "icon.png", "spriteSheet": "mount.png", "foregroundSheet": "foreground.png", "riderMaskSheet": "rider_mask.png"}
+	for pair: Array in [["idleSpriteSheet", "idle_mount.png"], ["idleForegroundSheet", "idle_foreground.png"], ["idleRiderMaskSheet", "idle_rider_mask.png"]]:
+		if definition.has(pair[0]):
+			keys[pair[0]] = pair[1]
 	for key: String in keys:
 		var path := directory + "/" + str(keys[key])
 		var file := FileAccess.open(path, FileAccess.WRITE)
@@ -41,12 +44,20 @@ func _check_mount() -> void:
 	var frames := Mounts.get_mount_frames(mount_id)
 	var foreground := Mounts.get_mount_foreground_frames(mount_id)
 	var mask := Mounts._get_mask_image(mount_id)
+	var idle_mask := Mounts._get_mask_image(mount_id, true)
+	_check(idle_mask != null, "idle mask loads before editor import")
 	var icon := Icons.load_icon(mount_id.replace("_", "-") + "-mount")
 	_check(icon != null and icon.get_size() == Vector2(64, 64), "Bag icon loads before editor import")
 	_check(frames != null and foreground != null and mask != null, "all mount layers load before editor import")
 	if frames != null and foreground != null and mask != null:
 		_check(frames == Mounts.get_mount_frames(mount_id), "loaded animation frames are cached")
 		for direction: String in ["down", "left", "right", "up"]:
+			var idle := StringName("idle_" + direction)
+			var idle_image := Mounts._get_texture_image(frames.get_frame_texture(idle, 0))
+			_check(idle_image.get_size() == expected_size and idle_image.get_used_rect().has_area(), "unimported idle creature is visible")
+			if definition.has("idleSpriteSheet"):
+				var idle_texture := frames.get_frame_texture(idle, 0) as AtlasTexture
+				_check(idle_texture.atlas.get_width() == expected_size.x, "idle uses its dedicated one-column sheet")
 			var anim := StringName("walk_" + direction)
 			_check(frames.get_frame_count(anim) == 4 and foreground.get_frame_count(anim) == 4, "unimported sheets produce all animation frames")
 			var image := Mounts._get_texture_image(frames.get_frame_texture(anim, 0))

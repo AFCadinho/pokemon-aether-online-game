@@ -19,6 +19,7 @@ func _run() -> void:
 		current_mount_id = mount_id
 		current_item_id = mount_id.replace("_", "-") + "-mount"
 		await _check_mount()
+	_check_idle_mask_selection()
 	print("Absol mount checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -42,6 +43,7 @@ func _check_mount() -> void:
 	if mount == null or foreground == null or mask == null:
 		quit(1)
 		return
+	_check_idle_layers(mount, foreground)
 	var source := Mounts._load_mount_texture("res://assets/mounts/" + current_mount_id + "/source.png").get_image()
 	for row in range(4):
 		var anim := StringName("walk_" + DIRECTIONS[row])
@@ -83,6 +85,61 @@ func _check_mount() -> void:
 	for gender: String in ["male", "female"]:
 		_check_side_pose_retained(gender)
 		await _check_avatars(gender)
+
+
+func _check_idle_layers(mount: SpriteFrames, foreground: SpriteFrames) -> void:
+	var idle_mask := Mounts._get_mask_image(current_mount_id, true)
+	_check(idle_mask != null, "idle mask loads")
+	if idle_mask == null:
+		return
+	for row in range(4):
+		var idle := StringName("idle_" + DIRECTIONS[row])
+		var walk := StringName("walk_" + DIRECTIONS[row])
+		var art := Mounts._get_texture_image(mount.get_frame_texture(idle, 0))
+		var walking := Mounts._get_texture_image(mount.get_frame_texture(walk, 0))
+		var fg := Mounts._get_texture_image(foreground.get_frame_texture(idle, 0))
+		var matching := true
+		for y in range(128):
+			for x in range(128):
+				var pixel := fg.get_pixel(x,y)
+				if (pixel.a > 0) != (idle_mask.get_pixel(x,row*128+y).a > 0) or (pixel.a > 0 and pixel != art.get_pixel(x,y)):
+					matching = false
+		_check(matching, "idle foreground and mask match the standing creature")
+		if current_mount_id == "mega_absol_z" and row in [1,2]:
+			var paws := art.get_region(Rect2i(0,84,128,12)).get_used_rect()
+			var walking_paws := walking.get_region(Rect2i(0,84,128,12)).get_used_rect()
+			_check(paws.size.x <= 40 and paws.size.x < walking_paws.size.x, "standing side paws are compact beneath the torso")
+			_check(art.get_used_rect().end.y == 96, "both standing paws use the existing ground line")
+		else:
+			_check(art.get_data() == walking.get_data(), "other idle views retain their existing artwork")
+
+
+func _check_idle_mask_selection() -> void:
+	# Distinct synthetic masks expose accidentally reusing the walk mask in idle.
+	var id := "absol_idle_mask_fixture"
+	var walk_mask := Image.create(256,256,false,Image.FORMAT_RGBA8)
+	walk_mask.fill(Color.TRANSPARENT)
+	var idle_mask := Image.create(64,256,false,Image.FORMAT_RGBA8)
+	idle_mask.fill(Color.TRANSPARENT)
+	idle_mask.set_pixel(31,95,Color.BLACK)
+	Mounts._texture_cache["fixture://walk-mask"] = ImageTexture.create_from_image(walk_mask)
+	Mounts._texture_cache["fixture://idle-mask"] = ImageTexture.create_from_image(idle_mask)
+	Mounts._catalog["mounts"][id] = {"frameSize": [64,64], "riderMaskSheet": "fixture://walk-mask", "idleRiderMaskSheet": "fixture://idle-mask", "riderOffsets": {"left": [[0,0]]}}
+	var source := Image.create(2,2,false,Image.FORMAT_RGBA8)
+	source.fill(Color.WHITE)
+	var frames := SpriteFrames.new()
+	frames.remove_animation(&"default")
+	for activity: String in ["idle_left", "walk_left"]:
+		frames.add_animation(StringName(activity))
+		for phase in range(4):
+			frames.add_frame(StringName(activity), ImageTexture.create_from_image(source))
+	var mounted := Mounts.get_mounted_rider_frames(frames,id)
+	for phase in range(4):
+		var standing := Mounts._get_texture_image(mounted.get_frame_texture(&"idle_left",phase))
+		var walking := Mounts._get_texture_image(mounted.get_frame_texture(&"walk_left",phase))
+		_check(standing.get_pixel(0,0).a == 0 and standing.get_pixel(1,1).a == 1, "idle uses its own mask column zero")
+		_check(walking.get_pixel(0,0).a == 1, "walking retains the walking mask")
+	Mounts._catalog["mounts"].erase(id)
 
 
 func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> void:

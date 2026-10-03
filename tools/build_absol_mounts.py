@@ -91,6 +91,26 @@ def build():
             path = folder/f'{key}.png'
             sheet.resize((512,512), Image.Resampling.NEAREST).save(path)
             write_texture_import(ROOT, path.relative_to(ROOT))
+        idle_source_path = folder/'idle_source.png'
+        if mount_id == 'mega_absol_z':
+            idle_source = Image.open(idle_source_path).convert('RGBA')
+            assert idle_source.size == (64,256)
+            idle_sheets = {key: Image.new('RGBA',(64,256)) for key in sheets}
+            for row in range(4):
+                art = idle_source.crop((0,row*64,64,(row+1)*64))
+                creature = Image.new('RGBA',(64,64))
+                creature.alpha_composite(art,(0,-1))
+                foreground = Image.new('RGBA',(64,64))
+                foreground.alpha_composite(foreground_pixels(art,mount_id,row,0),(0,-1))
+                mask = Image.new('RGBA',(64,64))
+                mask.putalpha(foreground.getchannel('A'))
+                for key,tile in [('mount',creature),('foreground',foreground),('rider_mask',mask)]:
+                    idle_sheets[key].alpha_composite(tile,(0,row*64))
+            for key,sheet in idle_sheets.items():
+                path = folder/f'idle_{key}.png'
+                sheet.resize((128,512),Image.Resampling.NEAREST).save(path)
+                write_texture_import(ROOT,path.relative_to(ROOT))
+            write_texture_import(ROOT,idle_source_path.relative_to(ROOT))
         icon_art = source.crop((0,0,64,64))
         icon_art = icon_art.crop(icon_art.getbbox())
         icon = Image.new('RGBA', (64,64))
