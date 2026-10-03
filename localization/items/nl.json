@@ -422,5 +422,13 @@
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "Beschikbaar vouchertegoed: {amount}. Te besteden aan geschikte cosmetics en mounts in de Gift Store. Aankopen en alle boxinhoud zijn untradeable. Alleen PokeAether kan tegoed toevoegen."
+  },
+  "mega-alakazam-mount-box": {
+    "name": "Mega Alakazam-mountbox",
+    "shortDesc": "Bevat een Mega Alakazam-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-mega-alakazam-mount": {
+    "name": "Shiny Mega Alakazam-mount",
+    "shortDesc": "Ontgrendelt Shiny Mega Alakazam als zwevende landmount."
   }
 }

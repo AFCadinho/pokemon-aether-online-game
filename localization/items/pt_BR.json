@@ -422,5 +422,13 @@
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "Crédito de voucher disponível: {amount}. Use em cosméticos e montarias elegíveis da Gift Store. Compras e conteúdo das caixas são inegociáveis. Somente a equipe PokeAether pode adicionar crédito."
+  },
+  "mega-alakazam-mount-box": {
+    "name": "Caixa de montaria Mega Alakazam",
+    "shortDesc": "Contém uma montaria Mega Alakazam. Chance shiny inicial: 50%."
+  },
+  "shiny-mega-alakazam-mount": {
+    "name": "Montaria Mega Alakazam Shiny",
+    "shortDesc": "Desbloqueia Mega Alakazam Shiny como montaria terrestre levitante."
   }
 }

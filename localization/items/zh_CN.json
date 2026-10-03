@@ -422,5 +422,13 @@
   "aether-gift-voucher": {
     "name": "Aether Gift Voucher",
     "shortDesc": "可用礼券余额：{amount}。可用于 Gift Store 中符合条件的外观和坐骑。购买的物品及所有箱内物品不可交易。只有 PokeAether 工作人员可以充值。"
+  },
+  "mega-alakazam-mount-box": {
+    "name": "超级胡地坐骑箱",
+    "shortDesc": "包含一只超级胡地坐骑。初始异色概率：50%。"
+  },
+  "shiny-mega-alakazam-mount": {
+    "name": "异色超级胡地坐骑",
+    "shortDesc": "解锁异色超级胡地作为悬浮陆地坐骑。"
   }
 }

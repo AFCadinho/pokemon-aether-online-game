@@ -58,17 +58,45 @@ func _run() -> void:
 				var result := Mounts._get_texture_image(mounted.get_frame_texture(animation, col))
 				_check(result.get_size() == Vector2i(64, 64), "rider remains original size")
 				_check_masked_layer(source, result, mask, row, col, Mounts.get_rider_frame_offset(MOUNT, DIRECTIONS[row], col))
-	await _check_runtime()
+	_check_shiny()
+	await _check_runtime(MOUNT)
+	await _check_runtime("mega_alakazam_shiny")
 	print("Mega Alakazam mount checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
 
-func _check_runtime() -> void:
+func _check_shiny() -> void:
+	var shiny_id := "mega_alakazam_shiny"
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shiny-mega-alakazam-mount"]) == [shiny_id], "shiny item unlocks only the shiny variant")
+	_check(Mounts.is_mount_unlocked(shiny_id, ["shiny-mega-alakazam-mount-bound"]), "bound shiny item retains entitlement")
+	_check(Icons.load_icon("shiny-mega-alakazam-mount").get_size() == Vector2(64, 64), "shiny uses a compact menu icon")
+	_check(Icons.load_icon("mega-alakazam-mount-box") != null, "box icon resolves to its normal mount")
+	_check(Mounts._get_mask_image(MOUNT).get_data() == Mounts._get_mask_image(shiny_id).get_data(), "shiny preserves the exact approved rider mask")
+	for foreground: bool in [false, true]:
+		var normal := Mounts.get_mount_foreground_frames(MOUNT) if foreground else Mounts.get_mount_frames(MOUNT)
+		var shiny := Mounts.get_mount_foreground_frames(shiny_id) if foreground else Mounts.get_mount_frames(shiny_id)
+		for direction: String in DIRECTIONS:
+			var animation := StringName("walk_" + direction)
+			_check(shiny.get_animation_speed(animation) == normal.get_animation_speed(animation), "shiny retains levitation rhythm")
+			for col in range(4):
+				var a := Mounts._get_texture_image(normal.get_frame_texture(animation, col))
+				var b := Mounts._get_texture_image(shiny.get_frame_texture(animation, col))
+				var same_alpha := true
+				for y in range(a.get_height()):
+					for x in range(a.get_width()):
+						if a.get_pixel(x, y).a != b.get_pixel(x, y).a:
+							same_alpha = false
+				_check(same_alpha, "shiny preserves silhouette and psychic aura")
+				if not foreground or direction == "up":
+					_check(a.get_data() != b.get_data(), "shiny palette is distinct in every creature frame")
+
+
+func _check_runtime(mount_id: String) -> void:
 	var local: Node2D = load("res://scenes/player.tscn").instantiate()
 	local.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
 	root.add_child(local)
 	local.set("base_look_position", local.get_node("Look").position)
-	local.set("active_mount_id", MOUNT)
+	local.set("active_mount_id", mount_id)
 	local.set("activity_style", "ride")
 	local.call("_cache_appearance_sprites")
 	local.call("_apply_body_appearance", Appearance.DEFAULT_MALE_BODY_ID)
@@ -76,8 +104,8 @@ func _check_runtime() -> void:
 	local.call("_sync_mount_visual")
 	var remote: Node2D = load("res://scripts/world/remote_player_avatar.gd").new()
 	root.add_child(remote)
-	remote.call("apply_state", {"userId": 1, "displayName": "Alakazam rider", "gender": "female", "position": {"x": 0, "y": 0}, "facingDirection": "up", "movement": {"isMoving": false, "activityStyle": "ride", "mountId": MOUNT}})
-	var mask := Mounts._get_mask_image(MOUNT)
+	remote.call("apply_state", {"userId": 1, "displayName": "Alakazam rider", "gender": "female", "position": {"x": 0, "y": 0}, "facingDirection": "up", "movement": {"isMoving": false, "activityStyle": "ride", "mountId": mount_id}})
+	var mask := Mounts._get_mask_image(mount_id)
 	for player: Node2D in [local, remote]:
 		var mount := player.get_node("Look/MountSprite") as AnimatedSprite2D
 		var body := player.get_node("Look/Rider/BodySprite") as AnimatedSprite2D
@@ -91,7 +119,7 @@ func _check_runtime() -> void:
 				mount.frame = col
 				_check(body.frame == col and not body.is_playing(), "mount frame selects static seated pose and mask")
 				_check(overlay.frame == col, "foreground synchronizes")
-				_check(rider.position == Vector2(Mounts.get_rider_frame_offset(MOUNT, DIRECTIONS[row], col)), "actual rider uses approved directional position")
+				_check(rider.position == Vector2(Mounts.get_rider_frame_offset(mount_id, DIRECTIONS[row], col)), "actual rider uses approved directional position")
 				var shadow := player.get_node("MountHoverShadow") as Node2D
 				_check(rider.global_position.x == shadow.global_position.x, "rider stays horizontally above the player's ground anchor in every frame")
 			player.call("_sync_mount_animation", false, FACING[row])
@@ -111,7 +139,7 @@ func _check_runtime() -> void:
 				var source := Mounts._get_texture_image(original.get_frame_texture(animation, 0))
 				for col in range(4):
 					var result := Mounts._get_texture_image(sprite.sprite_frames.get_frame_texture(animation, col))
-					var offset := Mounts.get_rider_frame_offset(MOUNT, DIRECTIONS[row], col) + Vector2i(sprite.offset)
+					var offset := Mounts.get_rider_frame_offset(mount_id, DIRECTIONS[row], col) + Vector2i(sprite.offset)
 					_check_masked_layer(source, result, mask, row, col, offset)
 		var before := player.position
 		player.call("_sync_mount_animation", false, Vector2.UP)

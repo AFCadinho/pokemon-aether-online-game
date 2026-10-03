@@ -7,6 +7,7 @@ signal spectate_requested(target_user_id: int)
 const POKE_BALL := preload("res://assets/items/icons/POKEBALL.png")
 const GREAT_BALL := preload("res://assets/items/icons/GREATBALL.png")
 const DEFAULT_ANCHOR_POSITION := Vector2(0, -92)
+const CLICK_RADIUS := 38.0
 
 var target_user_id := 0
 var battle_kind := ""
@@ -54,7 +55,7 @@ func _ready() -> void:
 	area.monitorable = false
 	var collision := CollisionShape2D.new()
 	var shape := CircleShape2D.new()
-	shape.radius = 38.0
+	shape.radius = CLICK_RADIUS
 	collision.shape = shape
 	area.add_child(collision)
 	area.input_event.connect(_on_input)
@@ -103,9 +104,38 @@ func _process(delta: float) -> void:
 		glow_sprite.modulate = Color(0.72, 0.9, 1.0, lerpf(0.58, 1.0, hover_amount))
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	# Handle the pointer before physics picking, which can be disabled or lose
+	# the indicator to overlapping world objects. GUI controls still get priority.
+	if not is_visible_in_tree():
+		return
+	var screen_position: Vector2
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+			return
+		screen_position = mouse_event.position
+	elif event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if not touch_event.pressed:
+			return
+		screen_position = touch_event.position
+	else:
+		return
+	var local_position := get_global_transform_with_canvas().affine_inverse() * screen_position
+	if local_position.distance_to(anchor_position) <= CLICK_RADIUS and _request_spectate():
+		get_viewport().set_input_as_handled()
+
+
+func _request_spectate() -> bool:
+	if not is_visible_in_tree() or target_user_id <= 0 or battle_kind not in ["wild", "trainer"]:
+		return false
+	spectate_requested.emit(target_user_id)
+	return true
+
+
 func _on_input(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed and visible:
-			spectate_requested.emit(target_user_id)
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed and _request_spectate():
 			get_viewport().set_input_as_handled()

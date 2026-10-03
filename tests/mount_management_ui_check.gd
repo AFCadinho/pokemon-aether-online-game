@@ -28,7 +28,7 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
-	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_absol_z"]:
+	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol_z"]:
 		_check(land_mounts.has(mount_id), "land catalog exposes " + mount_id)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
