@@ -818,12 +818,18 @@ display_name = "Aether Beacon"
 
 [node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("4_obqe6")]
 position = Vector2(528, 1296)
+sign_id = "kanto_vermilion_city_gym"
+sign_type = "building"
 
 [node name="PokemonFanClubSign" parent="Entities/Interactables/Signs" unique_id=1752091638 instance=ExtResource("4_obqe6")]
 position = Vector2(496, 912)
+sign_id = "kanto_vermilion_city_pokemon_fan_club"
+sign_type = "building"
 
 [node name="GuildBaseSign" parent="Entities/Interactables/Signs" unique_id=524634453 instance=ExtResource("4_obqe6")]
 position = Vector2(1776, 432)
+sign_id = "kanto_vermilion_city_guild_base"
+sign_type = "building"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false

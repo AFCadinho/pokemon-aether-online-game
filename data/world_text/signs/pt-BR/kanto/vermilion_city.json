@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_vermilion_city",
+  "signs": [
+    {
+      "id": "kanto_vermilion_city_gym",
+      "type": "building",
+      "title": "Ginásio Pokémon de Vermilion City",
+      "lines": [
+        "Ginásio Pokémon de Vermilion City",
+        "Líder: Lt. Surge — o Americano Relâmpago. Quem vencer recebe a Insígnia do Trovão."
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_pokemon_fan_club",
+      "type": "building",
+      "title": "Clube de Fãs de Pokémon de Vermilion City",
+      "lines": [
+        "Clube de Fãs de Pokémon",
+        "Todos os fãs de Pokémon são bem-vindos!"
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_guild_base",
+      "type": "building",
+      "title": "Base da Guilda de Treinadores — Em breve",
+      "lines": [
+        "Um lugar para as guildas de Treinadores se reunirem e planejarem aventuras.",
+        "As viagens para a Base da Guilda estarão disponíveis mais tarde."
+      ]
+    }
+  ]
+}
