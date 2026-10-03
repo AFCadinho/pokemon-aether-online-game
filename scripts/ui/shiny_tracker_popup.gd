@@ -4,6 +4,8 @@ extends PanelContainer
 signal closed
 signal share_requested(hunt: Dictionary)
 
+const Mounts := preload("res://scripts/services/mount_service.gd")
+
 const UI_BG := Color("#050b14fa")
 const UI_RAISED := Color("#081522f5")
 const UI_INTERACTIVE := Color("#0b1d30f2")
@@ -44,11 +46,26 @@ var stats_title: Label
 var stats_grid: GridContainer
 var history_title: Label
 var history_scroll: ScrollContainer
+var pokemon_workspace: HBoxContainer
+var mount_workspace: HBoxContainer
+var pokemon_tab: Button
+var mounts_tab: Button
+var mount_box_list: VBoxContainer
+var mount_history_list: VBoxContainer
+var mount_stat_labels: Dictionary = {}
+var mount_open_buttons: Array[Button] = []
+var mount_active_label: Label
+var mount_rules_label: Label
+var mount_confirmation: ConfirmationDialog
+var pending_mount_box_id := ""
 
 
 func _ready() -> void:
 	add_theme_stylebox_override("panel", _panel_style(UI_BG, Color("#8a62b7dd"), 14, 2))
 	_build_interface()
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	if inventory_service != null:
+		inventory_service.connect("mount_box_opened", _on_mount_box_opened)
 	search_timer = Timer.new()
 	search_timer.one_shot = true
 	search_timer.wait_time = 0.25
@@ -56,8 +73,9 @@ func _ready() -> void:
 	add_child(search_timer)
 
 
-func open_tracker() -> void:
+func open_tracker(tab: String = "pokemon") -> void:
 	shared_mode = false
+	_select_tracker_tab(tab)
 	selector_panel.visible = true
 	stats_title.visible = true
 	stats_grid.visible = true
@@ -84,11 +102,13 @@ func open_tracker() -> void:
 	tracker_state = _as_dictionary(result.get("tracker"))
 	_render_tracker()
 	_set_status(_t("ui.shiny_tracker.status.ready"), UI_MUTED)
-	await _refresh_search()
+	if pokemon_workspace.visible:
+		await _refresh_search()
 
 
 func open_shared_hunt(summary: Dictionary) -> void:
 	shared_mode = true
+	_select_tracker_tab("pokemon")
 	visible = true
 	selector_panel.visible = false
 	stats_title.visible = true
@@ -126,12 +146,32 @@ func _build_interface() -> void:
 	layout.add_theme_constant_override("separation", 12)
 	margin.add_child(layout)
 	layout.add_child(_build_header())
+	var tabs := HBoxContainer.new()
+	tabs.add_theme_constant_override("separation", 8)
+	layout.add_child(tabs)
+	pokemon_tab = Button.new()
+	mounts_tab = Button.new()
+	var group := ButtonGroup.new()
+	for entry: Array in [[pokemon_tab, "pokemon"], [mounts_tab, "mounts"]]:
+		var button := entry[0] as Button
+		button.text = _t("ui.shiny_tracker.tab." + str(entry[1]))
+		button.toggle_mode = true
+		button.button_group = group
+		button.custom_minimum_size = Vector2(130, 34)
+		_apply_button_style(button)
+		button.pressed.connect(_select_tracker_tab.bind(str(entry[1])))
+		tabs.add_child(button)
+	pokemon_tab.button_pressed = true
 	var workspace := HBoxContainer.new()
 	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	workspace.add_theme_constant_override("separation", 12)
 	layout.add_child(workspace)
 	workspace.add_child(_build_overview_panel())
 	workspace.add_child(_build_selector_panel())
+	pokemon_workspace = workspace
+	mount_workspace = _build_mount_workspace()
+	mount_workspace.visible = false
+	layout.add_child(mount_workspace)
 	status_label = Label.new()
 	status_label.custom_minimum_size = Vector2(0, 24)
 	status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -393,6 +433,7 @@ func _render_tracker() -> void:
 		empty.add_theme_font_size_override("font_size", 10)
 		empty.add_theme_color_override("font_color", UI_MUTED)
 		history_list.add_child(empty)
+	_render_mount_tracker()
 	_refresh_actions()
 
 
@@ -513,6 +554,8 @@ func _on_share_pressed() -> void:
 
 
 func _refresh_actions() -> void:
+	for button: Button in mount_open_buttons:
+		button.disabled = request_busy or shared_mode or int(button.get_meta("box_quantity", 0)) <= 0
 	var has_active := not _active_hunt().is_empty()
 	stop_button.disabled = request_busy or not has_active
 	share_button.disabled = request_busy or not has_active
@@ -597,3 +640,206 @@ func _apply_line_edit_style(input: LineEdit) -> void:
 	input.add_theme_stylebox_override("focus", _panel_style(Color("#050d18f5"), UI_CYAN, 7, 1))
 	input.add_theme_color_override("font_color", UI_TEXT)
 	input.add_theme_color_override("font_placeholder_color", UI_MUTED)
+
+
+func _select_tracker_tab(tab: String) -> void:
+	var show_mounts := tab == "mounts" and not shared_mode
+	pokemon_workspace.visible = not show_mounts
+	mount_workspace.visible = show_mounts
+	pokemon_tab.set_pressed_no_signal(not show_mounts)
+	mounts_tab.set_pressed_no_signal(show_mounts)
+	mounts_tab.disabled = shared_mode
+	if search_timer != null:
+		search_timer.stop()
+		if not show_mounts and not shared_mode:
+			search_timer.start()
+
+
+func _build_mount_workspace() -> HBoxContainer:
+	var workspace := HBoxContainer.new()
+	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	workspace.add_theme_constant_override("separation", 12)
+	var boxes := _mount_panel(workspace, true)
+	boxes.add_child(_mount_label(_t("ui.shiny_tracker.mounts.boxes"), UI_TEXT, 18))
+	mount_rules_label = _mount_label("", UI_MUTED, 11)
+	boxes.add_child(mount_rules_label)
+	mount_box_list = _mount_scroll_list(boxes)
+	var history := _mount_panel(workspace, true)
+	mount_active_label = _mount_label("", UI_CYAN, 11)
+	history.add_child(mount_active_label)
+	var grid := GridContainer.new()
+	grid.columns = 2
+	grid.add_theme_constant_override("h_separation", 8)
+	grid.add_theme_constant_override("v_separation", 8)
+	history.add_child(grid)
+	for entry: Array in [["totalBoxesOpened", "opened"], ["shinyMountsReceived", "shinies"], ["boxesSinceLastShiny", "dry"], ["longestDryStreak", "longest"]]:
+		var card := VBoxContainer.new()
+		card.custom_minimum_size = Vector2(170, 58)
+		card.add_child(_mount_label(_t("ui.shiny_tracker.mounts.stat." + str(entry[1])), UI_MUTED, 10))
+		var value := _mount_label("0", UI_GOLD, 22)
+		card.add_child(value)
+		grid.add_child(card)
+		mount_stat_labels[entry[0]] = value
+	history.add_child(_mount_label(_t("ui.shiny_tracker.mounts.history"), UI_TEXT, 16))
+	mount_history_list = _mount_scroll_list(history)
+	mount_confirmation = ConfirmationDialog.new()
+	mount_confirmation.title = _t("ui.shiny_tracker.mounts.confirm_title")
+	mount_confirmation.min_size = Vector2i(480, 220)
+	mount_confirmation.dialog_autowrap = true
+	mount_confirmation.confirmed.connect(_confirm_mount_box)
+	add_child(mount_confirmation)
+	return workspace
+
+
+func _mount_panel(workspace: HBoxContainer, expand: bool) -> VBoxContainer:
+	var panel := PanelContainer.new()
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL if expand else Control.SIZE_FILL
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_RAISED, UI_BORDER, 10, 1))
+	workspace.add_child(panel)
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 13)
+	panel.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 10)
+	margin.add_child(layout)
+	return layout
+
+
+func _mount_scroll_list(parent: VBoxContainer) -> VBoxContainer:
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	parent.add_child(scroll)
+	var list := VBoxContainer.new()
+	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	list.add_theme_constant_override("separation", 8)
+	scroll.add_child(list)
+	return list
+
+
+func _render_mount_tracker() -> void:
+	var state := _as_dictionary(tracker_state.get("mounts"))
+	mount_rules_label.text = _t("ui.shiny_tracker.mounts.rules", {
+		"base": int(state.get("baseChancePercent", 50)),
+		"step": int(state.get("chanceStepPercent", 10)),
+		"cap": int(state.get("maxChancePercent", 80)),
+	})
+	for key: String in mount_stat_labels:
+		(mount_stat_labels[key] as Label).text = _format_number(int(state.get(key, 0)))
+	var active_id := str(state.get("activeBoxItemId", ""))
+	mount_active_label.text = _t("ui.shiny_tracker.mounts.no_active") if active_id in ["", "<null>"] else _t("ui.shiny_tracker.mounts.active", {"box": _mount_box_name(active_id, active_id)})
+	for list: VBoxContainer in [mount_box_list, mount_history_list]:
+		for child: Node in list.get_children():
+			list.remove_child(child)
+			child.queue_free()
+	mount_open_buttons.clear()
+	var boxes := _as_array(state.get("boxes"))
+	for box: Variant in boxes:
+		if box is Dictionary:
+			mount_box_list.add_child(_build_mount_box_card(box))
+	if boxes.is_empty():
+		mount_box_list.add_child(_mount_label(_t("ui.shiny_tracker.mounts.no_boxes"), UI_MUTED))
+	var recent := _as_array(state.get("recentOpenings"))
+	for opening: Variant in recent:
+		if opening is Dictionary:
+			mount_history_list.add_child(_mount_label(_mount_opening_text(opening), UI_GREEN if bool(opening.get("isShiny", false)) else UI_TEXT))
+	if recent.is_empty():
+		mount_history_list.add_child(_mount_label(_t("ui.shiny_tracker.mounts.no_history"), UI_MUTED))
+	_refresh_actions()
+
+
+func _build_mount_box_card(box: Dictionary) -> Control:
+	var panel := PanelContainer.new()
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_INTERACTIVE, UI_BORDER, 8, 1))
+	var margin := MarginContainer.new()
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_" + side, 10)
+	panel.add_child(margin)
+	var layout := VBoxContainer.new()
+	layout.add_theme_constant_override("separation", 7)
+	margin.add_child(layout)
+	layout.add_child(_mount_label(_mount_box_name(str(box.get("itemId", "")), str(box.get("name", ""))), UI_TEXT, 16))
+	var previews := HBoxContainer.new()
+	previews.alignment = BoxContainer.ALIGNMENT_CENTER
+	layout.add_child(previews)
+	for key: String in ["normalMountId", "shinyMountId"]:
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(84, 84)
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+		icon.texture = Mounts.get_mount_icon_texture(str(box.get(key, "")))
+		icon.tooltip_text = Mounts.get_mount_display_name(str(box.get(key, "")))
+		previews.add_child(icon)
+	layout.add_child(_mount_label(_t("ui.shiny_tracker.mounts.chance", {"chance": int(box.get("nextShinyChancePercent", 50))}), UI_CYAN, 18))
+	layout.add_child(_mount_label(_t("ui.shiny_tracker.mounts.owned", {"count": int(box.get("quantity", 0))}), UI_MUTED))
+	var button := Button.new()
+	button.text = _t("ui.bag.action.open_box")
+	button.custom_minimum_size = Vector2(0, 36)
+	button.set_meta("box_quantity", int(box.get("quantity", 0)))
+	_apply_button_style(button, true)
+	button.pressed.connect(_on_mount_open_pressed.bind(box.duplicate(true)))
+	layout.add_child(button)
+	mount_open_buttons.append(button)
+	return panel
+
+
+func _on_mount_open_pressed(box: Dictionary) -> void:
+	if request_busy or shared_mode or int(box.get("quantity", 0)) <= 0:
+		return
+	pending_mount_box_id = str(box.get("itemId", ""))
+	mount_confirmation.dialog_text = _t("ui.shiny_tracker.mounts.confirm", {
+		"box": _mount_box_name(pending_mount_box_id, str(box.get("name", ""))),
+		"chance": int(box.get("nextShinyChancePercent", 50)),
+	})
+	mount_confirmation.popup_centered()
+
+
+func _confirm_mount_box() -> void:
+	if request_busy or shared_mode or pending_mount_box_id.is_empty():
+		return
+	request_busy = true
+	_refresh_actions()
+	var inventory_service := get_node_or_null("/root/InventoryService")
+	var result: Dictionary = await inventory_service.call("use_inventory_item", pending_mount_box_id) if inventory_service != null else {"success": false, "error": _t("ui.bag.message.open_box_failed")}
+	pending_mount_box_id = ""
+	request_busy = false
+	if not bool(result.get("success", false)):
+		_set_status(str(result.get("error", _t("ui.bag.message.open_box_failed"))), UI_DANGER)
+	_refresh_actions()
+
+
+func _on_mount_box_opened(result: Dictionary) -> void:
+	if shared_mode:
+		return
+	tracker_state["mounts"] = _as_dictionary(result.get("tracker"))
+	_render_mount_tracker()
+	_set_status(_mount_opening_text(_as_dictionary(result.get("opening"))), UI_GREEN)
+
+
+func _mount_opening_text(opening: Dictionary) -> String:
+	var text := _t("ui.shiny_tracker.mounts.result", {
+		"mount": Mounts.get_mount_display_name(str(opening.get("mountId", ""))),
+		"chance": int(opening.get("shinyChancePercent", 50)),
+	})
+	if bool(opening.get("alreadyOwned", false)):
+		text += " · " + _t("ui.shiny_tracker.mounts.duplicate")
+	return text
+
+
+func _mount_label(text: String, color: Color, font_size: int = 11) -> Label:
+	var label := Label.new()
+	label.text = text
+	# Seed a readable wrapping width before a hidden tab receives its first layout.
+	label.size.x = 350
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+	return label
+
+
+func _mount_box_name(item_id: String, fallback: String) -> String:
+	var localization := get_node_or_null("/root/ItemLocalization")
+	return str(localization.call("display_name", item_id, fallback)) if localization != null else fallback
