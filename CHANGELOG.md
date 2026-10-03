@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show mount box costs in Aether Gems only and preview the player riding either normal or shiny mounts, with animation and direction controls.
+
 - Vermilion City Gym, Pokémon Fan Club and Guild Base signs now show localized text and illustrated previews.
 
 - Style the weekly boss selector with the Aether modal, ordered difficulty cards, server-provided levels and base rewards, and a separate Hard-unlock hint.
