@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce Mega Alakazam's mount sprite by 29% and realign the psychic ring and rear rider while preserving player size and the seated pose.
+
 - Add localized Route 9 sign text and a new illustrated preview.
 
 - Add the Mega Alakazam levitation mount with the approved riding pose, psychic ring and lower rear rider.
