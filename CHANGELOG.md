@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Desynchronize Vermilion City's moving Pokémon with distinct pause timings and randomized waits.
+
 - Add Zapdos as a static weekly boss in the Power Plant with a red nameplate, Easy/Intermediate/Hard selector, reward notifications and reconnect support. Defeating Hard unlocks unlimited rare wild Zapdos encounters.
 
 - Add the approved pearl-white Shiny Shadow Lugia as a separate hovering mount with its own item and Bag icon, preserving the corrected head/tail overlap.
