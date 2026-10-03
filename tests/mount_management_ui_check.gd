@@ -24,8 +24,13 @@ func _run() -> void:
 		quit(1)
 		return
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras"],
-		"Surf catalog exposes Lapras to the loadout selector"
+		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras", "primal_kyogre"],
+		"Surf catalog includes Lapras and Primal Kyogre"
+	)
+	_check(
+		MountServiceScript.get_unlocked_mount_ids_for_mode("surf", []) == ["lapras"]
+		and MountServiceScript.get_unlocked_mount_ids_for_mode("surf", ["primal-kyogre-mount"]) == ["lapras", "primal_kyogre"],
+		"Primal Kyogre only appears in the selector after its mount item is owned"
 	)
 	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
 	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "glaceon", "glaceon_shiny", "cobalion", "cobalion_shiny"]:

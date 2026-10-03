@@ -131,6 +131,17 @@ static func get_rider_frame_delta(mount_id: String, direction: String, frame_ind
 		- get_rider_frame_offset(mount_id, direction, 0)
 
 
+static func get_surf_fishing_rider_offsets(mount_id: String, fallback: Dictionary) -> Dictionary:
+	var offsets := fallback.duplicate()
+	var values: Variant = get_mount_definition(mount_id).get("surfFishingRiderOffsets", {})
+	if values is Dictionary:
+		for direction: String in ["down", "left", "right", "up"]:
+			var pair: Variant = values.get(direction)
+			if pair is Array and pair.size() == 2:
+				offsets[direction] = Vector2i(int(pair[0]), int(pair[1]))
+	return offsets
+
+
 static func get_rider_frame_offset(mount_id: String, direction: String, frame_index: int) -> Vector2i:
 	# Read-only hot path: do not deep-copy the full catalog record every frame.
 	var normalized_id := normalize_mount_id(mount_id)
