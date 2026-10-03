@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_kkef3"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_lrh64"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="5_rrflk"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="10_h4b5l"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
@@ -407,6 +408,11 @@ position = Vector2(1200, 2512)
 pickup_id = "kanto_route_10_max_ether"
 item_id = "max-ether"
 
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=228732340]
+
+[node name="RockTunnelSign" parent="Entities/Interactables/Signs" unique_id=1525710322 instance=ExtResource("10_h4b5l")]
+position = Vector2(976, 1168)
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 
 [node name="Voltorb" parent="Entities/Pokemon" unique_id=190000185 instance=ExtResource("pokemon")]
@@ -519,7 +525,6 @@ overworld_pokemon_id = "kanto_route_10_water_ducklett_1"
 species_id = "ducklett"
 level = 16
 display_name = "Ducklett"
-facing_direction = Vector2(0, 1)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1241571794]
 visible = false

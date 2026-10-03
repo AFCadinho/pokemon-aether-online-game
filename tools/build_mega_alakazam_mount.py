@@ -1,4 +1,4 @@
-"""Build the approved V5 composition with the lower V9 rear rider.
+"""Build the smaller Mega Alakazam with the approved seated/levitating pose.
 
 The supplied source and unchanged player ride pose use exact 2x pixels.
 Only the creature and psychic support are baked into runtime sheets.
@@ -13,12 +13,13 @@ from import_player_layered_sprites import write_texture_import
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets/mounts/mega_alakazam"
 FRAME = 112
+CREATURE_SIZE = 40
 NEAREST = Image.Resampling.NEAREST
 DIRECTIONS = ("down", "left", "right", "up")
-# Translate each complete preview layout to one common ground anchor, without
-# changing the distance between rider, ring and Alakazam in any direction.
-RIDER_POS = ((40, 30), (22, 16), (58, 16), (40, 6))
-MOUNT_POS = ((28, 4), (37, 4), (19, 4), (28, 4))
+# Keep Alakazam centered over the same ground anchor when reducing his size.
+# Reposition only the rider origins; the player sprites are never resized.
+RIDER_POS = ((40, 34), (22, 26), (58, 26), (40, 19))
+MOUNT_POS = ((36, 20), (45, 20), (27, 20), (36, 20))
 
 
 def build() -> None:
@@ -35,7 +36,7 @@ def build() -> None:
             normalized = Image.new("RGBA", (32, 32))
             normalized.alpha_composite(original, (0, -2 if col % 2 else 0))
             assert normalized.getchannel("A").histogram()[255] == original.getchannel("A").histogram()[255]
-            sprite = normalized.resize((56, 56), NEAREST)
+            sprite = normalized.resize((CREATURE_SIZE, CREATURE_SIZE), NEAREST)
             creature = Image.new("RGBA", (FRAME, FRAME))
             mx, my = MOUNT_POS[row]
             mount_bob = round(math.sin(phase * math.tau / 16))
@@ -45,7 +46,8 @@ def build() -> None:
             if row == 3:
                 foreground = creature.copy()
                 # Precisely exclude the floating spoons, including frame bob.
-                foreground.paste((0, 0, 0, 0), (0, 0, FRAME, my + 12 + mount_bob))
+                spoon_height = math.ceil(CREATURE_SIZE * 7 / 32)
+                foreground.paste((0, 0, 0, 0), (0, 0, FRAME, my + spoon_height + mount_bob))
             mask = Image.new("RGBA", creature.size, (255, 255, 255, 0))
             mask.putalpha(foreground.getchannel("A"))
             rx, ry = RIDER_POS[row]

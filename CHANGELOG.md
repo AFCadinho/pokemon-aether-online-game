@@ -4,6 +4,10 @@
 
 - Open current Aether Gift Voucher credit from the Bag or Ctrl+3 in the default hotbar, with a localized balance dialog and support for moving the shortcut.
 
+- Reduce Mega Alakazam's mount sprite by 29% and realign the psychic ring and rear rider while preserving player size and the seated pose.
+
+- Add localized Route 9 sign text and a new illustrated preview.
+
 - Add the Mega Alakazam levitation mount with the approved riding pose, psychic ring and lower rear rider.
 
 - Desynchronize Route 9 Pokémon with distinct movement speeds, randomized pauses, and localized metadata for the four mountain Pokémon.
