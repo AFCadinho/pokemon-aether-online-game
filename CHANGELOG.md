@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Power Plant toont nu de opnieuw geïmporteerde Tiled-visual.
+
 - Route 10 heeft nu drie overworld-Pokémon in de rivier: Wooper, Buizel en Ducklett.
 
 - Er zwemt nu een Magikarp in de vijver van de daycare-tuin op Route 5.
