@@ -184,7 +184,7 @@ species_id = "quagsire"
 level = 20
 
 [node name="ZapdosWeeklyBoss" parent="Entities/Pokemon" unique_id=154426699 instance=ExtResource("7_boss")]
-position = Vector2(192, 336)
+position = Vector2(208, 336)
 boss_definition = ExtResource("8_zapdos")
 species_id = "zapdos"
 display_name = "Zapdos"
