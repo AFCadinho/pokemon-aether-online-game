@@ -442,5 +442,9 @@
   "glaceon-mount": {
     "name": "Glaceon Mount",
     "shortDesc": "Unlocks Glaceon as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-glaceon-mount": {
+    "name": "Shiny Glaceon Mount",
+    "shortDesc": "Unlocks Shiny Glaceon as a land mount. Requires a Mount License for the current region."
   }
 }

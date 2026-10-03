@@ -17,3 +17,7 @@ License are required. Ordinary land movement and collision rules apply.
 
 Focused checks: `tests/glaceon_mount_check.gd` and backend
 `account-service/tests/test_glaceon_mount.py`.
+
+The shiny variant uses the existing `assets/followers_shiny/GLACEON.png`
+with identical geometry, masks and seat offsets. The builder regenerates both
+variants. Grant `shiny-glaceon-mount` for the separate Shiny Glaceon entitlement.

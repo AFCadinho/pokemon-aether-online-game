@@ -442,5 +442,9 @@
   "glaceon-mount": {
     "name": "Montaria Glaceon",
     "shortDesc": "Desbloqueia Glaceon como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-glaceon-mount": {
+    "name": "Montaria Glaceon Brilhante",
+    "shortDesc": "Desbloqueia Glaceon Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }
