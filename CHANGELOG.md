@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Mega Alakazam a tightly framed icon so it is clearly visible in the Bag and mount selector.
+
 - Add localized text and illustrated previews for the Lavender Town and Pokémon Tower signs.
 
 - Keep Shadow Lugia riders between the two raised side wings by excluding the far wing from the foreground and rider mask, for normal and shiny variants.

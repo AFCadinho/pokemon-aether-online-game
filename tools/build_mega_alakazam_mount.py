@@ -26,6 +26,10 @@ MOUNT_POS = ((40, 31), (59, 38), (21, 38), (40, 43))
 def build() -> None:
     source = Image.open(ASSETS / "source.png").convert("RGBA")
     assert source.size == (512, 256)
+    # UI icons use the original creature cell without the large rider canvas.
+    icon_path = ASSETS / "icon.png"
+    source.crop((0, 0, 64, 64)).save(icon_path)
+    write_texture_import(ROOT, icon_path.relative_to(ROOT))
     small = source.resize((256, 128), NEAREST)
     assert small.resize(source.size, NEAREST).tobytes() == source.tobytes()
     sheets = {name: Image.new("RGBA", (FRAME * 4, FRAME * 4))
