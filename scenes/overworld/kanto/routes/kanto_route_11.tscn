@@ -422,9 +422,13 @@ item_id = "tm-grass-knot"
 
 [node name="DiglettCaveSign" parent="Entities/Interactables/Signs" unique_id=1781335597 instance=ExtResource("14_4cd0d")]
 position = Vector2(656, 496)
+sign_id = "kanto_route_11_digletts_cave_sign"
+sign_type = "road"
 
 [node name="Route11Sign" parent="Entities/Interactables/Signs" unique_id=580783040 instance=ExtResource("14_4cd0d")]
 position = Vector2(2256, 656)
+sign_id = "kanto_route_11_route_sign"
+sign_type = "road"
 
 [connection signal="body_entered" from="Exits/ToVermilionNorth" to="Exits/ToVermilionNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToVermilionSouth" to="Exits/ToVermilionSouth" method="_on_body_entered"]
