@@ -74,9 +74,7 @@
       "hoverHeight": 16,
       "hoverAmplitude": 2,
       "hoverPeriod": 2.4,
-      "foregroundRegions": {
-        "down": [0, 68, 128, 60]
-      },
+      "foregroundSheet": "res://assets/mounts/shadow_lugia/foreground.png",
       "riderOffsets": {
         "down": [[0, -12], [0, -12], [0, -12], [0, -12]],
         "left": [[8, -4], [8, -4], [8, -4], [8, -4]],
@@ -95,9 +93,7 @@
       "hoverHeight": 16,
       "hoverAmplitude": 2,
       "hoverPeriod": 2.4,
-      "foregroundRegions": {
-        "down": [0, 68, 128, 60]
-      },
+      "foregroundSheet": "res://assets/mounts/shadow_lugia_shiny/foreground.png",
       "riderOffsets": {
         "down": [[0, -12], [0, -12], [0, -12], [0, -12]],
         "left": [[8, -4], [8, -4], [8, -4], [8, -4]],
