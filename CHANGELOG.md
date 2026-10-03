@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized Route 9 sign text and a new illustrated preview.
+
 - Desynchronize Route 9 Pokémon with distinct movement speeds, randomized pauses, and localized metadata for the four mountain Pokémon.
 
 - Added Diglett and a rare Dugtrio roaming the Diglett Cave tunnel with varied pacing.
