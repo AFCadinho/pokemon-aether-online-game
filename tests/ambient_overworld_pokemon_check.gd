@@ -57,6 +57,13 @@ const MAP_POKEMON := {
 		"Spearow": "spearow",
 		"Sandshrew": "sandshrew",
 	},
+	"res://scenes/overworld/kanto/routes/kanto_route_6.tscn": {
+		"Pidgey": "pidgey",
+		"Meowth": "meowth",
+		"Oddish": "oddish",
+		"Bellsprout": "bellsprout",
+		"Pidgey2": "pidgey",
+	},
 	"res://scenes/overworld/kanto/towns/lavender_town/house1.tscn": {
 		"Growlithe": "growlithe",
 	},
@@ -85,7 +92,7 @@ func _init() -> void:
 func _run() -> void:
 	for scene_path: String in MAP_POKEMON:
 		_check_map(scene_path, MAP_POKEMON[scene_path])
-	_check(pokemon_ids.size() == 35, "all ambient Pokemon use unique metadata ids")
+	_check(pokemon_ids.size() == 40, "all ambient Pokemon use unique metadata ids")
 	quit(1 if failed else 0)
 
 

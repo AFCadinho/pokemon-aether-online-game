@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 6 heeft nu vijf aanspreekbare overworld-Pokémon uit de lokale grasontmoetingen.
+
 - Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
 
 - Populate Pokémon Tower with eight Hex Maniacs, four visitors, a 5F healing-seal NPC and seven Ghost Pokémon from generations 1–7; localize their conversations and register the healing arrival point.

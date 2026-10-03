@@ -11,6 +11,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="8_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="9_camper"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="11_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
@@ -378,6 +379,63 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("9_camper")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=851574945]
+
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=190001100]
+
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=190001101 instance=ExtResource("11_pokemon")]
+position = Vector2(592, 688)
+overworld_pokemon_id = "kanto_route_6_pidgey_1"
+species_id = "pidgey"
+level = 15
+display_name = "Pidgey"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Meowth" parent="Entities/Pokemon" unique_id=190001102 instance=ExtResource("11_pokemon")]
+position = Vector2(1104, 720)
+overworld_pokemon_id = "kanto_route_6_meowth_1"
+species_id = "meowth"
+level = 14
+display_name = "Meowth"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Oddish" parent="Entities/Pokemon" unique_id=190001103 instance=ExtResource("11_pokemon")]
+position = Vector2(400, 1008)
+overworld_pokemon_id = "kanto_route_6_oddish_1"
+species_id = "oddish"
+level = 15
+display_name = "Oddish"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Bellsprout" parent="Entities/Pokemon" unique_id=190001104 instance=ExtResource("11_pokemon")]
+position = Vector2(1104, 1040)
+overworld_pokemon_id = "kanto_route_6_bellsprout_1"
+species_id = "bellsprout"
+level = 15
+display_name = "Bellsprout"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Pidgey2" parent="Entities/Pokemon" unique_id=190001105 instance=ExtResource("11_pokemon")]
+position = Vector2(720, 1328)
+overworld_pokemon_id = "kanto_route_6_pidgey_2"
+species_id = "pidgey"
+level = 13
+display_name = "Pidgey"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1476137668]
 
