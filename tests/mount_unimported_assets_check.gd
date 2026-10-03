@@ -11,7 +11,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for id: String in ["mega_absol", "mega_absol_z"]:
+	for id: String in ["mega_absol", "mega_absol_z", "mega_garchomp"]:
 		mount_id = id
 		await _check_mount()
 	print("Unimported mount assets: ", "FAILED" if failed else "PASS")
@@ -26,6 +26,8 @@ func _check_mount() -> void:
 	var files: Array[String] = []
 	var definition := Mounts.get_mount_definition(mount_id)
 	var original := definition.duplicate(true)
+	var dimensions: Array = definition["frameSize"]
+	var expected_size := Vector2i(dimensions[0], dimensions[1])
 	var keys := {"iconTexture": "icon.png", "spriteSheet": "mount.png", "foregroundSheet": "foreground.png", "riderMaskSheet": "rider_mask.png"}
 	for key: String in keys:
 		var path := directory + "/" + str(keys[key])
@@ -48,7 +50,7 @@ func _check_mount() -> void:
 			var anim := StringName("walk_" + direction)
 			_check(frames.get_frame_count(anim) == 4 and foreground.get_frame_count(anim) == 4, "unimported sheets produce all animation frames")
 			var image := Mounts._get_texture_image(frames.get_frame_texture(anim, 0))
-			_check(image.get_size() == Vector2i(128, 128) and image.get_used_rect().has_area(), "unimported creature is visible")
+			_check(image.get_size() == expected_size and image.get_used_rect().has_area(), "unimported creature is visible")
 		var avatar: Node2D = load("res://scripts/ui/mount_rider_preview.gd").new()
 		root.add_child(avatar)
 		avatar.call("configure", mount_id, {"gender": "female"}, "down", false)

@@ -503,10 +503,10 @@ position = Vector2(2288, 912)
 pickup_id = "kanto_route_3_big_root"
 item_id = "big-root"
 
-[node name="HyperPotion" parent="Entities/Interactables/Items" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
+[node name="MiracleSeed" parent="Entities/Interactables/Items" unique_id=1051435544 instance=ExtResource("16_overworld_item")]
 position = Vector2(752, 1168)
 pickup_id = "kanto_route_3_hyper_potion"
-item_id = "hyper-potion"
+item_id = "miracle-seed"
 
 [node name="MtMoonSign" parent="Entities/Interactables" unique_id=764906515 instance=ExtResource("10_pprsw")]
 position = Vector2(2512, 976)
