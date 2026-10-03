@@ -24,7 +24,10 @@ def build() -> None:
             foreground=Image.new("RGBA",(FRAME,FRAME))
             for y in range(64):
                 for x in range(64):
-                    front = row == 0 and y >= 32
+                    # Keep Cobalion's horns behind the rider, but bring its
+                    # eyes and muzzle forward so the face remains visible
+                    # beneath the player's face in the front-facing pose.
+                    front = row == 0 and y >= 24
                     if row in (1,2): front = side_head(x,y,row)
                     if front: foreground.putpixel((ORIGIN[0]+x,ORIGIN[1]+y),sprite.getpixel((x,y)))
             mask=Image.new("RGBA",(FRAME,FRAME),(255,255,255,0));mask.putalpha(foreground.getchannel("A"))

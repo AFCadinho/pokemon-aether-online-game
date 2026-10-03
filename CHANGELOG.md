@@ -4,6 +4,10 @@
 
 - Restore the walkable Lavender Town exit to Route 8 and its transition arrow after the exit reverted to a disabled placeholder.
 
+- Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
+
+- Lower Cobalion, Glaceon and Shiny Glaceon riders by 16 pixels in every direction so their visual position aligns with nearby NPCs.
+
 - Give Mega Absol Z a compact standing pose with planted paws in side views, using separate idle layers while preserving its walking animation.
 
 - Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.
