@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
+
 - Shift Cobalion, Glaceon and Shiny Glaceon mount art 16 pixels lower on their padded sheets, and layer Cobalion's full front-facing head over the rider.
 
 - Reimport Route 8's artist visual from the updated Tiled map, rebuilding its compact lossless atlases.
