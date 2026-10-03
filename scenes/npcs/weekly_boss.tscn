@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scripts/world/npcs/weekly_boss_npc.gd" id="2_boss"]
+
+[node name="WeeklyBoss" instance=ExtResource("1_base")]
+script = ExtResource("2_boss")
+species_id = ""
+display_name = ""
+movement_behavior = "idle"
+boss_nameplate_color = Color(1, 0.33333334, 0.33333334, 1)
