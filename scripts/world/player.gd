@@ -3166,7 +3166,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	part_frames = MountService.get_mounted_rider_frames(
 		part_frames,
 		active_mount_id,
-		_get_surf_fish_rider_offset_adjustments(),
+		_get_mount_part_offset_adjustments(normalized_category),
 		{},
 		_uses_static_activity_movement_pose()
 	)
@@ -3298,7 +3298,17 @@ func _restore_sprite_base_offset(sprite: AnimatedSprite2D) -> void:
 	if sprite.has_meta(ACTIVITY_BASE_SPRITE_OFFSET_META):
 		sprite.offset = sprite.get_meta(ACTIVITY_BASE_SPRITE_OFFSET_META)
 
-func _get_activity_layer_offset(category: String) -> Vector2:
+func _get_mount_part_offset_adjustments(category: String) -> Dictionary:
+	# Masks sample mount coordinates, so include the same directional offset
+	# that the appearance sprite receives after its rider frames are masked.
+	var adjustments := _get_surf_fish_rider_offset_adjustments().duplicate()
+	for direction: String in ["down", "left", "right", "up"]:
+		adjustments[direction] = Vector2i(adjustments.get(direction, Vector2i.ZERO)) \
+			+ Vector2i(_get_activity_layer_offset(category, direction))
+	return adjustments
+
+
+func _get_activity_layer_offset(category: String, direction: String = "") -> Vector2:
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category)
 	var normalized_style: String = CharacterAppearanceService.normalize_movement_style(body_sprite_frames_movement_style)
 	# Dedicated hair and headgear sheets already follow the activity body's head position.
@@ -3316,7 +3326,7 @@ func _get_activity_layer_offset(category: String) -> Vector2:
 
 	var category_offsets: Dictionary = style_offsets as Dictionary
 	var direction_offsets: Variant = category_offsets.get(
-		_get_activity_offset_direction(),
+		_get_activity_offset_direction() if direction.is_empty() else direction,
 		category_offsets.get("default", {})
 	)
 	if direction_offsets is Dictionary:

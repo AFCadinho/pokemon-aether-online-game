@@ -107,6 +107,8 @@ func _check_players() -> void:
 		"movement": {"isMoving": true, "activityStyle": "ride", "mountId": "shadow_lugia",
 			"startPosition": {"x": 32, "y": 0}, "targetPosition": {"x": 32, "y": 32}, "duration": 0.065},
 	})
+	_check_head_layers(local, "local")
+	_check_head_layers(remote, "remote")
 	var local_mount := local.get_node("Look/MountSprite") as AnimatedSprite2D
 	var local_body := local.get_node("Look/Rider/BodySprite") as AnimatedSprite2D
 	var remote_mount: AnimatedSprite2D = remote.get("mount_sprite")
@@ -133,6 +135,49 @@ func _check_players() -> void:
 	local.queue_free()
 	remote.queue_free()
 	await process_frame
+
+
+func _check_head_layers(player: Node2D, label: String) -> void:
+	var mask := Mounts._get_mask_image("shadow_lugia")
+	var parts := {"hair": "HairSprite", "eyes": "EyesSprite", "eyebrows": "EyebrowsSprite"}
+	for category: String in parts:
+		var sprite: AnimatedSprite2D = player.call("_get_appearance_sprite", parts[category])
+		_check(sprite != null and sprite.sprite_frames != null, "%s %s layer loads" % [label, category])
+		if sprite == null or sprite.sprite_frames == null:
+			continue
+		var id_method := "_get_player_appearance_part_id" if label == "local" else "_get_appearance_part_id"
+		var part_id: String = player.call(id_method, category)
+		var base: SpriteFrames = player.call("_get_appearance_part_frames", category, part_id, "ride")
+		for direction: String in DIRECTIONS:
+			var facing := Vector2.DOWN
+			if direction == "left":
+				facing = Vector2.LEFT
+			elif direction == "right":
+				facing = Vector2.RIGHT
+			elif direction == "up":
+				facing = Vector2.UP
+			player.call("_sync_mount_animation", true, facing)
+			player.call("_sync_activity_layer_offsets")
+			var animation := StringName("walk_" + direction)
+			var original := Mounts._get_texture_image(base.get_frame_texture(animation, 0))
+			var row := DIRECTIONS.find(direction)
+			for index in range(4):
+				var mounted := Mounts._get_texture_image(sprite.sprite_frames.get_frame_texture(animation, index))
+				var origin := Vector2i(32, 32) + Mounts.get_rider_frame_offset("shadow_lugia", direction, index) + Vector2i(sprite.offset)
+				var matches := true
+				for y in range(original.get_height()):
+					for x in range(original.get_width()):
+						var point := origin + Vector2i(x, y)
+						var expected := original.get_pixel(x, y)
+						if Rect2i(0, 0, 128, 128).has_point(point) and mask.get_pixelv(point + Vector2i(index * 128, row * 128)).a > 0.0:
+							expected = Color.TRANSPARENT
+						var actual := mounted.get_pixel(x, y)
+						if actual.a != expected.a or (expected.a > 0.0 and actual != expected):
+							matches = false
+				_check(matches, "%s %s %s/%d mask follows the rendered layer offset without clearing other pixels" % [label, category, direction, index])
+	# Keep this fixture facing down for the existing runtime/hover checks.
+	player.call("_sync_mount_animation", true, Vector2.DOWN)
+	player.call("_sync_activity_layer_offsets")
 
 
 func _visible_pixels_equal(first: Image, second: Image) -> bool:

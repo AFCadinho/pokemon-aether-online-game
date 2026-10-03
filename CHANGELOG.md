@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep Shadow Lugia’s head in front of the rider by including directional appearance-layer offsets in mount masking for local and remote players.
+
 - Correct the viewer-left eye in downward-facing frames 1 and 3 of the normal and shiny Rayquaza mounts.
 
 - Route 6 wild Pokémon now pause at varied, randomized intervals and move at different speeds.
