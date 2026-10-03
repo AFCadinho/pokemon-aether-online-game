@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh rider body and clothing masks when switching mounts so the previous mount cannot leave missing body parts.
+
 - Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.
 
 - Keep mounted rider, clothing and mount foreground at one ground-based world depth, preserving their internal layer order so map objects do not cut between mount parts.
