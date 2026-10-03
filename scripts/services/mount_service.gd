@@ -168,6 +168,20 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 		return _mount_foreground_frames_cache[normalized_id] as SpriteFrames
 
 	var definition := get_mount_definition(normalized_id)
+	var foreground_path := str(definition.get("foregroundSheet", ""))
+	if not foreground_path.is_empty():
+		if not ResourceLoader.exists(foreground_path):
+			return null
+		var texture := ResourceLoader.load(foreground_path) as Texture2D
+		var frame_size := _get_mount_frame_size(definition)
+		if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
+			return null
+		var sheet_frames := _build_sprite_frames(texture, frame_size)
+		var speed := maxf(float(definition.get("movementAnimationSpeed", WALK_ANIMATION_SPEED)), 0.1)
+		for direction: String in ["down", "left", "right", "up"]:
+			sheet_frames.set_animation_speed(StringName("walk_" + direction), speed)
+		_mount_foreground_frames_cache[normalized_id] = sheet_frames
+		return sheet_frames
 	var regions_value: Variant = definition.get("foregroundRegions", {})
 	if not regions_value is Dictionary or (regions_value as Dictionary).is_empty():
 		return null

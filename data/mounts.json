@@ -105,6 +105,25 @@
         "up": [[0, 4], [0, 4], [0, 4], [0, 4]]
       }
     },
+    "mega_alakazam": {
+      "displayName": "Mega Alakazam",
+      "movementMode": "land",
+      "unlockItemId": "mega-alakazam-mount",
+      "spriteSheet": "res://assets/mounts/mega_alakazam/mount.png",
+      "riderMaskSheet": "res://assets/mounts/mega_alakazam/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/mega_alakazam/foreground.png",
+      "frameSize": [224, 224],
+      "movementAnimationSpeed": 1.667,
+      "hoverHeight": 16,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.4,
+      "riderOffsets": {
+        "down": [[0, -20], [0, -24], [0, -20], [0, -16]],
+        "left": [[-36, -48], [-36, -52], [-36, -48], [-36, -44]],
+        "right": [[36, -48], [36, -52], [36, -48], [36, -44]],
+        "up": [[0, -68], [0, -72], [0, -68], [0, -64]]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",
