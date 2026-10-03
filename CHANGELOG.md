@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Anchor the Mega Alakazam rider to the player's normal foot position and ground shadow in every direction, preserving the smaller mount and approved pose.
+
 - Add localized Rock Tunnel sign text and preview art on Route 10.
 
 - Open current Aether Gift Voucher credit from the Bag or Ctrl+3 in the default hotbar, with a localized balance dialog and support for moving the shortcut.

@@ -92,6 +92,12 @@ func _check_runtime() -> void:
 				_check(body.frame == col and not body.is_playing(), "mount frame selects static seated pose and mask")
 				_check(overlay.frame == col, "foreground synchronizes")
 				_check(rider.position == Vector2(Mounts.get_rider_frame_offset(MOUNT, DIRECTIONS[row], col)), "actual rider uses approved directional position")
+				var shadow := player.get_node("MountHoverShadow") as Node2D
+				_check(rider.global_position.x == shadow.global_position.x, "rider stays horizontally above the player's ground anchor in every frame")
+			player.call("_sync_mount_animation", false, FACING[row])
+			_check(rider.position == player.get("base_rider_position"), "turning while idle keeps the normal player foot origin")
+			var grounded_look: Vector2 = (player.get_node("Look") as Node2D).position - player.call("_get_mount_hover_offset")
+			_check(grounded_look == player.get("base_look_position"), "only levitation lifts the normal player origin")
 			for category: String in ["hair", "eyes", "eyebrows"]:
 				var name := str({"hair": "HairSprite", "eyes": "EyesSprite", "eyebrows": "EyebrowsSprite"}[category])
 				var sprite := player.get_node("Look/Rider/" + name) as AnimatedSprite2D
