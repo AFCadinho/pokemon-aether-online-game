@@ -363,34 +363,34 @@ facing_direction = Vector2(1, 0)
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=779385828]
 
 [node name="Pearl" parent="Entities/Interactables/Items" unique_id=1165019416 instance=ExtResource("99_item")]
-position = Vector2(2352, 1616)
+position = Vector2(2224, 2224)
 pickup_id = "kanto_rock_tunnel_1f_pearl"
 item_id = "pearl"
 
 [node name="XAccuracy" parent="Entities/Interactables/Items" unique_id=142575714 instance=ExtResource("99_item")]
-position = Vector2(592, 976)
+position = Vector2(272, 1264)
 pickup_id = "kanto_rock_tunnel_1f_xaccuracy"
 item_id = "x-accuracy"
 
 [node name="Elixir" parent="Entities/Interactables/Items" unique_id=1954490877 instance=ExtResource("99_item")]
-position = Vector2(752, 2224)
+position = Vector2(624, 2000)
 pickup_id = "kanto_rock_tunnel_1f_elixir"
 item_id = "elixir"
 
 [node name="XDefend" parent="Entities/Interactables/Items" unique_id=1217111342 instance=ExtResource("99_item")]
-position = Vector2(944, 2192)
+position = Vector2(656, 2160)
 pickup_id = "kanto_rock_tunnel_1f_xdefend"
 item_id = "x-defense"
 
 [node name="TMFling" parent="Entities/Interactables/Items" unique_id=848313557 instance=ExtResource("99_item")]
-position = Vector2(976, 2128)
+position = Vector2(688, 1552)
 pickup_id = "kanto_rock_tunnel_1f_tmfling"
 item_id = "tm-fling"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000002]
 
 [node name="Geodude" parent="Entities/Pokemon" unique_id=190000195 instance=ExtResource("pokemon")]
-position = Vector2(656, 336)
+position = Vector2(592, 400)
 overworld_pokemon_id = "kanto_rock_tunnel_1f_geodude_1"
 species_id = "geodude"
 level = 15
@@ -401,10 +401,87 @@ movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
 
 [node name="Zubat" parent="Entities/Pokemon" unique_id=190000585 instance=ExtResource("pokemon")]
-position = Vector2(1936, 848)
+position = Vector2(2032, 848)
 overworld_pokemon_id = "kanto_rock_tunnel_1f_zubat_1"
 species_id = "zubat"
 level = 15
+display_name = "Zubat"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Onix" parent="Entities/Pokemon" unique_id=190000610 instance=ExtResource("pokemon")]
+position = Vector2(2448, 592)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_onix_1"
+species_id = "onix"
+level = 15
+display_name = "Onix"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Mankey" parent="Entities/Pokemon" unique_id=190000611 instance=ExtResource("pokemon")]
+position = Vector2(1392, 1712)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_mankey_1"
+species_id = "mankey"
+level = 14
+display_name = "Mankey"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Machop" parent="Entities/Pokemon" unique_id=190000612 instance=ExtResource("pokemon")]
+position = Vector2(1520, 528)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_machop_1"
+species_id = "machop"
+level = 15
+display_name = "Machop"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Cubone" parent="Entities/Pokemon" unique_id=190000613 instance=ExtResource("pokemon")]
+position = Vector2(368, 1648)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_cubone_1"
+species_id = "cubone"
+level = 14
+display_name = "Cubone"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Machoke" parent="Entities/Pokemon" unique_id=190000614 instance=ExtResource("pokemon")]
+position = Vector2(944, 1296)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_machoke_1"
+species_id = "machoke"
+level = 17
+display_name = "Machoke"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Geodude2" parent="Entities/Pokemon" unique_id=190000615 instance=ExtResource("pokemon")]
+position = Vector2(2576, 848)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_geodude_2"
+species_id = "geodude"
+level = 14
+display_name = "Geodude"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 36.0
+
+[node name="Zubat2" parent="Entities/Pokemon" unique_id=190000616 instance=ExtResource("pokemon")]
+position = Vector2(1776, 624)
+overworld_pokemon_id = "kanto_rock_tunnel_1f_zubat_2"
+species_id = "zubat"
+level = 16
 display_name = "Zubat"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
