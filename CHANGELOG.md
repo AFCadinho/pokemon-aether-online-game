@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Correct the viewer-left eye in downward-facing frames 1 and 3 of the normal and shiny Rayquaza mounts.
+
 - Route 6 wild Pokémon now pause at varied, randomized intervals and move at different speeds.
 
 - Route 5's Day Care and Underground Path signs now show localized text and illustrated previews.
