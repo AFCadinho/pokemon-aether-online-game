@@ -303,10 +303,10 @@ display_name = "Engineer Bernie"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("6_worker")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1509200945]
 
-[node name="Rattata" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
-position = Vector2(352, 304)
+[node name="Rattata" parent="Entities/Pokemon" unique_id=2142784529 instance=ExtResource("100_pokemon")]
+position = Vector2(432, 592)
 overworld_pokemon_id = "kanto_route_11_rattata_1"
 species_id = "rattata"
 level = 12
@@ -317,15 +317,15 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="Diglett" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
-position = Vector2(640, 320)
+[node name="Diglett" parent="Entities/Pokemon" unique_id=220941523 instance=ExtResource("100_pokemon")]
+position = Vector2(592, 272)
 overworld_pokemon_id = "kanto_route_11_diglett_1"
 species_id = "diglett"
 level = 12
 display_name = "Diglett"
 
-[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
-position = Vector2(832, 304)
+[node name="Spearow" parent="Entities/Pokemon" unique_id=104904674 instance=ExtResource("100_pokemon")]
+position = Vector2(880, 272)
 overworld_pokemon_id = "kanto_route_11_spearow_1"
 species_id = "spearow"
 level = 13
@@ -336,19 +336,18 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="Drowzee" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
-position = Vector2(1232, 864)
+[node name="Drowzee" parent="Entities/Pokemon" unique_id=2007548040 instance=ExtResource("100_pokemon")]
+position = Vector2(1488, 368)
 overworld_pokemon_id = "kanto_route_11_drowzee_1"
 species_id = "drowzee"
 level = 14
 display_name = "Drowzee"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=699195215 instance=ExtResource("100_pokemon")]
 position = Vector2(1904, 336)
 overworld_pokemon_id = "kanto_route_11_pidgey_1"
 species_id = "pidgey"
@@ -360,8 +359,8 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 38.0
 
-[node name="Ekans" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
-position = Vector2(2384, 1088)
+[node name="Ekans" parent="Entities/Pokemon" unique_id=225550021 instance=ExtResource("100_pokemon")]
+position = Vector2(1648, 1104)
 overworld_pokemon_id = "kanto_route_11_ekans_1"
 species_id = "ekans"
 level = 13
