@@ -6356,5 +6356,8 @@
   "ui.town_map.location.route_14.name": "Route 14",
   "ui.town_map.location.route_14.description": "A narrow wooded route between Routes 13 and 15.",
   "ui.town_map.location.route_15.name": "Route 15",
-  "ui.town_map.location.route_15.description": "A long coastal route continuing west from Route 14 toward Fuchsia City."
+  "ui.town_map.location.route_15.description": "A long coastal route continuing west from Route 14 toward Fuchsia City.",
+  "static_encounter.snorlax_sleeping": "Snorlax is sleeping soundly. A Poké Flute might wake it up.",
+  "static_encounter.played_flute": "You played the Poké Flute!",
+  "static_encounter.snorlax_awoke": "Snorlax woke up and attacked!"
 }

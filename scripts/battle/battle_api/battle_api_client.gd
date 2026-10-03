@@ -25,7 +25,8 @@ func create_triggered_wild_battle(
 	encounter_type: String = "grass",
 	origin: Dictionary = {},
 	debug_time_of_day: String = "",
-	forced_species_id: String = ""
+	forced_species_id: String = "",
+	static_encounter_id: String = ""
 ) -> Dictionary:
 	var payload := {
 		"player": player,
@@ -35,7 +36,9 @@ func create_triggered_wild_battle(
 	}
 	if not origin.is_empty():
 		payload["origin"] = origin.duplicate(true)
-	if debug_time_of_day in ["day", "night"]:
+	if not static_encounter_id.is_empty():
+		payload["staticEncounterId"] = static_encounter_id
+	if static_encounter_id.is_empty() and debug_time_of_day in ["day", "night"]:
 		payload["debugTimeOfDay"] = debug_time_of_day
 	if forced_species_id.strip_edges() != "":
 		payload["forcedSpeciesId"] = forced_species_id.strip_edges()
