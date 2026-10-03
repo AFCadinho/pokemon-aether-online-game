@@ -24,6 +24,9 @@ size = Vector2(32, 128)
 [sub_resource type="RectangleShape2D" id="shape_route13"]
 size = Vector2(96, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_route13_water"]
+size = Vector2(32, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3qd3x"]
 texture = ExtResource("5_fu0oe")
 texture_region_size = Vector2i(32, 32)
@@ -207,6 +210,9 @@ position = Vector2(144, 1936)
 [node name="FromRoute13" type="Marker2D" parent="Spawns"]
 position = Vector2(1264, 3920)
 
+[node name="FromRoute13Water" type="Marker2D" parent="Spawns"]
+position = Vector2(1360, 3856)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1669842588]
 
 [node name="ToLavenderTown" type="Area2D" parent="Exits" unique_id=1728816522]
@@ -257,6 +263,22 @@ shape = SubResource("shape_route13")
 [node name="RouteTransitionHint" parent="Exits/ToRoute13" instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
+[node name="ToRoute13Water" type="Area2D" parent="Exits"]
+position = Vector2(1424, 3856)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_13.tscn"
+target_spawn_name = "FromRoute12Water"
+transition_id = "kanto_route_12__to_route13_water"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute13Water"]
+shape = SubResource("shape_route13_water")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute13Water" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 1)
 flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1130484717]
@@ -468,3 +490,4 @@ tile_set = SubResource("TileSet_2m8tt")
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11Gate" to="Exits/ToRoute11Gate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute13" to="Exits/ToRoute13" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute13Water" to="Exits/ToRoute13Water" method="_on_body_entered"]
