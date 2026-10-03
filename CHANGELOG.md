@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 10 heeft vier extra overworld-Pokémon op de berghellingen: Aron, Roggenrola, Carbink en Rockruff.
+
 - Route 6 heeft nu vijf aanspreekbare overworld-Pokémon uit de lokale grasontmoetingen.
 
 - Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
