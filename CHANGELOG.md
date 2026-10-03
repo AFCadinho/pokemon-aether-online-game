@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix the Route 15 to Route 14 transition failing to find its arrival point and leaving the map blank; move Route 14's Biker Malik off a blocked tile.
+
 - Add a sleeping Route 12 Snorlax awakened with the Poké Flute, with a multi-tile roadblock and permanent, independent completion per player and encounter.
 
 - Reimport Route 15's overworld visual from the updated artist TMX, keeping stale embedded layers removed.

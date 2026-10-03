@@ -76,7 +76,8 @@ func _check_link(
 	var record := record_value as Dictionary
 	var destination := record.get("destination", {}) as Dictionary
 	var spawn := destination.get("position", {}) as Dictionary
-	var marker := destination_scene.find_child(str(exit.target_spawn_name), true, false) as Marker2D
+	# Match World's lookup for both legacy and authorized map transitions.
+	var marker := destination_scene.get_node_or_null("Spawns/" + str(exit.target_spawn_name)) as Marker2D
 	_expect(exit.transition_id == transition_id, "%s uses its registered transition" % exit_name)
 	_expect(exit.target_scene_path == destination_path, "%s targets the connected scene" % exit_name)
 	_expect(exit.target_spawn_name == spawn_name, "%s names the matching arrival marker" % exit_name)
