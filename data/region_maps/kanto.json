@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "regionId": "kanto",
   "nameKey": "ui.town_map.region.kanto",
-  "backgroundPath": "res://assets/ui/maps/kanto_region_map.png",
+  "backgroundPath": "res://assets/ui/maps/kanto_region_map_aether.png",
   "layoutPath": "res://data/region_maps/kanto_layout.json",
   "showConnectionOverlay": false,
   "showMarkerOverlay": false,
   "canvasSize": {
-    "x": 400,
-    "y": 297
+    "x": 1453,
+    "y": 1082
   },
   "locations": {
     "kanto_pallet_town": {

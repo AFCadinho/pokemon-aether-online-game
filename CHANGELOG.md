@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.
+
 - Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
 
 - Preserve the player's head when riding Cobalion by masking only pixels covered by the mount foreground, removing the oversized front head mask.
