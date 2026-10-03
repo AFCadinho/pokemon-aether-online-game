@@ -4,9 +4,10 @@ Built from the supplied four-direction sprite sheet in `source.png`, preserving
 its original pixels at 1× and the game's original 64×64 player riding frames.
 The 224×224 frames place the unchanged source pixels 16 pixels lower to align
 the mount with the player's world position. The complete front-facing Cobalion
-sprite is layered over the rider so its head stays visible; side and rear
-layers use matching rider masks. Side frames follow the source's two-pixel
-animation bob.
+sprite is layered over the rider so its head stays visible. The front rider
+mask also hides the player's head where it would show around Cobalion's narrower
+head; side and rear layers use matching rider masks. Side frames follow the
+source's two-pixel animation bob.
 
 Rebuild with `python tools/build_cobalion_mount.py` (Pillow required).
 `icon.png` uses the unpadded front cell.

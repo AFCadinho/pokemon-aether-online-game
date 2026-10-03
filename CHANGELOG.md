@@ -4,6 +4,8 @@
 
 - Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
 
+- Hide the front-facing player's hair and face around Cobalion's narrower head while preserving the rider's shoulders and body.
+
 - Shift Cobalion, Glaceon and Shiny Glaceon mount art 16 pixels lower on their padded sheets, and layer Cobalion's full front-facing head over the rider.
 
 - Reimport Route 8's artist visual from the updated Tiled map, rebuilding its compact lossless atlases.
