@@ -48,6 +48,14 @@ func _check_mount() -> void:
 		_check(mount.get_frame_count(anim) == 4, "four walking phases")
 		_check(mount.get_animation_speed(anim) == 5.0, "approved walk tempo")
 		_check(foreground.get_animation_speed(anim) == mount.get_animation_speed(anim), "foreground tempo synchronized")
+		var seats: Array[Vector2i] = []
+		for phase in range(4):
+			var seat := Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], phase)
+			if not seats.has(seat):
+				seats.append(seat)
+			var next := Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], (phase + 1) % 4)
+			_check(Vector2(seat - next).length() <= 6.0, "seat movement stays small across the loop seam")
+		_check(seats.size() > 1, "rider follows the walking motion instead of staying frozen")
 		for col in range(4):
 			var frame := Mounts._get_texture_image(mount.get_frame_texture(anim, col))
 			var fg := Mounts._get_texture_image(foreground.get_frame_texture(anim, col))
@@ -71,8 +79,37 @@ func _check_mount() -> void:
 						layers_match = false
 			_check(art_matches, "approved artwork preserved exactly at native 2x scale")
 			_check(layers_match, "mask and foreground follow creature pixels")
+			_check_occlusion(frame, fg, row, col)
 	for gender: String in ["male", "female"]:
 		await _check_avatars(gender)
+
+
+func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> void:
+	var seat := Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], col)
+	# Both player models use a 64px seated frame. Raised creature anatomy must
+	# not cut the face/helmet; it can occlude the torso below this head envelope.
+	var head := Rect2i(Vector2i(32,32) + seat, Vector2i(64,48))
+	var head_clear := true
+	var fan_preserved := true
+	var protected_pixels := 0
+	for y in range(128):
+		for x in range(128):
+			var point := Vector2i(x,y)
+			var fg := foreground.get_pixelv(point)
+			if head.has_point(point):
+				if fg.a > 0:
+					head_clear = false
+				continue
+			var pixel := frame.get_pixelv(point)
+			if current_mount_id == "mega_absol_z" and row in [1,2] and pixel.a > 0 \
+				and pixel.r > 60.0/255.0 and pixel.r > pixel.b*1.3 and pixel.r > pixel.g*2.0:
+				protected_pixels += 1
+				if fg != pixel:
+					fan_preserved = false
+	_check(head_clear, "horn/fan/tail never mask the rider face")
+	_check(fan_preserved, "whole visible pink feather silhouette occludes lower rider, without rectangular cuts")
+	if current_mount_id == "mega_absol_z" and row in [1,2]:
+		_check(protected_pixels > 0, "side pose keeps feather pixels below the rider head")
 
 
 func _check_avatars(gender: String) -> void:
