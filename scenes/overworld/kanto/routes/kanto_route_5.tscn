@@ -360,8 +360,7 @@ position = Vector2(1104, 48)
 overworld_pokemon_id = "kanto_route_5_mountain_geodude_1"
 species_id = "geodude"
 display_name = "Geodude"
-movement_behavior = "pace_horizontal"
-movement_tiles = 1
+movement_behavior = "idle"
 
 [node name="Onix" parent="Entities/Pokemon/MountainPokemon" unique_id=797659855 instance=ExtResource("pokemon_scene")]
 position = Vector2(1136, 272)
@@ -390,6 +389,15 @@ species_id = "bellsprout"
 display_name = "Bellsprout"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
+
+[node name="DaycarePond" type="Node2D" parent="Entities/Pokemon/DaycareGardenPokemon"]
+
+[node name="Magikarp" parent="Entities/Pokemon/DaycareGardenPokemon/DaycarePond" instance=ExtResource("pokemon_scene")]
+position = Vector2(832, 976)
+overworld_pokemon_id = "kanto_route_5_daycare_pond_magikarp_1"
+species_id = "magikarp"
+display_name = "Magikarp"
+movement_behavior = "idle"
 
 [node name="RoutePokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1466934584]
 

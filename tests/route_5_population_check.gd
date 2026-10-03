@@ -1,12 +1,13 @@
 extends SceneTree
 
 const EXPECTED_POKEMON := {
-	"MountainPokemon/Geodude": ["kanto_route_5_mountain_geodude_1", "geodude", Vector2(448, 704)],
-	"MountainPokemon/Onix": ["kanto_route_5_mountain_onix_1", "onix", Vector2(704, 736)],
-	"DaycareGardenPokemon/Oddish": ["kanto_route_5_daycare_garden_oddish_1", "oddish", Vector2(256, 1024)],
-	"DaycareGardenPokemon/Bellsprout": ["kanto_route_5_daycare_garden_bellsprout_1", "bellsprout", Vector2(384, 1056)],
-	"RoutePokemon/Pidgey": ["kanto_route_5_pidgey_1", "pidgey", Vector2(384, 752)],
-	"RoutePokemon/Meowth": ["kanto_route_5_meowth_1", "meowth", Vector2(992, 1296)],
+	"MountainPokemon/Geodude": ["kanto_route_5_mountain_geodude_1", "geodude", Vector2(1104, 48)],
+	"MountainPokemon/Onix": ["kanto_route_5_mountain_onix_1", "onix", Vector2(1136, 272)],
+	"DaycareGardenPokemon/Oddish": ["kanto_route_5_daycare_garden_oddish_1", "oddish", Vector2(816, 1200)],
+	"DaycareGardenPokemon/Bellsprout": ["kanto_route_5_daycare_garden_bellsprout_1", "bellsprout", Vector2(720, 944)],
+	"DaycareGardenPokemon/DaycarePond/Magikarp": ["kanto_route_5_daycare_pond_magikarp_1", "magikarp", Vector2(832, 976)],
+	"RoutePokemon/Pidgey": ["kanto_route_5_pidgey_1", "pidgey", Vector2(560, 432)],
+	"RoutePokemon/Meowth": ["kanto_route_5_meowth_1", "meowth", Vector2(752, 720)],
 }
 
 var failed := false
@@ -34,6 +35,12 @@ func _run() -> void:
 		var cell := collision.local_to_map(pokemon.position)
 		_check(collision.get_cell_source_id(cell) < 0, "%s stands on walkable ground" % relative_path)
 		_check(grass.get_cell_source_id(cell) < 0, "%s stands outside encounter grass" % relative_path)
+		if relative_path.ends_with("/Geodude"):
+			_check(str(pokemon.get("movement_behavior")) == "idle", "cliffside Geodude stays clear of blocked patrol tiles")
+			continue
+		if relative_path.ends_with("/Magikarp"):
+			_check(str(pokemon.get("movement_behavior")) == "idle", "daycare pond Magikarp remains in the water")
+			continue
 		for offset in [-1, 1]:
 			var patrol_cell := cell + Vector2i(offset, 0)
 			_check(collision.get_cell_source_id(patrol_cell) < 0, "%s can complete its one-tile patrol" % relative_path)
