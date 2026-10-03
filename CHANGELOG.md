@@ -4,6 +4,12 @@
 
 - Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.
 
+- Restyle the Gift Store's voucher purchase confirmation with the reusable Aether dialog.
+
+- Add Shiny Cobalion and its 500-Gem Mount Box to the Gift Store, with mounted normal/shiny previews, preserved rider masking and Shiny Tracker support.
+
+- Add Route 12 from the artist Tiled map, connected to Lavender Town and the Route 11–12 transition building; register Route 8 and Route 12 in the browser map module.
+
 - Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
 
 - Preserve the player's head when riding Cobalion by masking only pixels covered by the mount foreground, removing the oversized front head mask.

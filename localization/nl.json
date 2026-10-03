@@ -6349,5 +6349,6 @@
   "ui.voucher.load_failed": "Het vouchertegoed kon niet worden geladen. Sluit dit venster en probeer opnieuw.",
   "ui.voucher.balance": "Beschikbaar vouchertegoed: {balance}\n\nBesteed het aan geschikte cosmetics en mounts in de Aether Gift Store. Aankopen en alle inhoud van boxen zijn niet verhandelbaar. Alleen PokeAether-staff kan tegoed toevoegen.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Bevat een Mega Alakazam-mount. Shiny-basiskans: 50%.",
-  "ui.shiny_tracker.mounts.store_description_glaceon": "Bevat een Glaceon-mount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_glaceon": "Bevat een Glaceon-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%."
 }

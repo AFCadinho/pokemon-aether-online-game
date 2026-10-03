@@ -7,6 +7,7 @@ signal purchase_requested(item_id: String, chroma_colors: Dictionary, currency: 
 const PREVIEW_SHINY_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const PREVIEW_PLAY_ICON: Texture2D = preload("res://assets/ui/icons/replay_play.svg")
 const PREVIEW_PAUSE_ICON: Texture2D = preload("res://assets/ui/icons/replay_pause.svg")
+const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 
@@ -549,6 +550,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "cobalion-mount-box",
+		"name": "Cobalion Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_cobalion",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["featured", "mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",
@@ -654,7 +664,7 @@ var voucher_balance_label: Label
 var voucher_eligible_items: Dictionary = {}
 var payment_select: OptionButton
 var voucher_notice_label: Label
-var voucher_confirm_dialog: ConfirmationDialog
+var voucher_confirm_dialog: AetherConfirmationDialog
 var pending_voucher_purchase: Dictionary = {}
 var gem_balance := 0
 var authoritative_gem_prices: Dictionary = {}
@@ -728,7 +738,8 @@ func _ready() -> void:
 	if host != null:
 		host.resized.connect(_fit_store_window)
 	_fit_store_window.call_deferred()
-	voucher_confirm_dialog = ConfirmationDialog.new()
+	voucher_confirm_dialog = AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	voucher_confirm_dialog.name = "VoucherPurchaseConfirmation"
 	voucher_confirm_dialog.confirmed.connect(_confirm_voucher_purchase)
 	voucher_confirm_dialog.canceled.connect(_cancel_voucher_purchase)
 	add_child(voucher_confirm_dialog)
@@ -881,7 +892,7 @@ func open_store() -> void:
 
 func close_store() -> void:
 	if voucher_confirm_dialog != null:
-		voucher_confirm_dialog.hide()
+		voucher_confirm_dialog.hide_dialog()
 	if not pending_voucher_purchase.is_empty():
 		_cancel_voucher_purchase()
 	patreon_status_request_id += 1
@@ -2696,14 +2707,18 @@ func _on_purchase_pressed() -> void:
 		return
 	if _payment_currency() == "gift_voucher":
 		pending_voucher_purchase = {"itemId": selected_item_id, "colors": _selected_purchase_chroma_colors()}
-		voucher_confirm_dialog.title = _t("ui.store.voucher.confirm_title")
-		voucher_confirm_dialog.dialog_text = _t("ui.store.voucher.confirm", {
-			"item": _item_name(_catalog_item(selected_item_id)),
-			"price": _format_number(_gem_price(selected_item_id)),
-			"balance": _format_number(voucher_balance - _gem_price(selected_item_id)),
-		})
+		voucher_confirm_dialog.configure(
+			_t("ui.store.voucher.confirm_title"),
+			_t("ui.store.voucher.confirm", {
+				"item": _item_name(_catalog_item(selected_item_id)),
+				"price": _format_number(_gem_price(selected_item_id)),
+				"balance": _format_number(voucher_balance - _gem_price(selected_item_id)),
+			}),
+			_t("common.confirm"),
+			_t("common.cancel")
+		)
 		set_purchase_in_progress(true)
-		voucher_confirm_dialog.popup_centered(Vector2i(440, 220))
+		voucher_confirm_dialog.popup_centered(Vector2i(540, 270))
 		return
 	set_purchase_in_progress(true)
 	purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors(), "gems")
