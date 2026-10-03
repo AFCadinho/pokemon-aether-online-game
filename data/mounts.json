@@ -121,6 +121,26 @@
         "up": [[0, 0], [0, -4], [0, 0], [0, 4]]
       }
     },
+    "mega_alakazam_shiny": {
+      "displayName": "Shiny Mega Alakazam",
+      "movementMode": "land",
+      "unlockItemId": "shiny-mega-alakazam-mount",
+      "iconTexture": "res://assets/mounts/mega_alakazam_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/mega_alakazam_shiny/mount.png",
+      "riderMaskSheet": "res://assets/mounts/mega_alakazam_shiny/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/mega_alakazam_shiny/foreground.png",
+      "frameSize": [224, 224],
+      "movementAnimationSpeed": 1.667,
+      "hoverHeight": 16,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.4,
+      "riderOffsets": {
+        "down": [[0, 0], [0, -4], [0, 0], [0, 4]],
+        "left": [[0, 0], [0, -4], [0, 0], [0, 4]],
+        "right": [[0, 0], [0, -4], [0, 0], [0, 4]],
+        "up": [[0, 0], [0, -4], [0, 0], [0, 4]]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",

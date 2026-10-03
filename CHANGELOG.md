@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Mega Alakazam and its 500-Gem Mount Box to the Gift Store, using the existing mount pity and Shiny Tracker.
+
 - Refresh rider body and clothing masks when switching mounts so the previous mount cannot leave missing body parts.
 
 - Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.

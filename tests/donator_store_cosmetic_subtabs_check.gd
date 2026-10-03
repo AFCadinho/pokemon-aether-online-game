@@ -418,6 +418,7 @@ func _run() -> void:
 		"adinho-chroma-shoes": 75,
 		"rayquaza-mount-box": 500,
 		"shadow-lugia-mount-box": 500,
+		"mega-alakazam-mount-box": 500,
 		"surf-charm": 350,
 		"cut-charm": 250,
 		"strength-charm": 300,

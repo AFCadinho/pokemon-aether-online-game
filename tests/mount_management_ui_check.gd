@@ -28,8 +28,8 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny"],
-		"land catalog contains Cyclizar, both Rayquaza and Shadow Lugia variants"
+		["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny"].all(func(id: String) -> bool: return id in MountServiceScript.get_mount_ids_for_mode("land")),
+		"land catalog contains Cyclizar and normal/shiny Rayquaza, Shadow Lugia and Mega Alakazam"
 	)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()

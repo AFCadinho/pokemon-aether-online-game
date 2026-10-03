@@ -6346,5 +6346,6 @@
   "ui.voucher.view_balance": "Ver saldo",
   "ui.voucher.loading": "Carregando saldo do voucher…",
   "ui.voucher.load_failed": "Não foi possível carregar seu saldo. Feche esta janela e tente novamente.",
-  "ui.voucher.balance": "Crédito de voucher disponível: {balance}\n\nUse em cosméticos e montarias elegíveis na Aether Gift Store. As compras e todo o conteúdo das caixas não podem ser trocados. Apenas a equipe PokeAether pode adicionar crédito."
+  "ui.voucher.balance": "Crédito de voucher disponível: {balance}\n\nUse em cosméticos e montarias elegíveis na Aether Gift Store. As compras e todo o conteúdo das caixas não podem ser trocados. Apenas a equipe PokeAether pode adicionar crédito.",
+  "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Contém uma montaria Mega Alakazam. Chance shiny inicial: 50%."
 }
