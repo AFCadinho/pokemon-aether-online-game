@@ -11,6 +11,7 @@
 [ext_resource type="SpriteFrames" uid="uid://57e7bp514fh2" path="res://assets/npcs/classes/bug_catcher_frames.tres" id="8_bug_catcher"]
 [ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="9_camper"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="10_picnicker"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="11_4pw3a"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="11_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
@@ -455,6 +456,11 @@ item_id = "sitrus-berry"
 position = Vector2(1168, 1264)
 pickup_id = "kanto_route_6_great_ball_tm_substitute"
 item_id = "great-ball"
+
+[node name="Route6Sign" parent="Entities/Interactables" unique_id=141834031 instance=ExtResource("11_4pw3a")]
+position = Vector2(624, 1552)
+
+[node name="Node2D" type="Node2D" parent="Entities" unique_id=152861064]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1575351291]
 visible = false
