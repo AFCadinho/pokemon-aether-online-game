@@ -5,7 +5,7 @@ from import_player_layered_sprites import write_texture_import
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets/mounts/cobalion"
 FRAME = 224
-ORIGIN = (80, 68)
+ORIGIN = (80, 84)
 
 def side_head(x: int, y: int, row: int) -> bool:
     u = (x if row == 1 else 63 - x) // 2
@@ -24,10 +24,9 @@ def build() -> None:
             foreground=Image.new("RGBA",(FRAME,FRAME))
             for y in range(64):
                 for x in range(64):
-                    # Keep Cobalion's horns behind the rider, but bring its
-                    # eyes and muzzle forward so the face remains visible
-                    # beneath the player's face in the front-facing pose.
-                    front = row == 0 and y >= 24
+                    # Put Cobalion's complete front-facing sprite in front of
+                    # the rider so its head does not get covered.
+                    front = row == 0
                     if row in (1,2): front = side_head(x,y,row)
                     if front: foreground.putpixel((ORIGIN[0]+x,ORIGIN[1]+y),sprite.getpixel((x,y)))
             mask=Image.new("RGBA",(FRAME,FRAME),(255,255,255,0));mask.putalpha(foreground.getchannel("A"))
