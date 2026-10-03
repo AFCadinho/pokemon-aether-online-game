@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Mega Absol Z clearer planted and lifted walking paws with a wider stride, preserving its upper-body artwork and fitted rider positions.
+
 - Lower the Glaceon rider slightly to sit against its back, preserving native sprite scale, side-ear layering and synchronized walking motion.
 
 - Add the native-size Glaceon land mount with the approved riding pose, corrected side-ear layering and a compact Bag icon.
