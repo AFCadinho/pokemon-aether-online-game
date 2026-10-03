@@ -4,6 +4,10 @@
 
 - Add the approved Shiny Rayquaza as a separate hovering mount with its own item and Bag icon; preserve the normal Rayquaza pose, size and riding behavior.
 
+- Gary lets players enter Pokémon Tower 2F and retreat freely, stopping them only when they pass him toward 3F.
+
+- Gary automatically stops the player on Pokémon Tower 2F for his active story battle.
+
 - Add FireRed/LeafGreen Power Plant Pokémon and nearby HeartGold/SoulSilver Route 10 species as ambient overworld encounters.
 
 - Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
