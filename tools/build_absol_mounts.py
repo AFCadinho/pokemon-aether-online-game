@@ -51,14 +51,15 @@ def foreground_pixels(art, mount_id, row, col):
         draw.polygon([(63,19),(39,19),(38,29),(38,37),(63,40)], fill=255)
         draw.rectangle((0,41,63,63),fill=255)
     # The full mount remains underneath, including within this cleared area.
-    # In side views the entire 32px authored pose stays visible, including
-    # trousers, seated hips and shoes. Front/rear views retain head protection.
+    # In the front view, Absol's complete head sits in front of the rider.
+    # Side views preserve the full authored rider; the rear view protects its head.
     # Add one logical pixel in Y to undo the source-to-runtime upward shift.
     dx, dy = OFFSETS[mount_id][row][col]
     rider_left, rider_top = 16 + dx//2, 17 + dy//2
-    protected_height = 32 if row in (1,2) else 24
-    draw.rectangle((rider_left, rider_top, rider_left+31,
-                    rider_top+protected_height-1), fill=0)
+    if row != 0:
+        protected_height = 32 if row in (1,2) else 24
+        draw.rectangle((rider_left, rider_top, rider_left+31,
+                        rider_top+protected_height-1), fill=0)
     foreground = Image.new('RGBA',(64,64))
     for y in range(64):
         for x in range(64):
