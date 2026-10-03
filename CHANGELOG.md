@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
+
 - Route 6 heeft nu vijf aanspreekbare overworld-Pokémon uit de lokale grasontmoetingen.
 
 - Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
