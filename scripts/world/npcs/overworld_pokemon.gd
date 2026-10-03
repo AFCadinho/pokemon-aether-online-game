@@ -77,6 +77,12 @@ func _format_species_display_name(raw_species_id: String) -> String:
 	return " ".join(words)
 
 
+func _get_npc_metadata_id() -> String:
+	# Pokémon actor IDs belong to /overworld-pokemon, not the human NPC catalog.
+	# A separate explicit NPC metadata binding can still opt into NPC features.
+	return npc_metadata_id.strip_edges()
+
+
 func _load_overworld_pokemon_metadata_if_needed() -> Dictionary:
 	if overworld_pokemon_id.strip_edges().is_empty():
 		return {

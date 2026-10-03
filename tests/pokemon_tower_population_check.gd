@@ -2,6 +2,12 @@ extends SceneTree
 
 const TOWER := "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn"
 const POPULATION := "res://docs/tiled/pokemon_tower_population.json"
+class UnexpectedNpcMetadataService extends Node:
+	var calls := 0
+	func get_npc_metadata(_id: String) -> Dictionary:
+		calls += 1
+		return {"success": true, "metadata": {}}
+
 var failures := 0
 
 func _init() -> void:
@@ -14,6 +20,36 @@ func _run() -> void:
 	var npcs := map.get_node("Entities/NPCs").get_children()
 	var pokemon := map.get_node("Entities/Pokemon").get_children()
 	var entities: Array = npcs + pokemon
+	var npc_service := UnexpectedNpcMetadataService.new()
+	root.add_child(npc_service)
+	var pokemon_service := root.get_node("OverworldPokemonMetadataService")
+	for entity in pokemon:
+		entity.NpcMetadataService = npc_service
+		await entity.call("_initialize_quest_markers")
+		_check(npc_service.calls == 0, "Pokémon startup does not request human NPC metadata: " + entity.name)
+		_check(not entity.npc_metadata_load_failed, "Pokémon startup has no false metadata failure: " + entity.name)
+		var id: String = entity.overworld_pokemon_id
+		var previous: Variant = pokemon_service.overworld_pokemon_metadata_cache.get(id)
+		pokemon_service.overworld_pokemon_metadata_cache[id] = {"success": true, "metadata": {
+			"speciesId": entity.species_id, "name": entity.display_name,
+			"dialogueId": id.trim_suffix("_1") + "_cry",
+		}}
+		var loaded: Dictionary = await entity.call("_load_overworld_pokemon_metadata_if_needed")
+		_check(loaded.get("success", false) and not entity.dialogue_id.is_empty(), "Pokémon still loads its dedicated dialogue metadata: " + entity.name)
+		if previous == null:
+			pokemon_service.overworld_pokemon_metadata_cache.erase(id)
+		else:
+			pokemon_service.overworld_pokemon_metadata_cache[id] = previous
+		entity.NpcMetadataService = root.get_node("NpcMetadataService")
+	# Explicit NPC bindings remain available to deliberately configured actors.
+	var explicit_pokemon := (load("res://scenes/npcs/overworld_pokemon.tscn") as PackedScene).instantiate()
+	explicit_pokemon.npc_metadata_id = " explicit_pokemon_npc_features "
+	_check(explicit_pokemon.call("_get_npc_metadata_id") == "explicit_pokemon_npc_features", "Explicit NPC metadata binding remains supported")
+	explicit_pokemon.NpcMetadataService = npc_service
+	await explicit_pokemon.call("_initialize_quest_markers")
+	_check(npc_service.calls == 1 and explicit_pokemon.npc_metadata_loaded, "Explicit binding loads NPC features normally")
+	explicit_pokemon.free()
+	npc_service.queue_free()
 	var by_id := {}
 	var occupied := {}
 	var trainer_count := 0

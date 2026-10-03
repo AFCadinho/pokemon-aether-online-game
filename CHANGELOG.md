@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
+
 - Route 10 heeft vier extra overworld-Pokémon op de berghellingen: Aron, Roggenrola, Carbink en Rockruff.
 
 - Route 6 heeft nu vijf aanspreekbare overworld-Pokémon uit de lokale grasontmoetingen.
