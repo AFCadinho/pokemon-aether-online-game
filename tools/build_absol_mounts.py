@@ -11,15 +11,16 @@ DIRECTIONS = ('down', 'left', 'right', 'up')
 # paws on the same world ground line as Cyclizar. Players retain 64px frames.
 # Per-frame seat offsets follow the torso rather than freezing the rider in
 # world space. Side seats sit over the shoulders, closer to the head.
+# Front seats settle behind the head, four source pixels lower than before.
 OFFSETS = {
     'mega_absol': (
-        ((0,-46),(0,-48),(0,-48),(0,-46)),
+        ((0,-38),(0,-40),(0,-40),(0,-38)),
         ((4,-24),(6,-26),(4,-24),(6,-22)),
         ((-4,-24),(-4,-22),(-6,-24),(-6,-26)),
         ((0,-18),(0,-16),(-2,-16),(0,-14)),
     ),
     'mega_absol_z': (
-        ((0,-48),(0,-50),(0,-48),(0,-50)),
+        ((0,-40),(0,-42),(0,-40),(0,-42)),
         ((6,-22),(6,-20),(6,-20),(8,-22)),
         ((-6,-22),(-8,-24),(-6,-22),(-6,-24)),
         ((0,-18),(0,-16),(-2,-18),(-2,-20)),
