@@ -231,6 +231,7 @@ static func get_mounted_rider_frames(
 	if mask_image == null:
 		return base_frames
 	var definition := get_mount_definition(normalized_id)
+	var mount_frame_size := _get_mount_frame_size(definition)
 	var rider_offsets_value: Variant = definition.get("riderOffsets", {})
 	if not rider_offsets_value is Dictionary:
 		return base_frames
@@ -263,7 +264,8 @@ static func get_mounted_rider_frames(
 				mask_image,
 				direction_row,
 				mini(frame_index, FRAME_COLUMNS - 1),
-				offset
+				offset,
+				mount_frame_size
 			)
 			_clear_hidden_region(mounted_image, hidden_regions, direction)
 			var mounted_texture := ImageTexture.create_from_image(mounted_image) \
@@ -318,7 +320,8 @@ static func _get_mask_image(mount_id: String) -> Image:
 	if texture == null:
 		return null
 	var image := texture.get_image()
-	if image == null or image.get_size() != DEFAULT_FRAME_SIZE * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
+	var frame_size := _get_mount_frame_size(definition)
+	if image == null or image.get_size() != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
 		return null
 	if image.get_format() != Image.FORMAT_RGBA8:
 		image.convert(Image.FORMAT_RGBA8)
@@ -331,7 +334,8 @@ static func _transform_rider_frame(
 	mask_image: Image,
 	direction_row: int,
 	frame_column: int,
-	offset: Vector2i
+	offset: Vector2i,
+	mount_frame_size: Vector2i = DEFAULT_FRAME_SIZE
 ) -> Image:
 	if source_image == null:
 		return null
@@ -339,9 +343,13 @@ static func _transform_rider_frame(
 	if source.get_format() != Image.FORMAT_RGBA8:
 		source = source_image.duplicate()
 		source.convert(Image.FORMAT_RGBA8)
+	var rider_frame_size := source.get_size()
+	# Sprites share their centers; a larger mount has extra padding around the
+	# unchanged rider. Convert rider pixels into that mount's mask coordinates.
+	var rider_origin := Vector2i((Vector2(mount_frame_size) - Vector2(rider_frame_size)) * 0.5)
 	var output := Image.create(
-		DEFAULT_FRAME_SIZE.x,
-		DEFAULT_FRAME_SIZE.y,
+		rider_frame_size.x,
+		rider_frame_size.y,
 		false,
 		Image.FORMAT_RGBA8
 	)
@@ -349,14 +357,14 @@ static func _transform_rider_frame(
 	var used_rect := source.get_used_rect()
 	for source_y: int in range(used_rect.position.y, used_rect.end.y):
 		for source_x: int in range(used_rect.position.x, used_rect.end.x):
-			var target_x := source_x + offset.x
-			var target_y := source_y + offset.y
+			var target_x := source_x + offset.x + rider_origin.x
+			var target_y := source_y + offset.y + rider_origin.y
 			var source_color := source.get_pixel(source_x, source_y)
 			if target_x >= 0 and target_y >= 0 \
-				and target_x < DEFAULT_FRAME_SIZE.x and target_y < DEFAULT_FRAME_SIZE.y:
+				and target_x < mount_frame_size.x and target_y < mount_frame_size.y:
 				var mask_position := Vector2i(
-					frame_column * DEFAULT_FRAME_SIZE.x + target_x,
-					direction_row * DEFAULT_FRAME_SIZE.y + target_y
+					frame_column * mount_frame_size.x + target_x,
+					direction_row * mount_frame_size.y + target_y
 				)
 				if mask_image.get_pixelv(mask_position).a > 0.001:
 					source_color = Color.TRANSPARENT
