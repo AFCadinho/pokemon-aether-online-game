@@ -791,6 +791,10 @@
     "name": "Rayquaza Mount",
     "shortDesc": "Unlocks Rayquaza as a land mount."
   },
+  "shiny-rayquaza-mount": {
+    "name": "Shiny Rayquaza Mount",
+    "shortDesc": "Unlocks Shiny Rayquaza as a land mount."
+  },
   "shadow-lugia-mount": {
     "name": "Shadow Lugia Mount",
     "shortDesc": "Unlocks Shadow Lugia as a land mount."

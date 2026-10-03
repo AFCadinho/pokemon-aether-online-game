@@ -91,6 +91,9 @@ location_name = "Power Plant"
 region_id = "kanto"
 battle_environment_id = "building"
 weather_profile = "disabled"
+encounter_area_id = "kanto_power_plant"
+step_encounter_type = "grass"
+grass_encounter_chance = 0.21
 
 [node name="Visual" parent="." unique_id=287491267 instance=ExtResource("1_visual")]
 
