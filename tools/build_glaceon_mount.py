@@ -12,7 +12,7 @@ from import_player_layered_sprites import write_texture_import
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets/mounts/glaceon"
 FRAME = 224
-ORIGIN = (80, 68)
+ORIGIN = (80, 84)
 
 
 def side_head(x: int, y: int, row: int, col: int) -> bool:
