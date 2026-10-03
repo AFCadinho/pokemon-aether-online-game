@@ -116,6 +116,8 @@ func _check_leads(preview: bool) -> void:
 	await process_frame
 	check(not battle.has_meta("battle_entry_pending") and battle._pending_entry_visibility.is_empty(), "Finished/failed lead setup releases pending masks")
 	check(battle.enemy_sprite_box.modulate.a == 1.0, "Pending alpha masks are restored")
+	if not preview:
+		check(not battle.moves_grid.input_disabled and battle.moves_grid.modulate == MovesGrid.INPUT_ENABLED_MODULATE, "Trainer lead selection restores enabled move colors after releasing the pending mask")
 	if not immersive:
 		for frame in 3:
 			await process_frame

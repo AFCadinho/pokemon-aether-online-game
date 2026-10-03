@@ -8303,6 +8303,9 @@ func _finish_pending_entry() -> void:
 			if state.reserve_layout:
 				control.process_mode = state.process_mode
 	_pending_entry_visibility.clear()
+	# Lead selection may have unlocked input since the pending mask captured
+	# its tint. Render the current input state rather than that old snapshot.
+	moves_grid.refresh_input_visual_state()
 	update_entry_layout()
 
 func _prepare_battle_setup(

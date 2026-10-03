@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trainer battles herstellen de kleuren van beschikbare moves na de battle-entry, zodat ze in de eerste beurt niet meer uitgeschakeld lijken terwijl ze al bruikbaar zijn.
+
 - Route 5 heeft zes overworld-Pokémon bij de rotshellingen, daycare-tuin en route en twee NPC’s met dialoog.
 
 - Rayquaza now hovers above a ground shadow while moving and standing still, with a calmer flight animation and no sand footprints.
