@@ -6,6 +6,8 @@ const Icons := preload("res://scripts/services/item_icon_resolver.gd")
 const DIRECTIONS := ["down", "left", "right", "up"]
 const HEAD_ROWS := {29: Vector2i(31, 33), 30: Vector2i(30, 34), 31: Vector2i(30, 34), 32: Vector2i(29, 35), 33: Vector2i(29, 35)}
 
+var mount_id := "shadow_lugia"
+var unlock_item_id := "shadow-lugia-mount"
 var failed := false
 
 
@@ -14,21 +16,25 @@ func _init() -> void:
 
 
 func _run() -> void:
-	_check(Mounts.get_mount_id_for_unlock_item("shadow-lugia-mount") == "shadow_lugia", "item resolves to Shadow Lugia")
-	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shadow-lugia-mount"]) == ["shadow_lugia"], "ownership unlocks only Shadow Lugia")
-	_check(Mounts.get_unlocked_mount_ids_for_mode("land", []).is_empty(), "mount requires its item")
-	_check(Mounts.resolve_mount_id_for_mode("shadow_lugia", "surf") == "", "hover retains land movement rules")
-	_check(Icons.load_icon("shadow-lugia-mount") != null, "Bag mount icon loads")
-	_check_animation_and_overlap()
-	_check_riders()
-	await _check_players()
+	for variant: Array in [["shadow_lugia", "shadow-lugia-mount"], ["shadow_lugia_shiny", "shiny-shadow-lugia-mount"]]:
+		mount_id = str(variant[0])
+		unlock_item_id = str(variant[1])
+		_check(Mounts.get_mount_id_for_unlock_item(unlock_item_id) == mount_id, "item resolves to Shadow Lugia")
+		_check(Mounts.get_unlocked_mount_ids_for_mode("land", [unlock_item_id]) == [mount_id], "ownership unlocks only Shadow Lugia")
+		_check(Mounts.get_unlocked_mount_ids_for_mode("land", []).is_empty(), "mount requires its item")
+		_check(Mounts.resolve_mount_id_for_mode(mount_id, "surf") == "", "hover retains land movement rules")
+		_check(Icons.load_icon(unlock_item_id) != null, "Bag mount icon loads")
+		_check_animation_and_overlap()
+		_check_riders()
+		await _check_players()
+	_check_variant_rigs()
 	print("Shadow Lugia mount checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
 
 func _check_animation_and_overlap() -> void:
-	var frames := Mounts.get_mount_frames("shadow_lugia")
-	var foreground := Mounts.get_mount_foreground_frames("shadow_lugia")
+	var frames := Mounts.get_mount_frames(mount_id)
+	var foreground := Mounts.get_mount_foreground_frames(mount_id)
 	_check(frames != null and foreground != null, "mount and foreground load")
 	if frames == null or foreground == null:
 		return
@@ -49,11 +55,11 @@ func _check_animation_and_overlap() -> void:
 				_check(front.get_used_rect().size == Vector2i.ZERO, "only down-facing head has a foreground layer")
 		_check(images[0].get_data() == images[2].get_data() and images[1].get_data() == images[3].get_data(), "approved A-B-A-B wing loop is preserved")
 		_check(images[0].get_data() != images[1].get_data(), "two distinct wing poses animate")
-	var mask := Mounts._get_mask_image("shadow_lugia")
+	var mask := Mounts._get_mask_image(mount_id)
 	var source := Image.create(64, 64, false, Image.FORMAT_RGBA8)
 	source.fill(Color.MAGENTA)
 	for index in range(4):
-		var offset := Mounts.get_rider_frame_offset("shadow_lugia", "down", index)
+		var offset := Mounts.get_rider_frame_offset(mount_id, "down", index)
 		var result := Mounts._transform_rider_frame(source, mask, 0, index, offset, Vector2i(128, 128))
 		var mount_image := Mounts._get_texture_image(frames.get_frame_texture(&"walk_down", index))
 		# Test the actual approved silhouette above the broad foreground region.
@@ -71,7 +77,7 @@ func _check_riders() -> void:
 	for gender: String in ["male", "female"]:
 		var body_id: String = Appearance.DEFAULT_MALE_BODY_ID if gender == "male" else Appearance.DEFAULT_FEMALE_BODY_ID
 		var base := Appearance.get_body_frames(body_id, gender, Appearance.BODY_MOVEMENT_RIDE)
-		var mounted := Mounts.get_mounted_rider_frames(base, "shadow_lugia", {}, {}, true)
+		var mounted := Mounts.get_mounted_rider_frames(base, mount_id, {}, {}, true)
 		_check(mounted != null and mounted != base, "rider receives the mask")
 		if mounted == null or base == null:
 			return
@@ -92,7 +98,7 @@ func _check_players() -> void:
 	local.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
 	root.add_child(local)
 	local.set("base_look_position", local.get_node("Look").position)
-	local.set("active_mount_id", "shadow_lugia")
+	local.set("active_mount_id", mount_id)
 	local.set("activity_style", "ride")
 	local.call("_cache_appearance_sprites")
 	local.call("_apply_body_appearance", Appearance.DEFAULT_MALE_BODY_ID)
@@ -104,7 +110,7 @@ func _check_players() -> void:
 	remote.call("apply_state", {
 		"userId": 1, "displayName": "Shadow Lugia rider", "gender": "female",
 		"position": {"x": 32, "y": 32}, "facingDirection": "down",
-		"movement": {"isMoving": true, "activityStyle": "ride", "mountId": "shadow_lugia",
+		"movement": {"isMoving": true, "activityStyle": "ride", "mountId": mount_id,
 			"startPosition": {"x": 32, "y": 0}, "targetPosition": {"x": 32, "y": 32}, "duration": 0.065},
 	})
 	_check_head_layers(local, "local")
@@ -138,7 +144,7 @@ func _check_players() -> void:
 
 
 func _check_head_layers(player: Node2D, label: String) -> void:
-	var mask := Mounts._get_mask_image("shadow_lugia")
+	var mask := Mounts._get_mask_image(mount_id)
 	var parts := {"hair": "HairSprite", "eyes": "EyesSprite", "eyebrows": "EyebrowsSprite"}
 	for category: String in parts:
 		var sprite: AnimatedSprite2D = player.call("_get_appearance_sprite", parts[category])
@@ -163,7 +169,7 @@ func _check_head_layers(player: Node2D, label: String) -> void:
 			var row := DIRECTIONS.find(direction)
 			for index in range(4):
 				var mounted := Mounts._get_texture_image(sprite.sprite_frames.get_frame_texture(animation, index))
-				var origin := Vector2i(32, 32) + Mounts.get_rider_frame_offset("shadow_lugia", direction, index) + Vector2i(sprite.offset)
+				var origin := Vector2i(32, 32) + Mounts.get_rider_frame_offset(mount_id, direction, index) + Vector2i(sprite.offset)
 				var matches := true
 				for y in range(original.get_height()):
 					for x in range(original.get_width()):
@@ -178,6 +184,40 @@ func _check_head_layers(player: Node2D, label: String) -> void:
 	# Keep this fixture facing down for the existing runtime/hover checks.
 	player.call("_sync_mount_animation", true, Vector2.DOWN)
 	player.call("_sync_activity_layer_offsets")
+
+
+func _check_variant_rigs() -> void:
+	var normal_definition := Mounts.get_mount_definition("shadow_lugia")
+	var shiny_definition := Mounts.get_mount_definition("shadow_lugia_shiny")
+	for key: String in normal_definition:
+		if key not in ["displayName", "unlockItemId", "spriteSheet", "riderMaskSheet"]:
+			_check(normal_definition[key] == shiny_definition.get(key), "normal and shiny share %s" % key)
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shadow-lugia-mount"]) == ["shadow_lugia"], "normal item does not unlock shiny")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shiny-shadow-lugia-mount"]) == ["shadow_lugia_shiny"], "shiny item does not unlock normal")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shadow-lugia-mount", "shiny-shadow-lugia-mount"]) == ["shadow_lugia", "shadow_lugia_shiny"], "both variants can be owned together")
+	_check(Mounts._get_mask_image("shadow_lugia").get_data() == Mounts._get_mask_image("shadow_lugia_shiny").get_data(), "shiny uses the exact normal head/tail mask")
+	var normal := Mounts.get_mount_frames("shadow_lugia")
+	var shiny := Mounts.get_mount_frames("shadow_lugia_shiny")
+	if normal == null or shiny == null:
+		_check(false, "both variants load for palette comparison")
+		return
+	for direction: String in DIRECTIONS:
+		var animation := StringName("walk_" + direction)
+		for index in range(4):
+			var old := Mounts._get_texture_image(normal.get_frame_texture(animation, index))
+			var new := Mounts._get_texture_image(shiny.get_frame_texture(animation, index))
+			old.convert(Image.FORMAT_RGBA8)
+			new.convert(Image.FORMAT_RGBA8)
+			var old_bytes := old.get_data()
+			var new_bytes := new.get_data()
+			var same_alpha := old_bytes.size() == new_bytes.size()
+			if same_alpha:
+				for byte in range(3, old_bytes.size(), 4):
+					if old_bytes[byte] != new_bytes[byte]:
+						same_alpha = false
+						break
+			_check(same_alpha, "%s/%d shiny silhouette and anchor match normal" % [direction, index])
+			_check(old_bytes != new_bytes, "%s/%d has its own shiny palette" % [direction, index])
 
 
 func _visible_pixels_equal(first: Image, second: Image) -> bool:
