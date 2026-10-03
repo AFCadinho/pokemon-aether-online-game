@@ -406,5 +406,13 @@
   "aether-royal-cape": {
     "name": "Aether Royal-skillcape",
     "shortDesc": "Vereist een actieve Patreon-rol. Niet verhandelbaar. Draag deze skillcape afzonderlijk via het Back-slot. Voor mannelijke en vrouwelijke personages."
+  },
+  "shadow-lugia-mount-box": {
+    "name": "Shadow Lugia-mountbox",
+    "shortDesc": "Bevat Shadow Lugia of Shiny Shadow Lugia. De shiny-kans begint op 50% en stijgt tot 80%. Dubbele mounts zijn mogelijk."
+  },
+  "shiny-shadow-lugia-mount": {
+    "name": "Shiny Shadow Lugia-mount",
+    "shortDesc": "Ontgrendelt Shiny Shadow Lugia als landmount."
   }
 }

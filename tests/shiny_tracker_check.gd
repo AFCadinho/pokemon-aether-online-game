@@ -50,14 +50,14 @@ func _run() -> void:
 	popup.tracker_state["mounts"] = {
 		"activeBoxItemId": "rayquaza-mount-box", "totalBoxesOpened": 4,
 		"shinyMountsReceived": 1, "boxesSinceLastShiny": 3, "longestDryStreak": 3,
-		"boxes": [{"itemId": "rayquaza-mount-box", "name": "Rayquaza Mount Box", "quantity": 2, "normalMountId": "rayquaza", "shinyMountId": "rayquaza_shiny", "nextShinyChancePercent": 80}],
+		"boxes": [{"itemId": "rayquaza-mount-box", "name": "Rayquaza Mount Box", "quantity": 2, "normalMountId": "rayquaza", "shinyMountId": "rayquaza_shiny", "nextShinyChancePercent": 80}, {"itemId": "shadow-lugia-mount-box", "name": "Shadow Lugia Mount Box", "quantity": 1, "normalMountId": "shadow_lugia", "shinyMountId": "shadow_lugia_shiny", "nextShinyChancePercent": 50}],
 		"recentOpenings": [{"mountId": "rayquaza_shiny", "isShiny": true, "alreadyOwned": true, "shinyChancePercent": 70}],
 	}
 	popup.call("_render_tracker")
 	popup.call("_select_tracker_tab", "mounts")
 	_check(popup.mount_workspace.visible and not popup.pokemon_workspace.visible, "Mounts tab switches away from Pokémon")
 	_check(popup.mount_stat_labels["totalBoxesOpened"].text == "4", "Mount counters render independently")
-	_check(popup.mount_open_buttons.size() == 1 and not popup.mount_open_buttons[0].disabled, "Owned box can be opened from tracker")
+	_check(popup.mount_open_buttons.size() == 2 and not popup.mount_open_buttons[0].disabled and not popup.mount_open_buttons[1].disabled, "Owned box can be opened from tracker")
 	_check(popup.mount_history_list.get_child(0).text.contains("70%") and popup.mount_history_list.get_child(0).text.contains("duplicate"), "History discloses used chance and duplicate outcomes")
 	popup.request_busy = true
 	popup.call("_refresh_actions")
@@ -68,6 +68,11 @@ func _run() -> void:
 	_check(popup.mount_confirmation.dialog_text.contains("80%") and popup.mount_confirmation.dialog_text.contains("resets") and popup.mount_confirmation.dialog_text.contains("Duplicates"), "Confirmation shows personal chance, resets and duplicates")
 	popup.mount_confirmation.hide()
 	_check(ItemIcons.load_icon("rayquaza-mount-box") != null, "Mount box has an item icon")
+	popup.call("_on_mount_open_pressed", popup.tracker_state["mounts"]["boxes"][1])
+	_check(popup.pending_mount_box_id == "shadow-lugia-mount-box" and popup.mount_confirmation.dialog_text.contains("50%") and popup.mount_confirmation.dialog_text.contains("Shadow Lugia"), "Switching to Shadow Lugia discloses its base chance and targets the correct box")
+	popup.mount_confirmation.hide()
+	_check(ItemIcons.load_icon("shadow-lugia-mount-box") != null, "Shadow Lugia box has its registered mount icon")
+
 	if "--preview-mounts" in OS.get_cmdline_user_args():
 		root.size = Vector2i(1200, 800)
 		popup.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
@@ -101,12 +106,22 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate()
 	root.add_child(store)
 	await process_frame
-	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
+	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
 	store.call("_select_category", "mounts")
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
 	_check(store.selection_price_label.text.contains("500") and store.selection_price_label.text.contains("€5.00"), "Box price includes Gems and euro value")
 	_check(store.selection_description_label.text.contains("50%") and store.selection_description_label.text.contains("80%") and store.selection_description_label.text.contains("Duplicates"), "Store discloses chance rules before purchase")
+	_check(store.call("_catalog_item", "nimbus_mount").is_empty() and store.call("_catalog_item", "aether_board_mount").is_empty(), "Removed Nimbus and Aether Board previews are absent from the Store")
+	store.call("_select_product", "shadow-lugia-mount-box")
+	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative Shadow Lugia box purchase")
+	_check(store.selection_title_label.text.contains("Shadow Lugia") and store.selection_description_label.text.contains("Shadow Lugia") and not store.selection_description_label.text.contains("Rayquaza"), "Shadow Lugia box shows the correct localized reward description")
+	_check(store.selection_price_label.text.contains("500") and store.selection_price_label.text.contains("€5.00"), "Shadow Lugia box displays Gems and the matching euro value")
+	var correct_preview := false
+	for child: Node in store.character_preview_viewport.get_children():
+		if child is Sprite2D and child.texture == load("res://scripts/services/mount_service.gd").get_mount_icon_texture("shadow_lugia"):
+			correct_preview = true
+	_check(correct_preview, "Shadow Lugia Store detail preview shows Shadow Lugia")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
 		_check(store.selection_price_label.text.contains("€5,00"), "Dutch Store uses the approved €5,00 price")
