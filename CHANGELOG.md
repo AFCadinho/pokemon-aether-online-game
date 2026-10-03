@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore clicking nearby wild and NPC battle indicators to spectate when physics picking is unavailable.
+
 - Refresh rider body and clothing masks when switching mounts so the previous mount cannot leave missing body parts.
 
 - Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.
