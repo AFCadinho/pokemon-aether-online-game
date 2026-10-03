@@ -295,6 +295,7 @@ var master_appearance_sprite: AnimatedSprite2D
 var visual_sort_depth_cache := -1
 var pokemon_follower: PokemonFollower
 var body_sprite_frames_movement_style := ""
+var body_sprite_frames_mount_id := ""
 var activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
 var fishing_activity_active := false
 var fishing_activity_time_left := 0.0
@@ -3045,6 +3046,7 @@ func _apply_body_appearance(body_id: String) -> void:
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	_apply_body_modulate(body_sprite, normalized_body_id)
 	body_sprite_frames_movement_style = movement_style
+	body_sprite_frames_mount_id = active_mount_id
 	_apply_appearance_parts(movement_style)
 
 func _sync_body_sprite_frames_for_movement() -> void:
@@ -3053,7 +3055,9 @@ func _sync_body_sprite_frames_for_movement() -> void:
 		return
 
 	var movement_style: String = _get_current_body_movement_style()
-	if movement_style == body_sprite_frames_movement_style:
+	# The same riding pose has a different cutout and offset for each mount.
+	if movement_style == body_sprite_frames_movement_style \
+		and active_mount_id == body_sprite_frames_mount_id:
 		return
 
 	var current_animation: StringName = body_sprite.animation
@@ -3080,6 +3084,7 @@ func _sync_body_sprite_frames_for_movement() -> void:
 	body_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	_apply_body_modulate(body_sprite, PlayerSave.appearance_body_id)
 	body_sprite_frames_movement_style = movement_style
+	body_sprite_frames_mount_id = active_mount_id
 	_apply_appearance_parts(movement_style)
 	_sync_appearance_animation_speeds()
 
