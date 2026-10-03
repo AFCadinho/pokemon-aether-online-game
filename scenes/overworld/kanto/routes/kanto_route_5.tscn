@@ -7,11 +7,11 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_20p23"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_vd24t"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_seajf"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="camper_frames"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="daycare_door_hint"]
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon_scene"]
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc_scene"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker_frames"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="camper_frames"]
+[ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker_frames"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon_scene"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(128, 16)
@@ -333,9 +333,9 @@ z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1792456903]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=180381981]
 
-[node name="HikerMilo" parent="Entities/NPCs" instance=ExtResource("dialogue_npc_scene")]
+[node name="HikerMilo" parent="Entities/NPCs" unique_id=726044363 instance=ExtResource("dialogue_npc_scene")]
 position = Vector2(864, 816)
 npc_id = "kanto_route_5_hiker_milo"
 npc_definition_id = "trainer_class_hiker"
@@ -343,7 +343,7 @@ display_name = "Hiker Milo"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("hiker_frames")
 
-[node name="CamperLena" parent="Entities/NPCs" instance=ExtResource("dialogue_npc_scene")]
+[node name="CamperLena" parent="Entities/NPCs" unique_id=658623414 instance=ExtResource("dialogue_npc_scene")]
 position = Vector2(832, 1504)
 npc_id = "kanto_route_5_camper_lena"
 npc_definition_id = "trainer_class_camper"
@@ -351,59 +351,62 @@ display_name = "Camper Lena"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("camper_frames")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1810714826]
 
-[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=621480368]
 
-[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(448, 704)
+[node name="Geodude" parent="Entities/Pokemon/MountainPokemon" unique_id=1331204206 instance=ExtResource("pokemon_scene")]
+position = Vector2(1104, 48)
 overworld_pokemon_id = "kanto_route_5_mountain_geodude_1"
 species_id = "geodude"
 display_name = "Geodude"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
-[node name="Onix" parent="Entities/Pokemon/MountainPokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(704, 736)
+[node name="Onix" parent="Entities/Pokemon/MountainPokemon" unique_id=797659855 instance=ExtResource("pokemon_scene")]
+position = Vector2(1136, 272)
 overworld_pokemon_id = "kanto_route_5_mountain_onix_1"
 species_id = "onix"
 display_name = "Onix"
+facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
-[node name="DaycareGardenPokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="DaycareGardenPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1396818811]
 
-[node name="Oddish" parent="Entities/Pokemon/DaycareGardenPokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(256, 1024)
+[node name="Oddish" parent="Entities/Pokemon/DaycareGardenPokemon" unique_id=473985262 instance=ExtResource("pokemon_scene")]
+position = Vector2(816, 1200)
 overworld_pokemon_id = "kanto_route_5_daycare_garden_oddish_1"
 species_id = "oddish"
 display_name = "Oddish"
+facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
-[node name="Bellsprout" parent="Entities/Pokemon/DaycareGardenPokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(384, 1056)
+[node name="Bellsprout" parent="Entities/Pokemon/DaycareGardenPokemon" unique_id=844821980 instance=ExtResource("pokemon_scene")]
+position = Vector2(720, 944)
 overworld_pokemon_id = "kanto_route_5_daycare_garden_bellsprout_1"
 species_id = "bellsprout"
 display_name = "Bellsprout"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
-[node name="RoutePokemon" type="Node2D" parent="Entities/Pokemon"]
+[node name="RoutePokemon" type="Node2D" parent="Entities/Pokemon" unique_id=1466934584]
 
-[node name="Pidgey" parent="Entities/Pokemon/RoutePokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(384, 752)
+[node name="Pidgey" parent="Entities/Pokemon/RoutePokemon" unique_id=1511395233 instance=ExtResource("pokemon_scene")]
+position = Vector2(560, 432)
 overworld_pokemon_id = "kanto_route_5_pidgey_1"
 species_id = "pidgey"
 display_name = "Pidgey"
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
-[node name="Meowth" parent="Entities/Pokemon/RoutePokemon" instance=ExtResource("pokemon_scene")]
-position = Vector2(992, 1296)
+[node name="Meowth" parent="Entities/Pokemon/RoutePokemon" unique_id=1095813308 instance=ExtResource("pokemon_scene")]
+position = Vector2(752, 720)
 overworld_pokemon_id = "kanto_route_5_meowth_1"
 species_id = "meowth"
 display_name = "Meowth"
+facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 
