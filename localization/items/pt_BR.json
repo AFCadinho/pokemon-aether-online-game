@@ -438,5 +438,9 @@
   "mega-garchomp-mount": {
     "name": "Montaria Mega Garchomp",
     "shortDesc": "Desbloqueia Mega Garchomp como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "glaceon-mount": {
+    "name": "Montaria Glaceon",
+    "shortDesc": "Desbloqueia Glaceon como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

@@ -438,5 +438,9 @@
   "mega-garchomp-mount": {
     "name": "Mega Garchomp-mount",
     "shortDesc": "Ontgrendelt Mega Garchomp als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "glaceon-mount": {
+    "name": "Glaceon-mount",
+    "shortDesc": "Ontgrendelt Glaceon als landmount. Vereist een Mount License voor de huidige regio."
   }
 }

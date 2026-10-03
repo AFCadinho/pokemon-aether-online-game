@@ -438,5 +438,9 @@
   "mega-garchomp-mount": {
     "name": "超级烈咬陆鲨坐骑",
     "shortDesc": "解锁超级烈咬陆鲨陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "glaceon-mount": {
+    "name": "冰伊布坐骑",
+    "shortDesc": "解锁冰伊布陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

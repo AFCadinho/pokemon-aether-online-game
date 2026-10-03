@@ -438,5 +438,9 @@
   "mega-garchomp-mount": {
     "name": "Mega Garchomp Mount",
     "shortDesc": "Unlocks Mega Garchomp as a land mount. Requires a Mount License for the current region."
+  },
+  "glaceon-mount": {
+    "name": "Glaceon Mount",
+    "shortDesc": "Unlocks Glaceon as a land mount. Requires a Mount License for the current region."
   }
 }
