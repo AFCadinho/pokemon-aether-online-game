@@ -1,12 +1,11 @@
 [gd_scene format=4 uid="uid://xiledkw6snc2"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
-
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/diglett_cave_tunnel/diglett_cave_tunnel.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_axtp6"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_syovu"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(32, 32)
@@ -91,6 +90,7 @@ location_id = "kanto.diglett.cave.tunnel"
 location_name = "Diglett Cave Tunnel"
 region_id = "kanto"
 encounter_area_id = "kanto_digletts_cave"
+land_mounts_allowed_interior = true
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"
@@ -146,30 +146,29 @@ z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=575797736]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=289434286]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=64759444]
 
-[node name="MaxRevive" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(816, 480)
+[node name="MaxRevive" parent="Entities/Interactables/Items" unique_id=1003279456 instance=ExtResource("99_item")]
+position = Vector2(176, 816)
 pickup_id = "kanto_diglett_cave_tunnel_maxrevive"
 item_id = "max-revive"
 
-[node name="Calcium" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(688, 928)
+[node name="Calcium" parent="Entities/Interactables/Items" unique_id=12465812 instance=ExtResource("99_item")]
+position = Vector2(1008, 1392)
 pickup_id = "kanto_diglett_cave_tunnel_calcium"
 item_id = "calcium"
 
-[node name="PPMax" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(752, 1456)
+[node name="PPMax" parent="Entities/Interactables/Items" unique_id=1600215982 instance=ExtResource("99_item")]
+position = Vector2(1264, 2160)
 pickup_id = "kanto_diglett_cave_tunnel_ppmax"
 item_id = "pp-max"
 
-[node name="RockIncense" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
-position = Vector2(816, 2224)
+[node name="RockIncense" parent="Entities/Interactables/Items" unique_id=1170593148 instance=ExtResource("99_item")]
+position = Vector2(528, 240)
 pickup_id = "kanto_diglett_cave_tunnel_rockincense"
 item_id = "rock-incense"
-
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1101823855]
 visible = false

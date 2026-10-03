@@ -91,6 +91,7 @@ location_id = "kanto.diglett.cave.route.2.entrance"
 location_name = "Diglett Cave Route 2 Entrance"
 region_id = "kanto"
 encounter_area_id = "kanto_digletts_cave"
+land_mounts_allowed_interior = true
 battle_environment_id = "cave"
 lighting_profile = "indoor"
 weather_profile = "disabled"

@@ -1096,6 +1096,13 @@ func _apply_world_pixel_scale() -> void:
 	)
 
 
+func _current_map_allows_land_mounts() -> bool:
+	var current_map := _resolve_current_map()
+	if current_map != null and current_map.has_method("allows_land_mounts"):
+		return bool(current_map.call("allows_land_mounts"))
+	return _get_current_map_world_access_area_type() != "interior"
+
+
 func _get_current_map_world_access_area_type() -> String:
 	var current_map := _resolve_current_map()
 	if current_map == null:
@@ -1898,7 +1905,7 @@ func request_land_mount_toggle() -> bool:
 	if toggle_land_mount():
 		return true
 	var message_key := "ui.mounts.interior_blocked" \
-		if _get_current_map_world_access_area_type() == "interior" \
+		if not _current_map_allows_land_mounts() \
 		else "ui.mounts.license_required" \
 		if not _has_mount_license_for_current_region() \
 		else "ui.mounts.unavailable"
@@ -1991,7 +1998,7 @@ func _start_surf_activity(clear_input := true) -> void:
 	_spawn_water_ripple_effect(global_position, "surf_start")
 
 func _start_land_mount_activity() -> bool:
-	if _get_current_map_world_access_area_type() == "interior":
+	if not _current_map_allows_land_mounts():
 		return false
 	if not _has_mount_license_for_current_region():
 		return false

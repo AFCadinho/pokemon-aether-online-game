@@ -13,6 +13,8 @@
     {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "Route 6", "lines": ["Route 6", "In het noorden ligt Saffron City. In het zuiden ligt Vermilion City."]},
     {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "Ondergrondse Doorgang", "lines": ["Ondergrondse Doorgang", "Een stille tunnel die Route 6 met Route 5 verbindt."]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Route 24", "lines": ["Route 24", "Nugget Bridge verbindt Cerulean City met Route 25."]},
-    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Volg de weg naar het oosten tot Bill's huis."]}
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Volg de weg naar het oosten tot Bill's huis."]},
+    {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "Route 11", "lines": ["Route 11", "Vermilion City ↔ Route 12. Via Diglett's grot bereik je Route 2."]},
+    {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "Diglett's grot", "lines": ["Diglett's grot", "Een ondergrondse tunnel tussen Route 11 en Route 2."]}
   ]
 }

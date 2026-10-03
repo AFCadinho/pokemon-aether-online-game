@@ -199,6 +199,7 @@ location_id = "kanto.mt_moon.b2f"
 location_name = "Mt. Moon"
 region_id = "kanto"
 encounter_area_id = "kanto_mt_moon_b2f"
+land_mounts_allowed_interior = true
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"

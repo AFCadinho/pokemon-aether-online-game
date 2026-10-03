@@ -13,6 +13,8 @@
     {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "Rota 6", "lines": ["Rota 6", "Saffron City fica ao norte. Vermilion City fica ao sul."]},
     {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "Passagem Subterrânea", "lines": ["Passagem Subterrânea", "Um túnel tranquilo que conecta as Rotas 6 e 5."]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Rota 24", "lines": ["Rota 24", "A Ponte Nugget liga a Cidade de Cerulean à Rota 25."]},
-    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Rota 25", "lines": ["Rota 25", "Siga a estrada para leste até a casa de Bill."]}
+    {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Rota 25", "lines": ["Rota 25", "Siga a estrada para leste até a casa de Bill."]},
+    {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "Rota 11", "lines": ["Rota 11", "Cidade de Vermilion ↔ Rota 12. A Caverna dos Diglett leva à Rota 2."]},
+    {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "Caverna dos Diglett", "lines": ["Caverna dos Diglett", "Um túnel subterrâneo que conecta a Rota 11 à Rota 2."]}
   ]
 }
