@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.
+
 - Keep mounted rider, clothing and mount foreground at one ground-based world depth, preserving their internal layer order so map objects do not cut between mount parts.
 
 - Give Mega Alakazam a tightly framed icon so it is clearly visible in the Bag and mount selector.

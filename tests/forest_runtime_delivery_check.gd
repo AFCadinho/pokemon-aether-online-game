@@ -21,6 +21,7 @@ func _run() -> void:
 	FileAccess.open(installed_manifest, FileAccess.WRITE).store_string('{"schema":1,"pack":"forest.pck"}')
 	FileAccess.open(installed_forest_dir.path_join("forest.pck"), FileAccess.WRITE).store_buffer(PackedByteArray([1]))
 	if settings._editor_installed_forest_manifest(local_game_user_data, true) != installed_manifest: failures += 1
+	if settings._editor_installed_forest_manifest(local_game_user_data + "/", true) != installed_manifest: failures += 1
 	if not settings._editor_installed_forest_manifest(local_game_user_data, false).is_empty(): failures += 1
 
 	var previous_setting: String = settings.battle_3d_forest_manifest
