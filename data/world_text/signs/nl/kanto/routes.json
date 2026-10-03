@@ -16,6 +16,7 @@
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Volg de weg naar het oosten tot Bill's huis."]},
     {"id": "kanto_route_11_route_sign", "type": "road", "mapId": "kanto_route_11", "title": "Route 11", "lines": ["Route 11", "Vermilion City ↔ Route 12. Via Diglett's grot bereik je Route 2."]},
     {"id": "kanto_route_11_digletts_cave_sign", "type": "road", "mapId": "kanto_route_11", "title": "Diglett's grot", "lines": ["Diglett's grot", "Een ondergrondse tunnel tussen Route 11 en Route 2."]},
-    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "Route 9", "lines": ["Route 9", "In het westen ligt Cerulean City. In het oosten liggen Route 10 en de Rock Tunnel."]}
+    {"id": "kanto_route_9_route_sign", "type": "road", "mapId": "kanto_route_9", "title": "Route 9", "lines": ["Route 9", "In het westen ligt Cerulean City. In het oosten liggen Route 10 en de Rock Tunnel."]},
+    {"id": "kanto_route_10_rock_tunnel_sign", "type": "road", "mapId": "kanto_route_10", "title": "Rock Tunnel", "lines": ["Rock Tunnel","Een donkere tunnel door de bergen. Zorg voor licht en kijk goed waar je loopt."]}
   ]
 }
