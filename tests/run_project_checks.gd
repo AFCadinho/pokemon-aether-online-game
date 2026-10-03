@@ -274,7 +274,6 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/shadow_lugia_mount_check.gd",
 	"res://tests/mega_alakazam_mount_check.gd",
 	"res://tests/mega_absol_z_mount_check.gd",
-	"res://tests/mega_garchomp_mount_check.gd",
 	"res://tests/glaceon_mount_check.gd",
 	"res://tests/mount_unimported_assets_check.gd",
 	"res://tests/mount_world_depth_check.gd",

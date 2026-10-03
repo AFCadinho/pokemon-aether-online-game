@@ -4,11 +4,11 @@
 
 - Remove the stray inner paw silhouettes in Mega Absol Z side-walking contact frames so its overlapping legs read clearly.
 
+- Remove the Mega Garchomp mount, its selection entry, item text and bundled mount assets.
+
 - Add the 500-Gem Glaceon Mount Box to the Gift Store with player-mounted normal/shiny previews and Shiny Tracker support.
 
 - Give Mega Absol Z clearer planted and lifted walking paws with a wider stride, preserving its upper-body artwork and fitted rider positions.
-
-- Give Mega Garchomp clearly alternating walking strides and lifted feet while retaining the approved head, riding position and standing pose.
 
 - Add Shiny Glaceon using the existing shiny follower palette, preserving the fitted riding pose, native scale and side-ear layering.
 
@@ -21,8 +21,6 @@
 - Move both Absol riders forward over the shoulders in side views, preserving the complete seated pose and synchronized walking motion.
 
 - Replace the early Route 3 Hyper Potion pickup with a Miracle Seed, adding a modest held type-boost item on the path toward Cerulean Gym while preserving collection progress.
-
-- Add Mega Garchomp as a land mount using the approved V7 sprites, fitted riders, synchronized foreground masks and a dedicated icon.
 
 - Preserve the complete seated player silhouette on both Absol mounts in side views, including hips, trousers and shoes, through every walking phase.
 
