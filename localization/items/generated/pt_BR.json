@@ -787,6 +787,10 @@
     "name": "Montaria Cyclizar",
     "shortDesc": "Desbloqueia Cyclizar como montaria terrestre."
   },
+  "rayquaza-mount": {
+    "name": "Montaria Rayquaza",
+    "shortDesc": "Desbloqueia Rayquaza como montaria terrestre."
+  },
   "mount-license": {
     "name": "Licença de Montaria",
     "shortDesc": "Lista as regiões onde você pode ativar montarias terrestres."

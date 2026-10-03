@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the larger Rayquaza land mount, unlocked by a manually granted mount item; larger mount masks preserve the existing player and outfit scale.
+
 - Route 10 heeft vier extra overworld-Pokémon op de berghellingen: Aron, Roggenrola, Carbink en Rockruff.
 
 - Route 6 heeft nu vijf aanspreekbare overworld-Pokémon uit de lokale grasontmoetingen.

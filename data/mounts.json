@@ -21,6 +21,23 @@
         "up": [[0, -2], [0, -4], [2, -2], [2, -4]]
       }
     },
+    "rayquaza": {
+      "displayName": "Rayquaza",
+      "movementMode": "land",
+      "unlockItemId": "rayquaza-mount",
+      "spriteSheet": "res://assets/mounts/rayquaza/mount.png",
+      "riderMaskSheet": "res://assets/mounts/rayquaza/rider_mask.png",
+      "frameSize": [128, 128],
+      "foregroundRegions": {
+        "down": [0, 0, 128, 88]
+      },
+      "riderOffsets": {
+        "down": [[0, -16], [0, -20], [0, -16], [0, -20]],
+        "left": [[8, 8], [8, 4], [8, 8], [8, 4]],
+        "right": [[-8, 8], [-8, 4], [-8, 8], [-8, 4]],
+        "up": [[0, -4], [0, -8], [0, -4], [0, -8]]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",
