@@ -311,37 +311,37 @@ npc_sprite_frames = ExtResource("hiker")
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=50865882]
 
 [node name="Revive" parent="Entities/Interactables/Items" unique_id=1218220865 instance=ExtResource("99_item")]
-position = Vector2(528, 1360)
+position = Vector2(400, 1200)
 pickup_id = "kanto_rock_tunnel_b1f_revive"
 item_id = "revive"
 
 [node name="MaxEther" parent="Entities/Interactables/Items" unique_id=226575369 instance=ExtResource("99_item")]
-position = Vector2(1904, 624)
+position = Vector2(2288, 816)
 pickup_id = "kanto_rock_tunnel_b1f_maxether"
 item_id = "max-ether"
 
 [node name="MaxPotion" parent="Entities/Interactables/Items" unique_id=839726074 instance=ExtResource("99_item")]
-position = Vector2(2352, 1840)
+position = Vector2(2128, 1744)
 pickup_id = "kanto_rock_tunnel_b1f_maxpotion"
 item_id = "max-potion"
 
 [node name="PPUp" parent="Entities/Interactables/Items" unique_id=994263321 instance=ExtResource("99_item")]
-position = Vector2(464, 976)
+position = Vector2(880, 944)
 pickup_id = "kanto_rock_tunnel_b1f_ppup"
 item_id = "pp-up"
 
 [node name="Iron" parent="Entities/Interactables/Items" unique_id=890991885 instance=ExtResource("99_item")]
-position = Vector2(688, 1584)
+position = Vector2(528, 1712)
 pickup_id = "kanto_rock_tunnel_b1f_iron"
 item_id = "iron"
 
 [node name="HPUp" parent="Entities/Interactables/Items" unique_id=546615668 instance=ExtResource("99_item")]
-position = Vector2(2032, 1968)
+position = Vector2(2576, 2000)
 pickup_id = "kanto_rock_tunnel_b1f_hpup"
 item_id = "hp-up"
 
 [node name="OvalStone" parent="Entities/Interactables/Items" unique_id=2080655040 instance=ExtResource("99_item")]
-position = Vector2(2512, 1520)
+position = Vector2(2000, 1680)
 pickup_id = "kanto_rock_tunnel_b1f_ovalstone"
 item_id = "oval-stone"
 

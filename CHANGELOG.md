@@ -4,6 +4,8 @@
 
 - Route 10 heeft nu drie overworld-Pokémon in de rivier: Wooper, Buizel en Ducklett.
 
+- Er zwemt nu een Magikarp in de vijver van de daycare-tuin op Route 5.
+
 - Trainer battles herstellen de kleuren van beschikbare moves na de battle-entry, zodat ze in de eerste beurt niet meer uitgeschakeld lijken terwijl ze al bruikbaar zijn.
 
 - Route 5 heeft zes overworld-Pokémon bij de rotshellingen, daycare-tuin en route en twee NPC’s met dialoog.
