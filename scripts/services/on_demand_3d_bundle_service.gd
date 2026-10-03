@@ -191,7 +191,21 @@ func _selected_release() -> Dictionary:
 		var pin: Dictionary = RELEASE_V8.data.index
 		if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 			return RELEASE_V8.data
+	# The development editor has the reviewed v8 index in the project itself.
+	# Use it automatically for local editor runs; exported clients keep their
+	# launcher-selected release and otherwise use the pinned production release.
+	var editor_path := _editor_local_v8_index_path()
+	if not editor_path.is_empty():
+		var editor_pin: Dictionary = RELEASE_V8.data.index
+		if _valid_file(editor_path, int(editor_pin.size_bytes), str(editor_pin.sha256)):
+			return RELEASE_V8.data
 	return RELEASE.data
+
+
+static func _editor_local_v8_index_path() -> String:
+	if not OS.has_feature("editor"):
+		return ""
+	return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v8_index.json")
 
 
 static func asset_id_for_identity(identity: String) -> String:
@@ -250,6 +264,10 @@ func _approved_index() -> Dictionary:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 		path = launcher_path
+	elif release.revision == RELEASE_V8.data.revision:
+		var editor_path := _editor_local_v8_index_path()
+		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
+			path = editor_path
 	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
 		var result := await _fetch(BASE_URL + str(pin.object_key), path, int(pin.size_bytes), str(pin.sha256), MAX_INDEX_BYTES, "3D content index")
 		if not result.is_empty():

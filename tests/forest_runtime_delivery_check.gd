@@ -6,6 +6,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var failures := 0
+	var settings := root.get_node("SettingsManager")
 	var install_dir := "user://forest_delivery_%d" % Time.get_ticks_usec()
 	var absolute := ProjectSettings.globalize_path(install_dir)
 	DirAccess.make_dir_recursive_absolute(absolute.path_join("forest-runtime"))
@@ -13,8 +14,15 @@ func _run() -> void:
 	var file := FileAccess.open(manifest_path, FileAccess.WRITE)
 	file.store_string('{"schema":1,"pack":"forest.pck"}')
 	file.close()
+	var local_game_user_data := absolute.path_join("app_userdata/PokeAether")
+	var installed_forest_dir := absolute.path_join("app_userdata/PokeAether Launcher/game/forest-runtime")
+	DirAccess.make_dir_recursive_absolute(installed_forest_dir)
+	var installed_manifest := installed_forest_dir.path_join("forest.json")
+	FileAccess.open(installed_manifest, FileAccess.WRITE).store_string('{"schema":1,"pack":"forest.pck"}')
+	FileAccess.open(installed_forest_dir.path_join("forest.pck"), FileAccess.WRITE).store_buffer(PackedByteArray([1]))
+	if settings._editor_installed_forest_manifest(local_game_user_data, true) != installed_manifest: failures += 1
+	if not settings._editor_installed_forest_manifest(local_game_user_data, false).is_empty(): failures += 1
 
-	var settings := root.get_node("SettingsManager")
 	var previous_setting: String = settings.battle_3d_forest_manifest
 	var had_env := OS.has_environment("POKEAETHER_FOREST_MANIFEST")
 	var previous_env := OS.get_environment("POKEAETHER_FOREST_MANIFEST")

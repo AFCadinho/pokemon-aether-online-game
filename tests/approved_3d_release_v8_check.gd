@@ -53,5 +53,9 @@ func _run() -> void:
 		OS.unset_environment("POKEAETHER_MODEL_INDEX")
 	else:
 		OS.set_environment("POKEAETHER_MODEL_INDEX", previous)
+	if OS.has_feature("editor"):
+		assert(service._selected_release().revision == Release.data.revision, "Editor runs should select the local v8 catalog by default")
+		var local_approved: Dictionary = await service._approved_index()
+		assert(local_approved.error.is_empty() and local_approved.index.assets.size() == 1139, "Editor should read the local v8 index without an environment variable")
 	print("APPROVED_3D_RELEASE_V8_OK bundles=1139 appearances=2278 all_form_ids=true on_demand=true")
 	quit()

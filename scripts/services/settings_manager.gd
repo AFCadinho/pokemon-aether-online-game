@@ -346,6 +346,12 @@ func get_battle_3d_forest_manifest() -> String:
 		var installed := OS.get_environment("POKEAETHER_FOREST_MANIFEST")
 		if installed.is_absolute_path() and FileAccess.file_exists(installed):
 			return installed
+	var editor_manifest := _editor_installed_forest_manifest(
+		ProjectSettings.globalize_path("user://"),
+		OS.has_feature("editor")
+	)
+	if not editor_manifest.is_empty():
+		return editor_manifest
 	# Developer installs made before the required launcher pack keep their
 	# deterministic forest runtime beside the explicitly selected local catalog.
 	if not OS.has_feature("web") and not OS.has_feature("mobile") and not battle_3d_catalog_path.is_empty():
@@ -353,6 +359,17 @@ func get_battle_3d_forest_manifest() -> String:
 		if FileAccess.file_exists(candidate):
 			return candidate
 	return ""
+
+
+func _editor_installed_forest_manifest(game_user_data_dir: String, editor_build: bool) -> String:
+	if not editor_build:
+		return ""
+	var app_userdata_dir := game_user_data_dir.get_base_dir()
+	var launcher_data_dir := app_userdata_dir.path_join("PokeAether Launcher/game")
+	var manifest := launcher_data_dir.path_join("forest-runtime/forest.json")
+	var pack := manifest.get_base_dir().path_join("forest.pck")
+	return manifest if FileAccess.file_exists(manifest) and FileAccess.file_exists(pack) else ""
+
 
 func set_battle_3d_camera_motion(enabled: bool) -> void:
 	if battle_3d_camera_motion == enabled:
