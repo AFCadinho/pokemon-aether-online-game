@@ -28,8 +28,8 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "shadow_lugia"],
-		"land catalog contains Cyclizar, Rayquaza and Shadow Lugia"
+		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia"],
+		"land catalog contains Cyclizar, both Rayquaza variants and Shadow Lugia"
 	)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
@@ -201,6 +201,24 @@ func _run() -> void:
 		str(settings_manager.call("get_selected_mount_id", "land")) == "shadow_lugia",
 		"owned Shadow Lugia can be selected as the active land mount"
 	)
+	panel.call("_on_inventory_changed", [{"itemId": "shiny-rayquaza-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Shiny Rayquaza"),
+		"Shiny Rayquaza item unlocks its own entry without unlocking normal Rayquaza"
+	)
+	panel.call("_select_mount", "land", "rayquaza_shiny")
+	_check(
+		str(settings_manager.call("get_selected_mount_id", "land")) == "rayquaza_shiny",
+		"owned Shiny Rayquaza can be selected as the active land mount"
+	)
+	panel.call("_on_inventory_changed", [
+		{"itemId": "rayquaza-mount", "quantity": 1},
+		{"itemId": "shiny-rayquaza-mount", "quantity": 1},
+	])
+	panel.call("_open_selector", "land")
+	_check(selector_options.get_child_count() == 2, "both owned Rayquaza variants remain separate selector entries")
 	var fake_player := FakeMountPlayer.new()
 	fake_player.add_to_group("player")
 	root.add_child(fake_player)
