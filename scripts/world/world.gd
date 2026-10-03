@@ -3131,7 +3131,13 @@ func _on_remote_player_interaction_requested(player_state: Dictionary, world_pos
 
 
 func _on_nearby_pve_spectate_requested(target_user_id: int) -> void:
+	_trace_nearby_pve_spectate("world_request", {
+		"targetUserId": target_user_id,
+		"isInBattle": is_in_battle,
+		"overlayCount": get_tree().get_nodes_in_group("ui_overlay").size(),
+	})
 	if is_in_battle or target_user_id <= 0:
+		_trace_nearby_pve_spectate("world_request_rejected")
 		return
 	get_tree().call_group("ui_overlay", "start_nearby_pve_spectate", target_user_id)
 
@@ -4420,6 +4426,9 @@ func start_training_ai_battle_from_response(response: Dictionary) -> bool:
 	return true
 
 func start_pvp_battle_from_response(response: Dictionary) -> bool:
+	var trace_nearby := str(response.get("viewerRole", "")) == "spectator" and str(response.get("sourceBattleKind", "")) in ["wild", "trainer"]
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_start_entered", {"isInBattle": is_in_battle, "wildResumePending": wild_battle_resume_pending})
 	if is_in_battle or wild_battle_resume_pending:
 		if not await _interrupt_current_battle_for_pvp_match():
 			await cancel_pvp_battle_transition()
@@ -4429,8 +4438,14 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		await cancel_pvp_battle_transition()
 		return false
 
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_prefetch_started")
 	await _prefetch_web_battle_sprites(response)
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_cover_wait_started")
 	await _wait_for_pvp_battle_cover()
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_cover_ready")
 	is_in_battle = true
 	active_battle_kind = "pvp"
 	active_battle_id = str(response.get("battleId", ""))
@@ -4446,6 +4461,8 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 	_save_player_activity_state_deferred("battle", _get_current_activity_context())
 	_lock_overworld_for_battle()
 
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_mount_started")
 	if not _mount_battle_ui():
 		push_error("World.start_pvp_battle_from_response failed: could not load battle scene.")
 		await cancel_pvp_battle_transition()
@@ -4462,14 +4479,20 @@ func start_pvp_battle_from_response(response: Dictionary) -> bool:
 		MusicManager.play_pvp_battle_music()
 	var environment_battle_kind := spectator_source_kind if spectator_source_kind in ["wild", "trainer"] else "pvp"
 	var battle_environment_id := _resolve_battle_environment_id(environment_battle_kind, response)
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_setup_started")
 	await battle_instance.setup_pvp_battle_from_response(
 		PlayerSave.party[0] if not PlayerSave.party.is_empty() else null,
 		response,
 		Callable(self, "_reveal_prepared_pvp_battle"),
 		battle_environment_id
 	)
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_setup_finished")
 	if pvp_battle_transition_started_at_msec >= 0:
 		await _reveal_prepared_pvp_battle()
+	if trace_nearby:
+		_trace_nearby_pve_spectate("world_start_finished")
 	return true
 
 func _interrupt_current_battle_for_pvp_match() -> bool:
@@ -5882,3 +5905,10 @@ func _recover_weekly_boss_result(battle_id: String) -> void:
 	SfxManager.play("item_received")
 	if bool(receipt.get("firstHardVictory", false)):
 		get_tree().call_group("ui_overlay", "add_system_message", LocalizationManager.text("weekly_boss.zapdos_unlocked"))
+
+
+func _trace_nearby_pve_spectate(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate()
+	payload["event"] = event
+	payload["ticksMs"] = Time.get_ticks_msec()
+	print("[NearbyPveSpectate] %s" % JSON.stringify(payload))

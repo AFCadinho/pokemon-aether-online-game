@@ -335,7 +335,11 @@ func _sync_nearby_battle_indicator(state: Dictionary) -> void:
 		nearby_battle_indicator = NearbyPveBattleIndicatorScript.new()
 		add_child(nearby_battle_indicator)
 		nearby_battle_indicator.spectate_requested.connect(
-			func(target_id: int): battle_spectate_requested.emit(target_id)
+			func(target_id: int):
+				print("[NearbyPveSpectate] avatar_forward targetUserId=%d worldConnections=%d" % [
+					target_id, battle_spectate_requested.get_connections().size()
+				])
+				battle_spectate_requested.emit(target_id)
 		)
 	nearby_battle_indicator.configure(
 		user_id,

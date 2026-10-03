@@ -63,6 +63,7 @@ func _ready() -> void:
 	area.mouse_exited.connect(func(): hover_amount = 0.0)
 	add_child(area)
 	_apply_kind()
+	_trace_spectate("indicator_ready", {"physicsPicking": get_viewport().physics_object_picking})
 
 
 func configure(
@@ -70,12 +71,15 @@ func configure(
 	kind: String,
 	next_anchor_position: Vector2 = DEFAULT_ANCHOR_POSITION
 ) -> void:
+	var changed := target_user_id != user_id or battle_kind != kind.strip_edges().to_lower() or anchor_position != next_anchor_position
 	target_user_id = user_id
 	battle_kind = kind.strip_edges().to_lower()
 	anchor_position = next_anchor_position
 	if is_node_ready():
 		area.position = anchor_position
 		_apply_kind()
+	if changed:
+		_trace_spectate("indicator_configured", {"visible": visible, "anchor": str(anchor_position)})
 
 
 func _apply_kind() -> void:
@@ -104,6 +108,26 @@ func _process(delta: float) -> void:
 		glow_sprite.modulate = Color(0.72, 0.9, 1.0, lerpf(0.58, 1.0, hover_amount))
 
 
+func _input(event: InputEvent) -> void:
+	# Observe nearby clicks even when a GUI control consumes them afterwards.
+	if not is_visible_in_tree() or not event is InputEventMouseButton:
+		return
+	var mouse_event := event as InputEventMouseButton
+	if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+		return
+	var local_position := get_global_transform_with_canvas().affine_inverse() * mouse_event.position
+	if local_position.distance_to(anchor_position) > CLICK_RADIUS:
+		return
+	var hovered := get_viewport().gui_get_hovered_control()
+	_trace_spectate("pointer_observed", {
+		"screenPosition": str(mouse_event.position),
+		"localPosition": str(local_position),
+		"physicsPicking": get_viewport().physics_object_picking,
+		"hoveredControl": str(hovered.get_path()) if hovered != null else "",
+		"hoveredMouseFilter": hovered.mouse_filter if hovered != null else -1,
+	})
+
+
 func _unhandled_input(event: InputEvent) -> void:
 	# Handle the pointer before physics picking, which can be disabled or lose
 	# the indicator to overlapping world objects. GUI controls still get priority.
@@ -123,13 +147,17 @@ func _unhandled_input(event: InputEvent) -> void:
 	else:
 		return
 	var local_position := get_global_transform_with_canvas().affine_inverse() * screen_position
-	if local_position.distance_to(anchor_position) <= CLICK_RADIUS and _request_spectate():
-		get_viewport().set_input_as_handled()
+	if local_position.distance_to(anchor_position) <= CLICK_RADIUS:
+		_trace_spectate("pointer_unhandled", {"eventType": event.get_class()})
+		if _request_spectate():
+			get_viewport().set_input_as_handled()
 
 
 func _request_spectate() -> bool:
 	if not is_visible_in_tree() or target_user_id <= 0 or battle_kind not in ["wild", "trainer"]:
+		_trace_spectate("indicator_request_rejected", {"visibleInTree": is_visible_in_tree()})
 		return false
+	_trace_spectate("indicator_request_emitted", {"connections": spectate_requested.get_connections().size()})
 	spectate_requested.emit(target_user_id)
 	return true
 
@@ -137,5 +165,16 @@ func _request_spectate() -> bool:
 func _on_input(_viewport: Node, event: InputEvent, _shape_index: int) -> void:
 	if event is InputEventMouseButton:
 		var mouse_event := event as InputEventMouseButton
-		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed and _request_spectate():
-			get_viewport().set_input_as_handled()
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT and mouse_event.pressed:
+			_trace_spectate("physics_input")
+			if _request_spectate():
+				get_viewport().set_input_as_handled()
+
+
+func _trace_spectate(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate()
+	payload["event"] = event
+	payload["ticksMs"] = Time.get_ticks_msec()
+	payload["targetUserId"] = target_user_id
+	payload["battleKind"] = battle_kind
+	print("[NearbyPveSpectate] %s" % JSON.stringify(payload))

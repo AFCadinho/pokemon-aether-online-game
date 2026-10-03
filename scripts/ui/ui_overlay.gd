@@ -50477,17 +50477,42 @@ func start_aether_clash_pvp_spectate(room_code: String) -> bool:
 
 
 func start_nearby_pve_spectate(target_user_id: int) -> bool:
+	_trace_nearby_pve_spectate("overlay_request", {
+		"targetUserId": target_user_id, "pvpBattleStarting": pvp_battle_starting,
+	})
 	if target_user_id <= 0 or pvp_battle_starting:
+		_trace_nearby_pve_spectate("overlay_request_rejected", {
+			"reason": "invalid_target" if target_user_id <= 0 else "battle_start_already_active",
+		})
 		return false
 	var request := _create_pvp_request_node()
+	_trace_nearby_pve_spectate("api_request_started", {"targetUserId": target_user_id})
 	var response: Dictionary = await BattleApiClient.spectate_nearby_pve(request, target_user_id)
 	request.queue_free()
-	if not bool(response.get("success", false)) or not _spectator_response_has_public_teams(response):
+	var has_public_teams := _spectator_response_has_public_teams(response)
+	_trace_nearby_pve_spectate("api_response", {
+		"targetUserId": target_user_id,
+		"success": bool(response.get("success", false)),
+		"httpStatus": int(response.get("status", 0)),
+		"errorCode": BackendErrorLocalizationService.error_code(response),
+		"error": str(response.get("error", "")),
+		"hasPublicTeams": has_public_teams,
+		"viewerRole": str(response.get("viewerRole", "")),
+		"sourceBattleKind": str(response.get("sourceBattleKind", "")),
+	})
+	if not bool(response.get("success", false)) or not has_public_teams:
+		_trace_nearby_pve_spectate("api_response_rejected")
 		add_system_message(str(response.get("error", "That nearby battle is no longer available.")))
 		return false
+	_trace_nearby_pve_spectate("overlay_battle_start_requested", {"pvpBattleStarting": pvp_battle_starting})
 	await _start_pvp_battle_from_response(response)
 	var world := get_tree().get_first_node_in_group("world")
-	return world != null and bool(world.get("is_in_battle"))
+	var started := world != null and bool(world.get("is_in_battle"))
+	_trace_nearby_pve_spectate("overlay_battle_start_finished", {
+		"started": started, "worldFound": world != null,
+		"pvpBattleStarting": pvp_battle_starting,
+	})
+	return started
 
 
 func _clear_stale_aether_clash_pvp_spectate_start() -> void:
@@ -53306,3 +53331,10 @@ func _add_pvp_training_ai_team_suggestion(display_name: String, team_id: String)
 	suggestion.add_theme_stylebox_override("normal", _make_pvp_ranked_dropdown_item_style(Color("#00000000"), Color("#00000000")))
 	suggestion.add_theme_stylebox_override("hover", _make_pvp_ranked_dropdown_item_style(Color("#17304afa"), UI_MONEY))
 	pvp_training_ai_team_suggestion_list.add_child(suggestion)
+
+
+func _trace_nearby_pve_spectate(event: String, fields: Dictionary = {}) -> void:
+	var payload := fields.duplicate()
+	payload["event"] = event
+	payload["ticksMs"] = Time.get_ticks_msec()
+	print("[NearbyPveSpectate] %s" % JSON.stringify(payload))
