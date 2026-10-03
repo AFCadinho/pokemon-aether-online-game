@@ -3,9 +3,9 @@
 Based on the supplied source sheet and approved seated levitation concept.
 Alakazam uses the original 32 logical pixels (64 physical pixels), with no
 fractional scaling or uneven pixel blocks. The player's exact 64×64 ride assets are retained.
-The player's normal foot origin anchors every direction. Alakazam, the ring
-and rear mask are positioned around that origin, retaining the creature's
-horizontal centers and the lower rear head position. Only the hover and
+The player's normal foot origin anchors every direction. Alakazam, the psychic wisps
+and rear mask are positioned around that origin, bringing the creature closer
+in the front/side views and retaining the lower rear head position. Only the hover and
 small vertical animation bob lift the rider; turning never shifts them sideways.
 
 `source.png` is the user-supplied 512×256 sheet. Only the first four columns
@@ -14,7 +14,10 @@ runtime sheets, with four directions and four 224×224 frames per direction.
 Pillow is required. The source's exact 2× grid is reduced losslessly and restored
 at export, preserving every creature pixel at its original size.
 
-The psychic ring is baked into the mount, not the rider. The player retains
+Thin, broken translucent psychic arcs replace the solid purple ring. The side
+views bring Alakazam 16 physical pixels closer to the player, and the front
+view brings them 6 pixels closer. The approved rear height is retained.
+The psychic effect is baked into the mount, not the rider. The player retains
 their own 64×64 ride assets, clothing, hair and skin. A dedicated rear
 foreground sheet and matching binary rider mask keep the creature's full
 head/body ahead of the rider and the floating spoons behind them. Each whole
