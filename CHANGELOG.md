@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Mega Alakazam's original 64×64 sprite scale to keep its pixels even, retaining the rider's foot anchor and levitation pose.
+
 - Align the Gift Store Gem and voucher balances in matching rows with equal icon sizes and clearer spacing.
 
 - Anchor the Mega Alakazam rider to the player's normal foot position and ground shadow in every direction, preserving the smaller mount and approved pose.
