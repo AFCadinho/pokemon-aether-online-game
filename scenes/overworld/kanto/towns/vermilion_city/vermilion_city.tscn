@@ -803,15 +803,6 @@ ambient_movement_ignores_map_collision = true
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1577339436]
 
-[node name="GymSign" parent="Entities/Interactables" unique_id=1449815395 instance=ExtResource("4_obqe6")]
-position = Vector2(528, 1296)
-
-[node name="PokemonFanClubSign" parent="Entities/Interactables" unique_id=1752091638 instance=ExtResource("4_obqe6")]
-position = Vector2(496, 912)
-
-[node name="GuildBaseSign" parent="Entities/Interactables" unique_id=524634453 instance=ExtResource("4_obqe6")]
-position = Vector2(1776, 432)
-
 [node name="GymCutTree" parent="Entities/Interactables" unique_id=683514050 instance=ExtResource("ss_anne_gym_tree")]
 position = Vector2(688, 1264)
 interactable_id = "kanto_vermilion_gym_cut_tree"
@@ -822,6 +813,17 @@ position = Vector2(848, 144)
 destination_id = "kanto_vermilion_city"
 interactable_id = "kanto_vermilion_city_aether_beacon"
 display_name = "Aether Beacon"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1046533121]
+
+[node name="GymSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("4_obqe6")]
+position = Vector2(528, 1296)
+
+[node name="PokemonFanClubSign" parent="Entities/Interactables/Signs" unique_id=1752091638 instance=ExtResource("4_obqe6")]
+position = Vector2(496, 912)
+
+[node name="GuildBaseSign" parent="Entities/Interactables/Signs" unique_id=524634453 instance=ExtResource("4_obqe6")]
+position = Vector2(1776, 432)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false
