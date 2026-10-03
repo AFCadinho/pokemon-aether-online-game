@@ -430,5 +430,9 @@
   "shiny-mega-alakazam-mount": {
     "name": "Montaria Mega Alakazam Shiny",
     "shortDesc": "Desbloqueia Mega Alakazam Shiny como montaria terrestre levitante."
+  },
+  "mega-absol-mount": {
+    "name": "Montaria Mega Absol",
+    "shortDesc": "Desbloqueia Mega Absol como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

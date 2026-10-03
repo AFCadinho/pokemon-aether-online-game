@@ -430,5 +430,9 @@
   "shiny-mega-alakazam-mount": {
     "name": "Shiny Mega Alakazam Mount",
     "shortDesc": "Unlocks Shiny Mega Alakazam as a levitating land mount."
+  },
+  "mega-absol-mount": {
+    "name": "Mega Absol Mount",
+    "shortDesc": "Unlocks Mega Absol as a land mount. Requires a Mount License for the current region."
   }
 }

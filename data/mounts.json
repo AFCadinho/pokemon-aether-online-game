@@ -141,6 +141,23 @@
         "up": [[0, 0], [0, -4], [0, 0], [0, 4]]
       }
     },
+    "mega_absol": {
+      "displayName": "Mega Absol",
+      "movementMode": "land",
+      "unlockItemId": "mega-absol-mount",
+      "iconTexture": "res://assets/mounts/mega_absol/icon.png",
+      "spriteSheet": "res://assets/mounts/mega_absol/mount.png",
+      "riderMaskSheet": "res://assets/mounts/mega_absol/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/mega_absol/foreground.png",
+      "frameSize": [128, 128],
+      "movementAnimationSpeed": 5.0,
+      "riderOffsets": {
+        "down": [[0, -40], [0, -40], [0, -40], [0, -40]],
+        "left": [[10, -20], [10, -20], [10, -20], [10, -20]],
+        "right": [[-10, -20], [-10, -20], [-10, -20], [-10, -20]],
+        "up": [[0, -18], [0, -18], [0, -18], [0, -18]]
+      }
+    },
     "mega_absol_z": {
       "displayName": "Mega Absol Z",
       "movementMode": "land",
@@ -149,13 +166,13 @@
       "spriteSheet": "res://assets/mounts/mega_absol_z/mount.png",
       "riderMaskSheet": "res://assets/mounts/mega_absol_z/rider_mask.png",
       "foregroundSheet": "res://assets/mounts/mega_absol_z/foreground.png",
-      "frameSize": [160, 160],
+      "frameSize": [128, 128],
       "movementAnimationSpeed": 5.0,
       "riderOffsets": {
-        "down": [[0, -48], [0, -50], [0, -48], [0, -50]],
-        "left": [[10, -30], [10, -32], [10, -30], [10, -32]],
-        "right": [[-10, -30], [-10, -32], [-10, -30], [-10, -32]],
-        "up": [[0, -26], [0, -28], [0, -26], [0, -28]]
+        "down": [[0, -40], [0, -40], [0, -40], [0, -40]],
+        "left": [[10, -20], [10, -20], [10, -20], [10, -20]],
+        "right": [[-10, -20], [-10, -20], [-10, -20], [-10, -20]],
+        "up": [[0, -18], [0, -18], [0, -18], [0, -18]]
       }
     },
     "lapras": {
