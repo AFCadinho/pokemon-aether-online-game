@@ -9,6 +9,15 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	# Geometry checks exercise every stair with the required key item owned.
+	var auth := root.get_node("AuthService")
+	var inventory := root.get_node("InventoryService")
+	var old_user: Dictionary = auth.current_user.duplicate(true)
+	var old_items: Array = inventory.cached_inventory_items.duplicate(true)
+	var old_owner: int = inventory.cached_inventory_user_id
+	auth.current_user = {"id": 8002}
+	inventory.cached_inventory_user_id = 8002
+	inventory.cached_inventory_items = [{"itemId": "silph-scope", "quantity": 1}]
 	var tower := (load(TOWER) as PackedScene).instantiate()
 	var town := (load(TOWN) as PackedScene).instantiate()
 	var layout: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://docs/tiled/lavender_pokemon_tower_layout.json"))
@@ -103,6 +112,9 @@ func _run() -> void:
 	town.free()
 	tower.queue_free()
 	await process_frame
+	auth.current_user = old_user
+	inventory.cached_inventory_items = old_items
+	inventory.cached_inventory_user_id = old_owner
 	print("Pokémon Tower checks: %d failures" % failures)
 	quit(1 if failures > 0 else 0)
 

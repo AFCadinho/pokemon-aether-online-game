@@ -6280,5 +6280,9 @@
   "story.kanto.investigate_pokemon_tower.battle_gary": "Versla Gary in Pokémon Tower.",
   "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Praat met Reina",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Ga de toren in",
-  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle met Gary"
+  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle met Gary",
+  "story.kanto.find_a_way_to_saffron.title": "Een weg naar Saffron",
+  "story.kanto.find_a_way_to_saffron.summary": "Vind een weg naar Saffron City om een apparaat te zoeken waarmee je de geest bij de trap in Pokémon Tower kunt zien.",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Vind een weg naar Saffron City.",
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Vind een weg naar de stad"
 }
