@@ -339,8 +339,8 @@ metadata/tiled_visual_layer = true
 [node name="FromRoute13" type="Marker2D" parent="Spawns" unique_id=2138893985]
 position = Vector2(592, 48)
 
-[node name="FromRoute15" type="Marker2D" parent="Spawns" unique_id=1929055377]
-position = Vector2(48, 2160)
+[node name="FromRoute15" type="Marker2D" parent="Spawns/FromRoute13" unique_id=1929055377]
+position = Vector2(-544, 2112)
 
 [node name="Exits" type="Node2D" parent="." unique_id=700315165]
 
