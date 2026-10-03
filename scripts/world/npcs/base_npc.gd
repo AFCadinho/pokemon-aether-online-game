@@ -94,6 +94,8 @@ const MISSING_DIALOGUE_LINES: Array[String] = [
 @export_range(1, 12, 1) var movement_tiles := 3
 @export var movement_wait_seconds := 0.0
 @export var movement_speed_pixels := 90.0
+## Randomly varies each ambient movement pause by up to this many seconds in either direction.
+@export_range(0.0, 3.0, 0.1) var movement_wait_jitter_seconds := 0.0
 ## Fetch metadata on spawn when this NPC can display catalog-driven quest markers.
 @export var preload_quest_markers := false
 @export_range(1, 8, 1) var manual_interaction_reach_tiles := 1
@@ -1096,7 +1098,11 @@ func _get_movement_axis_direction() -> Vector2:
 
 
 func _schedule_next_npc_movement_step() -> void:
-	var wait_msec := int(maxf(movement_wait_seconds, 0.0) * 1000.0)
+	var wait_seconds := maxf(movement_wait_seconds, 0.0)
+	var jitter_seconds := maxf(movement_wait_jitter_seconds, 0.0)
+	if jitter_seconds > 0.0:
+		wait_seconds = randf_range(maxf(wait_seconds - jitter_seconds, 0.0), wait_seconds + jitter_seconds)
+	var wait_msec := int(wait_seconds * 1000.0)
 	movement_next_step_at_msec = Time.get_ticks_msec() + wait_msec
 
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 6 wild Pokémon now pause at varied, randomized intervals and move at different speeds.
+
 - Route 5's Day Care and Underground Path signs now show localized text and illustrated previews.
 
 - Add a reusable static weekly boss scene with red nameplate text and server-status/difficulty hooks for future bosses.
