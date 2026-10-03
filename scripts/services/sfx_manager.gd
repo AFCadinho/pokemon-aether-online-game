@@ -13,6 +13,10 @@ const FIELD_MOVE_SOUND_IDS := {
 	"sunny-day": "field_move_sunny_day",
 }
 const SOUND_DATA := {
+	"poke_flute_awaken": {
+		"path": "res://assets/audio/sfx/poke_flute_awaken.wav",
+		"volume_db": -3.0,
+	},
 	"fishing_bite": {
 		"path": "res://assets/audio/sfx/overworld/item_found.ogg",
 		"volume_db": -9.0,

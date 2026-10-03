@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/interactables/sleeping_pokemon_encounter.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/npcs/Ultimate Gen 4 Overworlds Pack/All Official Overworlds/Pokemon_Snorlax.png" id="2"]
+[ext_resource type="AudioStream" path="res://assets/audio/sfx/poke_flute_awaken.wav" id="3"]
+
+[sub_resource type="AtlasTexture" id="SleepingFrame"]
+atlas = ExtResource("2")
+region = Rect2(0, 0, 96, 64)
+
+[node name="SleepingSnorlax" type="Node2D"]
+script = ExtResource("1")
+display_name = "Snorlax"
+interactable_kind = "static_encounter"
+blocked_tile_offset = Vector2i(-1, -1)
+blocked_tile_footprint = Vector2i(3, 2)
+interaction_shape_size = Vector2(160, 128)
+flute_sound = ExtResource("3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+scale = Vector2(1.4, 1.4)
+texture_filter = 1
+texture = SubResource("SleepingFrame")
