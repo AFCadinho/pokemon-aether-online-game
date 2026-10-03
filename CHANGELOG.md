@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized Route 9 sign text and a new illustrated preview.
+
 - Add the Mega Alakazam levitation mount with the approved riding pose, psychic ring and lower rear rider.
 
 - Desynchronize Route 9 Pokémon with distinct movement speeds, randomized pauses, and localized metadata for the four mountain Pokémon.

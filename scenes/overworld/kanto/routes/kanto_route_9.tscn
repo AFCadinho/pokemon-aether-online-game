@@ -559,6 +559,8 @@ item_id = "full-restore"
 
 [node name="Route9Sign" parent="Entities/Interactables/Signs" unique_id=547856318 instance=ExtResource("4_t3cr7")]
 position = Vector2(2704, 784)
+sign_id = "kanto_route_9_route_sign"
+sign_type = "road"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1978439623]
 visible = false
