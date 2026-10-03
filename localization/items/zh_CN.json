@@ -414,5 +414,9 @@
   "shiny-shadow-lugia-mount": {
     "name": "异色暗黑洛奇亚坐骑",
     "shortDesc": "解锁异色暗黑洛奇亚陆地坐骑。"
+  },
+  "aether-gift-voucher": {
+    "name": "Aether Gift Voucher",
+    "shortDesc": "可用礼券余额：{amount}。可用于 Gift Store 中符合条件的外观和坐骑。购买的物品及所有箱内物品不可交易。只有 PokeAether 工作人员可以充值。"
   }
 }

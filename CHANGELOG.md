@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the permanent Aether Gift Voucher Key Item, separate Gift Store balances and voucher checkout with clear untradeable purchase and box-content notices.
+
 - Allow land mounts throughout caves, including both Diglett's Cave entrances, while keeping buildings restricted.
 
 - Added localized text and location artwork for both Route 11 signs.

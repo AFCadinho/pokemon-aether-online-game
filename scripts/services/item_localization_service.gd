@@ -60,6 +60,13 @@ func localize_item(item: Dictionary, locale: String = "") -> Dictionary:
 	localized["name"] = display_name(item_id, source_name, locale)
 
 	var translated_description := short_description(item_id, source_description, locale)
+	var actual_id := str(localized.get("itemId", localized.get("id", "")))
+	if actual_id.ends_with("-bound") and str(localized.get("category", "")) == "cosmetics":
+		translated_description = LocalizationManager.text("ui.store.voucher.bound_item")
+	if item_id == "aether-gift-voucher" and localized.get("voucherBalance") != null:
+		translated_description = LocalizationManager.text("ui.store.voucher.bag_description", {
+			"amount": str(localized.get("voucherBalance", 0))
+		})
 	if localized.has("shortDesc") or not translated_description.is_empty():
 		localized["shortDesc"] = translated_description
 	if localized.has("short_desc"):

@@ -414,5 +414,9 @@
   "shiny-shadow-lugia-mount": {
     "name": "Shiny Shadow Lugia-mount",
     "shortDesc": "Ontgrendelt Shiny Shadow Lugia als landmount."
+  },
+  "aether-gift-voucher": {
+    "name": "Aether Gift Voucher",
+    "shortDesc": "Beschikbaar vouchertegoed: {amount}. Te besteden aan geschikte cosmetics en mounts in de Gift Store. Aankopen en alle boxinhoud zijn untradeable. Alleen PokeAether kan tegoed toevoegen."
   }
 }
