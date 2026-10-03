@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rock Tunnel 1F heeft nu zeven extra overworld-Pokémon uit de grotontmoetingen.
+
 - Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
 
 - Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
