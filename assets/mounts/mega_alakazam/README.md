@@ -1,6 +1,8 @@
 # Mega Alakazam levitation mount
 
 Based on the supplied source sheet and approved seated levitation concept.
+`icon.png` uses the original 64×64 front cell for Bag and mount selection icons,
+so the large transparent riding canvas does not shrink the creature in menus.
 Alakazam uses the original 32 logical pixels (64 physical pixels), with no
 fractional scaling or uneven pixel blocks. The player's exact 64×64 ride assets are retained.
 The player's normal foot origin anchors every direction. Alakazam, the psychic wisps

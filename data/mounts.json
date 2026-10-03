@@ -105,6 +105,7 @@
       "displayName": "Mega Alakazam",
       "movementMode": "land",
       "unlockItemId": "mega-alakazam-mount",
+      "iconTexture": "res://assets/mounts/mega_alakazam/icon.png",
       "spriteSheet": "res://assets/mounts/mega_alakazam/mount.png",
       "riderMaskSheet": "res://assets/mounts/mega_alakazam/rider_mask.png",
       "foregroundSheet": "res://assets/mounts/mega_alakazam/foreground.png",

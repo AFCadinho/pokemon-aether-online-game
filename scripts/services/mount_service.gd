@@ -113,6 +113,11 @@ static func resolve_mount_id_for_mode(
 
 
 static func get_mount_icon_texture(mount_id: String) -> Texture2D:
+	var icon_path := str(get_mount_definition(mount_id).get("iconTexture", ""))
+	if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+		var icon := ResourceLoader.load(icon_path) as Texture2D
+		if icon != null:
+			return icon
 	var frames := get_mount_frames(mount_id)
 	if frames == null or not frames.has_animation(&"idle_down"):
 		return null
