@@ -13,6 +13,8 @@ const SIGN_PORTRAIT_PATHS: Dictionary = {
 	"kanto_cerulean_city_town_sign": "res://assets/sprites/sign_previews/cerulean_city.png",
 	"kanto_cerulean_city_gym": "res://assets/sprites/sign_previews/cerulean_gym.png",
 	"kanto_cerulean_city_bike_shop": "res://assets/sprites/sign_previews/cerulean_bike_shop.png",
+	"kanto_lavender_town_town_sign": "res://assets/sprites/sign_previews/lavender_town.png",
+	"kanto_lavender_town_pokemon_tower_sign": "res://assets/sprites/sign_previews/lavender_pokemon_tower.png",
 	"kanto_vermilion_city_gym": "res://assets/sprites/sign_previews/vermilion_gym.png",
 	"kanto_vermilion_city_pokemon_fan_club": "res://assets/sprites/sign_previews/vermilion_fan_club.png",
 	"kanto_vermilion_city_guild_base": "res://assets/sprites/sign_previews/vermilion_guild_base.png",

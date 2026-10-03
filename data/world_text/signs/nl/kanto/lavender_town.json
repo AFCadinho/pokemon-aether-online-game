@@ -1,0 +1,24 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_lavender_town",
+  "signs": [
+    {
+      "id": "kanto_lavender_town_town_sign",
+      "type": "town",
+      "title": "Lavender Town",
+      "lines": [
+        "Lavender Town",
+        "Een rustig stadje waar mensen Pokémon herdenken die zijn heengegaan."
+      ]
+    },
+    {
+      "id": "kanto_lavender_town_pokemon_tower_sign",
+      "type": "building",
+      "title": "Pokémon Tower",
+      "lines": [
+        "Pokémon Tower",
+        "Een rustplaats ter nagedachtenis aan overleden Pokémon. Toon respect."
+      ]
+    }
+  ]
+}
