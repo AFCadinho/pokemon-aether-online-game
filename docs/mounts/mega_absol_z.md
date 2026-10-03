@@ -14,16 +14,17 @@ walking phases at 5 fps. Source pixels retain their exact colors and 2× scale.
 The full rig moves upward one logical pixel from the approved seated preview,
 aligning paws to the ordinary player ground line. Player frames remain 64×64.
 
-Directional masks follow the complete head, shoulder-fan and raised-tail
-silhouettes instead of small rectangular patches. Side seats sit further back,
-with a separate fit for each variant. A small saddle opening keeps the near leg
-in front of the torso. Foreground and mask share precisely the same silhouette
-pixels. The full base mount is always preserved underneath.
+Directional masks preserve the complete base mount underneath its foreground.
+Front and rear views protect the rider head/helmet from raised horns and feathers.
+In left/right views, the complete authored 64×64 rider frame stays in front of
+mount anatomy: body, seated hips, clothing and shoes are all retained. The clear
+region follows each phase's rider offset. There is no fixed opening in mount
+coordinates that could move away from the hips or cut off the boots.
 
-The rider head/helmet envelope is excluded from both occlusion layers, so high
-horns, feathers and tails sit behind the face but ahead of the lower rider. This
-envelope follows each frame's seat. Male and female players keep their original
-64×64 frames and existing clothing/appearance layers.
+Both player models retain their original ride sprites. The foreground may cover
+the lower rider only in front/rear views. In side views, exposed feathers remain
+visible around the complete rider, while overlapping feathers sit behind the
+player. Foreground and mask always share the same alpha silhouette.
 
 The seated source pose remains static, while the complete rider moves with
 small directional per-frame offsets following the walking cycle. Offsets are
@@ -47,7 +48,8 @@ Mount License. No shop source or automatic account grant is added.
 ## Verification and preview
 
 `tests/mega_absol_z_mount_check.gd` now covers both variants: ownership, icons,
-localization, exact artwork, ground alignment, layer consistency, both player
+localization, exact artwork, ground alignment, layer consistency, pixel-for-pixel
+retention of both side rider poses (body/top/trousers/shoes in idle and walking), both player
 models and local/remote animation synchronization. The unimported-assets check
 also covers both variants. Existing mount-selection, mount-switch, world-depth
 and localization checks cover their shared integration paths.

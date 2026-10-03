@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve the complete seated player silhouette on both Absol mounts in side views, including hips, trousers and shoes, through every walking phase.
+
 - Keep Absol mount feathers, fur and tails visible around the seated player, protect the rider face from foreground clipping, and synchronize directional seat movement with all walking phases.
 
 - Add follower-based Mega Absol and refresh Mega Absol Z with approved compact artwork, fitted player masks, four-direction animation and individual icons.

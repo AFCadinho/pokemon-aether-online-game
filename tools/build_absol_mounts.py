@@ -39,35 +39,25 @@ def foreground_pixels(art, mount_id, row, col):
         # The head, horn and shoulder fans are all in front of the rider.
         selection.paste(255, (0,0,64,64))
     elif row in (1,2):
-        # The rider may cover the saddle and haunch, but never the raised
-        # tail, horn, face or wing outline. A small saddle opening retains
-        # the near leg without cutting rectangular holes through anatomy.
+        # Preserve the authored side rider in front of the mount. Its seated
+        # hips/near leg are part of the player, not a fixed saddle-shaped hole
+        # in mount coordinates. The moving rider envelope is cleared below.
         selection.paste(255, (0,0,64,64))
-        points = [(34,34),(42,34),(46,40),(44,44),(34,44)]
-        if row == 2:
-            points = [(63-x,y) for x,y in points]
-        draw.polygon(points, fill=0)
     else:
         # Keep the rider over the saddle area, but retain the complete outer
         # shoulder fans and the rump. Do not lay the rear head over their face.
         draw.polygon([(0,19),(25,19),(26,29),(26,37),(0,40)], fill=255)
         draw.polygon([(63,19),(39,19),(38,29),(38,37),(63,40)], fill=255)
         draw.rectangle((0,41,63,63),fill=255)
-    if mount_id == 'mega_absol_z' and row in (1,2):
-        # Include every magenta feather plus its immediate dark outline.
-        # A color silhouette follows each generated pose's actual feather fan.
-        for y in range(64):
-            for x in range(64):
-                r,g,b,a = art.getpixel((x,y))
-                if a and r>60 and r>b*1.3 and r>g*2:
-                    draw.rectangle((max(0,x-1),max(0,y-1),min(63,x+1),min(63,y+1)),fill=255)
-    # Creature anatomy sits in front of the rider's lower body, while the
-    # face/helmet remains above the raised horn, feathers and tail. Clearing
-    # only the foreground here does not remove art: the full base mount stays
-    # underneath. The box follows the seated player's 32px logical frame.
+    # The full mount remains underneath, including within this cleared area.
+    # In side views the entire 32px authored pose stays visible, including
+    # trousers, seated hips and shoes. Front/rear views retain head protection.
+    # Add one logical pixel in Y to undo the source-to-runtime upward shift.
     dx, dy = OFFSETS[mount_id][row][col]
-    head_left, head_top = 16 + dx//2, 17 + dy//2
-    draw.rectangle((head_left, head_top, head_left+31, head_top+23), fill=0)
+    rider_left, rider_top = 16 + dx//2, 17 + dy//2
+    protected_height = 32 if row in (1,2) else 24
+    draw.rectangle((rider_left, rider_top, rider_left+31,
+                    rider_top+protected_height-1), fill=0)
     foreground = Image.new('RGBA',(64,64))
     for y in range(64):
         for x in range(64):
