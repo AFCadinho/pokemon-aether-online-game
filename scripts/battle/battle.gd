@@ -2657,12 +2657,12 @@ func _update_mechanic_button_states() -> void:
 		mechanic_orb_style.border_color = Color(0.196, 0.816, 1.0, 0.95)
 		mechanic_orb_style.shadow_color = Color(0.078, 0.722, 1.0, 0.42)
 
-func _update_z_move_button_icon() -> String:
+func _update_z_move_button_icon(available_z_moves: Variant = null) -> String:
 	if z_move_button == null:
 		return ""
 
 	var texture := Z_MOVE_FALLBACK_ICON
-	var move_type := _get_available_generic_z_move_type()
+	var move_type := _get_available_generic_z_move_type(available_z_moves)
 	if move_type != "":
 		var icon_path := Z_MOVE_TYPE_ICON_PATH % move_type
 		if not ResourceLoader.exists(icon_path):
@@ -2683,9 +2683,10 @@ func _update_z_move_button_icon() -> String:
 	z_move_button.texture_focused = texture
 	return move_type
 
-func _get_available_generic_z_move_type() -> String:
-	var local_state_player_id := _get_local_state_player_id()
-	for z_move_value: Variant in battle_state.get_available_z_moves(local_state_player_id):
+func _get_available_generic_z_move_type(available_z_moves: Variant = null) -> String:
+	if available_z_moves == null:
+		available_z_moves = battle_state.get_available_z_moves(_get_local_state_player_id())
+	for z_move_value: Variant in available_z_moves:
 		if not z_move_value is Dictionary:
 			continue
 		var z_move: Dictionary = z_move_value as Dictionary
