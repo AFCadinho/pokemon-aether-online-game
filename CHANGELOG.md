@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add FireRed/LeafGreen Power Plant Pokémon and nearby HeartGold/SoulSilver Route 10 species as ambient overworld encounters.
+
 - Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
 
 - Pokémon Tower plays its own FireRed/LeafGreen remastered soundtrack by Zame, converted to Ogg Vorbis.

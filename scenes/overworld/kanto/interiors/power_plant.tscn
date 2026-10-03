@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_kw2uo"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_96_32"]
 size = Vector2(96, 32)
@@ -126,6 +127,64 @@ shape = SubResource("shape_32_96")
 z_index = 5
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=113284602]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Magnemite" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(464, 336)
+overworld_pokemon_id = "kanto_power_plant_magnemite_1"
+species_id = "magnemite"
+level = 20
+movement_behavior = "idle"
+
+[node name="Voltorb" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(656, 336)
+overworld_pokemon_id = "kanto_power_plant_voltorb_1"
+species_id = "voltorb"
+level = 20
+movement_behavior = "idle"
+
+[node name="Pikachu" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(1104, 336)
+overworld_pokemon_id = "kanto_power_plant_pikachu_1"
+species_id = "pikachu"
+level = 21
+movement_behavior = "idle"
+
+[node name="Magneton" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(1328, 528)
+overworld_pokemon_id = "kanto_power_plant_magneton_1"
+species_id = "magneton"
+level = 22
+movement_behavior = "idle"
+
+[node name="Electabuzz" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(272, 720)
+overworld_pokemon_id = "kanto_power_plant_electabuzz_1"
+species_id = "electabuzz"
+level = 24
+movement_behavior = "idle"
+
+[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(656, 720)
+overworld_pokemon_id = "kanto_power_plant_spearow_1"
+species_id = "spearow"
+level = 18
+movement_behavior = "idle"
+
+[node name="Raticate" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(880, 1104)
+overworld_pokemon_id = "kanto_power_plant_raticate_1"
+species_id = "raticate"
+level = 22
+movement_behavior = "idle"
+
+[node name="Quagsire" parent="Entities/Pokemon" instance=ExtResource("6_pokemon")]
+position = Vector2(1776, 1488)
+overworld_pokemon_id = "kanto_power_plant_quagsire_1"
+species_id = "quagsire"
+level = 20
+movement_behavior = "idle"
 
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1179522570]
 z_index = 4096
