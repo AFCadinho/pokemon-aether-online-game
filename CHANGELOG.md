@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the 500-Gem Shadow Lugia Mount Box to the Gift Store and Shiny Tracker, with localized odds and mount previews; remove the unimplemented Nimbus and Aether Board shop previews.
+
 - Restore water animations in Vermilion City and Route 6 after map reimports, preserving their current layouts and existing grass animations.
 
 - Add Zapdos as a static weekly boss in the Power Plant with a red nameplate, Easy/Intermediate/Hard selector, reward notifications and reconnect support. Defeating Hard unlocks unlimited rare wild Zapdos encounters.

@@ -406,5 +406,13 @@
   "aether-royal-cape": {
     "name": "Capa Aether Royal",
     "shortDesc": "Exige um cargo Patreon ativo. Não negociável. Equipe esta capa separadamente no espaço Costas. Para personagens masculinos e femininos."
+  },
+  "shadow-lugia-mount-box": {
+    "name": "Caixa de Montaria Shadow Lugia",
+    "shortDesc": "Contém Shadow Lugia ou Shiny Shadow Lugia. A chance shiny começa em 50% e aumenta até 80%. Montarias duplicadas são possíveis."
+  },
+  "shiny-shadow-lugia-mount": {
+    "name": "Montaria Shiny Shadow Lugia",
+    "shortDesc": "Desbloqueia Shiny Shadow Lugia como montaria terrestre."
   }
 }

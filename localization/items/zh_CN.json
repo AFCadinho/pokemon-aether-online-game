@@ -406,5 +406,13 @@
   "aether-royal-cape": {
     "name": "以太王室披风",
     "shortDesc": "需要有效的 Patreon 身份。不可交易。可在背部栏位独立装备。适用于男性和女性角色。"
+  },
+  "shadow-lugia-mount-box": {
+    "name": "暗黑洛奇亚坐骑箱",
+    "shortDesc": "包含普通或异色暗黑洛奇亚。异色概率从50%提高至最高80%。可能获得重复坐骑。"
+  },
+  "shiny-shadow-lugia-mount": {
+    "name": "异色暗黑洛奇亚坐骑",
+    "shortDesc": "解锁异色暗黑洛奇亚陆地坐骑。"
   }
 }
