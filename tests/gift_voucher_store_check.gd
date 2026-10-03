@@ -62,10 +62,10 @@ func _run() -> void:
 		_check(localization_manager.text("ui.store.voucher.binding") != "ui.store.voucher.binding", "Voucher binding is localized for " + locale)
 	if "--capture" in OS.get_cmdline_user_args():
 		root.size = Vector2i(1280, 900)
-		localization_manager.set_locale("nl")
+		localization_manager.set_locale("en")
 		store.visible = true
-		store.set_voucher_balance(250)
-		store.set_gem_balance(1200)
+		store.set_voucher_balance(1000)
+		store.set_gem_balance(0)
 		store.call("_select_category", "cosmetics")
 		store.call("_select_product", "adinho-chroma-hair")
 		store.payment_select.select(1)
