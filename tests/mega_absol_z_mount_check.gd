@@ -91,6 +91,7 @@ func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> vo
 	# trousers and shoes. Other directions protect the face/helmet envelope.
 	var head := Rect2i(Vector2i(32,32) + seat, Vector2i(64,64 if row in [1,2] else 48))
 	var head_clear := true
+	var front_head_overlaps_rider := false
 	var fan_preserved := true
 	var protected_pixels := 0
 	for y in range(128):
@@ -99,7 +100,10 @@ func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> vo
 			var fg := foreground.get_pixelv(point)
 			if head.has_point(point):
 				if fg.a > 0:
-					head_clear = false
+					if row == 0:
+						front_head_overlaps_rider = true
+					else:
+						head_clear = false
 				continue
 			var pixel := frame.get_pixelv(point)
 			if current_mount_id == "mega_absol_z" and row in [1,2] and pixel.a > 0 \
@@ -107,7 +111,10 @@ func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> vo
 				protected_pixels += 1
 				if fg != pixel:
 					fan_preserved = false
-	_check(head_clear, "foreground keeps the face and complete side rider clear")
+	if row == 0:
+		_check(front_head_overlaps_rider, "front-facing Absol head overlaps the rider head in front")
+	else:
+		_check(head_clear, "foreground keeps the rider head clear")
 	_check(fan_preserved, "pink feather silhouette remains in front outside the rider envelope")
 	if current_mount_id == "mega_absol_z" and row in [1,2]:
 		_check(protected_pixels > 0, "side pose keeps exposed feather pixels around the rider")
