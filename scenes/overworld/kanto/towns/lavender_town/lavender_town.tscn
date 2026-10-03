@@ -321,8 +321,6 @@ tile_footprint = Vector2i(5, 1)
 
 [node name="ToRoute8" type="Area2D" parent="Exits" unique_id=1892462091]
 position = Vector2(16, 784)
-monitoring = true
-monitorable = true
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
 target_spawn_name = "FromLavenderTown"
