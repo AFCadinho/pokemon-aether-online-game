@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the walkable Lavender Town exit to Route 8 and its transition arrow after the exit reverted to a disabled placeholder.
+
 - Give Mega Absol Z a compact standing pose with planted paws in side views, using separate idle layers while preserving its walking animation.
 
 - Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.

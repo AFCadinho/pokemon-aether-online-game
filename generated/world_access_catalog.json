@@ -2469,7 +2469,9 @@
 			"locationGroupId": "kanto_route_21",
 			"locationGroupLabel": "Route 21",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://cp04qmx6r0m3u"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
 			"spawnPoints": {
 				"from_cinnabar_island": {
@@ -5184,7 +5186,9 @@
 		"kanto_cinnabar_island__to_route21": {
 			"destination": {
 				"mapId": "kanto_route_21",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cp04qmx6r0m3u"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
 				"position": {
 					"x": 848.0,
@@ -5846,7 +5850,9 @@
 		"kanto_pallet_town__to_route_21": {
 			"destination": {
 				"mapId": "kanto_route_21",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://cp04qmx6r0m3u"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
 				"position": {
 					"x": 400.0,
