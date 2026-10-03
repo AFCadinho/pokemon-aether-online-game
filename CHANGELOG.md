@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Load mount PNGs directly when a newly merged asset has not yet been imported, restoring Mega Absol Z visibility and its Bag icon in an already open checkout.
+
 - Give nearby wild and NPC spectate indicators priority over tap/drag movement controls so clicking a battle opens spectating.
 
 - Add Mega Absol Z as a land mount with four-direction animation, fitted riders, foreground masks and a dedicated Bag icon.
