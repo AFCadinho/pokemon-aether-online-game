@@ -4,18 +4,16 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_fu0oe"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_xd1br"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_xd1br"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/item_gift_npc.tscn" id="r12_gift"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_fu0oe"]
+[ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_xd1br"]
+[ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_xd1br"]
+[ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r12_bird"]
+[ext_resource type="SpriteFrames" uid="uid://gy0k4ju8k6vq" path="res://assets/npcs/classes/camper_frames.tres" id="r12_camper"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="r12_couple"]
+[ext_resource type="SpriteFrames" uid="uid://7ym2628q14if" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="r12_fisher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r12_item"]
-[ext_resource type="SpriteFrames" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="r12_fisher"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r12_bird"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/camper_frames.tres" id="r12_camper"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="r12_couple"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocker_frames.tres" id="r12_rocker"]
+[ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r12_rocker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_lavender"]
 size = Vector2(160, 32)
@@ -188,10 +186,10 @@ world_access_area_type = "route"
 location_id = "kanto.route.12"
 location_name = "Route 12"
 region_id = "kanto"
-music_profile_id = "kanto.routes_11_15"
 encounter_area_id = "kanto_route_12"
 grass_encounter_chance = 0.21
 surf_encounter_chance = 0.02
+music_profile_id = "kanto.routes_11_15"
 
 [node name="Visual" parent="." unique_id=888322523 instance=ExtResource("1_visual")]
 
@@ -234,7 +232,6 @@ position = Vector2(-16, -16)
 shape = SubResource("shape_gate")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute11Gate" unique_id=1241157154 instance=ExtResource("4_hint")]
-z_index = 4096
 z_as_relative = false
 position = Vector2(0, -16)
 tile_footprint = Vector2i(1, 3)
@@ -248,7 +245,183 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1719440602]
 
+[node name="fisherman_ned" parent="Entities/NPCs" unique_id=1908016146 instance=ExtResource("r12_trainer")]
+position = Vector2(592, 656)
+trainer_id = "kanto_route_12_fisherman_ned"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_ned"
+display_name = "Fisherman Ned"
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="fisherman_chip" parent="Entities/NPCs" unique_id=98281983 instance=ExtResource("r12_trainer")]
+position = Vector2(688, 976)
+trainer_id = "kanto_route_12_fisherman_chip"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_chip"
+display_name = "Fisherman Chip"
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="fisherman_hank" parent="Entities/NPCs" unique_id=1570730331 instance=ExtResource("r12_trainer")]
+position = Vector2(1104, 752)
+trainer_id = "kanto_route_12_fisherman_hank"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_hank"
+display_name = "Fisherman Hank"
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="fisherman_elliot" parent="Entities/NPCs" unique_id=544418933 instance=ExtResource("r12_trainer")]
+position = Vector2(592, 1232)
+trainer_id = "kanto_route_12_fisherman_elliot"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_elliot"
+display_name = "Fisherman Elliot"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="young_couple_gia_jes" parent="Entities/NPCs" unique_id=2049150196 instance=ExtResource("r12_trainer")]
+position = Vector2(976, 1168)
+trainer_id = "kanto_route_12_young_couple_gia_jes"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_young_couple_gia_jes"
+display_name = "Young Couple Gia & Jes"
+npc_sprite_frames = ExtResource("r12_couple")
+
+[node name="rocker_luca" parent="Entities/NPCs" unique_id=1313061643 instance=ExtResource("r12_trainer")]
+position = Vector2(976, 1552)
+trainer_id = "kanto_route_12_rocker_luca"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_rocker_luca"
+display_name = "Rocker Luca"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r12_rocker")
+
+[node name="camper_justin" parent="Entities/NPCs" unique_id=970047080 instance=ExtResource("r12_trainer")]
+position = Vector2(1008, 2064)
+trainer_id = "kanto_route_12_camper_justin"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_camper_justin"
+display_name = "Camper Justin"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r12_camper")
+
+[node name="fisherman_andrew" parent="Entities/NPCs" unique_id=1360232758 instance=ExtResource("r12_trainer")]
+position = Vector2(1296, 1840)
+trainer_id = "kanto_route_12_fisherman_andrew"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_andrew"
+display_name = "Fisherman Andrew"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="fisherman_kyle" parent="Entities/NPCs" unique_id=392031419 instance=ExtResource("r12_trainer")]
+position = Vector2(1200, 2416)
+trainer_id = "kanto_route_12_fisherman_kyle"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_kyle"
+display_name = "Fisherman Kyle"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="bird_keeper_justin" parent="Entities/NPCs" unique_id=464823553 instance=ExtResource("r12_trainer")]
+position = Vector2(656, 2512)
+trainer_id = "kanto_route_12_bird_keeper_justin"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_bird_keeper_justin"
+display_name = "Bird Keeper Justin"
+npc_sprite_frames = ExtResource("r12_bird")
+
+[node name="fisherman_martin" parent="Entities/NPCs" unique_id=720185221 instance=ExtResource("r12_trainer")]
+position = Vector2(1072, 2640)
+trainer_id = "kanto_route_12_fisherman_martin"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_martin"
+display_name = "Fisherman Martin"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="young_couple_vic_tara" parent="Entities/NPCs" unique_id=507965969 instance=ExtResource("r12_trainer")]
+position = Vector2(560, 2928)
+trainer_id = "kanto_route_12_young_couple_vic_tara"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_young_couple_vic_tara"
+display_name = "Young Couple Vic & Tara"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r12_couple")
+
+[node name="fisherman_stephen" parent="Entities/NPCs" unique_id=963415424 instance=ExtResource("r12_trainer")]
+position = Vector2(1040, 2928)
+trainer_id = "kanto_route_12_fisherman_stephen"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_stephen"
+display_name = "Fisherman Stephen"
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="bird_keeper_gail" parent="Entities/NPCs" unique_id=2065563992 instance=ExtResource("r12_trainer")]
+position = Vector2(592, 3120)
+trainer_id = "kanto_route_12_bird_keeper_gail"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_bird_keeper_gail"
+display_name = "Bird Keeper Gail"
+npc_sprite_frames = ExtResource("r12_bird")
+
+[node name="fisherman_barney" parent="Entities/NPCs" unique_id=344334231 instance=ExtResource("r12_trainer")]
+position = Vector2(944, 3472)
+trainer_id = "kanto_route_12_fisherman_barney"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_barney"
+display_name = "Fisherman Barney"
+npc_sprite_frames = ExtResource("r12_fisher")
+
+[node name="fisherman_kyler" parent="Entities/NPCs" unique_id=1231320127 instance=ExtResource("r12_trainer")]
+position = Vector2(1296, 3728)
+trainer_id = "kanto_route_12_fisherman_kyler"
+sight_range_tiles = 2
+npc_id = "kanto_route_12_fisherman_kyler"
+display_name = "Fisherman Kyler"
+facing_direction = Vector2(-1, 1)
+npc_sprite_frames = ExtResource("r12_fisher")
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1315946398]
+
+[node name="skill_swap" parent="Entities/Interactables" unique_id=898714740 instance=ExtResource("r12_item")]
+position = Vector2(1168, 784)
+pickup_id = "kanto_route_12_skill_swap"
+item_id = "tm-skill-swap"
+
+[node name="hyper_potion" parent="Entities/Interactables" unique_id=1161907605 instance=ExtResource("r12_item")]
+position = Vector2(1008, 1200)
+pickup_id = "kanto_route_12_hyper_potion"
+item_id = "hyper-potion"
+
+[node name="leftovers" parent="Entities/Interactables" unique_id=201037881 instance=ExtResource("r12_item")]
+position = Vector2(656, 2416)
+pickup_id = "kanto_route_12_leftovers"
+item_id = "leftovers"
+
+[node name="iron" parent="Entities/Interactables" unique_id=389978603 instance=ExtResource("r12_item")]
+position = Vector2(272, 3152)
+pickup_id = "kanto_route_12_iron"
+item_id = "iron"
+
+[node name="rare_candy" parent="Entities/Interactables" unique_id=385968478 instance=ExtResource("r12_item")]
+position = Vector2(272, 3504)
+pickup_id = "kanto_route_12_rare_candy"
+item_id = "rare-candy"
+
+[node name="elixir" parent="Entities/Interactables" unique_id=53230739 instance=ExtResource("r12_item")]
+position = Vector2(592, 1808)
+pickup_id = "kanto_route_12_elixir"
+item_id = "elixir"
+
+[node name="calcium" parent="Entities/Interactables" unique_id=212643886 instance=ExtResource("r12_item")]
+position = Vector2(1264, 2864)
+pickup_id = "kanto_route_12_calcium"
+item_id = "calcium"
+
+[node name="mystic_water" parent="Entities/Interactables" unique_id=1150737282 instance=ExtResource("r12_item")]
+position = Vector2(1264, 1776)
+pickup_id = "kanto_route_12_mystic_water"
+item_id = "mystic-water"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1321622094]
 visible = false
@@ -272,200 +445,3 @@ tile_set = SubResource("TileSet_2m8tt")
 
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute11Gate" to="Exits/ToRoute11Gate" method="_on_body_entered"]
-
-[node name="fisherman_ned" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(688, 400)
-npc_id = "kanto_route_12_fisherman_ned"
-trainer_id = "kanto_route_12_fisherman_ned"
-display_name = "Fisherman Ned"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_chip" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(560, 624)
-npc_id = "kanto_route_12_fisherman_chip"
-trainer_id = "kanto_route_12_fisherman_chip"
-display_name = "Fisherman Chip"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_hank" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(912, 784)
-npc_id = "kanto_route_12_fisherman_hank"
-trainer_id = "kanto_route_12_fisherman_hank"
-display_name = "Fisherman Hank"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_elliot" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(560, 1072)
-npc_id = "kanto_route_12_fisherman_elliot"
-trainer_id = "kanto_route_12_fisherman_elliot"
-display_name = "Fisherman Elliot"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="young_couple_gia_jes" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(816, 1296)
-npc_id = "kanto_route_12_young_couple_gia_jes"
-trainer_id = "kanto_route_12_young_couple_gia_jes"
-display_name = "Young Couple Gia & Jes"
-npc_sprite_frames = ExtResource("r12_couple")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="rocker_luca" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(944, 1552)
-npc_id = "kanto_route_12_rocker_luca"
-trainer_id = "kanto_route_12_rocker_luca"
-display_name = "Rocker Luca"
-npc_sprite_frames = ExtResource("r12_rocker")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="camper_justin" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(560, 1936)
-npc_id = "kanto_route_12_camper_justin"
-trainer_id = "kanto_route_12_camper_justin"
-display_name = "Camper Justin"
-npc_sprite_frames = ExtResource("r12_camper")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_andrew" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(1264, 1808)
-npc_id = "kanto_route_12_fisherman_andrew"
-trainer_id = "kanto_route_12_fisherman_andrew"
-display_name = "Fisherman Andrew"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_kyle" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(1264, 2224)
-npc_id = "kanto_route_12_fisherman_kyle"
-trainer_id = "kanto_route_12_fisherman_kyle"
-display_name = "Fisherman Kyle"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="bird_keeper_justin" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(656, 2512)
-npc_id = "kanto_route_12_bird_keeper_justin"
-trainer_id = "kanto_route_12_bird_keeper_justin"
-display_name = "Bird Keeper Justin"
-npc_sprite_frames = ExtResource("r12_bird")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_martin" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(1136, 2608)
-npc_id = "kanto_route_12_fisherman_martin"
-trainer_id = "kanto_route_12_fisherman_martin"
-display_name = "Fisherman Martin"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, -1)
-
-[node name="young_couple_vic_tara" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(592, 2864)
-npc_id = "kanto_route_12_young_couple_vic_tara"
-trainer_id = "kanto_route_12_young_couple_vic_tara"
-display_name = "Young Couple Vic & Tara"
-npc_sprite_frames = ExtResource("r12_couple")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_stephen" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(976, 3056)
-npc_id = "kanto_route_12_fisherman_stephen"
-trainer_id = "kanto_route_12_fisherman_stephen"
-display_name = "Fisherman Stephen"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="bird_keeper_gail" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(976, 3280)
-npc_id = "kanto_route_12_bird_keeper_gail"
-trainer_id = "kanto_route_12_bird_keeper_gail"
-display_name = "Bird Keeper Gail"
-npc_sprite_frames = ExtResource("r12_bird")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_barney" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(1264, 3472)
-npc_id = "kanto_route_12_fisherman_barney"
-trainer_id = "kanto_route_12_fisherman_barney"
-display_name = "Fisherman Barney"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="fisherman_kyler" parent="Entities/NPCs" instance=ExtResource("r12_trainer")]
-position = Vector2(1264, 3696)
-npc_id = "kanto_route_12_fisherman_kyler"
-trainer_id = "kanto_route_12_fisherman_kyler"
-display_name = "Fisherman Kyler"
-npc_sprite_frames = ExtResource("r12_fisher")
-sight_range_tiles = 2
-facing_direction = Vector2(0, 1)
-
-[node name="FishingGuru" parent="Entities/NPCs" instance=ExtResource("r12_gift")]
-position = Vector2(912, 2576)
-npc_id = "kanto_route_12_fishing_guru"
-display_name = "Fishing Guru"
-npc_sprite_frames = ExtResource("r12_fisher")
-reward_id = "kanto_route_12_super_rod"
-reward_item_id = "super-rod"
-success_dialogue_id = "kanto_route_12_fishing_guru_success"
-already_received_dialogue_id = "kanto_route_12_fishing_guru_received"
-failure_dialogue_id = "kanto_route_12_fishing_guru_failure"
-success_dialogue_lines = Array[String](["Take this Super Rod! Keep practicing your fishing."])
-already_received_dialogue_lines = Array[String](["Enjoy your Super Rod!"])
-
-[node name="skill_swap" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(1136, 784)
-pickup_id = "kanto_route_12_skill_swap"
-item_id = "tm-skill-swap"
-
-[node name="hyper_potion" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(720, 1200)
-pickup_id = "kanto_route_12_hyper_potion"
-item_id = "hyper-potion"
-
-[node name="leftovers" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(1296, 1776)
-pickup_id = "kanto_route_12_leftovers"
-item_id = "leftovers"
-
-[node name="iron" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(272, 3120)
-pickup_id = "kanto_route_12_iron"
-item_id = "iron"
-
-[node name="rare_candy" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(240, 3568)
-pickup_id = "kanto_route_12_rare_candy"
-item_id = "rare-candy"
-
-[node name="elixir" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(528, 1808)
-pickup_id = "kanto_route_12_elixir"
-item_id = "elixir"
-
-[node name="calcium" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(1232, 3632)
-pickup_id = "kanto_route_12_calcium"
-item_id = "calcium"
-
-[node name="mystic_water" parent="Entities/Interactables" instance=ExtResource("r12_item")]
-position = Vector2(1296, 3824)
-pickup_id = "kanto_route_12_mystic_water"
-item_id = "mystic-water"
