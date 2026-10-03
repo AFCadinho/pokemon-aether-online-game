@@ -787,6 +787,10 @@
     "name": "Montaria Cyclizar",
     "shortDesc": "Desbloqueia Cyclizar como montaria terrestre."
   },
+  "rayquaza-mount-box": {
+    "name": "Caixa de Montaria Rayquaza",
+    "shortDesc": "Contém Rayquaza ou Rayquaza Shiny. A chance Shiny começa em 50% e sobe até 80%. Montarias repetidas são possíveis."
+  },
   "rayquaza-mount": {
     "name": "Montaria Rayquaza",
     "shortDesc": "Desbloqueia Rayquaza como montaria terrestre."

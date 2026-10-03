@@ -5,6 +5,7 @@ class_name InventoryServiceNode
 signal inventory_changed(items: Array)
 signal world_pickup_state_changed
 signal item_received(item_id: String, quantity: int)
+signal mount_box_opened(result: Dictionary)
 
 const INVENTORY_ENDPOINT := "/game/inventory"
 const FISHING_PROGRESSION_ENDPOINT := "/game/fishing/progression"
@@ -39,6 +40,8 @@ func _npc_item_reward_endpoint(reward_id: String) -> String:
 func _npc_quest_item_turn_in_endpoint(turn_in_id: String) -> String:
 	var endpoint := NPC_QUEST_ITEM_TURN_IN_ENDPOINT % turn_in_id.uri_encode()
 	return endpoint
+
+var mount_box_pending_requests: Dictionary = {}
 
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
@@ -543,24 +546,40 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	if normalized_item_id == "":
 		return {"success": false, "error": "Missing item id."}
 
+	var headers := GatewayApiConfig.get_json_headers()
+	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), normalized_item_id]
+	var is_mount_box := normalized_item_id.ends_with("-mount-box")
+	if is_mount_box:
+		if not mount_box_pending_requests.has(request_key):
+			mount_box_pending_requests[request_key] = _new_request_id()
+		headers.append("Idempotency-Key: " + str(mount_box_pending_requests[request_key]))
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + INVENTORY_ITEM_USE_ENDPOINT % normalized_item_id.uri_encode(),
 		HTTPClient.METHOD_POST,
-		GatewayApiConfig.get_json_headers(),
+		headers,
 		""
 	)
 	if not bool(response.get("success", false)):
+		if int(response.get("status", 0)) >= 400 and int(response.get("status", 0)) < 500:
+			mount_box_pending_requests.erase(request_key)
 		return response
+	if is_mount_box:
+		mount_box_pending_requests.erase(request_key)
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
 	var appearance_inventory: Dictionary = _dictionary_from_value(body.get("appearanceInventory", {}))
+	var mount_box := _dictionary_from_value(body.get("mountBox", {}))
+	if not mount_box.is_empty():
+		apply_inventory_state(inventory)
+		mount_box_opened.emit(mount_box)
 	return {
 		"success": true,
 		"itemId": str(body.get("itemId", normalized_item_id)),
 		"useAction": str(body.get("useAction", "")),
 		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
+		"mountBox": mount_box,
 		"guild": _dictionary_from_value(body.get("guild", {})),
 		"user": _dictionary_from_value(body.get("user", {})),
 		"inventory": _array_from_value(inventory.get("items", [])),

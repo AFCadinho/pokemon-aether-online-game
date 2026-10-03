@@ -787,6 +787,10 @@
     "name": "Cyclizar Mount",
     "shortDesc": "Unlocks Cyclizar as a land mount."
   },
+  "rayquaza-mount-box": {
+    "name": "Rayquaza Mount Box",
+    "shortDesc": "Contains Rayquaza or Shiny Rayquaza. Shiny chance starts at 50% and rises to 80%. Duplicate mounts are possible."
+  },
   "rayquaza-mount": {
     "name": "Rayquaza Mount",
     "shortDesc": "Unlocks Rayquaza as a land mount."
