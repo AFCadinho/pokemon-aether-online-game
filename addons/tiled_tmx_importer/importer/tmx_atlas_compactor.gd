@@ -73,9 +73,9 @@ func compact(root: Node, output_tileset_path: String, animations: Dictionary = {
 	var mappings := {}
 	var paths: Array[String] = []
 	var base_bytes := 0
+	# Tiled firstgid values can produce source IDs above Godot's serialized
+	# TileMapLayer range. Reassign compact IDs before writing cell data.
 	var next_id := 0
-	for i in original.get_source_count():
-		next_id = maxi(next_id, original.get_source_id(i) + 1)
 	for i in original.get_source_count():
 		var id := original.get_source_id(i)
 		if not used.has(id):
@@ -110,9 +110,8 @@ func compact(root: Node, output_tileset_path: String, animations: Dictionary = {
 			source.separation = Vector2i.ONE * BORDER * 2
 			source.use_texture_padding = old.use_texture_padding
 			source.texture = ImageTexture.create_from_image(image)
-			var new_id := id if chunk == 0 else next_id
-			if chunk > 0:
-				next_id += 1
+			var new_id := next_id
+			next_id += 1
 			compact_set.add_source(source, new_id)
 			for n in count:
 				var before: Vector2i = coords[start + n]
