@@ -414,5 +414,9 @@
   "shiny-shadow-lugia-mount": {
     "name": "Shiny Shadow Lugia Mount",
     "shortDesc": "Unlocks Shiny Shadow Lugia as a land mount."
+  },
+  "aether-gift-voucher": {
+    "name": "Aether Gift Voucher",
+    "shortDesc": "Available voucher credit: {amount}. Spend it on eligible Gift Store cosmetics and mounts. Purchases and all box contents are untradeable. Only PokeAether staff can add credit."
   }
 }

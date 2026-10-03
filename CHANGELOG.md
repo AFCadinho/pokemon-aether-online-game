@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the permanent Aether Gift Voucher Key Item, separate Gift Store balances and voucher checkout with clear untradeable purchase and box-content notices.
+
 - Route 11's roaming Pokémon now use distinct movement speeds and randomized pauses to avoid synchronized pacing.
 
 - Style mount preview toggles as compact Aether buttons with shiny/play/pause icons, colored active states and localized On/Off labels.

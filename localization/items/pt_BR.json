@@ -414,5 +414,9 @@
   "shiny-shadow-lugia-mount": {
     "name": "Montaria Shiny Shadow Lugia",
     "shortDesc": "Desbloqueia Shiny Shadow Lugia como montaria terrestre."
+  },
+  "aether-gift-voucher": {
+    "name": "Aether Gift Voucher",
+    "shortDesc": "Crédito de voucher disponível: {amount}. Use em cosméticos e montarias elegíveis da Gift Store. Compras e conteúdo das caixas são inegociáveis. Somente a equipe PokeAether pode adicionar crédito."
   }
 }
