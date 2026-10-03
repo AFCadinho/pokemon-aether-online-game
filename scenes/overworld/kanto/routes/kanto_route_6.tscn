@@ -328,6 +328,14 @@ npc_id = "kanto_route_6_bug_catcher_keigo"
 npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Keigo"
 npc_sprite_frames = ExtResource("8_bug_catcher")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="CamperRicky" parent="Entities/NPCs" unique_id=485106914 instance=ExtResource("7_trainer")]
 position = Vector2(1200, 784)
@@ -338,6 +346,14 @@ npc_definition_id = "trainer_class_camper"
 display_name = "Camper Ricky"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("9_camper")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="PicnickerNancy" parent="Entities/NPCs" unique_id=171927362 instance=ExtResource("7_trainer")]
 position = Vector2(272, 880)
@@ -348,6 +364,14 @@ npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Nancy"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("10_picnicker")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="BugCatcherElijah" parent="Entities/NPCs" unique_id=44153149 instance=ExtResource("7_trainer")]
 position = Vector2(1040, 880)
@@ -358,6 +382,14 @@ npc_definition_id = "trainer_class_bug_catcher"
 display_name = "Bug Catcher Elijah"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("8_bug_catcher")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="PicnickerIsabelle" parent="Entities/NPCs" unique_id=967696408 instance=ExtResource("7_trainer")]
 position = Vector2(496, 1104)
@@ -368,6 +400,14 @@ npc_definition_id = "trainer_class_picnicker"
 display_name = "Picnicker Isabelle"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("10_picnicker")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="CamperJeff" parent="Entities/NPCs" unique_id=1685859924 instance=ExtResource("7_trainer")]
 position = Vector2(1040, 1456)
@@ -378,6 +418,14 @@ npc_definition_id = "trainer_class_camper"
 display_name = "Camper Jeff"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("9_camper")
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=851574945]
 
@@ -393,7 +441,14 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.5
 movement_speed_pixels = 42.0
-movement_wait_jitter_seconds = 0.8
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Meowth" parent="Entities/Pokemon" unique_id=190001102 instance=ExtResource("11_pokemon")]
 position = Vector2(1104, 1296)
@@ -405,7 +460,14 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.2
 movement_speed_pixels = 32.0
-movement_wait_jitter_seconds = 0.7
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Oddish" parent="Entities/Pokemon" unique_id=190001103 instance=ExtResource("11_pokemon")]
 position = Vector2(400, 1008)
@@ -417,7 +479,14 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 30.0
-movement_wait_jitter_seconds = 0.9
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Bellsprout" parent="Entities/Pokemon" unique_id=190001104 instance=ExtResource("11_pokemon")]
 position = Vector2(1104, 1040)
@@ -429,7 +498,14 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.4
 movement_speed_pixels = 38.0
-movement_wait_jitter_seconds = 0.8
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Pidgey2" parent="Entities/Pokemon" unique_id=190001105 instance=ExtResource("11_pokemon")]
 position = Vector2(432, 304)
@@ -441,7 +517,14 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 1.6
 movement_speed_pixels = 46.0
-movement_wait_jitter_seconds = 0.7
+movement_wait_jitter_seconds = null
+preload_quest_markers = 0.0
+manual_interaction_reach_tiles = false
+pickpocket_enabled = 1
+pickpocket_npc_type = false
+pickpocket_required_level = ""
+minimum_sort_z = 1
+ambient_movement_ignores_map_collision = -4096
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1476137668]
 
@@ -462,10 +545,12 @@ position = Vector2(1168, 1264)
 pickup_id = "kanto_route_6_great_ball_tm_substitute"
 item_id = "great-ball"
 
-[node name="Route6Sign" parent="Entities/Interactables" unique_id=141834031 instance=ExtResource("11_4pw3a")]
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=287396499]
+
+[node name="Route6Sign" parent="Entities/Interactables/Signs" unique_id=141834031 instance=ExtResource("11_4pw3a")]
 position = Vector2(624, 1552)
 
-[node name="Node2D" type="Node2D" parent="Entities" unique_id=152861064]
+[node name="Route6UndergroundSign" parent="Entities/Interactables/Signs" unique_id=473680250 instance=ExtResource("11_4pw3a")]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1575351291]
 visible = false
