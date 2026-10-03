@@ -320,19 +320,22 @@ z_as_relative = false
 tile_footprint = Vector2i(5, 1)
 
 [node name="ToRoute8" type="Area2D" parent="Exits" unique_id=1892462091]
+editor_description = "Pending Route 8: set target_scene_path and target_spawn_name when the map exists, register the transition, then enable monitoring and the collision shape."
 position = Vector2(16, 784)
-monitoring = true
-monitorable = true
+monitoring = false
+monitorable = false
 script = ExtResource("3_exit")
-target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
-target_spawn_name = "FromLavenderTown"
 transition_id = "kanto_lavender_town__to_route8"
 transition_facing_direction = "left"
+metadata/planned_target_map_id = "kanto_route_8"
+metadata/planned_target_spawn_name = "FromLavenderTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute8" unique_id=1791214196]
 shape = SubResource("shape_west")
+disabled = true
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute8" unique_id=686163291 instance=ExtResource("4_hint")]
+visible = false
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "left"

@@ -156,6 +156,8 @@ static func get_mount_frames(mount_id: String) -> SpriteFrames:
 		return null
 
 	var frames := _build_sprite_frames(texture, frame_size)
+	if not _apply_idle_sheet(frames, definition, "idleSpriteSheet", frame_size):
+		return null
 	var movement_speed := maxf(float(definition.get("movementAnimationSpeed", WALK_ANIMATION_SPEED)), 0.1)
 	for direction: String in ["down", "left", "right", "up"]:
 		frames.set_animation_speed(StringName("walk_" + direction), movement_speed)
@@ -178,6 +180,8 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 		if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
 			return null
 		var sheet_frames := _build_sprite_frames(texture, frame_size)
+		if not _apply_idle_sheet(sheet_frames, definition, "idleForegroundSheet", frame_size):
+			return null
 		var speed := maxf(float(definition.get("movementAnimationSpeed", WALK_ANIMATION_SPEED)), 0.1)
 		for direction: String in ["down", "left", "right", "up"]:
 			sheet_frames.set_animation_speed(StringName("walk_" + direction), speed)
@@ -248,8 +252,12 @@ static func get_mounted_rider_frames(
 	var mask_image := _get_mask_image(normalized_id)
 	if mask_image == null:
 		return base_frames
+	var idle_mask_image := _get_mask_image(normalized_id, true)
+	if idle_mask_image == null:
+		return base_frames
 	var definition := get_mount_definition(normalized_id)
 	var mount_frame_size := _get_mount_frame_size(definition)
+	var has_idle_mask := not str(definition.get("idleRiderMaskSheet", "")).is_empty()
 	var rider_offsets_value: Variant = definition.get("riderOffsets", {})
 	if not rider_offsets_value is Dictionary:
 		return base_frames
@@ -265,6 +273,7 @@ static func get_mounted_rider_frames(
 		transformed.set_animation_loop(animation_name, base_frames.get_animation_loop(animation_name))
 		var direction := _direction_from_animation(animation_name_text)
 		var direction_row := _direction_row(direction)
+		var is_idle := animation_name_text.begins_with("idle_")
 		var frame_count := base_frames.get_frame_count(animation_name)
 		for frame_index: int in range(frame_count):
 			# Mounted riders keep one seated pose while the mount animates. Repeat
@@ -279,9 +288,9 @@ static func get_mounted_rider_frames(
 			offset += _get_rider_offset_adjustment(rider_offset_adjustments, direction)
 			var mounted_image := _transform_rider_frame(
 				source_image,
-				mask_image,
+				idle_mask_image if is_idle else mask_image,
 				direction_row,
-				mini(frame_index, FRAME_COLUMNS - 1),
+				0 if is_idle and has_idle_mask else mini(frame_index, FRAME_COLUMNS - 1),
 				offset,
 				mount_frame_size
 			)
@@ -327,21 +336,25 @@ static func _get_mount_frame_size(definition: Dictionary) -> Vector2i:
 	return DEFAULT_FRAME_SIZE
 
 
-static func _get_mask_image(mount_id: String) -> Image:
-	if _mask_image_cache.has(mount_id):
-		return _mask_image_cache[mount_id] as Image
+static func _get_mask_image(mount_id: String, idle := false) -> Image:
 	var definition := get_mount_definition(mount_id)
-	var mask_path := str(definition.get("riderMaskSheet", ""))
+	var idle_path := str(definition.get("idleRiderMaskSheet", ""))
+	if idle and idle_path.is_empty():
+		return _get_mask_image(mount_id)
+	var cache_key := mount_id + (":idle" if idle else "")
+	if _mask_image_cache.has(cache_key):
+		return _mask_image_cache[cache_key] as Image
+	var mask_path := idle_path if idle else str(definition.get("riderMaskSheet", ""))
 	var texture := _load_mount_texture(mask_path)
 	if texture == null:
 		return null
 	var image := texture.get_image()
 	var frame_size := _get_mount_frame_size(definition)
-	if image == null or image.get_size() != frame_size * Vector2i(FRAME_COLUMNS, FRAME_ROWS):
+	if image == null or image.get_size() != frame_size * Vector2i(1 if idle else FRAME_COLUMNS, FRAME_ROWS):
 		return null
 	if image.get_format() != Image.FORMAT_RGBA8:
 		image.convert(Image.FORMAT_RGBA8)
-	_mask_image_cache[mount_id] = image
+	_mask_image_cache[cache_key] = image
 	return image
 
 
@@ -492,6 +505,20 @@ static func _direction_row(direction: String) -> int:
 			return 3
 		_:
 			return 0
+
+
+static func _apply_idle_sheet(frames: SpriteFrames, definition: Dictionary, field: String, frame_size: Vector2i) -> bool:
+	# Optional one-column sheets keep standing poses independent of the walk.
+	var path := str(definition.get(field, ""))
+	if path.is_empty():
+		return true
+	var texture := _load_mount_texture(path)
+	if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(1, FRAME_ROWS):
+		return false
+	for row: int in range(FRAME_ROWS):
+		var direction: String = str(["down", "left", "right", "up"][row])
+		frames.set_frame(StringName("idle_" + direction), 0, _make_frame_texture(texture, 0, row, frame_size))
+	return true
 
 
 static func _build_sprite_frames(texture: Texture2D, frame_size: Vector2i) -> SpriteFrames:

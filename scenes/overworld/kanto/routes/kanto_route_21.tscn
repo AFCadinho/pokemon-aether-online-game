@@ -1,9 +1,9 @@
-[gd_scene format=3]
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
+[gd_scene format=3 uid="uid://cp04qmx6r0m3u"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_21/route_21.visual.tscn" id="1_visual"]
-[ext_resource type="Script" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://cwoy7c4b5aqge" path="res://scripts/world/kanto/coastal_water_map.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(224, 32)
@@ -11,8 +11,9 @@ size = Vector2(224, 32)
 [sub_resource type="RectangleShape2D" id="shape_cinnabar"]
 size = Vector2(384, 32)
 
-[node name="Route21" type="Node2D"]
+[node name="Route21" type="Node2D" unique_id=1307080972]
 script = ExtResource("2_metadata")
+water_reference_tile = Vector2i(26, 88)
 map_id = "kanto_route_21"
 map_region_name = "Kanto"
 map_display_name = "Route 21"
@@ -23,21 +24,20 @@ location_id = "kanto.route.21"
 location_name = "Route 21"
 region_id = "kanto"
 music_profile_id = "kanto.routes_3_10_16_22"
-water_reference_tile = Vector2i(26, 88)
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=656313142 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=940099893]
 
-[node name="FromPalletTown" type="Marker2D" parent="Spawns"]
+[node name="FromPalletTown" type="Marker2D" parent="Spawns" unique_id=714401479]
 position = Vector2(400, 64)
 
-[node name="FromCinnabarIsland" type="Marker2D" parent="Spawns"]
+[node name="FromCinnabarIsland" type="Marker2D" parent="Spawns" unique_id=1646661836]
 position = Vector2(848, 2832)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=333029438]
 
-[node name="ToPalletTown" type="Area2D" parent="Exits"]
+[node name="ToPalletTown" type="Area2D" parent="Exits" unique_id=1517690051]
 position = Vector2(400, 16)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
@@ -45,10 +45,10 @@ target_spawn_name = "FromRoute21"
 transition_id = "kanto_route_21__to_pallet_town"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPalletTown" unique_id=119460033]
 shape = SubResource("shape_1")
 
-[node name="ToCinnabarIsland" type="Area2D" parent="Exits"]
+[node name="ToCinnabarIsland" type="Area2D" parent="Exits" unique_id=371781016]
 position = Vector2(832, 2864)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/cinnabar_island/cinnabar_island.tscn"
@@ -56,31 +56,34 @@ target_spawn_name = "FromRoute21"
 transition_id = "kanto_route_21__to_cinnabar_island"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCinnabarIsland"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToCinnabarIsland" unique_id=73236169]
 shape = SubResource("shape_cinnabar")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=1969053793]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=1911452761]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=572609897]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=2130535878]
 
-[node name="Pearl" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="Pearl" parent="Entities/Interactables/Items" unique_id=1912127418 instance=ExtResource("99_item")]
 position = Vector2(720, 1456)
 pickup_id = "kanto_route_21_pearl"
 item_id = "pearl"
-[node name="WaterStone" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+
+[node name="WaterStone" parent="Entities/Interactables/Items" unique_id=44422541 instance=ExtResource("99_item")]
 position = Vector2(624, 2224)
 pickup_id = "kanto_route_21_waterstone"
 item_id = "water-stone"
-[node name="PPUp" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+
+[node name="PPUp" parent="Entities/Interactables/Items" unique_id=2071757911 instance=ExtResource("99_item")]
 position = Vector2(832, 2784)
 pickup_id = "kanto_route_21_ppup"
 item_id = "pp-up"
-[node name="Stardust" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+
+[node name="Stardust" parent="Entities/Interactables/Items" unique_id=1166602693 instance=ExtResource("99_item")]
 position = Vector2(464, 480)
 pickup_id = "kanto_route_21_stardust"
 item_id = "stardust"
