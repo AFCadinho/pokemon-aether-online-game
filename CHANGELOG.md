@@ -4,6 +4,10 @@
 
 - Add Pokémon and Mounts tabs to the Shiny Tracker, show mount box odds and history, and open owned boxes with the disclosed 50%–80% shiny pity rules.
 
+- Route 5 Pokémon move more slowly, with varied pauses between patrol steps.
+
+- Lavender Town now has four Pokémon on its mountain approaches and two more in town, including Generation II and VI species.
+
 - Gary disappears after his Pokémon Tower battle when the player leaves 2F, including internal stair refreshes.
 
 - Add the approved Shiny Rayquaza as a separate hovering mount with its own item and Bag icon; preserve the normal Rayquaza pose, size and riding behavior.

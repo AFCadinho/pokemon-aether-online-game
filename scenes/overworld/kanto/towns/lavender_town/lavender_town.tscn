@@ -438,6 +438,66 @@ movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.5
 
+[node name="MountainGeodude" parent="Entities/Pokemon" unique_id=971154024 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(368, 80)
+overworld_pokemon_id = "kanto_lavender_town_mountain_geodude_1"
+species_id = "geodude"
+level = 16
+display_name = "Geodude"
+facing_direction = Vector2(0, -1)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+
+[node name="MountainMachop" parent="Entities/Pokemon" unique_id=1914537171 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(1296, 368)
+overworld_pokemon_id = "kanto_lavender_town_mountain_machop_1"
+species_id = "machop"
+level = 17
+display_name = "Machop"
+facing_direction = Vector2(0, -1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+
+[node name="MountainGligar" parent="Entities/Pokemon" unique_id=1825743184 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(1520, 1008)
+overworld_pokemon_id = "kanto_lavender_town_mountain_gligar_1"
+species_id = "gligar"
+level = 18
+display_name = "Gligar"
+facing_direction = Vector2(0, -1)
+
+[node name="MountainNoibat" parent="Entities/Pokemon" unique_id=1957576273 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(400, 1456)
+overworld_pokemon_id = "kanto_lavender_town_mountain_noibat_1"
+species_id = "noibat"
+level = 19
+display_name = "Noibat"
+facing_direction = Vector2(0, -1)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+
+[node name="TownGrowlithe" parent="Entities/Pokemon" unique_id=1665317084 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(400, 1264)
+overworld_pokemon_id = "kanto_lavender_town_growlithe_1"
+species_id = "growlithe"
+level = 14
+display_name = "Growlithe"
+facing_direction = Vector2(0, -1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.5
+
+[node name="TownHoothoot" parent="Entities/Pokemon" unique_id=303992535 instance=ExtResource("11_overworld_pokemon")]
+position = Vector2(1136, 1392)
+overworld_pokemon_id = "kanto_lavender_town_hoothoot_1"
+species_id = "hoothoot"
+level = 15
+display_name = "Hoothoot"
+facing_direction = Vector2(0, -1)
+
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=992970720]
 
 [node name="LavenderArrival" type="Area2D" parent="StoryTriggers" unique_id=1121201832]

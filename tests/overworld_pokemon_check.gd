@@ -8,6 +8,7 @@ const MAP_CHARACTER_BLOCKING_SCRIPT := "res://scripts/world/map_character_blocki
 const ROUTE_1_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_1.tscn"
 const PALLET_TOWN_SCENE := "res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn"
 const VIRIDIAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn"
+const LAVENDER_TOWN_SCENE := "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
 
 var failed := false
 
@@ -49,12 +50,12 @@ func _check_overworld_pokemon_script() -> void:
 	_check_true(text.contains("@export var auto_resolve_follower_sprite := true"), "OverworldPokemon auto-resolves follower sprites")
 	_check_true(text.contains("OverworldPokemonMetadataService.get_overworld_pokemon_metadata(overworld_pokemon_id)"), "OverworldPokemon loads backend metadata")
 	_check_true(text.contains("NpcDialogueService.resolve_lines("), "OverworldPokemon resolves backend dialogue centrally")
-	_check_true(text.contains("FollowerSpriteService.get_sprite_frames(resolved_species_id, false)"), "OverworldPokemon uses follower sprite animations")
+	_check_true(text.contains("FollowerSpriteService.get_sprite_frames(resolved_species_id, shiny)"), "OverworldPokemon uses follower sprite animations")
 	_check_true(text.contains("sprite.sprite_frames = follower_sprite_frames"), "OverworldPokemon applies resolved follower sprite frames")
 	_check_true(text.contains("sprite.animation != animation_name or not sprite.is_playing()"), "OverworldPokemon does not restart active walk loops")
 	_check_true(text.contains("_should_keep_walk_animation_after_step(direction)"), "OverworldPokemon keeps walk loops between continuous steps")
 	_check_true(text.contains("func _resolve_home_mugshot() -> void:"), "OverworldPokemon can resolve HOME mugshots")
-	_check_true(text.contains("PokemonAssets.load_home_sprite(species_id)"), "OverworldPokemon uses the central HOME sprite resolver")
+	_check_true(text.contains("PokemonAssets.load_home_sprite(species_id, shiny)"), "OverworldPokemon uses the central HOME sprite resolver")
 	_check_true(
 		text.find("_ready_base_npc()") < text.find("_resolve_home_mugshot()"),
 		"OverworldPokemon applies its HOME mugshot after generic NPC portrait resolution"
@@ -122,6 +123,22 @@ func _check_town_placements() -> void:
 		not viridian_city_text.contains('overworld_pokemon_id = "kanto_pallet_town_'),
 		"Viridian City does not reuse Pallet Town overworld Pokemon ids"
 	)
+
+	var lavender_town_text := _read_text(LAVENDER_TOWN_SCENE)
+	for pokemon_id: String in [
+		"kanto_lavender_town_mountain_geodude_1",
+		"kanto_lavender_town_mountain_machop_1",
+		"kanto_lavender_town_mountain_gligar_1",
+		"kanto_lavender_town_mountain_noibat_1",
+	]:
+		_check_true(lavender_town_text.contains('overworld_pokemon_id = "%s"' % pokemon_id),
+			"Lavender Town places mountain Pokemon %s" % pokemon_id)
+	for pokemon_id: String in [
+		"kanto_lavender_town_growlithe_1",
+		"kanto_lavender_town_hoothoot_1",
+	]:
+		_check_true(lavender_town_text.contains('overworld_pokemon_id = "%s"' % pokemon_id),
+			"Lavender Town places town Pokemon %s" % pokemon_id)
 
 
 func _read_text(path: String) -> String:
