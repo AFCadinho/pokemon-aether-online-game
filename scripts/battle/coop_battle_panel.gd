@@ -1225,6 +1225,12 @@ func _set_native_mechanic_buttons(can_mega: bool, can_z_move: bool) -> void:
 		_mega_evolution_button.disabled = not available or not can_mega
 		_mega_evolution_button.modulate = Color(1.0, 0.82, 0.2, 1.0) if _mega_evolution_selected else Color.WHITE
 	if _z_move_button != null:
+		var available_z_moves: Array = []
+		for move: Dictionary in CoopService.view.get("moves", []):
+			if move.get("zMove") is Dictionary:
+				available_z_moves.append(move["zMove"])
+		# Reuse the ordinary battle icon resolver, including signature fallback.
+		embedded_hosts["stage"].owner.call("_update_z_move_button_icon", available_z_moves)
 		_z_move_button.visible = can_z_move
 		_z_move_button.disabled = not available or not can_z_move
 		_z_move_button.modulate = Color(1.0, 0.72, 0.24, 1.0) if _z_move_selected else Color.WHITE

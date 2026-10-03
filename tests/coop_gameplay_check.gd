@@ -125,6 +125,8 @@ func _run() -> void:
 	var presenter: Control = mounted_battle.get("coop_presenter")
 	var original_activity: Dictionary = service.activity.duplicate(true)
 	var original_view: Dictionary = service.view.duplicate(true)
+	_check_z_move_icons(presenter, service)
+	service.view = original_view.duplicate(true)
 	service.view = {}
 	service.activity = {"status": "starting", "canCancel": true}
 	presenter._update_loading_overlay()
@@ -965,6 +967,26 @@ func _run() -> void:
 		"completed co-op result survives world reload and is consumed once")
 	await process_frame
 	quit(1 if failed else 0)
+
+
+func _check_z_move_icons(presenter: Control, service: Node) -> void:
+	var button: TextureButton = presenter._z_move_button
+	for fixture: Dictionary in [
+		{"zMove": {"name": "Hydro Vortex", "type": "Water"}, "icon": "water.svg"},
+		{"zMove": {"name": "Z-Splash", "type": "Normal"}, "icon": "normal.svg"},
+		{"zMove": {"name": "Gigavolt Havoc", "type": "Electric"}, "icon": "electric.svg"},
+		{"zMove": {"name": "Pulverizing Pancake", "type": "Normal"}, "icon": "fallback"},
+		{"zMove": {"name": "Unknown", "type": "invalid"}, "icon": "fallback"},
+		{"zMove": null, "icon": "fallback"},
+	]:
+		service.view = {"moves": [{"slot": 1, "zMove": null}, {"slot": 2, "zMove": fixture.zMove}]}
+		presenter._set_native_mechanic_buttons(false, fixture.zMove != null)
+		var path: String = "res://assets/battles/mechanics/z-move.png" if fixture.icon == "fallback" else "res://assets/battles/types/" + str(fixture.icon)
+		var expected: Texture2D = load(path)
+		_expect(button.texture_normal == expected and button.texture_hover == expected
+			and button.texture_pressed == expected and button.texture_disabled == expected
+			and button.texture_focused == expected,
+			"co-op refreshes every Z-Move button texture for " + str(fixture.icon))
 
 
 func _expect(condition: bool, message: String) -> void:
