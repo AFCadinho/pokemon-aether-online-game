@@ -12,6 +12,8 @@
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(96, 32)
+[sub_resource type="RectangleShape2D" id="shape_south"]
+size = Vector2(96, 32)
 
 [node name="KantoRoute13" type="Node2D"]
 script = ExtResource("2_metadata")
@@ -34,6 +36,8 @@ surf_encounter_chance = 0.02
 [node name="Spawns" type="Node2D" parent="."]
 [node name="FromRoute12" type="Marker2D" parent="Spawns"]
 position = Vector2(2736, 48)
+[node name="FromRoute14" type="Marker2D" parent="Spawns"]
+position = Vector2(336, 1168)
 
 [node name="Exits" type="Node2D" parent="."]
 [node name="ToRoute12" type="Area2D" parent="Exits"]
@@ -50,6 +54,20 @@ shape = SubResource("shape_north")
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 flow_direction = "up"
+
+[node name="ToRoute14" type="Area2D" parent="Exits"]
+position = Vector2(336, 1200)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_14.tscn"
+target_spawn_name = "FromRoute13"
+transition_id = "kanto_route_13__to_route14"
+transition_facing_direction = "down"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute14"]
+shape = SubResource("shape_south")
+[node name="RouteTransitionHint" parent="Exits/ToRoute14" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="."]
 z_index = 5
@@ -165,3 +183,4 @@ tile_map_data = PackedByteArray("AABHAAQAAAAAAAAAAABIAAQAAAAAAAAAAABJAAQAAAAAAAA
 tile_set = ExtResource("5_marker")
 
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute14" to="Exits/ToRoute14" method="_on_body_entered"]

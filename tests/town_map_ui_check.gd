@@ -57,7 +57,7 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 10, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 12, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
@@ -134,7 +134,7 @@ func _run() -> void:
 		if not playable:
 			expected_planned_count += 1
 	_check(planned_location_count == expected_planned_count, "Only unavailable locations remain planned points")
-	_check(planned_route_count == 20, "Named remaining route points are available alongside playable Route 13")
+	_check(planned_route_count == 18, "Named remaining route points are available alongside playable Routes 13 through 15")
 	_check(not bool((popup_locations.get("kanto_route_4", {}) as Dictionary).get("planned", false)), "Route 4 is available as a playable route")
 	_check(not bool((popup_locations.get("kanto_cerulean_city", {}) as Dictionary).get("planned", false)), "Cerulean City is available as a playable city")
 	for route_value: Variant in route_points:

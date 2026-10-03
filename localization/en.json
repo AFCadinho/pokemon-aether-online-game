@@ -6352,5 +6352,9 @@
   "ui.shiny_tracker.mounts.store_description_glaceon": "Contains a Glaceon mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_cobalion": "Contains a Cobalion mount. Base shiny chance: 50%.",
   "ui.town_map.location.route_13.name": "Route 13",
-  "ui.town_map.location.route_13.description": "A maze-like coastal route south of Route 12."
+  "ui.town_map.location.route_13.description": "A maze-like coastal route south of Route 12.",
+  "ui.town_map.location.route_14.name": "Route 14",
+  "ui.town_map.location.route_14.description": "A narrow wooded route between Routes 13 and 15.",
+  "ui.town_map.location.route_15.name": "Route 15",
+  "ui.town_map.location.route_15.description": "A long coastal route continuing west from Route 14 toward Fuchsia City."
 }

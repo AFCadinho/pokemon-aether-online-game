@@ -205,7 +205,7 @@
       "assetPath": "assets/sprites/sign_previews/route_13.png"
     },
     {
-      "id": "kanto_route_segment_14",
+      "id": "kanto_route_14",
       "file": "route_14.png",
       "name": "Route 14",
       "scene": "A narrow quiet southern route through lush tall grass and green hills, a slender earth path bordered by low wooden fences and scattered trees, distant warm coastal haze and a bright blue sky.",
@@ -214,7 +214,7 @@
       "assetPath": "assets/sprites/sign_previews/route_14.png"
     },
     {
-      "id": "kanto_route_segment_15",
+      "id": "kanto_route_15",
       "file": "route_15.png",
       "name": "Route 15",
       "scene": "A welcoming leafy approach to a coastal garden town: an earth road framed by mature trees and tall grasses, a cream gatehouse with a terracotta roof ahead, distant town roofs beyond it and warm sunny light.",

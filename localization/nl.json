@@ -6352,5 +6352,9 @@
   "ui.shiny_tracker.mounts.store_description_glaceon": "Bevat een Glaceon-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%.",
   "ui.town_map.location.route_13.name": "Route 13",
-  "ui.town_map.location.route_13.description": "Een kustroute met doolhofhekken ten zuiden van Route 12."
+  "ui.town_map.location.route_13.description": "Een kustroute met doolhofhekken ten zuiden van Route 12.",
+  "ui.town_map.location.route_14.name": "Route 14",
+  "ui.town_map.location.route_14.description": "Een smalle bosrijke route tussen Route 13 en Route 15.",
+  "ui.town_map.location.route_15.name": "Route 15",
+  "ui.town_map.location.route_15.description": "Een lange kustroute die vanaf Route 14 verdergaat richting Fuchsia City."
 }

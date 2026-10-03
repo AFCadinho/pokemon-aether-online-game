@@ -6348,5 +6348,9 @@
   "ui.shiny_tracker.mounts.store_description_glaceon": "包含一只冰伊布坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_cobalion": "包含一只勾帕路翁坐骑。初始异色概率：50%。",
   "ui.town_map.location.route_13.name": "13号道路",
-  "ui.town_map.location.route_13.description": "位于12号道路以南、设有迷宫围栏的海岸道路。"
+  "ui.town_map.location.route_13.description": "位于12号道路以南、设有迷宫围栏的海岸道路。",
+  "ui.town_map.location.route_14.name": "14号道路",
+  "ui.town_map.location.route_14.description": "连接13号道路与15号道路的狭窄林间道路。",
+  "ui.town_map.location.route_15.name": "15号道路",
+  "ui.town_map.location.route_15.description": "从14号道路向西延伸、通往浅红市的漫长海岸道路。"
 }
