@@ -411,9 +411,13 @@ display_name = "Aether Beacon"
 
 [node name="LavenderTownSign" parent="Entities/Interactables/Signs" unique_id=863908709 instance=ExtResource("12_nn5m0")]
 position = Vector2(816, 1104)
+sign_id = "kanto_lavender_town_town_sign"
+sign_type = "town"
 
 [node name="PokemonTowerSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("13_u2pc0")]
 position = Vector2(1008, 656)
+sign_id = "kanto_lavender_town_pokemon_tower_sign"
+sign_type = "building"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=676580131]
 

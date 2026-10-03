@@ -1,0 +1,24 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_lavender_town",
+  "signs": [
+    {
+      "id": "kanto_lavender_town_town_sign",
+      "type": "town",
+      "title": "紫苑镇",
+      "lines": [
+        "紫苑镇",
+        "一座宁静的小镇，人们在这里缅怀离去的宝可梦。"
+      ]
+    },
+    {
+      "id": "kanto_lavender_town_pokemon_tower_sign",
+      "type": "building",
+      "title": "宝可梦塔",
+      "lines": [
+        "宝可梦塔",
+        "离去的宝可梦安息的纪念之地。请表达敬意。"
+      ]
+    }
+  ]
+}

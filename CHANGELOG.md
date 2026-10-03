@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized text and illustrated previews for the Lavender Town and Pokémon Tower signs.
+
 - Give Rock Tunnel B1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
 
 - Keep the Gift Store window centered at a stable size across products and categories, with scrolling item details and scaling for smaller screens.
