@@ -5,6 +5,8 @@ const Appearance := preload("res://scripts/services/character_appearance_service
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
 const DIRECTIONS := ["down", "left", "right", "up"]
 
+var mount_id := "rayquaza"
+var unlock_item_id := "rayquaza-mount"
 var failed := false
 
 
@@ -13,22 +15,26 @@ func _init() -> void:
 
 
 func _run() -> void:
-	_check_entitlement_and_frames()
 	_check_large_mask_coordinates()
-	_check_actual_riders()
-	await _check_local_and_remote_players()
+	for variant: Array in [["rayquaza", "rayquaza-mount"], ["rayquaza_shiny", "shiny-rayquaza-mount"]]:
+		mount_id = str(variant[0])
+		unlock_item_id = str(variant[1])
+		_check_entitlement_and_frames()
+		_check_actual_riders()
+		await _check_local_and_remote_players()
+	_check_variant_rigs()
 	print("Rayquaza mount checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
 
 func _check_entitlement_and_frames() -> void:
-	_check(Mounts.get_mount_id_for_unlock_item("rayquaza-mount") == "rayquaza", "item resolves to Rayquaza")
-	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["rayquaza-mount"]) == ["rayquaza"], "ownership unlocks only Rayquaza")
+	_check(Mounts.get_mount_id_for_unlock_item(unlock_item_id) == mount_id, "item resolves to Rayquaza")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", [unlock_item_id]) == [mount_id], "ownership unlocks only Rayquaza")
 	_check(Mounts.get_unlocked_mount_ids_for_mode("land", []).is_empty(), "Rayquaza requires its item")
-	_check(Mounts.resolve_mount_id_for_mode("rayquaza", "surf") == "", "Rayquaza uses land movement rules")
-	_check(Icons.load_icon("rayquaza-mount") != null, "Bag uses the Rayquaza sprite as item icon")
-	var frames := Mounts.get_mount_frames("rayquaza")
-	var foreground := Mounts.get_mount_foreground_frames("rayquaza")
+	_check(Mounts.resolve_mount_id_for_mode(mount_id, "surf") == "", "Rayquaza uses land movement rules")
+	_check(Icons.load_icon(unlock_item_id) != null, "Bag uses the Rayquaza sprite as item icon")
+	var frames := Mounts.get_mount_frames(mount_id)
+	var foreground := Mounts.get_mount_foreground_frames(mount_id)
 	_check(frames != null and foreground != null, "large mount and foreground load")
 	if frames == null or foreground == null:
 		return
@@ -76,7 +82,7 @@ func _check_actual_riders() -> void:
 	for gender: String in ["male", "female"]:
 		var body_id: String = Appearance.DEFAULT_MALE_BODY_ID if gender == "male" else Appearance.DEFAULT_FEMALE_BODY_ID
 		var base := Appearance.get_body_frames(body_id, gender, Appearance.BODY_MOVEMENT_RIDE)
-		var mounted := Mounts.get_mounted_rider_frames(base, "rayquaza", {}, {}, true)
+		var mounted := Mounts.get_mounted_rider_frames(base, mount_id, {}, {}, true)
 		_check(mounted != null and mounted != base, "%s body receives the large mount mask" % gender)
 		if mounted == null or base == null:
 			continue
@@ -97,7 +103,7 @@ func _check_local_and_remote_players() -> void:
 	local.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
 	root.add_child(local)
 	local.set("base_look_position", local.get_node("Look").position)
-	local.set("active_mount_id", "rayquaza")
+	local.set("active_mount_id", mount_id)
 	local.set("activity_style", "ride")
 	local.call("_cache_appearance_sprites")
 	local.call("_apply_body_appearance", Appearance.DEFAULT_MALE_BODY_ID)
@@ -108,13 +114,13 @@ func _check_local_and_remote_players() -> void:
 	local.set("last_direction", Vector2.LEFT)
 	local.call("_sync_mount_animation", true, Vector2.LEFT)
 	mount.frame = 1
-	_check(local.get_node("Look/Rider").position == Vector2(Mounts.get_rider_frame_offset("rayquaza", "left", 1)), "local rider follows the larger mount bob")
+	_check(local.get_node("Look/Rider").position == Vector2(Mounts.get_rider_frame_offset(mount_id, "left", 1)), "local rider follows the larger mount bob")
 	var avatar: Node2D = load("res://scripts/world/remote_player_avatar.gd").new()
 	root.add_child(avatar)
 	avatar.call("apply_state", {
-		"userId": 1, "displayName": "Rayquaza rider", "gender": "female",
+		"userId": 1, "displayName": Mounts.get_mount_display_name(mount_id) + " rider", "gender": "female",
 		"position": {"x": 32, "y": 32}, "facingDirection": "right",
-		"movement": {"isMoving": true, "activityStyle": "ride", "mountId": "rayquaza",
+		"movement": {"isMoving": true, "activityStyle": "ride", "mountId": mount_id,
 			"startPosition": {"x": 0, "y": 32}, "targetPosition": {"x": 32, "y": 32}, "duration": 0.065},
 	})
 	var remote_mount: AnimatedSprite2D = avatar.get("mount_sprite")
@@ -122,7 +128,7 @@ func _check_local_and_remote_players() -> void:
 	_check_runtime_frame_sizes(remote_mount, remote_body, "remote")
 	remote_mount.frame = 1
 	_check(remote_body.frame == 1 and not remote_body.is_playing(), "remote rider uses one seated pose with the current mask frame")
-	var expected := Vector2(Mounts.get_rider_frame_offset("rayquaza", "right", 1))
+	var expected := Vector2(Mounts.get_rider_frame_offset(mount_id, "right", 1))
 	_check((avatar.get("rider_node") as Node2D).position == expected, "remote rider follows the larger mount bob")
 	_check_hover_visuals(local, avatar)
 	local.queue_free()
@@ -165,7 +171,7 @@ func _check_hover_visuals(local: Node2D, remote: Node2D) -> void:
 	var reference: Vector2
 	for fps in [30, 60, 144]:
 		var visual: Node2D = hover_script.new()
-		visual.call("configure", Mounts.get_mount_definition("rayquaza"))
+		visual.call("configure", Mounts.get_mount_definition(mount_id))
 		for frame in range(fps * 3):
 			visual.call("advance", 1.0 / fps)
 		var result: Vector2 = visual.get("visual_offset")
@@ -173,6 +179,40 @@ func _check_hover_visuals(local: Node2D, remote: Node2D) -> void:
 			reference = result
 		_check(result == reference, "hover timing is independent of FPS")
 		visual.free()
+
+
+func _check_variant_rigs() -> void:
+	var normal_definition := Mounts.get_mount_definition("rayquaza")
+	var shiny_definition := Mounts.get_mount_definition("rayquaza_shiny")
+	for key: String in normal_definition:
+		if key not in ["displayName", "unlockItemId", "spriteSheet", "riderMaskSheet"]:
+			_check(normal_definition[key] == shiny_definition.get(key), "normal and shiny share %s" % key)
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["rayquaza-mount"]) == ["rayquaza"], "normal item does not unlock shiny")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["shiny-rayquaza-mount"]) == ["rayquaza_shiny"], "shiny item does not unlock normal")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["rayquaza-mount", "shiny-rayquaza-mount"]) == ["rayquaza", "rayquaza_shiny"], "both variants can be owned together")
+	var normal := Mounts.get_mount_frames("rayquaza")
+	var shiny := Mounts.get_mount_frames("rayquaza_shiny")
+	_check(normal != null and shiny != null and normal != shiny, "variant textures use separate cached resources")
+	if normal == null or shiny == null:
+		return
+	_check(Mounts._get_mask_image("rayquaza").get_data() == Mounts._get_mask_image("rayquaza_shiny").get_data(), "shiny uses the exact normal rider mask")
+	for direction: String in DIRECTIONS:
+		var animation := StringName("walk_" + direction)
+		for index in range(4):
+			var old := Mounts._get_texture_image(normal.get_frame_texture(animation, index))
+			var new := Mounts._get_texture_image(shiny.get_frame_texture(animation, index))
+			old.convert(Image.FORMAT_RGBA8)
+			new.convert(Image.FORMAT_RGBA8)
+			var old_bytes := old.get_data()
+			var new_bytes := new.get_data()
+			var same_alpha := old_bytes.size() == new_bytes.size()
+			if same_alpha:
+				for byte in range(3, old_bytes.size(), 4):
+					if old_bytes[byte] != new_bytes[byte]:
+						same_alpha = false
+						break
+			_check(same_alpha, "%s/%d shiny silhouette and placement match normal" % [direction, index])
+			_check(old_bytes != new_bytes, "%s/%d uses the distinct shiny palette" % [direction, index])
 
 
 func _check_runtime_frame_sizes(mount: AnimatedSprite2D, body: AnimatedSprite2D, label: String) -> void:

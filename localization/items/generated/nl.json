@@ -791,6 +791,10 @@
     "name": "Rayquaza-mount",
     "shortDesc": "Ontgrendelt Rayquaza als landmount."
   },
+  "shiny-rayquaza-mount": {
+    "name": "Shiny Rayquaza-mount",
+    "shortDesc": "Ontgrendelt Shiny Rayquaza als landmount."
+  },
   "shadow-lugia-mount": {
     "name": "Shadow Lugia-mount",
     "shortDesc": "Ontgrendelt Shadow Lugia als landmount."

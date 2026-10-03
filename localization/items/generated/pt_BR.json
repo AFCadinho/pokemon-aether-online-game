@@ -791,6 +791,10 @@
     "name": "Montaria Rayquaza",
     "shortDesc": "Desbloqueia Rayquaza como montaria terrestre."
   },
+  "shiny-rayquaza-mount": {
+    "name": "Montaria Rayquaza Shiny",
+    "shortDesc": "Desbloqueia Rayquaza Shiny como montaria terrestre."
+  },
   "shadow-lugia-mount": {
     "name": "Montaria Shadow Lugia",
     "shortDesc": "Desbloqueia Shadow Lugia como montaria terrestre."
