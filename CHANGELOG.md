@@ -4,6 +4,8 @@
 
 - Simplify the weekly boss selector to difficulty names; show Zapdos's wild-encounter unlock hint only until the first Hard victory.
 
+- Shorten Rayquaza and Shadow Lugia Mount Box store descriptions to the included mount and 50% initial shiny chance.
+
 - Handle non-JSON battle API errors cleanly without emitting Godot JSON parse errors.
 
 - Show mount box costs in Aether Gems only and preview the player riding either normal or shiny mounts, with animation and direction controls.

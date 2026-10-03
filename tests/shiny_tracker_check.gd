@@ -111,7 +111,7 @@ func _run() -> void:
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
 	_check(store.selection_price_label.text == "500 Aether Gems", "Box price shows currency only")
-	_check(store.selection_description_label.text.contains("50%") and store.selection_description_label.text.contains("80%") and store.selection_description_label.text.contains("Duplicates"), "Store discloses chance rules before purchase")
+	_check(store.selection_description_label.text == "Contains a Rayquaza mount. Base shiny chance: 50%.", "Store concisely names the reward and initial shiny chance")
 	_check(store.call("_catalog_item", "nimbus_mount").is_empty() and store.call("_catalog_item", "aether_board_mount").is_empty(), "Removed Nimbus and Aether Board previews are absent from the Store")
 	store.call("_select_product", "shadow-lugia-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative Shadow Lugia box purchase")
@@ -124,7 +124,7 @@ func _run() -> void:
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
 		_check(store.selection_price_label.text == "500 Aether Gems", "Dutch Store shows currency only")
-		_check(store.selection_description_label.text.contains("Dubbele mounts"), "Dutch Store discloses duplicate outcomes")
+		_check(store.selection_description_label.text == "Bevat een Shadow Lugia-mount. Shiny-basiskans: 50%.", "Dutch Store concisely names the reward and initial shiny chance")
 	if "--preview-mounts" in OS.get_cmdline_user_args():
 		store.visible = true
 		await process_frame
