@@ -412,8 +412,9 @@ level = 13
 display_name = "Spearow"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.4
+movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="Sandshrew" parent="Entities/Pokemon" unique_id=190000559 instance=ExtResource("pokemon")]
 position = Vector2(1872, 1008)
@@ -423,8 +424,9 @@ level = 13
 display_name = "Sandshrew"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 2.1
+movement_speed_pixels = 30.0
+movement_wait_jitter_seconds = 0.9
 
 [node name="Rattata" parent="Entities/Pokemon" unique_id=190000600 instance=ExtResource("pokemon")]
 position = Vector2(912, 656)
@@ -434,8 +436,9 @@ level = 14
 display_name = "Rattata"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.7
+movement_speed_pixels = 40.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="Ekans" parent="Entities/Pokemon" unique_id=190000601 instance=ExtResource("pokemon")]
 position = Vector2(2064, 1040)
@@ -445,8 +448,9 @@ level = 14
 display_name = "Ekans"
 movement_behavior = "pace_vertical"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 36.0
+movement_wait_seconds = 2.4
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.8
 
 [node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=190000610]
 
@@ -459,8 +463,9 @@ display_name = "Gligar"
 facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_wait_seconds = 1.6
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.9
+movement_speed_pixels = 38.0
+movement_wait_jitter_seconds = 0.7
 
 [node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=190000612 instance=ExtResource("pokemon")]
 position = Vector2(784, 400)
@@ -471,8 +476,9 @@ display_name = "Nosepass"
 facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_wait_seconds = 1.8
-movement_speed_pixels = 32.0
+movement_wait_seconds = 2.2
+movement_speed_pixels = 28.0
+movement_wait_jitter_seconds = 0.5
 
 [node name="Shieldon" parent="Entities/Pokemon/MountainPokemon" unique_id=190000613 instance=ExtResource("pokemon")]
 position = Vector2(1936, 656)
@@ -483,8 +489,9 @@ display_name = "Shieldon"
 facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_wait_seconds = 1.6
-movement_speed_pixels = 36.0
+movement_wait_seconds = 1.5
+movement_speed_pixels = 33.0
+movement_wait_jitter_seconds = 0.9
 
 [node name="Carbink" parent="Entities/Pokemon/MountainPokemon" unique_id=190000614 instance=ExtResource("pokemon")]
 position = Vector2(1904, 400)
@@ -495,8 +502,9 @@ display_name = "Carbink"
 facing_direction = Vector2(-1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
-movement_wait_seconds = 2.0
-movement_speed_pixels = 32.0
+movement_wait_seconds = 2.6
+movement_speed_pixels = 36.0
+movement_wait_jitter_seconds = 0.6
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=678217890]
 
@@ -547,7 +555,9 @@ position = Vector2(1904, 560)
 pickup_id = "kanto_route_9_full_restore"
 item_id = "full-restore"
 
-[node name="LargeSignInteractable" parent="Entities/Interactables" unique_id=547856318 instance=ExtResource("4_t3cr7")]
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1612010381]
+
+[node name="Route9Sign" parent="Entities/Interactables/Signs" unique_id=547856318 instance=ExtResource("4_t3cr7")]
 position = Vector2(2704, 784)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1978439623]

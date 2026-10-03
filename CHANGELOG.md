@@ -4,6 +4,8 @@
 
 - Add the Mega Alakazam levitation mount with the approved riding pose, psychic ring and lower rear rider.
 
+- Desynchronize Route 9 Pokémon with distinct movement speeds, randomized pauses, and localized metadata for the four mountain Pokémon.
+
 - Added Diglett and a rare Dugtrio roaming the Diglett Cave tunnel with varied pacing.
 
 - Add the permanent Aether Gift Voucher Key Item, separate Gift Store balances and voucher checkout with clear untradeable purchase and box-content notices.
