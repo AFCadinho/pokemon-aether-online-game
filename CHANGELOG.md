@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the Gift Store window centered at a stable size across products and categories, with scrolling item details and scaling for smaller screens.
+
 - Restore Mega Alakazam's original 64×64 sprite scale to keep its pixels even, retaining the rider's foot anchor and levitation pose.
 
 - Align the Gift Store Gem and voucher balances in matching rows with equal icon sizes and clearer spacing.

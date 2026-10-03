@@ -55,6 +55,9 @@ const UI_PURPLE_DARK := Color("#6840b1")
 const UI_GOLD := Color("#f0cc70")
 const UI_CYAN := Color("#60d3ff")
 const UI_DANGER := Color("#ef7085")
+const STORE_WINDOW_SIZE := Vector2(1120, 680)
+const STORE_SCREEN_MARGIN := 16.0
+
 const PREVIEW_VIEWPORT_SIZE := Vector2i(258, 174)
 const PREVIEW_AVATAR_POSITION := Vector2(129, 91)
 const PREVIEW_AVATAR_SCALE := Vector2(2.25, 2.25)
@@ -702,6 +705,11 @@ func _ready() -> void:
 	if trainer_appearance.is_empty():
 		trainer_appearance = CharacterAppearanceService.get_default_appearance(trainer_gender)
 	_build_interface()
+	get_viewport().size_changed.connect(_fit_store_window)
+	var host := get_parent() as Control
+	if host != null:
+		host.resized.connect(_fit_store_window)
+	_fit_store_window.call_deferred()
 	voucher_confirm_dialog = ConfirmationDialog.new()
 	voucher_confirm_dialog.confirmed.connect(_confirm_voucher_purchase)
 	voucher_confirm_dialog.canceled.connect(_cancel_voucher_purchase)
@@ -715,6 +723,18 @@ func _ready() -> void:
 		var locale_callable := Callable(self, "_on_locale_changed")
 		if not localization_manager.is_connected("locale_changed", locale_callable):
 			localization_manager.connect("locale_changed", locale_callable)
+
+
+func _fit_store_window() -> void:
+	# Use logical UI coordinates so the overlay's own scaling is respected.
+	var host := get_parent() as Control
+	var available := host.size if host != null else get_viewport_rect().size
+	var usable := (available - Vector2.ONE * STORE_SCREEN_MARGIN * 2.0).max(Vector2.ONE)
+	var fit_scale := minf(1.0, minf(usable.x / STORE_WINDOW_SIZE.x, usable.y / STORE_WINDOW_SIZE.y))
+	set_anchors_preset(Control.PRESET_TOP_LEFT)
+	size = STORE_WINDOW_SIZE
+	scale = Vector2.ONE * fit_scale
+	position = (available - STORE_WINDOW_SIZE * fit_scale) * 0.5
 
 
 func set_gem_balance(amount: int) -> void:
@@ -829,6 +849,7 @@ func set_trainer_appearance(value: Dictionary) -> void:
 
 
 func open_store() -> void:
+	_fit_store_window()
 	_sync_character_preview_colors()
 	_refresh_character_preview()
 	visible = true
@@ -859,12 +880,17 @@ func _build_interface() -> void:
 	patreon_external_dialog.dialog_text = _t("ui.store.patreon.external_confirm")
 	patreon_external_dialog.confirmed.connect(_open_patreon_page)
 	add_child(patreon_external_dialog)
+	# A plain Control isolates the window minimum from changing product contents.
+	var content_frame := Control.new()
+	content_frame.name = "StoreContentFrame"
+	add_child(content_frame)
 	var outer_margin := MarginContainer.new()
 	outer_margin.add_theme_constant_override("margin_left", 16)
 	outer_margin.add_theme_constant_override("margin_top", 14)
 	outer_margin.add_theme_constant_override("margin_right", 16)
 	outer_margin.add_theme_constant_override("margin_bottom", 16)
-	add_child(outer_margin)
+	content_frame.add_child(outer_margin)
+	outer_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 10)
@@ -1311,16 +1337,25 @@ func _create_hero_panel() -> Control:
 func _create_character_preview_panel() -> Control:
 	var panel := PanelContainer.new()
 	panel.name = "CharacterPreviewPanel"
-	panel.custom_minimum_size = Vector2(282, 0)
+	panel.custom_minimum_size = Vector2(300, 0)
 	var style := _panel_style(Color("#0b1524f2"), UI_BORDER_SOFT, 10, 1)
 	panel.add_theme_stylebox_override("panel", style)
 
+	var panel_layout := VBoxContainer.new()
+	panel_layout.add_theme_constant_override("separation", 0)
+	panel.add_child(panel_layout)
+	var details_scroll := ScrollContainer.new()
+	details_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	details_scroll.name = "ProductDetailsScroll"
+	details_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	panel_layout.add_child(details_scroll)
 	var margin := MarginContainer.new()
+	margin.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	margin.add_theme_constant_override("margin_left", 11)
 	margin.add_theme_constant_override("margin_top", 11)
 	margin.add_theme_constant_override("margin_right", 11)
 	margin.add_theme_constant_override("margin_bottom", 11)
-	panel.add_child(margin)
+	details_scroll.add_child(margin)
 
 	var layout := VBoxContainer.new()
 	layout.add_theme_constant_override("separation", 6)
@@ -1492,9 +1527,15 @@ func _create_character_preview_panel() -> Control:
 	voucher_notice_label.add_theme_color_override("font_color", UI_GOLD)
 	layout.add_child(voucher_notice_label)
 
+	var checkout_margin := MarginContainer.new()
+	checkout_margin.add_theme_constant_override("margin_left", 11)
+	checkout_margin.add_theme_constant_override("margin_right", 11)
+	checkout_margin.add_theme_constant_override("margin_top", 6)
+	checkout_margin.add_theme_constant_override("margin_bottom", 11)
+	panel_layout.add_child(checkout_margin)
 	var checkout_row := HBoxContainer.new()
 	checkout_row.add_theme_constant_override("separation", 8)
-	layout.add_child(checkout_row)
+	checkout_margin.add_child(checkout_row)
 
 	selection_price_label = Label.new()
 	selection_price_label.text = "—"
