@@ -4,6 +4,8 @@
 
 - Populate Kanto Route 12 with FR/LG encounters and trainers, HG/SS additions balanced for the route, eight useful pickups and a one-time Super Rod gift.
 
+- Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.
+
 - Restyle the Gift Store's voucher purchase confirmation with the reusable Aether dialog.
 
 - Add Shiny Cobalion and its 500-Gem Mount Box to the Gift Store, with mounted normal/shiny previews, preserved rider masking and Shiny Tracker support.

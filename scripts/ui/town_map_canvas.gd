@@ -36,6 +36,7 @@ func configure(map_locations: Dictionary, map_paths: Array) -> void:
 
 func set_background(texture: Texture2D) -> void:
 	background_texture = texture
+	_position_markers()
 	queue_redraw()
 
 
@@ -83,7 +84,7 @@ func _process(_delta: float) -> void:
 
 func _draw() -> void:
 	if background_texture != null:
-		draw_texture_rect(background_texture, Rect2(Vector2.ZERO, size), false)
+		draw_texture_rect(background_texture, _map_rect(), false)
 	if show_connection_overlay:
 		for path_value: Variant in paths:
 			var path_location_ids := _path_location_ids(path_value)
@@ -209,11 +210,11 @@ func _build_markers() -> void:
 		var location := locations.get(location_id, {}) as Dictionary
 		var marker := Button.new()
 		marker.name = "Marker_%s" % location_id
-		marker.custom_minimum_size = MARKER_SIZE
-		marker.size = MARKER_SIZE
+		marker.custom_minimum_size = Vector2.ZERO
 		marker.focus_mode = Control.FOCUS_NONE
 		marker.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		marker.tooltip_text = _t(str(location.get("nameKey", "")))
+		var name_key := str(location.get("nameKey", ""))
+		marker.tooltip_text = _t(name_key) if name_key != "" else str(location.get("name", location_id))
 		marker.add_theme_stylebox_override("normal", _marker_style(location, false, false))
 		marker.add_theme_stylebox_override("hover", _marker_style(location, true, false))
 		marker.add_theme_stylebox_override("pressed", _marker_style(location, true, true))
@@ -252,7 +253,14 @@ func _position_markers() -> void:
 		var marker := marker_buttons.get(location_id) as Button
 		if marker == null:
 			continue
-		marker.position = _location_point(location_id) - MARKER_SIZE * 0.5
+		var location := locations.get(location_id, {}) as Dictionary
+		var hit_size := location.get("hitSize", {}) as Dictionary
+		var map_size := _map_rect().size
+		marker.size = Vector2(
+			float(hit_size.get("x", MARKER_SIZE.x / maxf(map_size.x, 1.0))) * map_size.x,
+			float(hit_size.get("y", MARKER_SIZE.y / maxf(map_size.y, 1.0))) * map_size.y
+		)
+		marker.position = _location_point(location_id) - marker.size * 0.5
 	_position_current_portrait()
 
 
@@ -268,9 +276,23 @@ func _location_point(location_id: String) -> Vector2:
 	if not position_value is Dictionary:
 		return size * 0.5
 	var normalized := position_value as Dictionary
-	return Vector2(
-		float(normalized.get("x", 0.5)) * size.x,
-		float(normalized.get("y", 0.5)) * size.y
+	return _map_position(normalized)
+
+
+func _map_rect() -> Rect2:
+	if background_texture == null:
+		return Rect2(Vector2.ZERO, size)
+	var texture_size := background_texture.get_size()
+	var scale_factor := minf(size.x / texture_size.x, size.y / texture_size.y)
+	var map_size := texture_size * scale_factor
+	return Rect2((size - map_size) * 0.5, map_size)
+
+
+func _map_position(normalized: Dictionary) -> Vector2:
+	var map_rect := _map_rect()
+	return map_rect.position + Vector2(
+		float(normalized.get("x", 0.5)) * map_rect.size.x,
+		float(normalized.get("y", 0.5)) * map_rect.size.y
 	)
 
 
@@ -297,16 +319,13 @@ func _path_points(path_value: Variant) -> Array[Vector2]:
 			if not waypoint_value is Dictionary:
 				continue
 			var waypoint := waypoint_value as Dictionary
-			points.append(Vector2(
-				float(waypoint.get("x", 0.5)) * size.x,
-				float(waypoint.get("y", 0.5)) * size.y
-			))
+			points.append(_map_position(waypoint))
 	points.append(_location_point(ids[1]))
 	return points
 
 
 func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> StyleBox:
-	if not show_marker_overlay:
+	if not show_marker_overlay and not bool(location.get("markerOverlay", false)):
 		return StyleBoxEmpty.new()
 	var kind := str(location.get("kind", "route"))
 	var color := Color("#f5d85c")
@@ -319,6 +338,9 @@ func _marker_style(location: Dictionary, highlighted: bool, current: bool) -> St
 	var style := StyleBoxFlat.new()
 	style.bg_color = color.lightened(0.14) if highlighted else color
 	style.border_color = Color("#e9f8ff") if current else Color("#07111f")
+	if bool(location.get("markerOverlay", false)):
+		style.bg_color = Color("#4895fc")
+		style.border_color = Color("#fbd445")
 	style.set_border_width_all(3 if current else 2)
 	style.set_corner_radius_all(11)
 	style.shadow_color = Color(0.0, 0.0, 0.0, 0.65)

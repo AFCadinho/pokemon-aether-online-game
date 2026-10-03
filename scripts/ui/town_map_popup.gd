@@ -19,6 +19,8 @@ const LEGEND_ICONS := {
 var region_data: Dictionary = {}
 var layout_data: Dictionary = {}
 var world_access: Dictionary = {}
+var location_group_points: Dictionary = {}
+var map_location_points: Dictionary = {}
 var shell: PanelContainer
 var title_label: Label
 var subtitle_label: Label
@@ -232,6 +234,7 @@ func _build_ui() -> void:
 	map_stack.clip_contents = true
 	map_margin.add_child(map_stack)
 	map_canvas = TownMapCanvasScript.new() as TownMapCanvas
+	map_canvas.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	map_stack.add_child(map_canvas)
 	map_canvas.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	map_canvas.mouse_filter = Control.MOUSE_FILTER_PASS
@@ -592,9 +595,12 @@ func _location_name(location_id: String) -> String:
 
 
 func _resolve_location_group(map_id: String) -> String:
+	if map_location_points.has(map_id):
+		return str(map_location_points[map_id])
 	var areas := world_access.get("areas", {}) as Dictionary
 	var area := areas.get(map_id, {}) as Dictionary
-	return str(area.get("locationGroupId", map_id)).strip_edges()
+	var group_id := str(area.get("locationGroupId", map_id)).strip_edges()
+	return str(location_group_points.get(group_id, group_id))
 
 
 func _path_endpoints(path_value: Variant) -> Array[String]:
@@ -616,7 +622,9 @@ func _apply_layout() -> void:
 	var width := maxf(float(coordinate_space.get("width", 1000.0)), 1.0)
 	var height := maxf(float(coordinate_space.get("height", 707.0)), 1.0)
 	var locations := region_data.get("locations", {}) as Dictionary
-	var points := layout_data.get("points", {}) as Dictionary
+	var points := (layout_data.get("points", {}) as Dictionary).duplicate(true)
+	location_group_points.clear()
+	map_location_points.clear()
 	for point_id_value: Variant in points.keys():
 		var point_id := str(point_id_value)
 		var point_data := points.get(point_id, {}) as Dictionary
@@ -641,7 +649,12 @@ func _apply_layout() -> void:
 			continue
 		var route_point := route_value as Dictionary
 		var route_id := str(route_point.get("id", "")).strip_edges()
-		if route_id == "" or locations.has(route_id):
+		if route_id == "":
+			continue
+		# Playable routes still need their coordinates, even if their presentation
+		# was already registered by kanto.json.
+		points[route_id] = route_point
+		if locations.has(route_id):
 			continue
 		locations[route_id] = {
 			"kind": "route",
@@ -649,11 +662,42 @@ func _apply_layout() -> void:
 			"description": str(route_point.get("description", "")),
 			"planned": bool(route_point.get("planned", true)),
 		}
-		points[route_id] = route_point
+	var playable_groups: Dictionary = {}
+	for area_value: Variant in (world_access.get("areas", {}) as Dictionary).values():
+		if not area_value is Dictionary:
+			continue
+		var area := area_value as Dictionary
+		if bool(area.get("accessOnly", false)) or str(area.get("scenePath", "")).is_empty():
+			continue
+		playable_groups[str(area.get("locationGroupId", ""))] = true
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		var location := locations.get(location_id, {}) as Dictionary
 		var point := points.get(location_id, {}) as Dictionary
+		var group_ids: Array = [location_id]
+		group_ids.append_array(point.get("locationGroupIds", []) as Array)
+		var playable := false
+		var catalog_interiors: Array = []
+		for group_id_value: Variant in group_ids:
+			var group_id := str(group_id_value)
+			location_group_points[group_id] = location_id
+			if playable_groups.has(group_id):
+				playable = true
+				for interior_value: Variant in _catalog_interiors_for_location(group_id):
+					if not catalog_interiors.has(interior_value):
+						catalog_interiors.append(interior_value)
+		if not catalog_interiors.is_empty():
+			location["interiors"] = catalog_interiors
+		for map_id_value: Variant in point.get("mapIds", []):
+			var map_id := str(map_id_value)
+			map_location_points[map_id] = location_id
+			var area := (world_access.get("areas", {}) as Dictionary).get(map_id, {}) as Dictionary
+			if not bool(area.get("accessOnly", false)) and not str(area.get("scenePath", "")).is_empty():
+				playable = true
+		location["planned"] = not playable
+		location["markerOverlay"] = bool(point.get("markerOverlay", false))
+		var hit_size := float(point.get("hitSize", 32.0))
+		location["hitSize"] = {"x": hit_size / width, "y": hit_size / height}
 		location["position"] = {
 			"x": clampf(float(point.get("x", width * 0.5)) / width, 0.0, 1.0),
 			"y": clampf(float(point.get("y", height * 0.5)) / height, 0.0, 1.0),
