@@ -1,6 +1,6 @@
 """Build the Cobalion land mount from the supplied four-direction sheet."""
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageDraw
 from import_player_layered_sprites import write_texture_import
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets/mounts/cobalion"
@@ -29,7 +29,18 @@ def build() -> None:
                     front = row == 0
                     if row in (1,2): front = side_head(x,y,row)
                     if front: foreground.putpixel((ORIGIN[0]+x,ORIGIN[1]+y),sprite.getpixel((x,y)))
-            mask=Image.new("RGBA",(FRAME,FRAME),(255,255,255,0));mask.putalpha(foreground.getchannel("A"))
+            mask=Image.new("RGBA",(FRAME,FRAME),(255,255,255,0))
+            mask_alpha = foreground.getchannel("A")
+            if row == 0:
+                # Hide the rider's head showing around Cobalion's narrower
+                # front-facing head. The ellipse follows the seated head area
+                # while leaving the rider's shoulders and body untouched.
+                draw = ImageDraw.Draw(mask_alpha)
+                draw.ellipse(
+                    (ORIGIN[0] - 7, ORIGIN[1] - 22, ORIGIN[0] + 71, ORIGIN[1] + 18),
+                    fill=255,
+                )
+            mask.putalpha(mask_alpha)
             for name,frame in (("mount",tile),("foreground",foreground),("rider_mask",mask)):
                 sheets[name].paste(frame,(col*FRAME,row*FRAME))
     sheets["icon"] = source.crop((0,0,64,64))
