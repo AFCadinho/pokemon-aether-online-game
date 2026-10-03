@@ -791,6 +791,10 @@
     "name": "Rayquaza-mount",
     "shortDesc": "Ontgrendelt Rayquaza als landmount."
   },
+  "shadow-lugia-mount": {
+    "name": "Shadow Lugia-mount",
+    "shortDesc": "Ontgrendelt Shadow Lugia als landmount."
+  },
   "mount-license": {
     "name": "Mount License",
     "shortDesc": "Toont de regio's waar je landmounts mag activeren."

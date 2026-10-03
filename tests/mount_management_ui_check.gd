@@ -28,8 +28,8 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza"],
-		"land catalog contains Cyclizar and Rayquaza"
+		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "shadow_lugia"],
+		"land catalog contains Cyclizar, Rayquaza and Shadow Lugia"
 	)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
@@ -188,6 +188,18 @@ func _run() -> void:
 	_check(
 		str(settings_manager.call("get_selected_mount_id", "land")) == "rayquaza",
 		"owned Rayquaza can be selected as the active land mount"
+	)
+	panel.call("_on_inventory_changed", [{"itemId": "shadow-lugia-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Shadow Lugia"),
+		"Shadow Lugia ownership unlocks only its own selector entry"
+	)
+	panel.call("_select_mount", "land", "shadow_lugia")
+	_check(
+		str(settings_manager.call("get_selected_mount_id", "land")) == "shadow_lugia",
+		"owned Shadow Lugia can be selected as the active land mount"
 	)
 	var fake_player := FakeMountPlayer.new()
 	fake_player.add_to_group("player")

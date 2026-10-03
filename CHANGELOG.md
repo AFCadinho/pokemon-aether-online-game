@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
+
 - Pokémon Tower plays its own FireRed/LeafGreen remastered soundtrack by Zame, converted to Ogg Vorbis.
 
 - Gate Pokémon Tower 7F behind an invisible spirit and the Silph Scope; Gary now explains that ordinary Ghost-type Pokémon remain visible and points the next main objective toward Saffron.

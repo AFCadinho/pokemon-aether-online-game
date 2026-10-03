@@ -791,6 +791,10 @@
     "name": "Rayquaza Mount",
     "shortDesc": "Unlocks Rayquaza as a land mount."
   },
+  "shadow-lugia-mount": {
+    "name": "Shadow Lugia Mount",
+    "shortDesc": "Unlocks Shadow Lugia as a land mount."
+  },
   "mount-license": {
     "name": "Mount License",
     "shortDesc": "Lists the regions where you are licensed to activate land mounts."
