@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Style the weekly boss selector with the Aether modal, ordered difficulty cards, server-provided levels and base rewards, and a separate Hard-unlock hint.
+
 - Desynchronize Vermilion City's moving Pokémon with distinct pause timings and randomized waits.
 
 - Restore water animations in Vermilion City and Route 6 after map reimports, preserving their current layouts and existing grass animations.
