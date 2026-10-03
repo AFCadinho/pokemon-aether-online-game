@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the walkable Lavender Town exit to Route 8 and its transition arrow after the exit reverted to a disabled placeholder.
+
 - Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
 
 - Lower Cobalion, Glaceon and Shiny Glaceon riders by 16 pixels in every direction so their visual position aligns with nearby NPCs.

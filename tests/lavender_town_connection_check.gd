@@ -6,6 +6,7 @@ const HOUSE3 := "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn"
 const HOUSE2 := "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn"
 const HOUSE1 := "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn"
 const ROUTE := "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
+const ROUTE8 := "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
 const AtlasValidator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd")
 var failures := 0
 
@@ -21,6 +22,7 @@ func _run() -> void:
 	var house2 := (load(HOUSE2) as PackedScene).instantiate()
 	var house1 := (load(HOUSE1) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
+	var route8 := (load(ROUTE8) as PackedScene).instantiate()
 	_check(town.get("map_id") == "kanto_lavender_town", "Lavender Town has its own map identity")
 	_check(town.has_node("Entities/Players") and town.has_node("Entities/NPCs")
 		and town.has_node("Entities/Interactables"), "Town supports players, NPCs and interactables")
@@ -38,6 +40,8 @@ func _run() -> void:
 	_check(atlas_errors.is_empty(), "New visual meets compact lossless atlas contract: %s" % [atlas_errors])
 	_check_connection(route, "ToLavenderTown", town, TOWN)
 	_check_connection(town, "ToRoute10", route, ROUTE)
+	_check_connection(town, "ToRoute8", route8, ROUTE8)
+	_check_connection(route8, "ToLavenderTown", town, TOWN)
 	_check_connection(town, "ToMrFujiHouse", house, HOUSE)
 	_check_connection(house, "ToOutside", town, TOWN)
 	_check(house.get("map_id") == "kanto_lavender_town_mr_fuji_house"
@@ -124,7 +128,7 @@ func _run() -> void:
 		"House 1 exterior door and return tile are traversable")
 	_check(house1.get("lighting_profile") == "indoor" and house1.get("weather_profile") == "disabled"
 		and house1.get("music_profile_id") == "kanto.lavender_town", "House 1 uses indoor lighting and Lavender music")
-	for route_number in [8, 12]:
+	for route_number in [12]:
 		var planned_exit := town.get_node("Exits/ToRoute%d" % route_number) as Area2D
 		var planned_shape := planned_exit.get_node("CollisionShape2D") as CollisionShape2D
 		_check(not planned_exit.monitoring and planned_shape.disabled,
@@ -139,9 +143,12 @@ func _run() -> void:
 			"Future Route %d spawn arrives inside town, outside its exit" % route_number)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
-	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 7,
-		"Catalog builder registers Route 10, Pokémon Center, Fuji house, all three houses and Pokémon Tower exits")
+	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 8,
+		"Catalog builder registers Route 8, Route 10 and all six indoor exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
+	_check(catalog.transitions.has("kanto_lavender_town__to_route8")
+		and catalog.transitions.has("kanto_route_8__to_lavender_town"),
+		"Catalog registers both authorized Route 8 transitions")
 	_check(not catalog.areas.has("kanto_lavender_town_north"), "Removed north map is absent from staff catalog")
 	_check(not ResourceLoader.exists("res://scenes/overworld/kanto/routes/connections/lavender_town_north.tscn"),
 		"Removed north scene cannot be loaded")
@@ -167,11 +174,14 @@ func _run() -> void:
 	house.free()
 	town.free()
 	route.free()
+	route8.free()
 	quit(1 if failures > 0 else 0)
 
 
 func _check_connection(source: Node, exit_name: String, destination: Node, destination_path: String) -> void:
 	var exit := source.get_node("Exits/" + exit_name) as Area2D
+	_check(exit.monitoring and not (exit.get_node("CollisionShape2D") as CollisionShape2D).disabled,
+		"%s has an enabled walking trigger" % exit_name)
 	_check(exit.get("target_scene_path") == destination_path, "%s points to the correct scene" % exit_name)
 	_check(exit.is_connected("body_entered", Callable(exit, "_on_body_entered")),
 		"%s responds to walking into the exit" % exit_name)
