@@ -20,6 +20,7 @@ var anchor_position := DEFAULT_ANCHOR_POSITION
 
 
 func _ready() -> void:
+	add_to_group("nearby_pve_battle_indicators")
 	z_as_relative = false
 	z_index = RenderingServer.CANVAS_ITEM_Z_MAX
 	glow_sprite = Sprite2D.new()
@@ -146,11 +147,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		screen_position = touch_event.position
 	else:
 		return
+	if try_spectate_at_screen_position(screen_position, "indicator_unhandled"):
+		get_viewport().set_input_as_handled()
+
+
+func try_spectate_at_screen_position(screen_position: Vector2, source: String) -> bool:
+	if not is_visible_in_tree():
+		return false
 	var local_position := get_global_transform_with_canvas().affine_inverse() * screen_position
-	if local_position.distance_to(anchor_position) <= CLICK_RADIUS:
-		_trace_spectate("pointer_unhandled", {"eventType": event.get_class()})
-		if _request_spectate():
-			get_viewport().set_input_as_handled()
+	if local_position.distance_to(anchor_position) > CLICK_RADIUS:
+		return false
+	_trace_spectate("pointer_unhandled", {"source": source})
+	return _request_spectate()
 
 
 func _request_spectate() -> bool:

@@ -11,13 +11,17 @@ func _run() -> void:
 	var avatar_script := load("res://scripts/world/remote_player_avatar.gd") as Script
 	var avatar := avatar_script.new() as Node2D
 	root.add_child(avatar)
-	await _check_pointer_input(avatar)
+	var mobile := load("res://scripts/ui/mobile/mobile_controls.gd").new() as Control
+	root.add_child(mobile)
+	await _check_pointer_input(avatar, mobile)
+	_check(not mobile.get("_mouse_tracking") and (mobile.get("_touches") as Dictionary).is_empty(), "spectate presses do not start movement or interact tracking")
+	mobile.queue_free()
 	avatar.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
 
 
-func _check_pointer_input(avatar: Node2D) -> void:
+func _check_pointer_input(avatar: Node2D, mobile: Control) -> void:
 	avatar.apply_state(_player_state("wild", "wild-click-test"))
 	await process_frame
 	var indicator := avatar.nearby_battle_indicator as Node2D
@@ -33,6 +37,7 @@ func _check_pointer_input(avatar: Node2D) -> void:
 	click.pressed = true
 	click.position = point
 	root.push_input(click, true)
+	_check(not mobile.get("_mouse_tracking"), "spectate click takes priority over tap/drag movement")
 	_check(requests == [7], "wild indicator forwards a real click without physics picking under camera zoom")
 	click.pressed = false
 	root.push_input(click, true)
@@ -43,6 +48,10 @@ func _check_pointer_input(avatar: Node2D) -> void:
 	click.position = point + Vector2(150, 0)
 	root.push_input(click, true)
 	_check(requests.size() == 1, "release, right click and clicks outside the indicator do not spectate")
+	_check(bool(mobile.get("_mouse_tracking")), "clicking outside the indicator still starts tap/drag movement")
+	click.pressed = false
+	root.push_input(click, true)
+	click.pressed = true
 
 	var blocker := Control.new()
 	blocker.position = point - Vector2(40, 40)
@@ -62,16 +71,25 @@ func _check_pointer_input(avatar: Node2D) -> void:
 	touch.position = point
 	touch.pressed = true
 	root.push_input(touch, true)
+	_check((mobile.get("_touches") as Dictionary).is_empty(), "spectate touch does not start joystick tracking")
 	_check(requests == [7, 7], "touching the wild indicator forwards one spectate request")
 	avatar.visible = false
 	root.push_input(click, true)
 	_check(requests.size() == 2, "hidden avatars cannot receive indicator clicks")
+	click.pressed = false
+	root.push_input(click, true)
+	click.pressed = true
 	avatar.visible = true
 	avatar.apply_state(_player_state("trainer", "trainer-click-test"))
 	point = indicator.get_global_transform_with_canvas() * indicator.anchor_position
 	click.position = point
 	root.push_input(click, true)
 	_check(requests == [7, 7, 7], "NPC indicators also forward a real click")
+	root.physics_object_picking = true
+	root.push_input(click, true)
+	await physics_frame
+	await process_frame
+	_check(requests == [7, 7, 7, 7], "enabled physics picking does not duplicate spectate requests with movement controls")
 	root.physics_object_picking = previous_picking
 	root.canvas_transform = previous_transform
 
