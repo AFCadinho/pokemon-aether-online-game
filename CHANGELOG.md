@@ -4,6 +4,8 @@
 
 - Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
 
+- Lower Cobalion, Glaceon and Shiny Glaceon riders by 16 pixels in every direction so their visual position aligns with nearby NPCs.
+
 - Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.
 
 - Add the artist-authored Route 8 exterior and connect its eastern exit to Lavender Town.
