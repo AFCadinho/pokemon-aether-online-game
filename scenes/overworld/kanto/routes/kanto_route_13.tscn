@@ -15,6 +15,9 @@
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(96, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_south"]
+size = Vector2(96, 32)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dnoyk"]
 texture = ExtResource("9_cvuyd")
 texture_region_size = Vector2i(32, 32)
@@ -192,6 +195,9 @@ music_profile_id = "kanto.routes_11_15"
 [node name="FromRoute12" type="Marker2D" parent="Spawns" unique_id=156929468]
 position = Vector2(2736, 48)
 
+[node name="FromRoute14" type="Marker2D" parent="Spawns"]
+position = Vector2(336, 1168)
+
 [node name="Exits" type="Node2D" parent="." unique_id=810032771]
 
 [node name="ToRoute12" type="Area2D" parent="Exits" unique_id=1929579664]
@@ -209,6 +215,22 @@ shape = SubResource("shape_north")
 [node name="RouteTransitionHint" parent="Exits/ToRoute12" unique_id=1344184049 instance=ExtResource("4_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
+
+[node name="ToRoute14" type="Area2D" parent="Exits"]
+position = Vector2(336, 1200)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_14.tscn"
+target_spawn_name = "FromRoute13"
+transition_id = "kanto_route_13__to_route14"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute14"]
+shape = SubResource("shape_south")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute14" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=47748979]
 z_index = 5
@@ -327,3 +349,4 @@ tile_map_data = PackedByteArray("AABHAAQAAQAIAAEAAABHAAUAAQAIAAEAAABHAAYAAQAIAAE
 tile_set = SubResource("TileSet_u7kxh")
 
 [connection signal="body_entered" from="Exits/ToRoute12" to="Exits/ToRoute12" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute14" to="Exits/ToRoute14" method="_on_body_entered"]

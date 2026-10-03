@@ -6351,5 +6351,9 @@
   "ui.shiny_tracker.mounts.store_description_glaceon": "Contém uma montaria Glaceon. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_cobalion": "Contém uma montaria Cobalion. Chance shiny inicial: 50%.",
   "ui.town_map.location.route_13.name": "Rota 13",
-  "ui.town_map.location.route_13.description": "Uma rota costeira com cercas labirínticas ao sul da Rota 12."
+  "ui.town_map.location.route_13.description": "Uma rota costeira com cercas labirínticas ao sul da Rota 12.",
+  "ui.town_map.location.route_14.name": "Rota 14",
+  "ui.town_map.location.route_14.description": "Uma rota estreita e arborizada entre as Rotas 13 e 15.",
+  "ui.town_map.location.route_15.name": "Rota 15",
+  "ui.town_map.location.route_15.description": "Uma longa rota costeira que segue para oeste da Rota 14 em direção à Cidade de Fuchsia."
 }
