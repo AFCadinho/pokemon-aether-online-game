@@ -15,7 +15,16 @@ func _run() -> void:
 	boss._apply_boss_definition()
 	_check(boss.boss_definition.boss_id == "zapdos" and boss.species_id == "zapdos", "Zapdos definition is wired")
 	_check(boss.movement_behavior == "idle", "Boss remains at its authoritative position")
-	_check(boss.position == Vector2(272, 240), "Client and account catalog positions agree")
+	var backend_path := ProjectSettings.globalize_path("res://").path_join("../backend/account-service/data/weekly_bosses/catalog.json").simplify_path()
+	if not FileAccess.file_exists(backend_path):
+		backend_path = ProjectSettings.globalize_path("res://").path_join("../pokemon-aether-backend/account-service/data/weekly_bosses/catalog.json").simplify_path()
+	var catalog_position := Vector2.INF
+	if FileAccess.file_exists(backend_path):
+		var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(backend_path))
+		for entry: Dictionary in catalog.get("bosses", []):
+			if entry.get("bossId") == boss.boss_definition.boss_id:
+				catalog_position = Vector2(float(entry["position"]["x"]), float(entry["position"]["y"]))
+	_check(boss.position == catalog_position, "Client and account catalog positions agree")
 	_check(FollowerSpriteService.get_sprite_frames("zapdos", false) != null, "Zapdos has a follower sprite")
 	var collision := map.get_node("Tiles/Collision") as TileMapLayer
 	var cell: Vector2i = collision.local_to_map(boss.position)

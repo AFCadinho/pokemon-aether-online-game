@@ -808,9 +808,13 @@ func _read_json_response(request_node: HTTPRequest) -> Dictionary:
 			"raw": response_text
 		}
 
-	var parsed: Variant = JSON.parse_string(response_text)
+	# Gateways may return HTML, plain text or an empty body during errors.
+	# Instance parsing returns an error code without logging a parser exception.
+	var json := JSON.new()
+	var parse_error := json.parse(response_text)
+	var parsed: Variant = json.data
 	
-	if typeof(parsed) != TYPE_DICTIONARY:
+	if parse_error != OK or typeof(parsed) != TYPE_DICTIONARY:
 		return {
 			"success": false,
 			"status": response_code, 
