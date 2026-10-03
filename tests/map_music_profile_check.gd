@@ -2,6 +2,9 @@ extends SceneTree
 
 const MapMetadataScript := preload("res://scripts/world/map_metadata.gd")
 const MUSIC_CATALOG_PATH := "res://data/music_catalog.json"
+const POKEMON_TOWER_SCENE_PATH := "res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn"
+const POKEMON_TOWER_TRACK_ID := "overworld.kanto.interior.pokemon_tower_remastered_zame"
+const POKEMON_TOWER_TRACK := "res://assets/music/overworld/kanto/interiors/pokemon_tower_remastered_zame.ogg"
 const PLAYERS_HOUSE_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/players_house.tscn"
 const OAKS_LAB_SCENE_PATH := "res://scenes/overworld/kanto/towns/pallet_town/oaks_lab.tscn"
 const POKEMON_CENTER_TEMPLATE_PATH := "res://scenes/overworld/kanto/reusable_interiors/pokemon_center_template.tscn"
@@ -134,6 +137,17 @@ func _run() -> void:
 		_check_equal(music_manager.call("get_map_music_path", map), lavender_track,
 			"%s resolves Lavender Town music through the runtime manager" % scene_path)
 		map.free()
+	_check_equal(str((tracks.get(POKEMON_TOWER_TRACK_ID, {}) as Dictionary).get("path", "")),
+		POKEMON_TOWER_TRACK, "Pokémon Tower catalog entry resolves to its own soundtrack")
+	_check_scene_track(POKEMON_TOWER_SCENE_PATH, 'music_track_id = "%s"' % POKEMON_TOWER_TRACK_ID,
+		"Pokémon Tower uses its dedicated catalog track")
+	var tower := (load(POKEMON_TOWER_SCENE_PATH) as PackedScene).instantiate()
+	_check_equal(music_manager.call("get_map_music_path", tower), POKEMON_TOWER_TRACK,
+		"Pokémon Tower resolves its dedicated soundtrack through the runtime manager")
+	tower.free()
+	var tower_stream := load(POKEMON_TOWER_TRACK) as AudioStreamOggVorbis
+	_check(tower_stream != null and absf(tower_stream.get_length() - 181.866667) < 1.0,
+		"Pokémon Tower OGG decodes with the complete source duration")
 	for cave_name: String in ["diglett_cave", "rock_tunnel"]:
 		var expected_track := (
 			"res://assets/music/overworld/kanto/routes/viridian_forest.ogg"
@@ -151,6 +165,7 @@ func _run() -> void:
 		_check(stream != null and stream.get_length() > 0, "%s theme decodes successfully" % cave_name)
 	music_manager.free()
 	inherited_interior.free()
+	print("map_music_profile_check: %s" % ("FAIL" if failed else "PASS"))
 	quit(1 if failed else 0)
 
 

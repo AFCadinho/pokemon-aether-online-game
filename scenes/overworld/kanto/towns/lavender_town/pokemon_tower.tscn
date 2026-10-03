@@ -173,7 +173,7 @@ battle_environment_id = "cave"
 cave_encounter_chance = 0.07
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "kanto.lavender_town"
+music_track_id = "overworld.kanto.interior.pokemon_tower_remastered_zame"
 
 [node name="Visual" parent="." unique_id=2141238513 instance=ExtResource("visual")]
 
