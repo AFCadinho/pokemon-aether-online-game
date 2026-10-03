@@ -49,6 +49,7 @@ const EXTENDED_MAP_SCENES := {
 	"kanto_route_10_pokemon_center": "res://scenes/overworld/kanto/routes/route_10_pokemon_center.tscn",
 	"kanto_route_11": "res://scenes/overworld/kanto/routes/kanto_route_11.tscn",
 	"kanto_route_12": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+	"kanto_route_13": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
 	"kanto_route_12_west": "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn",
 	"kanto_route_21": "res://scenes/overworld/kanto/routes/kanto_route_21.tscn",
 	"kanto_route_5": "res://scenes/overworld/kanto/routes/kanto_route_5.tscn",

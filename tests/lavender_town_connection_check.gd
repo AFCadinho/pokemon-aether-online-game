@@ -7,6 +7,7 @@ const HOUSE2 := "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn"
 const HOUSE1 := "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn"
 const ROUTE := "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 const ROUTE12 := "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
+const ROUTE13 := "res://scenes/overworld/kanto/routes/kanto_route_13.tscn"
 const ROUTE11 := "res://scenes/overworld/kanto/routes/kanto_route_11.tscn"
 const GATE := "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn"
 const ROUTE8 := "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
@@ -26,6 +27,7 @@ func _run() -> void:
 	var house1 := (load(HOUSE1) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
 	var route12 := (load(ROUTE12) as PackedScene).instantiate()
+	var route13 := (load(ROUTE13) as PackedScene).instantiate()
 	var route11 := (load(ROUTE11) as PackedScene).instantiate()
 	var gate := (load(GATE) as PackedScene).instantiate()
 	var route8 := (load(ROUTE8) as PackedScene).instantiate()
@@ -137,6 +139,11 @@ func _run() -> void:
 	_check_connection(town, "ToRoute12", route12, ROUTE12)
 	_check_connection(route12, "ToLavenderTown", town, TOWN)
 	_check_connection(route12, "ToRoute11Gate", gate, GATE)
+	_check_connection(route12, "ToRoute13", route13, ROUTE13)
+	_check_connection(route13, "ToRoute12", route12, ROUTE12)
+	_check(str(route12.get_node("Exits/ToRoute13").transition_facing_direction) == "down"
+		and str(route13.get_node("Exits/ToRoute12").transition_facing_direction) == "up",
+		"Both arrivals face forward along the Route 12–13 path")
 	_check_connection(gate, "ToEast", route12, ROUTE12)
 	_check_connection(gate, "ToWest", route11, ROUTE11)
 	_check_connection(route11, "ToRoute12West", gate, GATE)
@@ -150,12 +157,21 @@ func _run() -> void:
 		"res://generated/tiled_visuals/route_12/route_12.visual.tileset.tres").is_empty(),
 		"Route 12 uses valid compact atlases")
 	_check_route12_walkway(route12)
+	var route13_visual := route13.get_node("Visual")
+	var route13_metadata: Dictionary = route13_visual.get_meta("tiled_visual_map")
+	_check(route13_metadata.get("width") == 96 and route13_metadata.get("height") == 38
+		and str(route13_visual.get_meta("tiled_source_path")).ends_with("/Route 13.tmx"),
+		"Route 13 uses the requested 96 by 38 artist visual")
+	_check(AtlasValidator.new().validate(route13_visual,
+		"res://generated/tiled_visuals/route_13/route_13.visual.tileset.tres").is_empty(),
+		"Route 13 uses valid compact atlases")
+	_check_route13_path(route13)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
 	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 9,
 		"Catalog builder registers Route 8, Route 10, Route 12 and all six indoor exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
-	for transition in ["kanto_lavender_town__to_route12", "kanto_route_12__to_lavender_town", "kanto_route_12__to_route11_gate", "kanto_route_12_west__to_route12"]:
+	for transition in ["kanto_lavender_town__to_route12", "kanto_route_12__to_lavender_town", "kanto_route_12__to_route11_gate", "kanto_route_12_west__to_route12", "kanto_route_12__to_route13", "kanto_route_13__to_route12"]:
 		_check(catalog.transitions.has(transition), "Catalog authorizes " + transition)
 	_check(catalog.transitions.has("kanto_lavender_town__to_route8")
 		and catalog.transitions.has("kanto_route_8__to_lavender_town"),
@@ -186,6 +202,7 @@ func _run() -> void:
 	town.free()
 	route.free()
 	route8.free()
+	route13.free()
 	route12.free()
 	route11.free()
 	gate.free()
@@ -243,3 +260,27 @@ func _check_route12_walkway(route12: Node) -> void:
 		"The wooden bridge above water stays walkable without Surf")
 	_check(collision.get_cell_source_id(Vector2i(0, 30)) != -1,
 		"The closed route edge is blocked by the persisted collision layer")
+
+
+func _check_route13_path(route13: Node) -> void:
+	var collision := route13.get_node("Tiles/Collision") as TileMapLayer
+	var water := route13.get_node("Tiles/Water") as TileMapLayer
+	var start := Vector2i(85, 1)
+	_check(collision.get_cell_source_id(start) == -1 and water.get_cell_source_id(start) == -1,
+		"Route 12 arrival lands on the north gate path")
+	_check(collision.get_cell_source_id(Vector2i(0, 20)) != -1,
+		"Route 13 west forest edge is blocked")
+	var queue: Array[Vector2i] = [start]
+	var reached := {start: true}
+	var target := Vector2i(9, 35)
+	while not queue.is_empty():
+		var current: Vector2i = queue.pop_front()
+		for offset in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			var next: Vector2i = current + offset
+			if next.x < 0 or next.x >= 96 or next.y < 0 or next.y >= 38:
+				continue
+			if collision.get_cell_source_id(next) != -1 or water.get_cell_source_id(next) != -1 or reached.has(next):
+				continue
+			reached[next] = true
+			queue.append(next)
+	_check(reached.has(target), "Route 13 north entrance connects through its fence maze to the southern path")

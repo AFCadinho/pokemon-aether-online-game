@@ -6350,5 +6350,7 @@
   "ui.voucher.balance": "Available voucher credit: {balance}\n\nSpend it on eligible cosmetics and mounts in the Aether Gift Store. Purchases and all box contents are untradeable. Only PokeAether staff can add credit.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Contains a Mega Alakazam mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_glaceon": "Contains a Glaceon mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_cobalion": "Contains a Cobalion mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Contains a Cobalion mount. Base shiny chance: 50%.",
+  "ui.town_map.location.route_13.name": "Route 13",
+  "ui.town_map.location.route_13.description": "A maze-like coastal route south of Route 12."
 }

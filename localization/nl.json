@@ -6350,5 +6350,7 @@
   "ui.voucher.balance": "Beschikbaar vouchertegoed: {balance}\n\nBesteed het aan geschikte cosmetics en mounts in de Aether Gift Store. Aankopen en alle inhoud van boxen zijn niet verhandelbaar. Alleen PokeAether-staff kan tegoed toevoegen.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Bevat een Mega Alakazam-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_glaceon": "Bevat een Glaceon-mount. Shiny-basiskans: 50%.",
-  "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%.",
+  "ui.town_map.location.route_13.name": "Route 13",
+  "ui.town_map.location.route_13.description": "Een kustroute met doolhofhekken ten zuiden van Route 12."
 }
