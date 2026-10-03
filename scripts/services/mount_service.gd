@@ -73,7 +73,7 @@ static func get_mount_id_for_unlock_item(item_id: String) -> String:
 
 static func is_mount_unlocked(mount_id: String, owned_item_ids: Array) -> bool:
 	var unlock_item_id := get_mount_unlock_item_id(mount_id)
-	return unlock_item_id.is_empty() or unlock_item_id in owned_item_ids
+	return unlock_item_id.is_empty() or unlock_item_id in owned_item_ids or unlock_item_id + "-bound" in owned_item_ids
 
 
 static func get_mount_ids_for_mode(movement_mode: String) -> Array[String]:

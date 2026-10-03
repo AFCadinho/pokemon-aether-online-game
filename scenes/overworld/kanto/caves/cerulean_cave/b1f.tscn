@@ -20,6 +20,7 @@ world_access_area_type = "wilderness"
 location_id = "kanto.cerulean_cave.b1f"
 location_name = "Cerulean Cave B1F"
 region_id = "kanto"
+land_mounts_allowed_interior = true
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"

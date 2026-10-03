@@ -32,6 +32,7 @@ func purchase_item(
 	item_id: String,
 	chroma_colors: Dictionary = {},
 	request_id: String = "",
+	currency: String = "gems",
 ) -> Dictionary:
 	var normalized_item_id := item_id.strip_edges().to_lower().replace("_", "-").replace(" ", "-")
 	if not AuthService.is_authenticated():
@@ -51,6 +52,7 @@ func purchase_item(
 			"itemId": normalized_item_id,
 			"requestId": normalized_request_id,
 			"chromaColors": chroma_colors,
+			"currency": currency,
 		})
 	)
 	if not bool(response.get("success", false)):
@@ -86,6 +88,7 @@ func _normalize_store(value: Variant) -> Dictionary:
 			"category": str(item.get("category", "")),
 			"shortDesc": str(item.get("shortDesc", "")),
 			"genders": _array_from_value(item.get("genders", [])),
+			"voucherEligible": bool(item.get("voucherEligible", false)),
 			"costs": costs,
 		})
 	return {

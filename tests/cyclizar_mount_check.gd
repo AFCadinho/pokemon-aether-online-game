@@ -7,9 +7,14 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	_check_catalog_and_frames()
 	_check_land_mount_runtime_contract()
 	_check_bike_shop_owner_contract()
+	_check_cave_mount_access()
 	quit(1 if failed else 0)
 
 
@@ -68,7 +73,7 @@ func _check_catalog_and_frames() -> void:
 		bag_source.contains('{"id": "mounts", "labelKey": "ui.bag.category.mounts", "iconItemId": "cyclizar-mount"}')
 		and bag_source.contains('"power_stones", "mounts", "cosmetics"')
 		and bag_source.contains("ITEM_ICON_RESOLVER.load_icon(")
-		and icon_resolver_source.contains("MountServiceScript.get_mount_id_for_unlock_item(canonical_id)"),
+		and icon_resolver_source.contains("MountServiceScript.get_mount_id_for_unlock_item(mount_item_id)"),
 		"mount entitlements have their own visible Bag category and reuse the mount sprite as icon"
 	)
 	var voucher_icon := load("res://assets/items/icons/BIKEVOUCHER.png") as Texture2D
@@ -332,3 +337,58 @@ func _check(condition: bool, message: String) -> void:
 		return
 	failed = true
 	push_error("FAIL %s" % message)
+
+func _check_cave_mount_access() -> void:
+	var metadata := MapMetadataScript.new()
+	var player = load("res://tests/fixtures/mount_access_player.gd").new()
+	player.test_map = metadata
+	var settings := root.get_node("SettingsManager")
+	var previous_mount := str(settings.call("get_selected_mount_id", "land"))
+	settings.call("set_selected_mount_id", "land", "cyclizar")
+	metadata.world_access_area_type = "interior"
+	_check(not player.toggle_land_mount(), "buildings block mount activation")
+	_check(not player.restore_land_mount("cyclizar"), "buildings block restoring a saved mount")
+	metadata.land_mounts_allowed_interior = true
+	_check(player.toggle_land_mount() and player.get_active_land_mount_id() == "cyclizar",
+		"cave interiors allow activating an owned licensed mount")
+	_check(player.toggle_land_mount() and player.get_active_land_mount_id().is_empty(),
+		"cave riders can dismount")
+	_check(player.restore_land_mount("cyclizar"), "cave interiors restore mounts on arrival or login")
+	player.toggle_land_mount()
+	player.licensed = false
+	_check(not player.toggle_land_mount(), "caves still require a regional mount license")
+	player.licensed = true
+	player.owns_mount = false
+	_check(not player.toggle_land_mount(), "caves still require mount ownership")
+	metadata.land_mounts_allowed_interior = false
+	metadata.world_access_area_type = "route"
+	_check(metadata.allows_land_mounts(), "routes retain mount access")
+	metadata.world_access_area_type = "wilderness"
+	_check(metadata.allows_land_mounts(), "wilderness retains mount access")
+	_check_cave_scene_metadata("res://scenes/overworld/kanto/caves")
+	var tower := load("res://scenes/overworld/kanto/towns/lavender_town/pokemon_tower.tscn") as PackedScene
+	_check(not _scene_allows_land_mounts(tower), "Pokemon Tower remains a restricted building")
+	settings.call("set_selected_mount_id", "land", previous_mount)
+	player.free()
+	metadata.free()
+
+
+func _check_cave_scene_metadata(directory: String) -> void:
+	for file in DirAccess.get_files_at(directory):
+		if file.ends_with(".tscn"):
+			var scene := load(directory.path_join(file)) as PackedScene
+			_check(_scene_allows_land_mounts(scene), "%s permits land mounts" % file)
+	for child in DirAccess.get_directories_at(directory):
+		_check_cave_scene_metadata(directory.path_join(child))
+
+
+func _scene_allows_land_mounts(scene: PackedScene) -> bool:
+	var metadata := MapMetadataScript.new()
+	var state := scene.get_state()
+	for index in range(state.get_node_property_count(0)):
+		var key := str(state.get_node_property_name(0, index))
+		if key in ["world_access_area_type", "land_mounts_allowed_interior"]:
+			metadata.set(key, state.get_node_property_value(0, index))
+	var allowed := metadata.allows_land_mounts()
+	metadata.free()
+	return allowed

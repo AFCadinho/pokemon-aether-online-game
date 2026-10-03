@@ -15245,10 +15245,10 @@ func _load_donator_store_state() -> void:
 	donator_store_popup.apply_store_state(wallet, result.get("store", {}) as Dictionary)
 
 
-func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictionary) -> void:
+func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictionary, currency: String = "gems") -> void:
 	if donator_store_popup == null:
 		return
-	var result: Dictionary = await DonatorStoreService.purchase_item(item_id, chroma_colors)
+	var result: Dictionary = await DonatorStoreService.purchase_item(item_id, chroma_colors, "", currency)
 	if not bool(result.get("success", false)):
 		donator_store_popup.show_store_error(
 			"Purchase failed: %s" % str(result.get("error", "Unknown error"))
@@ -15259,6 +15259,7 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": wallet})
 	_refresh_player_status_card()
 	donator_store_popup.set_gem_balance(PlayerSave.gems)
+	donator_store_popup.set_voucher_balance(int(wallet.get("gift_voucher_balance", 0)))
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
 	bag_inventory_loaded = true
 	if bag_popup != null and bag_popup.visible:
@@ -15268,7 +15269,7 @@ func _on_donator_store_purchase_requested(item_id: String, chroma_colors: Dictio
 	var purchase := result.get("purchase", {}) as Dictionary
 	var purchased_item_id := str(purchase.get("itemId", item_id))
 	var purchased_item_name := _item_name_from_id(purchased_item_id)
-	donator_store_popup.show_purchase_success(purchased_item_name)
+	donator_store_popup.show_purchase_success(purchased_item_name, str(purchase.get("currency", currency)))
 	add_system_message(LocalizationManager.text(
 		"ui.store.purchase.system_success",
 		{"item": purchased_item_name}
@@ -25995,6 +25996,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"ownershipVariant": str(item.get("ownershipVariant", "")).strip_edges().to_lower(),
 			"name": str(item.get("name", _format_item_name_from_id(item_id))),
 			"category": _normalize_backend_bag_category(backend_category, item_id),
+			"voucherBalance": item.get("voucherBalance", null),
 			"shortDesc": str(item.get("shortDesc", item.get("description", ""))).strip_edges(),
 			"isHoldable": false if _is_fossil_item_id(item_id) else bool(item.get("isHoldable", false)),
 			"quantity": max(int(item.get("quantity", 1)), 1),

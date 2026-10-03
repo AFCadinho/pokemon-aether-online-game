@@ -2,7 +2,7 @@ class_name DonatorStorePopup
 extends PanelContainer
 
 signal closed
-signal purchase_requested(item_id: String, chroma_colors: Dictionary)
+signal purchase_requested(item_id: String, chroma_colors: Dictionary, currency: String)
 
 const PREVIEW_SHINY_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
 const PREVIEW_PLAY_ICON: Texture2D = preload("res://assets/ui/icons/replay_play.svg")
@@ -628,6 +628,13 @@ const CATALOG: Array[Dictionary] = [
 	},
 ]
 
+var voucher_balance := 0
+var voucher_balance_label: Label
+var voucher_eligible_items: Dictionary = {}
+var payment_select: OptionButton
+var voucher_notice_label: Label
+var voucher_confirm_dialog: ConfirmationDialog
+var pending_voucher_purchase: Dictionary = {}
 var gem_balance := 0
 var authoritative_gem_prices: Dictionary = {}
 var authoritative_item_genders: Dictionary = {}
@@ -695,8 +702,13 @@ func _ready() -> void:
 	if trainer_appearance.is_empty():
 		trainer_appearance = CharacterAppearanceService.get_default_appearance(trainer_gender)
 	_build_interface()
+	voucher_confirm_dialog = ConfirmationDialog.new()
+	voucher_confirm_dialog.confirmed.connect(_confirm_voucher_purchase)
+	voucher_confirm_dialog.canceled.connect(_cancel_voucher_purchase)
+	add_child(voucher_confirm_dialog)
 	_sync_character_preview_colors()
 	set_gem_balance(gem_balance)
+	set_voucher_balance(voucher_balance)
 	_select_category("featured")
 	var localization_manager := get_node_or_null("/root/LocalizationManager")
 	if localization_manager != null:
@@ -712,6 +724,17 @@ func set_gem_balance(amount: int) -> void:
 	_refresh_purchase_state()
 
 
+func set_voucher_balance(amount: int) -> void:
+	voucher_balance = maxi(amount, 0)
+	if voucher_balance_label != null:
+		voucher_balance_label.text = _t("ui.store.voucher.balance", {"amount": _format_number(voucher_balance)})
+	_refresh_purchase_state()
+
+
+func _payment_currency() -> String:
+	return "gift_voucher" if payment_select != null and payment_select.selected == 1 else "gems"
+
+
 func set_store_loading(loading: bool) -> void:
 	store_catalog_loading = loading
 	if loading and status_label != null:
@@ -721,6 +744,8 @@ func set_store_loading(loading: bool) -> void:
 
 func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 	set_gem_balance(int(wallet.get("gems", gem_balance)))
+	set_voucher_balance(int(wallet.get("gift_voucher_balance", 0)))
+	voucher_eligible_items.clear()
 	authoritative_gem_prices.clear()
 	authoritative_item_genders.clear()
 	var items_value: Variant = store.get("items", [])
@@ -730,6 +755,7 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 				continue
 			var offer := item_value as Dictionary
 			var item_id := str(offer.get("itemId", "")).strip_edges()
+			voucher_eligible_items[item_id] = bool(offer.get("voucherEligible", false))
 			var costs_value: Variant = offer.get("costs", [])
 			if item_id == "":
 				continue
@@ -775,10 +801,12 @@ func set_purchase_in_progress(active: bool) -> void:
 	_refresh_purchase_state()
 
 
-func show_purchase_success(item_name: String) -> void:
+func show_purchase_success(item_name: String, currency: String = "gems") -> void:
 	purchase_in_progress = false
 	if status_label != null:
-		status_label.text = _t("ui.store.status.added", {"item": item_name})
+		status_label.text = _t("ui.store.voucher.success" if currency == "gift_voucher" else "ui.store.status.added", {
+			"item": item_name, "amount": _format_number(voucher_balance)
+		})
 	_refresh_purchase_state(false)
 
 
@@ -813,6 +841,10 @@ func open_store() -> void:
 
 
 func close_store() -> void:
+	if voucher_confirm_dialog != null:
+		voucher_confirm_dialog.hide()
+	if not pending_voucher_purchase.is_empty():
+		_cancel_voucher_purchase()
 	patreon_status_request_id += 1
 	patreon_action_in_progress = false
 	if patreon_external_dialog != null:
@@ -1068,7 +1100,24 @@ func _create_balance_pill() -> Control:
 	balance_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	balance_label.add_theme_font_size_override("font_size", 13)
 	balance_label.add_theme_color_override("font_color", UI_TEXT)
-	row.add_child(balance_label)
+	var balances := VBoxContainer.new()
+	balances.add_theme_constant_override("separation", 2)
+	row.add_child(balances)
+	balances.add_child(balance_label)
+	voucher_balance_label = Label.new()
+	voucher_balance_label.name = "VoucherBalance"
+	voucher_balance_label.add_theme_font_size_override("font_size", 12)
+	voucher_balance_label.add_theme_color_override("font_color", UI_GOLD)
+	var voucher_row := HBoxContainer.new()
+	voucher_row.add_theme_constant_override("separation", 4)
+	var voucher_icon := TextureRect.new()
+	voucher_icon.custom_minimum_size = Vector2(16, 16)
+	voucher_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	voucher_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	voucher_icon.texture = preload("res://assets/ui/store_voucher.svg")
+	voucher_row.add_child(voucher_icon)
+	voucher_row.add_child(voucher_balance_label)
+	balances.add_child(voucher_row)
 	return panel
 
 
@@ -1430,6 +1479,24 @@ func _create_character_preview_panel() -> Control:
 	selection_description_label.add_theme_font_size_override("font_size", 11)
 	selection_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(selection_description_label)
+
+	payment_select = OptionButton.new()
+	payment_select.name = "StorePaymentMethod"
+	payment_select.custom_minimum_size = Vector2(0, 32)
+	_apply_cosmetic_item_category_style(payment_select)
+	payment_select.add_theme_constant_override("icon_max_width", 16)
+	payment_select.add_item(_t("ui.store.voucher.pay_gems"))
+	payment_select.add_item(_t("ui.store.voucher.pay_voucher"))
+	payment_select.set_item_icon(0, GEM_ICON)
+	payment_select.set_item_icon(1, preload("res://assets/ui/store_voucher.svg"))
+	payment_select.item_selected.connect(func(_index: int) -> void: _refresh_purchase_state())
+	layout.add_child(payment_select)
+	voucher_notice_label = Label.new()
+	voucher_notice_label.name = "VoucherBindingNotice"
+	voucher_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	voucher_notice_label.add_theme_font_size_override("font_size", 10)
+	voucher_notice_label.add_theme_color_override("font_color", UI_GOLD)
+	layout.add_child(voucher_notice_label)
 
 	var checkout_row := HBoxContainer.new()
 	checkout_row.add_theme_constant_override("separation", 8)
@@ -2465,6 +2532,19 @@ func _gem_price(item_id: String) -> int:
 func _refresh_purchase_state(update_status: bool = true) -> void:
 	if purchase_button == null:
 		return
+	var eligible := bool(voucher_eligible_items.get(selected_item_id, false))
+	if payment_select != null:
+		payment_select.disabled = purchase_in_progress or store_catalog_loading or not store_catalog_loaded
+		payment_select.set_item_disabled(1, not eligible)
+		if not eligible:
+			payment_select.select(0)
+		payment_select.visible = not selected_item_id.is_empty() and selected_item_id != "patreon-supporter-preview"
+	if voucher_notice_label != null:
+		voucher_notice_label.visible = payment_select.visible
+		voucher_notice_label.text = _t(
+			"ui.store.voucher.binding" if _payment_currency() == "gift_voucher"
+			else "ui.store.voucher.available" if eligible else "ui.store.voucher.unavailable"
+		)
 	if purchase_in_progress:
 		purchase_button.disabled = true
 		purchase_button.text = _t("ui.store.status.purchasing_short")
@@ -2508,7 +2588,16 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		return
 	var price := _gem_price(selected_item_id)
 	if price >= 0:
-		purchase_button.text = _t("ui.store.purchase_with_price", {
+		selection_price_label.text = (
+			_t("ui.store.voucher.price", {"amount": _format_number(price)})
+			if _payment_currency() == "gift_voucher"
+			else _mount_box_price_text(price) if not _mount_box_mount_id(selected_item_id).is_empty()
+			else "◆ %s" % _format_number(price)
+		)
+		purchase_button.icon = preload("res://assets/ui/store_voucher.svg") if _payment_currency() == "gift_voucher" else null
+		purchase_button.expand_icon = true
+		purchase_button.add_theme_constant_override("icon_max_width", 16)
+		purchase_button.text = _t("ui.store.voucher.buy" if _payment_currency() == "gift_voucher" else "ui.store.purchase_with_price", {
 			"amount": _format_number(price),
 		})
 	if price < 0:
@@ -2516,6 +2605,15 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		purchase_button.tooltip_text = _t("ui.store.error.preview_unavailable")
 		if update_status:
 			status_label.text = _t("ui.store.status.preview_only")
+		return
+	if _payment_currency() == "gift_voucher":
+		purchase_button.disabled = voucher_balance < price
+		purchase_button.tooltip_text = _t("ui.store.voucher.binding")
+		if update_status:
+			status_label.text = _t(
+				"ui.store.voucher.insufficient" if voucher_balance < price else "ui.store.voucher.remaining",
+				{"amount": _format_number(absi(voucher_balance - price))}
+			)
 		return
 	if gem_balance < price:
 		purchase_button.disabled = true
@@ -2543,8 +2641,32 @@ func _on_purchase_pressed() -> void:
 	if selected_item_id == "patreon-supporter-preview":
 		_on_patreon_action_pressed()
 		return
+	if _payment_currency() == "gift_voucher":
+		pending_voucher_purchase = {"itemId": selected_item_id, "colors": _selected_purchase_chroma_colors()}
+		voucher_confirm_dialog.title = _t("ui.store.voucher.confirm_title")
+		voucher_confirm_dialog.dialog_text = _t("ui.store.voucher.confirm", {
+			"item": _item_name(_catalog_item(selected_item_id)),
+			"price": _format_number(_gem_price(selected_item_id)),
+			"balance": _format_number(voucher_balance - _gem_price(selected_item_id)),
+		})
+		set_purchase_in_progress(true)
+		voucher_confirm_dialog.popup_centered(Vector2i(440, 220))
+		return
 	set_purchase_in_progress(true)
-	purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())
+	purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors(), "gems")
+
+
+func _confirm_voucher_purchase() -> void:
+	if pending_voucher_purchase.is_empty():
+		return
+	var pending := pending_voucher_purchase.duplicate(true)
+	pending_voucher_purchase.clear()
+	purchase_requested.emit(str(pending.itemId), pending.colors as Dictionary, "gift_voucher")
+
+
+func _cancel_voucher_purchase() -> void:
+	pending_voucher_purchase.clear()
+	set_purchase_in_progress(false)
 
 
 func _selected_purchase_chroma_colors() -> Dictionary:
@@ -2820,6 +2942,10 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 
 func _on_locale_changed(_locale: String) -> void:
+	if payment_select != null:
+		payment_select.set_item_text(0, _t("ui.store.voucher.pay_gems"))
+		payment_select.set_item_text(1, _t("ui.store.voucher.pay_voucher"))
+	set_voucher_balance(voucher_balance)
 	if patreon_external_dialog != null:
 		patreon_external_dialog.title = _t("ui.store.patreon.external_title")
 		patreon_external_dialog.dialog_text = _t("ui.store.patreon.external_confirm")
