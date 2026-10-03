@@ -5,6 +5,10 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
 [ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="5_marker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="r13_picnicker"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r13_bird_keeper"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocker_frames.tres" id="r13_biker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r13_trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(96, 32)
@@ -21,6 +25,9 @@ location_id = "kanto.route.13"
 location_name = "Route 13"
 region_id = "kanto"
 music_profile_id = "kanto.routes_11_15"
+encounter_area_id = "kanto_route_13"
+grass_encounter_chance = 0.21
+surf_encounter_chance = 0.02
 
 [node name="Visual" parent="." instance=ExtResource("1_visual")]
 
@@ -50,6 +57,96 @@ y_sort_enabled = true
 [node name="Players" type="Node2D" parent="Entities"]
 [node name="NPCs" type="Node2D" parent="Entities"]
 [node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="picnicker_alma" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(2256, 400)
+trainer_id = "kanto_route_13_picnicker_alma"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_picnicker_alma"
+display_name = "Picnicker Alma"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="bird_keeper_sebastian" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(2320, 272)
+trainer_id = "kanto_route_13_bird_keeper_sebastian"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_bird_keeper_sebastian"
+display_name = "Bird Keeper Sebastian"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_bird_keeper")
+
+[node name="picnicker_susie" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(1376, 400)
+trainer_id = "kanto_route_13_picnicker_susie"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_picnicker_susie"
+display_name = "Picnicker Susie"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="beauty_lola" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(752, 560)
+trainer_id = "kanto_route_13_beauty_lola"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_beauty_lola"
+display_name = "Beauty Lola"
+facing_direction = Vector2(-1, 0)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="beauty_sheila" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(1296, 560)
+trainer_id = "kanto_route_13_beauty_sheila"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_beauty_sheila"
+display_name = "Beauty Sheila"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="picnicker_valerie" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(560, 656)
+trainer_id = "kanto_route_13_picnicker_valerie"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_picnicker_valerie"
+display_name = "Picnicker Valerie"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="picnicker_gwen" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(368, 720)
+trainer_id = "kanto_route_13_picnicker_gwen"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_picnicker_gwen"
+display_name = "Picnicker Gwen"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r13_picnicker")
+
+[node name="bird_keeper_perry" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(336, 912)
+trainer_id = "kanto_route_13_bird_keeper_perry"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_bird_keeper_perry"
+display_name = "Bird Keeper Perry"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_bird_keeper")
+
+[node name="biker_jared" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(336, 1040)
+trainer_id = "kanto_route_13_biker_jared"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_biker_jared"
+display_name = "Biker Jared"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("r13_biker")
+
+[node name="bird_keeper_robert" parent="Entities/NPCs" instance=ExtResource("r13_trainer")]
+position = Vector2(336, 1136)
+trainer_id = "kanto_route_13_bird_keeper_robert"
+sight_range_tiles = 2
+npc_id = "kanto_route_13_bird_keeper_robert"
+display_name = "Bird Keeper Robert"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r13_bird_keeper")
 
 [node name="Tiles" type="Node2D" parent="."]
 visible = false
