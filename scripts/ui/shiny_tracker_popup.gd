@@ -660,7 +660,7 @@ func _build_mount_workspace() -> HBoxContainer:
 	workspace.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	workspace.add_theme_constant_override("separation", 12)
 	var boxes := _mount_panel(workspace, true)
-	boxes.add_child(_mount_label(_t("ui.shiny_tracker.mounts.boxes"), UI_TEXT, 18))
+	boxes.add_child(_mount_label(_t("ui.shiny_tracker.mounts.last_box"), UI_TEXT, 18))
 	mount_rules_label = _mount_label("", UI_MUTED, 11)
 	boxes.add_child(mount_rules_label)
 	mount_box_list = _mount_scroll_list(boxes)
@@ -735,10 +735,14 @@ func _render_mount_tracker() -> void:
 			child.queue_free()
 	mount_open_buttons.clear()
 	var boxes := _as_array(state.get("boxes"))
-	for box: Variant in boxes:
-		if box is Dictionary:
-			mount_box_list.add_child(_build_mount_box_card(box))
-	if boxes.is_empty():
+	var active_box_found := false
+	if active_id not in ["", "<null>"]:
+		for box: Variant in boxes:
+			if box is Dictionary and str(box.get("itemId", "")) == active_id:
+				mount_box_list.add_child(_build_mount_box_card(box))
+				active_box_found = true
+				break
+	if not active_box_found:
 		mount_box_list.add_child(_mount_label(_t("ui.shiny_tracker.mounts.no_boxes"), UI_MUTED))
 	var recent := _as_array(state.get("recentOpenings"))
 	for opening: Variant in recent:
