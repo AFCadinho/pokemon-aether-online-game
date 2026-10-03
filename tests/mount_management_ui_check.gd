@@ -28,8 +28,8 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia"],
-		"land catalog contains Cyclizar, both Rayquaza variants and Shadow Lugia"
+		MountServiceScript.get_mount_ids_for_mode("land") == ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny"],
+		"land catalog contains Cyclizar, both Rayquaza and Shadow Lugia variants"
 	)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
@@ -201,6 +201,24 @@ func _run() -> void:
 		str(settings_manager.call("get_selected_mount_id", "land")) == "shadow_lugia",
 		"owned Shadow Lugia can be selected as the active land mount"
 	)
+	panel.call("_on_inventory_changed", [{"itemId": "shiny-shadow-lugia-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(
+		selector_options.get_child_count() == 1
+		and (selector_options.get_child(0) as Button).text.contains("Shiny Shadow Lugia"),
+		"Shiny Shadow Lugia item unlocks its own entry without unlocking normal Shadow Lugia"
+	)
+	panel.call("_select_mount", "land", "shadow_lugia_shiny")
+	_check(
+		str(settings_manager.call("get_selected_mount_id", "land")) == "shadow_lugia_shiny",
+		"owned Shiny Shadow Lugia can be selected as the active land mount"
+	)
+	panel.call("_on_inventory_changed", [
+		{"itemId": "shadow-lugia-mount", "quantity": 1},
+		{"itemId": "shiny-shadow-lugia-mount", "quantity": 1},
+	])
+	panel.call("_open_selector", "land")
+	_check(selector_options.get_child_count() == 2, "both owned Shadow Lugia variants have separate selector entries")
 	panel.call("_on_inventory_changed", [{"itemId": "shiny-rayquaza-mount", "quantity": 1}])
 	panel.call("_open_selector", "land")
 	_check(

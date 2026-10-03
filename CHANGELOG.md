@@ -4,6 +4,18 @@
 
 - Add Zapdos as a static weekly boss in the Power Plant with a red nameplate, Easy/Intermediate/Hard selector, reward notifications and reconnect support. Defeating Hard unlocks unlimited rare wild Zapdos encounters.
 
+- Add the approved pearl-white Shiny Shadow Lugia as a separate hovering mount with its own item and Bag icon, preserving the corrected head/tail overlap.
+
+- Keep Shadow Lugia’s head in front of the rider by including directional appearance-layer offsets in mount masking for local and remote players.
+
+- Route 6's route and Underground Path signs now show localized text and illustrated previews.
+
+- Correct the viewer-left eye in downward-facing frames 1 and 3 of the normal and shiny Rayquaza mounts.
+
+- Route 6 wild Pokémon now pause at varied, randomized intervals and move at different speeds.
+
+- Route 5's Day Care and Underground Path signs now show localized text and illustrated previews.
+
 - Add a reusable static weekly boss scene with red nameplate text and server-status/difficulty hooks for future bosses.
 
 - Add Pokémon and Mounts tabs to the Shiny Tracker, show mount box odds and history, and open owned boxes with the disclosed 50%–80% shiny pity rules.
