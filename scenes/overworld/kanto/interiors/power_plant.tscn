@@ -136,49 +136,49 @@ z_index = 5
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=1818512929]
 
 [node name="Magnemite" parent="Entities/Pokemon" unique_id=1070054098 instance=ExtResource("6_pokemon")]
-position = Vector2(832, 1456)
+position = Vector2(816, 1488)
 overworld_pokemon_id = "kanto_power_plant_magnemite_1"
 species_id = "magnemite"
 level = 20
 
 [node name="Voltorb" parent="Entities/Pokemon" unique_id=1521576491 instance=ExtResource("6_pokemon")]
-position = Vector2(672, 304)
+position = Vector2(656, 304)
 overworld_pokemon_id = "kanto_power_plant_voltorb_1"
 species_id = "voltorb"
 level = 20
 
 [node name="Pikachu" parent="Entities/Pokemon" unique_id=444350632 instance=ExtResource("6_pokemon")]
-position = Vector2(1104, 336)
+position = Vector2(1136, 336)
 overworld_pokemon_id = "kanto_power_plant_pikachu_1"
 species_id = "pikachu"
 level = 21
 
 [node name="Magneton" parent="Entities/Pokemon" unique_id=1917909204 instance=ExtResource("6_pokemon")]
-position = Vector2(1536, 752)
+position = Vector2(1520, 752)
 overworld_pokemon_id = "kanto_power_plant_magneton_1"
 species_id = "magneton"
 level = 22
 
 [node name="Electabuzz" parent="Entities/Pokemon" unique_id=636392534 instance=ExtResource("6_pokemon")]
-position = Vector2(272, 720)
+position = Vector2(272, 688)
 overworld_pokemon_id = "kanto_power_plant_electabuzz_1"
 species_id = "electabuzz"
 level = 24
 
 [node name="Spearow" parent="Entities/Pokemon" unique_id=585540489 instance=ExtResource("6_pokemon")]
-position = Vector2(1824, 336)
+position = Vector2(1808, 336)
 overworld_pokemon_id = "kanto_power_plant_spearow_1"
 species_id = "spearow"
 level = 18
 
 [node name="Raticate" parent="Entities/Pokemon" unique_id=381079001 instance=ExtResource("6_pokemon")]
-position = Vector2(880, 1104)
+position = Vector2(912, 1136)
 overworld_pokemon_id = "kanto_power_plant_raticate_1"
 species_id = "raticate"
 level = 22
 
 [node name="Quagsire" parent="Entities/Pokemon" unique_id=702445853 instance=ExtResource("6_pokemon")]
-position = Vector2(1776, 1488)
+position = Vector2(1744, 1584)
 overworld_pokemon_id = "kanto_power_plant_quagsire_1"
 species_id = "quagsire"
 level = 20
