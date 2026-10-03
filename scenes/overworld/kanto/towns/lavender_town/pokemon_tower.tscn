@@ -19,6 +19,9 @@
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="population_scientist_f_frames"]
 [ext_resource type="SpriteFrames" path="res://assets/npcs/classes/elder_f_frames.tres" id="population_elder_f_frames"]
 
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/blue_frames.tres" id="gary_frames"]
+[ext_resource type="Script" path="res://scripts/world/story/story_hook.gd" id="gary_story_hook"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(32, 32)
 
@@ -214,6 +217,26 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=425547871]
 
+
+[node name="GaryOak" parent="Entities/NPCs" instance=ExtResource("population_dialogue")]
+position = Vector2(1328, 432)
+npc_id = "kanto_pokemon_tower_gary"
+npc_definition_id = "trainer_class_blue"
+visibility_required_quest_id = "investigate_pokemon_tower"
+visibility_required_quest_step_id = "speak_to_fuji_helper"
+visibility_hidden_quest_id = "investigate_pokemon_tower"
+defer_story_hide_until_reload = true
+display_name = "Gary Oak"
+npc_sprite_frames = ExtResource("gary_frames")
+portrait_id = "showdown_blue_lgpe"
+battle_sprite_id = "showdown_blue_lgpe"
+facing_direction = Vector2(0, 1)
+movement_behavior = "idle"
+preload_quest_markers = true
+
+[node name="StoryHook" type="Node" parent="Entities/NPCs/GaryOak"]
+script = ExtResource("gary_story_hook")
+interaction_id = "kanto_pokemon_tower_gary_challenge"
 
 [node name="HexManiacAster" parent="Entities/NPCs" instance=ExtResource("population_trainer")]
 position = Vector2(2160, 240)
