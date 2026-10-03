@@ -6343,5 +6343,6 @@
   "ui.voucher.view_balance": "查看余额",
   "ui.voucher.loading": "正在加载礼券余额…",
   "ui.voucher.load_failed": "无法加载礼券余额。请关闭此窗口后重试。",
-  "ui.voucher.balance": "可用礼券额度：{balance}\n\n可在 Aether Gift Store 购买符合条件的外观和坐骑。购买物品及箱内所有物品均不可交易。只有 PokeAether 工作人员可以增加额度。"
+  "ui.voucher.balance": "可用礼券额度：{balance}\n\n可在 Aether Gift Store 购买符合条件的外观和坐骑。购买物品及箱内所有物品均不可交易。只有 PokeAether 工作人员可以增加额度。",
+  "ui.shiny_tracker.mounts.store_description_mega_alakazam": "包含一只超级胡地坐骑。初始异色概率：50%。"
 }

@@ -23,12 +23,11 @@ RIDER_POS = ((40, 40),) * 4
 MOUNT_POS = ((40, 31), (59, 38), (21, 38), (40, 43))
 
 
-def build() -> None:
-    source = Image.open(ASSETS / "source.png").convert("RGBA")
-    assert source.size == (512, 256)
+def build_variant(source: Image.Image, assets: Path, column_offset: int) -> None:
+    assets.mkdir(parents=True, exist_ok=True)
     # UI icons use the original creature cell without the large rider canvas.
-    icon_path = ASSETS / "icon.png"
-    source.crop((0, 0, 64, 64)).save(icon_path)
+    icon_path = assets / "icon.png"
+    source.crop((column_offset * 64, 0, (column_offset + 1) * 64, 64)).save(icon_path)
     write_texture_import(ROOT, icon_path.relative_to(ROOT))
     small = source.resize((256, 128), NEAREST)
     assert small.resize(source.size, NEAREST).tobytes() == source.tobytes()
@@ -37,7 +36,8 @@ def build() -> None:
     for row in range(4):
         for col in range(4):
             phase = col * 4
-            original = small.crop((col * 32, row * 32, (col + 1) * 32, (row + 1) * 32))
+            source_col = col + column_offset
+            original = small.crop((source_col * 32, row * 32, (source_col + 1) * 32, (row + 1) * 32))
             normalized = Image.new("RGBA", (32, 32))
             normalized.alpha_composite(original, (0, -2 if col % 2 else 0))
             assert normalized.getchannel("A").histogram()[255] == original.getchannel("A").histogram()[255]
@@ -77,10 +77,20 @@ def build() -> None:
     for name, sheet in sheets.items():
         exported = sheet.resize((FRAME * 8, FRAME * 8), NEAREST)
         assert exported.resize(sheet.size, NEAREST).resize(exported.size, NEAREST).tobytes() == exported.tobytes()
-        path = ASSETS / f"{name}.png"
+        path = assets / f"{name}.png"
         exported.save(path)
         write_texture_import(ROOT, path.relative_to(ROOT))
-    print("Built Mega Alakazam mount, foreground and rider mask: 896x896, 224px frames.")
+    print(f"Built {assets.name}: 896x896, 224px frames and compact icon.")
+
+
+def build() -> None:
+    source = Image.open(ASSETS / "source.png").convert("RGBA")
+    assert source.size == (512, 256)
+    normal = source.crop((0, 0, 256, 256))
+    shiny = source.crop((256, 0, 512, 256))
+    assert normal.getchannel("A").tobytes() == shiny.getchannel("A").tobytes()
+    build_variant(source, ASSETS, 0)
+    build_variant(source, ASSETS.with_name("mega_alakazam_shiny"), 4)
 
 
 if __name__ == "__main__":
