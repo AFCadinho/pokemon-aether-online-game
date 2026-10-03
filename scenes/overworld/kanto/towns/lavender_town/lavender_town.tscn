@@ -405,11 +405,12 @@ z_index = 784
 position = Vector2(720, 784)
 destination_id = "kanto_lavender_town"
 interactable_id = "kanto_lavender_town_aether_beacon"
+display_name = "Aether Beacon"
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=990221907]
 
 [node name="LavenderTownSign" parent="Entities/Interactables/Signs" unique_id=863908709 instance=ExtResource("12_nn5m0")]
-position = Vector2(816, 1072)
+position = Vector2(816, 1104)
 
 [node name="PokemonTowerSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("13_u2pc0")]
 position = Vector2(1008, 656)
