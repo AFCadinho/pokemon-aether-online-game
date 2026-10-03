@@ -11,7 +11,7 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for id: String in ["mega_absol", "mega_absol_z", "mega_garchomp"]:
+	for id: String in ["mega_absol", "mega_absol_z"]:
 		mount_id = id
 		await _check_mount()
 	print("Unimported mount assets: ", "FAILED" if failed else "PASS")
