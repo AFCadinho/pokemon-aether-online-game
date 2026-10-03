@@ -4,6 +4,8 @@
 
 - Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.
 
+- Add the artist-authored Route 8 exterior and connect its eastern exit to Lavender Town.
+
 - Add Cobalion as a native-size four-direction land mount using the supplied sheet and original player riding pose.
 
 - Set Rayquaza, Shadow Lugia and Mega Alakazam Mount Boxes to 750 Aether Gems; Glaceon remains 500 Gems, with unchanged rewards and shiny pity.
