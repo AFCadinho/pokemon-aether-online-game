@@ -12,6 +12,7 @@
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="6_youngster"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_0510u"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="100_pokemon"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vlm2t"]
 texture = ExtResource("4_v0r3m")
@@ -301,6 +302,75 @@ npc_definition_id = "trainer_class_worker"
 display_name = "Engineer Bernie"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("6_worker")
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Rattata" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(352, 304)
+overworld_pokemon_id = "kanto_route_11_rattata_1"
+species_id = "rattata"
+level = 12
+display_name = "Rattata"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Diglett" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(640, 320)
+overworld_pokemon_id = "kanto_route_11_diglett_1"
+species_id = "diglett"
+level = 12
+display_name = "Diglett"
+
+[node name="Spearow" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(832, 304)
+overworld_pokemon_id = "kanto_route_11_spearow_1"
+species_id = "spearow"
+level = 13
+display_name = "Spearow"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Drowzee" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(1232, 864)
+overworld_pokemon_id = "kanto_route_11_drowzee_1"
+species_id = "drowzee"
+level = 14
+display_name = "Drowzee"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(1904, 336)
+overworld_pokemon_id = "kanto_route_11_pidgey_1"
+species_id = "pidgey"
+level = 12
+display_name = "Pidgey"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
+
+[node name="Ekans" parent="Entities/Pokemon" instance=ExtResource("100_pokemon")]
+position = Vector2(2384, 1088)
+overworld_pokemon_id = "kanto_route_11_ekans_1"
+species_id = "ekans"
+level = 13
+display_name = "Ekans"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 38.0
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=329768349]
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
+
 - Populate Pokémon Tower with eight Hex Maniacs, four visitors, a 5F healing-seal NPC and seven Ghost Pokémon from generations 1–7; localize their conversations and register the healing arrival point.
 
 - Adventure Party-dubbels gebruiken nu het type-icoon van de beschikbare Z-Move, zoals gewone battles; specifieke Z-Moves behouden het generieke Z-symbool.
