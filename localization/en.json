@@ -5913,11 +5913,11 @@
   "npc.transit.explain.change": "At any attuned Aether Beacon, choose which Anchor slot you want to change.",
   "ui.shiny_tracker.tab.pokemon": "Pokémon",
   "ui.shiny_tracker.tab.mounts": "Mounts",
-  "ui.shiny_tracker.mounts.boxes": "Mount boxes",
+  "ui.shiny_tracker.mounts.last_box": "Last opened box",
   "ui.shiny_tracker.mounts.rules": "Starts at {base}%. Each non-shiny from the same box adds {step} percentage points, up to {cap}%. A shiny or opening another mount box resets it. Duplicates are possible; {cap}% is not a guarantee.",
   "ui.shiny_tracker.mounts.no_active": "No mount box opened yet.",
   "ui.shiny_tracker.mounts.active": "Current streak: {box}",
-  "ui.shiny_tracker.mounts.no_boxes": "No mount boxes available.",
+  "ui.shiny_tracker.mounts.no_boxes": "Open a mount box to see it here.",
   "ui.shiny_tracker.mounts.no_history": "No mount boxes opened yet.",
   "ui.shiny_tracker.mounts.stat.opened": "Boxes opened",
   "ui.shiny_tracker.mounts.stat.shinies": "Shiny mounts received",
@@ -6350,5 +6350,7 @@
   "ui.voucher.balance": "Available voucher credit: {balance}\n\nSpend it on eligible cosmetics and mounts in the Aether Gift Store. Purchases and all box contents are untradeable. Only PokeAether staff can add credit.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Contains a Mega Alakazam mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_glaceon": "Contains a Glaceon mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_cobalion": "Contains a Cobalion mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Contains a Cobalion mount. Base shiny chance: 50%.",
+  "ui.town_map.location.route_13.name": "Route 13",
+  "ui.town_map.location.route_13.description": "A maze-like coastal route south of Route 12."
 }

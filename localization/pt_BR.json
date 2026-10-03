@@ -5810,11 +5810,11 @@
   "npc.transit.explain.change": "Em qualquer Beacon de Aether sintonizado, escolha qual espaço de Âncora deseja alterar.",
   "ui.shiny_tracker.tab.pokemon": "Pokémon",
   "ui.shiny_tracker.tab.mounts": "Montarias",
-  "ui.shiny_tracker.mounts.boxes": "Caixas de montaria",
+  "ui.shiny_tracker.mounts.last_box": "Última caixa aberta",
   "ui.shiny_tracker.mounts.rules": "Começa em {base}%. Cada resultado não shiny da mesma caixa adiciona {step} pontos percentuais, até {cap}%. Um shiny ou abrir outra caixa de montaria reinicia a chance. Duplicatas são possíveis; {cap}% não é garantia.",
   "ui.shiny_tracker.mounts.no_active": "Nenhuma caixa aberta ainda.",
   "ui.shiny_tracker.mounts.active": "Sequência atual: {box}",
-  "ui.shiny_tracker.mounts.no_boxes": "Nenhuma caixa disponível.",
+  "ui.shiny_tracker.mounts.no_boxes": "Abra uma caixa de montaria para vê-la aqui.",
   "ui.shiny_tracker.mounts.no_history": "Nenhuma caixa aberta ainda.",
   "ui.shiny_tracker.mounts.stat.opened": "Caixas abertas",
   "ui.shiny_tracker.mounts.stat.shinies": "Montarias shiny recebidas",
@@ -6349,5 +6349,7 @@
   "ui.voucher.balance": "Crédito de voucher disponível: {balance}\n\nUse em cosméticos e montarias elegíveis na Aether Gift Store. As compras e todo o conteúdo das caixas não podem ser trocados. Apenas a equipe PokeAether pode adicionar crédito.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Contém uma montaria Mega Alakazam. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_glaceon": "Contém uma montaria Glaceon. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_cobalion": "Contém uma montaria Cobalion. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Contém uma montaria Cobalion. Chance shiny inicial: 50%.",
+  "ui.town_map.location.route_13.name": "Rota 13",
+  "ui.town_map.location.route_13.description": "Uma rota costeira com cercas labirínticas ao sul da Rota 12."
 }

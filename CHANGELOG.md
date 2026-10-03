@@ -4,6 +4,10 @@
 
 - Add a framed location preview to the Town Map, sharing existing sign artwork and new illustrations for every remaining settlement, route, and special location.
 
+- Populate Route 13 with wild encounters and ten trainers from FireRed/LeafGreen, with HG/SS species additions.
+
+- Add Route 13 from the artist Tiled visual and connect it bidirectionally with Route 12.
+
 - Populate Kanto Route 12 with FR/LG encounters and trainers, HG/SS additions balanced for the route, eight useful pickups and a one-time Super Rod gift.
 
 - Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.

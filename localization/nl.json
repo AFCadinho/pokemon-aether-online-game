@@ -5913,11 +5913,11 @@
   "npc.transit.explain.change": "Kies bij een afgestemde Aether Beacon welke Anchor-plek je wilt wijzigen.",
   "ui.shiny_tracker.tab.pokemon": "Pokémon",
   "ui.shiny_tracker.tab.mounts": "Mounts",
-  "ui.shiny_tracker.mounts.boxes": "Mountboxen",
+  "ui.shiny_tracker.mounts.last_box": "Laatst geopende box",
   "ui.shiny_tracker.mounts.rules": "Begint op {base}%. Elke niet-shiny uit dezelfde box geeft {step} procentpunt erbij, tot {cap}%. Een shiny of het openen van een andere mountbox reset dit. Dubbele mounts zijn mogelijk; {cap}% geeft geen garantie.",
   "ui.shiny_tracker.mounts.no_active": "Nog geen mountbox geopend.",
   "ui.shiny_tracker.mounts.active": "Huidige reeks: {box}",
-  "ui.shiny_tracker.mounts.no_boxes": "Geen mountboxen beschikbaar.",
+  "ui.shiny_tracker.mounts.no_boxes": "Open een mountbox om deze hier te zien.",
   "ui.shiny_tracker.mounts.no_history": "Nog geen mountboxen geopend.",
   "ui.shiny_tracker.mounts.stat.opened": "Boxen geopend",
   "ui.shiny_tracker.mounts.stat.shinies": "Shiny mounts ontvangen",
@@ -6350,5 +6350,7 @@
   "ui.voucher.balance": "Beschikbaar vouchertegoed: {balance}\n\nBesteed het aan geschikte cosmetics en mounts in de Aether Gift Store. Aankopen en alle inhoud van boxen zijn niet verhandelbaar. Alleen PokeAether-staff kan tegoed toevoegen.",
   "ui.shiny_tracker.mounts.store_description_mega_alakazam": "Bevat een Mega Alakazam-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_glaceon": "Bevat een Glaceon-mount. Shiny-basiskans: 50%.",
-  "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_cobalion": "Bevat een Cobalion-mount. Shiny-basiskans: 50%.",
+  "ui.town_map.location.route_13.name": "Route 13",
+  "ui.town_map.location.route_13.description": "Een kustroute met doolhofhekken ten zuiden van Route 12."
 }

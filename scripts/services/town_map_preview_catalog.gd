@@ -46,7 +46,7 @@ const LOCATION_PORTRAIT_PATHS: Dictionary = {
 	"kanto_route_segment_08": "res://assets/sprites/sign_previews/route_8.png",
 	"kanto_route_segment_10": "res://assets/sprites/sign_previews/route_10.png",
 	"kanto_route_segment_12": "res://assets/sprites/sign_previews/route_12.png",
-	"kanto_route_segment_13": "res://assets/sprites/sign_previews/route_13.png",
+	"kanto_route_13": "res://assets/sprites/sign_previews/route_13.png",
 	"kanto_route_segment_14": "res://assets/sprites/sign_previews/route_14.png",
 	"kanto_route_segment_15": "res://assets/sprites/sign_previews/route_15.png",
 	"kanto_route_segment_16": "res://assets/sprites/sign_previews/route_16.png",
