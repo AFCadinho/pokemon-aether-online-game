@@ -787,6 +787,10 @@
     "name": "Cyclizar Mount",
     "shortDesc": "Unlocks Cyclizar as a land mount."
   },
+  "rayquaza-mount": {
+    "name": "Rayquaza Mount",
+    "shortDesc": "Unlocks Rayquaza as a land mount."
+  },
   "mount-license": {
     "name": "Mount License",
     "shortDesc": "Lists the regions where you are licensed to activate land mounts."

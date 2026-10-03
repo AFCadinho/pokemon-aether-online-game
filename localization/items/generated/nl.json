@@ -787,6 +787,10 @@
     "name": "Cyclizar-mount",
     "shortDesc": "Ontgrendelt Cyclizar als landmount."
   },
+  "rayquaza-mount": {
+    "name": "Rayquaza-mount",
+    "shortDesc": "Ontgrendelt Rayquaza als landmount."
+  },
   "mount-license": {
     "name": "Mount License",
     "shortDesc": "Toont de regio's waar je landmounts mag activeren."
