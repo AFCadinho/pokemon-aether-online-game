@@ -1131,7 +1131,9 @@
 			"locationGroupId": "kanto_lavender_town",
 			"locationGroupLabel": "Lavender Town",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://bnt1rptohjtco"
+			],
 			"scenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
 			"spawnPoints": {
 				"from_lavender_town": {
@@ -1221,7 +1223,7 @@
 					"spawnMarker": "Floor1From2",
 					"tile": {
 						"x": 18,
-						"y": 10
+						"y": 11
 					}
 				},
 				"floor_2_from_1": {
@@ -1230,8 +1232,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor2From1",
 					"tile": {
-						"x": 48,
-						"y": 10
+						"x": 49,
+						"y": 11
 					}
 				},
 				"floor_2_from_3": {
@@ -1241,7 +1243,7 @@
 					"spawnMarker": "Floor2From3",
 					"tile": {
 						"x": 33,
-						"y": 13
+						"y": 11
 					}
 				},
 				"floor_3_from_2": {
@@ -1250,8 +1252,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor3From2",
 					"tile": {
-						"x": 60,
-						"y": 12
+						"x": 58,
+						"y": 11
 					}
 				},
 				"floor_3_from_4": {
@@ -1261,7 +1263,7 @@
 					"spawnMarker": "Floor3From4",
 					"tile": {
 						"x": 74,
-						"y": 13
+						"y": 11
 					}
 				},
 				"floor_4_from_3": {
@@ -1270,8 +1272,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor4From3",
 					"tile": {
-						"x": 19,
-						"y": 38
+						"x": 21,
+						"y": 37
 					}
 				},
 				"floor_4_from_5": {
@@ -1281,7 +1283,7 @@
 					"spawnMarker": "Floor4From5",
 					"tile": {
 						"x": 5,
-						"y": 39
+						"y": 37
 					}
 				},
 				"floor_5_from_4": {
@@ -1290,8 +1292,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor5From4",
 					"tile": {
-						"x": 32,
-						"y": 38
+						"x": 30,
+						"y": 37
 					}
 				},
 				"floor_5_from_6": {
@@ -1301,7 +1303,7 @@
 					"spawnMarker": "Floor5From6",
 					"tile": {
 						"x": 46,
-						"y": 39
+						"y": 37
 					}
 				},
 				"floor_6_from_5": {
@@ -1310,8 +1312,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor6From5",
 					"tile": {
-						"x": 75,
-						"y": 38
+						"x": 77,
+						"y": 37
 					}
 				},
 				"floor_6_from_7": {
@@ -1321,7 +1323,7 @@
 					"spawnMarker": "Floor6From7",
 					"tile": {
 						"x": 69,
-						"y": 44
+						"y": 42
 					}
 				},
 				"floor_7_from_6": {
@@ -1330,8 +1332,18 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "Floor7From6",
 					"tile": {
-						"x": 13,
-						"y": 70
+						"x": 10,
+						"y": 68
+					}
+				},
+				"from_healing_seal": {
+					"facingDirection": "down",
+					"label": "Healing Seal",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromHealingSeal",
+					"tile": {
+						"x": 40,
+						"y": 37
 					}
 				},
 				"from_lavender_town": {
@@ -5286,7 +5298,9 @@
 		"kanto_lavender_town__to_house_3": {
 			"destination": {
 				"mapId": "kanto_lavender_town_house_3",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bnt1rptohjtco"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn",
 				"position": {
 					"x": 304.0,
