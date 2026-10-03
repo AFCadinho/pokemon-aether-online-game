@@ -1075,49 +1075,43 @@ func _open_patreon_page() -> void:
 
 func _create_balance_pill() -> Control:
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(120, 38)
-	panel.add_theme_stylebox_override("panel", _panel_style(Color("#180f29e8"), Color("#8f68c5b8"), 10, 1))
+	panel.custom_minimum_size = Vector2(180, 52)
+	panel.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1))
 
 	var margin := MarginContainer.new()
-	margin.add_theme_constant_override("margin_left", 9)
-	margin.add_theme_constant_override("margin_right", 11)
-	margin.add_theme_constant_override("margin_top", 5)
-	margin.add_theme_constant_override("margin_bottom", 5)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_top", 6)
+	margin.add_theme_constant_override("margin_bottom", 6)
 	panel.add_child(margin)
 
-	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 6)
-	margin.add_child(row)
+	var balances := GridContainer.new()
+	balances.columns = 2
+	balances.add_theme_constant_override("h_separation", 8)
+	balances.add_theme_constant_override("v_separation", 4)
+	margin.add_child(balances)
 
-	var icon := TextureRect.new()
-	icon.custom_minimum_size = Vector2(23, 23)
-	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icon.texture = GEM_ICON
-	row.add_child(icon)
+	for texture: Texture2D in [GEM_ICON, preload("res://assets/ui/store_voucher.svg")]:
+		var icon := TextureRect.new()
+		icon.custom_minimum_size = Vector2(18, 18)
+		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		icon.texture = texture
+		balances.add_child(icon)
 
-	balance_label = Label.new()
-	balance_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	balance_label.add_theme_font_size_override("font_size", 13)
-	balance_label.add_theme_color_override("font_color", UI_TEXT)
-	var balances := VBoxContainer.new()
-	balances.add_theme_constant_override("separation", 2)
-	row.add_child(balances)
-	balances.add_child(balance_label)
-	voucher_balance_label = Label.new()
-	voucher_balance_label.name = "VoucherBalance"
-	voucher_balance_label.add_theme_font_size_override("font_size", 12)
-	voucher_balance_label.add_theme_color_override("font_color", UI_GOLD)
-	var voucher_row := HBoxContainer.new()
-	voucher_row.add_theme_constant_override("separation", 4)
-	var voucher_icon := TextureRect.new()
-	voucher_icon.custom_minimum_size = Vector2(16, 16)
-	voucher_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	voucher_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	voucher_icon.texture = preload("res://assets/ui/store_voucher.svg")
-	voucher_row.add_child(voucher_icon)
-	voucher_row.add_child(voucher_balance_label)
-	balances.add_child(voucher_row)
+		var label := Label.new()
+		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		label.add_theme_font_size_override("font_size", 13)
+		balances.add_child(label)
+		if texture == GEM_ICON:
+			balance_label = label
+			label.add_theme_color_override("font_color", UI_TEXT)
+		else:
+			voucher_balance_label = label
+			label.name = "VoucherBalance"
+			label.add_theme_color_override("font_color", UI_GOLD)
 	return panel
 
 

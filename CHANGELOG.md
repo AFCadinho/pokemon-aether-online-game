@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align the Gift Store Gem and voucher balances in matching rows with equal icon sizes and clearer spacing.
+
 - Anchor the Mega Alakazam rider to the player's normal foot position and ground shadow in every direction, preserving the smaller mount and approved pose.
 
 - Add localized Rock Tunnel sign text and preview art on Route 10.
