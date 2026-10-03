@@ -339,8 +339,8 @@ metadata/tiled_visual_layer = true
 [node name="FromRoute13" type="Marker2D" parent="Spawns" unique_id=2138893985]
 position = Vector2(592, 48)
 
-[node name="FromRoute15" type="Marker2D" parent="Spawns/FromRoute13" unique_id=1929055377]
-position = Vector2(-544, 2112)
+[node name="FromRoute15" type="Marker2D" parent="Spawns" unique_id=1929055377]
+position = Vector2(48, 2160)
 
 [node name="Exits" type="Node2D" parent="." unique_id=700315165]
 
@@ -430,7 +430,7 @@ facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("r14_bird_keeper")
 
 [node name="biker_malik" parent="Entities/NPCs" unique_id=1432745289 instance=ExtResource("r14_trainer")]
-position = Vector2(752, 1072)
+position = Vector2(784, 1072)
 trainer_id = "kanto_route_14_biker_malik"
 sight_range_tiles = 2
 npc_id = "kanto_route_14_biker_malik"
