@@ -62,6 +62,7 @@ func _check_mount() -> void:
 			var next := Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], (phase + 1) % 4)
 			_check(Vector2(seat - next).length() <= 6.0, "seat movement stays small across the loop seam")
 
+		var gait_frames: Array[PackedByteArray] = []
 		for col in range(4):
 			var frame := Mounts._get_texture_image(mount.get_frame_texture(anim, col))
 			var fg := Mounts._get_texture_image(foreground.get_frame_texture(anim, col))
@@ -77,15 +78,27 @@ func _check_mount() -> void:
 					var expected := Color.TRANSPARENT
 					if Rect2i(0, 0, 192, 192).has_point(point):
 						expected = source.get_pixelv(point + Vector2i(col * 192, row * 192))
-					if pixel.a != expected.a or (pixel.a > 0 and pixel != expected):
+					if (col == 0 or y < 94) and (pixel.a != expected.a or (pixel.a > 0 and pixel != expected)):
 						art_matches = false
 					var front_pixel := fg.get_pixel(x, y)
 					var hidden := mask.get_pixel(x + col * 192, y + row * 192).a > 0.0
 					if hidden != (front_pixel.a > 0.0) or (front_pixel.a > 0.0 and front_pixel != pixel):
 						layers_match = false
-			_check(art_matches, "approved artwork preserved exactly at native 2x scale")
+			_check(art_matches, "approved upper body and idle pose preserved exactly")
 			_check(layers_match, "mask and foreground follow creature pixels")
 			_check_occlusion(frame, fg, row, col)
+			var legs := frame.get_region(Rect2i(40,108,112,24)).get_data()
+			_check(not gait_frames.has(legs), "each walking phase has a distinct leg pose")
+			gait_frames.append(legs)
+			var changed_leg_pixels := 0
+			for y in range(108,128):
+				for x in range(40,152):
+					var old := source.get_pixel(x+col*192,y+2+row*192)
+					var pixel := frame.get_pixel(x,y)
+					if old.a != pixel.a or (pixel.a > 0 and pixel != old):
+						changed_leg_pixels += 1
+			if col > 0:
+				_check(changed_leg_pixels >= 80, "authored stride changes leg silhouettes, not just body bob")
 	for gender: String in ["male", "female"]:
 		await _check_avatars(gender)
 
@@ -99,7 +112,7 @@ func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> vo
 			var expected := Color.TRANSPARENT
 			if y+2 < 192:
 				expected = approved_foreground.get_pixel(x+col*192,y+2+row*192)
-			if actual.a != expected.a or (actual.a > 0 and actual != expected):
+			if (col == 0 or y < 94) and (actual.a != expected.a or (actual.a > 0 and actual != expected)):
 				same = false
 			if actual.a > 0:
 				protected_pixels += 1
@@ -145,9 +158,39 @@ func _check_avatars(gender: String) -> void:
 		var look_before: Vector2 = avatar.get_node("Look").position
 		avatar.call("_update_mount_hover", 0.7)
 		_check(avatar.get_node("Look").position == look_before, "walking mount does not levitate")
+	if gender == "male":
+		await _check_live_playback(local, remote)
 	local.queue_free()
 	remote.queue_free()
 	await process_frame
+
+
+func _check_live_playback(local: Node2D, remote: Node2D) -> void:
+	# Let AnimatedSprite2D advance in real time. Never set its frame here:
+	# manually selecting frames cannot prove that gameplay animation runs.
+	remote.set_process(false)
+	for row in range(4):
+		var seen_local: Array[int] = []
+		var seen_remote: Array[int] = []
+		local.set("last_direction",FACING[row])
+		remote.set("last_direction",FACING[row])
+		for tick in range(16):
+			local.call("play_walk_animation",FACING[row])
+			remote.call("_update_animation",true)
+			await create_timer(0.065).timeout
+			for avatar: Node2D in [local,remote]:
+				var mount := avatar.get_node("Look/MountSprite") as AnimatedSprite2D
+				var seen := seen_local if avatar == local else seen_remote
+				if not seen.has(mount.frame):
+					seen.append(mount.frame)
+				_check(mount.is_playing(), "walk continues across consecutive movement updates")
+				_check(avatar.get_node("Look/MountForegroundSprite").frame == mount.frame, "live foreground stays on walking frame")
+				_check(avatar.get_node("Look/Rider/BodySprite").frame == mount.frame, "live rider mask stays on walking frame")
+		_check(seen_local.size() == 4 and seen_remote.size() == 4, "all four frames actually play locally and remotely: " + DIRECTIONS[row])
+		for avatar: Node2D in [local,remote]:
+			avatar.call("_sync_mount_animation",false,FACING[row])
+			var mount := avatar.get_node("Look/MountSprite") as AnimatedSprite2D
+			_check(mount.frame == 0 and not mount.is_playing(), "stopping restores original standing pose")
 
 
 func _check(ok: bool, message: String) -> void:
