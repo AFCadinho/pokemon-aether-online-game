@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lavender Town now has four Pokémon on its mountain approaches and two more in town, including Generation II and VI species.
+
 - Gary lets players enter Pokémon Tower 2F and retreat freely, stopping them only when they pass him toward 3F.
 
 - Gary automatically stops the player on Pokémon Tower 2F for his active story battle.
