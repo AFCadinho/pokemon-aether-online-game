@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep Shadow Lugia’s head in front of the rider by including directional appearance-layer offsets in mount masking for local and remote players.
+
 - Route 6's route and Underground Path signs now show localized text and illustrated previews.
 
 - Correct the viewer-left eye in downward-facing frames 1 and 3 of the normal and shiny Rayquaza mounts.
