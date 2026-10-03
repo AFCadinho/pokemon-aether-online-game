@@ -22,8 +22,8 @@ Administrators can grant it through the existing item reward flow:
 After receiving it, players can select Shiny Rayquaza in the land mount manager.
 The usual regional Mount License remains required. The Bag icon uses the shiny
 mount sprite. Item names and descriptions cover en, nl, pt_BR and zh_CN.
-It can now be obtained by opening a Rayquaza Mount Box, sold for 500 Aether Gems
-(€5.00 incl. VAT) in the Aether Gift Store. The Shiny Tracker Mounts tab shows
+It can now be obtained by opening a Rayquaza Mount Box, sold for 750 Aether Gems
+in the Aether Gift Store. The Shiny Tracker Mounts tab shows
 the current 50–80% shiny chance, owned boxes and recent outcomes. A shiny or
 opening another mount box resets the chance. Duplicates are possible.
 The entitlement itself has no direct shop or quest listing.

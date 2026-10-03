@@ -113,17 +113,17 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate()
 	root.add_child(store)
 	await process_frame
-	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "glaceon-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
+	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "glaceon-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
 	store.call("_select_category", "mounts")
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
-	_check(store.selection_price_label.text == "500 Aether Gems", "Box price shows currency only")
+	_check(store.selection_price_label.text == "750 Aether Gems", "Box price shows currency only")
 	_check(store.selection_description_label.text == "Contains a Rayquaza mount. Base shiny chance: 50%.", "Store concisely names the reward and initial shiny chance")
 	_check(store.call("_catalog_item", "nimbus_mount").is_empty() and store.call("_catalog_item", "aether_board_mount").is_empty(), "Removed Nimbus and Aether Board previews are absent from the Store")
 	store.call("_select_product", "shadow-lugia-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative Shadow Lugia box purchase")
 	_check(store.selection_title_label.text.contains("Shadow Lugia") and store.selection_description_label.text.contains("Shadow Lugia") and not store.selection_description_label.text.contains("Rayquaza"), "Shadow Lugia box shows the correct localized reward description")
-	_check(store.selection_price_label.text == "500 Aether Gems", "Shadow Lugia box displays currency only")
+	_check(store.selection_price_label.text == "750 Aether Gems", "Shadow Lugia box displays currency only")
 	await _check_mount_preview(store, "shadow_lugia")
 	store.call("_select_product", "rayquaza-mount-box")
 	await _check_mount_preview(store, "rayquaza")
@@ -136,7 +136,7 @@ func _run() -> void:
 	store.call("_select_product", "shadow-lugia-mount-box")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
-		_check(store.selection_price_label.text == "500 Aether Gems", "Dutch Store shows currency only")
+		_check(store.selection_price_label.text == "750 Aether Gems", "Dutch Store shows currency only")
 		_check(store.selection_description_label.text == "Bevat een Shadow Lugia-mount. Shiny-basiskans: 50%.", "Dutch Store concisely names the reward and initial shiny chance")
 	if "--preview-mounts" in OS.get_cmdline_user_args():
 		store.visible = true
@@ -175,6 +175,7 @@ func _check(condition: bool, label: String) -> void:
 
 
 func _check_mount_preview(store: Node, normal_mount_id: String) -> void:
+	var expected_price := "500 Aether Gems" if normal_mount_id == "glaceon" else "750 Aether Gems"
 	var appearance := load("res://scripts/services/character_appearance_service.gd").get_default_appearance("female") as Dictionary
 	appearance["gender"] = "female"
 	appearance["hair_color"] = "#dd66aa"
@@ -186,7 +187,7 @@ func _check_mount_preview(store: Node, normal_mount_id: String) -> void:
 	_check(store.mount_preview_controls.visible and store.character_preview_direction_row.visible and not store.character_preview_palette.visible, "Mount controls replace cosmetic color controls")
 	store.mount_preview_shiny_toggle.button_pressed = true
 	_check(preview.current_mount_id == normal_mount_id + "_shiny", "Shiny toggle displays the correct alternate reward")
-	_check(store.selected_item_id.ends_with("-mount-box") and store.selection_price_label.text == "500 Aether Gems", "Shiny preview keeps the box and purchase price unchanged")
+	_check(store.selected_item_id.ends_with("-mount-box") and store.selection_price_label.text == expected_price, "Shiny preview keeps the box and purchase price unchanged")
 	for direction: String in ["down", "left", "right", "up"]:
 		store.character_preview_direction_buttons[direction].pressed.emit()
 		_check(preview.mount_sprite.animation == StringName("walk_" + direction), "Direction buttons turn the mounted rider: " + direction)
