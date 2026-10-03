@@ -15,11 +15,11 @@
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(96, 32)
 
+[sub_resource type="RectangleShape2D" id="shape_route12_water"]
+size = Vector2(160, 32)
+
 [sub_resource type="RectangleShape2D" id="shape_south"]
 size = Vector2(96, 32)
-
-[sub_resource type="RectangleShape2D" id="shape_route12_water"]
-size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dnoyk"]
 texture = ExtResource("9_cvuyd")
@@ -198,8 +198,8 @@ music_profile_id = "kanto.routes_11_15"
 [node name="FromRoute12" type="Marker2D" parent="Spawns" unique_id=156929468]
 position = Vector2(2736, 48)
 
-[node name="FromRoute12Water" type="Marker2D" parent="Spawns"]
-position = Vector2(2896, 1040)
+[node name="FromRoute12Water" type="Marker2D" parent="Spawns" unique_id=889835804]
+position = Vector2(2864, 48)
 
 [node name="FromRoute14" type="Marker2D" parent="Spawns" unique_id=1414240]
 position = Vector2(336, 1168)
@@ -222,21 +222,21 @@ shape = SubResource("shape_north")
 z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 
-[node name="ToRoute12Water" type="Area2D" parent="Exits"]
-position = Vector2(2896, 976)
+[node name="ToRoute12Water" type="Area2D" parent="Exits" unique_id=1207691496]
+position = Vector2(2864, 16)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
 target_spawn_name = "FromRoute13Water"
 transition_id = "kanto_route_13__to_route12_water"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12Water"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12Water" unique_id=24928447]
+position = Vector2(0, -16)
 shape = SubResource("shape_route12_water")
 
-[node name="RouteTransitionHint" parent="Exits/ToRoute12Water" instance=ExtResource("4_hint")]
+[node name="RouteTransitionHint" parent="Exits/ToRoute12Water" unique_id=1468227504 instance=ExtResource("4_hint")]
 z_as_relative = false
-tile_footprint = Vector2i(1, 1)
-flow_direction = "right"
+tile_footprint = Vector2i(5, 1)
 
 [node name="ToRoute14" type="Area2D" parent="Exits" unique_id=1339752277]
 position = Vector2(336, 1200)
