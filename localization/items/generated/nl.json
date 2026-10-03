@@ -787,6 +787,10 @@
     "name": "Cyclizar-mount",
     "shortDesc": "Ontgrendelt Cyclizar als landmount."
   },
+  "rayquaza-mount-box": {
+    "name": "Rayquaza-mountbox",
+    "shortDesc": "Bevat Rayquaza of Shiny Rayquaza. De shiny-kans begint op 50% en stijgt tot 80%. Dubbele mounts zijn mogelijk."
+  },
   "rayquaza-mount": {
     "name": "Rayquaza-mount",
     "shortDesc": "Ontgrendelt Rayquaza als landmount."

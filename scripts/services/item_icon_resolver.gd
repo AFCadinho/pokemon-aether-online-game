@@ -36,7 +36,8 @@ static func load_icon(
 	if cosmetic_icon != null:
 		return cosmetic_icon
 
-	var mount_id := MountServiceScript.get_mount_id_for_unlock_item(canonical_id)
+	var mount_item_id := canonical_id.trim_suffix("-box") if canonical_id.ends_with("-mount-box") else canonical_id
+	var mount_id := MountServiceScript.get_mount_id_for_unlock_item(mount_item_id)
 	if not mount_id.is_empty():
 		var mount_icon := MountServiceScript.get_mount_icon_texture(mount_id)
 		if mount_icon != null:

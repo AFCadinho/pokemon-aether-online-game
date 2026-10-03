@@ -4,6 +4,8 @@ extends PanelContainer
 signal closed
 signal purchase_requested(item_id: String, chroma_colors: Dictionary)
 
+const Mounts := preload("res://scripts/services/mount_service.gd")
+
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const STYLE_ICON: Texture2D = preload("res://assets/ui/store_style.svg")
 const PROFILE_ICON: Texture2D = preload("res://assets/ui/store_profile.svg")
@@ -502,6 +504,15 @@ const CATALOG: Array[Dictionary] = [
 		"preview_part": {"slot": "shoes", "appearance_id": "Adinho_Shoes_Chroma", "tint": "shoes_color"},
 		"genders": ["male"],
 		"badge": "CHROMA",
+	},
+	{
+		"id": "rayquaza-mount-box",
+		"name": "Rayquaza Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["featured", "mounts"],
+		"badge": "MOUNT BOX",
 	},
 	{
 		"id": "nimbus_mount",
@@ -1738,7 +1749,7 @@ func _create_product_card(item: Dictionary) -> Button:
 		item_id,
 		_preview_gender_for_item(item)
 	)
-	icon.texture = cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
+	icon.texture = Mounts.get_mount_icon_texture("rayquaza") if item_id == "rayquaza-mount-box" else cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	center.add_child(icon)
 
@@ -1798,6 +1809,8 @@ func _select_product(item_id: String) -> void:
 		if bool(item.get("informational", false))
 		else _t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
+		else _mount_box_price_text(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
+		if item_id == "rayquaza-mount-box"
 		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
 	_refresh_purchase_state()
@@ -1925,7 +1938,7 @@ func _refresh_character_preview() -> void:
 	if preview_parts.is_empty():
 		var item_sprite := Sprite2D.new()
 		item_sprite.name = "StoreItemDetailPreview"
-		item_sprite.texture = item.get("icon") as Texture2D
+		item_sprite.texture = Mounts.get_mount_icon_texture("rayquaza") if str(item.get("id", "")) == "rayquaza-mount-box" else item.get("icon") as Texture2D
 		item_sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
 		var item_scale := 1.0
 		if item_sprite.texture != null:
@@ -2810,3 +2823,12 @@ func _on_locale_changed(_locale: String) -> void:
 		_select_product(previous_selection)
 	else:
 		_reset_selection_footer()
+
+
+func _mount_box_price_text(gems: int) -> String:
+	var localization_manager := get_node_or_null("/root/LocalizationManager")
+	var locale := str(localization_manager.get("current_locale")) if localization_manager != null else "en"
+	var euros := "%.2f" % (float(gems) / 100.0)
+	if locale in ["nl", "pt_BR"]:
+		euros = euros.replace(".", ",")
+	return _t("ui.shiny_tracker.mounts.store_price", {"gems": _format_number(gems), "euros": euros})

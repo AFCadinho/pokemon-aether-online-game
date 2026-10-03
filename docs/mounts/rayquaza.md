@@ -21,7 +21,9 @@ or system-mail workflow. Its reward payload is:
 ```
 
 The entitlement is permanent, nonconsumable, nonholdable and untradeable. It has
-no shop listing, price or quest reward. Once owned, Rayquaza appears in the land
+no direct shop listing, price or quest reward. Players can also obtain it from
+the Rayquaza Mount Box (500 Gems / €5.00 in the Aether Gift Store); see the
+Shiny Tracker Mounts tab for odds and opening history. Once owned, Rayquaza appears in the land
 mount selector. Riding still requires the usual regional Mount License, just
 like Cyclizar. Other players receive the selected mount through existing world
 presence messages.

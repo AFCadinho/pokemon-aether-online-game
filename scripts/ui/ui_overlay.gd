@@ -23170,13 +23170,19 @@ func _setup_shiny_tracker_popup() -> void:
 	root_control.add_child(shiny_tracker_popup)
 	shiny_tracker_popup.closed.connect(_hide_shiny_tracker)
 	shiny_tracker_popup.share_requested.connect(_on_shiny_tracker_share_requested)
+	InventoryService.mount_box_opened.connect(_on_mount_box_inventory_updated)
 
-func _show_shiny_tracker() -> void:
+func _on_mount_box_inventory_updated(_result: Dictionary) -> void:
+	bag_inventory_items = _normalize_bag_inventory_items(InventoryService.cached_inventory_items)
+	bag_inventory_loaded = true
+	_refresh_bag_items()
+
+func _show_shiny_tracker(tab: String = "pokemon") -> void:
 	if shiny_tracker_popup == null:
 		return
 	shiny_tracker_popup.visible = true
 	_activate_ui_panel(shiny_tracker_popup)
-	shiny_tracker_popup.open_tracker()
+	shiny_tracker_popup.open_tracker(tab)
 
 func _hide_shiny_tracker() -> void:
 	if shiny_tracker_popup == null:
@@ -24592,7 +24598,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24614,6 +24620,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		return LocalizationManager.text("ui.bag.action.use_charm")
 	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "open_mount_box":
+		return LocalizationManager.text("ui.bag.action.open_box")
 	if use_action == "trainer_name_change":
 		return LocalizationManager.text("ui.bag.action.change_name")
 	if use_action == "trainer_gender_change":
@@ -24807,6 +24815,9 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	if use_action == "unlock_appearance" and not _bag_item_matches_player_gender(item):
 		_add_chat_message(_bag_item_detail_description(item))
+		return
+	if use_action == "open_mount_box":
+		_show_shiny_tracker("mounts")
 		return
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
