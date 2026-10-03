@@ -11,10 +11,10 @@
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="9_bsg43"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2u64l"]
-size = Vector2(96, 32)
+size = Vector2(192, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kdkbm"]
-size = Vector2(32, 96)
+size = Vector2(32, 128)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_43p21"]
 texture = ExtResource("6_sxoos")
@@ -347,7 +347,7 @@ transition_id = "kanto_route_14__to_route13"
 transition_facing_direction = "up"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Exits/ToRoute13" unique_id=55350932]
-position = Vector2(0, -16)
+position = Vector2(16, -16)
 shape = SubResource("RectangleShape2D_2u64l")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute13" unique_id=310508938 instance=ExtResource("5_lrmwl")]
@@ -363,7 +363,7 @@ transition_id = "kanto_route_14__to_route15"
 transition_facing_direction = "left"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="Exits/ToRoute15" unique_id=68840437]
-position = Vector2(-16, 0)
+position = Vector2(-16, 16)
 shape = SubResource("RectangleShape2D_kdkbm")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute15" unique_id=43604472 instance=ExtResource("5_lrmwl")]
