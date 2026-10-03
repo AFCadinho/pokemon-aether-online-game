@@ -22,6 +22,10 @@ func _run() -> void:
 	camera.zoom = Vector2(1.5, 1.5)
 	player.add_child(camera)
 	tower.get_node("Entities/Players").add_child(player)
+	# This check exercises floor geometry; metadata/population is checked offline separately.
+	for holder in ["Entities/NPCs", "Entities/Pokemon"]:
+		for entity in tower.get_node(holder).get_children():
+			entity.free()
 	root.add_child(tower)
 	await process_frame
 	_check(tower.get("map_id") == "kanto_lavender_town_pokemon_tower"

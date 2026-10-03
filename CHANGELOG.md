@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Pokémon Tower with eight Hex Maniacs, four visitors, a 5F healing-seal NPC and seven Ghost Pokémon from generations 1–7; localize their conversations and register the healing arrival point.
+
 - De on-demand 3D-contentroute kan de volledige goedgekeurde catalogus met 1.139 bundels gebruiken, inclusief geregistreerde alternatieve en Mega-vormen; modellen blijven per benodigde Pokémon downloadbaar.
 
 - Classic-battles gebruiken vanaf het eerste frame de uiteindelijke speelveldgrootte; de onzichtbare bediening behoudt tijdens het laden haar ruimte, zodat arena en elementen niet meer verkleinen wanneer Pokémon verschijnen.
