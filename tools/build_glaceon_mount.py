@@ -23,10 +23,9 @@ def side_head(x: int, y: int, row: int, col: int) -> bool:
     return 11 <= v <= 25 and u <= limit and not far_ear
 
 
-def build() -> None:
-    source = Image.open(ROOT / "assets/followers/GLACEON.png").convert("RGBA")
+def build_variant(source: Image.Image, assets: Path) -> None:
     assert source.size == (256, 256)
-    ASSETS.mkdir(parents=True, exist_ok=True)
+    assets.mkdir(parents=True, exist_ok=True)
     sheets = {name: Image.new("RGBA", (FRAME * 4, FRAME * 4))
               for name in ("mount", "foreground", "rider_mask")}
     for row in range(4):
@@ -46,10 +45,19 @@ def build() -> None:
     # A compact icon avoids shrinking the creature to fit its padded riding canvas.
     sheets["icon"] = source.crop((0, 0, 64, 64))
     for name, sheet in sheets.items():
-        path = ASSETS / f"{name}.png"
+        path = assets / f"{name}.png"
         sheet.save(path)
         write_texture_import(ROOT, path.relative_to(ROOT))
-    print("Built Glaceon: unchanged 1x follower pixels, v10 head contour and compact icon.")
+    print(f"Built {assets.name}: unchanged 1x follower pixels, v10 head contour and compact icon.")
+
+
+def build() -> None:
+    normal = Image.open(ROOT / "assets/followers/GLACEON.png").convert("RGBA")
+    shiny = Image.open(ROOT / "assets/followers_shiny/GLACEON.png").convert("RGBA")
+    assert normal.size == shiny.size == (256, 256)
+    assert normal.getchannel("A").tobytes() == shiny.getchannel("A").tobytes()
+    build_variant(normal, ASSETS)
+    build_variant(shiny, ASSETS.with_name("glaceon_shiny"))
 
 
 if __name__ == "__main__":

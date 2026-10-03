@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Glaceon using the existing shiny follower palette, preserving the fitted riding pose, native scale and side-ear layering.
+
 - Lower the Glaceon rider slightly to sit against its back, preserving native sprite scale, side-ear layering and synchronized walking motion.
 
 - Add the native-size Glaceon land mount with the approved riding pose, corrected side-ear layering and a compact Bag icon.

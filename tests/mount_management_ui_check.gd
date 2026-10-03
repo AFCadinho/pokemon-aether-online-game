@@ -28,7 +28,7 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
-	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "mega_garchomp", "glaceon"]:
+	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "mega_garchomp", "glaceon", "glaceon_shiny"]:
 		_check(land_mounts.has(mount_id), "land catalog exposes " + mount_id)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
@@ -263,6 +263,11 @@ func _run() -> void:
 	_check(selector_options.get_child_count() == 1 and (selector_options.get_child(0) as Button).text.contains("Glaceon"), "Glaceon ownership unlocks only its selector entry")
 	panel.call("_select_mount", "land", "glaceon")
 	_check(str(settings_manager.call("get_selected_mount_id", "land")) == "glaceon", "Glaceon can be selected and persisted as the land mount")
+	panel.call("_on_inventory_changed", [{"itemId": "shiny-glaceon-mount", "quantity": 1}])
+	panel.call("_open_selector", "land")
+	_check(selector_options.get_child_count() == 1 and (selector_options.get_child(0) as Button).text.contains("Shiny Glaceon"), "Shiny Glaceon ownership unlocks only its selector entry")
+	panel.call("_select_mount", "land", "glaceon_shiny")
+	_check(str(settings_manager.call("get_selected_mount_id", "land")) == "glaceon_shiny", "Shiny Glaceon can be selected and persisted as the land mount")
 	var fake_player := FakeMountPlayer.new()
 	fake_player.add_to_group("player")
 	root.add_child(fake_player)
