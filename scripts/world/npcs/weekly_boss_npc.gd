@@ -98,7 +98,7 @@ func _open_difficulty_selector(player: Node2D) -> void:
 		dialog_status = weekly_status
 	var unlock_message := ""
 	if boss_definition.boss_id == "zapdos":
-		unlock_message = LocalizationManager.text("weekly_boss.zapdos_unlocked" if bool(dialog_status.get("hardDefeated", false)) else "weekly_boss.hard_unlock")
+		unlock_message = LocalizationManager.text("weekly_boss.hard_unlock")
 	dialog.configure_boss(display_name, dialog_status, unlock_message)
 	dialog.difficulty_selected.connect(func(difficulty: String):
 		selected["difficulty"] = difficulty
