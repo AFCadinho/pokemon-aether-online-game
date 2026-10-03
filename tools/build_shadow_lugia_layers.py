@@ -8,10 +8,13 @@ ROOT = Path(__file__).resolve().parents[1]
 HEAD_ROWS = {29: (31, 33), 30: (30, 34), 31: (30, 34),
              32: (29, 35), 33: (29, 35)}
 # Logical 64px coordinates. Follow the near wing and shoulder, leaving the
-# neck, far wing/body and tail behind the rider. Right-facing art is mirrored.
+# neck, far wing/body and tail behind the rider. In the raised pose the
+# diagonal inner edge separates the near wing from the taller rear wing.
+# Right-facing art is mirrored.
 WING_POLYGONS = (
-    [(31, 20), (48, 20), (48, 40), (38, 41), (34, 43), (29, 44),
-     (27, 41), (28, 37), (29, 36), (30, 33), (31, 32)],
+    [(39, 27), (48, 27), (48, 40), (38, 41), (34, 43), (29, 44),
+     (27, 41), (28, 40), (29, 39), (30, 38), (31, 37), (32, 36),
+     (33, 35), (34, 34), (35, 33), (35, 31), (36, 30), (37, 29), (38, 28)],
     [(31, 41), (36, 44), (33, 51), (34, 54), (37, 61), (34, 63),
      (24, 63), (24, 55), (26, 50), (28, 47), (28, 44)],
 )

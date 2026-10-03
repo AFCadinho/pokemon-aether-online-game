@@ -4,6 +4,8 @@
 
 - Add localized text and illustrated previews for the Lavender Town and Pokémon Tower signs.
 
+- Keep Shadow Lugia riders between the two raised side wings by excluding the far wing from the foreground and rider mask, for normal and shiny variants.
+
 - Fix normal and shiny Shadow Lugia head seams and render the near wing in front of the rider in side views, including idle.
 
 - Give Rock Tunnel B1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.

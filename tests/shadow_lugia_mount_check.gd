@@ -55,13 +55,19 @@ func _check_animation_and_overlap() -> void:
 					_check(front.get_pixel(62, seam_y) == body.get_pixel(62, seam_y) and front.get_pixel(62, seam_y).a > 0.0, "head foreground is continuous across the former mask/foreground seam")
 				_check(front.get_pixel(62, 78) == body.get_pixel(62, 78) and front.get_pixel(62, 78).a > 0.0, "lower face remains in front of the rider")
 			elif direction in ["left", "right"]:
-				var wing := Vector2i(68, 64) if index % 2 == 0 else Vector2i(60, 112)
+				var wing := Vector2i(80, 64) if index % 2 == 0 else Vector2i(60, 112)
 				var neck := Vector2i(40, 64)
+				var far_wing := Vector2i(66, 52)
 				if direction == "right":
 					wing.x = 127 - wing.x
 					neck.x = 127 - neck.x
+					far_wing.x = 127 - far_wing.x
 				_check(front.get_pixelv(wing) == body.get_pixelv(wing) and front.get_pixelv(wing).a > 0.0, "near wing is in front in both flight poses")
 				_check(front.get_pixelv(neck).a == 0.0, "neck remains behind the rider")
+				if index % 2 == 0:
+					_check(body.get_pixelv(far_wing).a > 0.0 and front.get_pixelv(far_wing).a == 0.0, "raised far wing stays behind the rider")
+					var mask_point := far_wing + Vector2i(index * 128, DIRECTIONS.find(direction) * 128)
+					_check(Mounts._get_mask_image(mount_id).get_pixelv(mask_point).a == 0.0, "far wing does not erase the rider")
 			else:
 				_check(front.get_used_rect().size == Vector2i.ZERO, "rear view retains its rider layering")
 		var idle_front := Mounts._get_texture_image(foreground.get_frame_texture(StringName("idle_" + direction), 0))
