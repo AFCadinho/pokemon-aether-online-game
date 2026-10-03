@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the approved pearl-white Shiny Shadow Lugia as a separate hovering mount with its own item and Bag icon, preserving the corrected head/tail overlap.
+
 - Keep Shadow Lugia’s head in front of the rider by including directional appearance-layer offsets in mount masking for local and remote players.
 
 - Route 6's route and Underground Path signs now show localized text and illustrated previews.

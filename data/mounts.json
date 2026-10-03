@@ -84,6 +84,27 @@
         "up": [[0, 4], [0, 4], [0, 4], [0, 4]]
       }
     },
+    "shadow_lugia_shiny": {
+      "displayName": "Shiny Shadow Lugia",
+      "movementMode": "land",
+      "unlockItemId": "shiny-shadow-lugia-mount",
+      "spriteSheet": "res://assets/mounts/shadow_lugia_shiny/mount.png",
+      "riderMaskSheet": "res://assets/mounts/shadow_lugia_shiny/rider_mask.png",
+      "frameSize": [128, 128],
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 16,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.4,
+      "foregroundRegions": {
+        "down": [0, 68, 128, 60]
+      },
+      "riderOffsets": {
+        "down": [[0, -12], [0, -12], [0, -12], [0, -12]],
+        "left": [[8, -4], [8, -4], [8, -4], [8, -4]],
+        "right": [[-8, -4], [-8, -4], [-8, -4], [-8, -4]],
+        "up": [[0, 4], [0, 4], [0, 4], [0, 4]]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",
