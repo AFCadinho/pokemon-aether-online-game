@@ -6276,5 +6276,9 @@
   "story.kanto.investigate_pokemon_tower.battle_gary": "在宝可梦塔击败小茂。",
   "ui.staff.story_checkpoint.fuji_helper": "紫苑镇 · 与Reina交谈",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "宝可梦塔 · 进入塔内",
-  "ui.staff.story_checkpoint.pokemon_tower_gary": "宝可梦塔 · 与小茂对战"
+  "ui.staff.story_checkpoint.pokemon_tower_gary": "宝可梦塔 · 与小茂对战",
+  "story.kanto.find_a_way_to_saffron.title": "通往金黄市的路",
+  "story.kanto.find_a_way_to_saffron.summary": "设法进入金黄市，寻找能让守在宝可梦塔楼梯前的亡灵显形的装置。",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "寻找进入金黄市的办法。",
+  "ui.staff.story_checkpoint.find_saffron_route": "金黄市 · 寻找入城的路"
 }

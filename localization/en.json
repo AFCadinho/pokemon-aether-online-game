@@ -6280,5 +6280,9 @@
   "story.kanto.investigate_pokemon_tower.battle_gary": "Defeat Gary in Pokémon Tower.",
   "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Speak with Reina",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Enter the tower",
-  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle Gary"
+  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle Gary",
+  "story.kanto.find_a_way_to_saffron.title": "A Way to Saffron",
+  "story.kanto.find_a_way_to_saffron.summary": "Find a way into Saffron City to look for a device that can reveal the spirit guarding Pokémon Tower.",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Find a way into Saffron City.",
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Find a way into the city"
 }
