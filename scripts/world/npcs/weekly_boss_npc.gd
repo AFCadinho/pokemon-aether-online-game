@@ -4,6 +4,7 @@ extends "res://scripts/world/npcs/overworld_pokemon.gd"
 class_name WeeklyBossNPC
 
 const BossDefinition := preload("res://scripts/world/npcs/weekly_boss_definition.gd")
+const BOSS_DIALOG := preload("res://scenes/interface/weekly_boss_dialog.tscn")
 const DIFFICULTIES: Array[String] = ["easy", "intermediate", "hard"]
 
 ## A world controller loads the server status and opens its difficulty selector here.
@@ -86,31 +87,25 @@ func _open_difficulty_selector(player: Node2D) -> void:
 	var api := _root_service("BattleApiClient")
 	var response: Dictionary = await api.get_weekly_boss_status(request, boss_definition.boss_id)
 	request.queue_free()
-	var dialog := ConfirmationDialog.new()
-	add_child(dialog)
-	dialog.title = display_name
-	dialog.get_ok_button().hide()
-	dialog.get_cancel_button().text = LocalizationManager.text("weekly_boss.close")
+	var dialog := BOSS_DIALOG.instantiate()
+	var ui_layer := CanvasLayer.new()
+	ui_layer.layer = 120
+	add_child(ui_layer)
+	ui_layer.add_child(dialog)
 	var selected := {"difficulty": ""}
+	var dialog_status: Dictionary = {}
 	if bool(response.get("success", false)) and apply_weekly_status(response.get("boss", {})):
-		if str(weekly_status.get("state", "")) == "available":
-			dialog.dialog_text = LocalizationManager.text("weekly_boss.choose")
-			for difficulty: String in DIFFICULTIES:
-				var profile: Dictionary = weekly_status.get("difficulties", {}).get(difficulty, {})
-				dialog.add_button(LocalizationManager.text("weekly_boss." + difficulty) + " (Lv. %d)" % int(profile.get("level", 0)), false, difficulty)
-		elif str(weekly_status.get("state", "")) == "completed":
-			dialog.dialog_text = LocalizationManager.text("weekly_boss.completed", {"reset": str(weekly_status.get("nextResetAt", ""))})
-		else:
-			dialog.dialog_text = LocalizationManager.text("weekly_boss.in_battle")
-	else:
-		dialog.dialog_text = LocalizationManager.text("weekly_boss.unavailable")
-	dialog.custom_action.connect(func(action: StringName):
-		selected["difficulty"] = str(action)
-		dialog.hide()
+		dialog_status = weekly_status
+	var unlock_message := ""
+	if boss_definition.boss_id == "zapdos":
+		unlock_message = LocalizationManager.text("weekly_boss.zapdos_unlocked" if bool(dialog_status.get("hardDefeated", false)) else "weekly_boss.hard_unlock")
+	dialog.configure_boss(display_name, dialog_status, unlock_message)
+	dialog.difficulty_selected.connect(func(difficulty: String):
+		selected["difficulty"] = difficulty
 	)
-	dialog.popup_centered(Vector2i(650, 250))
+	dialog.popup_centered()
 	await dialog.visibility_changed
-	dialog.queue_free()
+	ui_layer.queue_free()
 	GameState.unlock_overworld_input()
 	selector_open = false
 	is_interacting = false
