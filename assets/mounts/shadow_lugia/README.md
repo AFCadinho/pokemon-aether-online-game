@@ -4,6 +4,9 @@
 from their existing mount atlases without changing the source pixels or palette.
 The complete front-facing head, including its narrow tip, is drawn above the
 rider as one continuous silhouette. The nearby tail remains behind the rider.
+The diagonal inner edge of the raised near wing separates it from the taller
+far wing, so the rider appears between the two wings. The far wing is excluded
+from both the foreground and rider mask.
 Side views extract the near wing and shoulder independently for the raised and
 lowered poses; the raised pose is also the idle frame. The right-facing selection
 mirrors the left-facing selection, matching the source art exactly.
