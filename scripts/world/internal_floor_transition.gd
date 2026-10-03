@@ -4,6 +4,7 @@ class_name InternalFloorTransition
 const TRANSITION_LOCK_META := &"pao_internal_floor_transition_locked"
 
 @export var destination_marker_path: NodePath
+@export var passage_gate_path: NodePath
 @export var floor_mask_path: NodePath = ^"../../FloorVisibilityMask"
 @export var target_floor: StringName
 @export var player_node_name: StringName = &"Player"
@@ -15,6 +16,14 @@ var is_transitioning := false
 func _on_body_entered(body: Node2D) -> void:
 	if is_transitioning or body.name != player_node_name:
 		return
+
+	if not passage_gate_path.is_empty():
+		var gate := get_node_or_null(passage_gate_path)
+		if gate == null or not gate.has_method("is_passage_open"):
+			push_error("InternalFloorTransition: configured passage gate is missing on %s." % get_path())
+			return
+		if not bool(gate.call("is_passage_open")):
+			return
 
 	var destination := get_node_or_null(destination_marker_path) as Marker2D
 	if destination == null:

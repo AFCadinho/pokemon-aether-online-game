@@ -6279,5 +6279,9 @@
   "story.kanto.investigate_pokemon_tower.battle_gary": "Derrote Gary na Pokémon Tower.",
   "ui.staff.story_checkpoint.fuji_helper": "Lavender Town · Fale com Reina",
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Entre na torre",
-  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Enfrente Gary"
+  "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Enfrente Gary",
+  "story.kanto.find_a_way_to_saffron.title": "Um caminho para Saffron",
+  "story.kanto.find_a_way_to_saffron.summary": "Encontre um caminho até Saffron City para procurar um aparelho que revele o espírito que guarda a Pokémon Tower.",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Encontre um caminho para entrar em Saffron City.",
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Encontre um caminho para a cidade"
 }

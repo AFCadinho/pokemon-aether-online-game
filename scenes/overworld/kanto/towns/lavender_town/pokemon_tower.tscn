@@ -20,6 +20,8 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="population_trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_pokemon_tower/lavender_pokemon_tower.visual.tscn" id="visual"]
 
+[ext_resource type="Script" path="res://scripts/world/interactables/pokemon_tower_spirit_gate.gd" id="spirit_gate"]
+
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(32, 32)
 
@@ -171,7 +173,7 @@ battle_environment_id = "cave"
 cave_encounter_chance = 0.07
 lighting_profile = "indoor"
 weather_profile = "disabled"
-music_profile_id = "kanto.lavender_town"
+music_track_id = "overworld.kanto.interior.pokemon_tower_remastered_zame"
 
 [node name="Visual" parent="." unique_id=2141238513 instance=ExtResource("visual")]
 
@@ -476,6 +478,13 @@ display_name = "Mimikyu"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1599473425]
 
+[node name="RestlessSpirit" type="Node2D" parent="Entities/Interactables"]
+position = Vector2(2224, 1360)
+script = ExtResource("spirit_gate")
+interactable_id = "kanto_pokemon_tower_restless_spirit"
+interactable_kind = "restless_spirit"
+display_name = "???"
+
 [node name="Spawns" type="Node2D" parent="." unique_id=1063249035]
 
 [node name="FromLavenderTown" type="Marker2D" parent="Spawns" unique_id=968820600]
@@ -667,6 +676,7 @@ position = Vector2(2192, 1360)
 script = ExtResource("floor_transition")
 destination_marker_path = NodePath("../../Spawns/Floor7From6")
 target_floor = &"floor_7"
+passage_gate_path = NodePath("../../Entities/Interactables/RestlessSpirit")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FloorTransitions/Floor6To7" unique_id=442596168]
 position = Vector2(-16, 0)

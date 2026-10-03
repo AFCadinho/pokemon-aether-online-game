@@ -4,6 +4,10 @@
 
 - Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
 
+- Pokémon Tower plays its own FireRed/LeafGreen remastered soundtrack by Zame, converted to Ogg Vorbis.
+
+- Gate Pokémon Tower 7F behind an invisible spirit and the Silph Scope; Gary now explains that ordinary Ghost-type Pokémon remain visible and points the next main objective toward Saffron.
+
 - Enable floor-specific Pokémon Tower wild encounters from 3F upward with FireRed/LeafGreen species and levels, nighttime HGSS Misdreavus, a safe 5F healing seal and published floor locations in the Pokédex.
 
 - Restore Gary on Pokémon Tower 2F after Reina’s conversation, with the existing story battle, Gary artwork and post-victory Silph Co. hint.
