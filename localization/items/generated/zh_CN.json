@@ -791,6 +791,10 @@
     "name": "烈空坐坐骑",
     "shortDesc": "解锁烈空坐作为陆地坐骑。"
   },
+  "shadow-lugia-mount": {
+    "name": "暗黑洛奇亚坐骑",
+    "shortDesc": "解锁暗黑洛奇亚作为陆地坐骑。"
+  },
   "mount-license": {
     "name": "坐骑许可证",
     "shortDesc": "列出允许你召唤陆地坐骑的地区。"
