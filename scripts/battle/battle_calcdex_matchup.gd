@@ -70,7 +70,7 @@ static func _normalize_pokemon(value: Variant, _role: String) -> Dictionary:
 	var level: Variant = source.get("level")
 	if relation not in ["viewer", "opponent"] or not pokemon_ref.begins_with("%s:public-slot-" % relation):
 		return {}
-	if species == "" or typeof(level) != TYPE_INT or int(level) < 1 or int(level) > 100:
+	if species == "" or typeof(level) != TYPE_INT or int(level) < 1 or (int(level) > 100 and int(level) != 120):
 		return {}
 	if str(source.get("source", "")) not in ["owned_exact", "public_reveal", "user_scenario"]:
 		return {}

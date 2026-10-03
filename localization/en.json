@@ -6305,5 +6305,16 @@
   "story.kanto.find_a_way_to_saffron.title": "A Way to Saffron",
   "story.kanto.find_a_way_to_saffron.summary": "Find a way into Saffron City to look for a device that can reveal the spirit guarding Pokémon Tower.",
   "story.kanto.find_a_way_to_saffron.find_saffron_route": "Find a way into Saffron City.",
-  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Find a way into the city"
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Find a way into the city",
+  "weekly_boss.close": "Close",
+  "weekly_boss.choose": "Choose a difficulty. One victory per week across all difficulties. Losing allows another attempt. Defeat Hard once to unlock wild Zapdos.",
+  "weekly_boss.easy": "Easy",
+  "weekly_boss.intermediate": "Intermediate",
+  "weekly_boss.hard": "Hard",
+  "weekly_boss.completed": "Already defeated this week. Next reset: {reset} (UTC).",
+  "weekly_boss.in_battle": "You have an active challenge. Reconnect to resume it.",
+  "weekly_boss.unavailable": "The boss is temporarily unavailable. Please try again.",
+  "weekly_boss.reward_pending": "Your result is being saved. Reconnect to recover pending rewards.",
+  "weekly_boss.reward_received": "Weekly boss rewards received!",
+  "weekly_boss.zapdos_unlocked": "Wild Zapdos unlocked in the Power Plant! You can catch it without a weekly limit."
 }

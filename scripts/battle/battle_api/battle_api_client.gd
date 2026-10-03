@@ -952,3 +952,17 @@ func _as_array(value: Variant) -> Array:
 	if value is Array:
 		return value as Array
 	return []
+
+
+func create_weekly_boss_battle(request_node: HTTPRequest, player: Dictionary, boss_id: String, difficulty: String) -> Dictionary:
+	return await send_post_request(request_node, "/battle/weekly-boss", {
+		"player": player, "bossId": boss_id, "difficulty": difficulty,
+	})
+
+
+func get_weekly_boss_status(request_node: HTTPRequest, boss_id: String) -> Dictionary:
+	return await send_get_request(request_node, "/game/weekly-bosses/" + boss_id.uri_encode())
+
+
+func get_weekly_boss_result(request_node: HTTPRequest, battle_id: String) -> Dictionary:
+	return await send_get_request(request_node, "/game/weekly-boss-results/" + battle_id.uri_encode())

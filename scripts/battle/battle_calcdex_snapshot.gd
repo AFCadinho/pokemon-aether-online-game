@@ -296,7 +296,7 @@ static func _validate_known_value(field_name: String, value: Variant) -> String:
 			return "Calcdex %s value is invalid." % field_name
 	if field_name == "gender" and str(value) not in ["M", "F", "N"]:
 		return "Calcdex gender value is invalid."
-	if field_name == "level" and (typeof(value) != TYPE_INT or int(value) < 1 or int(value) > 100):
+	if field_name == "level" and (typeof(value) != TYPE_INT or int(value) < 1 or (int(value) > 100 and int(value) != 120)):
 		return "Calcdex level value is invalid."
 	if field_name == "status" and (typeof(value) != TYPE_STRING or str(value).length() > 16):
 		return "Calcdex status value is invalid."

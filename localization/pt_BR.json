@@ -6304,5 +6304,16 @@
   "story.kanto.find_a_way_to_saffron.title": "Um caminho para Saffron",
   "story.kanto.find_a_way_to_saffron.summary": "Encontre um caminho até Saffron City para procurar um aparelho que revele o espírito que guarda a Pokémon Tower.",
   "story.kanto.find_a_way_to_saffron.find_saffron_route": "Encontre um caminho para entrar em Saffron City.",
-  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Encontre um caminho para a cidade"
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Encontre um caminho para a cidade",
+  "weekly_boss.close": "Fechar",
+  "weekly_boss.choose": "Escolha uma dificuldade. Uma vitória por semana entre todas as dificuldades. Após perder, você pode tentar de novo. Vença no Hard uma vez para desbloquear Zapdos selvagem.",
+  "weekly_boss.easy": "Easy",
+  "weekly_boss.intermediate": "Intermediate",
+  "weekly_boss.hard": "Hard",
+  "weekly_boss.completed": "Já derrotado nesta semana. Próxima renovação: {reset} (UTC).",
+  "weekly_boss.in_battle": "Você tem um desafio ativo. Reconecte para continuar.",
+  "weekly_boss.unavailable": "O chefe está temporariamente indisponível. Tente novamente.",
+  "weekly_boss.reward_pending": "Seu resultado está sendo salvo. Reconecte para recuperar recompensas pendentes.",
+  "weekly_boss.reward_received": "Recompensas do chefe semanal recebidas!",
+  "weekly_boss.zapdos_unlocked": "Zapdos selvagem desbloqueado na Power Plant! Você pode capturá-lo sem limite semanal."
 }

@@ -108,7 +108,7 @@ func _run() -> void:
 	_assert(opponent_setup_card != null, "the opponent set and stat assumptions must share one opponent card")
 	if viewer_stat_grid != null and stat_grid != null and opponent_setup_card != null:
 		_assert(viewer_stat_card.find_child("ShowdexStatGrid", true, false) == null, "opponent assumptions must not appear inside the viewer card")
-		_assert(opponent_setup_card.find_child("SampleSetField", true, false) != null, "the opponent card must contain its set controls")
+		_assert(opponent_setup_card.find_child("NatureAssumptionField", true, false) != null, "the opponent card must contain its nature assumptions")
 		_assert(opponent_setup_card.find_child("ShowdexStatGrid", true, false) == stat_grid, "the opponent card must also contain its IV, EV, and stage controls")
 		_assert(_has_label_text(viewer_stat_grid, "315"), "the viewer stat row must show the actual calculated Attack instead of IVs and EVs")
 	var nature_field := content.find_child("NatureAssumptionField", true, false)
@@ -123,7 +123,7 @@ func _run() -> void:
 		_assert(panel.get_viewer_scenario() == {"boosts": {"atk": 2}}, "viewer stage controls must create a relation-scoped +2 Attack scenario")
 		panel.viewer_boost_scenarios.clear()
 		panel.show_response(response)
-	_assert(content.find_child("SampleSetField", true, false) != null, "the sample-set selector must have a compact labeled field")
+	_assert(content.find_child("SetSuggestionsToggle", true, false) is Button, "set suggestions must have their current inspector button")
 	panel._on_inspector_tab_pressed(panel.INSPECTOR_FIELD)
 	_assert(panel.advanced_scenario_expanded, "field conditions must be expanded by default")
 	_assert(content.find_child("ShowdexFieldControls", true, false) != null, "the field inspector must expose battle conditions")

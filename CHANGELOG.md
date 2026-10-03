@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Zapdos as a static weekly boss in the Power Plant with a red nameplate, Easy/Intermediate/Hard selector, reward notifications and reconnect support. Defeating Hard unlocks unlimited rare wild Zapdos encounters.
+
 - Add a reusable static weekly boss scene with red nameplate text and server-status/difficulty hooks for future bosses.
 
 - Add Pokémon and Mounts tabs to the Shiny Tracker, show mount box odds and history, and open owned boxes with the disclosed 50%–80% shiny pity rules.

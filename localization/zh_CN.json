@@ -6301,5 +6301,16 @@
   "story.kanto.find_a_way_to_saffron.title": "通往金黄市的路",
   "story.kanto.find_a_way_to_saffron.summary": "设法进入金黄市，寻找能让守在宝可梦塔楼梯前的亡灵显形的装置。",
   "story.kanto.find_a_way_to_saffron.find_saffron_route": "寻找进入金黄市的办法。",
-  "ui.staff.story_checkpoint.find_saffron_route": "金黄市 · 寻找入城的路"
+  "ui.staff.story_checkpoint.find_saffron_route": "金黄市 · 寻找入城的路",
+  "weekly_boss.close": "关闭",
+  "weekly_boss.choose": "选择难度。所有难度合计每周只能获胜一次。失败后可重试。首次击败困难难度后解锁野生闪电鸟。",
+  "weekly_boss.easy": "简单",
+  "weekly_boss.intermediate": "中等",
+  "weekly_boss.hard": "困难",
+  "weekly_boss.completed": "本周已击败。下次重置：{reset}（UTC）。",
+  "weekly_boss.in_battle": "你有正在进行的挑战。重新连接以继续。",
+  "weekly_boss.unavailable": "首领暂时不可用，请重试。",
+  "weekly_boss.reward_pending": "正在保存结果。重新连接以领取待发放的奖励。",
+  "weekly_boss.reward_received": "已收到每周首领奖励！",
+  "weekly_boss.zapdos_unlocked": "已在发电厂解锁野生闪电鸟！捕捉次数没有每周限制。"
 }

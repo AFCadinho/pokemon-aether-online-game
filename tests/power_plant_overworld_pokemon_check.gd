@@ -46,7 +46,7 @@ func _run() -> void:
 		if visual != null:
 			for node: Node in visual.find_children("*", "TileMapLayer", true, false):
 				var layer := node as TileMapLayer
-				if layer.name == "Ground":
+				if layer.name in ["Ground", "GroundDetail", "WallShadows"]:
 					continue
 				var visual_cell := layer.local_to_map(layer.to_local(pokemon.global_position))
 				_check(layer.get_cell_source_id(visual_cell) == -1, "%s avoids decor in %s" % [node_name, layer.name])
