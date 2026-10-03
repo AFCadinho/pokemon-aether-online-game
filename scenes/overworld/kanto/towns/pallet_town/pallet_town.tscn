@@ -2308,7 +2308,7 @@ target_scene_path = "res://scenes/overworld/kanto/towns/pallet_town/players_hous
 target_spawn_name = "FromPalletTown"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPlayersHouse" unique_id=1283236050]
-position = Vector2(0, -8)
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_3e7rq")
 
 [node name="DoorTransitionHint" parent="Exits/ToPlayersHouse" unique_id=228985460 instance=ExtResource("24_door_hint")]
