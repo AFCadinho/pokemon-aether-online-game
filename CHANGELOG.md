@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
 - Added the larger Rayquaza land mount, unlocked by a manually granted mount item; larger mount masks preserve the existing player and outfit scale.
 
 - Route 10 heeft vier extra overworld-Pokémon op de berghellingen: Aron, Roggenrola, Carbink en Rockruff.
