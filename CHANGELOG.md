@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Rock Tunnel 1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
+
 - Align the Gift Store Gem and voucher balances in matching rows with equal icon sizes and clearer spacing.
 
 - Anchor the Mega Alakazam rider to the player's normal foot position and ground shadow in every direction, preserving the smaller mount and approved pose.
