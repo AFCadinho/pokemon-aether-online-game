@@ -4,6 +4,8 @@
 
 - Shift Cobalion, Glaceon and Shiny Glaceon mount art 16 pixels lower on their padded sheets, and layer Cobalion's full front-facing head over the rider.
 
+- Reimport Route 8's artist visual from the updated Tiled map, rebuilding its compact lossless atlases.
+
 - Restore the walkable Lavender Town exit to Route 8 and its transition arrow after the exit reverted to a disabled placeholder.
 
 - Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
