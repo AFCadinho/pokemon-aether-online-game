@@ -14,12 +14,21 @@ walking phases at 5 fps. Source pixels retain their exact colors and 2× scale.
 The full rig moves upward one logical pixel from the approved seated preview,
 aligning paws to the ordinary player ground line. Player frames remain 64×64.
 
-Directional masks put the head in front of the rider when facing south, conceal
-the far leg in side views, and place the rear rump ahead of overlapping feet.
-Foreground and mask share precisely the same silhouette pixels in every frame.
-Near-side legs remain visible. Rider poses remain static while mount and masks
-advance together. Both genders use the existing body, clothes, hair and headgear.
-The mounts use normal land movement, collision and world depth, without hovering.
+Directional masks follow the complete head, shoulder-fan and raised-tail
+silhouettes instead of small rectangular patches. Side seats sit further back,
+with a separate fit for each variant. A small saddle opening keeps the near leg
+in front of the torso. Foreground and mask share precisely the same silhouette
+pixels. The full base mount is always preserved underneath.
+
+The rider head/helmet envelope is excluded from both occlusion layers, so high
+horns, feathers and tails sit behind the face but ahead of the lower rider. This
+envelope follows each frame's seat. Male and female players keep their original
+64×64 frames and existing clothing/appearance layers.
+
+The seated source pose remains static, while the complete rider moves with
+small directional per-frame offsets following the walking cycle. Offsets are
+matched in the catalog, foreground/mask export and animation sync, including the
+last-to-first transition. The mounts use ordinary land collision and world depth.
 
 Each variant has a dedicated 64×64 icon and item text in en, nl, pt_BR and zh_CN.
 The PNG fallback loader also handles assets not yet imported by an open editor.
