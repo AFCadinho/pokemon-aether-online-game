@@ -84,6 +84,10 @@
     "battle.pvp.lysandre_remix_pokemon_legends_z_a_zame": {
       "label": "Lysandre Remix Pokémon Legends Z-A Zame",
       "path": "res://assets/music/battle/pvp/lysandre_remix_pokemon_legends_z_a_zame.ogg"
+    },
+    "overworld.kanto.interior.pokemon_tower_remastered_zame": {
+      "label": "Pokémon Tower Remastered (FireRed & LeafGreen) - Zame",
+      "path": "res://assets/music/overworld/kanto/interiors/pokemon_tower_remastered_zame.ogg"
     }
   },
   "map_profiles": {
