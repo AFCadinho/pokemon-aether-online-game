@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the Gift Store window centered at a stable size across products and categories, with scrolling item details and scaling for smaller screens.
+
 - Bring Mega Alakazam closer to its rider and replace the solid purple levitation ring with subtle, translucent psychic wisps.
 
 - Give Rock Tunnel 1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
