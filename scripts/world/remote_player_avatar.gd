@@ -3,6 +3,7 @@ extends Node2D
 class_name RemotePlayerAvatar
 
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
+const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 signal battle_spectate_requested(target_user_id: int)
@@ -815,6 +816,7 @@ func _sync_mount_visual() -> void:
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
+	MountVisualDepth.configure(look_node, current_mount_id != "")
 	if current_mount_id == "":
 		mount_sprite.stop()
 		mount_sprite.sprite_frames = null
@@ -1511,12 +1513,13 @@ func _apply_directional_appearance_layer_order() -> void:
 	var facegear_sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES["facegear"]))
 	if facegear_sprite == null:
 		return
-	facegear_sprite.z_index = CharacterAppearanceService.get_directional_part_z_index(
+	var layer_z := CharacterAppearanceService.get_directional_part_z_index(
 		"facegear",
 		_get_appearance_part_id("facegear"),
 		_get_activity_offset_direction(),
 		8
 	)
+	MountVisualDepth.set_layer_z(facegear_sprite, layer_z)
 
 
 func _get_appearance_part_id(category: String) -> String:
