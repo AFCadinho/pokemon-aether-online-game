@@ -439,7 +439,7 @@ movement_tiles = 1
 movement_wait_seconds = 2.5
 
 [node name="MountainGeodude" parent="Entities/Pokemon" unique_id=971154024 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(96, 560)
+position = Vector2(368, 80)
 overworld_pokemon_id = "kanto_lavender_town_mountain_geodude_1"
 species_id = "geodude"
 level = 16
@@ -450,7 +450,7 @@ movement_tiles = 1
 movement_wait_seconds = 2.5
 
 [node name="MountainMachop" parent="Entities/Pokemon" unique_id=1914537171 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(448, 480)
+position = Vector2(1296, 368)
 overworld_pokemon_id = "kanto_lavender_town_mountain_machop_1"
 species_id = "machop"
 level = 17
@@ -461,16 +461,15 @@ movement_tiles = 1
 movement_wait_seconds = 2.5
 
 [node name="MountainGligar" parent="Entities/Pokemon" unique_id=1825743184 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(752, 128)
+position = Vector2(1520, 1008)
 overworld_pokemon_id = "kanto_lavender_town_mountain_gligar_1"
 species_id = "gligar"
 level = 18
 display_name = "Gligar"
 facing_direction = Vector2(0, -1)
-movement_behavior = "idle"
 
 [node name="MountainNoibat" parent="Entities/Pokemon" unique_id=1957576273 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(720, 1488)
+position = Vector2(400, 1456)
 overworld_pokemon_id = "kanto_lavender_town_mountain_noibat_1"
 species_id = "noibat"
 level = 19
@@ -481,7 +480,7 @@ movement_tiles = 1
 movement_wait_seconds = 2.5
 
 [node name="TownGrowlithe" parent="Entities/Pokemon" unique_id=1665317084 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(560, 816)
+position = Vector2(400, 1264)
 overworld_pokemon_id = "kanto_lavender_town_growlithe_1"
 species_id = "growlithe"
 level = 14
@@ -492,13 +491,12 @@ movement_tiles = 1
 movement_wait_seconds = 2.5
 
 [node name="TownHoothoot" parent="Entities/Pokemon" unique_id=303992535 instance=ExtResource("11_overworld_pokemon")]
-position = Vector2(1120, 928)
+position = Vector2(1136, 1392)
 overworld_pokemon_id = "kanto_lavender_town_hoothoot_1"
 species_id = "hoothoot"
 level = 15
 display_name = "Hoothoot"
 facing_direction = Vector2(0, -1)
-movement_behavior = "idle"
 
 [node name="StoryTriggers" type="Node2D" parent="." unique_id=992970720]
 
