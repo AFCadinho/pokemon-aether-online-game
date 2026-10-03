@@ -4,6 +4,8 @@
 
 - Reimport Route 14's overworld visual from the artist TMX.
 
+- Add Route 14 wild encounters, eight FR/LG trainers, and three useful overworld pickups.
+
 - Reimport Route 13's overworld visual from the artist TMX.
 
 - Add Route 14 from the artist Tiled visual and connect it bidirectionally with Routes 13 and 15; add the matching Route 15 scene.
