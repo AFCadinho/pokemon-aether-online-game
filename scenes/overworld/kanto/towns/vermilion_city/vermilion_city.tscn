@@ -817,6 +817,7 @@ z_index = 144
 position = Vector2(848, 144)
 destination_id = "kanto_vermilion_city"
 interactable_id = "kanto_vermilion_city_aether_beacon"
+display_name = "Aether Beacon"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=86835632]
 visible = false
