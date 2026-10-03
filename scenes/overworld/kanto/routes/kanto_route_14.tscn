@@ -9,6 +9,10 @@
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="7_4nbk3"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="8_lrmwl"]
 [ext_resource type="PackedScene" path="res://scenes/world/lighting/night_light.tscn" id="9_bsg43"]
+[ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r14_biker"]
+[ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r14_bird_keeper"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r14_trainer"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r14_item"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2u64l"]
 size = Vector2(192, 32)
@@ -246,6 +250,8 @@ world_access_area_type = "route"
 location_id = "kanto.route.14"
 location_name = "Route 14"
 region_id = "kanto"
+encounter_area_id = "kanto_route_14"
+grass_encounter_chance = 0.21
 music_profile_id = "kanto.routes_11_15"
 
 [node name="Visual" parent="." unique_id=457912220 instance=ExtResource("2_dpqic")]
@@ -379,7 +385,94 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=389258332]
 
+[node name="bird_keeper_mitch" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 384)
+trainer_id = "kanto_route_14_bird_keeper_mitch"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_bird_keeper_mitch"
+display_name = "Bird Keeper Mitch"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_bird_keeper")
+
+[node name="biker_lukas" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 640)
+trainer_id = "kanto_route_14_biker_lukas"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_biker_lukas"
+display_name = "Biker Lukas"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_biker")
+
+[node name="bird_keeper_carter" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 896)
+trainer_id = "kanto_route_14_bird_keeper_carter"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_bird_keeper_carter"
+display_name = "Bird Keeper Carter"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_bird_keeper")
+
+[node name="biker_isaac" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 1152)
+trainer_id = "kanto_route_14_biker_isaac"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_biker_isaac"
+display_name = "Biker Isaac"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_biker")
+
+[node name="bird_keeper_marlon" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 1408)
+trainer_id = "kanto_route_14_bird_keeper_marlon"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_bird_keeper_marlon"
+display_name = "Bird Keeper Marlon"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_bird_keeper")
+
+[node name="biker_malik" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 1664)
+trainer_id = "kanto_route_14_biker_malik"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_biker_malik"
+display_name = "Biker Malik"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_biker")
+
+[node name="bird_keeper_beck" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(480, 1920)
+trainer_id = "kanto_route_14_bird_keeper_beck"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_bird_keeper_beck"
+display_name = "Bird Keeper Beck"
+facing_direction = Vector2(0, -1)
+npc_sprite_frames = ExtResource("r14_bird_keeper")
+
+[node name="biker_gerald" parent="Entities/NPCs" instance=ExtResource("r14_trainer")]
+position = Vector2(448, 2112)
+trainer_id = "kanto_route_14_biker_gerald"
+sight_range_tiles = 2
+npc_id = "kanto_route_14_biker_gerald"
+display_name = "Biker Gerald"
+facing_direction = Vector2(1, 0)
+npc_sprite_frames = ExtResource("r14_biker")
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1231337548]
+
+[node name="PinapBerry" parent="Entities/Interactables" instance=ExtResource("r14_item")]
+position = Vector2(416, 160)
+pickup_id = "kanto_route_14_pinap_berry"
+item_id = "pinap-berry"
+
+[node name="Zinc" parent="Entities/Interactables" instance=ExtResource("r14_item")]
+position = Vector2(448, 256)
+pickup_id = "kanto_route_14_zinc"
+item_id = "zinc"
+
+[node name="PoisonBarb" parent="Entities/Interactables" instance=ExtResource("r14_item")]
+position = Vector2(768, 1600)
+pickup_id = "kanto_route_14_poison_barb"
+item_id = "poison-barb"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=384942785]
 visible = false
