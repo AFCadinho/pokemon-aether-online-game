@@ -4,6 +4,8 @@
 
 - Add Primal Kyogre as an unlockable Surf mount, with fitted rider layers, swimming poses and a mount-specific fishing seat.
 
+- Refresh Route 14's imported overworld visual from the updated artist TMX.
+
 - Reimport Route 14's overworld visual from the artist TMX.
 
 - Add Route 14 wild encounters, eight FR/LG trainers, and three useful overworld pickups.
