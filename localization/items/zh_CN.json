@@ -446,5 +446,9 @@
   "glaceon-mount-box": {
     "name": "冰伊布坐骑箱",
     "shortDesc": "包含一只冰伊布坐骑。初始异色概率：50%。"
+  },
+  "cobalion-mount": {
+    "name": "勾帕路翁坐骑",
+    "shortDesc": "解锁勾帕路翁陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

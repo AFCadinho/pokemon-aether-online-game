@@ -191,6 +191,23 @@
         "up": [[2, -2], [2, 0], [2, 0], [2, 2]]
       }
     },
+    "cobalion": {
+      "displayName": "Cobalion",
+      "movementMode": "land",
+      "unlockItemId": "cobalion-mount",
+      "iconTexture": "res://assets/mounts/cobalion/icon.png",
+      "spriteSheet": "res://assets/mounts/cobalion/mount.png",
+      "riderMaskSheet": "res://assets/mounts/cobalion/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/cobalion/foreground.png",
+      "frameSize": [224, 224],
+      "movementAnimationSpeed": 5.0,
+      "riderOffsets": {
+        "down": [[0, -34], [0, -34], [0, -34], [0, -34]],
+        "left": [[14, -30], [14, -28], [14, -30], [14, -28]],
+        "right": [[-14, -30], [-14, -28], [-14, -30], [-14, -28]],
+        "up": [[0, -24], [0, -24], [0, -24], [0, -24]]
+      }
+    },
     "glaceon": {
       "displayName": "Glaceon",
       "movementMode": "land",
