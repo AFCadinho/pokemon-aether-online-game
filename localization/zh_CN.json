@@ -5827,6 +5827,8 @@
   "ui.shiny_tracker.mounts.store_description": "包含一只烈空坐坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_shadow_lugia": "包含一只暗黑洛奇亚坐骑。初始异色概率：50%。",
   "ui.store.preview.shiny": "异色",
+  "ui.store.preview.state.on": "开",
+  "ui.store.preview.state.off": "关",
   "ui.store.preview.animation": "动画",
   "ui.shiny_tracker.mounts.store_price": "{gems} 以太宝石",
   "ui.shiny_tracker.title": "闪亮追踪器",

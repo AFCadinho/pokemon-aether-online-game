@@ -5830,6 +5830,8 @@
   "ui.shiny_tracker.mounts.store_description": "Contém uma montaria Rayquaza. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_shadow_lugia": "Contém uma montaria Shadow Lugia. Chance shiny inicial: 50%.",
   "ui.store.preview.shiny": "Shiny",
+  "ui.store.preview.state.on": "Sim",
+  "ui.store.preview.state.off": "Não",
   "ui.store.preview.animation": "Animação",
   "ui.shiny_tracker.mounts.store_price": "{gems} Aether Gems",
   "ui.shiny_tracker.title": "Rastreador Shiny",

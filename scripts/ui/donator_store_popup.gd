@@ -4,6 +4,10 @@ extends PanelContainer
 signal closed
 signal purchase_requested(item_id: String, chroma_colors: Dictionary)
 
+const PREVIEW_SHINY_ICON: Texture2D = preload("res://assets/ui/global_shiny_boost.svg")
+const PREVIEW_PLAY_ICON: Texture2D = preload("res://assets/ui/icons/replay_play.svg")
+const PREVIEW_PAUSE_ICON: Texture2D = preload("res://assets/ui/icons/replay_pause.svg")
+
 const Mounts := preload("res://scripts/services/mount_service.gd")
 
 const GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
@@ -679,8 +683,8 @@ var character_preview_direction_buttons: Dictionary = {}
 var character_preview_color_buttons: Dictionary = {}
 var character_preview_colors: Dictionary = {}
 var mount_preview_controls: HBoxContainer
-var mount_preview_shiny_toggle: CheckButton
-var mount_preview_animation_toggle: CheckButton
+var mount_preview_shiny_toggle: Button
+var mount_preview_animation_toggle: Button
 var mount_preview_shiny := false
 var mount_preview_animated := true
 
@@ -1337,17 +1341,17 @@ func _create_character_preview_panel() -> Control:
 	mount_preview_controls.add_theme_constant_override("separation", 8)
 	mount_preview_controls.visible = false
 	layout.add_child(mount_preview_controls)
-	mount_preview_shiny_toggle = CheckButton.new()
-	_set_localized_property(mount_preview_shiny_toggle, "text", "ui.store.preview.shiny")
-	mount_preview_shiny_toggle.focus_mode = Control.FOCUS_NONE
+	mount_preview_shiny_toggle = Button.new()
+	mount_preview_shiny_toggle.toggle_mode = true
+	mount_preview_shiny_toggle.icon = PREVIEW_SHINY_ICON
 	mount_preview_shiny_toggle.toggled.connect(_on_mount_preview_shiny_toggled)
 	mount_preview_controls.add_child(mount_preview_shiny_toggle)
-	mount_preview_animation_toggle = CheckButton.new()
-	_set_localized_property(mount_preview_animation_toggle, "text", "ui.store.preview.animation")
-	mount_preview_animation_toggle.focus_mode = Control.FOCUS_NONE
+	mount_preview_animation_toggle = Button.new()
+	mount_preview_animation_toggle.toggle_mode = true
 	mount_preview_animation_toggle.button_pressed = mount_preview_animated
 	mount_preview_animation_toggle.toggled.connect(_on_mount_preview_animation_toggled)
 	mount_preview_controls.add_child(mount_preview_animation_toggle)
+	_refresh_mount_preview_controls()
 
 	character_preview_palette = VBoxContainer.new()
 	character_preview_palette.visible = false
@@ -2882,6 +2886,7 @@ func _refresh_mount_rider_preview(item: Dictionary) -> void:
 	character_preview_direction_row.visible = true
 	_refresh_character_preview_direction_buttons()
 	mount_preview_controls.visible = true
+	_refresh_mount_preview_controls()
 	character_preview_palette.visible = false
 
 
@@ -2893,9 +2898,42 @@ func _update_mount_rider_preview() -> void:
 
 func _on_mount_preview_shiny_toggled(enabled: bool) -> void:
 	mount_preview_shiny = enabled
+	_refresh_mount_preview_controls()
 	_update_mount_rider_preview()
 
 
 func _on_mount_preview_animation_toggled(enabled: bool) -> void:
 	mount_preview_animated = enabled
+	_refresh_mount_preview_controls()
 	_update_mount_rider_preview()
+
+
+func _refresh_mount_preview_controls() -> void:
+	_style_mount_preview_toggle(mount_preview_shiny_toggle, "ui.store.preview.shiny", UI_PURPLE)
+	mount_preview_animation_toggle.icon = PREVIEW_PAUSE_ICON if mount_preview_animated else PREVIEW_PLAY_ICON
+	_style_mount_preview_toggle(mount_preview_animation_toggle, "ui.store.preview.animation", UI_CYAN)
+
+
+func _style_mount_preview_toggle(button: Button, label_key: String, accent: Color) -> void:
+	var active := button.button_pressed
+	var background := UI_SURFACE_INTERACTIVE.lerp(accent, 0.14) if active else UI_SURFACE_RAISED
+	var border := accent if active else UI_BORDER_SOFT
+	button.text = "%s · %s" % [_t(label_key), _t("ui.store.preview.state.on" if active else "ui.store.preview.state.off")]
+	button.custom_minimum_size = Vector2(118, 32)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.add_theme_font_size_override("font_size", 11)
+	button.add_theme_constant_override("icon_max_width", 14)
+	button.add_theme_constant_override("h_separation", 5)
+	button.expand_icon = true
+	button.add_theme_color_override("font_color", accent if active else UI_MUTED_TEXT)
+	button.add_theme_color_override("font_pressed_color", accent)
+	button.add_theme_color_override("font_hover_color", UI_TEXT)
+	button.add_theme_color_override("font_hover_pressed_color", accent.lightened(0.15))
+	button.add_theme_color_override("icon_normal_color", Color(0.65, 0.65, 0.65, 0.8))
+	button.add_theme_color_override("icon_pressed_color", Color.WHITE)
+	button.add_theme_stylebox_override("normal", _button_style(background, border, 8, 1))
+	button.add_theme_stylebox_override("pressed", _button_style(background, border, 8, 1))
+	button.add_theme_stylebox_override("hover", _button_style(UI_SURFACE_HOVER, accent, 8, 1))
+	button.add_theme_stylebox_override("hover_pressed", _button_style(background.lightened(0.06), accent, 8, 1))
+	button.add_theme_stylebox_override("focus", _button_style(Color.TRANSPARENT, accent, 8, 2))

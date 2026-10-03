@@ -5933,6 +5933,8 @@
   "ui.shiny_tracker.mounts.store_description": "Bevat een Rayquaza-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_shadow_lugia": "Bevat een Shadow Lugia-mount. Shiny-basiskans: 50%.",
   "ui.store.preview.shiny": "Shiny",
+  "ui.store.preview.state.on": "Aan",
+  "ui.store.preview.state.off": "Uit",
   "ui.store.preview.animation": "Animatie",
   "ui.shiny_tracker.mounts.store_price": "{gems} Aether Gems",
   "ui.shiny_tracker.title": "Shiny Tracker",
