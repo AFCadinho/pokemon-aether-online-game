@@ -517,10 +517,10 @@ position = Vector2(880, 944)
 pickup_id = "kanto_route_25_oran_berry"
 item_id = "oran-berry"
 
-[node name="BlukBerry" parent="Entities/Interactables/Items" unique_id=1476144820 instance=ExtResource("overworld_pickup_extra")]
+[node name="CheriBerry" parent="Entities/Interactables/Items" unique_id=1476144820 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(880, 1232)
 pickup_id = "kanto_route_25_bluk_berry"
-item_id = "bluk-berry"
+item_id = "cheri-berry"
 
 [node name="Ether" parent="Entities/Interactables/Items" unique_id=1844119967 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(1776, 784)

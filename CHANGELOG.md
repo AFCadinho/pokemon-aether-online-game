@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace unused Razz/Bluk Berries, Green Apricorn, X items and Route 11 Escape Rope pickups with progression-appropriate berries, healing items and Great Balls; preserve collected pickup progress.
+
 - Add follower-based Mega Absol and refresh Mega Absol Z with approved compact artwork, fitted player masks, four-direction animation and individual icons.
 
 - Reuse loaded profile preferences at startup to avoid a redundant settings request and its timeout during world loading.

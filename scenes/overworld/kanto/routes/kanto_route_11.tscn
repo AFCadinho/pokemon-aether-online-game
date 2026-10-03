@@ -388,30 +388,30 @@ position = Vector2(1520, 688)
 pickup_id = "kanto_route_11_awakening"
 item_id = "awakening"
 
-[node name="XDefend" parent="Entities/Interactables/Items" unique_id=2755822 instance=ExtResource("99_item")]
+[node name="SuperPotion" parent="Entities/Interactables/Items" unique_id=2755822 instance=ExtResource("99_item")]
 position = Vector2(848, 1168)
 pickup_id = "kanto_route_11_xdefend"
-item_id = "x-defense"
+item_id = "super-potion"
 
 [node name="GreatBall" parent="Entities/Interactables/Items" unique_id=1046788082 instance=ExtResource("99_item")]
 position = Vector2(2320, 592)
 pickup_id = "kanto_route_11_greatball"
 item_id = "great-ball"
 
-[node name="EscapeRope" parent="Entities/Interactables/Items" unique_id=523886436 instance=ExtResource("99_item")]
+[node name="Antidote" parent="Entities/Interactables/Items" unique_id=523886436 instance=ExtResource("99_item")]
 position = Vector2(624, 976)
 pickup_id = "kanto_route_11_escaperope"
-item_id = "escape-rope"
+item_id = "antidote"
 
 [node name="Revive" parent="Entities/Interactables/Items" unique_id=1739468193 instance=ExtResource("99_item")]
 position = Vector2(2128, 976)
 pickup_id = "kanto_route_11_revive"
 item_id = "revive"
 
-[node name="GreenApricorn" parent="Entities/Interactables/Items" unique_id=1375269068 instance=ExtResource("99_item")]
+[node name="GreatBallExtra" parent="Entities/Interactables/Items" unique_id=1375269068 instance=ExtResource("99_item")]
 position = Vector2(1584, 912)
 pickup_id = "kanto_route_11_greenapricorn"
-item_id = "green-apricorn"
+item_id = "great-ball"
 
 [node name="TMGrassKnot" parent="Entities/Interactables/Items" unique_id=608643886 instance=ExtResource("99_item")]
 position = Vector2(1744, 1104)
