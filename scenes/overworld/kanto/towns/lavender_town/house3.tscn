@@ -1,14 +1,14 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bnt1rptohjtco"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_house_3/lavender_house_3.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="hint"]
-[ext_resource type="Texture2D" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="collision_marker"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="dialogue_npc"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/youngster_frames.tres" id="trainer_frames"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
+[ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="trainer_frames"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/lavender_house_3/lavender_house_3.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(96, 32)
@@ -22,7 +22,7 @@ texture_region_size = Vector2i(32, 32)
 tile_size = Vector2i(32, 32)
 sources/0 = SubResource("collision_atlas")
 
-[node name="House3" type="Node2D"]
+[node name="House3" type="Node2D" unique_id=686992106]
 script = ExtResource("metadata")
 map_id = "kanto_lavender_town_house_3"
 map_region_name = "Kanto"
@@ -37,52 +37,59 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.lavender_town"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=121059022 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=152049846]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
-floor_regions = {&"ground_floor": Rect2(0, 0, 640, 640)}
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 640, 640)
+}
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1003312428]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=974973410]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1229705265]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1688536999]
+
+[node name="Entities" type="Node2D" parent="." unique_id=1699463082]
 z_index = 5
 y_sort_enabled = true
 
-[node name="Players" type="Node2D" parent="Entities"]
-[node name="NPCs" type="Node2D" parent="Entities"]
-[node name="YoungTrainer" parent="Entities/NPCs" instance=ExtResource("dialogue_npc")]
-position = Vector2(176, 144)
+[node name="Players" type="Node2D" parent="Entities" unique_id=1155108376]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=822267831]
+
+[node name="YoungTrainer" parent="Entities/NPCs" unique_id=1572657083 instance=ExtResource("dialogue_npc")]
+position = Vector2(304, 352)
 npc_id = "kanto_lavender_house_3_young_trainer"
 npc_definition_id = "trainer_class_youngster"
 display_name = "Young Trainer"
 npc_sprite_frames = ExtResource("trainer_frames")
-facing_direction = Vector2(0, 1)
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
-[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("pokemon")]
-position = Vector2(432, 144)
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=468704702]
+
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=430420760 instance=ExtResource("pokemon")]
+position = Vector2(336, 352)
 overworld_pokemon_id = "kanto_lavender_house_3_pidgey_1"
 species_id = "pidgey"
 level = 12
 display_name = "Pidgey"
-movement_behavior = "idle"
-[node name="Interactables" type="Node2D" parent="Entities"]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1548483678]
 
-[node name="FromLavenderTown" type="Marker2D" parent="Spawns"]
+[node name="Spawns" type="Node2D" parent="." unique_id=225955209]
+
+[node name="FromLavenderTown" type="Marker2D" parent="Spawns" unique_id=1809574062]
 position = Vector2(304, 464)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1796419817]
 
-[node name="ToOutside" type="Area2D" parent="Exits"]
+[node name="ToOutside" type="Area2D" parent="Exits" unique_id=1246949818]
 position = Vector2(304, 496)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn"
@@ -90,16 +97,17 @@ target_spawn_name = "FromHouse3"
 transition_id = "kanto_lavender_town_house_3__to_outside"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToOutside" unique_id=1323236656]
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToOutside" instance=ExtResource("hint")]
+[node name="DoorTransitionHint" parent="Exits/ToOutside" unique_id=182143307 instance=ExtResource("hint")]
+z_as_relative = false
 tile_footprint = Vector2i(3, 1)
 flow_direction = "down"
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=1666820210]
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=614180571]
 editor_description = "Empty collision layer: paint the room boundaries and furniture here. Collision is intentionally left for the map author."
 visible = false
 z_index = 4096
