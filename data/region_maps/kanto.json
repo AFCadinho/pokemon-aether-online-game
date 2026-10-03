@@ -55,6 +55,11 @@
       "kind": "city",
       "nameKey": "ui.town_map.location.cerulean_city.name",
       "descriptionKey": "ui.town_map.location.cerulean_city.description"
+    },
+    "kanto_route_13": {
+      "kind": "route",
+      "nameKey": "ui.town_map.location.route_13.name",
+      "descriptionKey": "ui.town_map.location.route_13.description"
     }
   }
 }

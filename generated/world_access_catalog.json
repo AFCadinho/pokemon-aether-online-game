@@ -2353,7 +2353,9 @@
 			"locationGroupId": "kanto_route_12",
 			"locationGroupLabel": "Route 12",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://dt81i73axpxb5"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
 			"spawnPoints": {
 				"from_lavender_town": {
@@ -2363,7 +2365,7 @@
 					"spawnMarker": "FromLavenderTown",
 					"tile": {
 						"x": 22,
-						"y": 2
+						"y": 1
 					}
 				},
 				"from_route_11_gate": {
@@ -2372,8 +2374,18 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromRoute11Gate",
 					"tile": {
-						"x": 7,
-						"y": 61
+						"x": 4,
+						"y": 60
+					}
+				},
+				"from_route_13": {
+					"facingDirection": "down",
+					"label": "Route 13",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute13",
+					"tile": {
+						"x": 39,
+						"y": 122
 					}
 				}
 			}
@@ -2426,6 +2438,28 @@
 					"tile": {
 						"x": 3,
 						"y": 10
+					}
+				}
+			}
+		},
+		"kanto_route_13": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 13",
+			"locationGroupId": "kanto_route_13",
+			"locationGroupLabel": "Route 13",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+			"spawnPoints": {
+				"from_route_12": {
+					"facingDirection": "down",
+					"label": "Route 12",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute12",
+					"tile": {
+						"x": 85,
+						"y": 1
 					}
 				}
 			}
@@ -5468,11 +5502,13 @@
 		"kanto_lavender_town__to_route12": {
 			"destination": {
 				"mapId": "kanto_route_12",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dt81i73axpxb5"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
 				"position": {
 					"x": 720.0,
-					"y": 80.0
+					"y": 48.0
 				},
 				"spawnMarker": "FromLavenderTown"
 			},
@@ -6545,6 +6581,20 @@
 			"destinationAreaId": "kanto_route_12_west",
 			"sourceMapId": "kanto_route_12"
 		},
+		"kanto_route_12__to_route13": {
+			"destination": {
+				"mapId": "kanto_route_13",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_13.tscn",
+				"position": {
+					"x": 2736.0,
+					"y": 48.0
+				},
+				"spawnMarker": "FromRoute12"
+			},
+			"destinationAreaId": "kanto_route_13",
+			"sourceMapId": "kanto_route_12"
+		},
 		"kanto_route_12_west__to_route11": {
 			"destination": {
 				"mapId": "kanto_route_11",
@@ -6564,16 +6614,34 @@
 		"kanto_route_12_west__to_route12": {
 			"destination": {
 				"mapId": "kanto_route_12",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://dt81i73axpxb5"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
 				"position": {
-					"x": 240.0,
-					"y": 1968.0
+					"x": 144.0,
+					"y": 1936.0
 				},
 				"spawnMarker": "FromRoute11Gate"
 			},
 			"destinationAreaId": "kanto_route_12",
 			"sourceMapId": "kanto_route_12_west"
+		},
+		"kanto_route_13__to_route12": {
+			"destination": {
+				"mapId": "kanto_route_12",
+				"mapSceneAliases": [
+					"uid://dt81i73axpxb5"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+				"position": {
+					"x": 1264.0,
+					"y": 3920.0
+				},
+				"spawnMarker": "FromRoute13"
+			},
+			"destinationAreaId": "kanto_route_12",
+			"sourceMapId": "kanto_route_13"
 		},
 		"kanto_route_1__to_pallet_town": {
 			"destination": {

@@ -55,7 +55,7 @@ func _run() -> void:
 	for area_value: Variant in areas.values():
 		if area_value is Dictionary:
 			location_groups[str((area_value as Dictionary).get("locationGroupId", ""))] = true
-	_check(locations.size() == 9, "Town Map contains the currently playable Kanto location groups")
+	_check(locations.size() == 10, "Town Map contains the currently playable Kanto location groups")
 	for location_id_value: Variant in locations.keys():
 		var location_id := str(location_id_value)
 		_check(location_groups.has(location_id), "%s is backed by a playable world location" % location_id)
@@ -131,7 +131,7 @@ func _run() -> void:
 		if not playable:
 			expected_planned_count += 1
 	_check(planned_location_count == expected_planned_count, "Only unavailable locations remain planned points")
-	_check(planned_route_count == 21, "All named route points are available alongside settlements")
+	_check(planned_route_count == 20, "Named remaining route points are available alongside playable Route 13")
 	_check(not bool((popup_locations.get("kanto_route_4", {}) as Dictionary).get("planned", false)), "Route 4 is available as a playable route")
 	_check(not bool((popup_locations.get("kanto_cerulean_city", {}) as Dictionary).get("planned", false)), "Cerulean City is available as a playable city")
 	for route_value: Variant in route_points:
@@ -263,7 +263,7 @@ func _run() -> void:
 	)
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
-	for map_id: String in ["kanto_route_3", "kanto_route_4", "kanto_route_5", "kanto_route_10", "kanto_route_21", "kanto_route_25", "kanto_route_12_west", "kanto_lavender_town", "kanto_cerulean_cave_b1f"]:
+	for map_id: String in ["kanto_route_3", "kanto_route_4", "kanto_route_5", "kanto_route_10", "kanto_route_21", "kanto_route_25", "kanto_route_12_west", "kanto_route_13", "kanto_lavender_town", "kanto_cerulean_cave_b1f"]:
 		popup.open_for_map(map_id)
 		_check(popup.current_location_id != "", "%s shows the current location" % map_id)
 		_check(popup.map_canvas.current_location_portrait.visible, "%s shows the current portrait" % map_id)
