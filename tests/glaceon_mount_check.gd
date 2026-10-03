@@ -43,7 +43,7 @@ func _check_mount() -> void:
 		quit(1)
 		return
 	var source := Mounts._load_mount_texture("res://assets/followers/GLACEON.png").get_image()
-	var expected_seats := [Vector2i(0, -34), Vector2i(14, -30), Vector2i(-14, -30), Vector2i(0, -24)]
+	var expected_seats := [Vector2i(0, -30), Vector2i(14, -26), Vector2i(-14, -26), Vector2i(0, -20)]
 	for row in range(4):
 		var anim := StringName("walk_" + DIRECTIONS[row])
 		_check(mount.get_frame_count(anim) == 4, "four walking phases")
@@ -53,7 +53,7 @@ func _check_mount() -> void:
 			var seat: Vector2i = expected_seats[row]
 			if row in [1, 2]:
 				seat.y += 2 * (col % 2)
-			_check(Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], col) == seat, "approved v10 seat and bob")
+			_check(Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], col) == seat, "lower seated fit and synchronized bob")
 			var frame := Mounts._get_texture_image(mount.get_frame_texture(anim, col))
 			var fg := Mounts._get_texture_image(foreground.get_frame_texture(anim, col))
 			_check(frame.get_size() == Vector2i(224, 224), "padded frame size")

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lower the Glaceon rider slightly to sit against its back, preserving native sprite scale, side-ear layering and synchronized walking motion.
+
 - Add the native-size Glaceon land mount with the approved riding pose, corrected side-ear layering and a compact Bag icon.
 
 - Lower the front-facing rider on both Absol mounts for a closer seated fit while preserving synchronized walking motion.
