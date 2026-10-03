@@ -143,6 +143,7 @@ location_id = "kanto.rock.tunnel.1f"
 location_name = "Rock Tunnel 1F"
 region_id = "kanto"
 encounter_area_id = "kanto_rock_tunnel_1f"
+land_mounts_allowed_interior = true
 battle_environment_id = "cave"
 lighting_profile = "dark"
 weather_profile = "disabled"

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow land mounts throughout caves, including both Diglett's Cave entrances, while keeping buildings restricted.
+
 - Added localized text and location artwork for both Route 11 signs.
 
 - Route 11's roaming Pokémon now use distinct movement speeds and randomized pauses to avoid synchronized pacing.

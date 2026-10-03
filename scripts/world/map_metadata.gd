@@ -8,6 +8,8 @@ const MapLayerResolverScript := preload("res://scripts/world/map_layer_resolver.
 @export var world_access_group_id := ""
 @export var world_access_group_label := ""
 @export_enum("exterior", "interior", "route", "wilderness", "transition") var world_access_area_type := "exterior"
+# Allow cave interiors to support riding without changing world-access grouping.
+@export var land_mounts_allowed_interior := false
 @export var location_id := ""
 @export var location_name := ""
 @export var region_id := ""
@@ -58,6 +60,10 @@ func get_map_region_name() -> String:
 
 func get_world_access_area_type() -> String:
 	return world_access_area_type
+
+
+func allows_land_mounts() -> bool:
+	return world_access_area_type != "interior" or land_mounts_allowed_interior
 
 
 func get_location_metadata() -> Dictionary:
