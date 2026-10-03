@@ -5933,6 +5933,8 @@
   "ui.shiny_tracker.mounts.store_description": "Contains a Rayquaza mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_shadow_lugia": "Contains a Shadow Lugia mount. Base shiny chance: 50%.",
   "ui.store.preview.shiny": "Shiny",
+  "ui.store.preview.state.on": "On",
+  "ui.store.preview.state.off": "Off",
   "ui.store.preview.animation": "Animation",
   "ui.shiny_tracker.mounts.store_price": "{gems} Aether Gems",
   "ui.shiny_tracker.title": "Shiny Tracker",

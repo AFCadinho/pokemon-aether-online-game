@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Style mount preview toggles as compact Aether buttons with shiny/play/pause icons, colored active states and localized On/Off labels.
+
 - Simplify the weekly boss selector to difficulty names; show Zapdos's wild-encounter unlock hint only until the first Hard victory.
 
 - Shorten Rayquaza and Shadow Lugia Mount Box store descriptions to the included mount and 50% initial shiny chance.
