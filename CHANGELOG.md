@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give nearby wild and NPC spectate indicators priority over tap/drag movement controls so clicking a battle opens spectating.
+
 - Add Mega Absol Z as a land mount with four-direction animation, fitted riders, foreground masks and a dedicated Bag icon.
 
 - Add Shiny Mega Alakazam and its 500-Gem Mount Box to the Gift Store, using the existing mount pity and Shiny Tracker.

@@ -58,6 +58,11 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not _controls_available():
 		return
+	# These controls run before world actors and consume pointer presses for
+	# tap/drag movement. Offer nearby spectate targets the press first.
+	if _try_nearby_battle_spectate(event):
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
 		_recent_touch_msec = Time.get_ticks_msec()
@@ -88,6 +93,30 @@ func _unhandled_input(event: InputEvent) -> void:
 		_mouse_position = mouse_button.position
 		_mouse_started_msec = Time.get_ticks_msec()
 		get_viewport().set_input_as_handled()
+
+
+func _try_nearby_battle_spectate(event: InputEvent) -> bool:
+	var screen_position: Vector2
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index != MOUSE_BUTTON_LEFT or not mouse_event.pressed:
+			return false
+		screen_position = mouse_event.position
+	elif event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if not touch_event.pressed:
+			return false
+		screen_position = touch_event.position
+	else:
+		return false
+	if _is_pointer_over_visible_ui(screen_position):
+		return false
+	for indicator in get_tree().get_nodes_in_group("nearby_pve_battle_indicators"):
+		if indicator.get_viewport() != get_viewport():
+			continue
+		if bool(indicator.call("try_spectate_at_screen_position", screen_position, "mobile_controls")):
+			return true
+	return false
 
 
 func _is_pointer_over_visible_ui(position: Vector2) -> bool:
