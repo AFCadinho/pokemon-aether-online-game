@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a separate Surf water connection between Kanto Routes 12 and 13 with dedicated arrival points.
+
 - Add Primal Kyogre as an unlockable Surf mount, with fitted rider layers, swimming poses and a mount-specific fishing seat.
 
 - Refresh Route 14's imported overworld visual from the updated artist TMX.

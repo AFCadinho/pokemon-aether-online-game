@@ -141,6 +141,12 @@ func _run() -> void:
 	_check_connection(route12, "ToRoute11Gate", gate, GATE)
 	_check_connection(route12, "ToRoute13", route13, ROUTE13)
 	_check_connection(route13, "ToRoute12", route12, ROUTE12)
+	_check_connection(route12, "ToRoute13Water", route13, ROUTE13)
+	_check_connection(route13, "ToRoute12Water", route12, ROUTE12)
+	_check(route12.get_node("Spawns/FromRoute13Water").position == Vector2(1360, 3856)
+		and route13.get_node("Spawns/FromRoute12Water").position == Vector2(2896, 1040),
+		"Water transitions arrive at their separate Route 12 and Route 13 spawn points")
+	_check_route_water_arrivals(route12, route13)
 	_check(str(route12.get_node("Exits/ToRoute13").transition_facing_direction) == "down"
 		and str(route13.get_node("Exits/ToRoute12").transition_facing_direction) == "up",
 		"Both arrivals face forward along the Route 12–13 path")
@@ -171,7 +177,7 @@ func _run() -> void:
 	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 9,
 		"Catalog builder registers Route 8, Route 10, Route 12 and all six indoor exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
-	for transition in ["kanto_lavender_town__to_route12", "kanto_route_12__to_lavender_town", "kanto_route_12__to_route11_gate", "kanto_route_12_west__to_route12", "kanto_route_12__to_route13", "kanto_route_13__to_route12"]:
+	for transition in ["kanto_lavender_town__to_route12", "kanto_route_12__to_lavender_town", "kanto_route_12__to_route11_gate", "kanto_route_12_west__to_route12", "kanto_route_12__to_route13", "kanto_route_13__to_route12", "kanto_route_12__to_route13_water", "kanto_route_13__to_route12_water"]:
 		_check(catalog.transitions.has(transition), "Catalog authorizes " + transition)
 	_check(catalog.transitions.has("kanto_lavender_town__to_route8")
 		and catalog.transitions.has("kanto_route_8__to_lavender_town"),
@@ -212,10 +218,10 @@ func _run() -> void:
 func _check_connection(source: Node, exit_name: String, destination: Node, destination_path: String) -> void:
 	var exit := source.get_node("Exits/" + exit_name) as Area2D
 	_check(exit.monitoring and not (exit.get_node("CollisionShape2D") as CollisionShape2D).disabled,
-		"%s has an enabled walking trigger" % exit_name)
+		"%s has an enabled transition trigger" % exit_name)
 	_check(exit.get("target_scene_path") == destination_path, "%s points to the correct scene" % exit_name)
 	_check(exit.is_connected("body_entered", Callable(exit, "_on_body_entered")),
-		"%s responds to walking into the exit" % exit_name)
+		"%s responds when the player enters the exit" % exit_name)
 	var spawn := destination.get_node("Spawns/" + str(exit.get("target_spawn_name"))) as Marker2D
 	_check(spawn != null, "%s has a destination spawn" % exit_name)
 	for destination_exit: Node2D in destination.get_node("Exits").get_children():
@@ -284,3 +290,22 @@ func _check_route13_path(route13: Node) -> void:
 			reached[next] = true
 			queue.append(next)
 	_check(reached.has(target), "Route 13 north entrance connects through its fence maze to the southern path")
+
+
+func _check_route_water_arrivals(route12: Node, route13: Node) -> void:
+	var route12_water := route12.get_node("Tiles/Water") as TileMapLayer
+	var route12_collision := route12.get_node("Tiles/Collision") as TileMapLayer
+	var route13_water := route13.get_node("Tiles/Water") as TileMapLayer
+	var route13_collision := route13.get_node("Tiles/Collision") as TileMapLayer
+	_check(route12_water.get_cell_source_id(Vector2i(44, 120)) != -1
+		and route12_collision.get_cell_source_id(Vector2i(44, 120)) == -1,
+		"Route 12 water exit is placed on traversable Surf water")
+	_check(route12_water.get_cell_source_id(Vector2i(42, 120)) != -1
+		and route12_collision.get_cell_source_id(Vector2i(42, 120)) == -1,
+		"Route 12 water arrival is clear of collision")
+	_check(route13_water.get_cell_source_id(Vector2i(90, 30)) != -1
+		and route13_collision.get_cell_source_id(Vector2i(90, 30)) == -1,
+		"Route 13 water exit is placed on traversable Surf water")
+	_check(route13_water.get_cell_source_id(Vector2i(90, 32)) != -1
+		and route13_collision.get_cell_source_id(Vector2i(90, 32)) == -1,
+		"Route 13 water arrival is clear of collision")
