@@ -430,5 +430,9 @@
   "shiny-mega-alakazam-mount": {
     "name": "异色超级胡地坐骑",
     "shortDesc": "解锁异色超级胡地作为悬浮陆地坐骑。"
+  },
+  "mega-absol-mount": {
+    "name": "超级阿勃梭鲁坐骑",
+    "shortDesc": "解锁超级阿勃梭鲁作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

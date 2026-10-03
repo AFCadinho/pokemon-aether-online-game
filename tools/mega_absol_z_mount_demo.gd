@@ -5,6 +5,7 @@ const Preview := preload("res://scripts/ui/mount_rider_preview.gd")
 var rider: Node2D
 var direction := "down"
 var gender := "male"
+var mount_id := "mega_absol_z"
 var animate := true
 var camera: Camera2D
 
@@ -32,14 +33,14 @@ func _ready() -> void:
 	add_child(hud)
 	var instructions := Label.new()
 	instructions.position = Vector2(24, 20)
-	instructions.text = "Mega Absol Z — mount try-out\nWASD / arrows: move and turn  |  Space: animation on/off  |  G: male/female"
+	instructions.text = "Mega Absol / Mega Absol Z — mount try-out\nWASD / arrows: move and turn  |  Space: animation on/off  |  G: male/female  |  M: change mount"
 	instructions.add_theme_font_size_override("font_size", 22)
 	hud.add_child(instructions)
 	_configure()
 
 
 func _configure() -> void:
-	rider.call("configure", "mega_absol_z", {"gender": gender}, direction, animate)
+	rider.call("configure", mount_id, {"gender": gender}, direction, animate)
 
 
 func _process(delta: float) -> void:
@@ -66,4 +67,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		_configure()
 	elif event.physical_keycode == KEY_G:
 		gender = "female" if gender == "male" else "male"
+		_configure()
+	elif event.physical_keycode == KEY_M:
+		mount_id = "mega_absol" if mount_id == "mega_absol_z" else "mega_absol_z"
 		_configure()

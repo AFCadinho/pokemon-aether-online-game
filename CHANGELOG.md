@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add follower-based Mega Absol and refresh Mega Absol Z with approved compact artwork, fitted player masks, four-direction animation and individual icons.
+
 - Reuse loaded profile preferences at startup to avoid a redundant settings request and its timeout during world loading.
 
 - Load mount PNGs directly when a newly merged asset has not yet been imported, restoring Mega Absol Z visibility and its Bag icon in an already open checkout.

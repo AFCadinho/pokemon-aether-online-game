@@ -430,5 +430,9 @@
   "shiny-mega-alakazam-mount": {
     "name": "Shiny Mega Alakazam-mount",
     "shortDesc": "Ontgrendelt Shiny Mega Alakazam als zwevende landmount."
+  },
+  "mega-absol-mount": {
+    "name": "Mega Absol-mount",
+    "shortDesc": "Ontgrendelt Mega Absol als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }
