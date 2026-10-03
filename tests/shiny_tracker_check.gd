@@ -50,14 +50,14 @@ func _run() -> void:
 	popup.tracker_state["mounts"] = {
 		"activeBoxItemId": "rayquaza-mount-box", "totalBoxesOpened": 4,
 		"shinyMountsReceived": 1, "boxesSinceLastShiny": 3, "longestDryStreak": 3,
-		"boxes": [{"itemId": "rayquaza-mount-box", "name": "Rayquaza Mount Box", "quantity": 2, "normalMountId": "rayquaza", "shinyMountId": "rayquaza_shiny", "nextShinyChancePercent": 80}, {"itemId": "shadow-lugia-mount-box", "name": "Shadow Lugia Mount Box", "quantity": 1, "normalMountId": "shadow_lugia", "shinyMountId": "shadow_lugia_shiny", "nextShinyChancePercent": 50}, {"itemId": "mega-alakazam-mount-box", "name": "Mega Alakazam Mount Box", "quantity": 1, "normalMountId": "mega_alakazam", "shinyMountId": "mega_alakazam_shiny", "nextShinyChancePercent": 50}],
+		"boxes": [{"itemId": "rayquaza-mount-box", "name": "Rayquaza Mount Box", "quantity": 2, "normalMountId": "rayquaza", "shinyMountId": "rayquaza_shiny", "nextShinyChancePercent": 80}, {"itemId": "shadow-lugia-mount-box", "name": "Shadow Lugia Mount Box", "quantity": 1, "normalMountId": "shadow_lugia", "shinyMountId": "shadow_lugia_shiny", "nextShinyChancePercent": 50}, {"itemId": "mega-alakazam-mount-box", "name": "Mega Alakazam Mount Box", "quantity": 1, "normalMountId": "mega_alakazam", "shinyMountId": "mega_alakazam_shiny", "nextShinyChancePercent": 50}, {"itemId": "glaceon-mount-box", "name": "Glaceon Mount Box", "quantity": 1, "normalMountId": "glaceon", "shinyMountId": "glaceon_shiny", "nextShinyChancePercent": 50}],
 		"recentOpenings": [{"mountId": "rayquaza_shiny", "isShiny": true, "alreadyOwned": true, "shinyChancePercent": 70}],
 	}
 	popup.call("_render_tracker")
 	popup.call("_select_tracker_tab", "mounts")
 	_check(popup.mount_workspace.visible and not popup.pokemon_workspace.visible, "Mounts tab switches away from Pokémon")
 	_check(popup.mount_stat_labels["totalBoxesOpened"].text == "4", "Mount counters render independently")
-	_check(popup.mount_open_buttons.size() == 3 and not popup.mount_open_buttons[0].disabled and not popup.mount_open_buttons[1].disabled and not popup.mount_open_buttons[2].disabled, "Owned box can be opened from tracker")
+	_check(popup.mount_open_buttons.size() == 4 and not popup.mount_open_buttons[0].disabled and not popup.mount_open_buttons[1].disabled and not popup.mount_open_buttons[2].disabled and not popup.mount_open_buttons[3].disabled, "Owned box can be opened from tracker")
 	_check(popup.mount_history_list.get_child(0).text.contains("70%") and popup.mount_history_list.get_child(0).text.contains("duplicate"), "History discloses used chance and duplicate outcomes")
 	popup.request_busy = true
 	popup.call("_refresh_actions")
@@ -75,6 +75,10 @@ func _run() -> void:
 	popup.call("_on_mount_open_pressed", popup.tracker_state["mounts"]["boxes"][2])
 	_check(popup.pending_mount_box_id == "mega-alakazam-mount-box" and popup.mount_confirmation.dialog_text.contains("50%") and popup.mount_confirmation.dialog_text.contains("Mega Alakazam"), "Tracker opens the Mega Alakazam box with its own chance")
 	popup.mount_confirmation.hide()
+	popup.call("_on_mount_open_pressed", popup.tracker_state["mounts"]["boxes"][3])
+	_check(popup.pending_mount_box_id == "glaceon-mount-box" and popup.mount_confirmation.dialog_text.contains("50%") and popup.mount_confirmation.dialog_text.contains("Glaceon"), "Tracker opens the Glaceon box with its own chance")
+	popup.mount_confirmation.hide()
+	_check(ItemIcons.load_icon("glaceon-mount-box") != null, "Glaceon box has its mount icon")
 
 	if "--preview-mounts" in OS.get_cmdline_user_args():
 		root.size = Vector2i(1200, 800)
@@ -109,7 +113,7 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate()
 	root.add_child(store)
 	await process_frame
-	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
+	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "glaceon-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
 	store.call("_select_category", "mounts")
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
@@ -126,6 +130,9 @@ func _run() -> void:
 	store.call("_select_product", "mega-alakazam-mount-box")
 	_check(not store.purchase_button.disabled and store.selection_description_label.text == "Contains a Mega Alakazam mount. Base shiny chance: 50%.", "Mega Alakazam box uses a short reward description and authoritative purchase")
 	await _check_mount_preview(store, "mega_alakazam")
+	store.call("_select_product", "glaceon-mount-box")
+	_check(not store.purchase_button.disabled and store.selection_description_label.text == "Contains a Glaceon mount. Base shiny chance: 50%.", "Glaceon box uses a short reward description and authoritative purchase")
+	await _check_mount_preview(store, "glaceon")
 	store.call("_select_product", "shadow-lugia-mount-box")
 	if localization_manager != null:
 		localization_manager.set_locale("nl")
