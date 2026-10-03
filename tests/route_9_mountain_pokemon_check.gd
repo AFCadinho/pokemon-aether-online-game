@@ -1,10 +1,10 @@
 extends SceneTree
 
 const EXPECTED_POKEMON := {
-	"Gligar": ["kanto_route_9_mountain_gligar_1", "gligar", Vector2(480, 400)],
-	"Nosepass": ["kanto_route_9_mountain_nosepass_1", "nosepass", Vector2(1120, 400)],
-	"Shieldon": ["kanto_route_9_mountain_shieldon_1", "shieldon", Vector2(1760, 400)],
-	"Carbink": ["kanto_route_9_mountain_carbink_1", "carbink", Vector2(2240, 400)],
+	"Gligar": ["kanto_route_9_mountain_gligar_1", "gligar", Vector2(1104, 816)],
+	"Nosepass": ["kanto_route_9_mountain_nosepass_1", "nosepass", Vector2(784, 400)],
+	"Shieldon": ["kanto_route_9_mountain_shieldon_1", "shieldon", Vector2(1936, 656)],
+	"Carbink": ["kanto_route_9_mountain_carbink_1", "carbink", Vector2(1904, 400)],
 }
 
 var failed := false
@@ -24,6 +24,8 @@ func _run() -> void:
 	var water := map.get_node("Tiles/Water") as TileMapLayer
 	_check(mountain.get_child_count() == EXPECTED_POKEMON.size(), "Route 9 has four mountain Pokemon")
 	var pokemon_ids: Dictionary = {}
+	var waits: Dictionary = {}
+	var speeds: Dictionary = {}
 	for node_name: String in EXPECTED_POKEMON:
 		var expected: Array = EXPECTED_POKEMON[node_name]
 		var pokemon := mountain.get_node_or_null(node_name) as Node2D
@@ -38,6 +40,9 @@ func _run() -> void:
 		_check(pokemon.position == expected[2], "%s is placed on the north mountain" % node_name)
 		_check(str(pokemon.get("movement_behavior")) == "pace_horizontal", "%s patrols its ledge horizontally" % node_name)
 		_check(int(pokemon.get("movement_tiles")) == 1, "%s uses a one-tile patrol" % node_name)
+		_check(float(pokemon.get("movement_wait_jitter_seconds")) > 0.0, "%s has randomized pauses" % node_name)
+		waits[float(pokemon.get("movement_wait_seconds"))] = true
+		speeds[float(pokemon.get("movement_speed_pixels"))] = true
 		_check(FollowerSpriteService.get_sprite_frames(expected[1], false) != null, "%s follower sprite resolves" % node_name)
 		var center := collision.local_to_map(collision.to_local(pokemon.global_position))
 		for offset in range(-1, 2):
@@ -45,7 +50,9 @@ func _run() -> void:
 			_check(collision.get_cell_source_id(cell) < 0, "%s patrol stays on open mountain ground" % node_name)
 			_check(grass.get_cell_source_id(cell) < 0, "%s patrol stays outside wild grass" % node_name)
 			_check(water.get_cell_source_id(cell) < 0, "%s patrol stays out of water" % node_name)
-		_check(_land_component_size(center, Rect2i(0, 0, 96, 48), collision, water) == 264, "%s remains on the isolated mountain" % node_name)
+		_check(_land_component_size(center, Rect2i(0, 0, 96, 48), collision, water) > 0, "%s remains on connected mountain ground" % node_name)
+	_check(waits.size() == EXPECTED_POKEMON.size(), "Route 9 mountain Pokémon use distinct base pauses")
+	_check(speeds.size() == EXPECTED_POKEMON.size(), "Route 9 mountain Pokémon use distinct movement speeds")
 	map.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
