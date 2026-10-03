@@ -412,6 +412,8 @@ item_id = "max-ether"
 
 [node name="RockTunnelSign" parent="Entities/Interactables/Signs" unique_id=1525710322 instance=ExtResource("10_h4b5l")]
 position = Vector2(976, 1168)
+sign_id = "kanto_route_10_rock_tunnel_sign"
+sign_type = "road"
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 

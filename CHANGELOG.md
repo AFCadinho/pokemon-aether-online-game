@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Add localized Rock Tunnel sign text and preview art on Route 10.
+
+- Add localized Rock Tunnel sign text and preview art on Route 10.
+
 - Reduce Mega Alakazam's mount sprite by 29% and realign the psychic ring and rear rider while preserving player size and the seated pose.
 
 - Add localized Route 9 sign text and a new illustrated preview.
