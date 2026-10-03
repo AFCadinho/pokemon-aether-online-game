@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rayquaza now hovers above a ground shadow while moving and standing still, with a calmer flight animation and no sand footprints.
+
 - Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
 
 - Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.

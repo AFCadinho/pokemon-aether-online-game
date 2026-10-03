@@ -5,6 +5,12 @@ atlas with four directions and four movement phases. Mount frames are 128×128;
 the player and every outfit layer remain at their existing 64×64 resolution.
 The creature floats visually but uses the existing land-mount movement rules.
 
+The rendered mount, foreground and rider hover together 16 pixels above their
+normal position, with a two-pixel bob over 2.4 seconds, including at rest. A
+stationary ground shadow makes the height visible. Movement frames play at four
+frames per second. Collision, tile movement, route restrictions and regional
+licenses retain their existing rules; hovering leaves no sand footprints.
+
 ## Manual availability
 
 Grant one `rayquaza-mount` inventory item through the existing admin item reward

@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
+
 const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
 
 signal overworld_steps_completed(step_count: int)
@@ -300,6 +302,8 @@ var fishing_activity_state := FISHING_STATE_NONE
 var surf_activity_active := false
 var land_mount_activity_active := false
 var active_mount_id := ""
+var mount_hover_visual: MountHoverVisual
+var mount_hover_id := ""
 var base_look_position := Vector2.ZERO
 var base_rider_position := Vector2.ZERO
 var fishing_prompt_button: Button
@@ -360,6 +364,7 @@ func get_active_land_mount_id() -> String:
 	return active_mount_id if land_mount_activity_active else ""
 
 func _sync_mount_visual() -> void:
+	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
 	var normalized_mount_id := MountService.normalize_mount_id(active_mount_id)
@@ -388,6 +393,28 @@ func _sync_mount_visual() -> void:
 	mount_foreground_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 	mount_foreground_sprite.visible = foreground_frames != null
 	_sync_mount_animation(is_moving, last_direction)
+
+func _update_mount_hover(delta: float) -> void:
+	var changed := mount_hover_id != active_mount_id
+	if changed:
+		mount_hover_id = active_mount_id
+		var definition := MountService.get_mount_definition(mount_hover_id)
+		if mount_hover_visual == null and float(definition.get("hoverHeight", 0.0)) > 0.0:
+			mount_hover_visual = MountHoverVisual.new()
+			mount_hover_visual.name = "MountHoverShadow"
+			add_child(mount_hover_visual)
+		if mount_hover_visual != null:
+			mount_hover_visual.configure(definition)
+	if mount_hover_visual != null:
+		mount_hover_visual.advance(delta)
+		mount_hover_visual.position = stair_visual_offset
+	if changed or _get_mount_hover_offset() != Vector2.ZERO:
+		_apply_activity_visual_offset()
+
+
+func _get_mount_hover_offset() -> Vector2:
+	return mount_hover_visual.visual_offset if mount_hover_visual != null else Vector2.ZERO
+
 
 func _connect_mount_frame_sync() -> void:
 	if mount_sprite == null:
@@ -1631,6 +1658,7 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _process(delta: float) -> void:
+	_update_mount_hover(delta)
 	_update_sort_z()
 	_sync_body_sprite_frames_for_movement()
 	_sync_appearance_sprite_frames()
@@ -2693,6 +2721,8 @@ func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_w
 	effect.play(_snap_world_position(world_position), kind)
 
 func _spawn_sand_footprint_effect() -> void:
+	if _get_mount_hover_offset() != Vector2.ZERO:
+		return
 	var footprint_offset: Variant = _get_sand_footprint_offset(global_position)
 	if footprint_offset == null:
 		return
@@ -3213,12 +3243,12 @@ func _sync_activity_layer_offsets() -> void:
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset + _get_mount_hover_offset()
 
 func _restore_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + stair_visual_offset
+	look_node.position = base_look_position + stair_visual_offset + _get_mount_hover_offset()
 
 
 func _update_stair_visual_offset(progress: float) -> void:
