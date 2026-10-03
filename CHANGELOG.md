@@ -4,6 +4,8 @@
 
 - Add the 500-Gem Glaceon Mount Box to the Gift Store with player-mounted normal/shiny previews and Shiny Tracker support.
 
+- Give Mega Absol Z clearer planted and lifted walking paws with a wider stride, preserving its upper-body artwork and fitted rider positions.
+
 - Give Mega Garchomp clearly alternating walking strides and lifted feet while retaining the approved head, riding position and standing pose.
 
 - Add Shiny Glaceon using the existing shiny follower palette, preserving the fitted riding pose, native scale and side-ear layering.
