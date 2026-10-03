@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_vermilion_city",
+  "signs": [
+    {
+      "id": "kanto_vermilion_city_gym",
+      "type": "building",
+      "title": "Vermilion City Pokémon Gym",
+      "lines": [
+        "Vermilion City Pokémon Gym",
+        "Leader: Lt. Surge — The Lightning American. Trainers who win earn the Thunder Badge."
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_pokemon_fan_club",
+      "type": "building",
+      "title": "Vermilion City Pokémon Fan Club",
+      "lines": [
+        "Pokémon Fan Club",
+        "All Pokémon fans are welcome!"
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_guild_base",
+      "type": "building",
+      "title": "Trainer Guild Base — Coming Soon",
+      "lines": [
+        "A place for Trainer guilds to gather and plan their adventures.",
+        "Guild Base travel will become available later."
+      ]
+    }
+  ]
+}

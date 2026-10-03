@@ -1,0 +1,33 @@
+{
+  "regionId": "kanto",
+  "mapId": "kanto_vermilion_city",
+  "signs": [
+    {
+      "id": "kanto_vermilion_city_gym",
+      "type": "building",
+      "title": "枯叶市宝可梦道馆",
+      "lines": [
+        "枯叶市宝可梦道馆",
+        "馆主：马志士——“雷电的美国人”。获胜者可获得橘子徽章。"
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_pokemon_fan_club",
+      "type": "building",
+      "title": "枯叶市宝可梦爱好者俱乐部",
+      "lines": [
+        "宝可梦爱好者俱乐部",
+        "欢迎所有宝可梦爱好者！"
+      ]
+    },
+    {
+      "id": "kanto_vermilion_city_guild_base",
+      "type": "building",
+      "title": "训练家公会基地——即将开放",
+      "lines": [
+        "训练家公会聚集并规划冒险的地方。",
+        "前往公会基地的旅行功能将在稍后开放。"
+      ]
+    }
+  ]
+}

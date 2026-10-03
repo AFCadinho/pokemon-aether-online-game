@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/power_plant/power_plant.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_0rmos"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_kw2uo"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
@@ -102,12 +103,12 @@ grass_encounter_chance = 0.21
 [node name="Spawns" type="Node2D" parent="." unique_id=821032076]
 
 [node name="FromRoute10" type="Marker2D" parent="Spawns" unique_id=159344074]
-position = Vector2(272, 1584)
+position = Vector2(272, 1648)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1548977790]
 
 [node name="ToRoute10" type="Area2D" parent="Exits" unique_id=1176795849]
-position = Vector2(272, 1648)
+position = Vector2(256, 1680)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromPowerPlant"
@@ -115,10 +116,17 @@ transition_id = "kanto_power_plant__to_route_10"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10" unique_id=1273051805]
+position = Vector2(16, 16)
 shape = SubResource("shape_96_32")
 
+[node name="RouteTransitionHint" parent="Exits/ToRoute10" unique_id=616041802 instance=ExtResource("4_0rmos")]
+z_as_relative = false
+position = Vector2(16, 16)
+tile_footprint = Vector2i(3, 1)
+flow_direction = "down"
+
 [node name="ToRoute10Northwest" type="Area2D" parent="Exits" unique_id=238755281]
-position = Vector2(112, 336)
+position = Vector2(80, 336)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
 target_spawn_name = "FromPowerPlant"
@@ -126,7 +134,13 @@ transition_id = "kanto_power_plant__to_route_10_northwest"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10Northwest" unique_id=110575943]
+position = Vector2(-16, 0)
 shape = SubResource("shape_32_96")
+
+[node name="RouteTransitionHint" parent="Exits/ToRoute10Northwest" unique_id=1515931594 instance=ExtResource("4_0rmos")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 3)
+flow_direction = "left"
 
 [node name="Entities" type="Node2D" parent="." unique_id=502621904]
 z_index = 5
