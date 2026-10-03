@@ -2,6 +2,7 @@ extends Node
 ## Downloads only the approved models requested by a desktop battle.
 
 const RELEASE = preload("res://data/approved_3d_release_v7.json")
+const RELEASE_V8 = preload("res://data/approved_3d_release_v8.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
@@ -180,7 +181,17 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 
 func _asset_id(identity: String) -> String:
 	var id := asset_id_for_identity(identity)
-	return id if id in RELEASE.data.requiredAssetIds else ""
+	var selected_release := _selected_release()
+	return id if id in selected_release.requiredAssetIds else ""
+
+
+func _selected_release() -> Dictionary:
+	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
+	if launcher_path.is_absolute_path():
+		var pin: Dictionary = RELEASE_V8.data.index
+		if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
+			return RELEASE_V8.data
+	return RELEASE.data
 
 
 static func asset_id_for_identity(identity: String) -> String:
@@ -233,7 +244,8 @@ func _entry_available(entries: Array, identity: String, expected_digest: String)
 
 
 func _approved_index() -> Dictionary:
-	var pin: Dictionary = RELEASE.data.index
+	var release := _selected_release()
+	var pin: Dictionary = release.index
 	var path := ROOT.path_join("index-%s.json" % pin.sha256)
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
@@ -243,7 +255,7 @@ func _approved_index() -> Dictionary:
 		if not result.is_empty():
 			return {"error": result}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != RELEASE.data.revision:
+	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
 		return {"error": "Approved 3D content index is invalid."}
 	return {"error": "", "index": parsed}
 
