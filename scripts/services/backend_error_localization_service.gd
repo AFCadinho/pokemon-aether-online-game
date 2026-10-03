@@ -11,6 +11,13 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"static_encounter_poke_flute_required": "static_encounter.snorlax_sleeping",
+	"static_encounter_completed": "backend.error.unavailable",
+	"static_encounter_wrong_map": "backend.error.coop_npc_out_of_range",
+	"static_encounter_out_of_reach": "backend.error.coop_npc_out_of_range",
+	"static_encounter_player_busy": "backend.error.action_blocked",
+	"static_encounter_start_pending": "backend.error.request_conflict",
+	"static_encounter_authority_unavailable": "backend.error.unavailable",
 	"unauthorized": "backend.error.auth_required",
 	"not_authenticated": "backend.error.auth_required",
 	"authentication_required": "backend.error.auth_required",

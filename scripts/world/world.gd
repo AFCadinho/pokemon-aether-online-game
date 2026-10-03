@@ -3658,7 +3658,8 @@ func create_dev_wild_battle_response(wild_pokemon: Pokemon) -> Dictionary:
 func create_triggered_wild_battle_response(
 	area_id: String,
 	encounter_type: String = "grass",
-	forced_species_id: String = ""
+	forced_species_id: String = "",
+	static_encounter_id: String = ""
 ) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
@@ -3674,7 +3675,8 @@ func create_triggered_wild_battle_response(
 		encounter_type,
 		_get_current_wild_battle_origin(),
 		debug_time_of_day,
-		forced_species_id
+		forced_species_id,
+		static_encounter_id
 	)
 
 	battle_request.queue_free()
@@ -3991,38 +3993,40 @@ func start_triggered_wild_battle_for_area(
 	area_id: String,
 	encounter_type: String = "grass",
 	forced_species_id: String = "",
-	retry_after_expired_battle := true
+	retry_after_expired_battle := true,
+	static_encounter_id: String = ""
 ) -> void:
 	WebMemoryProbe.mark("battle_start_requested")
 	if is_in_battle or wild_battle_resume_pending:
 		return
 	if coop_wild_step_pending:
 		return
-	coop_wild_step_pending = true
-	if not forced_species_id.is_empty():
-		var dev_spawn: Dictionary = await CoopService.try_dev_wild_spawn({
-			"kind": "map", "speciesId": forced_species_id, "encounterType": encounter_type,
-		})
-		if dev_spawn.get("handled", false):
-			coop_wild_step_pending = false
-			if not dev_spawn.get("success", false):
-				CoopService.request_failed.emit("dev_wild:" + str(dev_spawn.get("code", "coop_start_pending")))
-			return
-	var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
-	coop_wild_step_pending = false
-	if coop_step.get("handled", false):
-		if not coop_step.get("success", false):
-			CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
-		return
-	if coop_step.get("status", "") == "solo" and forced_species_id.is_empty():
-		var solo_encounter := WildEncounterProvider.resolve_wild_encounter(GameState.current_map, player.global_position, encounter_type)
-		if not bool(solo_encounter.get("available", false)):
-			return
-		if bool(solo_encounter.get("use_map_trigger", false)):
-			if not bool(GameState.current_map.call("should_trigger_wild_encounter", encounter_type)):
+	if static_encounter_id.is_empty():
+		coop_wild_step_pending = true
+		if not forced_species_id.is_empty():
+			var dev_spawn: Dictionary = await CoopService.try_dev_wild_spawn({
+				"kind": "map", "speciesId": forced_species_id, "encounterType": encounter_type,
+			})
+			if dev_spawn.get("handled", false):
+				coop_wild_step_pending = false
+				if not dev_spawn.get("success", false):
+					CoopService.request_failed.emit("dev_wild:" + str(dev_spawn.get("code", "coop_start_pending")))
 				return
-		elif randf() > clampf(float(solo_encounter.get("chance", 0.0)), 0.0, 1.0):
+		var coop_step: Dictionary = await CoopService.try_wild_step(encounter_type)
+		coop_wild_step_pending = false
+		if coop_step.get("handled", false):
+			if not coop_step.get("success", false):
+				CoopService.request_failed.emit(str(coop_step.get("code", "Co-op wild encounter unavailable.")))
 			return
+		if coop_step.get("status", "") == "solo" and forced_species_id.is_empty():
+			var solo_encounter := WildEncounterProvider.resolve_wild_encounter(GameState.current_map, player.global_position, encounter_type)
+			if not bool(solo_encounter.get("available", false)):
+				return
+			if bool(solo_encounter.get("use_map_trigger", false)):
+				if not bool(GameState.current_map.call("should_trigger_wild_encounter", encounter_type)):
+					return
+			elif randf() > clampf(float(solo_encounter.get("chance", 0.0)), 0.0, 1.0):
+				return
 	if is_in_battle or wild_battle_resume_pending:
 		return
 
@@ -4050,13 +4054,13 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_response(position_result)
 		return
 	_trace_mobile_wild_transition("position_saved", transition_started_at_msec)
-	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
+	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id, static_encounter_id)
 	if (
 		not response.get("success", false)
 		and WildEncounterErrorRules.error_code(response) == "pokemon_party_changed_refresh_required"
 		and await _load_player_party_state()
 	):
-		response = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id)
+		response = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id, static_encounter_id)
 	if not response.get("success", false):
 		if WildEncounterErrorRules.error_code(response) == "active_trainer_battle_exists":
 			await _cancel_wild_encounter_transition()
@@ -4090,7 +4094,8 @@ func start_triggered_wild_battle_for_area(
 						area_id,
 						encounter_type,
 						forced_species_id,
-						false
+						false,
+						static_encounter_id
 					)
 					return
 		if WildEncounterErrorRules.message_lines(response).is_empty():
@@ -4589,6 +4594,8 @@ func _fade_classic_wild_battle_out() -> bool:
 
 
 func _on_battle_ended(result: Dictionary) -> void:
+	# Completion is committed by the server before a static terminal response.
+	get_tree().call_group("static_encounters", "refresh_status")
 	var should_claim_wild_reward := _should_claim_wild_battle_reward(result)
 	var is_weekly_boss := not active_weekly_boss_id.is_empty()
 	var should_claim_trainer_reward := not is_weekly_boss and _should_claim_trainer_battle_reward(result)
