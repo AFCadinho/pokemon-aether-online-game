@@ -35,7 +35,10 @@ func _ready() -> void:
 	# code so stale inherited-scene overrides cannot silently disable attuning.
 	requires_facing = false
 	interaction_shape_size = Vector2(80, 80)
-	display_name = LocalizationManager.text("world.aether_beacon.name")
+	if Engine.is_editor_hint():
+		display_name = "Aether Beacon"
+	else:
+		display_name = LocalizationManager.text("world.aether_beacon.name")
 	if floating_visual != null:
 		_base_visual_position = floating_visual.position
 	super._ready()
