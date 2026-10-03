@@ -382,6 +382,7 @@ y_sort_enabled = true
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1231337548]
 
 [node name="Tiles" type="Node2D" parent="." unique_id=384942785]
+visible = false
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=614338377]
 visible = false
