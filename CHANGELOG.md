@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
+
 - Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
 - Added the larger Rayquaza land mount, unlocked by a manually granted mount item; larger mount masks preserve the existing player and outfit scale.
 

@@ -448,6 +448,56 @@ movement_tiles = 1
 movement_wait_seconds = 1.8
 movement_speed_pixels = 36.0
 
+[node name="MountainPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=190000610]
+
+[node name="Gligar" parent="Entities/Pokemon/MountainPokemon" unique_id=190000611 instance=ExtResource("pokemon")]
+position = Vector2(480, 400)
+overworld_pokemon_id = "kanto_route_9_mountain_gligar_1"
+species_id = "gligar"
+level = 13
+display_name = "Gligar"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 36.0
+
+[node name="Nosepass" parent="Entities/Pokemon/MountainPokemon" unique_id=190000612 instance=ExtResource("pokemon")]
+position = Vector2(1120, 400)
+overworld_pokemon_id = "kanto_route_9_mountain_nosepass_1"
+species_id = "nosepass"
+level = 14
+display_name = "Nosepass"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+
+[node name="Shieldon" parent="Entities/Pokemon/MountainPokemon" unique_id=190000613 instance=ExtResource("pokemon")]
+position = Vector2(1760, 400)
+overworld_pokemon_id = "kanto_route_9_mountain_shieldon_1"
+species_id = "shieldon"
+level = 14
+display_name = "Shieldon"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.6
+movement_speed_pixels = 36.0
+
+[node name="Carbink" parent="Entities/Pokemon/MountainPokemon" unique_id=190000614 instance=ExtResource("pokemon")]
+position = Vector2(2240, 400)
+overworld_pokemon_id = "kanto_route_9_mountain_carbink_1"
+species_id = "carbink"
+level = 15
+display_name = "Carbink"
+facing_direction = Vector2(-1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_speed_pixels = 32.0
+
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=678217890]
 
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=1146792404]
