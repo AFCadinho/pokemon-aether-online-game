@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
+
 - Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.
 
 - Add the artist-authored Route 8 exterior and connect its eastern exit to Lavender Town.
