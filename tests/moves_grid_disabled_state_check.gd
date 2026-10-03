@@ -48,6 +48,12 @@ func _run_check() -> void:
 		"next decision restores the complete move-button subtree"
 	)
 
+	# Entry masks can restore an older tint without changing input state.
+	moves_grid.modulate = MovesGrid.INPUT_DISABLED_MODULATE
+	moves_grid.refresh_input_visual_state()
+	_check_equal(moves_grid.modulate, MovesGrid.INPUT_ENABLED_MODULATE, "refreshing the current input state repairs a stale entry tint")
+	_check(not available_move.disabled and unavailable_move.disabled, "visual repair preserves individual move availability")
+
 	moves_grid._on_slot_hovered({"name": "Substitute"}, Rect2())
 	_check_equal(hovered_moves.size(), 1, "unlocked moves can show hover presentation again")
 
