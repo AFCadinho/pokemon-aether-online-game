@@ -15,6 +15,7 @@ const PEWTER_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/pewter_city
 const CERULEAN_CITY_SCENE := "res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn"
 const CERULEAN_CITY_SIGN_DATA := "res://data/world_text/signs/en/kanto/cerulean_city.json"
 const ROUTE_3_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_3.tscn"
+const ROUTE_5_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 const ROUTE_24_SCENE := "res://scenes/overworld/kanto/routes/kanto_route_24.tscn"
 const ROUTE_25_SCENE := "res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn"
 const ROUTE_SIGN_DATA := "res://data/world_text/signs/en/kanto/routes.json"
@@ -149,6 +150,8 @@ func _check_sign_portrait_catalog() -> void:
 		"kanto_route_2_digletts_cave",
 		"kanto_route_22_route_sign",
 		"kanto_route_3_mt_moon_sign",
+		"kanto_route_5_daycare_sign",
+		"kanto_route_5_underground_path_sign",
 		"kanto_route_24_route_sign",
 		"kanto_route_25_route_sign",
 	]
@@ -283,6 +286,8 @@ func _check_cerulean_city_sign_markers() -> void:
 func _check_cerulean_route_sign_markers() -> void:
 	var route_data_text := _read_text(ROUTE_SIGN_DATA)
 	var expected_signs := {
+		"kanto_route_5_daycare_sign": [ROUTE_5_SCENE, "kanto_route_5"],
+		"kanto_route_5_underground_path_sign": [ROUTE_5_SCENE, "kanto_route_5"],
 		"kanto_route_24_route_sign": [ROUTE_24_SCENE, "kanto_route_24"],
 		"kanto_route_25_route_sign": [ROUTE_25_SCENE, "kanto_route_25"],
 	}
