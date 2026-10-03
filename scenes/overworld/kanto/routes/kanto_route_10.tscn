@@ -415,6 +415,11 @@ position = Vector2(976, 1168)
 sign_id = "kanto_route_10_rock_tunnel_sign"
 sign_type = "road"
 
+[node name="RockTunnelSign2" parent="Entities/Interactables/Signs" unique_id=570894689 instance=ExtResource("10_h4b5l")]
+position = Vector2(784, 2640)
+sign_id = "kanto_route_10_rock_tunnel_sign"
+sign_type = "road"
+
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000001]
 
 [node name="Voltorb" parent="Entities/Pokemon" unique_id=190000185 instance=ExtResource("pokemon")]
