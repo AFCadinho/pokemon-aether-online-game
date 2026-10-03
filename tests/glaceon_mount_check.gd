@@ -15,10 +15,13 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for mount_id: String in ["glaceon"]:
+	for mount_id: String in ["glaceon", "glaceon_shiny"]:
 		current_mount_id = mount_id
-		current_item_id = mount_id.replace("_", "-") + "-mount"
+		current_item_id = "shiny-glaceon-mount" if mount_id == "glaceon_shiny" else "glaceon-mount"
 		await _check_mount()
+	_check(Mounts._get_mask_image("glaceon").get_data() == Mounts._get_mask_image("glaceon_shiny").get_data(), "normal and shiny preserve identical rider masks")
+	_check(Mounts.get_mount_definition("glaceon")["riderOffsets"] == Mounts.get_mount_definition("glaceon_shiny")["riderOffsets"], "normal and shiny preserve identical seating")
+	_check(Mounts.get_unlocked_mount_ids_for_mode("land", ["glaceon-mount", "shiny-glaceon-mount"]) == ["glaceon", "glaceon_shiny"], "both variants remain separately owned")
 	print("Glaceon mount checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -42,7 +45,8 @@ func _check_mount() -> void:
 	if mount == null or foreground == null or mask == null:
 		quit(1)
 		return
-	var source := Mounts._load_mount_texture("res://assets/followers/GLACEON.png").get_image()
+	var source_path := "res://assets/followers_shiny/GLACEON.png" if current_mount_id == "glaceon_shiny" else "res://assets/followers/GLACEON.png"
+	var source := Mounts._load_mount_texture(source_path).get_image()
 	var expected_seats := [Vector2i(0, -30), Vector2i(14, -26), Vector2i(-14, -26), Vector2i(0, -20)]
 	for row in range(4):
 		var anim := StringName("walk_" + DIRECTIONS[row])

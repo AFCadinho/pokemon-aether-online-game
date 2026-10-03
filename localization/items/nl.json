@@ -442,5 +442,9 @@
   "glaceon-mount": {
     "name": "Glaceon-mount",
     "shortDesc": "Ontgrendelt Glaceon als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-glaceon-mount": {
+    "name": "Shiny Glaceon-mount",
+    "shortDesc": "Ontgrendelt Shiny Glaceon als landmount. Vereist een Mount License voor de huidige regio."
   }
 }

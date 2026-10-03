@@ -442,5 +442,9 @@
   "glaceon-mount": {
     "name": "冰伊布坐骑",
     "shortDesc": "解锁冰伊布陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-glaceon-mount": {
+    "name": "异色冰伊布坐骑",
+    "shortDesc": "解锁异色冰伊布陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }
