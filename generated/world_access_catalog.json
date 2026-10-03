@@ -1953,7 +1953,9 @@
 			"locationGroupId": "kanto_power_plant",
 			"locationGroupLabel": "Power Plant",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://bs5qstcse4elg"
+			],
 			"scenePath": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
 			"spawnPoints": {
 				"route_10_entrance": {
@@ -1963,7 +1965,7 @@
 					"spawnMarker": "FromRoute10",
 					"tile": {
 						"x": 8,
-						"y": 49
+						"y": 51
 					}
 				}
 			}
@@ -3128,6 +3130,28 @@
 					"tile": {
 						"x": 10,
 						"y": 18
+					}
+				}
+			}
+		},
+		"kanto_route_8": {
+			"areaType": "route",
+			"defaultMode": "open",
+			"label": "Route 8",
+			"locationGroupId": "kanto_route_8",
+			"locationGroupLabel": "Route 8",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+			"spawnPoints": {
+				"from_lavender_town": {
+					"facingDirection": "down",
+					"label": "Lavender Town",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromLavenderTown",
+					"tile": {
+						"x": 78,
+						"y": 16
 					}
 				}
 			}
@@ -5373,6 +5397,20 @@
 			"destinationAreaId": "kanto_route_10",
 			"sourceMapId": "kanto_lavender_town"
 		},
+		"kanto_lavender_town__to_route8": {
+			"destination": {
+				"mapId": "kanto_route_8",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_8.tscn",
+				"position": {
+					"x": 2496.0,
+					"y": 512.0
+				},
+				"spawnMarker": "FromLavenderTown"
+			},
+			"destinationAreaId": "kanto_route_8",
+			"sourceMapId": "kanto_lavender_town"
+		},
 		"kanto_lavender_town_house_1__to_outside": {
 			"destination": {
 				"mapId": "kanto_lavender_town",
@@ -6236,11 +6274,13 @@
 		"kanto_route_10__to_power_plant": {
 			"destination": {
 				"mapId": "kanto_power_plant",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://bs5qstcse4elg"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/interiors/power_plant.tscn",
 				"position": {
 					"x": 272.0,
-					"y": 1584.0
+					"y": 1648.0
 				},
 				"spawnMarker": "FromRoute10"
 			},
@@ -7214,6 +7254,22 @@
 			},
 			"destinationAreaId": "kanto_saffron_city",
 			"sourceMapId": "kanto_route_6_saffron_gate"
+		},
+		"kanto_route_8__to_lavender_town": {
+			"destination": {
+				"mapId": "kanto_lavender_town",
+				"mapSceneAliases": [
+					"uid://c4d77ryf5shti"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn",
+				"position": {
+					"x": 80.0,
+					"y": 784.0
+				},
+				"spawnMarker": "FromRoute8"
+			},
+			"destinationAreaId": "kanto_lavender_town",
+			"sourceMapId": "kanto_route_8"
 		},
 		"kanto_route_9__to_cerulean_city": {
 			"destination": {
