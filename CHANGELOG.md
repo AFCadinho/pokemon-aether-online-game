@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Gary lets players enter Pokémon Tower 2F and retreat freely, stopping them only when they pass him toward 3F.
+
 - Gary automatically stops the player on Pokémon Tower 2F for his active story battle.
 
 - Add FireRed/LeafGreen Power Plant Pokémon and nearby HeartGold/SoulSilver Route 10 species as ambient overworld encounters.

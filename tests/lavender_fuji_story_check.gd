@@ -56,9 +56,12 @@ func _run() -> void:
 	_check(auto.get_node("StoryHook").interaction_id == "kanto_pokemon_tower_gary_auto_challenge", "Automatic challenge uses the server area-entry binding")
 	var shape := auto.get_node("CollisionShape2D") as CollisionShape2D
 	var bounds := Rect2(auto.position - shape.shape.size / 2, shape.shape.size)
-	_check(bounds == tower.get_node("FloorVisibilityMask").floor_regions[&"floor_2"], "Every route across 2F crosses Gary's challenge area")
-	for marker in ["Spawns/Floor2From1", "Spawns/Floor2From3", "FloorTransitions/Floor2To3"]:
-		_check(bounds.has_point(tower.get_node(marker).position), "Gary covers arrival and onward stair: " + marker)
+	_check(auto.position.x == gary.position.x - 32, "Gary stops the player one tile past his position toward 3F")
+	var arrival: Vector2 = tower.get_node("Spawns/Floor2From1").position
+	_check(not bounds.grow(16).has_point(arrival), "Arriving on 2F does not challenge the player")
+	_check(not bounds.has_point(tower.get_node("FloorTransitions/Floor2To1").position), "The return stair remains outside Gary's trigger")
+	_check(_route_exists(tower, arrival, tower.get_node("FloorTransitions/Floor2To3").position, Rect2()), "There is a walkable route across 2F")
+	_check(not _route_exists(tower, arrival, tower.get_node("FloorTransitions/Floor2To3").position, bounds), "Every route to 3F passes Gary's trigger")
 	# Mount the shared battle presenter without the DialogueNPC startup requests.
 	var battle_host := (load("res://scenes/npcs/dialogue_npc.tscn") as PackedScene).instantiate() as Node2D
 	battle_host.set_script(load("res://scripts/world/npcs/base_npc.gd"))
@@ -124,7 +127,7 @@ func _run() -> void:
 	world.add_child(player)
 	story_service.apply_story({"quests": [{"questId": "investigate_pokemon_tower", "status": "active", "steps": [{"stepId": "battle_gary", "status": "active"}]}]})
 	await auto._on_body_entered(player)
-	_check(auto_hook.calls == 1 and auto_hook.lock_observed and auto_hook.trigger_seen == "area_enter", "Walking onto 2F locks movement and automatically starts Gary")
+	_check(auto_hook.calls == 1 and auto_hook.lock_observed and auto_hook.trigger_seen == "area_enter", "Passing Gary toward 3F locks movement and starts his challenge")
 	story_service.apply_story({"quests": [{"questId": "investigate_pokemon_tower", "status": "completed", "steps": [{"stepId": "battle_gary", "status": "completed"}]}]})
 	await auto._on_body_entered(player)
 	_check(auto_hook.calls == 1 and not root.get_node("GameState").is_overworld_input_locked(), "Returning after victory does not stop or challenge the player again")
@@ -142,3 +145,23 @@ func _check(value: bool, label: String) -> void:
 	else:
 		failed = true
 		push_error(label)
+
+func _route_exists(tower: Node, start: Vector2, goal: Vector2, excluded: Rect2) -> bool:
+	var collision := tower.get_node("Tiles/Collision") as TileMapLayer
+	var floor_bounds: Rect2 = tower.get_node("FloorVisibilityMask").floor_regions[&"floor_2"]
+	var target := Vector2i(floor(goal / 32))
+	var queue: Array[Vector2i] = [Vector2i(floor(start / 32))]
+	var seen: Dictionary = {}
+	while not queue.is_empty():
+		var tile := queue.pop_front() as Vector2i
+		if seen.has(tile):
+			continue
+		seen[tile] = true
+		var point := Vector2(tile) * 32 + Vector2(16, 16)
+		if not floor_bounds.has_point(point) or collision.get_cell_source_id(tile) >= 0 or excluded.has_point(point):
+			continue
+		if tile == target:
+			return true
+		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			queue.append(tile + direction)
+	return false

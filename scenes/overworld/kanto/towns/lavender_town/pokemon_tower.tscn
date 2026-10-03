@@ -24,8 +24,8 @@
 
 [ext_resource type="Script" path="res://scripts/world/story/story_trigger.gd" id="gary_story_trigger"]
 
-[sub_resource type="RectangleShape2D" id="shape_gary_floor"]
-size = Vector2(768, 704)
+[sub_resource type="RectangleShape2D" id="shape_gary_passage"]
+size = Vector2(32, 416)
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(32, 32)
@@ -493,14 +493,14 @@ display_name = "???"
 [node name="StoryTriggers" type="Node2D" parent="."]
 
 [node name="GaryChallenge" type="Area2D" parent="StoryTriggers"]
-position = Vector2(1280, 352)
+position = Vector2(1296, 400)
 script = ExtResource("gary_story_trigger")
 story_host_path = NodePath("../../Entities/NPCs/GaryOak")
 required_quest_id = "investigate_pokemon_tower"
 required_step_id = "battle_gary"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StoryTriggers/GaryChallenge"]
-shape = SubResource("shape_gary_floor")
+shape = SubResource("shape_gary_passage")
 
 [node name="StoryHook" type="Node" parent="StoryTriggers/GaryChallenge"]
 script = ExtResource("gary_story_hook")
