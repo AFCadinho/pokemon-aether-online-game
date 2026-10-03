@@ -182,6 +182,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/impersonation_account_switch_check.gd",
 	"res://tests/floor_visibility_mask_camera_check.gd",
 	"res://tests/lavender_pokemon_tower_check.gd",
+	"res://tests/pokemon_tower_population_check.gd",
 	"res://tests/tall_grass_character_depth_check.gd",
 	"res://tests/map_depth_lookup_check.gd",
 	"res://tests/viridian_forest_depth_order_check.gd",

@@ -1,0 +1,172 @@
+{
+  "trainers": [
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_aster",
+      "floor": 3,
+      "levels": [
+        26,
+        26
+      ],
+      "position": [
+        2160,
+        240
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_nora",
+      "floor": 3,
+      "levels": [
+        26,
+        27
+      ],
+      "position": [
+        2192,
+        496
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_liora",
+      "floor": 4,
+      "levels": [
+        27,
+        28
+      ],
+      "position": [
+        368,
+        1168
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_vera",
+      "floor": 4,
+      "levels": [
+        28,
+        28
+      ],
+      "position": [
+        592,
+        1296
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_mira",
+      "floor": 5,
+      "levels": [
+        28,
+        29
+      ],
+      "position": [
+        1488,
+        1072
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_iris",
+      "floor": 6,
+      "levels": [
+        29,
+        30
+      ],
+      "position": [
+        2192,
+        1168
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_nyx",
+      "floor": 6,
+      "levels": [
+        30,
+        30
+      ],
+      "position": [
+        1936,
+        1328
+      ]
+    },
+    {
+      "id": "kanto_pokemon_tower_hex_maniac_rhea",
+      "floor": 7,
+      "levels": [
+        31,
+        31,
+        32
+      ],
+      "position": [
+        592,
+        2032
+      ]
+    }
+  ],
+  "dialogueNPCs": [
+    {
+      "id": "kanto_pokemon_tower_caretaker_elias",
+      "floor": 1
+    },
+    {
+      "id": "kanto_pokemon_tower_mourner_mara",
+      "floor": 1
+    },
+    {
+      "id": "kanto_pokemon_tower_researcher_noor",
+      "floor": 2
+    },
+    {
+      "id": "kanto_pokemon_tower_pilgrim_ren",
+      "floor": 7
+    }
+  ],
+  "healerId": "kanto_pokemon_tower_healer_selene",
+  "healerFloor": 5,
+  "pokemon": [
+    {
+      "id": "kanto_pokemon_tower_gastly_1",
+      "speciesId": "gastly",
+      "floor": 2,
+      "level": 22,
+      "generation": 1
+    },
+    {
+      "id": "kanto_pokemon_tower_misdreavus_1",
+      "speciesId": "misdreavus",
+      "floor": 3,
+      "level": 24,
+      "generation": 2
+    },
+    {
+      "id": "kanto_pokemon_tower_shuppet_1",
+      "speciesId": "shuppet",
+      "floor": 4,
+      "level": 25,
+      "generation": 3
+    },
+    {
+      "id": "kanto_pokemon_tower_drifloon_1",
+      "speciesId": "drifloon",
+      "floor": 4,
+      "level": 26,
+      "generation": 4
+    },
+    {
+      "id": "kanto_pokemon_tower_litwick_1",
+      "speciesId": "litwick",
+      "floor": 5,
+      "level": 27,
+      "generation": 5
+    },
+    {
+      "id": "kanto_pokemon_tower_phantump_1",
+      "speciesId": "phantump",
+      "floor": 6,
+      "level": 28,
+      "generation": 6
+    },
+    {
+      "id": "kanto_pokemon_tower_mimikyu_1",
+      "speciesId": "mimikyu",
+      "floor": 7,
+      "level": 30,
+      "generation": 7
+    }
+  ]
+}
