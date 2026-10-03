@@ -29,6 +29,13 @@ func _run() -> void:
 	_expect(route15.map_id == "kanto_route_15", "Route 15 scene has its canonical map ID")
 	_check_visual(route14, 48, 76, "/Route 14.tmx")
 	_check_visual(route15, 104, 40, "/Route 15.tmx")
+	var route15_visual := route15.get_node("Visual")
+	var imported_layer_count := 0
+	for child: Node in route15_visual.get_children():
+		if child is TileMapLayer and bool(child.get_meta("tiled_visual_layer", false)):
+			imported_layer_count += 1
+	_expect(imported_layer_count == 9,
+		"Route 15 renders the nine imported Tiled layers without stale duplicate layers")
 	_expect(route14.has_node("Tiles/Collision"), "Route 14 has a collision layer")
 	_expect(route15.has_node("Tiles/Collision"), "Route 15 has a collision layer")
 	_expect(areas.has("kanto_route_14") and areas.has("kanto_route_15"), "Routes 14 and 15 are registered")
@@ -69,13 +76,16 @@ func _check_link(
 	var record := record_value as Dictionary
 	var destination := record.get("destination", {}) as Dictionary
 	var spawn := destination.get("position", {}) as Dictionary
-	var marker := destination_scene.get_node("Spawns/" + str(exit.target_spawn_name)) as Marker2D
+	var marker := destination_scene.find_child(str(exit.target_spawn_name), true, false) as Marker2D
 	_expect(exit.transition_id == transition_id, "%s uses its registered transition" % exit_name)
 	_expect(exit.target_scene_path == destination_path, "%s targets the connected scene" % exit_name)
 	_expect(exit.target_spawn_name == spawn_name, "%s names the matching arrival marker" % exit_name)
 	_expect(record.get("sourceMapId") == source.map_id and record.get("destinationAreaId") == destination_id, "%s catalog endpoints match the scenes" % transition_id)
 	_expect(destination.get("mapId") == destination_id and destination.get("spawnMarker") == spawn_name, "%s catalog destination and marker match" % transition_id)
-	_expect(Vector2(spawn.get("x", -1.0), spawn.get("y", -1.0)) == marker.position, "%s catalog coordinates match the scene marker" % transition_id)
+	if marker != null:
+		_expect(Vector2(spawn.get("x", -1.0), spawn.get("y", -1.0)) == marker.global_position, "%s catalog coordinates match the scene marker" % transition_id)
+	else:
+		_expect(false, "%s scene contains its target spawn marker" % transition_id)
 	_expect(exit.body_entered.is_connected(Callable(exit, "_on_body_entered")), "%s transition trigger is connected" % exit_name)
 
 
