@@ -23,6 +23,9 @@ func _ready() -> void:
 	add_child(ground)
 	rider = Preview.new()
 	add_child(rider)
+	# Match the player's actual Look origin so the grounded shadow represents
+	# the same normal foot position as regular gameplay.
+	rider.set("base_look_position", Vector2(0, -16))
 	camera = Camera2D.new()
 	camera.zoom = Vector2(2, 2)
 	add_child(camera)

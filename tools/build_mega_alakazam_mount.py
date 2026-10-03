@@ -16,10 +16,11 @@ FRAME = 112
 CREATURE_SIZE = 40
 NEAREST = Image.Resampling.NEAREST
 DIRECTIONS = ("down", "left", "right", "up")
-# Keep Alakazam centered over the same ground anchor when reducing his size.
-# Reposition only the rider origins; the player sprites are never resized.
-RIDER_POS = ((40, 34), (22, 26), (58, 26), (40, 19))
-MOUNT_POS = ((36, 20), (45, 20), (27, 20), (36, 20))
+# Center the unchanged 32px logical player frame in every direction. The
+# player's normal ground position anchors the rig; Alakazam and the ring move
+# around it. These translations retain the approved creature/rider spacing.
+RIDER_POS = ((40, 40),) * 4
+MOUNT_POS = ((36, 26), (63, 34), (9, 34), (36, 41))
 
 
 def build() -> None:

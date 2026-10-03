@@ -2,9 +2,11 @@
 
 Based on the supplied source sheet and approved seated levitation concept.
 Alakazam is now 40 logical pixels (80 physical pixels), down from 56/112,
-approximately 29% smaller. His ground anchor and the player's exact 64×64
-ride assets are retained. Rider origins and the rear mask were realigned to
-the smaller body, keeping the rear rider low and his head behind Alakazam.
+approximately 29% smaller. The player's exact 64×64 ride assets are retained.
+The player's normal foot origin anchors every direction. Alakazam, the ring
+and rear mask are positioned around that origin, preserving the approved
+relative composition and the lower rear head position. Only the hover and
+small vertical animation bob lift the rider; turning never shifts them sideways.
 
 `source.png` is the user-supplied 512×256 sheet. Only the first four columns
 are used. `tools/build_mega_alakazam_mount.py` reproduces the three 896×896
@@ -15,7 +17,7 @@ The psychic ring is baked into the mount, not the rider. The player retains
 their own 64×64 ride assets, clothing, hair and skin. A dedicated rear
 foreground sheet and matching binary rider mask keep the creature's full
 head/body ahead of the rider and the floating spoons behind them. Each whole
-directional layout is shifted to a common ground anchor. These shifts preserve
+directional layout is shifted to the player's normal foot anchor. These shifts preserve
 the approved creature/rider spacing.
 
 To try without logging in, open `tools/mega_alakazam_mount_demo.tscn` in Godot
