@@ -20,6 +20,8 @@ const SIGN_PORTRAIT_PATHS: Dictionary = {
 	"kanto_route_3_mt_moon_sign": "res://assets/sprites/sign_previews/mt_moon.png",
 	"kanto_route_5_daycare_sign": "res://assets/sprites/sign_previews/route_5_daycare.png",
 	"kanto_route_5_underground_path_sign": "res://assets/sprites/sign_previews/route_5_underground_path.png",
+	"kanto_route_6_route_sign": "res://assets/sprites/sign_previews/route_6.png",
+	"kanto_route_6_underground_path_sign": "res://assets/sprites/sign_previews/route_5_underground_path.png",
 	"kanto_route_24_route_sign": "res://assets/sprites/sign_previews/route_24.png",
 	"kanto_route_25_route_sign": "res://assets/sprites/sign_previews/route_25.png",
 }
