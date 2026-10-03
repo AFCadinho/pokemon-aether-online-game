@@ -1,4 +1,4 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://bs5qstcse4elg"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/power_plant/power_plant.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
@@ -11,7 +11,7 @@ size = Vector2(96, 32)
 [sub_resource type="RectangleShape2D" id="shape_32_96"]
 size = Vector2(32, 96)
 
-[node name="PowerPlant" type="Node2D"]
+[node name="PowerPlant" type="Node2D" unique_id=1547750194]
 script = ExtResource("2_metadata")
 map_id = "kanto_power_plant"
 map_region_name = "Kanto"
@@ -25,15 +25,16 @@ region_id = "kanto"
 battle_environment_id = "building"
 weather_profile = "disabled"
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=287491267 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
-[node name="FromRoute10" type="Marker2D" parent="Spawns"]
+[node name="Spawns" type="Node2D" parent="." unique_id=821032076]
+
+[node name="FromRoute10" type="Marker2D" parent="Spawns" unique_id=159344074]
 position = Vector2(272, 1584)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1548977790]
 
-[node name="ToRoute10" type="Area2D" parent="Exits"]
+[node name="ToRoute10" type="Area2D" parent="Exits" unique_id=1176795849]
 position = Vector2(272, 1648)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
@@ -41,10 +42,10 @@ target_spawn_name = "FromPowerPlant"
 transition_id = "kanto_power_plant__to_route_10"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10" unique_id=1273051805]
 shape = SubResource("shape_96_32")
 
-[node name="ToRoute10Northwest" type="Area2D" parent="Exits"]
+[node name="ToRoute10Northwest" type="Area2D" parent="Exits" unique_id=238755281]
 position = Vector2(112, 336)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
@@ -52,15 +53,15 @@ target_spawn_name = "FromPowerPlant"
 transition_id = "kanto_power_plant__to_route_10_northwest"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10Northwest"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute10Northwest" unique_id=110575943]
 shape = SubResource("shape_32_96")
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=502621904]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=113284602]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1179522570]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_mask")
@@ -70,16 +71,15 @@ floor_regions = {
 floor_display_names = {
 &"ground_floor": "Power Plant"
 }
-active_floor = &"ground_floor"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=422513535]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1009778855]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=727593465]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=258540359]
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10Northwest" to="Exits/ToRoute10Northwest" method="_on_body_entered"]

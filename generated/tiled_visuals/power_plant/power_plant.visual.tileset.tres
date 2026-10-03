@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://bhc0wary57m3s"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/power_plant/assets/power_plant.visual.tileset.compact_source_1_0.texture.res" id="1_6d681"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/power_plant/assets/power_plant.visual.tileset.compact_source_1025_0.texture.res" id="2_5ph3e"]
