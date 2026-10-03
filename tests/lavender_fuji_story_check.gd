@@ -131,6 +131,41 @@ func _run() -> void:
 	story_service.apply_story({"quests": [{"questId": "investigate_pokemon_tower", "status": "completed", "steps": [{"stepId": "battle_gary", "status": "completed"}]}]})
 	await auto._on_body_entered(player)
 	_check(auto_hook.calls == 1 and not root.get_node("GameState").is_overworld_input_locked(), "Returning after victory does not stop or challenge the player again")
+	# Keep only Gary's base presentation, avoiding live NPC metadata requests.
+	for holder_path in ["Entities/NPCs", "Entities/Pokemon"]:
+		for actor in tower.get_node(holder_path).get_children():
+			if actor != gary:
+				actor.free()
+	var visibility_config: Dictionary = {}
+	for config_key in ["npc_id", "visibility_required_quest_id", "visibility_required_quest_step_id", "visibility_required_quest_status", "visibility_hidden_quest_id", "visibility_hidden_quest_step_id", "visibility_hidden_quest_status", "defer_story_hide_until_reload"]:
+		visibility_config[config_key] = gary.get(config_key)
+	gary.set_script(load("res://scripts/world/npcs/base_npc.gd"))
+	for config_key in visibility_config:
+		gary.set(config_key, visibility_config[config_key])
+	gary.preload_quest_markers = false
+	var mask := tower.get_node("FloorVisibilityMask")
+	mask.follow_player_floor = false
+	world.add_child(tower)
+	story_service.apply_story({"quests": [{"questId": "investigate_pokemon_tower", "status": "active", "steps": [{"stepId": "speak_to_fuji_helper", "status": "completed"}, {"stepId": "battle_gary", "status": "active"}]}]})
+	gary._ready_base_npc()
+	mask.show_floor(&"floor_2")
+	_check(gary.visible, "Gary is present before victory")
+	mask.show_floor(&"floor_1")
+	await process_frame
+	_check(gary.visible, "Leaving before victory does not remove Gary")
+	mask.show_floor(&"floor_2")
+	story_service.apply_story({"quests": [{"questId": "investigate_pokemon_tower", "status": "completed", "steps": [{"stepId": "speak_to_fuji_helper", "status": "completed"}, {"stepId": "battle_gary", "status": "completed"}]}]})
+	_check(gary.visible, "Gary stays for his advice after victory")
+	mask.show_floor(&"floor_2")
+	_check(gary.visible, "Reapplying the same floor does not interrupt Gary's advice")
+	mask.show_floor(&"floor_3")
+	await process_frame
+	_check(not gary.visible and not gary.story_visibility_active and not gary.interaction_area.monitoring, "Leaving 2F after victory hides Gary and disables interaction")
+	mask.show_floor(&"floor_2")
+	_check(not gary.visible, "Gary remains absent when returning to 2F")
+	gary.visible = true
+	gary._apply_story_visibility()
+	_check(not gary.visible, "A map reload also hides defeated Gary")
 	house.free()
 	tower.free()
 	world.queue_free()
