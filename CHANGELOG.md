@@ -4,6 +4,8 @@
 
 - Lavender Town now has four Pokémon on its mountain approaches and two more in town, including Generation II and VI species.
 
+- Gary disappears after his Pokémon Tower battle when the player leaves 2F, including internal stair refreshes.
+
 - Add the approved Shiny Rayquaza as a separate hovering mount with its own item and Bag icon; preserve the normal Rayquaza pose, size and riding behavior.
 
 - Gary lets players enter Pokémon Tower 2F and retreat freely, stopping them only when they pass him toward 3F.

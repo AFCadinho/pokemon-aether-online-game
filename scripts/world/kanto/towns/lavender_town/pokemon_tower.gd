@@ -9,6 +9,23 @@ const FLOOR_ENCOUNTER_AREAS := {
 }
 
 
+func _ready() -> void:
+	var mask := get_node_or_null("FloorVisibilityMask")
+	if mask != null:
+		mask.floor_changed.connect(_on_floor_changed)
+	super._ready()
+
+
+func _on_floor_changed(previous_floor: StringName, _current_floor: StringName) -> void:
+	if previous_floor != &"floor_2":
+		return
+	# Floors share one scene. Treat leaving Gary's floor as a refresh, while
+	# retaining him for his post-battle advice until the player takes a stair.
+	var gary := get_node_or_null("Entities/NPCs/GaryOak")
+	if gary != null:
+		gary.call_deferred("_apply_story_visibility")
+
+
 func get_wild_encounter_area_id() -> String:
 	return str(FLOOR_ENCOUNTER_AREAS.get(_get_encounter_floor(), ""))
 
