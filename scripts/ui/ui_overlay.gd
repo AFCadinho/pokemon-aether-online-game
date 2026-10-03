@@ -34864,7 +34864,12 @@ func _hide_my_powers_menu() -> void:
 		staff_actions_panel.visible = false
 
 func _load_toggle_preferences() -> void:
-	var result: Dictionary = await PlayerGameStateService.load_player_preferences()
+	var result: Dictionary = PlayerGameStateService.consume_profile_preferences()
+	if result.is_empty():
+		# Direct world entry and legacy profile fallback still need a request.
+		# Let initial scene construction finish before starting its HTTP timer.
+		await GatewayApiConfig.wait_for_metadata_request_frame()
+		result = await PlayerGameStateService.load_player_preferences()
 	if not bool(result.get("success", false)):
 		push_warning("UIOverlay: toggle preference load failed: %s" % str(result.get("error", "Unknown error")))
 		return

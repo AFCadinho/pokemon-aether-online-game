@@ -22,9 +22,16 @@ const PUBLIC_TRAINER_CARD_ENDPOINT := "/game/trainers/%s/card"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 
 var pending_side_quest_accept_request_ids: Dictionary = {}
+var profile_preferences_snapshot: Dictionary = {}
+var profile_preferences_session := ""
+var profile_preferences_user_id := ""
+var profile_preferences_generation := 0
 
 
 func load_player_profile() -> Dictionary:
+	_clear_profile_preferences_snapshot()
+	var snapshot_generation := profile_preferences_generation
+	var snapshot_session := AuthService.session_token
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -45,6 +52,20 @@ func load_player_profile() -> Dictionary:
 	var position: Dictionary = _dictionary_from_value(body.get("position", {}))
 	var party: Dictionary = _dictionary_from_value(body.get("party", {}))
 	var preferences: Dictionary = _dictionary_from_value(body.get("preferences", {}))
+	var profile_user_id := AuthService.get_user_id_text_from(_dictionary_from_value(body.get("user", {})))
+	if (
+		snapshot_generation == profile_preferences_generation
+		and snapshot_session == AuthService.session_token
+		and profile_user_id == AuthService.get_user_id_text()
+		and not profile_user_id.is_empty()
+		and preferences.get("preferences") is Dictionary
+	):
+		profile_preferences_snapshot = {
+			"success": true,
+			"preferences": (preferences["preferences"] as Dictionary).duplicate(true),
+		}
+		profile_preferences_session = snapshot_session
+		profile_preferences_user_id = profile_user_id
 	var wallet: Dictionary = _dictionary_from_value(body.get("wallet", {}))
 	var stats: Dictionary = _dictionary_from_value(body.get("stats", {}))
 	var badges: Dictionary = _dictionary_from_value(body.get("badges", {}))
@@ -856,6 +877,27 @@ func load_map_players() -> Dictionary:
 	}
 
 
+func consume_profile_preferences() -> Dictionary:
+	# The loading screen already fetched these values. Hand them to the startup
+	# UI once instead of fetching the trainer-card companion list again.
+	var snapshot := {}
+	if (
+		AuthService.is_authenticated()
+		and profile_preferences_session == AuthService.session_token
+		and profile_preferences_user_id == AuthService.get_user_id_text()
+	):
+		snapshot = profile_preferences_snapshot.duplicate(true)
+	_clear_profile_preferences_snapshot()
+	return snapshot
+
+
+func _clear_profile_preferences_snapshot() -> void:
+	profile_preferences_snapshot.clear()
+	profile_preferences_session = ""
+	profile_preferences_user_id = ""
+	profile_preferences_generation += 1
+
+
 func load_player_preferences() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -882,6 +924,7 @@ func load_player_preferences() -> Dictionary:
 
 
 func save_player_preferences(preferences: Dictionary) -> Dictionary:
+	_clear_profile_preferences_snapshot()
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
