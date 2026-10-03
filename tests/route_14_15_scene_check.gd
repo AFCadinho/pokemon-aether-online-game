@@ -29,6 +29,13 @@ func _run() -> void:
 	_expect(route15.map_id == "kanto_route_15", "Route 15 scene has its canonical map ID")
 	_check_visual(route14, 48, 76, "/Route 14.tmx")
 	_check_visual(route15, 104, 40, "/Route 15.tmx")
+	var route15_visual := route15.get_node("Visual")
+	var imported_layer_count := 0
+	for child: Node in route15_visual.get_children():
+		if child is TileMapLayer and bool(child.get_meta("tiled_visual_layer", false)):
+			imported_layer_count += 1
+	_expect(imported_layer_count == 9,
+		"Route 15 renders the nine imported Tiled layers without stale duplicate layers")
 	_expect(route14.has_node("Tiles/Collision"), "Route 14 has a collision layer")
 	_expect(route15.has_node("Tiles/Collision"), "Route 15 has a collision layer")
 	_expect(areas.has("kanto_route_14") and areas.has("kanto_route_15"), "Routes 14 and 15 are registered")

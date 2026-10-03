@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Reimport Route 15's overworld visual from the artist TMX.
+- Reimport Route 15's overworld visual and remove stale embedded layers that obscured it.
 
 - Add a separate Surf water connection between Kanto Routes 12 and 13 with dedicated arrival points.
 
