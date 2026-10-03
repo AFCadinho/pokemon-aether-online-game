@@ -2,18 +2,18 @@
 	"after": {
 		"baseRGBABytes": 6266880,
 		"cells": 10206,
-		"fingerprint": "7baa0a5be4e555f7805a35a0d0a8a27d89c6ee06d92d674449f86a8302fc8052",
+		"fingerprint": "0bff73e667b833ab3ac838689ad28b0611fb3063a290e3eff703ef0e6762ff51",
 		"layers": 6,
 		"usedTiles": 731
 	},
 	"animated_cells": {
-		"water": 1976
+		"water": 1955
 	},
 	"animated_types": 13,
 	"before": {
 		"baseRGBABytes": 4902912,
 		"cells": 10206,
-		"fingerprint": "7baa0a5be4e555f7805a35a0d0a8a27d89c6ee06d92d674449f86a8302fc8052",
+		"fingerprint": "0bff73e667b833ab3ac838689ad28b0611fb3063a290e3eff703ef0e6762ff51",
 		"layers": 6,
 		"usedTiles": 731
 	},
