@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_4wgod"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_dp7hi"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_h4ff5"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_nbafy"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_dp7hi"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
@@ -286,6 +287,9 @@ transition_facing_direction = "up"
 position = Vector2(0, -8)
 shape = SubResource("shape_1")
 
+[node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=1784601391 instance=ExtResource("4_h4ff5")]
+z_as_relative = false
+
 [node name="ToSaffronSouth" type="Area2D" parent="Exits" unique_id=979983108]
 position = Vector2(752, 112)
 script = ExtResource("3_exit")
@@ -314,6 +318,11 @@ transition_facing_direction = "down"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilion" unique_id=1022283317]
 position = Vector2(0, 16)
 shape = SubResource("shape_3")
+
+[node name="RouteTransitionHint" parent="Exits/ToVermilion" unique_id=1645429510 instance=ExtResource("4_dp7hi")]
+z_as_relative = false
+tile_footprint = Vector2i(4, 1)
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=1064945309]
 z_index = 5
