@@ -555,7 +555,9 @@ position = Vector2(1904, 560)
 pickup_id = "kanto_route_9_full_restore"
 item_id = "full-restore"
 
-[node name="LargeSignInteractable" parent="Entities/Interactables" unique_id=547856318 instance=ExtResource("4_t3cr7")]
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1612010381]
+
+[node name="Route9Sign" parent="Entities/Interactables/Signs" unique_id=547856318 instance=ExtResource("4_t3cr7")]
 position = Vector2(2704, 784)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1978439623]
