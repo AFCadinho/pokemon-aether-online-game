@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added localized text and location artwork for both Route 11 signs.
+
 - Route 11's roaming Pokémon now use distinct movement speeds and randomized pauses to avoid synchronized pacing.
 
 - Style mount preview toggles as compact Aether buttons with shiny/play/pause icons, colored active states and localized On/Off labels.

@@ -5,6 +5,9 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/routes/route2/kanto_route_2.tscn": "kanto_route_2",
 	"res://scenes/overworld/kanto/routes/kanto_route_22.tscn": "kanto_route_22",
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": "kanto_route_3",
+	"res://scenes/overworld/kanto/routes/kanto_route_5.tscn": "kanto_route_5",
+	"res://scenes/overworld/kanto/routes/kanto_route_6.tscn": "kanto_route_6",
+	"res://scenes/overworld/kanto/routes/kanto_route_11.tscn": "kanto_route_11",
 	"res://scenes/overworld/kanto/routes/kanto_route_24.tscn": "kanto_route_24",
 	"res://scenes/overworld/kanto/routes/route25/kanto_route_25.tscn": "kanto_route_25",
 	"res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn": "kanto_pallet_town",
@@ -12,6 +15,7 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": "kanto_viridian_city",
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": "kanto_pewter_city",
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": "kanto_cerulean_city",
+	"res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn": "kanto_vermilion_city",
 }
 
 const SIGN_SCENE_SUFFIXES: Array[String] = [
