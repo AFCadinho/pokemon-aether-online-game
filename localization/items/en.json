@@ -406,5 +406,13 @@
   "aether-royal-cape": {
     "name": "Aether Royal Skillcape",
     "shortDesc": "Requires an active Patreon role. Untradeable. Equip this skillcape independently in the Back slot. Fits male and female characters."
+  },
+  "shadow-lugia-mount-box": {
+    "name": "Shadow Lugia Mount Box",
+    "shortDesc": "Contains Shadow Lugia or Shiny Shadow Lugia. Shiny chance starts at 50% and rises to 80%. Duplicate mounts are possible."
+  },
+  "shiny-shadow-lugia-mount": {
+    "name": "Shiny Shadow Lugia Mount",
+    "shortDesc": "Unlocks Shiny Shadow Lugia as a land mount."
   }
 }

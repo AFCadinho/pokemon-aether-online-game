@@ -515,22 +515,13 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
-		"id": "nimbus_mount",
-		"name": "Nimbus Mount",
-		"description": "A cloud-inspired overworld mount for travelling in style.",
-		"price": 600,
+		"id": "shadow-lugia-mount-box",
+		"name": "Shadow Lugia Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_shadow_lugia",
+		"price": 500,
 		"icon": MOUNT_ICON,
 		"categories": ["featured", "mounts"],
-		"badge": "MOUNT",
-	},
-	{
-		"id": "aether_board_mount",
-		"name": "Aether Board Mount",
-		"description": "A sleek supporter mount with its own overworld look.",
-		"price": 600,
-		"icon": MOUNT_ICON,
-		"categories": ["mounts"],
-		"badge": "MOUNT",
+		"badge": "MOUNT BOX",
 	},
 	{
 		"id": "surf-charm",
@@ -1749,7 +1740,7 @@ func _create_product_card(item: Dictionary) -> Button:
 		item_id,
 		_preview_gender_for_item(item)
 	)
-	icon.texture = Mounts.get_mount_icon_texture("rayquaza") if item_id == "rayquaza-mount-box" else cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
+	icon.texture = Mounts.get_mount_icon_texture(_mount_box_mount_id(item_id)) if not _mount_box_mount_id(item_id).is_empty() else cosmetic_icon if cosmetic_icon != null else item.get("icon") as Texture2D
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	center.add_child(icon)
 
@@ -1810,7 +1801,7 @@ func _select_product(item_id: String) -> void:
 		else _t("ui.store.coming_later")
 		if store_catalog_loaded and authoritative_price < 0
 		else _mount_box_price_text(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
-		if item_id == "rayquaza-mount-box"
+		if not _mount_box_mount_id(item_id).is_empty()
 		else "◆ %s" % _format_number(authoritative_price if authoritative_price >= 0 else int(item.get("price", 0)))
 	)
 	_refresh_purchase_state()
@@ -1938,7 +1929,7 @@ func _refresh_character_preview() -> void:
 	if preview_parts.is_empty():
 		var item_sprite := Sprite2D.new()
 		item_sprite.name = "StoreItemDetailPreview"
-		item_sprite.texture = Mounts.get_mount_icon_texture("rayquaza") if str(item.get("id", "")) == "rayquaza-mount-box" else item.get("icon") as Texture2D
+		item_sprite.texture = Mounts.get_mount_icon_texture(_mount_box_mount_id(str(item.get("id", "")))) if not _mount_box_mount_id(str(item.get("id", ""))).is_empty() else item.get("icon") as Texture2D
 		item_sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
 		var item_scale := 1.0
 		if item_sprite.texture != null:
@@ -2823,6 +2814,12 @@ func _on_locale_changed(_locale: String) -> void:
 		_select_product(previous_selection)
 	else:
 		_reset_selection_footer()
+
+
+func _mount_box_mount_id(item_id: String) -> String:
+	if not item_id.ends_with("-mount-box"):
+		return ""
+	return Mounts.get_mount_id_for_unlock_item(item_id.trim_suffix("-box"))
 
 
 func _mount_box_price_text(gems: int) -> String:

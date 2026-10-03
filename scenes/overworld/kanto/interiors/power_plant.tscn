@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_mask"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_kw2uo"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="6_pokemon"]
-
 [ext_resource type="PackedScene" path="res://scenes/npcs/weekly_boss.tscn" id="7_boss"]
 [ext_resource type="Resource" path="res://resources/weekly_bosses/zapdos.tres" id="8_zapdos"]
 
@@ -184,6 +183,13 @@ overworld_pokemon_id = "kanto_power_plant_quagsire_1"
 species_id = "quagsire"
 level = 20
 
+[node name="ZapdosWeeklyBoss" parent="Entities/Pokemon" unique_id=154426699 instance=ExtResource("7_boss")]
+position = Vector2(208, 336)
+boss_definition = ExtResource("8_zapdos")
+species_id = "zapdos"
+display_name = "Zapdos"
+facing_direction = Vector2(1, 0)
+
 [node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1179522570]
 z_index = 4096
 z_as_relative = false
@@ -215,8 +221,3 @@ tile_set = SubResource("TileSet_t6e2u")
 
 [connection signal="body_entered" from="Exits/ToRoute10" to="Exits/ToRoute10" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToRoute10Northwest" to="Exits/ToRoute10Northwest" method="_on_body_entered"]
-
-
-[node name="ZapdosWeeklyBoss" parent="Entities/Pokemon" instance=ExtResource("7_boss")]
-position = Vector2(272, 240)
-boss_definition = ExtResource("8_zapdos")

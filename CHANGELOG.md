@@ -4,6 +4,8 @@
 
 - Style the weekly boss selector with the Aether modal, ordered difficulty cards, server-provided levels and base rewards, and a separate Hard-unlock hint.
 
+- Add the 500-Gem Shadow Lugia Mount Box to the Gift Store and Shiny Tracker, with localized odds and mount previews; remove the unimplemented Nimbus and Aether Board shop previews.
+
 - Desynchronize Vermilion City's moving Pokémon with distinct pause timings and randomized waits.
 
 - Restore water animations in Vermilion City and Route 6 after map reimports, preserving their current layouts and existing grass animations.
