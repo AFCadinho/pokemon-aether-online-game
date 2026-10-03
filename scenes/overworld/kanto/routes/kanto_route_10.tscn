@@ -495,6 +495,32 @@ movement_tiles = 1
 movement_wait_seconds = 2.0
 movement_speed_pixels = 36.0
 
+[node name="WaterPokemon" type="Node2D" parent="Entities/Pokemon" unique_id=190000608]
+
+[node name="Wooper" parent="Entities/Pokemon/WaterPokemon" unique_id=190000609 instance=ExtResource("pokemon")]
+position = Vector2(336, 272)
+overworld_pokemon_id = "kanto_route_10_water_wooper_1"
+species_id = "wooper"
+level = 14
+display_name = "Wooper"
+facing_direction = Vector2(1, 0)
+
+[node name="Buizel" parent="Entities/Pokemon/WaterPokemon" unique_id=190000610 instance=ExtResource("pokemon")]
+position = Vector2(976, 272)
+overworld_pokemon_id = "kanto_route_10_water_buizel_1"
+species_id = "buizel"
+level = 15
+display_name = "Buizel"
+facing_direction = Vector2(-1, 0)
+
+[node name="Ducklett" parent="Entities/Pokemon/WaterPokemon" unique_id=190000611 instance=ExtResource("pokemon")]
+position = Vector2(1616, 272)
+overworld_pokemon_id = "kanto_route_10_water_ducklett_1"
+species_id = "ducklett"
+level = 16
+display_name = "Ducklett"
+facing_direction = Vector2(0, 1)
+
 [node name="Tiles" type="Node2D" parent="." unique_id=1241571794]
 visible = false
 
