@@ -364,7 +364,7 @@ func get_battle_3d_forest_manifest() -> String:
 func _editor_installed_forest_manifest(game_user_data_dir: String, editor_build: bool) -> String:
 	if not editor_build:
 		return ""
-	var app_userdata_dir := game_user_data_dir.get_base_dir()
+	var app_userdata_dir := game_user_data_dir.trim_suffix("/").get_base_dir()
 	var launcher_data_dir := app_userdata_dir.path_join("PokeAether Launcher/game")
 	var manifest := launcher_data_dir.path_join("forest-runtime/forest.json")
 	var pack := manifest.get_base_dir().path_join("forest.pck")
