@@ -28,7 +28,7 @@ func _run() -> void:
 		"Surf catalog exposes Lapras to the loadout selector"
 	)
 	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
-	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "mega_garchomp", "glaceon", "glaceon_shiny"]:
+	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "glaceon", "glaceon_shiny"]:
 		_check(land_mounts.has(mount_id), "land catalog exposes " + mount_id)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()
@@ -255,9 +255,9 @@ func _run() -> void:
 	_check(str(settings_manager.call("get_selected_mount_id", "land")) == "mega_absol", "white Mega Absol can be selected")
 	panel.call("_on_inventory_changed", [{"itemId": "mega-garchomp-mount", "quantity": 1}])
 	panel.call("_open_selector", "land")
-	_check(selector_options.get_child_count() == 1 and (selector_options.get_child(0) as Button).text.contains("Mega Garchomp"), "Mega Garchomp ownership unlocks only its selector entry")
-	panel.call("_select_mount", "land", "mega_garchomp")
-	_check(str(settings_manager.call("get_selected_mount_id", "land")) == "mega_garchomp", "Mega Garchomp can be selected and persisted as the land mount")
+	_check(selector_options.get_child_count() == 0, "retired Garchomp item cannot unlock a mount")
+	_check(not bool(settings_manager.call("set_selected_mount_id", "land", "mega_garchomp")), "retired Garchomp mount cannot be selected")
+	_check(MountServiceScript.resolve_mount_id_for_mode("mega_garchomp", "land", true).is_empty(), "retired saved selection falls back to an empty land slot")
 	panel.call("_on_inventory_changed", [{"itemId": "glaceon-mount", "quantity": 1}])
 	panel.call("_open_selector", "land")
 	_check(selector_options.get_child_count() == 1 and (selector_options.get_child(0) as Button).text.contains("Glaceon"), "Glaceon ownership unlocks only its selector entry")
