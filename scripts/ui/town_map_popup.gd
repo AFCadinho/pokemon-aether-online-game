@@ -7,6 +7,7 @@ signal closed
 const REGION_MAP_PATH := "res://data/region_maps/kanto.json"
 const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const TownMapCanvasScript := preload("res://scripts/ui/town_map_canvas.gd")
+const TownMapPreviewCatalogScript := preload("res://scripts/services/town_map_preview_catalog.gd")
 const CURRENT_LOCATION_ICON := preload("res://assets/ui/town_map_current.svg")
 const INTERIOR_ICON := preload("res://assets/ui/town_map_interior.svg")
 const CONNECTION_ICON := preload("res://assets/ui/town_map_connection.svg")
@@ -31,6 +32,8 @@ var detail_overline_label: Label
 var detail_name_label: Label
 var detail_kind_panel: PanelContainer
 var detail_kind_label: Label
+var detail_preview_panel: PanelContainer
+var detail_preview_image: TextureRect
 var detail_description_label: Label
 var interiors_title_label: Label
 var detail_interiors_container: GridContainer
@@ -269,7 +272,7 @@ func _build_ui() -> void:
 	_add_legend_chip(legend_flow, "special", Color("#8ceaff"))
 
 	var details := PanelContainer.new()
-	details.custom_minimum_size = Vector2(300, 0)
+	details.custom_minimum_size = Vector2(340, 0)
 	details.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	details.add_theme_stylebox_override("panel", _panel_style(Color("#081a29f2"), Color("#31566c"), 14, 1))
 	body.add_child(details)
@@ -293,7 +296,7 @@ func _build_ui() -> void:
 
 	detail_overline_label = Label.new()
 	detail_overline_label.add_theme_font_size_override("font_size", 10)
-	detail_overline_label.add_theme_color_override("font_color", Color("#ff73e2"))
+	detail_overline_label.add_theme_color_override("font_color", Color("#65d7f3"))
 	detail_column.add_child(detail_overline_label)
 
 	var detail_heading := HBoxContainer.new()
@@ -323,6 +326,8 @@ func _build_ui() -> void:
 	detail_kind_label = Label.new()
 	detail_kind_label.add_theme_font_size_override("font_size", 10)
 	kind_margin.add_child(detail_kind_label)
+
+	_build_location_preview(detail_column)
 
 	var description_card := PanelContainer.new()
 	description_card.name = "DescriptionCard"
@@ -376,6 +381,40 @@ func _build_ui() -> void:
 	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	detail_column.add_child(spacer)
 	_position_shell.call_deferred()
+
+
+func _build_location_preview(parent: Container) -> void:
+	detail_preview_panel = PanelContainer.new()
+	detail_preview_panel.name = "LocationPreview"
+	detail_preview_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_preview_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var frame_style := _panel_style(Color("#06131f"), Color("#a58b4d"), 12, 1)
+	frame_style.shadow_color = Color("#00000040")
+	frame_style.shadow_size = 5
+	detail_preview_panel.add_theme_stylebox_override("panel", frame_style)
+	parent.add_child(detail_preview_panel)
+	var margin := MarginContainer.new()
+	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for side: String in ["left", "top", "right", "bottom"]:
+		margin.add_theme_constant_override("margin_%s" % side, 6)
+	detail_preview_panel.add_child(margin)
+	detail_preview_image = TextureRect.new()
+	detail_preview_image.name = "LocationPreviewImage"
+	detail_preview_image.custom_minimum_size = Vector2(0, 180)
+	detail_preview_image.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	detail_preview_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	detail_preview_image.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
+	detail_preview_image.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	detail_preview_image.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	margin.add_child(detail_preview_image)
+
+
+func _refresh_location_preview(location_id: String) -> void:
+	if detail_preview_image == null:
+		return
+	detail_preview_image.texture = TownMapPreviewCatalogScript.get_portrait(location_id)
+	detail_preview_panel.visible = detail_preview_image.texture != null
+	detail_preview_panel.tooltip_text = _location_name(location_id)
 
 
 func _add_legend_chip(parent: Container, kind: String, color: Color) -> void:
@@ -458,6 +497,7 @@ func _refresh_details(location_id: String) -> void:
 	if map_canvas != null:
 		map_canvas.select_location(location_id)
 	var location := locations.get(location_id, {}) as Dictionary
+	_refresh_location_preview(location_id)
 	detail_name_label.text = _location_name(location_id)
 	detail_kind_label.text = _t(
 		"ui.town_map.kind.%s" % str(location.get("kind", "route"))

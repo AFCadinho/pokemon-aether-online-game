@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a framed location preview to the Town Map, sharing existing sign artwork and new illustrations for every remaining settlement, route, and special location.
+
 - Populate Kanto Route 12 with FR/LG encounters and trainers, HG/SS additions balanced for the route, eight useful pickups and a one-time Super Rod gift.
 
 - Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.

@@ -4,6 +4,8 @@ const REGION_MAP_PATH := "res://data/region_maps/kanto.json"
 const REGION_LAYOUT_PATH := "res://data/region_maps/kanto_layout.json"
 const WORLD_ACCESS_PATH := "res://generated/world_access_catalog.json"
 const POPUP_SCRIPT := preload("res://scripts/ui/town_map_popup.gd")
+const PREVIEW_CATALOG := preload("res://scripts/services/town_map_preview_catalog.gd")
+const SIGN_PORTRAIT_CATALOG := preload("res://scripts/services/sign_portrait_catalog.gd")
 
 var failed := false
 
@@ -99,6 +101,7 @@ func _run() -> void:
 		var pixel := background_image.get_pixel(int(point["x"]), int(point["y"]))
 		_check(_is_gold(pixel), "%s is on its painted golden route" % str(point["name"]))
 
+	_check(PREVIEW_CATALOG.portrait_cache.is_empty(), "New preview textures are not loaded before selecting a location")
 	var popup := POPUP_SCRIPT.new() as TownMapPopup
 	var game_state := root.get_node_or_null("GameState")
 	root.add_child(popup)
@@ -189,7 +192,37 @@ func _run() -> void:
 	)
 	_check(popup.current_location_id == "kanto_pallet_town", "Interior maps resolve to their parent Town Map location")
 	_check(popup.selected_location_id == "kanto_pallet_town", "Current location is selected when the map opens")
-	_check(popup.detail_name_label.size.x > 0.0, "Current location details use the full sidebar width without a duplicate portrait")
+	_check(popup.detail_preview_panel.visible, "The selected location has a framed preview")
+	_check(
+		popup.detail_preview_image.texture == SIGN_PORTRAIT_CATALOG.get_portrait("kanto_pallet_town_town_sign"),
+		"Pallet Town shares its exact overworld-sign illustration"
+	)
+	_check(popup.detail_preview_image.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_COVERED, "Preview pictures fill their frame without distortion")
+	_check(PREVIEW_CATALOG.portrait_cache.is_empty(), "Opening at an existing sign image does not load new illustrations")
+	var preview_paths: Dictionary = {}
+	for preview_id_value: Variant in popup_locations.keys():
+		var preview_id := str(preview_id_value)
+		var preview_path := PREVIEW_CATALOG.get_portrait_path(preview_id)
+		_check(not preview_path.is_empty() and ResourceLoader.exists(preview_path, "Texture2D"), "%s has a bundled preview illustration" % preview_id)
+		_check(not preview_paths.has(preview_path), "%s has its own location illustration" % preview_id)
+		preview_paths[preview_path] = true
+		popup._refresh_details(preview_id)
+		_check(popup.detail_preview_image.texture != null and popup.detail_preview_panel.visible, "%s updates the visible preview" % preview_id)
+		if PREVIEW_CATALOG.LOCATION_PORTRAIT_PATHS.has(preview_id) and popup.detail_preview_image.texture != null:
+			var preview := popup.detail_preview_image.texture
+			_check(preview.get_width() <= 512 and preview.get_height() <= 512, "%s uses a compact imported preview texture" % preview_id)
+		_check(popup.current_location_id == "kanto_pallet_town", "Browsing previews preserves the player's actual position")
+	_check(PREVIEW_CATALOG.get_portrait("unknown_location") == null, "Unknown locations fail without stale or unrelated artwork")
+	popup._refresh_location_preview("unknown_location")
+	_check(popup.detail_preview_image.texture == null and not popup.detail_preview_panel.visible, "Unknown locations clear and hide the previous picture")
+	popup.map_canvas.marker_buttons["kanto_route_segment_12"].pressed.emit()
+	_check(popup.selected_location_id == "kanto_route_segment_12", "Clicking a map marker selects its preview")
+	_check(popup.detail_preview_image.texture == PREVIEW_CATALOG.get_portrait("kanto_route_segment_12"), "A marker click loads the matching location picture")
+	popup.refresh_localized_ui()
+	_check(popup.detail_preview_image.texture == PREVIEW_CATALOG.get_portrait("kanto_route_segment_12"), "Refreshing localization preserves the selected preview")
+	_check(popup.detail_preview_panel.tooltip_text == popup._location_name("kanto_route_segment_12"), "Preview tooltip follows the localized location name")
+	popup._refresh_details("kanto_pallet_town")
+	_check(popup.detail_name_label.size.x > 0.0, "Current location heading uses the available sidebar width")
 	_check(popup.detail_name_label.get_parent() is HBoxContainer, "Location name and kind badge share one heading row")
 	_check(popup.detail_name_label.size_flags_horizontal == Control.SIZE_EXPAND_FILL, "Location name expands across the available heading width")
 	_check(popup.detail_kind_panel.get_parent() == popup.detail_name_label.get_parent(), "Location kind badge stays beside the location name")
@@ -261,6 +294,9 @@ func _run() -> void:
 		(popup.detail_connections_container.get_child(0) as Button).icon != null,
 		"Connected-location buttons use a browser-safe icon"
 	)
+	(popup.detail_connections_container.get_child(0) as Button).pressed.emit()
+	_check(popup.selected_location_id == "kanto_route_1", "Connected-location navigation selects Route 1 from Pallet Town")
+	_check(popup.detail_preview_image.texture == PREVIEW_CATALOG.get_portrait("kanto_route_1"), "Connected-location navigation refreshes its illustration")
 	_check(not popup.map_canvas.show_connection_overlay, "Baked route lines are not drawn a second time")
 	_check(not popup.map_canvas.show_marker_overlay, "Baked map circles use invisible interactive hotspots")
 	for map_id: String in ["kanto_route_3", "kanto_route_4", "kanto_route_5", "kanto_route_10", "kanto_route_21", "kanto_route_25", "kanto_route_12_west", "kanto_lavender_town", "kanto_cerulean_cave_b1f"]:
