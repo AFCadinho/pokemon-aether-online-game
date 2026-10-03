@@ -4,6 +4,8 @@
 
 - Desynchronize Vermilion City's moving Pokémon with distinct pause timings and randomized waits.
 
+- Restore water animations in Vermilion City and Route 6 after map reimports, preserving their current layouts and existing grass animations.
+
 - Add Zapdos as a static weekly boss in the Power Plant with a red nameplate, Easy/Intermediate/Hard selector, reward notifications and reconnect support. Defeating Hard unlocks unlimited rare wild Zapdos encounters.
 
 - Add the approved pearl-white Shiny Shadow Lugia as a separate hovering mount with its own item and Bag icon, preserving the corrected head/tail overlap.
