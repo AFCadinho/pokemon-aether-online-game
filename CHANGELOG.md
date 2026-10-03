@@ -4,6 +4,10 @@
 
 - Add Mega Garchomp as a land mount using the approved V7 sprites, fitted riders, synchronized foreground masks and a dedicated icon.
 
+- Preserve the complete seated player silhouette on both Absol mounts in side views, including hips, trousers and shoes, through every walking phase.
+
+- Replace unused Razz/Bluk Berries, Green Apricorn, X items and Route 11 Escape Rope pickups with progression-appropriate berries, healing items and Great Balls; preserve collected pickup progress.
+
 - Keep Absol mount feathers, fur and tails visible around the seated player, protect the rider face from foreground clipping, and synchronize directional seat movement with all walking phases.
 
 - Add follower-based Mega Absol and refresh Mega Absol Z with approved compact artwork, fitted player masks, four-direction animation and individual icons.
