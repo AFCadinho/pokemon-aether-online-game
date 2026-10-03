@@ -81,14 +81,15 @@ func _check_mount() -> void:
 			_check(layers_match, "mask and foreground follow creature pixels")
 			_check_occlusion(frame, fg, row, col)
 	for gender: String in ["male", "female"]:
+		_check_side_pose_retained(gender)
 		await _check_avatars(gender)
 
 
 func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> void:
 	var seat := Mounts.get_rider_frame_offset(current_mount_id, DIRECTIONS[row], col)
-	# Both player models use a 64px seated frame. Raised creature anatomy must
-	# not cut the face/helmet; it can occlude the torso below this head envelope.
-	var head := Rect2i(Vector2i(32,32) + seat, Vector2i(64,48))
+	# Side views preserve the complete authored rider, including seated hips,
+	# trousers and shoes. Other directions protect the face/helmet envelope.
+	var head := Rect2i(Vector2i(32,32) + seat, Vector2i(64,64 if row in [1,2] else 48))
 	var head_clear := true
 	var fan_preserved := true
 	var protected_pixels := 0
@@ -106,10 +107,41 @@ func _check_occlusion(frame: Image, foreground: Image, row: int, col: int) -> vo
 				protected_pixels += 1
 				if fg != pixel:
 					fan_preserved = false
-	_check(head_clear, "horn/fan/tail never mask the rider face")
-	_check(fan_preserved, "whole visible pink feather silhouette occludes lower rider, without rectangular cuts")
+	_check(head_clear, "foreground keeps the face and complete side rider clear")
+	_check(fan_preserved, "pink feather silhouette remains in front outside the rider envelope")
 	if current_mount_id == "mega_absol_z" and row in [1,2]:
-		_check(protected_pixels > 0, "side pose keeps feather pixels below the rider head")
+		_check(protected_pixels > 0, "side pose keeps exposed feather pixels around the rider")
+
+
+func _check_side_pose_retained(gender: String) -> void:
+	var body_id := Appearance.DEFAULT_MALE_BODY_ID if gender == "male" else Appearance.DEFAULT_FEMALE_BODY_ID
+	var layers := {"body": Appearance.get_body_frames(body_id, gender, "ride")}
+	for category: String in ["top", "bottom", "shoes"]:
+		layers[category] = Appearance.get_part_frames(category, Appearance.get_default_part_id(category, gender), gender, "ride")
+	for category: String in layers:
+		var source: SpriteFrames = layers[category]
+		_check(source != null, "authored " + gender + " " + category + " ride layer loads")
+		if source == null:
+			continue
+		var mounted := Mounts.get_mounted_rider_frames(source, current_mount_id, {}, {}, true)
+		for direction: String in ["left", "right"]:
+			var retained := true
+			var lower_pixels := 0
+			for activity: String in ["idle_", "walk_"]:
+				var anim := StringName(activity + direction)
+				var reference := Mounts._get_texture_image(source.get_frame_texture(anim, 0))
+				for col in range(mounted.get_frame_count(anim)):
+					var actual := Mounts._get_texture_image(mounted.get_frame_texture(anim, col))
+					for y in range(64):
+						for x in range(64):
+							var expected := reference.get_pixel(x,y)
+							if expected.a > 0:
+								if y >= 48:
+									lower_pixels += 1
+								if actual.get_pixel(x,y) != expected:
+									retained = false
+			_check(retained, gender + " " + category + " " + direction + " retains every authored rider pixel in idle and all walking phases")
+			_check(lower_pixels > 0, gender + " " + category + " fixture contains lower-body pixels")
 
 
 func _check_avatars(gender: String) -> void:
