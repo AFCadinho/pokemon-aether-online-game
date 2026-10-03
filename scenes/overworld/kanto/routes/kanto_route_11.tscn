@@ -11,6 +11,7 @@
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="6_worker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="6_youngster"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="7_0510u"]
+[ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="14_4cd0d"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="100_pokemon"]
 
@@ -378,39 +379,47 @@ movement_speed_pixels = 38.0
 [node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=697587473]
 
 [node name="Awakening" parent="Entities/Interactables/Items" unique_id=387036588 instance=ExtResource("99_item")]
-position = Vector2(560, 400)
+position = Vector2(1520, 688)
 pickup_id = "kanto_route_11_awakening"
 item_id = "awakening"
 
 [node name="XDefend" parent="Entities/Interactables/Items" unique_id=2755822 instance=ExtResource("99_item")]
-position = Vector2(1840, 944)
+position = Vector2(848, 1168)
 pickup_id = "kanto_route_11_xdefend"
 item_id = "x-defense"
 
 [node name="GreatBall" parent="Entities/Interactables/Items" unique_id=1046788082 instance=ExtResource("99_item")]
-position = Vector2(2128, 752)
+position = Vector2(2320, 592)
 pickup_id = "kanto_route_11_greatball"
 item_id = "great-ball"
 
 [node name="EscapeRope" parent="Entities/Interactables/Items" unique_id=523886436 instance=ExtResource("99_item")]
-position = Vector2(560, 432)
+position = Vector2(624, 976)
 pickup_id = "kanto_route_11_escaperope"
 item_id = "escape-rope"
 
 [node name="Revive" parent="Entities/Interactables/Items" unique_id=1739468193 instance=ExtResource("99_item")]
-position = Vector2(976, 400)
+position = Vector2(2128, 976)
 pickup_id = "kanto_route_11_revive"
 item_id = "revive"
 
 [node name="GreenApricorn" parent="Entities/Interactables/Items" unique_id=1375269068 instance=ExtResource("99_item")]
-position = Vector2(1584, 752)
+position = Vector2(1584, 912)
 pickup_id = "kanto_route_11_greenapricorn"
 item_id = "green-apricorn"
 
 [node name="TMGrassKnot" parent="Entities/Interactables/Items" unique_id=608643886 instance=ExtResource("99_item")]
-position = Vector2(2288, 432)
+position = Vector2(1744, 1104)
 pickup_id = "kanto_route_11_tmgrassknot"
 item_id = "tm-grass-knot"
+
+[node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=1614840596]
+
+[node name="DiglettCaveSign" parent="Entities/Interactables/Signs" unique_id=1781335597 instance=ExtResource("14_4cd0d")]
+position = Vector2(656, 496)
+
+[node name="Route11Sign" parent="Entities/Interactables/Signs" unique_id=580783040 instance=ExtResource("14_4cd0d")]
+position = Vector2(2256, 656)
 
 [connection signal="body_entered" from="Exits/ToVermilionNorth" to="Exits/ToVermilionNorth" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToVermilionSouth" to="Exits/ToVermilionSouth" method="_on_body_entered"]
