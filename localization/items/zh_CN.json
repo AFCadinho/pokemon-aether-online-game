@@ -434,5 +434,9 @@
   "mega-absol-mount": {
     "name": "超级阿勃梭鲁坐骑",
     "shortDesc": "解锁超级阿勃梭鲁作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "mega-garchomp-mount": {
+    "name": "超级烈咬陆鲨坐骑",
+    "shortDesc": "解锁超级烈咬陆鲨陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

@@ -434,5 +434,9 @@
   "mega-absol-mount": {
     "name": "Mega Absol-mount",
     "shortDesc": "Ontgrendelt Mega Absol als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "mega-garchomp-mount": {
+    "name": "Mega Garchomp-mount",
+    "shortDesc": "Ontgrendelt Mega Garchomp als landmount. Vereist een Mount License voor de huidige regio."
   }
 }
