@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Route 13 with wild encounters and ten trainers from FireRed/LeafGreen, with HG/SS species additions.
+
 - Add Route 13 from the artist Tiled visual and connect it bidirectionally with Route 12.
 
 - Populate Kanto Route 12 with FR/LG encounters and trainers, HG/SS additions balanced for the route, eight useful pickups and a one-time Super Rod gift.
