@@ -1,0 +1,90 @@
+{
+  "mega_garchomp": {
+    "displayName": "Mega Garchomp",
+    "foregroundSheet": "res://assets/mounts/mega_garchomp/foreground.png",
+    "frameSize": [
+      192,
+      192
+    ],
+    "iconTexture": "res://assets/mounts/mega_garchomp/icon.png",
+    "movementAnimationSpeed": 5.0,
+    "movementMode": "land",
+    "riderMaskSheet": "res://assets/mounts/mega_garchomp/rider_mask.png",
+    "riderOffsets": {
+      "down": [
+        [
+          0,
+          -72
+        ],
+        [
+          0,
+          -72
+        ],
+        [
+          0,
+          -74
+        ],
+        [
+          0,
+          -74
+        ]
+      ],
+      "left": [
+        [
+          4,
+          -54
+        ],
+        [
+          4,
+          -52
+        ],
+        [
+          4,
+          -52
+        ],
+        [
+          4,
+          -50
+        ]
+      ],
+      "right": [
+        [
+          -4,
+          -56
+        ],
+        [
+          -4,
+          -56
+        ],
+        [
+          -4,
+          -56
+        ],
+        [
+          -4,
+          -56
+        ]
+      ],
+      "up": [
+        [
+          0,
+          -50
+        ],
+        [
+          0,
+          -50
+        ],
+        [
+          0,
+          -52
+        ],
+        [
+          0,
+          -50
+        ]
+      ]
+    },
+    "spriteSheet": "res://assets/mounts/mega_garchomp/mount.png",
+    "unlockItemId": "mega-garchomp-mount"
+  }
+}

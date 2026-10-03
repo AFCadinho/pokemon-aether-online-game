@@ -434,5 +434,9 @@
   "mega-absol-mount": {
     "name": "Montaria Mega Absol",
     "shortDesc": "Desbloqueia Mega Absol como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "mega-garchomp-mount": {
+    "name": "Montaria Mega Garchomp",
+    "shortDesc": "Desbloqueia Mega Garchomp como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }
