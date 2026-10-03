@@ -271,6 +271,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cyclizar_mount_check.gd",
 	"res://tests/rayquaza_mount_check.gd",
 	"res://tests/shadow_lugia_mount_check.gd",
+	"res://tests/mega_alakazam_mount_check.gd",
 	"res://tests/skills_ui_check.gd",
 	"res://tests/ev_training_check.gd",
 	"res://tests/fishing_inventory_check.gd",
