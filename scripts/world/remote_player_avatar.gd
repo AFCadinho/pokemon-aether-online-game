@@ -2,6 +2,8 @@ extends Node2D
 
 class_name RemotePlayerAvatar
 
+const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
+
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 signal battle_spectate_requested(target_user_id: int)
 
@@ -182,6 +184,8 @@ var look_node: Node2D
 var mount_sprite: AnimatedSprite2D
 var mount_foreground_sprite: AnimatedSprite2D
 var rider_node: Node2D
+var mount_hover_visual: MountHoverVisual
+var mount_hover_id := ""
 var base_look_position := Vector2.ZERO
 var base_rider_position := Vector2.ZERO
 var appearance_sprites: Array[AnimatedSprite2D] = []
@@ -235,6 +239,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	_update_mount_hover(delta)
 	if not has_position:
 		return
 
@@ -807,6 +812,7 @@ func _create_visual() -> void:
 
 
 func _sync_mount_visual() -> void:
+	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
 	if current_mount_id == "":
@@ -858,6 +864,28 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 	_sync_mounted_rider_frame()
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
+
+
+func _update_mount_hover(delta: float) -> void:
+	var changed := mount_hover_id != current_mount_id
+	if changed:
+		mount_hover_id = current_mount_id
+		var definition := MountService.get_mount_definition(mount_hover_id)
+		if mount_hover_visual == null and float(definition.get("hoverHeight", 0.0)) > 0.0:
+			mount_hover_visual = MountHoverVisual.new()
+			mount_hover_visual.name = "MountHoverShadow"
+			add_child(mount_hover_visual)
+		if mount_hover_visual != null:
+			mount_hover_visual.configure(definition)
+	if mount_hover_visual != null:
+		mount_hover_visual.advance(delta)
+		mount_hover_visual.position = stair_visual_offset
+	if changed or _get_mount_hover_offset() != Vector2.ZERO:
+		_apply_activity_visual_offset()
+
+
+func _get_mount_hover_offset() -> Vector2:
+	return mount_hover_visual.visual_offset if mount_hover_visual != null else Vector2.ZERO
 
 
 func _connect_mount_frame_sync() -> void:
@@ -1657,7 +1685,7 @@ func _apply_activity_layer_offset(sprite: AnimatedSprite2D, category: String) ->
 func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
-	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset
+	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset + _get_mount_hover_offset()
 
 
 func _get_activity_visual_offset() -> Vector2:

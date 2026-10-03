@@ -153,6 +153,9 @@ static func get_mount_frames(mount_id: String) -> SpriteFrames:
 		return null
 
 	var frames := _build_sprite_frames(texture, frame_size)
+	var movement_speed := maxf(float(definition.get("movementAnimationSpeed", WALK_ANIMATION_SPEED)), 0.1)
+	for direction: String in ["down", "left", "right", "up"]:
+		frames.set_animation_speed(StringName("walk_" + direction), movement_speed)
 	_mount_frames_cache[normalized_id] = frames
 	return frames
 

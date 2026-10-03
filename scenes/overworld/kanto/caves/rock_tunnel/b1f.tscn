@@ -1,13 +1,12 @@
 [gd_scene format=4 uid="uid://b6uv3fbq8gdvi"]
 
-[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
-
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/rock_tunnel_b1f/rock_tunnel_b1f.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="4_gvjat"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_o5fgx"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="5_ew7gd"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="99_item"]
 [ext_resource type="SpriteFrames" uid="uid://bkr4widro5ky3" path="res://assets/npcs/classes/hiker_frames.tres" id="hiker"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
@@ -307,45 +306,44 @@ npc_sprite_frames = ExtResource("hiker")
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1513431613]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=29699862]
 
-[node name="Items" type="Node2D" parent="Entities/Interactables"]
+[node name="Items" type="Node2D" parent="Entities/Interactables" unique_id=50865882]
 
-[node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="Revive" parent="Entities/Interactables/Items" unique_id=1218220865 instance=ExtResource("99_item")]
 position = Vector2(528, 1360)
 pickup_id = "kanto_rock_tunnel_b1f_revive"
 item_id = "revive"
 
-[node name="MaxEther" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="MaxEther" parent="Entities/Interactables/Items" unique_id=226575369 instance=ExtResource("99_item")]
 position = Vector2(1904, 624)
 pickup_id = "kanto_rock_tunnel_b1f_maxether"
 item_id = "max-ether"
 
-[node name="MaxPotion" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="MaxPotion" parent="Entities/Interactables/Items" unique_id=839726074 instance=ExtResource("99_item")]
 position = Vector2(2352, 1840)
 pickup_id = "kanto_rock_tunnel_b1f_maxpotion"
 item_id = "max-potion"
 
-[node name="PPUp" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="PPUp" parent="Entities/Interactables/Items" unique_id=994263321 instance=ExtResource("99_item")]
 position = Vector2(464, 976)
 pickup_id = "kanto_rock_tunnel_b1f_ppup"
 item_id = "pp-up"
 
-[node name="Iron" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="Iron" parent="Entities/Interactables/Items" unique_id=890991885 instance=ExtResource("99_item")]
 position = Vector2(688, 1584)
 pickup_id = "kanto_rock_tunnel_b1f_iron"
 item_id = "iron"
 
-[node name="HPUp" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="HPUp" parent="Entities/Interactables/Items" unique_id=546615668 instance=ExtResource("99_item")]
 position = Vector2(2032, 1968)
 pickup_id = "kanto_rock_tunnel_b1f_hpup"
 item_id = "hp-up"
 
-[node name="OvalStone" parent="Entities/Interactables/Items" instance=ExtResource("99_item")]
+[node name="OvalStone" parent="Entities/Interactables/Items" unique_id=2080655040 instance=ExtResource("99_item")]
 position = Vector2(2512, 1520)
 pickup_id = "kanto_rock_tunnel_b1f_ovalstone"
 item_id = "oval-stone"
-
 
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=190000003]
 

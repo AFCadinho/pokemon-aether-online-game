@@ -4,6 +4,10 @@
 
 - Route 5 heeft zes overworld-Pokémon bij de rotshellingen, daycare-tuin en route en twee NPC’s met dialoog.
 
+- Rayquaza now hovers above a ground shadow while moving and standing still, with a calmer flight animation and no sand footprints.
+
+- Rock Tunnel 1F heeft nu zeven extra overworld-Pokémon uit de grotontmoetingen.
+
 - Route 9 heeft vier mountain-Pokémon uit generatie II, III, IV en VI.
 
 - Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.

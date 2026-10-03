@@ -28,6 +28,10 @@
       "spriteSheet": "res://assets/mounts/rayquaza/mount.png",
       "riderMaskSheet": "res://assets/mounts/rayquaza/rider_mask.png",
       "frameSize": [128, 128],
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 16,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.4,
       "foregroundRegions": {
         "down": [0, 0, 128, 88]
       },

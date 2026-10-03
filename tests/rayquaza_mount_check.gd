@@ -36,6 +36,8 @@ func _check_entitlement_and_frames() -> void:
 		var walk := StringName("walk_" + direction)
 		var idle := StringName("idle_" + direction)
 		_check(frames.get_frame_count(walk) == 4 and frames.get_frame_count(idle) == 1, "%s has movement and idle frames" % direction)
+		_check(frames.get_animation_speed(walk) == 4.0, "Rayquaza's movement has a gentle flight rhythm")
+		_check(foreground.get_animation_speed(walk) == 4.0, "foreground uses the same flight rhythm")
 		for index in range(4):
 			_check(Vector2i(frames.get_frame_texture(walk, index).get_size()) == Vector2i(128, 128), "Rayquaza frame remains 128px")
 			_check(Vector2i(foreground.get_frame_texture(walk, index).get_size()) == Vector2i(128, 128), "foreground keeps mount dimensions")
@@ -94,6 +96,7 @@ func _check_local_and_remote_players() -> void:
 	var local: Node2D = load("res://scenes/player.tscn").instantiate()
 	local.set_script(load("res://tests/fixtures/mount_movement_player.gd"))
 	root.add_child(local)
+	local.set("base_look_position", local.get_node("Look").position)
 	local.set("active_mount_id", "rayquaza")
 	local.set("activity_style", "ride")
 	local.call("_cache_appearance_sprites")
@@ -121,9 +124,55 @@ func _check_local_and_remote_players() -> void:
 	_check(remote_body.frame == 1 and not remote_body.is_playing(), "remote rider uses one seated pose with the current mask frame")
 	var expected := Vector2(Mounts.get_rider_frame_offset("rayquaza", "right", 1))
 	_check((avatar.get("rider_node") as Node2D).position == expected, "remote rider follows the larger mount bob")
+	_check_hover_visuals(local, avatar)
 	local.queue_free()
 	avatar.queue_free()
 	await process_frame
+
+
+func _check_hover_visuals(local: Node2D, remote: Node2D) -> void:
+	var tile_position := local.position
+	local.call("_sync_mount_animation", false, Vector2.LEFT)
+	remote.call("_sync_mount_animation", false, Vector2.RIGHT)
+	var look := local.get_node("Look") as Node2D
+	var shadow := local.get_node("MountHoverShadow") as Node2D
+	var initial_look := look.position
+	var initial_shadow := shadow.position
+	var initial_rider := (local.get_node("Look/Rider") as Node2D).global_position
+	local.call("_update_mount_hover", 0.6)
+	remote.call("_update_mount_hover", 0.6)
+	_check(look.position.y != initial_look.y, "Rayquaza continues hovering while idle")
+	_check((local.get_node("Look/Rider") as Node2D).global_position - initial_rider == look.position - initial_look, "rider and mount hover together")
+	_check(shadow.visible and shadow.position == initial_shadow, "hover shadow stays on the ground")
+	_check(local.position == tile_position, "hover does not move the collision or tile position")
+	_check(local.call("_get_mount_hover_offset") == remote.call("_get_mount_hover_offset"), "local and remote use the same hover motion")
+	var before_resync: Vector2 = remote.call("_get_mount_hover_offset")
+	remote.call("_sync_mount_visual")
+	_check(remote.call("_get_mount_hover_offset") == before_resync, "presence resync preserves hover phase")
+	local.set("stair_visual_offset", Vector2(0, -6))
+	local.call("_update_mount_hover", 0.0)
+	_check(shadow.position == Vector2(0, -6), "shadow follows ground elevation on stairs")
+	local.set("active_mount_id", "cyclizar")
+	local.call("_sync_mount_visual")
+	_check(local.call("_get_mount_hover_offset") == Vector2.ZERO and not shadow.visible, "switching to Cyclizar removes hover and shadow")
+	_check(look.position == local.get("base_look_position") + local.call("_get_activity_visual_offset") + Vector2(0, -6), "ground mount restores its normal rendered position")
+	remote.set("current_mount_id", "")
+	remote.call("_sync_mount_visual")
+	_check(remote.call("_get_mount_hover_offset") == Vector2.ZERO and not (remote.get_node("MountHoverShadow") as Node2D).visible, "dismount removes remote hover and shadow")
+	_check(Mounts.get_mount_frames("cyclizar").get_animation_speed(&"walk_left") == Mounts.WALK_ANIMATION_SPEED, "Cyclizar keeps its existing movement rhythm")
+	_check(Mounts.get_mount_frames("lapras").get_animation_speed(&"walk_left") == Mounts.WALK_ANIMATION_SPEED, "Lapras keeps its existing movement rhythm")
+	var hover_script := load("res://scripts/world/mount_hover_visual.gd")
+	var reference: Vector2
+	for fps in [30, 60, 144]:
+		var visual: Node2D = hover_script.new()
+		visual.call("configure", Mounts.get_mount_definition("rayquaza"))
+		for frame in range(fps * 3):
+			visual.call("advance", 1.0 / fps)
+		var result: Vector2 = visual.get("visual_offset")
+		if fps == 30:
+			reference = result
+		_check(result == reference, "hover timing is independent of FPS")
+		visual.free()
 
 
 func _check_runtime_frame_sizes(mount: AnimatedSprite2D, body: AnimatedSprite2D, label: String) -> void:
