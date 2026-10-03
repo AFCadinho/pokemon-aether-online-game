@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Primal Kyogre as an unlockable Surf mount, with fitted rider layers, swimming poses and a mount-specific fishing seat.
+
 - Reimport Route 14's overworld visual from the artist TMX.
 
 - Reimport Route 13's overworld visual from the artist TMX.

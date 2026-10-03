@@ -392,6 +392,7 @@ func _sync_mount_visual() -> void:
 	var foreground_frames := mount_frames \
 		if CharacterAppearanceService.normalize_movement_style(activity_style) \
 		== CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH \
+		and bool(MountService.get_mount_definition(normalized_mount_id).get("surfFishingFullForeground", true)) \
 		else MountService.get_mount_foreground_frames(normalized_mount_id)
 	mount_foreground_sprite.sprite_frames = foreground_frames
 	mount_foreground_sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
@@ -503,14 +504,14 @@ func _get_surf_fish_rider_offset(direction: String) -> Vector2:
 	if CharacterAppearanceService.normalize_movement_style(activity_style) \
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return Vector2.ZERO
-	return Vector2(SURF_FISH_RIDER_OFFSETS.get(direction, Vector2i.ZERO))
+	return Vector2(_get_surf_fish_rider_offset_adjustments().get(direction, Vector2i.ZERO))
 
 
 func _get_surf_fish_rider_offset_adjustments() -> Dictionary:
 	if CharacterAppearanceService.normalize_movement_style(activity_style) \
 		!= CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH:
 		return {}
-	return SURF_FISH_RIDER_OFFSETS
+	return MountService.get_surf_fishing_rider_offsets(active_mount_id, SURF_FISH_RIDER_OFFSETS)
 
 
 func _get_surf_fish_body_hidden_regions() -> Dictionary:
@@ -1049,11 +1050,7 @@ func _on_mount_loadout_changed(movement_mode: String, mount_id: String) -> void:
 		return
 	if movement_mode != SettingsManager.MOUNT_MODE_SURF or not surf_activity_active:
 		return
-	active_mount_id = MountService.resolve_mount_id_for_mode(
-		mount_id,
-		SettingsManager.MOUNT_MODE_SURF,
-		true
-	)
+	active_mount_id = _resolve_owned_surf_mount(mount_id)
 	_sync_mount_visual()
 	_sync_body_sprite_frames_for_movement()
 
@@ -1984,12 +1981,19 @@ func _fishing_prompt_tooltip(translation_key: String) -> String:
 		"hotkey": SettingsManager.get_input_binding_label("fish"),
 	})
 
+func _resolve_owned_surf_mount(mount_id: String) -> String:
+	var resolved := MountService.resolve_mount_id_for_mode(
+		mount_id, SettingsManager.MOUNT_MODE_SURF, true
+	)
+	if _is_mount_owned(resolved):
+		return resolved
+	return MountService.get_default_mount_id(SettingsManager.MOUNT_MODE_SURF)
+
+
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
-	active_mount_id = MountService.resolve_mount_id_for_mode(
-		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_SURF),
-		SettingsManager.MOUNT_MODE_SURF,
-		true
+	active_mount_id = _resolve_owned_surf_mount(
+		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_SURF)
 	)
 	_sync_mount_visual()
 	if clear_input:

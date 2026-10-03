@@ -178,6 +178,113 @@
         "up": [[0, -18], [0, -16], [-2, -18], [-2, -20]]
       }
     },
+    "primal_kyogre": {
+      "displayName": "Primal Kyogre",
+      "movementMode": "surf",
+      "unlockItemId": "primal-kyogre-mount",
+      "iconTexture": "res://assets/mounts/primal_kyogre/icon.png",
+      "spriteSheet": "res://assets/mounts/primal_kyogre/mount.png",
+      "riderMaskSheet": "res://assets/mounts/primal_kyogre/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/primal_kyogre/foreground.png",
+      "frameSize": [
+        192,
+        224
+      ],
+      "movementAnimationSpeed": 7.5,
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      },
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -79
+          ],
+          [
+            0,
+            -79
+          ],
+          [
+            0,
+            -61
+          ],
+          [
+            0,
+            -61
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -79
+          ],
+          [
+            0,
+            -79
+          ],
+          [
+            0,
+            -61
+          ],
+          [
+            0,
+            -61
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ]
+        ]
+      }
+    },
     "lapras": {
       "displayName": "Lapras",
       "movementMode": "surf",
