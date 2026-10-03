@@ -6,6 +6,9 @@ const HOUSE3 := "res://scenes/overworld/kanto/towns/lavender_town/house3.tscn"
 const HOUSE2 := "res://scenes/overworld/kanto/towns/lavender_town/house2.tscn"
 const HOUSE1 := "res://scenes/overworld/kanto/towns/lavender_town/house1.tscn"
 const ROUTE := "res://scenes/overworld/kanto/routes/kanto_route_10.tscn"
+const ROUTE12 := "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
+const ROUTE11 := "res://scenes/overworld/kanto/routes/kanto_route_11.tscn"
+const GATE := "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn"
 const ROUTE8 := "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
 const AtlasValidator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd")
 var failures := 0
@@ -22,6 +25,9 @@ func _run() -> void:
 	var house2 := (load(HOUSE2) as PackedScene).instantiate()
 	var house1 := (load(HOUSE1) as PackedScene).instantiate()
 	var route := (load(ROUTE) as PackedScene).instantiate()
+	var route12 := (load(ROUTE12) as PackedScene).instantiate()
+	var route11 := (load(ROUTE11) as PackedScene).instantiate()
+	var gate := (load(GATE) as PackedScene).instantiate()
 	var route8 := (load(ROUTE8) as PackedScene).instantiate()
 	_check(town.get("map_id") == "kanto_lavender_town", "Lavender Town has its own map identity")
 	_check(town.has_node("Entities/Players") and town.has_node("Entities/NPCs")
@@ -128,24 +134,29 @@ func _run() -> void:
 		"House 1 exterior door and return tile are traversable")
 	_check(house1.get("lighting_profile") == "indoor" and house1.get("weather_profile") == "disabled"
 		and house1.get("music_profile_id") == "kanto.lavender_town", "House 1 uses indoor lighting and Lavender music")
-	for route_number in [12]:
-		var planned_exit := town.get_node("Exits/ToRoute%d" % route_number) as Area2D
-		var planned_shape := planned_exit.get_node("CollisionShape2D") as CollisionShape2D
-		_check(not planned_exit.monitoring and planned_shape.disabled,
-			"Future Route %d exit cannot trigger during gameplay" % route_number)
-		_check(str(planned_exit.get("target_scene_path")).is_empty()
-			and str(planned_exit.get("target_spawn_name")).is_empty(),
-			"Future Route %d exit has no dangling scene or spawn reference" % route_number)
-		var arrival := town.get_node("Spawns/FromRoute%d" % route_number) as Marker2D
-		var rectangle := planned_shape.shape as RectangleShape2D
-		var bounds := Rect2(planned_exit.position - rectangle.size / 2, rectangle.size)
-		_check(not bounds.has_point(arrival.position),
-			"Future Route %d spawn arrives inside town, outside its exit" % route_number)
+	_check_connection(town, "ToRoute12", route12, ROUTE12)
+	_check_connection(route12, "ToLavenderTown", town, TOWN)
+	_check_connection(route12, "ToRoute11Gate", gate, GATE)
+	_check_connection(gate, "ToEast", route12, ROUTE12)
+	_check_connection(gate, "ToWest", route11, ROUTE11)
+	_check_connection(route11, "ToRoute12West", gate, GATE)
+	_check(gate.get("lighting_profile") == "indoor" and gate.get("weather_profile") == "disabled",
+		"Route 11–12 gate uses the indoor transition building")
+	var route12_visual := route12.get_node("Visual")
+	var route12_metadata: Dictionary = route12_visual.get_meta("tiled_visual_map")
+	_check(route12_metadata.get("width") == 50 and route12_metadata.get("height") == 124,
+		"Route 12 preserves the artist map dimensions")
+	_check(AtlasValidator.new().validate(route12_visual,
+		"res://generated/tiled_visuals/route_12/route_12.visual.tileset.tres").is_empty(),
+		"Route 12 uses valid compact atlases")
+	_check_route12_walkway(route12)
 	var builder := load("res://tools/world_access_catalog_builder.gd").new() as RefCounted
 	var record: Dictionary = builder.call("_load_scene_record", TOWN, {})
-	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 8,
-		"Catalog builder registers Route 8, Route 10 and all six indoor exits")
+	_check(bool(record.get("success", false)) and (record.get("exits", []) as Array).size() == 9,
+		"Catalog builder registers Route 8, Route 10, Route 12 and all six indoor exits")
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
+	for transition in ["kanto_lavender_town__to_route12", "kanto_route_12__to_lavender_town", "kanto_route_12__to_route11_gate", "kanto_route_12_west__to_route12"]:
+		_check(catalog.transitions.has(transition), "Catalog authorizes " + transition)
 	_check(catalog.transitions.has("kanto_lavender_town__to_route8")
 		and catalog.transitions.has("kanto_route_8__to_lavender_town"),
 		"Catalog registers both authorized Route 8 transitions")
@@ -175,6 +186,9 @@ func _run() -> void:
 	town.free()
 	route.free()
 	route8.free()
+	route12.free()
+	route11.free()
+	gate.free()
 	quit(1 if failures > 0 else 0)
 
 
@@ -201,3 +215,31 @@ func _check(condition: bool, label: String) -> void:
 	else:
 		failures += 1
 		push_error("FAIL: %s" % label)
+
+
+func _check_route12_walkway(route12: Node) -> void:
+	var collision := route12.get_node("Tiles/Collision") as TileMapLayer
+	var water := route12.get_node("Tiles/Water") as TileMapLayer
+	var start := Vector2i(22, 2)
+	var goal := Vector2i(7, 61)
+	var queue: Array[Vector2i] = [start]
+	var seen := {start: true}
+	var index := 0
+	while index < queue.size():
+		var cell := queue[index]
+		index += 1
+		for direction in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			var next: Vector2i = cell + direction
+			if next.x < 0 or next.x >= 50 or next.y < 0 or next.y >= 124 or seen.has(next):
+				continue
+			if collision.get_cell_source_id(next) != -1 or water.get_cell_source_id(next) != -1:
+				continue
+			seen[next] = true
+			queue.append(next)
+	_check(seen.has(goal), "Lavender arrival connects to the Route 11 gate along walkable bridges")
+	_check(water.get_cell_source_id(Vector2i(30, 10)) != -1,
+		"Open water is marked for Surf rather than walking")
+	_check(water.get_cell_source_id(Vector2i(15, 8)) == -1,
+		"The wooden bridge above water stays walkable without Surf")
+	_check(collision.get_cell_source_id(Vector2i(0, 30)) != -1,
+		"The closed route edge is blocked by the persisted collision layer")

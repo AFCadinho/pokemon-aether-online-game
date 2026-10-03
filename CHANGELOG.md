@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Route 12 from the artist Tiled map, connected to Lavender Town and the Route 11–12 transition building; register Route 8 and Route 12 in the browser map module.
+
 - Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
 
 - Preserve the player's head when riding Cobalion by masking only pixels covered by the mount foreground, removing the oversized front head mask.
