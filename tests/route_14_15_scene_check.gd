@@ -9,6 +9,11 @@ const HORIZONTAL_TEMPLATE := "res://scenes/overworld/kanto/reusable_interiors/ho
 const ROUTE_11_12_GATE := "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn"
 const COLLISION_LAYER_NAMES: Array[String] = ["Collision"]
 
+class GuardTestPlayer extends CharacterBody2D:
+	var last_direction := Vector2.UP
+	func get_feet_position() -> Vector2:
+		return global_position
+
 var failed := false
 
 
@@ -59,6 +64,8 @@ func _run() -> void:
 	_check_fuchsia_gate(route15, gate, areas)
 	_check_horizontal_tile_collision(gate, template)
 	_check_horizontal_tile_collision(route11_12_gate, template)
+	await _check_guard_interaction(gate)
+	await _check_guard_interaction(route11_12_gate)
 
 	route11_12_gate.free()
 	template.free()
@@ -133,6 +140,45 @@ func _check_horizontal_tile_collision(map: Node2D, template: Node2D) -> void:
 			_expect(player.can_move_to(Vector2(x * 32 + 16, y * 32 + 16)),
 				"%s doorway stays clear for server-authorized transitions" % map.name)
 	player.free()
+
+
+func _check_guard_interaction(map: Node2D) -> void:
+	var guard := map.get_node("Entities/NPCs/GateNPC")
+	_expect(guard._get_npc_metadata_id() == "horizontal_gate_attendant",
+		"%s attendant resolves shared server dialogue" % map.name)
+	_expect(not guard.requires_party_pokemon and not guard.requires_staff_role,
+		"%s attendant can speak without local access requirements" % map.name)
+	var collision := map.get_node("Tiles/Collision") as TileMapLayer
+	var guard_tile: Vector2i = guard._to_tile(guard.get_feet_position())
+	var approach_tile := guard_tile + Vector2i.DOWN * 2
+	_expect(collision.get_cell_source_id(guard_tile + Vector2i.DOWN) != -1,
+		"%s counter separates the attendant from the player" % map.name)
+	_expect(collision.get_cell_source_id(approach_tile) == -1,
+		"%s two-tile attendant approach is walkable" % map.name)
+	# Use the real detector and player collider in physics, without running NPC/API setup.
+	var fixture := Node2D.new()
+	var detector := guard.get_node("InteractionArea").duplicate() as Area2D
+	fixture.add_child(detector)
+	detector.position += guard.position
+	var source_player := (load("res://scenes/player.tscn") as PackedScene).instantiate()
+	var player := GuardTestPlayer.new()
+	player.add_child(source_player.get_node("DetectionShape").duplicate())
+	source_player.free()
+	fixture.add_child(player)
+	player.position = Vector2(approach_tile) * 32 + Vector2(16, 16)
+	get_root().add_child(fixture)
+	await physics_frame
+	await physics_frame
+	_expect(detector.get_overlapping_bodies().has(player),
+		"%s detector recognizes the player across the counter" % map.name)
+	_expect(guard._is_player_facing_npc(player),
+		"%s player can address the attendant across the counter" % map.name)
+	player.last_direction = Vector2.DOWN
+	_expect(not guard._is_player_facing_npc(player), "%s player must face the attendant" % map.name)
+	player.last_direction = Vector2.UP
+	player.position += Vector2.DOWN * 32
+	_expect(not guard._is_player_facing_npc(player), "%s speech does not extend beyond two tiles" % map.name)
+	fixture.free()
 
 
 func _check_visual(map: Node, width: int, height: int, source_suffix: String) -> void:
