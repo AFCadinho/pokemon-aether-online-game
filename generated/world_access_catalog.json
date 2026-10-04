@@ -1989,7 +1989,7 @@
 					"spawnMarker": "FromPalletTown",
 					"tile": {
 						"x": 5,
-						"y": 29
+						"y": 30
 					}
 				},
 				"ground_floor_stairs": {
@@ -2364,8 +2364,8 @@
 					"safeForStaffTeleport": true,
 					"spawnMarker": "FromFishingBrotherHouse",
 					"tile": {
-						"x": 32,
-						"y": 79
+						"x": 28,
+						"y": 78
 					}
 				},
 				"from_lavender_town": {
@@ -2417,7 +2417,9 @@
 			"locationGroupId": "kanto_route_12",
 			"locationGroupLabel": "Route 12",
 			"regionName": "Kanto",
-			"sceneAliases": [],
+			"sceneAliases": [
+				"uid://d138xqmh4ks1h"
+			],
 			"scenePath": "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn",
 			"spawnPoints": {
 				"from_route_12": {
@@ -6312,7 +6314,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn",
 				"position": {
 					"x": 176.0,
-					"y": 944.0
+					"y": 976.0
 				},
 				"spawnMarker": "FromPalletTown"
 			},
@@ -6926,7 +6928,9 @@
 		"kanto_route_12__to_fishing_brother_house": {
 			"destination": {
 				"mapId": "kanto_route_12_fishing_brother_house",
-				"mapSceneAliases": [],
+				"mapSceneAliases": [
+					"uid://d138xqmh4ks1h"
+				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn",
 				"position": {
 					"x": 304.0,
@@ -7007,8 +7011,8 @@
 				],
 				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
 				"position": {
-					"x": 1040.0,
-					"y": 2544.0
+					"x": 912.0,
+					"y": 2512.0
 				},
 				"spawnMarker": "FromFishingBrotherHouse"
 			},
