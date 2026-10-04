@@ -30,6 +30,10 @@ def main() -> None:
     mode.add_argument('--apk-only', action='store_true')
     mode.add_argument('--verify-assets-only', action='store_true',
                       help='Check the matching public asset payload before activating the updater; uploads nothing')
+    mode.add_argument('--repair-active-assets', action='store_true',
+                      help='Restore only the asset payload of the exact currently published Android release')
+    mode.add_argument('--plan-active-assets', action='store_true',
+                      help='Validate an active-release asset repair and report its destination; uploads nothing')
     args = parser.parse_args()
     game = json.loads(Path('release/manifest-android.json').read_text())['game']
     build = game['buildId']
@@ -61,19 +65,32 @@ def main() -> None:
             if hashlib.file_digest(stream, 'sha256').hexdigest() != entry['sha256']:
                 raise SystemExit('Native asset checksum differs')
         files.append((path, relative))
-    config = _load_config() if not args.verify_assets_only else None
     manifest_url = 'https://updates.pokeaether.com/manifest-android.json'
     previous_manifest = public_bytes(manifest_url)
     previous_game = json.loads(previous_manifest)['game']
-    if game['versionCode'] <= previous_game['versionCode']:
-        raise SystemExit('Test version code must exceed the active Android release')
-    if game.get('testCompatibleBuildId') != previous_game.get('buildId'):
-        raise SystemExit('Active Android build changed since the candidate was built')
+    active_repair = args.repair_active_assets or args.plan_active_assets
+    if active_repair:
+        if game != previous_game:
+            raise SystemExit('Asset repair must match the exact active Android release manifest')
+    else:
+        if game['versionCode'] <= previous_game['versionCode']:
+            raise SystemExit('Test version code must exceed the active Android release')
+        if game.get('testCompatibleBuildId') != previous_game.get('buildId'):
+            raise SystemExit('Active Android build changed since the candidate was built')
     prefix = f'android/releases/{build}/'
+    if args.plan_active_assets:
+        plan = {'buildId': build, 'version': game['version'], 'assetCount': len(files),
+                'payloadBytes': sum(path.stat().st_size for path, _ in files),
+                'destinationPrefix': prefix, 'catalogSha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest(),
+                'updaterManifestChanged': False, 'apkUpload': False}
+        Path('android-active-asset-repair-plan.json').write_text(json.dumps(plan, indent=2) + '\n')
+        print(json.dumps(plan, indent=2), flush=True)
+        return
+    config = _load_config() if not args.verify_assets_only else None
     def upload(item):
         path, relative = item
         _upload_file(config, path, prefix + relative)
-    if args.assets_only:
+    if args.assets_only or args.repair_active_assets:
         print(f'Uploading {len(files)} verified native assets for {build}', flush=True)
         with ThreadPoolExecutor(max_workers=32) as executor:
             for _ in executor.map(upload, files):
@@ -104,7 +121,8 @@ def main() -> None:
         return
     evidence = {'game': game, 'assetCatalogUrl': origin + 'mobile-assets/catalog.json',
                 'assetCount': len(files), 'activeAndroidVersion': previous_game['version'],
-                'updaterManifestChanged': False, 'apkDownloadReady': args.apk_only}
+                'updaterManifestChanged': False, 'apkDownloadReady': args.apk_only,
+                'activeAssetsRepaired': args.repair_active_assets}
     Path('android-test-download.json').write_text(json.dumps(evidence, indent=2) + '\n')
     print(f"Android {game['version']} test download: {expected_url}", flush=True)
 

@@ -59,6 +59,16 @@ public native catalog and HOME, cry and video samples before activating the
 updater manifest. If assets have not been prepared for that exact build, publication
 stops; run `Prepare Android test download` for the candidate first.
 
+If an already active APK is missing its immutable assets, use `Prepare Android
+test download` with that APK's original build run and `repair_active_assets=true`.
+The repair requires the candidate manifest to equal the current public Android
+manifest, validates the original payload, uploads its assets and catalog, and
+checks public samples. It skips APK uploading and leaves the updater manifest
+unchanged. A changed active release stops the repair. For a read-only local plan,
+run `prepare_android_test_download.py --plan-active-assets` from the directory
+containing the original `release/` and `android-assets/` artifacts with the
+candidate source SHA, build run ID and attempt environment variables set.
+
 The signed candidate also records the currently published Android build ID as
 its only approved test compatibility identity. On a version rejection during
 login or session restoration it retries once using that identity. After the
