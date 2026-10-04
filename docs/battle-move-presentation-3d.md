@@ -23,10 +23,12 @@ must explicitly own matching audio inside the 3D move driver's lifetime.
 
 Damage and faint still use model reactions. Idle/sleep, send-out, recall and
 switching stay with the existing model lifecycle. Common damage audio stays
-shared. Legacy heal/stat flashes and effect-catalog particles (including entrance
-and mechanic effects) are suppressed in 3D until native replacements exist;
-their battle messages and mechanical effects are not changed. Substitute and
-capture transitions are separate existing lifecycle work, not new move effects.
+shared. General effect events now use short native arena geometry for stats,
+healing, items, shields, statuses and activations; see
+[battle-common-effects-3d.md](battle-common-effects-3d.md) for coverage and timing.
+These effects retain existing event boundaries and common sounds without
+requesting 2D visual assets. Substitute and capture transitions remain separate
+existing lifecycle work.
 
 Cancellation invalidates the 3D move generation before releasing model waits.
 Miss callbacks are delivered once, even without native dodge visuals, and never
@@ -80,7 +82,8 @@ Node3D effects in the arena's world, separate from the sprite catalogs. Own and
 release particles, projectiles and temporary camera overrides on completion,
 cancellation and scene teardown. Effects must not apply damage, alter battle
 state, invent outcomes or bypass the event renderer's completion boundary.
-`play_effect` is the separate entry point for future non-move 3D effects.
+General non-move effects use the router’s separate `play_effect_animation`
+event route and the arena’s `create_common_effect` boundary.
 No native move VFX or attack-camera shots are shipped by this foundation.
 
 ## Focused checks
@@ -98,3 +101,8 @@ No native move VFX or attack-camera shots are shipped by this foundation.
 - The same pacing check validates every reviewed faint-start duration and runs
   native-clock faint lifecycle cases for Pikachu, Blastoise and Volbeat, including
   missing faint-loop, retained final pose, replay pause/speed and cancellation.
+
+- `battle_common_effects_3d_check.tscn`: all 21 effect-catalog entries classified,
+  18 native profiles, shared aliases/audio, species-relative bounds, all four
+  target slots, replay pause/speed, absent audio, missing/hidden actors, ordered
+  heal HP updates, cancellation and pooled-world deactivation.

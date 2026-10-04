@@ -4,18 +4,23 @@ const Timeline = preload("res://scripts/battle/animations/battle_sound_timeline.
 var catalogs := {}
 var plans := {}
 
+func resolve_key(kind: String, key: String) -> String:
+	if kind not in ["move", "effect"]:
+		return key
+	if not catalogs.has(kind):
+		var path := "res://data/battle_move_animations.json" if kind == "move" else "res://data/battle_effect_animations.json"
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		catalogs[kind] = parsed if parsed is Dictionary else {}
+	return str(catalogs[kind].get("aliases", {}).get(key, key))
+
 func get_plan(kind: String, key: String) -> Dictionary:
 	var cache_key := kind + ":" + key
 	if plans.has(cache_key):
 		return plans[cache_key]
 	if kind not in ["move", "effect"]:
 		return {}
-	if not catalogs.has(kind):
-		var path := "res://data/battle_move_animations.json" if kind == "move" else "res://data/battle_effect_animations.json"
-		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-		catalogs[kind] = parsed if parsed is Dictionary else {}
+	var resolved := resolve_key(kind, key)
 	var catalog: Dictionary = catalogs[kind]
-	var resolved := str(catalog.get("aliases", {}).get(key, key))
 	var config: Dictionary = catalog.get("moves" if kind == "move" else "effects", {}).get(resolved, {})
 	var path := str(config.get("data_path", ""))
 	if not FileAccess.file_exists(path):

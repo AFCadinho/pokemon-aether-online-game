@@ -228,6 +228,9 @@ func _shared_effect_checks() -> void:
 	await router.play_stat_change_presentation_for_target("p2", 1)
 	await router.play_stat_change_presentation_for_target("p2", -1)
 	assert(router.effects == ["health_up", "stat_up", "stat_down"])
+	# Shared samples may outlive their short native event without serial waits.
+	while not router.active_audio_nodes.is_empty():
+		await get_tree().process_frame
 	assert(router.active_audio_nodes.is_empty() and not router.audio_catalog.catalogs.has("move"))
 
 func _sprite_hp_check() -> void:

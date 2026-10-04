@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add short native 3D battle effects for stat changes, healing, items and berries, shiny sparkles, Protect, status conditions, terrain and power activations, with shared sounds synchronized to their animation.
+
 - Speed up desktop 3D faint animations to at least 2× and cap their full movement at about 1.25 seconds, while preserving the resting faint pose and ordered replacement transition.
 
 - Enable permission-based staff and creator tools in the browser, including account impersonation and downloadable Photo Mode screenshots.
