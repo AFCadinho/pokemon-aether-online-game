@@ -209,6 +209,7 @@ jobs:
 
       - name: Run release-focused checks
         run: |
+          python3 tools/check_web_release_config_bridge.py --godot ./godot
           ./godot --headless --path . --script res://tests/web_runtime_check.gd
           ./godot --headless --path . --script res://tests/web_dynamic_pokemon_sprite_check.gd
           python3 tools/serve_web_preview.py >/tmp/pokeaether-web-preview.log 2>&1 &

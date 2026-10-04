@@ -6,6 +6,7 @@ signal closed
 
 const ExternalLinks = preload("res://scripts/core/external_links.gd")
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
+const StorageConfirmation := preload("res://scripts/ui/aether_confirmation_dialog.gd")
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const LOADING_SCENE_PATH := "res://scenes/interface/loading_screen.tscn"
 const MINIMUM_MENU_SIZE := Vector2(900, 680)
@@ -43,7 +44,11 @@ var battle_presentation_options: OptionButton
 var battle_camera_motion_toggle: CheckBox
 var sprite_storage_button: Button
 var model_storage_button: Button
-var storage_confirm_dialog: ConfirmationDialog
+var sprite_storage_hint: Label
+var model_storage_hint: Label
+var storage_feedback_label: Label
+var storage_refresh_elapsed := 0.0
+var storage_confirm_dialog: StorageConfirmation
 var terminology_label: Label
 var terminology_options_button: OptionButton
 var terminology_hint_label: Label
@@ -207,6 +212,10 @@ func open(context: String = "game") -> void:
 func _process(_delta: float) -> void:
 	if visible:
 		_fit_to_viewport()
+		storage_refresh_elapsed += _delta
+		if storage_refresh_elapsed >= 0.5:
+			storage_refresh_elapsed = 0.0
+			_refresh_asset_storage_controls()
 	if OS.has_feature("web") and visible and fullscreen_check_box != null:
 		fullscreen_check_box.set_pressed_no_signal(SettingsManager.fullscreen)
 		fullscreen_check_box.disabled = not bool(JavaScriptBridge.eval("Boolean(window.pokeaetherFullscreen?.supported())", true))
@@ -259,6 +268,8 @@ func show_impersonation_return_confirmation() -> void:
 
 
 func close() -> void:
+	if storage_confirm_dialog != null:
+		storage_confirm_dialog.hide_dialog()
 	if account_details_dialog != null:
 		_hide_account_details_dialog()
 	if privacy_dialog != null:
@@ -292,7 +303,9 @@ func _input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
 
-	if privacy_dialog != null and privacy_dialog.visible:
+	if storage_confirm_dialog != null and storage_confirm_dialog.visible:
+		storage_confirm_dialog.hide_dialog()
+	elif privacy_dialog != null and privacy_dialog.visible:
 		_hide_privacy_dialog()
 	elif account_details_dialog != null and account_details_dialog.visible:
 		_hide_account_details_dialog()
@@ -485,19 +498,37 @@ func _setup_tabs() -> void:
 			if not loading_controls:
 				SettingsManager.set_battle_3d_camera_motion(enabled))
 		graphics_tab.add_child(battle_camera_motion_toggle)
-		var storage_label := Label.new()
-		storage_label.text = "Downloaded battle assets"
-		graphics_tab.add_child(storage_label)
 		sprite_storage_button = Button.new()
-		sprite_storage_button.text = "Remove downloaded 2D sprites"
+		sprite_storage_button.name = "RemoveSpriteFiles"
+		sprite_storage_button.custom_minimum_size.y = 40
+		_set_localized_text(sprite_storage_button, "ui.settings.storage.remove")
 		sprite_storage_button.pressed.connect(_confirm_remove_sprites)
-		graphics_tab.add_child(sprite_storage_button)
 		model_storage_button = Button.new()
-		model_storage_button.text = "Remove downloaded 3D models"
+		model_storage_button.name = "RemoveModelFiles"
+		model_storage_button.custom_minimum_size.y = 40
+		_set_localized_text(model_storage_button, "ui.settings.storage.remove")
 		model_storage_button.pressed.connect(_confirm_remove_models)
-		graphics_tab.add_child(model_storage_button)
-		storage_confirm_dialog = ConfirmationDialog.new()
+		var sprite_storage_label := Label.new()
+		_set_localized_text(sprite_storage_label, "ui.settings.storage.sprites")
+		var model_storage_label := Label.new()
+		_set_localized_text(model_storage_label, "ui.settings.storage.models")
+		sprite_storage_hint = Label.new()
+		model_storage_hint = Label.new()
+		var sprite_storage_row := _create_labeled_control_row(sprite_storage_label, sprite_storage_button, sprite_storage_hint, 164)
+		var model_storage_row := _create_labeled_control_row(model_storage_label, model_storage_button, model_storage_hint, 164)
+		graphics_tab.add_child(sprite_storage_row)
+		graphics_tab.add_child(model_storage_row)
+		storage_feedback_label = Label.new()
+		storage_feedback_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		storage_feedback_label.hide()
+		graphics_tab.add_child(storage_feedback_label)
+		_wrap_settings_section(graphics_tab, "ui.settings.storage.title", "ui.settings.storage.hint",
+			[sprite_storage_row, model_storage_row, storage_feedback_label])
+		storage_confirm_dialog = preload("res://scenes/interface/aether_confirmation_dialog.tscn").instantiate()
 		add_child(storage_confirm_dialog)
+		_set_localized_text(storage_confirm_dialog.title_label, "ui.settings.storage.confirm_title")
+		_set_localized_text(storage_confirm_dialog.confirm_button, "ui.settings.storage.remove")
+		_set_localized_text(storage_confirm_dialog.cancel_button, "common.cancel")
 	_wrap_settings_section(
 		general_tab,
 		"",
@@ -799,7 +830,8 @@ func _create_tab_content(
 func _create_labeled_control_row(
 	label: Label,
 	control: Control,
-	hint: Label = null
+	hint: Label = null,
+	control_minimum_width := 268.0
 ) -> PanelContainer:
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size.y = 58.0 if hint == null else 68.0
@@ -832,7 +864,7 @@ func _create_labeled_control_row(
 		hint.add_theme_font_size_override("font_size", 11)
 
 	_move_node(control, row)
-	control.custom_minimum_size.x = maxf(control.custom_minimum_size.x, 268.0)
+	control.custom_minimum_size.x = maxf(control.custom_minimum_size.x, control_minimum_width)
 	control.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	return panel
 
@@ -1618,6 +1650,7 @@ func _refresh_localized_content() -> void:
 	if privacy_dialog != null and privacy_dialog.visible:
 		_refresh_privacy_dialog_copy()
 	_refresh_support_report_state()
+	_refresh_asset_storage_controls()
 
 
 func _update_about_version_label() -> void:
@@ -1654,6 +1687,13 @@ func _apply_premium_styles() -> void:
 		tab_container.add_theme_color_override("font_hovered_color", UI_TEXT)
 
 	_apply_styles_recursive(self)
+	if storage_confirm_dialog != null:
+		_apply_button_style(storage_confirm_dialog.confirm_button, "danger")
+	for button: Button in [sprite_storage_button, model_storage_button]:
+		if button != null:
+			_apply_button_style(button, "danger")
+			button.add_theme_stylebox_override("disabled", _make_button_style(UI_ROW_BG, UI_BORDER_SOFT))
+			button.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
 	for slider: HSlider in [
 		master_volume_slider,
 		music_volume_slider,
@@ -1677,6 +1717,8 @@ func _apply_premium_styles() -> void:
 
 
 func _apply_styles_recursive(node: Node) -> void:
+	if node == storage_confirm_dialog:
+		return # Keep the shared confirmation dialog's own readable layout/style.
 	if node is Label:
 		_apply_label_style(node as Label)
 	elif node is CheckBox:
@@ -2961,33 +3003,87 @@ func _world_pixel_scale_option_text(scale: float) -> String:
 func _refresh_asset_storage_controls() -> void:
 	if sprite_storage_button == null or model_storage_button == null:
 		return
-	var battle_open := get_tree().root.find_child("ExperimentalBattle3D", true, false) != null
+	var battle_open := _battle_assets_in_use()
 	var sprite_bytes: int = DesktopAssetUsageService.sprite_bytes
 	var model_bytes: int = DesktopAssetUsageService.model_bytes
 	var scanning: bool = DesktopAssetUsageService.is_scanning()
-	sprite_storage_button.text = "Remove downloaded 2D sprites (%0.1f MiB)" % (sprite_bytes / 1048576.0) if sprite_bytes >= 0 else "Remove downloaded 2D sprites (…)"
-	model_storage_button.text = "Remove downloaded 3D models (%0.1f MiB)" % (model_bytes / 1048576.0) if model_bytes >= 0 else "Remove downloaded 3D models (…)"
-	sprite_storage_button.disabled = scanning or battle_open or sprite_bytes <= 0 or not WebPokemonSpriteService.can_clear_desktop_disk()
-	model_storage_button.disabled = scanning or battle_open or model_bytes <= 0 or not OnDemand3DBundleService.can_clear_cache()
+	_update_asset_storage_row(sprite_storage_button, sprite_storage_hint, sprite_bytes,
+		_storage_block_reason(sprite_bytes, scanning, battle_open, WebPokemonSpriteService.can_clear_desktop_disk()))
+	_update_asset_storage_row(model_storage_button, model_storage_hint, model_bytes,
+		_storage_block_reason(model_bytes, scanning, battle_open, OnDemand3DBundleService.can_clear_cache()))
+
+
+func _battle_assets_in_use() -> bool:
+	for presenter: Node in get_tree().root.find_children("ExperimentalBattle3D", "", true, false):
+		var ancestor: Node = presenter
+		while ancestor != null and not ancestor.has_meta("dedicated_battle_screen"):
+			ancestor = ancestor.get_parent()
+		# A hidden prewarmed host is idle. Mounted battles, including 2D and
+		# battles still under their entrance cover, continue to protect their files.
+		if ancestor == null or (ancestor is CanvasItem and ancestor.is_visible_in_tree()):
+			return true
+	return false
+
+
+func _storage_block_reason(bytes: int, scanning: bool, battle_open: bool, can_remove: bool) -> String:
+	if battle_open:
+		return "ui.settings.storage.battle_busy"
+	if scanning or bytes < 0:
+		return "ui.settings.storage.checking"
+	if bytes == 0:
+		return "ui.settings.storage.empty"
+	if not can_remove:
+		return "ui.settings.storage.download_busy"
+	return ""
+
+
+func _update_asset_storage_row(button: Button, hint: Label, bytes: int, reason_key: String) -> void:
+	button.disabled = not reason_key.is_empty()
+	button.mouse_default_cursor_shape = Control.CURSOR_ARROW if button.disabled else Control.CURSOR_POINTING_HAND
+	button.tooltip_text = LocalizationManager.text(reason_key) if button.disabled else ""
+	var size_text := "%0.2f GB" % (bytes / 1000000000.0) if bytes >= 1000000000 else "%0.1f MB" % (bytes / 1000000.0)
+	hint.text = LocalizationManager.text("ui.settings.storage.used", {"size": size_text}) if bytes >= 0 else ""
+	if not reason_key.is_empty():
+		hint.text += ("\n" if not hint.text.is_empty() else "") + LocalizationManager.text(reason_key)
+
+
+func _configure_storage_confirmation(key: String) -> void:
+	storage_confirm_dialog.configure(LocalizationManager.text("ui.settings.storage.confirm_title"),
+		LocalizationManager.text(key), LocalizationManager.text("ui.settings.storage.remove"),
+		LocalizationManager.text("common.cancel"))
+	_set_localized_text(storage_confirm_dialog.message_label, key)
+	for connection in storage_confirm_dialog.confirmed.get_connections():
+		storage_confirm_dialog.confirmed.disconnect(connection.callable)
+
+
+func _remove_downloaded_assets(models: bool) -> void:
+	# Recheck after confirmation: a battle or download may have started while
+	# the dialog was open. Opening settings never removes any files by itself.
+	_refresh_asset_storage_controls()
+	if (model_storage_button if models else sprite_storage_button).disabled:
+		return
+	var removed: bool = OnDemand3DBundleService.clear_cache() if models else WebPokemonSpriteService.clear_desktop_disk()
+	_set_localized_text(storage_feedback_label, "ui.settings.storage.failed")
+	storage_feedback_label.visible = not removed
+	DesktopAssetUsageService.request_refresh()
+	_refresh_asset_storage_controls()
 
 
 func _confirm_remove_sprites() -> void:
-	storage_confirm_dialog.dialog_text = "Remove downloaded battle sprites? They will be downloaded again when needed."
-	for connection in storage_confirm_dialog.confirmed.get_connections():
-		storage_confirm_dialog.confirmed.disconnect(connection.callable)
-	storage_confirm_dialog.confirmed.connect(func():
-		WebPokemonSpriteService.clear_desktop_disk()
-		DesktopAssetUsageService.request_refresh()
-		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
+	_refresh_asset_storage_controls()
+	if sprite_storage_button.disabled:
+		return
+	_configure_storage_confirmation("ui.settings.storage.confirm_sprites")
+	storage_confirm_dialog.confirmed.connect(_remove_downloaded_assets.bind(false), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
+	storage_confirm_dialog.cancel_button.grab_focus.call_deferred()
 
 
 func _confirm_remove_models() -> void:
-	storage_confirm_dialog.dialog_text = "Remove downloaded 3D Pokémon models? Both 3D and 2.5D will download them again when needed."
-	for connection in storage_confirm_dialog.confirmed.get_connections():
-		storage_confirm_dialog.confirmed.disconnect(connection.callable)
-	storage_confirm_dialog.confirmed.connect(func():
-		OnDemand3DBundleService.clear_cache()
-		DesktopAssetUsageService.request_refresh()
-		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
+	_refresh_asset_storage_controls()
+	if model_storage_button.disabled:
+		return
+	_configure_storage_confirmation("ui.settings.storage.confirm_models")
+	storage_confirm_dialog.confirmed.connect(_remove_downloaded_assets.bind(true), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
+	storage_confirm_dialog.cancel_button.grab_focus.call_deferred()
