@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep mobile HUD and quest-tracker collapse/reopen buttons comfortable to tap at smaller UI scales, and place enlarged controls clear of neighbouring HUD surfaces.
+
 - Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
 
 - Restore forum announcements on the browser login screen by reading the shared updates feed instead of the browser asset bucket.
