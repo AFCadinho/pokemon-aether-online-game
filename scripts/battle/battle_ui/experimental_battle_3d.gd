@@ -74,6 +74,7 @@ var placements := {}
 var motion_clips := {}
 var visual_bounds := {}
 var motion_offsets := [0.0, 0.0, 0.0, 0.0]
+var hover_offsets := [0.0, 0.0, 0.0, 0.0]
 var arena_preparing := false
 var entry_arena_requested := false
 var entry_arena_visible := false
@@ -1864,6 +1865,7 @@ func _process(delta: float) -> void:
 			identities[i] = desired[i]
 			resting[i] = true
 			_action(restoring[i], i)
+			hover_offsets[i] = ModelPlacement.hover_target(placements[desired[i]], current_actions[i], 0.0, players[i].current_animation_length)
 			actor_build_ms += (Time.get_ticks_usec() - actor_started) / 1000.0
 		players[i].speed_scale = 0.0 if status_conditions[i] == "frozen" and resting[i] else playback_speed
 		if transition_tweens[i] != null and transition_tweens[i].is_valid():
@@ -1877,13 +1879,15 @@ func _process(delta: float) -> void:
 			_action(restoring[i], i)
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
+		var hover_target := ModelPlacement.hover_target(placements[identities[i]], current_actions[i], players[i].current_animation_position, players[i].current_animation_length)
+		hover_offsets[i] = ModelPlacement.advance_hover(hover_offsets[i], hover_target, placements[identities[i]], delta * playback_speed)
 		if _is_hybrid_presentation():
 			# Follow responsive platform layout without changing native animation,
 			# grounding, recall scale or the attack/faint motion correction.
 			actors[i].position = _position(i)
 			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
-		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
+		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i] + hover_offsets[i]
 	_sync_substitute_models()
 	_sync_status_effects()
 	_prune_models()

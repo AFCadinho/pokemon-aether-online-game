@@ -13,9 +13,12 @@ static func resolve(entry: Dictionary, calibration: Dictionary, runtime_hash: St
 		return {}
 	var scale: Variant = authored.get("scale", 0.0)
 	var yaw: Variant = authored.get("yaw_degrees", 0.0)
+	var hover: Variant = authored.get("hover_height", 0.0)
 	if not _finite_number(scale) or float(scale) <= 0.0 or not _finite_number(yaw):
 		return {}
-	var result := {"scale": float(scale), "yaw_degrees": float(yaw), "lift": 0.0, "calibrated": false}
+	if not _finite_number(hover) or float(hover) < 0.0:
+		return {}
+	var result := {"scale": float(scale), "yaw_degrees": float(yaw), "lift": 0.0, "hover_height": float(hover), "calibrated": false}
 	if calibration.is_empty():
 		return result
 	var lift: Variant = calibration.get("lift", null)
@@ -28,6 +31,20 @@ static func resolve(entry: Dictionary, calibration: Dictionary, runtime_hash: St
 	result.lift = float(lift)
 	result.calibrated = true
 	return result
+
+static func hover_target(placement: Dictionary, action: String, time: float, duration: float) -> float:
+	var height := float(placement.get("hover_height", 0.0))
+	if action in ["sleep", "faint_loop"]:
+		return 0.0
+	if action == "faint_start":
+		# Finish descending before the resting pose joins the faint loop.
+		return height * (1.0 - smoothstep(0.0, maxf(0.01, duration * 0.7), time))
+	return height
+
+static func advance_hover(current: float, target: float, placement: Dictionary, delta: float) -> float:
+	# Separate from floor clearance: waking and falling asleep may ease in both
+	# directions, while the collision correction must still raise immediately.
+	return move_toward(current, target, float(placement.get("hover_height", 0.0)) * 4.0 * maxf(delta, 0.0))
 
 static func _finite_number(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value))
