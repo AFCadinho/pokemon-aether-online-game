@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open battles with already installed 3D models without waiting for unrelated background downloads or rewriting their catalog; spread cached map prefetch work across frames.
+
 - Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
 
 - Wait for desktop 3D battle models and arenas before revealing wild encounters, with loading progress instead of briefly showing 2D sprites.

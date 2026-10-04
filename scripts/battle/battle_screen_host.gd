@@ -18,6 +18,7 @@ var outgoing_snapshot: TextureRect
 @onready var backdrop: ColorRect = $Content/Backdrop
 var preparation_ready := false
 var reveal_requested := false
+var loading_message_after_ms := 0
 var fade_progress := 0.0:
 	set(value):
 		fade_progress = clampf(value, 0.0, 1.0)
@@ -124,6 +125,8 @@ func _on_battle_settings_closed() -> void:
 func _process(_delta: float) -> void:
 	if released or not is_instance_valid(battle) or not $Cover.visible:
 		return
+	if loading_message_after_ms > 0:
+		loading_label.get_parent().visible = not preparation_ready and Time.get_ticks_msec() >= loading_message_after_ms
 	var presenter = battle.animation_router.model_presenter
 	if is_instance_valid(presenter) and not presenter.preparation_failed:
 		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
@@ -245,7 +248,9 @@ func reveal_pending_entry() -> void:
 	if settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile"):
 		# Keep the outgoing world visible until both models and the arena are
 		# prepared. Early arena reveal would flash 2D sprites before the download.
-		loading_label.get_parent().show()
+		# Cached encounters should fade straight in without flashing a loading
+		# message. First downloads/slow preparation still show their progress.
+		loading_message_after_ms = Time.get_ticks_msec() + 500
 		request_reveal()
 		return
 	# Sprite-only platforms can open their arena while the response is pending.
@@ -269,6 +274,7 @@ func _apply_entry_fade() -> void:
 func _reveal_cover() -> void:
 	if released or reveal_tween != null:
 		return
+	loading_label.get_parent().hide()
 	reveal_tween = create_tween()
 	reveal_tween.tween_property(self, "fade_progress", 1.0, FADE_SECONDS).set_trans(Tween.TRANS_LINEAR)
 	# A slow mount/upload frame must not consume the whole entrance tween.
