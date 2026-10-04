@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add short native 3D battle effects for stat changes, healing, items and berries, shiny sparkles, Protect, status conditions, terrain and power activations, with shared sounds synchronized to their animation.
+
 - Match settings dropdowns, including battle layout and visuals, to the menu's styled arrows, selection indicators and popup lists.
 
 - Keep mobile HUD and quest-tracker collapse/reopen buttons comfortable to tap at smaller UI scales, and place enlarged controls clear of neighbouring HUD surfaces.

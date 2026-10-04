@@ -66,7 +66,9 @@ func _run() -> void:
 	router.prewarm_move_animations(["Outrage"])
 	router.prewarm_effect_animations(["stat_up"])
 	assert(router.legacy_reads == 0 and router.legacy_plays == 0, "3D must never invoke legacy visual loading/playback")
-	assert(router.audio_reads > 0 and router.active_audio_nodes.is_empty())
+	assert(router.audio_reads > 0)
+	for audio: Node in router.active_audio_nodes:
+		assert(audio.draining, "Only naturally finishing effect samples may outlive their event")
 	presenter.delayed = true
 	_cancelled_move(router)
 	assert(not completed)

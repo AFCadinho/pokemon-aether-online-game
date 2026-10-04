@@ -4,6 +4,8 @@ extends Control
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
+const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
+var common_effects: Array[Node] = []
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
@@ -574,6 +576,7 @@ func set_sleeping(index: int, sleeping: bool) -> void:
 		_action("reset", index)
 
 func cancel_actions() -> void:
+	_cancel_common_effects()
 	for index in _slot_count():
 		staged_mega_species[index] = ""
 		if is_instance_valid(mega_effects[index]):
@@ -584,6 +587,59 @@ func cancel_actions() -> void:
 		actor_shown[index] = not combatants[index].species.is_empty()
 		lifecycle[index] = "idle" if actor_shown[index] else "empty"
 		_action("reset", index)
+
+func _cancel_common_effects() -> void:
+	for effect: Node in common_effects.duplicate():
+		if is_instance_valid(effect):
+			effect.cancel()
+	common_effects.clear()
+
+func common_effect_speed() -> float:
+	return playback_speed
+
+func create_common_effect(key: String, ident: String) -> Node:
+	if not active or not is_instance_valid(world) or not CommonBattleEffect.supports(key):
+		return null
+	var effect := CommonBattleEffect.new()
+	var body_height := 2.0
+	var body_radius := 1.0
+	var anchor := Vector3.ZERO
+	var guard: Callable
+	if key == "grassy_terrain_start":
+		var count := 0
+		for slot in _slot_count():
+			if handles("p%d" % (slot + 1)):
+				anchor += _position(slot)
+				count += 1
+		if count == 0:
+			effect.free()
+			return null
+		anchor /= count
+		guard = func(): return active and is_instance_valid(world)
+	else:
+		if not handles(ident):
+			effect.free()
+			return null
+		var index := actor_index(ident)
+		var actor: Node3D = actors[index]
+		if not actor.visible or not actor_shown[index] or lifecycle[index] in ["hidden", "empty", "fainted"]:
+			effect.free()
+			return null
+		anchor = world.to_local(actor.global_position)
+		var bounds: Dictionary = visual_bounds.get(identities[index], {}).get("idle", {})
+		if not bounds.is_empty():
+			var box := AABB(Vector3(bounds.min[0],bounds.min[1],bounds.min[2]),Vector3(bounds.size[0],bounds.size[1],bounds.size[2]))
+			var local_box: AABB = (world.global_transform.affine_inverse() * actor.global_transform) * box
+			anchor = local_box.position + Vector3(local_box.size.x * 0.5,0,local_box.size.z * 0.5)
+			body_height = local_box.size.y
+			body_radius = maxf(local_box.size.x, local_box.size.z) * 0.55
+		guard = func(): return active and handles(ident) and actors[index] == actor and actor.visible and actor_shown[index] and lifecycle[index] not in ["hidden", "empty", "fainted"]
+	world.add_child(effect)
+	effect.position = anchor
+	common_effects.append(effect)
+	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
+	effect.start(key, body_height, body_radius, guard, common_effect_speed)
+	return effect
 
 func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms := 5000) -> bool:
 	var index := actor_index(ident)
@@ -1299,6 +1355,7 @@ func _reuse_checked_resource(entry: Dictionary) -> void:
 		verified_model_cache_hits += 1
 
 func _clear_actors() -> void:
+	_cancel_common_effects()
 	_clear_coop_target_highlight()
 	for i in 4:
 		staged_mega_species[i] = ""
@@ -1314,6 +1371,7 @@ func _clear_actors() -> void:
 
 func _set_active(value: bool) -> void:
 	if active and not value:
+		_cancel_common_effects()
 		_clear_coop_target_highlight()
 		camera_phase = 0.0
 		for i in 4:

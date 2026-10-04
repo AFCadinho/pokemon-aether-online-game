@@ -246,10 +246,32 @@ func play_effect_animation(effect_key: String, target_ident: String = "", reveal
 			if played:
 				return
 			reveal_3d.call()
-		var audio := await _start_3d_audio("effect", _normalize_animation_key(effect_key))
-		while is_instance_valid(audio) and not audio.done:
-			await audio.get_tree().process_frame
-		_release_3d_audio(audio)
+		var owned_generation := render_generation
+		var key := audio_catalog.resolve_key("effect", _normalize_animation_key(effect_key))
+		var native = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
+		if key in native.MOVE_EFFECTS:
+			return # Specific move VFX/audio remain deferred with model-only moves.
+		var plan: Dictionary = native.audio_plan(audio_catalog.get_plan("effect", key), key)
+		var audio := await _start_3d_audio("effect", key, plan, false)
+		if owned_generation != render_generation or not uses_realtime_3d():
+			_release_3d_audio(audio)
+			return
+		var effect: Node
+		if model_presenter.has_method("create_common_effect"):
+			effect = model_presenter.create_common_effect(key, target_ident)
+		if is_instance_valid(audio):
+			if is_instance_valid(effect):
+				audio.clock = effect.seconds
+			audio.begin()
+		if is_instance_valid(effect):
+			await effect.finished
+			if is_instance_valid(audio) and owned_generation == render_generation and not effect.cancelled:
+				audio._process(0.0) # Dispatch the final crossed cue before detaching.
+			_release_3d_audio(audio, owned_generation == render_generation and not effect.cancelled)
+		else:
+			while is_instance_valid(audio) and not audio.done:
+				await audio.get_tree().process_frame
+			_release_3d_audio(audio, native.supports(key) and owned_generation == render_generation)
 		return
 	var config: Dictionary = _get_effect_animation_config(_normalize_animation_key(effect_key))
 	if config.is_empty():
