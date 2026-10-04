@@ -113,6 +113,13 @@ func _init() -> void:
 		"stationary Surf players can fish without losing their Surf state"
 	)
 	_check(
+		not _function_source(player_source, "can_fish_here").contains("land_mount_activity_active")
+		and _function_source(player_source, "_finish_fishing_activity").contains(
+			"set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_RIDE)"
+		),
+		"land-mounted players can fish beside water and keep their mount after the cast"
+	)
+	_check(
 		appearance_source.contains('const BODY_MOVEMENT_SURF_FISH := "surf_fish"')
 		and appearance_source.contains("func resolve_layer_movement_style(")
 		and not appearance_source.contains("SURF_FISH_BODY_CUTOFFS")
