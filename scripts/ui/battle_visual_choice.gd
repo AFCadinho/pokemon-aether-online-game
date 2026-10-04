@@ -43,7 +43,8 @@ func _ready() -> void:
 		var example := TextureRect.new()
 		example.name = "Example" + mode.to_upper()
 		example.texture = _load_example(EXAMPLE_PATHS[mode])
-		example.texture_filter = Control.TEXTURE_FILTER_NEAREST if mode == "2d" else Control.TEXTURE_FILTER_LINEAR
+		# Both examples are complete battle screenshots, including UI text.
+		example.texture_filter = Control.TEXTURE_FILTER_LINEAR
 		example.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		example.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		example.custom_minimum_size = Vector2(0, 196)
