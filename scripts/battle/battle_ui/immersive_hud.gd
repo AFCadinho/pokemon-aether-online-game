@@ -119,7 +119,7 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		turn.position.y + turn_extent.y + 6.0
 	), Vector2(32, 28), 1.0)
 	var presenter = battle.animation_router.model_presenter
-	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active
+	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active and settings.battle_presentation_mode == "3d"
 	reset_camera.visible = realtime_3d
 	if not realtime_3d:
 		_compose_sprite_battle(stage)

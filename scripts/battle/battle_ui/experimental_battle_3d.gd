@@ -980,6 +980,14 @@ func _build_classic_ground() -> void:
 		_mesh(cylinder, _position(i) - Vector3(0, 0.05, 0), Color("879b8a"))
 
 func _position(index: int) -> Vector3:
+	if _is_hybrid_presentation() and is_instance_valid(camera) and is_instance_valid(viewport) and platforms.size() >= 2:
+		# Hybrid terrain is screen art. Project its visible landing surface back
+		# onto the model floor rather than using the full arena's fixed spawns.
+		var local_point := get_global_transform().affine_inverse() * _hybrid_platform_anchor(index)
+		var pixel := local_point * Vector2(viewport.size) / size.max(Vector2.ONE)
+		var point: Variant = Plane(Vector3.UP, 0.0).intersects_ray(camera.project_ray_origin(pixel), camera.project_ray_normal(pixel))
+		if point is Vector3:
+			return point
 	var point := ArenaCatalog.spawn(index % 2) + ArenaCatalog.battle_origin(arena_id)
 	if double_mode:
 		# Align each team's row with the home camera. World X alone projects at
@@ -994,6 +1002,26 @@ func _position(index: int) -> Vector3:
 	if is_instance_valid(arena_root):
 		point.y = float(arena_root.get_meta("surface_height",0.0))
 	return point
+
+
+func _is_hybrid_presentation() -> bool:
+	return get_tree().root.get_node("SettingsManager").battle_presentation_mode == "2.5d"
+
+
+func _hybrid_platform_anchor(index: int) -> Vector2:
+	var image: TextureRect = platforms[index % 2].get_node("PlatformImage")
+	# The shared platform images have transparent space above their ellipse;
+	# its surface is at 65% of the source image height, not the control center.
+	var surface := Vector2(0.5, 0.65)
+	if double_mode:
+		surface.x = 0.32 if index < 2 else 0.68
+	var dimensions := image.size
+	if image.texture != null and image.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_COVERED:
+		var texture_size := image.texture.get_size()
+		var ratio := dimensions / texture_size.max(Vector2.ONE)
+		var drawn_size := texture_size * maxf(ratio.x, ratio.y)
+		return image.get_global_transform() * ((dimensions - drawn_size) * 0.5 + drawn_size * surface)
+	return image.get_global_transform() * (dimensions * surface)
 
 func build_response_arena(response_world: Node3D, response_camera: Camera3D) -> Node3D:
 	return ArenaCatalog.build(arena_id, response_world, response_camera)
@@ -1485,6 +1513,15 @@ func _action(action: String, index: int) -> void:
 
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
+	if settings.battle_presentation_mode == "2.5d":
+		# A flat background cannot follow orbit/zoom or perspective depth changes.
+		# Keep a shallow, centered view and equal model scale on both platforms.
+		camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+		camera.size = 10.0
+		camera.position = Vector3(0, 5.5, 16)
+		camera.look_at(Vector3(0, 1.3, 0))
+		return
+	camera.projection = Camera3D.PROJECTION_PERSPECTIVE
 	var all_resting := true
 	var focus_reframe_safe := true
 	for index in _slot_count():
@@ -1681,6 +1718,12 @@ func _process(delta: float) -> void:
 			_action(restoring[i], i)
 		var target_offset := MotionPlacement.offset(motion_clips.get(identities[i], {}), current_actions[i], players[i].current_animation_position if not players[i].current_animation.is_empty() else 0.0)
 		motion_offsets[i] = MotionPlacement.advance(motion_offsets[i], target_offset, delta * playback_speed)
+		if _is_hybrid_presentation():
+			# Follow responsive platform layout without changing native animation,
+			# grounding, recall scale or the attack/faint motion correction.
+			actors[i].position = _position(i)
+			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
+			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
 	_sync_coop_target_highlight()
 	_prune_models()
