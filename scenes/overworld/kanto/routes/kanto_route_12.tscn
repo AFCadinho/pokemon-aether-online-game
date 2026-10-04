@@ -13,9 +13,8 @@
 [ext_resource type="SpriteFrames" uid="uid://7ym2628q14if" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="r12_fisher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r12_item"]
 [ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r12_rocker"]
-[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
-
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/sleeping_snorlax.tscn" id="r12_snorlax"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
 
 [sub_resource type="RectangleShape2D" id="shape_lavender"]
 size = Vector2(160, 32)
@@ -291,11 +290,11 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1797371020]
 
-[node name="StaticEncounters" type="Node2D" parent="Entities"]
+[node name="StaticEncounters" type="Node2D" parent="Entities" unique_id=776773195]
 y_sort_enabled = true
 
-[node name="Snorlax" parent="Entities/StaticEncounters" instance=ExtResource("r12_snorlax")]
-position = Vector2(944, 2032)
+[node name="Snorlax" parent="Entities/StaticEncounters" unique_id=1183562543 instance=ExtResource("r12_snorlax")]
+position = Vector2(944, 1968)
 encounter_id = "snorlax_route_12"
 encounter_area_id = "kanto_route_12"
 interactable_id = "snorlax_route_12"
