@@ -7691,6 +7691,9 @@ func prepare_wild_battle_from_response(
 
 	_add_battle_log_messages(setup_flow.get_wild_battle_start_messages(_get_active_battle_log_identity("p1"), _get_active_battle_log_identity("p2")))
 	_show_original_player_lead_before_initial_events(player_species, player_lead_pokemon)
+	# Both leads must reach the 3D presenter before the encounter host prepares
+	# downloads. A cached opponent hid this omission; an uncached one fell to 2D.
+	_show_original_active_pokemon_for_player("p2", opponent_species)
 	# Wild encounters are frequent grind loops, so stage the resolved lead behind
 	# the encounter cover instead of blocking first-turn input on a summon.
 	player_sprite_box.visible = true
