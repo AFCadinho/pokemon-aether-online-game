@@ -279,6 +279,7 @@ jobs:
           python3 launcher/tests/run_resumable_download_check.py
           ./godot --headless --path launcher --script res://tests/localization_check.gd
           ./godot --headless --path launcher --script res://tests/update_checkpoint_check.gd
+          ./godot --headless --path launcher --script res://tests/bulk_asset_downloads_check.gd
           ./godot --headless --path launcher --script res://tests/music_asset_integrity_check.gd
 
       - name: Verify generated world access catalog

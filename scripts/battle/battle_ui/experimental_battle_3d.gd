@@ -854,7 +854,7 @@ func _load_catalog(path: String) -> void:
 		if parsed is Dictionary and parsed.get("schema",0)==1 and parsed.get("entries") is Dictionary:
 			catalog_calibration = parsed.entries
 	var file := FileAccess.open(prepared_path, FileAccess.READ)
-	if file == null or file.get_length() > 1048576:
+	if file == null or file.get_length() > 8 * 1024 * 1024:
 		return
 	var data: Variant = JSON.parse_string(file.get_as_text())
 	var portable_pack := data is Dictionary

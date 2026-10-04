@@ -6,6 +6,8 @@ const LauncherLanguageSelectorStyle := preload("res://scripts/language_selector_
 const LauncherResumableDownloadService := preload("res://scripts/resumable_download_service.gd")
 const LauncherAssetPackIntegrity := preload("res://scripts/asset_pack_integrity.gd")
 const LauncherReleaseAssetBundles := preload("res://scripts/release_asset_bundles.gd")
+const BulkAssets := preload("res://scripts/bulk_asset_downloads.gd")
+const DownloadsPanel := preload("res://scripts/asset_downloads_panel.gd")
 
 const DEFAULT_MANIFEST_URL := "https://example.com/pokeaether/manifest.json"
 const DEFAULT_NEWS_URL := "https://updates.pokeaether.com/data/news.json"
@@ -167,6 +169,22 @@ var server_access_message := ""
 var server_health_check_in_progress := false
 var server_health_failure_logged := false
 var server_health_refresh_timer: Timer
+var download_all_3d := false
+var download_all_2d := false
+var downloads_button: Button
+var downloads_panel: PanelContainer
+var bulk_plans := {}
+var bulk_kind := ""
+var bulk_paused := false
+var bulk_total_bytes := 0
+var bulk_completed_bytes := 0
+var bulk_total_files := 0
+var bulk_completed_files := 0
+var bulk_planning := false
+var content_busy := false
+var installing_bundle := false
+var bundle_worker: Thread
+var planning_worker: Thread
 
 
 func _draw() -> void:
@@ -274,6 +292,7 @@ func _ready() -> void:
 	http_request.timeout = 30.0
 	download_service = LauncherResumableDownloadService.new()
 	release_asset_bundles = LauncherReleaseAssetBundles.new()
+	_setup_asset_downloads()
 	add_child(download_service)
 	server_health_refresh_timer = Timer.new()
 	server_health_refresh_timer.wait_time = SERVER_HEALTH_REFRESH_SECONDS
@@ -316,6 +335,10 @@ func _apply_locale() -> void:
 		"This will permanently remove the selected game folder and all downloaded files.\n\nContinue?"
 	)
 	_refresh_diagnostics_button()
+	if downloads_panel != null:
+		downloads_button.text = _t("Downloads")
+		downloads_panel.refresh_locale()
+		_refresh_bulk_summaries()
 
 
 func _populate_language_options() -> void:
@@ -357,12 +380,16 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 
 func _show_home() -> void:
+	if downloads_panel != null:
+		downloads_panel.hide()
 	content_layout.show()
 	diagnostics_card.hide()
 	_apply_active_nav_style(home_button)
 
 
 func _show_diagnostics() -> void:
+	if downloads_panel != null:
+		downloads_panel.hide()
 	content_layout.hide()
 	diagnostics_card.show()
 	has_unseen_diagnostics_error = false
@@ -378,7 +405,10 @@ func _apply_active_nav_style(active_button: Button) -> void:
 		Color(0.48, 0.25, 0.92, 0.9),
 		1
 	)
-	for button: Button in [home_button, diagnostics_button]:
+	var nav_buttons: Array[Button] = [home_button, diagnostics_button]
+	if downloads_button != null:
+		nav_buttons.append(downloads_button)
+	for button: Button in nav_buttons:
 		var style := active_style if button == active_button else inactive_style
 		button.add_theme_stylebox_override("normal", style)
 		button.add_theme_stylebox_override("hover", style if button == active_button else _sidebar_button_style(Color(0.105, 0.085, 0.19, 0.82), Color(0.42, 0.22, 0.82, 0.68), 1))
@@ -534,6 +564,7 @@ func _apply_refresh_button_style(button: Button) -> void:
 func _process(_delta: float) -> void:
 	_update_progress_percent()
 	_sync_button_cursors()
+	_update_bulk_progress()
 	if download_progress_snapshot.is_empty():
 		return
 	var downloaded_bytes := int(download_progress_snapshot.get("downloaded_bytes", 0))
@@ -1093,6 +1124,8 @@ func _handle_manifest_response(body: PackedByteArray) -> void:
 	_set_busy(false)
 	_refresh_status()
 	_refresh_launcher_update_status()
+	if downloads_panel != null and downloads_panel.visible:
+		_refresh_bulk_plans.call_deferred()
 	if launcher_update_pending and not launcher_update_shown:
 		launcher_update_shown = true
 		_show_launcher_update_prompt()
@@ -1804,9 +1837,22 @@ func _handle_download_response() -> void:
 		var result: Dictionary
 		if download_type == "asset_bundle_index":
 			result = release_asset_bundles.accept_index(descriptor, file_path, false)
+			if str(result.get("error", "")).is_empty() and download_all_3d:
+				result = BulkAssets.models_plan(release_asset_bundles, descriptor, BulkAssets.game_catalog_path())
 		else:
 			var index: Dictionary = release_asset_bundles.cached_index(descriptor)
-			result = release_asset_bundles.accept_bundle(index, str(current_download.get("id", "")), file_path)
+			# File verification and installation must not freeze the download UI.
+			installing_bundle = true
+			bundle_worker = Thread.new()
+			var start_error := bundle_worker.start(release_asset_bundles.accept_bundle.bind(index, str(current_download.get("id", "")), file_path))
+			if start_error == OK:
+				while bundle_worker.is_alive():
+					await get_tree().process_frame
+				result = bundle_worker.wait_to_finish()
+			else:
+				result = {"error": "Could not start model installation."}
+			installing_bundle = false
+			bundle_worker = null
 		if not str(result.get("error", "")).is_empty():
 			_set_busy(false)
 			_set_status("Could not install approved 3D models.", "error")
@@ -1818,6 +1864,7 @@ func _handle_download_response() -> void:
 		if download_type == "asset_bundle_index":
 			for job: Dictionary in result.get("jobs", []):
 				pending_downloads.append(job)
+		_bulk_file_installed(current_download)
 		current_download.clear()
 		_start_next_download()
 		return
@@ -1863,6 +1910,7 @@ func _handle_download_response() -> void:
 
 	_delete_existing_download(file_path)
 	_mark_download_installed(current_download)
+	_bulk_file_installed(current_download)
 	current_download.clear()
 	_start_next_download()
 
@@ -1874,10 +1922,18 @@ func _start_next_download() -> void:
 		_reset_download_progress_counters()
 		_save_local_versions()
 		update_required = false
+		if not bulk_kind.is_empty():
+			bulk_kind = ""
+			bulk_paused = false
+			if downloads_panel != null:
+				downloads_panel.progress.value = 100
+				downloads_panel.message.text = _t("Downloads complete. Ready to play.")
 		_set_busy(false)
 		_refresh_status()
 		_set_status("Update complete.")
 		_log("Update complete.")
+		if downloads_panel != null and downloads_panel.visible:
+			_refresh_bulk_plans.call_deferred()
 		return
 
 	current_download = pending_downloads.pop_front()
@@ -1887,6 +1943,8 @@ func _start_next_download() -> void:
 
 
 func _start_current_download() -> void:
+	current_download.erase("file_path")
+	current_download.erase("download_summary")
 	progress_is_indeterminate = false
 	progress_bar.value = 0.0
 	download_progress_snapshot.clear()
@@ -2078,6 +2136,8 @@ func _build_download_queue() -> void:
 	var bundle_descriptor := _get_dictionary(manifest, "assetBundleIndex")
 	if not bundle_descriptor.is_empty() and release_asset_bundles != null:
 		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor, false)
+		if download_all_3d and not release_asset_bundles.cached_index(bundle_descriptor).is_empty():
+			bundle_plan = BulkAssets.models_plan(release_asset_bundles, bundle_descriptor, BulkAssets.game_catalog_path())
 		if not str(bundle_plan.get("error", "")).is_empty():
 			_log_error("Approved 3D bundle planning failed: %s" % bundle_plan.error)
 		else:
@@ -2182,6 +2242,8 @@ func _reset_download_progress_counters() -> void:
 func _prepare_current_download_progress() -> void:
 	if str(current_download.get("type", "")) != "asset_pack":
 		return
+	if current_download.has("asset_pack_index"):
+		return # Resume the same file without advancing its position in the queue.
 
 	current_asset_pack_download_index += 1
 	current_download["asset_pack_index"] = current_asset_pack_download_index
@@ -2657,6 +2719,8 @@ func _load_launcher_settings() -> void:
 	locale = LauncherLocalization.normalize_locale(
 		str(settings.get("locale", LauncherLocalization.get_preferred_system_locale()))
 	)
+	download_all_3d = bool(settings.get("downloadAll3D", false))
+	download_all_2d = bool(settings.get("downloadAll2D", false))
 
 
 func _save_launcher_settings() -> void:
@@ -2668,6 +2732,8 @@ func _save_launcher_settings() -> void:
 	file.store_string(JSON.stringify({
 		"installDir": install_dir,
 		"locale": locale,
+		"downloadAll3D": download_all_3d,
+		"downloadAll2D": download_all_2d,
 	}, "\t"))
 
 
@@ -2842,6 +2908,7 @@ func _refresh_status() -> void:
 	else:
 		_set_status("Ready to play.")
 	_sync_button_cursors()
+	_set_busy(content_busy)
 
 
 func _refresh_launcher_version() -> void:
@@ -2940,12 +3007,23 @@ func _refresh_online_players() -> void:
 
 
 func _set_busy(is_busy: bool) -> void:
-	var locked := is_busy or launcher_update_busy or launcher_update_in_progress
+	if not is_busy and not bulk_kind.is_empty() and not bulk_paused and not current_download.is_empty():
+		# Installation/download errors retain the failed job and its partial files.
+		pending_downloads.push_front(current_download.duplicate(true))
+		bulk_paused = true
+	content_busy = is_busy
+	var locked := is_busy or launcher_update_busy or launcher_update_in_progress or bulk_planning or bulk_paused
 	check_button.disabled = locked
 	update_button.disabled = locked or not update_required
 	gen5_sprites_button.disabled = locked or not _can_download_gen5_sprites()
-	play_button.disabled = locked or server_access_blocked or update_required or not _has_installed_game()
+	play_button.disabled = is_busy or launcher_update_busy or launcher_update_in_progress or bulk_planning or server_access_blocked or update_required or not _has_installed_game()
 	uninstall_button.disabled = locked or not _has_game_install_folder()
+	game_folder_button.disabled = locked
+	if downloads_panel != null:
+		for kind: String in ["3d", "2d"]:
+			var plan: Dictionary = bulk_plans.get(kind, {})
+			downloads_panel.buttons[kind].disabled = locked or update_required or not _has_installed_game() or not str(plan.get("error", "")).is_empty() or plan.get("jobs", []).is_empty()
+			downloads_panel.automatic[kind].disabled = locked
 	_sync_button_cursors()
 
 
@@ -3018,7 +3096,169 @@ func _directory_has_contents(path: String) -> bool:
 	return false
 
 
+func _setup_asset_downloads() -> void:
+	downloads_button = Button.new()
+	downloads_button.text = _t("Downloads")
+	var nav := game_folder_button.get_parent()
+	nav.add_child(downloads_button)
+	nav.move_child(downloads_button, diagnostics_button.get_index() + 1)
+	_apply_button_style(downloads_button, false)
+	downloads_button.pressed.connect(_show_asset_downloads)
+	downloads_panel = DownloadsPanel.new()
+	downloads_panel.name = "AssetDownloads"
+	downloads_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	downloads_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	content_layout.get_parent().add_child(downloads_panel)
+	downloads_panel.add_theme_stylebox_override("panel", _panel_style(Color("0d1928"), Color("31536e"), 12, 1))
+	downloads_panel.hide()
+	for button: Button in [downloads_panel.buttons["3d"], downloads_panel.buttons["2d"], downloads_panel.pause, downloads_panel.resume]:
+		_apply_button_style(button, false)
+	downloads_panel.automatic["3d"].set_pressed_no_signal(download_all_3d)
+	downloads_panel.automatic["2d"].set_pressed_no_signal(download_all_2d)
+	downloads_panel.download_requested.connect(_start_bulk_download)
+	downloads_panel.pause_requested.connect(_pause_bulk_download)
+	downloads_panel.resume_requested.connect(_resume_bulk_download)
+	downloads_panel.automatic_updates_changed.connect(_set_bulk_preference)
+
+
+func _exit_tree() -> void:
+	# Finish an atomic publication before releasing the store during shutdown.
+	for worker: Thread in [bundle_worker, planning_worker]:
+		if worker != null and worker.is_started():
+			worker.wait_to_finish()
+
+
+func _show_asset_downloads() -> void:
+	content_layout.hide()
+	diagnostics_card.hide()
+	downloads_panel.show()
+	_apply_active_nav_style(downloads_button)
+	_refresh_bulk_plans()
+
+
+func _refresh_bulk_plans() -> void:
+	if content_busy or bulk_planning or bulk_paused or manifest.is_empty():
+		_refresh_bulk_summaries()
+		return
+	bulk_planning = true
+	_set_busy(content_busy)
+	downloads_panel.summaries["3d"].text = _t("Checking download catalog…")
+	var descriptor := _get_dictionary(manifest, "assetBundleIndex")
+	planning_worker = Thread.new()
+	var start_error := planning_worker.start(BulkAssets.models_plan.bind(release_asset_bundles, descriptor, BulkAssets.game_catalog_path()))
+	if start_error == OK:
+		while planning_worker.is_alive():
+			await get_tree().process_frame
+		bulk_plans["3d"] = planning_worker.wait_to_finish()
+	else:
+		bulk_plans["3d"] = {"error": "Could not prepare download catalog.", "jobs": []}
+	bulk_plans["2d"] = BulkAssets.sprites_plan(self)
+	bulk_planning = false
+	planning_worker = null
+	_refresh_bulk_summaries()
+	_set_busy(content_busy)
+
+
+func _refresh_bulk_summaries() -> void:
+	if downloads_panel == null:
+		return
+	for kind: String in ["3d", "2d"]:
+		var plan: Dictionary = bulk_plans.get(kind, {})
+		var error := str(plan.get("error", ""))
+		if not error.is_empty():
+			downloads_panel.summaries[kind].text = _t(error)
+		elif plan.is_empty():
+			downloads_panel.summaries[kind].text = _t("Check for updates first.")
+		else:
+			downloads_panel.summaries[kind].text = _t("{available} / {count} already installed · {size} left to download", {
+				"available": plan.available, "count": plan.count, "size": _format_bytes(int(plan.total_bytes))})
+		if update_required or not _has_installed_game():
+			downloads_panel.summaries[kind].text += "\n" + _t("Update the game first to load the download catalog.")
+
+
+func _set_bulk_preference(kind: String, enabled: bool) -> void:
+	if kind == "3d":
+		download_all_3d = enabled
+	else:
+		download_all_2d = enabled
+	_save_launcher_settings()
+
+
+func _start_bulk_download(kind: String) -> void:
+	if content_busy or bulk_paused or bulk_planning or update_required or not _has_installed_game():
+		return
+	var plan: Dictionary = bulk_plans.get(kind, {})
+	if not str(plan.get("error", "")).is_empty() or plan.get("jobs", []).is_empty():
+		return
+	bulk_kind = kind
+	bulk_paused = false
+	pending_downloads.assign(plan.jobs)
+	bulk_total_bytes = BulkAssets.bytes_in(pending_downloads)
+	bulk_total_files = pending_downloads.size()
+	bulk_completed_bytes = 0
+	bulk_completed_files = 0
+	downloads_panel.automatic[kind].set_pressed_no_signal(true)
+	_set_bulk_preference(kind, true)
+	_reset_download_progress_counters()
+	_set_busy(true)
+	_start_next_download()
+
+
+func _bulk_file_installed(job: Dictionary) -> void:
+	if bulk_kind.is_empty():
+		return
+	bulk_completed_bytes += int(job.get("size_bytes", 0))
+	bulk_completed_files += 1
+
+
+func _pause_bulk_download() -> void:
+	if bulk_kind.is_empty() or installing_bundle or not download_service.is_active():
+		return
+	download_service.cancel()
+	pending_downloads.push_front(current_download.duplicate(true))
+	current_download.clear()
+	download_progress_snapshot.clear()
+	active_resumable_download_kind = ""
+	bulk_paused = true
+	_set_busy(false)
+	downloads_panel.message.text = _t("Paused. Installed files and partial downloads are kept.")
+
+
+func _resume_bulk_download() -> void:
+	if not bulk_paused or bulk_kind.is_empty():
+		return
+	bulk_paused = false
+	_set_busy(true)
+	_start_next_download()
+
+
+func _update_bulk_progress() -> void:
+	if downloads_panel == null:
+		return
+	downloads_panel.pause.disabled = bulk_kind.is_empty() or bulk_paused or installing_bundle or not download_service.is_active()
+	downloads_panel.resume.disabled = not bulk_paused
+	if bulk_kind.is_empty() or bulk_paused:
+		return
+	var received := int(download_progress_snapshot.get("downloaded_bytes", 0))
+	if installing_bundle or current_download.has("file_path"):
+		received = int(current_download.get("size_bytes", 0))
+	var done := mini(bulk_total_bytes, bulk_completed_bytes + received)
+	downloads_panel.progress.value = 100.0 * done / maxi(1, bulk_total_bytes)
+	var speed := float(download_progress_snapshot.get("recent_bytes_per_second", 0.0))
+	var eta := _t("Estimating time remaining…")
+	if speed > 0:
+		var seconds := int(ceil((bulk_total_bytes - done) / speed))
+		eta = _t("About {minutes} min remaining", {"minutes": maxi(1, int(ceil(seconds / 60.0)))})
+	downloads_panel.message.text = _t("{done} / {count} files · {downloaded} / {total} · {speed}\n{eta}", {
+		"done": bulk_completed_files, "count": bulk_total_files, "downloaded": _format_bytes(done),
+		"total": _format_bytes(bulk_total_bytes), "speed": _format_transfer_speed(speed), "eta": eta})
+	if installing_bundle:
+		downloads_panel.message.text += "\n" + _t("Verifying and installing model…")
+
+
 func _should_auto_update_optional_asset_pack(asset_pack: Dictionary) -> bool:
+	if download_all_2d and str(asset_pack.get("id", "")) in BulkAssets.SPRITE_PACK_IDS:
+		return true
 	if not _is_optional_asset_pack(asset_pack):
 		return true
 
@@ -3099,6 +3339,8 @@ func _get_game_install_dir() -> String:
 
 func _set_status(message: String, state: String = "") -> void:
 	status_label.text = _t(message)
+	if bulk_paused and downloads_panel != null:
+		downloads_panel.message.text = _t(message) + "\n" + _t("Paused. Installed files and partial downloads are kept.")
 	var lowered_message := message.to_lower()
 	if state == "maintenance":
 		status_value_label.text = _t("Maintenance")
