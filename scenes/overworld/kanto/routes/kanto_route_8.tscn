@@ -7,6 +7,15 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_0t5s4"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_gh3qq"]
 
+[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/overworld_pokemon.tscn" id="8_pokemon"]
+[ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="9_pickup"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="10_lass"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="11_gamer"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_nerd"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="13_twins"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocker_frames.tres" id="14_biker"]
+
 [sub_resource type="RectangleShape2D" id="shape_lavender_exit"]
 size = Vector2(32, 160)
 
@@ -234,6 +243,218 @@ shape = SubResource("shape_lavender_exit")
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+y_sort_enabled = true
+
+[node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="LassJulia" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(2312, 560)
+trainer_id = "kanto_route_8_lass_julia"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_lass_julia"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Julia"
+npc_sprite_frames = ExtResource("10_lass")
+
+[node name="GamerRich" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(2128, 720)
+trainer_id = "kanto_route_8_gamer_rich"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_gamer_rich"
+npc_definition_id = "trainer_class_gentleman"
+display_name = "Gamer Rich"
+npc_sprite_frames = ExtResource("11_gamer")
+
+[node name="SuperNerdGlenn" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1904, 496)
+trainer_id = "kanto_route_8_super_nerd_glenn"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_super_nerd_glenn"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Super Nerd Glenn"
+npc_sprite_frames = ExtResource("12_nerd")
+
+[node name="TwinsEliAnne" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1776, 912)
+trainer_id = "kanto_route_8_twins_eli_anne"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_twins_eli_anne"
+npc_definition_id = "trainer_class_school_kid_f"
+display_name = "Twins Eli & Anne"
+npc_sprite_frames = ExtResource("13_twins")
+
+[node name="LassPaige" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1632, 624)
+trainer_id = "kanto_route_8_lass_paige"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_lass_paige"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Paige"
+npc_sprite_frames = ExtResource("10_lass")
+
+[node name="SuperNerdLeslie" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1456, 448)
+trainer_id = "kanto_route_8_super_nerd_leslie"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_super_nerd_leslie"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Super Nerd Leslie"
+npc_sprite_frames = ExtResource("12_nerd")
+
+[node name="LassAndrea" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1280, 896)
+trainer_id = "kanto_route_8_lass_andrea"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_lass_andrea"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Andrea"
+npc_sprite_frames = ExtResource("10_lass")
+
+[node name="LassMegan" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(1008, 656)
+trainer_id = "kanto_route_8_lass_megan"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_lass_megan"
+npc_definition_id = "trainer_class_lass"
+display_name = "Lass Megan"
+npc_sprite_frames = ExtResource("10_lass")
+
+[node name="BikerJaren" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(752, 720)
+trainer_id = "kanto_route_8_biker_jaren"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_biker_jaren"
+npc_definition_id = "trainer_class_rocker"
+display_name = "Biker Jaren"
+npc_sprite_frames = ExtResource("14_biker")
+
+[node name="BikerRicardo" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(560, 784)
+trainer_id = "kanto_route_8_biker_ricardo"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_biker_ricardo"
+npc_definition_id = "trainer_class_rocker"
+display_name = "Biker Ricardo"
+npc_sprite_frames = ExtResource("14_biker")
+
+[node name="GamerStan" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(416, 528)
+trainer_id = "kanto_route_8_gamer_stan"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_gamer_stan"
+npc_definition_id = "trainer_class_gentleman"
+display_name = "Gamer Stan"
+npc_sprite_frames = ExtResource("11_gamer")
+
+[node name="SuperNerdAidan" parent="Entities/NPCs" instance=ExtResource("7_trainer")]
+position = Vector2(240, 832)
+trainer_id = "kanto_route_8_super_nerd_aidan"
+sight_range_tiles = 3
+npc_id = "kanto_route_8_super_nerd_aidan"
+npc_definition_id = "trainer_class_scientist_m"
+display_name = "Super Nerd Aidan"
+npc_sprite_frames = ExtResource("12_nerd")
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1456, 656)
+overworld_pokemon_id = "kanto_route_8_pidgey_1"
+species_id = "pidgey"
+level = 18
+display_name = "Pidgey"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Meowth" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1504, 880)
+overworld_pokemon_id = "kanto_route_8_meowth_1"
+species_id = "meowth"
+level = 18
+display_name = "Meowth"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Growlithe" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1376, 592)
+overworld_pokemon_id = "kanto_route_8_growlithe_1"
+species_id = "growlithe"
+level = 17
+display_name = "Growlithe"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Vulpix" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1440, 976)
+overworld_pokemon_id = "kanto_route_8_vulpix_1"
+species_id = "vulpix"
+level = 17
+display_name = "Vulpix"
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Abra" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1536, 720)
+overworld_pokemon_id = "kanto_route_8_abra_1"
+species_id = "abra"
+level = 18
+display_name = "Abra"
+movement_behavior = "idle"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Noctowl" parent="Entities/Pokemon" instance=ExtResource("8_pokemon")]
+position = Vector2(1552, 896)
+overworld_pokemon_id = "kanto_route_8_noctowl_1"
+species_id = "noctowl"
+level = 19
+display_name = "Noctowl"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_speed_pixels = 32.0
+movement_wait_jitter_seconds = 0.6
+
+[node name="Interactables" type="Node2D" parent="Entities"]
+
+[node name="Items" type="Node2D" parent="Entities/Interactables"]
+
+[node name="TMTorment" parent="Entities/Interactables/Items" instance=ExtResource("9_pickup")]
+position = Vector2(416, 1120)
+pickup_id = "kanto_route_8_tm_torment"
+item_id = "tm-torment"
+
+[node name="LeppaBerry" parent="Entities/Interactables/Items" instance=ExtResource("9_pickup")]
+position = Vector2(1408, 608)
+pickup_id = "kanto_route_8_leppa_berry"
+item_id = "leppa-berry"
+
+[node name="LumBerry" parent="Entities/Interactables/Items" instance=ExtResource("9_pickup")]
+position = Vector2(1504, 608)
+pickup_id = "kanto_route_8_lum_berry"
+item_id = "lum-berry"
+
+[node name="RawstBerry" parent="Entities/Interactables/Items" instance=ExtResource("9_pickup")]
+position = Vector2(1504, 928)
+pickup_id = "kanto_route_8_rawst_berry"
+item_id = "rawst-berry"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1596377093]
 visible = false
