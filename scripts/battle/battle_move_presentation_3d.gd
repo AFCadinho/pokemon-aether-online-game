@@ -28,8 +28,8 @@ func play_move(presenter: Node, move: String, actor: String, _target: String, op
 			started.erase(actor)
 			return
 		await presenter.wait_action(actor)
-	# Unreviewed moves retain the shared source-audio completion boundary.
-	# Pilot impact beats leave recovery owned until the ordered damage event joins it.
+	# Model-only routes pass no move audio. Optional future native-effect audio
+	# stays inside this boundary; pilot recovery joins the ordered damage event.
 	while owned_generation == generation and is_instance_valid(audio) and not audio.done:
 		await audio.get_tree().process_frame
 	if owned_generation != generation or not is_instance_valid(presenter) or not presenter.active:
