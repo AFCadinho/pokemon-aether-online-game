@@ -1,18 +1,149 @@
-[gd_scene load_steps=8 format=4]
+[gd_scene format=4 uid="uid://bpbvuex1xke78"]
 
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/underground_path_route_8_entrance/underground_path_route_8_entrance.visual.tscn" id="1_visual"]
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_door_hint"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
-
-[sub_resource type="RectangleShape2D" id="stair_exit_shape"]
-size = Vector2(32, 32)
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="6_dflal"]
 
 [sub_resource type="RectangleShape2D" id="outside_exit_shape"]
 size = Vector2(96, 32)
 
-[node name="UndergroundPathRoute8Entrance" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="stair_exit_shape"]
+size = Vector2(32, 32)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mcfjk"]
+texture = ExtResource("6_dflal")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_yx0w1"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_mcfjk")
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wu3ji"]
+texture = ExtResource("6_dflal")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_827xu"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_wu3ji")
+
+[node name="UndergroundPathRoute8Entrance" type="Node2D" unique_id=1874985036]
 script = ExtResource("2_metadata")
 map_id = "kanto_underground_path_route_8_entrance"
 map_region_name = "Kanto"
@@ -26,19 +157,19 @@ region_id = "kanto"
 lighting_profile = "indoor"
 weather_profile = "disabled"
 
-[node name="Visual" parent="." instance=ExtResource("1_visual")]
+[node name="Visual" parent="." unique_id=1969971905 instance=ExtResource("1_visual")]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=755002147]
 
-[node name="FromRoute8" type="Marker2D" parent="Spawns"]
-position = Vector2(400, 368)
+[node name="FromRoute8" type="Marker2D" parent="Spawns" unique_id=357653726]
+position = Vector2(400, 400)
 
-[node name="FromTunnel" type="Marker2D" parent="Spawns"]
-position = Vector2(304, 240)
+[node name="FromTunnel" type="Marker2D" parent="Spawns" unique_id=576178516]
+position = Vector2(272, 240)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=778102823]
 
-[node name="ToRoute8" type="Area2D" parent="Exits"]
+[node name="ToRoute8" type="Area2D" parent="Exits" unique_id=381395994]
 position = Vector2(400, 432)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
@@ -46,40 +177,36 @@ target_spawn_name = "FromUndergroundPath"
 transition_id = "kanto_underground_path_route_8_entrance__to_route8"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute8"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute8" unique_id=1903913446]
+position = Vector2(0, 16)
 shape = SubResource("outside_exit_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToRoute8" instance=ExtResource("4_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToRoute8" unique_id=1105032029 instance=ExtResource("4_door_hint")]
 z_as_relative = false
 flow_direction = "down"
 
-[node name="ToTunnelHorizontal" type="Area2D" parent="Exits"]
-position = Vector2(272, 240)
+[node name="ToTunnelHorizontal" type="Area2D" parent="Exits" unique_id=1873309488]
+position = Vector2(240, 240)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel_horizontal.tscn"
 target_spawn_name = "FromRoute8Entrance"
 transition_id = "kanto_underground_path_route_8_entrance__to_horizontal_tunnel"
 transition_facing_direction = "right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnelHorizontal"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnelHorizontal" unique_id=538510072]
+position = Vector2(-16, 0)
 shape = SubResource("stair_exit_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToTunnelHorizontal" instance=ExtResource("4_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToTunnelHorizontal" unique_id=2094245975 instance=ExtResource("4_door_hint")]
 z_as_relative = false
 flow_direction = "left"
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=516717591]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=36430182]
 
-[node name="Tiles" type="Node2D" parent="."]
-visible = false
-
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
-z_index = 100
-
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2051331497]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("5_floor_mask")
@@ -89,16 +216,30 @@ floor_regions = {
 floor_display_names = {
 &"ground_floor": "Underground Path — Route 8 Entrance"
 }
-active_floor = &"ground_floor"
 constrain_camera_to_active_floor = true
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1746724935]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=883883066]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=369722497]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=417009276]
+
+[node name="Tiles" type="Node2D" parent="." unique_id=878225650]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=815752588]
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAADAAQAAAABAAEAAAADAAUAAAABAAEAAAADAAYAAAABAAEAAAADAAcAAAABAAEAAAADAAgAAAABAAEAAAADAAkAAAABAAEAAAADAAoAAAABAAEAAAADAAsAAAABAAEAAAADAAwAAAABAAEAAAADAA0AAAABAAEAAAAEAA0AAAABAAEAAAAFAA0AAAABAAEAAAAGAA0AAAABAAEAAAAHAA0AAAABAAEAAAAIAA0AAAABAAEAAAAJAA0AAAABAAEAAAAKAA0AAAABAAEAAAAKAA4AAAABAAEAAAALAA4AAAABAAEAAAAMAA4AAAABAAEAAAANAA4AAAABAAEAAAAOAA4AAAABAAEAAAAOAA0AAAABAAEAAAAPAA0AAAABAAEAAAAQAA0AAAABAAEAAAARAA0AAAABAAEAAAASAA0AAAABAAEAAAATAA0AAAABAAEAAAAUAA0AAAABAAEAAAAUAAQAAAABAAEAAAAUAAUAAAABAAEAAAAUAAYAAAABAAEAAAAUAAcAAAABAAEAAAAUAAgAAAABAAEAAAAUAAkAAAABAAEAAAAUAAoAAAABAAEAAAAUAAsAAAABAAEAAAAUAAwAAAABAAEAAAATAAQAAAABAAEAAAAFAAMAAAABAAEAAAAFAAQAAAABAAEAAAAFAAUAAAABAAEAAAAGAAMAAAABAAEAAAAGAAQAAAABAAEAAAAGAAUAAAABAAEAAAAHAAMAAAABAAEAAAAHAAQAAAABAAEAAAAHAAUAAAABAAEAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAJAAMAAAABAAEAAAAJAAQAAAABAAEAAAAJAAUAAAABAAEAAAAKAAMAAAABAAEAAAAKAAQAAAABAAEAAAAKAAUAAAABAAEAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAALAAUAAAABAAEAAAAMAAMAAAABAAEAAAAMAAQAAAABAAEAAAAMAAUAAAABAAEAAAANAAMAAAABAAEAAAANAAQAAAABAAEAAAANAAUAAAABAAEAAAAOAAMAAAABAAEAAAAOAAQAAAABAAEAAAAOAAUAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAQAAMAAAABAAEAAAAQAAQAAAABAAEAAAAQAAUAAAABAAEAAAARAAMAAAABAAEAAAARAAQAAAABAAEAAAARAAUAAAABAAEAAAASAAMAAAABAAEAAAASAAQAAAABAAEAAAASAAUAAAABAAEAAAATAAMAAAABAAEAAAATAAUAAAABAAEAAAAEAAQAAAABAAEAAAAEAAMAAAABAAEAAAAEAAUAAAABAAEAAAAGAAgAAAABAAEAAAAHAAgAAAABAAEAAAAGAAcAAAABAAEAAAAPAAgAAAABAAEAAAAQAAgAAAABAAEAAAARAAgAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_yx0w1")
+
+[node name="BlockDirection" type="Node2D" parent="Tiles" unique_id=1881622096]
+
+[node name="BlockDown" type="TileMapLayer" parent="Tiles/BlockDirection" unique_id=798027511]
+tile_map_data = PackedByteArray("AAAHAAYAAAAEAAAAAAA=")
+tile_set = SubResource("TileSet_827xu")
 
 [connection signal="body_entered" from="Exits/ToRoute8" to="Exits/ToRoute8" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToTunnelHorizontal" to="Exits/ToTunnelHorizontal" method="_on_body_entered"]
