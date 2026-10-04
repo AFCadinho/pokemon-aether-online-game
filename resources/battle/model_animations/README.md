@@ -36,6 +36,8 @@ the animation or its measured profile.
 
 ## Verification
 
+- User visual approval, 2026-10-05: “oke, de nieuwe gliscor vind ik wel goed trouwens”.
+  This approves the new Gliscor presentation; it does not certify a release.
 - `tests/gliscor_flight_check.gd`: exact hashes, skeletal-only tracks, timing,
   placement, clearance profile and independent per-actor animation libraries.
 - `tests/model_placement_check.gd`: Gliscor has no extra hover; Weezing retains
