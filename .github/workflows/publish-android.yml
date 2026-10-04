@@ -116,6 +116,22 @@ jobs:
           PY
           python3 tools/check_android_manifest_version.py release/manifest-android.json
 
+      - name: Download matching immutable Android asset payload
+        uses: actions/download-artifact@v5
+        with:
+          name: android-assets-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: android-assets
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Require matching public assets before activating Android update
+        env:
+          BUILD_RUN_ID: ${{ inputs.build_run_id }}
+          BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+        run: |
+          export CANDIDATE_SOURCE_SHA="$(python3 -c 'import json; print(json.load(open("/tmp/android-build-run.json"))["head_sha"])')"
+          python3 tools/prepare_android_test_download.py --verify-assets-only
+
       - name: Upload immutable APK, then publish updater manifest
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}

@@ -54,6 +54,11 @@ workflow for that same candidate. The regular web pipeline can still include
 native assets, but Android publication does not depend on publishing the
 browser game.
 
+`Publish Android release` downloads the matching asset payload and verifies its
+public native catalog and HOME, cry and video samples before activating the
+updater manifest. If assets have not been prepared for that exact build, publication
+stops; run `Prepare Android test download` for the candidate first.
+
 The signed candidate also records the currently published Android build ID as
 its only approved test compatibility identity. On a version rejection during
 login or session restoration it retries once using that identity. After the
