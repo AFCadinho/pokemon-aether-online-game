@@ -50,13 +50,13 @@ func _run() -> void:
 		_check(battle.prepare_wild_battle_from_response(player, enemy, response, &"grass"), "authoritative wild snapshot is accepted")
 		var stage: Node = battle.animation_router.model_presenter
 		_check(stage.combatants[0].species == "zapdos" and stage.combatants[1].species == "hoothoot",
-			"both leads are known before the encounter cover can release")
+			"both leads are staged before model readiness is awaited")
 		_check(stage.combatants[1].shiny == shiny, "opponent appearance is staged before downloads")
 		probe.requested.clear()
 		await stage._ensure_downloaded_models()
 		_check("zapdos" in probe.requested, "player is included in pre-battle model preparation")
 		_check(("hoothoot@shiny" if shiny else "hoothoot") in probe.requested,
-			"uncached normal/shiny opponent is requested before revealing the battle")
+			"uncached normal/shiny opponent is requested before enabling battle input")
 		battle.free()
 		await process_frame
 	# Route encounters show a pending arena before the response arrives. Exercise
@@ -66,7 +66,7 @@ func _run() -> void:
 	probe.free()
 	root.add_child(downloader)
 	if not failed:
-		print("PASS wild_3d_opponent_preparation_check normal=true shiny=true both_leads_before_reveal=true no_interim_2d=true download_progress=true")
+		print("PASS wild_3d_opponent_preparation_check normal=true shiny=true early_arena=true both_leads_before_input=true no_interim_2d=true download_progress=true")
 	quit(1 if failed else 0)
 
 
@@ -84,17 +84,20 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	host.reveal_pending_entry()
 	for frame in 20:
 		await process_frame
-	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "3D entry retains the outgoing world while its response is pending")
+	_check(host.fade_progress > 0.0 and host.entry_arena_ready, "3D arena starts the existing fade before its response arrives")
+	var arena_viewport: SubViewport = battle.animation_router.model_presenter.viewport
+	_check(arena_viewport != null and battle.animation_router.model_presenter.is_visible_in_tree(), "pending entry shows a genuine 3D arena")
+	_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "pending arena masks both 2D placeholders")
 	_check(not host.preparation_ready and probe.requested.is_empty(), "no incomplete pair is downloaded before the response")
-	# Exceed the message delay without network I/O. Even a slow local shader
-	# warmup must keep the outgoing world clean and retain the readiness gate.
+	# Local work stays quiet on the visible arena; only genuine network I/O
+	# may show download feedback. Full readiness still protects input.
 	var stage: Node = battle.animation_router.model_presenter
 	host.loading_message_after_ms = Time.get_ticks_msec() - 1
 	for phase: String in ["Checking approved 3D models…", "Loading Pokémon models", "Preparing lighting and shaders"]:
 		stage.preparation_phase = phase
 		host._process(0.0)
 		_check(not host.loading_label.is_visible_in_tree() and host.loading_label.text.is_empty(), "local preparation never shows technical text: " + phase)
-		_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "quiet preparation still protects the 3D entrance")
+		_check(host.get_node("Cover").visible and battle.has_meta("battle_screen_preparing"), "quiet preparation keeps input locked on the visible arena")
 	host.loading_message_after_ms = Time.get_ticks_msec() + 500
 	var enemy := Pokemon.new("Hoothoot", 2)
 	enemy.shiny = prewarmed
@@ -110,10 +113,14 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	for frame in 20:
 		await process_frame
 	_check(probe.requested == ["zapdos", "hoothoot@shiny" if enemy.shiny else "hoothoot"], "uncached pair is requested through the real entry host")
-	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible and not host.preparation_ready,
-		"slow model download never exposes the interim 2D arena or sprites")
+	_check(host.fade_progress > 0.0 and stage.viewport == arena_viewport and stage.is_visible_in_tree() and not host.preparation_ready,
+		"slow model download keeps the same 3D arena visible")
+	_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "authoritative sprite updates never expose 2D placeholders")
+	_check(battle.battle_input_locked and not battle.battle_actions_ready and battle.has_meta("battle_screen_preparing"), "the visible arena cannot accept first-turn actions before the models are ready")
 	_check(not host.loading_label.is_visible_in_tree(), "quick preparations do not flash a loading message")
 	await create_timer(0.55).timeout
+	_check(host.fade_progress == 1.0 and host.outgoing_snapshot.texture == null and not host.preparation_ready, "fade finishes without waiting for the model download")
+	_check(stage.actors[0] == null and stage.actors[1] == null and not stage.warming_render, "the early arena contains no fake or prematurely exposed Pokémon")
 	_check(host.loading_label.is_visible_in_tree() and "50%" in host.loading_label.text, "waiting players can see model download progress")
 	_check(host.loading_label.text == root.get_node("LocalizationManager").text("ui.battle.downloading_pokemon") + " 50%", "download feedback uses simple player-facing language")
 	probe.show_download = false
@@ -126,6 +133,7 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 		await process_frame
 	_check(host.preparation_ready and not host.get_node("Cover").visible, "failed download reveals the stable fallback without blocking the encounter")
 	_check(battle.animation_router.model_presenter.preparation_failed, "fallback is caused by the explicit download failure")
+	_check(not stage.entry_arena_requested and not stage.visible and not battle.player_sprite_box.model_sprites_hidden, "explicit fallback restores sprites and releases the early 3D arena")
 	host.release()
 	host.free()
 	probe.hold_download = false
