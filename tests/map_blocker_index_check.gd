@@ -41,6 +41,15 @@ func _run() -> void:
 	_check(Blocking.is_position_blocked_by_character(map, added.position), "dynamic additions invalidate topology")
 	added.free()
 	_check(not Blocking.is_position_blocked_by_character(map, Vector2(96, 32)), "dynamic removal invalidates topology")
+	var encounters := Node.new()
+	encounters.name = "StaticEncounters"
+	entities.add_child(encounters)
+	var encounter := Blocker.new()
+	encounter.position = Vector2(128, 32)
+	encounters.add_child(encounter)
+	_check(Blocking.is_position_blocked_by_character(map, encounter.position), "static encounters block player movement")
+	encounter.open = true
+	_check(not Blocking.is_position_blocked_by_character(map, encounter.position), "completed static encounters release passage without rebuilding the index")
 	map.free()
 	await process_frame
 	print("map_blocker_index_check: %s" % ("PASS" if failures == 0 else "FAIL"))
