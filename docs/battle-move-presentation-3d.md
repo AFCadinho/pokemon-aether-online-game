@@ -14,6 +14,13 @@ Physical/special selection is species-independent. Missing attack clips use the
 other attack clip if available; otherwise the model keeps its current pose.
 Missing actors/effects never request legacy sprite effects in an active 3D scene.
 
+Model-only 3D moves do not load or play their 2D move-animation sounds, including
+the initial impact pilots. They have no move-specific visual effect to match.
+Existing damage, heal, stat-up/down and other common effect sounds remain on
+their separate event routes. There is no new generic attack sound. Actual 2D
+fallback retains its original move visuals and sounds. Future native move VFX
+must explicitly own matching audio inside the 3D move driver's lifetime.
+
 Damage and faint still use model reactions. Idle/sleep, send-out, recall and
 switching stay with the existing model lifecycle. Common damage audio stays
 shared. Legacy heal/stat flashes and effect-catalog particles (including entrance
@@ -32,17 +39,16 @@ activation can still have shared 2D fallback assets prepared.
 Desktop 3D physical/special attacks and damage reactions use a presentation
 speed of 1.5, separate from replay speed. Idle, sleep, faint and lifecycle clips
 retain their existing speed; the reviewed registry's native timing stays intact.
-Sound preparation precedes native attack motion, including direct move calls.
+Model-only attacks start without waiting for move audio or its 2D source clock.
 
 `battle_3d_move_timing.gd` initially authors Pikachu Thunderbolt (native impact
 frame 48/120), Pikachu Tackle (42/110), and Blastoise Ice Beam (120/407.5).
 These markers came from native-pose inspection, not a universal clip percentage.
 Profiles require matching species, selected action and reviewed clip length.
-Source sound files, pitch and volume remain shared with 2D, but pilot cue times
-follow the actual AnimationPlayer position. Pause and replay speed therefore
-affect cue scheduling with the model. Started pilot sound tails finish naturally
-without another serial wait; the router retains ownership until completion and
-stops them on cancellation or teardown.
+Impact timing follows the actual AnimationPlayer position, independently of
+audio availability or catalogs. Pause and replay speed continue to affect the
+model and the damage/HP boundary together. The prior pilot sound schedule is
+not used for the model-only route.
 
 The batch renderer permits an impact boundary only for a single, targeted,
 direct HP-loss event preceded solely by critical/effectiveness metadata. Misses,
@@ -54,9 +60,8 @@ until that recovery finishes. Server state and render cursors still advance
 through the existing event renderer; audio never generates damage. 2D retains
 its original HP-after-reaction behavior and message waits.
 
-Unreviewed 3D moves still use the shared source-audio schedule and completion
-boundary. New unknown source sounds disable pilot retiming rather than being
-dropped. This is an initial authored timing pass, without native move VFX;
+Unreviewed 3D moves await the complete native attack clip without any extra
+move-audio completion boundary. This is an initial timing pass without move VFX;
 Blastoise's complete Ice Beam recovery still takes about 4.53 seconds at 1.5×.
 
 ## Adding native effects later
@@ -79,5 +84,6 @@ No native move VFX or attack-camera shots are shipped by this foundation.
   routed attacks, recall/send-out, damage, faint and repeated arena teardown.
 - Existing event-order and animation-recovery checks retain shared sequencing.
 - `battle_3d_impact_pacing_check.tscn`: real native action clocks with canonical
-  clip lengths, all three pilot impact/recovery boundaries, cold readiness,
-  pause/replay speed, audio tails, cancellation, eligibility and 2D HP ordering.
+  clip lengths, all three silent pilot impact/recovery boundaries, an unreviewed
+  move, pause/replay speed, shared damage/heal/stat sounds, cancellation,
+  eligibility and 2D HP ordering.

@@ -263,3 +263,14 @@ naturally and the authoritative HP state reached 50 after its damage event.
 Before/impact/after screenshots and raw pose sheets remain ignored under
 `.tmp/3d-pacing-review/` in the assigned slot. This verifies rendered sequencing;
 perceived sound fit and the longer Blastoise recovery still need play review.
+
+## Model-only audio policy follow-up
+
+Following player feedback, model-only 3D moves now omit all 2D move-animation
+audio, including the three initial pilot schedules. The existing Pokémon attack
+and damage animations, 1.5× speed and reviewed damage/HP impact markers remain.
+Pilot impact timing no longer depends on an audio plan. Unreviewed native moves
+also stop waiting for the inherited 2D audio clock. Damage, healing, stat changes
+and other common event sounds remain; actual 2D fallback is unchanged. Specific
+move sounds can return when a matching native move effect is authored. Earlier
+audio measurements and preview results above describe the initial timing pass.
