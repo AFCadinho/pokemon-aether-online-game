@@ -11,7 +11,7 @@
 size = Vector2(32, 96)
 
 [sub_resource type="RectangleShape2D" id="FuchsiaGateExitShape"]
-size = Vector2(32, 64)
+size = Vector2(64, 96)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tnc64"]
 texture = ExtResource("5_kl2dy")
@@ -348,8 +348,8 @@ music_profile_id = "kanto.routes_11_15"
 [node name="FromRoute14" type="Marker2D" parent="Spawns" unique_id=1287913198]
 position = Vector2(3280, 880)
 
-[node name="FromFuchsiaGate" type="Marker2D" parent="Spawns"]
-position = Vector2(176, 464)
+[node name="FromFuchsiaGate" type="Marker2D" parent="Spawns" unique_id=341377826]
+position = Vector2(176, 432)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1184400762]
 
@@ -370,7 +370,7 @@ z_as_relative = false
 tile_footprint = Vector2i(1, 3)
 flow_direction = "right"
 
-[node name="ToFuchsiaGate" type="Area2D" parent="Exits"]
+[node name="ToFuchsiaGate" type="Area2D" parent="Exits" unique_id=750595461]
 position = Vector2(144, 448)
 script = ExtResource("4_oxoen")
 target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_15_fuchsia_gate.tscn"
@@ -378,10 +378,12 @@ target_spawn_name = "FromRoute15"
 transition_id = "kanto_route_15__to_fuchsia_gate"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFuchsiaGate"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFuchsiaGate" unique_id=1475661015]
+position = Vector2(-16, -16)
 shape = SubResource("FuchsiaGateExitShape")
 
-[node name="RouteTransitionHint" parent="Exits/ToFuchsiaGate" instance=ExtResource("5_px0b4")]
+[node name="RouteTransitionHint" parent="Exits/ToFuchsiaGate" unique_id=936401977 instance=ExtResource("5_px0b4")]
+z_as_relative = false
 tile_footprint = Vector2i(1, 2)
 flow_direction = "left"
 
