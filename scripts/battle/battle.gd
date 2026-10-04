@@ -1150,10 +1150,13 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		if _is_pvp_battle():
 			arena_kind = "pvp"
 		animation_router.model_presenter.set_battle_context(profile.environment_id, arena_kind)
+	# Select 2D art without replacing the route/city context sent to the 3D arena.
+	profile = profile.get_2d_profile(battle_type == BattleType.WILD)
 	active_battle_environment_loops_video = profile.loop_background_video
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
 	battle_background_video.stop()
+	battle_background_video.paused = false
 	battle_background_video.stream = profile.background_video
 	battle_background_video.visible = profile.background_video != null
 	if player_battle_platform.has_method("set_platform_texture"):
@@ -1162,6 +1165,19 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		enemy_battle_platform.call("set_platform_texture", profile.platform_texture)
 	if battle_background_video.visible:
 		battle_background_video.play()
+	_sync_battle_background_video()
+
+
+func _sync_battle_background_video() -> void:
+	if battle_background_video.stream == null:
+		return
+	var covered_by_3d: bool = (
+		SettingsManager.battle_presentation_mode == "3d"
+		and is_instance_valid(animation_router.model_presenter)
+		and animation_router.model_presenter.visible
+	)
+	battle_background_video.visible = not covered_by_3d
+	battle_background_video.paused = covered_by_3d or not is_visible_in_tree()
 
 
 func _on_battle_background_video_finished() -> void:
@@ -1181,6 +1197,7 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	_sync_battle_background_video()
 	if has_meta("battle_entry_pending"):
 		return
 	animation_router.poll_threaded_resource_requests()

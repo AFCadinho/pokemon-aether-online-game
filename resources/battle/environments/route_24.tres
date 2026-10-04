@@ -1,8 +1,10 @@
-[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=4 format=3]
+[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
 [ext_resource type="Texture2D" path="res://assets/background/battle/environments/grass_meadow.png" id="2_background"]
 [ext_resource type="Texture2D" path="res://assets/background/platform/grass_platform_v3.png" id="3_platform"]
+
+[ext_resource type="Resource" path="res://resources/battle/environments/grass_animated_2d.tres" id="4_wild_background"]
 
 [resource]
 resource_name = "Route 24 Battle Environment"
@@ -11,3 +13,4 @@ environment_id = &"route_24"
 arena_3d_id = "route_24"
 background_texture = ExtResource("2_background")
 platform_texture = ExtResource("3_platform")
+wild_2d_background = ExtResource("4_wild_background")

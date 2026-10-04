@@ -1586,6 +1586,7 @@ var dev_gems_confirm_button: Button
 var dev_aetherite_confirm_button: Button
 var dev_battle_points_confirm_button: Button
 var dev_heal_party_button: Button
+var dev_open_pc_button: Button
 var dev_badge_progress_button: Button
 var dev_trainer_rematch_mode_button: Button
 var dev_overworld_resets_button: Button
@@ -2050,6 +2051,7 @@ func _ready() -> void:
 	dev_spawn_pokemon_button.pressed.connect(_on_dev_spawn_pokemon_button_pressed)
 	dev_add_button.pressed.connect(_on_dev_add_button_pressed)
 	dev_heal_party_button.pressed.connect(_on_dev_heal_party_button_pressed)
+	dev_open_pc_button.pressed.connect(_on_dev_open_pc_button_pressed)
 	dev_badge_progress_button.pressed.connect(_on_dev_badge_progress_button_pressed)
 	dev_trainer_rematch_mode_button.pressed.connect(_on_dev_trainer_rematch_mode_button_pressed)
 	dev_add_item_button.pressed.connect(_on_dev_add_item_button_pressed)
@@ -2577,6 +2579,9 @@ func _refresh_dev_tools_visibility() -> void:
 	if dev_heal_party_button != null:
 		dev_heal_party_button.visible = can_use_dev_tools
 		dev_heal_party_button.disabled = not can_use_dev_tools
+	if dev_open_pc_button != null:
+		dev_open_pc_button.visible = can_use_dev_tools
+		dev_open_pc_button.disabled = not can_use_dev_tools
 	if dev_badge_progress_button != null:
 		dev_badge_progress_button.visible = can_use_dev_tools
 		dev_badge_progress_button.disabled = not can_use_dev_tools
@@ -9721,6 +9726,14 @@ func _setup_dev_add_item_tools() -> void:
 		dev_actions_container.add_child(dev_heal_party_button)
 		dev_actions_container.move_child(dev_heal_party_button, dev_clear_party_button.get_index())
 
+	dev_open_pc_button = Button.new()
+	dev_open_pc_button.name = "OpenPcButton"
+	dev_open_pc_button.custom_minimum_size = Vector2(190, 34)
+	dev_open_pc_button.focus_mode = Control.FOCUS_NONE
+	if dev_actions_container != null:
+		dev_actions_container.add_child(dev_open_pc_button)
+		dev_actions_container.move_child(dev_open_pc_button, dev_clear_party_button.get_index())
+
 	dev_badge_progress_button = Button.new()
 	_set_localized_control_property(dev_badge_progress_button, "text", "ui.staff.dev.trainer_progress")
 	dev_badge_progress_button.custom_minimum_size = Vector2(190, 34)
@@ -10125,6 +10138,7 @@ func _setup_dev_tools_menu_surface() -> void:
 		dev_spawn_pokemon_button,
 		dev_add_button,
 		dev_heal_party_button,
+		dev_open_pc_button,
 		dev_badge_progress_button,
 		dev_trainer_rematch_mode_button,
 		dev_clear_party_button,
@@ -10165,6 +10179,13 @@ func _setup_dev_tools_menu_surface() -> void:
 		"ui.staff.dev.trainer_progress_description",
 		DEV_TRAINER_PROGRESS_ICON,
 		Color("#e3bd68")
+	)
+	_configure_tool_tile_button(
+		dev_open_pc_button,
+		"ui.staff.dev.open_pc",
+		"ui.staff.dev.open_pc_description",
+		POKEMON_STORAGE_ICON,
+		Color("#75d9ed")
 	)
 	_refresh_dev_trainer_rematch_mode_button()
 	_configure_tool_tile_button(
@@ -35024,6 +35045,14 @@ func _on_dev_actions_button_pressed() -> void:
 		_activate_ui_panel(dev_actions_popup)
 	else:
 		_deactivate_ui_panel(dev_actions_popup)
+
+func _on_dev_open_pc_button_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+	dev_actions_popup.visible = false
+	_deactivate_ui_panel(dev_actions_popup)
+	await open_pokemon_pc()
+
 
 func _on_dev_badge_progress_button_pressed() -> void:
 	if not _can_use_dev_tools():
