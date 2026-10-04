@@ -25,7 +25,7 @@ func _init() -> void:
 	_check(transit_service.contains('_transit_endpoint() + "/travel"'), "browser Aethernet uses the shared travel endpoint")
 	var login := FileAccess.get_file_as_string("res://scripts/ui/login_screen.gd")
 	_check(not login.contains("_offer_web_lobby_recovery"), "login no longer uses the old browser map boundary")
-	_check(login.contains("Trading, Lending, Aether Exchange, Guild Bank and mail attachments require"), "the browser notice lists the transfer restriction")
+	_check(login.contains("send mail attachments directly in your browser"), "the browser notice explains shared gameplay access")
 
 	print("web_first_gym_contract_check: %s" % ("PASS" if failures == 0 else "FAIL"))
 	quit(failures)

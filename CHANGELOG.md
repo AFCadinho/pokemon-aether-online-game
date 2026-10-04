@@ -4,6 +4,8 @@
 
 - Omit 2D move-animation sounds from model-only 3D attacks while retaining Pokémon animations, impact timing and shared damage, healing and stat-change sounds.
 
+- Browser players can now trade, lend, use Aether Exchange and the Guild Bank, and send or claim mail attachments through the shared game API.
+
 - Keep local 3D battle preparation quiet; show simple download progress only when missing Pokémon files are actually downloading.
 
 - Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize HP changes and damage reactions with an earlier impact beat for the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilots while the attacker recovers.

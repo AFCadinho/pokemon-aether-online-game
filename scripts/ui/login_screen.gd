@@ -332,7 +332,7 @@ func _show_web_demo_notice() -> void:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.configure(
 		"Welcome to PokeAether in your browser",
-		"Your account and progress are shared with the downloadable game. Trading, Lending, Aether Exchange, Guild Bank and mail attachments require the desktop or Android client.",
+		"Your account, progress and gameplay are shared with the downloadable game. Trade, lend, use Aether Exchange and the Guild Bank, and send mail attachments directly in your browser.",
 		"Continue in browser",
 		"Download client"
 	)
@@ -898,9 +898,7 @@ func _get_idle_login_button_text() -> String:
 
 
 func _get_saved_session_button_key() -> String:
-	# The browser notice explains the demo boundary after an explicit sign-in.
-	# Keep the launch action consistent with the desktop login affordance rather
-	# than labelling it as a separate browser-demo destination.
+	# Browser sessions use the normal sign-in action and shared gameplay notice.
 	return "ui.login.sign_in" if OS.has_feature("web") else "ui.login.continue"
 
 

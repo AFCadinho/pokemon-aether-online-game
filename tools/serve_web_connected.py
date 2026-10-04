@@ -94,6 +94,7 @@ GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
     ("GET", r"/game/trainers/\d+/card"),
     ("GET", r"/battle/pve/nearby/\d+/spectate"),
     ("POST", r"/auth/web/mail/\d+/read"),
+    ("POST", r"/auth/web/mail/\d+/(?:claim|attachments/\d+/claim)"),
     ("DELETE", r"/auth/web/mail/\d+"),
     ("POST", r"/auth/web/player-actions/[a-z0-9-]+/execute"),
 ))
@@ -191,7 +192,7 @@ def create_app(upstream, build=None, *, transport=None):
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
-        if "internal" in route.split("/") or re.match(r"^/game/(?:trades|loans|exchange)(?:/|$)", route) or re.match(r"^/game/guilds/me/bank(?:/|$)", route) or re.match(r"^/game/guilds/me/members/[^/]+/bank-permissions$", route) or re.match(r"^/game/pokemon/[^/]+/transfer(?:/|$)", route) or re.match(r"^/game/mail/[^/]+/(?:claim|attachments/[^/]+/claim)$", route):
+        if "internal" in route.split("/"):
             return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
         allowed = (route.startswith(("/game/", "/account/pvp/")) and request.method in {"GET", "POST", "PUT", "PATCH", "DELETE"}) or (request.method, route) in HTTP_ROUTES or any(
             request.method == method and (route.startswith(prefix) if prefix.endswith("/") else route == prefix or route.startswith(prefix + "/"))
@@ -299,6 +300,10 @@ def create_app(upstream, build=None, *, transport=None):
             for task in tasks:
                 task.cancel()
             await asyncio.gather(*tasks, return_exceptions=True)
+
+    @app.websocket("/api/ws/trade")
+    async def trade_websocket_proxy(socket: WebSocket):
+        await websocket_proxy(socket, "trade")
 
     @app.websocket("/api/ws/chat")
     async def chat_websocket_proxy(socket: WebSocket):

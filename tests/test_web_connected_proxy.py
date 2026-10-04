@@ -246,6 +246,8 @@ class ConnectedProxyTests(unittest.TestCase):
             return httpx.Response(200, json={"ok": True})
         client = TestClient(proxy.create_app("http://127.0.0.1:8000", transport=httpx.MockTransport(handler)), base_url="http://localhost")
         for method, path in routes["allowed"]:
+            if path.startswith("/ws/"):
+                continue  # WebSocket routes are exercised with an actual upgrade below.
             self.assertEqual(client.request(method, "/api" + path).status_code, 200, (method, path))
         accepted = len(calls)
         for method, path in routes["denied"]:
@@ -287,6 +289,14 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive_text(), "training-spectate")
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertIn("/ws/training-live", paths[3])
+            with client.websocket_connect(
+                "ws://localhost/api/ws/trade?token=test-only&clientBuild=web-test&clientPlatform=windows"
+            ) as socket:
+                socket.send_text('{"v":1,"type":"trade.join","tradeId":"test-trade","lastEventSeq":0}')
+                self.assertIn('"trade.join"', socket.receive_text())
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertTrue(paths[4].startswith("/ws/trade?"))
+            self.assertIn("clientPlatform=web", paths[4])
             upstream.shutdown()
             worker.join(timeout=5)
 
@@ -300,10 +310,15 @@ class ConnectedProxyTests(unittest.TestCase):
             client = TestClient(proxy.create_app(f"http://127.0.0.1:{port}"))
             with client.websocket_connect("ws://localhost/api/ws/chat?token=test-only") as socket:
                 self.assertEqual(socket.receive()["code"], 1008)
-            with self.assertRaises(WebSocketDisconnect) as rejected:
-                with client.websocket_connect("ws://localhost/api/ws/chat", headers={"origin": "https://attacker.example"}):
-                    self.fail("foreign origin was accepted")
-            self.assertEqual(rejected.exception.code, 1008)
+            for channel in ("chat", "trade"):
+                with self.assertRaises(WebSocketDisconnect) as rejected:
+                    with client.websocket_connect(f"ws://localhost/api/ws/{channel}", headers={"origin": "https://attacker.example"}):
+                        self.fail("foreign origin was accepted")
+                self.assertEqual(rejected.exception.code, 1008)
+                with self.assertRaises(WebSocketDisconnect) as rejected:
+                    with client.websocket_connect(f"ws://localhost/api/ws/{channel}?token=test-only&untrusted=1"):
+                        self.fail("untrusted WebSocket query was accepted")
+                self.assertEqual(rejected.exception.code, 1008)
             upstream.shutdown()
             worker.join(timeout=5)
 

@@ -479,28 +479,6 @@
     [
       "POST",
       "/privacy/delete"
-    ]
-  ],
-  "denied": [
-    [
-      "GET",
-      "/auth/web/npc-pokemon-sales/other_sale"
-    ],
-    [
-      "POST",
-      "/auth/web/npc-pokemon-sales/other_sale/purchase"
-    ],
-    [
-      "POST",
-      "/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"
-    ],
-    [
-      "POST",
-      "/auth/web/world-pickups/kanto_viridian_city_potion/claim/escape"
-    ],
-    [
-      "GET",
-      "/auth/web/world-pickups-escape"
     ],
     [
       "POST",
@@ -533,6 +511,100 @@
     [
       "PUT",
       "/game/guilds/me/members/7/bank-permissions"
+    ],
+    [
+      "GET",
+      "/ws/trade"
+    ],
+    [
+      "GET",
+      "/game/trades/capabilities"
+    ],
+    [
+      "GET",
+      "/game/trades/active"
+    ],
+    [
+      "GET",
+      "/game/trades/history"
+    ],
+    [
+      "GET",
+      "/game/trades/test-trade/receipt"
+    ],
+    [
+      "POST",
+      "/game/trades/test-trade/accept"
+    ],
+    [
+      "PUT",
+      "/game/trades/test-trade/offer"
+    ],
+    [
+      "PUT",
+      "/game/trades/test-trade/readiness"
+    ],
+    [
+      "POST",
+      "/game/trades/test-trade/confirm"
+    ],
+    [
+      "GET",
+      "/game/loans/notifications/pending"
+    ],
+    [
+      "POST",
+      "/game/loans/test-loan/accept"
+    ],
+    [
+      "POST",
+      "/game/loans/test-loan/return"
+    ],
+    [
+      "GET",
+      "/game/exchange/listings"
+    ],
+    [
+      "POST",
+      "/game/exchange/listings"
+    ],
+    [
+      "POST",
+      "/game/exchange/listings/test-listing/buy"
+    ],
+    [
+      "POST",
+      "/game/guilds/me/bank/money/deposit"
+    ],
+    [
+      "POST",
+      "/game/guilds/me/bank/money/withdraw"
+    ],
+    [
+      "POST",
+      "/game/mail/5/attachments/3/claim"
+    ]
+  ],
+  "denied": [
+    [
+      "GET",
+      "/auth/web/npc-pokemon-sales/other_sale"
+    ],
+    [
+      "POST",
+      "/auth/web/npc-pokemon-sales/other_sale/purchase"
+    ],
+    [
+      "POST",
+      "/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"
+    ],
+    [
+      "POST",
+      "/auth/web/world-pickups/kanto_viridian_city_potion/claim/escape"
+    ],
+    [
+      "GET",
+      "/auth/web/world-pickups-escape"
     ],
     [
       "POST",
@@ -595,8 +667,16 @@
       "/calcdex/v1/sample-sets/aether-ou/charizard"
     ],
     [
-      "GET",
-      "/ws/trade"
+      "POST",
+      "/game/trades/internal/connections/connected"
+    ],
+    [
+      "POST",
+      "/game/trades/internal/connections/disconnected"
+    ],
+    [
+      "POST",
+      "/game/loans/internal/expire"
     ]
   ]
 }
