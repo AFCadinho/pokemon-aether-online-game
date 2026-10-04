@@ -2,7 +2,7 @@ extends "res://scripts/ui/aether_confirmation_dialog.gd"
 ## First-run desktop choice. Static examples need no model download or 3D scene.
 const DOWNLOAD_INFO = preload("res://data/battle_visual_download_info.json")
 const EXAMPLE_PATHS := {
-	"2d": "res://assets/ui/presentation/2d.png",
+	"2d": "res://assets/ui/presentation/2d-battle.png",
 	"3d": "res://assets/ui/presentation/3d.png",
 }
 var selected_mode := ""

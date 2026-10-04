@@ -6393,7 +6393,7 @@
   "story.kanto.find_a_way_to_saffron.find_secret_route": "Look for another way into Saffron City.",
   "ui.staff.story_checkpoint.find_secret_route": "Find another way into Saffron",
   "ui.visual_choice.title": "How would you like your Pokémon to look?",
-  "ui.visual_choice.intro": "Choose 2D or 3D for battles and your Pokémon. You can change this later in Settings.",
+  "ui.visual_choice.intro": "Choose 2D or 3D for battles and your Pokémon.\nYou can switch between 2D and 3D at any time in Settings.",
   "ui.visual_choice.confirm": "Continue",
   "ui.visual_choice.description.2d": "2D · Classic look\nAnimated Pokémon. Good for most computers.",
   "ui.visual_choice.description.3d": "3D · More detail\nPokémon and battlefields in 3D. Best on a faster computer.",

@@ -6389,7 +6389,7 @@
   "story.kanto.find_a_way_to_saffron.find_secret_route": "寻找另一条进入金黄市的路线。",
   "ui.staff.story_checkpoint.find_secret_route": "寻找另一条进入金黄市的路线",
   "ui.visual_choice.title": "你想怎样显示宝可梦？",
-  "ui.visual_choice.intro": "为对战和宝可梦选择2D或3D显示。之后可在设置中更改。",
+  "ui.visual_choice.intro": "为对战和宝可梦选择2D或3D显示。\n你可以随时在设置中切换2D和3D。",
   "ui.visual_choice.confirm": "继续",
   "ui.visual_choice.description.2d": "2D · 经典风格\n会动的宝可梦，适合大多数电脑。",
   "ui.visual_choice.description.3d": "3D · 更多细节\n宝可梦和对战场地以3D显示，更适合性能较好的电脑。",
