@@ -4,6 +4,10 @@
 
 - Use Android’s actual display density for mobile HUD collapse/reopen targets, preserving a 48 dp minimum even when Godot caps its screen scale.
 
+- Keep poison, burn and other persistent statuses on 3D Pokémon without exposing 2D sprites; add a native Substitute doll, rising item particles and a berry bite with shared sounds, stronger power auras, and prepare reviewed Mega forms before their 3D reveal.
+
+- Use a smoothly looping animated meadow for wild 2D grass encounters, including route and city grassfields.
+
 - Offer existing desktop players the 2D/3D visual choice once after updating, then remember their confirmed choice across restarts and later updates.
 
 - Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.

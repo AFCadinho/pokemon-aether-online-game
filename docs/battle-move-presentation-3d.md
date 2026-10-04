@@ -27,8 +27,8 @@ shared. General effect events now use short native arena geometry for stats,
 healing, items, shields, statuses and activations; see
 [battle-common-effects-3d.md](battle-common-effects-3d.md) for coverage and timing.
 These effects retain existing event boundaries and common sounds without
-requesting 2D visual assets. Substitute and capture transitions remain separate
-existing lifecycle work.
+requesting 2D visual assets. Substitute uses a native doll with attack reveal/return and hit feedback. Capture
+transitions remain separate existing lifecycle work.
 
 Cancellation invalidates the 3D move generation before releasing model waits.
 Miss callbacks are delivered once, even without native dodge visuals, and never

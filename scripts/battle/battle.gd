@@ -1150,10 +1150,13 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		if _is_pvp_battle():
 			arena_kind = "pvp"
 		animation_router.model_presenter.set_battle_context(profile.environment_id, arena_kind)
+	# Select 2D art without replacing the route/city context sent to the 3D arena.
+	profile = profile.get_2d_profile(battle_type == BattleType.WILD)
 	active_battle_environment_loops_video = profile.loop_background_video
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
 	battle_background_video.stop()
+	battle_background_video.paused = false
 	battle_background_video.stream = profile.background_video
 	battle_background_video.visible = profile.background_video != null
 	if player_battle_platform.has_method("set_platform_texture"):
@@ -1162,6 +1165,19 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 		enemy_battle_platform.call("set_platform_texture", profile.platform_texture)
 	if battle_background_video.visible:
 		battle_background_video.play()
+	_sync_battle_background_video()
+
+
+func _sync_battle_background_video() -> void:
+	if battle_background_video.stream == null:
+		return
+	var covered_by_3d: bool = (
+		SettingsManager.battle_presentation_mode == "3d"
+		and is_instance_valid(animation_router.model_presenter)
+		and animation_router.model_presenter.visible
+	)
+	battle_background_video.visible = not covered_by_3d
+	battle_background_video.paused = covered_by_3d or not is_visible_in_tree()
 
 
 func _on_battle_background_video_finished() -> void:
@@ -1181,6 +1197,7 @@ func _on_settings_changed() -> void:
 	_update_active_sprites("settings_sprite_refresh")
 
 func _process(delta: float) -> void:
+	_sync_battle_background_video()
 	if has_meta("battle_entry_pending"):
 		return
 	animation_router.poll_threaded_resource_requests()
@@ -6428,7 +6445,7 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 	if sprite_box != null and sprite_box.has_method("set_dratini_poc_sleeping"):
 		sprite_box.call("set_dratini_poc_sleeping", condition_key == "sleeping")
 	if is_instance_valid(animation_router.model_presenter):
-		animation_router.model_presenter.set_sleeping(0 if player_id == "p1" else 1, condition_key == "sleeping")
+		animation_router.model_presenter.set_status_condition(0 if player_id == "p1" else 1, condition_key)
 
 func _prepare_pending_status_condition_overlays(events: Array) -> void:
 	pending_status_condition_overlay_players.clear()
@@ -10367,7 +10384,7 @@ func _render_battle_events(
 			_fill_mega_event_species(event_data)
 			var mega_ident := str(event_data.get("target", ""))
 			var mega_stage: Node = animation_router.model_presenter
-			if event_type == "mega" and SettingsManager.battle_animations and animation_router.uses_realtime_3d() and is_instance_valid(mega_stage):
+			if event_type == "mega" and animation_router.uses_realtime_3d() and is_instance_valid(mega_stage):
 				var mega_index: int = mega_stage.actor_index(mega_ident)
 				if mega_index >= 0:
 					staged_3d_mega = await mega_stage.prepare_mega_form(
@@ -10375,6 +10392,7 @@ func _render_battle_events(
 						str(event_data.get("species", "")),
 						bool(mega_stage.combatants[mega_index].shiny)
 					)
+					staged_3d_mega = staged_3d_mega and SettingsManager.battle_animations
 			if training_ai_battle and _get_player_id_from_ident(str(event_data.get("target", ""))) == "p2":
 				display_data_presenter.remember_public_trainer_mega_species(event_data)
 			battle_state.apply_event_conditions([event_data])

@@ -38,6 +38,10 @@ func _exit_tree() -> void:
 
 
 func _update_sprite_tint() -> void:
+	var box := _sprite_box()
+	if box != null and box.model_sprites_hidden:
+		_reset_sprite_tint()
+		return
 	var sprite := _get_parent_sprite()
 	if sprite != tinted_sprite:
 		_reset_sprite_tint()
@@ -80,7 +84,7 @@ func _apply_sprite_tint(target_color: Color, speed: float, base_amount: float, p
 		lerpf(1.0, target_color.b, flash),
 		1.0
 	)
-	tinted_sprite.self_modulate = tint
+	_set_self_tint(tinted_sprite, tint)
 	tinted_sprite.modulate = tint
 	sprite_tint_applied = true
 
@@ -89,7 +93,7 @@ func _reset_sprite_tint() -> void:
 	_reset_frozen_sprite_state()
 	_clear_sleep_labels()
 	if sprite_tint_applied and tinted_sprite != null and is_instance_valid(tinted_sprite):
-		tinted_sprite.self_modulate = Color.WHITE
+		_set_self_tint(tinted_sprite, Color.WHITE)
 		tinted_sprite.modulate = Color.WHITE
 	tinted_sprite = null
 	sprite_tint_applied = false
@@ -119,7 +123,7 @@ func _apply_frozen_sprite_state() -> void:
 		1.0,
 		1.0
 	)
-	tinted_sprite.self_modulate = tint
+	_set_self_tint(tinted_sprite, tint)
 	tinted_sprite.modulate = tint
 	sprite_tint_applied = true
 
@@ -233,7 +237,7 @@ func _get_parent_sprite() -> AnimatedSprite2D:
 	return parent_node.get_node_or_null("AnimatedPokemonSprite2") as AnimatedSprite2D
 
 
-func _normalize_condition(value: String) -> String:
+static func _normalize_condition(value: String) -> String:
 	match value.strip_edges().to_lower().replace(" ", "").replace("_", "").replace("-", ""):
 		"par", "paralysis", "paralyzed":
 			return "paralysis"
@@ -249,3 +253,19 @@ func _normalize_condition(value: String) -> String:
 			return "sleeping"
 		_:
 			return ""
+
+
+func _sprite_box() -> Node:
+	var node := get_parent()
+	while node != null:
+		if node.has_method("set_model_sprites_hidden"):
+			return node
+		node = node.get_parent()
+	return null
+
+func _set_self_tint(sprite: AnimatedSprite2D, color: Color) -> void:
+	var box := _sprite_box()
+	if box != null:
+		box._set_sprite_self_color(sprite, color)
+	else:
+		sprite.self_modulate = color
