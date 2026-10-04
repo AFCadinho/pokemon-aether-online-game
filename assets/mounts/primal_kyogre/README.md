@@ -5,8 +5,11 @@ art. The 4x4 runtime sheets use 192x224 frames; all source pixels and the origin
 64x64 seated player poses retain their size. Padding anchors the front waterline
 at world Y +12, matching Lapras with the existing player Look offset.
 
-The rider stays above the forehead in front. Side seats follow the source torso's
-18px shift between swimming poses. The mask exactly follows the foreground's alpha:
+The rider stays above the forehead in front. Side views anchor the hull to the
+occupied water tile, rather than using the lower fin tip as the waterline. The
+whole side-facing rig sits 32px lower than the initial integration. Packing
+compensates the source torso's 18px shift between swimming poses, keeping the
+hull and seat steady while the fins move. The mask exactly follows the foreground's alpha:
 only the head and nearby fin can cover the player. Tail and far fin stay behind.
 Both player models and clothing layers use the normal shared avatar renderer.
 

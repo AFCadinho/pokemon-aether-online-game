@@ -17,26 +17,32 @@ func _run() -> void:
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
 	DirAccess.make_dir_recursive_absolute(output)
-	root.size = Vector2i(1280, 660)
+	root.size = Vector2i(1280, 720)
 	root.content_scale_size = root.size
 	viewport = SubViewport.new()
-	viewport.size = Vector2i(1280, 660)
+	viewport.size = Vector2i(1280, 720)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	root.add_child(viewport)
 	var background := ColorRect.new()
 	background.color = Color("193346")
-	background.size = Vector2(1280, 660)
+	background.size = Vector2(1280, 720)
 	viewport.add_child(background)
 	for gender_index in range(2):
 		var gender: String = ["male", "female"][gender_index]
 		for row in range(4):
 			var label := Label.new()
 			label.text = gender + " / " + DIRS[row]
-			label.position = Vector2(20+320*row, 16+320*gender_index)
+			label.position = Vector2(20+320*row, 16+360*gender_index)
 			viewport.add_child(label)
 			var actor: Variant = preview_script.new()
-			actor.position = Vector2(160+320*row, 250+320*gender_index)
+			actor.position = Vector2(160+320*row, 220+360*gender_index)
+			var tile := ReferenceRect.new()
+			tile.position = actor.position - Vector2(32, 32)
+			tile.size = Vector2(64, 64)
+			tile.border_color = Color(0.4, 0.8, 0.9, 0.5)
+			tile.editor_only = false
+			viewport.add_child(tile)
 			actor.scale = Vector2(2, 2)
 			viewport.add_child(actor)
 			var appearance := Appearance.get_default_appearance(gender)

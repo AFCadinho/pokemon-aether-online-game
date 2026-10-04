@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align Primal Kyogre's side-facing hull and rider with the water tile, removing the airborne appearance and vertical swimming jump.
+
 - Fix sleeping Snorlax being ignored by player movement checks, keeping its roadblock active until that player's encounter is completed.
 
 - Fix the Route 15 to Route 14 transition failing to find its arrival point and leaving the map blank; move Route 14's Biker Malik off a blocked tile.
