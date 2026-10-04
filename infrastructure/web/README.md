@@ -36,10 +36,12 @@ those files directly from `web-assets.pokeaether.com`.
 
 The web manifest is different from those runtime files: the production gateway
 reads `https://updates.pokeaether.com/manifest-web.json`. The publisher writes
-that one small file to the existing updates bucket, using separate
-`UPDATE_R2_*` credentials. It writes the immutable browser runtime to the
-`pokeaether-web` bucket using `R2_*` credentials. The two buckets must not be
-the same.
+that one small file to the existing updates bucket with the repository-level
+`R2_*` credentials already used by desktop and Android publishing. Its final
+manifest job has no `web-production` environment, so the environment's
+browser-bucket `R2_*` secrets do not override them. The immutable browser
+runtime is written to the `pokeaether-web` bucket by the `web-production` job.
+The two buckets must not be the same.
 
 One-time Cloudflare setup:
 
@@ -64,10 +66,11 @@ One-time Cloudflare setup:
    `web-production` environment, with `R2_BUCKET=pokeaether-web`. Protect that
    environment with an approval rule. The Cloudflare API token needs Pages edit
    access; the `R2_*` keys need object read/write access to the browser bucket.
-   Also add `UPDATE_R2_ACCOUNT_ID`, `UPDATE_R2_BUCKET`,
-   `UPDATE_R2_ACCESS_KEY_ID` and `UPDATE_R2_SECRET_ACCESS_KEY` for the existing
-   updates bucket that serves `updates.pokeaether.com/manifest-web.json`.
-   These update-bucket keys need object write access to `manifest-web.json`.
+   The repository-level `R2_ACCOUNT_ID`, `R2_BUCKET`, `R2_ACCESS_KEY_ID` and
+   `R2_SECRET_ACCESS_KEY` are used for the existing updates bucket that serves
+   `updates.pokeaether.com/manifest-web.json`. Those keys need object write
+   access to update manifests. Keep the `web-production` environment's `R2_*`
+   secrets scoped to the browser assets bucket.
 6. Add Cloudflare rate-limiting rules for `POST /api/auth/web/login` and
    `POST /api/auth/web/signup`. Start with a managed challenge after 10 login
    attempts per minute per client and after 5 signup attempts per hour, then
