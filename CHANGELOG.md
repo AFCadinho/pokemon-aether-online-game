@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the horizontal Route 15–Fuchsia transition building and its two-way Route 15 entrance, with the Fuchsia doorway reserved for its future connection.
+
 - Align Primal Kyogre's side-facing hull and rider with the water tile, removing the airborne appearance and vertical swimming jump.
 
 - Fix sleeping Snorlax being ignored by player movement checks, keeping its roadblock active until that player's encounter is completed.
