@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Remember each successfully installed desktop update component immediately, so a later failed download does not force the game and asset packs to download again after restarting the launcher.
+
 - Fix desktop update packaging listing seven models for the full v8 3D catalog, which blocked launcher installation.
 
 - Add an asset-only recovery path for active Android releases missing their Pokémon icons, cries or login video.

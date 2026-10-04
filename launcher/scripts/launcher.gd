@@ -2220,6 +2220,9 @@ func _mark_download_installed(download: Dictionary) -> void:
 		var local_asset_packs: Dictionary = _get_dictionary(local_versions, "assetPacks")
 		local_asset_packs[str(download.get("id", ""))] = str(download.get("version", ""))
 		local_versions["assetPacks"] = local_asset_packs
+	# Called only after the verified staging transaction succeeds. Persist each
+	# completed component so a later failure/restart does not download it again.
+	_save_local_versions()
 
 
 func _extract_zip(zip_path: String, target_dir: String, label: String) -> Error:
