@@ -18,6 +18,7 @@ func _run() -> void:
 	await process_frame
 	_check_gate()
 	_check_route_5_gate()
+	_check_route_8_gate()
 	_check_oak()
 	_check_lavender()
 	_check_lavender_pokemon_center()
@@ -157,3 +158,15 @@ func _check(condition: bool, label: String) -> void:
 	else:
 		failures += 1
 		push_error("FAIL " + label)
+
+
+func _check_route_8_gate() -> void:
+	var gate := (load("res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn") as PackedScene).instantiate()
+	var npc := gate.get_node("Entities/NPCs/GateNPC")
+	_check(npc.npc_id == "kanto_route_8_saffron_gate_attendant", "Eastern guard has the matching story identity")
+	_check(npc.preload_quest_markers, "Eastern guard loads its main quest marker")
+	_check(npc.blocked_dialogue_id == "kanto_route_8_saffron_gate_unsafe", "Eastern guard uses its own lockdown dialogue")
+	var hook := npc.get_node("SaffronClosedStoryHook")
+	_check(hook.interaction_id == "kanto_route_8_saffron_gate_closed", "Eastern guard advances the correct main quest step")
+	_check(npc.guarded_transition_id == "kanto_route_8_saffron_gate__to_saffron_city", "Eastern guard retains the locked Saffron exit")
+	gate.free()

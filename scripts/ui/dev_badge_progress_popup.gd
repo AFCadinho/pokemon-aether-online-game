@@ -64,6 +64,7 @@ const STORY_CHECKPOINTS: Array[Dictionary] = [
 	{"id": "pokemon_tower_entry", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.pokemon_tower_entry"},
 	{"id": "pokemon_tower_gary", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.pokemon_tower_gary"},
 	{"id": "find_saffron_route", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.find_saffron_route"},
+	{"id": "find_secret_route", "chapter_id": "saffron", "label_key": "ui.staff.story_checkpoint.find_secret_route"},
 ]
 const STORY_CHAPTERS: Array[Dictionary] = [
 	{"id": "pallet", "label_key": "ui.staff.story_chapter.pallet"},
