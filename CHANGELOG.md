@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use Android’s actual display density for mobile HUD collapse/reopen targets, preserving a 48 dp minimum even when Godot caps its screen scale.
+
 - Offer existing desktop players the 2D/3D visual choice once after updating, then remember their confirmed choice across restarts and later updates.
 
 - Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.
