@@ -2,7 +2,8 @@
 
 Approved v10 follower design, using the original `assets/followers/GLACEON.png`
 at 1×. The 224×224 runtime frames place unchanged Glaceon pixels 16 pixels
-lower to align the mount with the player's world position; neither Glaceon nor
+lower to align the mount with the player's world position. Rider offsets include
+the same 16-pixel downward shift in every direction for both variants; neither Glaceon nor
 the player's original 64×64 riding pose is resized. All four directions and
 phases retain their source pixels. The side seat follows the source's two-pixel
 bob. The rider sits four pixels lower than the v10 preview

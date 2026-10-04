@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix riders sitting too high on Glaceon and Shiny Glaceon mounts in all directions.
+
 - Add the Route 12 Fishing Brother's House interior and connect its entrance, return exit, and arrival spawns.
 
 - Prevent settings from freezing the desktop game while counting downloaded sprites and 3D models on large installations.
