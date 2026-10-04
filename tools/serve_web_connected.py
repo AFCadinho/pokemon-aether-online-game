@@ -4,7 +4,7 @@ import argparse
 import asyncio
 from pathlib import Path
 import re
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 import httpx
 import uvicorn
@@ -51,7 +51,7 @@ HTTP_ROUTES = {
     ("POST", "/pokemon/create-from-text"), ("POST", "/team/create-from-text"),
     ("POST", "/battle/wild-encounter"), ("POST", "/battle/dev/wild"),
     ("GET", "/battle/wild/resume"),
-    ("POST", "/battle/trainer"), ("GET", "/battle/trainer/resume"),
+    ("POST", "/battle/trainer"), ("POST", "/battle/weekly-boss"), ("GET", "/battle/trainer/resume"),
     ("POST", "/battle/pvp/rooms"),
     # Public species data needed by the battle hover card (including speed tiers).
     ("GET", "/pokemon/stats"),
@@ -193,7 +193,12 @@ def create_app(upstream, build=None, *, transport=None):
     @app.api_route("/api/{path:path}", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD"])
     async def proxy(request: Request, path: str):
         route = "/" + path
-        if "internal" in route.split("/"):
+        try:
+            decoded_route = unquote(route, errors="strict")
+        except UnicodeError:
+            return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
+        if ("%" in decoded_route or "\\" in decoded_route
+                or any(part in {"internal", ".", ".."} for part in decoded_route.split("/"))):
             return JSONResponse({"error": "Not enabled in this browser build"}, status_code=403)
         allowed = (route.startswith(("/game/", "/account/pvp/")) and request.method in {"GET", "POST", "PUT", "PATCH", "DELETE"}) or (request.method, route) in HTTP_ROUTES or any(
             request.method == method and (route.startswith(prefix) if prefix.endswith("/") else route == prefix or route.startswith(prefix + "/"))
