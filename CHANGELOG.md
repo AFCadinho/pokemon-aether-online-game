@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use a smoothly looping animated meadow for wild 2D grass encounters, including route and city grassfields.
+
 - Offer existing desktop players the 2D/3D visual choice once after updating, then remember their confirmed choice across restarts and later updates.
 
 - Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.
