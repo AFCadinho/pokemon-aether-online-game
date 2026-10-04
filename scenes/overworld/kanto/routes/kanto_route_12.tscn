@@ -323,6 +323,58 @@ movement_wait_seconds = 1.8
 movement_speed_pixels = 34.0
 movement_wait_jitter_seconds = 0.4
 
+[node name="Gloom" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(272, 3184)
+overworld_pokemon_id = "kanto_route_12_gloom_1"
+species_id = "gloom"
+display_name = "Gloom"
+movement_behavior = "idle"
+
+[node name="Pidgeotto" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(400, 3184)
+overworld_pokemon_id = "kanto_route_12_pidgeotto_1"
+species_id = "pidgeotto"
+display_name = "Pidgeotto"
+movement_behavior = "idle"
+
+[node name="Bellsprout" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(240, 3568)
+overworld_pokemon_id = "kanto_route_12_bellsprout_1"
+species_id = "bellsprout"
+display_name = "Bellsprout"
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.9
+movement_speed_pixels = 30.0
+
+[node name="Weepinbell" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(304, 3568)
+overworld_pokemon_id = "kanto_route_12_weepinbell_1"
+species_id = "weepinbell"
+display_name = "Weepinbell"
+movement_behavior = "idle"
+
+[node name="Goldeen" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(1392, 592)
+overworld_pokemon_id = "kanto_route_12_goldeen_1"
+species_id = "goldeen"
+display_name = "Goldeen"
+movement_behavior = "idle"
+
+[node name="Horsea" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(1392, 2192)
+overworld_pokemon_id = "kanto_route_12_horsea_1"
+species_id = "horsea"
+display_name = "Horsea"
+movement_behavior = "idle"
+
+[node name="Magikarp" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+position = Vector2(1392, 3696)
+overworld_pokemon_id = "kanto_route_12_magikarp_1"
+species_id = "magikarp"
+display_name = "Magikarp"
+movement_behavior = "idle"
+
 [node name="StaticEncounters" type="Node2D" parent="Entities" unique_id=776773195]
 y_sort_enabled = true
 
