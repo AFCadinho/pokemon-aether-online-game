@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
 [ext_resource type="Texture2D" path="res://assets/background/battle/environments/grass_animated_fallback.jpg" id="2_background"]
 [ext_resource type="VideoStream" path="res://assets/video/battle/grass_meadow.ogv" id="3_video"]
-[ext_resource type="Texture2D" path="res://assets/background/platform/grass_platform_v3.png" id="4_platform"]
+[ext_resource type="Texture2D" path="res://assets/background/platform/grass_meadow_platform.png" id="4_platform"]
 
 [resource]
 resource_name = "Animated Wild Grass 2D Background"

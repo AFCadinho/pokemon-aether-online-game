@@ -20,7 +20,7 @@ func _run() -> void:
 		var location := Catalog.get_profile(StringName(id))
 		assert(location.get_2d_profile(true) == animated, "%s wild battles share animated grass" % id)
 		assert(location.get_2d_profile(false) == location, "%s trainers retain their art" % id)
-		assert(location.platform_texture == animated.platform_texture)
+		assert(location.platform_texture != animated.platform_texture, "wild meadow has its own platform art")
 	for id: StringName in Catalog.PROFILES:
 		if str(id) not in GRASS_IDS:
 			var location := Catalog.get_profile(id)
@@ -40,6 +40,8 @@ func _run() -> void:
 	var player: VideoStreamPlayer = battle.battle_background_video
 	assert(player.stream == animated.background_video and player.visible)
 	assert(battle.battle_background.texture == animated.background_texture)
+	assert(battle.player_battle_platform.get_platform_texture() == animated.platform_texture)
+	assert(battle.enemy_battle_platform.get_platform_texture() == animated.platform_texture)
 	await create_timer(0.3).timeout
 	assert(player.is_playing() and player.stream_position > 0.0)
 	assert(player.get_video_texture().get_size() == Vector2(1152, 648))
@@ -78,6 +80,7 @@ func _run() -> void:
 	battle._apply_battle_environment(&"route_22")
 	assert(player.stream == null and not player.visible and not player.is_playing())
 	assert(battle.battle_background.texture == Catalog.get_profile(&"route_22").background_texture)
+	assert(battle.player_battle_platform.get_platform_texture() == Catalog.get_profile(&"route_22").platform_texture)
 	battle.battle_type = battle.BattleType.WILD
 	battle._apply_battle_environment(&"route_22_water")
 	assert(player.stream == null and not player.visible)
