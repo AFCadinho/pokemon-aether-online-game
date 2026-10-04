@@ -183,13 +183,21 @@ const deniedReleaseMethod = await getWebReleaseObject({
 assert.equal(deniedReleaseMethod.status, 405);
 
 globalThis.fetch = async request => {
-  assert.equal(request, 'https://assets.example.test/data/news.json');
-  return Response.json({ items: [{ title: 'Release' }] });
+  assert.equal(request, 'https://updates.pokeaether.com/data/news.json');
+  return Response.json({ articles: [{ title: 'Release', externalLink: 'https://forums.pokeaether.com/t/release/31' }] });
 };
 const news = await getNews({ env: { ASSET_BASE_URL: 'https://assets.example.test' } });
 assert.equal(news.status, 200);
 assert.equal(news.headers.get('cache-control'), 'public, max-age=300');
-assert.equal((await news.json()).items[0].title, 'Release');
+assert.equal((await news.json()).articles[0].title, 'Release');
+const newsWithoutBrowserAssets = await getNews({ env: {} });
+assert.equal(newsWithoutBrowserAssets.status, 200);
+assert.equal((await newsWithoutBrowserAssets.json()).articles[0].externalLink, 'https://forums.pokeaether.com/t/release/31');
+
+globalThis.fetch = async () => new Response('', { status: 404 });
+const unavailableNews = await getNews({ env: {} });
+assert.equal(unavailableNews.status, 502);
+assert.equal(unavailableNews.headers.get('cache-control'), 'no-store');
 
 globalThis.fetch = async () => new Response(new Uint8Array([0xff]), { status: 200 });
 const invalidNews = await getNews({ env: { ASSET_BASE_URL: 'https://assets.example.test' } });
