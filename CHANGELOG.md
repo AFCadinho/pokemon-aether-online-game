@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Raise Gliscor and Weezing to a natural battle hover height, with smooth descent for sleep and fainting and a gentle rise when waking.
+
 - Use Android’s actual display density for mobile HUD collapse/reopen targets, preserving a 48 dp minimum even when Godot caps its screen scale.
 
 - Replace the old oval platforms in animated wild grass battles with painted meadow clearings and natural grass edges.

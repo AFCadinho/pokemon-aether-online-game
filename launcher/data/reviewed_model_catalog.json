@@ -381368,6 +381368,7 @@
 				"yaw_degrees": 0.0
 			},
 			"placement": {
+				"hover_height": 0.6,
 				"scale": 1.0,
 				"yaw_degrees": 0.0
 			}
@@ -1075326,6 +1075327,7 @@
 				"yaw_degrees": 0.0
 			},
 			"placement": {
+				"hover_height": 0.45,
 				"scale": 1.0,
 				"yaw_degrees": 0.0
 			}
