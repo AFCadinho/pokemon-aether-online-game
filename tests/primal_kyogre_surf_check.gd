@@ -16,6 +16,7 @@ func _run() -> void:
 	inventory.cached_inventory_user_id = 123
 	inventory.cached_inventory_items = []
 	var actor := _new_local()
+	_check_side_waterline(actor)
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "lapras", "unowned saved Surf selection falls back to Lapras")
 	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}]
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "primal_kyogre", "grant unlocks the selected Surf mount")
@@ -78,6 +79,28 @@ func _run() -> void:
 	await process_frame
 	print("Primal Kyogre Surf checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
+
+
+func _check_side_waterline(actor: Node2D) -> void:
+	var frames := Mounts.get_mount_frames("primal_kyogre")
+	for direction: String in ["left", "right"]:
+		var previous_height := INF
+		for phase in range(4):
+			var texture := frames.get_frame_texture(StringName("walk_" + direction), phase)
+			var pixels := Mounts._get_texture_image(texture)
+			# These nose-tip columns exclude the fins extending below the hull.
+			var nose_x := 32 if direction == "left" else 160
+			var bottom := -1
+			for y in range(pixels.get_height()):
+				if pixels.get_pixel(nose_x, y).a > 0.0:
+					bottom = y
+			_check(bottom >= 0, "side hull measurement contains artwork")
+			var mount: AnimatedSprite2D = actor.get_node("Look/MountSprite")
+			var waterline := mount.to_global(Vector2(nose_x, bottom) - Vector2(pixels.get_size()) / 2.0).y - actor.global_position.y
+			_check(waterline >= -16.0 and waterline <= 16.0, "side hull reaches the occupied water tile")
+			if previous_height != INF:
+				_check(absf(waterline - previous_height) <= 1.0, "swimming keeps the hull at a stable waterline")
+			previous_height = waterline
 
 
 func _new_local() -> Node2D:

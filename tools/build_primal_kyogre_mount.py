@@ -10,14 +10,19 @@ FRAME = (192, 224)
 DIRECTIONS = ('down', 'left', 'right', 'up')
 SEATS = (((88,8),)*4, ((96,-20),(96,-20),(96,-2),(96,-2)),
          ((96,-20),(96,-20),(96,-2),(96,-2)), ((88,3),)*4)
-# Center front/rear anatomy on the tile. Waterline ends at world Y +12,
-# matching Lapras with the player's existing Look Y=-16.
-SHIFTS = ((-24,21),(-32,21),(-32,21),(-24,21))
+# Front/rear positioning remains as approved. Side views anchor the hull,
+# not the lower fin tip, on the water tile: move the whole rig down one tile.
+# The second source pose drops the hull 18px; compensate before packing so
+# the fins swim around a stable hull and the rider does not bounce in midair.
+SHIFTS = (((-24,21),)*4,
+          ((-32,53),(-32,53),(-32,35),(-32,35)),
+          ((-32,53),(-32,53),(-32,35),(-32,35)),
+          ((-24,21),)*4)
 
 
 def definition():
-    offsets = {d: [[x+SHIFTS[r][0]-(FRAME[0]-64)//2,
-                   y+SHIFTS[r][1]-(FRAME[1]-64)//2] for x,y in SEATS[r]]
+    offsets = {d: [[x+SHIFTS[r][c][0]-(FRAME[0]-64)//2,
+                   y+SHIFTS[r][c][1]-(FRAME[1]-64)//2] for c,(x,y) in enumerate(SEATS[r])]
                for r,d in enumerate(DIRECTIONS)}
     return {'displayName':'Primal Kyogre', 'movementMode':'surf',
             'unlockItemId':'primal-kyogre-mount',
@@ -57,10 +62,10 @@ def build():
         for col in range(4):
             art = source.crop((col*256,row*128,(col+1)*256,(row+1)*128))
             base = Image.new('RGBA',FRAME)
-            base.alpha_composite(art,SHIFTS[row])
+            base.alpha_composite(art,SHIFTS[row][col])
             assert sum(base.getchannel('A').histogram()[1:]) == sum(art.getchannel('A').histogram()[1:])
             fg = Image.new('RGBA',FRAME)
-            fg.alpha_composite(foreground(art,row,col),SHIFTS[row])
+            fg.alpha_composite(foreground(art,row,col),SHIFTS[row][col])
             mask = Image.new('RGBA',FRAME)
             mask.putalpha(fg.getchannel('A'))
             for key,tile in [('mount',base),('foreground',fg),('rider_mask',mask)]:
