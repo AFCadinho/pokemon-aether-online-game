@@ -27,6 +27,13 @@ static func retain(cache_key: String, scene: PackedScene, bytes: int) -> void:
 	order.append(cache_key)
 	source_bytes += bytes
 
+static func mark_rendered(cache_key: String, render_key: String) -> void:
+	if items.has(cache_key):
+		items[cache_key]["render_key"] = render_key
+
+static func was_rendered(cache_key: String, render_key: String) -> bool:
+	return not render_key.is_empty() and items.has(cache_key) and str(items[cache_key].get("render_key", "")) == render_key
+
 static func _remove(cache_key: String) -> void:
 	if items.has(cache_key):
 		source_bytes -= int(items[cache_key].bytes)
