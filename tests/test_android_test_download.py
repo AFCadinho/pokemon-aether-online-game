@@ -6,12 +6,13 @@ import runpy
 from tempfile import TemporaryDirectory
 import unittest
 from unittest.mock import patch
+from urllib.error import HTTPError
 
 from tools import upload_launcher_release
 
 
 class AndroidTestDownloadTests(unittest.TestCase):
-    def exercise(self, mode, corrupt=False):
+    def exercise(self, mode, corrupt=False, missing_catalog=False):
         with TemporaryDirectory() as directory:
             root = Path(directory)
             build = 'a' * 40 + '-123-1'
@@ -40,6 +41,8 @@ class AndroidTestDownloadTests(unittest.TestCase):
             origin = f'https://web-assets.pokeaether.com/android/releases/{build}/'
             responses = {origin + relative: body for relative, body in payload.items()}
             responses[origin + 'mobile-assets/catalog.json'] = catalog_bytes
+            if missing_catalog:
+                del responses[origin + 'mobile-assets/catalog.json']
             responses[game['url']] = b'apk'
             responses['https://updates.pokeaether.com/manifest-android.json'] = previous
             source = Path(__file__).resolve().parents[1] / 'tools/prepare_android_test_download.py'
@@ -49,15 +52,25 @@ class AndroidTestDownloadTests(unittest.TestCase):
             try:
                 os.chdir(root)
                 globals_ = module['main'].__globals__
-                with patch.dict(os.environ, {'GITHUB_SHA': 'a' * 40, 'BUILD_RUN_ID': '123',
+                def public_bytes(url):
+                    if url not in responses:
+                        raise SystemExit('Public Android download is unavailable: HTTP 404')
+                    return responses[url]
+                with patch.dict(os.environ, {'GITHUB_SHA': ('b' if mode == '--verify-assets-only' else 'a') * 40,
+                                             'CANDIDATE_SOURCE_SHA': 'a' * 40, 'BUILD_RUN_ID': '123',
                                              'BUILD_RUN_ATTEMPT': '1'}), \
                         patch('sys.argv', ['prepare', mode]), \
-                        patch.dict(globals_, {'public_bytes': lambda url: responses[url],
-                                              '_load_config': lambda: object()}), \
+                        patch.dict(globals_, {'public_bytes': public_bytes,
+                                              '_load_config': unittest.mock.Mock(return_value=object())}), \
                         patch.dict(globals_, {'_upload_file': unittest.mock.Mock()}) as patched:
                     upload = patched['_upload_file']
                     if corrupt:
                         with self.assertRaisesRegex(SystemExit, 'checksum differs'):
+                            module['main']()
+                        upload.assert_not_called()
+                        return
+                    if missing_catalog:
+                        with self.assertRaisesRegex(SystemExit, 'HTTP 404'):
                             module['main']()
                         upload.assert_not_called()
                         return
@@ -69,9 +82,13 @@ class AndroidTestDownloadTests(unittest.TestCase):
                     if mode == '--assets-only':
                         self.assertEqual(len(keys), 5)
                         self.assertEqual(keys[-1], f'android/releases/{build}/mobile-assets/catalog.json')
-                    else:
+                    elif mode == '--apk-only':
                         self.assertEqual(keys, ['game/' + apk_name])
                         self.assertTrue(json.loads(Path('android-test-download.json').read_text())['apkDownloadReady'])
+                    else:
+                        upload.assert_not_called()
+                        globals_['_load_config'].assert_not_called()
+                        self.assertFalse(Path('android-test-download.json').exists())
             finally:
                 os.chdir(original)
 
@@ -83,3 +100,24 @@ class AndroidTestDownloadTests(unittest.TestCase):
 
     def test_corrupt_asset_prevents_all_uploads(self):
         self.exercise('--assets-only', corrupt=True)
+
+    def test_publication_preflight_verifies_assets_without_uploading(self):
+        self.exercise('--verify-assets-only')
+
+    def test_missing_public_asset_catalog_blocks_publication(self):
+        self.exercise('--verify-assets-only', missing_catalog=True)
+
+    def test_corrupt_local_payload_blocks_publication(self):
+        self.exercise('--verify-assets-only', corrupt=True)
+
+    def test_missing_download_explains_required_preparation(self):
+        source = Path(__file__).resolve().parents[1] / 'tools/prepare_android_test_download.py'
+        with patch.dict('sys.modules', {'upload_launcher_release': upload_launcher_release}):
+            module = runpy.run_path(str(source), run_name='android_review_test')
+        error = HTTPError('https://example.invalid/catalog.json', 404, 'Not Found', {}, None)
+        try:
+            with patch.dict(module['public_bytes'].__globals__, {'urlopen': unittest.mock.Mock(side_effect=error)}):
+                with self.assertRaisesRegex(SystemExit, 'Run Prepare Android test download'):
+                    module['public_bytes']('https://example.invalid/catalog.json')
+        finally:
+            error.close()

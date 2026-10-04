@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Prevent Android updates from being activated before their matching Pokémon HOME icons, cries and login video have been verified on the public download route.
+
 ## 0.3.92
 
 ### Browser and Launcher

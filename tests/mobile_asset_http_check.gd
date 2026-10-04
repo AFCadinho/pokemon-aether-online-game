@@ -1,9 +1,16 @@
 extends SceneTree
 const Service := preload("res://scripts/services/mobile_asset_service.gd")
 const Cache := preload("res://scripts/services/mobile_asset_cache.gd")
+const HomeService := preload("res://scripts/services/web_home_icon_service.gd")
 class FixtureService extends Service:
 	func release_prefix() -> String:
 		return OS.get_environment("POKEAETHER_MOBILE_FIXTURE_ORIGIN") + "/"
+
+class FixtureHomeService extends HomeService:
+	var mobile_service: Node
+	func _download_relative(relative: String) -> PackedByteArray:
+		var path: String = await mobile_service.fetch(relative)
+		return FileAccess.get_file_as_bytes(path) if path != "" else PackedByteArray()
 
 var failures := 0
 var service: Node
@@ -43,6 +50,15 @@ func _run() -> void:
 	_check(await service.fetch("cry with space.ogg") != "", "manifest-driven fetch validates size and checksum and encodes URL segments")
 	_check(await service.fetch("oversized.ogg") == "", "manifest cannot allow an oversized asset")
 	_check(await service.fetch("../escape") == "", "catalog traversal is refused")
+	var home := FixtureHomeService.new()
+	home.mobile_service = service
+	root.add_child(home)
+	var icon := home.get_icon("Pikachu")
+	_check(icon.get_width() == 64, "HOME consumer starts with a mutable placeholder")
+	await home.load_icon("Pikachu")
+	_check(icon.get_width() == 20 and (home._files["home-icons/icon.png"] as Image).get_pixel(0, 0).is_equal_approx(Color.RED), "native manifest and PNG download replace the existing HOME placeholder")
+	_check(await restarted.fetch_url(origin + "/home-icons/icon.png", FileAccess.get_sha256(service.cache.path_for(origin + "/home-icons/icon.png")), 1024) != "", "downloaded HOME image is reusable after restart")
+	home.queue_free()
 	var cry := AudioStreamOggVorbis.load_from_file("res://assets/audio/sfx/pokemon_cries/PIKACHU.ogg")
 	_check(cry != null and cry.get_length() > 0, "native Ogg loader can decode a standalone cry")
 	# Use a filename without an extension, as the persistent cache does.

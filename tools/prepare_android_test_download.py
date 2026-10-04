@@ -7,15 +7,20 @@ import os
 from pathlib import Path
 import re
 from urllib.parse import quote
+from urllib.error import URLError
 from urllib.request import Request, urlopen
 
 from upload_launcher_release import _load_config, _upload_file
 
 
 def public_bytes(url: str) -> bytes:
-    with urlopen(Request(url, headers={'User-Agent': 'PokeAetherAndroidReview/1.0',
-                                      'Cache-Control': 'no-cache'}), timeout=90) as response:
-        return response.read()
+    try:
+        with urlopen(Request(url, headers={'User-Agent': 'PokeAetherAndroidReview/1.0',
+                                          'Cache-Control': 'no-cache'}), timeout=90) as response:
+            return response.read()
+    except (URLError, TimeoutError) as error:
+        raise SystemExit(f'Public Android download is unavailable: {url}: {error}. '
+                         'Run Prepare Android test download for this candidate before publication.') from error
 
 
 def main() -> None:
@@ -23,10 +28,13 @@ def main() -> None:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--assets-only', action='store_true')
     mode.add_argument('--apk-only', action='store_true')
+    mode.add_argument('--verify-assets-only', action='store_true',
+                      help='Check the matching public asset payload before activating the updater; uploads nothing')
     args = parser.parse_args()
     game = json.loads(Path('release/manifest-android.json').read_text())['game']
     build = game['buildId']
-    expected = f"{os.environ['GITHUB_SHA']}-{os.environ['BUILD_RUN_ID']}-{os.environ['BUILD_RUN_ATTEMPT']}"
+    source_sha = os.environ.get('CANDIDATE_SOURCE_SHA', os.environ['GITHUB_SHA'])
+    expected = f"{source_sha}-{os.environ['BUILD_RUN_ID']}-{os.environ['BUILD_RUN_ATTEMPT']}"
     if not re.fullmatch(r'[0-9a-f]{40}-[0-9]+-[0-9]+', build) or build != expected:
         raise SystemExit('Candidate identity does not match the selected main build')
     apk = Path('release') / f'game-{build}-android.apk'
@@ -53,7 +61,7 @@ def main() -> None:
             if hashlib.file_digest(stream, 'sha256').hexdigest() != entry['sha256']:
                 raise SystemExit('Native asset checksum differs')
         files.append((path, relative))
-    config = _load_config()
+    config = _load_config() if not args.verify_assets_only else None
     manifest_url = 'https://updates.pokeaether.com/manifest-android.json'
     previous_manifest = public_bytes(manifest_url)
     previous_game = json.loads(previous_manifest)['game']
@@ -91,6 +99,9 @@ def main() -> None:
             raise SystemExit('Public test APK differs from the signed candidate')
     if public_bytes(manifest_url) != previous_manifest:
         raise SystemExit('Active Android updater manifest changed during test preparation')
+    if args.verify_assets_only:
+        print(f'Verified matching public Android assets for {build}; no uploads or active manifest changes', flush=True)
+        return
     evidence = {'game': game, 'assetCatalogUrl': origin + 'mobile-assets/catalog.json',
                 'assetCount': len(files), 'activeAndroidVersion': previous_game['version'],
                 'updaterManifestChanged': False, 'apkDownloadReady': args.apk_only}
