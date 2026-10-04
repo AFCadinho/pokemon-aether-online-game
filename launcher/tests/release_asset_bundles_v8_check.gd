@@ -48,6 +48,18 @@ func _run() -> void:
 	var index: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	assert(BundleIndex.validate(index).is_empty())
 	assert(service._release_index_error(index, descriptor).is_empty())
+	# Exercise the packaging output through the actual launcher install path.
+	for argument: String in OS.get_cmdline_user_args():
+		if argument.begins_with("--descriptor="):
+			var packaged: Variant = JSON.parse_string(FileAccess.get_file_as_string(argument.trim_prefix("--descriptor=")))
+			assert(packaged is Dictionary)
+			var isolated := ReleaseBundles.new("user://v8-install-check/bundles", "user://v8-install-check/index-" + str(Time.get_ticks_usec()))
+			var accepted: Dictionary = isolated.accept_index(packaged, path, false)
+			assert(accepted.error.is_empty(), str(accepted.error))
+			assert(accepted.jobs.is_empty())
+			assert(not isolated.cached_index(packaged).is_empty())
+			assert(isolated.jobs(packaged, false).jobs.is_empty())
+			assert(isolated.accept_index(packaged, path, false).error.is_empty())
 	var by_id := BundleIndex.by_id(index)
 	for asset_id: String in [
 		"pokemon_3d:ogerpon-wellspring:base",

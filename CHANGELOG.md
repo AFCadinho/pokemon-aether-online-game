@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix desktop update packaging listing seven models for the full v8 3D catalog, which blocked launcher installation.
+
 - Add an asset-only recovery path for active Android releases missing their Pokémon icons, cries or login video.
 
 - Prevent Android updates from being activated before their matching Pokémon HOME icons, cries and login video have been verified on the public download route.

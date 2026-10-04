@@ -125,6 +125,31 @@ class ExternalAssetMetadataTests(unittest.TestCase):
             )
 
 
+    def test_approved_v8_bundle_index_pins_all_1139_assets(self) -> None:
+        import json
+
+        receipt = json.loads((TOOLS_DIR.parent / "release/approved_3d_bundles_v8.json").read_text())
+        launcher_pin = json.loads((TOOLS_DIR.parent / "launcher/data/approved_3d_release_v8.json").read_text())
+        pin = receipt["index"]
+        descriptor = package_release._build_asset_bundle_index(
+            f"{receipt['revision']}:{pin['object_key']}:{pin['size_bytes']}:{pin['sha256']}",
+            "https://updates.example",
+        )
+        self.assertEqual(len(descriptor["requiredAssetIds"]), 1139)
+        self.assertEqual(descriptor["requiredAssetIds"], launcher_pin["requiredAssetIds"])
+        self.assertEqual(launcher_pin["index"], pin)
+        self.assertIn("pokemon_3d:ogerpon-wellspring:base", descriptor["requiredAssetIds"])
+        self.assertIn("pokemon_3d:absol:mega-z", descriptor["requiredAssetIds"])
+        for field, invalid in [("sha256", "0" * 64), ("size_bytes", pin["size_bytes"] + 1),
+                               ("object_key", "optional-assets/pokemon_3d/index/wrong.json")]:
+            with self.subTest(field=field), self.assertRaises(SystemExit):
+                bad_pin = {**pin, field: invalid}
+                package_release._build_asset_bundle_index(
+                    f"{receipt['revision']}:{bad_pin['object_key']}:{bad_pin['size_bytes']}:{bad_pin['sha256']}",
+                    "https://updates.example",
+                )
+
+
 class PublicArtifactVerificationTests(unittest.TestCase):
     def test_verifier_requires_exact_size_checksum_and_range_support(self) -> None:
         responses = [
