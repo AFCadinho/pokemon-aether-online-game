@@ -304,6 +304,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/wild_entry_before_response_check.gd",
 	"res://tests/wild_3d_opponent_preparation_check.gd",
 	"res://tests/cached_3d_battle_ready_check.gd",
+	"res://tests/battle_switch_sprite_flash_check.gd",
 	"res://tests/pokedex_on_demand_3d_check.gd",
 	"res://tests/full_3d_catalog_size_check.gd",
 	"res://tests/trainer_entry_before_response_check.gd",
