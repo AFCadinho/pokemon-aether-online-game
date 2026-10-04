@@ -11,6 +11,7 @@
     {"id": "kanto_route_5_daycare_sign", "type": "building", "mapId": "kanto_route_5", "title": "Pokémon Dagverblijf", "lines": ["Pokémon Dagverblijf", "We verzorgen de Pokémon van Trainers terwijl ze op reis zijn."]},
     {"id": "kanto_route_5_underground_path_sign", "type": "road", "mapId": "kanto_route_5", "title": "Ondergrondse Doorgang", "lines": ["Ondergrondse Doorgang", "Een stille tunnel tussen Route 5 en Route 6."]},
     {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "Route 6", "lines": ["Route 6", "In het noorden ligt Saffron City. In het zuiden ligt Vermilion City."]},
+    {"id": "kanto_route_8_route_sign", "type": "road", "mapId": "kanto_route_8", "title": "Route 8", "lines": ["Route 8", "Lavender Town ↔ Saffron City."]},
     {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "Ondergrondse Doorgang", "lines": ["Ondergrondse Doorgang", "Een stille tunnel die Route 6 met Route 5 verbindt."]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "Route 24", "lines": ["Route 24", "Nugget Bridge verbindt Cerulean City met Route 25."]},
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "Route 25", "lines": ["Route 25", "Volg de weg naar het oosten tot Bill's huis."]},
