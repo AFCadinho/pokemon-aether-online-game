@@ -50,7 +50,20 @@ func _run() -> void:
 			dialog._cancel()
 			_check(dialog.visible and settings.needs_battle_visual_choice(), "Escape does not silently select a renderer")
 			_check(dialog.sizes["3d"].text.contains("17.68 GiB") and dialog.sizes["2d"].text.contains("0.41 GiB"), "separate full collection sizes are shown")
-			_check(dialog.EXAMPLES["2d"].get_width() > 0 and dialog.EXAMPLES["3d"].get_width() > 0, "small example textures are available without downloads")
+			for example_mode: String in ["2d", "3d"]:
+				var example := dialog.find_child("Example" + example_mode.to_upper(), true, false) as TextureRect
+				_check(example.texture != null and example.texture.get_width() > 0, "example is visible without downloads: " + example_mode)
+				# user:// PNGs have no importer metadata, reproducing a fresh pull
+				# before the editor has scanned the two new presentation examples.
+				var raw_path := "user://visual_choice_unimported_" + example_mode + ".png"
+				var raw_file := FileAccess.open(raw_path, FileAccess.WRITE)
+				raw_file.store_buffer(FileAccess.get_file_as_bytes(dialog.EXAMPLE_PATHS[example_mode]))
+				raw_file.close()
+				_check(not ResourceLoader.exists(raw_path, "Texture2D"), "regression fixture has no Godot texture import")
+				var raw_texture: Texture2D = dialog._load_example(raw_path)
+				_check(raw_texture is ImageTexture and raw_texture.get_size() == example.texture.get_size(), "unimported PNG remains visible: " + example_mode)
+				raw_texture = null
+				DirAccess.remove_absolute(ProjectSettings.globalize_path(raw_path))
 			settings.set_locale("nl")
 			_check(dialog.choices["3d"].text == "Kies 3D" and "Geïnstalleerde" in dialog.sizes["3d"].text, "locale changes translate the open chooser")
 			var capture := OS.get_environment("VISUAL_CHOICE_CAPTURE")
