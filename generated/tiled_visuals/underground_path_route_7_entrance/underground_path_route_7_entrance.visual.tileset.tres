@@ -1,0 +1,91 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_7_entrance/assets/underground_path_route_7_entrance.visual.tileset.compact_source_1_0.texture.res" id="1_0u22o"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_7_entrance/assets/underground_path_route_7_entrance.visual.tileset.compact_source_1025_0.texture.res" id="2_trs0s"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_7_entrance/assets/underground_path_route_7_entrance.visual.tileset.compact_source_2049_0.texture.res" id="3_oaqfs"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/underground_path_route_7_entrance/assets/underground_path_route_7_entrance.visual.tileset.compact_source_3073_0.texture.res" id="4_sr1vw"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ori41"]
+texture = ExtResource("1_0u22o")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_r2htb"]
+texture = ExtResource("2_trs0s")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e0q6h"]
+texture = ExtResource("3_oaqfs")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pr2rl"]
+texture = ExtResource("4_sr1vw")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ori41")
+sources/1 = SubResource("TileSetAtlasSource_r2htb")
+sources/2 = SubResource("TileSetAtlasSource_e0q6h")
+sources/3 = SubResource("TileSetAtlasSource_pr2rl")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/underground_path/Route 7 Entrance.tmx"
+metadata/tiled_compact_atlas_version = 1
