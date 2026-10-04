@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare both Pokémon's 3D models before revealing wild encounters, including opponents that have not been downloaded yet.
+
 - Remember each successfully installed desktop update component immediately, so a later failed download does not force the game and asset packs to download again after restarting the launcher.
 
 - Fix desktop update packaging listing seven models for the full v8 3D catalog, which blocked launcher installation.
