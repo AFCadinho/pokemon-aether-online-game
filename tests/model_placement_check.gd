@@ -32,7 +32,8 @@ func _init() -> void:
 			var digest: String = reviewed.DATA.data.models[identity].sha256
 			var profile: Dictionary = reviewed.resolve(identity, digest)
 			var hover := Placement.resolve(profile, profile.grounding, digest)
-			assert(hover.calibrated and hover.hover_height > 0.4)
+			assert(hover.calibrated)
+			assert(hover.hover_height == 0.0 if species == "gliscor" else hover.hover_height > 0.4, "Gliscor's native flight replaces the artificial hover")
 			for action in ["idle", "physical_attack", "physical_attack_2", "special_attack", "damage"]:
 				assert(Placement.hover_target(hover, action, 0.5, 2.0) == hover.hover_height)
 			for action in ["sleep", "faint_loop"]:
