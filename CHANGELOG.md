@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Raise the Rayquaza Mount Box price to 1,000 Aether Gems, with the same cost in Gift Voucher credit.
+
 - Refresh Route 15's visual after the latest artist TMX correction.
 
 - Reimport Route 15's overworld visual from the latest artist TMX.
