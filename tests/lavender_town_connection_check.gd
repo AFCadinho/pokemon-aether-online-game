@@ -143,9 +143,11 @@ func _run() -> void:
 	_check_connection(route13, "ToRoute12", route12, ROUTE12)
 	_check_connection(route12, "ToRoute13Water", route13, ROUTE13)
 	_check_connection(route13, "ToRoute12Water", route12, ROUTE12)
-	_check(route12.get_node("Spawns/FromRoute13Water").position == Vector2(1360, 3856)
-		and route13.get_node("Spawns/FromRoute12Water").position == Vector2(2896, 1040),
-		"Water transitions arrive at their separate Route 12 and Route 13 spawn points")
+	_check(route12.get_node("Exits/ToRoute13Water").target_spawn_name == "FromRoute12Water"
+		and route13.get_node("Exits/ToRoute12Water").target_spawn_name == "FromRoute13Water"
+		and route12.get_node("Spawns/FromRoute13Water").position != route12.get_node("Spawns/FromRoute13").position
+		and route13.get_node("Spawns/FromRoute12Water").position != route13.get_node("Spawns/FromRoute12").position,
+		"Water transitions target their distinct water arrival markers")
 	_check_route_water_arrivals(route12, route13)
 	_check(str(route12.get_node("Exits/ToRoute13").transition_facing_direction) == "down"
 		and str(route13.get_node("Exits/ToRoute12").transition_facing_direction) == "up",

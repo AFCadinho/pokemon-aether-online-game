@@ -213,6 +213,8 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
 target_spawn_name = "FromRoute13"
 transition_id = "kanto_route_13__to_route12"
+land_transition_id = "kanto_route_13__to_route12"
+water_transition_id = "kanto_route_13__to_route12_water"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12" unique_id=1393282814]
@@ -229,6 +231,8 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
 target_spawn_name = "FromRoute13Water"
 transition_id = "kanto_route_13__to_route12_water"
+land_transition_id = "kanto_route_13__to_route12"
+water_transition_id = "kanto_route_13__to_route12_water"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12Water" unique_id=24928447]

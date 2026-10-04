@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve land and water arrival surfaces when crossing between Routes 12 and 13.
+
 - Have Route 12's Fishing Guru's brother send players to Vermilion City before he offers his reward.
 
 - Require completing the Vermilion City Fishing Guru lesson before using the Super Rod.
