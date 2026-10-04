@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport Route 15's overworld visual from the latest artist TMX.
+
 - Make horizontal gate attendants reachable across the counter and connect their dialogue to shared server content.
 
 - Add Shiny Primal Kyogre and its 1,000-Gem box; split Gift Store mounts into Land and Surf tabs with mounted previews.
