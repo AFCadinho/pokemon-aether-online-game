@@ -3280,6 +3280,8 @@
   "ui.staff.dev.create_pokemon_description": "Crie um membro da equipe",
   "ui.staff.dev.start_encounter": "Iniciar Encontro",
   "ui.staff.dev.start_encounter_description": "Inicie uma batalha selvagem",
+  "ui.staff.dev.open_pc": "Abrir Box do PC",
+  "ui.staff.dev.open_pc_description": "Abra seu armazenamento de Pokémon em qualquer lugar",
   "ui.staff.dev.heal_party": "Curar Equipe",
   "ui.staff.dev.heal_party_description": "Restaure a equipe ativa",
   "ui.staff.dev.trainer_progress_description": "Gerencie insígnias, itens-chave e pontos da história",

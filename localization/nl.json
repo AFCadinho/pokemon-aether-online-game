@@ -3312,6 +3312,8 @@
   "ui.staff.dev.create_pokemon_description": "Maak een partijlid",
   "ui.staff.dev.start_encounter": "Encounter starten",
   "ui.staff.dev.start_encounter_description": "Start een wild gevecht",
+  "ui.staff.dev.open_pc": "PC-box openen",
+  "ui.staff.dev.open_pc_description": "Open overal je Pokémon-opslag",
   "ui.staff.dev.heal_party": "Party genezen",
   "ui.staff.dev.heal_party_description": "Herstel het actieve team",
   "ui.staff.dev.trainer_progress_description": "Beheer badges, key items en verhaalcheckpoints",
