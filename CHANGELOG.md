@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Route 12 Fishing Brother's House interior and connect its entrance, return exit, and arrival spawns.
+
 - Download approved normal and shiny 3D models when opening the Pokédex or a summary card, with loading progress and a sprite fallback if the download fails.
 
 - Prepare both Pokémon's 3D models before revealing wild encounters, including opponents that have not been downloaded yet.

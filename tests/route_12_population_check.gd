@@ -33,9 +33,16 @@ func run() -> void:
 		check(clear_cell(map, Vector2i(pickup.position / 32.0)), "Pickup stands on land: " + pickup.name)
 		check(not ids.has(pickup.pickup_id), "Pickup IDs are unique")
 		ids[pickup.pickup_id] = true
-	check(map.get_node("Exits").get_child_count() == 2, "Lavender and Route 11 gate exits remain")
+	check(map.get_node("Exits").get_child_count() == 5, "Route 12 retains its four regional exits and fishing house entrance")
+	var house_exit := map.get_node("Exits/ToFishingBrotherHouse")
+	check(house_exit.target_scene_path == "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn", "Fishing house entrance targets its interior")
+	check(map.get_node("Spawns/FromFishingBrotherHouse").position == Vector2(1040, 2544), "Fishing house return spawn matches its Tiled arrival tile")
+	var house := (load("res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn") as PackedScene).instantiate()
+	check(house.get_node("Exits/ToRoute12").target_scene_path == "res://scenes/overworld/kanto/routes/kanto_route_12.tscn", "Fishing house exit returns to Route 12")
+	check(house.get_node("Spawns/FromRoute12").position == Vector2(304, 464), "Interior arrival spawn matches its Tiled arrival tile")
+	house.free()
 	map.free()
-	if not failed: print("PASS Route 12: encounters, 16 trainers, fishing guru, pickups and safe placement")
+	if not failed: print("PASS Route 12: encounters, trainers, pickups, safe placement and fishing house connection")
 	quit(1 if failed else 0)
 func clear_cell(map: Node, cell: Vector2i) -> bool:
 	return map.get_node("Tiles/Collision").get_cell_source_id(cell) == -1 and map.get_node("Tiles/Water").get_cell_source_id(cell) == -1
