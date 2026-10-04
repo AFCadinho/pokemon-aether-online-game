@@ -63,6 +63,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_exit"]
 size = Vector2(32, 160)
 
+[sub_resource type="RectangleShape2D" id="HorizontalGuardInteraction"]
+size = Vector2(160, 160)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0kcpy"]
 texture = ExtResource("7_6pqal")
 texture_region_size = Vector2i(32, 32)
@@ -164,8 +167,13 @@ y_sort_enabled = true
 
 [node name="GateNPC" parent="Entities/NPCs" unique_id=441392445 instance=ExtResource("5_7oyuy")]
 position = Vector2(496, 208)
+npc_definition_id = "horizontal_gate_attendant"
 npc_sprite_frames = SubResource("SpriteFrames_vbqux")
 manual_interaction_reach_tiles = 2
+requires_party_pokemon = false
+
+[node name="CollisionShape2D" parent="Entities/NPCs/GateNPC/InteractionArea" index="0"]
+shape = SubResource("HorizontalGuardInteraction")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1026242201]
 

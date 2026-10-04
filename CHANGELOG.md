@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make horizontal gate attendants reachable across the counter and connect their dialogue to shared server content.
+
 - Add Shiny Primal Kyogre and its 1,000-Gem box; split Gift Store mounts into Land and Surf tabs with mounted previews.
 
 - Make horizontal transition buildings inherit the authored template collision tiles and remove the Route 15 gate's client-side Fuchsia doorway blockade.
