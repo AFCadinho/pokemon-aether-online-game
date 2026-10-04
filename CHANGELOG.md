@@ -1,28 +1,18 @@
 # Changelog
 
 ## 0.3.91
-
 ### World, Story, and Maps
-
-- Add the Route 7 exterior from the artist TMX and connect it bidirectionally to its Underground Path entrance.
-- Set Route 12 to 10 overworld Pokémon and Routes 13, 14 and 15 to 8 each, with four water Pokémon on each of Routes 12–14.
+- Add Route 7 and connect it to the Underground Path, with entrances open in both directions.
+- Set overworld populations to 10 Pokémon on Route 12 and eight each on Routes 13–15, with four water encounters on Routes 12–14.
 - Add the horizontal Route 8–Saffron gate with a story-locked attendant and two-way city connections.
 - Add twelve overworld Pokémon with route habitat patrols on Kanto Routes 12, 13, 14 and 15.
 - Add the Route 8 Underground Path entrance and horizontal tunnel through to the Route 7 entrance.
-- Refresh Route 15's visual after the latest artist TMX correction.
-- Reimport Route 15's overworld visual from the latest artist TMX.
 - Expand sleeping Snorlax's roadblock to 3 by 3 tiles and enlarge its interaction area to cover every adjacent edge.
 - Fix the Route 15 to Route 14 transition failing to find its arrival point and leaving the map blank; move Route 14's Biker Malik off a blocked tile.
-- Reimport Route 15's overworld visual from the updated artist TMX, keeping stale embedded layers removed.
-- Add a separate Surf water connection between Kanto Routes 12 and 13 with dedicated arrival points.
-- Refresh Route 14's imported overworld visual from the updated artist TMX.
-- Reimport Route 14's overworld visual from the artist TMX.
-- Reimport Route 13's overworld visual from the artist TMX.
-- Add Route 14 from the artist Tiled visual and connect it bidirectionally with Routes 13 and 15; add the matching Route 15 scene.
-- Add Route 13 from the artist Tiled visual and connect it bidirectionally with Route 12.
+- Add Route 14, connect it to Routes 13 and 15, and add the matching Route 15 area.
+- Add Route 13 and connect it to Route 12.
 - Use the new illustrated Kanto Town Map, align every location and Route 1–25 with its artwork, and show the current position on newly added routes, towns, and caves.
-- Reimport Route 21 and compact Tiled atlas source IDs so all map cells resolve correctly in Godot.
-- Add the artist-authored Route 8 exterior and connect its eastern exit to Lavender Town.
+- Add Route 8's eastern exit and connect it to Lavender Town.
 - Give Rock Tunnel B1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
 - Give Rock Tunnel 1F Pokémon distinct roaming rhythms and randomized pauses, and add localized interaction text for its missing ambient Pokémon.
 - Added Diglett and a rare Dugtrio roaming the Diglett Cave tunnel with varied pacing.
@@ -30,19 +20,14 @@
 - Route 11's roaming Pokémon now use distinct movement speeds and randomized pauses to avoid synchronized pacing.
 - Desynchronize Vermilion City's moving Pokémon with distinct pause timings and randomized waits.
 - Route 6 wild Pokémon now pause at varied, randomized intervals and move at different speeds.
-- Add a reusable static weekly boss scene with red nameplate text and server-status/difficulty hooks for future bosses.
 - Route 5 Pokémon move more slowly, with varied pauses between patrol steps.
 - Gary lets players enter Pokémon Tower 2F and retreat freely, stopping them only when they pass him toward 3F.
 - Pokémon Tower plays its own FireRed/LeafGreen remastered soundtrack by Zame, converted to Ogg Vorbis.
 - Gate Pokémon Tower 7F behind an invisible spirit and the Silph Scope; Gary now explains that ordinary Ghost-type Pokémon remain visible and points the next main objective toward Saffron.
-- Update the Power Plant visual to the latest Tiled import.
 - Add a swimming Magikarp to the pond in Route 5’s Day Care garden.
 - Added six overworld Pokémon to Kanto Route 11, including Diglett by the Diglett Cave entrance.
 - Added a resident and an overworld Pokémon to each of Lavender Town's three previously empty houses.
-- Pokémon Tower uses the latest artist visual, while retaining the manually set stair transitions and directional blocks.
-- Pokémon Tower uses the latest TMX visual with updated tombstones, floors and healing seal.
 - Added Rattata and Ekans to Route 9, and Spearow and Sandshrew to Route 10 as roaming overworld Pokémon.
-- Pokémon Tower now uses the updated artist visual, retaining the floor masks and manually placed arrival points.
 - Lavender Town House 1 now has the Lavender Home interior and a passageway to and from the purple house to the northeast.
 - Lavender Town House 2 now has the Mauve interior and a passageway to and from the little blue house to the southwest.
 - Lavender Town House 3 now has the blue artist interior and a passageway to and from the house to the southeast.
@@ -50,69 +35,43 @@
 - Upon entering Rock Tunnel from Route 10, the player now looks into the cave.
 - Rock Tunnel's Mysterious Trainer stays hidden until the C staircase, then appears behind the player through the same blue rift effect as Mt. Moon.
 - Rock Tunnel's Mysterious Trainer now challenges at the fixed middle C staircase, instead of every exit; the opponent's Pokémon level is displayed as ???.
-- Route 10 once again uses the visual from the updated Tiled map.
-- The Vermilion City visual has been re-imported from the updated Tiled source.
 - Lavender Town now has an active Aethernet Beacon, a Keeper and safe arrival position; Meowth replaces the Cubone reserved for Fuji's house.
 - The Pokémon Center in Lavender Town no longer contains Cubone; that Pokémon is being saved for Mr. Fuji's house.
 - After Oak's advice about Rock Tunnel, the main quest activates the route to Lavender Town. There, a resident automatically warns about Pokémon Tower, Team Rocket and the missing Mr. Fuji.
 - After Lt. Surge is defeated, the story sends the player to the sealed Saffron Gate and then back to Oak for advice on Route 9, Route 10, and Rock Tunnel. Saffron remains closed server-side until the later Celadon tea quest.
 - In Route 2 House, the two residents have been replaced by Oak's assistant, with a side quest to capture ten different Pokémon for HM Flash.
 - Diglett Cave now uses the Viridian Forest theme; both Rock Tunnel floors use the Mt. Moon theme.
-- The Route 10 visual has been re-imported from the updated artist TMX.
-- The S.S. Anne-captain uses the Mr. Briney sailor portrait; Gary disappears after his defeat as soon as SS Anne 2F reloads.
+- Give the S.S. Anne captain Mr. Briney's portrait and remove Gary after his defeat.
 - Stair crossings in Diglett Cave and Rock Tunnel allow the player to look straight ahead out of the stairs; maps and server use the same direction and arrival position.
 - On all SS Anne stairs, the player looks straight ahead to the right upon arrival, through the open side of the stairs.
-- Lavender Town has preliminary exits and arrival spawns for Route 8 to the west and Route 12 to the south; the existing northern connection to Route 10 will remain active.
 - Lavender Town and the northern branch now use Zame's remastered HeartGold/SoulSilver soundtrack.
-- Lavender Town now has its own Tiled visual and a transition to and from Route 10 via Lavender Town North; the collision layer is ready to be filled in.
+- Connect Lavender Town to Route 10 through its northern exit.
 - Players now look in the direction of the stairs at stair crossings in SS Anne, Diglett Cave, and Rock Tunnel.
-- The visuals of SS Anne 1F, 2F and B1F have been re-imported from the updated artist TMX files.
 - Rose's Titanic quest is now available in Trainer Progress at Side Quests, with reset, activation and completion.
 - Vermilion City and Route 11 now have separate north and south transitions with spawns on the corresponding path.
 - Rose and the player turn back to the sea before the Titanic pose.
 - The remastered soundtracks now play in Vermilion City, the S.S. Anne and on Routes 11–15.
-- The SS Anne 1F visual once again uses the updated artist TMX.
 - Tourist Sana on SS Anne 3F has been replaced by Beauty Rose, with a brief Titanic reference.
-- The SS Anne 3F visual has been re-imported from the updated Tiled source.
-- The SS Anne 2F visual has been re-imported from the updated Tiled source.
 - Nurse Joy on SS Anne 1F now also sets your return spot to a spawn marker next to her.
 - The rest room on SS Anne 1F now has Nurse Joy as a healer.
 - Passages within the same map, including the rooms of SS Anne 1F, remain usable after going there and back.
 - The S.S. Anne storyline begins with the skipper's favor: find boastful Gary through clues from guests and crew, defeat him at the captain's cabin, then help the seasick, exhausted captain with ginger tea for HM Cut.
 - Vermilion's Aether Beacon and Keeper now join Aethernet Travel, with local attunement, Aether Anchor selection, and an arrival point beside the Beacon.
-- The shared Vermilion house visual has been re-imported with the saved TMX layer layout.
-- Vermilion Port Exterior uses the re-imported artist TMX visual, including updated tile layers.
-- Story Progress in the dev tools has Vermilion/S.S. Anne checkpoints; the crew quest is adjustable via Side Quests.
-- The three houses in Vermilion City use the reimported shared artist TMX visual.
-- Vermilion Port Exterior uses the latest artist-authored TMX visual.
-- Add four S.S. Anne floors with connected cabins, a kitchen, and a deck. The skipper at Vermilion Port checks the S.S. Ticket; leave collision layers empty for manual setup.
-- The collision tiers of the Vermilion Houses, Pokemon Fan Club, and Gym are empty for manual furnishing.
-- Add the Port Exterior visual south of Vermilion City, with connecting arrival points and an empty collision layer for manual setup.
-- Kanto Route 11 uses the re-imported artist-TMX visual.
+- Add four connected S.S. Anne floors with cabins, a kitchen, and a deck. The skipper at Vermilion Port checks the S.S. Ticket.
+- Open Vermilion Port south of the city and connect it to the harbor entrance.
 - The entrance to Vermilion Port is now on the visible harbor door in Vermilion City; returning places you in front of the door with the right facing direction.
-- The Collision layer of the Vermilion Port interior is empty so it can be filled in manually.
 - Vermilion Port has an interior with the artist-TMX visual and passageways between the city and the docks.
-- Vermilion City uses the re-imported Artist TMX visual, with updated terrain, grass, and object layers.
 - Painted water edges in Vermilion City are now recognized as water: walking is blocked, and Surf and fishing use the Water layer.
-- The three homes in Vermilion City have accessible interiors with the shared Vermilion House visual, collision, and their own connections to the city.
-- The S.S. Anne 1F uses the latest artist-authored TMX visual.
-- The S.S. Anne B1F uses the latest artist-authored TMX visual.
-- The S.S. Anne 2F uses the latest artist-authored TMX visual.
-- The Pokémon Fan Club uses the latest artist-authored TMX visual.
-- The ocean around SS Anne 3F now moves with the four water animation frames from Tiled.
-- The dark blue water and coastal tiles in Vermilion City now move with the same water animation as Cerulean; banks, collision and existing grass animations are retained.
-- The Pokémon Fan Club uses the updated artist TMX visual.
+- Animate Vermilion City's water to match Cerulean while keeping the shoreline and grass intact.
 - Add localized Route 8 sign text and show its existing location preview when inspected.
 - Restore Route 8's spawn and exit for the Saffron gate.
 - Make horizontal gate attendants reachable across the counter and connect their dialogue to shared server content.
-- Make horizontal transition buildings inherit the authored template collision tiles and remove the Route 15 gate's client-side Fuchsia doorway blockade.
-- Add the horizontal Route 15–Fuchsia transition building and its two-way Route 15 entrance, with the Fuchsia doorway reserved for its future connection.
+- Fix the Route 15 gate so players can pass through the doorway and use its two-way connection.
+- Connect Route 15 with a two-way passage; its Fuchsia exit will open when that area becomes available.
 - Add a framed location preview to the Town Map, sharing existing sign artwork and new illustrations for every remaining settlement, route, and special location.
-- Add Route 12 from the artist Tiled map, connected to Lavender Town and the Route 11–12 transition building; register Route 8 and Route 12 in the browser map module.
-- Reimport Route 8's artist visual from the updated Tiled map, rebuilding its compact lossless atlases.
+- Connect Route 12 to Lavender Town and the Route 11–12 passage.
 - Restore the walkable Lavender Town exit to Route 8 and its transition arrow after the exit reverted to a disabled placeholder.
-- Start Beacon transit lookups after the map's first render, handle network failures without a JSON parser error, and reject empty or malformed successful replies.
-- Reuse loaded profile preferences at startup to avoid a redundant settings request and its timeout during world loading.
+- Aethernet travel now gives a clear response when the service cannot complete a trip.
 - Add localized text and illustrated previews for the Lavender Town and Pokémon Tower signs.
 - Add localized Rock Tunnel sign text and preview art on Route 10.
 - Add localized Route 9 sign text and a new illustrated preview.
@@ -123,13 +82,11 @@
 - Name Mr. Fuji's helper Reina in her overworld label, quest tracker and Trainer Progress checkpoints.
 - Lavender Resident now uses an appropriate portrait of an older woman during her main quest dialogue and regular conversations.
 - Android input fields remain visible when typing: the keyboard fix now also takes into account the actual viewport scaling, without changing the original UI layout.
-- The game now supports staff-only access: allowed accounts can continue to log in while regular players receive a maintenance message.
-- Keep S.S. Anne, the harbor interior, and Lavender’s Pokémon Center in the separate browser map pack; report outdated folder selections before export.
-- Map transitions now use the arrival direction from the client scene; the server validates the direction and no longer overwrites it with duplicate catalog metadata.
-- After Oak's advice, the main quest tracker and developer checkpoints now separate the milestones for reaching Rock Tunnel, crossing it, meeting the masked trainer, and reaching Lavender Town.
+- Fix map transitions so players arrive facing the intended direction.
+- Oak's advice now guides players through Rock Tunnel and the masked trainer to Lavender Town.
 - The guards at both Saffron gates display their lockdown dialogue when server access blocks passage.
 - The Fishing Guru in Vermilion City is now Fishing Guru Sam; the name also appears that way in quest texts and all translations.
-- Route 10 and Lavender Town are now directly connected in both directions; Lavender Town North has been removed from the world and staff teleport catalogue.
+- Connect Route 10 and Lavender Town directly in both directions.
 - Rose on the S.S. Anne now uses her Beauty portrait and own dialogue; her Titanic posequest gives a one-time PP Up.
 - Thieving prompts have a larger hand-and-coin icon, a rounded violet surface, and clearer hover/press feedback matching the fishing button style.
 - The fishing start button uses a larger illustrated rod icon, a rounded navy surface, and clearer hover/press feedback.
@@ -138,17 +95,15 @@
 - Player and future-self dialogue portraits show the full trainer-card artwork at its original resolution, without a zoomed crop.
 - The Fishing Guru is now giving his Old Rod and Fishing Lesson quest in House 1 in Vermilion City. His teaching reward and assistance will move with him; existing quest progress is retained.
 - Player dialogue portraits now use trainer card artwork; Mt. Moon's future self uses the matching masked Mysterious Outfit portrait.
-- Add the new Tiled visual, Lt. Surge, a Gym Guide, and a city connection to Vermilion Gym. Leave the prepared terrain collision layer empty for manual setup.
+- Add Vermilion Gym with Lt. Surge, a Gym Guide, and a connection to the city.
 - Vermilion City has an accessible Pokémon Center with the standard amenities, three of its own visitors, and Mareep, Squirtle, and Wingull with localized dialogue.
 - Mt. Moon's fossil ambush only stops players while its story step is active, and failed cutscene attempts restore the actors and follower before retrying.
-- Android assets are pinned to the signed APK build, allowing Android test downloads and releases independently of browser publication.
 - Fixed the entrances to Rival's House and the Cerulean Bike Shop so stepping onto the door tile reliably enters the building on Android and other platforms.
 - Browser map downloads now cover the current Kanto world beyond Cerulean, including Route 5, Vermilion, Rock Tunnel and Cinnabar. Normal progression requirements still apply.
 - Restore water animations in Vermilion City and Route 6 after map reimports, preserving their current layouts and existing grass animations.
-
+- Refresh the map visuals across Routes 8, 10, 13–15, and 21; Lavender Town, Pokémon Tower, and the Power Plant; Vermilion City, its homes and port; the Pokémon Fan Club; and the S.S. Anne.
 ### Encounters and Field NPCs
-
-- Correct Kanto route pickup, sign, map-marker, and overworld Pokémon data detected by the release gate.
+- Correct Kanto route pickups, signs, map markers, and overworld Pokémon.
 - Populate Kanto Route 8 with FireRed/LeafGreen trainers, grass encounters and berries, with HeartGold/SoulSilver night species and TM41.
 - Populate Route 15 with day/night grass encounters, twelve FR/LG trainer NPCs (Ron and Mya as singles), and Rain Dance, PP Up and Rose Incense pickups.
 - Fix sleeping Snorlax being ignored by player movement checks, keeping its roadblock active until that player's encounter is completed.
@@ -165,7 +120,6 @@
 - Add six overworld Pokémon around Route 5’s rocky slopes, Day Care garden, and path, plus two NPCs with dialogue.
 - Rock Tunnel 1F now has seven additional overworld Pokémon from the cave encounters.
 - Rock Tunnel B1F now has seven additional overworld Pokémon from the cave encounters.
-- Fixed false NPC metadata 404 errors for Pokémon Tower’s overworld Pokémon by using their dedicated Pokémon metadata catalog.
 - Add five interactable overworld Pokémon to Route 6, drawn from its local grass encounters.
 - Populate Pokémon Tower with eight Hex Maniacs, four visitors, a 5F healing-seal NPC and seven Ghost Pokémon from generations 1–7; localize their conversations and register the healing arrival point.
 - Mt. Moon 1F, B1F and B2F now have overworld Pokémon matching their cave encounter pools.
@@ -175,279 +129,148 @@
 - Route 9, Route 10, and both Rock Tunnel floors now contain visible, interactable overworld Pokémon.
 - Undefeated trainers on the S.S. Anne now automatically challenges you within three tiles of their line of sight.
 - The S.S. Anne has eight additional passengers and crew with localized dialogues and six optional FRLG trainers on levels 17–21 across the four floors.
-- Route 11 has ten FRLG trainers and gameplay grass that links the wild encounters to the existing visual; tile collision remains manual.
-- Vermilion Port uses the same animated seawater and wharf tiles as Vermilion City; collision, NPCs and passageways are retained.
-- The S.S. Anne has Gary on 2F, a captain quest with HM Cut, kitchen and crew NPCs, optional trainers and a rest point. There is a Cut tree near the Vermilion Gym; tile collision remains manual.
+- Add ten FireRed/LeafGreen trainers and wild encounter grass to Route 11.
+- Vermilion Port now has animated seawater and matching wharf visuals.
+- Add Gary, the captain’s HM Cut quest, kitchen and crew NPCs, optional trainers, and a rest point aboard the S.S. Anne. Add a Cut tree near Vermilion Gym.
 - The main quest after Misty refers to the SS Anne skipper in Vermilion Port. The conversation with the skipper shows your ticket and completes the quest, with a main quest marker at the NPC.
 - Add ten outdoor NPCs to Vermilion City who players can interact with and pickpocket, along with six roaming or resting overworld Pokémon.
 - Pickpocket attempts show a short animated meter above the NPC, wait for the server result, and display success, detection, or interrupted feedback with confirmed money and XP. The pickpocket pose now resolves its appearance service correctly.
 
-### Mounts, Cosmetics, and the Gift Store
-
-- Correct double-battle camera framing, Glaceon rider alignment, and walkable Kanto interior collision.
-- Raise the Rayquaza Mount Box price to 1,000 Aether Gems, with the same cost in Gift Voucher credit.
-- Add Shiny Primal Kyogre and its 1,000-Gem box; split Gift Store mounts into Land and Surf tabs with mounted previews.
-- Align Primal Kyogre's side-facing hull and rider with the water tile, removing the airborne appearance and vertical swimming jump.
-- Add Primal Kyogre as an unlockable Surf mount, with fitted rider layers, swimming poses and a mount-specific fishing seat.
-- Restyle the Gift Store's voucher purchase confirmation with the reusable Aether dialog.
-- Add Shiny Cobalion and its 500-Gem Mount Box to the Gift Store, with mounted normal/shiny previews, preserved rider masking and Shiny Tracker support.
-- Preserve the player's head when riding Cobalion by masking only pixels covered by the mount foreground, removing the oversized front head mask.
-- Shift Cobalion, Glaceon and Shiny Glaceon mount art 16 pixels lower on their padded sheets, and layer Cobalion's full front-facing head over the rider.
-- Bring Cobalion's front-facing eyes and muzzle in front of the rider so its face stays visible while the horns remain behind the player.
-- Lower Cobalion, Glaceon and Shiny Glaceon riders by 16 pixels in every direction so their visual position aligns with nearby NPCs.
-- Give Mega Absol Z a compact standing pose with planted paws in side views, using separate idle layers while preserving its walking animation.
-- Add Cobalion as a native-size four-direction land mount using the supplied sheet and original player riding pose.
-- Set Rayquaza, Shadow Lugia and Mega Alakazam Mount Boxes to 750 Aether Gems; Glaceon remains 500 Gems, with unchanged rewards and shiny pity.
-- Remove the stray inner paw silhouettes in Mega Absol Z side-walking contact frames so its overlapping legs read clearly.
-- Remove the Mega Garchomp mount, its selection entry, item text and bundled mount assets.
-- Add the 500-Gem Glaceon Mount Box to the Gift Store with player-mounted normal/shiny previews and Shiny Tracker support.
-- Give Mega Absol Z clearer planted and lifted walking paws with a wider stride, preserving its upper-body artwork and fitted rider positions.
-- Add Shiny Glaceon using the existing shiny follower palette, preserving the fitted riding pose, native scale and side-ear layering.
-- Lower the Glaceon rider slightly to sit against its back, preserving native sprite scale, side-ear layering and synchronized walking motion.
-- Add the native-size Glaceon land mount with the approved riding pose, corrected side-ear layering and a compact Bag icon.
-- Lower the front-facing rider on both Absol mounts for a closer seated fit while preserving synchronized walking motion.
-- Move both Absol riders forward over the shoulders in side views, preserving the complete seated pose and synchronized walking motion.
-- Preserve the complete seated player silhouette on both Absol mounts in side views, including hips, trousers and shoes, through every walking phase.
-- Keep Absol mount feathers, fur and tails visible around the seated player, protect the rider face from foreground clipping, and synchronize directional seat movement with all walking phases.
-- Add follower-based Mega Absol and refresh Mega Absol Z with approved compact artwork, fitted player masks, four-direction animation and individual icons.
-- Load mount PNGs directly when a newly merged asset has not yet been imported, restoring Mega Absol Z visibility and its Bag icon in an already open checkout.
-- Add Mega Absol Z as a land mount with four-direction animation, fitted riders, foreground masks and a dedicated Bag icon.
-- Add Shiny Mega Alakazam and its 500-Gem Mount Box to the Gift Store, using the existing mount pity and Shiny Tracker.
-- Refresh rider body and clothing masks when switching mounts so the previous mount cannot leave missing body parts.
-- Keep mounted rider, clothing and mount foreground at one ground-based world depth, preserving their internal layer order so map objects do not cut between mount parts.
-- Give Mega Alakazam a tightly framed icon so it is clearly visible in the Bag and mount selector.
-- Keep Shadow Lugia riders between the two raised side wings by excluding the far wing from the foreground and rider mask, for normal and shiny variants.
-- Fix normal and shiny Shadow Lugia head seams and render the near wing in front of the rider in side views, including idle.
-- Keep the Gift Store window centered at a stable size across products and categories, with scrolling item details and scaling for smaller screens.
-- Bring Mega Alakazam closer to its rider and replace the solid purple levitation ring with subtle, translucent psychic wisps.
-- Restore Mega Alakazam's original 64×64 sprite scale to keep its pixels even, retaining the rider's foot anchor and levitation pose.
-- Align the Gift Store Gem and voucher balances in matching rows with equal icon sizes and clearer spacing.
-- Anchor the Mega Alakazam rider to the player's normal foot position and ground shadow in every direction, preserving the smaller mount and approved pose.
-- Open current Aether Gift Voucher credit from the Bag or Ctrl+3 in the default hotbar, with a localized balance dialog and support for moving the shortcut.
-- Reduce Mega Alakazam's mount sprite by 29% and realign the psychic ring and rear rider while preserving player size and the seated pose.
-- Add the Mega Alakazam levitation mount with the approved riding pose, psychic ring and lower rear rider.
-- Desynchronize Route 9 Pokémon with distinct movement speeds, randomized pauses, and localized metadata for the four mountain Pokémon.
-- Add the permanent Aether Gift Voucher Key Item, separate Gift Store balances and voucher checkout with clear untradeable purchase and box-content notices.
-- Allow land mounts throughout caves, including both Diglett's Cave entrances, while keeping buildings restricted.
-- Style mount preview toggles as compact Aether buttons with shiny/play/pause icons, colored active states and localized On/Off labels.
-- Shorten Rayquaza and Shadow Lugia Mount Box store descriptions to the included mount and 50% initial shiny chance.
-- Show mount box costs in Aether Gems only and preview the player riding either normal or shiny mounts, with animation and direction controls.
-- Add the 500-Gem Shadow Lugia Mount Box to the Gift Store and Shiny Tracker, with localized odds and mount previews; remove the unimplemented Nimbus and Aether Board shop previews.
-- Add the approved pearl-white Shiny Shadow Lugia as a separate hovering mount with its own item and Bag icon, preserving the corrected head/tail overlap.
-- Keep Shadow Lugia’s head in front of the rider by including directional appearance-layer offsets in mount masking for local and remote players.
-- Correct the viewer-left eye in downward-facing frames 1 and 3 of the normal and shiny Rayquaza mounts.
-- Add Pokémon and Mounts tabs to the Shiny Tracker, show mount box odds and history, and open owned boxes with the disclosed 50%–80% shiny pity rules.
+- Route 9 Pokémon move at varied speeds and pause at different intervals.
 - Lavender Town now has four Pokémon on its mountain approaches and two more in town, including Generation II and VI species.
-- Add the approved Shiny Rayquaza as a separate hovering mount with its own item and Bag icon; preserve the normal Rayquaza pose, size and riding behavior.
-- Add the approved Shadow Lugia mount with a hovering wing animation and a precise rider mask that keeps its head in front and tail behind the rider.
-- Rayquaza now hovers above a ground shadow while moving and standing still, with a calmer flight animation and no sand footprints.
 - Route 9 has four mountain Pokémon from generations II, III, IV and VI.
-- Added the larger Rayquaza land mount, unlocked by a manually granted mount item; larger mount masks preserve the existing player and outfit scale.
 - Route 10 has four additional overworld Pokémon on the mountainsides: Aron, Roggenrola, Carbink, and Rockruff.
 - Route 3's mountain ridges now have roaming Geodude and Onix.
-- Calyrex Ice Rider and Shadow Rider, Zacian Crowned and Zamazenta Crowned are locally qualified for 3D battles, normal and shiny, with individual download bundles and pre-loaded models.
-- Six more Pokémon have been approved locally for 3D battles, with normal/shiny models and individual download bundles: Lugia, Ho-Oh, Vibrava, Flygon, Swanna and Mandibuzz.
 - Open the Vermilion City Pokémon Fan Club with the Chairman and his Bike Voucher quest, three new visitors, and Rapidash, Eevee, and Clefairy. Move the Chairman from the Cerulean Bike Shop.
+### Mounts, Cosmetics, and the Gift Store
+
+- Add Primal Kyogre as a Surf mount, with a Shiny variant, a fitted riding pose, swimming animation, fishing seat, and a 1,000-Gem Gift Store box.
+- Add Cobalion as a four-direction land mount, with a Shiny variant, mounted previews, and Shiny Tracker support.
+- Add Glaceon as a land mount, with a Shiny variant and mounted previews.
+- Add Mega Absol and Mega Absol Z as land mounts, with four-direction animations, fitted riders, and separate Bag icons.
+- Add Mega Alakazam as a levitating mount, with a Shiny variant.
+- Add Shadow Lugia and Shiny Shadow Lugia as hovering mounts, with mounted previews and Shiny Tracker support.
+- Add Rayquaza and Shiny Rayquaza as hovering mounts, plus Rayquaza as a larger land mount.
+- Set Mount Box prices to 1,000 Gems for Primal Kyogre; 750 Gems for Rayquaza, Shadow Lugia, and Mega Alakazam; and 500 Gems for Cobalion and Glaceon. Boxes retain their rewards and shiny-pity rules.
+- Organize Gift Store mounts into Land and Surf tabs. Preview normal and shiny mounts with riding animations and direction controls, and show box costs in Aether Gems.
+- Add the permanent Aether Gift Voucher Key Item, separate Gem and voucher balances, and checkout notices for untradeable purchases and box contents.
+- Open the current Gift Voucher balance from the Bag or Ctrl+3, with a localized dialog and a movable hotbar shortcut.
+- Add Pokémon and Mounts tabs to the Shiny Tracker, with mount-box odds, purchase history, and the disclosed 50%–80% shiny-pity rules.
+- Allow land mounts in caves, including both Diglett’s Cave entrances; keep buildings mount-free.
+- Improve rider positioning, mount poses, and layering across Cobalion, Glaceon, Absol, Mega Alakazam, Primal Kyogre, Rayquaza, and Shadow Lugia.
+- Keep the Gift Store centered across products and categories, with scrollable item details and layouts that scale to smaller screens.
+- Align Gem and voucher balances in matching rows with clearer spacing, and use the shared Aether dialog for voucher-purchase confirmation.
 
 ### Battles and Battle Presentation
-
 - After the Pokémon Tower battle with Gary, the main quest directs players to Route 8’s eastern Saffron guard, then asks them to find another entrance.
-- Give nearby wild and NPC spectate indicators priority over tap/drag movement controls so clicking a battle opens spectating.
-- Restore clicking nearby wild and NPC battle indicators to spectate when physics picking is unavailable.
-- Fix local editor discovery of the installed 3D outdoor backgrounds so battles show their scenery instead of the test floor.
+- Click nearby wild or NPC battle indicators to spectate, including when movement controls overlap them.
 - Simplify the weekly boss selector to difficulty names; show Zapdos's wild-encounter unlock hint only until the first Hard victory.
-- Handle non-JSON battle API errors cleanly without emitting Godot JSON parse errors.
+- Show a clear message when battle data cannot be loaded.
 - Style the weekly boss selector with the Aether modal, ordered difficulty cards, server-provided levels and base rewards, and a separate Hard-unlock hint.
-- Gary disappears after his Pokémon Tower battle when the player leaves 2F, including internal stair refreshes.
+- Gary leaves Pokémon Tower 2F after his battle.
 - Gary automatically stops the player on Pokémon Tower 2F for his active story battle.
 - Restore Gary on Pokémon Tower 2F after Reina’s conversation, with the existing story battle, Gary artwork and post-victory Silph Co. hint.
 - Restore the colors of available moves after trainer battle entry so usable moves no longer appear disabled on the first turn.
 - Adventure Party doubles now use the type icon of the available Z-Move, like regular battles; specific Z-Moves retain the generic Z symbol.
-- The on-demand 3D content route can use the entire approved catalog of 1,139 bundles, including registered alternate and Mega forms; models remain downloadable for each required Pokémon.
 - Classic battles use the final playing field size from the first frame; the invisible control retains its space during loading, so that the arena and elements no longer shrink when Pokémon appear.
 - Lavender's story continues through Mr. Fuji's helper and Cubone to Gary's Pokémon Tower battle and Silph Co. hint, with new Trainer Progress checkpoints.
 - Adventure Party doubles show two separate party sections: Player 1 on top and Player 2 on bottom, each with three slots. A solo NPC's entire team stays together in the opponent rail.
-- Female and male Mega Meowstic now resolve to the same reviewed 3D model, matching the shared in-game Mega design.
-- Qualify 24 additional Mega forms for local 3D battles in normal and shiny variants, with separate download bundles. Male and female Mega Meowstic now share the same reviewed model bundle.
+- Mega Meowstic uses the same model design in battle for both forms.
 - The HP bar stays above tall 3D animations like Mega Greninja's water star, even when the usual top margin doesn't leave enough room.
 - Pokémon Tower in Lavender Town now has seven connected floors with floor masks and camera borders that hide the other floors.
-- Classic NPC battles show the arena directly above the overworld, including during battle creation and automatic Pokémon selections, without a full-screen transition or entrance zoom.
-- Qualify 71 additional Mega forms for local 3D battles in normal and shiny variants, with separate download bundles and support for Mega X, Y, and Z. The bundles are verified on R2 for a future release.
-- Fullscreen NPC battles show arena and trainers while retrieving battle data and automatic lead choices. The fixed pause after trainer dialogue has been removed.
-- Immersive wild battles calculate the final element sizes before the fade, so that the arena, Pokémon and HUD don't appear large first and then shrink.
-- Wild battles show their arena and start the full screen fade while saving the position and retrieving the battle data. The opponent and actions will only appear once the real data is available.
+- NPC and wild battles now show the arena promptly, with smoother transitions while battle data and Pokémon sprites load.
 - The Android app retains its previous login, chat, menu and battle layout; the compact mobile browser layout is limited to browsers. Input fields remain visible above the keyboard.
-- Trainer vision sensors are safely updated after physics callbacks so that the mandatory Rock Tunnel battle no longer causes a physics error.
-- Open battles on desktop, browser and Android without waiting for the first Pokémon sprites; missing sprites load in the background, even with a 2D fallback.
-- Fullscreen battle entrances fade the entire battle screen as one layer above the overworld, including background, Pokémon and controls.
-- The fullscreen battle fade remains visible after a heavy loading frame. Without an overworld snapshot, the game still fades instead of switching screens abruptly.
-- Fullscreen battles now slide in from the visible overworld view without a black loading screen or flashes; Android waits for the first sprites before the slide starts.
-- Fullscreen battles now appear with a gentle 180ms fade-in on top of the visible overworld, without scrolling, black loading screen or flashing; Android waits for the first sprites before the fade begins.
+- Fix Rock Tunnel trainer encounters so the required battle starts reliably.
+- Show battles promptly while Pokémon sprites load in the background.
 - Rock Tunnel's masked visitor is identified as Mysterious Trainer, uses layered trainer art in battle, appears beside the player at mandatory exit encounters, remains visible until his farewell ends, and leaves no invisible blocking tile afterward.
-- Ogerpon Wellspring, Hearthflame and Cornerstone now have the correct shoulder and cloak colors, normal and shiny, with updated individual 3D bundles.
-- The Classic overlay opens up wild battles without transition latency or entrance fade; sprite downloads no longer prevent the battle screen from showing.
-- Wild battles in the Classic overlay keep the overworld visible, with brief dimming, a soft entrance, and a fade upon return.
+- Ogerpon’s Wellspring, Hearthflame, and Cornerstone forms now have their correct shoulder and cloak colors in battle.
+- Classic wild battles keep the overworld visible with a soft entrance and fade on return.
 - Future Self in Rock Tunnel now wears the same player-derived Mysterious outfit and dialogue portrait as in Mt. Moon, including during battle.
 - Rock Tunnel 1F exits now require a one-time Future Self battle using the player's final starter evolution and a level-cap-plus-10 Smogon set; the party is healed afterwards and the encounter completes on either result.
-- The six passengers on the S.S. Anne now cheer with both arms, like the audience in the PvP arena.
 - Rock Tunnel 1F and B1F now have rarity-selected FRLG encounters, HGSS cave additions, and the original local trainer battles.
-- Qualify seven additional battle forms for local 3D battles in normal and shiny variants: Aegislash Blade, Darmanitan Zen, Eiscue Noice, Mimikyu Busted, Morpeko Hangry, Palafin Hero, and Wishiwashi School. Preload each form before battle so it can change immediately.
-- Black Kyurem and White Kyurem are locally qualified for 3D battles, normal and shiny, with eight native animations and individual download bundles.
-- The 3D stage groups fixed bleacher sections and pauses audience animations off-screen. Distant spectators animate at 30 Hz; Pokémon keep their existing animation pace.
 - Route 9 and Route 10 now have FRLG trainer battles and rarity-selected wild encounters, with HGSS species as nighttime grass additions.
 - The PvP 3D arena mixes a full, simple stand with some Quaternius NPCs cheering with both arms.
-- Qualify the three Ogerpon mask forms and Terapagos Terastal/Stellar for local 3D battles in normal and shiny variants, with individual bundles and preloaded Terapagos form changes. New downloads on the same catalog path become available immediately.
-- The SS Anne passengers and their CC0 license are included in the game package; the desktop release controls the arena and animations from the exported Windows and Linux packages.
-- The audience in the SS Anne battle arena uses clothed Quaternius characters with skeletal animations for waving and resting.
 - The S.S. Anne battle deck is decorated with cheering passengers, deck lights, portholes, and a foredeck with a signal mast and ship fittings.
-- The SS Anne battle arena has a small group of six cheering passengers and sailors on the quarterdeck.
-- The last 15 DLC Pokémon have been locally approved for 3D battles, with normal/shiny, resting poses and individual download bundles.
 - All four SS Anne maps now also use the ship arena for PvP and combat with an included environment choice.
 - SS Anne battles now use its own 3D ship deck with wooden planks, railings, lifebuoys and moving sea.
-- Another 112 Pokémon have been approved locally for 3D battles, with normal/shiny models, controlled eye details and individual download bundles.
 - The approved fire effects for Ponyta, Rapidash, and Centiskorch are supported by the 3D battle renderer.
-- Paras is locally approved for 3D battles, with normal/shiny models, custom battle size and an individual download bundle.
-- Eight more Pokémon have been approved locally for 3D battles, with normal/shiny models and individual download bundles: Arctovish, Lillipup, Mr. Rime, Noctowl, Palpitoad, Poipole, Seismitoad and Trumbeak.
-- Another 76 Pokémon have been approved locally for 3D battles, with normal/shiny models and individual download bundles.
 - Skarmory flies 70 cm higher in 3D battles, while sleeping and fainting poses stay grounded. HP panels move up immediately for elevated 3D models.
 - Vermilion Gym has three new NPC trainers with Electric-type teams at levels 20–22, cash rewards, and localized battle dialogues.
-- Starting the game normally no longer activates a stale local sprite-review catalog that overrides on-demand 2D battle sprites. Launch a preview explicitly to review sprites.
 - Wild battles now use smoother sliding bands, a softer entry flash without a second flash on reveal, and an opaque cover while the first battle frame loads. Battle intros wait until the dedicated loading cover has cleared.
-- Another 56 Pokémon have approved normal/shiny 3D models in individual bundles. Colors, eyes, battle placement, animations and installation have been checked. The local catalog now includes 807 regular Pokémon plus Mega Dragonite.
-- Another 39 Pokémon have locally approved normal/shiny 3D models in individual bundles, with controlled colors, eyes, battle placement and animations. The catalog now includes 751 regular Pokémon plus Mega Dragonite.
-- Android HOME icons, Pokémon cries and the full-quality login video now download separately and remain cached between launches. Battle sprites also use a bounded persistent cache.
-- Sandslash and Toucannon have locally approved normal/shiny 3D models in individual bundles. Eyes, shiny colors, battle placement and Toucannon's wing transitions have been checked.
-
+- Android now includes Pokémon HOME icons and cries, plus the full-quality login video.
 ### Interface, Clients, and Tools
-
 - Shiny follower sparkles now surround the visible Pokémon and scale with its sprite, instead of floating above small followers.
 - Browser HOME icons now load individually when displayed. The world video on the login screen streams separately at its original resolution, reducing the required startup download.
-- The local browser preview loads the login video and Pokémon HOME icons correctly via the connected preview server.
 - Fishing shows animated waiting feedback, a bite sound and reaction ring, the current input hint, and distinct early/late results. Larger clickable prompts render above nameplates and the regular HUD.
 - Professor Oak's starter catalog and selection preview show normal forms to keep the shiny gift a surprise. Your future self in Mt. Moon summons a shiny final evolution of your chosen starter.
 - Browser players on phones and tablets now get a compact login, larger touch controls and collapsible HUD panels. Settings includes a saved UI scale slider with a reset button; login and chat follow the browser keyboard.
 - Android login fields and the in-game chat input now move above the keyboard while typing and return to their original position when it closes.
 - Android now uses immersive fullscreen mode to hide the system status and navigation bars while playing.
-- Browser cries and sound effects now load as separate audio files, reducing the initial game download.
-
-### 3D Model Catalog and Battle Arenas
-
-- Desktop 3D battles now ignore a saved forest manifest path when the file has moved and use the launcher-installed forest assets instead.
-- Desktop battles now support 2D sprites, 3D models on 2D backgrounds, and full 3D arenas. Sprites and approved models are cached per Pokémon when a map is entered, remain available locally, and can be removed in Settings. Battles fall back to 2D when a model is unavailable.
-- New desktop players now start in 3D battles. Battles automatically fall back to 2D if a model is missing or cannot be loaded.
-- The planned starter model pack is no longer downloaded in advance. The desktop client downloads models for the current party, map, and battles only when needed.
-- Desktop launcher updates now fetch only the approved 3D catalog index. Missing Pokémon models download individually before a 3D battle, with progress and an estimated time remaining. Older launchers also offer an available launcher update even if they do not know about the new bundle list; game and model downloads begin after restarting with the updated launcher.
-- Desktop release v7 activates catalog version 7 with 160 individually downloadable, approved normal and shiny 3D bundles.
-- Locally approved normal and shiny model bundles are ready for these catalog groups: 200 Pokémon; 144 Pokémon; 75 Pokémon; 71 Pokémon; 69 Pokémon; 32 Pokémon; 30 Pokémon; 17 Pokémon; 12 Pokémon; the final 25 Pokémon from batch 03; and 81 models for local Pokédex and summary-card review. Each model pair has its own downloadable or updatable bundle, and player availability depends on a separate desktop release where noted.
-- Additional individually bundled normal and shiny models are approved for Unown, Darmanitan, Wishiwashi, Silvally, Obstagoon, Cursola, Slugma, Magcargo, male Meowstic, Trevenant, Blastoise, Furret, Yanma, Entei, Mudkip, Solosis, Reuniclus, Incineroar, Primarina, Dewpider, Jirachi, Zekrom, Shroomish, and Bronzong. Review covered colors, eyes, animations, and battle placement. Fixes include Staryu’s gem, Vanilluxe’s ice and face, Xerneas’s battle scale, floor alignment for Doublade, Inkay, and Cosmoem, and keeping Mamoswine and Malamar above the floor during attacks.
-- The final 200-model set restores Typhlosion’s colored flames and other previously reviewed fixes. Other reviewed corrections include Torchic’s battle scale, eyes for Torchic, Dodrio, and Vileplume, and Jirachi’s and Zekrom’s repaired eyes and body parts.
-- New catalog model bundles preserve shared-texture shiny colors per part, including Veluza; glowing color regions, animated LED eyes, metal maps, and original lens transparency for Paradox Pokémon; custom smoke rendering and a clearer face for Gastly; and baked color regions in static fire effects, preventing white patches on Typhlosion’s flames.
-- Grimer and Muk catalog candidates render without seams between moving body parts. Additional source models and shiny materials retain metal, glow, and animated surfaces during catalog review.
-- The desktop launcher can download the approved catalog of 82 Pokémon plus Mega Dragonite in normal and shiny forms as individual bundles once release v5 is published. Mega Dragonite’s forms have a locally approved, updateable bundle for a later desktop release.
-- Mega Dragonite’s local 3D battle preview now uses measured ground correction for its original Mega pose and hides its own HP bar during transformation. Local 3D battles use the approved transformation effect, existing Mega sound, and original pose when a suitable model is available.
+- Reduce the browser's initial download by loading cries and sound effects separately.
+### 3D Battles and Arenas
+- Choose between 2D sprites, 3D Pokémon on 2D backgrounds, and full 3D arenas in desktop battles. Battles use 2D sprites if a model is unavailable.
+- Desktop battles now default to 3D, with an automatic 2D fallback when a model is unavailable.
+- The desktop client downloads Pokémon models as needed and shows download progress and an estimated time remaining.
+- In 3D battles, Mega Dragonite keeps its original pose and Mega sound; its HP bar hides during transformation.
 - Shared 3D double battles highlight the selected opponent along the Pokémon model instead of drawing a large frame around its click area. The camera moves smoothly behind and closer to the player’s Pokémon during their choice, then returns to the overview.
 - Shared double battles retain compact pixel portraits: both party trainers appear side by side on the left, while a generic encounter portrait or the opposing trainer appears on the right. Turn and camera controls move aside for the right portrait, and stay in the upper-right corner when no opponent portrait is shown.
 - Shared double battles play the usual damage sound with 3D hit reactions, show weather and terrain from the current battle state, report public field changes in the battle log, and scale stat changes alongside compact 3D HP cards. Poké Ball selection shows ball icons and a separate whole-number count.
-- Adventure Party double battles place both 3D Pokémon on each team side by side from the default camera, facing their respective opponents, with four compact HP cards above the field. Desktop battles show four approved 3D Pokémon with suitable framing, model animations, and target areas; if any active model is missing, the entire battle stays in the existing 2D layout.
-- Adventure Party encounters now explain when the local backend does not yet support the new route instead of reporting a connection error. Dev Tools spawns start one shared double battle with the selected Pokémon when a partner is available, so both players see the same battle; without a partner, no unintended single battle starts.
+- Adventure Party double battles show both teams side by side with compact HP cards. If a Pokémon lacks a 3D model, the battle uses the 2D layout.
 - Wild 3D battles use a calm default arena for grass, caves, or water. Trainer battles use the map’s arena, and Gym battles use their own room. Existing 2D backgrounds remain based on location.
 - Pokémon summary cards with 3D models now use the existing grass, cave, or water arena as a type-based 3D background. The camera frames the visible Pokémon larger while leaving room for card controls.
-- The 3D stadium now builds its audience lights reliably across repeated battles.
 - Pewter Gym and Cerulean Gym now have fully decorated 3D battle arenas based on their pixel maps: a stone cavern for Brock and a pool hall with yellow walkways for Misty. Gym trainers use their local arena too.
 - Pallet Town, Viridian City, and Pewter City now have 3D battle arenas based on their pixel maps, with recognizable buildings, gardens, and mountain terraces around the camera. Viridian includes the fenced EV training field. Pallet has an open ocean view toward Cinnabar, and Pallet and Viridian also have separate water arenas.
 - Cerulean City, Route 24, and Route 25 now have dedicated land and water battle arenas based on their pixel maps, including Nugget Bridge, the city, mountain terraces, Bill’s house, and a rocky coast. Cerulean City is visible across Nugget Bridge from Route 24’s arena, with blue roofs, a riverside promenade, the Pokémon Center, and the Gym.
 - Routes 1 and 22 now have expanded 3D arenas based on their pixel maps, with fuller forest edges, connected terraces, grass, and flowerbeds. Route 22 also has a League gate and southern pond with a footbridge. The rotating camera stays clear of treetops and blocking stair rails during water battles.
 - Route 2 and Route 4 now have dedicated land and water arenas based on their pixel maps, including forest gates, Diglett’s Cave, Mt. Moon, a river bridge, and added natural details.
 - Route 3 now has a detailed 3D arena based on its pixel map, including the Pokémon Center, Mt. Moon entrance, stepped rock terraces, enclosed grass, shrubs, and flowers. Wild and trainer battles on Route 3 use this route-specific arena. Its rotating camera is surrounded by connected rock terraces, a southern path and stairs, and added trees, rocks, shrubs, and flowers.
-
 ### Map Assets and Connections
-
 - Cerulean City now loads correctly with shared Surf encounter settings. Encounter masks on Routes 6, 9, and 10 and in Vermilion City remain hidden behind map visuals.
-- Route 6 uses the latest Tiled map, with collision, water, tall grass, ledges, and the southern exit following the updated layout. Vermilion City uses the latest Tiled visuals and exterior tileset, with openings to Route 6, Route 11, and the docks aligned to the updated map.
-- Route 10 uses the latest Tiled visuals in the existing Godot scene. Its Pokémon Center is available through the server catalog and as a staff teleport destination. Two new visitors, Magnemite and Emolga, appear there. Route 9 now has enclosed riverbanks with railings, extra trees, and matching collision; the Surf path and route to Route 10 remain open, while a dense tree line closes the southern shore and leaves the Surf entrance clear.
-- Cerulean Cave 1F, 2F, and B1F now use their Tiled visuals with reciprocal stair connections and staff teleport destinations. The Power Plant is reachable from Route 10, and indoor scenes use floor visibility masks. The two missing stair openings to B1F are restored, and upward connections use the standard cave wall stairs.
+- Refresh Route 6's paths, water, grass and ledges. Connect Vermilion City to Routes 6 and 11 and the docks.
 - In Cerulean Cave, players can walk across the bridge and surf underneath it. Bridgeheads determine where the player enters and leaves the raised path, keeping the bridge route and Surf route separate. Players and Pokémon can also walk along the dry passage under the bridge.
-- The Cerulean Cave quest can be granted or completed through Dev Tools. Once active, the League agent in Cerulean City moves aside and opens the cave.
-- Diglett’s Cave now has complete cave openings in both entrance rooms, and the Godot exits span their full width.
-- The player now faces into the room or tunnel after arriving at the Underground Passage stairs from either Route 5 or Route 6. The Underground Path has side stairs against the walls, matching arrival points, and clear landings. Route 5 and Route 6 Underground Passage entrances have updated tile and blocking layers.
-- Route 5’s Underground Passage entrance now sits beside the walking path with its own access path; the door, return position, and collision align with it. Route 5 also has updated Tiled visuals and layers for collision, ledges, and tall grass, shown in the existing Godot scene while retaining animations and gameplay layers.
-- Route 5 now has its own daycare interior with a reception desk, red carpet, seating and rest areas, a care table, plants, flowers, and a play area. Its doors are connected, and it is available as a staff teleport destination. A Pokémon PC is included.
-- Cinnabar Island now has continuous road edges and corners. The Mansion stairs connect to the plaza beside the research lab through a wide, clear path. Cinnabar Island and the separate Vermilion Docks are imported into Godot, with reciprocal transitions to Route 21 and Vermilion City. Vermilion City uses the current Tiled layout with gray streets.
+- Complete the cave openings at both Diglett’s Cave entrances.
 - Route 21 now has a sandy beach with surf and cliffs below Pallet Town. Farther along, two sandbars and scattered reef rocks make the Surf route feel more open.
-- Saffron City now uses the complete Tiled city, with full tree borders, continuous north-south paths, and half-width east-west gates connected to trees. Separate vertical gate interiors connect it to Routes 5 and 6, with reciprocal arrival points and indoor visibility masks.
-- New Kanto route, cave, and connector scenes now show the imported Tiled maps and have linked entrances and exits. Route 2 and Pallet Town connect to Diglett Cave and Route 21; these locations are available for staff teleport.
+- Open Saffron City’s north–south paths and connect its east–west gates to Routes 5 and 6.
 - The southern exit of Rock Tunnel 1F now has a complete cave arch and low front wall, matching Mt. Moon. The exit and arrival point are centered beneath the arch.
-- The pink flower beside the path in Pallet Town once again has a complete base. The map was reimported while retaining its animations.
-
 ### Outfits and Trainer Customization
-
-- The female Team Rocket hairstyle now includes its matching eyebrows. The female Rocket overworld outfit has clearer gloves, a visible skirt with unobstructed knees, a recognizable cap brim, and a shorter bob. Its trainer outfit has a visible waistband and darker skirt to distinguish the shirt and skirt. A later collar, waist, skirt, and logo-color adjustment was reverted to the previous version.
-- The female Team Rocket outfit is available in an outfit box with uniform, skirt, boots, purple bob hairstyle, and cap, including trainer and overworld sprites. It is not in the store yet.
-- The male Team Rocket outfit now follows the Gen 4 grunt reference, with a darker uniform, purple-gray gloves and boots, and a separate cap in the outfit box. The box includes the uniform, gloves, pants, boots, and trainer and overworld sprites.
-- The Team Rocket uniform now has the same open neckline as the starter outfit, leaving a small part of the neck visible while standing and walking. Its collar follows the neck while walking without jumping during step poses. Clothing follows body animations precisely when walking, starting, and changing direction; the shirt’s torso and chest emblem stay in place without the waistband jumping. The boots follow the feet in every walking frame, the pants fully cover the legs, and the stray stripe behind the cap is removed. The cap no longer shifts twice while fishing or riding.
-- The male tuxedo trainer sprite’s trousers now follow the legs more closely, with revised outlines and folds. The male tuxedo is available in an outfit box with separate jacket, pants, and shoes, including overworld and trainer sprites. The box is not in the store yet.
-- The Aether Wayfarer is available in separate male and female outfit boxes, with trainer and overworld layers for walking, fishing, and riding. The boxes are not in the store.
 - Aether Ronin sleeves now fully cover the arms in male walking frames and in fishing and riding frames for both genders. The female top has closed sleeve seams in side-facing walking frames and leaves the arms clear while walking. The waistband no longer crosses the arms in overworld side frames.
-- The Aether Royal Patreon outfit now has a shared, non-tradeable box for male and female characters, containing a crown, jacket, pants, boots, and skill cape. The cape has its own equipment slot and can be combined with other clothing. Trainer, walking, fishing, and riding sprites are included; the outfit is not in the store yet. The Back cosmetic category now uses a narrower, straighter side profile for the Aether Royal cape on both models and in all overworld activities.
-- The Trainer Card no longer applies Aether Royal items locally without the Patreon role. If the server rejects a preview, the card restores the saved outfit without a console warning. It clearly reports when the role is missing, and position persistence updates the equipped outfit when the server removes an expired item.
-- Patreon Support now displays the Aether Royal outfit on the player model in the Gift Store. The card retains its Patreon pixel icon.
-
 ### Overworld Animations
-
-- Tall grass now sways softly by default, with varied pauses for each patch, including in Viridian Forest. New Tiled imports receive the same animation automatically. A separate Route 1 preview demonstrates the effect with an on/off comparison.
-- Water, tree leaves, and flowers now move subtly in existing maps, including animated water in cave ponds. Static map layouts and collision data are preserved. A separate Pallet Town preview compares real Tiled animations for water, leaves, and flowers with static tiles; a Viridian City preview demonstrates animated pond water without changing the playable city.
-- The Tiled importer now supports tile animations.
+- Tall grass now sways softly with varied pauses, including in Viridian Forest.
+- Water, tree leaves, and flowers now move subtly in existing maps, including animated water in cave ponds.
 - Mouse clicks and touches over visible UI buttons are no longer intercepted by the world’s free-space controls. Browser and desktop clients now support a short click on open play space as an interaction and mouse dragging as a temporary joystick.
-- The browser build now enables the virtual keyboard on touchscreen devices.
+- Enable the virtual keyboard on touchscreen browsers.
 - The login screen now checks server status again after a failed request, so a temporary network error does not leave the browser client permanently offline.
-
 ### Android
-
-- Android release builds now restore and checksum both Pokémon HOME sprite packs before export, so party icons are available in the installed APK. Normal and shiny Pokémon HOME icons are explicitly included so party slots can resolve their portraits.
-- The desktop client removes the previous local Pokémon sprite version after the new metadata and sprite sheet load successfully. Existing sprite caches without a version index are cleaned up once.
-- Pokémon Centers use the standard metadata from their shared template.
-
 ### Browser and Android Clients
-
-- The browser can use weather actions, view Calcdex, export teams, watch AI battles, and access account and privacy features through the standard API.
+- Browser players can change the weather in battle, use Calcdex, export teams, watch AI battles, and manage account and privacy settings.
 - Ranked defaults to Aether OU in the browser and can open or resume a found battle there.
-- The website’s Android download link and the update server now support signed APKs, including validation of the manifest, file size, and SHA-256 checksum.
-- Browser play uses the same gameplay routes as desktop and can continue through all currently available maps, including Routes 5 and 9 and Cerulean Cave. Guild activity and ranked PvP are available; player asset transfers still require the desktop or Android client.
-- The Android client can find a required APK update through its update server, download and verify it, and offer it through Android’s installer. The old client pauses until the update is installed.
+- Android players can download signed client updates from the website and install them directly.
+- Browser players can explore the available Kanto maps, join guild activities, and play ranked PvP. Asset transfers are available in the desktop and Android clients.
+- Android checks for required updates and guides players through installing them.
 - The mount dialog on Android and desktop now has a button to mount or dismount the selected land mount.
 - HP panels in Android battles stay above their Pokémon, even without a 3D presenter.
 - Android prepares the battle screen for wild encounters in advance and keeps transitions smooth while the server and sprites load. New Pokémon briefly appear as subtle silhouettes until their animated sprites are ready; sprites for the current area are fetched on entry.
-- The Android preview build now plays music on the login screen, in the world, and during wild battles. It downloads and verifies the full music pack automatically and keeps it for future launches. After a music update, Android removes the old version on the next launch to free storage.
-- Android no longer displays a crash report after a normal interruption in the background.
-- The Android preview build uses landscape 2D battles with the full battle view and loads standard animated Pokémon sprites through the existing online asset route.
-- The Android world interface no longer depends on a desktop-only file excluded from local 3D model review.
+- Android now plays music on the login screen, in the world, and during wild battles.
+- Android no longer shows a crash report when the app is normally interrupted in the background.
+- Android battles now use a full-screen landscape view with animated Pokémon sprites.
 - Android movement uses a virtual joystick that appears where the player places a thumb; a short tap on the world interacts with it.
-- The Android preview build enlarges the login and world interfaces, right-side action buttons, global boost buttons, chat tabs, and chat input. The keyboard opens only when selecting an input field, and dialogue advances one line per tap.
+- Android has larger login and world interfaces, touch controls, boost buttons, and chat. The keyboard opens when selecting an input field, and dialogue advances one line per tap.
 - In Android battles, the battle log starts below the left party slots so the bottom Pokémon stays clear of its controls. Preloading animated Pokémon sprites no longer interrupts the transition into battle.
 - Adventure Party double battles now open in the full-screen Immersive layout on desktop and browser. Classic remains available for single battles.
-
 ### Adventure Party
-
-- Six more Pokémon (Charizard, Corviknight, Dondozo, Gyarados, Haunter, and Mewtwo) now have approved normal and shiny 3D battle models with individually prepared bundles. A local battle review accepted 14 additional Pokémon in normal and shiny forms for a later desktop release, and approved 55 more Pokémon for local 3D battles, each with its own updateable bundle.
 - Defeat dialogue after shared NPC battles now uses the defeated Trainer’s mugshot, including class portraits such as Lass Zoe. Missing portraits no longer show Professor Oak.
 - Active boost trays no longer flash over the Immersive battle UI when Adventure Party presence refreshes. The Adventure Party HUD also no longer briefly appears over Immersive battles during presence updates.
 - Classic wild battles now briefly show the player’s Trainer sprite and a callout when throwing a Poké Ball and receiving the capture result.
-- The Adventure Party EXP buff now applies to shared wild and NPC battles and is hidden when a party member is offline or on another map and battles are solo. Grouped Adventure Party members see a +25% EXP buff that increases their own rewards from shared wild battles.
+- Adventure Party members earn 25% more EXP from shared wild battles while grouped together.
 - Immersive Adventure Party doubles now use the single-battle Trainer voice variants for move callouts, name the acting Pokémon when a Trainer orders a move, and show NPC Trainers’ own mugshots while they give commands. Their class battle portrait or overworld sprite is used if the mugshot is unavailable.
 - Immersive 2D/2.5D double battles now size move effects for two Pokémon per side and aim projectile sheets from the acting Pokémon to the actual target.
 - Duplicate large and small Trainer figures in Immersive Adventure Party doubles are fixed. Both players receive a battle result message, and trainer victories play the NPC’s defeat dialogue after returning to the world. Trainer sprites appear beside party rails only while giving a battle command.
 - Adventure Party members can start shared battles with supported Trainers they encounter, even if their partner leads the party. When a partner disconnects, the battle now indicates that a requested exit is being processed.
 - The Immersive battle party rail now fits above the Battle Log controls on shorter screens.
 - Immersive 2D Adventure Party doubles now use wider platforms aligned beneath both Pokémon on each side, with the two pairs spaced across separate battlefield platforms.
-- The Pokédex preview zoom button now enlarges local 3D Pokémon, making model details easier to inspect.
-
-### Store, Tools, and Lobby
-
+### Store and Lobby
 - The Aether Clash lobby visuals have been updated for desktop and browser clients.
 - The Pokémon Rental specialist now explains that players can rent Pokémon for PvP, but can make a rental permanent only after reaching the Kanto level cap of 100.
-- Alpha Tools now shows the Aetherite amount in a small dialog after selecting Generate Aetherite, keeping the main menu compact. Its generator accepts a custom amount instead of offering buttons to create or delete Alpha Pokémon.
-- Content Creator Tools can create one non-shiny Pokémon, show existing Creator Pokémon, and remove a selected one before creating another.
-
 ## 0.3.83
 
 ### Player Lending
@@ -1351,7 +1174,6 @@
 - Revive and Max Revive no longer restore PP.
 - Teleports now keep movement locked until the teleport window and map transition are finished.
 - Your position and active mount are now saved immediately when you mount or dismount.
-
 
 ## 0.3.73 - 2026-09-06
 
