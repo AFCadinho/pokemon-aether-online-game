@@ -1726,7 +1726,7 @@ func _apply_styles_recursive(node: Node) -> void:
 	elif node is HSlider:
 		_apply_slider_style(node as HSlider)
 	elif node is OptionButton:
-		_apply_button_style(node as Button)
+		LanguageSelectorStyle.configure(node as OptionButton)
 	elif node is Button:
 		_apply_button_style(node as Button)
 
