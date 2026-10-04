@@ -7,6 +7,7 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": "kanto_route_3",
 	"res://scenes/overworld/kanto/routes/kanto_route_5.tscn": "kanto_route_5",
 	"res://scenes/overworld/kanto/routes/kanto_route_6.tscn": "kanto_route_6",
+	"res://scenes/overworld/kanto/routes/kanto_route_8.tscn": "kanto_route_8",
 	"res://scenes/overworld/kanto/routes/kanto_route_9.tscn": "kanto_route_9",
 	"res://scenes/overworld/kanto/routes/kanto_route_10.tscn": "kanto_route_10",
 	"res://scenes/overworld/kanto/routes/kanto_route_11.tscn": "kanto_route_11",
@@ -17,6 +18,7 @@ const OVERWORLD_SCENE_MAP_IDS: Dictionary = {
 	"res://scenes/overworld/kanto/towns/viridian_city/viridian_city.tscn": "kanto_viridian_city",
 	"res://scenes/overworld/kanto/towns/pewter_city/pewter_city.tscn": "kanto_pewter_city",
 	"res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn": "kanto_cerulean_city",
+	"res://scenes/overworld/kanto/towns/lavender_town/lavender_town.tscn": "kanto_lavender_town",
 	"res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn": "kanto_vermilion_city",
 }
 
