@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add the Route 7 exterior from the artist TMX and connect it bidirectionally to its Underground Path entrance.
 - After Tower Gary, the main quest points to Route 8’s eastern Saffron guard, then asks players to find another entrance.
 
 - Add localized Route 8 sign text and show its existing location preview when inspected.

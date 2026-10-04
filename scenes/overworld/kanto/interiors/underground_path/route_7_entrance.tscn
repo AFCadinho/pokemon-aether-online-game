@@ -10,6 +10,9 @@
 [sub_resource type="RectangleShape2D" id="stair_exit_shape"]
 size = Vector2(32, 32)
 
+[sub_resource type="RectangleShape2D" id="outside_exit_shape"]
+size = Vector2(32, 16)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dnvfy"]
 texture = ExtResource("6_o31rn")
 texture_region_size = Vector2i(32, 32)
@@ -181,6 +184,22 @@ shape = SubResource("stair_exit_shape")
 z_as_relative = false
 flow_direction = "right"
 
+[node name="ToRoute7" type="Area2D" parent="Exits"]
+position = Vector2(400, 432)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_7.tscn"
+target_spawn_name = "FromUndergroundPath"
+transition_id = "kanto_underground_path_route_7_entrance__to_route7"
+transition_facing_direction = "down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute7"]
+position = Vector2(0, 16)
+shape = SubResource("outside_exit_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToRoute7" instance=ExtResource("4_door_hint")]
+z_as_relative = false
+flow_direction = "down"
+
 [node name="Entities" type="Node2D" parent="." unique_id=1935793822]
 z_index = 5
 
@@ -223,3 +242,4 @@ tile_map_data = PackedByteArray("AAAPAAYAAAAEAAAAAAAQAAYAAAAEAAAAAAA=")
 tile_set = SubResource("TileSet_ggrwj")
 
 [connection signal="body_entered" from="Exits/ToTunnelHorizontal" to="Exits/ToTunnelHorizontal" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToRoute7" to="Exits/ToRoute7" method="_on_body_entered"]
