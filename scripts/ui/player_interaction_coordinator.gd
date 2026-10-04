@@ -858,10 +858,6 @@ func _on_lend_pressed() -> void:
 		return
 	if not _target_is_on_current_map():
 		return
-	if not bool(current_target.get("supportsPlayerLending", true)):
-		lending_status_message = _t("ui.lending.error.browser_recipient")
-		_refresh_context_status()
-		return
 	var username := str(current_target.get("username", "")).strip_edges()
 	var workspace := get_node_or_null("/root/LendingWorkspace")
 	if username == "" or workspace == null or not workspace.has_method("open_for_trainer"):
@@ -1345,7 +1341,7 @@ func _can_view_overworld_identity(user_id: int) -> bool:
 
 
 func _exchange_actions_allowed() -> bool:
-	return not OS.has_feature("web") and get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
+	return get_tree().get_nodes_in_group("aether_clash_duel_controller").is_empty()
 
 
 func _normalized_player(player: Dictionary) -> Dictionary:

@@ -117,7 +117,7 @@ The Pages Function forwards only the explicit browser route catalog and rejects
 desktop ranked and internal routes. It requires an HTTPS API origin, refuses a
 self-referential origin, does not follow upstream redirects and retains the
 bounded request sizes used by the local connected preview. WebSocket upgrades
-for chat, world presence and PvP-room transport pass through the same origin.
+for chat, world presence, trading and PvP-room transport pass through the same origin.
 
 Cross-browser and full gameplay checks in Chrome, Firefox and Safari are
 optional release diagnostics, not a publication gate. Use them when a change
@@ -138,32 +138,35 @@ committed. No second Godot project or duplicate source asset tree is created.
 
 ## Current scope
 
-The browser demo uses the existing account, world and interface. Its opening
-world is bounded to Pallet Town, Route 1 and Viridian City. Mail, friends, bag,
-guild browsing, replays, Custom battles and AI Sparring remain visible; ranked,
-competitive guild actions, Aether Exchange and My Powers require the client.
+The browser uses the same gameplay endpoints, account state and interface as
+native clients. Trading, Lending, Aether Exchange, Guild Bank and sending or
+claiming mail attachments are available through the shared `/game/*` API.
+Trading invitations and reconnects use `/ws/trade` through both browser proxies.
+The account service still validates permissions, ownership, funds, party limits,
+reservations, consent and feature rollout gates. Internal service routes are
+not exposed through the browser proxy.
 
-Phase 3 connects real shared accounts and a bounded browser-world position through dedicated `/auth/web` endpoints.
 Registration retains the existing legal acceptance, registration toggle and
-email-verification flow. Login and refresh restore the bounded browser world.
-Remembered sessions use browser localStorage; otherwise sessionStorage retains
-the session only in this tab (including refresh). Logout clears both. Only the
-token, expiry and remember choice are stored, never a password or account profile.
-The server revalidates every restored session. Temporary restore network failures
-preserve storage; expired/revoked/forbidden sessions clear it.
+email-verification flow. Remembered sessions use browser localStorage;
+otherwise sessionStorage retains the session only in this tab (including
+refresh). Logout clears both. Only the token, expiry and remember choice are
+stored, never a password or account profile. The server revalidates every
+restored session. Temporary restore network failures preserve storage;
+expired/revoked/forbidden sessions clear it.
 
 The server issues `session_type=web` independently of client headers. Web login
 rotates only other web sessions; desktop login rotates only desktop sessions.
-Web logout does not cancel desktop queues. Existing desktop-only and ranked
-routes reject web tokens by default. Browser movement uses the canonical
-character state through a server-owned projection of the canonical map and
-transition catalogs. The current browser uses the shared `/game/world` access and transition routes.
+Web logout does not cancel desktop queues. Gameplay and asset transfers accept
+both session types; browser-specific authentication endpoints retain their
+session-type checks. Legacy `/auth/web` gameplay aliases remain for older
+clients rather than duplicating transfer routes for the current client.
+
+The current browser uses the shared `/game/world` access and transition routes.
 Its map modules cover the current Kanto catalog beyond Cerulean, including
 Route 5, Route 9 and Cerulean Cave; canonical story and area requirements apply.
-The normal Brock, Bill and Misty story requirements still apply. A character at another
-Aethernet destination can explicitly move to the Aether Clash Lobby; this never
-happens automatically and changes the shared desktop position. Background trade,
-guild notifications, thieving and Rock Smash discovery are disabled on web.
+Transition, Aethernet travel and saved-map restoration prepare the required
+map module before entering that map. Aether Clash retains its normal rules
+against trading or lending inside the duel arena.
 
 The client uses the page's origin plus `/api`, never the desktop production
 fallback. Pages proxies the approved API/WebSocket routes and same-origin news;
@@ -404,13 +407,16 @@ contains interiors, connecting gates, Underground Path, Diglett's Cave, both
 Rock Tunnel floors and all three Cerulean Cave floors. Empty/unimplemented
 catalog scene paths are not turned into playable maps. Transition and Aethernet
 travel prepare the requested map module before committing travel; saved-map
-restoration loads it before opening the world. Trade/asset transfer remains
-blocked by the persisted browser session type. Legacy `/auth/web/world` demo
+restoration loads it before opening the world. Trading, Lending, Aether Exchange,
+Guild Bank and mail attachments now use the same account-authorized game API
+as the native client; `/ws/trade` also passes through both browser proxies.
+Account permissions, ownership checks, reservations and feature rollout gates
+remain authoritative. Legacy `/auth/web/world` demo
 endpoints retain their compatibility scope and are not used by this client.
 
 Local export after partitioning all later maps: initial 162.7 MiB; extended
 module 9.7 MiB. Focused checks cover the complete current Kanto scene catalog,
 actual module contents and audio exclusion, shared browser area access and
-Cerulean Cave progression, unchanged transfer denial, plus Chromium login and
+Cerulean Cave progression, plus Chromium login and
 map restoration on Route 5, Vermilion City and Rock Tunnel 1F. No live release
 has been published. New Kanto scenes missing from the partition fail the build.

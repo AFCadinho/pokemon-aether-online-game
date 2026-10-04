@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Browser players can now trade, lend, use Aether Exchange and the Guild Bank, and send or claim mail attachments through the shared game API.
+
 - Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.
 
 - Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.

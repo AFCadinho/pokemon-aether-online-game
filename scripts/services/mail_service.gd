@@ -43,8 +43,6 @@ func send_mail(
 	pokemon_attachment_ids: Array = [],
 	money_attachment: int = 0
 ) -> Dictionary:
-	if OS.has_feature("web") and (money_attachment > 0 or not item_attachments.is_empty() or not pokemon_attachment_ids.is_empty()):
-		return {"success": false, "error": "Mail attachments require the game client."}
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -95,8 +93,6 @@ func send_mail(
 
 
 func claim_mail(mail_id: int) -> Dictionary:
-	if OS.has_feature("web"):
-		return {"success": false, "error": "Mail attachments require the game client."}
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,
@@ -159,8 +155,6 @@ func mark_mail_read(mail_id: int) -> Dictionary:
 
 
 func claim_mail_attachment(mail_id: int, attachment_id: int) -> Dictionary:
-	if OS.has_feature("web"):
-		return {"success": false, "error": "Mail attachments require the game client."}
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,

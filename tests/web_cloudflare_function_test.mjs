@@ -25,8 +25,8 @@ assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-rewards/test-reward/claim'
 assert.equal(isAllowedApiRoute('POST', '/auth/web/npc-quest-item-turn-ins/test-turn-in/claim'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/story-escape'), false);
 assert.equal(isAllowedApiRoute('GET', '/game/guilds/me'), true);
-assert.equal(isAllowedApiRoute('GET', '/game/guilds/me/bank'), false);
-assert.equal(isAllowedApiRoute('PUT', '/game/guilds/me/members/7/bank-permissions'), false);
+assert.equal(isAllowedApiRoute('GET', '/game/guilds/me/bank'), true);
+assert.equal(isAllowedApiRoute('PUT', '/game/guilds/me/members/7/bank-permissions'), true);
 assert.equal(isAllowedApiRoute('POST', '/pvp/queues/ranked/join'), false);
 assert.equal(isAllowedApiRoute('GET', '/internal/authority'), false);
 
@@ -89,6 +89,18 @@ const rankedStart = await onRequest({
 assert.equal(rankedStart.status, 200);
 assert.equal(forwarded.url, 'https://api.example.test/battle/pvp/matches/test-match/start-battle');
 assert.equal(forwarded.headers.get('authorization'), 'Bearer test-only');
+assert.equal(forwarded.headers.get('x-pokeaether-client-platform'), 'web');
+
+const tradeSocket = await onRequest({
+  request: new Request('https://play.example.test/api/ws/trade?token=test-only&clientPlatform=web', {
+    headers: { upgrade: 'websocket', cookie: 'private=1', 'x-pokeaether-client-platform': 'windows' },
+  }),
+  env: { API_ORIGIN: 'https://api.example.test' },
+});
+assert.equal(tradeSocket.status, 200);
+assert.equal(forwarded.url, 'https://api.example.test/ws/trade?token=test-only&clientPlatform=web');
+assert.equal(forwarded.headers.get('upgrade'), 'websocket');
+assert.equal(forwarded.headers.get('cookie'), null);
 assert.equal(forwarded.headers.get('x-pokeaether-client-platform'), 'web');
 
 globalThis.fetch = async request => {
