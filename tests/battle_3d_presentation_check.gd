@@ -22,6 +22,9 @@ func _run() -> void:
 	var settings = root.get_node("SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
 	var old_path: String = settings.battle_3d_catalog_path
+	var old_manual: bool = settings._manual_model_catalog_this_session
+	# This fixture controls its catalog, independent of installed on-demand models.
+	settings._manual_model_catalog_this_session = true
 	var old_camera: bool = settings.battle_3d_camera_motion
 	var old_arena: String = settings.battle_3d_arena
 	var old_layout: String = settings.battle_ui_layout
@@ -36,7 +39,8 @@ func _run() -> void:
 	assert(Renderer.supported("Dragonite", false, false, false))
 	assert(Renderer.supported("Dragonite", true, false, false))
 	assert(Renderer.supported("Dragonite", false, true, false))
-	for args in [["Definitely Not A Pokémon", false, false, false], ["Definitely Not A Pokémon", true, false, false], ["Dragonite", false, false, true]]:
+	assert(Renderer.supported("Dragonite", false, false, true))
+	for args in [["Definitely Not A Pokémon", false, false, false], ["Definitely Not A Pokémon", true, false, false]]:
 		assert(not Renderer.supported.callv(args))
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	var screen_host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
@@ -237,7 +241,9 @@ func _run() -> void:
 		battle.enemy_sprite_box.substitute_active = true
 		await process_frame
 		await process_frame
-		assert(not stage.active)
+		assert(stage.active and is_instance_valid(stage.substitute_models[1]))
+		assert(stage.substitute_models[1].visible and not stage.actors[1].visible)
+		assert(not battle.enemy_sprite_box.substitute_sprite.visible)
 		battle.enemy_sprite_box.substitute_active = false
 		stage.set_sleeping(0, false)
 		await process_frame
@@ -367,6 +373,7 @@ func _run() -> void:
 		assert(stage.packed.is_empty() and stage.viewport == null)
 	settings.battle_presentation_mode = old_mode
 	settings.battle_3d_catalog_path = old_path
+	settings._manual_model_catalog_this_session = old_manual
 	settings.battle_3d_camera_motion = old_camera
 	settings.battle_3d_arena = old_arena
 	settings.battle_ui_layout = old_layout

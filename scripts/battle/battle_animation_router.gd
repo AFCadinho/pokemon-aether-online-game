@@ -121,6 +121,8 @@ func setup(player_box: Node, enemy_box: Node, parent_node: Node = null, animatio
 
 
 func reveal_pokemon_from_substitute_for_move(actor_ident: String) -> bool:
+	if uses_realtime_3d():
+		return model_presenter.reveal_substitute_pokemon(actor_ident, true)
 	var actor_box := _get_sprite_box_for_ident(actor_ident)
 	if actor_box == null or not actor_box.has_method("reveal_pokemon_from_substitute_for_move"):
 		return false
@@ -128,6 +130,9 @@ func reveal_pokemon_from_substitute_for_move(actor_ident: String) -> bool:
 
 
 func restore_substitute_after_move(actor_ident: String) -> void:
+	if uses_realtime_3d():
+		model_presenter.reveal_substitute_pokemon(actor_ident, false)
+		return
 	var actor_box := _get_sprite_box_for_ident(actor_ident)
 	if actor_box == null or not actor_box.has_method("restore_substitute_after_move"):
 		return
@@ -135,6 +140,9 @@ func restore_substitute_after_move(actor_ident: String) -> void:
 
 
 func set_substitute_active(target_ident: String, is_active: bool, animate := true) -> void:
+	if uses_realtime_3d():
+		model_presenter.set_substitute_active(target_ident, is_active)
+		return
 	var target_box := _get_sprite_box_for_ident(target_ident)
 	if target_box == null or not target_box.has_method("set_substitute_active"):
 		return
@@ -142,6 +150,9 @@ func set_substitute_active(target_ident: String, is_active: bool, animate := tru
 
 
 func play_substitute_damage_tween(target_ident: String) -> void:
+	if uses_realtime_3d():
+		await model_presenter.play_substitute_hit(target_ident)
+		return
 	var target_box := _get_sprite_box_for_ident(target_ident)
 	if target_box == null or not target_box.has_method("play_substitute_damage_tween"):
 		return
@@ -149,6 +160,9 @@ func play_substitute_damage_tween(target_ident: String) -> void:
 
 
 func clear_substitute_for_ident(target_ident: String) -> void:
+	if uses_realtime_3d():
+		model_presenter.set_substitute_active(target_ident, false)
+		return
 	var target_box := _get_sprite_box_for_ident(target_ident)
 	if target_box != null and target_box.has_method("clear_substitute_immediately"):
 		target_box.call("clear_substitute_immediately")
@@ -245,7 +259,6 @@ func play_effect_animation(effect_key: String, target_ident: String = "", reveal
 				return
 			if played:
 				return
-			reveal_3d.call()
 		var owned_generation := render_generation
 		var key := audio_catalog.resolve_key("effect", _normalize_animation_key(effect_key))
 		var native = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
@@ -263,7 +276,14 @@ func play_effect_animation(effect_key: String, target_ident: String = "", reveal
 			if is_instance_valid(effect):
 				audio.clock = effect.seconds
 			audio.begin()
-		if is_instance_valid(effect):
+		if key == "mega_evolution" and reveal_3d.is_valid():
+			while is_instance_valid(effect) and not effect.done and effect.elapsed < effect.duration * 0.55 and owned_generation == render_generation:
+				await model_presenter.get_tree().process_frame
+			if owned_generation != render_generation or not uses_realtime_3d() or (is_instance_valid(effect) and effect.cancelled):
+				if is_instance_valid(audio): _release_3d_audio(audio)
+				return
+			reveal_3d.call()
+		if is_instance_valid(effect) and not effect.done:
 			await effect.finished
 			if is_instance_valid(audio) and owned_generation == render_generation and not effect.cancelled:
 				audio._process(0.0) # Dispatch the final crossed cue before detaching.

@@ -7,14 +7,14 @@ const MOVE_EFFECTS := ["future_sight_impact", "solar_beam_charge", "electro_shot
 const PROFILES := {
 	"stat_up": ["rise", "73b7ff", 0.65], "stat_down": ["fall", "ec638b", 0.65],
 	"health_up": ["heal", "45ef95", 0.85], "wish_fulfilled": ["wish", "ffdc72", 0.7],
-	"use_item": ["item", "86ddff", 0.55], "eat_berry": ["berry", "f3798b", 0.55],
+	"use_item": ["item", "a5e7ff", 0.85], "eat_berry": ["berry", "f3798b", 0.75],
 	"shiny_sparkle": ["shiny", "ffe685", 0.7], "protect_block": ["shield", "67d9ff", 0.65],
 	"status_paralysis": ["electric", "ffe14f", 0.65],
 	"status_poisoned": ["poison", "c07dea", 0.7], "status_badly_poisoned": ["poison", "ae47e5", 0.75],
 	"status_burned": ["fire", "ff9a48", 0.7], "status_frozen": ["ice", "9deeff", 0.75],
 	"status_sleeping": ["sleep", "9db2f4", 0.8], "status_confused": ["confused", "ffce63", 0.7],
 	"grassy_terrain_start": ["terrain", "63e28a", 0.75],
-	"z_power": ["power", "ffcb57", 0.85], "mega_evolution": ["power", "d2a4ff", 0.85],
+	"z_power": ["power", "ffcb57", 1.35], "mega_evolution": ["power", "d2a4ff", 1.4],
 }
 
 var key := ""
@@ -30,6 +30,9 @@ var speed_provider: Callable
 var particles: Array[MeshInstance3D] = []
 var rings: Array[MeshInstance3D] = []
 var shell: MeshInstance3D
+var aura: MeshInstance3D
+var berry_parts: Array[MeshInstance3D] = []
+var front := Vector3(0,0,1)
 
 static func supports(effect: String) -> bool:
 	return PROFILES.has(effect)
@@ -49,6 +52,10 @@ static func audio_plan(source: Dictionary, effect: String) -> Dictionary:
 		seen[name] = true
 		cues.append({"at_seconds": clampf(float(cue.at_seconds) / source_duration, 0.0, 0.75) * native_duration,
 			"event": cue.event.duplicate(true)})
+	if effect == "eat_berry" and not cues.is_empty():
+		cues[0].at_seconds = native_duration * 0.32
+	if effect == "mega_evolution" and cues.size() >= 2:
+		cues[1].at_seconds = native_duration * 0.55
 	result.cues = cues
 	result.duration_seconds = native_duration
 	result.speed_scale = 1.0
@@ -186,10 +193,13 @@ func _build(color: Color) -> void:
 	if style == "wish": count = 6
 	if style == "terrain": count = 0
 	if style == "shield": count = 6
+	if style == "item": count = 12
+	if style == "power": count = 16
+	if style == "berry": count = 6
 	var material := _material(color, not icon.is_empty())
 	for index in count:
 		particles.append(_mesh(particle_mesh, material))
-	if style in ["rise", "fall", "heal", "item", "berry", "power", "shield", "terrain"]:
+	if style in ["rise", "fall", "heal", "item", "power", "shield", "terrain"]:
 		for index in (3 if style in ["shield", "terrain"] else 2):
 			var torus := TorusMesh.new()
 			torus.inner_radius = radius * 0.96
@@ -197,6 +207,30 @@ func _build(color: Color) -> void:
 			torus.rings = 32
 			torus.ring_segments = 6
 			rings.append(_mesh(torus, _material(color, false, 0.6)))
+	if style == "berry":
+		for index in 3:
+			var fruit := SphereMesh.new()
+			fruit.radius = 0.13
+			fruit.height = 0.26
+			fruit.radial_segments = 16
+			fruit.rings = 8
+			berry_parts.append(_mesh(fruit,_material(Color("ec617f"))))
+		var leaf := PrismMesh.new()
+		leaf.size = Vector3(0.13,0.23,0.04)
+		berry_parts.append(_mesh(leaf,_material(Color("60d577"))))
+	if style == "power":
+		var cylinder := CylinderMesh.new()
+		cylinder.top_radius = radius * 0.75
+		cylinder.bottom_radius = radius * 1.25
+		cylinder.height = height * 1.25
+		cylinder.radial_segments = 48
+		cylinder.cap_top = false
+		cylinder.cap_bottom = false
+		var material_aura := ShaderMaterial.new()
+		material_aura.shader = preload("res://scripts/battle/battle_ui/power_aura_3d.gdshader")
+		material_aura.set_shader_parameter("flame_color",color)
+		aura = _mesh(cylinder,material_aura)
+		aura.position.y = height * 0.6
 	if style == "shield":
 		var sphere := SphereMesh.new()
 		sphere.radius = 1.0
@@ -230,15 +264,29 @@ func _update_visuals() -> void:
 			"sleep": y = height * (0.85 + offset * 0.5 + progress * 0.3); spread *= 0.35; size *= 1.0 + offset
 			"confused": y = height * 1.1 + sin(angle * 2.0) * 0.1; angle += progress * TAU; spread *= 0.7; size *= 0.65
 			"wish": y = height * (1.45 - progress * 0.9 + offset * 0.15); spread *= 1.0 - progress * 0.65; size *= 0.75
-			"shiny", "item": y = height * (0.2 + offset * 0.8); spread *= 0.4 + progress * 1.1
-			"berry": y = height * 0.55 + sin(angle * 2.0) * 0.18; spread *= 1.0 - progress * 0.85; size = 1.0 - progress * 0.6
+			"shiny": y = height * (0.2 + offset * 0.8); spread *= 0.4 + progress * 1.1
+			"item": y = height * (0.02 + progress * 1.1 - offset * 0.28); spread *= 0.65; size *= 0.65 + 0.35 * sin(index * 2.0)
+			"power": y = height * (0.05 + phase * 1.2); spread *= 1.4 - progress * 0.65; size *= 0.8 + progress
+			"berry": y = height * 0.65 - maxf(0.0,progress - 0.32) * height * 0.4; spread *= maxf(0.0,progress - 0.32) * 0.6; size = 0.5 * (1.0 - progress)
 			"shield": y = height * (0.2 + offset * 0.6); spread *= 1.1; size *= 0.5
 		node.position = Vector3(cos(angle) * spread, y, sin(angle) * spread)
+		if style == "berry": node.position += front * radius * 0.9
 		node.scale = Vector3.ONE * maxf(size, 0.01)
 		if style == "fire": node.scale.y *= 2.0
 		if style == "ice": node.rotation = Vector3(0.12 * sin(index),angle,0.2 * cos(index))
-		node.visible = envelope > 0.01
+		node.visible = envelope > 0.01 and (style != "berry" or progress >= 0.32) and (style != "item" or y > 0.0)
 		node.transparency = 1.0 - envelope * (0.65 + 0.35 * sin(phase * PI))
+	for index in berry_parts.size():
+		var part := berry_parts[index]
+		part.position = front * radius * 0.9 + Vector3((index % 2 - 0.5) * 0.12, height * 0.55 + (0.18 if index == 3 else float(index) * 0.04), 0.0)
+		var shrink := 1.0 - smoothstep(0.32,0.68,progress)
+		part.scale = Vector3.ONE * shrink * clampf(height * 0.65,0.8,1.6)
+		part.visible = envelope > 0.01 and shrink > 0.01
+		part.transparency = 1.0 - envelope
+	if is_instance_valid(aura):
+		aura.material_override.set_shader_parameter("effect_time",elapsed)
+		aura.material_override.set_shader_parameter("strength",envelope * smoothstep(0.0,0.35,progress))
+		aura.scale = Vector3.ONE * (0.75 + progress * 0.45)
 	for index in rings.size():
 		var ring := rings[index]
 		var scale_factor := 0.75 + progress * 0.55 + index * 0.12
@@ -246,6 +294,7 @@ func _update_visuals() -> void:
 		if style == "shield":
 			ring.position.y = height * (0.2 + index * 0.3)
 			scale_factor = 1.1 - 0.08 * sin(progress * PI)
+		if style == "power": scale_factor = 0.8 + maxf(0.0,progress - 0.5) * 3.5 + index * 0.18
 		if style == "terrain": scale_factor = 1.0 + progress * 3.0 + index * 0.7
 		if style == "fall": scale_factor = 1.3 - progress * 0.45
 		ring.scale = Vector3.ONE * scale_factor
