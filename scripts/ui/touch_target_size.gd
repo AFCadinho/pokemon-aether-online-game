@@ -19,6 +19,25 @@ static func font_size_for(control: Control, desktop_size: int, minimum: float = 
 	return maxi(desktop_size, ceili(minimum / screen_scale(control).y))
 
 
+static func compact_button_style(button: Button) -> void:
+	# Keep the full Button rect for input, but draw a compact 28 dp surface in
+	# its centre. The transparent padding still accepts taps and blocks movement.
+	var window_fit := button.get_node_or_null("/root/WindowFit")
+	var compact: bool = window_fit != null and window_fit.is_touch_ui() and not window_fit.is_mobile_browser_ui()
+	var inset := (button.size - Vector2.ONE * 28.0 / screen_scale(button)).max(Vector2.ZERO) * 0.5 if compact else Vector2.ZERO
+	for state: String in ["normal", "hover", "pressed", "focus", "disabled"]:
+		var style := button.get_theme_stylebox(state) as StyleBoxFlat
+		if style == null:
+			continue
+		if not button.has_theme_stylebox_override(state):
+			style = style.duplicate() as StyleBoxFlat
+			button.add_theme_stylebox_override(state, style)
+		style.expand_margin_left = -inset.x
+		style.expand_margin_right = -inset.x
+		style.expand_margin_top = -inset.y
+		style.expand_margin_bottom = -inset.y
+
+
 static func screen_scale(control: Control) -> Vector2:
 	# Screen scale converts physical pixels to Android dp / iOS points / web CSS
 	# pixels; the viewport transform includes the player's chosen UI scale.

@@ -102,13 +102,18 @@ func _sample(percentage: float, state: String) -> void:
 		if not button.visible:
 			continue
 		var rect: Rect2 = (root.get_screen_transform() * button.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, button.size)
+		var style := button.get_theme_stylebox("normal") as StyleBoxFlat
+		var visual := Rect2(Vector2.ZERO, button.size).grow_individual(style.expand_margin_left, style.expand_margin_top, style.expand_margin_right, style.expand_margin_bottom)
+		var drawn: Rect2 = (root.get_screen_transform() * button.get_global_transform_with_canvas()) * visual
+		_check((drawn.size / density).is_equal_approx(Vector2(28, 28)), "compact 28 dp surface " + panel_id)
+		_check(not visual.has_point(button.size * 0.9), "edge tap in transparent padding " + panel_id)
 		_check(rect.size.x / density >= 47.99 and rect.size.y / density >= 47.99, "48 dp " + panel_id + " at " + str(percentage))
 		_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(0.1).encloses(rect), "on screen " + panel_id)
 		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * 0.9), "blocks movement " + panel_id)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "separate targets " + panel_id)
 		rects.append(rect)
-		buttons[panel_id] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y, "widthDp": rect.size.x / density, "heightDp": rect.size.y / density}
+		buttons[panel_id] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y, "widthDp": rect.size.x / density, "heightDp": rect.size.y / density, "visibleWidthDp": drawn.size.x / density, "visibleHeightDp": drawn.size.y / density}
 	samples.append({"scale": percentage, "state": state, "buttons": buttons})
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("user://collapse-%d-%s.png" % [percentage, state])

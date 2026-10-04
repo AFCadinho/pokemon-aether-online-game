@@ -11,6 +11,21 @@ smallest. Godot 4.6.2
 [clamps its Android scale by the output dimensions](https://github.com/godotengine/godot/blob/4.6.2-stable/platform/android/display_server_android.cpp#L315).
 The helper now uses Android's uncapped `screen_get_dpi() / 160` density.
 
+After player feedback that the visible controls looked too large, native
+collapse/reopen and chat-resize controls now draw a centred 28 dp surface inside
+their unchanged 48 dp minimum input rect. Arrows and the centred resize icon are
+smaller too. Hover/pressed surfaces remain compact, and transparent padding
+continues to accept taps and block movement. Desktop surfaces and the labelled
+browser navigation retain their layout. The focused desktop regression passed
+33,506 assertions, including presses outside the visible surfaces; a rendered
+844×390 native preview passed 541 assertions and was visually inspected.
+The updated app also passed 541 assertions on the same Samsung phone at
+75%, 100% and 150%. All six samples had 28 dp visible surfaces and at least
+48.125 dp touch targets. The independent ADB check passed another 18 actual
+Android taps in the transparent padding at 75%; 75% and 150% device screenshots
+were visually inspected. Evidence is retained in the slot's
+`.tmp/mobile-collapse-phone-compact` directory.
+
 The physical-device probe uses the real HUD and quest-tracker scenes. It checks
 native layout, minimum sizes, viewport bounds, separate targets, movement-input
 blocking and collapse/reopen clicks near the enlarged edge at 75%, 100% and
