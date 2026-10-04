@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add the horizontal Route 8–Saffron gate with a story-locked attendant and two-way city connections.
 - Add twelve overworld Pokémon with route habitat patrols on Kanto Routes 12, 13, 14 and 15.
 - Populate Kanto Route 8 with FireRed/LeafGreen trainers, grass encounters and berries, with HeartGold/SoulSilver night species and TM41.
 
