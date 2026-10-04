@@ -7,12 +7,18 @@ const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
 # Compile the actual batch integration as part of this runtime check.
 const Battle = preload("res://scripts/battle/battle.gd")
 
-class SlowRouter extends BattleAnimationRouter:
-	var delay := 0.0
+class RecordingRouter extends BattleAnimationRouter:
+	var effects: Array = []
+	var damage_sounds: Array = []
 	func _start_3d_audio(kind: String, key: String, plan: Dictionary = {}, begin_immediately := true) -> Node:
-		if delay > 0:
-			await model_presenter.get_tree().create_timer(delay).timeout
-		return await super._start_3d_audio(kind, key, plan, begin_immediately)
+		assert(kind == "effect", "Model-only moves must not prepare or play move-animation audio")
+		var audio := await super._start_3d_audio(kind, key, plan, begin_immediately)
+		assert(is_instance_valid(audio) and not audio.streams.is_empty(), "Shared effect sounds remain available")
+		effects.append(key)
+		return audio
+	func _play_one_shot_sound(path: String) -> void:
+		damage_sounds.append(path)
+		super._play_one_shot_sound(path)
 
 class ActionPanel extends CurrentActionPanel:
 	func set_message(_message: String) -> void:
@@ -24,7 +30,7 @@ class SpriteReactionRouter extends BattleAnimationRouter:
 		observe_damage.call()
 
 var stage: Node
-var router: SlowRouter
+var router: RecordingRouter
 var renderer: BattleEventRenderer
 var hp_samples: Array = []
 var move_done := false
@@ -80,19 +86,14 @@ func _case(species: String, move: String) -> void:
 	assert(not pilot.is_empty())
 	var started := Time.get_ticks_msec()
 	_move(move)
-	if router.delay > 0:
-		await get_tree().create_timer(router.delay * 0.5).timeout
-		assert(stage.current_actions[0] == "idle", "Cold audio must prepare before native motion starts")
-	var observed_audio: Node
+	assert(stage.current_actions[0] == pilot.action, "Native motion starts without move-audio preparation")
 	while not move_done:
-		if not router.active_audio_nodes.is_empty():
-			observed_audio = router.active_audio_nodes[0]
+		assert(router.active_audio_nodes.is_empty())
 		await get_tree().process_frame
 	assert(stage.players[0].is_playing(), "Move must release events at impact, before recovery ends")
 	assert(is_equal_approx(stage.players[0].get_playing_speed(), 1.5))
 	assert(stage.players[0].current_animation_position >= float(pilot.impact_frame) / 60.0)
-	assert(is_instance_valid(observed_audio) and observed_audio.draining)
-	assert(observed_audio.cursor == observed_audio.plan.cues.size(), "All reviewed cues must dispatch by impact")
+	assert(router.active_audio_nodes.is_empty(), "Pilot sounds are also silent without move VFX")
 	assert(not router.has_3d_impact_damage("p1") and router.has_3d_impact_damage("p2"))
 	var impact_ms := Time.get_ticks_msec() - started
 	# Neutral/effectiveness metadata stays ordered but must not delay the hit.
@@ -103,6 +104,7 @@ func _case(species: String, move: String) -> void:
 	assert(hp_samples[1].at - hp_samples[0].at < 20, "HP must not wait for the damage clip to finish")
 	assert(not stage.players[0].is_playing() and not stage.players[1].is_playing(), "Next action must wait for both recoveries")
 	assert(not router.has_3d_impact_damage())
+	assert(router.damage_sounds[-1] == router.TAKE_DAMAGE_SOUND_PATH)
 	stats.append({"species": species, "move": move, "impact_ms": impact_ms, "pair_ms": Time.get_ticks_msec() - started})
 	router.cancel_render()
 	await get_tree().process_frame
@@ -153,41 +155,60 @@ func _clock_checks() -> void:
 	_move("Thunderbolt")
 	while stage.players[0].current_animation_position < 0.38:
 		await get_tree().process_frame
-	var audio: Node = router.active_audio_nodes[0]
-	assert(audio.cursor == 1, "Startup cue precedes the impact cue")
 	_set_replay_speed(0)
 	var position: float = stage.players[0].current_animation_position
 	await get_tree().create_timer(0.15).timeout
 	assert(not move_done and is_equal_approx(stage.players[0].current_animation_position, position))
-	assert(audio.cursor == 1, "Paused native motion must not dispatch the hit early")
-	for sound: AudioStreamPlayer in audio.players.values():
-		assert(sound.stream_paused and is_equal_approx(sound.pitch_scale, 1.0))
+	assert(router.active_audio_nodes.is_empty())
 	_set_replay_speed(2)
 	while not move_done:
 		await get_tree().process_frame
-	assert(audio.cursor == 2 and audio.draining and router.has_3d_impact_damage())
+	assert(router.active_audio_nodes.is_empty() and router.has_3d_impact_damage())
 	assert(is_equal_approx(stage.players[0].get_playing_speed(), 3.0))
 	await renderer.render_event({"type": "damage"}, {"damage_target_ident": "p2"})
 	_set_replay_speed(1)
 	router.cancel_render()
 	await get_tree().process_frame
 
-func _cold_attack() -> void:
-	await router.play_attack_tween_for_actor("p1", "Thunderbolt")
+func _next_attack() -> void:
+	await router.play_attack_tween_for_actor("p1", "Outrage")
 	attack_done = true
 
-func _cold_cancel_check() -> void:
+func _recovery_cancel_check() -> void:
 	_actor(0, "pikachu")
-	router.delay = 0.12
+	_actor(1, "pikachu")
+	await router.play_move_animation("Thunderbolt", "p1", "p2", {"stop_at_impact": true})
 	attack_done = false
-	_cold_attack()
+	_next_attack()
+	assert(not attack_done, "Next attack must wait for pending recovery")
 	await get_tree().create_timer(0.03).timeout
 	router.cancel_render()
 	while not attack_done:
 		await get_tree().process_frame
-	assert(stage.current_actions[0] == "idle", "Cancelled preparation must not restart an attack")
-	assert(router.active_audio_nodes.is_empty() and router.prepared_move_audio.is_empty())
-	router.delay = 0
+	assert(stage.current_actions[0] == "idle", "Cancelled recovery must not restart an attack")
+	assert(router.active_audio_nodes.is_empty() and router.prepared_moves.is_empty())
+
+func _unreviewed_move_check() -> void:
+	_actor(0, "garchomp")
+	_actor(1, "pikachu")
+	move_done = false
+	assert(stage.move_timing("Earthquake", "p1").is_empty())
+	_move("Earthquake", false)
+	assert(stage.current_actions[0] == "physical_attack")
+	while not move_done:
+		assert(router.active_audio_nodes.is_empty())
+		await get_tree().process_frame
+	assert(not stage.players[0].is_playing() and not router.has_3d_impact_damage())
+	assert(not router.audio_catalog.catalogs.has("move"), "Unreviewed source clocks must not prolong native attacks")
+
+func _shared_effect_checks() -> void:
+	await router.play_damage_tween_for_target("p2", "super_effective")
+	assert(router.damage_sounds[-1] == router.SUPER_EFFECTIVE_DAMAGE_SOUND_PATH)
+	await router.play_heal_presentation_for_target("p2", "health_up")
+	await router.play_stat_change_presentation_for_target("p2", 1)
+	await router.play_stat_change_presentation_for_target("p2", -1)
+	assert(router.effects == ["health_up", "stat_up", "stat_down"])
+	assert(router.active_audio_nodes.is_empty() and not router.audio_catalog.catalogs.has("move"))
 
 func _sprite_hp_check() -> void:
 	var sprite_router := SpriteReactionRouter.new()
@@ -207,7 +228,7 @@ func _run() -> void:
 	add_child(stage)
 	stage.set_process(false)
 	stage.active = true
-	router = SlowRouter.new()
+	router = RecordingRouter.new()
 	router.model_presenter = stage
 	router.animation_parent = stage
 	var panel := ActionPanel.new()
@@ -220,26 +241,22 @@ func _run() -> void:
 	add_child(panel)
 	renderer = BattleEventRenderer.new()
 	renderer.setup(null, null, panel, router, BattleMessageTiming.new(), stage, _hp)
-	router.delay = 0.12
 	await _case("pikachu", "Thunderbolt")
-	router.delay = 0
 	await _case("pikachu", "Tackle")
 	await _case("blastoise", "Ice Beam")
 	await _clock_checks()
-	await _cold_cancel_check()
+	await _recovery_cancel_check()
+	await _unreviewed_move_check()
+	await _shared_effect_checks()
 	await _sprite_hp_check()
-	# Cancellation must release an impact recovery and any playing audio tails.
+	# Cancellation must release an impact recovery without any move sound nodes.
 	_actor(0, "pikachu")
 	_actor(1, "pikachu")
 	await router.play_attack_tween_for_actor("p1", "Thunderbolt")
 	await router.play_move_animation("Thunderbolt", "p1", "p2", {"stop_at_impact": true})
 	assert(router.has_3d_impact_damage())
-	var tails: Array = router.active_audio_nodes.duplicate()
 	router.cancel_render()
-	assert(not router.has_3d_impact_damage() and router.active_audio_nodes.is_empty())
-	for tail: Node in tails:
-		for sound: AudioStreamPlayer in tail.players.values():
-			assert(not sound.playing)
+	assert(not router.has_3d_impact_damage() and router.active_audio_nodes.is_empty() and router.prepared_moves.is_empty())
 	router.release_threaded_resource_requests()
 	renderer = null
 	router = null

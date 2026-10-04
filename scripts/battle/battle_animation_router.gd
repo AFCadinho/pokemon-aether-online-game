@@ -40,7 +40,7 @@ var playback_speed := 1.0:
 				node.speed = value * float(node.plan.get("speed_scale", 1.0))
 var audio_catalog := preload("res://scripts/battle/animations/battle_audio_catalog.gd").new()
 var active_audio_nodes: Array[Node] = []
-var prepared_move_audio: Dictionary = {}
+var prepared_moves: Dictionary = {}
 var model_presenter: Node
 var move_presentation_3d := preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
 
@@ -94,7 +94,7 @@ func cancel_render() -> void:
 			node.cancel()
 			node.queue_free()
 	active_audio_nodes.clear()
-	prepared_move_audio.clear()
+	prepared_moves.clear()
 	move_presentation_3d.cancel()
 	if is_instance_valid(model_presenter):
 		model_presenter.cancel_actions()
@@ -171,24 +171,11 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		await move_presentation_3d.finish_recovery(model_presenter)
 		if owned_generation != render_generation or not uses_realtime_3d():
 			return
-		if prepared_move_audio.has(actor_ident):
-			_release_3d_audio(prepared_move_audio[actor_ident].get("audio"))
-			prepared_move_audio.erase(actor_ident)
 		var pilot: Dictionary = model_presenter.move_timing(move_name, actor_ident) if model_presenter.has_method("move_timing") else {}
-		var plan: Dictionary = audio_catalog.get_plan("move", _normalize_move_name(move_name))
-		plan = preload("res://scripts/battle/battle_3d_move_timing.gd").audio_plan(plan, pilot)
-		if not bool(plan.get("native_clock", false)):
-			pilot = {}
-		var audio := await _start_3d_audio("move", _normalize_move_name(move_name), plan, false)
-		if owned_generation != render_generation or not uses_realtime_3d():
-			_release_3d_audio(audio)
-			return
+		# Model-only attacks have no move VFX, so their 2D animation sounds
+		# are neither prepared nor played. Damage/heal/stat audio is separate.
 		move_presentation_3d.begin_attack(model_presenter, actor_ident, move_name)
-		if is_instance_valid(audio):
-			if bool(plan.get("native_clock", false)):
-				audio.clock = model_presenter.bind_action_clock(actor_ident)
-			audio.begin()
-		prepared_move_audio[actor_ident] = {"move": move_name, "audio": audio, "pilot": pilot}
+		prepared_moves[actor_ident] = {"move": move_name, "pilot": pilot}
 		return
 
 	match _get_player_id_from_ident(actor_ident):
@@ -213,23 +200,16 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 
 	if uses_realtime_3d():
 		model_presenter.playback_speed = playback_speed
-		var audio_generation := render_generation
-		if not prepared_move_audio.has(actor_ident) or prepared_move_audio[actor_ident].move != move_name:
+		var owned_generation := render_generation
+		if not prepared_moves.has(actor_ident) or prepared_moves[actor_ident].move != move_name:
 			await play_attack_tween_for_actor(actor_ident, move_name)
-		if audio_generation != render_generation or not uses_realtime_3d():
+		if owned_generation != render_generation or not uses_realtime_3d():
 			return
-		var prepared: Dictionary = prepared_move_audio.get(actor_ident, {})
-		prepared_move_audio.erase(actor_ident)
-		var audio: Node = prepared.get("audio")
+		var prepared: Dictionary = prepared_moves.get(actor_ident, {})
+		prepared_moves.erase(actor_ident)
 		var playback_options := options.duplicate()
 		playback_options["native_timing"] = prepared.get("pilot", {})
-		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options, audio)
-		if is_instance_valid(audio) and bool(audio.plan.get("native_clock", false)) and audio_generation == render_generation:
-			# Dispatch a marker crossed on this frame before detaching its clock.
-			audio._process(0.0)
-			_release_3d_audio(audio, true)
-		else:
-			_release_3d_audio(audio)
+		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options)
 		return
 
 	var move_key: String = _normalize_move_name(move_name)

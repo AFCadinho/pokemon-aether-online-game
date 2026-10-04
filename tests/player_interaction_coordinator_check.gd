@@ -12,6 +12,12 @@ class FakeAetherClashDuelController extends Node:
 	func can_view_overworld_identity(user_id: int) -> bool:
 		return visible_user_ids.has(user_id)
 
+class FakeLendingWorkspace extends Node:
+	var target_username := ""
+
+	func open_for_trainer(username: String) -> void:
+		target_username = username
+
 var failed := false
 var coordinator: Node
 var auth_service: Node
@@ -35,7 +41,7 @@ func _init() -> void:
 	_check_social_state_matching()
 	_check_phase_scope_contract()
 	_check_remote_avatar_interaction_contract()
-	_check_browser_lend_feedback()
+	_check_browser_lend_access()
 	coordinator.queue_free()
 	presence_service.queue_free()
 	auth_service.queue_free()
@@ -120,7 +126,13 @@ func _check_trade_context_action() -> void:
 	await _check_aether_clash_identity_filtering()
 	host.queue_free()
 
-func _check_browser_lend_feedback() -> void:
+func _check_browser_lend_access() -> void:
+	var original_workspace := root.get_node_or_null("LendingWorkspace")
+	if original_workspace != null:
+		root.remove_child(original_workspace)
+	var workspace := FakeLendingWorkspace.new()
+	workspace.name = "LendingWorkspace"
+	root.add_child(workspace)
 	presence_service._apply_snapshot_message({
 		"rosterRevision": 999999,
 		"players": [{"userId": 8, "username": "browsermisty", "supportsPlayerLending": false}],
@@ -132,11 +144,16 @@ func _check_browser_lend_feedback() -> void:
 	coordinator._on_lend_pressed()
 	_check_equal(
 		coordinator.lending_status_message.contains("playing in the browser"),
-		true,
-		"Lend action gives immediate feedback for a browser player"
+		false,
+		"Lend action accepts a browser player despite the legacy capability marker"
 	)
-	_check_equal(coordinator.context_menu.visible, true, "browser lending feedback keeps the player context open")
+	_check_equal(workspace.target_username, "browsermisty", "browser target opens the normal lending workspace")
+	_check_equal(coordinator.context_menu.visible, false, "successful lending action closes the player context")
 	coordinator.close_context_menu()
+	root.remove_child(workspace)
+	workspace.free()
+	if original_workspace != null:
+		root.add_child(original_workspace)
 
 
 func _check_context_page_navigation() -> void:

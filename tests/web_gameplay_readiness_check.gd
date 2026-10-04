@@ -18,7 +18,7 @@ func _run() -> void:
 	var action_service_source := FileAccess.get_file_as_string("res://scripts/services/player_action_service.gd")
 	_check(_function(action_service_source, "_request_json").contains("WebRuntime.gameplay_url(base_url + endpoint)"), "hotbar player actions use the scoped browser transport")
 	for path: String in ["trades", "loans", "exchange", "guilds/me/bank"]:
-		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "transfer policy is enforced by the account session: " + path)
+		_check(Runtime.browser_gameplay_url("/game/" + path) == "/game/" + path, "asset transfers use the shared gameplay routes: " + path)
 	var source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var ready := _function(source, "_ready")
 	_check(ready.find("_connect_world_presence_signals()") < ready.find('if OS.has_feature("web")'), "both platforms connect the visible roster before branching")

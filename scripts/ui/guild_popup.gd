@@ -1352,9 +1352,6 @@ func _build_guild_section_navigation(can_open_management: bool) -> Control:
 
 
 func _show_guild_section(section: String) -> void:
-	if OS.has_feature("web") and section == "bank":
-		_show_web_guild_download_dialog()
-		return
 	if section not in ["overview", "bank", "aether_clash", "members", "management"]:
 		return
 	active_guild_section = section
@@ -7915,24 +7912,6 @@ func _on_create_pressed() -> void:
 	_set_member_status(_t("ui.guild.status.created", {
 		"guild": str(created_guild.get("name", guild_name)),
 	}), false)
-
-
-func _show_web_guild_download_dialog() -> void:
-	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
-	dialog.name = "GuildWebClientRequiredDialog"
-	dialog.configure(
-		"Guild Bank requires the game client",
-		"Download the desktop or Android game to deposit, withdraw or borrow Guild Bank assets.",
-		_t("ui.guild.web_client.download"),
-		_t("ui.guild.web_client.not_now")
-	)
-	dialog.confirmed.connect(func():
-		OS.shell_open("https://pokeaether.com/download")
-		dialog.queue_free()
-	)
-	dialog.canceled.connect(dialog.queue_free)
-	add_child(dialog)
-	dialog.popup_centered(Vector2i(560, 250))
 
 
 func _refresh_from_server() -> void:
