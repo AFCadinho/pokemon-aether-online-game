@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add nine overworld Pokémon with route habitat patrols on Kanto Routes 12, 13, 14 and 15.
+
 - Populate Route 15 with day/night grass encounters, twelve FR/LG trainer NPCs (Ron and Mya as singles), and Rain Dance, PP Up and Rose Incense pickups.
 
 - Raise the Rayquaza Mount Box price to 1,000 Aether Gems, with the same cost in Gift Voucher credit.

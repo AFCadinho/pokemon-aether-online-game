@@ -23,6 +23,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/blackbelt-gen6.png" id="r15_portrait_blackbelt"]
 [ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/battlegirl-gen6.png" id="r15_portrait_battlegirl"]
 
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r15_overworld_pokemon"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1k0ms"]
 size = Vector2(32, 96)
 
@@ -410,6 +412,44 @@ z_index = 5
 y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1021422439]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Oddish" parent="Entities/Pokemon" instance=ExtResource("r15_overworld_pokemon")]
+position = Vector2(592, 624)
+overworld_pokemon_id = "kanto_route_15_oddish_1"
+species_id = "oddish"
+display_name = "Oddish"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.0
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 32.0
+
+[node name="Pidgeotto" parent="Entities/Pokemon" instance=ExtResource("r15_overworld_pokemon")]
+position = Vector2(1904, 720)
+overworld_pokemon_id = "kanto_route_15_pidgeotto_1"
+species_id = "pidgeotto"
+display_name = "Pidgeotto"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.7
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 36.0
+
+[node name="Venonat" parent="Entities/Pokemon" instance=ExtResource("r15_overworld_pokemon")]
+position = Vector2(2960, 432)
+overworld_pokemon_id = "kanto_route_15_venonat_1"
+species_id = "venonat"
+display_name = "Venonat"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.2
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 30.0
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=558868010]
 

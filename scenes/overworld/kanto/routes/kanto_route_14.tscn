@@ -14,6 +14,8 @@
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r14_item"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r14_trainer"]
 
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r14_overworld_pokemon"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2u64l"]
 size = Vector2(192, 32)
 
@@ -382,6 +384,44 @@ z_index = 5
 y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1106841184]
+
+[node name="Pokemon" type="Node2D" parent="Entities"]
+
+[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("r14_overworld_pokemon")]
+position = Vector2(432, 208)
+overworld_pokemon_id = "kanto_route_14_pidgey_1"
+species_id = "pidgey"
+display_name = "Pidgey"
+facing_direction = Vector2(1, 0)
+movement_behavior = "pace_horizontal"
+movement_tiles = 1
+movement_wait_seconds = 1.8
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 34.0
+
+[node name="Hoppip" parent="Entities/Pokemon" instance=ExtResource("r14_overworld_pokemon")]
+position = Vector2(496, 304)
+overworld_pokemon_id = "kanto_route_14_hoppip_1"
+species_id = "hoppip"
+display_name = "Hoppip"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.1
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 30.0
+
+[node name="Venonat" parent="Entities/Pokemon" instance=ExtResource("r14_overworld_pokemon")]
+position = Vector2(400, 400)
+overworld_pokemon_id = "kanto_route_14_venonat_1"
+species_id = "venonat"
+display_name = "Venonat"
+facing_direction = Vector2(0, 1)
+movement_behavior = "pace_vertical"
+movement_tiles = 1
+movement_wait_seconds = 2.1
+movement_wait_jitter_seconds = 0.4
+movement_speed_pixels = 30.0
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=389258332]
 
