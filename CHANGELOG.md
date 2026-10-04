@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make downloaded Pokémon storage settings clearer, explain disabled removal actions, allow removal outside battles when a hidden battle screen is prewarmed, and ask for confirmation with Cancel selected by default.
+
 - Omit 2D move-animation sounds from model-only 3D attacks while retaining Pokémon animations, impact timing and shared damage, healing and stat-change sounds.
 
 - Browser players can now trade, lend, use Aether Exchange and the Guild Bank, and send or claim mail attachments through the shared game API.
