@@ -55,6 +55,7 @@ func _run() -> void:
 	_check(menu.visible and service.is_scanning(), "settings open before storage scan finishes")
 	_check(menu.sprite_storage_button.disabled and menu.model_storage_button.disabled,
 		"cache removal waits for complete storage counts")
+	_check("Checking" in menu.model_storage_hint.text, "a pending scan has a visible explanation")
 	menu.close()
 	menu.open("game")
 	_check(service._thread == worker, "reopening shares the pending scan")
@@ -71,10 +72,61 @@ func _run() -> void:
 	await _wait_for_scan(service)
 	_check(service.sprite_bytes == expected_sprites and service.model_bytes == expected_models,
 		"background counts match all desktop cache and launcher asset roots")
-	_check("MiB" in menu.sprite_storage_button.text and "MiB" in menu.model_storage_button.text,
-		"completed scan updates storage labels")
+	_check("MB" in menu.sprite_storage_hint.text and "MB" in menu.model_storage_hint.text,
+		"completed scan updates separate, readable storage labels")
 	_check(not menu.sprite_storage_button.disabled and not menu.model_storage_button.disabled,
 		"completed nonempty scan enables removal")
+	_check(menu.model_storage_button.text == "Remove files" and menu.model_storage_button.custom_minimum_size.y >= 40,
+		"removal uses a short, properly sized action button")
+	# The world keeps a dormant battle UI ready on the map. Its mere existence
+	# must not disable cache management outside a battle.
+	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	root.add_child(host)
+	var prewarmed = load("res://scenes/battle/battle.tscn").instantiate()
+	host.prewarm_battle(prewarmed)
+	menu._refresh_asset_storage_controls()
+	_check(not menu.model_storage_button.disabled and not menu.sprite_storage_button.disabled,
+		"a hidden prewarmed battle does not block removal on the map")
+	menu._confirm_remove_models()
+	_check(menu.storage_confirm_dialog.visible and "download again" in menu.storage_confirm_dialog.message_label.text,
+		"an enabled button opens the existing confirmation with clear download consequences")
+	await process_frame
+	_check(menu.get_viewport().gui_get_focus_owner() == menu.storage_confirm_dialog.cancel_button, "cancel has the default focus in the removal confirmation")
+	menu.storage_confirm_dialog.cancel_button.pressed.emit()
+	_check(not menu.storage_confirm_dialog.visible and FileAccess.file_exists(legacy_models.path_join("objects/pikachu/model.scn")), "cancelling confirmation leaves downloaded files untouched")
+	menu._confirm_remove_sprites()
+	var escape := InputEventAction.new()
+	escape.action = "ui_cancel"
+	escape.pressed = true
+	menu._input(escape)
+	_check(menu.visible and not menu.storage_confirm_dialog.visible and FileAccess.file_exists(legacy_models.path_join("objects/pikachu/model.scn")),
+		"Escape dismisses only the confirmation without deleting files")
+	var model_service := root.get_node("OnDemand3DBundleService")
+	model_service._busy = true
+	menu._process(0.6)
+	_check(menu.model_storage_button.disabled and "downloads" in menu.model_storage_hint.text,
+		"a download temporarily disables removal with a readable reason")
+	menu._remove_downloaded_assets(true)
+	_check(FileAccess.file_exists(legacy_models.path_join("objects/pikachu/model.scn")),
+		"a newly busy download protects files even after confirmation was opened")
+	model_service._busy = false
+	menu._process(0.6)
+	_check(not menu.model_storage_button.disabled, "button re-enables while settings stay open after downloads finish")
+	host.mount(prewarmed)
+	menu._refresh_asset_storage_controls()
+	_check(menu.sprite_storage_button.disabled and menu.model_storage_button.disabled and "battle" in menu.model_storage_hint.text,
+		"a mounted battle still protects its files and explains the disabled action")
+	menu._confirm_remove_models()
+	_check(not menu.storage_confirm_dialog.visible, "blocked removal cannot open a confirmation")
+	host.release()
+	host.free()
+	menu._refresh_asset_storage_controls()
+	_check(not menu.model_storage_button.disabled, "removal is available again after leaving the battle")
+	service.model_bytes = 0
+	menu._refresh_asset_storage_controls()
+	_check(menu.model_storage_button.disabled and "No files" in menu.model_storage_hint.text,
+		"an empty cache is explained rather than appearing broken")
+	service.model_bytes = expected_models
 
 	# Exercise the real request path and a refresh after assets change without
 	# removing or touching any existing slot assets.
