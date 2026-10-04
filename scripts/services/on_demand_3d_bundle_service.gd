@@ -91,16 +91,24 @@ func cancel_prefetch() -> void:
 
 func _run_prefetch(identities: Array[String], generation: int) -> void:
 	for identity in identities:
+		# Spread cached area/party checks across frames instead of checking a
+		# whole area synchronously in one frame after changing maps.
+		await get_tree().process_frame
 		if generation != _prefetch_generation or not is_inside_tree():
 			return
 		if _asset_id(identity).is_empty():
+			continue
+		var source: String = get_tree().root.get_node("SettingsManager").get_battle_3d_catalog_path()
+		var cached := _installed_models([identity], source)
+		if not cached.is_empty():
+			OS.set_environment("POKEAETHER_MODEL_CATALOG", str(cached.path))
 			continue
 		while _busy or _battle_waiters > 0:
 			await get_tree().process_frame
 			if generation != _prefetch_generation or not is_inside_tree():
 				return
 		_busy = true
-		var source: String = get_tree().root.get_node("SettingsManager").get_battle_3d_catalog_path()
+		source = get_tree().root.get_node("SettingsManager").get_battle_3d_catalog_path()
 		var result := await _ensure_models([identity], source)
 		_busy = false
 		if str(result.get("error", "")).is_empty() and not str(result.get("path", "")).is_empty():
@@ -123,6 +131,11 @@ func progress_text() -> String:
 
 
 func ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
+	# Installed, verified combatants need no downloader lock or catalog write.
+	# A different model may still be downloading in the background.
+	var cached := _installed_models(identities, source_catalog)
+	if not cached.is_empty():
+		return cached
 	_battle_waiters += 1
 	while _busy:
 		await get_tree().process_frame
@@ -131,6 +144,47 @@ func ensure_models(identities: Array[String], source_catalog: String) -> Diction
 	var result := await _ensure_models(identities, source_catalog)
 	_busy = false
 	return result
+
+
+func _installed_models(identities: Array[String], source_catalog: String) -> Dictionary:
+	var release := _selected_release()
+	var index := _read_local_index(_local_index_path(release), release)
+	if index.is_empty():
+		return {} # Initial installs and missing indexes use the normal downloader.
+	var expected := {}
+	for identity in identities:
+		var asset_id := asset_id_for_identity(identity)
+		if asset_id not in release.requiredAssetIds:
+			continue
+		var canonical := ReviewedModels.canonical_identity(identity)
+		var asset := _indexed_asset(index, asset_id)
+		var digest := ""
+		for appearance in asset.get("appearances", []):
+			if appearance is Dictionary and str(appearance.get("runtime_identity", "")) == canonical:
+				digest = str(appearance.get("runtime_sha256", ""))
+		if digest.is_empty():
+			return {}
+		expected[canonical] = digest
+	if expected.is_empty():
+		return {}
+	var paths: Array[String] = []
+	if not source_catalog.is_empty():
+		paths.append(source_catalog)
+	var own := ProjectSettings.globalize_path(ROOT.path_join("runtime-catalog.json"))
+	if source_catalog.is_empty() or ProjectSettings.globalize_path(source_catalog) != own:
+		paths.append(own)
+	for path in paths:
+		var entries := _catalog(path)
+		var ready := true
+		for identity: String in expected:
+			if not _entry_available(entries, identity, expected[identity]):
+				ready = false
+				break
+		if ready:
+			# Reuse only a complete existing catalog. Mixed sources are merged
+			# under the normal lock so concurrent installs cannot lose entries.
+			return {"error": "", "path": path, "catalog_changed": false}
+	return {}
 
 
 func _ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
@@ -258,23 +312,38 @@ func _entry_available(entries: Array, identity: String, expected_digest: String)
 	return false
 
 
-func _approved_index() -> Dictionary:
-	var release := _selected_release()
+func _local_index_path(release: Dictionary) -> String:
 	var pin: Dictionary = release.index
-	var path := ROOT.path_join("index-%s.json" % pin.sha256)
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
-		path = launcher_path
+		return launcher_path
 	elif release.revision == RELEASE_V8.data.revision:
 		var editor_path := _editor_local_v8_index_path()
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
-			path = editor_path
+			return editor_path
+	return ROOT.path_join("index-%s.json" % pin.sha256)
+
+
+func _read_local_index(path: String, release: Dictionary) -> Dictionary:
+	var pin: Dictionary = release.index
+	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
+		return {}
+	return parsed
+
+
+func _approved_index() -> Dictionary:
+	var release := _selected_release()
+	var pin: Dictionary = release.index
+	var path := _local_index_path(release)
 	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
 		var result := await _fetch(BASE_URL + str(pin.object_key), path, int(pin.size_bytes), str(pin.sha256), MAX_INDEX_BYTES, "3D content index")
 		if not result.is_empty():
 			return {"error": result}
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
-	if not parsed is Dictionary or not parsed.get("assets") is Array or parsed.get("catalog_revision") != release.revision:
+	var parsed := _read_local_index(path, release)
+	if parsed.is_empty():
 		return {"error": "Approved 3D content index is invalid."}
 	return {"error": "", "index": parsed}
 

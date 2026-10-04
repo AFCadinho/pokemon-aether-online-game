@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open battles with already installed 3D models without waiting for unrelated background downloads or rewriting their catalog; spread cached map prefetch work across frames.
+
 - Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
 
 - Connect Vermilion City's map to its fishing encounter area so fishing encounters load there.

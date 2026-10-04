@@ -98,6 +98,8 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	_check(probe.requested == ["zapdos", "hoothoot@shiny" if enemy.shiny else "hoothoot"], "uncached pair is requested through the real entry host")
 	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible and not host.preparation_ready,
 		"slow model download never exposes the interim 2D arena or sprites")
+	_check(not host.loading_label.is_visible_in_tree(), "quick preparations do not flash a loading message")
+	await create_timer(0.55).timeout
 	_check(host.loading_label.is_visible_in_tree() and "50%" in host.loading_label.text, "waiting players can see model download progress")
 	probe.finish_download.emit()
 	# A genuine failure still releases the entry into stable sprite fallback.
