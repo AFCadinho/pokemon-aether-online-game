@@ -172,7 +172,7 @@ script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel_horizontal.tscn"
 target_spawn_name = "FromRoute7Entrance"
 transition_id = "kanto_underground_path_route_7_entrance__to_horizontal_tunnel"
-transition_facing_direction = "left"
+transition_facing_direction = "right"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnelHorizontal" unique_id=1795009777]
 shape = SubResource("stair_exit_shape")
