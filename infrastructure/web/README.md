@@ -79,6 +79,10 @@ browser-bucket `R2_*` secrets do not override them. The immutable browser
 runtime is written to the `pokeaether-web` bucket by the `web-production` job.
 The two buckets must not be the same.
 
+The browser's same-origin `/news.json` Function reads the shared forum feed at
+`https://updates.pokeaether.com/data/news.json`, also used by desktop, Android
+and the launcher. News does not use `ASSET_BASE_URL` or the browser R2 bucket.
+
 One-time Cloudflare setup:
 
 1. Use the Direct Upload Pages project `pokeaether-web`, with production branch
