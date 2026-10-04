@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Download approved normal and shiny 3D models when opening the Pokédex or a summary card, with loading progress and a sprite fallback if the download fails.
+
 - Prepare both Pokémon's 3D models before revealing wild encounters, including opponents that have not been downloaded yet.
 
 - Remember each successfully installed desktop update component immediately, so a later failed download does not force the game and asset packs to download again after restarting the launcher.

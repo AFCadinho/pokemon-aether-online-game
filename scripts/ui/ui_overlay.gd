@@ -12256,6 +12256,9 @@ func _setup_pokedex_popup() -> void:
 	pokedex_3d_preview.name = "PokedexModelPreview"
 	pokedex_3d_preview.visible = false
 	pokedex_sprite_panel.add_child(pokedex_3d_preview)
+	pokedex_3d_preview.model_failed.connect(func():
+		if not pokedex_selected_species.is_empty():
+			_set_pokedex_species_sprite(pokedex_selected_species, false))
 	_add_preview_zoom_button(pokedex_sprite_panel, pokedex_sprite_viewport, pokedex_sprite, 0.55)
 	_add_preview_animation_button(pokedex_sprite_panel, pokedex_animated_sprite, pokedex_sprite_loader, "bottom_right")
 
@@ -27312,7 +27315,7 @@ func _set_pokemon_summary_sprite(pokemon: Pokemon, allow_3d: bool = true) -> voi
 		preview.set_pokemon_types(pokemon.types)
 		preview.show()
 		var key := str(pokemon.species) + (":shiny" if pokemon.shiny else ":normal")
-		var ready_or_loading: bool = preview.get_meta("summary_species", "") == key and (preview.actor != null or not preview.loading_path.is_empty())
+		var ready_or_loading: bool = preview.get_meta("summary_species", "") == key and (preview.actor != null or preview.is_loading())
 		if ready_or_loading or preview.show_species(pokemon.species, pokemon.shiny):
 			preview.set_meta("summary_species", key)
 			pokemon_summary_animated_sprite.stop()
@@ -37104,6 +37107,7 @@ func _refresh_pokedex_type_row(types: Array) -> void:
 func _clear_pokedex_species_sprite() -> void:
 	pokedex_web_sprite_generation += 1
 	if pokedex_3d_preview != null:
+		pokedex_3d_preview._clear_actor()
 		pokedex_3d_preview.visible = false
 	if pokedex_animated_sprite != null:
 		pokedex_animated_sprite.stop()
@@ -37116,13 +37120,13 @@ func _clear_pokedex_species_sprite() -> void:
 	if pokedex_sprite_panel != null:
 		pokedex_sprite_panel.tooltip_text = LocalizationManager.text("ui.pokedex.sprite.select")
 
-func _set_pokedex_species_sprite(species: Dictionary) -> void:
+func _set_pokedex_species_sprite(species: Dictionary, allow_3d := true) -> void:
 	if pokedex_animated_sprite == null or pokedex_sprite == null:
 		return
 	pokedex_web_sprite_generation += 1
 	if pokedex_3d_preview != null:
 		var preview_species := str(species.get("id", species.get("showdownId", species.get("name", ""))))
-		if bool(pokedex_3d_preview.call("show_species", preview_species, pokedex_shiny_mode)):
+		if allow_3d and bool(pokedex_3d_preview.call("show_species", preview_species, pokedex_shiny_mode)):
 			pokedex_sprite.visible = false
 			pokedex_animated_sprite.stop()
 			pokedex_animated_sprite.visible = false
@@ -37131,8 +37135,9 @@ func _set_pokedex_species_sprite(species: Dictionary) -> void:
 			var zoom := pokedex_sprite_panel.find_child("PreviewZoomButton", true, false) as Button
 			if zoom != null:
 				pokedex_3d_preview.call("set_zoom", 2.0 if zoom.button_pressed else 1.0)
-			pokedex_sprite_panel.tooltip_text = "Drag to rotate local 3D preview"
+			pokedex_sprite_panel.tooltip_text = "Drag to rotate the 3D model"
 			return
+		pokedex_3d_preview._clear_actor()
 		pokedex_3d_preview.visible = false
 	var web_generation := pokedex_web_sprite_generation
 

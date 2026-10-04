@@ -1,5 +1,5 @@
 extends Node
-## Downloads only the approved models requested by a desktop battle.
+## Downloads only the approved models requested by desktop battles and previews.
 
 const RELEASE = preload("res://data/approved_3d_release_v7.json")
 const RELEASE_V8 = preload("res://data/approved_3d_release_v8.json")
