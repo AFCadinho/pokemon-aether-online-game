@@ -4,6 +4,8 @@
 
 - Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
 
+- Connect Vermilion City's map to its fishing encounter area so fishing encounters load there.
+
 - Wait for desktop 3D battle models and arenas before revealing wild encounters, with loading progress instead of briefly showing 2D sprites.
 
 - Prevent the login screen from failing after an update when its new 2D/3D example images have not yet been imported by the editor.
