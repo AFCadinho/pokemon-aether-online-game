@@ -18,6 +18,13 @@ func _ready() -> void:
 	close_button.hide()
 	cancel_button.hide()
 	confirm_button.disabled = true
+	# A short introduction keeps room for readable examples on smaller windows.
+	var introduction := message_label.get_parent().get_parent() as PanelContainer
+	introduction.custom_minimum_size.y = 0
+	introduction.size_flags_vertical = Control.SIZE_FILL
+	introduction.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	for edge: String in ["left", "right", "top", "bottom"]:
+		message_label.get_parent().add_theme_constant_override("margin_" + edge, 0)
 	var cards := HBoxContainer.new()
 	cards.add_theme_constant_override("separation", 18)
 	var group := ButtonGroup.new()
@@ -39,7 +46,7 @@ func _ready() -> void:
 		example.texture_filter = Control.TEXTURE_FILTER_NEAREST if mode == "2d" else Control.TEXTURE_FILTER_LINEAR
 		example.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		example.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		example.custom_minimum_size = Vector2(0, 156)
+		example.custom_minimum_size = Vector2(0, 196)
 		content.add_child(example)
 		var description := _label()
 		descriptions[mode] = description
@@ -107,12 +114,14 @@ func refresh_locale() -> void:
 		choices[mode].text = LocalizationManager.text("ui.visual_choice.choose." + mode)
 		var info: Dictionary = DOWNLOAD_INFO.data[mode]
 		sizes[mode].text = LocalizationManager.text("ui.visual_choice.size", {
-			"download": _gib(int(info.download_bytes)), "installed": _gib(int(info.installed_bytes))})
+			"installed": _space(int(info.installed_bytes))})
 	hint.text = LocalizationManager.text("ui.visual_choice.hint")
 	error_label.text = LocalizationManager.text("ui.visual_choice.save_error")
 
-static func _gib(bytes: int) -> String:
-	return "%.2f GiB" % (bytes / 1073741824.0)
+static func _space(bytes: int) -> String:
+	if bytes >= 1000000000:
+		return "%.0f GB" % (bytes / 1000000000.0)
+	return "%.0f MB" % snappedf(bytes / 1000000.0, 10.0)
 
 func _confirm() -> void:
 	if selected_mode.is_empty():

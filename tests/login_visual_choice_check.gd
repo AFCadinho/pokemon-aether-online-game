@@ -49,7 +49,7 @@ func _run() -> void:
 			_check(login.get_child_count() == count and not login.is_loading, "login and saved-session paths cannot bypass the choice or duplicate the dialog")
 			dialog._cancel()
 			_check(dialog.visible and settings.needs_battle_visual_choice(), "Escape does not silently select a renderer")
-			_check(dialog.sizes["3d"].text.contains("17.68 GiB") and dialog.sizes["2d"].text.contains("0.41 GiB"), "separate full collection sizes are shown")
+			_check(dialog.sizes["3d"].text.contains("19 GB") and dialog.sizes["2d"].text.contains("470 MB"), "approximate full collection storage is shown")
 			for example_mode: String in ["2d", "3d"]:
 				var example := dialog.find_child("Example" + example_mode.to_upper(), true, false) as TextureRect
 				_check(example.texture != null and example.texture.get_width() > 0, "example is visible without downloads: " + example_mode)
@@ -65,7 +65,7 @@ func _run() -> void:
 				raw_texture = null
 				DirAccess.remove_absolute(ProjectSettings.globalize_path(raw_path))
 			settings.set_locale("nl")
-			_check(dialog.choices["3d"].text == "Kies 3D" and "Geïnstalleerde" in dialog.sizes["3d"].text, "locale changes translate the open chooser")
+			_check(dialog.choices["3d"].text == "Kies 3D" and "Ruimte voor alle Pokémon" in dialog.sizes["3d"].text, "locale changes translate the open chooser")
 			var capture := OS.get_environment("VISUAL_CHOICE_CAPTURE")
 			if not capture.is_empty() and mode == "3d":
 				DisplayServer.window_set_size(Vector2i(1280, 720))
