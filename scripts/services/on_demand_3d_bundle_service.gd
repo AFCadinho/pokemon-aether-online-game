@@ -115,6 +115,13 @@ func _run_prefetch(identities: Array[String], generation: int) -> void:
 			OS.set_environment("POKEAETHER_MODEL_CATALOG", str(result.path))
 
 
+func battle_download_progress() -> Dictionary:
+	# Local verification/import work is deliberately not a download indicator.
+	if not is_instance_valid(active_request):
+		return {}
+	return {"received_bytes": active_request.get_downloaded_bytes(), "total_bytes": active_size}
+
+
 func progress_text() -> String:
 	if not is_instance_valid(active_request):
 		return active_label

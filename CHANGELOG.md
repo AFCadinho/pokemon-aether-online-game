@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep local 3D battle preparation quiet; show simple download progress only when missing Pokémon files are actually downloading.
+
 - Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilot sounds, HP changes and damage reactions with an earlier impact beat while the attacker recovers.
 
 - Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.

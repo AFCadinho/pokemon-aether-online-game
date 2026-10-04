@@ -202,6 +202,12 @@ func _blocking_pipelines() -> Array:
 		Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_SURFACE),
 		Performance.get_monitor(Performance.PIPELINE_COMPILATIONS_DRAW)]
 
+func battle_download_progress() -> Dictionary:
+	if not is_instance_valid(model_downloader) or not model_downloader.has_method("battle_download_progress"):
+		return {}
+	return model_downloader.battle_download_progress()
+
+
 func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 	# Only the opaque screen host may temporarily expose hidden summon actors.
 	# Reuse these exact viewports/materials after reveal; do not rebuild them.
