@@ -41076,9 +41076,6 @@ func _on_coop_party_popup_closed() -> void:
 
 func _on_socials_loans_button_pressed() -> void:
 	_hide_socials_menu()
-	if OS.has_feature("web"):
-		_show_web_client_required("Lending")
-		return
 	var workspace := get_node_or_null("/root/LendingWorkspace")
 	if workspace == null:
 		return
@@ -43633,9 +43630,6 @@ func _on_mail_box_selected(box: String) -> void:
 	_load_mailbox()
 
 func _on_mail_claim_button_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Mail attachments")
-		return
 	if selected_mail_id <= 0:
 		return
 	var selected_mail := _get_mail_by_id(selected_mail_id)
@@ -43668,9 +43662,6 @@ func _on_mail_claim_button_pressed() -> void:
 
 
 func _on_mail_attachment_claim_pressed(attachment_id: int) -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Mail attachments")
-		return
 	if selected_mail_id <= 0:
 		return
 	if active_mail_box != "inbox":
@@ -43811,12 +43802,6 @@ func _on_mail_delete_button_pressed() -> void:
 	_add_chat_message(LocalizationManager.text("ui.mail.message.deleted"))
 
 func _prepare_mail_attachment_options() -> void:
-	if OS.has_feature("web"):
-		var compose_stack := $Control/MailComposePopup/MarginContainer/VBoxContainer
-		for child_name: String in ["ItemAttachmentRow", "ItemSuggestions", "MoneyAttachmentRow", "PokemonAttachmentRow", "SelectedAttachmentsScroll"]:
-			compose_stack.get_node(child_name).hide()
-		compose_stack.get_node("AttachmentsTitle").text = "Mail attachments require the game client."
-		return
 	mail_compose_inventory_items.clear()
 	mail_compose_party_pokemon.clear()
 	_refresh_mail_attachment_summary()
@@ -44447,9 +44432,7 @@ func _refresh_mail_detail() -> void:
 	mail_claim_button.text = LocalizationManager.text(
 		"ui.mail.claim_all" if has_unclaimed_attachments else "ui.mail.all_claimed"
 	)
-	mail_claim_button.disabled = OS.has_feature("web") or not has_unclaimed_attachments
-	if OS.has_feature("web"):
-		mail_claim_button.tooltip_text = "Mail attachments require the game client."
+	mail_claim_button.disabled = not has_unclaimed_attachments
 	mail_delete_button.disabled = active_mail_box == "inbox" and has_unclaimed_attachments
 
 func _on_mail_reply_button_pressed() -> void:
@@ -44656,7 +44639,6 @@ func _create_mail_attachment_row(
 		summary_button.focus_mode = Control.FOCUS_NONE
 		summary_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		summary_button.tooltip_text = LocalizationManager.text("ui.mail.summary_tooltip")
-		summary_button.disabled = OS.has_feature("web")
 		summary_button.pressed.connect(_on_mail_pokemon_attachment_pressed.bind(pokemon_payload))
 		_apply_button_style(summary_button)
 		row.add_child(summary_button)
@@ -44667,9 +44649,7 @@ func _create_mail_attachment_row(
 		claim_button.custom_minimum_size = Vector2(58, 26)
 		claim_button.focus_mode = Control.FOCUS_NONE
 		claim_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		claim_button.disabled = OS.has_feature("web") or active_mail_box != "inbox"
-		if OS.has_feature("web"):
-			claim_button.tooltip_text = "Mail attachments require the game client."
+		claim_button.disabled = active_mail_box != "inbox"
 		claim_button.pressed.connect(_on_mail_attachment_claim_pressed.bind(attachment_id))
 		_apply_button_style(claim_button, "primary")
 		row.add_child(claim_button)
@@ -44677,9 +44657,6 @@ func _create_mail_attachment_row(
 	return panel
 
 func _on_mail_pokemon_attachment_pressed(pokemon_payload: Dictionary) -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Mail attachments")
-		return
 	_open_readonly_pokemon_summary(pokemon_payload)
 
 func _open_readonly_pokemon_summary(pokemon_payload: Dictionary) -> void:
@@ -44957,9 +44934,6 @@ func _cancel_authorized_teleport_effect(world: Node) -> void:
 		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
-	if OS.has_feature("web"):
-		_show_web_client_required("Aether Exchange")
-		return
 	if aether_exchange_popup == null:
 		return
 	aether_exchange_popup.visible = true
@@ -45004,22 +44978,6 @@ func _on_pvp_mode_ranked_pressed() -> void:
 func _on_pvp_mode_tournaments_pressed() -> void:
 	await _open_pvp_popup_section("Tournaments")
 
-
-func _show_web_client_required(feature_name: String) -> void:
-	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
-	dialog.configure(
-		"Available in the full client",
-		"%s is shown here so you can explore PokeAether, but using it requires the downloadable client." % feature_name,
-		"Download client",
-		"Not now"
-	)
-	dialog.confirmed.connect(func():
-		OS.shell_open("https://pokeaether.com/download")
-		dialog.queue_free()
-	)
-	dialog.canceled.connect(dialog.queue_free)
-	root_control.add_child(dialog)
-	dialog.popup_centered(Vector2i(560, 240))
 
 func _on_pvp_mode_casual_pressed() -> void:
 	await _open_pvp_popup_section("Custom / Casual")

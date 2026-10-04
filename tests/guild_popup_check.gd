@@ -16,7 +16,7 @@ func _init() -> void:
 	_check_contains(popup_source, '"ui.guild.title"', "guildless interface has a localized title")
 	_check_contains(popup_source, '"ui.guild.tab.browse"', "guildless interface exposes localized guild discovery")
 	_check_contains(popup_source, "GUILD_BROWSE_ICON", "Guild browsing uses a font-independent icon")
-	_check_contains(popup_source, "GuildWebClientRequiredDialog", "browser-only Guild restrictions use the themed dialog")
+	_check(not popup_source.contains("GuildWebClientRequiredDialog"), "Guild Bank access is shared with browser players")
 	_check_contains(popup_source, '"ui.guild.tab.create"', "guildless interface exposes localized guild creation")
 	_check_contains(popup_source, "func _build_directory_filter_dialog", "guild directory exposes its filters in one dialog")
 	_check_contains(popup_source, "func _render_guild_list", "guild directory renders a compact guild list")
@@ -224,3 +224,9 @@ func _check_contains(source: String, expected: String, label: String) -> void:
 		return
 	failed = true
 	push_error(label)
+
+
+func _check(ok: bool, label: String) -> void:
+	if not ok:
+		failed = true
+		push_error(label)

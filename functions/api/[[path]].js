@@ -78,7 +78,7 @@ const CALCULATOR_CATALOG_ROUTE = /^\/damage-calc\/catalog\/(?:items|abilities|na
 const CALCDEX_SAMPLE_SETS_ROUTE = /^\/calcdex\/v1\/sample-sets\/[a-z0-9-]{1,64}\/[A-Za-z0-9-]{1,128}$/;
 const PVP_MATCH_START_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/start-battle$/;
 const PVP_MATCH_SPECTATE_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/spectate$/;
-const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live', '/ws/training-live']);
+const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live', '/ws/training-live', '/ws/trade']);
 const GAMEPLAY_ROUTES = [
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp$/],
@@ -98,6 +98,7 @@ const GAMEPLAY_ROUTES = [
   ['GET', /^\/game\/trainers\/\d+\/card$/],
   ['GET', /^\/battle\/pve\/nearby\/\d+\/spectate$/],
   ['POST', /^\/auth\/web\/mail\/\d+\/read$/],
+  ['POST', /^\/auth\/web\/mail\/\d+\/(?:claim|attachments\/\d+\/claim)$/],
   ['DELETE', /^\/auth\/web\/mail\/\d+$/],
   ['POST', /^\/auth\/web\/player-actions\/[a-z0-9-]+\/execute$/],
 ];
@@ -105,13 +106,7 @@ const GAMEPLAY_ROUTES = [
 export function isAllowedApiRoute(method, path) {
   const normalizedMethod = method.toUpperCase();
   if (path.split('/').includes('internal')) return false;
-  if (/^\/game\/(?:trades|loans|exchange)(?:\/|$)/.test(path)
-      || /^\/game\/guilds\/me\/bank(?:\/|$)/.test(path)
-      || /^\/game\/guilds\/me\/members\/[^/]+\/bank-permissions$/.test(path)
-      || /^\/game\/pokemon\/[^/]+\/transfer(?:\/|$)/.test(path)
-      || /^\/game\/mail\/[^/]+\/(?:claim|attachments\/[^/]+\/claim)$/.test(path)) return false;
-  // Gameplay uses the same account API on every platform. Transfer rules are
-  // enforced by the account service from the persisted session type.
+  // Gameplay and transfers share the native account API and its authorization.
   if (path.startsWith('/game/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;
   if (path.startsWith('/account/pvp/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;
   if (HTTP_ROUTES.has(`${normalizedMethod} ${path}`)) return true;
