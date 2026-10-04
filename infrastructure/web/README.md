@@ -161,6 +161,15 @@ both session types; browser-specific authentication endpoints retain their
 session-type checks. Legacy `/auth/web` gameplay aliases remain for older
 clients rather than duplicating transfer routes for the current client.
 
+Staff and creator tools use the same account permissions on browser and desktop.
+Browser staff can consume the shared `/auth/impersonate/consume` token exchange
+and return through `/auth/impersonate/stop`. The backend records a
+`web_impersonation` session so web identity, logout and the restored staff login
+keep their browser behavior; temporary impersonation tokens are not persisted.
+Photo Mode prepares a PNG in memory and exposes a separate download button so
+the download is initiated by a user click, including after a capture timer.
+Desktop screenshot folders, local cosmetic mods and 2.5D/3D remain desktop-only.
+
 The current browser uses the shared `/game/world` access and transition routes.
 Its map modules cover the current Kanto catalog beyond Cerulean, including
 Route 5, Route 9 and Cerulean Cave; canonical story and area requirements apply.

@@ -2,6 +2,7 @@ const HTTP_ROUTES = new Set([
   'GET /auth/status', 'GET /presence/online-count',
   'GET /auth/web/meta', 'GET /auth/web/me', 'POST /auth/web/signup',
   'POST /auth/web/login', 'POST /auth/web/logout',
+  'POST /auth/impersonate/consume', 'POST /auth/impersonate/stop',
   'GET /auth/web/preferences', 'PUT /auth/web/preferences',
   'PUT /auth/web/appearance',
   'GET /auth/web/world', 'PUT /auth/web/world',
