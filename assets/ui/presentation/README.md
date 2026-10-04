@@ -2,7 +2,7 @@
 
 The chooser uses static battle screenshots supplied for the first-play dialog,
 so a new player can decide without fetching a model or starting a 3D renderer.
-`2d.png` (960 × 540) shows Lopunny versus Landorus-Therian in the Aether stadium.
+`2d-battle.png` (1903 × 992) shows Iron Treads versus Great Tusk in the Aether stadium.
 `3d.png` (1907 × 985) shows Roaring Moon versus Dragonite in a 3D cave arena.
 Keep the full screenshots visible with their original aspect ratios. Both use
 linear filtering when scaled down, including the 2D screenshot's UI text.
