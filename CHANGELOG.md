@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore NPC interactions in Vermilion City and Route 6 by setting their interaction reach to one tile.
+
 - Simplify the first-play 2D/3D choice with clearer examples, approximate storage sizes and an explanation of automatic downloads and optional launcher downloads.
 
 - Open battles with already installed 3D models without waiting for unrelated background downloads or rewriting their catalog; spread cached map prefetch work across frames.
