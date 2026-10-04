@@ -39,7 +39,7 @@ on:
         type: string
 
 concurrency:
-  group: deploy-web-cloudflare
+  group: browser-release
   cancel-in-progress: false
 
 env:
@@ -59,9 +59,8 @@ env:
   POKEMON_GEN5_SHINY_BACK_ASSET_VERSION: pokemon-gen5-shiny-back-e432df8479a4
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment: web-production
     permissions:
       contents: read
 
@@ -69,6 +68,10 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
 
       - name: Validate release inputs
         env:
@@ -118,6 +121,14 @@ jobs:
             exit 1
           fi
           echo "PREVIEW_CLIENT_BUILD_ID=${client_build_id}" >> "${GITHUB_ENV}"
+
+      - name: Check browser sources before installing build tools
+        run: |
+          python3 -m pip install --disable-pip-version-check -r tools/web-release-requirements.txt
+          python3 tools/build_web_preview.py --check-only
+          python3 -m unittest tests.test_package_web_release tests.test_publish_web_sprite_catalog \
+            tests.test_verify_web_candidate tests.test_browser_release_workflows tests.test_upload_web_release
+          node tests/web_cloudflare_function_test.mjs
 
       - name: Install build tools
         run: sudo apt-get update && sudo apt-get install -y rclone unzip ffmpeg
@@ -198,14 +209,94 @@ jobs:
 
       - name: Run release-focused checks
         run: |
-          python3 -m unittest tests.test_package_web_release tests.test_publish_web_sprite_catalog
-          node tests/web_cloudflare_function_test.mjs
           ./godot --headless --path . --script res://tests/web_runtime_check.gd
           ./godot --headless --path . --script res://tests/web_dynamic_pokemon_sprite_check.gd
           python3 tools/serve_web_preview.py >/tmp/pokeaether-web-preview.log 2>&1 &
           preview_pid="$!"
           trap 'kill "${preview_pid}" 2>/dev/null || true' EXIT
           node tests/web_preview_browser_smoke.cjs
+
+      - name: Assemble promotable candidate artifact
+        env:
+          RELEASE_VERSION: ${{ inputs.release_version }}
+        run: |
+          mkdir -p builds/browser-candidate/r2
+          cp -a builds/web-pages-production builds/browser-candidate/pages-production
+          cp builds/web-r2/web-release.json builds/browser-candidate/r2/web-release.json
+          cp builds/web-r2/manifest-web.json builds/browser-candidate/r2/manifest-web.json
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          value = {
+              'schemaVersion': 2,
+              'previewUrl': os.environ['PREVIEW_URL'],
+              'runId': os.environ['GITHUB_RUN_ID'],
+              'sourceSha': os.environ['GITHUB_SHA'],
+              'buildId': os.environ['WEB_BUILD_ID'],
+              'releaseVersion': os.environ['RELEASE_VERSION'],
+              'previewClientBuildId': os.environ['PREVIEW_CLIENT_BUILD_ID'],
+              'pageFiles': {path.relative_to(Path('builds/web-pages-production')).as_posix():
+                            hashlib.sha256(path.read_bytes()).hexdigest()
+                            for path in Path('builds/web-pages-production').rglob('*') if path.is_file()},
+          }
+          Path('builds/browser-candidate/candidate.json').write_text(
+              json.dumps(value, indent=2) + '\n', encoding='utf-8')
+          PY
+
+      - name: Archive the verified browser build for deployment retries
+        run: |
+          tar -I 'gzip -1' -cf builds/browser-release-build.tar.gz -C builds \
+            browser-candidate web-pages-preview web-r2
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: browser-release-build-${{ github.run_id }}
+          path: builds/browser-release-build.tar.gz
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+          overwrite: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: web-production
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/download-artifact@v6
+        with:
+          name: browser-release-build-${{ github.run_id }}
+          path: builds
+
+      - name: Restore the verified build without running Godot
+        run: |
+          tar -xzf builds/browser-release-build.tar.gz -C builds
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          candidate = json.loads(Path('builds/browser-candidate/candidate.json').read_text())
+          if candidate['sourceSha'] != os.environ['GITHUB_SHA'] or candidate['runId'] != os.environ['GITHUB_RUN_ID']:
+              raise SystemExit('Saved build does not belong to this workflow run.')
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              print('WEB_BUILD_ID=' + candidate['buildId'], file=output)
+              print('PREVIEW_URL=' + candidate['previewUrl'], file=output)
+              print('PAGES_BRANCH=rc', file=output)
+          PY
+
+      - name: Verify browser upload configuration
+        env:
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+        run: |
+          test "${R2_BUCKET}" = pokeaether-web
+
+      - name: Install upload and Cloudflare tooling
+        run: |
+          sudo apt-get update && sudo apt-get install -y rclone
+          npm ci --ignore-scripts
 
       - name: Upload immutable runtime to R2
         env:
@@ -215,7 +306,7 @@ jobs:
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: |
           python3 tools/upload_web_release.py builds/web-r2 --verify-only
-          python3 tools/upload_web_release.py builds/web-r2
+          python3 tools/upload_web_release.py builds/web-r2 --reuse-upload
 
       - name: Verify R2 CORS is ready
         env:
@@ -300,34 +391,13 @@ jobs:
             "${WEB_URL}/pokemon-assets/gen5/${POKEMON_GEN5_FRONT_ASSET_VERSION}/pikachu/sheet.png" \
             | grep -Eiq '^content-type: image/png'
 
-      - name: Assemble promotable candidate artifact
-        env:
-          RELEASE_VERSION: ${{ inputs.release_version }}
-        run: |
-          mkdir -p builds/browser-candidate/r2
-          cp -a builds/web-pages-production builds/browser-candidate/pages-production
-          cp builds/web-r2/web-release.json builds/browser-candidate/r2/web-release.json
-          cp builds/web-r2/manifest-web.json builds/browser-candidate/r2/manifest-web.json
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          value = {
-              'runId': os.environ['GITHUB_RUN_ID'],
-              'sourceSha': os.environ['GITHUB_SHA'],
-              'buildId': os.environ['WEB_BUILD_ID'],
-              'releaseVersion': os.environ['RELEASE_VERSION'],
-              'previewClientBuildId': os.environ['PREVIEW_CLIENT_BUILD_ID'],
-          }
-          Path('builds/browser-candidate/candidate.json').write_text(
-              json.dumps(value, indent=2) + '\n', encoding='utf-8')
-          PY
-
       - uses: actions/upload-artifact@v6
         with:
           name: browser-release-candidate-${{ github.run_id }}
           path: builds/browser-candidate
           if-no-files-found: error
           retention-days: 30
+          overwrite: true
 
       - name: Publish preview instructions
         run: |
@@ -339,5 +409,6 @@ jobs:
             echo "- Candidate run ID: ${GITHUB_RUN_ID}"
             echo "- Production manifest: unchanged"
             echo
-            echo "Test the preview using the release matrix in infrastructure/web/README.md."
+            echo "Optional gameplay checks: infrastructure/web/README.md."
+            echo "Upload/deploy failure: use Re-run failed jobs to reuse the verified build."
           } >> "${GITHUB_STEP_SUMMARY}"
