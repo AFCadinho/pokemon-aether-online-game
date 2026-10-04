@@ -24,3 +24,6 @@ static func resolve(action: String, available: PackedStringArray, timing: Dictio
 
 static func _positive_number(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and float(value) > 0.0
+
+static func presentation_speed(action: String) -> float:
+	return 1.5 if action in ["physical_attack", "physical_attack_2", "special_attack", "damage"] else 1.0

@@ -40,6 +40,7 @@ var playback_speed := 1.0:
 				node.speed = value * float(node.plan.get("speed_scale", 1.0))
 var audio_catalog := preload("res://scripts/battle/animations/battle_audio_catalog.gd").new()
 var active_audio_nodes: Array[Node] = []
+var prepared_move_audio: Dictionary = {}
 var model_presenter: Node
 var move_presentation_3d := preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
 
@@ -93,6 +94,7 @@ func cancel_render() -> void:
 			node.cancel()
 			node.queue_free()
 	active_audio_nodes.clear()
+	prepared_move_audio.clear()
 	move_presentation_3d.cancel()
 	if is_instance_valid(model_presenter):
 		model_presenter.cancel_actions()
@@ -165,7 +167,28 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		return
 	if uses_realtime_3d():
 		model_presenter.playback_speed = playback_speed
+		var owned_generation := render_generation
+		await move_presentation_3d.finish_recovery(model_presenter)
+		if owned_generation != render_generation or not uses_realtime_3d():
+			return
+		if prepared_move_audio.has(actor_ident):
+			_release_3d_audio(prepared_move_audio[actor_ident].get("audio"))
+			prepared_move_audio.erase(actor_ident)
+		var pilot: Dictionary = model_presenter.move_timing(move_name, actor_ident) if model_presenter.has_method("move_timing") else {}
+		var plan: Dictionary = audio_catalog.get_plan("move", _normalize_move_name(move_name))
+		plan = preload("res://scripts/battle/battle_3d_move_timing.gd").audio_plan(plan, pilot)
+		if not bool(plan.get("native_clock", false)):
+			pilot = {}
+		var audio := await _start_3d_audio("move", _normalize_move_name(move_name), plan, false)
+		if owned_generation != render_generation or not uses_realtime_3d():
+			_release_3d_audio(audio)
+			return
 		move_presentation_3d.begin_attack(model_presenter, actor_ident, move_name)
+		if is_instance_valid(audio):
+			if bool(plan.get("native_clock", false)):
+				audio.clock = model_presenter.bind_action_clock(actor_ident)
+			audio.begin()
+		prepared_move_audio[actor_ident] = {"move": move_name, "audio": audio, "pilot": pilot}
 		return
 
 	match _get_player_id_from_ident(actor_ident):
@@ -191,12 +214,22 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 	if uses_realtime_3d():
 		model_presenter.playback_speed = playback_speed
 		var audio_generation := render_generation
-		var audio := await _start_3d_audio("move", _normalize_move_name(move_name))
+		if not prepared_move_audio.has(actor_ident) or prepared_move_audio[actor_ident].move != move_name:
+			await play_attack_tween_for_actor(actor_ident, move_name)
 		if audio_generation != render_generation or not uses_realtime_3d():
-			_release_3d_audio(audio)
 			return
-		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, options, audio)
-		_release_3d_audio(audio)
+		var prepared: Dictionary = prepared_move_audio.get(actor_ident, {})
+		prepared_move_audio.erase(actor_ident)
+		var audio: Node = prepared.get("audio")
+		var playback_options := options.duplicate()
+		playback_options["native_timing"] = prepared.get("pilot", {})
+		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options, audio)
+		if is_instance_valid(audio) and bool(audio.plan.get("native_clock", false)) and audio_generation == render_generation:
+			# Dispatch a marker crossed on this frame before detaching its clock.
+			audio._process(0.0)
+			_release_3d_audio(audio, true)
+		else:
+			_release_3d_audio(audio)
 		return
 
 	var move_key: String = _normalize_move_name(move_name)
@@ -444,8 +477,8 @@ func clear_move_animation_cache() -> void:
 	sound_stream_cache.clear()
 
 
-func _start_3d_audio(kind: String, key: String) -> Node:
-	var plan: Dictionary = audio_catalog.get_plan(kind, key)
+func _start_3d_audio(kind: String, key: String, prepared_plan: Dictionary = {}, begin_immediately := true) -> Node:
+	var plan: Dictionary = prepared_plan if not prepared_plan.is_empty() else audio_catalog.get_plan(kind, key)
 	if plan.is_empty() or not is_instance_valid(model_presenter):
 		return null
 	var generation := render_generation
@@ -480,14 +513,25 @@ func _start_3d_audio(kind: String, key: String) -> Node:
 			node.streams[name] = stream
 	model_presenter.add_child(node)
 	active_audio_nodes.append(node)
-	node.begin()
+	if begin_immediately:
+		node.begin()
 	return node
 
-func _release_3d_audio(node: Node) -> void:
+func _release_3d_audio(node: Node, allow_tail := false) -> void:
+	if allow_tail and is_instance_valid(node):
+		node.tree_exiting.connect(func(): active_audio_nodes.erase(node), CONNECT_ONE_SHOT)
+		node.drain()
+		return
 	active_audio_nodes.erase(node)
 	if is_instance_valid(node):
 		node.cancel()
 		node.queue_free()
+
+func has_3d_impact_damage(target: String = "") -> bool:
+	return uses_realtime_3d() and move_presentation_3d.has_impact_damage(target)
+
+func finish_3d_impact_damage(target: String = "") -> void:
+	await move_presentation_3d.finish_recovery(model_presenter, target)
 
 func _get_move_animation_config(move_key: String) -> Dictionary:
 	if loaded_move_animation_configs.has(move_key):

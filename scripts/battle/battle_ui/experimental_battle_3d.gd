@@ -608,6 +608,43 @@ func wait_action(ident: String) -> void:
 			return
 		await get_tree().process_frame
 
+func move_timing(move: String, ident: String) -> Dictionary:
+	if not handles(ident):
+		return {}
+	var index := actor_index(ident)
+	var timing: Dictionary = entries[identities[index]].action_timing
+	var mapped := ActionMap.resolve(attack_action_for(move, ident), players[index].get_animation_list(), timing)
+	if mapped.is_empty():
+		return {}
+	return preload("res://scripts/battle/battle_3d_move_timing.gd").profile(identities[index], move, mapped.action, timing)
+
+func action_clock(ident: String, generation: int, end_seconds: float) -> float:
+	if not handles(ident):
+		return end_seconds
+	var index := actor_index(ident)
+	if action_generation[index] != generation or current_actions[index] in ["idle", "sleep"]:
+		return end_seconds
+	return players[index].current_animation_position
+
+func bind_action_clock(ident: String) -> Callable:
+	if not handles(ident):
+		return Callable()
+	var index := actor_index(ident)
+	var length: float = players[index].get_animation(current_actions[index]).length
+	return action_clock.bind(ident, action_generation[index], length)
+
+func wait_action_until(ident: String, native_frame: float) -> void:
+	if not handles(ident):
+		return
+	var index := actor_index(ident)
+	var generation: int = action_generation[index]
+	while is_inside_tree() and handles(ident) and generation == action_generation[index]:
+		if current_actions[index] in ["idle", "sleep", "faint_loop"] or not players[index].is_playing():
+			return
+		if players[index].current_animation_position >= native_frame / 60.0:
+			return
+		await get_tree().process_frame
+
 func play_action(ident: String, action: String) -> void:
 	start_action(ident, action)
 	if not handles(ident):
@@ -1316,7 +1353,7 @@ func _action(action: String, index: int) -> void:
 	animation.length = mapped.duration
 	animation.loop_mode = Animation.LOOP_LINEAR if mapped.loop else Animation.LOOP_NONE
 	players[index].speed_scale = playback_speed
-	players[index].play(mapped.clip, -1, mapped.speed)
+	players[index].play(mapped.clip, -1, mapped.speed * ActionMap.presentation_speed(action))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 
 func _update_camera(delta: float) -> void:

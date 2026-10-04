@@ -4,6 +4,7 @@ extends RefCounted
 ## awaited lifetime, and must be released by cancel (including camera overrides).
 var generation := 0
 var started: Dictionary = {}
+var recovery: Dictionary = {}
 
 func begin_attack(presenter: Node, actor: String, move: String) -> void:
 	if not is_instance_valid(presenter) or not presenter.handles(actor):
@@ -18,9 +19,17 @@ func play_move(presenter: Node, move: String, actor: String, _target: String, op
 	if presenter.handles(actor):
 		if not started.has(actor) or started[actor] != move:
 			begin_attack(presenter, actor, move)
+		var pilot: Dictionary = options.get("native_timing", {})
+		if bool(options.get("stop_at_impact", false)) and str(options.get("result", "")).is_empty() and not pilot.is_empty() and presenter.handles(_target):
+			await presenter.wait_action_until(actor, float(pilot.impact_frame))
+			if owned_generation != generation or not presenter.active:
+				return
+			recovery = {"actor": actor, "target": _target}
+			started.erase(actor)
+			return
 		await presenter.wait_action(actor)
-	# Native clip speed is unchanged. The move beat lasts until both native
-	# motion and shared audio/source timing finish, never their summed duration.
+	# Unreviewed moves retain the shared source-audio completion boundary.
+	# Pilot impact beats leave recovery owned until the ordered damage event joins it.
 	while owned_generation == generation and is_instance_valid(audio) and not audio.done:
 		await audio.get_tree().process_frame
 	if owned_generation != generation or not is_instance_valid(presenter) or not presenter.active:
@@ -40,3 +49,17 @@ func play_effect(_presenter: Node, _effect: String, _target: String) -> void:
 func cancel() -> void:
 	generation += 1
 	started.clear()
+	recovery.clear()
+
+func has_impact_damage(target: String = "") -> bool:
+	return not recovery.is_empty() and (target.is_empty() or target.strip_edges().to_lower() == str(recovery.target).strip_edges().to_lower())
+
+func finish_recovery(presenter: Node, target: String = "") -> void:
+	if not has_impact_damage(target):
+		return
+	var actor := str(recovery.actor)
+	var owned_generation := generation
+	if is_instance_valid(presenter):
+		await presenter.wait_action(actor)
+	if owned_generation == generation:
+		recovery.clear()

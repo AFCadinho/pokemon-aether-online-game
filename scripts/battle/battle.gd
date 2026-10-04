@@ -10323,6 +10323,7 @@ func _render_battle_events(
 	_prewarm_battle_event_animations(ordered_events)
 	_prepare_pending_status_condition_overlays(ordered_events)
 	event_presentation.reset_recent_context()
+	var impact_banter_cues: Array[Dictionary] = []
 
 	for event_index: int in range(ordered_events.size()):
 		if spectator_exit_in_progress:
@@ -10434,6 +10435,13 @@ func _render_battle_events(
 				var move_animation_result := _get_move_animation_result_for_event(ordered_events, event_index)
 				if move_animation_result != "":
 					presentation["move_animation_result"] = move_animation_result
+				if SettingsManager.battle_animations and animation_router.uses_realtime_3d():
+					var pilot_hit := preload("res://scripts/battle/battle_3d_move_timing.gd").damage_index(ordered_events, event_index)
+					presentation["3d_impact_bridge"] = pilot_hit >= 0 and move_animation_result == "" and (
+						hp_event_helper.event_has_hp_loss(ordered_events[pilot_hit])
+						or hp_event_helper.event_has_sub_percent_hp_loss(ordered_events[pilot_hit])
+					)
+
 		elif event_type == "damage":
 			var direct_release_move := _get_direct_prepare_release_move(ordered_events, event_index, event_data)
 			if not direct_release_move.is_empty():
@@ -10538,8 +10546,17 @@ func _render_battle_events(
 				_summarize_active_battle_state(),
 			])
 		if source != "initial_battle_events" and not _is_pvp_battle():
-			await _present_battle_banter_cues(battle_banter_presenter.take_cues_for_event(event_data))
+			impact_banter_cues.append_array(battle_banter_presenter.take_cues_for_event(event_data))
+			if not animation_router.has_3d_impact_damage():
+				await _present_battle_banter_cues(impact_banter_cues)
+				impact_banter_cues.clear()
 		_mark_pvp_render_event_completed(event_index + 1)
+
+	await animation_router.finish_3d_impact_damage()
+	if spectator_exit_in_progress or (replay_mode and owned_replay_generation != replay_generation):
+		return
+	if not impact_banter_cues.is_empty():
+		await _present_battle_banter_cues(impact_banter_cues)
 
 	_remember_rendered_non_pvp_event_keys(ordered_events)
 	# PvP presentation advances through ordered fieldEffect events. Replacing it
