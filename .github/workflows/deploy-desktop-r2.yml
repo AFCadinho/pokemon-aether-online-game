@@ -431,6 +431,15 @@ jobs:
           register_external_pack "music" "${MUSIC_ASSET_VERSION}" "${MUSIC_ASSET_SIZE}" "${MUSIC_ASSET_SHA256}"
           register_external_pack "battle-environment-forest" "${FOREST_ASSET_VERSION}" "${FOREST_ASSET_SIZE}" "${FOREST_ASSET_SHA256}"
 
+      - name: Publish approved 3D v8 index after verifying its bundles
+        if: inputs.approved_3d_release == 'v8'
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/publish_approved_3d_index_v8.py --apply
+
       - name: Register approved 3D Pokemon bundle index
         env:
           INPUT_APPROVED_3D_RELEASE: ${{ inputs.approved_3d_release }}

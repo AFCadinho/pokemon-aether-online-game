@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.92
+
+### Browser and Launcher
+
+- Add the Route 7–8 and Routes 13–15 scenes to the browser's extended map module.
+- Publish the approved 3D v8 index after validating its 1,139 referenced bundles before launcher packaging.
+
 ## 0.3.91
 ### World, Story, and Maps
 - Add Route 7 and connect it to the Underground Path, with entrances open in both directions.
