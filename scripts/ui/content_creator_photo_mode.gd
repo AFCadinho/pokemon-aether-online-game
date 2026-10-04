@@ -74,6 +74,8 @@ var screenshot_in_progress := false
 var controls_panel_dragging := false
 var camera_mouse_panning := false
 var capture_sequence := 0
+var browser_screenshot := PackedByteArray()
+var browser_screenshot_filename := ""
 
 
 func _ready() -> void:
@@ -335,37 +337,49 @@ func capture_screenshot() -> void:
 	if not active or current_capture_sequence != capture_sequence:
 		return
 
-	var directory_error := DirAccess.make_dir_recursive_absolute(
-		ProjectSettings.globalize_path(SCREENSHOT_DIRECTORY)
-	)
-	var saved := false
-	var screenshot_path := ""
-	if directory_error == OK or directory_error == ERR_ALREADY_EXISTS:
-		var timestamp := Time.get_datetime_string_from_system(false, true)
-		timestamp = "%s_%03d" % [
-			timestamp.replace(":", "-").replace(" ", "_"),
-			Time.get_ticks_msec() % 1000,
-		]
-		screenshot_path = "%s/pokeaether_%s.png" % [SCREENSHOT_DIRECTORY, timestamp]
-		var image := get_viewport().get_texture().get_image()
-		saved = image != null and image.save_png(screenshot_path) == OK
+	var timestamp := Time.get_datetime_string_from_system(false, true)
+	timestamp = "%s_%03d" % [
+		timestamp.replace(":", "-").replace(" ", "_"),
+		Time.get_ticks_msec() % 1000,
+	]
+	var screenshot_path := "%s/pokeaether_%s.png" % [SCREENSHOT_DIRECTORY, timestamp]
+	var image := get_viewport().get_texture().get_image()
+	var saved := _store_screenshot(image, screenshot_path)
 
 	controls_panel.visible = controls_were_visible
 	hidden_controls_hint.visible = hint_was_visible
 	composition_grid.visible = grid_was_visible
 	if saved:
 		status_label.text = LocalizationManager.text(
-			"ui.creator.photo.status_saved",
+			"ui.creator.photo.status_download_ready" if OS.has_feature("web") else "ui.creator.photo.status_saved",
 			{"filename": screenshot_path.get_file()}
 		)
 	else:
 		status_label.text = LocalizationManager.text("ui.creator.photo.status_failed")
 	screenshot_in_progress = false
 	capture_button.disabled = false
+	_refresh_copy()
 	_fit_controls_panel_to_content.call_deferred()
 
 
+func _store_screenshot(image: Image, screenshot_path: String, is_web: bool = OS.has_feature("web")) -> bool:
+	if is_web:
+		browser_screenshot = image.save_png_to_buffer() if image != null else PackedByteArray()
+		browser_screenshot_filename = screenshot_path.get_file() if not browser_screenshot.is_empty() else ""
+		return not browser_screenshot.is_empty()
+	var directory_error := DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(SCREENSHOT_DIRECTORY)
+	)
+	return (directory_error == OK or directory_error == ERR_ALREADY_EXISTS) and image != null and image.save_png(screenshot_path) == OK
+
+
 func open_screenshot_folder() -> void:
+	if OS.has_feature("web"):
+		if not browser_screenshot.is_empty():
+			# Keep the download directly in this button interaction, including for
+			# delayed captures, so the browser can accept the download gesture.
+			JavaScriptBridge.download_buffer(browser_screenshot, browser_screenshot_filename, "image/png")
+		return
 	var absolute_directory := ProjectSettings.globalize_path(SCREENSHOT_DIRECTORY)
 	var directory_error := DirAccess.make_dir_recursive_absolute(absolute_directory)
 	if directory_error != OK and directory_error != ERR_ALREADY_EXISTS:
@@ -695,7 +709,8 @@ func _refresh_copy() -> void:
 	_refresh_lighting_preset_options()
 	reset_button.text = LocalizationManager.text("ui.creator.photo.reset")
 	capture_button.text = LocalizationManager.text("ui.creator.photo.capture")
-	open_folder_button.text = LocalizationManager.text("ui.creator.photo.open_folder")
+	open_folder_button.text = LocalizationManager.text("ui.creator.photo.download" if OS.has_feature("web") else "ui.creator.photo.open_folder")
+	open_folder_button.disabled = OS.has_feature("web") and browser_screenshot.is_empty()
 	close_button.text = "×"
 	close_button.tooltip_text = LocalizationManager.text("common.close")
 	hidden_controls_hint.text = LocalizationManager.text("ui.creator.photo.hidden_hint")
@@ -713,7 +728,7 @@ func _refresh_copy() -> void:
 	composition_grid_toggle.tooltip_text = LocalizationManager.text("ui.creator.photo.tooltip.grid")
 	timer_select.tooltip_text = LocalizationManager.text("ui.creator.photo.tooltip.timer")
 	capture_button.tooltip_text = LocalizationManager.text("ui.creator.photo.tooltip.capture")
-	open_folder_button.tooltip_text = LocalizationManager.text("ui.creator.photo.tooltip.folder")
+	open_folder_button.tooltip_text = LocalizationManager.text("ui.creator.photo.tooltip.download" if OS.has_feature("web") else "ui.creator.photo.tooltip.folder")
 
 
 func _refresh_direction_options() -> void:

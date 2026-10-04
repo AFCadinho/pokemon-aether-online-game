@@ -33,6 +33,7 @@ HTTP_ROUTES = {
     ("GET", "/auth/status"), ("GET", "/presence/online-count"),
     ("GET", "/auth/web/meta"), ("GET", "/auth/web/me"),
     ("POST", "/auth/web/signup"), ("POST", "/auth/web/login"), ("POST", "/auth/web/logout"),
+    ("POST", "/auth/impersonate/consume"), ("POST", "/auth/impersonate/stop"),
     ("GET", "/auth/web/preferences"), ("PUT", "/auth/web/preferences"),
     ("PUT", "/auth/web/appearance"),
     ("PATCH", "/auth/web/party/battle-state"),

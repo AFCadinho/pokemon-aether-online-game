@@ -2487,7 +2487,6 @@ func _can_use_moderation_center() -> bool:
 	return _can_use_chat_moderation() or _can_manage_jail()
 
 func _refresh_dev_tools_visibility() -> void:
-	var is_web := OS.has_feature("web")
 	var can_show_staff_action_bar: bool = _can_show_staff_action_bar()
 	var can_use_dev_tools: bool = _can_use_dev_tools()
 	var can_generate_dev_items: bool = _can_generate_dev_items()
@@ -2495,18 +2494,18 @@ func _refresh_dev_tools_visibility() -> void:
 	var can_open_dev_actions: bool = can_use_dev_tools or can_generate_dev_items
 	var can_impersonate: bool = _can_impersonate_accounts()
 	var can_return_from_impersonation := AuthService.is_impersonating()
-	var can_impersonate_here := can_impersonate and not is_web
-	var can_return_from_impersonation_here := can_return_from_impersonation and not is_web
+	var can_impersonate_here := can_impersonate
+	var can_return_from_impersonation_here := can_return_from_impersonation
 	var can_teleport: bool = _can_teleport_self()
 	var can_teleport_to_player: bool = _can_teleport_to_player()
 	var can_teleport_other: bool = _can_teleport_other_player()
 	var can_use_content_creator_photo_mode: bool = _can_use_content_creator_photo_mode()
 	var can_use_content_creator_generation: bool = _can_use_content_creator_generation()
 	var can_generate_alpha_aetherite: bool = _can_generate_alpha_aetherite()
-	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web
-	var can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web
+	var can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode
+	var can_use_content_creator_generation_here := can_use_content_creator_generation
 	var can_use_content_creator_tools_here := can_use_content_creator_photo_mode_here or can_use_content_creator_generation_here
-	var can_generate_alpha_aetherite_here := can_generate_alpha_aetherite and not is_web
+	var can_generate_alpha_aetherite_here := can_generate_alpha_aetherite
 	var has_staff_tool: bool = (
 		can_return_from_impersonation_here
 		or can_impersonate_here

@@ -583,6 +583,14 @@
     [
       "POST",
       "/game/mail/5/attachments/3/claim"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/consume"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/stop"
     ]
   ],
   "denied": [
@@ -677,6 +685,14 @@
     [
       "POST",
       "/game/loans/internal/expire"
+    ],
+    [
+      "GET",
+      "/auth/impersonate/consume"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/unknown"
     ]
   ]
 }

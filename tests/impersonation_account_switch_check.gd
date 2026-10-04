@@ -19,7 +19,7 @@ func _run() -> void:
 	var chat := _source("res://scripts/services/chat_realtime_service.gd")
 
 	_expect(
-		auth.contains('session_type == "impersonation"')
+		auth.contains('session_type in ["impersonation", "web_impersonation"]')
 		and auth.contains("impersonated_by_user_id > 0"),
 		"auth service exposes authoritative impersonation session state"
 	)
@@ -146,9 +146,25 @@ func _run() -> void:
 			and auth_service.call("get_user_id_text_from", {"id": 42.0}) == "42",
 			"integer and decoded JSON float ids normalize identically"
 		)
+	_verify_browser_impersonation_state()
 	_verify_player_identity_reset()
 
 	quit(1 if failed else 0)
+
+
+func _verify_browser_impersonation_state() -> void:
+	var auth = load("res://scripts/services/auth_service.gd").new()
+	auth.session_token = "test-only"
+	auth.current_user = {"id": 42}
+	auth.session_type = "web_impersonation"
+	auth.impersonated_by_user_id = 7
+	_expect(auth.is_impersonating(), "browser impersonation exposes account-return controls")
+	auth.impersonated_by_user_id = 0
+	_expect(not auth.is_impersonating(), "a browser session without an actor is not impersonation")
+	auth.session_type = "web"
+	auth.impersonated_by_user_id = 7
+	_expect(not auth.is_impersonating(), "normal browser sessions cannot become impersonation through actor metadata alone")
+	auth.free()
 
 
 func _verify_player_identity_reset() -> void:

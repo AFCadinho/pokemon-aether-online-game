@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable permission-based staff and creator tools in the browser, including account impersonation and downloadable Photo Mode screenshots.
+
 - Fix browser Pokémon HOME icons remaining as question marks in Party, Storage and the Pokédex when reading the release's asset configuration.
 
 - Make downloaded Pokémon storage settings clearer, explain disabled removal actions, allow removal outside battles when a hidden battle screen is prewarmed, and ask for confirmation with Cancel selected by default.
