@@ -22,9 +22,17 @@ static func font_size_for(control: Control, desktop_size: int, minimum: float = 
 static func screen_scale(control: Control) -> Vector2:
 	# Screen scale converts physical pixels to Android dp / iOS points / web CSS
 	# pixels; the viewport transform includes the player's chosen UI scale.
-	var density := DisplayServer.screen_get_scale() if OS.has_feature("mobile") or OS.has_feature("web") else 1.0
+	var density := pixel_density()
 	var transform := control.get_viewport().get_screen_transform() * control.get_global_transform_with_canvas()
 	return transform.get_scale().abs().max(Vector2.ONE * 0.001) / maxf(density, 0.001)
+
+
+static func pixel_density() -> float:
+	if OS.has_feature("android"):
+		# Godot clamps Android screen_get_scale() by the viewport dimensions.
+		# Android dp uses the uncapped densityDpi / 160 instead.
+		return maxf(float(DisplayServer.screen_get_dpi()) / 160.0, 0.001)
+	return DisplayServer.screen_get_scale() if OS.has_feature("mobile") or OS.has_feature("web") else 1.0
 
 
 static func fit_rect(desired: Rect2, bounds: Rect2, occupied: Array[Rect2], gap: float = 4.0) -> Rect2:
