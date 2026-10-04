@@ -6,22 +6,20 @@
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_kl2dy"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="5_px0b4"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="6_gwdho"]
-
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="r15_ace_trainer_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r15_bird_keeper"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/black_belt_frames.tres" id="r15_black_belt"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/lass_frames.tres" id="r15_lass"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/picnicker_frames.tres" id="r15_picnicker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/rocker_frames.tres" id="r15_rocker"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="r15_trainer"]
+[ext_resource type="SpriteFrames" uid="uid://cg046cju3kis8" path="res://assets/npcs/classes/ace_trainer_f_frames.tres" id="r15_ace_trainer_f"]
+[ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r15_bird_keeper"]
+[ext_resource type="SpriteFrames" uid="uid://bgt5h7r4aixq5" path="res://assets/npcs/classes/black_belt_frames.tres" id="r15_black_belt"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r15_item"]
-
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/picnicker-gen6.png" id="r15_portrait_picnicker"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/beauty-gen6.png" id="r15_portrait_beauty"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/triathletebiker-gen6.png" id="r15_portrait_triathletebiker"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/birdkeeper-gen6.png" id="r15_portrait_birdkeeper"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/blackbelt-gen6.png" id="r15_portrait_blackbelt"]
-[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/battlegirl-gen6.png" id="r15_portrait_battlegirl"]
+[ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="r15_lass"]
+[ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="r15_picnicker"]
+[ext_resource type="Texture2D" uid="uid://kukr2avd3nmu" path="res://assets/sprites/trainer_cards/showdown/battlegirl-gen6.png" id="r15_portrait_battlegirl"]
+[ext_resource type="Texture2D" uid="uid://b34ixm3mbsv7r" path="res://assets/sprites/trainer_cards/showdown/beauty-gen6.png" id="r15_portrait_beauty"]
+[ext_resource type="Texture2D" uid="uid://bhrt56m2wqkbv" path="res://assets/sprites/trainer_cards/showdown/birdkeeper-gen6.png" id="r15_portrait_birdkeeper"]
+[ext_resource type="Texture2D" uid="uid://cvo5mo152hxke" path="res://assets/sprites/trainer_cards/showdown/blackbelt-gen6.png" id="r15_portrait_blackbelt"]
+[ext_resource type="Texture2D" uid="uid://6cq61cf10rxd" path="res://assets/sprites/trainer_cards/showdown/picnicker-gen6.png" id="r15_portrait_picnicker"]
+[ext_resource type="Texture2D" uid="uid://bijf5maooquds" path="res://assets/sprites/trainer_cards/showdown/triathletebiker-gen6.png" id="r15_portrait_triathletebiker"]
+[ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r15_rocker"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r15_trainer"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1k0ms"]
 size = Vector2(32, 96)
@@ -355,9 +353,9 @@ world_access_area_type = "route"
 location_id = "kanto.route.15"
 location_name = "Route 15"
 region_id = "kanto"
-music_profile_id = "kanto.routes_11_15"
 encounter_area_id = "kanto_route_15"
 grass_encounter_chance = 0.21
+music_profile_id = "kanto.routes_11_15"
 
 [node name="Visual" parent="." unique_id=1408942258 instance=ExtResource("2_tnc64")]
 
@@ -413,142 +411,136 @@ y_sort_enabled = true
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=558868010]
 
-
-[node name="picnicker_becky" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="picnicker_becky" parent="Entities/NPCs" unique_id=226365550 instance=ExtResource("r15_trainer")]
 position = Vector2(2576, 464)
 trainer_id = "kanto_route_15_picnicker_becky"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_becky"
 display_name = "Picnicker Becky"
-mugshot = ExtResource("r15_portrait_picnicker")
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r15_picnicker")
+mugshot = ExtResource("r15_portrait_picnicker")
 
-[node name="crush_kin_ron" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
-position = Vector2(1872, 464)
+[node name="crush_kin_ron" parent="Entities/NPCs" unique_id=965284857 instance=ExtResource("r15_trainer")]
+position = Vector2(1840, 464)
 trainer_id = "kanto_route_15_crush_kin_ron"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_crush_kin_ron"
 display_name = "Crush Kin Ron"
-mugshot = ExtResource("r15_portrait_blackbelt")
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r15_black_belt")
+mugshot = ExtResource("r15_portrait_blackbelt")
 
-[node name="crush_kin_mya" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
-position = Vector2(1808, 464)
+[node name="crush_kin_mya" parent="Entities/NPCs" unique_id=1750676129 instance=ExtResource("r15_trainer")]
+position = Vector2(1808, 432)
 trainer_id = "kanto_route_15_crush_kin_mya"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_crush_kin_mya"
 display_name = "Crush Kin Mya"
-mugshot = ExtResource("r15_portrait_battlegirl")
-facing_direction = Vector2(0, 1)
+facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_ace_trainer_f")
+mugshot = ExtResource("r15_portrait_battlegirl")
 
-[node name="picnicker_celia" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="picnicker_celia" parent="Entities/NPCs" unique_id=1384246685 instance=ExtResource("r15_trainer")]
 position = Vector2(976, 464)
 trainer_id = "kanto_route_15_picnicker_celia"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_celia"
 display_name = "Picnicker Celia"
-mugshot = ExtResource("r15_portrait_picnicker")
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r15_picnicker")
+mugshot = ExtResource("r15_portrait_picnicker")
 
-[node name="biker_ernest" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="biker_ernest" parent="Entities/NPCs" unique_id=1218444832 instance=ExtResource("r15_trainer")]
 position = Vector2(2768, 880)
 trainer_id = "kanto_route_15_biker_ernest"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_biker_ernest"
 display_name = "Biker Ernest"
-mugshot = ExtResource("r15_portrait_triathletebiker")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_rocker")
+mugshot = ExtResource("r15_portrait_triathletebiker")
 
-[node name="biker_alex" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="biker_alex" parent="Entities/NPCs" unique_id=1290170576 instance=ExtResource("r15_trainer")]
 position = Vector2(2416, 880)
 trainer_id = "kanto_route_15_biker_alex"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_biker_alex"
 display_name = "Biker Alex"
-mugshot = ExtResource("r15_portrait_triathletebiker")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_rocker")
+mugshot = ExtResource("r15_portrait_triathletebiker")
 
-[node name="beauty_grace" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="beauty_grace" parent="Entities/NPCs" unique_id=1135787041 instance=ExtResource("r15_trainer")]
 position = Vector2(2992, 784)
 trainer_id = "kanto_route_15_beauty_grace"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_beauty_grace"
 display_name = "Beauty Grace"
-mugshot = ExtResource("r15_portrait_beauty")
-facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("r15_lass")
+mugshot = ExtResource("r15_portrait_beauty")
 
-[node name="beauty_olivia" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="beauty_olivia" parent="Entities/NPCs" unique_id=281926186 instance=ExtResource("r15_trainer")]
 position = Vector2(2128, 880)
 trainer_id = "kanto_route_15_beauty_olivia"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_beauty_olivia"
 display_name = "Beauty Olivia"
-mugshot = ExtResource("r15_portrait_beauty")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_lass")
+mugshot = ExtResource("r15_portrait_beauty")
 
-[node name="picnicker_kindra" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="picnicker_kindra" parent="Entities/NPCs" unique_id=1937086920 instance=ExtResource("r15_trainer")]
 position = Vector2(1456, 880)
 trainer_id = "kanto_route_15_picnicker_kindra"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_kindra"
 display_name = "Picnicker Kindra"
-mugshot = ExtResource("r15_portrait_picnicker")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_picnicker")
+mugshot = ExtResource("r15_portrait_picnicker")
 
-[node name="bird_keeper_chester" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="bird_keeper_chester" parent="Entities/NPCs" unique_id=1128637220 instance=ExtResource("r15_trainer")]
 position = Vector2(1136, 880)
 trainer_id = "kanto_route_15_bird_keeper_chester"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_bird_keeper_chester"
 display_name = "Bird Keeper Chester"
-mugshot = ExtResource("r15_portrait_birdkeeper")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_bird_keeper")
+mugshot = ExtResource("r15_portrait_birdkeeper")
 
-[node name="bird_keeper_edwin" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="bird_keeper_edwin" parent="Entities/NPCs" unique_id=955223790 instance=ExtResource("r15_trainer")]
 position = Vector2(816, 880)
 trainer_id = "kanto_route_15_bird_keeper_edwin"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_bird_keeper_edwin"
 display_name = "Bird Keeper Edwin"
-mugshot = ExtResource("r15_portrait_birdkeeper")
 facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("r15_bird_keeper")
+mugshot = ExtResource("r15_portrait_birdkeeper")
 
-[node name="picnicker_yazmin" parent="Entities/NPCs" instance=ExtResource("r15_trainer")]
+[node name="picnicker_yazmin" parent="Entities/NPCs" unique_id=1055074644 instance=ExtResource("r15_trainer")]
 position = Vector2(528, 752)
 trainer_id = "kanto_route_15_picnicker_yazmin"
 sight_range_tiles = 2
 npc_id = "kanto_route_15_picnicker_yazmin"
 display_name = "Picnicker Yazmin"
-mugshot = ExtResource("r15_portrait_picnicker")
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("r15_picnicker")
+mugshot = ExtResource("r15_portrait_picnicker")
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=945102395]
 
-
-[node name="RainDance" parent="Entities/Interactables" instance=ExtResource("r15_item")]
+[node name="RainDance" parent="Entities/Interactables" unique_id=508828601 instance=ExtResource("r15_item")]
 position = Vector2(464, 368)
 pickup_id = "kanto_route_15_rain_dance"
 item_id = "tm-rain-dance"
 
-[node name="PPUp" parent="Entities/Interactables" instance=ExtResource("r15_item")]
-position = Vector2(848, 528)
+[node name="PPUp" parent="Entities/Interactables" unique_id=414171611 instance=ExtResource("r15_item")]
+position = Vector2(1328, 368)
 pickup_id = "kanto_route_15_pp_up"
 item_id = "pp-up"
 
-[node name="RoseIncense" parent="Entities/Interactables" instance=ExtResource("r15_item")]
-position = Vector2(2896, 784)
+[node name="RoseIncense" parent="Entities/Interactables" unique_id=501210147 instance=ExtResource("r15_item")]
+position = Vector2(3152, 368)
 pickup_id = "kanto_route_15_rose_incense"
 item_id = "rose-incense"
 
