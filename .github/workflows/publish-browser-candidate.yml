@@ -207,7 +207,7 @@ jobs:
           run-id: ${{ inputs.candidate_run_id }}
           path: builds/browser-candidate
 
-      - name: Publish manifest to the existing updates bucket
+      - name: Publish the tested browser manifest
         env:
           UPDATE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           UPDATE_R2_BUCKET: ${{ secrets.R2_BUCKET }}
