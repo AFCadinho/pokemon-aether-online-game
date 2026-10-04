@@ -1862,6 +1862,7 @@ func _process(delta: float) -> void:
 			var direction := _position(opponent_index) - _position(i)
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[desired[i]].yaw_degrees))
 			players[i] = _find_player(actors[i])
+			preload("res://scripts/battle/animations/gliscor_flight.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
 			identities[i] = desired[i]
 			resting[i] = true
 			_action(restoring[i], i)
