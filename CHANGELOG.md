@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Route 15's visual after the latest artist TMX correction.
+
 - Reimport Route 15's overworld visual from the latest artist TMX.
 
 - Make horizontal gate attendants reachable across the counter and connect their dialogue to shared server content.
