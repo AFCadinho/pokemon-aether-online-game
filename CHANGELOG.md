@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Route 15 with day/night grass encounters, twelve FR/LG trainer NPCs (Ron and Mya as singles), and Rain Dance, PP Up and Rose Incense pickups.
+
 - Refresh Route 15's visual after the latest artist TMX correction.
 
 - Reimport Route 15's overworld visual from the latest artist TMX.
