@@ -20,6 +20,9 @@
 [sub_resource type="RectangleShape2D" id="shape_lavender_exit"]
 size = Vector2(32, 160)
 
+[sub_resource type="RectangleShape2D" id="shape_saffron_gate_exit"]
+size = Vector2(32, 64)
+
 [sub_resource type="RectangleShape2D" id="shape_underground_path_exit"]
 size = Vector2(32, 32)
 
@@ -233,6 +236,9 @@ position = Vector2(2496, 512)
 [node name="FromUndergroundPath" type="Marker2D" parent="Spawns"]
 position = Vector2(784, 432)
 
+[node name="FromSaffronGate" type="Marker2D" parent="Spawns"]
+position = Vector2(128, 544)
+
 [node name="Exits" type="Node2D" parent="." unique_id=522200237]
 
 [node name="ToLavenderTown" type="Area2D" parent="Exits" unique_id=1676940583]
@@ -250,6 +256,22 @@ shape = SubResource("shape_lavender_exit")
 z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
+
+[node name="ToSaffronGate" type="Area2D" parent="Exits"]
+position = Vector2(80, 544)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn"
+target_spawn_name = "FromEast"
+transition_id = "kanto_route_8__to_saffron_gate"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSaffronGate"]
+shape = SubResource("shape_saffron_gate_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToSaffronGate" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
+flow_direction = "left"
 
 [node name="ToUndergroundPath" type="Area2D" parent="Exits"]
 position = Vector2(784, 400)
@@ -526,4 +548,5 @@ tile_map_data = PackedByteArray("AAAgAA4AAAAEAAAAAAAhAA4AAAAEAAAAAAAiAA4AAAAEAAA
 tile_set = SubResource("TileSet_gjif5")
 
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToSaffronGate" to="Exits/ToSaffronGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
