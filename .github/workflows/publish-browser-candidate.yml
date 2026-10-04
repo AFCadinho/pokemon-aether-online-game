@@ -9,14 +9,39 @@ on:
         type: string
 
 concurrency:
-  group: publish-browser-candidate
+  group: browser-release
   cancel-in-progress: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+
+      - name: Verify update manifest credentials before changing Pages
+        env:
+          UPDATE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          UPDATE_R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          UPDATE_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          UPDATE_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          PYTHONPATH=tools python3 - <<'PY'
+          from upload_launcher_release import _load_updates_config
+          config = _load_updates_config()
+          if config.bucket == 'pokeaether-web':
+              raise SystemExit('The updates bucket must be separate from the browser assets bucket.')
+          print('Update manifest credentials are configured.')
+          PY
+
   publish:
+    needs: preflight
     runs-on: ubuntu-latest
     environment: web-production
     permissions:
@@ -26,7 +51,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.sha }}
+          fetch-depth: 0
 
       - name: Verify browser bucket configuration
         env:
@@ -51,18 +77,7 @@ jobs:
             exit 1
           fi
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${CANDIDATE_RUN_ID}" > /tmp/candidate-run.json
-          python3 - <<'PY'
-          import json, os, sys
-          run = json.load(open('/tmp/candidate-run.json', encoding='utf-8'))
-          current_main = os.popen('git rev-parse HEAD').read().strip()
-          if (run.get('path') != '.github/workflows/deploy-web-cloudflare.yml'
-              or run.get('head_branch') != 'main'
-              or run.get('head_sha') != current_main
-              or run.get('status') != 'completed'
-              or run.get('conclusion') != 'success'):
-              sys.exit('Candidate must be the successful preview build for the current main commit.')
-          print(f"Verified candidate source commit {run['head_sha']}")
-          PY
+          python3 tools/verify_web_candidate.py --run-json /tmp/candidate-run.json --run-id "${CANDIDATE_RUN_ID}"
 
       - uses: actions/download-artifact@v6
         with:
@@ -73,50 +88,24 @@ jobs:
           path: builds/browser-candidate
 
       - name: Verify candidate artifact identity
+        env:
+          CANDIDATE_RUN_ID: ${{ inputs.candidate_run_id }}
         run: |
-          python3 - <<'PY'
-          import json, re
-          from pathlib import Path
-          root = Path('builds/browser-candidate')
-          candidate = json.loads((root / 'candidate.json').read_text())
-          metadata = json.loads((root / 'r2/web-release.json').read_text())
-          manifest = json.loads((root / 'r2/manifest-web.json').read_text())
-          config = json.loads((root / 'pages-production/web-release-config.json').read_text())
-          build_id = metadata.get('buildId', '')
-          if not re.fullmatch(r'[a-f0-9]{40}-[0-9]+-[0-9]+', build_id):
-              raise SystemExit('Candidate build ID is invalid.')
-          if (candidate.get('runId') != '${{ inputs.candidate_run_id }}'
-              or candidate.get('buildId') != build_id
-              or not build_id.startswith(candidate.get('sourceSha', '') + '-')
-              or candidate.get('releaseVersion') != manifest.get('gameVersion')
-              or manifest.get('gameBuildId') != build_id
-              or manifest.get('game', {}).get('buildId') != build_id
-              or manifest.get('game', {}).get('url') != 'https://play.pokeaether.com'
-              or config.get('buildId') != build_id
-              or config.get('clientBuildId') != build_id
-              or config.get('assetBaseUrl') != 'https://web-assets.pokeaether.com'):
-              raise SystemExit('Candidate manifest and production page configuration do not match.')
-          html = (root / 'pages-production/index.html').read_text()
-          if f'"buildId":"{build_id}"' not in html or f'"clientBuildId":"{build_id}"' not in html:
-              raise SystemExit('Production page does not identify this candidate build.')
-          print(f"Candidate {build_id} is internally consistent.")
-          PY
+          python3 tools/verify_web_candidate.py --run-json /tmp/candidate-run.json \
+            --run-id "${CANDIDATE_RUN_ID}" --candidate-dir builds/browser-candidate
 
       - name: Verify active release
         env:
           API_ORIGIN: https://api.pokeaether.com
           UPDATE_BASE_URL: https://updates.pokeaether.com
         run: |
-          candidate_preview_build="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/candidate.json"))["previewClientBuildId"])')"
           public_manifest="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS "${UPDATE_BASE_URL}/manifest-web.json")"
           manifest_build="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("gameBuildId", ""))' <<<"${public_manifest}")"
           api_build="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
             "${API_ORIGIN}/client-version?platform=web" \
             | python3 -c 'import json,sys; print(json.load(sys.stdin).get("requiredBuild", ""))')"
-          if [[ "${candidate_preview_build}" != "${manifest_build}" || "${api_build}" != "${manifest_build}" ]]; then
-            echo "::error::The active browser release changed after this candidate was tested; build and test a fresh candidate"
-            exit 1
-          fi
+          python3 tools/verify_web_candidate.py --candidate-dir builds/browser-candidate \
+            --manifest-build "${manifest_build}" --api-build "${api_build}"
 
       - name: Verify immutable candidate assets are available
         env:
@@ -127,6 +116,11 @@ jobs:
             "${R2_ASSET_BASE_URL}/web/releases/${build_id}/index.wasm" \
             | tr -d '\r' \
             | grep -Eiq '^access-control-allow-origin: https://play\.pokeaether\.com$'
+
+      - name: Restore the candidate's Pages Functions and configuration
+        run: |
+          source_sha="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/candidate.json"))["sourceSha"])')"
+          git restore --source="${source_sha}" -- functions wrangler.jsonc
 
       - name: Install Cloudflare tooling
         run: npm ci --ignore-scripts
@@ -171,8 +165,9 @@ jobs:
           done
           curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: ${WEB_URL}" \
             "${R2_ASSET_BASE_URL}/web/releases/${build_id}/index.wasm" | grep -Eiq '^content-type: application/wasm'
+          sprite_version="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/web-release.json"))["spriteVersions"]["animated"]["front"])')"
           curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
-            "${WEB_URL}/pokemon-assets/battle/pokemon-front-scale1-128-402b7a6cee88/pikachu/animation.json" \
+            "${WEB_URL}/pokemon-assets/battle/${sprite_version}/pikachu/animation.json" \
             | python3 -c 'import json,sys; assert json.load(sys.stdin).get("frames")'
 
   publish-manifest:
@@ -185,7 +180,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.sha }}
 
       - uses: actions/download-artifact@v6
         with:
@@ -215,14 +210,23 @@ jobs:
           UPDATE_BASE_URL: https://updates.pokeaether.com
         run: |
           expected="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/manifest-web.json"))["gameBuildId"])')"
-          public_manifest="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
-            "${UPDATE_BASE_URL}/manifest-web.json")"
-          public_build="$(python3 -c 'import json,sys; print(json.load(sys.stdin).get("gameBuildId", ""))' <<<"${public_manifest}")"
-          test "${public_build}" = "${expected}"
-          actual="$(curl --retry 6 --retry-all-errors --retry-delay 2 -fsS \
-            "${API_ORIGIN}/client-version?platform=web" \
-            | python3 -c 'import json,sys; print(json.load(sys.stdin).get("requiredBuild", ""))')"
-          test "${actual}" = "${expected}"
+          deadline=$((SECONDS + 180))
+          while true; do
+            public_build="$(curl --connect-timeout 10 --max-time 20 -fsS \
+              "${UPDATE_BASE_URL}/manifest-web.json" \
+              | python3 -c 'import json,sys; print(json.load(sys.stdin).get("gameBuildId", ""))')" || public_build=''
+            api_build="$(curl --connect-timeout 10 --max-time 20 -fsS \
+              "${API_ORIGIN}/client-version?platform=web" \
+              | python3 -c 'import json,sys; print(json.load(sys.stdin).get("requiredBuild", ""))')" || api_build=''
+            if [[ "${public_build}" == "${expected}" && "${api_build}" == "${expected}" ]]; then
+              break
+            fi
+            if (( SECONDS >= deadline )); then
+              echo "::error::Manifest uploaded, but activation was not confirmed. Retry publication with the SAME candidate run ID; do not rebuild."
+              exit 1
+            fi
+            sleep 5
+          done
 
       - name: Summarize published release
         run: |
@@ -248,7 +252,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.sha }}
 
       - uses: actions/download-artifact@v6
         with:

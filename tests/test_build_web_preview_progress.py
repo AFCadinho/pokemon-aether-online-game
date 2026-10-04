@@ -72,6 +72,20 @@ class WebMapPartitionPreflightTests(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, 'partition misses.*kanto_new_map'):
                 validate_world_map_export_partition(root)
 
+    def test_check_only_passes_without_preparing_assets_or_starting_godot(self):
+        from tools.build_web_preview import main
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self.fixture(root)
+            with patch('tools.build_web_preview.ROOT', root), \
+                    patch.object(sys, 'argv', ['build_web_preview', '--check-only']), \
+                    patch('tools.build_web_preview.copy_browser_audio') as audio, \
+                    patch('tools.build_web_preview.run_export') as export:
+                main()
+                audio.assert_not_called()
+                export.assert_not_called()
+                self.assertFalse((root / 'builds').exists())
+
 
 class BuildWebPreviewProgressTests(unittest.TestCase):
     def test_normal_initial_size_limit_remains_312_mib(self):

@@ -29,6 +29,42 @@ validated without opening it to players:
    the public files, and publishes that same candidate's manifest last. It
    does not rebuild the game, so the tested build ID stays unchanged.
 
+### Retrying a browser release
+
+The candidate workflow has separate `build` and `deploy` jobs. The first checks
+the map partition and packaging contracts before installing Godot, then exports
+and tests the client. It saves the verified output in
+`browser-release-build-RUN_ID` for 30 days. If upload, CORS, sprite publication
+or preview deployment fails, use **Re-run failed jobs** (CLI:
+`gh run rerun RUN_ID --failed`). The deploy job restores that output and its
+original build ID; it does not run Godot again. A completed R2 upload with the
+same receipt is reused. An incomplete upload is retried, and a conflicting
+immutable receipt stops the job instead of being overwritten.
+
+For a successful candidate, retry **Publish Browser Candidate** with the same
+candidate run ID. Publication fixes or newer commits on `main` do not require
+rebuilding the frozen game. The publisher checks that the source belongs to its
+approved `main` history and that the artifact identifies the exact successful
+source run. The selected run determines which game version is published; it
+does not automatically publish newer game changes. Pages Functions and their
+configuration are restored from that same source commit. New candidates also
+record hashes of every production page file, including map modules. Existing
+successful candidate artifacts remain supported.
+
+The publisher accepts either the previously active build used for preview or
+this candidate when it has already been activated. This makes retries after
+manifest publication possible. A different active release or disagreement
+between API and update manifest still blocks publication. Activation is polled
+for up to three minutes to allow cached version information to converge.
+Update-bucket credentials are checked before Pages changes. Cleanup runs only
+after activation and its failure does not fail publication. Candidate and
+publication workflows share one concurrency group so they cannot change the
+browser release at the same time.
+
+The workflow regression tests parse job dependencies and executable commands;
+renaming or translating a step label does not invalidate a build. Install their
+small dependency with `python3 -m pip install -r tools/web-release-requirements.txt`.
+
 The preview serves large immutable runtime files through a same-origin Pages
 Function backed by the browser R2 bucket. This avoids adding the preview domain
 to the production bucket's browser CORS allowlist. Production continues to read
