@@ -187,7 +187,7 @@ text = "Discord"
 icon = ExtResource("4_discord")
 alignment = 0
 
-[node name="SupportButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow"]
+[node name="SupportButton" type="Button" parent="Shell/MainSplit/Sidebar/SidebarMargin/SidebarLayout/SocialSection/SocialRow" unique_id=1341612133]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
