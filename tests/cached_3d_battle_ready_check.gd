@@ -2,6 +2,8 @@ extends SceneTree
 
 const Service = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
 const Registry = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Renderer = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
+const Cache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const FIXTURE := "user://cached-3d-ready-check"
 
 class Probe extends Service:
@@ -39,7 +41,11 @@ func _run() -> void:
 	for variant in ["normal", "shiny"]:
 		var identity := "garchomp" + ("@shiny" if variant == "shiny" else "")
 		var path := FIXTURE.path_join(variant + ".scn")
-		_write(path, variant + "-verified-test-model")
+		var packed := PackedScene.new()
+		var node := Node3D.new()
+		node.name = variant
+		_check(packed.pack(node) == OK and ResourceSaver.save(packed, path) == OK, "create a valid standalone model fixture")
+		node.free()
 		var digest := FileAccess.get_sha256(path)
 		originals[identity] = reviewed_models[identity].duplicate(true)
 		reviewed_models[identity].sha256 = digest
@@ -64,6 +70,8 @@ func _run() -> void:
 	_check(service._busy and service._battle_waiters == 0 and service.slow_calls == 0, "cached entry never joins or alters the background download")
 	_check(ready.get("path") == source and not ready.get("catalog_changed", true), "original catalog is reused")
 	_check(FileAccess.get_file_as_string(source) == original_catalog, "catalog is not rewritten")
+	_check(ready.get("verified_models", {}).size() == 2, "successful SHA checks are handed to this battle only")
+	await _check_verified_resource_reuse(source, ready.verified_models)
 	service._busy = false
 	await process_frame # Also drain the slow path if this regression fails.
 	service.own_entries = entries.duplicate(true)
@@ -80,12 +88,14 @@ func _run() -> void:
 	restarted.free()
 	# Same-size corruption must still fail full SHA verification.
 	var model_path: String = entries[0].runtime_path
-	var original_model := FileAccess.get_file_as_string(model_path)
-	_write(model_path, "X" + original_model.substr(1))
+	var original_model := FileAccess.get_file_as_bytes(model_path)
+	var damaged := original_model.duplicate()
+	damaged[0] = damaged[0] ^ 1
+	_write_bytes(model_path, damaged)
 	_check(service._installed_models(["garchomp"], source).is_empty(), "same-size corruption cannot use the fast path")
 	var repair: Dictionary = await service.ensure_models(["garchomp"], source)
 	_check(not str(repair.get("error", "")).is_empty() and service.slow_calls == 1, "corruption reaches the normal repair path")
-	_write(model_path, original_model)
+	_write_bytes(model_path, original_model)
 	_check(service._installed_models(["garchomp", "garchomp@shiny"], source).get("path") == source, "repaired pair becomes ready again")
 	var original_index := FileAccess.get_file_as_string(service.fixture_index)
 	_write(service.fixture_index, "X" + original_index.substr(1))
@@ -106,6 +116,57 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(FIXTURE))
 	print("cached_3d_battle_ready_check: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
+
+func _check_verified_resource_reuse(source: String, proofs: Dictionary) -> void:
+	Cache.clear()
+	var stage := Renderer.new()
+	stage.set_process(false)
+	root.add_child(stage)
+	stage.set_combatant(0, "Garchomp")
+	stage._load_catalog(source)
+	var entry: Dictionary = stage.catalog_entries.garchomp
+	var proof: Dictionary = proofs.garchomp
+	var key := Cache.key(entry.runtime_path, proof.sha256, entry.action_timing)
+	var scene := ResourceLoader.load(entry.runtime_path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+	Cache.retain(key, scene, int(proof.bytes))
+	stage.download_verified_files = proofs.duplicate(true)
+	stage._import_next_model()
+	_check(stage.packed.get("garchomp") == scene and stage.model_cache_hits == 1, "the downloader's current proof reuses the exact admitted RAM scene")
+	_check(stage.integrity_read == null and stage.model_validation_ms == 0.0 and stage.verified_model_cache_hits == 1, "an already checked cached model is not hashed a second time")
+	stage._load_catalog(source)
+	_check(stage.download_verified_files.is_empty(), "catalog reload discards the ephemeral verification handoff")
+	var mismatched := proofs.duplicate(true)
+	mismatched.garchomp.path = proofs["garchomp@shiny"].path
+	stage.download_verified_files = mismatched
+	var wrong_path: Dictionary = stage.catalog_entries.garchomp.duplicate(true)
+	stage._reuse_checked_resource(wrong_path)
+	_check(not wrong_path.has("_verified_runtime_hash"), "proof from a different file cannot authorize this resource")
+	mismatched.garchomp.path = proof.path
+	mismatched.garchomp.bytes += 1
+	stage.download_verified_files = mismatched
+	var wrong_size: Dictionary = stage.catalog_entries.garchomp.duplicate(true)
+	stage._reuse_checked_resource(wrong_size)
+	_check(not wrong_size.has("_verified_runtime_hash"), "proof size must match this catalog entry")
+	mismatched.garchomp.bytes = proof.bytes
+	mismatched.garchomp.sha256 = "0".repeat(64)
+	var wrong_hash: Dictionary = stage.catalog_entries.garchomp.duplicate(true)
+	stage._reuse_checked_resource(wrong_hash)
+	_check(not wrong_hash.has("_verified_runtime_hash"), "a stale digest cannot authorize a cached scene")
+	Cache.clear()
+	stage.download_verified_files = proofs.duplicate(true)
+	stage._import_next_model()
+	_check(stage.integrity_read != null and stage.packed.is_empty(), "a cold cache still uses the complete disk validation path")
+	var read: Renderer.IntegrityRead = stage.integrity_read
+	stage.cancel_preparation()
+	while not read.ready():
+		await process_frame
+	stage.free()
+	await process_frame
+
+func _write_bytes(path: String, value: PackedByteArray) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	file.store_buffer(value)
+	file.close()
 
 func _collect_ready(service: Probe, source: String) -> void:
 	ready = await service.ensure_models(["garchomp", "garchomp@shiny"], source)

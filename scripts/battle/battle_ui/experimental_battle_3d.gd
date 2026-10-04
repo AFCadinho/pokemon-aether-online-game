@@ -97,6 +97,8 @@ var mode_label: Label
 var pending_entries: Array = []
 var import_times_ms := {}
 var model_cache_hits := 0
+var download_verified_files := {}
+var verified_model_cache_hits := 0
 var catalog_read_ms := 0.0
 var model_validation_ms := 0.0
 var arena_build_ms := 0.0
@@ -279,7 +281,14 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 						quiet_frames += 1
 					last_draw = drawn
 					last_sample = sample
-					if quiet_frames >= 5:
+					var required_frames := 2 if _reuses_rendered_models() else 5
+					if quiet_frames >= required_frames:
+						if DisplayServer.get_name() != "headless":
+							for identity: String in identities:
+								var entry: Dictionary = entries.get(identity, {})
+								ModelCache.mark_rendered(str(entry.get("_resource_cache_key", "")), _render_reuse_key())
+						preparation_metrics["warm_reuse"] = required_frames == 2
+						preparation_metrics["verified_model_cache_hits"] = verified_model_cache_hits
 						warming_render = false
 						# Restore actual send-out visibility before fading the cover.
 						await get_tree().process_frame
@@ -295,7 +304,27 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 		await get_tree().process_frame
 
 
+func _reuses_rendered_models() -> bool:
+	# A pooled arena and these exact resources have already drawn together.
+	# New models, new viewports, evictions and a changed render size stay cold.
+	if forest_lease.is_empty() or viewport == null or not _actors_resolved():
+		return false
+	var needed := _needed_species()
+	if needed.is_empty():
+		return false
+	for identity in needed:
+		var key := str(entries.get(identity, {}).get("_resource_cache_key", ""))
+		if key.is_empty() or not ModelCache.was_rendered(key, _render_reuse_key()):
+			return false
+	return true
+
+
+func _render_reuse_key() -> String:
+	return "%s:%s:%s" % [viewport.get_instance_id(), viewport.size, viewport.msaa_3d]
+
+
 func _ensure_downloaded_models() -> void:
+	download_verified_files.clear()
 	if OS.has_feature("web") or OS.has_feature("mobile") or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
@@ -343,6 +372,8 @@ func _ensure_downloaded_models() -> void:
 	if not new_path.is_empty() and (new_path != old_path or refresh_catalog):
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", new_path)
 		_load_catalog(new_path)
+	# Ephemeral full-SHA results from this entry only; catalogs cannot supply them.
+	download_verified_files = result.get("verified_models", {}).duplicate(true)
 var action_generation := [0, 0, 0, 0]
 var camera_phase := 0.0
 var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": false},
@@ -825,6 +856,8 @@ func _load_catalog(path: String) -> void:
 	pending_entries.clear()
 	import_times_ms.clear()
 	model_cache_hits = 0
+	download_verified_files.clear()
+	verified_model_cache_hits = 0
 	catalog_read_ms = 0.0
 	model_validation_ms = 0.0
 	catalog_entries.clear()
@@ -1057,6 +1090,8 @@ func _import_next_model() -> void:
 				return
 			loading_entry = pending_entries.pop_front()
 		if not loading_entry.has("_verified_runtime_hash"):
+			_reuse_checked_resource(loading_entry)
+		if not loading_entry.has("_verified_runtime_hash"):
 			if integrity_read == null:
 				integrity_read = IntegrityRead.new()
 				integrity_read.start(loading_entry.runtime_path)
@@ -1124,6 +1159,32 @@ func _import_next_model() -> void:
 	loading_path = ""
 	loading_entry.clear()
 	loading_scene = null
+
+
+func _reuse_checked_resource(entry: Dictionary) -> void:
+	# The downloader just checked the entire file. Only an already admitted,
+	# hash-bound RAM scene can reuse that result; cold loads still recheck disk
+	# before and after loading, including changes made during the load.
+	if integrity_read != null:
+		return # Finish any read that was already started before the handoff.
+	var identity := ReviewedModels.canonical_identity(str(entry.species))
+	var verified: Dictionary = download_verified_files.get(identity, {})
+	var digest := str(verified.get("sha256", ""))
+	var reviewed := ReviewedModels.resolve(identity, digest)
+	if reviewed.is_empty() or not entry.get("_reviewed_model", false):
+		return
+	if digest != str(entry.get("runtime_sha256", "")) or int(verified.get("bytes", 0)) != int(entry.get("bytes", -1)):
+		return
+	if ProjectSettings.globalize_path(str(verified.get("path", ""))) != ProjectSettings.globalize_path(str(entry.runtime_path)):
+		return
+	var key := ModelCache.key(entry.runtime_path, digest, reviewed.action_timing)
+	if ModelCache.fetch(key) == null:
+		return
+	var check := IntegrityRead.new()
+	check.digest = digest
+	check.bytes = int(verified.bytes)
+	if _finish_validation(entry, check):
+		verified_model_cache_hits += 1
 
 func _clear_actors() -> void:
 	_clear_coop_target_highlight()

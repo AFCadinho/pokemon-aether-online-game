@@ -176,14 +176,17 @@ func _installed_models(identities: Array[String], source_catalog: String) -> Dic
 	for path in paths:
 		var entries := _catalog(path)
 		var ready := true
+		var verified_models := {}
 		for identity: String in expected:
-			if not _entry_available(entries, identity, expected[identity]):
+			var verified := _verified_entry(entries, identity, expected[identity])
+			if verified.is_empty():
 				ready = false
 				break
+			verified_models[identity] = verified
 		if ready:
 			# Reuse only a complete existing catalog. Mixed sources are merged
 			# under the normal lock so concurrent installs cannot lose entries.
-			return {"error": "", "path": path, "catalog_changed": false}
+			return {"error": "", "path": path, "catalog_changed": false, "verified_models": verified_models}
 	return {}
 
 
@@ -301,6 +304,10 @@ func _merge_entries(first: Array, second: Array) -> Array:
 
 
 func _entry_available(entries: Array, identity: String, expected_digest: String) -> bool:
+	return not _verified_entry(entries, identity, expected_digest).is_empty()
+
+
+func _verified_entry(entries: Array, identity: String, expected_digest: String) -> Dictionary:
 	for entry in entries:
 		if not entry is Dictionary:
 			continue
@@ -308,8 +315,8 @@ func _entry_available(entries: Array, identity: String, expected_digest: String)
 		var model_path := str(entry.get("runtime_path", ""))
 		var digest := str(entry.get("runtime_sha256", ""))
 		if key == identity and digest == expected_digest and not ReviewedModels.resolve(identity, digest).is_empty() and _valid_file(model_path, int(entry.get("bytes", 0)), digest):
-			return true
-	return false
+			return {"path": model_path, "sha256": digest, "bytes": int(entry.bytes)}
+	return {}
 
 
 func _local_index_path(release: Dictionary) -> String:
