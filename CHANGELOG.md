@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Expand sleeping Snorlax's roadblock to 3 by 3 tiles and enlarge its interaction area to cover every adjacent edge.
+
 - Add the horizontal Route 15–Fuchsia transition building and its two-way Route 15 entrance, with the Fuchsia doorway reserved for its future connection.
 
 - Align Primal Kyogre's side-facing hull and rider with the water tile, removing the airborne appearance and vertical swimming jump.

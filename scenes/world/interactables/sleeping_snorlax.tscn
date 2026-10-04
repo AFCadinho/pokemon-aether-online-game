@@ -13,8 +13,8 @@ script = ExtResource("1")
 display_name = "Snorlax"
 interactable_kind = "static_encounter"
 blocked_tile_offset = Vector2i(-1, -1)
-blocked_tile_footprint = Vector2i(3, 2)
-interaction_shape_size = Vector2(160, 128)
+blocked_tile_footprint = Vector2i(3, 3)
+interaction_shape_size = Vector2(160, 160)
 flute_sound = ExtResource("3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

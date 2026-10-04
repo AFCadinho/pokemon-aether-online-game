@@ -22,12 +22,12 @@ func run() -> void:
 	var map := scene.instantiate()
 	var snorlax := map.get_node("Entities/StaticEncounters/Snorlax")
 	check(snorlax.encounter_id == "snorlax_route_12", "Independent Route 12 ID")
-	check(snorlax.blocked_tile_footprint == Vector2i(3, 2), "Three-wide footprint")
+	check(snorlax.blocked_tile_footprint == Vector2i(3, 3), "Three-by-three footprint")
 	var collision := map.get_node("Tiles/Collision") as TileMapLayer
 	var water := map.get_node("Tiles/Water") as TileMapLayer
 	var origin: Vector2i = Vector2i(snorlax.position / 32.0) + snorlax.blocked_tile_offset
 	var north := origin + Vector2i(1, -1)
-	var south := origin + Vector2i(1, 2)
+	var south := origin + Vector2i(1, 3)
 	var movement_map := Node2D.new()
 	var entities := Node2D.new()
 	entities.name = "Entities"
@@ -45,22 +45,22 @@ func run() -> void:
 	movement_player.resolved_map_cache = movement_map
 	movement_player.collision_tilemap = collision
 	movement_player.water_tilemap = water
-	for y in range(origin.y, origin.y + 2):
+	for y in range(origin.y, origin.y + 3):
 		for x in range(origin.x, origin.x + 3):
 			var tile := Vector2i(x, y)
 			check(collision.get_cell_source_id(tile) == -1 and water.get_cell_source_id(tile) == -1, "Snorlax occupies walkable steiger tiles")
 			check(snorlax.blocks_world_position(Vector2(tile) * 32 + Vector2(16, 16)), "Every footprint tile blocks")
 			check(not movement_player.can_move_to(Vector2(tile) * 32 + Vector2(16, 16)), "Player cannot enter any sleeping Snorlax tile")
 	check(movement_player.can_move_to(Vector2(north) * 32 + Vector2(16, 16)), "Approach remains clear")
+	check(movement_player.can_move_to(Vector2(south) * 32 + Vector2(16, 16)), "South approach remains clear")
 	check(not reachable(collision, water, movement_map, north, south), "Cannot walk around Snorlax anywhere on Route 12")
+	snorlax._ensure_interaction_area()
 	var player := TestPlayer.new()
-	for x in range(origin.x, origin.x + 3):
-		player.position = Vector2(x * 32 + 16, north.y * 32 + 16)
-		player.last_direction = Vector2.DOWN
-		check(snorlax._is_player_facing_interactable(player), "Interaction at every north edge tile")
-		player.position.y = south.y * 32 + 16
-		player.last_direction = Vector2.UP
-		check(snorlax._is_player_facing_interactable(player), "Interaction at every south edge tile")
+	for offset in range(3):
+		check_interaction_edge(snorlax, player, origin + Vector2i(offset, -1), Vector2.DOWN, "north")
+		check_interaction_edge(snorlax, player, origin + Vector2i(offset, 3), Vector2.UP, "south")
+		check_interaction_edge(snorlax, player, origin + Vector2i(-1, offset), Vector2.RIGHT, "west")
+		check_interaction_edge(snorlax, player, origin + Vector2i(3, offset), Vector2.LEFT, "east")
 	player.free()
 	check(not snorlax.apply_status({"encounterId": "snorlax_celadon", "completed": true}), "Another encounter cannot hide Route 12 Snorlax")
 	check(not movement_snorlax.apply_status({"encounterId": "snorlax_celadon", "completed": true}), "Another encounter cannot release the movement blocker")
@@ -71,15 +71,23 @@ func run() -> void:
 	check(snorlax.apply_status({"encounterId": "snorlax_route_12", "completed": true}), "Own completion applies")
 	check(not snorlax.visible and not snorlax.blocks_world_position(snorlax.position), "Completion removes artwork and collision together")
 	check(movement_snorlax.apply_status({"encounterId": "snorlax_route_12", "completed": true}), "Own completion updates the movement blocker")
-	for y in range(origin.y, origin.y + 2):
+	for y in range(origin.y, origin.y + 3):
 		for x in range(origin.x, origin.x + 3):
 			check(movement_player.can_move_to(Vector2(x * 32 + 16, y * 32 + 16)), "Completed Snorlax tiles allow player movement")
 	check(reachable(collision, water, movement_map, north, south), "Completed route is traversable")
 	movement_map.free()
 	map.free()
 	if not failed:
-		print("PASS Snorlax: six blocked tiles, no land bypass, both interaction edges, independent IDs and completed passage")
+		print("PASS Snorlax: nine blocked tiles, no land bypass, all interaction edges, independent IDs and completed passage")
 	quit(1 if failed else 0)
+
+func check_interaction_edge(snorlax: Node2D, player: TestPlayer, tile: Vector2i, direction: Vector2, edge: String) -> void:
+	player.position = Vector2(tile) * 32 + Vector2(16, 16)
+	player.last_direction = direction
+	check(not snorlax.blocks_world_position(player.position), "%s adjacent tile lies outside the footprint" % edge)
+	check(snorlax._is_player_facing_interactable(player), "Interaction at every %s edge tile" % edge)
+	var shape := snorlax.get_node("InteractionArea/CollisionShape2D").shape as RectangleShape2D
+	check(Rect2(-shape.size / 2, shape.size).has_point(player.position - snorlax.position), "%s edge falls inside the interaction area" % edge)
 
 func reachable(collision: TileMapLayer, water: TileMapLayer, movement_map: Node2D, start: Vector2i, goal: Vector2i) -> bool:
 	var queue: Array[Vector2i] = [start]
