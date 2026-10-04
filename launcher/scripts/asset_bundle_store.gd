@@ -6,6 +6,7 @@ const STATE_KIND := "pokeaether-installed-asset-bundles"
 const BUNDLE_SCHEMA := 1
 const BUNDLE_KIND := "pokeaether-asset-bundle"
 const MAX_JSON := 1024 * 1024
+const MAX_STATE_JSON := 8 * 1024 * 1024
 const MAX_FILE := 128 * 1024 * 1024
 const MAX_ARCHIVE := 512 * 1024 * 1024
 const MAX_FILES := 10
@@ -28,9 +29,9 @@ static func _hash(data: PackedByteArray) -> String:
 	return hashing.finish().hex_encode()
 
 
-static func _read_json(path: String) -> Dictionary:
+static func _read_json(path: String, maximum := MAX_JSON) -> Dictionary:
 	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null or file.get_length() > MAX_JSON:
+	if file == null or file.get_length() > maximum:
 		return {}
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	return parsed if parsed is Dictionary else {}
@@ -72,7 +73,7 @@ func active_generation() -> String:
 
 func state() -> Dictionary:
 	var generation := active_generation()
-	return _read_json(_generations_root().path_join(generation).path_join("installed-state.json")) if not generation.is_empty() else _empty_state("")
+	return _read_json(_generations_root().path_join(generation).path_join("installed-state.json"), MAX_STATE_JSON) if not generation.is_empty() else _empty_state("")
 
 
 func catalog_path() -> String:
@@ -376,7 +377,7 @@ func _runtime_catalog(value: Dictionary) -> Array:
 func _validate_generation(generation: String) -> bool:
 	var directory := _generations_root().path_join(generation)
 	var state_path := directory.path_join("installed-state.json")
-	var state_data := _read_json(state_path)
+	var state_data := _read_json(state_path, MAX_STATE_JSON)
 	if state_data.get("schema") != STATE_SCHEMA or state_data.get("kind") != STATE_KIND or not state_data.get("assets") is Dictionary:
 		return false
 	if FileAccess.get_file_as_string(state_path).sha256_text() != generation:

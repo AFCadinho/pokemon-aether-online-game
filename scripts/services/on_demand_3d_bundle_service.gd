@@ -8,6 +8,7 @@ const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storag
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"
 const MAX_INDEX_BYTES := 1024 * 1024
+const MAX_CATALOG_BYTES := 8 * 1024 * 1024
 const MAX_ARCHIVE_BYTES := 512 * 1024 * 1024
 
 
@@ -224,7 +225,7 @@ func _catalog(path: String) -> Array:
 	if path.is_empty() or not FileAccess.file_exists(path):
 		return []
 	var file := FileAccess.open(path, FileAccess.READ)
-	if file == null or file.get_length() > MAX_INDEX_BYTES:
+	if file == null or file.get_length() > MAX_CATALOG_BYTES:
 		return []
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	return parsed if parsed is Array else []

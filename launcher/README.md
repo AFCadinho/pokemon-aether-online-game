@@ -4,6 +4,22 @@ Small Godot launcher project for PokeAether.
 
 ## Current flow
 
+The **Downloads** page offers optional complete **3D models** and **2D sprites**
+(normal, shiny, alternate forms and the sprite styles supplied by the release).
+Update/install the game first so the pinned content index is available. The page
+shows already installed files and the remaining download size before starting.
+3D files downloaded by the game are reused only when both approved appearances
+match the current index and their file size and SHA-256 pass verification.
+
+Downloads show overall bytes, file count, speed and an estimated remaining time.
+**Pause** preserves the current partial download and installed files; **Resume**
+continues the same job. Play remains available while optional downloads are
+paused. After restarting the launcher, **Update** or the relevant download
+button re-plans the remaining files and resumes matching partials automatically.
+Starting a complete download enables **Keep these assets up to date** for that
+category. Players can turn that preference off without deleting installed files.
+Normal installations continue to download Pokémon assets on demand by default.
+
 Local cosmetic packs are managed through the **Mods** button. See
 [Content packs v1](../docs/content-packs.md) for the format, player instructions,
 and the planned official catalog. The Discover tab is not connected to a feed yet.
