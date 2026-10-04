@@ -13,6 +13,7 @@ func _init() -> void:
 func _run() -> void:
 	var preview_script: Script = load("res://scripts/ui/mount_rider_preview.gd")
 	var output := "user://primal_kyogre_preview"
+	var mount_id := "primal_kyogre_shiny" if "--shiny" in OS.get_cmdline_user_args() else "primal_kyogre"
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
@@ -47,7 +48,7 @@ func _run() -> void:
 			viewport.add_child(actor)
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
-			actor.configure("primal_kyogre", appearance, DIRS[row], false)
+			actor.configure(mount_id, appearance, DIRS[row], false)
 			actor.look_node.position = Vector2(0, -16)
 			actors.append({"actor": actor, "appearance": appearance, "direction": DIRS[row]})
 	print("Configured eight mount previews")

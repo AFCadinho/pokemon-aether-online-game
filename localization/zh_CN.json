@@ -6355,5 +6355,8 @@
   "ui.town_map.location.route_15.description": "从14号道路向西延伸、通往浅红市的漫长海岸道路。",
   "static_encounter.snorlax_sleeping": "卡比兽睡得很沉。宝可梦之笛也许能唤醒它。",
   "static_encounter.played_flute": "你吹响了宝可梦之笛！",
-  "static_encounter.snorlax_awoke": "卡比兽醒来并发动了攻击！"
+  "static_encounter.snorlax_awoke": "卡比兽醒来并发动了攻击！",
+  "ui.store.mounts.mode.land": "陆地",
+  "ui.store.mounts.mode.surf": "冲浪",
+  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。"
 }

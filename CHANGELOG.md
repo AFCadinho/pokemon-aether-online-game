@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Primal Kyogre and its 1,000-Gem box; split Gift Store mounts into Land and Surf tabs with mounted previews.
+
 - Align Primal Kyogre's side-facing hull and rider with the water tile, removing the airborne appearance and vertical swimming jump.
 
 - Fix sleeping Snorlax being ignored by player movement checks, keeping its roadblock active until that player's encounter is completed.
