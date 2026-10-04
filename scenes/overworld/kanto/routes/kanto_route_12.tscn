@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/route_transition_hint.tscn" id="4_hint"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_ava0l"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="5_fu0oe"]
 [ext_resource type="Texture2D" uid="uid://bn6mppkl5aj3u" path="res://assets/tilesets/fiver/tiles_env2_water32.png" id="6_xd1br"]
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="7_xd1br"]
@@ -27,10 +28,10 @@ size = Vector2(32, 128)
 size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_route13_water"]
-size = Vector2(224, 32)
+size = Vector2(208, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_fishing_brother_house"]
-size = Vector2(64, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3qd3x"]
 texture = ExtResource("5_fu0oe")
@@ -218,7 +219,7 @@ position = Vector2(1264, 3920)
 [node name="FromRoute13Water" type="Marker2D" parent="Spawns" unique_id=1322488790]
 position = Vector2(1392, 3920)
 
-[node name="FromFishingBrotherHouse" type="Marker2D" parent="Spawns"]
+[node name="FromFishingBrotherHouse" type="Marker2D" parent="Spawns" unique_id=1491525056]
 position = Vector2(1040, 2544)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1669842588]
@@ -282,7 +283,7 @@ transition_id = "kanto_route_12__to_route13_water"
 transition_facing_direction = "down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute13Water" unique_id=571827816]
-position = Vector2(32, 16)
+position = Vector2(40, 16)
 shape = SubResource("shape_route13_water")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute13Water" unique_id=1980447145 instance=ExtResource("4_hint")]
@@ -291,20 +292,20 @@ position = Vector2(32, 16)
 tile_footprint = Vector2i(7, 1)
 flow_direction = "down"
 
-[node name="ToFishingBrotherHouse" type="Area2D" parent="Exits"]
-position = Vector2(1056, 2480)
+[node name="ToFishingBrotherHouse" type="Area2D" parent="Exits" unique_id=1321538646]
+position = Vector2(912, 2480)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn"
 target_spawn_name = "FromRoute12"
 transition_id = "kanto_route_12__to_fishing_brother_house"
 transition_facing_direction = "up"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFishingBrotherHouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFishingBrotherHouse" unique_id=976656333]
+position = Vector2(0, -16)
 shape = SubResource("shape_fishing_brother_house")
 
-[node name="DoorTransitionHint" parent="Exits/ToFishingBrotherHouse" instance=ExtResource("4_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToFishingBrotherHouse" unique_id=1713693043 instance=ExtResource("5_ava0l")]
 z_as_relative = false
-tile_footprint = Vector2i(2, 1)
 
 [node name="Entities" type="Node2D" parent="." unique_id=1130484717]
 z_index = 5

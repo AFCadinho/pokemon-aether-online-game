@@ -17,7 +17,7 @@
 size = Vector2(96, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_route12_water"]
-size = Vector2(160, 32)
+size = Vector2(144, 32)
 
 [sub_resource type="RectangleShape2D" id="shape_south"]
 size = Vector2(96, 32)
@@ -232,7 +232,7 @@ transition_id = "kanto_route_13__to_route12_water"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12Water" unique_id=24928447]
-position = Vector2(0, -16)
+position = Vector2(8, -16)
 shape = SubResource("shape_route12_water")
 
 [node name="RouteTransitionHint" parent="Exits/ToRoute12Water" unique_id=1468227504 instance=ExtResource("4_hint")]
