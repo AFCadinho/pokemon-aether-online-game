@@ -4,6 +4,10 @@ const CATALOG_PATH := "res://generated/world_access_catalog.json"
 const ROUTE_13 := "res://scenes/overworld/kanto/routes/kanto_route_13.tscn"
 const ROUTE_14 := "res://scenes/overworld/kanto/routes/kanto_route_14.tscn"
 const ROUTE_15 := "res://scenes/overworld/kanto/routes/kanto_route_15.tscn"
+const FUCHSIA_GATE := "res://scenes/overworld/kanto/transition_buildings/route_15_fuchsia_gate.tscn"
+const HORIZONTAL_TEMPLATE := "res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn"
+const ROUTE_11_12_GATE := "res://scenes/overworld/kanto/routes/connections/route_12_west.tscn"
+const COLLISION_LAYER_NAMES: Array[String] = ["Collision"]
 
 var failed := false
 
@@ -24,6 +28,13 @@ func _run() -> void:
 	var route13 := (load(ROUTE_13) as PackedScene).instantiate()
 	var route14 := (load(ROUTE_14) as PackedScene).instantiate()
 	var route15 := (load(ROUTE_15) as PackedScene).instantiate()
+	var gate := (load(FUCHSIA_GATE) as PackedScene).instantiate()
+	var template := (load(HORIZONTAL_TEMPLATE) as PackedScene).instantiate()
+	var route11_12_gate := (load(ROUTE_11_12_GATE) as PackedScene).instantiate()
+	# Resolve the ready-time feet marker without entering the tree or requesting NPC metadata.
+	for building: Node2D in [gate, route11_12_gate]:
+		var attendant := building.get_node("Entities/NPCs/GateNPC")
+		attendant.feet_marker = attendant.get_node("FeetMarker")
 
 	_expect(route14.map_id == "kanto_route_14", "Route 14 scene has its canonical map ID")
 	_expect(route15.map_id == "kanto_route_15", "Route 15 scene has its canonical map ID")
@@ -43,11 +54,85 @@ func _run() -> void:
 	_check_link(route14, route13, "ToRoute13", "kanto_route_14__to_route13", "kanto_route_13", ROUTE_13, "FromRoute14", transitions)
 	_check_link(route14, route15, "ToRoute15", "kanto_route_14__to_route15", "kanto_route_15", ROUTE_15, "FromRoute14", transitions)
 	_check_link(route15, route14, "ToRoute14", "kanto_route_15__to_route14", "kanto_route_14", ROUTE_14, "FromRoute15", transitions)
+	_check_link(route15, gate, "ToFuchsiaGate", "kanto_route_15__to_fuchsia_gate", "kanto_route_15_fuchsia_gate", FUCHSIA_GATE, "FromRoute15", transitions)
+	_check_link(gate, route15, "ToEast", "kanto_route_15_fuchsia_gate__to_route15", "kanto_route_15", ROUTE_15, "FromFuchsiaGate", transitions)
+	_check_fuchsia_gate(route15, gate, areas)
+	_check_horizontal_tile_collision(gate, template)
+	_check_horizontal_tile_collision(route11_12_gate, template)
 
+	route11_12_gate.free()
+	template.free()
+	gate.free()
 	route13.free()
 	route14.free()
 	route15.free()
 	quit(1 if failed else 0)
+
+
+func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void:
+	_expect(areas.has("kanto_route_15_fuchsia_gate"), "Fuchsia gate is registered")
+	_expect(gate.get_node("Visuals").scene_file_path == "res://generated/tiled_visuals/transition_building_horizontal/transition_building_horizontal.visual.tscn",
+		"Fuchsia gate uses the shared horizontal template visual")
+	_expect(gate.lighting_profile == "indoor" and gate.weather_profile == "disabled",
+		"Fuchsia gate inherits indoor lighting and weather")
+	var entrance := route.get_node("Exits/ToFuchsiaGate") as Area2D
+	var shape := entrance.get_node("CollisionShape2D").shape as RectangleShape2D
+	_expect(entrance.position == Vector2(144, 448) and shape.size == Vector2(32, 64),
+		"Route 15 doorway matches the west_to_fuchsia TMX connection marker")
+	var route_spawn := route.get_node("Spawns/FromFuchsiaGate") as Marker2D
+	var gate_spawn := gate.get_node("Spawns/FromRoute15") as Marker2D
+	_expect(route_spawn.position == Vector2(176, 464), "Route 15 return uses the artist's arrival tile")
+	_expect(not entrance.contains_world_position(route_spawn.global_position), "Route 15 arrival avoids an immediate return transition")
+	_expect(not gate.get_node("Exits/ToEast").contains_world_position(gate_spawn.global_position), "Gate arrival avoids an immediate return transition")
+	for y in range(13, 15):
+		_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(4, y)) == -1,
+			"Route 15 gate entrance tiles are walkable")
+	var west := gate.get_node("Exits/ToWest") as Area2D
+	_expect(not west.monitoring and west.get_node("CollisionShape2D").disabled,
+		"Future Fuchsia exit stays inactive until its destination exists")
+	var player: Node2D = (load("res://scripts/world/player.gd") as GDScript).new()
+	gate.get_node("Entities/Players").add_child(player)
+	player.map_layers_initialized = true
+	player.map_layers_owner = gate
+	player.resolved_map_cache = gate
+	player.collision_tilemap = player._find_tilemap_layer(gate, COLLISION_LAYER_NAMES)
+	_expect(player.can_move_to(gate_spawn.global_position), "Player can stand at the gate arrival point")
+	_expect(player.can_move_to(gate.get_node("Spawns/FromFuchsiaCity").global_position), "Future Fuchsia arrival point is walkable")
+	_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(5, 14)) == -1,
+		"Return arrival on Route 15 is walkable")
+	for y in range(9, 12):
+		_expect(player.can_move_to(Vector2(80, y * 32 + 16)),
+			"Future Fuchsia doorway has no client movement blockade")
+	player.free()
+
+
+func _check_horizontal_tile_collision(map: Node2D, template: Node2D) -> void:
+	_expect(not map.has_node("Collision"), "%s has no obsolete root collision layer" % map.name)
+	_expect(map.find_children("*", "StaticBody2D", true, false).is_empty(),
+		"%s uses tiles instead of physical wall or doorway blockers" % map.name)
+	var collision := map.get_node("Tiles/Collision") as TileMapLayer
+	var expected := template.get_node("Tiles/Collision") as TileMapLayer
+	var cells_match := collision.get_used_cells().size() == expected.get_used_cells().size()
+	for tile: Vector2i in expected.get_used_cells():
+		cells_match = cells_match and collision.get_cell_source_id(tile) == expected.get_cell_source_id(tile)
+		cells_match = cells_match and collision.get_cell_atlas_coords(tile) == expected.get_cell_atlas_coords(tile)
+	_expect(cells_match and collision.tile_set == expected.tile_set,
+		"%s inherits its collision tiles from the horizontal template" % map.name)
+	var player: Node2D = (load("res://scripts/world/player.gd") as GDScript).new()
+	map.get_node("Entities/Players").add_child(player)
+	player.map_layers_initialized = true
+	player.map_layers_owner = map
+	player.resolved_map_cache = map
+	player.collision_tilemap = player._find_tilemap_layer(map, COLLISION_LAYER_NAMES)
+	_expect(player.collision_tilemap == collision, "%s player resolves the authored Tiles/Collision layer" % map.name)
+	for tile: Vector2i in [Vector2i(2, 1), Vector2i(17, 4), Vector2i(11, 6)]:
+		_expect(not player.can_move_to(Vector2(tile) * 32 + Vector2(16, 16)),
+			"%s authored wall tiles block movement" % map.name)
+	for y in range(9, 12):
+		for x in [2, 17]:
+			_expect(player.can_move_to(Vector2(x * 32 + 16, y * 32 + 16)),
+				"%s doorway stays clear for server-authorized transitions" % map.name)
+	player.free()
 
 
 func _check_visual(map: Node, width: int, height: int, source_suffix: String) -> void:

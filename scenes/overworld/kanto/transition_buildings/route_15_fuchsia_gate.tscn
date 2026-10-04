@@ -1,0 +1,33 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn" id="1_template"]
+
+[node name="Route15FuchsiaGate" instance=ExtResource("1_template")]
+map_id = "kanto_route_15_fuchsia_gate"
+map_display_name = "Route 15–Fuchsia Gate"
+world_access_group_id = "kanto_route_15_fuchsia_gate"
+world_access_group_label = "Route 15–Fuchsia Gate"
+world_access_area_type = "transition"
+location_id = "kanto.route_15.fuchsia.gate"
+location_name = "Route 15–Fuchsia Gate"
+music_profile_id = "kanto.routes_11_15"
+
+[node name="FromRoute15" type="Marker2D" parent="Spawns" index="2"]
+position = Vector2(528, 336)
+
+[node name="FromFuchsiaCity" type="Marker2D" parent="Spawns" index="3"]
+position = Vector2(112, 336)
+
+[node name="ToWest" parent="Exits" index="0"]
+visible = false
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" parent="Exits/ToWest" index="0"]
+disabled = true
+
+[node name="ToEast" parent="Exits" index="1"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_15.tscn"
+target_spawn_name = "FromFuchsiaGate"
+transition_id = "kanto_route_15_fuchsia_gate__to_route15"
+transition_facing_direction = "right"
