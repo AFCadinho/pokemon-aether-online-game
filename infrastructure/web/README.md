@@ -79,6 +79,10 @@ browser-bucket `R2_*` secrets do not override them. The immutable browser
 runtime is written to the `pokeaether-web` bucket by the `web-production` job.
 The two buckets must not be the same.
 
+The browser's same-origin `/news.json` Function reads the shared forum feed at
+`https://updates.pokeaether.com/data/news.json`, also used by desktop, Android
+and the launcher. News does not use `ASSET_BASE_URL` or the browser R2 bucket.
+
 One-time Cloudflare setup:
 
 1. Use the Direct Upload Pages project `pokeaether-web`, with production branch
@@ -160,6 +164,15 @@ Web logout does not cancel desktop queues. Gameplay and asset transfers accept
 both session types; browser-specific authentication endpoints retain their
 session-type checks. Legacy `/auth/web` gameplay aliases remain for older
 clients rather than duplicating transfer routes for the current client.
+
+Staff and creator tools use the same account permissions on browser and desktop.
+Browser staff can consume the shared `/auth/impersonate/consume` token exchange
+and return through `/auth/impersonate/stop`. The backend records a
+`web_impersonation` session so web identity, logout and the restored staff login
+keep their browser behavior; temporary impersonation tokens are not persisted.
+Photo Mode prepares a PNG in memory and exposes a separate download button so
+the download is initiated by a user click, including after a capture timer.
+Desktop screenshot folders, local cosmetic mods and 2.5D/3D remain desktop-only.
 
 The current browser uses the shared `/game/world` access and transition routes.
 Its map modules cover the current Kanto catalog beyond Cerulean, including

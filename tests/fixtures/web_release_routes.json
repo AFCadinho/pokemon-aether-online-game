@@ -1,5 +1,9 @@
 {
   "allowed": [
+    ["GET", "/game/socials/private-message-target/%E4%BD%A0%E5%A5%BD"],
+    ["POST", "/battle/weekly-boss"],
+    ["GET", "/game/weekly-bosses/zapdos"],
+    ["GET", "/game/weekly-boss-results/test-battle"],
     [
       "GET",
       "/auth/web/world-pickups"
@@ -583,9 +587,24 @@
     [
       "POST",
       "/game/mail/5/attachments/3/claim"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/consume"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/stop"
     ]
   ],
   "denied": [
+    ["POST", "/game/trades/%69nternal/connections/connected"],
+    ["POST", "/game/trades/%2569nternal/connections/connected"],
+    ["POST", "/game/trades/a%2F..%2Finternal/connections/connected"],
+    ["POST", "/game/trades/a%5Cinternal/connections/connected"],
+    ["GET", "/game/invalid%ZZ"],
+    ["GET", "/battle/weekly-boss"],
+    ["POST", "/battle/weekly-boss/settle"],
     [
       "GET",
       "/auth/web/npc-pokemon-sales/other_sale"
@@ -677,6 +696,14 @@
     [
       "POST",
       "/game/loans/internal/expire"
+    ],
+    [
+      "GET",
+      "/auth/impersonate/consume"
+    ],
+    [
+      "POST",
+      "/auth/impersonate/unknown"
     ]
   ]
 }

@@ -4,6 +4,14 @@
 
 - Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
 
+- Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
+
+- Restore forum announcements on the browser login screen by reading the shared updates feed instead of the browser asset bucket.
+
+- Speed up desktop 3D faint animations to at least 2× and cap their full movement at about 1.25 seconds, while preserving the resting faint pose and ordered replacement transition.
+
+- Enable permission-based staff and creator tools in the browser, including account impersonation and downloadable Photo Mode screenshots.
+
 - Fix browser Pokémon HOME icons remaining as question marks in Party, Storage and the Pokédex when reading the release's asset configuration.
 
 - Make downloaded Pokémon storage settings clearer, explain disabled removal actions, allow removal outside battles when a hidden battle screen is prewarmed, and ask for confirmation with Cancel selected by default.

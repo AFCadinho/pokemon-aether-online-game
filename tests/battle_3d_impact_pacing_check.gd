@@ -36,6 +36,8 @@ var hp_samples: Array = []
 var move_done := false
 var stats: Array = []
 var attack_done := false
+var faint_done := false
+var faint_stats: Array = []
 
 func _ready() -> void:
 	_run.call_deferred()
@@ -69,7 +71,8 @@ func _actor(index: int, species: String) -> void:
 
 func _hp(_ident: String, _event: Dictionary, previous: bool) -> void:
 	hp_samples.append({"previous": previous, "actor_playing": stage.players[0].is_playing(),
-		"actor_position": stage.players[0].current_animation_position, "at": Time.get_ticks_msec()})
+		"actor_position": stage.players[0].current_animation_position if not stage.players[0].current_animation.is_empty() else 0.0,
+		"at": Time.get_ticks_msec()})
 
 func _move(move: String, bridge := true) -> void:
 	await renderer.render_event({"type": "move"}, {"attack_actor_ident": "p1", "move_animation_name": move,
@@ -134,8 +137,25 @@ func _selection_checks() -> void:
 	assert(native.cues[1].event.name == "PRSFX- Thunderbolt1.wav" and native.cues[1].at_seconds == 48.0 / 60.0)
 	source.cues.append({"at_seconds": 1, "event": {"name": "unreviewed"}})
 	assert(Timing.audio_plan(source, pilot) == source, "A new sound must not be silently discarded")
-	for action in ["idle", "sleep", "faint_start", "faint_loop"]:
+	for action in ["idle", "sleep", "faint_loop"]:
 		assert(ActionMap.presentation_speed(action) == 1.0)
+	assert(ActionMap.presentation_speed("faint_start") == 2.0)
+	# Apply the policy to every reviewed clip while retaining the registry's
+	# full frame span and loop policy. Effective duration includes native speed.
+	for species: String in Registry.data.profiles:
+		var timing: Dictionary = Registry.data.profiles[species].action_timing
+		var available := PackedStringArray(timing.keys())
+		var faint: Dictionary = ActionMap.resolve("faint_start", available, timing)
+		if faint.is_empty():
+			continue
+		var native_seconds: float = faint.duration / faint.speed
+		var speed := ActionMap.presentation_speed("faint_start", native_seconds)
+		assert(speed >= 2.0 and native_seconds / speed <= ActionMap.FAINT_MAX_SECONDS + 0.000001, species)
+		assert(not faint.loop, "Reviewed faint-start clips must complete before their resting pose")
+	var faster_native := ActionMap.resolve("faint_start", PackedStringArray(["faint_start"]), {
+		"faint_start": {"frames": 480.0, "speed": 2.0, "loop": false}})
+	var faster_seconds: float = faster_native.duration / faster_native.speed
+	assert(is_equal_approx(faster_seconds / ActionMap.presentation_speed("faint_start", faster_seconds), 1.25))
 	for action in ["physical_attack", "physical_attack_2", "special_attack", "damage"]:
 		assert(ActionMap.presentation_speed(action) == 1.5)
 
@@ -221,6 +241,64 @@ func _sprite_hp_check() -> void:
 	renderer.animation_router = router
 	sprite_router.observe_damage = Callable()
 
+func _faint() -> void:
+	await renderer.render_event({"type": "faint"}, {"faint_target_ident": "p1", "battle_message": "Fainted"})
+	faint_done = true
+
+func _faint_case(species: String, with_loop := true) -> void:
+	_actor(0, species)
+	if not with_loop:
+		stage.players[0].get_animation_library("").remove_animation("faint_loop")
+	hp_samples.clear()
+	faint_done = false
+	var native_seconds: float = stage.players[0].get_animation("faint_start").length
+	var spec: Dictionary = Registry.data.profiles[species].action_timing.faint_start
+	native_seconds /= float(spec.speed)
+	var speed := ActionMap.presentation_speed("faint_start", native_seconds)
+	var started := Time.get_ticks_msec()
+	_faint()
+	assert(hp_samples.size() == 1 and not hp_samples[0].previous, "Final HP precedes the faint motion")
+	assert(stage.current_actions[0] == "faint_start" and stage.lifecycle[0] != "fainted")
+	assert(is_equal_approx(stage.players[0].get_playing_speed(), float(spec.speed) * speed))
+	while not faint_done:
+		assert(stage.actors[0].visible, "The next event must await the visible faint movement")
+		await get_tree().process_frame
+	assert(stage.lifecycle[0] == "fainted" and stage.actors[0].visible)
+	if with_loop:
+		assert(stage.current_actions[0] == "faint_loop" and stage.players[0].is_playing())
+		assert(stage.players[0].get_playing_speed() == float(Registry.data.profiles[species].action_timing.faint_loop.speed))
+	else:
+		assert(stage.current_actions[0] == "faint_start" and not stage.players[0].is_playing())
+	# HP/HUD refreshes cannot revive the completed model into idle.
+	stage.start_action("p1", "idle")
+	assert(stage.lifecycle[0] == "fainted" and stage.current_actions[0] in ["faint_start", "faint_loop"])
+	faint_stats.append({"species": species, "native_seconds": native_seconds,
+		"motion_seconds": native_seconds / speed, "event_ms": Time.get_ticks_msec() - started, "loop": with_loop})
+
+func _faint_pause_cancel_check() -> void:
+	_actor(0, "pikachu")
+	faint_done = false
+	_faint()
+	await get_tree().process_frame
+	_set_replay_speed(0)
+	var position: float = stage.players[0].current_animation_position
+	await get_tree().create_timer(0.15).timeout
+	assert(not faint_done and is_equal_approx(stage.players[0].current_animation_position, position))
+	_set_replay_speed(2)
+	assert(stage.players[0].get_playing_speed() == 4.0)
+	while not faint_done:
+		await get_tree().process_frame
+	assert(stage.lifecycle[0] == "fainted" and stage.players[0].get_playing_speed() == 2.0)
+	_set_replay_speed(1)
+	_actor(0, "pikachu")
+	faint_done = false
+	_faint()
+	await get_tree().process_frame
+	renderer.cancel_render()
+	while not faint_done:
+		await get_tree().process_frame
+	assert(stage.lifecycle[0] != "fainted" and stage.current_actions[0] == "idle", "Cancelled faint must not install a stale faint pose")
+
 func _run() -> void:
 	_selection_checks()
 	SettingsManager.battle_animations = true
@@ -249,6 +327,11 @@ func _run() -> void:
 	await _unreviewed_move_check()
 	await _shared_effect_checks()
 	await _sprite_hp_check()
+	await _faint_case("pikachu")
+	await _faint_case("blastoise")
+	await _faint_case("volbeat")
+	await _faint_case("pikachu", false)
+	await _faint_pause_cancel_check()
 	# Cancellation must release an impact recovery without any move sound nodes.
 	_actor(0, "pikachu")
 	_actor(1, "pikachu")
@@ -265,4 +348,5 @@ func _run() -> void:
 	await get_tree().process_frame
 	await get_tree().process_frame
 	print("BATTLE_3D_IMPACT_PACING_OK ", JSON.stringify(stats))
+	print("BATTLE_3D_FAINT_PACING_OK ", JSON.stringify(faint_stats))
 	get_tree().quit()

@@ -1422,7 +1422,7 @@ func _action(action: String, index: int) -> void:
 	animation.length = mapped.duration
 	animation.loop_mode = Animation.LOOP_LINEAR if mapped.loop else Animation.LOOP_NONE
 	players[index].speed_scale = playback_speed
-	players[index].play(mapped.clip, -1, mapped.speed * ActionMap.presentation_speed(action))
+	players[index].play(mapped.clip, -1, mapped.speed * ActionMap.presentation_speed(action, mapped.duration / mapped.speed))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 
 func _update_camera(delta: float) -> void:

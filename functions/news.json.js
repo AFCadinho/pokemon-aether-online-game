@@ -1,19 +1,8 @@
-function assetOrigin(value) {
-  const parsed = new URL(value || '');
-  if (parsed.protocol !== 'https:' || parsed.username || parsed.password || parsed.pathname !== '/' || parsed.search || parsed.hash) {
-    throw new Error('ASSET_BASE_URL must be an HTTPS origin');
-  }
-  return parsed.origin;
-}
+// Forum news lives in the shared updates bucket, independent of browser assets.
+const NEWS_URL = 'https://updates.pokeaether.com/data/news.json';
 
-export async function onRequestGet(context) {
-  let origin;
-  try {
-    origin = assetOrigin(context.env.ASSET_BASE_URL);
-  } catch (_) {
-    return Response.json({ items: [] }, { status: 503, headers: { 'Cache-Control': 'no-store' } });
-  }
-  const result = await fetch(`${origin}/data/news.json`, {
+export async function onRequestGet() {
+  const result = await fetch(NEWS_URL, {
     headers: { Accept: 'application/json' }, redirect: 'manual',
   });
   if (result.status !== 200) {

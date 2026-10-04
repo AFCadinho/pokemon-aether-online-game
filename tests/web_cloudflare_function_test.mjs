@@ -10,6 +10,28 @@ const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_ro
 for (const [method, path] of releaseRoutes.allowed) assert.equal(isAllowedApiRoute(method, path), true, `${method} ${path}`);
 for (const [method, path] of releaseRoutes.denied) assert.equal(isAllowedApiRoute(method, path), false, `${method} ${path}`);
 
+let matrixUpstreamCalls = 0;
+globalThis.fetch = async () => {
+  matrixUpstreamCalls++;
+  return Response.json({ ok: true });
+};
+for (const [method, path] of releaseRoutes.allowed) {
+  const response = await onRequest({
+    request: new Request('https://play.example.test/api' + path, { method }),
+    env: { API_ORIGIN: 'https://api.example.test' },
+  });
+  assert.equal(response.status, 200, `${method} ${path}`);
+}
+const acceptedMatrixCalls = matrixUpstreamCalls;
+for (const [method, path] of releaseRoutes.denied) {
+  const response = await onRequest({
+    request: new Request('https://play.example.test/api' + path, { method }),
+    env: { API_ORIGIN: 'https://api.example.test' },
+  });
+  assert.equal(response.status, 403, `${method} ${path}`);
+}
+assert.equal(matrixUpstreamCalls, acceptedMatrixCalls, 'Denied browser routes never reach the gateway');
+
 assert.equal(isAllowedApiRoute('POST', '/auth/web/login'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access'), true);
 assert.equal(isAllowedApiRoute('PUT', '/auth/web/world'), true);
@@ -80,6 +102,15 @@ const exportedTeam = await onRequest({
 });
 assert.equal(exportedTeam.status, 200);
 assert.equal(forwarded.url, 'https://api.example.test/team/export');
+const weeklyBoss = await onRequest({
+  request: new Request('https://play.example.test/api/battle/weekly-boss', {
+    method: 'POST', headers: { authorization: 'Bearer test-only' }, body: 'x'.repeat(20000),
+  }),
+  env: { API_ORIGIN: 'https://api.example.test' },
+});
+assert.equal(weeklyBoss.status, 200);
+assert.equal(forwarded.url, 'https://api.example.test/battle/weekly-boss');
+assert.equal(forwarded.headers.get('authorization'), 'Bearer test-only');
 const rankedStart = await onRequest({
   request: new Request('https://play.example.test/api/battle/pvp/matches/test-match/start-battle', {
     method: 'POST', headers: { authorization: 'Bearer test-only' }, body: '{}',
@@ -183,13 +214,34 @@ const deniedReleaseMethod = await getWebReleaseObject({
 assert.equal(deniedReleaseMethod.status, 405);
 
 globalThis.fetch = async request => {
-  assert.equal(request, 'https://assets.example.test/data/news.json');
-  return Response.json({ items: [{ title: 'Release' }] });
+  forwarded = request;
+  return new Response(null, { headers: { 'Content-Type': 'audio/ogg' } });
+};
+for (const file of ['Kanto Wild Battle.ogg', "Johto's Battle.ogg"]) {
+  const audio = await getWebReleaseObject({
+    request: new Request('https://play.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/browser-audio/music/' + encodeURIComponent(file), { method: 'HEAD' }),
+    env: { ASSET_BASE_URL: 'https://assets.example.test' },
+  });
+  assert.equal(audio.status, 200, file);
+  assert.equal(decodeURIComponent(new URL(forwarded.url).pathname), '/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/browser-audio/music/' + file);
+}
+
+globalThis.fetch = async request => {
+  assert.equal(request, 'https://updates.pokeaether.com/data/news.json');
+  return Response.json({ articles: [{ title: 'Release', externalLink: 'https://forums.pokeaether.com/t/release/31' }] });
 };
 const news = await getNews({ env: { ASSET_BASE_URL: 'https://assets.example.test' } });
 assert.equal(news.status, 200);
 assert.equal(news.headers.get('cache-control'), 'public, max-age=300');
-assert.equal((await news.json()).items[0].title, 'Release');
+assert.equal((await news.json()).articles[0].title, 'Release');
+const newsWithoutBrowserAssets = await getNews({ env: {} });
+assert.equal(newsWithoutBrowserAssets.status, 200);
+assert.equal((await newsWithoutBrowserAssets.json()).articles[0].externalLink, 'https://forums.pokeaether.com/t/release/31');
+
+globalThis.fetch = async () => new Response('', { status: 404 });
+const unavailableNews = await getNews({ env: {} });
+assert.equal(unavailableNews.status, 502);
+assert.equal(unavailableNews.headers.get('cache-control'), 'no-store');
 
 globalThis.fetch = async () => new Response(new Uint8Array([0xff]), { status: 200 });
 const invalidNews = await getNews({ env: { ASSET_BASE_URL: 'https://assets.example.test' } });

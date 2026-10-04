@@ -32,7 +32,7 @@ func is_authenticated() -> bool:
 func is_impersonating() -> bool:
 	return (
 		is_authenticated()
-		and session_type == "impersonation"
+		and session_type in ["impersonation", "web_impersonation"]
 		and impersonated_by_user_id > 0
 	)
 
@@ -152,11 +152,12 @@ func stop_impersonating() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var remember_me := bool(body.get("rememberMe", false))
+	web_remember_me = remember_me
 	_reset_account_runtime_state()
 	_apply_auth_response(body)
 	account_switch_pending = true
 	_refresh_trade_session.call_deferred()
-	if remember_me:
+	if remember_me or OS.has_feature("web"):
 		_save_session()
 	else:
 		_clear_session_file()
@@ -224,6 +225,11 @@ func me() -> Dictionary:
 		current_user = body
 	if body.has("expiresAt"):
 		expires_at = str(body.get("expiresAt", ""))
+	if body.has("sessionType"):
+		session_type = str(body.get("sessionType", ""))
+	if body.has("impersonatedByUserId"):
+		var actor_id: Variant = body.get("impersonatedByUserId")
+		impersonated_by_user_id = 0 if actor_id == null else int(actor_id)
 
 	return {
 		"success": true,

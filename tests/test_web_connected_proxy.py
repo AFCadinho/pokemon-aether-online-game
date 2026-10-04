@@ -297,6 +297,13 @@ class ConnectedProxyTests(unittest.TestCase):
                 self.assertEqual(socket.receive()["code"], 1000)
             self.assertTrue(paths[4].startswith("/ws/trade?"))
             self.assertIn("clientPlatform=web", paths[4])
+            with client.websocket_connect(
+                "ws://localhost/api/ws/pvp-battle?token=test-only&clientBuild=web-test"
+            ) as socket:
+                socket.send_text("battle")
+                self.assertEqual(socket.receive_text(), "battle")
+                self.assertEqual(socket.receive()["code"], 1000)
+            self.assertTrue(paths[5].startswith("/ws/pvp-battle?"))
             upstream.shutdown()
             worker.join(timeout=5)
 
