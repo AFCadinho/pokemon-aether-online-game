@@ -1,20 +1,19 @@
-[gd_scene format=4]
+[gd_scene format=3 uid="uid://d138xqmh4ks1h"]
 
-[ext_resource type="Script" path="res://scripts/world/transition_hint.gd" id="1_hint_script"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="2_collision"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
+[ext_resource type="TileSet" uid="uid://bw4ggkfn67bev" path="res://resources/world/collision_marker_tileset.tres" id="2_collision"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="4_floor_mask"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="6_metadata"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="6_metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_12_fishing_brother_house/route_12_fishing_brother_house.visual.tscn" id="7_visual"]
 [ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="8_gift_npc"]
 [ext_resource type="SpriteFrames" uid="uid://7ym2628q14if" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="9_fishing_guru_frames"]
 [ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="10_fishing_guru_portrait"]
 
 [sub_resource type="RectangleShape2D" id="door_shape"]
-size = Vector2(64, 32)
+size = Vector2(96, 32)
 
-[node name="Route12FishingBrotherHouse" type="Node2D"]
+[node name="Route12FishingBrotherHouse" type="Node2D" unique_id=1432813160]
 script = ExtResource("6_metadata")
 map_id = "kanto_route_12_fishing_brother_house"
 map_region_name = "Kanto"
@@ -29,59 +28,57 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "kanto.routes_11_15"
 
-[node name="Visual" parent="." instance=ExtResource("7_visual")]
-metadata/pao_generated_visual = true
-metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/route_12/Route 12 Fishing Brother House.tmx"
-metadata/tiled_visual_map = {
-"height": 20,
-"orientation": "orthogonal",
-"render_order": "right-down",
-"tile_height": 32,
-"tile_width": 32,
-"tiled_version": "1.12.2",
-"version": "1.10",
-"width": 20
-}
+[node name="Visual" parent="." unique_id=1808834573 instance=ExtResource("7_visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=2008465417]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("4_floor_mask")
-floor_regions = {&"ground_floor": Rect2(0, 0, 640, 640)}
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 640, 640)
+}
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1903341156]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1366415593]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=239664038]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=71092281]
+
+[node name="Entities" type="Node2D" parent="." unique_id=964128393]
 z_index = 5
-[node name="Players" type="Node2D" parent="Entities"]
-[node name="NPCs" type="Node2D" parent="Entities"]
 
-[node name="FishingGuruYoungerBrother" parent="Entities/NPCs" instance=ExtResource("8_gift_npc")]
+[node name="Players" type="Node2D" parent="Entities" unique_id=2078947137]
+
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=306070962]
+
+[node name="FishingGuruYoungerBrother" parent="Entities/NPCs" unique_id=1964463507 instance=ExtResource("8_gift_npc")]
 position = Vector2(304, 336)
-display_name = "Fishing Guru's Younger Brother"
 reward_id = "kanto_route_12_super_rod"
 success_dialogue_id = "kanto_route_12_fishing_guru_success"
 already_received_dialogue_id = "kanto_route_12_fishing_guru_received"
 failure_dialogue_id = "kanto_route_12_fishing_guru_failure"
 reward_item_id = "super-rod"
 npc_id = "kanto_route_12_fishing_guru"
+display_name = "Fishing Guru's Younger Brother"
 facing_direction = Vector2(0, 1)
 npc_sprite_frames = ExtResource("9_fishing_guru_frames")
 mugshot = ExtResource("10_fishing_guru_portrait")
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1607463875]
 
-[node name="Spawns" type="Node2D" parent="."]
-[node name="FromRoute12" type="Marker2D" parent="Spawns"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=1436163978]
+
+[node name="Spawns" type="Node2D" parent="." unique_id=1557179318]
+
+[node name="FromRoute12" type="Marker2D" parent="Spawns" unique_id=1739116892]
 position = Vector2(304, 464)
 
-[node name="Exits" type="Node2D" parent="."]
-[node name="ToRoute12" type="Area2D" parent="Exits"]
+[node name="Exits" type="Node2D" parent="." unique_id=1276785643]
+
+[node name="ToRoute12" type="Area2D" parent="Exits" unique_id=535408062]
 position = Vector2(304, 496)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_12.tscn"
@@ -89,19 +86,19 @@ target_spawn_name = "FromFishingBrotherHouse"
 transition_id = "kanto_route_12_fishing_brother_house__to_route_12"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToRoute12" unique_id=357670622]
+position = Vector2(0, 16)
 shape = SubResource("door_shape")
 
-[node name="DoorTransitionHint" parent="Exits/ToRoute12" instance=ExtResource("5_hint")]
-z_index = 7
+[node name="DoorTransitionHint" parent="Exits/ToRoute12" unique_id=769757706 instance=ExtResource("5_hint")]
 z_as_relative = false
-script = ExtResource("1_hint_script")
 tile_footprint = Vector2i(2, 1)
 flow_direction = "down"
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=286272626]
 visible = false
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=71851965]
 visible = false
 z_index = 4096
 tile_set = ExtResource("2_collision")
