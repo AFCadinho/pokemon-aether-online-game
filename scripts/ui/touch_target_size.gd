@@ -19,12 +19,12 @@ static func font_size_for(control: Control, desktop_size: int, minimum: float = 
 	return maxi(desktop_size, ceili(minimum / screen_scale(control).y))
 
 
-static func compact_button_style(button: Button) -> void:
-	# Keep the full Button rect for input, but draw a compact 28 dp surface in
-	# its centre. The transparent padding still accepts taps and blocks movement.
+static func compact_button_style(button: Button, visual_size: Vector2 = Vector2(28, 28)) -> void:
+	# Keep the full Button rect for input, with the original UI-scaled surface
+	# centred inside it. Transparent padding accepts taps and blocks movement.
 	var window_fit := button.get_node_or_null("/root/WindowFit")
 	var compact: bool = window_fit != null and window_fit.is_touch_ui() and not window_fit.is_mobile_browser_ui()
-	var inset := (button.size - Vector2.ONE * 28.0 / screen_scale(button)).max(Vector2.ZERO) * 0.5 if compact else Vector2.ZERO
+	var inset := (button.size - visual_size).max(Vector2.ZERO) * 0.5 if compact else Vector2.ZERO
 	for state: String in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var style := button.get_theme_stylebox(state) as StyleBoxFlat
 		if style == null:

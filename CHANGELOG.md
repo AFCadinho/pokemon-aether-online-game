@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore the original UI-scaled appearance of native HUD collapse/reopen buttons and chat resize, keeping the enlarged touch padding invisible.
+
 - Make native mobile HUD collapse/reopen controls look compact, while retaining their 48 dp touch area independently of UI scale.
 
 - Raise Gliscor and Weezing to a natural battle hover height, with smooth descent for sleep and fainting and a gentle rise when waking.
