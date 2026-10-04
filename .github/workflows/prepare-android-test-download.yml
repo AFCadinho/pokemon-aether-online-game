@@ -12,6 +12,11 @@ on:
         default: "1"
         required: true
         type: string
+      repair_active_assets:
+        description: Restore assets for this exact active Android release; do not upload APK or change updater
+        default: false
+        required: true
+        type: boolean
 
 concurrency:
   group: prepare-android-test-download
@@ -35,6 +40,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUILD_RUN_ID: ${{ inputs.build_run_id }}
           BUILD_RUN_ATTEMPT: ${{ inputs.build_run_attempt }}
+          REPAIR_ACTIVE_ASSETS: ${{ inputs.repair_active_assets }}
         run: |
           python3 - <<'PY'
           import os
@@ -50,7 +56,8 @@ jobs:
           assert run['head_branch'] == 'main' and run['event'] == 'workflow_dispatch'
           assert run['status'] == 'completed' and run['conclusion'] == 'success'
           assert str(run['run_attempt']) == os.environ['BUILD_RUN_ATTEMPT']
-          assert run['head_sha'] == os.environ['GITHUB_SHA'], 'Candidate must match the reviewed main source'
+          if os.environ['REPAIR_ACTIVE_ASSETS'] != 'true':
+              assert run['head_sha'] == os.environ['GITHUB_SHA'], 'Candidate must match the reviewed main source'
           PY
       - uses: actions/download-artifact@v5
         with:
@@ -72,9 +79,27 @@ jobs:
           R2_BUCKET: ${{ secrets.R2_BUCKET }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: python3 tools/prepare_android_test_download.py --assets-only
+          REPAIR_ACTIVE_ASSETS: ${{ inputs.repair_active_assets }}
+        run: |
+          if [ "${REPAIR_ACTIVE_ASSETS}" = "true" ]; then
+            export CANDIDATE_SOURCE_SHA="$(python3 -c 'import json; print(json.load(open("/tmp/android-build-run.json"))["head_sha"])')"
+            python3 tools/prepare_android_test_download.py --repair-active-assets
+          else
+            python3 tools/prepare_android_test_download.py --assets-only
+          fi
+      - name: Record active-release asset repair
+        if: ${{ inputs.repair_active_assets }}
+        run: cat android-test-download.json >> "${GITHUB_STEP_SUMMARY}"
+      - name: Retain active-release repair evidence
+        if: ${{ inputs.repair_active_assets }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-active-assets-repair-${{ inputs.build_run_id }}-${{ inputs.build_run_attempt }}
+          path: android-test-download.json
+          if-no-files-found: error
   apk:
     needs: prepare
+    if: ${{ !inputs.repair_active_assets }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

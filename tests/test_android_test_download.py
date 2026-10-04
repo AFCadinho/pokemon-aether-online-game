@@ -12,7 +12,7 @@ from tools import upload_launcher_release
 
 
 class AndroidTestDownloadTests(unittest.TestCase):
-    def exercise(self, mode, corrupt=False, missing_catalog=False):
+    def exercise(self, mode, corrupt=False, missing_catalog=False, changed_active=False):
         with TemporaryDirectory() as directory:
             root = Path(directory)
             build = 'a' * 40 + '-123-1'
@@ -38,6 +38,11 @@ class AndroidTestDownloadTests(unittest.TestCase):
             if corrupt:
                 (root / 'android-assets/home-icons/icon.png').write_bytes(b'bad')
             previous = b'{"game":{"version":"0.3.89","versionCode":6,"buildId":"published-6"}}'
+            if mode in ('--repair-active-assets', '--plan-active-assets'):
+                active_game = dict(game)
+                if changed_active:
+                    active_game['sha256'] = 'b' * 64
+                previous = json.dumps({'game': active_game}).encode()
             origin = f'https://web-assets.pokeaether.com/android/releases/{build}/'
             responses = {origin + relative: body for relative, body in payload.items()}
             responses[origin + 'mobile-assets/catalog.json'] = catalog_bytes
@@ -56,7 +61,7 @@ class AndroidTestDownloadTests(unittest.TestCase):
                     if url not in responses:
                         raise SystemExit('Public Android download is unavailable: HTTP 404')
                     return responses[url]
-                with patch.dict(os.environ, {'GITHUB_SHA': ('b' if mode == '--verify-assets-only' else 'a') * 40,
+                with patch.dict(os.environ, {'GITHUB_SHA': ('a' if mode in ('--assets-only', '--apk-only') else 'b') * 40,
                                              'CANDIDATE_SOURCE_SHA': 'a' * 40, 'BUILD_RUN_ID': '123',
                                              'BUILD_RUN_ATTEMPT': '1'}), \
                         patch('sys.argv', ['prepare', mode]), \
@@ -74,14 +79,23 @@ class AndroidTestDownloadTests(unittest.TestCase):
                             module['main']()
                         upload.assert_not_called()
                         return
+                    if changed_active:
+                        with self.assertRaisesRegex(SystemExit, 'exact active Android release'):
+                            module['main']()
+                        upload.assert_not_called()
+                        globals_['_load_config'].assert_not_called()
+                        return
                     module['main']()
                     keys = [call.args[2] for call in upload.call_args_list]
                     self.assertNotIn('manifest-android.json', keys)
                     self.assertNotIn('manifest-web.json', keys)
                     self.assertNotIn('web-release-config.json', keys)
-                    if mode == '--assets-only':
+                    if mode in ('--assets-only', '--repair-active-assets'):
                         self.assertEqual(len(keys), 5)
                         self.assertEqual(keys[-1], f'android/releases/{build}/mobile-assets/catalog.json')
+                        evidence = json.loads(Path('android-test-download.json').read_text())
+                        self.assertEqual(evidence['activeAssetsRepaired'], mode == '--repair-active-assets')
+                        self.assertFalse(evidence['apkDownloadReady'])
                     elif mode == '--apk-only':
                         self.assertEqual(keys, ['game/' + apk_name])
                         self.assertTrue(json.loads(Path('android-test-download.json').read_text())['apkDownloadReady'])
@@ -89,6 +103,10 @@ class AndroidTestDownloadTests(unittest.TestCase):
                         upload.assert_not_called()
                         globals_['_load_config'].assert_not_called()
                         self.assertFalse(Path('android-test-download.json').exists())
+                        if mode == '--plan-active-assets':
+                            plan = json.loads(Path('android-active-asset-repair-plan.json').read_text())
+                            self.assertEqual(plan['destinationPrefix'], f'android/releases/{build}/')
+                            self.assertEqual(plan['assetCount'], 4)
             finally:
                 os.chdir(original)
 
@@ -109,6 +127,18 @@ class AndroidTestDownloadTests(unittest.TestCase):
 
     def test_corrupt_local_payload_blocks_publication(self):
         self.exercise('--verify-assets-only', corrupt=True)
+
+    def test_active_repair_uploads_only_exact_active_build_assets(self):
+        self.exercise('--repair-active-assets')
+
+    def test_active_repair_rejects_changed_manifest_before_reading_upload_credentials(self):
+        self.exercise('--repair-active-assets', changed_active=True)
+
+    def test_active_repair_plan_does_not_upload_or_require_credentials(self):
+        self.exercise('--plan-active-assets')
+
+    def test_active_repair_rejects_corrupt_payload(self):
+        self.exercise('--repair-active-assets', corrupt=True)
 
     def test_missing_download_explains_required_preparation(self):
         source = Path(__file__).resolve().parents[1] / 'tools/prepare_android_test_download.py'
