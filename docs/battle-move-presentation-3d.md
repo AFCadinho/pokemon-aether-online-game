@@ -37,9 +37,17 @@ activation can still have shared 2D fallback assets prepared.
 ## Initial pacing and impact pilot
 
 Desktop 3D physical/special attacks and damage reactions use a presentation
-speed of 1.5, separate from replay speed. Idle, sleep, faint and lifecycle clips
+speed of 1.5, separate from replay speed. Idle, sleep, faint-loop and lifecycle clips
 retain their existing speed; the reviewed registry's native timing stays intact.
 Model-only attacks start without waiting for move audio or its 2D source clock.
+
+Faint-start uses at least 2× presentation speed, with longer native clips sped
+up enough to finish their full movement within 1.25 seconds at normal replay
+speed. Effective duration accounts for the reviewed clip's native speed; frames
+are not trimmed or skipped. The renderer presents final HP first and awaits the
+complete movement before the model enters faint-loop (or keeps its final pose
+when that loop is missing). The resting faint-loop retains native/replay speed.
+Pause, cancellation and the existing replacement boundary remain in force.
 
 `battle_3d_move_timing.gd` initially authors Pikachu Thunderbolt (native impact
 frame 48/120), Pikachu Tackle (42/110), and Blastoise Ice Beam (120/407.5).
@@ -87,3 +95,6 @@ No native move VFX or attack-camera shots are shipped by this foundation.
   clip lengths, all three silent pilot impact/recovery boundaries, an unreviewed
   move, pause/replay speed, shared damage/heal/stat sounds, cancellation,
   eligibility and 2D HP ordering.
+- The same pacing check validates every reviewed faint-start duration and runs
+  native-clock faint lifecycle cases for Pikachu, Blastoise and Volbeat, including
+  missing faint-loop, retained final pose, replay pause/speed and cancellation.
