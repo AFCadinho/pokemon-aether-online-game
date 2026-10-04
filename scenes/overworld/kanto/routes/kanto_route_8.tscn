@@ -17,6 +17,7 @@
 [ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="14_biker"]
 [ext_resource type="PackedScene" uid="uid://b6sun8ubp3uia" path="res://scenes/world/interactables/large_sign_interactable.tscn" id="15_bhfuy"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="15_door_hint"]
+[ext_resource type="PackedScene" uid="uid://b8s7eihsl5ikf" path="res://scenes/world/interactables/sign_interactable.tscn" id="16_6cbgw"]
 
 [sub_resource type="RectangleShape2D" id="shape_lavender_exit"]
 size = Vector2(32, 160)
@@ -284,11 +285,11 @@ transition_id = "kanto_route_8__to_underground_path"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=724159406]
+position = Vector2(0, -16)
 shape = SubResource("shape_underground_path_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=648122059 instance=ExtResource("15_door_hint")]
 z_as_relative = false
-flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=420611869]
 z_index = 5
@@ -534,6 +535,9 @@ position = Vector2(1808, 816)
 position = Vector2(368, 496)
 sign_id = "kanto_route_8_route_sign"
 sign_type = "road"
+
+[node name="Route8UndergroundSign" parent="Entities/Interactables/Signs" unique_id=1449815395 instance=ExtResource("16_6cbgw")]
+position = Vector2(848, 432)
 
 [node name="Tiles" type="Node2D" parent="." unique_id=1596377093]
 visible = false
