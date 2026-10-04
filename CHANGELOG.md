@@ -4,6 +4,8 @@
 
 - Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.
 
+- Preserve land and water arrival surfaces when crossing between Routes 12 and 13.
+
 - Include Route 12's Fishing Brother's House in the browser's extended map module.
 
 - Have Route 12's Fishing Guru's brother send players to Vermilion City before he offers his reward.

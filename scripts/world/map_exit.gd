@@ -3,6 +3,8 @@ extends Area2D
 @export_file("*.tscn") var target_scene_path := ""
 @export var target_spawn_name := ""
 @export var transition_id := ""
+@export var land_transition_id := ""
+@export var water_transition_id := ""
 @export var required_trainer_id := ""
 @export_enum("up", "down", "left", "right") var transition_facing_direction := ""
 @export var player_node_name := "Player"
@@ -14,7 +16,11 @@ var is_transitioning := false
 
 func handles_transition(candidate_transition_id: String) -> bool:
 	var normalized_transition_id := candidate_transition_id.strip_edges()
-	return not normalized_transition_id.is_empty() and _resolve_transition_id() == normalized_transition_id
+	return not normalized_transition_id.is_empty() and normalized_transition_id in [
+		_resolve_transition_id(),
+		land_transition_id.strip_edges(),
+		water_transition_id.strip_edges(),
+	]
 
 
 func contains_world_position(world_position: Vector2) -> bool:
@@ -47,7 +53,7 @@ func _on_body_entered(body: Node2D) -> void:
 		push_error("MapExit failed: target_spawn_name is empty on %s." % get_path())
 		return
 
-	var normalized_transition_id := _resolve_transition_id()
+	var normalized_transition_id := _resolve_transition_id_for_player(body)
 	if normalized_transition_id.is_empty():
 		push_warning("MapExit is using legacy loading because its source map has no map_id: %s." % get_path())
 
@@ -245,6 +251,14 @@ func _resolve_transition_id() -> String:
 	if source_map_id.is_empty():
 		return ""
 	return "%s__%s" % [source_map_id, str(name).to_snake_case()]
+
+
+func _resolve_transition_id_for_player(body: Node2D) -> String:
+	var is_surfing := body.has_method("is_surfing_activity_active") \
+		and bool(body.call("is_surfing_activity_active"))
+	var surface_transition_id := water_transition_id if is_surfing else land_transition_id
+	var normalized_surface_transition_id := surface_transition_id.strip_edges()
+	return normalized_surface_transition_id if not normalized_surface_transition_id.is_empty() else _resolve_transition_id()
 
 
 func _resolve_arrival_facing_direction(player: Node2D) -> String:
