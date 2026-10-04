@@ -181,6 +181,7 @@ func _ready() -> void:
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
 	_apply_settings_to_controls()
 	_refresh_localized_content()
+	DesktopAssetUsageService.usage_updated.connect(_refresh_asset_storage_controls)
 	visible = false
 
 
@@ -194,6 +195,7 @@ func _configure_graphics_dropdowns() -> void:
 
 func open(context: String = "game") -> void:
 	_apply_settings_to_controls()
+	DesktopAssetUsageService.request_refresh()
 	_refresh_asset_storage_controls()
 	_apply_context(context)
 	_refresh_impersonation_account_controls()
@@ -2960,12 +2962,13 @@ func _refresh_asset_storage_controls() -> void:
 	if sprite_storage_button == null or model_storage_button == null:
 		return
 	var battle_open := get_tree().root.find_child("ExperimentalBattle3D", true, false) != null
-	var sprite_bytes: int = WebPokemonSpriteService.desktop_disk_bytes()
-	var model_bytes: int = preload("res://scripts/services/on_demand_3d_bundle_service.gd").downloaded_bytes()
-	sprite_storage_button.text = "Remove downloaded 2D sprites (%0.1f MiB)" % (sprite_bytes / 1048576.0)
-	model_storage_button.text = "Remove downloaded 3D models (%0.1f MiB)" % (model_bytes / 1048576.0)
-	sprite_storage_button.disabled = battle_open or sprite_bytes == 0 or not WebPokemonSpriteService.can_clear_desktop_disk()
-	model_storage_button.disabled = battle_open or model_bytes == 0 or not OnDemand3DBundleService.can_clear_cache()
+	var sprite_bytes: int = DesktopAssetUsageService.sprite_bytes
+	var model_bytes: int = DesktopAssetUsageService.model_bytes
+	var scanning: bool = DesktopAssetUsageService.is_scanning()
+	sprite_storage_button.text = "Remove downloaded 2D sprites (%0.1f MiB)" % (sprite_bytes / 1048576.0) if sprite_bytes >= 0 else "Remove downloaded 2D sprites (…)"
+	model_storage_button.text = "Remove downloaded 3D models (%0.1f MiB)" % (model_bytes / 1048576.0) if model_bytes >= 0 else "Remove downloaded 3D models (…)"
+	sprite_storage_button.disabled = scanning or battle_open or sprite_bytes <= 0 or not WebPokemonSpriteService.can_clear_desktop_disk()
+	model_storage_button.disabled = scanning or battle_open or model_bytes <= 0 or not OnDemand3DBundleService.can_clear_cache()
 
 
 func _confirm_remove_sprites() -> void:
@@ -2974,6 +2977,7 @@ func _confirm_remove_sprites() -> void:
 		storage_confirm_dialog.confirmed.disconnect(connection.callable)
 	storage_confirm_dialog.confirmed.connect(func():
 		WebPokemonSpriteService.clear_desktop_disk()
+		DesktopAssetUsageService.request_refresh()
 		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
 
@@ -2984,5 +2988,6 @@ func _confirm_remove_models() -> void:
 		storage_confirm_dialog.confirmed.disconnect(connection.callable)
 	storage_confirm_dialog.confirmed.connect(func():
 		OnDemand3DBundleService.clear_cache()
+		DesktopAssetUsageService.request_refresh()
 		_refresh_asset_storage_controls(), CONNECT_ONE_SHOT)
 	storage_confirm_dialog.popup_centered()
