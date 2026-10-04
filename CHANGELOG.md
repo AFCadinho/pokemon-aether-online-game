@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix sleeping Snorlax being ignored by player movement checks, keeping its roadblock active until that player's encounter is completed.
+
 - Fix the Route 15 to Route 14 transition failing to find its arrival point and leaving the map blank; move Route 14's Biker Malik off a blocked tile.
 
 - Add a sleeping Route 12 Snorlax awakened with the Poké Flute, with a multi-tile roadblock and permanent, independent completion per player and encounter.
