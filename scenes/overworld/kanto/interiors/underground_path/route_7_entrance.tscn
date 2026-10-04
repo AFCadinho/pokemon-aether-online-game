@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=4]
+
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/underground_path_route_7_entrance/underground_path_route_7_entrance.visual.tscn" id="1_visual"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="2_metadata"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="3_exit"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="4_door_hint"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="5_floor_mask"]
+
+[sub_resource type="RectangleShape2D" id="stair_exit_shape"]
+size = Vector2(32, 32)
+
+[node name="UndergroundPathRoute7Entrance" type="Node2D"]
+script = ExtResource("2_metadata")
+map_id = "kanto_underground_path_route_7_entrance"
+map_region_name = "Kanto"
+map_display_name = "Underground Path Route 7 Entrance"
+world_access_group_id = "kanto_underground_path"
+world_access_group_label = "Underground Path"
+world_access_area_type = "interior"
+location_id = "kanto.underground.path.route.7.entrance"
+location_name = "Underground Path Route 7 Entrance"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+
+[node name="Visual" parent="." instance=ExtResource("1_visual")]
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromRoute7" type="Marker2D" parent="Spawns"]
+position = Vector2(400, 368)
+
+[node name="FromTunnel" type="Marker2D" parent="Spawns"]
+position = Vector2(464, 240)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToTunnelHorizontal" type="Area2D" parent="Exits"]
+position = Vector2(496, 240)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/tunnel_horizontal.tscn"
+target_spawn_name = "FromRoute7Entrance"
+transition_id = "kanto_underground_path_route_7_entrance__to_horizontal_tunnel"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToTunnelHorizontal"]
+shape = SubResource("stair_exit_shape")
+
+[node name="DoorTransitionHint" parent="Exits/ToTunnelHorizontal" instance=ExtResource("4_door_hint")]
+z_as_relative = false
+flow_direction = "right"
+
+[node name="Entities" type="Node2D" parent="."]
+z_index = 5
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Tiles" type="Node2D" parent="."]
+visible = false
+
+[node name="Collision" type="TileMapLayer" parent="Tiles"]
+z_index = 100
+
+[node name="FloorVisibilityMask" type="Node2D" parent="."]
+z_index = 4096
+z_as_relative = false
+script = ExtResource("5_floor_mask")
+floor_regions = {
+&"ground_floor": Rect2(0, 0, 768, 576)
+}
+floor_display_names = {
+&"ground_floor": "Underground Path — Route 7 Entrance"
+}
+active_floor = &"ground_floor"
+constrain_camera_to_active_floor = true
+
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+
+[connection signal="body_entered" from="Exits/ToTunnelHorizontal" to="Exits/ToTunnelHorizontal" method="_on_body_entered"]
