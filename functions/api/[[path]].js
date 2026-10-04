@@ -14,7 +14,7 @@ const HTTP_ROUTES = new Set([
   'DELETE /auth/web/ai-sparring/history', 'GET /battle/pvp/training/ai/teams',
   'GET /battle/pvp/training/ai/live', 'POST /battle/pvp/training/ai/battles',
   'POST /battle/wild-encounter', 'POST /battle/dev/wild', 'GET /battle/wild/resume',
-  'POST /battle/trainer', 'GET /battle/trainer/resume',
+  'POST /battle/trainer', 'POST /battle/weekly-boss', 'GET /battle/trainer/resume',
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
   'POST /pokemon/create-from-text', 'POST /team/create-from-text',
   'POST /auth/email-verification/confirm',
@@ -106,7 +106,16 @@ const GAMEPLAY_ROUTES = [
 
 export function isAllowedApiRoute(method, path) {
   const normalizedMethod = method.toUpperCase();
-  if (path.split('/').includes('internal')) return false;
+  let decodedPath;
+  try {
+    decodedPath = decodeURIComponent(path);
+  } catch (_) {
+    return false;
+  }
+  // Check what the gateway will route, including encoded separators. Do not
+  // pass nested encodings that another upstream hop could decode differently.
+  if (decodedPath.includes('%') || decodedPath.includes('\\')
+      || decodedPath.split('/').some(part => ['internal', '.', '..'].includes(part))) return false;
   // Gameplay and transfers share the native account API and its authorization.
   if (path.startsWith('/game/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;
   if (path.startsWith('/account/pvp/') && ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'].includes(normalizedMethod)) return true;

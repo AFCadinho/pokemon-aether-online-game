@@ -10,6 +10,28 @@ const releaseRoutes = JSON.parse(readFileSync(new URL('./fixtures/web_release_ro
 for (const [method, path] of releaseRoutes.allowed) assert.equal(isAllowedApiRoute(method, path), true, `${method} ${path}`);
 for (const [method, path] of releaseRoutes.denied) assert.equal(isAllowedApiRoute(method, path), false, `${method} ${path}`);
 
+let matrixUpstreamCalls = 0;
+globalThis.fetch = async () => {
+  matrixUpstreamCalls++;
+  return Response.json({ ok: true });
+};
+for (const [method, path] of releaseRoutes.allowed) {
+  const response = await onRequest({
+    request: new Request('https://play.example.test/api' + path, { method }),
+    env: { API_ORIGIN: 'https://api.example.test' },
+  });
+  assert.equal(response.status, 200, `${method} ${path}`);
+}
+const acceptedMatrixCalls = matrixUpstreamCalls;
+for (const [method, path] of releaseRoutes.denied) {
+  const response = await onRequest({
+    request: new Request('https://play.example.test/api' + path, { method }),
+    env: { API_ORIGIN: 'https://api.example.test' },
+  });
+  assert.equal(response.status, 403, `${method} ${path}`);
+}
+assert.equal(matrixUpstreamCalls, acceptedMatrixCalls, 'Denied browser routes never reach the gateway');
+
 assert.equal(isAllowedApiRoute('POST', '/auth/web/login'), true);
 assert.equal(isAllowedApiRoute('GET', '/auth/web/world/transitions/test/access'), true);
 assert.equal(isAllowedApiRoute('PUT', '/auth/web/world'), true);
@@ -80,6 +102,15 @@ const exportedTeam = await onRequest({
 });
 assert.equal(exportedTeam.status, 200);
 assert.equal(forwarded.url, 'https://api.example.test/team/export');
+const weeklyBoss = await onRequest({
+  request: new Request('https://play.example.test/api/battle/weekly-boss', {
+    method: 'POST', headers: { authorization: 'Bearer test-only' }, body: 'x'.repeat(20000),
+  }),
+  env: { API_ORIGIN: 'https://api.example.test' },
+});
+assert.equal(weeklyBoss.status, 200);
+assert.equal(forwarded.url, 'https://api.example.test/battle/weekly-boss');
+assert.equal(forwarded.headers.get('authorization'), 'Bearer test-only');
 const rankedStart = await onRequest({
   request: new Request('https://play.example.test/api/battle/pvp/matches/test-match/start-battle', {
     method: 'POST', headers: { authorization: 'Bearer test-only' }, body: '{}',
@@ -181,6 +212,19 @@ const deniedReleaseMethod = await getWebReleaseObject({
   env: { ASSET_BASE_URL: 'https://assets.example.test' },
 });
 assert.equal(deniedReleaseMethod.status, 405);
+
+globalThis.fetch = async request => {
+  forwarded = request;
+  return new Response(null, { headers: { 'Content-Type': 'audio/ogg' } });
+};
+for (const file of ['Kanto Wild Battle.ogg', "Johto's Battle.ogg"]) {
+  const audio = await getWebReleaseObject({
+    request: new Request('https://play.example.test/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/browser-audio/music/' + encodeURIComponent(file), { method: 'HEAD' }),
+    env: { ASSET_BASE_URL: 'https://assets.example.test' },
+  });
+  assert.equal(audio.status, 200, file);
+  assert.equal(decodeURIComponent(new URL(forwarded.url).pathname), '/web/releases/0123456789abcdef0123456789abcdef01234567-123-1/browser-audio/music/' + file);
+}
 
 globalThis.fetch = async request => {
   assert.equal(request, 'https://updates.pokeaether.com/data/news.json');
