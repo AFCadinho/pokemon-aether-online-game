@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace the old oval platforms in animated wild grass battles with painted meadow clearings and natural grass edges.
+
 - Keep poison, burn and other persistent statuses on 3D Pokémon without exposing 2D sprites; add a native Substitute doll, rising item particles and a berry bite with shared sounds, stronger power auras, and prepare reviewed Mega forms before their 3D reveal.
 
 - Use a smoothly looping animated meadow for wild 2D grass encounters, including route and city grassfields.
