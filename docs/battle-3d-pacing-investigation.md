@@ -154,3 +154,80 @@ readable. They should occupy existing beats rather than add further serial waits
 
 No full paired certification, live accounts, production access, deployment or
 player-visible gameplay change is part of this investigation.
+
+## Follow-up: reused 2D move sounds are out of sync with 3D
+
+On 2026-10-04 the player specifically identified the reused 2D move sound effects
+as poorly synchronized with the Pokémon's 3D motion. Follow-up source/audio audit
+uses frontend `62f933225d6aad7c48dc152e141f74617deedbb7`. No gameplay fix is
+implemented by this follow-up; these are findings and implementation constraints.
+
+**Reusing the sound files is compatible with 3D; reusing their sprite-frame
+schedule is the mismatch.** `BattleAudioCatalog` gets cue offsets and duration
+from the same 2D JSON/config as the sprite animation. The native action has an
+independent clock, without reviewed anticipation/release/impact markers.
+
+Source-file lengths were measured with ffprobe. Cue positions below include
+catalog `speed_scale`, and natural sound ends include the individual cue pitch.
+At ordinary playback speed, assuming aligned starts and no resource-loading
+skew, the current router releases audio after the longer of the native clip and
+source clock. Releasing calls `cancel`, which stops still-playing sounds.
+
+| Move / model | Native attack | 2D clock | Last sound's natural end | Consequence |
+|---|---:|---:|---:|---|
+| Flamethrower / Dragonite | 2.70 s | 0.76 s | 1.09 s | Sound finishes about 1.61 s before the action ends. |
+| Ice Beam / Blastoise | 6.79 s | 1.21 s | 1.29 s | Sound finishes about 5.50 s before the action ends. |
+| Thunderbolt / Pikachu | 2.00 s | 1.17 s | 2.39 s | About 0.39 s of the last sample can be stopped at normal completion. |
+| Earthquake / Garchomp | 2.17 s | 2.46 s | 2.68 s | Sprite clock prolongs the move, yet can still stop about 0.22 s of its last sample. |
+
+These intervals describe clip/sample clocks, not visually reviewed impact
+frames or perceived audible silence. Source files can include silence, so their
+full duration is not a measurement of audible energy. Repeated cues with the
+same sound name restart the same AudioStreamPlayer; Flamethrower currently
+restarts its sample at 0.00, 0.08 and 0.16 s. This is inherited 2D choreography,
+not an authored 3D sustained-flame sequence.
+
+There are two further synchronization issues:
+
+- The renderer calls `play_attack_tween_for_actor`, which immediately starts
+  native motion. Only its next call, `play_move_animation`, awaits `_start_3d_audio`
+  resource preparation. Cold audio can therefore start later than the animation.
+  Active 3D skips the legacy move-prewarm route; audio readiness before native
+  motion is not guaranteed. The 1.5 s preparation limit is a watchdog, not a
+  measured constant delay.
+- Playback speed advances cue timestamps and model motion, but deliberately
+  does not multiply an audio sample's pitch/rate. Globally increasing speed can
+  thus compress the intervals between triggers without shortening the samples,
+  causing more overlap/restarts or an earlier completion cut. It cannot replace
+  an explicit 3D audio schedule.
+
+The implementation should retain the current 2D sounds and leave the 2D route
+unchanged, while introducing a separate 3D schedule:
+
+1. Prepare required audio **before** starting native motion, then start both from
+   one action clock. Test cold preparation, direct move calls, cancellation and
+   unavailable optional audio, without delaying a clip midway through playback.
+2. Review native attack anticipation, release/impact and recovery markers for
+   the actual selected clip. Bind move sound roles (wind-up, beam/strike,
+   sustained/repeated, impact) to those markers. Physical and special attacks
+   need different policies; avoid assuming a single universal percentage or
+   changing sample pitch to stretch all sounds to every model's clip length.
+   Keep reviewed timing outside untrusted downloaded model metadata.
+3. Separate **cue dispatch completion**, **sample completion** and **action
+   completion**. On ordinary completion, allow appropriate short sound tails
+   to finish or deliberately fade them, without making every tail another
+   sequential battle wait. Cancellation/scene teardown must still stop and
+   release all audio. Sustained effects need an authored stop/fade policy rather
+   than repeated restarts copied from 2D. Missing optional sounds must never
+   block progression.
+4. Align attack-impact audio, target reaction and HP presentation on the same
+   reviewed impact beat. Preserve server event order, misses, multi-hit outcomes,
+   and PvP render completion; sound playback must not generate battle damage.
+
+Raw source/cue audit is retained in assigned slot-a at
+`.tmp/battle-audio-sync/audit.json` (ignored). File-duration checks can be repeated
+with `ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "PATH.wav"`; cue/clip calculations use the
+existing timeline compiler formula and reviewed profile lengths. The focused
+`battle_audio_playback_check.tscn` rerun passed, including the explicit checks
+that cancellation stops samples and playback speed preserves source pitch.
+No rendered audiovisual audition or live backend measurement was performed.
