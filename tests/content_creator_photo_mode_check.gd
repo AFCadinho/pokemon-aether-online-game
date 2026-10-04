@@ -43,6 +43,9 @@ const REQUIRED_LOCALIZATION_KEYS := [
 	"ui.creator.photo.reset",
 	"ui.creator.photo.capture",
 	"ui.creator.photo.open_folder",
+	"ui.creator.photo.download",
+	"ui.creator.photo.status_download_ready",
+	"ui.creator.photo.tooltip.download",
 	"ui.creator.photo.hidden_hint",
 	"ui.creator.photo.status_ready",
 	"ui.creator.photo.status_saved",
@@ -69,7 +72,12 @@ var failures := 0
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	_check_sources()
+	_check_browser_capture()
 	_check_zoom_scaling()
 	_check_localization()
 	_check_scene()
@@ -143,6 +151,18 @@ func _check_sources() -> void:
 	_check(overlay_source.contains('const CONTENT_CREATOR_PHOTO_MODE_PERMISSION := "content:creator:photo-mode"'), "Photo Mode uses its dedicated permission")
 	_check(overlay_source.contains('if not _can_use_content_creator_photo_mode():'), "Photo Mode remains permission gated")
 	_check(overlay_source.contains('"open_photo_mode"'), "Creator menu launches Photo Mode")
+
+
+func _check_browser_capture() -> void:
+	var photo = load(PHOTO_SCRIPT_PATH).new()
+	var image := Image.create(3, 2, false, Image.FORMAT_RGBA8)
+	image.fill(Color.RED)
+	_check(photo._store_screenshot(image, "user://screenshots/test.png", true), "Browser captures prepare a PNG for download")
+	var decoded := Image.new()
+	_check(decoded.load_png_from_buffer(photo.browser_screenshot) == OK and decoded.get_size() == Vector2i(3, 2), "Download contains the captured PNG image")
+	_check(photo.browser_screenshot_filename == "test.png", "Download uses a filename without a local filesystem path")
+	_check(not photo._store_screenshot(null, "user://screenshots/failed.png", true) and photo.browser_screenshot.is_empty(), "A failed capture cannot download stale image data")
+	photo.free()
 
 
 func _check_zoom_scaling() -> void:

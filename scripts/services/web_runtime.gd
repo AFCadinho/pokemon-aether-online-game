@@ -42,10 +42,11 @@ static func browser_gameplay_url(url: String) -> String:
 static func web_release_config() -> Dictionary:
 	if not OS.has_feature("web"):
 		return {}
-	var value: Variant = JavaScriptBridge.eval("window.POKEAETHER_WEB_RELEASE || null", true)
-	if value == null:
+	# eval cannot return ordinary JavaScript objects. Serialize before crossing
+	# the bridge so a valid production configuration does not become null.
+	var json_value: Variant = JavaScriptBridge.eval("JSON.stringify(window.POKEAETHER_WEB_RELEASE || null)", true)
+	if not json_value is String:
 		return {}
-	var json_value: Variant = JavaScriptBridge.eval("JSON.stringify(window.POKEAETHER_WEB_RELEASE)", true)
 	var parsed: Variant = JSON.parse_string(str(json_value))
 	return parsed if parsed is Dictionary else {}
 
