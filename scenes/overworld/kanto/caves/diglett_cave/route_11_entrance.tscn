@@ -87,6 +87,7 @@ map_display_name = "Diglett Cave Route 11 Entrance"
 world_access_group_id = "kanto_diglett_cave"
 world_access_group_label = "Diglett Cave"
 world_access_area_type = "interior"
+land_mounts_allowed_interior = true
 location_id = "kanto.diglett.cave.route.11.entrance"
 location_name = "Diglett Cave Route 11 Entrance"
 region_id = "kanto"

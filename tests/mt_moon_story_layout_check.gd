@@ -24,7 +24,7 @@ func _init() -> void:
 	_check(first_floor.contains('portrait_id = "showdown_hiker_gen6"'), "warning Hiker uses the Showdown Hiker portrait")
 	_check(first_floor.contains('interaction_id = "kanto_mt_moon_entrance_warning"'), "1F binds the entrance warning")
 	_check(first_floor.contains('trainer_id = "kanto_mt_moon_1f_lass_iris"\nnpc_id = "kanto_mt_moon_1f_lass_iris"') and trainer_script.contains("var sight_range_tiles := 5"), "Lass Iris inherits the five-tile Trainer sight range")
-	_check(first_floor.contains('[node name="MoonStone" parent="Entities/Interactables" unique_id=618258656 instance=ExtResource("14_item")]\nposition = Vector2(432, 240)'), "1F places the Moon Stone in its intended spot")
+	_check(first_floor.contains('[node name="MoonStone" parent="Entities/Interactables/Items" unique_id=618258656 instance=ExtResource("14_item")]\nposition = Vector2(432, 240)'), "1F places the Moon Stone in its intended spot")
 	_check(miguel_script.contains('BATTLE_STEP_ID := "defeat_miguel"'), "Miguel checks the story battle step")
 	_check(miguel_script.contains('BLOCKED_DIALOGUE_ID := "kanto_mt_moon_miguel_blocked"'), "Miguel has blocked dialogue")
 	_check(miguel_script.contains('FOSSIL_DIALOGUE_ID := "kanto_mt_moon_miguel_fossil_choice"'), "Miguel has fossil-choice dialogue")

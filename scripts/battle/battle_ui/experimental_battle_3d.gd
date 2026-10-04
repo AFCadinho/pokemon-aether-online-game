@@ -1294,7 +1294,7 @@ func _update_camera(delta: float) -> void:
 	offset = offset.rotated(Vector3.UP,user_camera_yaw)
 	var right := offset.cross(Vector3.UP).normalized()
 	offset = offset.rotated(right,user_camera_pitch)
-	offset *= user_camera_zoom * (1.35 if double_mode else 1.0) * (1.0 - focus_mix * 0.13)
+	offset *= user_camera_zoom * (1.45 if double_mode else 1.0) * (1.0 - focus_mix * 0.13)
 	camera.position = target + offset
 	camera.look_at(target)
 

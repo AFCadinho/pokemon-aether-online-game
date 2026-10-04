@@ -478,7 +478,7 @@ transition_id = "kanto_vermilion_city__to_pokemon_center"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=422639044]
-position = Vector2(0, -16)
+position = Vector2(0, 0)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=245838150 instance=ExtResource("center_door_hint")]
@@ -564,6 +564,7 @@ z_index = 5
 [node name="VisitorIris" parent="Entities/NPCs" unique_id=1448718584 instance=ExtResource("life_dialogue")]
 position = Vector2(528, 464)
 npc_id = "kanto_vermilion_city_visitor_iris"
+facing_direction = Vector2(1, 0)
 npc_definition_id = "trainer_class_lass"
 display_name = "Harbor Visitor Iris"
 npc_sprite_frames = ExtResource("life_lass")
@@ -627,9 +628,9 @@ ambient_movement_ignores_map_collision = true
 [node name="TrainerFelix" parent="Entities/NPCs" unique_id=942215298 instance=ExtResource("life_dialogue")]
 position = Vector2(720, 1232)
 npc_id = "kanto_vermilion_city_trainer_felix"
+facing_direction = Vector2(0, 1)
 npc_definition_id = "trainer_class_camper"
 display_name = "Trainer Felix"
-facing_direction = Vector2(0, -1)
 npc_sprite_frames = ExtResource("life_camper")
 manual_interaction_reach_tiles = 0
 pickpocket_enabled = true
@@ -691,6 +692,7 @@ ambient_movement_ignores_map_collision = true
 
 [node name="TransitKeeperNPC" parent="Entities/NPCs" unique_id=1599793774 instance=ExtResource("16_by6y8")]
 position = Vector2(784, 144)
+npc_id = "kanto_vermilion_city_transit_keeper"
 local_destination_id = "kanto_vermilion_city"
 manual_interaction_reach_tiles = 0
 pickpocket_enabled = true
@@ -846,6 +848,7 @@ tile_map_data = PackedByteArray("AAAAAAwAAAABAAQAAAAAAA0AAAABAAQAAAAAAA4AAAABAAQ
 tile_set = SubResource("TileSet_obqe6")
 
 [node name="TallGrass" type="TileMapLayer" parent="Tiles" unique_id=1205159264]
+visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAOAAUAAAAIAAEAAAAOAAYAAAAIAAEAAAAOAAcAAAAIAAEAAAAPAAUAAAAIAAEAAAAPAAYAAAAIAAEAAAAPAAcAAAAIAAEAAAAQAAUAAAAIAAEAAAAQAAYAAAAIAAEAAAAQAAcAAAAIAAEAAAARAAUAAAAIAAEAAAARAAYAAAAIAAEAAAARAAcAAAAIAAEAAAASAAUAAAAIAAEAAAASAAYAAAAIAAEAAAASAAcAAAAIAAEAAAATAAUAAAAIAAEAAAATAAYAAAAIAAEAAAATAAcAAAAIAAEAAAAUAAYAAAAIAAEAAAAUAAcAAAAIAAEAAAAVAAYAAAAIAAEAAAAVAAcAAAAIAAEAAAAWAAYAAAAIAAEAAAAWAAcAAAAIAAEAAAA=")
 tile_set = SubResource("TileSet_o0vof")

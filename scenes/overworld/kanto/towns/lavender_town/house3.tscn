@@ -74,7 +74,7 @@ npc_sprite_frames = ExtResource("trainer_frames")
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=468704702]
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=430420760 instance=ExtResource("pokemon")]
-position = Vector2(336, 352)
+position = Vector2(304, 336)
 overworld_pokemon_id = "kanto_lavender_house_3_pidgey_1"
 species_id = "pidgey"
 level = 12

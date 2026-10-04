@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Correct double-battle camera framing, Glaceon rider alignment, and walkable Kanto interior collision.
+
+- Correct Kanto route pickup, sign, map-marker, and overworld Pokémon data detected by the release gate.
 - Add the Route 7 exterior from the artist TMX and connect it bidirectionally to its Underground Path entrance.
 - After Tower Gary, the main quest points to Route 8’s eastern Saffron guard, then asks players to find another entrance.
 

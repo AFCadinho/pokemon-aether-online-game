@@ -562,8 +562,8 @@ func _init() -> void:
 	)
 	_check(
 		donator_store_script_source.contains("authoritative_gem_prices")
-		and donator_store_script_source.contains("purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors())")
-		and script_source.contains("DonatorStoreService.purchase_item(item_id, chroma_colors)"),
+		and donator_store_script_source.contains('purchase_requested.emit(selected_item_id, _selected_purchase_chroma_colors(), "gems")')
+		and script_source.contains("DonatorStoreService.purchase_item(item_id, chroma_colors, \"\", currency)"),
 		"Donator Store purchases use the authoritative Aether Gem checkout"
 	)
 	_check(

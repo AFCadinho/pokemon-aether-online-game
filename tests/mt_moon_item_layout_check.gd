@@ -13,16 +13,20 @@ const ROCK_POSITIONS := {
 }
 const PICKUP_POSITIONS := {
 	"1f": [
-		Vector2i(208, 240), Vector2i(1424, 208), Vector2i(2608, 208),
+		Vector2i(2640, 1552), Vector2i(208, 240), Vector2i(1424, 208), Vector2i(2608, 208),
 		Vector2i(2576, 1296), Vector2i(272, 2192), Vector2i(2608, 2192),
 	],
-	"b1f": [],
+	"b1f": [
+		Vector2i(720, 848), Vector2i(2224, 144), Vector2i(112, 1072),
+		Vector2i(1008, 848), Vector2i(2224, 1232), Vector2i(656, 2352),
+	],
 	"b2f": [
 		Vector2i(432, 336), Vector2i(528, 336), Vector2i(2096, 464),
-		Vector2i(464, 1232), Vector2i(1712, 1424), Vector2i(2192, 2160),
+		Vector2i(464, 1232), Vector2i(1712, 1424), Vector2i(2192, 2160), Vector2i(560, 2288),
 	],
 }
 const EXPECTED_PICKUPS := [
+	["kanto_mt_moon_1f_revive", "revive"],
 	["kanto_mt_moon_1f_tm_bullet_seed", "tm-bullet-seed"],
 	["kanto_mt_moon_1f_paralyze_heal", "paralyze-heal"],
 	["kanto_mt_moon_1f_potion", "potion"],
@@ -35,6 +39,13 @@ const EXPECTED_PICKUPS := [
 	["kanto_mt_moon_b2f_helix_fossil", "helix-fossil"],
 	["kanto_mt_moon_b2f_dome_fossil", "dome-fossil"],
 	["kanto_mt_moon_b2f_antidote", "antidote"],
+	["kanto_mt_moon_b2f_ether", "ether"],
+	["kanto_mt_moon_b1f_tinymushroomeast", "tiny-mushroom"],
+	["kanto_mt_moon_b1f_tinymushroomnorth", "tiny-mushroom"],
+	["kanto_mt_moon_b1f_tinymushroomwest", "tiny-mushroom"],
+	["kanto_mt_moon_b1f_bigmushroomeast", "big-mushroom"],
+	["kanto_mt_moon_b1f_bigmushroomcenter", "big-mushroom"],
+	["kanto_mt_moon_b1f_bigmushroomwest", "big-mushroom"],
 ]
 
 var failed := false
@@ -59,8 +70,8 @@ func _init() -> void:
 				)
 
 	_check(all_scene_source.count("smashable_rock.tscn") == 3, "all three Mt. Moon floors use the reusable Rock Smash scene")
-	_check(all_scene_source.count("overworld_item.tscn") == 2, "Mt. Moon visible-item floors use the reusable Poké Ball scene")
-	_check(all_scene_source.count('pickup_id = "kanto_mt_moon_') == EXPECTED_PICKUPS.size(), "Mt. Moon has all twelve visible pickups")
+	_check(all_scene_source.count("overworld_item.tscn") == 3, "all Mt. Moon floors use the reusable pickup scene")
+	_check(all_scene_source.count('pickup_id = "kanto_mt_moon_') == EXPECTED_PICKUPS.size(), "Mt. Moon has all twenty item pickups")
 	_check(not all_scene_source.contains("escape-rope"), "Mt. Moon does not grant the key-item Escape Rope")
 	for pickup: Array in EXPECTED_PICKUPS:
 		_check(all_scene_source.contains('pickup_id = "%s"' % pickup[0]), "pickup scene id exists: %s" % pickup[0])

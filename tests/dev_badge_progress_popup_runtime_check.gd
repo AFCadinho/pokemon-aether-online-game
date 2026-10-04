@@ -109,7 +109,7 @@ func _run() -> void:
 		"resetting Rock Smash refreshes removed training-rock nodes in the open map"
 	)
 	if story_chapter_select != null and story_checkpoint_select != null:
-		_check(story_chapter_select.item_count == 7, "story checkpoints include all seven chapters through Saffron")
+		_check(story_chapter_select.item_count == 11, "story checkpoints use bounded chapters through the Saffron quest")
 		var largest_chapter_size := 0
 		for chapter_index in story_chapter_select.item_count:
 			story_chapter_select.select(chapter_index)
@@ -142,6 +142,18 @@ func _run() -> void:
 		for checkpoint_index in story_checkpoint_select.item_count:
 			saffron_checkpoint_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
 		_check(saffron_checkpoint_ids == ["saffron_gate_closed", "oak_rock_tunnel_advice"], "Saffron chapter exposes both new main-story checkpoints")
+		var after_tower_index := -1
+		for chapter_index in story_chapter_select.item_count:
+			if str(story_chapter_select.get_item_metadata(chapter_index)) == "after_tower":
+				after_tower_index = chapter_index
+		_check(after_tower_index >= 0, "story chapter selector includes the post-Tower route search")
+		if after_tower_index >= 0:
+			story_chapter_select.select(after_tower_index)
+			popup.call("_on_story_chapter_selected", after_tower_index)
+			var after_tower_ids: Array[String] = []
+			for checkpoint_index in story_checkpoint_select.item_count:
+				after_tower_ids.append(str(story_checkpoint_select.get_item_metadata(checkpoint_index)))
+			_check(after_tower_ids == ["find_saffron_route", "find_secret_route"], "post-Tower chapter holds the Route 8 and alternate-route checkpoints")
 		var cerulean_index := -1
 		for chapter_index in story_chapter_select.item_count:
 			if str(story_chapter_select.get_item_metadata(chapter_index)) == "cerulean":

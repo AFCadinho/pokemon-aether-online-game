@@ -20,7 +20,7 @@ display_name = "Saffron Gate Attendant"
 preload_quest_markers = true
 guard_role = "transition_guard"
 guarded_transition_id = "kanto_route_8_saffron_gate__to_saffron_city"
-blocked_dialogue_id = "kanto_route_8_saffron_gate_unsafe"
+blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"
 story_blocked_dialogue_id = "kanto_route_8_saffron_gate_unsafe"
 npc_definition_id = "kanto_route_8_saffron_gate_attendant"
 

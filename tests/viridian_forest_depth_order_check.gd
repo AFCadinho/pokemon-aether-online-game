@@ -42,7 +42,7 @@ func _init() -> void:
 		for item_name_value: Variant in ITEM_POSITIONS:
 			var item_name := str(item_name_value)
 			var item_position: Vector2 = ITEM_POSITIONS[item_name_value]
-			_check(map_source.contains('[node name="%s" parent="Entities/Interactables"' % item_name), "%s exists" % item_name)
+			_check(map_source.contains('[node name="%s" parent="Entities/Interactables/Items"' % item_name), "%s exists" % item_name)
 			var cell := ground_detail.local_to_map(ground_detail.to_local(item_position))
 			_check(ground_detail.get_cell_source_id(cell) >= 0, "%s overlaps GroundDetail" % item_name)
 

@@ -12,6 +12,7 @@
     {"id": "kanto_route_5_underground_path_sign", "type": "road", "mapId": "kanto_route_5", "title": "地下通道", "lines": ["地下通道", "连接5号道路和6号道路的安静隧道。"]},
     {"id": "kanto_route_6_route_sign", "type": "road", "mapId": "kanto_route_6", "title": "6号道路", "lines": ["6号道路", "北边通往金黄市，南边通往枯叶市。"]},
     {"id": "kanto_route_8_route_sign", "type": "road", "mapId": "kanto_route_8", "title": "8号道路", "lines": ["8号道路", "紫苑镇 ↔ 金黄市。"]},
+    {"id": "kanto_route_8_underground_path_sign", "type": "road", "mapId": "kanto_route_8", "title": "地下通道", "lines": ["地下通道", "连接7号道路与8号道路的安静通道。"]},
     {"id": "kanto_route_6_underground_path_sign", "type": "road", "mapId": "kanto_route_6", "title": "地下通道", "lines": ["地下通道", "连接6号道路与5号道路的安静隧道。"]},
     {"id": "kanto_route_24_route_sign", "type": "road", "mapId": "kanto_route_24", "title": "24号道路", "lines": ["24号道路", "金块大桥连接华蓝市与25号道路。"]},
     {"id": "kanto_route_25_route_sign", "type": "road", "mapId": "kanto_route_25", "title": "25号道路", "lines": ["25号道路", "沿道路向东前往正辉的家。"]},
