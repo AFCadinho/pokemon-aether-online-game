@@ -7,6 +7,9 @@
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="5_hint"]
 [ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="6_metadata"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/route_12_fishing_brother_house/route_12_fishing_brother_house.visual.tscn" id="7_visual"]
+[ext_resource type="PackedScene" uid="uid://rnbee61xiftm" path="res://scenes/npcs/item_gift_npc.tscn" id="8_gift_npc"]
+[ext_resource type="SpriteFrames" uid="uid://7ym2628q14if" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="9_fishing_guru_frames"]
+[ext_resource type="Texture2D" uid="uid://l4jsju4s8v3a" path="res://assets/sprites/trainer_cards/showdown/fisherman-gen6.png" id="10_fishing_guru_portrait"]
 
 [sub_resource type="RectangleShape2D" id="door_shape"]
 size = Vector2(64, 32)
@@ -56,6 +59,20 @@ follow_player_floor = false
 z_index = 5
 [node name="Players" type="Node2D" parent="Entities"]
 [node name="NPCs" type="Node2D" parent="Entities"]
+
+[node name="FishingGuruYoungerBrother" parent="Entities/NPCs" instance=ExtResource("8_gift_npc")]
+position = Vector2(304, 336)
+display_name = "Fishing Guru's Younger Brother"
+reward_id = "kanto_route_12_super_rod"
+success_dialogue_id = "kanto_route_12_fishing_guru_success"
+already_received_dialogue_id = "kanto_route_12_fishing_guru_received"
+failure_dialogue_id = "kanto_route_12_fishing_guru_failure"
+reward_item_id = "super-rod"
+npc_id = "kanto_route_12_fishing_guru"
+facing_direction = Vector2(0, 1)
+npc_sprite_frames = ExtResource("9_fishing_guru_frames")
+mugshot = ExtResource("10_fishing_guru_portrait")
+
 [node name="Pokemon" type="Node2D" parent="Entities"]
 [node name="Interactables" type="Node2D" parent="Entities"]
 

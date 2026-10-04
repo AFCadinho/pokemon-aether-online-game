@@ -8,6 +8,8 @@
 
 - Add the Route 12 Fishing Brother's House interior and connect its entrance, return exit, and arrival spawns.
 
+- Place the Fishing Guru's younger brother in his Route 12 house, where he gives the one-time Super Rod.
+
 - Prevent settings from freezing the desktop game while counting downloaded sprites and 3D models on large installations.
 
 - Download approved normal and shiny 3D models when opening the Pokédex or a summary card, with loading progress and a sprite fallback if the download fails.

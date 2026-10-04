@@ -13,7 +13,7 @@ func run() -> void:
 	for cell in grass.get_used_cells():
 		check(map.get_node("Visual/Grass").get_cell_source_id(cell) != -1, "Encounter grass has artwork")
 	var npcs := map.get_node("Entities/NPCs").get_children()
-	check(npcs.size() == 17, "Sixteen trainers and the fishing guru exist")
+	check(npcs.size() == 16, "Sixteen route trainers exist; the Fishing Guru's brother lives indoors")
 	var ids := {}
 	for npc in npcs:
 		check(not ids.has(npc.npc_id), "NPC IDs are unique")
