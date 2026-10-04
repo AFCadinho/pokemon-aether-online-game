@@ -127,6 +127,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 	if battle_message != "":
 		current_action_panel.set_message(battle_message)
 
+	var event_started_msec := Time.get_ticks_msec()
 	var artificial_hold_seconds := 0.0
 	var has_animation_action := (
 		effect_animation_key != ""
@@ -186,6 +187,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 			await animation_router.play_move_animation(move_animation_name, move_animation_actor_ident, move_animation_target_ident, {
 				"result": move_animation_result,
 				"on_dodge_started": dodge_command,
+				"stop_at_impact": bool(presentation.get("3d_impact_bridge", false)),
 			})
 			if owned_generation != render_generation:
 				return
@@ -193,13 +195,16 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 			await animation_router.restore_substitute_after_move(attack_actor_ident)
 			if owned_generation != render_generation:
 				return
-		var move_hold_seconds := message_timing.get_move_animation_hold_seconds()
+		var move_hold_seconds := 0.0 if animation_router.has_3d_impact_damage() else message_timing.get_move_animation_hold_seconds()
 		artificial_hold_seconds += move_hold_seconds
 		await _wait(move_hold_seconds, suppress_presentation_waits)
 		if owned_generation != render_generation:
 			return
 	if damage_target_ident != "":
 		_set_active_hud_hp_from_event(damage_target_ident, event_data, true)
+		var immediate_3d_hp := animations_allowed and animation_router.uses_realtime_3d()
+		if immediate_3d_hp:
+			_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
 		if animations_allowed:
 			await animation_router.play_damage_tween_for_target(
 				damage_target_ident,
@@ -207,8 +212,12 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 			)
 			if owned_generation != render_generation:
 				return
-		_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
-		var damage_hold_seconds := message_timing.get_damage_animation_hold_seconds()
+		if not immediate_3d_hp:
+			_set_active_hud_hp_from_event(damage_target_ident, event_data, false)
+		await animation_router.finish_3d_impact_damage(damage_target_ident)
+		if owned_generation != render_generation:
+			return
+		var damage_hold_seconds := 0.0 if immediate_3d_hp else message_timing.get_damage_animation_hold_seconds()
 		artificial_hold_seconds += damage_hold_seconds
 		await _wait(damage_hold_seconds, suppress_presentation_waits)
 		if owned_generation != render_generation:
@@ -271,10 +280,12 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 				return
 	if battle_message != "":
 		var message_hold_seconds := message_timing.get_battle_message_hold_seconds(event_data, battle_message)
-		await _wait(
-			max(message_hold_seconds - artificial_hold_seconds, 0.0),
-			suppress_presentation_waits
-		)
+		var already_visible_seconds := artificial_hold_seconds
+		if animation_router.uses_realtime_3d():
+			already_visible_seconds = float(Time.get_ticks_msec() - event_started_msec) / 1000.0 * maxf(playback_speed, 0.5)
+			if animation_router.has_3d_impact_damage() and str(event_data.get("type", "")) in ["move", "criticalHit", "effectiveness"]:
+				already_visible_seconds = message_hold_seconds
+		await _wait(maxf(message_hold_seconds - already_visible_seconds, 0.0), suppress_presentation_waits)
 		if owned_generation != render_generation:
 			return
 
