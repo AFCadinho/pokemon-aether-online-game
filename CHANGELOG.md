@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Match settings dropdowns, including battle layout and visuals, to the menu's styled arrows, selection indicators and popup lists.
+
 - Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
 
 - Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
