@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep local 3D battle preparation quiet; show simple download progress only when missing Pokémon files are actually downloading.
+
 - Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.
 
 - Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.

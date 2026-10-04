@@ -48,8 +48,8 @@ func _ready() -> void:
 	loading_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	loading_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	loading_label.custom_minimum_size = Vector2(520,60)
-	loading_label.text = "Preparing battle…"
 	stack.add_child(loading_label)
+	stack.hide()
 func _prepare_2d_fallback() -> void:
 	if not is_instance_valid(battle):
 		return
@@ -66,7 +66,6 @@ func _prepare_2d_fallback() -> void:
 			"shiny": bool(combatant.get("shiny", false)), "style": get_node("/root/SettingsManager").get_active_sprite_style()})
 	if entries.is_empty():
 		return
-	loading_label.text = "Preparing 2D sprites…"
 	# Fallback downloads are presentation work, not an entry readiness gate.
 	get_node("/root/WebPokemonSpriteService").prefetch(entries, true)
 	if is_instance_valid(battle):
@@ -125,11 +124,16 @@ func _on_battle_settings_closed() -> void:
 func _process(_delta: float) -> void:
 	if released or not is_instance_valid(battle) or not $Cover.visible:
 		return
-	if loading_message_after_ms > 0:
-		loading_label.get_parent().visible = not preparation_ready and Time.get_ticks_msec() >= loading_message_after_ms
 	var presenter = battle.animation_router.model_presenter
-	if is_instance_valid(presenter) and not presenter.preparation_failed:
-		loading_label.text = "Preparing battle…\n" + presenter.preparation_phase
+	var progress: Dictionary = presenter.battle_download_progress() if is_instance_valid(presenter) and not presenter.preparation_failed else {}
+	var show_download := not preparation_ready and not progress.is_empty() and loading_message_after_ms > 0 and Time.get_ticks_msec() >= loading_message_after_ms
+	loading_label.get_parent().visible = show_download
+	loading_label.text = ""
+	if show_download:
+		loading_label.text = LocalizationManager.text("ui.battle.downloading_pokemon")
+		var total := int(progress.get("total_bytes", 0))
+		if total > 0:
+			loading_label.text += " %d%%" % clampi(int(100.0 * int(progress.get("received_bytes", 0)) / total), 0, 99)
 
 func prewarm_battle(instance: Control, immersive := true) -> void:
 	# Build battle controls while the world is open on any platform. Keep the whole
@@ -149,6 +153,7 @@ func mount(instance: Control, overworld_overlay: CanvasLayer = null, transition_
 	outgoing_snapshot.texture = snapshot if snapshot != null else WildEncounterTransition.capture_viewport(get_viewport())
 	$Cover.color.a = 0.0
 	loading_label.get_parent().hide()
+	loading_message_after_ms = Time.get_ticks_msec() + 500
 	# Entry callbacks release the fade only after authoritative scene setup.
 	# Replay/resume paths without an encounter transition retain auto reveal.
 	reveal_requested = transition_style != WildEncounterTransition.STYLE_FULLSCREEN_FADE
@@ -249,7 +254,7 @@ func reveal_pending_entry() -> void:
 		# Keep the outgoing world visible until both models and the arena are
 		# prepared. Early arena reveal would flash 2D sprites before the download.
 		# Cached encounters should fade straight in without flashing a loading
-		# message. First downloads/slow preparation still show their progress.
+		# message. Only actual downloads show progress; local preparation is quiet.
 		loading_message_after_ms = Time.get_ticks_msec() + 500
 		request_reveal()
 		return

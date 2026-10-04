@@ -4,6 +4,7 @@ class DownloadProbe extends Node:
 	signal finish_download
 	var requested: Array[String] = []
 	var hold_download := false
+	var show_download := true
 	func ensure_models(identities: Array[String], _catalog: String) -> Dictionary:
 		requested = identities.duplicate()
 		if hold_download:
@@ -11,6 +12,8 @@ class DownloadProbe extends Node:
 		return {"error": "Offline probe stops before network access."}
 	func progress_text() -> String:
 		return "Downloading approved model… 50%"
+	func battle_download_progress() -> Dictionary:
+		return {"received_bytes": 50, "total_bytes": 100} if hold_download and show_download else {}
 
 var failed := false
 
@@ -70,6 +73,7 @@ func _run() -> void:
 func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: bool) -> void:
 	probe.requested.clear()
 	probe.hold_download = true
+	probe.show_download = true
 	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(host)
 	var battle = scene.instantiate()
@@ -82,6 +86,16 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 		await process_frame
 	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "3D entry retains the outgoing world while its response is pending")
 	_check(not host.preparation_ready and probe.requested.is_empty(), "no incomplete pair is downloaded before the response")
+	# Exceed the message delay without network I/O. Even a slow local shader
+	# warmup must keep the outgoing world clean and retain the readiness gate.
+	var stage: Node = battle.animation_router.model_presenter
+	host.loading_message_after_ms = Time.get_ticks_msec() - 1
+	for phase: String in ["Checking approved 3D models…", "Loading Pokémon models", "Preparing lighting and shaders"]:
+		stage.preparation_phase = phase
+		host._process(0.0)
+		_check(not host.loading_label.is_visible_in_tree() and host.loading_label.text.is_empty(), "local preparation never shows technical text: " + phase)
+		_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "quiet preparation still protects the 3D entrance")
+	host.loading_message_after_ms = Time.get_ticks_msec() + 500
 	var enemy := Pokemon.new("Hoothoot", 2)
 	enemy.shiny = prewarmed
 	var p1 := _active("p1", "Zapdos", false)
@@ -101,6 +115,10 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	_check(not host.loading_label.is_visible_in_tree(), "quick preparations do not flash a loading message")
 	await create_timer(0.55).timeout
 	_check(host.loading_label.is_visible_in_tree() and "50%" in host.loading_label.text, "waiting players can see model download progress")
+	_check(host.loading_label.text == root.get_node("LocalizationManager").text("ui.battle.downloading_pokemon") + " 50%", "download feedback uses simple player-facing language")
+	probe.show_download = false
+	host._process(0.0)
+	_check(not host.loading_label.is_visible_in_tree() and host.loading_label.text.is_empty(), "download text disappears as soon as only local preparation remains")
 	probe.finish_download.emit()
 	# A genuine failure still releases the entry into stable sprite fallback.
 	var deadline := Time.get_ticks_msec() + 5000
