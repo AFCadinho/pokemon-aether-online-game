@@ -13406,6 +13406,8 @@ func is_point_over_visible_ui(global_position: Vector2) -> bool:
 	]
 	if chat_resize_button != null:
 		panels.append(chat_resize_button)
+	if quest_journal_view != null:
+		panels.append(quest_journal_view.tracker_collapse_button)
 	for state_value: Variant in collapsible_panels.values():
 		var state: Dictionary = state_value as Dictionary
 		var button: Control = state.get("button") as Control

@@ -86,6 +86,7 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 	var rects: Array[Rect2] = []
 	for button: Control in buttons:
 		var rect := _screen_rect(button)
+		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.9, 0.9)), "enlarged target blocks touch movement: " + context)
 		_check(rect.size.x >= 47.99 and rect.size.y >= 47.99, "48-pixel target: " + context + " " + str(rect))
 		_check(bounds.grow(0.1).encloses(rect), "target stays on screen: " + context + " " + str(rect))
 		for previous: Rect2 in rects:
