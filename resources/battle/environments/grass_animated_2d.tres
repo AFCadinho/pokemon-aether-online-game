@@ -1,9 +1,16 @@
-[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=5 format=3]
+[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
 [ext_resource type="Texture2D" path="res://assets/background/battle/environments/grass_animated_fallback.jpg" id="2_background"]
 [ext_resource type="VideoStream" path="res://assets/video/battle/grass_meadow.ogv" id="3_video"]
-[ext_resource type="Texture2D" path="res://assets/background/platform/grass_meadow_platform.png" id="4_platform"]
+
+[sub_resource type="Gradient" id="Gradient_transparent"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="Texture_transparent_platform"]
+gradient = SubResource("Gradient_transparent")
+width = 1536
+height = 1024
 
 [resource]
 resource_name = "Animated Wild Grass 2D Background"
@@ -12,4 +19,4 @@ environment_id = &"grass"
 arena_3d_id = "forest"
 background_texture = ExtResource("2_background")
 background_video = ExtResource("3_video")
-platform_texture = ExtResource("4_platform")
+platform_texture = SubResource("Texture_transparent_platform")

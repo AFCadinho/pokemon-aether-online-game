@@ -10,7 +10,7 @@ The shared 2D grass video is selected through `BattleEnvironmentProfile.wild_2d_
 - Crossfade the last second into the original first second and begin at source second 1. This joins the end to the start without reversing the animation.
 - Encode with FFmpeg `libtheora`, quality 6, keyframe interval 64, `yuv420p`.
 - Extract the first decoded video frame as `assets/background/battle/environments/grass_animated_fallback.jpg` (FFmpeg JPEG quality 2).
-- `grass_meadow_platform.png` supplies the painted clearing for animated wild grass battles. Other grass profiles retain `grass_platform_v3.png`.
+- Animated wild grass battles currently use a fully transparent 1536×1024 `GradientTexture2D` in `grass_animated_2d.tres`. This removes the visible platform while preserving its layout canvas, Pokémon anchors, hazards and screen effects. Other grass profiles retain `grass_platform_v3.png`.
 
 Recreate from the source with:
 
@@ -28,6 +28,8 @@ Run `tests/animated_grass_background_check.gd` through the assigned slot environ
 Browser and Android frame rates still require testing on those target platforms; native decoding is not a platform performance certification.
 
 ## Meadow platform art
+
+The painted platform below is retained as an alternative asset; the current grass presentation does not display it.
 
 `assets/background/platform/grass_meadow_platform.png` is a 1536×1024 RGBA asset generated with the built-in imagegen tool from the approved painted-platform concept, which used the battle screenshot as its style reference. Its alpha hides the surrounding RGB haze; preserve the original alpha channel. The sprite remains on the established platform canvas and uses the existing Pokémon/hazard anchors.
 
