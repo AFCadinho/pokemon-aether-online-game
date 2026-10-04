@@ -160,6 +160,7 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn("run.get('head_branch') != 'main'", publish)
         self.assertIn('UPDATE_R2_BUCKET', publish)
         self.assertIn('https://updates.pokeaether.com', publish)
+        self.assertIn("| tr -d '\\r' \\\n            | grep -Eiq '^access-control-allow-origin: https://play\\.pokeaether\\.com$'", publish)
         build_source = (ROOT / 'tools/build_web_preview.py').read_text()
         self.assertIn("b'assets/fonts/DejaVuSans.ttf'", build_source)
         self.assertIn("b'assets/sprites/pokemon/front/pikachu/sheet.png.import'", build_source)
