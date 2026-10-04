@@ -1,0 +1,35 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn" id="1_template"]
+
+[node name="Route8SaffronGate" instance=ExtResource("1_template")]
+map_id = "kanto_route_8_saffron_gate"
+map_display_name = "Route 8–Saffron Gate"
+world_access_group_id = "kanto_saffron_city"
+world_access_group_label = "Saffron City"
+world_access_area_type = "transition"
+location_id = "kanto.route_8.saffron.gate"
+location_name = "Route 8–Saffron Gate"
+music_track_id = "overworld.kanto.route.1"
+
+[node name="GateNPC" parent="Entities/NPCs" index="0"]
+position = Vector2(144, 208)
+requires_party_pokemon = false
+npc_definition_id = "kanto_route_8_saffron_gate_attendant"
+manual_interaction_reach_tiles = 2
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_route_8_saffron_gate__to_saffron_city"
+blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"
+story_blocked_dialogue_id = "kanto_route_6_saffron_gate_unsafe"
+
+[node name="ToWest" parent="Exits" index="0"]
+target_scene_path = "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn"
+target_spawn_name = "FromRoute8"
+transition_id = "kanto_route_8_saffron_gate__to_saffron_city"
+transition_facing_direction = "left"
+
+[node name="ToEast" parent="Exits" index="1"]
+target_scene_path = "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
+target_spawn_name = "FromSaffronGate"
+transition_id = "kanto_route_8_saffron_gate__to_route8"
+transition_facing_direction = "right"

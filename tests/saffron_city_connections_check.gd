@@ -3,8 +3,10 @@ extends SceneTree
 const CITY := "res://scenes/overworld/kanto/towns/saffron_city/saffron_city.tscn"
 const GATE5 := "res://scenes/overworld/kanto/transition_buildings/route_5_saffron_gate.tscn"
 const GATE6 := "res://scenes/overworld/kanto/transition_buildings/route_6_saffron_gate.tscn"
+const GATE8 := "res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn"
 const ROUTE5 := "res://scenes/overworld/kanto/routes/kanto_route_5.tscn"
 const ROUTE6 := "res://scenes/overworld/kanto/routes/kanto_route_6.tscn"
+const ROUTE8 := "res://scenes/overworld/kanto/routes/kanto_route_8.tscn"
 var failed := false
 var maps: Dictionary = {}
 
@@ -12,14 +14,13 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	for path in [CITY, GATE5, GATE6, ROUTE5, ROUTE6]:
+	for path in [CITY, GATE5, GATE6, GATE8, ROUTE5, ROUTE6, ROUTE8]:
 		var packed := load(path) as PackedScene
 		_expect(packed != null, "scene loads: " + path.get_file())
 		if packed == null:
 			quit(1)
 			return
 		var map := packed.instantiate()
-		root.add_child(map)
 		maps[path] = map
 	var city: Node = maps[CITY]
 	var validator = load("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd").new()
@@ -39,6 +40,8 @@ func _run() -> void:
 	_expect(city.get_node("Visual/ObjectsTop") is TileMapLayer, "city includes upper building scenery")
 	_expect(city.get_node("Spawns/FromRoute5").position == Vector2(1520, 176), "north arrival matches Tiled connection")
 	_expect(city.get_node("Spawns/FromRoute6").position == Vector2(1584, 2672), "south arrival matches Tiled connection")
+	_expect(city.get_node("Spawns/FromRoute8").position == Vector2(2848, 1248), "Route 8 arrival matches the authored Saffron gate")
+	_expect(maps[ROUTE8].get_node("Spawns/FromSaffronGate").position == Vector2(128, 544), "Route 8 arrival matches its authored Saffron gate")
 	for gate_path in [GATE5, GATE6]:
 		var gate: Node = maps[gate_path]
 		_expect(gate.lighting_profile == "indoor" and gate.weather_profile == "disabled", "gate uses indoor lighting and weather")
@@ -52,6 +55,21 @@ func _run() -> void:
 			corridor_clear = corridor_clear and collision.get_cell_source_id(Vector2i(10, y)) == -1
 		_expect(corridor_clear, "gate has a clear vertical walking corridor")
 		_expect(not gate.get_node("Entities/NPCs/GateNPC").requires_party_pokemon, "gate attendant does not block traversal")
+	var route8_gate: Node = maps[GATE8]
+	var route8_guard: Node = route8_gate.get_node("Entities/NPCs/GateNPC")
+	_expect(route8_gate.lighting_profile == "indoor" and route8_gate.weather_profile == "disabled", "Route 8 gate uses the horizontal indoor template")
+	_expect(not route8_guard.requires_party_pokemon, "Route 8 guard only gates the Saffron transition")
+	_expect(
+		route8_guard.guard_role == "transition_guard"
+		and route8_guard.guarded_transition_id == "kanto_route_8_saffron_gate__to_saffron_city",
+		"Route 8 guard holds the player at the Saffron entrance"
+	)
+	_expect(route8_guard.blocked_dialogue_id == "kanto_route_6_saffron_gate_unsafe", "Route 8 guard uses the Saffron lockdown dialogue")
+	var route8_gate_collision := route8_gate.get_node("Tiles/Collision") as TileMapLayer
+	var horizontal_corridor_clear := true
+	for x in range(3, 17):
+		horizontal_corridor_clear = horizontal_corridor_clear and route8_gate_collision.get_cell_source_id(Vector2i(x, 10)) == -1
+	_expect(horizontal_corridor_clear, "horizontal gate has a clear corridor between both doors")
 
 	var legs := [
 		[ROUTE5, "ToSaffronNorth", GATE5, "FromNorth", "down"],
@@ -62,6 +80,10 @@ func _run() -> void:
 		[GATE6, "ToNorth", CITY, "FromRoute6", "up"],
 		[CITY, "ToRoute5Gate", GATE5, "FromSouth", "up"],
 		[GATE5, "ToNorth", ROUTE5, "FromSaffronNorth", "up"],
+		[ROUTE8, "ToSaffronGate", GATE8, "FromEast", "left"],
+		[GATE8, "ToEast", ROUTE8, "FromSaffronGate", "right"],
+		[CITY, "ToRoute8Gate", GATE8, "FromWest", "right"],
+		[GATE8, "ToWest", CITY, "FromRoute8", "left"],
 	]
 	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world_access_catalog.json"))
 	for leg in legs:
@@ -80,9 +102,9 @@ func _run() -> void:
 		_expect(safe, "arrival does not retrigger an exit: " + leg[3])
 		var entry: Dictionary = catalog.transitions.get(exit_node.transition_id, {})
 		_expect(entry.get("destinationAreaId") == destination.map_id and entry.get("sourceMapId") == source.map_id, "catalog matches runtime transition")
-	_expect(catalog.areas.has("kanto_saffron_city") and catalog.areas.has("kanto_route_6_saffron_gate"), "city and both gates are registered")
+	_expect(catalog.areas.has("kanto_saffron_city") and catalog.areas.has("kanto_route_6_saffron_gate") and catalog.areas.has("kanto_route_8_saffron_gate"), "city and all Saffron gates are registered")
 	for map in maps.values():
-		map.queue_free()
+		map.free()
 	print("SAFFRON_CITY_CONNECTIONS ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
