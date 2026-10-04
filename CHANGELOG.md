@@ -8,6 +8,8 @@
 
 - Preserve land and water arrival surfaces when crossing between Routes 12 and 13.
 
+- Allow fishing from a land mount beside water and preserve the mount afterward.
+
 - Include Route 12's Fishing Brother's House in the browser's extended map module.
 
 - Have Route 12's Fishing Guru's brother send players to Vermilion City before he offers his reward.

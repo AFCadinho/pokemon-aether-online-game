@@ -550,7 +550,7 @@ func can_fish_here() -> bool:
 		return false
 	if int(GameState.fishing_tier) <= 0:
 		return false
-	if fishing_activity_active or land_mount_activity_active or is_moving:
+	if fishing_activity_active or is_moving:
 		return false
 	if GameState.is_overworld_input_locked() or _is_ui_typing():
 		return false
@@ -2198,6 +2198,8 @@ func _finish_fishing_activity() -> void:
 	fishing_activity_state = FISHING_STATE_NONE
 	if surf_activity_active:
 		set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_SURF)
+	elif land_mount_activity_active:
+		set_activity_style(CharacterAppearanceService.BODY_MOVEMENT_RIDE)
 	else:
 		clear_activity_style()
 	_sync_fishing_bite_prompt_visibility()
