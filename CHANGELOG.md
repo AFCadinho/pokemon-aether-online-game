@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
+
 - Prevent the login screen from failing after an update when its new 2D/3D example images have not yet been imported by the editor.
 
 - Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.
