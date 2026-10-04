@@ -12,11 +12,10 @@
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="r12_couple"]
 [ext_resource type="SpriteFrames" uid="uid://7ym2628q14if" path="res://resources/npcs/mentors/fishing_guru_frames.tres" id="r12_fisher"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="r12_item"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r12_overworld_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r12_rocker"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/sleeping_snorlax.tscn" id="r12_snorlax"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r12_trainer"]
-
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r12_overworld_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_lavender"]
 size = Vector2(160, 32)
@@ -292,9 +291,9 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1797371020]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1282484307]
 
-[node name="Pidgey" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+[node name="Pidgey" parent="Entities/Pokemon" unique_id=677733214 instance=ExtResource("r12_overworld_pokemon")]
 position = Vector2(336, 3184)
 overworld_pokemon_id = "kanto_route_12_pidgey_1"
 species_id = "pidgey"
@@ -303,17 +302,16 @@ facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.4
 movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.4
 
-[node name="Venonat" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+[node name="Venonat" parent="Entities/Pokemon" unique_id=1393629900 instance=ExtResource("r12_overworld_pokemon")]
 position = Vector2(368, 3568)
 overworld_pokemon_id = "kanto_route_12_venonat_1"
 species_id = "venonat"
 display_name = "Venonat"
-movement_behavior = "idle"
 
-[node name="Poliwag" parent="Entities/Pokemon" instance=ExtResource("r12_overworld_pokemon")]
+[node name="Poliwag" parent="Entities/Pokemon" unique_id=1491176704 instance=ExtResource("r12_overworld_pokemon")]
 position = Vector2(848, 1104)
 overworld_pokemon_id = "kanto_route_12_poliwag_1"
 species_id = "poliwag"
@@ -322,8 +320,8 @@ facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.4
 movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.4
 
 [node name="StaticEncounters" type="Node2D" parent="Entities" unique_id=776773195]
 y_sort_enabled = true

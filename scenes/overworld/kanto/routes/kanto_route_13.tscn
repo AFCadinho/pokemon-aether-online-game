@@ -9,10 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://cju7pgi3qsoe5" path="res://assets/tilesets/fiver/tiles_env2_props32.png" id="11_ovwfi"]
 [ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="r13_biker"]
 [ext_resource type="SpriteFrames" uid="uid://csw1c2lg3cyhk" path="res://assets/npcs/classes/bird_keeper_frames.tres" id="r13_bird_keeper"]
+[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r13_overworld_pokemon"]
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="r13_picnicker"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="r13_trainer"]
-
-[ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="r13_overworld_pokemon"]
 
 [sub_resource type="RectangleShape2D" id="shape_north"]
 size = Vector2(96, 32)
@@ -262,9 +261,9 @@ y_sort_enabled = true
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=1902947613]
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=1830259111]
 
-[node name="Oddish" parent="Entities/Pokemon" instance=ExtResource("r13_overworld_pokemon")]
+[node name="Oddish" parent="Entities/Pokemon" unique_id=70657474 instance=ExtResource("r13_overworld_pokemon")]
 position = Vector2(976, 752)
 overworld_pokemon_id = "kanto_route_13_oddish_1"
 species_id = "oddish"
@@ -273,10 +272,10 @@ facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.4
 movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.4
 
-[node name="Pidgeotto" parent="Entities/Pokemon" instance=ExtResource("r13_overworld_pokemon")]
+[node name="Pidgeotto" parent="Entities/Pokemon" unique_id=1310372406 instance=ExtResource("r13_overworld_pokemon")]
 position = Vector2(2352, 176)
 overworld_pokemon_id = "kanto_route_13_pidgeotto_1"
 species_id = "pidgeotto"
@@ -285,20 +284,19 @@ facing_direction = Vector2(1, 0)
 movement_behavior = "pace_horizontal"
 movement_tiles = 1
 movement_wait_seconds = 1.8
-movement_wait_jitter_seconds = 0.4
 movement_speed_pixels = 34.0
+movement_wait_jitter_seconds = 0.4
 
-[node name="Quagsire" parent="Entities/Pokemon" instance=ExtResource("r13_overworld_pokemon")]
+[node name="Quagsire" parent="Entities/Pokemon" unique_id=631895479 instance=ExtResource("r13_overworld_pokemon")]
 position = Vector2(2896, 272)
 overworld_pokemon_id = "kanto_route_13_quagsire_1"
 species_id = "quagsire"
 display_name = "Quagsire"
-facing_direction = Vector2(0, 1)
 movement_behavior = "pace_vertical"
 movement_tiles = 1
 movement_wait_seconds = 2.1
-movement_wait_jitter_seconds = 0.4
 movement_speed_pixels = 30.0
+movement_wait_jitter_seconds = 0.4
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=453507716]
 
