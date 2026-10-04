@@ -57,7 +57,7 @@ func _run() -> void:
 	popup.call("_select_tracker_tab", "mounts")
 	_check(popup.mount_workspace.visible and not popup.pokemon_workspace.visible, "Mounts tab switches away from Pokémon")
 	_check(popup.mount_stat_labels["totalBoxesOpened"].text == "4", "Mount counters render independently")
-	_check(popup.mount_open_buttons.size() == 5 and not popup.mount_open_buttons[0].disabled and not popup.mount_open_buttons[1].disabled and not popup.mount_open_buttons[2].disabled and not popup.mount_open_buttons[3].disabled and not popup.mount_open_buttons[4].disabled, "Owned box can be opened from tracker")
+	_check(popup.mount_open_buttons.size() == 1 and not popup.mount_open_buttons[0].disabled, "Only the last opened box is shown and can be opened from tracker")
 	_check(popup.mount_history_list.get_child(0).text.contains("70%") and popup.mount_history_list.get_child(0).text.contains("duplicate"), "History discloses used chance and duplicate outcomes")
 	popup.request_busy = true
 	popup.call("_refresh_actions")
@@ -117,11 +117,11 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate()
 	root.add_child(store)
 	await process_frame
-	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "glaceon-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "cobalion-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
+	store.apply_store_state({"gems": 1000}, {"items": [{"itemId": "rayquaza-mount-box", "costs": [{"currency": "gems", "amount": 1000}]}, {"itemId": "shadow-lugia-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "mega-alakazam-mount-box", "costs": [{"currency": "gems", "amount": 750}]}, {"itemId": "glaceon-mount-box", "costs": [{"currency": "gems", "amount": 500}]}, {"itemId": "cobalion-mount-box", "costs": [{"currency": "gems", "amount": 500}]}]})
 	store.call("_select_category", "mounts")
 	store.call("_select_product", "rayquaza-mount-box")
 	_check(not store.purchase_button.disabled, "Gift Store permits the authoritative box purchase")
-	_check(store.selection_price_label.text == "750 Aether Gems", "Box price shows currency only")
+	_check(store.selection_price_label.text == "1,000 Aether Gems", "Box price shows currency only")
 	_check(store.selection_description_label.text == "Contains a Rayquaza mount. Base shiny chance: 50%.", "Store concisely names the reward and initial shiny chance")
 	_check(store.call("_catalog_item", "nimbus_mount").is_empty() and store.call("_catalog_item", "aether_board_mount").is_empty(), "Removed Nimbus and Aether Board previews are absent from the Store")
 	store.call("_select_product", "shadow-lugia-mount-box")
@@ -182,7 +182,7 @@ func _check(condition: bool, label: String) -> void:
 
 
 func _check_mount_preview(store: Node, normal_mount_id: String) -> void:
-	var expected_price := "500 Aether Gems" if normal_mount_id in ["glaceon", "cobalion"] else "750 Aether Gems"
+	var expected_price := "1,000 Aether Gems" if normal_mount_id == "rayquaza" else "500 Aether Gems" if normal_mount_id in ["glaceon", "cobalion"] else "750 Aether Gems"
 	var appearance := load("res://scripts/services/character_appearance_service.gd").get_default_appearance("female") as Dictionary
 	appearance["gender"] = "female"
 	appearance["hair_color"] = "#dd66aa"

@@ -517,7 +517,7 @@ const CATALOG: Array[Dictionary] = [
 		"id": "rayquaza-mount-box",
 		"name": "Rayquaza Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description",
-		"price": 750,
+		"price": 1000,
 		"icon": MOUNT_ICON,
 		"categories": ["featured", "mounts"],
 		"badge": "MOUNT BOX",
