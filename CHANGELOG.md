@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Populate Route 15 with day/night grass encounters, twelve FR/LG trainer NPCs (Ron and Mya as singles), and Rain Dance, PP Up and Rose Incense pickups.
+
 - Raise the Rayquaza Mount Box price to 1,000 Aether Gems, with the same cost in Gift Voucher credit.
 
 - Refresh Route 15's visual after the latest artist TMX correction.
