@@ -6428,7 +6428,7 @@ func _sync_status_condition_overlay_for_player(player_id: String) -> void:
 	if sprite_box != null and sprite_box.has_method("set_dratini_poc_sleeping"):
 		sprite_box.call("set_dratini_poc_sleeping", condition_key == "sleeping")
 	if is_instance_valid(animation_router.model_presenter):
-		animation_router.model_presenter.set_sleeping(0 if player_id == "p1" else 1, condition_key == "sleeping")
+		animation_router.model_presenter.set_status_condition(0 if player_id == "p1" else 1, condition_key)
 
 func _prepare_pending_status_condition_overlays(events: Array) -> void:
 	pending_status_condition_overlay_players.clear()
@@ -10367,7 +10367,7 @@ func _render_battle_events(
 			_fill_mega_event_species(event_data)
 			var mega_ident := str(event_data.get("target", ""))
 			var mega_stage: Node = animation_router.model_presenter
-			if event_type == "mega" and SettingsManager.battle_animations and animation_router.uses_realtime_3d() and is_instance_valid(mega_stage):
+			if event_type == "mega" and animation_router.uses_realtime_3d() and is_instance_valid(mega_stage):
 				var mega_index: int = mega_stage.actor_index(mega_ident)
 				if mega_index >= 0:
 					staged_3d_mega = await mega_stage.prepare_mega_form(
@@ -10375,6 +10375,7 @@ func _render_battle_events(
 						str(event_data.get("species", "")),
 						bool(mega_stage.combatants[mega_index].shiny)
 					)
+					staged_3d_mega = staged_3d_mega and SettingsManager.battle_animations
 			if training_ai_battle and _get_player_id_from_ident(str(event_data.get("target", ""))) == "p2":
 				display_data_presenter.remember_public_trainer_mega_species(event_data)
 			battle_state.apply_event_conditions([event_data])

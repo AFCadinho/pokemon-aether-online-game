@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep poison, burn and other persistent statuses on 3D Pokémon without exposing 2D sprites; add a native Substitute doll, rising item particles and a berry bite with shared sounds, stronger power auras, and prepare reviewed Mega forms before their 3D reveal.
+
 - Show real 2D and 3D battle screenshots in the first-play visual choice so players can compare Pokémon and arenas before choosing.
 
 - Align 2.5D Pokémon with their visible platform surfaces and use a stable, shallow camera that follows screen layout without drifting or orbiting away from the 2D background.

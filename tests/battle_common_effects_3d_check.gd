@@ -95,7 +95,7 @@ func _geometry() -> void:
 	glyphs.free()
 	for key: String in Effect.PROFILES:
 		var effect: Node = stage.create_common_effect(key, "p3")
-		assert(is_instance_valid(effect) and effect.get_child_count() > 0 and effect.get_child_count() <= 10, key)
+		assert(is_instance_valid(effect) and effect.get_child_count() > 0 and effect.get_child_count() <= 20, key)
 		if key != "grassy_terrain_start":
 			assert(effect.height == 2.0 and is_equal_approx(effect.radius, 0.55))
 		else:
@@ -104,8 +104,8 @@ func _geometry() -> void:
 		effect._process(effect.duration * 0.4)
 		for mesh: MeshInstance3D in effect.get_children():
 			assert(mesh.mesh.get_surface_count() > 0 and mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
-			assert(mesh.material_override is StandardMaterial3D)
-			if mesh.material_override.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED:
+			assert(mesh.material_override is StandardMaterial3D or mesh.material_override is ShaderMaterial)
+			if mesh.material_override is StandardMaterial3D and mesh.material_override.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED:
 				assert(mesh.material_override.billboard_keep_scale, "Pictograms must retain their species-relative size")
 		assert(stage.actors[2].position == Vector3(6,0,0), "Visuals cannot move their actor")
 		effect.cancel()

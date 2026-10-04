@@ -1,11 +1,17 @@
 extends Control
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
-## Missing models/forms/substitute fall back as a whole battle, never guessing art.
+## Missing reviewed models fall back as a whole battle; Substitute has native geometry.
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
+const StatusEffect = preload("res://scripts/battle/battle_ui/status_effect_3d.gd")
+var status_conditions := ["", "", "", ""]
+var status_effects: Array = [null, null, null, null]
+const SubstituteModel = preload("res://scripts/battle/battle_ui/substitute_model_3d.gd")
+var substitute_models: Array = [null, null, null, null]
+var fallback_effect_bounds := {}
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
@@ -369,7 +375,7 @@ func _render_reuse_key() -> String:
 	return "%s:%s:%s" % [viewport.get_instance_id(), viewport.size, viewport.msaa_3d]
 
 
-func _ensure_downloaded_models() -> void:
+func _ensure_downloaded_models(preserve_actors := false) -> void:
 	download_verified_files.clear()
 	if OS.has_feature("web") or OS.has_feature("mobile") or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
@@ -383,7 +389,7 @@ func _ensure_downloaded_models() -> void:
 	var needed: Array[String] = []
 	for index in _slot_count():
 		var box: Node = boxes[index] if index < boxes.size() else null
-		if box != null and (box.substitute_active or (box.double_container.visible and not double_mode)):
+		if box != null and (box.double_container.visible and not double_mode):
 			return
 		if str(combatants[index].species).is_empty():
 			continue
@@ -429,7 +435,7 @@ func _ensure_downloaded_models() -> void:
 		refresh_catalog = refresh_catalog or not catalog_entries.has(identity)
 	if not new_path.is_empty() and (new_path != old_path or refresh_catalog):
 		OS.set_environment("POKEAETHER_MODEL_CATALOG", new_path)
-		_load_catalog(new_path)
+		_load_catalog(new_path, preserve_actors)
 	# Ephemeral full-SHA results from this entry only; catalogs cannot supply them.
 	download_verified_files = result.get("verified_models", {}).duplicate(true)
 var action_generation := [0, 0, 0, 0]
@@ -492,6 +498,8 @@ func set_combatant(index: int, species: String, shiny := false, force := false) 
 	if not force and combatants[index].species == normalized and combatants[index].shiny == shiny:
 		return
 	action_generation[index] += 1
+	if force or species.is_empty():
+		status_conditions[index] = ""
 	staged_mega_species[index] = ""
 	_stop_transition(index)
 	combatants[index] = {"species": normalized, "shiny": shiny}
@@ -560,7 +568,9 @@ func _sync_coop_target_highlight() -> void:
 	for node: Node in meshes:
 		var mesh := node as MeshInstance3D
 		coop_target_original_overlays[mesh] = mesh.material_overlay
-		mesh.material_overlay = coop_target_outline_material
+		var outline := coop_target_outline_material.duplicate()
+		outline.next_pass = mesh.material_overlay
+		mesh.material_overlay = outline
 
 func _combatant_key(index: int) -> String:
 	return ReviewedModels.key(combatants[index].species, combatants[index].shiny)
@@ -576,6 +586,8 @@ func set_sleeping(index: int, sleeping: bool) -> void:
 		_action("reset", index)
 
 func cancel_actions() -> void:
+	for doll: Node in substitute_models:
+		if is_instance_valid(doll): doll.cancel_motion()
 	_cancel_common_effects()
 	for index in _slot_count():
 		staged_mega_species[index] = ""
@@ -593,6 +605,135 @@ func _cancel_common_effects() -> void:
 		if is_instance_valid(effect):
 			effect.cancel()
 	common_effects.clear()
+
+func _substitute_box(index: int) -> Node:
+	return boxes[index] if index >= 0 and index < boxes.size() else null
+
+func _substitute_visible(index: int) -> bool:
+	var box := _substitute_box(index)
+	return box != null and box.substitute_active and not box.substitute_revealed_for_move
+
+func _clear_substitute_models() -> void:
+	for index in 4:
+		if is_instance_valid(substitute_models[index]):
+			substitute_models[index].queue_free()
+		substitute_models[index] = null
+
+func _sync_substitute_models() -> void:
+	for index in _slot_count():
+		var box := _substitute_box(index)
+		var needed: bool = active and is_instance_valid(world) and handles("p%d" % (index+1)) and box != null and box.substitute_active
+		if not needed:
+			if is_instance_valid(substitute_models[index]): substitute_models[index].queue_free()
+			substitute_models[index] = null
+			continue
+		if not is_instance_valid(substitute_models[index]):
+			var doll := SubstituteModel.new()
+			world.add_child(doll)
+			doll.build(_effect_bounds(index).height, common_effect_speed)
+			substitute_models[index] = doll
+		var doll: Node3D = substitute_models[index]
+		doll.position = _position(index)
+		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - doll.position
+		doll.rotation.y = atan2(direction.x,direction.z)
+		doll.visible = _substitute_visible(index) and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty"]
+		actors[index].visible = actor_shown[index] and not doll.visible
+
+func set_substitute_active(ident: String, enabled: bool) -> void:
+	var index := actor_index(ident)
+	var box := _substitute_box(index)
+	if box == null: return
+	box.set_substitute_active(enabled,false)
+	if not enabled and handles(ident): actors[index].visible = actor_shown[index]
+	_sync_substitute_models()
+	_sync_status_effects()
+
+func reveal_substitute_pokemon(ident: String, revealed: bool) -> bool:
+	var index := actor_index(ident)
+	var box := _substitute_box(index)
+	if box == null or not box.substitute_active or not handles(ident): return false
+	box.substitute_revealed_for_move = revealed
+	_sync_substitute_models()
+	_sync_status_effects()
+	return true
+
+func play_substitute_hit(ident: String) -> void:
+	var index := actor_index(ident)
+	if index < 0: return
+	_sync_substitute_models()
+	var doll: Node = substitute_models[index]
+	if not is_instance_valid(doll): return
+	doll.hit()
+	while active and is_instance_valid(doll) and doll.hit_left > 0.0:
+		await get_tree().process_frame
+
+func set_status_condition(index: int, condition: String) -> void:
+	if index < 0 or index >= 4:
+		return
+	status_conditions[index] = preload("res://scripts/battle/animations/status_condition_overlay.gd")._normalize_condition(condition)
+	set_sleeping(index, status_conditions[index] == "sleeping")
+	_sync_status_effects()
+
+func _effect_bounds(index: int) -> Dictionary:
+	var actor: Node3D = actors[index]
+	var result := {"position": world.to_local(actor.global_position), "height": 2.0, "radius": 1.0}
+	var bounds: Dictionary = visual_bounds.get(identities[index], {}).get("idle", {})
+	var box: AABB
+	if not bounds.is_empty():
+		box = AABB(Vector3(bounds.min[0],bounds.min[1],bounds.min[2]),Vector3(bounds.size[0],bounds.size[1],bounds.size[2]))
+	else:
+		# Older approved cohorts have grounding but no sampled idle bounds.
+		# Derive their mesh envelope once, in model units, then apply live scale.
+		var identity: String = identities[index]
+		if not fallback_effect_bounds.has(identity):
+			var meshes := actor.find_children("*", "MeshInstance3D", true, false)
+			if actor is MeshInstance3D: meshes.append(actor)
+			for mesh: MeshInstance3D in meshes:
+				if mesh.mesh == null or not mesh.is_visible_in_tree(): continue
+				var posed: Mesh = mesh.bake_mesh_from_current_skeleton_pose() if mesh.skin != null else mesh.mesh
+				if posed == null: posed = mesh.mesh
+				var mesh_box: AABB = (actor.global_transform.affine_inverse() * mesh.global_transform) * posed.get_aabb()
+				box = box.merge(mesh_box) if box.has_volume() else mesh_box
+			fallback_effect_bounds[identity] = box
+		box = fallback_effect_bounds[identity]
+	if box.has_volume():
+		var local_box: AABB = (world.global_transform.affine_inverse() * actor.global_transform) * box
+		result.position = local_box.position + Vector3(local_box.size.x * 0.5,0,local_box.size.z * 0.5)
+		result.height = local_box.size.y
+		result.radius = maxf(local_box.size.x, local_box.size.z) * 0.55
+	return result
+
+func _clear_status_effects() -> void:
+	_clear_coop_target_highlight()
+	for index in 4:
+		if is_instance_valid(status_effects[index]):
+			status_effects[index].cancel()
+		status_effects[index] = null
+
+func _sync_status_effects() -> void:
+	for index in _slot_count():
+		var ident := "p%d" % (index + 1)
+		var actor: Node3D = actors[index]
+		var enabled: bool = active and is_instance_valid(world) and handles(ident) and actor.visible and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty"] and get_tree().root.get_node("SettingsManager").battle_animations
+		var key := "status_" + str(status_conditions[index]) if enabled and not status_conditions[index].is_empty() else ""
+		var effect: Node = status_effects[index]
+		if is_instance_valid(effect) and (effect.done or effect.key != key or effect.actor != actor):
+			_clear_coop_target_highlight()
+			effect.cancel()
+			status_effects[index] = null
+			effect = null
+		if not key.is_empty() and not is_instance_valid(effect):
+			_clear_coop_target_highlight()
+			effect = StatusEffect.new()
+			world.add_child(effect)
+			var bounds := _effect_bounds(index)
+			effect.position = bounds.position
+			effect.start(key, bounds.height, bounds.radius, func(): return active and handles(ident) and actors[index] == actor and actor.visible and actor_shown[index], common_effect_speed)
+			effect.attach_model(actor)
+			status_effects[index] = effect
+		if is_instance_valid(effect):
+			effect.position = _effect_bounds(index).position
+	_sync_coop_target_highlight()
 
 func common_effect_speed() -> float:
 	return playback_speed
@@ -622,20 +763,24 @@ func create_common_effect(key: String, ident: String) -> Node:
 			return null
 		var index := actor_index(ident)
 		var actor: Node3D = actors[index]
-		if not actor.visible or not actor_shown[index] or lifecycle[index] in ["hidden", "empty", "fainted"]:
+		var visual: Node3D = substitute_models[index] if is_instance_valid(substitute_models[index]) and substitute_models[index].visible else actor
+		if not visual.visible or not actor_shown[index] or lifecycle[index] in ["hidden", "empty", "fainted"]:
 			effect.free()
 			return null
-		anchor = world.to_local(actor.global_position)
-		var bounds: Dictionary = visual_bounds.get(identities[index], {}).get("idle", {})
-		if not bounds.is_empty():
-			var box := AABB(Vector3(bounds.min[0],bounds.min[1],bounds.min[2]),Vector3(bounds.size[0],bounds.size[1],bounds.size[2]))
-			var local_box: AABB = (world.global_transform.affine_inverse() * actor.global_transform) * box
-			anchor = local_box.position + Vector3(local_box.size.x * 0.5,0,local_box.size.z * 0.5)
-			body_height = local_box.size.y
-			body_radius = maxf(local_box.size.x, local_box.size.z) * 0.55
-		guard = func(): return active and handles(ident) and actors[index] == actor and actor.visible and actor_shown[index] and lifecycle[index] not in ["hidden", "empty", "fainted"]
+		var bounds := _effect_bounds(index)
+		if visual != actor:
+			bounds = {"position": world.to_local(visual.global_position), "height": visual.idle_scale * 1.2, "radius": visual.idle_scale * 0.6}
+		anchor = bounds.position
+		body_height = bounds.height
+		body_radius = bounds.radius
+		guard = func(): return active and handles(ident) and actors[index] == actor and is_instance_valid(visual) and visual.visible and actor_shown[index] and lifecycle[index] not in ["hidden", "empty", "fainted"]
+	if key == "mega_evolution":
+		guard = func(): return active and is_instance_valid(world)
 	world.add_child(effect)
 	effect.position = anchor
+	if is_instance_valid(camera):
+		var toward_camera: Vector3 = world.to_local(camera.global_position) - anchor
+		effect.front = Vector3(toward_camera.x,0,toward_camera.z).normalized()
 	common_effects.append(effect)
 	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
 	effect.start(key, body_height, body_radius, guard, common_effect_speed)
@@ -643,18 +788,23 @@ func create_common_effect(key: String, ident: String) -> Node:
 
 func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms := 5000) -> bool:
 	var index := actor_index(ident)
-	# The battle effect is qualified only for the Dragonite Mega pilot.
-	if species.to_lower().replace(" ", "-") != "dragonite-mega" or index < 0 or not handles(ident):
-		return false
 	var key := ReviewedModels.key(species, shiny)
-	if not catalog_entries.has(key) or not _supports_combatant(species.to_lower().replace(" ", "-"), shiny, false, false):
+	if index < 0 or not handles(ident) or not ReviewedModels.supports(key):
 		return false
+	var generation: int = action_generation[index]
 	staged_mega_species[index] = key
+	if not catalog_entries.has(key):
+		# Download only the public form announced by this event. Keep the old
+		# actors visible while the selected, pinned release supplies its model.
+		await _ensure_downloaded_models(true)
+	if not is_inside_tree() or not active or generation != action_generation[index] or not catalog_entries.has(key):
+		staged_mega_species[index] = ""
+		return false
 	_queue_needed_models()
 	var deadline := Time.get_ticks_msec() + timeout_ms
-	while is_inside_tree() and active and handles(ident) and not packed.has(key) and not failed_models.has(key) and Time.get_ticks_msec() < deadline:
+	while is_inside_tree() and active and handles(ident) and generation == action_generation[index] and not packed.has(key) and not failed_models.has(key) and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
-	var ready: bool = is_inside_tree() and active and handles(ident) and packed.has(key) and bool(placements.get(key, {}).get("calibrated", false)) and motion_clips.get(key, {}).has("mega_appeal")
+	var ready: bool = is_inside_tree() and active and handles(ident) and generation == action_generation[index] and packed.has(key) and bool(placements.get(key, {}).get("calibrated", false))
 	if not ready:
 		staged_mega_species[index] = ""
 	return ready
@@ -663,6 +813,8 @@ func play_mega_evolution(ident: String, reveal: Callable) -> bool:
 	var index := actor_index(ident)
 	if index < 0 or not handles(ident) or staged_mega_species[index].is_empty() or not packed.has(staged_mega_species[index]) or not reveal.is_valid():
 		return false
+	if staged_mega_species[index].trim_suffix("@shiny") != "dragonite-mega":
+		return false # Other reviewed forms use the generic staged reveal in the router.
 	var effect := MegaEvolutionEffect.new()
 	world.add_child(effect)
 	effect.position = actors[index].position
@@ -832,7 +984,7 @@ func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	process_priority = 10
 
 static func supported(species: String, shiny: bool, double: bool, substitute: bool) -> bool:
-	return ReviewedModels.supports(ReviewedModels.key(species, shiny)) and not substitute
+	return ReviewedModels.supports(ReviewedModels.key(species, shiny))
 
 # Narrow override points for the offline candidate harness. The production
 # renderer never reads candidate allowlists or motion profiles from Settings.
@@ -1045,7 +1197,7 @@ func _find_player(node: Node) -> AnimationPlayer:
 			return player
 	return null
 
-func _load_catalog(path: String) -> void:
+func _load_catalog(path: String, preserve_actors := false) -> void:
 	var catalog_started := Time.get_ticks_usec()
 	_cancel_load()
 	loaded_path = path
@@ -1062,9 +1214,10 @@ func _load_catalog(path: String) -> void:
 	failed_models.clear()
 	catalog_problem = "Invalid 3D catalog; choose a compatible installed model catalog in Settings"
 	reason = catalog_problem
-	entries.clear()
-	packed.clear()
-	_clear_actors()
+	if not preserve_actors:
+		entries.clear()
+		packed.clear()
+		_clear_actors()
 	if path.strip_edges().is_empty():
 		catalog_problem = "No 3D catalog selected — choose a local model catalog in Settings"
 		reason = catalog_problem
@@ -1074,10 +1227,11 @@ func _load_catalog(path: String) -> void:
 		reason = catalog_problem
 		return
 	var prepared_path := path + ".runtime.json" if FileAccess.file_exists(path + ".runtime.json") else path
-	ground_offsets.clear()
-	placements.clear()
-	motion_clips.clear()
-	visual_bounds.clear()
+	if not preserve_actors:
+		ground_offsets.clear()
+		placements.clear()
+		motion_clips.clear()
+		visual_bounds.clear()
 	if FileAccess.file_exists(prepared_path+".grounding.json"):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(prepared_path+".grounding.json"))
 		if parsed is Dictionary and parsed.get("schema",0)==1 and parsed.get("entries") is Dictionary:
@@ -1383,6 +1537,9 @@ func _reuse_checked_resource(entry: Dictionary) -> void:
 		verified_model_cache_hits += 1
 
 func _clear_actors() -> void:
+	fallback_effect_bounds.clear()
+	_clear_substitute_models()
+	_clear_status_effects()
 	_cancel_common_effects()
 	_clear_coop_target_highlight()
 	for i in 4:
@@ -1399,6 +1556,8 @@ func _clear_actors() -> void:
 
 func _set_active(value: bool) -> void:
 	if active and not value:
+		_clear_substitute_models()
+		_clear_status_effects()
 		_cancel_common_effects()
 		_clear_coop_target_highlight()
 		camera_phase = 0.0
@@ -1706,7 +1865,7 @@ func _process(delta: float) -> void:
 			resting[i] = true
 			_action(restoring[i], i)
 			actor_build_ms += (Time.get_ticks_usec() - actor_started) / 1000.0
-		players[i].speed_scale = playback_speed
+		players[i].speed_scale = 0.0 if status_conditions[i] == "frozen" and resting[i] else playback_speed
 		if transition_tweens[i] != null and transition_tweens[i].is_valid():
 			transition_tweens[i].set_speed_scale(playback_speed)
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
@@ -1725,13 +1884,14 @@ func _process(delta: float) -> void:
 			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
 		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i]
-	_sync_coop_target_highlight()
+	_sync_substitute_models()
+	_sync_status_effects()
 	_prune_models()
 
 func _exit_tree() -> void:
 	for index in 4:
 		_stop_transition(index)
-	_cancel_load()
+	cancel_preparation()
 	_set_active(false)
 	pending_entries.clear()
 	packed.clear()

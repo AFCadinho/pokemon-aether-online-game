@@ -847,7 +847,7 @@ func _set_native_status(controller: String, status: String) -> void:
 		overlay.set_condition(status if SettingsManager.battle_animations else "")
 	var model: Node = _model_presenter()
 	if model != null and controller in SLOTS:
-		model.set_sleeping(model.actor_index(controller), status.to_lower() in ["slp", "sleep", "sleeping"])
+		model.set_status_condition(model.actor_index(controller), status if SettingsManager.battle_animations else "")
 
 
 func _position_coop_stat_overlays() -> void:

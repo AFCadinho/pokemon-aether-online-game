@@ -341,7 +341,7 @@ func set_substitute_active(is_active: bool, animate := true) -> void:
 		_reset_sprite_pose(single_sprite)
 		substitute_active = true
 		_sync_substitute_region()
-		substitute_sprite.visible = true
+		substitute_sprite.visible = not model_sprites_hidden
 		substitute_sprite.position = _get_substitute_idle_position()
 		substitute_sprite.rotation = 0.0
 		if not should_animate:
@@ -390,7 +390,7 @@ func reveal_pokemon_from_substitute_for_move() -> bool:
 	substitute_revealed_for_move = true
 	var retreat_direction := -1.0 if current_single_side == "back" else 1.0
 	var retreat_offset := Vector2(SUBSTITUTE_RETREAT_OFFSET.x * retreat_direction, SUBSTITUTE_RETREAT_OFFSET.y)
-	substitute_sprite.visible = true
+	substitute_sprite.visible = not model_sprites_hidden
 	substitute_sprite.position = _get_substitute_idle_position()
 	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
 	substitute_sprite.modulate = Color.WHITE
@@ -416,7 +416,7 @@ func restore_substitute_after_move() -> void:
 	_reset_sprite_pose(single_sprite)
 	var retreat_direction := -1.0 if current_single_side == "back" else 1.0
 	var retreat_offset := Vector2(SUBSTITUTE_RETREAT_OFFSET.x * retreat_direction, SUBSTITUTE_RETREAT_OFFSET.y)
-	substitute_sprite.visible = true
+	substitute_sprite.visible = not model_sprites_hidden
 	substitute_sprite.position = _get_substitute_idle_position() + retreat_offset
 	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE * 0.88
 	substitute_sprite.modulate = Color(1.0, 1.0, 1.0, 0.0)
@@ -895,7 +895,7 @@ func _sync_substitute_idle_pose() -> void:
 	substitute_sprite.scale = SUBSTITUTE_DISPLAY_SCALE
 	substitute_sprite.rotation = 0.0
 	substitute_sprite.modulate = Color.WHITE
-	substitute_sprite.visible = substitute_active and not substitute_revealed_for_move
+	substitute_sprite.visible = substitute_active and not substitute_revealed_for_move and not model_sprites_hidden
 	if single_sprite != null:
 		single_sprite.modulate = _with_alpha(single_sprite.modulate, 0.0 if substitute_active and not substitute_revealed_for_move else 1.0)
 
@@ -2203,6 +2203,8 @@ func set_model_sprites_hidden(hidden: bool) -> void:
 	if model_sprites_hidden == hidden:
 		return
 	model_sprites_hidden = hidden
+	if is_instance_valid(substitute_sprite):
+		substitute_sprite.visible = substitute_active and not substitute_revealed_for_move and not hidden
 	for sprite: AnimatedSprite2D in [single_sprite, double_sprite_1, double_sprite_2]:
 		var color: Color = sprite_self_colors.get(sprite, sprite.self_modulate)
 		_set_sprite_self_color(sprite, color)
