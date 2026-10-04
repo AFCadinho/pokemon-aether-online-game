@@ -231,3 +231,35 @@ existing timeline compiler formula and reviewed profile lengths. The focused
 `battle_audio_playback_check.tscn` rerun passed, including the explicit checks
 that cancellation stops samples and playback speed preserves source pitch.
 No rendered audiovisual audition or live backend measurement was performed.
+
+## Implemented first timing pass
+
+The follow-up implements 1.5× attack/damage presentation speed with unchanged
+idle pacing, audio preparation before motion, and native-clock impact profiles
+for Pikachu Thunderbolt/Tackle and Blastoise Ice Beam. See
+`battle-move-presentation-3d.md` for eligibility, recovery and fallback rules.
+
+Rendered native pose sheets in assigned slot-a were inspected for Pikachu's
+special and physical clips and Blastoise's special clip. The Pikachu runtime
+matched the currently approved installed model. Blastoise inspection used the
+existing slot-local pre-eye-texture runtime with the same reviewed action
+lengths; this was a pose/timing check, not approval of that old visual asset.
+Impact markers are an initial authored choice; no projectile/contact VFX exists.
+
+The focused synthetic check uses real AnimationPlayers with canonical lengths
+and the actual stage/router/event renderer. At ordinary replay speed it observed
+Thunderbolt impact at about 0.57 s including an injected 0.12 s audio-readiness
+delay, Tackle at 0.48 s and Ice Beam at 1.35 s. Attack/reaction recovery boundaries
+completed at approximately 1.36, 1.24 and 4.55 s respectively. These exclude
+trainer callouts, real geometry and backend transport; compare phase behavior,
+not FPS or full encounter duration, with the earlier sequential probe.
+
+A rendered offline Thunderbolt check also ran the real battle scene and ordered
+batch renderer against two approved installed Pikachu models. The HP bar was
+already at 50% when the target damage reaction started, while the attacker was
+still in special_attack near native position 0.83 s. The complete attack/reaction
+pair took about 1.39 s without trainer callouts. Native audio tails were released
+naturally and the authoritative HP state reached 50 after its damage event.
+Before/impact/after screenshots and raw pose sheets remain ignored under
+`.tmp/3d-pacing-review/` in the assigned slot. This verifies rendered sequencing;
+perceived sound fit and the longer Blastoise recovery still need play review.

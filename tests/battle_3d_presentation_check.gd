@@ -170,12 +170,12 @@ func _run() -> void:
 		stage.set_combatant(0, "Dragonite", false, true)
 		await process_frame
 		assert(stage.lifecycle[0] == "idle" and stage.actor_shown[0])
-		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Claw")
+		await battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Claw")
 		assert(stage.players[0].current_animation == "physical_attack")
 		stage.players[0].advance(100.0)
 		await process_frame
 		await process_frame
-		battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Pulse")
+		await battle.animation_router.play_attack_tween_for_actor("p1: Dragonite", "Dragon Pulse")
 		await process_frame
 		assert(stage.players[0].current_animation == "special_attack")
 		assert(battle.player_sprite_box.single_sprite.sprite_frames == null)

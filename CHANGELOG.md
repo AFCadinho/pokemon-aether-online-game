@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilot sounds, HP changes and damage reactions with an earlier impact beat while the attacker recovers.
+
 - Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.
 
 - Restore NPC interactions in Vermilion City and Route 6 by setting their interaction reach to one tile.
