@@ -458,5 +458,17 @@
   "cobalion-mount-box": {
     "name": "勾帕路翁坐骑箱",
     "shortDesc": "包含一只勾帕路翁坐骑。初始异色概率：50%。"
+  },
+  "primal-kyogre-mount": {
+    "name": "原始盖欧卡坐骑",
+    "shortDesc": "解锁原始盖欧卡冲浪坐骑。需要拥有冲浪权限。"
+  },
+  "shiny-primal-kyogre-mount": {
+    "name": "异色原始盖欧卡坐骑",
+    "shortDesc": "解锁异色原始盖欧卡冲浪坐骑。需要拥有冲浪权限。"
+  },
+  "primal-kyogre-mount-box": {
+    "name": "原始盖欧卡坐骑箱",
+    "shortDesc": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。"
   }
 }

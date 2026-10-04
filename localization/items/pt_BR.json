@@ -458,5 +458,17 @@
   "cobalion-mount-box": {
     "name": "Caixa de montaria Cobalion",
     "shortDesc": "Contém uma montaria Cobalion. Chance shiny inicial: 50%."
+  },
+  "primal-kyogre-mount": {
+    "name": "Montaria Primal Kyogre",
+    "shortDesc": "Desbloqueia Primal Kyogre como montaria de Surf. Requer acesso ao Surf."
+  },
+  "shiny-primal-kyogre-mount": {
+    "name": "Montaria Shiny Primal Kyogre",
+    "shortDesc": "Desbloqueia Shiny Primal Kyogre como montaria de Surf. Requer acesso ao Surf."
+  },
+  "primal-kyogre-mount-box": {
+    "name": "Caixa de Montaria Primal Kyogre",
+    "shortDesc": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%."
   }
 }

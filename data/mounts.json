@@ -191,6 +191,123 @@
         224
       ],
       "movementAnimationSpeed": 7.5,
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        -16
+      ],
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      },
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ],
+          [
+            0,
+            -51
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ],
+          [
+            0,
+            -47
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -56
+          ]
+        ]
+      }
+    },
+    "primal_kyogre_shiny": {
+      "displayName": "Shiny Primal Kyogre",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-primal-kyogre-mount",
+      "iconTexture": "res://assets/mounts/primal_kyogre_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/primal_kyogre_shiny/mount.png",
+      "riderMaskSheet": "res://assets/mounts/primal_kyogre_shiny/rider_mask.png",
+      "foregroundSheet": "res://assets/mounts/primal_kyogre_shiny/foreground.png",
+      "frameSize": [
+        192,
+        224
+      ],
+      "movementAnimationSpeed": 7.5,
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        -16
+      ],
       "surfFishingFullForeground": false,
       "surfFishingRiderOffsets": {
         "down": [

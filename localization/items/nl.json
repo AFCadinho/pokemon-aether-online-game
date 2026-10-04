@@ -458,5 +458,17 @@
   "cobalion-mount-box": {
     "name": "Cobalion-mountbox",
     "shortDesc": "Bevat een Cobalion-mount. Shiny-basiskans: 50%."
+  },
+  "primal-kyogre-mount": {
+    "name": "Primal Kyogre-mount",
+    "shortDesc": "Ontgrendelt Primal Kyogre als surfmount. Vereist toegang tot Surf."
+  },
+  "shiny-primal-kyogre-mount": {
+    "name": "Shiny Primal Kyogre-mount",
+    "shortDesc": "Ontgrendelt Shiny Primal Kyogre als surfmount. Vereist toegang tot Surf."
+  },
+  "primal-kyogre-mount-box": {
+    "name": "Primal Kyogre Mount Box",
+    "shortDesc": "Bevat een Primal Kyogre-surfmount. Shiny-basiskans: 50%."
   }
 }

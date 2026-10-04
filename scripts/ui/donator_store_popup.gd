@@ -559,6 +559,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "primal-kyogre-mount-box",
+		"name": "Primal Kyogre Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_primal_kyogre",
+		"price": 1000,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "surf-charm",
 		"name": "Surf Charm",
 		"description": "Use Surf without an HM Pokémon. Badge and story requirements still apply.",
@@ -675,6 +684,9 @@ var purchase_in_progress := false
 var trainer_gender := "male"
 var trainer_appearance: Dictionary = {}
 var active_category := "featured"
+var active_mount_mode := "land"
+var mount_mode_bar: HBoxContainer
+var mount_mode_buttons: Dictionary = {}
 var active_cosmetic_filter_group := "all"
 var active_cosmetic_subcategory := "all"
 var active_outfit_gender_filter := "mine"
@@ -1213,6 +1225,7 @@ func _create_catalog_area() -> Control:
 	layout.add_theme_constant_override("separation", 10)
 	layout.add_child(_create_hero_panel())
 	layout.add_child(_create_cosmetic_subcategory_bar())
+	layout.add_child(_create_mount_mode_bar())
 
 	var catalog_header := HBoxContainer.new()
 	catalog_header.add_theme_constant_override("separation", 8)
@@ -1248,6 +1261,50 @@ func _create_catalog_area() -> Control:
 	product_grid.add_theme_constant_override("v_separation", 9)
 	scroll.add_child(product_grid)
 	return layout
+
+
+func _create_mount_mode_bar() -> HBoxContainer:
+	mount_mode_bar = HBoxContainer.new()
+	mount_mode_bar.name = "MountModeTabs"
+	mount_mode_bar.visible = false
+	mount_mode_bar.add_theme_constant_override("separation", 6)
+	var group := ButtonGroup.new()
+	for mode: String in ["land", "surf"]:
+		var button := Button.new()
+		button.name = "MountMode_" + mode
+		button.custom_minimum_size = Vector2(110, 34)
+		button.toggle_mode = true
+		button.button_group = group
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.pressed.connect(_select_mount_mode.bind(mode))
+		mount_mode_bar.add_child(button)
+		mount_mode_buttons[mode] = button
+	return mount_mode_bar
+
+
+func _refresh_mount_mode_bar() -> void:
+	if mount_mode_bar == null:
+		return
+	mount_mode_bar.visible = active_category == "mounts"
+	for mode: String in mount_mode_buttons:
+		var button: Button = mount_mode_buttons[mode]
+		button.text = _t("ui.store.mounts.mode." + mode)
+		button.set_pressed_no_signal(mode == active_mount_mode)
+		_apply_cosmetic_subcategory_style(button, mode == active_mount_mode)
+
+
+func _select_mount_mode(mode: String) -> void:
+	if mode not in ["land", "surf"]:
+		return
+	active_mount_mode = mode
+	selected_item_id = ""
+	catalog_search_text = ""
+	catalog_search_input.set_block_signals(true)
+	catalog_search_input.text = ""
+	catalog_search_input.set_block_signals(false)
+	_refresh_mount_mode_bar()
+	_reset_selection_footer()
+	_render_products()
 
 
 func _create_cosmetic_subcategory_bar() -> PanelContainer:
@@ -1625,6 +1682,7 @@ func _select_category(category_id: String) -> void:
 	if hero_description_label != null:
 		hero_description_label.text = _category_text(active_category, "description")
 	_refresh_cosmetic_subcategory_bar()
+	_refresh_mount_mode_bar()
 	_reset_selection_footer()
 	_render_products()
 
@@ -1737,6 +1795,8 @@ func _render_products() -> void:
 		if not categories.has(active_category):
 			continue
 		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
+			continue
+		if active_category == "mounts" and Mounts.get_mount_movement_mode(_mount_box_mount_id(str(item.get("id", "")))) != active_mount_mode:
 			continue
 		if not _item_matches_catalog_search(item):
 			continue
@@ -3071,8 +3131,10 @@ func _refresh_mount_rider_preview(item: Dictionary) -> void:
 	var preview := load("res://scripts/ui/mount_rider_preview.gd").new() as Node2D
 	preview.name = "MountRiderPreview"
 	character_preview_viewport.add_child(preview)
-	preview.position = Vector2(129, 111)
-	preview.scale = Vector2(1.5, 1.5)
+	var definition := Mounts.get_mount_definition(_mount_preview_id())
+	var offset: Array = definition.get("storePreviewOffset", [0, 0])
+	preview.position = Vector2(129, 111) + Vector2(float(offset[0]), float(offset[1]))
+	preview.scale = Vector2.ONE * float(definition.get("storePreviewScale", 1.5))
 	_update_mount_rider_preview()
 	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
 	character_preview_title_label.text = _item_name(item)

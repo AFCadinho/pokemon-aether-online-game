@@ -28,4 +28,8 @@ ops/worktrees/slot-env SLOT -- godot --path .worktrees/SLOT/frontend \
 Grant `primal-kyogre-mount` through the existing administration reward controls.
 It permanently unlocks Primal Kyogre in the Surf selector. Existing Surf access
 requirements still apply; a saved selection without the item falls back to Lapras.
-The item is not consumable or tradeable. No box or shop entry is included.
+The item is not consumable or tradeable. The Gift Store Surf tab sells the
+Primal Kyogre Mount Box for 1,000 Gems, with the existing 50–80% mount-box pity.
+The shiny assets in `../primal_kyogre_shiny` reuse the exact same alpha, rider
+mask and positioning; the builder recolours the source using the existing
+Shiny Primal Kyogre reference (charcoal, pale gold and rose fin tips).

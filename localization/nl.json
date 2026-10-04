@@ -6359,5 +6359,8 @@
   "ui.town_map.location.route_15.description": "Een lange kustroute die vanaf Route 14 verdergaat richting Fuchsia City.",
   "static_encounter.snorlax_sleeping": "Snorlax ligt diep te slapen. Een Poké Flute kan hem misschien wakker maken.",
   "static_encounter.played_flute": "Je speelde op de Poké Flute!",
-  "static_encounter.snorlax_awoke": "Snorlax werd wakker en viel aan!"
+  "static_encounter.snorlax_awoke": "Snorlax werd wakker en viel aan!",
+  "ui.store.mounts.mode.land": "Land",
+  "ui.store.mounts.mode.surf": "Surf",
+  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Bevat een Primal Kyogre-surfmount. Shiny-basiskans: 50%."
 }

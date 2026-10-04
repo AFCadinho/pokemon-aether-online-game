@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Primal Kyogre and its 1,000-Gem box; split Gift Store mounts into Land and Surf tabs with mounted previews.
+
 - Make horizontal transition buildings inherit the authored template collision tiles and remove the Route 15 gate's client-side Fuchsia doorway blockade.
 
 - Expand sleeping Snorlax's roadblock to 3 by 3 tiles and enlarge its interaction area to cover every adjacent edge.

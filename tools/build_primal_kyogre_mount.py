@@ -20,17 +20,19 @@ SHIFTS = (((-24,21),)*4,
           ((-24,21),)*4)
 
 
-def definition():
+def definition(shiny=False):
     offsets = {d: [[x+SHIFTS[r][c][0]-(FRAME[0]-64)//2,
                    y+SHIFTS[r][c][1]-(FRAME[1]-64)//2] for c,(x,y) in enumerate(SEATS[r])]
                for r,d in enumerate(DIRECTIONS)}
-    return {'displayName':'Primal Kyogre', 'movementMode':'surf',
-            'unlockItemId':'primal-kyogre-mount',
-            'iconTexture':'res://assets/mounts/primal_kyogre/icon.png',
-            'spriteSheet':'res://assets/mounts/primal_kyogre/mount.png',
-            'riderMaskSheet':'res://assets/mounts/primal_kyogre/rider_mask.png',
-            'foregroundSheet':'res://assets/mounts/primal_kyogre/foreground.png',
+    folder = 'primal_kyogre_shiny' if shiny else 'primal_kyogre'
+    return {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
+            'unlockItemId':'shiny-primal-kyogre-mount' if shiny else 'primal-kyogre-mount',
+            'iconTexture':f'res://assets/mounts/{folder}/icon.png',
+            'spriteSheet':f'res://assets/mounts/{folder}/mount.png',
+            'riderMaskSheet':f'res://assets/mounts/{folder}/rider_mask.png',
+            'foregroundSheet':f'res://assets/mounts/{folder}/foreground.png',
             'frameSize':list(FRAME), 'movementAnimationSpeed':7.5,
+            'storePreviewScale':1.0, 'storePreviewOffset':[0,-16],
             'surfFishingFullForeground':False,
             'surfFishingRiderOffsets':{'down':[0,18],'left':[0,4],'right':[0,4],'up':[0,10]},
             'riderOffsets':offsets}
@@ -54,8 +56,43 @@ def foreground(art, row, col):
     return result
 
 
-def build():
-    source = Image.open(FOLDER/'source.png').convert('RGBA')
+# Matches the existing shiny Primal Kyogre reference: charcoal, pale gold and
+# rose fin tips. No resampling, silhouette changes or rider geometry changes.
+SHINY_PALETTE = {
+    (0,0,0):(0,0,0), (13,10,66):(15,21,25),
+    (41,37,121):(30,39,43), (89,75,161):(55,68,69),
+    (117,97,175):(83,98,96), (95,169,176):(123,157,147),
+    (161,200,211):(183,210,195), (188,223,233):(207,227,211),
+    (212,234,241):(232,240,221), (248,249,250):(255,253,232),
+    (243,238,192):(255,240,155), (233,198,154):(236,204,112),
+    (198,127,144):(181,145,82), (30,30,30):(30,30,30),
+}
+FIN_PALETTE = {
+    (95,169,176):(142,62,136), (161,200,211):(186,94,173),
+    (188,223,233):(218,126,196), (212,234,241):(241,163,216),
+    (248,249,250):(255,201,235),
+}
+
+
+def shiny_source(source):
+    result = source.copy()
+    for y in range(source.height):
+        row, v = divmod(y,128)
+        for x in range(source.width):
+            pixel = source.getpixel((x,y))
+            if not pixel[3]:
+                continue
+            col, u = divmod(x,256)
+            fin_tip = (u < 96 or u > 144) if row in (0,3) else (
+                v >= (110 if col < 2 else 100) or v < (32 if col < 2 else 48))
+            palette = FIN_PALETTE if fin_tip and pixel[:3] in FIN_PALETTE else SHINY_PALETTE
+            result.putpixel((x,y), (*palette[pixel[:3]], pixel[3]))
+    assert result.getchannel('A').tobytes() == source.getchannel('A').tobytes()
+    return result
+
+
+def build_variant(source, folder):
+    folder.mkdir(parents=True, exist_ok=True)
     assert source.size == (1024,512)
     sheets = {k:Image.new('RGBA',(FRAME[0]*4,FRAME[1]*4)) for k in ('mount','foreground','rider_mask')}
     for row in range(4):
@@ -71,14 +108,26 @@ def build():
             for key,tile in [('mount',base),('foreground',fg),('rider_mask',mask)]:
                 sheets[key].alpha_composite(tile,(col*FRAME[0],row*FRAME[1]))
     for key,sheet in sheets.items():
-        sheet.save(FOLDER/f'{key}.png')
+        sheet.save(folder/f'{key}.png')
     # Inventory controls fit this tight icon themselves; no oversized padding.
     icon = source.crop((0,0,256,128))
-    icon.crop(icon.getbbox()).save(FOLDER/'icon.png')
+    icon.crop(icon.getbbox()).save(folder/'icon.png')
     for name in ['source','mount','foreground','rider_mask','icon']:
-        write_texture_import(ROOT,(FOLDER/f'{name}.png').relative_to(ROOT))
-    assert json.loads((ROOT/'data/mounts.json').read_text())['mounts']['primal_kyogre'] == definition()
-    print('Primal Kyogre: preserved source art, approved v3 seats, aligned waterline.')
+        write_texture_import(ROOT,(folder/f'{name}.png').relative_to(ROOT))
+    print(f'{folder.name}: preserved source art, approved seats, aligned waterline.')
+
+
+def build():
+    source = Image.open(FOLDER/'source.png').convert('RGBA')
+    shiny = shiny_source(source)
+    shiny_folder = FOLDER.with_name('primal_kyogre_shiny')
+    shiny_folder.mkdir(parents=True, exist_ok=True)
+    shiny.save(shiny_folder/'source.png')
+    catalog = json.loads((ROOT/'data/mounts.json').read_text())['mounts']
+    for is_shiny, art, folder in [(False,source,FOLDER),(True,shiny,shiny_folder)]:
+        build_variant(art,folder)
+        mount_id = 'primal_kyogre_shiny' if is_shiny else 'primal_kyogre'
+        assert catalog[mount_id] == definition(is_shiny)
 
 
 if __name__ == '__main__':
