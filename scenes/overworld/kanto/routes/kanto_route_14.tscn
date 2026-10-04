@@ -387,7 +387,7 @@ y_sort_enabled = true
 [node name="Pokemon" type="Node2D" parent="Entities" unique_id=502880541]
 
 [node name="Pidgey" parent="Entities/Pokemon" unique_id=116322267 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(592, 208)
+position = Vector2(432, 208)
 overworld_pokemon_id = "kanto_route_14_pidgey_1"
 species_id = "pidgey"
 display_name = "Pidgey"
@@ -399,7 +399,7 @@ movement_speed_pixels = 34.0
 movement_wait_jitter_seconds = 0.4
 
 [node name="Hoppip" parent="Entities/Pokemon" unique_id=1906559314 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(1008, 240)
+position = Vector2(496, 304)
 overworld_pokemon_id = "kanto_route_14_hoppip_1"
 species_id = "hoppip"
 display_name = "Hoppip"
@@ -410,7 +410,7 @@ movement_speed_pixels = 30.0
 movement_wait_jitter_seconds = 0.4
 
 [node name="Venonat" parent="Entities/Pokemon" unique_id=1621235059 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(464, 624)
+position = Vector2(400, 400)
 overworld_pokemon_id = "kanto_route_14_venonat_1"
 species_id = "venonat"
 display_name = "Venonat"
@@ -421,7 +421,7 @@ movement_speed_pixels = 30.0
 movement_wait_jitter_seconds = 0.4
 
 [node name="Gloom" parent="Entities/Pokemon" unique_id=489654043 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(1008, 1360)
+position = Vector2(496, 400)
 overworld_pokemon_id = "kanto_route_14_gloom_1"
 species_id = "gloom"
 display_name = "Gloom"
@@ -431,7 +431,7 @@ movement_wait_seconds = 2.0
 movement_speed_pixels = 30.0
 
 [node name="Poliwag" parent="Entities/Pokemon" unique_id=1556667765 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(1232, 208)
+position = Vector2(1232, 464)
 overworld_pokemon_id = "kanto_route_14_poliwag_1"
 species_id = "poliwag"
 display_name = "Poliwag"
@@ -443,13 +443,13 @@ species_id = "goldeen"
 display_name = "Goldeen"
 
 [node name="Magikarp" parent="Entities/Pokemon" unique_id=426790834 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(1200, 1680)
+position = Vector2(1232, 1616)
 overworld_pokemon_id = "kanto_route_14_magikarp_1"
 species_id = "magikarp"
 display_name = "Magikarp"
 
 [node name="Psyduck" parent="Entities/Pokemon" unique_id=1327223270 instance=ExtResource("r14_overworld_pokemon")]
-position = Vector2(1040, 2128)
+position = Vector2(1232, 2192)
 overworld_pokemon_id = "kanto_route_14_psyduck_1"
 species_id = "psyduck"
 display_name = "Psyduck"
@@ -559,6 +559,7 @@ tile_map_data = PackedByteArray("AAAYAAAAAAABAAQAAAAYAAEAAAABAAQAAAAYAAIAAAABAAQ
 tile_set = SubResource("TileSet_tsmrm")
 
 [node name="TallGrass" type="TileMapLayer" parent="Tiles" unique_id=2019665503]
+visible = false
 z_index = 100
 tile_map_data = PackedByteArray("AAAMAAQAAAAIAAEAAAAMAAUAAAAIAAEAAAAMAAYAAAAIAAEAAAAMAAcAAAAIAAEAAAAMAAgAAAAIAAEAAAAMAAkAAAAIAAEAAAAMAAoAAAAIAAEAAAAMAAsAAAAIAAEAAAAMAAwAAAAIAAEAAAAMAA0AAAAIAAEAAAANAAUAAAAIAAEAAAANAAYAAAAIAAEAAAANAAcAAAAIAAEAAAANAAgAAAAIAAEAAAANAAkAAAAIAAEAAAANAAoAAAAIAAEAAAANAAsAAAAIAAEAAAANAAwAAAAIAAEAAAANAA0AAAAIAAEAAAAOAAUAAAAIAAEAAAAOAAYAAAAIAAEAAAAOAAcAAAAIAAEAAAAOAAgAAAAIAAEAAAAOAAkAAAAIAAEAAAAOAAoAAAAIAAEAAAAOAAsAAAAIAAEAAAAOAAwAAAAIAAEAAAAOAA0AAAAIAAEAAAAPAAUAAAAIAAEAAAAPAAYAAAAIAAEAAAAPAAcAAAAIAAEAAAAPAAgAAAAIAAEAAAAPAAkAAAAIAAEAAAAPAAoAAAAIAAEAAAAPAAsAAAAIAAEAAAAPAAwAAAAIAAEAAAAPAA0AAAAIAAEAAAAOAAQAAAAIAAEAAAAPAAQAAAAIAAEAAAA=")
 tile_set = SubResource("TileSet_4awgc")

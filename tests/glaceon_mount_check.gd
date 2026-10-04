@@ -67,8 +67,8 @@ func _check_mount() -> void:
 				for x in range(224):
 					var pixel := frame.get_pixel(x, y)
 					var expected := Color.TRANSPARENT
-					if Rect2i(80, 68, 64, 64).has_point(Vector2i(x, y)):
-						expected = source.get_pixel(x - 80 + col * 64, y - 68 + row * 64)
+					if Rect2i(80, 84, 64, 64).has_point(Vector2i(x, y)):
+						expected = source.get_pixel(x - 80 + col * 64, y - 84 + row * 64)
 					if pixel.a != expected.a or (pixel.a > 0 and pixel != expected):
 						native_pixels = false
 					var front := fg.get_pixel(x, y)
@@ -81,8 +81,8 @@ func _check_mount() -> void:
 				# Known interior pixels of the far upper ear and near hanging flap.
 				var far_x := 32 if row == 1 else 31
 				var near_x := 24 if row == 1 else 39
-				var far_point := Vector2i(80 + far_x, 68 + 24 + 2 * (col % 2))
-				var near_point := Vector2i(80 + near_x, 68 + 46 + 2 * (col % 2))
+				var far_point := Vector2i(80 + far_x, 84 + 24 + 2 * (col % 2))
+				var near_point := Vector2i(80 + near_x, 84 + 46 + 2 * (col % 2))
 				_check(frame.get_pixelv(far_point).a > 0 and fg.get_pixelv(far_point).a == 0, "far ear stays behind rider")
 				_check(fg.get_pixelv(near_point).a > 0, "near head flap remains ahead of rider")
 			if row == 3:

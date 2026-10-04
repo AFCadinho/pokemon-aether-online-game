@@ -41,7 +41,11 @@ func _check_scene(scene_path: String) -> void:
 		if not line.begins_with("[node ") or not line.contains('type="TileMapLayer"'):
 			continue
 		var node_name := _node_attribute(line, "name")
-		if not node_name.to_lower().contains("grass") or node_name.ends_with("GrassVisual"):
+		if (
+			_node_attribute(line, "parent") != "Tiles"
+			or not node_name.to_lower().contains("grass")
+			or node_name.ends_with("GrassVisual")
+		):
 			continue
 
 		_check(

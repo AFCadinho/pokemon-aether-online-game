@@ -25,7 +25,7 @@ func sync_player_position_for_world_action() -> Dictionary:
 	await continue_position
 	position_waiting = false
 	return {"success": true}
-func create_triggered_wild_battle_response(_area: String, _encounter_type := "grass", _forced_species := "") -> Dictionary:
+func create_triggered_wild_battle_response(_area: String, _encounter_type := "grass", _forced_species := "", _static_encounter_id := "") -> Dictionary:
 	response_waiting = true
 	await continue_response
 	response_waiting = false

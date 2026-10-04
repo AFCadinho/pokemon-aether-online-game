@@ -30,8 +30,10 @@ func _init() -> void:
 	_expect(
 		world_source.contains(
 			"if not should_respawn_after_loss:\n"
-				+ "\t\t_finish_trainer_battle_npc("
-				+ "reward_trainer_id, should_claim_trainer_reward)"
+				+ "\t\t_finish_trainer_battle_npc(\n"
+				+ "\t\t\treward_trainer_id,\n"
+				+ "\t\t\tshould_claim_trainer_reward and not is_future_self_battle\n"
+				+ "\t\t)"
 		),
 		"Non-blackout trainer results still release their trainer immediately"
 	)
