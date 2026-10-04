@@ -2358,6 +2358,16 @@
 			],
 			"scenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
 			"spawnPoints": {
+				"from_fishing_brother_house": {
+					"facingDirection": "down",
+					"label": "Fishing Brother House",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromFishingBrotherHouse",
+					"tile": {
+						"x": 32,
+						"y": 79
+					}
+				},
 				"from_lavender_town": {
 					"facingDirection": "down",
 					"label": "Lavender Town",
@@ -2396,6 +2406,28 @@
 					"tile": {
 						"x": 43,
 						"y": 122
+					}
+				}
+			}
+		},
+		"kanto_route_12_fishing_brother_house": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Route 12 Fishing Brother's House",
+			"locationGroupId": "kanto_route_12",
+			"locationGroupLabel": "Route 12",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn",
+			"spawnPoints": {
+				"from_route_12": {
+					"facingDirection": "down",
+					"label": "Route 12",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromRoute12",
+					"tile": {
+						"x": 9,
+						"y": 14
 					}
 				}
 			}
@@ -6891,6 +6923,20 @@
 			"destinationAreaId": "kanto_vermilion_city",
 			"sourceMapId": "kanto_route_11"
 		},
+		"kanto_route_12__to_fishing_brother_house": {
+			"destination": {
+				"mapId": "kanto_route_12_fishing_brother_house",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn",
+				"position": {
+					"x": 304.0,
+					"y": 464.0
+				},
+				"spawnMarker": "FromRoute12"
+			},
+			"destinationAreaId": "kanto_route_12_fishing_brother_house",
+			"sourceMapId": "kanto_route_12"
+		},
 		"kanto_route_12__to_lavender_town": {
 			"destination": {
 				"mapId": "kanto_lavender_town",
@@ -6952,6 +6998,22 @@
 			},
 			"destinationAreaId": "kanto_route_13",
 			"sourceMapId": "kanto_route_12"
+		},
+		"kanto_route_12_fishing_brother_house__to_route_12": {
+			"destination": {
+				"mapId": "kanto_route_12",
+				"mapSceneAliases": [
+					"uid://dt81i73axpxb5"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/routes/kanto_route_12.tscn",
+				"position": {
+					"x": 1040.0,
+					"y": 2544.0
+				},
+				"spawnMarker": "FromFishingBrotherHouse"
+			},
+			"destinationAreaId": "kanto_route_12",
+			"sourceMapId": "kanto_route_12_fishing_brother_house"
 		},
 		"kanto_route_12_west__to_route11": {
 			"destination": {
