@@ -161,6 +161,12 @@ class PackageWebReleaseTests(unittest.TestCase):
         self.assertIn('UPDATE_R2_BUCKET', publish)
         self.assertIn('https://updates.pokeaether.com', publish)
         self.assertIn("| tr -d '\\r' \\\n            | grep -Eiq '^access-control-allow-origin: https://play\\.pokeaether\\.com$'", publish)
+        publish_job, manifest_job = publish.split('  publish-manifest:', 1)
+        cleanup_job = manifest_job.split('  cleanup:', 1)[1]
+        self.assertNotIn('Test and prune obsolete browser releases', publish_job)
+        self.assertIn('needs: publish-manifest', cleanup_job)
+        self.assertIn('continue-on-error: true', cleanup_job)
+        self.assertIn('R2 cleanup did not complete', cleanup_job)
         build_source = (ROOT / 'tools/build_web_preview.py').read_text()
         self.assertIn("b'assets/fonts/DejaVuSans.ttf'", build_source)
         self.assertIn("b'assets/sprites/pokemon/front/pikachu/sheet.png.import'", build_source)
