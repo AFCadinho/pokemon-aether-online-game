@@ -1,10 +1,11 @@
 # First-run presentation examples and sizes
 
-The chooser uses small static examples, so a new player can decide without
-fetching a model or starting a 3D renderer. `2d.png` is the first frame of the
-existing Dragonite front animation. `3d.png` is a neutral Godot viewport capture
-of our Dragonite model. These represent the Pokémon styles, not complete battle
-backgrounds.
+The chooser uses static battle screenshots supplied for the first-play dialog,
+so a new player can decide without fetching a model or starting a 3D renderer.
+`2d.png` (960 × 540) shows Lopunny versus Landorus-Therian in the Aether stadium.
+`3d.png` (1907 × 985) shows Roaring Moon versus Dragonite in a 3D cave arena.
+Keep the full screenshots visible with their original aspect ratios. Both use
+linear filtering when scaled down, including the 2D screenshot's UI text.
 
 `data/battle_visual_download_info.json` describes optional full collections, not
 remaining downloads or base game size. 2D includes the six normal/shiny HOME and
