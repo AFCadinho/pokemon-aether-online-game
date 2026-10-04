@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use a smoothly looping animated meadow for wild 2D grass encounters, including route and city grassfields.
+
 - Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.
 
 - Add an Open PC Box quick action to developer tools for direct access to Pokémon storage.

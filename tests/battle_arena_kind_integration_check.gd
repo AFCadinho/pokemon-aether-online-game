@@ -8,7 +8,8 @@ func _init() -> void:
 func _run() -> void:
 	var settings = root.get_node("SettingsManager")
 	var old_mode: String = settings.battle_presentation_mode
-	settings.battle_presentation_mode = "2.5d"
+	# Full 3D owns terrain arenas; 2.5D intentionally uses the classic sprite stage.
+	settings.battle_presentation_mode = "3d"
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
 	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(host)
@@ -76,6 +77,8 @@ func _run() -> void:
 		settings.battle_3d_catalog_path = old_catalog
 		settings.battle_3d_forest_manifest = old_forest
 		settings._manual_model_catalog_this_session = old_manual
+	host.release()
+	await process_frame
 	host.free()
 	settings.battle_presentation_mode = old_mode
 	print("BATTLE_ARENA_KIND_INTEGRATION_OK")

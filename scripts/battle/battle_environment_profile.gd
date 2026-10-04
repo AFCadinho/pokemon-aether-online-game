@@ -8,7 +8,13 @@ class_name BattleEnvironmentProfile
 @export var background_video: VideoStream
 @export var loop_background_video := true
 @export var platform_texture: Texture2D
+## Optional 2D art override; encounter location and 3D arena remain on this profile.
+@export var wild_2d_background: BattleEnvironmentProfile
 
 
 func is_valid() -> bool:
 	return environment_id != &"" and background_texture != null and platform_texture != null
+
+
+func get_2d_profile(is_wild: bool) -> BattleEnvironmentProfile:
+	return wild_2d_background if is_wild and wild_2d_background != null else self
