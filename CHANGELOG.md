@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.
+
 - Add optional complete 3D and 2D Pokémon downloads to the desktop launcher, with size estimates, overall progress, pause/resume and updates for selected assets.
 
 - Fix riders sitting too high on Glaceon and Shiny Glaceon mounts in all directions.

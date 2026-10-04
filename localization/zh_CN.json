@@ -6364,5 +6364,15 @@
   "ui.store.mounts.mode.surf": "冲浪",
   "ui.shiny_tracker.mounts.store_description_primal_kyogre": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。",
   "story.kanto.find_a_way_to_saffron.find_secret_route": "寻找另一条进入金黄市的路线。",
-  "ui.staff.story_checkpoint.find_secret_route": "寻找另一条进入金黄市的路线"
+  "ui.staff.story_checkpoint.find_secret_route": "寻找另一条进入金黄市的路线",
+  "ui.visual_choice.title": "选择宝可梦的显示方式",
+  "ui.visual_choice.intro": "选择此设备上的对战、图鉴及宝可梦详情的显示方式。之后可在设置中更改。",
+  "ui.visual_choice.confirm": "保存选择并继续",
+  "ui.visual_choice.description.2d": "2D · 动画精灵图\n对电脑的图形性能要求较低。",
+  "ui.visual_choice.description.3d": "3D · 模型与3D场景\n细节更多，对图形性能要求更高。",
+  "ui.visual_choice.choose.2d": "选择2D",
+  "ui.visual_choice.choose.3d": "选择3D",
+  "ui.visual_choice.size": "完整合集下载：{download}\n已安装宝可梦文件：{installed}",
+  "ui.visual_choice.hint": "完整合集下载为可选项，不含基础游戏、3D背景及安装所需临时空间。缺少的模型会在对战前加载。若要提前下载全部文件，请使用启动器的“下载”页面。",
+  "ui.visual_choice.save_error": "无法保存选择。请检查设备的可用空间并重试。"
 }

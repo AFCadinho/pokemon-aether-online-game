@@ -61,7 +61,8 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 ]
 
 var battle_animations := true
-var battle_presentation_mode := "3d"
+var battle_presentation_mode := "2d"
+var battle_visual_choice_completed := false
 var battle_3d_catalog_path := ""
 var _manual_model_catalog_this_session := false
 var battle_3d_arena := "auto"
@@ -119,9 +120,11 @@ func _process(_delta: float) -> void:
 		settings_changed.emit()
 
 func load_settings() -> void:
-	if OS.has_feature("web") or OS.has_feature("mobile"):
+	battle_visual_choice_completed = false
+	if not supports_3d_presentation():
 		battle_presentation_mode = "2d"
 	if not FileAccess.file_exists(SETTINGS_PATH):
+		battle_presentation_mode = "2d"
 		locale = LocalizationManager.get_preferred_system_locale()
 		_apply_launcher_locale_argument()
 		content_name_language = _default_content_name_language(locale)
@@ -136,14 +139,20 @@ func load_settings() -> void:
 		return
 
 	var data: Dictionary = parsed_data as Dictionary
+	# Existing profiles retain their renderer. New profiles persist an explicit
+	# false marker until the desktop player chooses, including before first login.
+	battle_visual_choice_completed = bool(data.get("battle_visual_choice_completed", true))
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	# Older clients called the sprite renderer 2.5D. Preserve that player choice.
 	var saved_presentation := str(data.get("battle_presentation_mode", "3d"))
 	battle_presentation_mode = saved_presentation if saved_presentation in ["2d", "3d"] or (saved_presentation == "2.5d" and int(data.get("battle_presentation_schema", 1)) >= 2) else ("2d" if saved_presentation == "2.5d" else "3d")
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
-	if OS.has_feature("web") or OS.has_feature("mobile"):
+	if not supports_3d_presentation():
 		battle_presentation_mode = "2d"
+		# No choice was offered on these platforms. Leave onboarding pending if
+		# model rendering becomes available there in a future client.
+		battle_visual_choice_completed = false
 	if OS.has_feature("mobile"):
 		battle_ui_layout = "immersive"
 	immersive_battle_log_open = bool(data.get("immersive_battle_log_open", false))
@@ -237,11 +246,12 @@ func _apply_launcher_locale_argument() -> bool:
 	return false
 
 
-func save_settings() -> void:
+func save_settings() -> bool:
 	var data: Dictionary = {
 		"battle_animations": battle_animations,
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_presentation_schema": 2,
+		"battle_visual_choice_completed": battle_visual_choice_completed,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
@@ -281,9 +291,39 @@ func save_settings() -> void:
 	var file: FileAccess = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
 	if file == null:
 		push_warning("Could not save settings to %s" % SETTINGS_PATH)
-		return
+		return false
 
 	file.store_string(JSON.stringify(data, "\t"))
+	var saved := file.get_error() == OK
+	file.close()
+	return saved
+
+
+func needs_battle_visual_choice() -> bool:
+	return supports_3d_presentation() and not battle_visual_choice_completed
+
+
+func supports_3d_presentation() -> bool:
+	return supports_battle_visual_choice(OS.has_feature("web"), OS.has_feature("mobile"))
+
+
+static func supports_battle_visual_choice(is_web: bool, is_mobile: bool) -> bool:
+	return not is_web and not is_mobile
+
+
+func confirm_battle_visual_choice(mode: String) -> bool:
+	if mode not in ["2d", "3d"] or not supports_3d_presentation():
+		return false
+	var previous_mode := battle_presentation_mode
+	var previous_completed := battle_visual_choice_completed
+	battle_presentation_mode = mode
+	battle_visual_choice_completed = true
+	if not save_settings():
+		battle_presentation_mode = previous_mode
+		battle_visual_choice_completed = previous_completed
+		return false
+	settings_changed.emit()
+	return true
 
 
 func set_battle_animations(enabled: bool) -> void:
@@ -294,10 +334,13 @@ func set_battle_animations(enabled: bool) -> void:
 	_save_and_emit()
 
 func set_battle_presentation_mode(mode: String) -> void:
-	var validated := mode if mode in ["2d", "2.5d", "3d"] and not OS.has_feature("mobile") and not OS.has_feature("web") else "2d"
-	if battle_presentation_mode == validated:
+	var validated := mode if mode in ["2d", "2.5d", "3d"] and supports_3d_presentation() else "2d"
+	var completing_choice := needs_battle_visual_choice() and mode in ["2d", "2.5d", "3d"]
+	if battle_presentation_mode == validated and not completing_choice:
 		return
 	battle_presentation_mode = validated
+	if completing_choice:
+		battle_visual_choice_completed = true
 	_save_and_emit()
 
 func set_battle_3d_catalog_path(path: String) -> void:

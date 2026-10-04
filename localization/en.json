@@ -6368,5 +6368,15 @@
   "ui.store.mounts.mode.surf": "Surf",
   "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contains a Primal Kyogre Surf mount. Base shiny chance: 50%.",
   "story.kanto.find_a_way_to_saffron.find_secret_route": "Look for another way into Saffron City.",
-  "ui.staff.story_checkpoint.find_secret_route": "Find another way into Saffron"
+  "ui.staff.story_checkpoint.find_secret_route": "Find another way into Saffron",
+  "ui.visual_choice.title": "Choose your Pokémon visuals",
+  "ui.visual_choice.intro": "Choose how battles, the Pokédex and Pokémon summaries look on this device. You can change this later in Settings.",
+  "ui.visual_choice.confirm": "Save choice and continue",
+  "ui.visual_choice.description.2d": "2D · Animated sprites\nLighter graphics for your desktop.",
+  "ui.visual_choice.description.3d": "3D · Models and 3D arenas\nMore detail; uses more graphics power.",
+  "ui.visual_choice.choose.2d": "Choose 2D",
+  "ui.visual_choice.choose.3d": "Choose 3D",
+  "ui.visual_choice.size": "Full collection download: {download}\nInstalled Pokémon files: {installed}",
+  "ui.visual_choice.hint": "These are optional full collection sizes, excluding the base game, 3D backgrounds and temporary installation space. Missing models load before battles. To download everything first, use Downloads in the launcher.",
+  "ui.visual_choice.save_error": "Could not save your choice. Check that your device has available space and try again."
 }
