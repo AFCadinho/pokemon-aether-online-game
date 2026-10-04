@@ -1,0 +1,7 @@
+extends "res://scripts/services/settings_manager.gd"
+## Exercise unsupported-platform settings with the same persistence methods.
+var is_web := false
+var is_mobile := false
+func _ready() -> void: pass
+func supports_3d_presentation() -> bool:
+	return supports_battle_visual_choice(is_web, is_mobile)

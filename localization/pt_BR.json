@@ -6370,5 +6370,15 @@
   "ui.store.mounts.mode.surf": "Surf",
   "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%.",
   "story.kanto.find_a_way_to_saffron.find_secret_route": "Procure outra maneira de entrar em Saffron City.",
-  "ui.staff.story_checkpoint.find_secret_route": "Encontre outra entrada para Saffron"
+  "ui.staff.story_checkpoint.find_secret_route": "Encontre outra entrada para Saffron",
+  "ui.visual_choice.title": "Escolha o visual dos seus Pokémon",
+  "ui.visual_choice.intro": "Escolha a aparência das batalhas, da Pokédex e dos resumos dos Pokémon neste dispositivo. Você pode mudar isso depois nas Configurações.",
+  "ui.visual_choice.confirm": "Salvar escolha e continuar",
+  "ui.visual_choice.description.2d": "2D · Sprites animados\nGráficos mais leves para seu computador.",
+  "ui.visual_choice.description.3d": "3D · Modelos e arenas 3D\nMais detalhes; exige mais da placa gráfica.",
+  "ui.visual_choice.choose.2d": "Escolher 2D",
+  "ui.visual_choice.choose.3d": "Escolher 3D",
+  "ui.visual_choice.size": "Download da coleção completa: {download}\nArquivos de Pokémon instalados: {installed}",
+  "ui.visual_choice.hint": "Estas coleções completas são opcionais e não incluem o jogo base, os cenários 3D nem o espaço temporário de instalação. Modelos ausentes carregam antes das batalhas. Para baixar tudo antes, use Downloads no launcher.",
+  "ui.visual_choice.save_error": "Não foi possível salvar sua escolha. Verifique se há espaço disponível no dispositivo e tente novamente."
 }

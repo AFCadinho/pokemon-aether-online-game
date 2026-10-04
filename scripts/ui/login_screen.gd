@@ -4,6 +4,7 @@ const NewsLocalizationService := preload("res://scripts/services/news_localizati
 const LanguageSelectorStyle := preload("res://scripts/ui/language_selector_style.gd")
 const MobileKeyboardAvoidance := preload("res://scripts/ui/mobile_keyboard_avoidance.gd")
 const AETHER_CONFIRMATION_DIALOG_SCENE: PackedScene = preload("res://scenes/interface/aether_confirmation_dialog.tscn")
+const BattleVisualChoice := preload("res://scripts/ui/battle_visual_choice.gd")
 
 signal login_submitted(username: String, password: String)
 
@@ -79,6 +80,7 @@ var online_players_translation_values: Dictionary = {}
 var loading_language_options := false
 var web_demo_notice_acknowledged := false
 var login_return_notice := ""
+var battle_visual_choice: Control
 
 func _ready() -> void:
 	var keyboard_avoidance := MobileKeyboardAvoidance.new()
@@ -133,6 +135,7 @@ func _ready() -> void:
 	_refresh_server_health.call_deferred()
 	_fetch_news.call_deferred()
 	_restore_saved_session.call_deferred()
+	_show_battle_visual_choice.call_deferred()
 	if OS.has_feature("web"):
 		JavaScriptBridge.eval("window.pokeaetherPreview.loginReady = true", true)
 
@@ -228,6 +231,8 @@ func show_saved_status_key(key: String, values: Dictionary = {}, is_error: bool 
 
 
 func _on_locale_changed(_locale: String) -> void:
+	if is_instance_valid(battle_visual_choice):
+		battle_visual_choice.refresh_locale()
 	LocalizationManager.localize_tree(self)
 	_apply_language_options_to_control()
 	login_button.text = (
@@ -314,6 +319,8 @@ func _on_login_button_pressed() -> void:
 func _on_continue_button_pressed() -> void:
 	if is_loading:
 		return
+	if _show_battle_visual_choice():
+		return
 	_clear_login_return_notice()
 	if OS.has_feature("web") and not web_demo_notice_acknowledged:
 		_show_web_demo_notice()
@@ -381,6 +388,10 @@ func _on_options_button_pressed() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_instance_valid(battle_visual_choice) and battle_visual_choice.visible:
+		if event.is_action_pressed("ui_cancel"):
+			get_viewport().set_input_as_handled()
+		return
 	if (
 		not event.is_action_pressed("ui_cancel")
 		or is_loading
@@ -588,6 +599,8 @@ func _escape_bbcode(text: String) -> String:
 
 func _submit_login() -> void:
 	if is_loading:
+		return
+	if _show_battle_visual_choice():
 		return
 	_clear_login_return_notice()
 
@@ -829,6 +842,8 @@ func _apply_saved_session_preview_state() -> void:
 
 
 func _enter_world() -> void:
+	if _show_battle_visual_choice():
+		return
 	_apply_authenticated_player_profile()
 
 	# The browser uses the same authenticated loading path as the desktop
@@ -839,6 +854,27 @@ func _enter_world() -> void:
 	if error != OK:
 		show_status_key("ui.login.error.enter_world", {}, true)
 		push_error("LoginScreen: failed to load loading scene: %s" % error_string(error))
+
+
+func _show_battle_visual_choice() -> bool:
+	if not SettingsManager.needs_battle_visual_choice():
+		return false
+	if is_instance_valid(battle_visual_choice):
+		return true
+	battle_visual_choice = AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()
+	battle_visual_choice.set_script(BattleVisualChoice)
+	add_child(battle_visual_choice)
+	battle_visual_choice.confirmed.connect(func():
+		battle_visual_choice.queue_free()
+		battle_visual_choice = null
+		if saved_session_card.visible:
+			continue_button.grab_focus()
+		else:
+			username_input.grab_focus()
+	)
+	battle_visual_choice.popup_centered(Vector2i(850, 620))
+	battle_visual_choice.choices["2d"].grab_focus()
+	return true
 
 
 func _apply_authenticated_player_profile() -> void:
@@ -874,7 +910,7 @@ func _show_login_form() -> void:
 	login_card.visible = true
 	saved_session_card.visible = false
 	show_saved_status("")
-	username_input.grab_focus()
+	_focus_login_control(username_input)
 
 
 func _show_saved_session_card() -> void:
@@ -889,11 +925,18 @@ func _show_saved_session_card() -> void:
 	show_saved_status("")
 	_apply_server_access_notice()
 	_apply_login_return_notice()
-	continue_button.grab_focus()
+	_focus_login_control(continue_button)
 	if OS.has_feature("web"):
 		continue_button.disabled = is_loading or not server_online
 		continue_button.text = LocalizationManager.text(_get_saved_session_button_key())
 		JavaScriptBridge.eval("window.pokeaetherPreview.authenticated = true", true)
+
+
+func _focus_login_control(control: Control) -> void:
+	if is_instance_valid(battle_visual_choice) and battle_visual_choice.visible:
+		battle_visual_choice.choices["2d"].grab_focus()
+	else:
+		control.grab_focus()
 
 
 func _setup_player_preview() -> void:

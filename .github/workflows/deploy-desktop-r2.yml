@@ -282,6 +282,11 @@ jobs:
           ./godot --headless --path launcher --script res://tests/bulk_asset_downloads_check.gd
           ./godot --headless --path launcher --script res://tests/music_asset_integrity_check.gd
 
+      - name: Verify first-run desktop visual choice
+        run: |
+          python3 tools/build_battle_visual_download_info.py --check
+          ./godot --headless --path . --script res://tests/login_visual_choice_check.gd
+
       - name: Verify generated world access catalog
         run: ./godot --no-header --headless --path . res://tools/generate_world_access_catalog.tscn -- --check
 

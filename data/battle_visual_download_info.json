@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "2d": {
+    "packs": {
+      "pokemon_home": {
+        "version": "pokemon-home-a74442caa16b",
+        "download_bytes": 60842557,
+        "installed_bytes": 61192008
+      },
+      "pokemon_home_shiny": {
+        "version": "pokemon-home-shiny-b7565d0885ae",
+        "download_bytes": 33195703,
+        "installed_bytes": 32903191
+      },
+      "front": {
+        "version": "pokemon-front-scale1-128-402b7a6cee88",
+        "download_bytes": 97090350,
+        "installed_bytes": 106191152
+      },
+      "back": {
+        "version": "pokemon-back-scale1-128-6b78c3968c2f",
+        "download_bytes": 78877199,
+        "installed_bytes": 87651141
+      },
+      "shiny_front": {
+        "version": "pokemon-shiny-front-scale1-128-066cf83cdfc7",
+        "download_bytes": 94432214,
+        "installed_bytes": 103290188
+      },
+      "shiny_back": {
+        "version": "pokemon-shiny-back-scale1-128-cb0b6ecfc3ef",
+        "download_bytes": 72905146,
+        "installed_bytes": 81286519
+      }
+    },
+    "download_bytes": 437343169,
+    "installed_bytes": 472514199
+  },
+  "3d": {
+    "index_sha256": "89ea2fcf0747c9cb2bb6c37f82b23607d4c2ff6d617ae3f5de0e968346533f2b",
+    "bundle_count": 1139,
+    "download_bytes": 18988742373,
+    "installed_bytes": 18988793898
+  }
+}
