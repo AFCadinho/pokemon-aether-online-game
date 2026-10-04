@@ -1,6 +1,6 @@
 class_name PokedexModelPreview
 extends Control
-## A single-model, local desktop review viewport for the Pokédex.
+## A single-model desktop viewport for the Pokédex and summary cards.
 ## It deliberately reads the same hash-bound catalog as the battle presenter.
 
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
@@ -16,6 +16,8 @@ var player: AnimationPlayer
 var status: Label
 var requested_key := ""
 var loading_path := ""
+var download_pending := false
+var request_generation := 0
 var yaw := 0.0
 var profile := {}
 var preview_floor: MeshInstance3D
@@ -77,12 +79,48 @@ func show_species(species: String, shiny: bool) -> bool:
 	requested_key = ReviewedModels.key(species, shiny)
 	_clear_actor()
 	var settings := get_node_or_null("/root/SettingsManager")
-	if OS.has_feature("web") or OS.has_feature("mobile") or settings == null or settings.battle_presentation_mode not in ["2.5d", "3d"] or shiny:
+	if OS.has_feature("web") or OS.has_feature("mobile") or settings == null or settings.battle_presentation_mode not in ["2.5d", "3d"]:
 		return false
 	var candidate_review := LocalReview.resolve(requested_key) if not ReviewedModels.supports(requested_key) else {}
 	if not candidate_review.is_empty():
 		profile = candidate_review.profile
 		return _request_model(candidate_review.path)
+	if _request_cached_model():
+		return true
+	if not ReviewedModels.supports(requested_key) or settings.has_manual_battle_3d_catalog_selection():
+		return false
+	if not settings.battle_3d_catalog_path.is_empty() and not OS.has_environment("POKEAETHER_MODEL_CATALOG"):
+		return false
+	if get_node_or_null("/root/OnDemand3DBundleService") == null:
+		return false
+	download_pending = true
+	status.text = "Loading 3D model…"
+	_download_model.call_deferred(requested_key, request_generation)
+	return true
+
+func is_loading() -> bool:
+	return download_pending or not loading_path.is_empty()
+
+func _download_model(identity: String, generation: int) -> void:
+	if generation != request_generation:
+		return
+	var service := get_node("/root/OnDemand3DBundleService")
+	var settings := get_node("/root/SettingsManager")
+	var identities: Array[String] = [identity]
+	var result: Dictionary = await service.ensure_models(identities, settings.get_battle_3d_catalog_path())
+	# Changing or clearing entries must never display a previous request.
+	if generation != request_generation:
+		return
+	download_pending = false
+	if str(result.get("error", "")).is_empty() and not str(result.get("path", "")).is_empty():
+		OS.set_environment("POKEAETHER_MODEL_CATALOG", str(result.path))
+		if _request_cached_model():
+			return
+	status.text = "3D preview unavailable"
+	model_failed.emit()
+
+func _request_cached_model() -> bool:
+	var settings := get_node("/root/SettingsManager")
 	var catalogs := [str(settings.get_battle_3d_catalog_path())]
 	if not settings.has_manual_battle_3d_catalog_selection():
 		var downloaded := ProjectSettings.globalize_path("user://on-demand-3d-v1/runtime-catalog.json")
@@ -118,6 +156,12 @@ func _request_model(model_path: String) -> bool:
 	return true
 
 func _process(_delta: float) -> void:
+	if download_pending:
+		var service := get_node_or_null("/root/OnDemand3DBundleService")
+		if service != null:
+			var progress: String = service.progress_text()
+			if not progress.is_empty():
+				status.text = progress
 	if loading_path.is_empty():
 		return
 	var progress: Array = []
@@ -145,7 +189,7 @@ func _process(_delta: float) -> void:
 			player.play("idle")
 		elif not clips.is_empty():
 			player.play(clips[0])
-	status.text = "Drag to rotate · local 3D review"
+	status.text = "Drag to rotate the 3D model"
 	if profile.get("review_candidate", false):
 		preview_floor.hide()
 		_fit_review_actor()
@@ -198,6 +242,8 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 
 func _clear_actor() -> void:
+	request_generation += 1
+	download_pending = false
 	loading_path = ""
 	if actor != null:
 		actor.queue_free()

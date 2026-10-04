@@ -140,9 +140,10 @@ func _run() -> void:
 	assert(preview.arena_background.arena.name == "SeaSandbarStudy")
 	assert(preview.actor == original_actor, "background refresh preserves model and playback")
 	pokemon.shiny = true
+	settings.battle_presentation_mode = "2d"
 	overlay._set_pokemon_summary_sprite(pokemon)
 	assert(not preview.visible and preview.actor == null)
-	assert(animated.visible or sprite.visible, "unsupported shiny retains the sprite fallback")
+	assert(animated.visible or sprite.visible, "classic presentation retains the sprite fallback")
 	stage.free()
 	host.free()
 	overlay.free()
