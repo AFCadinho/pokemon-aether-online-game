@@ -31,6 +31,10 @@ def main() -> None:
         default="CHANGELOG.md",
         help="Path to the changelog file.",
     )
+    parser.add_argument(
+        "--release-body-file",
+        help="Optional Markdown file containing the GitHub Release description.",
+    )
     args = parser.parse_args()
 
     version = args.version.strip()
@@ -38,7 +42,10 @@ def main() -> None:
         raise SystemExit("--version is required")
 
     changelog_path = Path(args.changelog)
-    sections = _parse_changelog_section(changelog_path, version)
+    release_body_path = Path(args.release_body_file) if args.release_body_file else None
+    sections = _parse_release_body(release_body_path) if release_body_path else {}
+    if not any(sections.values()):
+        sections = _parse_changelog_section(changelog_path, version)
     if not any(sections.values()):
         raise SystemExit(f"No release notes found for version {version} in {changelog_path}.")
     fields = _build_fields(sections)
@@ -79,6 +86,27 @@ def _parse_changelog_section(changelog_path: Path, version: str) -> dict[str, li
         if stripped.startswith("- "):
             # Release notes may be grouped under Added/Fixed/Changed, but
             # direct bullets under the version heading are valid too.
+            section = current_section or "Release notes"
+            sections.setdefault(section, []).append(stripped)
+
+    return sections
+
+
+def _parse_release_body(release_body_path: Path) -> dict[str, list[str]]:
+    if not release_body_path.is_file():
+        return {}
+
+    sections: dict[str, list[str]] = {}
+    current_section = ""
+    for line in release_body_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        heading_match = re.match(r"^(?:#{1,6}\s+(.+?)|\*\*(.+?)\*\*)$", stripped)
+        if heading_match:
+            current_section = next(group for group in heading_match.groups() if group).strip()
+            sections.setdefault(current_section, [])
+            continue
+
+        if stripped.startswith("- "):
             section = current_section or "Release notes"
             sections.setdefault(section, []).append(stripped)
 
