@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="8_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="9_pickup"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="9_door_hint"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="10_lass"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="11_gamer"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_nerd"]
@@ -21,6 +22,9 @@ size = Vector2(32, 160)
 
 [sub_resource type="RectangleShape2D" id="shape_saffron_gate_exit"]
 size = Vector2(32, 64)
+
+[sub_resource type="RectangleShape2D" id="shape_underground_path_exit"]
+size = Vector2(32, 32)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wwxk6"]
 texture = ExtResource("5_0t5s4")
@@ -232,6 +236,9 @@ position = Vector2(2496, 512)
 [node name="FromSaffronGate" type="Marker2D" parent="Spawns"]
 position = Vector2(128, 544)
 
+[node name="FromUndergroundPath" type="Marker2D" parent="Spawns"]
+position = Vector2(784, 432)
+
 [node name="Exits" type="Node2D" parent="." unique_id=522200237]
 
 [node name="ToLavenderTown" type="Area2D" parent="Exits" unique_id=1676940583]
@@ -265,6 +272,21 @@ shape = SubResource("shape_saffron_gate_exit")
 z_as_relative = false
 tile_footprint = Vector2i(1, 2)
 flow_direction = "left"
+
+[node name="ToUndergroundPath" type="Area2D" parent="Exits"]
+position = Vector2(784, 400)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/route_8_entrance.tscn"
+target_spawn_name = "FromRoute8"
+transition_id = "kanto_route_8__to_underground_path"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath"]
+shape = SubResource("shape_underground_path_exit")
+
+[node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" instance=ExtResource("9_door_hint")]
+z_as_relative = false
+flow_direction = "down"
 
 [node name="Entities" type="Node2D" parent="." unique_id=420611869]
 z_index = 5
@@ -527,3 +549,4 @@ tile_set = SubResource("TileSet_gjif5")
 
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToSaffronGate" to="Exits/ToSaffronGate" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
