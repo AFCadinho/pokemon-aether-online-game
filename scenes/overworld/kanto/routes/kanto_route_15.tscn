@@ -11,7 +11,7 @@
 size = Vector2(32, 96)
 
 [sub_resource type="RectangleShape2D" id="FuchsiaGateExitShape"]
-size = Vector2(64, 96)
+size = Vector2(48, 96)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tnc64"]
 texture = ExtResource("5_kl2dy")
@@ -379,7 +379,7 @@ transition_id = "kanto_route_15__to_fuchsia_gate"
 transition_facing_direction = "left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToFuchsiaGate" unique_id=1475661015]
-position = Vector2(-16, -16)
+position = Vector2(-24, -16)
 shape = SubResource("FuchsiaGateExitShape")
 
 [node name="RouteTransitionHint" parent="Exits/ToFuchsiaGate" unique_id=936401977 instance=ExtResource("5_px0b4")]
