@@ -11,20 +11,36 @@ smallest. Godot 4.6.2
 [clamps its Android scale by the output dimensions](https://github.com/godotengine/godot/blob/4.6.2-stable/platform/android/display_server_android.cpp#L315).
 The helper now uses Android's uncapped `screen_get_dpi() / 160` density.
 
-After player feedback that the visible controls looked too large, native
-collapse/reopen and chat-resize controls now draw a centred 28 dp surface inside
-their unchanged 48 dp minimum input rect. Arrows and the centred resize icon are
-smaller too. Hover/pressed surfaces remain compact, and transparent padding
-continues to accept taps and block movement. Desktop surfaces and the labelled
-browser navigation retain their layout. The focused desktop regression passed
+An intermediate revision drew native collapse/reopen and chat-resize controls
+as centred 28 dp surfaces inside their 48 dp minimum input rect. Its arrows and
+resize icon were smaller too. Hover/pressed surfaces stayed compact, and
+transparent padding accepted taps and blocked movement. Desktop surfaces and
+the labelled browser navigation retained their layout. That regression passed
 33,506 assertions, including presses outside the visible surfaces; a rendered
 844×390 native preview passed 541 assertions and was visually inspected.
-The updated app also passed 541 assertions on the same Samsung phone at
+That revision's app also passed 541 assertions on the same Samsung phone at
 75%, 100% and 150%. All six samples had 28 dp visible surfaces and at least
 48.125 dp touch targets. The independent ADB check passed another 18 actual
 Android taps in the transparent padding at 75%; 75% and 150% device screenshots
 were visually inspected. Evidence is retained in the slot's
 `.tmp/mobile-collapse-phone-compact` directory.
+
+The player still found 28 dp surfaces too large. The current revision restores
+the original 28×28 HUD/resize and 28×32 quest surfaces in UI units, with the
+original 18-unit HUD arrow, 16-unit quest arrow and 16-unit resize icon. Their
+visible appearance now follows the chosen UI scale; only the transparent input
+padding retains the 48 dp minimum. The current revision passed 34,397 local
+regression checks and 541 rendered-preview checks at 800×360, simulating
+Android's 1.25 platform scale factor in dp screen units. The inspected previews
+had 8.75 dp visible HUD buttons at 75%, 11.667 dp at 100% and 17.5 dp at 150%,
+with at least 48.125 dp touch rects throughout. These are local simulations,
+not new physical-device results.
+
+After the intermediate physical test, the player reported that their phone's
+touchscreen stopped responding. Stopping the app and removing the diagnostic
+package did not immediately restore touch. A normal Android reboot restored
+screen input, as confirmed by the player. The cause has not been established.
+The device was not used for further testing of the current visual revision.
 
 The physical-device probe uses the real HUD and quest-tracker scenes. It checks
 native layout, minimum sizes, viewport bounds, separate targets, movement-input
@@ -44,7 +60,10 @@ finger testing. The installed `com.pokeaether.game` version 0.3.92/code 13 and
 its app data are retained. This is offline HUD QA, not logged-in gameplay or a
 release certification. No APK or assets are published.
 
-## Repeat
+## Previous physical QA workflow
+
+These commands document the earlier run. The current visual revision has not
+been installed on the phone.
 
 Use an assigned task slot and substitute its name and the attached serial:
 
@@ -75,4 +94,5 @@ manually. Stop/remove only the diagnostic package when device QA is finished.
 
 Local APKs, screenshots and reports remain under the assigned slot's `.tmp`
 directory. The desktop `mobile_collapse_touch_size_check` also passed 28,152
-checks with the final helper and the normal project configuration restored.
+checks for the original Android density fix with normal project configuration
+restored; current revision results are listed above.

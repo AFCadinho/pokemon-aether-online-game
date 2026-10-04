@@ -31605,7 +31605,7 @@ func _position_collapsible_button(panel_id: String) -> void:
 	var collapsed := bool(state.get("collapsed", false))
 	var button_size := TouchTargetSize.size_for(button, Vector2(64, 64) if WindowFit.is_mobile_browser_ui() else COLLAPSE_BUTTON_SIZE)
 	button.custom_minimum_size = button_size
-	button.add_theme_font_size_override("font_size", TouchTargetSize.font_size_for(button, 18, 18.0))
+	button.add_theme_font_size_override("font_size", 18)
 	var rect := panel.get_rect()
 	var position := rect.position
 	if collapsed:
@@ -31695,7 +31695,7 @@ func _position_chat_resize_button() -> void:
 
 	var resize_size := TouchTargetSize.size_for(chat_resize_button, COLLAPSE_BUTTON_SIZE)
 	chat_resize_button.custom_minimum_size = resize_size
-	chat_resize_button.add_theme_constant_override("icon_max_width", TouchTargetSize.font_size_for(chat_resize_button, 16, 16.0))
+	chat_resize_button.add_theme_constant_override("icon_max_width", 16)
 	chat_resize_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER if WindowFit.is_touch_ui() else HORIZONTAL_ALIGNMENT_LEFT
 	chat_resize_button.position = collapse_button.position + Vector2(0.0, collapse_button.size.y + CHAT_RESIZE_BUTTON_GAP)
 	chat_resize_button.size = resize_size
