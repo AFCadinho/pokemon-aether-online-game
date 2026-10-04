@@ -4,6 +4,14 @@
 
 - Add short native 3D battle effects for stat changes, healing, items and berries, shiny sparkles, Protect, status conditions, terrain and power activations, with shared sounds synchronized to their animation.
 
+- Keep mobile HUD and quest-tracker collapse/reopen buttons comfortable to tap at smaller UI scales, and place enlarged controls clear of neighbouring HUD surfaces.
+
+- Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
+
+- Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
+
+- Restore forum announcements on the browser login screen by reading the shared updates feed instead of the browser asset bucket.
+
 - Speed up desktop 3D faint animations to at least 2× and cap their full movement at about 1.25 seconds, while preserving the resting faint pose and ordered replacement transition.
 
 - Enable permission-based staff and creator tools in the browser, including account impersonation and downloadable Photo Mode screenshots.

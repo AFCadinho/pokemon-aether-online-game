@@ -57,10 +57,29 @@ var active_started_ms := 0
 var _busy := false
 var _battle_waiters := 0
 var _prefetch_generation := 0
+var _local_checks := 0
+
+class InstalledCheck extends RefCounted:
+	var result := {}
+	func run(check: Callable) -> void:
+		result = check.call()
+
+
+func _check_installed_models(identities: Array[String], source_catalog: String) -> Dictionary:
+	# Full index/file SHA checks still run on every entry. Disk I/O must not
+	# stop the arena fade or the world frames while cached files are verified.
+	var check := InstalledCheck.new()
+	_local_checks += 1
+	var task := WorkerThreadPool.add_task(check.run.bind(_installed_models.bind(identities.duplicate(), source_catalog)))
+	while not WorkerThreadPool.is_task_completed(task):
+		await get_tree().process_frame
+	WorkerThreadPool.wait_for_task_completion(task) # Completed only; never joins pending I/O.
+	_local_checks -= 1
+	return check.result
 
 
 func can_clear_cache() -> bool:
-	return not _busy and _battle_waiters == 0
+	return not _busy and _battle_waiters == 0 and _local_checks == 0
 
 
 func clear_cache() -> bool:
@@ -99,7 +118,9 @@ func _run_prefetch(identities: Array[String], generation: int) -> void:
 		if _asset_id(identity).is_empty():
 			continue
 		var source: String = get_tree().root.get_node("SettingsManager").get_battle_3d_catalog_path()
-		var cached := _installed_models([identity], source)
+		var cached := await _check_installed_models([identity], source)
+		if generation != _prefetch_generation or not is_inside_tree():
+			return
 		if not cached.is_empty():
 			OS.set_environment("POKEAETHER_MODEL_CATALOG", str(cached.path))
 			continue
@@ -140,7 +161,7 @@ func progress_text() -> String:
 func ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
 	# Installed, verified combatants need no downloader lock or catalog write.
 	# A different model may still be downloading in the background.
-	var cached := _installed_models(identities, source_catalog)
+	var cached := await _check_installed_models(identities, source_catalog)
 	if not cached.is_empty():
 		return cached
 	_battle_waiters += 1

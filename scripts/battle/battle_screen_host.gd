@@ -17,6 +17,10 @@ var outgoing_snapshot: TextureRect
 @onready var content: Control = $Content
 @onready var backdrop: ColorRect = $Content/Backdrop
 var preparation_ready := false
+var early_arena_requested := false
+var entry_arena_ready := false
+var entry_arena_frames := 0
+var entry_viewport_id := 0
 var reveal_requested := false
 var loading_message_after_ms := 0
 var fade_progress := 0.0:
@@ -125,6 +129,19 @@ func _process(_delta: float) -> void:
 	if released or not is_instance_valid(battle) or not $Cover.visible:
 		return
 	var presenter = battle.animation_router.model_presenter
+	if early_arena_requested and not entry_arena_ready and is_instance_valid(presenter):
+		# Poll readiness instead of keeping an arena coroutine alive after an
+		# aborted encounter. Two drawn frames precede the existing screen fade.
+		if presenter.entry_arena_visible and is_instance_valid(presenter.viewport) and not presenter.arena_preparing:
+			var viewport_id: int = presenter.viewport.get_instance_id()
+			if viewport_id != entry_viewport_id:
+				entry_viewport_id = viewport_id
+				entry_arena_frames = 0
+			entry_arena_frames += 1
+			if entry_arena_frames >= 2:
+				entry_arena_ready = true
+				if reveal_requested:
+					_reveal_cover()
 	var progress: Dictionary = presenter.battle_download_progress() if is_instance_valid(presenter) and not presenter.preparation_failed else {}
 	var show_download := not preparation_ready and not progress.is_empty() and loading_message_after_ms > 0 and Time.get_ticks_msec() >= loading_message_after_ms
 	loading_label.get_parent().visible = show_download
@@ -237,19 +254,31 @@ func _reveal_when_prepared(token: int) -> void:
 	if released or token != generation or not is_inside_tree():
 		return
 	if presenter != null:
-		await presenter.await_prepared(true)
+		# Once the arena is visible, hidden send-out actors must stay hidden.
+		await presenter.await_prepared(not early_arena_requested)
 	if released or token != generation or not is_inside_tree():
 		return
 	if presenter != null and (presenter.preparation_failed or not presenter.active) and settings.battle_presentation_mode in ["2.5d", "3d"]:
 		_prepare_2d_fallback()
 		if released or token != generation or not is_inside_tree():
 			return
+	if presenter != null:
+		presenter.finish_entry_arena()
 	preparation_ready = true
 	if reveal_requested:
 		_reveal_cover()
+	_finish_entry_if_ready()
+
 
 func reveal_pending_entry() -> void:
 	var settings := get_node("/root/SettingsManager")
+	if settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile"):
+		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
+		if presenter != null:
+			early_arena_requested = true
+			reveal_requested = true
+			presenter.begin_entry_arena()
+			return
 	if settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile"):
 		# Keep the outgoing world visible until both models and the arena are
 		# prepared. Early arena reveal would flash 2D sprites before the download.
@@ -264,7 +293,7 @@ func reveal_pending_entry() -> void:
 
 func request_reveal() -> void:
 	reveal_requested = true
-	if preparation_ready:
+	if preparation_ready or entry_arena_ready:
 		_reveal_cover()
 
 func _apply_entry_fade() -> void:
@@ -298,9 +327,18 @@ func _reveal_cover() -> void:
 		content.modulate.a = 1.0
 		backdrop.color.a = 1.0
 		outgoing_snapshot.texture = null
-		$Cover.hide()
-		if is_instance_valid(battle):
-			battle.remove_meta("battle_screen_preparing")
+		_finish_entry_if_ready()
+
+
+func _finish_entry_if_ready() -> void:
+	# The transparent cover keeps actions/shortcuts blocked after the early
+	# fade. Only complete preparation releases the intro and first-turn input.
+	if released or not preparation_ready or fade_progress < 1.0:
+		return
+	$Cover.hide()
+	loading_label.get_parent().hide()
+	if is_instance_valid(battle):
+		battle.remove_meta("battle_screen_preparing")
 
 func wait_until_revealed() -> void:
 	var token := generation

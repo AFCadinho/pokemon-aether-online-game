@@ -8275,7 +8275,9 @@ func prepare_pending_entry(
 		get_node("%PlayerStagePartyRail"), get_node("%OpponentStagePartyRail"),
 		player_team_preview_layer, enemy_team_preview_layer]
 	var presenter := battle_stage.get_node_or_null("ExperimentalBattle3D") as Control
-	if presenter != null:
+	# Desktop 3D shows its empty arena while the authoritative leads load.
+	# Sprite/lead controls stay masked; the arena presenter owns its visibility.
+	if presenter != null and (SettingsManager.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile")):
 		controls.append(presenter)
 	for control: CanvasItem in controls:
 		var reserve_layout := control == action_side_panel and not has_meta("immersive_battle_ui")

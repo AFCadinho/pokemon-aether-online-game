@@ -69,6 +69,8 @@ var motion_clips := {}
 var visual_bounds := {}
 var motion_offsets := [0.0, 0.0, 0.0, 0.0]
 var arena_preparing := false
+var entry_arena_requested := false
+var entry_arena_visible := false
 var material_response: Node
 var boxes: Array = []
 var platforms: Array = []
@@ -178,6 +180,24 @@ var warming_render := false
 var preparation_phase := "Loading model catalog"
 var preparation_metrics := {}
 var model_downloader: Node
+signal preparation_stopped
+
+class ModelDownloadRequest extends Node:
+	signal completed
+	var finished := false
+	var result: Dictionary = {}
+	func run(service: Node, needed: Array[String], catalog_path: String) -> void:
+		# A shared download can outlive the battle that requested it. Keep its
+		# completion outside the scene so leaving cannot resume a freed presenter.
+		result = await service.ensure_models(needed, catalog_path)
+		finished = true
+		completed.emit()
+		queue_free()
+
+class ModelDownloadCompletion extends RefCounted:
+	signal completed
+	func finish() -> void:
+		completed.emit()
 
 func _preparation_progress() -> Array:
 	var progress: Array = []
@@ -194,8 +214,26 @@ func _preparation_progress() -> Array:
 func cancel_preparation() -> void:
 	preparation_cancelled = true
 	warming_render = false
+	entry_arena_requested = false
+	entry_arena_visible = false
 	_cancel_load()
 	pending_entries.clear()
+	preparation_stopped.emit()
+
+
+func begin_entry_arena() -> void:
+	# The host may show the empty desktop arena before the response/models.
+	# This never claims a combatant is ready and never exposes sprite placeholders.
+	entry_arena_requested = true
+	if is_instance_valid(mode_label):
+		mode_label.hide()
+	_set_active(active)
+
+
+func finish_entry_arena() -> void:
+	entry_arena_requested = false
+	entry_arena_visible = false
+	_set_active(active and not preparation_failed and not preparation_cancelled)
 
 func _blocking_pipelines() -> Array:
 	# Specialization compiles in the background and is not a blocking gate.
@@ -365,7 +403,19 @@ func _ensure_downloaded_models() -> void:
 	model_downloader = get_tree().root.get_node("OnDemand3DBundleService")
 	preparation_phase = "Checking approved 3D models…"
 	var old_path: String = settings.get_battle_3d_catalog_path()
-	var result: Dictionary = await model_downloader.ensure_models(needed, old_path)
+	var request := ModelDownloadRequest.new()
+	model_downloader.add_child(request)
+	request.run(model_downloader, needed, old_path)
+	if not request.finished:
+		var completion := ModelDownloadCompletion.new()
+		request.completed.connect(completion.finish, CONNECT_ONE_SHOT)
+		preparation_stopped.connect(completion.finish, CONNECT_ONE_SHOT)
+		await completion.completed
+		if preparation_stopped.is_connected(completion.finish):
+			preparation_stopped.disconnect(completion.finish)
+		if request.completed.is_connected(completion.finish):
+			request.completed.disconnect(completion.finish)
+	var result := request.result
 	model_downloader = null
 	if preparation_cancelled or not is_inside_tree():
 		return
@@ -824,6 +874,25 @@ func set_battle_context(next_environment_id: StringName, next_kind: String) -> v
 	camera = null
 	arena_root = null
 	arena_preparing = false
+	entry_arena_visible = false
+
+
+func _prepare_arena() -> bool:
+	if viewport != null:
+		return true
+	arena_preparing = false
+	if ArenaCatalog.uses_forest_assets(_requested_arena()):
+		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
+		arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
+	var pool := ForestPool.get_current()
+	if pool != null and pool.arena_id == _requested_arena() and not pool.ready_for_battle and not pool.failed:
+		arena_preparing = true
+	if arena_preparing:
+		return false
+	var arena_started := Time.get_ticks_usec()
+	_build_world()
+	arena_build_ms += (Time.get_ticks_usec() - arena_started) / 1000.0
+	return viewport != null
 
 func _screened_arena_review() -> bool:
 	# Screened candidates are a local visual-QC cohort. They have exact source
@@ -841,7 +910,7 @@ func _screened_arena_review() -> bool:
 
 func _build_world() -> void:
 	var screened_review := _screened_arena_review()
-	if ArenaCatalog.uses_forest_assets(_requested_arena()) and (ground_offsets.size() >= packed.size() or screened_review):
+	if ground_offsets.size() >= packed.size() or screened_review:
 		forest_pool = ForestPool.get_current()
 		if forest_pool != null and forest_pool.arena_id == _requested_arena():
 			forest_lease = forest_pool.acquire(self)
@@ -1317,10 +1386,10 @@ func _set_active(value: bool) -> void:
 				resting[i] = true
 				current_actions[i] = "idle"
 	active = value
-	visible = value
+	visible = value or (entry_arena_requested and entry_arena_visible and viewport != null)
 	if viewport != null:
-		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if value else SubViewport.UPDATE_DISABLED
-	if not value:
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED
+	if not value and not entry_arena_requested:
 		for node in saved_colors:
 			if is_instance_valid(node):
 				node.self_modulate = saved_colors[node]
@@ -1328,8 +1397,8 @@ func _set_active(value: bool) -> void:
 	for i in boxes.size():
 		boxes[i].presentation_anchor = _anchor.bind(i) if value else Callable()
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
-		boxes[i].set_model_sprites_hidden(value)
-	if value:
+		boxes[i].set_model_sprites_hidden(value or entry_arena_requested)
+	if value or entry_arena_requested:
 		var hidden: Array = []
 		if get_tree().root.get_node("SettingsManager").battle_presentation_mode == "3d":
 			for platform in platforms:
@@ -1459,20 +1528,31 @@ func _update_camera(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	_sync_render_size()
+	var settings := get_tree().root.get_node("SettingsManager")
+	if entry_arena_requested and settings.battle_presentation_mode == "3d" and not preparation_failed and not preparation_cancelled:
+		# Terrain preparation is independent of catalog/model I/O. A pooled arena
+		# can already be drawing while the actual Pokémon are still downloading.
+		if _prepare_arena():
+			entry_arena_visible = true
+			_set_active(active)
+			_update_camera(delta)
 	if is_instance_valid(model_downloader):
 		preparation_phase = model_downloader.progress_text()
 		return
 	if preparation_failed or preparation_cancelled:
+		entry_arena_requested = false
+		entry_arena_visible = false
 		_set_active(false)
 		if is_instance_valid(mode_label):
 			mode_label.text = "2D · " + reason
 			mode_label.tooltip_text = reason
 		return
-	var settings := get_tree().root.get_node("SettingsManager")
-	mode_label.visible = settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile")
+	mode_label.visible = not entry_arena_requested and settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile")
 	mode_label.text = (("2.5D" if settings.battle_presentation_mode == "2.5d" else "3D") + " · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if _models_pending() else "2D · " + reason)
 	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
 	if settings.battle_presentation_mode not in ["2.5d", "3d"] or OS.has_feature("web") or OS.has_feature("mobile"):
+		entry_arena_requested = false
+		entry_arena_visible = false
 		ModelCache.clear() # Explicitly leaving 3D releases retained resources.
 		_set_active(false)
 		_cancel_load()
@@ -1513,6 +1593,11 @@ func _process(delta: float) -> void:
 		if _models_pending():
 			return
 	if packed.is_empty() and not catalog_problem.is_empty():
+		# Empty Team Preview needs an arena, not a model catalog. Actual leads
+		# still take the complete download/validation path when they are selected.
+		if viewport != null and (entry_arena_visible or active) and combatants.all(func(combatant): return str(combatant.species).is_empty()):
+			_set_active(true)
+			return
 		reason = catalog_problem
 		_set_active(false)
 		return
@@ -1550,18 +1635,9 @@ func _process(delta: float) -> void:
 	# arena anyway so the loading cover can release the lead-selection UI.
 	# Empty actor slots are cleared below; no placeholder Pokémon are needed.
 	if viewport == null:
-		if ArenaCatalog.uses_forest_assets(_requested_arena()):
-			arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
-			arena_preparing = arena_problem.is_empty() and not ArenaCatalog.forest_ready()
-			var pool := ForestPool.get_current()
-			if pool != null and pool.arena_id == _requested_arena() and not pool.ready_for_battle and not pool.failed:
-				arena_preparing = true
-			if arena_preparing:
-				reason = "Preparing forest assets…"
-				return
-		var arena_started := Time.get_ticks_usec()
-		_build_world()
-		arena_build_ms += (Time.get_ticks_usec() - arena_started) / 1000.0
+		if not _prepare_arena():
+			reason = "Preparing arena assets…"
+			return
 	_set_active(true)
 	_update_camera(delta)
 	reason = "Experimental 3D active"

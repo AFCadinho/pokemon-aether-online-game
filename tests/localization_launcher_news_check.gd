@@ -43,6 +43,20 @@ func _check_launcher_catalogs() -> void:
 
 
 func _check_news_fallbacks() -> void:
+	var forum_feed := {
+		"articles": [{
+			"title": "Forum announcement",
+			"summary": "Official update summary",
+			"externalLink": "https://forums.pokeaether.com/t/announcement/31",
+		}],
+	}
+	var forum_items := NewsLocalizationService.resolve_items(forum_feed, "nl")
+	_check(forum_items.size() == 1, "shared forum feed supplies login news")
+	if forum_items.size() == 1:
+		_check(forum_items[0].get("title") == "Forum announcement", "forum title is displayed")
+		_check(forum_items[0].get("description") == "Official update summary", "forum summary is displayed")
+		_check(forum_items[0].get("url") == "https://forums.pokeaether.com/t/announcement/31", "forum link opens the topic")
+
 	var legacy := {
 		"items": [{
 			"title": "English legacy title",

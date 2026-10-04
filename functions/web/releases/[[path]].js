@@ -1,4 +1,5 @@
-const RELEASE_OBJECT_PATH = /^[a-f0-9]{40}-[0-9]+-[0-9]+\/[A-Za-z0-9._/-]{1,512}$/;
+// Original music and move-sound filenames can contain spaces and apostrophes.
+const RELEASE_OBJECT_PATH = /^[a-f0-9]{40}-[0-9]+-[0-9]+\/[A-Za-z0-9._ '/-]{1,512}$/;
 
 function errorResponse(status) {
   return new Response(null, {
@@ -46,7 +47,8 @@ export async function onRequest(context) {
     const value = context.request.headers.get(name);
     if (value) headers.set(name, value);
   }
-  const upstream = await fetch(new Request(`${origin}/web/releases/${objectPath}`, {
+  const encodedPath = pathParts.map(part => encodeURIComponent(part)).join('/');
+  const upstream = await fetch(new Request(`${origin}/web/releases/${encodedPath}`, {
     method: context.request.method,
     headers,
     redirect: 'manual',
