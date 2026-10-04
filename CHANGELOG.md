@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep mobile HUD and quest-tracker collapse/reopen buttons comfortable to tap at smaller UI scales, and place enlarged controls clear of neighbouring HUD surfaces.
+
 - Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
 
 - Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.

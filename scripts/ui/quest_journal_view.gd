@@ -2,6 +2,8 @@ extends Control
 
 class_name QuestJournalView
 
+const TouchTargetSize := preload("res://scripts/ui/touch_target_size.gd")
+
 signal journal_opened
 signal journal_closed
 signal tracker_layout_changed
@@ -96,6 +98,15 @@ func _ready() -> void:
 	if localization_manager != null and not localization_manager.locale_changed.is_connected(_on_locale_changed):
 		localization_manager.locale_changed.connect(_on_locale_changed)
 	refresh()
+
+
+func _process(_delta: float) -> void:
+	if tracker_collapse_button == null or not tracker_collapse_button.visible:
+		return
+	var target_size := TouchTargetSize.size_for(tracker_collapse_button, Vector2(28, 32))
+	if not target_size.is_equal_approx(tracker_collapse_button.custom_minimum_size):
+		_layout_trackers()
+		tracker_layout_changed.emit()
 
 
 func open_journal(quest_id: String = "") -> void:
@@ -586,10 +597,13 @@ func _layout_trackers() -> void:
 	tracker_collapse_button.visible = has_trackers
 	if not has_trackers:
 		return
+	var button_size := TouchTargetSize.size_for(tracker_collapse_button, Vector2(28, 32))
+	tracker_collapse_button.custom_minimum_size = button_size
+	tracker_collapse_button.add_theme_font_size_override("font_size", TouchTargetSize.font_size_for(tracker_collapse_button, 16))
 	tracker_collapse_button.offset_top = tracker_top_offset
-	tracker_collapse_button.offset_bottom = tracker_top_offset + 32.0
-	tracker_collapse_button.offset_left = -28.0 if tracker_collapsed else -280.0
+	tracker_collapse_button.offset_bottom = tracker_top_offset + button_size.y
 	tracker_collapse_button.offset_right = 0.0 if tracker_collapsed else -252.0
+	tracker_collapse_button.offset_left = tracker_collapse_button.offset_right - button_size.x
 	tracker_collapse_button.text = "‹" if tracker_collapsed else "›"
 	tracker_collapse_button.tooltip_text = localization_manager.text(
 		"ui.chat.expand" if tracker_collapsed else "ui.chat.collapse"
