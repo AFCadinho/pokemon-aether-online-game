@@ -10,6 +10,7 @@ const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 
 const SETTINGS_PATH := "user://settings.json"
+const BATTLE_VISUAL_CHOICE_VERSION := 1
 const SPRITE_STYLE_ANIMATED := "animated"
 const SPRITE_STYLE_PIXEL := "pixel"
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
@@ -63,6 +64,7 @@ const AVAILABLE_WINDOW_RESOLUTIONS: Array[Vector2i] = [
 var battle_animations := true
 var battle_presentation_mode := "2d"
 var battle_visual_choice_completed := false
+var battle_visual_choice_version := 0
 var battle_3d_catalog_path := ""
 var _manual_model_catalog_this_session := false
 var battle_3d_arena := "auto"
@@ -121,6 +123,7 @@ func _process(_delta: float) -> void:
 
 func load_settings() -> void:
 	battle_visual_choice_completed = false
+	battle_visual_choice_version = 0
 	if not supports_3d_presentation():
 		battle_presentation_mode = "2d"
 	if not FileAccess.file_exists(SETTINGS_PATH):
@@ -139,9 +142,11 @@ func load_settings() -> void:
 		return
 
 	var data: Dictionary = parsed_data as Dictionary
-	# Existing profiles retain their renderer. New profiles persist an explicit
-	# false marker until the desktop player chooses, including before first login.
-	battle_visual_choice_completed = bool(data.get("battle_visual_choice_completed", true))
+	# Older clients automatically marked existing profiles as complete. Give
+	# every desktop profile one explicit choice for this rollout, then retain it.
+	battle_visual_choice_version = int(data.get("battle_visual_choice_version", 0))
+	battle_visual_choice_completed = bool(data.get("battle_visual_choice_completed", false)) \
+		and battle_visual_choice_version >= BATTLE_VISUAL_CHOICE_VERSION
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	# Older clients called the sprite renderer 2.5D. Preserve that player choice.
 	var saved_presentation := str(data.get("battle_presentation_mode", "3d"))
@@ -252,6 +257,7 @@ func save_settings() -> bool:
 		"battle_presentation_mode": battle_presentation_mode,
 		"battle_presentation_schema": 2,
 		"battle_visual_choice_completed": battle_visual_choice_completed,
+		"battle_visual_choice_version": battle_visual_choice_version,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
@@ -316,11 +322,14 @@ func confirm_battle_visual_choice(mode: String) -> bool:
 		return false
 	var previous_mode := battle_presentation_mode
 	var previous_completed := battle_visual_choice_completed
+	var previous_version := battle_visual_choice_version
 	battle_presentation_mode = mode
 	battle_visual_choice_completed = true
+	battle_visual_choice_version = BATTLE_VISUAL_CHOICE_VERSION
 	if not save_settings():
 		battle_presentation_mode = previous_mode
 		battle_visual_choice_completed = previous_completed
+		battle_visual_choice_version = previous_version
 		return false
 	settings_changed.emit()
 	return true
@@ -341,6 +350,7 @@ func set_battle_presentation_mode(mode: String) -> void:
 	battle_presentation_mode = validated
 	if completing_choice:
 		battle_visual_choice_completed = true
+		battle_visual_choice_version = BATTLE_VISUAL_CHOICE_VERSION
 	_save_and_emit()
 
 func set_battle_3d_catalog_path(path: String) -> void:
