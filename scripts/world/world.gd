@@ -311,7 +311,7 @@ func _prefetch_current_map_desktop_arena() -> Node:
 		return null
 	var arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
 	var requested_arena: String = arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild"), "wild")
-	if arenas.uses_forest_assets(requested_arena):
+	if requested_arena != "classic":
 		# Session-bounded environment only: never cache combatants/network state.
 		return preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),Vector2i(get_viewport().get_visible_rect().size), requested_arena)
 	return null
@@ -1636,8 +1636,8 @@ func _reveal_prepared_wild_battle() -> void:
 	if is_instance_valid(battle_screen_host):
 		battle_screen_host.request_reveal()
 		await wild_encounter_transition.reveal()
-		# The screen may still be preparing 3D or its fallback behind its own
-		# cover. Do not play the battle intro until that reveal has finished.
+		# The arena may already be visible while models are loading. The host
+		# releases this wait only when preparation and the fade are both complete.
 		if is_instance_valid(battle_screen_host):
 			await battle_screen_host.wait_until_revealed()
 		return

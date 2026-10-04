@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
+
 - Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
 
 - Restore forum announcements on the browser login screen by reading the shared updates feed instead of the browser asset bucket.

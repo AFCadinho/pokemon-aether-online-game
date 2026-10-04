@@ -11,6 +11,7 @@ class Probe extends Service:
 	var fixture_index := ""
 	var own_entries: Array = []
 	var slow_calls := 0
+	var pause_check: Semaphore
 	func _selected_release() -> Dictionary:
 		return fixture_release
 	func _local_index_path(_release: Dictionary) -> String:
@@ -22,6 +23,10 @@ class Probe extends Service:
 	func _ensure_models(_ids: Array[String], _source: String) -> Dictionary:
 		slow_calls += 1
 		return {"error": "Offline fixture requires the normal install/repair path."}
+	func _installed_models(ids: Array[String], source: String) -> Dictionary:
+		if pause_check != null:
+			pause_check.wait()
+		return super._installed_models(ids, source)
 
 var failed := false
 var ready := {}
@@ -65,7 +70,18 @@ func _run() -> void:
 	# Hold the background downloader indefinitely. A ready battle must complete
 	# without releasing that lock, joining its queue, downloading or publishing.
 	service._busy = true
+	service.pause_check = Semaphore.new()
 	_collect_ready(service, source)
+	_check(service._local_checks == 1 and ready.is_empty(), "disk verification is pending without blocking the calling frame")
+	_check(not service.can_clear_cache(), "files cannot be removed while a verification worker is reading them")
+	for frame in 3:
+		await process_frame
+	_check(ready.is_empty() and service._local_checks == 1, "frames continue while disk verification is deliberately held")
+	service.pause_check.post()
+	var ready_deadline := Time.get_ticks_msec() + 5000
+	while ready.is_empty() and Time.get_ticks_msec() < ready_deadline:
+		await process_frame
+	service.pause_check = null
 	_check(not ready.is_empty() and ready.get("error") == "", "installed pair is ready while an unrelated download holds the lock")
 	_check(service._busy and service._battle_waiters == 0 and service.slow_calls == 0, "cached entry never joins or alters the background download")
 	_check(ready.get("path") == source and not ready.get("catalog_changed", true), "original catalog is reused")

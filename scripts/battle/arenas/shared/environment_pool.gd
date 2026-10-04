@@ -1,5 +1,5 @@
 extends Node
-## One world-session-owned pair of mesh-environment passes. Never stores battle state.
+## One world-session-owned pair of arena passes. Never stores battle state.
 const Catalog = preload("res://scripts/battle/arenas/arena_catalog.gd")
 const Response = preload("res://scripts/battle/battle_ui/material_response.gd")
 static var current: WeakRef
@@ -28,7 +28,7 @@ static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i, re
 		if existing.borrower != null and existing.borrower.get_ref() != null:
 			return null
 		existing.queue_free()
-	if not Catalog.prepare_forest(manifest).is_empty():
+	if Catalog.uses_forest_assets(requested_arena) and not Catalog.prepare_forest(manifest).is_empty():
 		return null
 	var pool := new()
 	pool.name = "ForestEnvironmentPool"
@@ -50,7 +50,7 @@ func _process(_delta: float) -> void:
 			pass_data.viewport.queue_free()
 		passes.clear()
 		return
-	if not Catalog.forest_ready():
+	if Catalog.uses_forest_assets(arena_id) and not Catalog.forest_ready():
 		failed = not Catalog.forest_error.is_empty() or Time.get_ticks_msec()-started > 120000
 		return
 	if passes.size() < 2:
