@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://dw3alj6bg76v7"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_12_fishing_brother_house/assets/route_12_fishing_brother_house.visual.tileset.compact_source_1_0.texture.res" id="1_i6y60"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/route_12_fishing_brother_house/assets/route_12_fishing_brother_house.visual.tileset.compact_source_1025_0.texture.res" id="2_5gbre"]

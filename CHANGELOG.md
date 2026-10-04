@@ -4,6 +4,12 @@
 
 - Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.
 
+- Include Route 12's Fishing Brother's House in the browser's extended map module.
+
+- Have Route 12's Fishing Guru's brother send players to Vermilion City before he offers his reward.
+
+- Require completing the Vermilion City Fishing Guru lesson before using the Super Rod.
+
 - Add optional complete 3D and 2D Pokémon downloads to the desktop launcher, with size estimates, overall progress, pause/resume and updates for selected assets.
 
 - Fix riders sitting too high on Glaceon and Shiny Glaceon mounts in all directions.

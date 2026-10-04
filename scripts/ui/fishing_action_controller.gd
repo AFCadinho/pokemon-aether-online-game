@@ -267,6 +267,8 @@ func _rod_button_text(rod: Dictionary) -> String:
 	var name := _localized_rod_name(item_id, str(rod.get("name", "")))
 	if not bool(rod.get("owned", false)):
 		return prefix + LocalizationManager.text("ui.fishing.rod.not_owned", {"rod": name})
+	if not bool(rod.get("questRequirementMet", true)):
+		return prefix + LocalizationManager.text("ui.fishing.rod.quest_required", {"rod": name})
 	if not bool(rod.get("levelRequirementMet", false)):
 		return prefix + LocalizationManager.text("ui.fishing.rod.level_required", {
 			"rod": name,
@@ -282,10 +284,15 @@ func _rod_button_text(rod: Dictionary) -> String:
 
 
 func _rod_tooltip(rod: Dictionary) -> String:
-	return LocalizationManager.text("ui.fishing.rod.requirements", {
+	var requirements := LocalizationManager.text("ui.fishing.rod.requirements", {
 		"level": int(rod.get("requiredLevel", 1)),
 		"badges": int(rod.get("requiredBadges", 0)),
 	})
+	if not bool(rod.get("questRequirementMet", true)):
+		requirements += "\n" + LocalizationManager.text(
+			"ui.fishing.rod.quest_requirement_hint"
+		)
+	return requirements
 
 
 func _toggle_popup() -> void:

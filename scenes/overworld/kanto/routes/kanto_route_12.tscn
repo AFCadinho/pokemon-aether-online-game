@@ -220,7 +220,7 @@ position = Vector2(1264, 3920)
 position = Vector2(1392, 3920)
 
 [node name="FromFishingBrotherHouse" type="Marker2D" parent="Spawns" unique_id=1491525056]
-position = Vector2(1040, 2544)
+position = Vector2(912, 2512)
 
 [node name="Exits" type="Node2D" parent="." unique_id=1669842588]
 
