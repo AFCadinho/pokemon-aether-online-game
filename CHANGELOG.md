@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make horizontal transition buildings inherit the authored template collision tiles and remove the Route 15 gate's client-side Fuchsia doorway blockade.
+
 - Expand sleeping Snorlax's roadblock to 3 by 3 tiles and enlarge its interaction area to cover every adjacent edge.
 
 - Add the horizontal Route 15–Fuchsia transition building and its two-way Route 15 entrance, with the Fuchsia doorway reserved for its future connection.
