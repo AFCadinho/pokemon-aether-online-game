@@ -599,11 +599,12 @@ func _layout_trackers() -> void:
 		return
 	var button_size := TouchTargetSize.size_for(tracker_collapse_button, Vector2(28, 32))
 	tracker_collapse_button.custom_minimum_size = button_size
-	tracker_collapse_button.add_theme_font_size_override("font_size", TouchTargetSize.font_size_for(tracker_collapse_button, 16))
+	tracker_collapse_button.add_theme_font_size_override("font_size", TouchTargetSize.font_size_for(tracker_collapse_button, 16, 16.0))
 	tracker_collapse_button.offset_top = tracker_top_offset
 	tracker_collapse_button.offset_bottom = tracker_top_offset + button_size.y
 	tracker_collapse_button.offset_right = 0.0 if tracker_collapsed else -252.0
 	tracker_collapse_button.offset_left = tracker_collapse_button.offset_right - button_size.x
+	TouchTargetSize.compact_button_style(tracker_collapse_button)
 	tracker_collapse_button.text = "‹" if tracker_collapsed else "›"
 	tracker_collapse_button.tooltip_text = localization_manager.text(
 		"ui.chat.expand" if tracker_collapsed else "ui.chat.collapse"

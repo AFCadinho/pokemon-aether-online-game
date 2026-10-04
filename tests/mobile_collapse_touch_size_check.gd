@@ -58,6 +58,8 @@ func _run() -> void:
 		await process_frame
 	for state: Dictionary in desktop.collapsible_panels.values():
 		_check(state["button"].size == Vector2(28, 28), "desktop collapse size is preserved")
+		var button: Button = state["button"]
+		_check(_visual_rect(button, "normal") == Rect2(Vector2.ZERO, button.size), "desktop surface covers the original button")
 	desktop.quest_journal_view.has_main_tracker = true
 	desktop.quest_journal_view._layout_trackers()
 	_check(desktop.quest_journal_view.tracker_collapse_button.size == Vector2(28, 32), "desktop quest collapse size is preserved")
@@ -89,6 +91,13 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.9, 0.9)), "enlarged target blocks touch movement: " + context)
 		_check(rect.size.x >= 47.99 and rect.size.y >= 47.99, "48-pixel target: " + context + " " + str(rect))
 		_check(bounds.grow(0.1).encloses(rect), "target stays on screen: " + context + " " + str(rect))
+		if not root.get_node("WindowFit").is_mobile_browser_ui():
+			for state: String in ["normal", "hover", "pressed"]:
+				var visual := _visual_rect(button, state)
+				var transform := root.get_screen_transform() * button.get_global_transform_with_canvas()
+				var drawn: Rect2 = transform * visual
+				_check(drawn.size.is_equal_approx(Vector2(28, 28)), "compact visible surface in " + state + ": " + context)
+				_check(not visual.has_point(button.size * 0.9), "edge press lies in transparent padding: " + context)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "touch controls do not overlap: " + context + " " + str(previous) + " / " + str(rect))
 		for surface: Control in surfaces:
@@ -115,6 +124,11 @@ func _tap_edge(button: Control) -> void:
 
 func _screen_rect(control: Control) -> Rect2:
 	return (control.get_viewport().get_screen_transform() * control.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, control.size)
+
+
+func _visual_rect(button: Control, state: String) -> Rect2:
+	var style := button.get_theme_stylebox(state) as StyleBoxFlat
+	return Rect2(Vector2.ZERO, button.size).grow_individual(style.expand_margin_left, style.expand_margin_top, style.expand_margin_right, style.expand_margin_bottom)
 
 
 func _check(condition: bool, message: String) -> void:
