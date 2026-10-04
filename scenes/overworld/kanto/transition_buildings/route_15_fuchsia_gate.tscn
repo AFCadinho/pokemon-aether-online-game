@@ -1,9 +1,6 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=2 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/overworld/kanto/reusable_interiors/horizontal_transition_building_template.tscn" id="1_template"]
-
-[sub_resource type="RectangleShape2D" id="FuchsiaDoorBlockerShape"]
-size = Vector2(32, 96)
 
 [node name="Route15FuchsiaGate" instance=ExtResource("1_template")]
 map_id = "kanto_route_15_fuchsia_gate"
@@ -14,13 +11,6 @@ world_access_area_type = "transition"
 location_id = "kanto.route_15.fuchsia.gate"
 location_name = "Route 15–Fuchsia Gate"
 music_profile_id = "kanto.routes_11_15"
-
-[node name="Collision" parent="." index="2"]
-tile_map_data = PackedByteArray("AAACAAgAAAAAAAAAAAACAA4AAAAAAAAAAAADAAgAAAAAAAAAAAADAA4AAAAAAAAAAAAEAAgAAAAAAAAAAAAEAA4AAAAAAAAAAAAFAAgAAAAAAAAAAAAFAA4AAAAAAAAAAAAGAAgAAAAAAAAAAAAGAA4AAAAAAAAAAAAHAAgAAAAAAAAAAAAHAA4AAAAAAAAAAAAIAAgAAAAAAAAAAAAIAA4AAAAAAAAAAAAJAAgAAAAAAAAAAAAJAA4AAAAAAAAAAAAKAAgAAAAAAAAAAAAKAA4AAAAAAAAAAAALAAgAAAAAAAAAAAALAA4AAAAAAAAAAAAMAAgAAAAAAAAAAAAMAA4AAAAAAAAAAAANAAgAAAAAAAAAAAANAA4AAAAAAAAAAAAOAAgAAAAAAAAAAAAOAA4AAAAAAAAAAAAPAAgAAAAAAAAAAAAPAA4AAAAAAAAAAAAQAAgAAAAAAAAAAAAQAA4AAAAAAAAAAAARAAgAAAAAAAAAAAARAA4AAAAAAAAAAAACAAwAAAAAAAAAAAARAAwAAAAAAAAAAAACAA0AAAAAAAAAAAARAA0AAAAAAAAAAAACAAkAAAAAAAAAAAACAAoAAAAAAAAAAAACAAsAAAAAAAAAAAA=")
-
-[node name="FuchsiaDoorBlocker" type="CollisionShape2D" parent="PhysicsCollision" index="6"]
-position = Vector2(80, 336)
-shape = SubResource("FuchsiaDoorBlockerShape")
 
 [node name="FromRoute15" type="Marker2D" parent="Spawns" index="2"]
 position = Vector2(528, 336)
