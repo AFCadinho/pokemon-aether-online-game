@@ -334,6 +334,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/developer_world_time_selector_check.gd",
 	"res://tests/overworld_weather_controller_check.gd",
 	"res://tests/weather_settings_performance_check.gd",
+	"res://tests/settings_storage_responsiveness_check.gd",
 	"res://tests/content_creator_photo_mode_check.gd",
 	"res://tests/hide_other_players_setting_check.gd",
 	"res://tests/player_name_visibility_setting_check.gd",
