@@ -47,7 +47,8 @@ func _check_mount() -> void:
 		return
 	var source_path := "res://assets/followers_shiny/GLACEON.png" if current_mount_id == "glaceon_shiny" else "res://assets/followers/GLACEON.png"
 	var source := Mounts._load_mount_texture(source_path).get_image()
-	var expected_seats := [Vector2i(0, -30), Vector2i(14, -26), Vector2i(-14, -26), Vector2i(0, -20)]
+	# Keep the rider aligned with the mount art shifted 16 pixels down.
+	var expected_seats := [Vector2i(0, -14), Vector2i(14, -10), Vector2i(-14, -10), Vector2i(0, -4)]
 	for row in range(4):
 		var anim := StringName("walk_" + DIRECTIONS[row])
 		_check(mount.get_frame_count(anim) == 4, "four walking phases")
