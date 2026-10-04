@@ -184,6 +184,7 @@ func _process(_delta: float) -> void:
 		actor.scale = Vector3.ONE * float(profile.get("placement", {}).get("scale", 1.0))
 	player = _find_player(actor)
 	if player != null:
+		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
 		var clips := player.get_animation_list()
 		if "idle" in clips:
 			player.play("idle")

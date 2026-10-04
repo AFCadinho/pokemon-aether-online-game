@@ -1,0 +1,46 @@
+extends SceneTree
+const Flight = preload("res://scripts/battle/animations/gliscor_flight.gd")
+const Reviewed = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Motion = preload("res://scripts/battle/battle_ui/model_motion_placement.gd")
+const Placement = preload("res://scripts/battle/battle_ui/model_placement.gd")
+func _initialize() -> void:
+	var library: AnimationLibrary = load(Flight.LIBRARY_PATH)
+	assert(FileAccess.get_sha256(Flight.LIBRARY_PATH) == Flight.DATA.data.library_sha256)
+	assert(library.get_animation_list().size() == 7)
+	for clip_name in library.get_animation_list():
+		var clip := library.get_animation(clip_name)
+		assert(clip.length > 0)
+		for t in clip.get_track_count():
+			assert(clip.track_get_type(t) in [Animation.TYPE_POSITION_3D,Animation.TYPE_ROTATION_3D,Animation.TYPE_SCALE_3D], "No methods, materials or mesh mutations")
+			assert(str(clip.track_get_path(t)).begins_with("pm0472_00_00/Skeleton3D:"))
+			assert(clip.track_get_key_count(t)>0)
+			assert(clip.track_get_key_time(t,0)==0)
+			assert(clip.track_get_key_time(t,clip.track_get_key_count(t)-1)<=clip.length+0.00001)
+	var shared := AnimationLibrary.new()
+	shared.add_animation("old_idle", Animation.new())
+	var first := AnimationPlayer.new()
+	var second := AnimationPlayer.new()
+	first.add_animation_library("",shared)
+	second.add_animation_library("",shared)
+	assert(not Flight.apply(first,"weezing",Flight.DATA.data.models.gliscor))
+	assert(not Flight.apply(first,"gliscor","changed-model"))
+	assert(first.get_animation_library("")==shared)
+	for identity: String in Flight.DATA.data.models:
+		var digest: String = Flight.DATA.data.models[identity]
+		var profile := Reviewed.resolve(identity,digest)
+		var placement := Placement.resolve(profile,profile.grounding,digest)
+		assert(placement.hover_height == 0)
+		assert(not Motion.resolve(profile.motion,placement,digest,profile.action_timing).is_empty())
+		assert(profile.action_timing.size()==library.get_animation_list().size())
+		for action: String in profile.action_timing:
+			assert(is_equal_approx(profile.action_timing[action].frames/60.0,library.get_animation(action).length))
+		assert(Flight.apply(first,identity,digest))
+		assert(second.get_animation_library("")==shared and second.has_animation("old_idle"))
+		first.get_animation("idle").length=99
+		assert(library.get_animation("idle").length<3,"No cross-actor mutation")
+	assert(Flight.profile_for("gliscor","future-model",{"sentinel":true})=={"sentinel":true})
+	assert(Reviewed.resolve("gliscor","changed-model").is_empty())
+	first.free()
+	second.free()
+	print("GLISCOR_FLIGHT_OK variants=2 exact_hashes=true isolated_animation_libraries=true")
+	quit()
