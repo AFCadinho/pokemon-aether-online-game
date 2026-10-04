@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Require completing the Vermilion City Fishing Guru lesson before using the Super Rod.
+
 - Add optional complete 3D and 2D Pokémon downloads to the desktop launcher, with size estimates, overall progress, pause/resume and updates for selected assets.
 
 - Fix riders sitting too high on Glaceon and Shiny Glaceon mounts in all directions.

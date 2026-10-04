@@ -9,6 +9,7 @@ static func message_lines(response: Dictionary) -> Array[String]:
 		"fishing_rod_not_owned",
 		"fishing_level_required",
 		"fishing_badges_required",
+		"fishing_quest_required",
 		"encounter_type_not_found",
 		"wild_encounter_not_found",
 		"fishing_authentication_required",
