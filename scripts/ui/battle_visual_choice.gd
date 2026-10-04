@@ -1,9 +1,9 @@
 extends "res://scripts/ui/aether_confirmation_dialog.gd"
 ## First-run desktop choice. Static examples need no model download or 3D scene.
 const DOWNLOAD_INFO = preload("res://data/battle_visual_download_info.json")
-const EXAMPLES := {
-	"2d": preload("res://assets/ui/presentation/2d.png"),
-	"3d": preload("res://assets/ui/presentation/3d.png"),
+const EXAMPLE_PATHS := {
+	"2d": "res://assets/ui/presentation/2d.png",
+	"3d": "res://assets/ui/presentation/3d.png",
 }
 var selected_mode := ""
 var choices := {}
@@ -35,7 +35,7 @@ func _ready() -> void:
 		margin.add_child(content)
 		var example := TextureRect.new()
 		example.name = "Example" + mode.to_upper()
-		example.texture = EXAMPLES[mode]
+		example.texture = _load_example(EXAMPLE_PATHS[mode])
 		example.texture_filter = Control.TEXTURE_FILTER_NEAREST if mode == "2d" else Control.TEXTURE_FILTER_LINEAR
 		example.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		example.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -76,6 +76,20 @@ func _ready() -> void:
 		button.focus_next = button.get_path_to(focus_order[(index + 1) % focus_order.size()])
 		button.focus_previous = button.get_path_to(focus_order[(index + focus_order.size() - 1) % focus_order.size()])
 	refresh_locale()
+
+static func _load_example(path: String) -> Texture2D:
+	# Exported builds use imported textures; a newly updated checkout may only
+	# have the source PNG until the editor's next filesystem scan.
+	if ResourceLoader.exists(path, "Texture2D"):
+		var texture := ResourceLoader.load(path, "Texture2D") as Texture2D
+		if texture != null:
+			return texture
+	if not FileAccess.file_exists(path):
+		return null
+	var image := Image.load_from_file(path)
+	if image == null or image.is_empty():
+		return null
+	return ImageTexture.create_from_image(image)
 
 func _label() -> Label:
 	var label := Label.new()
