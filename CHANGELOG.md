@@ -4,6 +4,8 @@
 
 ### World, Story, and Maps
 
+- Include Routes 7–8 and 13–15, the Route 8–Saffron and Route 15–Fuchsia gates, and the Route 7–8 Underground Path in the browser's extended map pack.
+- Publish the approved 3D v8 bundle index after verifying every referenced bundle, before building the launcher.
 - Add the Route 7 exterior from the artist TMX and connect it bidirectionally to its Underground Path entrance.
 - Set Route 12 to 10 overworld Pokémon and Routes 13, 14 and 15 to 8 each, with four water Pokémon on each of Routes 12–14.
 - Add the horizontal Route 8–Saffron gate with a story-locked attendant and two-way city connections.
