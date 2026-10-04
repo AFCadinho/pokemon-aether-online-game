@@ -3312,6 +3312,8 @@
   "ui.staff.dev.create_pokemon_description": "Build a party member",
   "ui.staff.dev.start_encounter": "Start Encounter",
   "ui.staff.dev.start_encounter_description": "Spawn a wild battle",
+  "ui.staff.dev.open_pc": "Open PC Box",
+  "ui.staff.dev.open_pc_description": "Open your Pokémon storage anywhere",
   "ui.staff.dev.heal_party": "Heal Party",
   "ui.staff.dev.heal_party_description": "Restore the active team",
   "ui.staff.dev.trainer_progress_description": "Manage badges, key items and story checkpoints",
