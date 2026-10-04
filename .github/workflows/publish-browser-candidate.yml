@@ -1,10 +1,10 @@
-name: Publish Tested Browser Candidate
+name: Publish Browser Candidate
 
 on:
   workflow_dispatch:
     inputs:
       candidate_run_id:
-        description: Successful “Build Browser Release Candidate (Preview)” run ID that passed manual browser/gameplay testing
+        description: Successful “Build Browser Release Candidate (Preview)” run ID with automated checks passed
         required: true
         type: string
 

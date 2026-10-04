@@ -8,8 +8,8 @@ WebAssembly runtime, browser audio and versioned Gen 5 sprite catalogs are
 served from the existing R2 bucket through its HTTPS custom domain. Pages has
 a 25 MiB per-file limit, so it cannot contain the complete Godot export.
 
-Browser releases use two separate manual workflows so testers can log in to a
-candidate without opening it to players:
+Browser releases use two separate manual workflows so a candidate can be
+validated without opening it to players:
 
 1. Run `Build Browser Release Candidate (Preview)` from `main`. It uploads the
    immutable runtime to the dedicated browser bucket, deploys the preview to
@@ -18,14 +18,16 @@ candidate without opening it to players:
    identifies to the production API as the currently active web build, while
    its runtime assets remain under the new immutable candidate ID. It does not
    replace the production Pages site or `manifest-web.json`.
-2. Test that preview using a designated test account. It talks to the live API,
-   so tests can change that account's saved game state. Do not use a staff or
-   personal account for destructive gameplay checks.
-3. After the release-candidate matrix below passes, run
-   `Publish Tested Browser Candidate` with the successful preview run ID. It
+2. The workflow runs the automated browser and runtime checks. Preview testing
+   with a designated test account is optional and useful for release-specific
+   investigation; it talks to the live API, so it can change that account's
+   saved game state. Do not use a staff or personal account for destructive
+   gameplay checks.
+3. When the candidate is ready, run `Publish Browser Candidate` with the
+   successful preview run ID. It
    verifies the artifact, deploys its matching production page bundle, checks
    the public files, and publishes that same candidate's manifest last. It
-   does not rebuild the game, so the ID testers checked is the ID players get.
+   does not rebuild the game, so the tested build ID stays unchanged.
 
 The preview serves large immutable runtime files through a same-origin Pages
 Function backed by the browser R2 bucket. This avoids adding the preview domain
@@ -78,14 +80,12 @@ self-referential origin, does not follow upstream redirects and retains the
 bounded request sizes used by the local connected preview. WebSocket upgrades
 for chat, world presence and PvP-room transport pass through the same origin.
 
-Before setting `publish_manifest=true`, verify Chrome, Firefox and Safari on
-the public custom domain. Complete registration and email verification, world
-entry and transitions, a wild battle including catch/run, a trainer battle, a
-complete AI Sparring battle, refresh during each state, logout, session expiry,
-background-tab reconnect and simultaneous desktop/browser use. Record cold and
-warm load time, transferred bytes, peak memory and API/WebSocket failures. The
-current automated Chromium fixture remains a focused regression check and does
-not replace this release-candidate matrix.
+Cross-browser and full gameplay checks in Chrome, Firefox and Safari are
+optional release diagnostics, not a publication gate. Use them when a change
+has browser-specific risk or when automated checks point to a problem. The
+publisher still verifies the candidate identity, active build compatibility,
+required bucket configuration, deployment and public files before it publishes
+the manifest.
 
 Rollback is manifest-based: republish the retained previous
 `manifest-web.json`, then verify `/auth/web/login` accepts its build ID. Pages
@@ -231,8 +231,8 @@ The preview workflow normally enforces the 312 MiB limit. For an explicitly
 approved, one-release exception, its manual dispatch can allow a payload up to
 328 MiB and requires an audit reason; the build receipt records that reason and
 the exception ceiling. The normal limit stays at 312 MiB, and a payload above
-328 MiB still fails. The candidate must still pass the regular preview checks
-and manual browser release matrix before publication.
+328 MiB still fails. The candidate must still pass the regular automated preview
+checks before publication.
 
 Phase 7 serves the optional Gen 5 sheets separately under
 `/pokemon-assets/gen5/`. The browser build never embeds that 1.1 GiB source
@@ -255,7 +255,9 @@ The last command requires Playwright. An existing installation can be used via
 `POKEAETHER_CHROME_PATH`. The browser test uses a fresh isolated context, blocks
 external requests, checks startup/settings/refresh and records screenshots plus
 errors in `builds/web-qa/`. It never uses a real account. Inspect those screenshots
-as well as the test outcome. A Chromium pass is not a Firefox/Safari pass.
+as well as the test outcome. This fixture is an automated focused regression
+check; optional Firefox/Safari testing can be used when investigating a
+browser-specific change.
 
 The account browser test uses the disconnected static server at port 8060 and
 intercepts only `/api` requests into the paired test fixture. It covers browser
@@ -283,14 +285,15 @@ Backend focused suites: `tests.test_web_sessions`,
   JavaScript-readable, as required by this Godot bearer client. Before public
   hosting, review XSS/CSP, HTTPS, session design and edge auth rate limits.
 - Registration and recovery use the existing email URLs and operational email
-  settings. Real delivery and the browser release-candidate matrix remain
-  explicit checks before the manifest is opened to players.
+  settings. Validate real delivery when changing those flows; the full manual
+  browser matrix is optional.
 
 ## Release boundary
 
 Accounts, the bounded world, AI Sparring, on-demand Gen 5 sprites and browser
 social access are implemented. Production activation still requires the
-one-time Cloudflare configuration and public release-candidate checks above.
+one-time Cloudflare configuration and successful automated candidate and
+public asset checks.
 Expanding the world boundary or enabling ranked play is a separate product and
 security decision.
 
