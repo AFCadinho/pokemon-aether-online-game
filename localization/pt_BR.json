@@ -6307,9 +6307,9 @@
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Entre na torre",
   "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Enfrente Gary",
   "story.kanto.find_a_way_to_saffron.title": "Um caminho para Saffron",
-  "story.kanto.find_a_way_to_saffron.summary": "Encontre um caminho até Saffron City para procurar um aparelho que revele o espírito que guarda a Pokémon Tower.",
-  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Encontre um caminho para entrar em Saffron City.",
-  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Encontre um caminho para a cidade",
+  "story.kanto.find_a_way_to_saffron.summary": "Encontre outra entrada para Saffron City e procure um aparelho que revele o espírito da Pokémon Tower.",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Fale com o guarda no portão leste de Saffron, na Rota 8.",
+  "ui.staff.story_checkpoint.find_saffron_route": "Guarda leste de Saffron",
   "weekly_boss.close": "Fechar",
   "weekly_boss.choose": "Escolha uma dificuldade. Uma vitória por semana entre todas as dificuldades; após perder, você pode tentar novamente.",
   "weekly_boss.title": "{boss} · Chefe semanal",
@@ -6361,5 +6361,7 @@
   "static_encounter.snorlax_awoke": "Snorlax acordou e atacou!",
   "ui.store.mounts.mode.land": "Terrestres",
   "ui.store.mounts.mode.surf": "Surf",
-  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%.",
+  "story.kanto.find_a_way_to_saffron.find_secret_route": "Procure outra maneira de entrar em Saffron City.",
+  "ui.staff.story_checkpoint.find_secret_route": "Encontre outra entrada para Saffron"
 }

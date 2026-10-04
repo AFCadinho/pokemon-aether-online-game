@@ -6304,9 +6304,9 @@
   "ui.staff.story_checkpoint.pokemon_tower_entry": "宝可梦塔 · 进入塔内",
   "ui.staff.story_checkpoint.pokemon_tower_gary": "宝可梦塔 · 与小茂对战",
   "story.kanto.find_a_way_to_saffron.title": "通往金黄市的路",
-  "story.kanto.find_a_way_to_saffron.summary": "设法进入金黄市，寻找能让守在宝可梦塔楼梯前的亡灵显形的装置。",
-  "story.kanto.find_a_way_to_saffron.find_saffron_route": "寻找进入金黄市的办法。",
-  "ui.staff.story_checkpoint.find_saffron_route": "金黄市 · 寻找入城的路",
+  "story.kanto.find_a_way_to_saffron.summary": "寻找另一条进入金黄市的路线，并寻找能显现宝可梦塔幽灵的装置。",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "与8号道路上金黄市东门的守卫交谈。",
+  "ui.staff.story_checkpoint.find_saffron_route": "金黄市东门守卫",
   "weekly_boss.close": "关闭",
   "weekly_boss.choose": "选择难度。所有难度每周共可获胜一次；失败后可再次挑战。",
   "weekly_boss.title": "{boss} · 每周首领",
@@ -6358,5 +6358,7 @@
   "static_encounter.snorlax_awoke": "卡比兽醒来并发动了攻击！",
   "ui.store.mounts.mode.land": "陆地",
   "ui.store.mounts.mode.surf": "冲浪",
-  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。"
+  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。",
+  "story.kanto.find_a_way_to_saffron.find_secret_route": "寻找另一条进入金黄市的路线。",
+  "ui.staff.story_checkpoint.find_secret_route": "寻找另一条进入金黄市的路线"
 }

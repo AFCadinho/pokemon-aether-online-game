@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- After Tower Gary, the main quest points to Route 8’s eastern Saffron guard, then asks players to find another entrance.
+
 - Add localized Route 8 sign text and show its existing location preview when inspected.
 - Set Route 12 to 10 overworld Pokémon and Routes 13, 14 and 15 to 8 each, with four water Pokémon on each of Routes 12–14.
 - Restore Route 8's spawn and exit for the Saffron gate.
