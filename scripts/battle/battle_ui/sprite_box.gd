@@ -3,6 +3,8 @@ extends Control
 ## Presentation-only seam. The battle state/event queue remains authoritative.
 var presentation_anchor: Callable
 var presentation_visual_rect: Callable
+var model_sprites_hidden := false
+var sprite_self_colors := {}
 
 @export var default_is_double_battle := false
 
@@ -2184,18 +2186,34 @@ func _apply_single_web_frames(frames: SpriteFrames) -> void:
 		mobile_sprite_reveal_tween = create_tween()
 		mobile_sprite_reveal_tween.tween_property(single_sprite, "self_modulate", Color.WHITE, 0.18)
 	else:
-		single_sprite.self_modulate = Color.WHITE
+		_set_sprite_self_color(single_sprite, Color.WHITE)
 	_apply_sprite_playback_mode(single_sprite)
 	_position_stat_stage_panel(single_sprite, single_stat_stage_panel)
 
 
 func _apply_mobile_home_fallback_tint(sprite: AnimatedSprite2D, frames: SpriteFrames) -> void:
-	sprite.self_modulate = (
+	_set_sprite_self_color(sprite, (
 		MOBILE_HOME_SILHOUETTE_COLOR
 		if OS.has_feature("mobile") and bool(frames.get_meta("home_fallback", false))
 		else Color.WHITE
-	)
+	))
 
+
+func set_model_sprites_hidden(hidden: bool) -> void:
+	if model_sprites_hidden == hidden:
+		return
+	model_sprites_hidden = hidden
+	for sprite: AnimatedSprite2D in [single_sprite, double_sprite_1, double_sprite_2]:
+		var color: Color = sprite_self_colors.get(sprite, sprite.self_modulate)
+		_set_sprite_self_color(sprite, color)
+
+func _set_sprite_self_color(sprite: AnimatedSprite2D, color: Color) -> void:
+	# Frame replacements and asynchronous sprite upgrades must not reveal a
+	# fallback while the model presenter owns this slot, even for one frame.
+	sprite_self_colors[sprite] = color
+	if model_sprites_hidden:
+		color.a = 0.0
+	sprite.self_modulate = color
 
 func _upgrade_double_web_sprites(
 	generation: int, species_1: String, shiny_1: bool,

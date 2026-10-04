@@ -1264,16 +1264,13 @@ func _set_active(value: bool) -> void:
 	for i in boxes.size():
 		boxes[i].presentation_anchor = _anchor.bind(i) if value else Callable()
 		boxes[i].presentation_visual_rect = _visual_rect.bind(i) if value else Callable()
+		boxes[i].set_model_sprites_hidden(value)
 	if value:
 		var hidden: Array = []
 		if get_tree().root.get_node("SettingsManager").battle_presentation_mode == "3d":
 			for platform in platforms:
 				hidden.append(platform.get_node("PlatformImage"))
 		for box in boxes:
-			hidden.append(box.single_sprite)
-			if double_mode:
-				hidden.append(box.double_sprite_1)
-				hidden.append(box.double_sprite_2)
 			if is_instance_valid(box.dratini_poc_shadow):
 				hidden.append(box.dratini_poc_shadow)
 		for node in hidden:
