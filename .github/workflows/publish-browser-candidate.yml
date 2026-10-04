@@ -125,6 +125,7 @@ jobs:
           build_id="$(python3 -c 'import json; print(json.load(open("builds/browser-candidate/r2/manifest-web.json"))["gameBuildId"])')"
           curl --retry 6 --retry-all-errors --retry-delay 2 -fsSI -H "Origin: https://play.pokeaether.com" \
             "${R2_ASSET_BASE_URL}/web/releases/${build_id}/index.wasm" \
+            | tr -d '\r' \
             | grep -Eiq '^access-control-allow-origin: https://play\.pokeaether\.com$'
 
       - name: Install Cloudflare tooling
