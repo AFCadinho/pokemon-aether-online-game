@@ -9,6 +9,8 @@ var elapsed := 0.0
 var cursor := 0
 var done := false
 var valid: Callable
+var clock: Callable
+var draining := false
 
 func begin() -> void:
 	if speed > 0:
@@ -19,14 +21,23 @@ func begin() -> void:
 func _process(delta: float) -> void:
 	for player: AudioStreamPlayer in players.values():
 		player.stream_paused = speed <= 0
-	if done:
-		return
 	if valid.is_valid() and not valid.call():
 		cancel()
+		if draining:
+			queue_free()
+		return
+	if draining:
+		var playing := false
+		for player: AudioStreamPlayer in players.values():
+			playing = playing or player.playing
+		if not playing:
+			queue_free()
+		return
+	if done:
 		return
 	if speed <= 0:
 		return
-	elapsed += maxf(delta, 0) * speed
+	elapsed = maxf(elapsed, float(clock.call())) if clock.is_valid() else elapsed + maxf(delta, 0) * speed
 	_dispatch()
 	done = elapsed >= float(plan.get("duration_seconds", 0))
 
@@ -51,8 +62,16 @@ func _play_cue(event: Dictionary) -> void:
 	player.pitch_scale = maxf(.01, float(event.get("pitch", 100)) / 100.0)
 	player.play()
 
+func drain() -> void:
+	# Normal action completion lets already-started samples finish independently.
+	done = true
+	draining = true
+	clock = Callable()
+	set_process(true)
+
 func cancel() -> void:
 	done = true
+	clock = Callable()
 	valid = Callable() # Release the router/generation closure immediately.
 	for player: AudioStreamPlayer in players.values():
 		player.stop()

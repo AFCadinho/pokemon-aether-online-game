@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilot sounds, HP changes and damage reactions with an earlier impact beat while the attacker recovers.
+
 - Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.
 
 - Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.
