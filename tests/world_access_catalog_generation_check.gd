@@ -26,6 +26,19 @@ func _init() -> void:
 
 	var areas := areas_value as Dictionary
 	var transitions := transitions_value as Dictionary
+	var fishing_house := areas.get("kanto_route_12_fishing_brother_house", {}) as Dictionary
+	_expect(
+		fishing_house.get("scenePath", "")
+			== "res://scenes/overworld/kanto/routes/route_12_fishing_brother_house.tscn"
+			and fishing_house.get("areaType", "") == "interior"
+			and (fishing_house.get("spawnPoints", {}) as Dictionary).has("from_route_12"),
+		"Route 12 Fishing Brother house is a scene-backed interior with an arrival point"
+	)
+	_expect(
+		transitions.has("kanto_route_12__to_fishing_brother_house")
+			and transitions.has("kanto_route_12_fishing_brother_house__to_route_12"),
+		"Route 12 Fishing Brother house is listed in both directions in the world catalog"
+	)
 	_expect(areas.size() >= 13, "All current overworld maps are registered")
 	_expect(transitions.size() >= 28, "All configured map exits are registered")
 	_expect(areas.has("kanto_pallet_town"), "Pallet Town is registered")
