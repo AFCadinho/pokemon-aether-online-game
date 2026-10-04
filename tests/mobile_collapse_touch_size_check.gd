@@ -94,10 +94,14 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 		if not root.get_node("WindowFit").is_mobile_browser_ui():
 			for state: String in ["normal", "hover", "pressed"]:
 				var visual := _visual_rect(button, state)
-				var transform := root.get_screen_transform() * button.get_global_transform_with_canvas()
-				var drawn: Rect2 = transform * visual
-				_check(drawn.size.is_equal_approx(Vector2(28, 28)), "compact visible surface in " + state + ": " + context)
+				var expected := Vector2(28, 32) if button == overlay.quest_journal_view.tracker_collapse_button else Vector2(28, 28)
+				_check(visual.size.is_equal_approx(expected), "original UI-scaled surface in " + state + ": " + context)
 				_check(not visual.has_point(button.size * 0.9), "edge press lies in transparent padding: " + context)
+			if button == overlay.chat_resize_button:
+				_check(button.get_theme_constant("icon_max_width") == 16, "resize icon follows the chosen UI scale: " + context)
+			else:
+				var expected_font := 16 if button == overlay.quest_journal_view.tracker_collapse_button else 18
+				_check(button.get_theme_font_size("font_size") == expected_font, "arrow follows the chosen UI scale: " + context)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "touch controls do not overlap: " + context + " " + str(previous) + " / " + str(rect))
 		for surface: Control in surfaces:
