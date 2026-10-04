@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Restore Route 8's spawn and exit for the Saffron gate.
 - Add the horizontal Route 8–Saffron gate with a story-locked attendant and two-way city connections.
 - Add twelve overworld Pokémon with route habitat patrols on Kanto Routes 12, 13, 14 and 15.
 - Add the Route 8 Underground Path entrance and horizontal tunnel through to the Route 7 entrance.

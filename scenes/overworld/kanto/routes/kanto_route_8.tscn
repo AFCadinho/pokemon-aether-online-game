@@ -9,16 +9,19 @@
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="7_trainer"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="8_pokemon"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/overworld_item.tscn" id="9_pickup"]
-[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="15_door_hint"]
 [ext_resource type="SpriteFrames" uid="uid://uqldn2vhcla4" path="res://assets/npcs/classes/lass_frames.tres" id="10_lass"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="11_gamer"]
 [ext_resource type="SpriteFrames" uid="uid://caas815hh7buy" path="res://assets/npcs/classes/scientist_m_frames.tres" id="12_nerd"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="13_hq8t2"]
 [ext_resource type="SpriteFrames" uid="uid://ddpjpv44v1bjn" path="res://assets/npcs/classes/school_kid_f_frames.tres" id="13_twins"]
 [ext_resource type="SpriteFrames" uid="uid://qoq05ou3e5a5" path="res://assets/npcs/classes/rocker_frames.tres" id="14_biker"]
+[ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="15_door_hint"]
 
 [sub_resource type="RectangleShape2D" id="shape_lavender_exit"]
 size = Vector2(32, 160)
+
+[sub_resource type="RectangleShape2D" id="shape_saffron_gate_exit"]
+size = Vector2(32, 64)
 
 [sub_resource type="RectangleShape2D" id="shape_underground_path_exit"]
 size = Vector2(32, 32)
@@ -230,8 +233,11 @@ music_profile_id = "kanto.routes_3_10_16_22"
 [node name="FromLavenderTown" type="Marker2D" parent="Spawns" unique_id=205530749]
 position = Vector2(2496, 512)
 
-[node name="FromUndergroundPath" type="Marker2D" parent="Spawns"]
+[node name="FromUndergroundPath" type="Marker2D" parent="Spawns" unique_id=332380347]
 position = Vector2(784, 432)
+
+[node name="FromSaffronGate" type="Marker2D" parent="Spawns"]
+position = Vector2(128, 544)
 
 [node name="Exits" type="Node2D" parent="." unique_id=522200237]
 
@@ -251,7 +257,23 @@ z_as_relative = false
 tile_footprint = Vector2i(1, 5)
 flow_direction = "right"
 
-[node name="ToUndergroundPath" type="Area2D" parent="Exits"]
+[node name="ToSaffronGate" type="Area2D" parent="Exits"]
+position = Vector2(80, 544)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/transition_buildings/route_8_saffron_gate.tscn"
+target_spawn_name = "FromEast"
+transition_id = "kanto_route_8__to_saffron_gate"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToSaffronGate"]
+shape = SubResource("shape_saffron_gate_exit")
+
+[node name="RouteTransitionHint" parent="Exits/ToSaffronGate" instance=ExtResource("4_hint")]
+z_as_relative = false
+tile_footprint = Vector2i(1, 2)
+flow_direction = "left"
+
+[node name="ToUndergroundPath" type="Area2D" parent="Exits" unique_id=1196703186]
 position = Vector2(784, 400)
 script = ExtResource("3_exit")
 target_scene_path = "res://scenes/overworld/kanto/interiors/underground_path/route_8_entrance.tscn"
@@ -259,10 +281,10 @@ target_spawn_name = "FromRoute8"
 transition_id = "kanto_route_8__to_underground_path"
 transition_facing_direction = "left"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToUndergroundPath" unique_id=724159406]
 shape = SubResource("shape_underground_path_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" instance=ExtResource("15_door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToUndergroundPath" unique_id=648122059 instance=ExtResource("15_door_hint")]
 z_as_relative = false
 flow_direction = "down"
 
@@ -526,4 +548,5 @@ tile_map_data = PackedByteArray("AAAgAA4AAAAEAAAAAAAhAA4AAAAEAAAAAAAiAA4AAAAEAAA
 tile_set = SubResource("TileSet_gjif5")
 
 [connection signal="body_entered" from="Exits/ToLavenderTown" to="Exits/ToLavenderTown" method="_on_body_entered"]
+[connection signal="body_entered" from="Exits/ToSaffronGate" to="Exits/ToSaffronGate" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToUndergroundPath" to="Exits/ToUndergroundPath" method="_on_body_entered"]
