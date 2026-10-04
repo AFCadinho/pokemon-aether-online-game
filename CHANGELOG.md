@@ -4,6 +4,8 @@
 
 - Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.
 
+- Add an Open PC Box quick action to developer tools for direct access to Pokémon storage.
+
 - Show real 2D and 3D battle screenshots in the first-play visual choice so players can compare Pokémon and arenas before choosing.
 
 - Align 2.5D Pokémon with their visible platform surfaces and use a stable, shallow camera that follows screen layout without drifting or orbiting away from the 2D background.

@@ -3277,6 +3277,8 @@
   "ui.staff.dev.create_pokemon_description": "建设一名党员",
   "ui.staff.dev.start_encounter": "开始遭遇",
   "ui.staff.dev.start_encounter_description": "引发一场狂野的战斗",
+  "ui.staff.dev.open_pc": "打开电脑盒子",
+  "ui.staff.dev.open_pc_description": "随时随地打开你的宝可梦存储",
   "ui.staff.dev.heal_party": "治愈队伍",
   "ui.staff.dev.heal_party_description": "恢复活跃队伍",
   "ui.staff.dev.trainer_progress_description": "管理徽章、关键物品和故事检查点",
