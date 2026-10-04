@@ -1,10 +1,16 @@
 extends SceneTree
 
 class DownloadProbe extends Node:
+	signal finish_download
 	var requested: Array[String] = []
+	var hold_download := false
 	func ensure_models(identities: Array[String], _catalog: String) -> Dictionary:
 		requested = identities.duplicate()
+		if hold_download:
+			await finish_download
 		return {"error": "Offline probe stops before network access."}
+	func progress_text() -> String:
+		return "Downloading approved model… 50%"
 
 var failed := false
 
@@ -50,11 +56,60 @@ func _run() -> void:
 			"uncached normal/shiny opponent is requested before revealing the battle")
 		battle.free()
 		await process_frame
+	# Route encounters show a pending arena before the response arrives. Exercise
+	# the actual host, with a deliberately slow download and no Pokédex visit.
+	for prewarmed in [false, true]:
+		await _check_pending_entry(scene, probe, prewarmed)
 	probe.free()
 	root.add_child(downloader)
 	if not failed:
-		print("PASS wild_3d_opponent_preparation_check normal=true shiny=true both_leads_before_reveal=true")
+		print("PASS wild_3d_opponent_preparation_check normal=true shiny=true both_leads_before_reveal=true no_interim_2d=true download_progress=true")
 	quit(1 if failed else 0)
+
+
+func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: bool) -> void:
+	probe.requested.clear()
+	probe.hold_download = true
+	var host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
+	root.add_child(host)
+	var battle = scene.instantiate()
+	if prewarmed:
+		host.prewarm_battle(battle)
+	host.mount(battle, null, WildEncounterTransition.STYLE_FULLSCREEN_FADE)
+	battle.prepare_pending_entry(&"grass")
+	host.reveal_pending_entry()
+	for frame in 20:
+		await process_frame
+	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible, "3D entry retains the outgoing world while its response is pending")
+	_check(not host.preparation_ready and probe.requested.is_empty(), "no incomplete pair is downloaded before the response")
+	var enemy := Pokemon.new("Hoothoot", 2)
+	enemy.shiny = prewarmed
+	var p1 := _active("p1", "Zapdos", false)
+	var p2 := _active("p2", "Hoothoot", enemy.shiny)
+	var response := {"success": true, "battleId": "offline-slow-3d", "formatId": "gen9nationaldex",
+		"players": {"p1": {"name": "Player"}, "p2": {"name": "Wild"}},
+		"ownTeam": [p1], "trainerTeam": [p2],
+		"requests": {"p1": {"side": {"pokemon": [p1]}}, "p2": {"side": {"pokemon": [p2]}}},
+		"state": {"turn": 1, "ended": false}, "events": []}
+	_check(battle.prepare_wild_battle_from_response(Pokemon.new("Zapdos", 100), enemy, response, &"grass"), "pending encounter accepts its authoritative pair")
+	host.request_reveal()
+	for frame in 20:
+		await process_frame
+	_check(probe.requested == ["zapdos", "hoothoot@shiny" if enemy.shiny else "hoothoot"], "uncached pair is requested through the real entry host")
+	_check(host.fade_progress == 0.0 and host.get_node("Cover").visible and not host.preparation_ready,
+		"slow model download never exposes the interim 2D arena or sprites")
+	_check(host.loading_label.is_visible_in_tree() and "50%" in host.loading_label.text, "waiting players can see model download progress")
+	probe.finish_download.emit()
+	# A genuine failure still releases the entry into stable sprite fallback.
+	var deadline := Time.get_ticks_msec() + 5000
+	while host.get_node("Cover").visible and Time.get_ticks_msec() < deadline:
+		await process_frame
+	_check(host.preparation_ready and not host.get_node("Cover").visible, "failed download reveals the stable fallback without blocking the encounter")
+	_check(battle.animation_router.model_presenter.preparation_failed, "fallback is caused by the explicit download failure")
+	host.release()
+	host.free()
+	probe.hold_download = false
+	await process_frame
 
 
 func _active(side: String, species: String, shiny: bool) -> Dictionary:

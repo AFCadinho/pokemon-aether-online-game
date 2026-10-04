@@ -4,6 +4,8 @@
 
 - Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
 
+- Wait for desktop 3D battle models and arenas before revealing wild encounters, with loading progress instead of briefly showing 2D sprites.
+
 - Prevent the login screen from failing after an update when its new 2D/3D example images have not yet been imported by the editor.
 
 - Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.

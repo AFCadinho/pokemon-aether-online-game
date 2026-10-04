@@ -198,6 +198,8 @@ def initial_size_limit(*, allow_exception: bool, reason: str | None) -> tuple[in
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--godot', default='godot')
+    parser.add_argument('--check-only', action='store_true',
+                        help='Validate the map partition without preparing assets or running Godot.')
     parser.add_argument('--allow-size-exception', action='store_true',
                         help='Allow this candidate to exceed 312 MiB, up to 328 MiB.')
     parser.add_argument('--size-exception-reason',
@@ -213,6 +215,9 @@ def main():
     if ROOT.parent.name.startswith('slot-') and os.environ.get('POKEAETHER_SLOT') != ROOT.parent.name:
         parser.error('Run slot builds through ops/worktrees/slot-env SLOT -- COMMAND.')
     validate_world_map_export_partition(ROOT)
+    if args.check_only:
+        print('Browser map partition: PASS (no import or export needed).')
+        return
     output = ROOT / 'builds/web'
     output.mkdir(parents=True, exist_ok=True)
     browser_audio_files = copy_browser_audio(output)

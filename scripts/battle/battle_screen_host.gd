@@ -217,9 +217,13 @@ func _reveal_when_prepared(token: int) -> void:
 		# until its combatants are known; Team Preview deliberately opens empty.
 		var model_deadline := Time.get_ticks_msec() + 30000
 		while not released and token == generation and is_instance_valid(battle) and is_instance_valid(presenter):
-			if bool(battle.get("team_preview_lead_selection_active")) or not str(presenter.combatants[0].species).is_empty() or not str(presenter.combatants[1].species).is_empty():
+			if bool(battle.get("team_preview_lead_selection_active")):
 				break
-			if Time.get_ticks_msec() >= model_deadline:
+			# Pending entries can last longer than the model timeout while the
+			# authoritative response waits. Their controls and leads are not final.
+			if not battle.has_meta("battle_entry_pending") and (not str(presenter.combatants[0].species).is_empty() or not str(presenter.combatants[1].species).is_empty()):
+				break
+			if not battle.has_meta("battle_entry_pending") and Time.get_ticks_msec() >= model_deadline:
 				break
 			await get_tree().process_frame
 	if released or token != generation or not is_inside_tree():
@@ -237,7 +241,14 @@ func _reveal_when_prepared(token: int) -> void:
 		_reveal_cover()
 
 func reveal_pending_entry() -> void:
-	# The arena can already fade in while authoritative data/models are pending.
+	var settings := get_node("/root/SettingsManager")
+	if settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile"):
+		# Keep the outgoing world visible until both models and the arena are
+		# prepared. Early arena reveal would flash 2D sprites before the download.
+		loading_label.get_parent().show()
+		request_reveal()
+		return
+	# Sprite-only platforms can open their arena while the response is pending.
 	reveal_requested = true
 	_reveal_cover()
 
