@@ -6308,9 +6308,9 @@
   "ui.staff.story_checkpoint.pokemon_tower_entry": "Pokémon Tower · Enter the tower",
   "ui.staff.story_checkpoint.pokemon_tower_gary": "Pokémon Tower · Battle Gary",
   "story.kanto.find_a_way_to_saffron.title": "A Way to Saffron",
-  "story.kanto.find_a_way_to_saffron.summary": "Find a way into Saffron City to look for a device that can reveal the spirit guarding Pokémon Tower.",
-  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Find a way into Saffron City.",
-  "ui.staff.story_checkpoint.find_saffron_route": "Saffron · Find a way into the city",
+  "story.kanto.find_a_way_to_saffron.summary": "Find another way into Saffron City and search for a device that reveals Pokémon Tower’s spirit.",
+  "story.kanto.find_a_way_to_saffron.find_saffron_route": "Speak to the guard at Saffron’s eastern gate on Route 8.",
+  "ui.staff.story_checkpoint.find_saffron_route": "Saffron eastern guard",
   "weekly_boss.close": "Close",
   "weekly_boss.choose": "Choose a difficulty. One victory per week across all difficulties; losing allows another attempt.",
   "weekly_boss.title": "{boss} · Weekly boss",
@@ -6362,5 +6362,7 @@
   "static_encounter.snorlax_awoke": "Snorlax woke up and attacked!",
   "ui.store.mounts.mode.land": "Land",
   "ui.store.mounts.mode.surf": "Surf",
-  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contains a Primal Kyogre Surf mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_primal_kyogre": "Contains a Primal Kyogre Surf mount. Base shiny chance: 50%.",
+  "story.kanto.find_a_way_to_saffron.find_secret_route": "Look for another way into Saffron City.",
+  "ui.staff.story_checkpoint.find_secret_route": "Find another way into Saffron"
 }

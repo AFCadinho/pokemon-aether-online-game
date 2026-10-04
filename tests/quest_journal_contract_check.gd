@@ -5,6 +5,7 @@ const QUEST_LOCALIZATION_KEYS: Array[String] = [
 	"story.kanto.find_a_way_to_saffron.title",
 	"story.kanto.find_a_way_to_saffron.summary",
 	"story.kanto.find_a_way_to_saffron.find_saffron_route",
+	"story.kanto.find_a_way_to_saffron.find_secret_route",
 
 	"story.kanto.investigate_pokemon_tower.title",
 	"story.kanto.investigate_pokemon_tower.summary",
