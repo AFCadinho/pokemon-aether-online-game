@@ -255,6 +255,7 @@ const CODE_TO_KEY: Dictionary = {
 	"fishing_rod_validation_unavailable": "backend.error.fishing_unavailable",
 	"fishing_level_required": "backend.error.fishing_level_required",
 	"fishing_badges_required": "backend.error.fishing_badges_required",
+	"fishing_quest_required": "backend.error.fishing_quest_required",
 	"no_usable_pokemon": "backend.error.no_usable_pokemon",
 	"pokemon_level_cap_reached": "backend.error.pokemon_level_cap_reached",
 	"pokemon_level_cap_party_ineligible": "backend.error.pokemon_level_cap_party_ineligible",
