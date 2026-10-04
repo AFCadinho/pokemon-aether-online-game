@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix browser Pokémon HOME icons remaining as question marks in Party, Storage and the Pokédex when reading the release's asset configuration.
+
 - Omit 2D move-animation sounds from model-only 3D attacks while retaining Pokémon animations, impact timing and shared damage, healing and stat-change sounds.
 
 - Browser players can now trade, lend, use Aether Exchange and the Guild Bank, and send or claim mail attachments through the shared game API.
