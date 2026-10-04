@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.
+
 - Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.
 
 - Restore NPC interactions in Vermilion City and Route 6 by setting their interaction reach to one tile.
