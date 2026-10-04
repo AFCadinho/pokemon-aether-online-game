@@ -4,6 +4,7 @@ const CATALOG_PATH := "res://generated/world_access_catalog.json"
 const ROUTE_13 := "res://scenes/overworld/kanto/routes/kanto_route_13.tscn"
 const ROUTE_14 := "res://scenes/overworld/kanto/routes/kanto_route_14.tscn"
 const ROUTE_15 := "res://scenes/overworld/kanto/routes/kanto_route_15.tscn"
+const FUCHSIA_GATE := "res://scenes/overworld/kanto/transition_buildings/route_15_fuchsia_gate.tscn"
 
 var failed := false
 
@@ -24,6 +25,7 @@ func _run() -> void:
 	var route13 := (load(ROUTE_13) as PackedScene).instantiate()
 	var route14 := (load(ROUTE_14) as PackedScene).instantiate()
 	var route15 := (load(ROUTE_15) as PackedScene).instantiate()
+	var gate := (load(FUCHSIA_GATE) as PackedScene).instantiate()
 
 	_expect(route14.map_id == "kanto_route_14", "Route 14 scene has its canonical map ID")
 	_expect(route15.map_id == "kanto_route_15", "Route 15 scene has its canonical map ID")
@@ -43,11 +45,52 @@ func _run() -> void:
 	_check_link(route14, route13, "ToRoute13", "kanto_route_14__to_route13", "kanto_route_13", ROUTE_13, "FromRoute14", transitions)
 	_check_link(route14, route15, "ToRoute15", "kanto_route_14__to_route15", "kanto_route_15", ROUTE_15, "FromRoute14", transitions)
 	_check_link(route15, route14, "ToRoute14", "kanto_route_15__to_route14", "kanto_route_14", ROUTE_14, "FromRoute15", transitions)
+	_check_link(route15, gate, "ToFuchsiaGate", "kanto_route_15__to_fuchsia_gate", "kanto_route_15_fuchsia_gate", FUCHSIA_GATE, "FromRoute15", transitions)
+	_check_link(gate, route15, "ToEast", "kanto_route_15_fuchsia_gate__to_route15", "kanto_route_15", ROUTE_15, "FromFuchsiaGate", transitions)
+	_check_fuchsia_gate(route15, gate, areas)
 
+	gate.free()
 	route13.free()
 	route14.free()
 	route15.free()
 	quit(1 if failed else 0)
+
+
+func _check_fuchsia_gate(route: Node2D, gate: Node2D, areas: Dictionary) -> void:
+	_expect(areas.has("kanto_route_15_fuchsia_gate"), "Fuchsia gate is registered")
+	_expect(gate.get_node("Visuals").scene_file_path == "res://generated/tiled_visuals/transition_building_horizontal/transition_building_horizontal.visual.tscn",
+		"Fuchsia gate uses the shared horizontal template visual")
+	_expect(gate.lighting_profile == "indoor" and gate.weather_profile == "disabled",
+		"Fuchsia gate inherits indoor lighting and weather")
+	var entrance := route.get_node("Exits/ToFuchsiaGate") as Area2D
+	var shape := entrance.get_node("CollisionShape2D").shape as RectangleShape2D
+	_expect(entrance.position == Vector2(144, 448) and shape.size == Vector2(32, 64),
+		"Route 15 doorway matches the west_to_fuchsia TMX connection marker")
+	var route_spawn := route.get_node("Spawns/FromFuchsiaGate") as Marker2D
+	var gate_spawn := gate.get_node("Spawns/FromRoute15") as Marker2D
+	_expect(route_spawn.position == Vector2(176, 464), "Route 15 return uses the artist's arrival tile")
+	_expect(not entrance.contains_world_position(route_spawn.global_position), "Route 15 arrival avoids an immediate return transition")
+	_expect(not gate.get_node("Exits/ToEast").contains_world_position(gate_spawn.global_position), "Gate arrival avoids an immediate return transition")
+	for y in range(13, 15):
+		_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(4, y)) == -1,
+			"Route 15 gate entrance tiles are walkable")
+	var west := gate.get_node("Exits/ToWest") as Area2D
+	_expect(not west.monitoring and west.get_node("CollisionShape2D").disabled,
+		"Future Fuchsia exit stays inactive until its destination exists")
+	var player: Node2D = (load("res://scripts/world/player.gd") as GDScript).new()
+	gate.get_node("Entities/Players").add_child(player)
+	player.map_layers_initialized = true
+	player.map_layers_owner = gate
+	player.resolved_map_cache = gate
+	player.collision_tilemap = gate.get_node("Collision")
+	_expect(player.can_move_to(gate_spawn.global_position), "Player can stand at the gate arrival point")
+	_expect(player.can_move_to(gate.get_node("Spawns/FromFuchsiaCity").global_position), "Future Fuchsia arrival point is walkable")
+	_expect(route.get_node("Tiles/Collision").get_cell_source_id(Vector2i(5, 14)) == -1,
+		"Return arrival on Route 15 is walkable")
+	for y in range(9, 12):
+		_expect(not player.can_move_to(Vector2(80, y * 32 + 16)),
+			"Player cannot leave through the unfinished Fuchsia doorway")
+	player.free()
 
 
 func _check_visual(map: Node, width: int, height: int, source_suffix: String) -> void:
