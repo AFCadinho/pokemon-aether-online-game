@@ -28,6 +28,7 @@ jobs:
       - name: Post release announcement to Discord
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GH_TOKEN: ${{ github.token }}
           RELEASE_VERSION: ${{ inputs.release_version }}
           RELEASE_NOTES: ${{ inputs.release_notes }}
         run: |
@@ -36,9 +37,19 @@ jobs:
             exit 0
           fi
 
+          release_body_file="${RUNNER_TEMP}/github-release-body.md"
+          release_body_args=()
+          if gh release view "v${RELEASE_VERSION}" --json body --jq .body > "${release_body_file}" 2>/dev/null; then
+            if [ -s "${release_body_file}" ] && [ "$(tr -d '[:space:]' < "${release_body_file}")" != "null" ]; then
+              release_body_args=(--release-body-file "${release_body_file}")
+              echo "Using notes from the GitHub Release for v${RELEASE_VERSION}."
+            fi
+          fi
+
           python3 tools/build_discord_release_payload.py \
             --version "${RELEASE_VERSION}" \
             --release-notes "${RELEASE_NOTES}" \
+            "${release_body_args[@]}" \
             > discord_payloads.json
 
           python3 - <<'PY'
