@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make downloaded Pokémon storage settings clearer, explain disabled removal actions, allow removal outside battles when a hidden battle screen is prewarmed, and ask for confirmation with Cancel selected by default.
+
 - Keep local 3D battle preparation quiet; show simple download progress only when missing Pokémon files are actually downloading.
 
 - Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilot sounds, HP changes and damage reactions with an earlier impact beat while the attacker recovers.
