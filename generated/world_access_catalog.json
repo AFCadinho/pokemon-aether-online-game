@@ -1989,7 +1989,7 @@
 					"spawnMarker": "FromPalletTown",
 					"tile": {
 						"x": 5,
-						"y": 30
+						"y": 29
 					}
 				},
 				"ground_floor_stairs": {
@@ -6314,7 +6314,7 @@
 				"mapScenePath": "res://scenes/overworld/kanto/towns/pallet_town/rivals_house.tscn",
 				"position": {
 					"x": 176.0,
-					"y": 976.0
+					"y": 944.0
 				},
 				"spawnMarker": "FromPalletTown"
 			},
