@@ -3,6 +3,8 @@ var battle: Control
 var dragging := false
 
 func _may_rotate(presenter: Node) -> bool:
+	if get_node("/root/SettingsManager").battle_presentation_mode != "3d":
+		return false
 	# Screen-space attack effects use captured anchors: keep those shots stable.
 	return presenter.active and presenter.current_actions[0] in ["idle","sleep"] and presenter.current_actions[1] in ["idle","sleep"] and presenter.lifecycle[0] in ["idle","hidden","empty"] and presenter.lifecycle[1] in ["idle","hidden","empty"]
 
