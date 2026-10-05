@@ -215,11 +215,11 @@
       "path": "res://assets/battles/moves_3d/audio_edited/moonblast_charge.wav",
       "source": "res://assets/battles/animations/moonblast/PRSFX- Moonblast1.wav",
       "source_sha256": "babf3a76b3e9d3f242a6492985d909b77d5eb35364447e7b59d0c191c151ca2d",
-      "sha256": "97699d03126e764726170b7efa5d6c63de51c6216af67436cab6cd9762fb5ec3",
-      "source_start": 1.45,
+      "sha256": "b9dac3616f330639c4c2b79cb026a02c782118d374999206a787476e8c13f36d",
+      "source_start": 1.18,
       "source_end": 2.08,
-      "duration_seconds": 0.24,
-      "filters": "atrim=start=1.45:end=2.08,asetpts=PTS-STARTPTS,atempo=2,atempo=1.312500000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.24,atrim=duration=0.24,afade=t=in:d=0.005,afade=t=out:st=0.185000:d=0.055"
+      "duration_seconds": 0.9,
+      "filters": "atrim=start=1.18:end=2.08,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.9,atrim=duration=0.9,afade=t=in:d=0.005,afade=t=out:st=0.845000:d=0.055"
     },
     "PRSFX- Moonblast2.wav": {
       "role": "impact",

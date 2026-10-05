@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'assets/battles/moves_3d/audio_edited'
 # move, source stem, visual role, source start/end, maximum edited seconds.
-# Moonblast uses the final rising portion during charge, not its 2s preamble.
+# Moonblast keeps 0.9s of its rising portion for the longer 3D charge.
 # Magical Leaf removes the second repeated 2D volley; Flash Cannon removes its
 # delayed second swell. Short attacks retain their initial transient.
 EDITS = [
@@ -37,7 +37,7 @@ EDITS = [
  ('sludgebomb','Sludge Bomb1','launch',0,.399,.30),
  ('sludgebomb','Sludge Bomb2','impact',0,.65,.32),
  ('focusblast','Focus Blast1','launch',0,.85,.42),
- ('moonblast','Moonblast1','charge',1.45,2.08,.24),
+ ('moonblast','Moonblast1','charge',1.18,2.08,.90),
  ('moonblast','Moonblast2','impact',0,.70,.34),
  ('iceshard','Ice Shard','launch',0,.65,.35),
  ('poisonsting','Poison Sting','launch',0,.60,.30),
@@ -71,7 +71,7 @@ def audit():
             assert max(abs(value) for value in samples[:2] + samples[-2:]) < 150, name
             duration = wav.getnframes() / wav.getframerate()
             assert abs(duration - entry['duration_seconds']) < .0001, name
-            assert 0 < duration <= .56, name
+            assert 0 < duration <= (.901 if name == 'PRSFX- Moonblast1.wav' else .56), name
     print('PCM_AUDIT_OK files=30 source_hashes=true edited_hashes=true '
           'non_silent=true clipping=false faded_edges=true')
 

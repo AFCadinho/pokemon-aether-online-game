@@ -135,7 +135,9 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	var t := maxf(travel,0)
 	var point := from.lerp(to,t)
 	if key=="sludgebomb": point.y += sin(t*PI)*0.6
-	var radius := (0.34 if key=="sludgebomb" else 0.29) * (charge if travel<0 else 1.0)
+	# Let the moon appear first, build the orb, then hold it briefly at full size.
+	var orb_charge := clampf((charge-0.25)/0.65,0,1) if key=="moonblast" else charge
+	var radius := (0.34 if key=="sludgebomb" else 0.29) * (orb_charge if travel<0 else 1.0)
 	var orb_scale := Vector3.ONE * radius
 	if key=="sludgebomb": orb_scale *= Vector3(1.0+sin(elapsed*15)*0.12,0.9,1.1)
 	_piece(sphere,surface_material,point,orb_scale)

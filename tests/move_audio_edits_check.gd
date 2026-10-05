@@ -19,7 +19,7 @@ func _initialize() -> void:
 				assert(cue.event.fade_seconds>0 and cue.event.fade_seconds < cue.event.end_seconds-cue.at_seconds)
 				assert(plan.sound_paths[cue.event.name].begins_with("res://assets/battles/moves_3d/audio_edited/"))
 				var audio: AudioStream = load(plan.sound_paths[cue.event.name])
-				assert(audio != null and audio.get_length() > 0 and audio.get_length() <= .56)
+				assert(audio != null and audio.get_length() > 0 and audio.get_length() <= (.901 if cue.event.name == "PRSFX- Moonblast1.wav" else .56))
 				if cue.event.requires_hit: assert(is_equal_approx(cue.at_seconds,frames*.45/60))
 		count += 1
 	var flash := Effect.audio_plan(catalog.get_plan("move","flashcannon"),{"move_key":"flashcannon","frames":407.5,"launch_frame":60,"impact_frame":120})

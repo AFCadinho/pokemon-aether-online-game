@@ -21,7 +21,7 @@ Examples (before runtime clock envelopes):
 | Sound | Original | Edited | Role |
 | --- | ---: | ---: | --- |
 | Flash Cannon | 3.224 s | 0.480 s | Beam release |
-| Moonblast 1 | 2.366 s | 0.240 s | Charge, using the final rising portion |
+| Moonblast 1 | 2.366 s | 0.900 s | Rising charge for the longer Moonblast presentation |
 | Moonblast 2 | 2.166 s | 0.340 s | Confirmed impact |
 | Magical Leaf 1 | 2.193 s | 0.380 s | One release volley |
 | Shadow Ball 1 / 2 | 1.004 / 0.987 s | 0.360 / 0.320 s | Release / impact |
@@ -34,6 +34,13 @@ fade before the endpoint. This also bounds short/fast species clips. Playback
 speed changes the cue/envelope timing without multiplying sample pitch.
 Samples do not loop/stretch to fill a slower animation window; they may finish
 earlier at slow speed. At high speeds the envelope can cut a sample shorter.
+
+Moonblast has a two-second native presentation at normal battle speed, independent
+of the species' clip length: launch at 0.9s, impact at 1.25s, end at 2.0s.
+The moon appears before the orb grows, followed by a brief full-size hold and a
+0.35s flight. Both pose and VFX retain the shared native clock, so pause, dodge,
+impact damage and cancellation keep their existing ownership. Only Moonblast
+uses this duration override; subsequent attacks recover their usual speed.
 
 The router supplies the same confirmed-hit flag as the VFX. Dodge/block/immune
 presentations omit impact-only clips, including physical contact clips; charge

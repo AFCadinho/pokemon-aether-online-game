@@ -7,7 +7,33 @@ func _start() -> void:
 	status.text = "Grotere move-effecten: bekijk Moonblast, Flash Cannon en de andere moves. Test ook ontwijken en de camera."
 	if "--smoke-move-scale" in OS.get_cmdline_user_args():
 		await _check_move_scale()
+	if "--smoke-moonblast-charge" in OS.get_cmdline_user_args():
+		await _check_moonblast_charge()
 	print("MOVE_SCALE_PREVIEW_READY")
+
+func _check_moonblast_charge() -> void:
+	create_timer(30).timeout.connect(func(): printerr("MOONBLAST_CHARGE_TIMEOUT"); quit(1))
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	assert(not output.is_empty())
+	DirAccess.make_dir_recursive_absolute(output)
+	_preview_move()
+	var renderer = battle.animation_router.model_presenter
+	while renderer.common_effects.is_empty(): await process_frame
+	var effect: Node = renderer.common_effects[0]
+	var rate: float = renderer.players[0].get_playing_speed()
+	assert(is_equal_approx(effect.duration/rate,2.0))
+	assert(is_equal_approx(effect.launch/rate,0.9))
+	assert(is_equal_approx(effect.impact/rate,1.25))
+	var start_ms := Time.get_ticks_msec()
+	for mark in [["moon",0.2],["charge",0.7],["flight",1.05],["impact",1.3]]:
+		while effect.elapsed/rate<float(mark[1]): await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("moonblast-%s.png" % mark[0]))
+	while move_busy: await process_frame
+	var wall_seconds := float(Time.get_ticks_msec()-start_ms)/1000.0
+	assert(wall_seconds>=1.8 and wall_seconds<3.0,"Moonblast must visibly take its full two seconds")
+	print("MOONBLAST_CHARGE_OK charge=0.9 flight=0.35 impact=1.25 total=2.0 wall=",wall_seconds)
+	quit()
 
 func _check_move_scale() -> void:
 	create_timer(180).timeout.connect(func(): printerr("MOVE_SCALE_TIMEOUT"); quit(1))

@@ -4,6 +4,25 @@ var seconds := 0.0
 func _run() -> void:
 	get_tree().create_timer(45).timeout.connect(func(): get_tree().quit(1))
 	_setup()
+	# Different native clip lengths must produce the same Moonblast beats.
+	for frames in [60.0,120.0,407.5]:
+		stage.entries.fixture.action_timing.special_attack.frames = frames
+		stage.start_move_action("p1","Moonblast")
+		var timing: Dictionary = stage.move_timing("Moonblast","p1")
+		var rate: float = stage.players[0].get_playing_speed()
+		assert(is_equal_approx(float(timing.frames)/60.0/rate,2.0))
+		assert(is_equal_approx(float(timing.launch_frame)/60.0/rate,0.9))
+		assert(is_equal_approx(float(timing.impact_frame-timing.launch_frame)/60.0/rate,0.35))
+		var plan := Effect.audio_plan(Catalog.new().get_plan("move","moonblast"),timing)
+		assert(is_equal_approx(plan.cues[0].event.end_seconds/rate,0.9))
+		assert(is_equal_approx(plan.cues[1].at_seconds/rate,1.25))
+		stage.hold_move_command("p1",true)
+		assert(stage.players[0].get_playing_speed()==0)
+		stage.hold_move_command("p1",false)
+		assert(is_equal_approx(stage.players[0].get_playing_speed(),rate))
+	stage.entries.fixture.action_timing.special_attack.frames = 60.0
+	stage.start_move_action("p1","Shadow Ball")
+	assert(is_equal_approx(stage.players[0].get_playing_speed(),1.5),"Moonblast pacing cannot leak to the next move")
 	var camera := Camera3D.new()
 	stage.world.add_child(camera)
 	for move in Batch.MOVE_KEYS:
