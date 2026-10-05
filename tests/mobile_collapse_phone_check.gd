@@ -110,6 +110,10 @@ func _sample(percentage: float, state: String) -> void:
 		_check(not visual.has_point(button.size * Vector2(0.1, 0.9)), "edge tap in transparent padding " + panel_id)
 		_check(rect.size.x / density >= 47.99 and rect.size.y / density >= 47.99, "48 dp " + panel_id + " at " + str(percentage))
 		_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(0.1).encloses(rect), "on screen " + panel_id)
+		if panel_id in ["actions", "dex_actions", "quest"]:
+			var owner: Control = overlay.quest_journal_view.tracker_panel if panel_id == "quest" else overlay.collapsible_panels[panel_id]["panel"]
+			var owner_rect: Rect2 = (root.get_screen_transform() * owner.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, owner.size)
+			_check(is_equal_approx(drawn.end.x, owner_rect.end.x) if state == "collapsed" else drawn.end.x <= owner_rect.position.x, "right-edge reopen / adjacent collapse arrow " + panel_id + " at " + str(percentage))
 		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.1, 0.9)), "blocks movement " + panel_id)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "separate targets " + panel_id)

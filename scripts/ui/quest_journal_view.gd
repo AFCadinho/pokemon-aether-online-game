@@ -605,7 +605,7 @@ func _layout_trackers() -> void:
 	TouchTargetSize.compact_button_style(tracker_collapse_button, Vector2(28, 32), Vector2(1, 0) if native_touch else Vector2(0.5, 0.5))
 	tracker_collapse_button.offset_top = tracker_top_offset
 	tracker_collapse_button.offset_bottom = tracker_top_offset + button_size.y
-	tracker_collapse_button.offset_right = -252.0 if native_touch else (0.0 if tracker_collapsed else -252.0)
+	tracker_collapse_button.offset_right = 0.0 if tracker_collapsed else -252.0
 	tracker_collapse_button.offset_left = tracker_collapse_button.offset_right - button_size.x
 	tracker_collapse_button.text = "‹" if tracker_collapsed else "›"
 	tracker_collapse_button.tooltip_text = localization_manager.text(

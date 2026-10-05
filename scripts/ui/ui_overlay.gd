@@ -31594,13 +31594,13 @@ func _fit_collapse_touch_controls() -> void:
 	var occupied: Array[Rect2] = []
 	var buttons: Array[Control] = []
 	var native_touch := not WindowFit.is_mobile_browser_ui()
-	# Reserve these rows even while collapsed; reopening must not move a nearby
-	# button into the space that used to belong to the closed panel.
+	# Hidden panels release their horizontal space. The native top-right rows
+	# retain their vertical spacing in _refresh_quest_tracker_layout().
 	for panel_id: String in collapsible_panels:
 		var state: Dictionary = collapsible_panels[panel_id]
 		var panel: Control = state["panel"]
 		var button: Control = state["button"]
-		if panel.visible or (native_touch and panel_id in ["actions", "dex_actions"]):
+		if panel.visible:
 			occupied.append(_collapse_touch_rect(panel))
 		if button.visible:
 			buttons.append(button)
@@ -31609,8 +31609,7 @@ func _fit_collapse_touch_controls() -> void:
 			occupied.append(_collapse_touch_rect(companion))
 	if quest_journal_view != null:
 		for panel: Control in [quest_journal_view.tracker_panel, quest_journal_view.side_tracker_panel]:
-			var has_tracker: bool = quest_journal_view.has_main_tracker if panel == quest_journal_view.tracker_panel else quest_journal_view.has_side_tracker
-			if panel.visible or (native_touch and has_tracker and quest_journal_view.tracker_available):
+			if panel.visible:
 				occupied.append(_collapse_touch_rect(panel))
 		if quest_journal_view.tracker_collapse_button.visible:
 			buttons.append(quest_journal_view.tracker_collapse_button)
@@ -31715,7 +31714,8 @@ func _position_collapsible_button(panel_id: String) -> void:
 	var visual_alignment := Vector2(0.5, 0.5)
 	if WindowFit.is_touch_ui() and not WindowFit.is_mobile_browser_ui() and panel_id in ["actions", "dex_actions"]:
 		# Draw next to the owning row; grow the input area toward the world.
-		position = rect.position - Vector2(button_size.x + maxf(COLLAPSE_BUTTON_MARGIN, 4.0 / TouchTargetSize.screen_scale(button).x), 0.0)
+		if not collapsed:
+			position = rect.position - Vector2(button_size.x + maxf(COLLAPSE_BUTTON_MARGIN, 4.0 / TouchTargetSize.screen_scale(button).x), 0.0)
 		visual_alignment = Vector2(1.0, clampf((rect.size.y - COLLAPSE_BUTTON_SIZE.y) * 0.5 / maxf(button_size.y - COLLAPSE_BUTTON_SIZE.y, 0.001), 0.0, 1.0))
 	if WindowFit.is_mobile_browser_ui():
 		var order: Array[String] = ["options", "actions", "party", "chat", "location", "dex_actions", "hotkey_sidebar", "player_status"]

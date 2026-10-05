@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Move mobile action-bar, Pokédex and quest-tracker reopen buttons to the right edge when their panels are collapsed, while retaining separate touch areas.
 - Correct shiny Dreepy's follower facing directions when standing and walking.
 - Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
 
