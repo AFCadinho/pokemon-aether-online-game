@@ -159,10 +159,10 @@ Only explicit player approval completes an entry.
 - [x] Toxic — persistent tint only; short event particles
 - [x] Burn — persistent tint only
 - [x] Paralysis — persistent tint only
-- [ ] Freeze
+- [ ] Freeze — player could not visually test it yet
 - [x] Sleep — Z glyph layout follows camera rotation
-- [ ] Substitute
-- [ ] Mega evolution
+- [ ] Substitute — procedural doll; dedicated 3D asset still to review
+- [x] Mega evolution
 
 Gem activation events emitted after a move announcement are presented before
 that move's animation. This uses the same ordered batch for rendering and HP
