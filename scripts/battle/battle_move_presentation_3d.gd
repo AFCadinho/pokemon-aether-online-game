@@ -43,12 +43,8 @@ func play_move(presenter: Node, move: String, actor: String, _target: String, op
 	if owned_generation != generation or not is_instance_valid(presenter) or not presenter.active:
 		return
 	started.erase(actor)
-	# No sprite dodge in a 3D scene. Preserve the event renderer's miss beat
-	# even until a native 3D dodge/effect is available.
-	if str(options.get("result", "")).strip_edges().to_lower() == "miss":
-		var callback: Callable = options.get("on_dodge_started", Callable())
-		if callback.is_valid():
-			await callback.call()
+	if presenter.has_method("wait_move_dodge"):
+		await presenter.wait_move_dodge(_target)
 
 func play_effect(_presenter: Node, _effect: String, _target: String) -> void:
 	# Unsupported 3D effects intentionally have no visual, never a 2D fallback.

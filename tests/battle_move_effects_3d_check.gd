@@ -137,14 +137,14 @@ func _run() -> void:
 	for audio: Node in router.active_audio_nodes: assert(audio.draining)
 	router.cancel_render()
 	await get_tree().process_frame
-	# Miss has no hit burst; cancellation releases the waiter and suppresses callbacks.
+	# Miss calls Dodge before motion; cancellation releases the waiter without repeating it.
 	complete = false
 	_route("Scratch",{"result":"miss","on_dodge_started":_miss,"show_impact":true})
 	while stage.common_effects.is_empty() and not complete: await get_tree().process_frame
 	assert(not complete and not stage.common_effects[0].hit)
 	router.cancel_render()
 	while not complete: await get_tree().process_frame
-	assert(misses==0 and router.active_audio_nodes.is_empty())
+	assert(misses==1 and router.active_audio_nodes.is_empty())
 	await get_tree().process_frame
 	# Missing optional audio must not prevent native geometry.
 	router.audio_catalog = SilentCatalog.new()
@@ -172,7 +172,7 @@ func _run() -> void:
 	assert(stage.common_effects.is_empty())
 	SettingsManager.battle_animations = true
 	await router.play_move_animation("Bite","p1","p2",{"result":"miss","on_dodge_started":_miss})
-	assert(misses==1)
+	assert(misses==2)
 	router.cancel_render()
 	router.release_threaded_resource_requests()
 	router = null

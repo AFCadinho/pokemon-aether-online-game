@@ -13,7 +13,8 @@ inherits the normal move driver, so model clocks, audio routing, target guards,
 miss/blocked outcomes, impact/recovery and cancellation remain shared. It draws
 into the driver's existing mesh pool instead of running a second visual clock.
 Its process priority follows the arena camera update, including during pause.
-The approved Ember miss offset uses world-up, as in the pilot.
+Misses use the same aim as hits; the target performs a native 3D dodge.
+The original aim is held fixed while the target moves.
 
 Eight PNGs totaling 287,582 bytes are tracked under
 `assets/battles/moves_3d/sv_source`. Resources use `preload`, so the normal path
@@ -86,7 +87,8 @@ provenance file. Imported caches remain slot-local.
   containers/23 emitters and explicit BC5 opt-in.
 - `source_move_effects_3d_check.tscn -- --legacy-source=EXTRACTED_EMBER_DIR`:
   both moves and three outcomes, bounded geometry, exact approved Ember
-  placement/count/frame/opacity/tint parity over six timestamps. The external
+  placement/count/frame/opacity/tint parity over six timestamps, adjusting the
+  historical pilot to use the newly requested on-target miss aim. The external
   argument is optional and only used for comparison with the historical pilot.
 - `battle_move_effects_3d_check.tscn`: six moves, four slots, audio, impact,
   Substitute, cancellation and explicit Ember-live/Water-Gun-preview gating.

@@ -62,7 +62,7 @@ func start(move: String, timing: Dictionary, options: Dictionary, native_clock: 
 	clock = native_clock
 	anchors = positions
 	valid = guard
-	miss = str(options.get("result", "")) == "miss"
+	miss = str(options.get("result", "")).strip_edges().to_lower() == "miss"
 	hit = bool(options.get("show_impact", options.get("stop_at_impact", false))) and not miss
 	set_meta("battle_field_visual", true) # Exclude temporary geometry from irradiance copies.
 	var color: Color = COLORS[KEYS.find(key)]
@@ -157,7 +157,6 @@ func _process(_delta: float) -> void:
 	if is_instance_valid(view_camera):
 		right = global_basis.inverse() * view_camera.global_basis.x
 		up = global_basis.inverse() * view_camera.global_basis.y
-	if miss: to += right * (size + 1.4) + up * 0.4
 	var travel := clampf((elapsed-launch) / maxf(impact-launch,0.01),0,1)
 	var after := (elapsed-impact) / maxf(duration * 0.19,0.01)
 	var fade := 1.0 - clampf(after,0,1)
