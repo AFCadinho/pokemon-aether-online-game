@@ -35,6 +35,8 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	# Catalog admission follows the selected presentation mode.
+	root.get_node("SettingsManager").battle_presentation_mode = "3d"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(FIXTURE))
 	var service := Probe.new()
 	root.add_child(service)
@@ -173,6 +175,9 @@ func _check_verified_resource_reuse(source: String, proofs: Dictionary) -> void:
 	stage._import_next_model()
 	_check(stage.integrity_read != null and stage.packed.is_empty(), "a cold cache still uses the complete disk validation path")
 	var read: Renderer.IntegrityRead = stage.integrity_read
+	if read == null:
+		stage.free()
+		return
 	stage.cancel_preparation()
 	while not read.ready():
 		await process_frame

@@ -133,7 +133,13 @@ func _check_import_and_failure() -> void:
 	var first_scene := ResourceLoader.load(output, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 	var root := first_scene.instantiate()
 	_check(Validator.new().validate(root, first.tileset_path).is_empty(), "Saved scene reload retains external compact resources")
-	var old_texture_path: String = root.get_child(0).tile_set.get_source(100).texture.resource_path
+	var imported_layer := root.get_child(0) as TileMapLayer
+	var imported_source := imported_layer.tile_set.get_source(imported_layer.get_cell_source_id(Vector2i(1, 0))) as TileSetAtlasSource
+	_check(imported_source != null, "Reloaded second tile retains its compact atlas")
+	if imported_source == null:
+		root.free()
+		return
+	var old_texture_path: String = imported_source.texture.resource_path
 	root.free()
 	_check(importer.import_tmx(fixture, output).get("success", false), "Reimport succeeds without stale atlas errors")
 	_check(not FileAccess.file_exists(old_texture_path), "Reimport removes only its superseded compact chunks")

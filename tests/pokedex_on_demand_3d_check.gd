@@ -41,6 +41,11 @@ func _run() -> void:
 	probe.name = "OnDemand3DBundleService"
 	root.add_child(probe)
 	var preview := PreviewProbe.new()
+	preview.download_pending = true
+	preview.loading_path = "/offline-probe/pending.scn"
+	preview._clear_actor()
+	_check(not preview.is_loading() and preview.request_generation == 1,
+		"clearing before the preview enters the tree cancels pending work safely")
 	root.add_child(preview)
 	preview.model_failed.connect(func(): failure_count += 1)
 	for shiny in [false, true]:

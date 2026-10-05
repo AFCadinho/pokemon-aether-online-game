@@ -252,6 +252,9 @@ func _clear_actor() -> void:
 	actor = null
 	player = null
 	profile = {}
+	# A card can clear its selection before the preview enters the scene tree.
+	if not is_instance_valid(status):
+		return
 	status.text = ""
 	tooltip_text = "Drag to rotate the 3D model"
 	status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
