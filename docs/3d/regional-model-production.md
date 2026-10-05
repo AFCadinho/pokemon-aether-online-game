@@ -9,8 +9,9 @@ previously accepted Galarian birds are outside this batch.
 
 All 58 pairs have appearance and battle approval. The 58 local bundles have
 passed installation and the 116 scenes have passed on-demand runtime checks.
-Performance qualification is held; no registry admission or publication has
-occurred. R2 publication and release activation are separate steps. Earlier sections retain the
+The 116 scenes are now runtime approved in the local game and launcher catalogs.
+All bundle, runtime and full performance gates pass. R2 publication and release
+activation remain separate steps. Earlier sections retain the
 chronology of candidate review and its limitations.
 
 ## Reproducible inputs and tooling
@@ -152,7 +153,7 @@ view and retaining a switch to the latest appearance images. Its receipt,
 combined report and qualification are in `battle-eyes-final-v1`. The subsequent
 bundle qualification is described below.
 
-## Bundle qualification: performance hold
+## Initial bundle qualification and performance hold
 
 The user approved the final 58-pair battle page with “Alle 58 in battle goed”.
 Appearance and battle approval are recorded in the candidate checkpoint.
@@ -189,7 +190,7 @@ including restart, no-op and coexistence checks. The on-demand renderer check
 passed all 58 normal/shiny pairs, exact profiles, aliases and Zen preloading.
 Total compressed bundle size is 807,233,937 bytes.
 
-Performance is **not admitted**. A second full attempt overlapped a slot-b
+At that checkpoint performance was **not admitted**. A second full attempt overlapped a slot-b
 animation preview and later stalled during Pikachu preparation. That failed
 log is retained. The following diagnostics exposed two test-setup issues:
 forcing a render after just one skipped draw can submit unnecessary work, and
@@ -230,3 +231,30 @@ new slot-b Thunderbolt preview. Its log is retained and excluded from admission.
 The complete 58-pair on-demand runtime check was repeated on the merged code and
 passes again with zero forced frames. An exclusive measurement period has been
 requested before repeating the full performance test.
+
+## Final local qualification
+
+A complete follow-up run passed the frame-time and memory limits but recorded
+one uncovered 137.388 ms load frame for Galarian Corsola. That report is retained
+as `admission-v1/stress-held-single-load-spike.json`; it was not admitted or
+edited. A targeted Corsola check did not reproduce the load stall (its standalone
+stadium timing was above 20 ms, so it is diagnostic only). The complete unchanged
+58-pair measurement was therefore repeated.
+
+The final three rounds pass at 16.827 / 19.342 / 18.523 ms p95. Prepared intervals
+measure 17.621 ms classic and 19.264 ms stadium across 41,760 frames. There are no
+uncovered stalls above 100 ms, no forced render frames, and all threaded-load
+dispatch/collect spans remain within one frame. Retained source data is
+33,643,761 bytes; final-round static-memory growth is 806,744 bytes, below 1 MiB.
+All battle actors/viewports are released according to the existing weak-reference
+checks. Godot emitted one ObjectDB warning on process exit; this is retained in
+the log, not represented as a clean shutdown or full release certification.
+
+`regional_model_admission.py validate` passes every existing limit and verifies
+all installed scene and archive hashes. Admission adds exactly 116 model entries
+and 116 calibrated profiles, plus `release/approved_3d_regional_58_index.json`.
+Existing catalog data and ordering are preserved. The post-admission runtime
+check passes all 58 pairs with exact placement/action profiles, Mr. Mime aliases,
+Zen preloading, and no downloads on normal/shiny swaps. The qualification receipt
+is `regional_model_bundle_qualification.json`. No public index or R2 object has
+been changed by this task.

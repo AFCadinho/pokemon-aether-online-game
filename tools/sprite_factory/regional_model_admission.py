@@ -175,7 +175,7 @@ def admit():
         'remaining':['Post-admission runtime check','Local integration','R2 upload and release index activation']}
     RECEIPT.write_bytes(encoded(receipt))
     registry['regional_58_bundle_qualification_sha256'] = sha(RECEIPT)
-    payload = (json.dumps(registry,indent='\t',sort_keys=True)+'\n').encode()
+    payload = (json.dumps(registry,indent='\t')+'\n').encode()
     game.write_bytes(payload); launcher.write_bytes(payload)
     (ROOT/'release/approved_3d_regional_58_index.json').write_bytes(encoded(index))
     print('REGIONAL_ADMITTED models=116 bundles=58 published=false')
@@ -199,7 +199,7 @@ def finalize():
     registry = read(game)
     assert all(registry['models'][k] == v for k,v in fixture['models'].items())
     registry['regional_58_bundle_qualification_sha256'] = sha(RECEIPT)
-    payload = (json.dumps(registry,indent='\t',sort_keys=True)+'\n').encode()
+    payload = (json.dumps(registry,indent='\t')+'\n').encode()
     game.write_bytes(payload); launcher.write_bytes(payload)
     checkpoint = read(CHECKPOINT)
     checkpoint.update(status='qualified_locally_not_published',runtime_approved=True,performance_qualified=True,

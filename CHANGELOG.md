@@ -4,7 +4,7 @@
 
 - Match 3D battle rendering to the actual window resolution, avoiding unnecessary GPU work in smaller windows while keeping larger windows sharp.
 - Restore missing eye details in regional Pokémon 3D model imports.
-- Prepare normal and shiny 3D bundles for 58 regional and related forms, pending performance approval and publication; preload Galarian Darmanitan's Zen form once approved.
+- Prepare normal and shiny 3D bundles for 58 regional and related forms, ready for publication; preload Galarian Darmanitan's Zen form before battle when installed.
 - Add source-textured Thunder Shock in 3D battles, with jagged lightning, synchronized sound and impact, and a moving discharge origin for Pikachu.
 
 - Add source-textured 3D effects for Tackle, Scratch and Bite with approach/return movement, synchronized contact sounds and Dodge; enable the approved source-textured Water Gun in normal battles.

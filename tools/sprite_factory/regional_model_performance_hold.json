@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "performance_hold",
+  "status": "resolved_by_raster_fix_and_complete_requalification",
   "pairs": 58,
   "models": 116,
   "bundles": 58,
@@ -48,17 +48,15 @@
     ".tmp/regional-production-v1/admission-v1/stress-incomplete-restart-and-thunderbolt-preview.log": "d875e664eb67d735c1c404df50371cbfcdf59930a04a0fd465dc0b0af687763d"
   },
   "remaining": [
-    "Resolve stadium performance hold under controlled rendering conditions",
-    "Complete full 58-pair stress run",
-    "Registry admission and post-admission runtime check",
     "Local integration",
     "Separately authorized R2 upload and release index activation"
   ],
   "followup": {
-    "status": "raster_fix_passes_control_full_run_awaits_exclusive_gpu",
+    "status": "qualified_locally_not_published",
     "fix_commit": "6a59803ae",
     "development_merge": "8b007e1f9",
     "runtime_pairs_passed": 58,
-    "remaining": "Full 58-pair stress run without competing Godot preview, then admission and integration"
+    "remaining": "Local integration, then separately authorized R2 upload and index activation",
+    "qualification_sha256": "511ceac81bcf819b446fe3d2145283aa9e3f3960408c9376a2f7cbdebc033985"
   }
 }
