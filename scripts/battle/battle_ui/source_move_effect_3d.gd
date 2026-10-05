@@ -97,17 +97,18 @@ func _draw_ember(from: Vector3, to: Vector3, right: Vector3, facing: Basis) -> v
 			var offset := Vector3(cos(angle), sin(angle), sin(angle * 2)) * after * 0.65
 			_source_sprite(to + offset, 0.6, "ember_sparks", after, 0.8 * (1.0 - after), facing, angle)
 
-func _draw_watergun(from: Vector3, to: Vector3, facing: Basis) -> void:
+func _draw_watergun(_from: Vector3, to: Vector3, facing: Basis) -> void:
 	var travel := (elapsed - launch) / maxf(impact - launch, 0.01)
 	var after := (elapsed - impact) / maxf(duration * 0.3, 0.01)
-	if travel >= 0 and after < 0.6:
-		var fade := 1.0 - clampf(after / 0.6, 0, 1)
-		var tip := from.lerp(to, clampf(travel, 0, 1))
-		_water_beam(from, tip, fade)
-		_source_sprite(from, 0.48, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
-		for i in 5:
-			var phase := clampf(travel - i * 0.045, 0, 1)
-			_source_sprite(from.lerp(to, phase), 0.32, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
+	for origin: Vector3 in emission_sources:
+		if travel >= 0 and after < 0.6:
+			var fade := 1.0 - clampf(after / 0.6, 0, 1)
+			var tip := origin.lerp(to, clampf(travel, 0, 1))
+			_water_beam(origin, tip, fade)
+			_source_sprite(origin, 0.48, "water_muzzle", fmod(elapsed * 3, 1.0), fade * 0.6, facing)
+			for i in 5:
+				var phase := clampf(travel - i * 0.045, 0, 1)
+				_source_sprite(origin.lerp(to, phase), 0.32, "water_drop", float(i) / 8.0, 0.75 * fade, facing, float(i))
 	if hit and after >= 0 and after < 1:
 		_source_sprite(to, 1.35, "water_splash", after, 0.9 * (1.0 - after * 0.3), facing)
 		for i in 9:

@@ -97,6 +97,7 @@ provenance file. Imported caches remain slot-local.
   comparison toggles, cancellation and cleanup. Screenshots use the optional
   `POKEAETHER_STAGE_OUTPUT` directory. Flight/impact screenshots inspected.
 
-Model mouth anchors still come from the existing model bounds. Different
-species may need individual attachment refinement. Water Gun still needs the
-user's visual review before enabling it in normal battles.
+Anatomical origins now use the [move attachment profiles](move-attachments.md)
+for Charmander, Squirtle and Blastoise. Other models retain bounds-based origins.
+Water Gun still needs the user's visual review before enabling its new source-textured
+look in normal battles; both Water Gun renderers support paired cannon origins.
