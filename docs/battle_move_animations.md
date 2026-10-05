@@ -2,6 +2,9 @@
 
 Move animations are routed through `BattleAnimationRouter` and configured in `res://data/battle_move_animations.json`.
 
+For the current 2D-to-3D coverage audit, shared building blocks and per-move
+approval checklist, see [the move animation inventory](battle-move-animation-inventory.md).
+
 The scalable path is:
 
 1. Put move-specific assets in `res://assets/battles/animations/<move_key>/`.
