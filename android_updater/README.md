@@ -91,6 +91,11 @@ the generated template, APKs, or signing credentials.
 
 ## Local USB game updates
 
+For desktop Android UI work, see `docs/android-emulator.md`. The local candidate
+helper accepts `--architecture x86_64` for the accelerated emulator; ARM64
+remains the default for physical phones. The selected architecture is checked
+against the APK's native libraries and saved in its local build record.
+
 `tools/build_android_usb_candidate.py` builds the full signed game in an
 assigned slot, checks its package, version, certificate and on-demand asset
 partition, and writes a local build record. Run it through `slot-env` with the

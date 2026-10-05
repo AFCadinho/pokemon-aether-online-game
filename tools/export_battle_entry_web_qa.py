@@ -29,6 +29,7 @@ def main():
     parser.add_argument("--sdk", type=Path)
     parser.add_argument("--templates", type=Path, default=Path.home() / ".local/share/godot/export_templates/4.6.2.stable")
     parser.add_argument("--java", type=Path, default=Path("/usr/lib/jvm/java-26-openjdk"))
+    parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     if mobile_collapse:
@@ -106,6 +107,10 @@ def main():
                 raise ValueError("Android diagnostic requires --sdk")
             selected = selected.replace(f'[preset.{next_index}.options]', f'[preset.{next_index}.options]\ncustom_template/debug="{args.templates / 'android_debug.apk'}"\ncustom_template/release="{args.templates / 'android_release.apk'}"')
             selected = selected.replace('gradle_build/use_gradle_build=true', 'gradle_build/use_gradle_build=false')
+            for architecture in ["armeabi-v7a", "arm64-v8a", "x86", "x86_64"]:
+                selected = re.sub(r'^architectures/' + re.escape(architecture) + r'=.*$',
+                                  'architectures/' + architecture + '=' + ('true' if architecture == args.architecture else 'false'),
+                                  selected, flags=re.M)
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if mobile_collapse:
