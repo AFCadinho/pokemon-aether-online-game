@@ -7,8 +7,10 @@
   impact layout as the approved `da06b8d89` pilot.
 - **Water Gun: visually approved by the user and enabled in normal 3D battles.**
   Uses the same source-textured recipe reviewed in the offline preview.
-- **Tackle, Scratch and Bite: implemented, awaiting visual approval.** See
+- **Tackle, Scratch and Bite: visually approved by the user.** See
   [contact move effects](contact-move-effects.md) for sources and conversion limits.
+- **Thunder Shock: implemented, awaiting visual approval.** See
+  [Thunder Shock](thundershock.md) for sources, timing and review.
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,

@@ -14,7 +14,7 @@ def rejected(raw):
     raise AssertionError('Malformed particle source accepted')
 
 
-def main(source, watergun=None, contacts=None):
+def main(source, watergun=None, contacts=None, electric=None):
     expected = {'ew0052_fire_muzzle': (3, 'fire', 'cpt_2_fire0005'),
                 'ew0052_bullet': (4, 'fire_core', 'cpt_2_fire0010'),
                 'ew0052_hit': (6, 'fire_Child', 'cpt_2_fire0008')}
@@ -93,6 +93,23 @@ def main(source, watergun=None, contacts=None):
                     else:
                         raise AssertionError('Unknown BC3 format/swizzle accepted')
         print('SV_CONTACT_EXTRACTION_OK parts=6 emitters=29 bc3_explicit=true source_unchanged=true')
+    if electric is not None:
+        for stem, count in [('ew0084_thunder', 2), ('ew0084_thunder_hit', 8)]:
+            path = electric / (stem + '.ptcl')
+            raw = path.read_bytes()
+            parsed, bntx = inspect_particle(raw)
+            assert len(parsed['emitters']) == count
+            assert len(legacy_bntx(bntx, allow_bc3=True)) == len(bntx)
+            assert any('cpt_3_mask0602' in e['textures'] for e in parsed['emitters'])
+            rejected(raw[:-1])
+            try:
+                legacy_bntx(bntx)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('Electric BC3 requires explicit opt-in')
+            assert path.read_bytes() == raw
+        print('SV_THUNDERSHOCK_EXTRACTION_OK parts=2 emitters=10 bc3_explicit=true source_unchanged=true')
     print('SV_EMBER_EXTRACTION_OK parts=3 emitters=13 invalid_inputs_rejected=18 source_unchanged=true')
 
 
@@ -101,5 +118,6 @@ if __name__ == '__main__':
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--watergun', type=Path)
     parser.add_argument('--contacts', type=Path, help='SV romfs/effect/battle_ew')
+    parser.add_argument('--electric', type=Path, help='SV romfs/effect/battle_ew/ew0084')
     args = parser.parse_args()
-    main(args.source, args.watergun, args.contacts)
+    main(args.source, args.watergun, args.contacts, args.electric)

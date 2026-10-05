@@ -1,7 +1,7 @@
 # Tackle, Scratch and Bite
 
 The three contact effects are implemented in `contact_move_effect_3d.gd` and
-selected by the normal 3D battle renderer. Visual approval is still pending.
+selected by the normal 3D battle renderer. The user has approved the effects and approach/return movement.
 Ember and Water Gun retain their approved source-textured recipes; Water Gun's
 previous preview-only gate has been removed following the user's approval.
 
