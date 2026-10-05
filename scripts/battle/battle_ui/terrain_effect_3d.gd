@@ -48,18 +48,32 @@ render_mode unshaded, blend_mix, cull_disabled, depth_draw_never;
 uniform vec4 tint : source_color;
 uniform float clock = 0.0;
 uniform float opacity = 0.0;
-uniform vec2 cells = vec2(8.0, 4.0);
+uniform vec2 cells = vec2(32.0, 12.0);
+float tile_hash(vec2 tile) {
+	return fract(sin(dot(tile, vec2(127.1, 311.7))) * 43758.5453);
+}
 void fragment() {
+	vec2 tile = floor(UV * cells);
+	float seed = tile_hash(tile);
+	// Each tile changes smoothly; broad waves travel across the mosaic.
+	float wave = 0.5 + 0.5 * sin(dot(tile, vec2(0.38, 0.51)) - clock * 1.25);
+	float shimmer = 0.5 + 0.5 * sin(clock * 1.6 + seed * 6.28318);
+	float hue = 0.5 + 0.5 * sin(seed * 6.28318 + wave * 2.0 + clock * 0.28);
+	vec3 blue = vec3(0.18, 0.35, 1.0);
+	vec3 violet = vec3(0.67, 0.24, 1.0);
+	vec3 cyan = vec3(0.24, 0.87, 1.0);
+	vec3 color = mix(blue, violet, hue);
+	color = mix(color, cyan, smoothstep(0.45, 0.95, wave) * (0.35 + seed * 0.65));
+	float highlight = pow(shimmer, 5.0) * wave;
+	color = mix(color, tint.rgb, highlight * 0.7);
 	vec2 grid = abs(fract(UV * cells - 0.5) - 0.5) / max(fwidth(UV * cells), vec2(0.0001));
-	float distance_to_line = min(grid.x, grid.y);
-	float lines = 1.0 - smoothstep(0.6, 1.6, distance_to_line);
-	float outline = 1.0 - smoothstep(1.6, 2.8, distance_to_line);
+	float seam = 1.0 - smoothstep(0.3, 1.0, min(grid.x, grid.y));
 	vec2 border = min(UV, vec2(1.0) - UV);
-	float frame = 1.0 - smoothstep(0.002, 0.007, min(border.x, border.y));
-	float pulse = 0.92 + 0.08 * sin(clock * 0.8 + UV.x * 5.0 + UV.y * 3.0);
-	// Pale cores and dark outlines stay legible against the stadium's purple lights.
-	ALBEDO = mix(vec3(0.09, 0.045, 0.18), tint.rgb, max(lines, frame));
-	ALPHA = (0.012 + outline * 0.14 + lines * 0.27 + frame * 0.38) * pulse * opacity;
+	float frame = 1.0 - smoothstep(0.001, 0.005, min(border.x, border.y));
+	ALBEDO = mix(color, tint.rgb, frame * 0.65);
+	// Keep even overlapping front/back faces transparent around the combatants.
+	ALPHA = (0.085 + wave * 0.065 + shimmer * 0.04 + highlight * 0.08
+		- seam * 0.025 + frame * 0.25) * opacity;
 }
 """
 var key := ""
@@ -111,9 +125,9 @@ func _plane(size: Vector2, point: Vector3, angles: Vector3, material: Material) 
 
 func _build_room() -> void:
 	var walls := _shader(ROOM_SHADER)
-	walls.set_shader_parameter("cells", Vector2(8, 3))
+	walls.set_shader_parameter("cells", Vector2(32, 12))
 	var floor_material := _shader(ROOM_SHADER)
-	floor_material.set_shader_parameter("cells", Vector2(8, 8))
+	floor_material.set_shader_parameter("cells", Vector2(32, 32))
 	_plane(Vector2(16, 16), Vector3.ZERO, Vector3(-PI / 2, 0, 0), floor_material)
 	_plane(Vector2(16, 16), Vector3(0, 6, 0), Vector3(PI / 2, 0, 0), floor_material)
 	for side in [-1, 1]:

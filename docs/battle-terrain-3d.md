@@ -14,7 +14,7 @@ Implemented and awaiting player review:
 - [ ] Electric Terrain — warm ground glow and brief low lightning arcs.
 - [ ] Misty Terrain — pale pink ground haze and gently drifting mist patches.
 - [ ] Psychic Terrain — violet ground ripples and small rising rings.
-- [ ] Trick Room — translucent walls with brighter lilac grid lines, dark outlines and stronger borders for visibility in the PvP stadium; awaiting re-review.
+- [ ] Trick Room — a translucent blue/purple mosaic cube with softly moving cyan highlights and defined borders, keeping Pokémon and the arena visible; awaiting re-review.
 
 ## Offline review
 
@@ -40,7 +40,7 @@ on a display. The preview uses the assigned slot's own model cache/downloader.
 
 Ground meshes follow the arena's surface height and battle origin, including co-op.
 Each terrain has one soft ground layer and at most 90 shadowless mesh instances.
-Trick Room uses six transparent grid planes. All animation uses the battle clock;
+Trick Room uses six transparent mosaic planes with smoothly animated tile colors. All animation uses the battle clock;
 there are no new waits in the event queue or camera movement/distortion.
 
 These are presentation-only layers. They do not change arena materials, lighting,
