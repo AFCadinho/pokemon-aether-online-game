@@ -46,6 +46,8 @@ func _run() -> void:
 	assert(battle.player_battle_platform.get_platform_texture() == animated.platform_texture)
 	assert(battle.enemy_battle_platform.get_platform_texture() == animated.platform_texture)
 	assert(battle.battle_background.self_modulate == Color.WHITE, "day retains original background colors")
+	assert(player.material is ShaderMaterial and player.material == battle.battle_background.material, "video and fallback share the sky effect")
+	assert(is_zero_approx(player.material.get_shader_parameter("night_amount")), "daytime sky stays unchanged")
 	var hud_color: Color = battle.player_hud_panel.modulate
 	var sprite_color: Color = battle.player_sprite_box.modulate
 	for hour in [6, 19, 23]:
@@ -53,6 +55,7 @@ func _run() -> void:
 		var expected := DayNight.color_for_seconds(hour * 3600.0)
 		assert(battle.battle_background.self_modulate.is_equal_approx(expected), "fallback follows outdoor time")
 		assert(player.self_modulate.is_equal_approx(expected), "video follows outdoor time")
+		assert(is_equal_approx(player.material.get_shader_parameter("night_amount"), DayNight.night_intensity_for_seconds(hour * 3600.0)), "sky follows the same clock")
 	assert(battle.player_hud_panel.modulate == hud_color and battle.player_sprite_box.modulate == sprite_color, "background lighting preserves HUD and sprite readability")
 	battle.weather_presentation.update_weather("raindance")
 	assert(player.self_modulate == DayNight.NIGHT_COLOR and player.modulate != Color.WHITE, "weather and night lighting compose")
@@ -103,6 +106,7 @@ func _run() -> void:
 	assert(battle.battle_background.texture == Catalog.get_profile(&"route_22").background_texture)
 	assert(battle.player_battle_platform.get_platform_texture() == Catalog.get_profile(&"route_22").platform_texture)
 	assert(player.self_modulate == Color.WHITE and battle.battle_background.self_modulate == Color.WHITE, "other backgrounds reset the meadow tint")
+	assert(player.material == null and battle.battle_background.material == null, "other backgrounds release the meadow sky effect")
 	battle.battle_type = battle.BattleType.WILD
 	battle._apply_battle_environment(&"route_22_water")
 	assert(player.stream == null and not player.visible)
