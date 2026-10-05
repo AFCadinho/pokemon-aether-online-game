@@ -1,6 +1,6 @@
 # Flamethrower, Bubble and Bubble Beam
 
-Implemented in normal 3D battles; all three await user visual approval.
+Implemented in normal 3D battles; all three are visually approved by the user.
 
 | Move | Source artwork | Authored 3D presentation |
 | --- | --- | --- |

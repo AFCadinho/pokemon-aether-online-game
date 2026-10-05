@@ -13,7 +13,7 @@
   [Thunder Shock](thundershock.md) for sources, timing and review.
 - **Thunderbolt: visually approved by the user.** See
   [Thunderbolt](thunderbolt.md) for source ribbons, sound timing and review.
-- **Flamethrower, Bubble and Bubble Beam: implemented, awaiting visual approval.**
+- **Flamethrower, Bubble and Bubble Beam: visually approved by the user.**
   See [fire and bubble effects](fire-bubble-effects.md) for source reuse and review.
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
