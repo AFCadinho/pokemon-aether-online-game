@@ -1685,6 +1685,13 @@ func _visual_rect(index: int) -> Rect2:
 	if not data.is_empty():
 		var box := AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
 		return _project_visual_bounds(box, actors[index].global_transform)
+	if _is_hybrid_presentation():
+		# Older approved models lack sampled bounds. Reuse the posed envelope
+		# already cached for effects instead of placing their HUD 3 metres up.
+		_effect_bounds(index)
+		var box: AABB = fallback_effect_bounds.get(identities[index], AABB())
+		if box.has_volume():
+			return _project_visual_bounds(box, actors[index].global_transform)
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
 	var top := _project_to_ui(actors[index].position + Vector3(0, 3, 0))
@@ -1733,15 +1740,43 @@ func _action(action: String, index: int) -> void:
 	players[index].play(mapped.clip, -1, mapped.speed * ActionMap.presentation_speed(action, mapped.duration / mapped.speed))
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 
+func _hybrid_size_limit() -> float:
+	# One shared magnification preserves relative model sizes. Fit idle envelopes
+	# so giant bodies do not fill the field, and attacks never pump the camera.
+	var limit := 1.0
+	for index in _slot_count():
+		var identity := _combatant_key(index)
+		if not placements.has(identity):
+			continue
+		var data: Dictionary = visual_bounds.get(identity, {}).get("idle", {})
+		var box := AABB()
+		if not data.is_empty():
+			box = AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
+		elif fallback_effect_bounds.has(identity):
+			box = fallback_effect_bounds[identity]
+		if not box.has_volume():
+			continue
+		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - _position(index)
+		var yaw := atan2(direction.x, direction.z) + deg_to_rad(float(placements[identity].yaw_degrees))
+		var basis := Basis(Vector3.UP, yaw).scaled(Vector3.ONE * float(placements[identity].scale))
+		var rect := Rect2()
+		for corner in 8:
+			var point := camera.unproject_position(basis * box.get_endpoint(corner))
+			rect = Rect2(point, Vector2.ZERO) if corner == 0 else rect.expand(point)
+		var available := Vector2(viewport.size) * (Vector2(0.24, 0.30) if double_mode else Vector2(0.40, 0.40))
+		limit = maxf(limit, maxf(rect.size.x / maxf(available.x, 1.0), rect.size.y / maxf(available.y, 1.0)))
+	return limit
+
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	if settings.battle_presentation_mode == "2.5d":
 		# A flat background cannot follow orbit/zoom or perspective depth changes.
 		# Keep a shallow, centered view and equal model scale on both platforms.
 		camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-		camera.size = 10.0
+		camera.size = 6.5
 		camera.position = Vector3(0, 5.5, 16)
 		camera.look_at(Vector3(0, 1.3, 0))
+		camera.size *= _hybrid_size_limit()
 		return
 	camera.projection = Camera3D.PROJECTION_PERSPECTIVE
 	var all_resting := true

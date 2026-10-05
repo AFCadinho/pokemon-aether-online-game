@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enlarge Pokémon in 2.5D battles while keeping their feet aligned with the field, fitting very large models, and placing HP panels closer to older models.
+
 - Render rain, sun, sandstorm, snow, hail and primal weather inside 3D battles, with camera-stable effects and replay pause/speed support.
 
 - Restore smooth filtering for enlarged 2D battle Pokémon after reviewing the sharper pixel-art presentation.
