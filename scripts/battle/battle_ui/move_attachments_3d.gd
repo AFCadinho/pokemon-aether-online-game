@@ -17,7 +17,7 @@ const PROFILES := {
 		"cannons": [["left_feeler_b_02", Vector3(0.261, 0, 0)], ["right_feeler_b_02", Vector3(0.261, 0, 0)]],
 	},
 }
-const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons"}, "pikachu": {"thundershock": "electric_body"}}
+const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
 const CACHE_META := &"move_attachment_bindings"
 
 static func part_for(identity: String, move_key: String) -> String:

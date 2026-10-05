@@ -71,9 +71,10 @@ func _run() -> void:
 		var source := catalog.get_plan("move",move)
 		var copy := source.duplicate(true)
 		var plan := Effect.audio_plan(source,timing)
-		assert(source == copy and plan.cues.size() == 1 and plan.sound_paths == source.sound_paths)
+		assert(source == copy and plan.cues.size() == (2 if move == "thunderbolt" else 1) and plan.sound_paths == source.sound_paths)
 		var expected: float = timing.impact_frame/60.0 if move in ["tackle","scratch","bite"] else timing.impact_frame/60.0-0.28
 		assert(is_equal_approx(plan.cues[0].at_seconds,expected))
+		if move == "thunderbolt": assert(is_equal_approx(plan.cues[1].at_seconds,timing.impact_frame/60.0))
 		for slot in 4:
 			var actor := "p%d" % (slot+1)
 			var target := "p%d" % ((slot+1)%4+1)
@@ -83,6 +84,7 @@ func _run() -> void:
 			if move == "ember": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Ember must use packaged source textures")
 			if move in ["tackle", "scratch", "bite"]: assert(effect.get_script() == Stage.ContactMoveEffect)
 			if move == "thundershock": assert(effect.get_script() == Stage.ElectricMoveEffect)
+			if move == "thunderbolt": assert(effect.get_script() == Stage.ThunderboltMoveEffect)
 			if move == "watergun": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Water Gun must use packaged source textures")
 			effect.set_process(false)
 			stage.players[slot].seek(effect.impact+0.04,true)
@@ -181,5 +183,5 @@ func _run() -> void:
 	stage.queue_free()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	print("BATTLE_MOVE_EFFECTS_3D_OK moves=6 slots=4 audio=true impact=true outcomes=true replacement=true cancellation=true optional_audio=true")
+	print("BATTLE_MOVE_EFFECTS_3D_OK moves=",Effect.KEYS.size()," slots=4 audio=true impact=true outcomes=true replacement=true cancellation=true optional_audio=true")
 	get_tree().quit()

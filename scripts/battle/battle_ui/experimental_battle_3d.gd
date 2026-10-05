@@ -14,6 +14,7 @@ const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const ContactMoveEffect = preload("res://scripts/battle/battle_ui/contact_move_effect_3d.gd")
 const ElectricMoveEffect = preload("res://scripts/battle/battle_ui/electric_move_effect_3d.gd")
+const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbolt_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 var move_command_holds := [false, false, false, false]
@@ -1064,6 +1065,8 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = ContactMoveEffect.new()
 	elif MoveEffect.move_key(move) == "thundershock":
 		effect = ElectricMoveEffect.new()
+	elif MoveEffect.move_key(move) == "thunderbolt":
+		effect = ThunderboltMoveEffect.new()
 	else:
 		effect = SourceMoveEffect.new() if MoveEffect.move_key(move) in ["ember", "watergun"] else MoveEffect.new()
 	world.add_child(effect)

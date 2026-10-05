@@ -18,7 +18,7 @@ and non-looping clip guards preserve generic timing for different model clips.
 
 Pikachu's discharge origin follows `spine_02` (the moving upper body). This
 avoids emitting from below Pikachu when its special attack jumps. The
-`electric_body` attachment is specific to Thunder Shock, so its approved Tackle
+`electric_body` attachment is used by Thunder Shock and Thunderbolt, so its approved Tackle
 and other moves retain their existing origins. Other species and visible
 Substitutes use the established body/bounds fallback. There is no contact
 approach for this ranged electric move.

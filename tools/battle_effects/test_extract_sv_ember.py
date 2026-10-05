@@ -14,7 +14,7 @@ def rejected(raw):
     raise AssertionError('Malformed particle source accepted')
 
 
-def main(source, watergun=None, contacts=None, electric=None):
+def main(source, watergun=None, contacts=None, electric=None, thunderbolt=None):
     expected = {'ew0052_fire_muzzle': (3, 'fire', 'cpt_2_fire0005'),
                 'ew0052_bullet': (4, 'fire_core', 'cpt_2_fire0010'),
                 'ew0052_hit': (6, 'fire_Child', 'cpt_2_fire0008')}
@@ -110,6 +110,24 @@ def main(source, watergun=None, contacts=None, electric=None):
                 raise AssertionError('Electric BC3 requires explicit opt-in')
             assert path.read_bytes() == raw
         print('SV_THUNDERSHOCK_EXTRACTION_OK parts=2 emitters=10 bc3_explicit=true source_unchanged=true')
+    if thunderbolt is not None:
+        for stem, count in [('ew0085_start', 11), ('ew0085_beam01', 7), ('ew0085_hit_start', 9),
+                            ('ew0085_hit', 10), ('ew0085_hit_end', 14)]:
+            path = thunderbolt / (stem + '.ptcl')
+            raw = path.read_bytes()
+            parsed, bntx = inspect_particle(raw)
+            assert len(parsed['emitters']) == count
+            assert len(legacy_bntx(bntx, allow_bc3=True, allow_bc5=True)) == len(bntx)
+            rejected(raw[:-1])
+            if stem != 'ew0085_hit_start':
+                try:
+                    legacy_bntx(bntx)
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('Thunderbolt BC3/BC5 requires explicit opt-in')
+            assert path.read_bytes() == raw
+        print('SV_THUNDERBOLT_EXTRACTION_OK parts=5 emitters=51 formats_explicit=true source_unchanged=true')
     print('SV_EMBER_EXTRACTION_OK parts=3 emitters=13 invalid_inputs_rejected=18 source_unchanged=true')
 
 
@@ -119,5 +137,6 @@ if __name__ == '__main__':
     parser.add_argument('--watergun', type=Path)
     parser.add_argument('--contacts', type=Path, help='SV romfs/effect/battle_ew')
     parser.add_argument('--electric', type=Path, help='SV romfs/effect/battle_ew/ew0084')
+    parser.add_argument('--thunderbolt', type=Path, help='SV romfs/effect/battle_ew/ew0085')
     args = parser.parse_args()
-    main(args.source, args.watergun, args.contacts, args.electric)
+    main(args.source, args.watergun, args.contacts, args.electric, args.thunderbolt)

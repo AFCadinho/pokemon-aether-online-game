@@ -23,6 +23,7 @@ MOVE_PARTS.update({
     'scratch': ('ew0010_hit',),
     'bite': ('ew0044_tooth', 'ew0044_df_hit'),
     'thundershock': ('ew0084_thunder', 'ew0084_thunder_hit'),
+    'thunderbolt': ('ew0085_start', 'ew0085_beam01', 'ew0085_hit_start', 'ew0085_hit', 'ew0085_hit_end'),
 })
 
 
@@ -173,7 +174,8 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move == "watergun", allow_bc3=move in ("scratch", "thundershock")))
+        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt"),
+                                      allow_bc3=move in ("scratch", "thundershock", "thunderbolt")))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
                              cwd=folder, capture_output=True, text=True, timeout=60)
         (folder / 'decoder.log').write_text(run.stdout + run.stderr)

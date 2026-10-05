@@ -22,10 +22,11 @@ class RecordingRouter extends BattleAnimationRouter:
 		await super.play_damage_tween_for_target(target,variant)
 	var damage_sounds: Array = []
 	func _start_3d_audio(kind: String, key: String, plan: Dictionary = {}, begin_immediately := true) -> Node:
-		assert(kind == "effect", "Model-only moves must not prepare or play move-animation audio")
+		assert(kind == "effect" or (kind == "move" and key == "thunderbolt" and model_presenter.can_present_move(key)),
+			"Move audio requires an available native move effect")
 		var audio := await super._start_3d_audio(kind, key, plan, begin_immediately)
 		assert(is_instance_valid(audio) and not audio.streams.is_empty(), "Shared effect sounds remain available")
-		effects.append(key)
+		if kind == "effect": effects.append(key)
 		return audio
 	func _play_one_shot_sound(path: String) -> void:
 		damage_sounds.append(path)
@@ -105,7 +106,8 @@ func _case(species: String, move: String) -> void:
 		assert(router.active_audio_nodes.is_empty())
 		await get_tree().process_frame
 	assert(stage.players[0].is_playing(), "Move must release events at impact, before recovery ends")
-	assert(is_equal_approx(stage.players[0].get_playing_speed(), 1.5))
+	# Pikachu's two-second native clip now uses the supported-VFX 1.25s cap.
+	assert(is_equal_approx(stage.players[0].get_playing_speed(), 1.6 if move == "Thunderbolt" else 1.5))
 	assert(stage.players[0].current_animation_position >= float(pilot.impact_frame) / 60.0)
 	assert(router.active_audio_nodes.is_empty(), "Pilot sounds are also silent without move VFX")
 	assert(not router.has_3d_impact_damage("p1") and router.has_3d_impact_damage("p2"))
@@ -195,7 +197,7 @@ func _clock_checks() -> void:
 	while not move_done:
 		await get_tree().process_frame
 	assert(router.active_audio_nodes.is_empty() and router.has_3d_impact_damage())
-	assert(is_equal_approx(stage.players[0].get_playing_speed(), 3.0))
+	assert(is_equal_approx(stage.players[0].get_playing_speed(), 3.2))
 	await renderer.render_event({"type": "damage"}, {"damage_target_ident": "p2"})
 	_set_replay_speed(1)
 	router.cancel_render()
