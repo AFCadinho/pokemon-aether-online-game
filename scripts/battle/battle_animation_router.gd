@@ -247,7 +247,8 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 		var audio: Node = prepared.get("audio")
 		if is_instance_valid(effect) and not effect.done:
 			if is_instance_valid(audio):
-				# Contact sounds also describe a swing on a miss; no hit burst is shown.
+				# Only confirmed visual impacts receive a contact/impact sample.
+				audio.confirmed_hit = effect.hit
 				audio.clock = effect.seconds
 				audio.set_process(true)
 				audio.begin()

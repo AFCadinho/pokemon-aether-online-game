@@ -14,6 +14,9 @@ func _start() -> void:
 	_button(row,"Vorige nieuwe move",func(): _select_new(-1))
 	_button(row,"Volgende nieuwe move",func(): _select_new(1))
 	status.text = "Nieuwe reeks: Shadow Ball t/m Water Pulse. Test raak / ontwijken en draai de camera."
+	if "--audio-review" in OS.get_cmdline_user_args():
+		root.title = "PokeAether — 3D movegeluiden testen"
+		status.text = "Nieuwe korte 3D-geluiden: test vooral Moonblast, Flash Cannon en Magical Leaf. Raak / ontwijken via de keuzelijst."
 	print("BATCH_FOUR_PREVIEW_READY moves=10")
 	if "--smoke-batch-four" in OS.get_cmdline_user_args(): await _check_batch()
 	if "--smoke-batch-navigation" in OS.get_cmdline_user_args(): await _check_navigation()

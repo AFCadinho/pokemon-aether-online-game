@@ -71,8 +71,8 @@ func _run() -> void:
 		var source := catalog.get_plan("move",Effect.audio_source_key(move))
 		var copy := source.duplicate(true)
 		var plan := Effect.audio_plan(source,timing)
-		assert(source == copy and plan.cues.size() == (2 if move in ["thunderbolt","razorleaf"] or Effect.IMPACT_SOUNDS.has(move) else 1) and plan.sound_paths == source.sound_paths)
-		var expected: float = timing.impact_frame/60.0 if move in ["tackle","scratch","bite"] else timing.impact_frame/60.0-0.28
+		assert(source == copy and plan.cues.size() == (2 if move in ["thunderbolt","razorleaf"] or Effect.IMPACT_SOUNDS.has(move) else 1) and plan.sound_paths != source.sound_paths)
+		var expected: float = 0.0 if move == "moonblast" else (timing.impact_frame/60.0 if move in ["tackle","scratch","bite"] else timing.impact_frame/60.0-0.28)
 		assert(is_equal_approx(plan.cues[0].at_seconds,expected))
 		if move in ["thunderbolt","razorleaf"] or Effect.IMPACT_SOUNDS.has(move): assert(is_equal_approx(plan.cues[1].at_seconds,timing.impact_frame/60.0))
 		for slot in 4:
@@ -143,7 +143,7 @@ func _run() -> void:
 	await router.finish_3d_impact_damage("p2")
 	await get_tree().process_frame
 	assert(stage.common_effects.is_empty() and not router.has_3d_impact_damage())
-	for audio: Node in router.active_audio_nodes: assert(audio.draining)
+	assert(router.active_audio_nodes.is_empty(), "3D move samples cannot outlive recovery")
 	router.cancel_render()
 	await get_tree().process_frame
 	# Miss calls Dodge before motion; cancellation releases the waiter without repeating it.
@@ -151,6 +151,7 @@ func _run() -> void:
 	_route("Scratch",{"result":"miss","on_dodge_started":_miss,"show_impact":true})
 	while stage.common_effects.is_empty() and not complete: await get_tree().process_frame
 	assert(not complete and not stage.common_effects[0].hit)
+	assert(not router.active_audio_nodes.is_empty() and not router.active_audio_nodes[0].confirmed_hit)
 	router.cancel_render()
 	while not complete: await get_tree().process_frame
 	assert(misses==1 and router.active_audio_nodes.is_empty())
