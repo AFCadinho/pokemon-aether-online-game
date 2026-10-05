@@ -60,6 +60,8 @@ def export(row, source_root, work):
     folder.mkdir(parents=True, exist_ok=True)
     source = folder / 'prepared.blend'
     files = {str(p): sha(p) for p in model.parent.iterdir() if p.is_file()}
+    if row.get('restore_source_albedo_bindings', False):
+        files.update({str(source_root / r['path']): r['sha256'] for r in row['scvi_files']})
     files.update({p: sha(p) for p in motions.values()})
     import_job = {'species': row['species'], 'identity': row['resource'], 'variant': 'normal',
                   'model_dir': str(model.parent), 'motions': motions, 'motion_channels': {},
@@ -110,8 +112,11 @@ def visibility(row, entry, motion_dir):
         if abs((spec['frames'] - 1) / spec['fps'] - clip['duration']) > 1e-5:
             raise ValueError('Raw visibility clock differs: ' + action)
         tracks = [{'mesh': mesh_name(t['target']), 'source_target': t['target'],
-                   'keys': keys(t, spec['frames'], spec['fps'])}
-                  for t in inspect_visibility(path)]
+                   'keys': keys(t, spec['frames'], spec['fps'],
+                                dynamic_review=row.get('dynamic_visibility_review', False),
+                                full_frame_review=row.get('dynamic_visibility_review', False))}
+                  for t in inspect_visibility(path)
+                  if t['target'] not in row.get('excluded_visibility_targets', [])]
         if len(tracks) != len(meshes) or {t['mesh'] for t in tracks} != meshes:
             raise ValueError('Visibility does not identify every exported mesh')
         result['clips'][action] = {'duration': clip['duration'], 'loop': clip['loop'],
@@ -160,7 +165,7 @@ def material(row, source_root, work):
     tables = {m['name']: m for m in inspect_materials(normal)}
     effect_names = {p['material'] for p in row['material_profiles'] if p.get('requires_effect_payload')}
     for m in doc['materials']:
-        if m['name'] not in effect_names:
+        if m['name'] not in effect_names and not row.get('restore_source_albedo_bindings', False):
             continue
         name = tables[m['name']]['textures']['BaseColorMap']
         texture = normal.parent / Path(name).with_suffix('.png')
@@ -205,10 +210,16 @@ def material(row, source_root, work):
             'source_eye_material_diagnostic': 'eyelid_source_uv',
             'motion_channels': channels,
             'identity_evidence': {'source_sha256': {p: sha(p) for p in channels.values()}}}}
-        entry['eye_motion'] = prepare_eyes(eye_job, clips, entry['glb_sha256'])
+        eye_motion = prepare_eyes(eye_job, clips, entry['glb_sha256'])
+        if eye_motion.get('materials'):
+            entry['eye_motion'] = eye_motion
         effects = prepare_effects({'material_source': str(table),
                                   'material_source_sha256': sha(table),
-                                  'effect_motion_dir': str(motions)})
+                                  'effect_motion_dir': str(motions),
+                                  'identity_intake': {**row.get('effect_review_options', {}),
+                                      'motion_channels': channels,
+                                      'identity_evidence': {'source_sha256': {
+                                          str(p): sha(p) for p in motions.glob('*.tracm')}}}})
         if effects:
             doc, binary = chunks(target)
             material_rows = {m['name']: m for m in inspect_materials(table)}
@@ -235,7 +246,18 @@ def material(row, source_root, work):
                                          'scope': 'source-driven effects; pending visual approval'}
         write(folder / 'receipt.json', entry)
         variants.append(entry)
-    parity = compare(Path(variants[0]['path']), Path(variants[1]['path']))
+    if row.get('identical_source_variant_review', False):
+        from phase5_variant_parity import signature
+        rare = normal.with_stem(normal.stem + '_rare')
+        if inspect_materials(normal) != inspect_materials(rare):
+            raise ValueError('Identical variant exception requires identical parsed source materials')
+        if variants[0]['glb_sha256'] != variants[1]['glb_sha256']:
+            raise ValueError('Identical source variant unexpectedly changed')
+        parity = signature(Path(variants[0]['path']))
+        for entry in variants:
+            entry['variant_limitation'] = 'Normal and rare source materials are identical; no invented shiny recolour'
+    else:
+        parity = compare(Path(variants[0]['path']), Path(variants[1]['path']))
     return {'species': row['species'], 'variants': variants, 'geometry_motion_parity': parity}
 
 

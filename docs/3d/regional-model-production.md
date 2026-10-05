@@ -1,0 +1,84 @@
+# Regional model production batch
+
+## Scope and status
+
+This batch covers the 58 missing entries from `tools/sprite_factory/regional_model_coverage_audit.json`:
+54 ordinary regional forms, Galarian Darmanitan Zen, two Alolan Totems and
+Pikachu with the Alola cap. It produces 116 normal/shiny candidates. The three
+previously accepted Galarian birds are outside this batch.
+
+Candidates are **not runtime approved**. Registry admission, bundle generation,
+performance qualification and R2 publication remain separate steps after the
+combined visual review. No release index or runtime registry is changed here.
+
+## Reproducible inputs and tooling
+
+- `tools/sprite_factory/regional_model_batch_inputs.json`: the 58-entry source
+  scan, 20 legacy intake rows, own-rig action mappings and ZA archive members.
+- `regional_model_source_intake.json`: native input files and hashes, including
+  shared Pikachu textures. Source paths refer to the mounted external disk.
+- `regional_model_production.py`: source intake, native export and material pass.
+- `regional_legacy_candidates.py` / `regional_legacy_variants.py`: the legacy
+  source route, own-rig animation export and normal/shiny material candidates.
+- `regional_visual_repairs.py`: explicit material and source-atlas eye repairs.
+- `regional_weezing_smoke.py`: compact chimney plumes for Galarian Weezing.
+- `regional_battle_prepare.py`: geometry-bound native measurements and proposed
+  size, grounding and hover profiles.
+- `regional_finish_review.py` / `regional_review_page.py`: checked evidence
+  aggregation and a single lazy-loading normal/shiny appearance/battle gallery.
+
+Generated source exports, receipts, scenes, rendered images and measurement
+reports live in `.tmp/regional-production-v1/` in the assigned worktree. They
+must remain available until acceptance and bundle admission. They are not
+copied into an integration checkout or committed as runtime assets.
+
+## Review limitations and explicit proposals
+
+- Native routes: 31 SCVI regional entries, six entries from five ZA resources,
+  and the Alola-cap Pikachu; 20 entries use the legacy dump.
+- Eleven legacy shiny candidates use matched normal/shiny sprite references.
+  Palette registration and geometry/alpha parity are checked, but this still
+  requires visual colour approval. Other pairs use native variant materials.
+- Alola-cap Pikachu has identical parsed normal/rare source material tables.
+  Identical colours are recorded explicitly instead of inventing a variant.
+- Alolan Vulpix has no suitable battle attacks in its source archive. Its
+  attack candidates use its own source gestures, with explicit action timing.
+- Galarian Darmanitan Zen uses a source rest proposal because its source has no
+  sleep clip. Corsola keeps its native open-eyed rest expression.
+- Closed-eye atlas frames were explicitly inspected for nine legacy pairs;
+  arbitrary dark texture cells are not treated as closed eyes.
+- Galarian Weezing had excessively stretched animated smoke tubes. The two
+  smoke meshes are compressed, given source-noise surface variation and bound
+  to their own chimney joints. Body meshes, rig and animation clips are
+  unchanged. This effect adjustment requires the same final visual review.
+- Totem sizes are proposed relative to the corresponding base forms, bounded
+  by battle framing. Geodude, Raichu and Weezing have explicit hover proposals.
+
+## Verification
+
+- 48 focused existing Python checks passed (18 export/visibility/eye/parity,
+  30 materials/variants/effects). Existing thresholds were not relaxed.
+- All 116 standalone runtime candidates converted successfully.
+- All 116 final appearance entries have no load or animation-switch errors.
+- Full source-clock 60 Hz geometry measurements cover every candidate. Where
+  only materials changed, reuse requires identical geometry, skin and motion
+  signatures; the modified Weezing geometry was measured again.
+- Independent 120 Hz measurements check actual packed runtime scenes, plus
+  captured poses in both cameras and on both sides. Corrections must pass the
+  existing qualification gate before the combined page is presented.
+- The battle harness uses HUD proxies. Full game UI, arena collision and
+  performance qualification are not implied by these geometry checks.
+
+## Current review checkpoint
+
+All 116 variants pass the unchanged independent 120 Hz battle qualification.
+The initial report held 18 variants on floor-clearance samples; explicit local
+vertical-envelope refinements were remeasured in fresh packed scenes. All
+failed reports and refinement provenance are retained. Camera/HUD checks pass.
+`regional_model_candidate_review.json` pins the current candidate and report
+hashes; `regional_clearance_refine.py` records the correction process.
+
+The combined review is `.tmp/regional-production-v1/review-v1/index.html`.
+The normal checkout and runtime registries remain unchanged. Keep slot-a and
+its generated artifacts for the final review, performance check and admission.
+User visual approval is still required before building approved bundles.
