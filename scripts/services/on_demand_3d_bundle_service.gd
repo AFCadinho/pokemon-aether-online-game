@@ -102,7 +102,7 @@ func prefetch_models(identities: Array[String]) -> void:
 	if OS.has_feature("web") or OS.has_feature("mobile"):
 		return
 	_prefetch_generation += 1
-	_run_prefetch.call_deferred(identities.duplicate(), _prefetch_generation)
+	_run_prefetch.call_deferred(preload("res://scripts/battle/battle_ui/model_form_dependencies.gd").with_forms(identities), _prefetch_generation)
 
 
 func cancel_prefetch() -> void:

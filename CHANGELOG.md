@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Download and prepare possible Mega forms before their battle transformations, including shiny variants; include these forms in background party and area downloads.
+
 - Give Mega Garchomp its reviewed standing stance and matching battle animations, including normal/shiny Pokédex and summary previews.
 
 - Show a clearer Poké Ball throw on every 3D summon, including switches, and keep the HP HUD anchored to the visible Substitute model.
