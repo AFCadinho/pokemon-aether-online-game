@@ -128,7 +128,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
 	if elapsed<=0: return
 	if key=="moonblast" and travel<0.6:
-		_source_sprite(from+Vector3.UP*1.35,0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
+		_source_sprite(from+Vector3.UP*(1.35+0.3*(presentation_scale-1.0)),0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
 		if cursor>0 and sprite_keys[cursor-1]=="moon":
 			sprite_materials[cursor-1].set_shader_parameter("moon_disc",true)
 	if travel>=1: return

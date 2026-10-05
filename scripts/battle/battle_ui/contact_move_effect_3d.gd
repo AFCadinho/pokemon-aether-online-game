@@ -24,13 +24,18 @@ var claw_material: ShaderMaterial
 var fang_mesh: ArrayMesh
 var fang_material: StandardMaterial3D
 
+func _geometry_scale() -> float:
+	# Scale the complete claw/jaw pattern, including tooth spacing, once via
+	# target_radius. Independently enlarging each tooth makes them overlap.
+	return 1.0
+
 func _sprite_values(id: String) -> Array:
 	return CONTACT_SPRITES[id] if CONTACT_SPRITES.has(id) else super._sprite_values(id)
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	if key not in CONTACT_KEYS: return super._draw_source_move(from, to, right, up)
 	var points: Dictionary = anchors.call()
-	target_radius = clampf(float(points.radius), 0.4, 1.2)
+	target_radius = clampf(float(points.radius), 0.4, 1.2) * presentation_scale
 	var facing := Basis(right, up, right.cross(up))
 	match key:
 		"tackle": _draw_tackle(from, to, facing)
