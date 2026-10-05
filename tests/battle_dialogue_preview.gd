@@ -28,7 +28,7 @@ func _start() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.offset_left = 12
 	panel.offset_right = 450
-	panel.offset_top = -245 if freeze_preview else -205
+	panel.offset_top = -275 if freeze_preview else -205
 	panel.offset_bottom = -12
 	toolbar = VBoxContainer.new()
 	panel.add_child(toolbar)
@@ -64,6 +64,7 @@ func _start() -> void:
 		freeze_buttons.append(_button(freezing, "Bevries links", func(): _freeze(0, true)))
 		freeze_buttons.append(_button(freezing, "Bevries rechts", func(): _freeze(1, true)))
 		freeze_buttons.append(_button(freezing, "Ontdooi alles", func(): _freeze(0, false); _freeze(1, false)))
+		freeze_buttons.append(_button(toolbar, "Aanval geblokkeerd (rechts)", _freeze_blocked))
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.custom_minimum_size.x = 420
@@ -208,7 +209,19 @@ func _freeze(side: int, enabled: bool) -> void:
 	hud.set_pokemon_data("Dragonite" if side == 0 else right_species, 100, hp, hp, "frz" if enabled else "")
 	status.text = "Freeze geforceerd — draai de camera; Ontdooi alles verwijdert het effect." if enabled else "Ontdooid — normale animatie hervat."
 	if enabled:
-		await battle.animation_router.play_effect_animation("status_frozen", "p%d" % (side+1))
+		await battle.event_renderer.render_event({"type":"status", "status":"frz"}, {
+			"effect_animation_key":"status_frozen", "effect_animation_target_ident":"p%d" % (side+1)
+		}, true)
+
+func _freeze_blocked() -> void:
+	if loading or not is_instance_valid(battle): return
+	var renderer: Node = battle.animation_router.model_presenter
+	if not is_instance_valid(renderer) or not renderer.handles("p2"): return
+	await _freeze(1, true)
+	status.text = "Pikachu kan niet aanvallen door Freeze — eenmalige ijskristallen."
+	await battle.event_renderer.render_event({"type":"cant", "reason":"frz", "actor":"p2"}, {
+		"effect_animation_key":"status_frozen", "effect_animation_target_ident":"p2"
+	}, true)
 
 func _check_freeze() -> void:
 	var renderer: Node = battle.animation_router.model_presenter
@@ -220,12 +233,15 @@ func _check_freeze() -> void:
 	assert(renderer.status_conditions[1] == "frozen")
 	await process_frame
 	assert(renderer.players[1].speed_scale == 0.0)
+	assert(renderer.status_effects[1].particles.is_empty())
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	if not output.is_empty() and DisplayServer.get_name() != "headless":
 		DirAccess.make_dir_recursive_absolute(output)
 		for i in 20: await process_frame
 		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png(output.path_join("freeze-preview.png"))
+	await _freeze_blocked()
+	assert(renderer.status_conditions[1] == "frozen" and renderer.players[1].speed_scale == 0.0)
 	await _freeze(1, false)
 	await process_frame
 	assert(renderer.status_effects[1] == null and renderer.players[1].speed_scale > 0.0)

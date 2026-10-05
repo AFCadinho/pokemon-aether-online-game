@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep frozen 3D Pokémon tinted and still without repeating particles; show ice crystals only when Freeze blocks an action.
+
 - Give Mega Garchomp its reviewed standing stance and matching battle animations, including normal/shiny Pokédex and summary previews.
 
 - Show a clearer Poké Ball throw on every 3D summon, including switches, and keep the HP HUD anchored to the visible Substitute model.
