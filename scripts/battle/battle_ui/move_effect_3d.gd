@@ -1,8 +1,8 @@
 extends Node3D
 ## First native move VFX. Samples the model clock; never changes HP or outcomes.
 signal finished
-const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock"]
-const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25")]
+const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt"]
+const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448")]
 var key := ""
 var elapsed := 0.0
 var duration := 1.0
@@ -48,7 +48,12 @@ static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 		var name := str(cue.event.get("name", ""))
 		if seen.has(name): continue
 		seen[name] = true
-		cues.append({"at_seconds": cue_time, "event": cue.event.duplicate(true)})
+		var at_seconds := cue_time
+		# Thunderbolt has a discharge sound and a separate impact sound in 2D.
+		if str(timing.get("move_key", "")) == "thunderbolt" and name == "PRSFX- Thunderbolt1.wav":
+			at_seconds = impact_seconds
+		cues.append({"at_seconds": at_seconds, "event": cue.event.duplicate(true)})
+	cues.sort_custom(func(a, b): return a.at_seconds < b.at_seconds)
 	plan.cues = cues
 	plan.duration_seconds = float(timing.frames) / 60.0
 	plan.speed_scale = 1.0

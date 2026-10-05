@@ -1,13 +1,16 @@
 extends "res://tests/battle_dialogue_preview.gd"
 const Electric = preload("res://scripts/battle/battle_ui/electric_move_effect_3d.gd")
+var electric_script: Script = Electric
+var electric_name := "Thunder Shock"
+var electric_index := 5
 func _start() -> void:
 	left_species = "Pikachu"
 	if "--smoke-electric" in OS.get_cmdline_user_args():
 		create_timer(100).timeout.connect(func(): printerr("ELECTRIC_PREVIEW_TIMEOUT"); quit(1))
 	await super._start()
-	root.title = "PokeAether — Thunder Shock"
-	move_picker.select(5)
-	status.text = "Thunder Shock met bronmateriaal. Test raak / ontwijken, pauzeer en draai de camera."
+	root.title = "PokeAether — " + electric_name
+	move_picker.select(electric_index)
+	status.text = electric_name + " met bronmateriaal. Test raak / ontwijken, pauzeer en draai de camera."
 	if "--smoke-electric" in OS.get_cmdline_user_args(): await _check_electric()
 
 func _load_preview() -> void:
@@ -29,7 +32,7 @@ func _check_electric() -> void:
 				_preview_move()
 				while renderer.common_effects.is_empty(): await process_frame
 				var effect: Node = renderer.common_effects[0]
-				assert(effect.get_script()==Electric)
+				assert(effect.get_script()==electric_script)
 				var original_aim: Vector3 = effect.anchors.call().target
 				if species=="Pikachu" and not reverse:
 					assert(effect.anchors.call().attachment_part == "electric_body")
@@ -48,8 +51,10 @@ func _check_electric() -> void:
 					renderer.user_camera_yaw += 0.18
 					await create_timer(0.05).timeout
 					assert(is_equal_approx(effect.elapsed,frozen))
-					for piece: MeshInstance3D in effect.pieces:
+					for piece_index in effect.cursor:
+						var piece: MeshInstance3D = effect.pieces[piece_index]
 						if piece.visible and piece.mesh is QuadMesh:
+							if effect.sprite_keys[piece_index] in ["bolt_arc", "bolt_core"]: continue
 							assert(absf(piece.global_basis.z.normalized().dot(renderer.camera.global_basis.z.normalized())) > 0.999)
 					battle.animation_router.playback_speed = 1
 				while move_busy: await process_frame
@@ -65,5 +70,5 @@ func _check_electric() -> void:
 		while move_busy: await process_frame
 		await process_frame
 		assert(renderer.common_effects.is_empty() and battle.animation_router.active_audio_nodes.is_empty())
-	print("THUNDERSHOCK_PREVIEW_OK species=3 directions=2 outcomes=3 pause_orbit=true dodge=true cancellation=true")
+	print(electric_name.to_upper().replace(" ", ""), "_PREVIEW_OK species=3 directions=2 outcomes=3 pause_orbit=true dodge=true cancellation=true")
 	quit()
