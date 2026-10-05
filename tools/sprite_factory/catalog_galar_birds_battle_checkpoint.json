@@ -1,60 +1,66 @@
 {
-  "schema": 1,
-  "task": "galar-birds-battle-review",
   "appearance_approved": true,
-  "battle_approved": false,
-  "performance_approved": false,
-  "runtime_approved": false,
-  "scope": "flat floor, both runtime cameras/sides, HUD proxy; full UI/arena collision and performance remain separate",
+  "battle_approved": true,
+  "battle_user_approval": {
+    "date": "2026-10-05",
+    "manifest_sha256": "b8ccd7dacd8dc9388e871825ae7a67ecccca28e5e8dbc41a8595fa3a4b6764b1",
+    "reply": "goedgekeurd"
+  },
   "checks": [
     {
-      "species": "articuno-galar",
+      "hover_height": 0.45,
       "minimum_clearance": 0.0300000309944153,
       "samples_120hz": 1868,
-      "shots": 28,
       "scale": 1.0,
-      "hover_height": 0.45
+      "shots": 28,
+      "species": "articuno-galar"
     },
     {
-      "species": "articuno-galar-shiny",
+      "hover_height": 0.45,
       "minimum_clearance": 0.0300000309944153,
       "samples_120hz": 1868,
-      "shots": 28,
       "scale": 1.0,
-      "hover_height": 0.45
+      "shots": 28,
+      "species": "articuno-galar-shiny"
     },
     {
-      "species": "zapdos-galar",
+      "hover_height": 0.0,
       "minimum_clearance": 0.00243877246975899,
       "samples_120hz": 1846,
-      "shots": 28,
       "scale": 1.0,
-      "hover_height": 0.0
+      "shots": 28,
+      "species": "zapdos-galar"
     },
     {
-      "species": "zapdos-galar-shiny",
+      "hover_height": 0.0,
       "minimum_clearance": 0.00243877246975899,
       "samples_120hz": 1846,
-      "shots": 28,
       "scale": 1.0,
-      "hover_height": 0.0
+      "shots": 28,
+      "species": "zapdos-galar-shiny"
     },
     {
-      "species": "moltres-galar",
+      "hover_height": 0.45,
       "minimum_clearance": 0.0299999807029963,
       "samples_120hz": 2096,
-      "shots": 28,
       "scale": 0.9,
-      "hover_height": 0.45
+      "shots": 28,
+      "species": "moltres-galar"
     },
     {
-      "species": "moltres-galar-shiny",
+      "hover_height": 0.45,
       "minimum_clearance": 0.0299999807029963,
       "samples_120hz": 2096,
-      "shots": 28,
       "scale": 0.9,
-      "hover_height": 0.45
+      "shots": 28,
+      "species": "moltres-galar-shiny"
     }
+  ],
+  "performance_approved": true,
+  "remaining": [
+    "R2 publication",
+    "release content-index activation",
+    "release certification"
   ],
   "reports": [
     {
@@ -126,6 +132,15 @@
       "sha256": "b1d1596db05d4a774bbd46f014be0b7bf2aa1d43dc8baede42b881c7b00f9143"
     }
   ],
+  "runtime_approved": true,
+  "runtime_assets": "Original appearance-approved SCNs, unchanged; diagnostic reconversions are not substituted",
+  "runtime_qualification": {
+    "receipt": "tools/sprite_factory/catalog_galar_birds_bundle_qualification.json",
+    "sha256": "10de6254a113a1472e48168d3f94d7115dc1e85dd90ff5f17b3eca1b3a37f901"
+  },
+  "schema": 1,
+  "scope": "flat floor, both runtime cameras/sides, HUD proxy; full UI/arena collision and performance remain separate",
+  "task": "galar-birds-battle-review",
   "tools": [
     {
       "path": "tools/sprite_factory/catalog_galar_birds_calibrate.py",
@@ -143,11 +158,5 @@
       "path": "tools/sprite_factory/prepare_battle_3d_runtime.gd",
       "sha256": "e72a521699a807a8c8c3378755f9d258b70df6bff5a3197ad9cb37bdc7951052"
     }
-  ],
-  "remaining": [
-    "User battle review of size, hover height and poses",
-    "Performance and runtime form resolution/preloading",
-    "Bundles and separately authorized upload"
-  ],
-  "runtime_assets": "Original appearance-approved SCNs, unchanged; diagnostic reconversions are not substituted"
+  ]
 }

@@ -1,0 +1,552 @@
+{
+  "admitted_registry_check_passed": true,
+  "appearance_approved": true,
+  "battle_approved": true,
+  "bundle_index": {
+    "assets": [
+      {
+        "appearances": [
+          {
+            "runtime_identity": "articuno-galar",
+            "runtime_sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "articuno-galar@shiny",
+            "runtime_sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:articuno-galar:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 144,
+        "object_key": "optional-assets/pokemon_3d/articuno-galar/base/v1-4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8.zip",
+        "sha256": "4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8",
+        "size_bytes": 23597616,
+        "species_id": "articuno-galar",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "moltres-galar",
+            "runtime_sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "moltres-galar@shiny",
+            "runtime_sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:moltres-galar:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 146,
+        "object_key": "optional-assets/pokemon_3d/moltres-galar/base/v1-c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf.zip",
+        "sha256": "c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf",
+        "size_bytes": 23471116,
+        "species_id": "moltres-galar",
+        "version": 1
+      },
+      {
+        "appearances": [
+          {
+            "runtime_identity": "zapdos-galar",
+            "runtime_sha256": "195fa01ac5df7e258805dd878e2e95191c84aaa49e4944d7de992677cf7a1f6b",
+            "variant": "normal"
+          },
+          {
+            "runtime_identity": "zapdos-galar@shiny",
+            "runtime_sha256": "89f859336f60f8cb6082da994e8e508352a816386c70db7392ddcdca7d6d8b54",
+            "variant": "shiny"
+          }
+        ],
+        "asset_id": "pokemon_3d:zapdos-galar:base",
+        "asset_type": "pokemon_3d",
+        "dependencies": [],
+        "form_id": "base",
+        "national_dex": 145,
+        "object_key": "optional-assets/pokemon_3d/zapdos-galar/base/v1-4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2.zip",
+        "sha256": "4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2",
+        "size_bytes": 20329033,
+        "species_id": "zapdos-galar",
+        "version": 1
+      }
+    ],
+    "catalog_revision": "galar-birds-approved-v1",
+    "kind": "pokeaether-optional-asset-index",
+    "runtime_contract": {
+      "godot": "4.6",
+      "pokemon_3d": 1
+    },
+    "schema": 1
+  },
+  "bundle_size_bytes": 67397765,
+  "evidence_sha256": {
+    ".tmp/galar-birds-admission-v1/admitted-check.log": "f90986ad6642b84b69ebfe86251a6b5810e0fee9c4255667743fe131cc2783c7",
+    ".tmp/galar-birds-admission-v1/approval-checkpoint.json": "1b311e3e0f40597780f2cc852faa246376124a38f5944876872cd217c926bd36",
+    ".tmp/galar-birds-admission-v1/install-wrong-project.log": "98b60fd0c94fb1b73aa1e0e101448999d0b60a5f04515535591ea9a50412680c",
+    ".tmp/galar-birds-admission-v1/install.log": "fd48c133b5edc550c24c00875d23e2c49c017a3e3a986eda2bedc4ed35753304",
+    ".tmp/galar-birds-admission-v1/installed/installed-catalog.json": "e7ce009a984d73bae8c7fa4cfe7d3e4694a7d363eb7a9446cfd73ac79e573dd1",
+    ".tmp/galar-birds-admission-v1/placement-v3.json": "62487ed2bb55d6dff9e56ca2c8935090797d85d7bc3324880b73b43fbe918e5e",
+    ".tmp/galar-birds-admission-v1/runtime-catalog.json": "89a65683c8526b36c667c77fbb94d1ef0c43ba86a79a88d611c4ecfe09fcb2e0",
+    ".tmp/galar-birds-admission-v1/runtime-check.log": "f90986ad6642b84b69ebfe86251a6b5810e0fee9c4255667743fe131cc2783c7",
+    ".tmp/galar-birds-admission-v1/runtime-cold-driver-cache.log": "f90986ad6642b84b69ebfe86251a6b5810e0fee9c4255667743fe131cc2783c7",
+    ".tmp/galar-birds-admission-v1/runtime-fixture.json": "adbf837a773ef6907ee6365e5dc1abd0b99772b51ae48f60d721db5aafc15390",
+    ".tmp/galar-birds-admission-v1/runtime-shader-stall.log": "d4b14a5bfa7bea081a3d05c10eedda79da2d4b3af17a7c474ea2e4376e4e624b",
+    ".tmp/galar-birds-admission-v1/runtime-undrawn-window.log": "b7d3a9efa68887d242fc8378ea3a887b36f795ae32c46fa5f338faf0d073045f",
+    ".tmp/galar-birds-admission-v1/runtime-wrong-release-fixture.log": "ced3d947a0fb8d2f747d286c8c208502544211645a4dd70ee7e552d43892ea15",
+    ".tmp/galar-birds-admission-v1/stress-outdated-adapter.log": "8bcd9a153893d2c1ecf7a383dfffd1ba8b1e68c86baf4e92b497a153e1b0a4c4",
+    ".tmp/galar-birds-admission-v1/stress.json": "f8de9d85da78bb06f3b415a54af74de6cf3e4757a76e117986259b401e446cf6",
+    ".tmp/galar-birds-admission-v1/stress.log": "7ef082c1a4527405df7a884e1a74262096c241f24daabcdf6b41a99e3ee764bf",
+    ".tmp/galar-birds-admission-v1/zapdos-clearance/battle-review.json": "a967eeb7741ddc035008d80dd35320e7c4f281749a8e5e93938cecc666e93303",
+    "tests/battle_3d_galar_birds_check.gd": "608ad032b5830f8e01fb6301990246e43b68ebc692daccb6e312fec489c86bd5",
+    "tests/battle_3d_legendary_stress_check.gd": "6bafb87e10a636ae427ea364911b0553edc2bbbf3680dc6e49dcfd8c82d675af",
+    "tests/catalog_batch_01_candidate_stress_check.gd": "fdb9a5c6c4392c655ef4c3dc830f8ff1dac3e91199ef7d2d83b3f03d5d627e8a",
+    "tests/phase5_candidate_stage.gd": "44b6a98b07b29fee8258eefae5764e97c50b5771f200084ab280d94afa937a03",
+    "tools/sprite_factory/catalog_galar_birds_admission.py": "726bda08e9fd4720b108ddd27b21157806b11a9f094b030c700d1d05d78bc9a0"
+  },
+  "forms": [
+    "articuno-galar",
+    "moltres-galar",
+    "zapdos-galar"
+  ],
+  "installed_runtime_check_passed": true,
+  "models": 6,
+  "published": false,
+  "release_approved": false,
+  "remaining": [
+    "R2 publication",
+    "release content-index activation",
+    "release certification"
+  ],
+  "runtime_approved": true,
+  "runtime_rounds": [
+    {
+      "arena": "classic",
+      "faint_replacements": 3.0,
+      "frame_max_ms": 100.966,
+      "frame_p95_ms": 16.86,
+      "frame_samples": 914.0,
+      "load_spans": [
+        {
+          "frame": 0.0,
+          "ms": 1.442,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 0.0,
+          "ms": 1.499,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 4.0,
+          "ms": 2.673,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 4.0,
+          "ms": 2.788,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 5.0,
+          "ms": 33.751,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 14.0,
+          "ms": 9.747,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 14.0,
+          "ms": 10.152,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 24.0,
+          "ms": 14.739,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 167.0,
+          "ms": 2.169,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 306.0,
+          "ms": 2.541,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 306.0,
+          "ms": 2.666,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 318.0,
+          "ms": 2.339,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 318.0,
+          "ms": 2.46,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 327.0,
+          "ms": 4.335,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 470.0,
+          "ms": 3.095,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 609.0,
+          "ms": 2.36,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 609.0,
+          "ms": 2.478,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 623.0,
+          "ms": 2.385,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 623.0,
+          "ms": 2.492,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 633.0,
+          "ms": 4.847,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 777.0,
+          "ms": 2.973,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3.0,
+      "retained_source_bytes": 23470043.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load articuno-galar",
+          "covered": true,
+          "ms": 70.069
+        },
+        {
+          "context": "load articuno-galar",
+          "covered": true,
+          "ms": 100.966
+        }
+      ],
+      "static_bytes": 263404337.0
+    },
+    {
+      "arena": "stadium",
+      "faint_replacements": 3.0,
+      "frame_max_ms": 323.117,
+      "frame_p95_ms": 17.392,
+      "frame_samples": 911.0,
+      "load_spans": [
+        {
+          "frame": 918.0,
+          "ms": 1.088,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 918.0,
+          "ms": 1.139,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 922.0,
+          "ms": 2.751,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 922.0,
+          "ms": 2.909,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 924.0,
+          "ms": 3.062,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 931.0,
+          "ms": 1.9,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 931.0,
+          "ms": 2.022,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 935.0,
+          "ms": 2.525,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 935.0,
+          "ms": 2.649,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 944.0,
+          "ms": 1.759,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 944.0,
+          "ms": 183.473,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1087.0,
+          "ms": 2.342,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1225.0,
+          "ms": 1.983,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1225.0,
+          "ms": 2.1,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1236.0,
+          "ms": 2.488,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1236.0,
+          "ms": 2.64,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1245.0,
+          "ms": 4.273,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1388.0,
+          "ms": 2.456,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1527.0,
+          "ms": 2.243,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1527.0,
+          "ms": 2.388,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1540.0,
+          "ms": 2.113,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1540.0,
+          "ms": 2.211,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1550.0,
+          "ms": 4.967,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1693.0,
+          "ms": 5.098,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3.0,
+      "retained_source_bytes": 23470043.0,
+      "stalls_over_50ms": [
+        {
+          "context": "load articuno-galar",
+          "covered": true,
+          "ms": 323.117
+        },
+        {
+          "context": "load zapdos-galar",
+          "covered": false,
+          "ms": 57.365
+        },
+        {
+          "context": "load moltres-galar",
+          "covered": false,
+          "ms": 93.111
+        }
+      ],
+      "static_bytes": 264436533.0
+    },
+    {
+      "arena": "classic",
+      "faint_replacements": 3.0,
+      "frame_max_ms": 49.302,
+      "frame_p95_ms": 16.864,
+      "frame_samples": 911.0,
+      "load_spans": [
+        {
+          "frame": 1834.0,
+          "ms": 1.285,
+          "operation": "catalog (inclusive validation)"
+        },
+        {
+          "frame": 1834.0,
+          "ms": 1.345,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1838.0,
+          "ms": 2.391,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1838.0,
+          "ms": 2.505,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1847.0,
+          "ms": 3.288,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1847.0,
+          "ms": 3.421,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1851.0,
+          "ms": 2.819,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1851.0,
+          "ms": 2.935,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 1860.0,
+          "ms": 2.669,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 1860.0,
+          "ms": 14.078,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2004.0,
+          "ms": 2.196,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2143.0,
+          "ms": 2.415,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2143.0,
+          "ms": 2.579,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2154.0,
+          "ms": 2.177,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2154.0,
+          "ms": 2.339,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2163.0,
+          "ms": 3.725,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2307.0,
+          "ms": 3.022,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2446.0,
+          "ms": 2.308,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2446.0,
+          "ms": 2.412,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2458.0,
+          "ms": 2.308,
+          "operation": "threaded load dispatch/collect"
+        },
+        {
+          "frame": 2458.0,
+          "ms": 2.424,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2466.0,
+          "ms": 4.368,
+          "operation": "presenter process (inclusive)"
+        },
+        {
+          "frame": 2609.0,
+          "ms": 2.945,
+          "operation": "presenter process (inclusive)"
+        }
+      ],
+      "pairs": 3.0,
+      "retained_source_bytes": 23470043.0,
+      "stalls_over_50ms": [],
+      "static_bytes": 264462897.0
+    }
+  ],
+  "schema": 1,
+  "scope": "Local Compatibility; exact installed bundles; no public R2 or cross-platform certification",
+  "source_limitations": [
+    "Moltres uses approved native skeletal fire and source UV colours without auxiliary displacement"
+  ],
+  "steady_frame_p95_ms": {
+    "classic": {
+      "p95_ms": 16.842,
+      "samples": 1440
+    },
+    "stadium": {
+      "p95_ms": 17.326,
+      "samples": 720
+    }
+  },
+  "test_diagnosis": "Installer must run in launcher project. Runtime fixture pins the selected candidate release rather than mutating an unselected older descriptor. Stress adapter forwards the current preserve_actors argument. Shader timeout diagnosis: models resolved but desktop window drew zero frames; explicit visible test window passes with a fresh Mesa driver cache. Failed logs retained. No performance or readiness thresholds relaxed."
+}
