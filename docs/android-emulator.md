@@ -95,3 +95,24 @@ a GLES fragment-uniform limit and could not render the login scene. The
 launcher defaults to `--gpu host`; use `--gpu software` only for UI-only
 diagnostics if host rendering is unavailable. Changing GPU mode requires
 closing and reopening the virtual device.
+
+## Laptop viewing size
+
+When starting the dedicated AVD, the launcher writes `window.scale = 0.700000`
+to its local `emulator-user.ini` and rotates the emulator's presentation once
+before opening the app. This displays the landscape game at 1680×756 desktop
+pixels on the 1920×1080 laptop panel. Use `--window-scale 0.5`, for example, for
+a smaller view on the next cold start. An already-open emulator is left alone.
+
+The AVD retains its portrait 1080×2400 framebuffer: the game's landscape
+viewport remains 2400×1080 at 480 dpi, with independent game UI scale. Forcing
+a `2400x1080` framebuffer skin instead puts the Pixel camera cutout along the
+long edge and reduces the usable viewport to 2400×952; do not use that shortcut.
+The obsolete emulator `-scale` option is ignored by current SDK versions.
+The emulator resets its stored viewing scale on exit, so the launcher applies
+the preference before each cold start. App data is retained.
+
+This viewing configuration passed 541 native UI checks and Android edge taps.
+An occasional first app launch after a cold boot exits during Android's late
+resource configuration change. Reopening the same desktop shortcut works;
+the host-window size and installed apps are retained.
