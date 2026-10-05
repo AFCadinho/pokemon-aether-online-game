@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a source-textured 3D Draco Meteor with a rising charge, sky burst, seven fiery meteors and timed impacts; retain native dodge, damage and stat-drop ordering.
+
 - Build Moonblast's energy orb in front of the attacker with room for its full size, while keeping the moon above the Pokémon.
 
 - Give 3D Moonblast a two-second presentation with a longer moon reveal and energy charge, a quick release, and matching charge audio.

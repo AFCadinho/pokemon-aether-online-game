@@ -16,6 +16,7 @@ import subprocess
 import sys
 
 from sv_batch_four import PARTS as BATCH_FOUR_PARTS, FORMAT_FLAGS as BATCH_FOUR_FLAGS
+from sv_draco_meteor import PARTS as DRACO_PARTS, TEXTURES as DRACO_TEXTURES
 
 NULL = 0xFFFFFFFF
 PARTS = ('ew0052_fire_muzzle', 'ew0052_bullet', 'ew0052_hit')
@@ -34,6 +35,35 @@ MOVE_PARTS.update({
 })
 
 MOVE_PARTS.update(BATCH_FOUR_PARTS)
+MOVE_PARTS['dracometeor'] = DRACO_PARTS
+
+
+def subset_bntx(data, names):
+    """Point the decoder at explicitly selected textures; retain original data separately.
+
+    Draco includes unsupported BC1/signed-BC5 maps. Do not reinterpret those as
+    other formats: leave their pointers out of the decode-only texture table.
+    """
+    count = read(data, 36, 'I')[0]
+    table = read(data, 40, 'Q')[0]
+    selected = []
+    found = set()
+    if not 1 <= count <= 32:
+        raise ValueError('Unexpected texture count')
+    for i in range(count):
+        pos = read(data, table + i * 8, 'Q')[0]
+        name_pos = read(data, pos + 96, 'Q')[0]
+        name = text(data, name_pos + 2, read(data, name_pos, 'H')[0])
+        if name in names:
+            selected.append(pos)
+            found.add(name)
+    if not selected or found != set(names):
+        raise ValueError('Missing selected BNTX texture')
+    out = bytearray(data)
+    struct.pack_into('<I', out, 36, len(selected))
+    for i, pos in enumerate(selected):
+        struct.pack_into('<Q', out, table + i * 8, pos)
+    return bytes(out)
 
 
 def read(data, pos, fmt):
@@ -185,7 +215,8 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, **BATCH_FOUR_FLAGS[move]) if move in BATCH_FOUR_FLAGS else legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
+        decode_bntx = subset_bntx(bntx, DRACO_TEXTURES[stem]) if move == 'dracometeor' else bntx
+        legacy.write_bytes(legacy_bntx(decode_bntx, **BATCH_FOUR_FLAGS[move]) if move in BATCH_FOUR_FLAGS else legacy_bntx(decode_bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack", "dracometeor"),
                                       allow_bc3=move in ("scratch", "thundershock", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
                                       allow_r8=move == "flamethrower", allow_bc7=move in ("bubblebeam", "icebeam")))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
@@ -194,6 +225,11 @@ def extract(source, output, decoder, move="ember"):
         if run.returncode:
             raise ValueError('Texture decoder failed; see ' + str(folder / 'decoder.log'))
         textures = sorted({name for e in info['emitters'] for name in e['textures'] if name})
+        if move == 'dracometeor':
+            if not set(DRACO_TEXTURES[stem]) <= set(textures):
+                raise ValueError('Selected texture lacks a source emitter binding')
+            info['unconverted_textures'] = sorted(set(textures) - set(DRACO_TEXTURES[stem]))
+            textures = sorted(DRACO_TEXTURES[stem])
         metadata = {}
         for i in range(read(bntx, 36, 'I')[0]):
             pos = read(bntx, read(bntx, 40, 'Q')[0] + i * 8, 'Q')[0]

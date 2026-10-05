@@ -18,7 +18,8 @@ The existing bounds-based contact sizing still applies to Pokémon/Substitutes;
 ranged effects retain their authored world-space size. Geometry counts do not
 increase. Larger transparent surfaces can increase GPU overdraw.
 
-Review remains subjective. Use the assigned slot's `slot-env` to open
+The user approved these 23 moves, their size adjustments and the later Moonblast
+charge/clearance revisions on 6 October 2026. Use the assigned slot's `slot-env` to open
 `res://tests/move_scale_preview.gd -- --moves`. Its move picker contains all
 23 supported moves. `--smoke-move-scale` captures before/after sizes at the same
 frozen animation frame for ten representative moves, including Moonblast and

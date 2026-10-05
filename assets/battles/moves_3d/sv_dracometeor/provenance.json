@@ -1,0 +1,107 @@
+{
+  "source_move": "dracometeor",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_1_flash0001.png",
+      "source_particle": "ew0434_charge.ptcl",
+      "source_sha256": "259ec9565e6f74a93bba13bd84fd672c1d0a76e60aa3aa4518979bf2c32009d5",
+      "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_1_circle0005.png",
+      "source_particle": "ew0434_charge.ptcl",
+      "source_sha256": "259ec9565e6f74a93bba13bd84fd672c1d0a76e60aa3aa4518979bf2c32009d5",
+      "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_1_blur0003.png",
+      "source_particle": "ew0434_charge.ptcl",
+      "source_sha256": "259ec9565e6f74a93bba13bd84fd672c1d0a76e60aa3aa4518979bf2c32009d5",
+      "png_sha256": "12d4e9298cbcb71afcc9ca6270ea2994a2a71bea5dd8eaf8f62df899404e6b4c",
+      "size": [
+        128,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_shock0004.png",
+      "source_particle": "ew0434_charge.ptcl",
+      "source_sha256": "259ec9565e6f74a93bba13bd84fd672c1d0a76e60aa3aa4518979bf2c32009d5",
+      "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_fire0008.png",
+      "source_particle": "ew0434_meteo01.ptcl",
+      "source_sha256": "4f39b344ffc5e533cbeeede8bbbb8d601d8c21a617b518f540ad4bbcac5672af",
+      "png_sha256": "c78695c1afb3a09980b9c806c9ce66b981b244fc1354dcd53c6d14dd9e0ed8cb",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_flow0026.png",
+      "source_particle": "ew0434_meteo01.ptcl",
+      "source_sha256": "4f39b344ffc5e533cbeeede8bbbb8d601d8c21a617b518f540ad4bbcac5672af",
+      "png_sha256": "c3a8f6a15ed151922030f2417944bbc337394256504572f395fd72188344fa0c",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_fire0007.png",
+      "source_particle": "ew0434_big_meteo01.ptcl",
+      "source_sha256": "93aed44717c3dd3da7c64d5c4b286feecfff783563855dc3316bdefb07c2e0f6",
+      "png_sha256": "208672fec59634ccd8869f968d86a572184f71d621577a4a131c6a3bfb428b67",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_flow0024.png",
+      "source_particle": "ew0434_big_meteo01.ptcl",
+      "source_sha256": "93aed44717c3dd3da7c64d5c4b286feecfff783563855dc3316bdefb07c2e0f6",
+      "png_sha256": "6441b639063499c643edb2e8cafb7500cfe07247a4353bc8cd8466c9b8f85c7f",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_smoke0011.png",
+      "source_particle": "ew0434_big_meteo01.ptcl",
+      "source_sha256": "93aed44717c3dd3da7c64d5c4b286feecfff783563855dc3316bdefb07c2e0f6",
+      "png_sha256": "ff8379791a70f5122df5bd4ac129e5d72e9a2a0f85b0267529dd6412c1380510",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

@@ -18,6 +18,7 @@ const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbol
 const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
 const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
+const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
 const LeafMoveEffect = preload("res://scripts/battle/battle_ui/leaf_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
@@ -575,7 +576,7 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
 	# Projectile motion uses a release clip even for physical damage moves.
-	if MoveEffect.move_key(move_name) in BatchFourMoveEffect.MOVE_KEYS: return "special_attack"
+	if MoveEffect.move_key(move_name)=="dracometeor" or MoveEffect.move_key(move_name) in BatchFourMoveEffect.MOVE_KEYS: return "special_attack"
 	if key in ["razorleaf", "razor-leaf"]: return "special_attack"
 	if key in ["quickattack", "quick-attack"]: return "physical_attack"
 	if key in ["ember", "flamethrower"] and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
@@ -1050,22 +1051,23 @@ func _move_bounds(ident: String) -> Dictionary:
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var a := _move_bounds(actor)
 	var b := _move_bounds(target)
-	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam", "shadowball", "sludgebomb", "poisonsting", "flashcannon", "waterpulse"] else 0.6
+	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam", "shadowball", "sludgebomb", "poisonsting", "flashcannon", "waterpulse", "dracometeor"] else 0.6
 	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
 	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
 	var direction := (end-source).normalized()
 	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
 	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
-	if MoveEffect.move_key(move)=="moonblast":
+	if MoveEffect.move_key(move) in ["moonblast","dracometeor"]:
 		# Reserve space for the fully grown orb, not just its centre. Charge and
 		# flight share this point, while the moon stays above the attacker.
 		var moon_source := source
 		var forward := Vector3(direction.x,0,direction.z).normalized()
-		var orb_radius: float = BatchFourMoveEffect.MOONBLAST_ORB_RADIUS * MoveEffect.PRESENTATION_SCALES.moonblast
+		var orb_radius: float = (DracoMeteorEffect.CHARGE_RADIUS if MoveEffect.move_key(move)=="dracometeor" else BatchFourMoveEffect.MOONBLAST_ORB_RADIUS) * MoveEffect.PRESENTATION_SCALES[MoveEffect.move_key(move)]
 		var body_extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
 		source = a.position + Vector3.UP * a.height * source_height + forward * (body_extent + orb_radius + 0.15)
 		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
-			"moon_source":moon_source,"attachment_part":"bounds","attachment_bones":[]}
+			"moon_source":moon_source,"target_ground":Vector3(end.x,_position(actor_index(target)).y+0.04,end.z),
+			"attachment_part":"bounds","attachment_bones":[]}
 	var attachment := {}
 	var index := actor_index(actor)
 	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
@@ -1083,7 +1085,9 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
 	var effect: Node3D
-	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
+	if MoveEffect.move_key(move)=="dracometeor":
+		effect = DracoMeteorEffect.new()
+	elif MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
 		effect = ContactMoveEffect.new()
 	elif MoveEffect.move_key(move) == "thundershock":
 		effect = ElectricMoveEffect.new()
@@ -1121,8 +1125,9 @@ func start_move_action(ident: String, move: String) -> void:
 		var index := actor_index(ident)
 		var max_seconds := 0.8 if MoveEffect.move_key(move)=="quickattack" else (1.25 if MoveEffect.supports(move) else 0.0)
 		# Moonblast gets a full two-second performance: 0.9s charge, 0.35s
-		# flight, then impact/recovery. The native clock still owns every cue.
-		var duration_override := 2.0 if MoveEffect.move_key(move)=="moonblast" else 0.0
+		# flight, then impact/recovery. Draco Meteor takes 3.2s for its ascent
+		# and shower. The native clock still owns every cue.
+		var duration_override := 2.0 if MoveEffect.move_key(move)=="moonblast" else (3.2 if MoveEffect.move_key(move)=="dracometeor" else 0.0)
 		_action(attack_action_for(move, ident), index, max_seconds, duration_override)
 		# play() schedules its reset; sample frame zero before binding a VFX clock.
 		if MoveEffect.supports(move) and players[index] != null:
@@ -1226,6 +1231,9 @@ func move_timing(move: String, ident: String) -> Dictionary:
 		if profile.move_key == "moonblast":
 			profile["launch_frame"] = float(profile.frames) * 0.45
 			profile["impact_frame"] = float(profile.frames) * 0.625
+		elif profile.move_key == "dracometeor":
+			profile["launch_frame"] = float(profile.frames) * (0.7/3.2)
+			profile["impact_frame"] = float(profile.frames) * (2.05/3.2)
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:

@@ -1,6 +1,6 @@
 # Short audio edits for native 3D moves
 
-The 23 supported native moves now use 30 short edits of the existing 2D WAV
+The 24 supported native moves now use 32 short edits of the existing 2D WAV
 sources. Bubble Beam shares Bubble's edit. These are **not original SV sounds**;
 original game sound banks are still missing (see [source audit](sv-move-audio-research.md)).
 The 2D catalogs, source WAVs, common status/item sounds and damage sounds are
@@ -71,7 +71,8 @@ Focused checks:
 - WAV audit: source/output hashes, duration, non-silent PCM, no full-scale
   clipping and quiet first/last samples.
 
-Subjective sound approval is pending. Review especially Moonblast's charge,
-Flash Cannon, Magical Leaf and fast misses. Open the existing batch preview with
+The user approved the previous 23-move presentation/audio batch on 6 October
+2026. Draco Meteor uses a 1.376s charge/ascent edit and 0.65s impact edit of its existing
+WAVs; its subjective review remains pending. Open the existing batch preview with
 `--moves --audio-review` through the assigned slot's `slot-env`. Its move picker
 also includes the previously approved moves.
