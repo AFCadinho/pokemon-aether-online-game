@@ -99,6 +99,50 @@ func _ready() -> void:
 	real.cancel()
 	assert(not real.players.tone.playing)
 	real.free()
+	# Native move envelopes fade on the native clock, not a second timer.
+	var bounded := AudioPlayer.new()
+	add_child(bounded)
+	bounded.set_process(false)
+	var long_wave := AudioStreamWAV.new()
+	long_wave.data = PackedByteArray()
+	var samples := PackedByteArray()
+	samples.resize(44100 * 4)
+	samples.fill(128)
+	long_wave.data = samples
+	bounded.streams = {"tone": long_wave}
+	bounded.plan = {"bounded_to_action": true, "duration_seconds": 1.0, "cues": [
+		{"at_seconds": 0.0, "event": {"name": "tone", "volume": 50.0, "end_seconds": 0.5, "fade_seconds": 0.1}}]}
+	bounded.begin()
+	bounded._process(.45)
+	assert(is_equal_approx(db_to_linear(bounded.players.tone.volume_db), .25))
+	bounded.speed = 0
+	bounded._process(10)
+	assert(is_equal_approx(bounded.elapsed,.45) and bounded.players.tone.stream_paused)
+	assert(is_equal_approx(db_to_linear(bounded.players.tone.volume_db), .25))
+	bounded.speed = 4
+	bounded._process(.02)
+	assert(not bounded.players.tone.playing and bounded.envelopes.is_empty())
+	assert(is_equal_approx(bounded.players.tone.pitch_scale,1.0))
+	bounded.drain()
+	assert(bounded.is_queued_for_deletion() and not bounded.draining)
+	# Dodge/block suppresses impact only; release/charge remain audible. A
+	# clock jump past a sound's window must not play it belatedly in recovery.
+	var outcome := RecordingPlayer.new()
+	outcome.plan = {"duration_seconds": 1, "cues": [
+		{"at_seconds": 0, "event": {"name":"release", "end_seconds":.4}},
+		{"at_seconds": .5, "event": {"name":"hit", "requires_hit":true, "end_seconds":.8}}]}
+	outcome.confirmed_hit = false
+	outcome.begin()
+	outcome._process(.6)
+	assert(outcome.heard == ["release"])
+	outcome.free()
+	var jumped := RecordingPlayer.new()
+	jumped.plan = {"duration_seconds": 1, "cues": [
+		{"at_seconds":.2, "event":{"name":"expired", "end_seconds":.4}}]}
+	jumped.clock = func(): return .8
+	jumped._process(0)
+	assert(jumped.heard.is_empty())
+	jumped.free()
 	# Both lifetimes overlap; neither is silently shortened or played serially.
 	var driver = preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
 	var presenter := Presenter.new()
