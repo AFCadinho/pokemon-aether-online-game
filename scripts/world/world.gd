@@ -5682,7 +5682,7 @@ func _setup_coop_controls() -> void:
 func _on_coop_state_changed() -> void:
 	if not coop_world_ready or coop_finishing:
 		return
-	if OS.has_feature("web") and not CoopService.view.is_empty():
+	if (OS.has_feature("web") or OS.has_feature("mobile")) and not CoopService.view.is_empty():
 		_prefetch_coop_web_battle_sprites(CoopService.view)
 	if CoopService.activity.is_empty():
 		if active_battle_kind == "coop":
