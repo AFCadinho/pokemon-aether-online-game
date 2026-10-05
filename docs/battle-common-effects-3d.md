@@ -161,7 +161,7 @@ Only explicit player approval completes an entry.
 - [x] Toxic — persistent tint only; short event particles
 - [x] Burn — persistent tint only
 - [x] Paralysis — persistent tint only
-- [ ] Freeze — tint-only idle; ice burst only on blocked actions, awaiting re-review
+- [x] Freeze — approved with tint-only idle; ice burst and existing 2D sound only on blocked actions; initial freezing is silent
 - [x] Sleep — Z glyph layout follows camera rotation
 - [x] Substitute — imported textured doll and corrected HP HUD placement approved
 - [x] Mega evolution
