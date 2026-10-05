@@ -7,16 +7,16 @@ Terrain and Trick Room effects are outside this change.
 
 ## Visual review checklist
 
-These are implemented; each still requires player approval.
+All eight weather conditions have been visually reviewed and approved by the player.
 
-- [ ] Rain — fine slanted rain streaks and cool haze.
-- [ ] Sun — soft warm shafts and light golden haze.
-- [ ] Sandstorm — low windblown grains and sandy haze.
-- [ ] Snow / Snowscape — small gently drifting flakes and cool haze.
-- [ ] Hail — faster ice pellets with a small ground bounce.
-- [ ] Primordial Sea — heavier, faster rain and darker haze.
-- [ ] Desolate Land — stronger amber shafts and warm haze.
-- [ ] Delta Stream — curved wind strands crossing the arena.
+- [x] Rain — fine slanted rain streaks and cool haze.
+- [x] Sun — soft warm shafts and light golden haze.
+- [x] Sandstorm — low windblown grains and sandy haze.
+- [x] Snow / Snowscape — small gently drifting flakes and cool haze.
+- [x] Hail — faster ice pellets with a small ground bounce.
+- [x] Primordial Sea — heavier, faster rain and darker haze.
+- [x] Desolate Land — stronger amber shafts and warm haze.
+- [x] Delta Stream — curved wind strands crossing the arena.
 
 ## Offline review
 
