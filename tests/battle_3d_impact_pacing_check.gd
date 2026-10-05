@@ -9,6 +9,17 @@ const Battle = preload("res://scripts/battle/battle.gd")
 
 class RecordingRouter extends BattleAnimationRouter:
 	var effects: Array = []
+	var beats: Array = []
+	func play_effect_animation(key: String, target: String = "", reveal: Callable = Callable()) -> void:
+		beats.append("effect_start")
+		await super.play_effect_animation(key,target,reveal)
+		beats.append("effect_end")
+	func play_attack_tween_for_actor(actor: String, move: String = "") -> void:
+		beats.append("attack")
+		await super.play_attack_tween_for_actor(actor,move)
+	func play_damage_tween_for_target(target: String, variant: String = "normal") -> void:
+		beats.append("damage")
+		await super.play_damage_tween_for_target(target,variant)
 	var damage_sounds: Array = []
 	func _start_3d_audio(kind: String, key: String, plan: Dictionary = {}, begin_immediately := true) -> Node:
 		assert(kind == "effect", "Model-only moves must not prepare or play move-animation audio")
@@ -329,6 +340,7 @@ func _run() -> void:
 	await _recovery_cancel_check()
 	await _unreviewed_move_check()
 	await _shared_effect_checks()
+	await _gem_order_check()
 	await _sprite_hp_check()
 	await _faint_case("pikachu")
 	await _faint_case("blastoise")
@@ -353,3 +365,35 @@ func _run() -> void:
 	print("BATTLE_3D_IMPACT_PACING_OK ", JSON.stringify(stats))
 	print("BATTLE_3D_FAINT_PACING_OK ", JSON.stringify(faint_stats))
 	get_tree().quit()
+
+
+func _gem_order_check() -> void:
+	_actor(0,"pikachu")
+	_actor(1,"pikachu")
+	stage.world = Node3D.new()
+	stage.add_child(stage.world)
+	var presenter := BattleEventPresentation.new()
+	presenter.setup(BattleEventTextFormatter.new(),BattleHpEventHelper.new(),func(ident: String, _prefix: bool): return ident,func(ident: String): return ident)
+	for spec in [["Ground Gem","Earthquake"],["Electric Gem","Thunderbolt"]]:
+		var source := [
+			{"type":"move","actor":"p1","target":"p2","move":spec[1]},
+			{"type":"item","target":"p1","item":spec[0],"state":"end","source":"gem"},
+			{"type":"damage","target":"p2","previousCondition":"100/100","condition":"70/100","damagePercent":30.0},
+		]
+		var ordered: Array = Battle.BATTLE_GEM_EVENT_ORDER.before_moves(source)
+		router.beats.clear()
+		presenter.reset()
+		for index in ordered.size():
+			var event: Dictionary = ordered[index]
+			var presentation: Dictionary = presenter.build(event)
+			for key in ["pre_log_message","log_message","battle_message"]: presentation[key] = ""
+			presentation.add_blank_after = false
+			if event.type == "move":
+				assert(router.beats == ["effect_start","effect_end"],"Gem visual and sound finish before attacking")
+				presentation["3d_impact_bridge"] = Timing.damage_index(ordered,index) >= 0
+			await renderer.render_event(event,presentation,true)
+		assert(router.beats == ["effect_start","effect_end","attack","damage"],str(router.beats))
+		assert(router.effects[-1] == "use_item" and not router.has_3d_impact_damage())
+	stage.world.queue_free()
+	stage.world = null
+	print("GEM_BEFORE_ATTACK_OK ground_and_electric=true")

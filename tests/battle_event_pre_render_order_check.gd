@@ -4,10 +4,13 @@ const BATTLE_SCRIPT_PATH := "res://scripts/battle/battle.gd"
 const BATTLE_ANIMATION_ROUTER_PATH := "res://scripts/battle/battle_animation_router.gd"
 const DisguiseEventOrderScript := preload("res://scripts/battle/battle_disguise_event_order.gd")
 
+const GemOrder := preload("res://scripts/battle/battle_gem_event_order.gd")
+
 var failed := false
 
 
 func _init() -> void:
+	_check_gems_before_attacks()
 	_check_pre_event_render_skips_final_team_hud_refresh()
 	_check_damage_continuity_is_normalized_before_hud_rewind()
 	_check_non_pvp_switch_events_are_not_deduped_by_species()
@@ -1124,3 +1127,31 @@ func _check_equal(actual: Variant, expected: Variant, label: String) -> void:
 
 	failed = true
 	push_error("%s expected=%s actual=%s" % [label, var_to_str(expected), var_to_str(actual)])
+
+
+func _check_gems_before_attacks() -> void:
+	var move := {"type": "move", "actor": "p1a: Garchomp", "target": "p2a: Hippowdon", "move": "Earthquake", "seq": 10}
+	var gem := {"type": "item", "target": "p1a: Garchomp", "state": "end", "item": "Ground Gem", "source": "gem", "seq": 11}
+	var hit := {"type": "damage", "target": "p2a: Hippowdon", "condition": "50/100", "previousCondition": "100/100", "seq": 12}
+	var events := [move, gem, hit]
+	var original := events.duplicate(true)
+	var result := GemOrder.before_moves(events)
+	_check_equal(result, [gem, move, hit], "Ground Gem activates before its attack and damage")
+	_check_equal(events, original, "presentation ordering leaves authoritative input intact")
+	_check_equal(GemOrder.before_moves(result), result, "repeated ordering cannot duplicate or move the gem twice")
+	for type: String in GemOrder.GEM_TYPES:
+		var legacy := gem.duplicate()
+		legacy.erase("source")
+		legacy.item = type + "gem"
+		_check_equal(GemOrder.before_moves([move,legacy,hit]), [legacy,move,hit], "legacy gem timing: " + type)
+	for change: Dictionary in [{"item":"Focus Sash","source":""}, {"item":"Shuca Berry","source":""}, {"item":"Life Orb","source":""}, {"item":"Leftovers","source":""}, {"source":"move: Fling"}, {"source":"move: Knock Off"}, {"state":"start"}, {"target":"p2a: Hippowdon"}, {"target":"p1b: Garchomp"}]:
+		var other := gem.duplicate()
+		other.merge(change,true)
+		_check_equal(GemOrder.before_moves([move,other,hit]), [move,other,hit], "unrelated item or holder keeps its timing: " + str(change))
+	for barrier: Dictionary in [hit, {"type":"heal"}, {"type":"prepare"}, {"type":"cant"}, {"type":"fail"}, {"type":"turn"}, {"type":"switch"}, {"type":"move","actor":"p2a: Hippowdon"}]:
+		_check_equal(GemOrder.before_moves([move,barrier,gem]), [move,barrier,gem], "gem cannot cross " + str(barrier.type))
+	var meta := {"type":"effectiveness","target":"p2a: Hippowdon"}
+	_check_equal(GemOrder.before_moves([move,meta,gem,hit]), [gem,move,meta,hit], "pre-hit metadata keeps its order")
+	_check_equal(GemOrder.before_moves([move,gem,hit,hit]), [gem,move,hit,hit], "multi-hit damage order remains intact")
+	var source := FileAccess.get_file_as_string(BATTLE_SCRIPT_PATH)
+	_check_equal(source.count("ordered_events = BATTLE_GEM_EVENT_ORDER.before_moves(ordered_events)"), 2, "render and HP rewind share gem presentation order")

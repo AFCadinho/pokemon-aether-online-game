@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Play Ground Gem and other offensive gem activations before their attack animation, keeping the attack and damage reaction together.
+
 - Keep animated pixel-art Pokémon crisp when enlarged in 2D battles, while retaining smooth filtering for HOME artwork and rendered HD sprites.
 
 - Keep native mobile Pokédex and quest-tracker collapse controls beside their own rows in fixed positions, with separate touch space and no overlap from the global-buff tray.

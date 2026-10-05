@@ -160,3 +160,8 @@ Only explicit player approval completes an entry.
 - [ ] Sleep
 - [ ] Substitute
 - [ ] Mega evolution
+
+Gem activation events emitted after a move announcement are presented before
+that move's animation. This uses the same ordered batch for rendering and HP
+rewind, including replays. Only the attacker's gem consumption moves; defensive
+items, berries, recoil and end-of-turn effects retain their event order.
