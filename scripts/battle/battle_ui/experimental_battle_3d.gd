@@ -801,6 +801,7 @@ func _effect_bounds(index: int) -> Dictionary:
 		result.position = local_box.position + Vector3(local_box.size.x * 0.5,0,local_box.size.z * 0.5)
 		result.height = local_box.size.y
 		result.radius = maxf(local_box.size.x, local_box.size.z) * 0.55
+		result["half_extents"] = local_box.size * 0.5
 	return result
 
 func _clear_status_effects() -> void:
@@ -1055,6 +1056,16 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var direction := (end-source).normalized()
 	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
 	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
+	if MoveEffect.move_key(move)=="moonblast":
+		# Reserve space for the fully grown orb, not just its centre. Charge and
+		# flight share this point, while the moon stays above the attacker.
+		var moon_source := source
+		var forward := Vector3(direction.x,0,direction.z).normalized()
+		var orb_radius: float = BatchFourMoveEffect.MOONBLAST_ORB_RADIUS * MoveEffect.PRESENTATION_SCALES.moonblast
+		var body_extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
+		source = a.position + Vector3.UP * a.height * source_height + forward * (body_extent + orb_radius + 0.15)
+		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
+			"moon_source":moon_source,"attachment_part":"bounds","attachment_bones":[]}
 	var attachment := {}
 	var index := actor_index(actor)
 	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.

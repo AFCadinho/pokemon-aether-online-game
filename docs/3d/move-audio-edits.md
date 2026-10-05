@@ -41,6 +41,10 @@ The moon appears before the orb grows, followed by a brief full-size hold and a
 0.35s flight. Both pose and VFX retain the shared native clock, so pause, dodge,
 impact damage and cancellation keep their existing ownership. Only Moonblast
 uses this duration override; subsequent attacks recover their usual speed.
+The orb charges outside the attacker's projected body bounds with clearance for
+its full radius. The moon keeps a separate anchor above the attacker. The charge
+point becomes the fixed launch origin, preventing a jump on release; visible
+Substitutes supply their own bounds.
 
 The router supplies the same confirmed-hit flag as the VFX. Dodge/block/immune
 presentations omit impact-only clips, including physical contact clips; charge

@@ -75,11 +75,31 @@ func _run() -> void:
 	var actual: Dictionary = stage._move_anchors("p1", "p2", "Ember")
 	assert(actual.attachment_part == "mouth")
 	assert(stage._move_anchors("p2", "p1", "Ember").attachment_part == "mouth")
+	# The whole Moonblast orb must clear the attacker's silhouette on either
+	# side, including rotated/scaled models; the moon keeps its own body anchor.
+	var orb_radius: float = Stage.BatchFourMoveEffect.MOONBLAST_ORB_RADIUS * LegacyEffect.PRESENTATION_SCALES.moonblast
+	for index in 2:
+		for yaw in [0.0,PI/4]:
+			for size in [0.75,2.0]:
+				stage.actors[index].rotation.y = yaw
+				stage.actors[index].scale = Vector3.ONE * size
+				var charge: Dictionary = stage._move_anchors("p%d" % (index+1),"p%d" % (2-index),"Moonblast")
+				var bounds: AABB = stage.actors[index].transform * AABB(Vector3(-0.5,0,-0.5),Vector3(1,2,1))
+				var forward: Vector3 = charge.target-charge.source
+				forward.y = 0
+				forward = forward.normalized()
+				for corner in 8:
+					assert(charge.source.dot(forward)-orb_radius > bounds.get_endpoint(corner).dot(forward))
+				assert(charge.moon_source.dot(forward)<charge.source.dot(forward))
+		stage.actors[index].rotation.y = 0
+		stage.actors[index].scale = Vector3.ONE
 	var doll := Doll.new()
 	world.add_child(doll)
 	doll.position = Vector3(-3,0,1)
 	stage.substitute_models[0] = doll
 	assert(stage._move_anchors("p1", "p2", "Ember").attachment_part == "bounds", "Visible Substitute must own the emitter")
+	var doll_charge: Dictionary = stage._move_anchors("p1","p2","Moonblast")
+	assert(doll_charge.source.distance_to(doll.position)>orb_radius+doll.idle_scale*0.6)
 	doll.hide()
 	assert(stage._move_anchors("p1", "p2", "Ember").attachment_part == "mouth")
 	stage.world = null # This fixture owns world separately from the stage.
