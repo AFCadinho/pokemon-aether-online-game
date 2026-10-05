@@ -266,6 +266,7 @@ const WILD_BATTLE_PRESENTATION_POLICY := preload("res://scripts/battle/wild_batt
 const BATTLE_VOICE_TIMING := preload("res://scripts/battle/battle_voice_timing.gd")
 const DODGE_COMMAND_DISPLAY_SECONDS := 2.60
 const BATTLE_ENVIRONMENT_CATALOG := preload("res://scripts/battle/battle_environment_catalog.gd")
+const BATTLE_DAY_NIGHT := preload("res://scripts/world/day_night_controller.gd")
 const OGERPON_BATTLE_FORM := preload("res://scripts/battle/ogerpon_battle_form.gd")
 const TYPE_CHANGE_BADGE_COLORS := {
 	"bug": Color("#85a114"), "dark": Color("#403847"), "dragon": Color("#4d52c4"),
@@ -352,6 +353,8 @@ var z_move_mechanic_label: Label
 var pending_mega_species_by_ident: Dictionary = {}
 var active_battle_environment_id: StringName = BATTLE_ENVIRONMENT_CATALOG.DEFAULT_ENVIRONMENT_ID
 var active_battle_environment_loops_video := false
+var active_background_uses_world_lighting := false
+var background_lighting_elapsed := 0.0
 var pvp_room_code := ""
 var pvp_match_id := ""
 var pvp_viewer_role := "participant"
@@ -728,6 +731,7 @@ func _ready() -> void:
 	add_child(battle_result_auto_continue_timer)
 	if not battle_background_video.finished.is_connected(_on_battle_background_video_finished):
 		battle_background_video.finished.connect(_on_battle_background_video_finished)
+	WorldTimeService.time_changed.connect(_refresh_battle_background_lighting)
 	if not calc_panel.defender_assumptions_changed.is_connected(_on_calc_panel_defender_assumptions_changed):
 		calc_panel.defender_assumptions_changed.connect(_on_calc_panel_defender_assumptions_changed)
 	if not calc_panel.assumption_catalog_requested.is_connected(_on_calc_panel_assumption_catalog_requested):
@@ -1155,6 +1159,8 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 	# Select 2D art without replacing the route/city context sent to the 3D arena.
 	profile = profile.get_2d_profile(battle_type == BattleType.WILD)
 	active_battle_environment_loops_video = profile.loop_background_video
+	active_background_uses_world_lighting = profile.background_uses_world_lighting
+	_refresh_battle_background_lighting()
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
 	battle_background_video.stop()
@@ -1168,6 +1174,16 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 	if battle_background_video.visible:
 		battle_background_video.play()
 	_sync_battle_background_video()
+
+
+func _refresh_battle_background_lighting() -> void:
+	background_lighting_elapsed = 0.0
+	var color := Color.WHITE
+	if active_background_uses_world_lighting:
+		color = BATTLE_DAY_NIGHT.color_for_seconds(WorldTimeService.get_seconds_since_midnight())
+	# Weather owns modulate; self_modulate composes with it without dimming HUD/sprites.
+	battle_background.self_modulate = color
+	battle_background_video.self_modulate = color
 
 
 func _sync_battle_background_video() -> void:
@@ -1200,6 +1216,10 @@ func _on_settings_changed() -> void:
 
 func _process(delta: float) -> void:
 	_sync_battle_background_video()
+	if active_background_uses_world_lighting:
+		background_lighting_elapsed += delta
+		if background_lighting_elapsed >= BATTLE_DAY_NIGHT.REFRESH_INTERVAL_SECONDS:
+			_refresh_battle_background_lighting()
 	if has_meta("battle_entry_pending"):
 		return
 	animation_router.poll_threaded_resource_requests()
