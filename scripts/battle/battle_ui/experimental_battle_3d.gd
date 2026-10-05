@@ -105,6 +105,37 @@ var identities := ["", "", "", ""]
 var restoring := ["idle", "idle", "idle", "idle"]
 var loaded_path := "!unloaded"
 var active := false
+const WeatherEffect = preload("res://scripts/battle/battle_ui/weather_effect_3d.gd")
+var weather_condition := ""
+var weather_effect: Node3D
+
+func owns_weather() -> bool:
+	return active and not _is_hybrid_presentation()
+
+func set_weather_condition(condition: String) -> void:
+	weather_condition = WeatherEffect.normalize(condition)
+	_sync_weather()
+
+func _clear_weather() -> void:
+	if is_instance_valid(weather_effect):
+		weather_effect.cancel()
+	weather_effect = null
+
+func _sync_weather() -> void:
+	var enabled := owns_weather() and SettingsManager.weather_effects and not weather_condition.is_empty()
+	if not enabled or not is_instance_valid(world) or not is_instance_valid(camera):
+		_clear_weather()
+		return
+	if is_instance_valid(weather_effect):
+		if weather_effect.key == weather_condition and weather_effect.get_parent() == world:
+			return
+		_clear_weather()
+	weather_effect = WeatherEffect.new()
+	world.add_child(weather_effect)
+	var origin := ArenaCatalog.battle_origin(arena_id)
+	if is_instance_valid(arena_root): origin.y = float(arena_root.get_meta("surface_height", 0.0))
+	weather_effect.start(weather_condition, world, camera, origin, common_effect_speed)
+
 var saved_colors := {}
 var reason := "2D selected"
 var catalog_problem := ""
@@ -1593,6 +1624,7 @@ func _set_active(value: bool) -> void:
 				resting[i] = true
 				current_actions[i] = "idle"
 	active = value
+	_sync_weather()
 	visible = value or (entry_arena_requested and entry_arena_visible and viewport != null)
 	if viewport != null:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED

@@ -132,6 +132,8 @@ func _build() -> void:
 	world = Node3D.new()
 	viewport.add_child(world)
 	for child in stage.world.get_children():
+		if child.has_meta("battle_weather_visual"):
+			continue
 		if child == stage.camera or child in stage.actors:
 			continue
 		if stage.has_method("build_response_arena") and child == stage.arena_root:

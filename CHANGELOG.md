@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Render rain, sun, sandstorm, snow, hail and primal weather inside 3D battles, with camera-stable effects and replay pause/speed support.
+
 - Restore smooth filtering for enlarged 2D battle Pokémon after reviewing the sharper pixel-art presentation.
 
 - Download and prepare possible Mega forms before their battle transformations, including shiny variants; include these forms in background party and area downloads.
