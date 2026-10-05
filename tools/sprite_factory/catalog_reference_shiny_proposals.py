@@ -38,8 +38,10 @@ def references(name):
     return found
 
 
-def palette(name):
-    refs=references(name);images=[]
+def palette(name, reference_paths=None):
+    refs=[Path(p) for p in reference_paths] if reference_paths else references(name)
+    if len(refs)!=2 or not all(p.is_file() for p in refs):raise ValueError("Expected two existing colour references")
+    images=[]
     for p in refs:
         im=Image.open(p).convert('RGBA');im=im.crop(im.getchannel('A').getbbox());images.append(im.resize((128,128),Image.Resampling.LANCZOS))
     a,z=[list(im.get_flattened_data()) for im in images]
@@ -66,7 +68,7 @@ def palette(name):
 def build(row,output):
     name=row['species'];target=output/name/'model.glb'
     try:
-        refs,registration,anchors=palette(name)
+        refs,registration,anchors=palette(name,row.get("reference_paths"))
         source=Path(row['path']);assert sha(source)==row['glb_sha256']
         doc,original=chunks(source);binary=bytearray(original);changed=[]
         @lru_cache(maxsize=100000)
@@ -102,7 +104,7 @@ def build(row,output):
         target.parent.mkdir(exist_ok=False);write_glb(target,doc,binary)
         proof={'species':name,'status':'exported_for_review','path':str(target),'glb_sha256':sha(target),
                'normal_glb_sha256':sha(source),'geometry_motion_sha256':compare(source,target),
-               'alpha_unchanged':True,'runtime_approved':False,'method':'registered_home_hsv_transfer_review_v1',
+               'alpha_unchanged':True,'runtime_approved':False,'method':'registered_'+row.get('reference_kind','home')+'_hsv_transfer_review_v1',
                'registration_iou':float(registration),'anchors':anchors,'changed_materials':changed,
                'references':[{'path':str(p),'sha256':sha(p)} for p in refs],
                'limitations':'Reference shading and spatial registration are approximations; final visual colour qualification is mandatory'}

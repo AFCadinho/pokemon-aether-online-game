@@ -221,6 +221,11 @@ func _run() -> void:
 		report.entries.append(result)
 		failed = failed or not result.errors.is_empty()
 		print("REVIEW ", entry.species, " errors=", result.errors)
+		# Preserve diagnostics when a long review window is interrupted. This is
+		# deliberately separate from the completed report consumed by gates.
+		var progress := FileAccess.open(output.path_join("godot-review-progress.json"), FileAccess.WRITE)
+		progress.store_string(JSON.stringify(report, "  "))
+		progress.close()
 	var file := FileAccess.open(output.path_join("godot-review.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify(report, "  "))
 	file.close()

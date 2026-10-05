@@ -117,7 +117,7 @@ func _run() -> void:
 		for factor in [0.75, 1.37, 1.0]:
 			stage.scale = original_scale * factor
 			stage._sync_render_size()
-			var screen: Transform2D = stage.get_screen_transform()
+			var screen: Transform2D = stage.get_viewport().get_final_transform() * stage.get_global_transform_with_canvas()
 			var expected := Vector2i(ceili(stage.size.x * screen.x.length()), ceili(stage.size.y * screen.y.length()))
 			assert(stage.viewport.size == expected)
 			var anchor_after: Vector2 = stage.get_global_transform().affine_inverse() * stage._anchor(true, 0)

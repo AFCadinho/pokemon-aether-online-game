@@ -14,6 +14,8 @@ const STANCE_FORMS := {
 	"morpeko": ["morpeko-hangry"], "morpeko-hangry": ["morpeko"],
 	"darmanitan": ["darmanitan-zen"], "darmanitan-standard": ["darmanitan-zen"],
 	"darmanitan-zen": ["darmanitan-standard"],
+	"darmanitan-galar": ["darmanitan-galar-zen"],
+	"darmanitan-galar-zen": ["darmanitan-galar"],
 }
 static var _mega_targets: Dictionary = {}
 static var _indexed := false
