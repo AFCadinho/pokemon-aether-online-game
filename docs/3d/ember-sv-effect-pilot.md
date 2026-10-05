@@ -1,5 +1,11 @@
 # Ember: SV source-effect conversion pilot
 
+**Follow-up:** the user approved this look. Ember is now integrated into normal
+3D battles with tracked textures; `tests/source_moves_preview.gd` compares the
+live Ember and the Water Gun candidate without an external dump directory.
+See [the follow-up](source-move-effects.md). The sections below record the initial
+pilot at `da06b8d89`, before promotion to the runtime.
+
 ## Result and boundary
 
 The full local SV ROMFS contains the Ember source components in

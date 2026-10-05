@@ -155,6 +155,9 @@ func _process(_delta: float) -> void:
 	var after := (elapsed-impact) / maxf(duration * 0.19,0.01)
 	var fade := 1.0 - clampf(after,0,1)
 	cursor = 0
+	if _draw_source_move(from, to, right, up):
+		for i in range(cursor, pieces.size()): pieces[i].visible = false
+		return
 	if elapsed >= launch and after < 1.0:
 		match key:
 			"tackle":
@@ -230,3 +233,6 @@ func _process(_delta: float) -> void:
 				else:
 					_line(to+direction*distance,to+direction*(distance+size*0.25*fade),0.025*fade,core)
 	for i in range(cursor,pieces.size()): pieces[i].visible = false
+
+func _draw_source_move(_from: Vector3, _to: Vector3, _right: Vector3, _up: Vector3) -> bool:
+	return false
