@@ -1,6 +1,6 @@
 # Thunderbolt
 
-Available in normal 3D battles, awaiting user visual approval.
+Available in normal 3D battles and visually approved by the user.
 
 The SV `ew0085` source contains five particle containers with 51 emitters:
 start, beam, initial hit, sustained hit and ending hit. The offline extractor
