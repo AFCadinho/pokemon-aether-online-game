@@ -107,10 +107,10 @@ func _sample(percentage: float, state: String) -> void:
 		var drawn: Rect2 = (root.get_screen_transform() * button.get_global_transform_with_canvas()) * visual
 		var expected := Vector2(28, 32) if panel_id == "quest" else Vector2(28, 28)
 		_check(visual.size.is_equal_approx(expected), "original UI-scaled surface " + panel_id)
-		_check(not visual.has_point(button.size * 0.9), "edge tap in transparent padding " + panel_id)
+		_check(not visual.has_point(button.size * Vector2(0.1, 0.9)), "edge tap in transparent padding " + panel_id)
 		_check(rect.size.x / density >= 47.99 and rect.size.y / density >= 47.99, "48 dp " + panel_id + " at " + str(percentage))
 		_check(Rect2(Vector2.ZERO, Vector2(root.size)).grow(0.1).encloses(rect), "on screen " + panel_id)
-		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * 0.9), "blocks movement " + panel_id)
+		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.1, 0.9)), "blocks movement " + panel_id)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "separate targets " + panel_id)
 		rects.append(rect)
@@ -123,7 +123,7 @@ func _sample(percentage: float, state: String) -> void:
 func _tap_edge(button: Control) -> void:
 	var click := InputEventMouseButton.new()
 	click.button_index = MOUSE_BUTTON_LEFT
-	click.position = button.get_global_rect().position + button.size * 0.9
+	click.position = button.get_global_rect().position + button.size * Vector2(0.1, 0.9)
 	var motion := InputEventMouseMotion.new()
 	motion.position = click.position
 	root.push_input(motion, true)
