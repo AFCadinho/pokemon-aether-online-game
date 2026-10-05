@@ -108,6 +108,40 @@ var active := false
 const WeatherEffect = preload("res://scripts/battle/battle_ui/weather_effect_3d.gd")
 var weather_condition := ""
 var weather_effect: Node3D
+const TerrainEffect = preload("res://scripts/battle/battle_ui/terrain_effect_3d.gd")
+var terrain_condition := ""
+var trick_room_active := false
+var terrain_effect: Node3D
+var trick_room_effect: Node3D
+
+func owns_field_effects() -> bool:
+	return active and not _is_hybrid_presentation()
+
+func set_terrain_condition(condition: String) -> void:
+	terrain_condition = TerrainEffect.normalize(condition)
+	_sync_field_effects()
+
+func set_trick_room(enabled: bool) -> void:
+	trick_room_active = enabled
+	_sync_field_effects()
+
+func _sync_field_effects() -> void:
+	var enabled := owns_field_effects() and SettingsManager.terrain_effects and is_instance_valid(world)
+	terrain_effect = _sync_field_effect(terrain_effect, terrain_condition if enabled else "")
+	trick_room_effect = _sync_field_effect(trick_room_effect, "trickroom" if enabled and trick_room_active else "")
+
+func _sync_field_effect(current: Node3D, key: String) -> Node3D:
+	if is_instance_valid(current):
+		if not key.is_empty() and current.key == key and current.get_parent() == world:
+			return current
+		current.cancel()
+	if key.is_empty(): return null
+	var effect := TerrainEffect.new()
+	world.add_child(effect)
+	var origin := ArenaCatalog.battle_origin(arena_id)
+	if is_instance_valid(arena_root): origin.y = float(arena_root.get_meta("surface_height", 0.0))
+	effect.start(key, origin, common_effect_speed)
+	return effect
 
 func owns_weather() -> bool:
 	return active and not _is_hybrid_presentation()
@@ -1625,6 +1659,7 @@ func _set_active(value: bool) -> void:
 				current_actions[i] = "idle"
 	active = value
 	_sync_weather()
+	_sync_field_effects()
 	visible = value or (entry_arena_requested and entry_arena_visible and viewport != null)
 	if viewport != null:
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if visible else SubViewport.UPDATE_DISABLED

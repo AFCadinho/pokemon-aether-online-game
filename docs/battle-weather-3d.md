@@ -3,7 +3,8 @@
 Native 3D uses the existing displayed weather state and event order. Weather is
 arena-space geometry, rendered behind the HUD and independent of camera orbit.
 2D and 2.5D keep the existing weather presentation, including after model fallback.
-Terrain and Trick Room effects are outside this change.
+Terrain and Trick Room have a separate [3D review checklist](battle-terrain-3d.md)
+and can be combined with weather.
 
 ## Visual review checklist
 

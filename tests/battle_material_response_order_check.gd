@@ -32,6 +32,11 @@ func _run() -> void:
 	stage.viewport = main.viewport
 	stage.world = main.world
 	stage.camera = main.camera
+	for tag in ["battle_weather_visual", "battle_field_visual"]:
+		var visual := Node3D.new()
+		visual.name = tag
+		visual.set_meta(tag, true)
+		stage.world.add_child(visual)
 	var response := Response.new()
 	response.stage = stage
 	stage.add_child(response)
@@ -40,6 +45,8 @@ func _run() -> void:
 	var light: SubViewport = response.viewport
 	assert(light.get_parent()==stage.viewport)
 	assert(light.own_world_3d)
+	assert(response.world.get_node_or_null("battle_weather_visual") == null)
+	assert(response.world.get_node_or_null("battle_field_visual") == null, "Persistent field visuals must not be duplicated into the irradiance pass")
 	response._drop()
 	await process_frame
 	assert(not is_instance_valid(light))

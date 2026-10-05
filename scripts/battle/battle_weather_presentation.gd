@@ -34,6 +34,9 @@ var active_weather_effect := ""
 var model_presenter: Node
 var native_weather_owned := false
 var weather_enabled := true
+var active_trick_room := false
+var native_field_owned := false
+var terrain_enabled := true
 
 func setup(
 	weather_particles_node: GPUParticles2D,
@@ -155,6 +158,10 @@ func animate(delta: float) -> void:
 	var owns_native: bool = is_instance_valid(model_presenter) and model_presenter.owns_weather()
 	if owns_native != native_weather_owned or weather_enabled != SettingsManager.weather_effects:
 		update_weather(active_weather_effect)
+	var owns_field: bool = is_instance_valid(model_presenter) and model_presenter.owns_field_effects()
+	if owns_field != native_field_owned or terrain_enabled != SettingsManager.terrain_effects:
+		update_terrain(active_terrain_effect)
+		update_trick_room(active_trick_room)
 	if not SettingsManager.weather_effects and not SettingsManager.terrain_effects:
 		return
 
@@ -174,7 +181,12 @@ func animate(delta: float) -> void:
 		_animate_trick_room_effect(delta)
 
 func update_terrain(terrain_effect: String) -> void:
-	if not SettingsManager.terrain_effects:
+	active_terrain_effect = terrain_effect
+	terrain_enabled = SettingsManager.terrain_effects
+	native_field_owned = is_instance_valid(model_presenter) and model_presenter.owns_field_effects()
+	if is_instance_valid(model_presenter):
+		model_presenter.set_terrain_condition(terrain_effect)
+	if native_field_owned or not terrain_enabled:
 		_hide_terrain_effects()
 		return
 
@@ -184,7 +196,6 @@ func update_terrain(terrain_effect: String) -> void:
 	var should_show_psychic_terrain := terrain_key == "psychicterrain"
 	var should_show_electric_terrain := terrain_key == "electricterrain"
 	var should_show_terrain := should_show_grassy_terrain or should_show_misty_terrain or should_show_psychic_terrain or should_show_electric_terrain
-	active_terrain_effect = terrain_effect
 
 	if terrain_tint != null:
 		terrain_tint.visible = should_show_terrain
@@ -208,6 +219,11 @@ func update_terrain(terrain_effect: String) -> void:
 		_set_child_particles_emitting(electric_terrain_layer, should_show_electric_terrain)
 
 func update_trick_room(is_active: bool) -> void:
+	active_trick_room = is_active
+	if is_instance_valid(model_presenter):
+		model_presenter.set_trick_room(is_active)
+		if model_presenter.owns_field_effects():
+			is_active = false
 	if trick_room_layer == null:
 		return
 
