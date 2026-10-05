@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reduce 3D poison and toxic bubble diameter by 40% for subtler status effects.
+
 - Play Ground Gem and other offensive gem activations before their attack animation, keeping the attack and damage reaction together.
 
 - Keep animated pixel-art Pokémon crisp when enlarged in 2D battles, while retaining smooth filtering for HOME artwork and rendered HD sprites.

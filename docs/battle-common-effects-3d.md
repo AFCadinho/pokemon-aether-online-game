@@ -151,9 +151,9 @@ Only explicit player approval completes an entry.
 
 - [x] Z-Moves / Z-Power
 - [x] Item activation — golden bands and particles sweeping up and down; approved after gem-before-attack timing fix
-- [ ] Berry eating
-- [ ] Poison
-- [ ] Toxic
+- [x] Berry eating
+- [ ] Poison — bubble diameter reduced by 40%; awaiting visual approval
+- [ ] Toxic — same smaller bubbles; awaiting visual approval
 - [ ] Burn
 - [ ] Paralysis
 - [ ] Freeze
