@@ -1,0 +1,1358 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "scope": "galar_birds_source_intake_only",
+  "runtime_approved": false,
+  "appearance_approved": false,
+  "shiny_rendered": false,
+  "battle_approved": false,
+  "source_root_hint": "/home/adinho/Documents/3d_models",
+  "evidence_root": ".tmp/galar-birds-source-review",
+  "entries": [
+    {
+      "species": "articuno-galar",
+      "national_dex": 144,
+      "resource": "pm0144_00_31",
+      "source": {
+        "archive": "Biochao/Gen1.zip",
+        "member": "pm0144_31.blend",
+        "bytes": 41075643,
+        "crc32": "a55a2629",
+        "sha256": "f91e981c4f5b0a611e9d1ffd8bde6dd6b4454257af2638ef4bf2d8023f11a0a4"
+      },
+      "rig": "pm0144_00_31.trmdl",
+      "meshes": 2,
+      "native_clips": 55,
+      "raw_skeletal_clip_count": 55,
+      "raw_material_clip_count": 55,
+      "actions": {
+        "idle": "pm0144_00_31_20000_defaultwait01_loop.gfbanm",
+        "physical_attack": "pm0144_00_31_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0144_00_31_20410_attack02.gfbanm",
+        "special_attack": "pm0144_00_31_20450_rangeattack01.gfbanm",
+        "sleep": "pm0144_00_31_00281_sleep01_loop.gfbanm",
+        "damage": "pm0144_00_31_20500_damage01.gfbanm",
+        "faint_start": "pm0144_00_31_20520_down01_start.gfbanm",
+        "faint_loop": "pm0144_00_31_20521_down01_loop.gfbanm"
+      },
+      "cross_bank_sleep": true,
+      "material_profiles": [
+        {
+          "material": "body_b",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a_01",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "r_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "l_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        }
+      ],
+      "rare_texture_replacements": [
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_body_a_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_body_a_rare_alb.png",
+          "normal_sha256": "5664e28ede34223df4940a0acb46787fbe6f7fc88f351dd1c7d53e7aef8116cd",
+          "rare_sha256": "cc5e2287a8a500e7558b2e7c21db472b6e1edb40145edb9ec84b52eb1413d9e3"
+        },
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_body_b_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_body_b_rare_alb.png",
+          "normal_sha256": "4630530818b94d994bb30bd09a055fe73d5a65b92023678469e5b3169c88bedd",
+          "rare_sha256": "9df553e696a4cfd69ce2320edfa5970ef4238f9193abdba625ba121f7873f240"
+        }
+      ],
+      "rare_float_overrides": [],
+      "rare_color_overrides": [],
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31.trmbf",
+          "bytes": 373888,
+          "sha256": "b3467b256a5733a8f696ec28d50041833227121a7f0833f827686b37d952a580"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31.trmdl",
+          "bytes": 380,
+          "sha256": "62fdc21e9766ae2daa634fb1f0c1c270d2203fbd486f3d1f630fa40584a10bbd"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31.trmsh",
+          "bytes": 3300,
+          "sha256": "a5597c92cff5cfa17c1339ba0b53bc17aee9408ed0cafadcd4160df992993354"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31.trmtr",
+          "bytes": 11728,
+          "sha256": "6f7b3963f32256de2bebbcd2dcf25592788cb29735d1c8f057f2c102ccde520a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31.trskl",
+          "bytes": 28504,
+          "sha256": "b6ee8dfdf7b3494c71268b973bbbb52f794df1a5ab5339181a4c3fc61b51c935"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_lod1.trmbf",
+          "bytes": 167476,
+          "sha256": "502af91837e1b3c705e64c84aaf4154af320163ecab6f8b1980c1cd1972ef48b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_lod1.trmsh",
+          "bytes": 3320,
+          "sha256": "d6d50ed41cbf834bb0546c07841bd6625354d0f9a057812ac602895357e62d8a"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_lod2.trmbf",
+          "bytes": 83812,
+          "sha256": "ef0200789ac1cf77ac919fc8acaca6f4130d5666047c8a2d585a423ae39c1242"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_lod2.trmsh",
+          "bytes": 3320,
+          "sha256": "5d88ca20dcf4bc17821961abf39c45a677e2f6c968112c5891d5e09545d2d8cd"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/pm0144_00_31_rare.trmtr",
+          "bytes": 11464,
+          "sha256": "4de892037f0947a4785b36b58a5369ed399f1973f93bfacacf7a04281394a0ae"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0144/pm0144_00_31/icon/pm0144_00_31_00_big.png",
+          "bytes": 19869,
+          "sha256": "61b719b3bca45ae1c750b692af13da6fb2c1af1dbcfce33d1aae873e0719a632"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20000_defaultwait01_loop.tranm",
+          "bytes": 41028,
+          "sha256": "551061770bc1cf9a1c7a9bc66dae125fae65d5cc02206e6c14eb7155723cc40e"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20000_defaultwait01_loop.tracm",
+          "bytes": 284,
+          "sha256": "aaf4a3228e6328a63fe56409b21f84492626c28a81094ea398c31d5d564da7b0"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20400_attack01.tranm",
+          "bytes": 82200,
+          "sha256": "fcc4235b069954597cd378e03e46b18b2940c46b4249a2ffb594c9cf53ee779b"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20400_attack01.tracm",
+          "bytes": 5648,
+          "sha256": "297abab175efe3c61286418ec60e0002adf90802cfc1e97eeebb4f6338d085d5"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20410_attack02.tranm",
+          "bytes": 126020,
+          "sha256": "938fab6e8922e38652e2b14ae32c42d68cc32a0b9c27c3978a88c0e4e7381acf"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20410_attack02.tracm",
+          "bytes": 5648,
+          "sha256": "40f3607d9e303d06e15084e8558e96c2c5fff57b6221acdd80e37344b51dabe9"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20450_rangeattack01.tranm",
+          "bytes": 124972,
+          "sha256": "48082f2bd0f7d0ad7a770f40199533718645fc96e24bf5acd061fcba991a33fb"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20450_rangeattack01.tracm",
+          "bytes": 6128,
+          "sha256": "abe434cd17bdddb4fe26b39d4b66db0d429777a77ca4d42c528c447900191a64"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_00281_sleep01_loop.tranm",
+          "bytes": 26428,
+          "sha256": "668bbcf4b3092b7feb3c64ca7c7adaa358d140def9d7a27fd0b2bdc52a48bd39"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_00281_sleep01_loop.tracm",
+          "bytes": 284,
+          "sha256": "d80e09d42f10c5241b4d495cc9a8fb75a3ae6c8f82b8112300add696a5215e6f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20500_damage01.tranm",
+          "bytes": 49508,
+          "sha256": "92904fd23e7016565d286492e2edb12a6b6ec89b1ac3a533e05d56dc3ba4f7b8"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20500_damage01.tracm",
+          "bytes": 280,
+          "sha256": "756932924cd323f47ce2d69dd0c113fb653970709bb35701ec13db159ea1ea06"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20520_down01_start.tranm",
+          "bytes": 69044,
+          "sha256": "db9ce8343d91d98c497baa19af7a1e0199d42cc8d7f533fa45338c1975dfcad2"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20520_down01_start.tracm",
+          "bytes": 280,
+          "sha256": "f613e4a34784b016b59dfb5005974a832b940ce3bff331cb4a70c26394dfda26"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20521_down01_loop.tranm",
+          "bytes": 32412,
+          "sha256": "9a207af6f0f51bf278bc9761e3e7fffbd80603f031c837c8aeede2a83b312d74"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0144/pm0144_00_31/pm0144_00_31_20521_down01_loop.tracm",
+          "bytes": 284,
+          "sha256": "df03661f3215cd97a7fd5c91ec7a0ce041188b1e3925f8b9093226ca795d452c"
+        }
+      ],
+      "probe_receipt": {
+        "path": "articuno-galar/probe.json",
+        "bytes": 5858,
+        "sha256": "97f78bf30ff1de15ce4eeb81a1c12778fb57a80b09537b6774ffef87dfb24842"
+      },
+      "review_receipts": [
+        {
+          "path": "articuno-galar/normal/review.json",
+          "bytes": 30468,
+          "sha256": "b56b5acd50389003b28990a8eddd20ad25c2d0da564abfba7c8430509e642c91"
+        },
+        {
+          "path": "articuno-galar/portrait/review.json",
+          "bytes": 26436,
+          "sha256": "6cb40e52ce0900f4845f6ddbbefe9e4181070cfd32877e6bf9445450c5347da0"
+        }
+      ],
+      "normal_source_images": [
+        {
+          "path": "articuno-galar/normal/idle-front.png",
+          "bytes": 57295,
+          "sha256": "59f21be8174eaa04cb403a7458b82d1a2ccb9d4dcef7f659e63d3b57f2ce5a61",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/idle-back.png",
+          "bytes": 57215,
+          "sha256": "a86ecd15ef35c2a3f4c0ad0ad96c2a8bff9868cd292468ae6d1fa97def26b064",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack-early-front.png",
+          "bytes": 59556,
+          "sha256": "448b54066e072596345318a9f049ae5d46f0f2029af60b098fcea77e667bbb84",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack-front.png",
+          "bytes": 58043,
+          "sha256": "7350898ccce96def9f8242304d124a1360df4f735a68ba434f041a8e32cbb255",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack-late-front.png",
+          "bytes": 57947,
+          "sha256": "46778152cd11953d4936bd9b787f7485bedc943f670fbac8860c547b6628edc8",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack_2-early-front.png",
+          "bytes": 60927,
+          "sha256": "caa762610b12ac67f14f5ecb1005c7357411a5631d10acd8e1bfaf9175f2ecb0",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack_2-front.png",
+          "bytes": 58603,
+          "sha256": "394cfec12991e1bd19a026a1cc9f0122635807b6c60436b7e45e4ebbabc21e94",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/physical_attack_2-late-front.png",
+          "bytes": 60045,
+          "sha256": "796cf9127702f455db5ef501f11e75aab5a1ba0d123fc88765aacfefb14c3de9",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "articuno-galar/normal/special_attack-front.png",
+          "bytes": 59881,
+          "sha256": "c1950447979b97c9f5a3748d8c89eaa314656f9ebbcfbaaf2cbadc321245b46a",
+          "category": "special_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/sleep-front.png",
+          "bytes": 56546,
+          "sha256": "564bf8adb2e543efaac7de79acd971b71462894acaa61dfc95fb1c6db12ee591",
+          "category": "sleep",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/normal/faint_start-front.png",
+          "bytes": 58746,
+          "sha256": "955ffd56047e3fb58decdb576de42a1ca13b9a9695404cec55aac63c62d9733d",
+          "category": "faint_start",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/portrait/idle-front.png",
+          "bytes": 352437,
+          "sha256": "6d913ca9bb9b80f894df48a93aedce5efb177a4de89c703775d9cfaea3209749",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "articuno-galar/portrait/idle-back.png",
+          "bytes": 350095,
+          "sha256": "0df79f6a21fef3740dde872bffe446e40448d5ed8ad4a6ea4473066957fe5df8",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        }
+      ]
+    },
+    {
+      "species": "zapdos-galar",
+      "national_dex": 145,
+      "resource": "pm0145_00_31",
+      "source": {
+        "archive": "Biochao/Gen1.zip",
+        "member": "pm0145_31.blend",
+        "bytes": 21472906,
+        "crc32": "5e83a996",
+        "sha256": "ff9d31fe245d1198572ee44fe7b0db2b5e55653578e670b9963aca0ef4989a9a"
+      },
+      "rig": "pm0145_00_31.trmdl",
+      "meshes": 3,
+      "native_clips": 43,
+      "raw_skeletal_clip_count": 43,
+      "raw_material_clip_count": 43,
+      "actions": {
+        "idle": "pm0145_00_31_00001_battlewait01_loop.gfbanm",
+        "physical_attack": "pm0145_00_31_00400_attack01.gfbanm",
+        "physical_attack_2": "pm0145_00_31_00410_attack02.gfbanm",
+        "special_attack": "pm0145_00_31_00450_rangeattack01.gfbanm",
+        "sleep": "pm0145_00_31_00281_sleep01_loop.gfbanm",
+        "damage": "pm0145_00_31_00500_damage01.gfbanm",
+        "faint_start": "pm0145_00_31_00520_down01_start.gfbanm",
+        "faint_loop": "pm0145_00_31_00521_down01_loop.gfbanm"
+      },
+      "cross_bank_sleep": false,
+      "material_profiles": [
+        {
+          "material": "body_b_00",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "r_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "l_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        }
+      ],
+      "rare_texture_replacements": [
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_body_a_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_body_a_rare_alb.png",
+          "normal_sha256": "6b3452bdfb0cc69329bffa2816df64edb7f64f0b41718f0e8b24361640fdf582",
+          "rare_sha256": "e8a45b07aa0f47a967b20417f08d9853fce564f9e27b846104b26a2e9fbc8ee3"
+        },
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_body_b_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_body_b_rare_alb.png",
+          "normal_sha256": "606f156bc51aa096ee215f2733f6b2bda800616a55a5abbcb24a71ff3e22db0a",
+          "rare_sha256": "042cfd07b9d74c26538eae9814dbb1e8250554886e0dc746e8affe4521d7a854"
+        }
+      ],
+      "rare_float_overrides": [],
+      "rare_color_overrides": [
+        {
+          "material": "r_eye",
+          "key": "BaseColorLayer1",
+          "normal": [
+            0.8713562488555908,
+            0.6307660341262817,
+            0.030713137239217758,
+            1.0
+          ],
+          "rare": [
+            0.8626999855041504,
+            0.8626999855041504,
+            0.8626999855041504,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "r_eye",
+          "key": "BaseColorLayer2",
+          "normal": [
+            0.012900000438094139,
+            0.012900000438094139,
+            0.012900000438094139,
+            1.0
+          ],
+          "rare": [
+            0.004777070134878159,
+            0.004777070134878159,
+            0.004777070134878159,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "r_eye",
+          "key": "EmissionColorLayer1",
+          "normal": [
+            0.9733999967575073,
+            0.6937999725341797,
+            0.018400000408291817,
+            1.0
+          ],
+          "rare": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "l_eye",
+          "key": "BaseColorLayer1",
+          "normal": [
+            0.8713562488555908,
+            0.6307660341262817,
+            0.030713137239217758,
+            1.0
+          ],
+          "rare": [
+            0.8626999855041504,
+            0.8626999855041504,
+            0.8626999855041504,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "l_eye",
+          "key": "BaseColorLayer2",
+          "normal": [
+            0.012900000438094139,
+            0.012900000438094139,
+            0.012900000438094139,
+            1.0
+          ],
+          "rare": [
+            0.004777070134878159,
+            0.004777070134878159,
+            0.004777070134878159,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "l_eye",
+          "key": "EmissionColorLayer1",
+          "normal": [
+            0.9733999967575073,
+            0.6937999725341797,
+            0.018400000408291817,
+            1.0
+          ],
+          "rare": [
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "mode": "apply"
+        }
+      ],
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31.trmbf",
+          "bytes": 232688,
+          "sha256": "d7679fdaacd065b2eb3ff1a484cc9ede420e19d6d9f84e7448a3f1df66105557"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31.trmdl",
+          "bytes": 380,
+          "sha256": "97107468fa0fc1a4c519616805bc0b50561b0b33f796e89309cc972fac1a07fb"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31.trmsh",
+          "bytes": 3336,
+          "sha256": "745e5de36f06e72862bec6576ce2a432f546c0154716f7dc57f10335c76f453d"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31.trmtr",
+          "bytes": 10892,
+          "sha256": "6ad9a69c38c57e2708f780f3ec1fa34eaada55234017e93e05ee0198fbb7913d"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31.trskl",
+          "bytes": 26412,
+          "sha256": "71b0842d02c190c723ccf3e54fe7ef1426ebbe5ba305f0c4f6cc806e450a06be"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_lod1.trmbf",
+          "bytes": 228344,
+          "sha256": "ec4c1354c99cdf52dfaf93f0746eed8cdb7b8ff5be4eebf16c2322ce272f2f61"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_lod1.trmsh",
+          "bytes": 3364,
+          "sha256": "a146f014991e0d26ac4fb5965fc5144e394ad8dffdf82db4735d552615c0da04"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_lod2.trmbf",
+          "bytes": 110996,
+          "sha256": "377453cfd702d24b9f77351d089fa6c34152326c7ff76147617d249d3be92e8d"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_lod2.trmsh",
+          "bytes": 3324,
+          "sha256": "5eae7a348e12040c67d40b6eb230b222ea962b7c581e3cfef4ab3ab2dbae090c"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/pm0145_00_31_rare.trmtr",
+          "bytes": 10900,
+          "sha256": "3d5728b3e2c2723471b3d71edc109e756cc7f75137f99b4a3873d98e3dbf4b8c"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0145/pm0145_00_31/icon/pm0145_00_31_00_big.png",
+          "bytes": 24560,
+          "sha256": "3750af71204b3bec2ab24cd94eee4729089988afabcbfab53f7c7effcbecffdb"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00001_battlewait01_loop.tranm",
+          "bytes": 18856,
+          "sha256": "693ec971f0903dcb262c85e67a713ed9e0c75f2dccfdc1fa7c85fa9e83b559ba"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00001_battlewait01_loop.tracm",
+          "bytes": 2836,
+          "sha256": "e65caf5a9bab2d51541f61cd8265a3b00a972432c7f8933d1dcf57555f697bef"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00400_attack01.tranm",
+          "bytes": 72096,
+          "sha256": "106a3704ef9e655383f9a65b7d39b26da40738fae558a5c35f0ef98281adab45"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00400_attack01.tracm",
+          "bytes": 4856,
+          "sha256": "ee1d2e106ff89674af797d56232854c7f55b050ee42cb745b99ed2cb1da85da9"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00410_attack02.tranm",
+          "bytes": 71076,
+          "sha256": "979f2537787973c7028a4a53ccc9e54b6227e7afe5970e432898bef0f4274461"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00410_attack02.tracm",
+          "bytes": 7076,
+          "sha256": "5171f088ac66bba29aaa4c2f20875d774fe3f54c3377a5ca66d1fab1eb55aa00"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00450_rangeattack01.tranm",
+          "bytes": 82344,
+          "sha256": "cfc893ccd97f7780d5e909fa6a5b1d9e363f4c633436d817e34a4e80ec37a2c6"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00450_rangeattack01.tracm",
+          "bytes": 6840,
+          "sha256": "5479035770d2d69c4cc8c1ffe0019797e500f4f2d90813f3100288395b8ba31b"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00281_sleep01_loop.tranm",
+          "bytes": 17644,
+          "sha256": "07162a325897bcb6ceee3da6162033e5bccfd2f2e55f1330c25d5f1949cc6b68"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00281_sleep01_loop.tracm",
+          "bytes": 2788,
+          "sha256": "d8c75eaab72b4d550058044adbc314670c100ee1c057b77704f902af4faa8340"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00500_damage01.tranm",
+          "bytes": 29560,
+          "sha256": "fe6d0cf47e88bb33f13b007fd4a1953535e4eb7ae7eff727c50fd4d2966f3cb1"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00500_damage01.tracm",
+          "bytes": 4832,
+          "sha256": "d27dfd6b120edb22c76873e8767c9f91ba588a3c832f8cd078a7bdaecfd27047"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00520_down01_start.tranm",
+          "bytes": 49312,
+          "sha256": "b3dff39b9bca78b4b11b56c6eeebb12c0f45ebb9a01154c1486abd4acd8ebe8d"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00520_down01_start.tracm",
+          "bytes": 3736,
+          "sha256": "b524f1fe0d13c8a72de14d1010e17166f7c45328af41c00042e60f18919cdd20"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00521_down01_loop.tranm",
+          "bytes": 11176,
+          "sha256": "a25b9870efaef9f72145daa2d6473e1a4426ae81c6536e290326353bf5ccfd4f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0145/pm0145_00_31/pm0145_00_31_00521_down01_loop.tracm",
+          "bytes": 2788,
+          "sha256": "d8c75eaab72b4d550058044adbc314670c100ee1c057b77704f902af4faa8340"
+        }
+      ],
+      "probe_receipt": {
+        "path": "zapdos-galar/probe.json",
+        "bytes": 5119,
+        "sha256": "b97e28ab9abd76fbdb6ed74143ff967587f6e814ec62d2ca34ea6699a1a9c470"
+      },
+      "review_receipts": [
+        {
+          "path": "zapdos-galar/normal/review.json",
+          "bytes": 25985,
+          "sha256": "cbe106e109b6f37aeb43d1db9b49ee8c51f2217ab0830052db545a81aa98bd56"
+        },
+        {
+          "path": "zapdos-galar/portrait/review.json",
+          "bytes": 21965,
+          "sha256": "5af4fbe31f7e07552ced367c8fbcdf4fc0a0c85005a458db017f0f8a6c2aaea3"
+        }
+      ],
+      "normal_source_images": [
+        {
+          "path": "zapdos-galar/normal/idle-front.png",
+          "bytes": 62730,
+          "sha256": "481058f523eccbe3e449f3f6440d9c4a0c02ebde0d62c5d1ba10fbcaa25483c1",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/idle-back.png",
+          "bytes": 62016,
+          "sha256": "0a39f2a7da326d60e4c1512a0151a387a5514dc09e6e63108fdaeeaa6695243b",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack-early-front.png",
+          "bytes": 63352,
+          "sha256": "8a5a8a6179b765cafef07d643eead663bf9e298d4ba2dbaf14c09cba1983a91a",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack-front.png",
+          "bytes": 64872,
+          "sha256": "f1695b321f885cee06c15d0546ddb94036fe2a0128522e60000c41fe35afafa8",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack-late-front.png",
+          "bytes": 62702,
+          "sha256": "d8bc53ae3bd38b444eb48e5eded043529f8e86b772fdc63f6df744488be71f73",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack_2-early-front.png",
+          "bytes": 64556,
+          "sha256": "a32ac12afee59db83ae333683f7becbe2956377515e0bc591357b4bb61aa7be3",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack_2-front.png",
+          "bytes": 63813,
+          "sha256": "780e2d032da330b6bdbca4c4cc4c62695e23fc72fd4e4d9be4ab5e7ab60b27ab",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/physical_attack_2-late-front.png",
+          "bytes": 61908,
+          "sha256": "f65ccf67a5d1997a2f581d731e5db61afcf7a5b3d49292bb868e146194951b27",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "zapdos-galar/normal/special_attack-front.png",
+          "bytes": 63758,
+          "sha256": "f9225802cb9aa87709bbc30f188c47a06c071134e436ed71f4f0dd13a57ec92c",
+          "category": "special_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/sleep-front.png",
+          "bytes": 60949,
+          "sha256": "36cd585f9df442caeefb9c97fbf1596f67b524885fd032722fc92eb2f55d7fcf",
+          "category": "sleep",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/normal/faint_start-front.png",
+          "bytes": 62441,
+          "sha256": "ede2914ada42fc7559fa92fb5a72f076968599889deb85e45e6c76c0a3b4d28c",
+          "category": "faint_start",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/portrait/idle-front.png",
+          "bytes": 397702,
+          "sha256": "2a4fa8decab09079660cb508bb96f7939d2178fd8aad235d89900f79e46f2577",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "zapdos-galar/portrait/idle-back.png",
+          "bytes": 381838,
+          "sha256": "df6673e08285e908d30a21279375fc0dd1350f4f76a7dbf0bbc662bc175f4c66",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        }
+      ]
+    },
+    {
+      "species": "moltres-galar",
+      "national_dex": 146,
+      "resource": "pm0146_00_31",
+      "source": {
+        "archive": "Biochao/Gen1.zip",
+        "member": "pm0146_31.blend",
+        "bytes": 43888510,
+        "crc32": "86803874",
+        "sha256": "20a37d58b43deed225661fb1775f50172756f11ab6cb538ad7e111ae27420a66"
+      },
+      "rig": "pm0146_00_31.trmdl",
+      "meshes": 5,
+      "native_clips": 57,
+      "raw_skeletal_clip_count": 57,
+      "raw_material_clip_count": 57,
+      "actions": {
+        "idle": "pm0146_00_31_20001_battlewait01_loop.gfbanm",
+        "physical_attack": "pm0146_00_31_20400_attack01.gfbanm",
+        "physical_attack_2": "pm0146_00_31_20410_attack02.gfbanm",
+        "special_attack": "pm0146_00_31_20450_rangeattack01.gfbanm",
+        "sleep": "pm0146_00_31_00281_sleep01_loop.gfbanm",
+        "damage": "pm0146_00_31_20500_damage01.gfbanm",
+        "faint_start": "pm0146_00_31_20520_down01_start.gfbanm",
+        "faint_loop": "pm0146_00_31_20521_down01_loop.gfbanm"
+      },
+      "cross_bank_sleep": true,
+      "material_profiles": [
+        {
+          "material": "l_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "r_eye",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_a",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "body_b",
+          "profile": "existing_graph_validation_required",
+          "export_supported": true
+        },
+        {
+          "material": "fire_a_00",
+          "profile": "scvi_unlit_layered_displacement_uv2_v1",
+          "alpha_test": false,
+          "export_supported": true,
+          "requires_effect_payload": true,
+          "requirements": [
+            "layer_mask_opacity",
+            "displacement_uv2",
+            "auxiliary_uv_animation",
+            "unlit_lighting"
+          ]
+        },
+        {
+          "material": "fire_a_01",
+          "profile": "scvi_unlit_layered_displacement_uv2_v1",
+          "alpha_test": false,
+          "export_supported": true,
+          "requires_effect_payload": true,
+          "requirements": [
+            "layer_mask_opacity",
+            "displacement_uv2",
+            "auxiliary_uv_animation",
+            "unlit_lighting"
+          ]
+        },
+        {
+          "material": "fire_b",
+          "profile": "scvi_unlit_layered_displacement_uv2_v1",
+          "alpha_test": false,
+          "export_supported": true,
+          "requires_effect_payload": true,
+          "requirements": [
+            "layer_mask_opacity",
+            "displacement_uv2",
+            "auxiliary_uv_animation",
+            "unlit_lighting"
+          ]
+        }
+      ],
+      "rare_texture_replacements": [
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_body_a_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_body_a_rare_alb.png",
+          "normal_sha256": "78eab2ecc7740bbecaaeb0513a7f3e63ece1a08db6eba053506293ad0867d8c6",
+          "rare_sha256": "8bdd6faffb032ec2c1d3286e153c616f5e09af4cf69bc8081866405d35a2b559"
+        },
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_body_b_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_body_b_rare_alb.png",
+          "normal_sha256": "c3986cd7a2544e2a54acd3900baa9642c511141e5e05144355ed9189f5d9e262",
+          "rare_sha256": "c10e4b5102c7f887caf7958644f2274b00d32d1602c6046fb0580717c694ea91"
+        },
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lower_eyelid_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lower_eyelid_rare_alb.png",
+          "normal_sha256": "5a368e8419c3b3ada3f2450f4a2b4d01dfe8c173a51ef644fc6549742c3d61a3",
+          "rare_sha256": "96f7a7059b8239e69098c880d907fdf70a648a23e9bf512f8e5a744481da043a"
+        },
+        {
+          "normal": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_upper_eyelid_alb.png",
+          "rare": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_upper_eyelid_rare_alb.png",
+          "normal_sha256": "55fbb48d74838594ed91930bf5c5f9757387c605e7f66bafb35acfa3703c69c4",
+          "rare_sha256": "df0469845f9fd46c71003f6cb1b91013c5ceff1b9101c0897601bbcca2b3bfdd"
+        }
+      ],
+      "rare_float_overrides": [],
+      "rare_color_overrides": [
+        {
+          "material": "fire_a_00",
+          "key": "BaseColorLayer1",
+          "normal": [
+            3.0,
+            0.0,
+            0.07000000029802322,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_a_00",
+          "key": "BaseColorLayer2",
+          "normal": [
+            3.0,
+            0.07500000298023224,
+            0.1899999976158142,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_a_00",
+          "key": "BaseColorLayer3",
+          "normal": [
+            3.0,
+            0.4300000071525574,
+            0.7699999809265137,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.30000001192092896,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_a_01",
+          "key": "BaseColorLayer1",
+          "normal": [
+            3.0,
+            0.0,
+            0.07000000029802322,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_a_01",
+          "key": "BaseColorLayer2",
+          "normal": [
+            3.0,
+            0.07500000298023224,
+            0.1899999976158142,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_a_01",
+          "key": "BaseColorLayer3",
+          "normal": [
+            3.0,
+            0.4300000071525574,
+            0.7699999809265137,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.30000001192092896,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_b",
+          "key": "BaseColorLayer1",
+          "normal": [
+            3.0,
+            0.0,
+            0.07000000029802322,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_b",
+          "key": "BaseColorLayer2",
+          "normal": [
+            3.0,
+            0.07500000298023224,
+            0.1899999976158142,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.05999999865889549,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        },
+        {
+          "material": "fire_b",
+          "key": "BaseColorLayer3",
+          "normal": [
+            3.0,
+            0.4300000071525574,
+            0.7699999809265137,
+            1.0
+          ],
+          "rare": [
+            3.0,
+            0.30000001192092896,
+            0.009999999776482582,
+            1.0
+          ],
+          "mode": "apply"
+        }
+      ],
+      "scvi_files": [
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31.trmbf",
+          "bytes": 473004,
+          "sha256": "6007c104ba75ffda0648dbe058333060c594e2f35b1a8186e88fa89c3ee547bd"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31.trmdl",
+          "bytes": 380,
+          "sha256": "fbe3eef9449e68248b526270b94b39f72defe454708e717563f63a9f7bb15a7b"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31.trmsh",
+          "bytes": 5316,
+          "sha256": "4dd39f38d7266cae125ac521a09fd17497a498116ef042ea63dd8ab08d899b71"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31.trmtr",
+          "bytes": 15124,
+          "sha256": "894cebb8ffa4eabcb5cb71ff308e8486b264e469558904a1d3d06f27c31729d8"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31.trskl",
+          "bytes": 29636,
+          "sha256": "273294d122a0eed552ba93c2ffaab72f168986f601f600fa9f21bfb887f82c96"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_edit.trmtr",
+          "bytes": 15540,
+          "sha256": "f555b12b1bce1a022c50684e10222fc1305874585201fb917a12c1971ab23ef6"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lod1.trmbf",
+          "bytes": 327644,
+          "sha256": "d702da67c1df929b905ebe4258f01ba88494ef35a5977ca4a3215d9a28b9f1eb"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lod1.trmsh",
+          "bytes": 5420,
+          "sha256": "9a6088aa49d3eddb094028875c166e14419432c5ba775b48739ea4fe5aa05705"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lod2.trmbf",
+          "bytes": 278568,
+          "sha256": "ff16153423c754c675e99e4896fe01218c4eebedb40db87d43edb07004162b45"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_lod2.trmsh",
+          "bytes": 5420,
+          "sha256": "4b113cc336b6ce285cbf0317b3a522075f5eb35e17057498ddec746d3183f038"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/pm0146_00_31_rare.trmtr",
+          "bytes": 15148,
+          "sha256": "f7fb2b45f0a463e4d6cad3aa40ac5b5af612de78ef1cd4fdf13a6478da5e6b99"
+        },
+        {
+          "path": "Pok\u00e9mon SCVI Base + DLC Model Dump/pm0146/pm0146_00_31/icon/pm0146_00_31_00_big.png",
+          "bytes": 27645,
+          "sha256": "af1a2b1b6f12704c3b87778536f084b89a35054d3d23c4dc327997101173cfda"
+        }
+      ],
+      "selected_motion_files": [
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20001_battlewait01_loop.tranm",
+          "bytes": 101428,
+          "sha256": "09fbc173da6a8d6a763b4f5a2d0dffef9372680bbf2ff4cf754d50bbae41d1de"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20001_battlewait01_loop.tracm",
+          "bytes": 16564,
+          "sha256": "d3b6acf6de18bcfcbff945a3d305129577f154ae29b6ae05f43ce9028cc6a8e7"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20400_attack01.tranm",
+          "bytes": 114884,
+          "sha256": "6b2383dc8e14c6263656ddc86ece32817e5db4226527a54f42b764be95ab9ab5"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20400_attack01.tracm",
+          "bytes": 2996,
+          "sha256": "e10c891609b8e2785c21d29b461ba436d66e1b36aee3dce9847d766cc7488a3f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20410_attack02.tranm",
+          "bytes": 126336,
+          "sha256": "9b71107b5f4982467539d007793c67a4b3ea2af27e041ca5f97fcd0804a406b7"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20410_attack02.tracm",
+          "bytes": 11840,
+          "sha256": "c2a597b44f5dc4150ec8623d126e70ffd36f4f97ec6be16a2546b3ace15fbc7a"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20450_rangeattack01.tranm",
+          "bytes": 135600,
+          "sha256": "1f410827b6951c887172876f77d34896d26b138bfab4403b52b5ec7ac0df6257"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20450_rangeattack01.tracm",
+          "bytes": 9540,
+          "sha256": "9262718a3eb11b035cc91e460ebdae0743df6767ead6de2a5917268976ad83d8"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_00281_sleep01_loop.tranm",
+          "bytes": 40948,
+          "sha256": "8729de6823833449a844ff43f356f1993ef4d2a5d970672ef0ca9646b504262f"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_00281_sleep01_loop.tracm",
+          "bytes": 2000,
+          "sha256": "f6644d916a0660d822b7e7d0ee13608be562e90bd132fe777cdf7e8586af7a5c"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20500_damage01.tranm",
+          "bytes": 53204,
+          "sha256": "078f83323eb6fa7ff5718c3ff005f4fa8c471f4e17c4ad03f6d3a31fbac01d26"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20500_damage01.tracm",
+          "bytes": 2876,
+          "sha256": "e1d739816bb7c4724dba928556930e101ede9da0c54554ed6cc96fcf76707465"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20520_down01_start.tranm",
+          "bytes": 104544,
+          "sha256": "79a8962fc1be4b4dec6db042ac1a687223bef9dfe90dc06663bbab53eb5f9dd6"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20520_down01_start.tracm",
+          "bytes": 3236,
+          "sha256": "3067715d81ef934bead4ba34953120295e442297508a3485a11a2d17d1862bc4"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20521_down01_loop.tranm",
+          "bytes": 74772,
+          "sha256": "b9b506bf11c802b58fd3d3068abb4ecb71abd9ae145934e24a76cc7605f8dec2"
+        },
+        {
+          "path": "SV Every File/romfs/pokemon/data/pm0146/pm0146_00_31/pm0146_00_31_20521_down01_loop.tracm",
+          "bytes": 2000,
+          "sha256": "93b409c7042459b867b588fae8c828ef5361beff98beffa87c82c98343ae4e05"
+        }
+      ],
+      "probe_receipt": {
+        "path": "moltres-galar/probe.json",
+        "bytes": 6085,
+        "sha256": "eed75861b360dc18a1c2c0f77db62fd329d176214ab75e34bbd1a59e377183f4"
+      },
+      "review_receipts": [
+        {
+          "path": "moltres-galar/normal/review.json",
+          "bytes": 32473,
+          "sha256": "f4a18e62aa5624b9e340fb8219089a21cba4d2ac9abd9023116b4af49f6a6e4b"
+        },
+        {
+          "path": "moltres-galar/portrait/review.json",
+          "bytes": 28451,
+          "sha256": "5bf17f6e7278f31a19e4a15632ffc7f313d3237483c8fb14fbe431b03365b909"
+        },
+        {
+          "path": "moltres-galar/face/review.json",
+          "bytes": 28448,
+          "sha256": "c75670fea3b9c00151b4c98e4a7841d2c38f24619873219bd4d5e6f4dd09a74f"
+        }
+      ],
+      "normal_source_images": [
+        {
+          "path": "moltres-galar/normal/idle-front.png",
+          "bytes": 60869,
+          "sha256": "b83804a42d266b90f2de25e5318fb7538a99bf210580d176157c4ce76bd7dc31",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/idle-back.png",
+          "bytes": 65049,
+          "sha256": "f489abb19310c401dec8dba3fc38dba7c799be2b9f9747e3b7e6d134ac2f1f75",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack-early-front.png",
+          "bytes": 61482,
+          "sha256": "a81037affab78c00a13c3ea4ee00098e3a7b6c92663c5be95eb0052a5affb473",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack-front.png",
+          "bytes": 64477,
+          "sha256": "512ef165038f813ba13b19f9c60051a3ef2cbfd340ce9fd805f33aa49af30bdd",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack-late-front.png",
+          "bytes": 62030,
+          "sha256": "debbdea84f18b1c49f281cde653dfd29f05ab3f3ed64737dc13f4f3c3e9ac363",
+          "category": "physical_attack",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack_2-early-front.png",
+          "bytes": 62149,
+          "sha256": "aeda3ed8eeae460d8cf70cf1df6cf54fd80a1e88d9d4c9230f09fe7da7d84b1d",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "early"
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack_2-front.png",
+          "bytes": 65831,
+          "sha256": "2585bd3fa7186ce9d28ea080d8919b0e94a66d94840ddcf0b0b308af5189832e",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/physical_attack_2-late-front.png",
+          "bytes": 63023,
+          "sha256": "15b6a4b16e43053aca33d367161d76398d73b0e99a654298bf8e01df34b56dd1",
+          "category": "physical_attack_2",
+          "view": "front",
+          "sample": "late"
+        },
+        {
+          "path": "moltres-galar/normal/special_attack-front.png",
+          "bytes": 63771,
+          "sha256": "c00728216491ceccbd21c242a64f5e8266a1a5cd7d2329dfcf901a997e49acea",
+          "category": "special_attack",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/sleep-front.png",
+          "bytes": 59801,
+          "sha256": "bc3f02756de612913bf967fcf83e26ed5b1f80c30831466780881c0b2ffdc8b3",
+          "category": "sleep",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/normal/faint_start-front.png",
+          "bytes": 61937,
+          "sha256": "378bed05504165b7290987725ae6806af5081e5cd40d504d8c5fc03b516cda34",
+          "category": "faint_start",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/portrait/idle-front.png",
+          "bytes": 347643,
+          "sha256": "090578c71e3f82141ff9f9d77b615e20bbf90caf488e5443c922084b5ae16e68",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/portrait/idle-back.png",
+          "bytes": 369915,
+          "sha256": "54d22169a93af6c75a638084535e81ecabb444a34990d9e505ec46ee4e406a95",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/face/idle-front.png",
+          "bytes": 358685,
+          "sha256": "23877ee7a7ea87f11f83aa86c857bf6f1c5c819659003378f1df491d6f2f40a3",
+          "category": "idle",
+          "view": "front",
+          "sample": ""
+        },
+        {
+          "path": "moltres-galar/face/idle-back.png",
+          "bytes": 359825,
+          "sha256": "a7f8051cc849012580b0bc7f4f9bd2dd30c33d50af3a152cad279280e9f9bb94",
+          "category": "idle",
+          "view": "back",
+          "sample": ""
+        }
+      ]
+    }
+  ],
+  "workers": [
+    {
+      "path": "tools/sprite_factory/catalog_remaining_legacy_worker.py",
+      "bytes": 3342,
+      "sha256": "5de91e631ec62223088c7b5b1c561a9f59e4804902833c491d239a97d545b8f4"
+    },
+    {
+      "path": "tools/sprite_factory/phase5_source_review_worker.py",
+      "bytes": 8075,
+      "sha256": "c9cd2db24351a8d253e185fcfe3609561676101fbdb26b45627029aad94c797f"
+    }
+  ],
+  "local_portrait_worker": {
+    "path": "portrait_worker.py",
+    "bytes": 8144,
+    "sha256": "084ac57d8b291918d39c72728ecbf947cf3cb11c446f5e43f73ed2db2e41ff02"
+  },
+  "local_moltres_face_worker": {
+    "path": "face_worker.py",
+    "bytes": 8145,
+    "sha256": "e9b11ed72d821e3498ce812edce26e1262343bc19320460024fb3894d47d7248"
+  }
+}
