@@ -15,7 +15,7 @@ to the target and back on the same native action clock.
 | Charmander | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
 | Charmander | Scratch / hand | `right_hand` |
 | Squirtle | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
-| Blastoise | Water Gun, Bubble Beam, Ice Beam / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
+| Blastoise | Water Gun, Bubble Beam, Ice Beam, Flash Cannon / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
 | Blastoise | Ember, Flamethrower, Bubble, Bite / mouth | `head` |
 
 The primary visual review is Charmander + Ember, Squirtle + Water Gun, and
@@ -71,3 +71,8 @@ approved and use the source-textured effects in normal battles.
   `battle_move_presentation_routes_check` and `battle_3d_impact_pacing_check`
   cover approved Ember parity, audio, four actor slots, Substitute, 2D fallback,
   cancellation, gem order, impact recovery and faint.
+
+The [fourth source batch](source-move-batch-four.md) reuses the existing mouth
+profiles for Shadow Ball, Sludge Bomb, Poison Sting, Flash Cannon and Water Pulse.
+Flash Cannon uses Blastoise's paired cannons. Released projectiles keep their
+launch point; the continuous cannon beam follows the current bones.

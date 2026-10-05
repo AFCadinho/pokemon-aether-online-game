@@ -1,0 +1,52 @@
+{
+  "source_move": "sludgebomb",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_3_flow0015.png",
+      "source_particle": "ew0188_bullet.ptcl",
+      "source_sha256": "0825005a4f74a7a6f3ddf4dd732123fec4d00b4781d8bc6ae9dba0915c663da2",
+      "png_sha256": "29806b39807b00f9ffbac1f89f0221c1e0072d5512761224db78aeb8ed6cd56a",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_flow0025.png",
+      "source_particle": "ew0188_bullet.ptcl",
+      "source_sha256": "0825005a4f74a7a6f3ddf4dd732123fec4d00b4781d8bc6ae9dba0915c663da2",
+      "png_sha256": "68f46defb14ad5a13d173712e6850ba4abfc53204925dae75a5a30c22c9b979d",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_water0013.png",
+      "source_particle": "ew0188_hit.ptcl",
+      "source_sha256": "f6031ec0723575714a36199d95eb881b947da605b9bf0355724072f9d0e68ec3",
+      "png_sha256": "0e80cc84dda6a334b3fb525c9a651638e4432514fa7d01f35f8ec256272cdbac",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_2_shock0010.png",
+      "source_particle": "ew0188_hit.ptcl",
+      "source_sha256": "f6031ec0723575714a36199d95eb881b947da605b9bf0355724072f9d0e68ec3",
+      "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "L"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "source_move": "iceshard",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_0_ice0002.png",
+      "source_particle": "ew0420_bullet.ptcl",
+      "source_sha256": "aed71a8a8e4172261a874a8b386249ea7af230f04b08335e3c9b1aa6fd65ee87",
+      "png_sha256": "92d373acf8082dcd124049d0c475d5eaa3cec61f3a6edeb293a0834051700211",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_fire0004.png",
+      "source_particle": "ew0420_bullet.ptcl",
+      "source_sha256": "aed71a8a8e4172261a874a8b386249ea7af230f04b08335e3c9b1aa6fd65ee87",
+      "png_sha256": "99c2404b0483e2a53858eee2143a88949448559e67bd90789d83c0b4f0d0937f",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_shock0003.png",
+      "source_particle": "ew0420_df_hit01.ptcl",
+      "source_sha256": "3fbec193b750c09397b7a19dc814a189f3cfe053fa4b629d19e490942891aa5e",
+      "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    }
+  ]
+}

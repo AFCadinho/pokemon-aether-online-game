@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add source-textured 3D Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting, Swift, Flash Cannon, Magical Leaf and Water Pulse, with shared move sounds and Dodge-aware impacts.
+
 - Add 3D Ice Beam, Razor Leaf and Quick Attack with source textures, shared move sounds, cannon/mouth origins and fast contact movement.
 
 - Add 3D Flamethrower, Bubble and Bubble Beam with animated mouth/cannon origins, shared move sounds and Dodge-aware impacts.

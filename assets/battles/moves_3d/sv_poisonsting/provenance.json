@@ -1,0 +1,41 @@
+{
+  "source_move": "poisonsting",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_2_line0004.png",
+      "source_particle": "ew0040_needle.ptcl",
+      "source_sha256": "4ee3e3b2ac35dcb49ce41a3ef73bee825f018815934b844a77049b5d88050642",
+      "png_sha256": "ffd584ecb010d0060592a7cb6a97f5883b1c1c1f48b1976678f494f404ba2b88",
+      "size": [
+        512,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_shock0008.png",
+      "source_particle": "ew0040_hit.ptcl",
+      "source_sha256": "8b062a03fac07a591ece1ed8efe47e50a066b5d6646e9a4b3bc37daac8322bbb",
+      "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_bubble0004.png",
+      "source_particle": "ew0040_hit.ptcl",
+      "source_sha256": "8b062a03fac07a591ece1ed8efe47e50a066b5d6646e9a4b3bc37daac8322bbb",
+      "png_sha256": "729c5bc3896f48e5995b52a7800c7e4ea65b0fd138a0802c3a28a8eba1650b9b",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

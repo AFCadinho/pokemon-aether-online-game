@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 from PIL import Image
+from sv_batch_four import TEXTURES as BATCH_FOUR_TEXTURES
 
 SELECTION = {
     'flamethrower': {'ew0053_fire': ['cpt_2_fire0007s', 'cpt_3_flow0703s'],
@@ -20,6 +21,8 @@ SELECTION = {
                     'ew0098_at_srash01': ['cpt_0_shock0002'],
                     'ew0098_df_hit': ['cpt_0_circle0007', 'cpt_0_circle0010']},
 }
+
+SELECTION.update(BATCH_FOUR_TEXTURES)
 
 
 def package(source, output):

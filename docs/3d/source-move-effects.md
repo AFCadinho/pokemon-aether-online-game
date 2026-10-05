@@ -19,6 +19,11 @@
 - **Ice Beam, Razor Leaf and Quick Attack: visually approved by the user.**
   See [ice, leaf and quick effects](ice-leaf-quick-effects.md).
 
+- **Fourth batch: ten moves implemented; visual approval pending.**
+  Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting,
+  Swift, Flash Cannon, Magical Leaf and Water Pulse. See
+  [fourth source batch](source-move-batch-four.md).
+
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,
 miss/blocked outcomes, impact/recovery and cancellation remain shared. It draws
@@ -101,7 +106,7 @@ provenance file. Imported caches remain slot-local.
   placement/count/frame/opacity/tint parity over six timestamps, adjusting the
   historical pilot to use the newly requested on-target miss aim. The external
   argument is optional and only used for comparison with the historical pilot.
-- `battle_move_effects_3d_check.tscn`: thirteen moves, four slots, audio, impact,
+- `battle_move_effects_3d_check.tscn`: 23 moves, four slots, audio, impact,
   Substitute, cancellation and explicit live-source routing for both approved moves.
 - `battle_move_presentation_routes_check.tscn`: ordinary routes and 2D fallback.
 - `battle_3d_impact_pacing_check.tscn`: impact recovery, gem-before-attack and faint.

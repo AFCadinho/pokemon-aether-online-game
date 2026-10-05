@@ -15,6 +15,8 @@ import struct
 import subprocess
 import sys
 
+from sv_batch_four import PARTS as BATCH_FOUR_PARTS, FORMAT_FLAGS as BATCH_FOUR_FLAGS
+
 NULL = 0xFFFFFFFF
 PARTS = ('ew0052_fire_muzzle', 'ew0052_bullet', 'ew0052_hit')
 MOVE_PARTS = {'ember': PARTS, 'watergun': ('ew0055_muzzle01', 'ew0055_shot01', 'ew0055_hit01')}
@@ -30,6 +32,8 @@ MOVE_PARTS.update({
     'razorleaf': ('ew0075_start', 'ew0075_hit'),
     'quickattack': ('ew0098_at_bgkem', 'ew0098_at_srash01', 'ew0098_hideline', 'ew0098_df_hit'),
 })
+
+MOVE_PARTS.update(BATCH_FOUR_PARTS)
 
 
 def read(data, pos, fmt):
@@ -181,7 +185,7 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
+        legacy.write_bytes(legacy_bntx(bntx, **BATCH_FOUR_FLAGS[move]) if move in BATCH_FOUR_FLAGS else legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
                                       allow_bc3=move in ("scratch", "thundershock", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
                                       allow_r8=move == "flamethrower", allow_bc7=move in ("bubblebeam", "icebeam")))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],

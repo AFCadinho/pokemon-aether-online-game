@@ -18,6 +18,7 @@ const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbol
 const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
 const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
+const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
 const LeafMoveEffect = preload("res://scripts/battle/battle_ui/leaf_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
@@ -573,7 +574,8 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
-	# Razor Leaf is a ranged release despite its physical damage category.
+	# Projectile motion uses a release clip even for physical damage moves.
+	if MoveEffect.move_key(move_name) in BatchFourMoveEffect.MOVE_KEYS: return "special_attack"
 	if key in ["razorleaf", "razor-leaf"]: return "special_attack"
 	if key in ["quickattack", "quick-attack"]: return "physical_attack"
 	if key in ["ember", "flamethrower"] and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
@@ -1047,7 +1049,7 @@ func _move_bounds(ident: String) -> Dictionary:
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var a := _move_bounds(actor)
 	var b := _move_bounds(target)
-	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam"] else 0.6
+	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam", "shadowball", "sludgebomb", "poisonsting", "flashcannon", "waterpulse"] else 0.6
 	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
 	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
 	var direction := (end-source).normalized()
@@ -1080,6 +1082,8 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = FireStreamMoveEffect.new()
 	elif MoveEffect.move_key(move) in ["bubble", "bubblebeam"]:
 		effect = BubbleMoveEffect.new()
+	elif MoveEffect.move_key(move) in BatchFourMoveEffect.MOVE_KEYS:
+		effect = BatchFourMoveEffect.new()
 	elif MoveEffect.move_key(move) == "icebeam":
 		effect = IceBeamMoveEffect.new()
 	elif MoveEffect.move_key(move) == "razorleaf":
