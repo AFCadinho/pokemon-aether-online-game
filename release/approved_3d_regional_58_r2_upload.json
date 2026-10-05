@@ -1,0 +1,557 @@
+{
+  "active_manifest_sha256_unchanged": "c95425803c12eb9cea36bca2fc8fabf78ecdf7fc471bd71bdeb284766daf9281",
+  "appearance_count": 116,
+  "bundle_bytes": 807233937,
+  "bundle_qualification_sha256": "792032fcc4fdd004588ea88fb1ea0fe19b4c31c8fa2fb0aa43137eac1e207dd0",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:arcanine-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/arcanine-hisui/base/v1-49501b03863c1ee3cd5087cfc77f35bc5223757a2db13820d865ef80099ac004.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "49501b03863c1ee3cd5087cfc77f35bc5223757a2db13820d865ef80099ac004",
+      "size_bytes": 15877220,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:avalugg-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/avalugg-hisui/base/v1-b6cd1f7f65ff73b9d1320b6f3efbec164d223a4fa8665e766408b34711301130.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "b6cd1f7f65ff73b9d1320b6f3efbec164d223a4fa8665e766408b34711301130",
+      "size_bytes": 24858151,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:braviary-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/braviary-hisui/base/v1-0780b08a68c64edf9760cc656a4ea6dd2f820970c7c98764e7f3ef92304a8081.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "0780b08a68c64edf9760cc656a4ea6dd2f820970c7c98764e7f3ef92304a8081",
+      "size_bytes": 13632941,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:corsola-galar:base",
+      "object_key": "optional-assets/pokemon_3d/corsola-galar/base/v1-ff7978b0ee65a0c1faae424ad46a053db4ffd6888d91054e7770f8da2f32a56a.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ff7978b0ee65a0c1faae424ad46a053db4ffd6888d91054e7770f8da2f32a56a",
+      "size_bytes": 8804616,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:darmanitan-galar-zen:base",
+      "object_key": "optional-assets/pokemon_3d/darmanitan-galar-zen/base/v1-657fb9e327509042c34bed12e170a4c10be6cc1f9c8a241ecf9bd995baec28cc.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "657fb9e327509042c34bed12e170a4c10be6cc1f9c8a241ecf9bd995baec28cc",
+      "size_bytes": 1145305,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:darmanitan-galar:base",
+      "object_key": "optional-assets/pokemon_3d/darmanitan-galar/base/v1-2529c99911ddac680807f873db21a6f4ebf90f86e9930ab623562fee6746a501.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "2529c99911ddac680807f873db21a6f4ebf90f86e9930ab623562fee6746a501",
+      "size_bytes": 3142588,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:darumaka-galar:base",
+      "object_key": "optional-assets/pokemon_3d/darumaka-galar/base/v1-ac1fa1668978f33a3717f9904e6cc084a87c12fef7f055132327dff8b437bc69.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ac1fa1668978f33a3717f9904e6cc084a87c12fef7f055132327dff8b437bc69",
+      "size_bytes": 2231501,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:decidueye-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/decidueye-hisui/base/v1-e1aa30037a4ee7bb18cdabe993f981ca28f7fc3e0459d80a67d88962ded8cb04.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e1aa30037a4ee7bb18cdabe993f981ca28f7fc3e0459d80a67d88962ded8cb04",
+      "size_bytes": 19556404,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:diglett-alola:base",
+      "object_key": "optional-assets/pokemon_3d/diglett-alola/base/v1-4071441be703ea157e812df161f3f4dce9de4264fb8a5f3ce163812e3c754ccb.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "4071441be703ea157e812df161f3f4dce9de4264fb8a5f3ce163812e3c754ccb",
+      "size_bytes": 17228272,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:dugtrio-alola:base",
+      "object_key": "optional-assets/pokemon_3d/dugtrio-alola/base/v1-00c37510e20b200a869c1d35f689f5d47caf4baafb6565e049d183d2c856510d.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "00c37510e20b200a869c1d35f689f5d47caf4baafb6565e049d183d2c856510d",
+      "size_bytes": 25282489,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:electrode-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/electrode-hisui/base/v1-edcb07a9b454b0487eb12d39bdee79287e4da1ebbf49b1ed37fdc3306a06011d.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "edcb07a9b454b0487eb12d39bdee79287e4da1ebbf49b1ed37fdc3306a06011d",
+      "size_bytes": 6141894,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:exeggutor-alola:base",
+      "object_key": "optional-assets/pokemon_3d/exeggutor-alola/base/v1-dbc71bd0a89c66c29bc50d0fe81d9187a039e6d50c45d5d736a4fb9720f83ee2.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "dbc71bd0a89c66c29bc50d0fe81d9187a039e6d50c45d5d736a4fb9720f83ee2",
+      "size_bytes": 17221632,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:farfetchd-galar:base",
+      "object_key": "optional-assets/pokemon_3d/farfetchd-galar/base/v1-aa0ea880c5af6ea2c56274fdb8355c85555014ca9cd19fb69f6cdb00a92784ed.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "aa0ea880c5af6ea2c56274fdb8355c85555014ca9cd19fb69f6cdb00a92784ed",
+      "size_bytes": 7980387,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:geodude-alola:base",
+      "object_key": "optional-assets/pokemon_3d/geodude-alola/base/v1-fa440fca167d36ded741b898b0572b0949d8812d5a35497cdd136b7144170fdf.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "fa440fca167d36ded741b898b0572b0949d8812d5a35497cdd136b7144170fdf",
+      "size_bytes": 11991213,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:golem-alola:base",
+      "object_key": "optional-assets/pokemon_3d/golem-alola/base/v1-1e2fa301ccd1d6a053e344fe5f3cc6490efe376eeafd4d187b990e4adfb0aa10.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "1e2fa301ccd1d6a053e344fe5f3cc6490efe376eeafd4d187b990e4adfb0aa10",
+      "size_bytes": 21842507,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:goodra-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/goodra-hisui/base/v1-b4bc4a777165228418014f7a4332a41493172c23fffdf84929c50a205ecfd712.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "b4bc4a777165228418014f7a4332a41493172c23fffdf84929c50a205ecfd712",
+      "size_bytes": 45009435,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:graveler-alola:base",
+      "object_key": "optional-assets/pokemon_3d/graveler-alola/base/v1-6ddf8a602d33c6843583f3f58f79e4d63839c338a5cd6df232cb32cf63f9a810.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "6ddf8a602d33c6843583f3f58f79e4d63839c338a5cd6df232cb32cf63f9a810",
+      "size_bytes": 18684043,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:grimer-alola:base",
+      "object_key": "optional-assets/pokemon_3d/grimer-alola/base/v1-e0579a599f76eb5064246632766f2fcee2b3744d06cd2c15a3b01efee45fd5c6.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e0579a599f76eb5064246632766f2fcee2b3744d06cd2c15a3b01efee45fd5c6",
+      "size_bytes": 17763487,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:growlithe-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/growlithe-hisui/base/v1-9d8b870d0eece45a9692389d953ecb5c4c49f9ee76d5d61c574ce70ccb246367.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "9d8b870d0eece45a9692389d953ecb5c4c49f9ee76d5d61c574ce70ccb246367",
+      "size_bytes": 11425992,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:lilligant-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/lilligant-hisui/base/v1-41ec404246803f139f847368b6c15bb77e12470631eb118958843f2d6ee80523.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "41ec404246803f139f847368b6c15bb77e12470631eb118958843f2d6ee80523",
+      "size_bytes": 8685892,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:linoone-galar:base",
+      "object_key": "optional-assets/pokemon_3d/linoone-galar/base/v1-2b66211a1225a3e3b332a3482b1f1018ca2241194069971fe442529c011b7bde.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "2b66211a1225a3e3b332a3482b1f1018ca2241194069971fe442529c011b7bde",
+      "size_bytes": 4582148,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:marowak-alola-totem:base",
+      "object_key": "optional-assets/pokemon_3d/marowak-alola-totem/base/v1-62b5065454a205bcb50307e08075c71d093f210eaa695f4f9b8921aaa983cc9c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "62b5065454a205bcb50307e08075c71d093f210eaa695f4f9b8921aaa983cc9c",
+      "size_bytes": 10404636,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:marowak-alola:base",
+      "object_key": "optional-assets/pokemon_3d/marowak-alola/base/v1-fe5c43e15a1beee95b63ca30a6de4d8a7ddeca2e87c1305cb712ebd95749ce68.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "fe5c43e15a1beee95b63ca30a6de4d8a7ddeca2e87c1305cb712ebd95749ce68",
+      "size_bytes": 10404607,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:meowth-alola:base",
+      "object_key": "optional-assets/pokemon_3d/meowth-alola/base/v1-d687caf1c892900eb56f7c0f67403797da6eb98427b04a347a17a7d1c47c4fcb.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "d687caf1c892900eb56f7c0f67403797da6eb98427b04a347a17a7d1c47c4fcb",
+      "size_bytes": 15557724,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:meowth-galar:base",
+      "object_key": "optional-assets/pokemon_3d/meowth-galar/base/v1-7db608a498b38de977a6a8963caa67ed4f3b16948794dbe95d20b4ede2b9ca16.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "7db608a498b38de977a6a8963caa67ed4f3b16948794dbe95d20b4ede2b9ca16",
+      "size_bytes": 21696933,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:mr-mime-galar:base",
+      "object_key": "optional-assets/pokemon_3d/mr-mime-galar/base/v1-3de8fda73f4c1f0fc9c1f8b81d003bd35fc0cdb66674ec6f3f36dfd3c12080b3.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "3de8fda73f4c1f0fc9c1f8b81d003bd35fc0cdb66674ec6f3f36dfd3c12080b3",
+      "size_bytes": 11026413,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:muk-alola:base",
+      "object_key": "optional-assets/pokemon_3d/muk-alola/base/v1-ed71916c5b1420eef12bac6a33bda56c7c6014a3d007081a41c12636399cd4d9.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ed71916c5b1420eef12bac6a33bda56c7c6014a3d007081a41c12636399cd4d9",
+      "size_bytes": 19002739,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ninetales-alola:base",
+      "object_key": "optional-assets/pokemon_3d/ninetales-alola/base/v1-593212f5d8dceb3b88387bfc2d8dce09296f866bbe5c3f9848655de9fb2b368c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "593212f5d8dceb3b88387bfc2d8dce09296f866bbe5c3f9848655de9fb2b368c",
+      "size_bytes": 18066590,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:persian-alola:base",
+      "object_key": "optional-assets/pokemon_3d/persian-alola/base/v1-5c2b0ff3e0802b5d910a2f489f3743ac6c4154cf401ec9c47b3ccbeea439e116.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "5c2b0ff3e0802b5d910a2f489f3743ac6c4154cf401ec9c47b3ccbeea439e116",
+      "size_bytes": 9507416,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:pikachu-alola:base",
+      "object_key": "optional-assets/pokemon_3d/pikachu-alola/base/v1-11e3fd99042e2247012056f025c0e84ec9c58f456a88fd5d095eaadf2cfb656d.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "11e3fd99042e2247012056f025c0e84ec9c58f456a88fd5d095eaadf2cfb656d",
+      "size_bytes": 12886512,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:ponyta-galar:base",
+      "object_key": "optional-assets/pokemon_3d/ponyta-galar/base/v1-11e9e02358a59b4b5defd5bcc43a086b9f8cd0189bed214ae5583dd8bb3270ad.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "11e9e02358a59b4b5defd5bcc43a086b9f8cd0189bed214ae5583dd8bb3270ad",
+      "size_bytes": 8921847,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:qwilfish-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/qwilfish-hisui/base/v1-59d3c16d8b5f39c6569e795013b991ae86d1c13ea6892d3cf8197a430f5b7160.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "59d3c16d8b5f39c6569e795013b991ae86d1c13ea6892d3cf8197a430f5b7160",
+      "size_bytes": 7477384,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:raichu-alola:base",
+      "object_key": "optional-assets/pokemon_3d/raichu-alola/base/v1-ca9c901ac728a216c862c76c81b124e321df09952f5bb997aa331dfb83311e68.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ca9c901ac728a216c862c76c81b124e321df09952f5bb997aa331dfb83311e68",
+      "size_bytes": 17563576,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:rapidash-galar:base",
+      "object_key": "optional-assets/pokemon_3d/rapidash-galar/base/v1-58fb9a91f94d05960a554ab4edf66fc603b011294559273ff871b7b9382c6a06.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "58fb9a91f94d05960a554ab4edf66fc603b011294559273ff871b7b9382c6a06",
+      "size_bytes": 10922566,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:raticate-alola-totem:base",
+      "object_key": "optional-assets/pokemon_3d/raticate-alola-totem/base/v1-297a4505e4098f3a2f17ccd12e30f3c5ec5530b662d17e0418c173cf98792103.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "297a4505e4098f3a2f17ccd12e30f3c5ec5530b662d17e0418c173cf98792103",
+      "size_bytes": 4953840,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:raticate-alola:base",
+      "object_key": "optional-assets/pokemon_3d/raticate-alola/base/v1-cacc60a3033be61dea56d2bb516d32f5c8712179440edb63ae8cd8fb29d81414.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "cacc60a3033be61dea56d2bb516d32f5c8712179440edb63ae8cd8fb29d81414",
+      "size_bytes": 4953804,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:rattata-alola:base",
+      "object_key": "optional-assets/pokemon_3d/rattata-alola/base/v1-e85053bfab8715adaf6cd1871f6167d460cc0c9b227af04e7f22b08ad35ab3e3.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e85053bfab8715adaf6cd1871f6167d460cc0c9b227af04e7f22b08ad35ab3e3",
+      "size_bytes": 5235431,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:samurott-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/samurott-hisui/base/v1-c5878901f3a6c41ac31ed079b52b8ab9ae34b3c0b4fae5585f516aaa12ee2228.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "c5878901f3a6c41ac31ed079b52b8ab9ae34b3c0b4fae5585f516aaa12ee2228",
+      "size_bytes": 17458217,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:sandshrew-alola:base",
+      "object_key": "optional-assets/pokemon_3d/sandshrew-alola/base/v1-695ef1bc61249fe34649dbd84284152bde63e2aed09277ad4602482f46c5e687.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "695ef1bc61249fe34649dbd84284152bde63e2aed09277ad4602482f46c5e687",
+      "size_bytes": 14704211,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:sandslash-alola:base",
+      "object_key": "optional-assets/pokemon_3d/sandslash-alola/base/v1-93764f90f377934f8c0b6f4578a54ab8377b247e295638671b6cde8cbf8c618b.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "93764f90f377934f8c0b6f4578a54ab8377b247e295638671b6cde8cbf8c618b",
+      "size_bytes": 20516503,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:sliggoo-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/sliggoo-hisui/base/v1-7ac62ca5fb3b179fbdcef149c1ffdc520365c2fa197afb5ba8f1d5893f1d7e7c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "7ac62ca5fb3b179fbdcef149c1ffdc520365c2fa197afb5ba8f1d5893f1d7e7c",
+      "size_bytes": 25505597,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:slowbro-galar:base",
+      "object_key": "optional-assets/pokemon_3d/slowbro-galar/base/v1-fe0053cb0a43768d5656fc9bdb5c1cd08b46d3a6eeb90b12ed2ae213c6c9bf1e.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "fe0053cb0a43768d5656fc9bdb5c1cd08b46d3a6eeb90b12ed2ae213c6c9bf1e",
+      "size_bytes": 12283775,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:slowking-galar:base",
+      "object_key": "optional-assets/pokemon_3d/slowking-galar/base/v1-a1ebff481c9e9fc6fcf5754cfe70262ed4e2ccb7c24358f9a7b6b058a6179e51.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "a1ebff481c9e9fc6fcf5754cfe70262ed4e2ccb7c24358f9a7b6b058a6179e51",
+      "size_bytes": 14161988,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:slowpoke-galar:base",
+      "object_key": "optional-assets/pokemon_3d/slowpoke-galar/base/v1-b54eb2b58d0898e08b06c4ae4243b2d0e60e12583031be4fdd3b5051d5b0a2fd.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "b54eb2b58d0898e08b06c4ae4243b2d0e60e12583031be4fdd3b5051d5b0a2fd",
+      "size_bytes": 7304881,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:sneasel-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/sneasel-hisui/base/v1-573e0c584587bd989da29cb97e5a50d4060052e57a81934a67438bd136661396.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "573e0c584587bd989da29cb97e5a50d4060052e57a81934a67438bd136661396",
+      "size_bytes": 15055000,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:stunfisk-galar:base",
+      "object_key": "optional-assets/pokemon_3d/stunfisk-galar/base/v1-03bd90a14c5666697b075fe051c3a321937df1cab497d7b7d5e231a53af4c8e3.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "03bd90a14c5666697b075fe051c3a321937df1cab497d7b7d5e231a53af4c8e3",
+      "size_bytes": 5223122,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:tauros-paldea-aqua:base",
+      "object_key": "optional-assets/pokemon_3d/tauros-paldea-aqua/base/v1-5aeb01536d5f1844570fda10e7d11c9d6e76fd0d6289ed50d9e89ddfa76f3e95.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "5aeb01536d5f1844570fda10e7d11c9d6e76fd0d6289ed50d9e89ddfa76f3e95",
+      "size_bytes": 15691569,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:tauros-paldea-blaze:base",
+      "object_key": "optional-assets/pokemon_3d/tauros-paldea-blaze/base/v1-89e8bfd3e1b73edd21158742b039db98138b94eef84b884f20332b689d401897.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "89e8bfd3e1b73edd21158742b039db98138b94eef84b884f20332b689d401897",
+      "size_bytes": 16442796,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:tauros-paldea-combat:base",
+      "object_key": "optional-assets/pokemon_3d/tauros-paldea-combat/base/v1-1ce588a62daa967db52d01a4640be1662a45d0ae233a67215b04401d80a9f5ef.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "1ce588a62daa967db52d01a4640be1662a45d0ae233a67215b04401d80a9f5ef",
+      "size_bytes": 16543557,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:typhlosion-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/typhlosion-hisui/base/v1-beab10da176f95fbb1839a58793ee27e7cfb8fd3d9b485d4003a085844898395.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "beab10da176f95fbb1839a58793ee27e7cfb8fd3d9b485d4003a085844898395",
+      "size_bytes": 21274669,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:voltorb-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/voltorb-hisui/base/v1-e5258e578e6050e01a4126b60e6155dfb6c8bf71de2d732053d10b789ed6db8b.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "e5258e578e6050e01a4126b60e6155dfb6c8bf71de2d732053d10b789ed6db8b",
+      "size_bytes": 3568943,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:vulpix-alola:base",
+      "object_key": "optional-assets/pokemon_3d/vulpix-alola/base/v1-28f5e99d8f2e9814907232c2924098dd1728fa0b2e21aeb64916f309eb0506d4.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "28f5e99d8f2e9814907232c2924098dd1728fa0b2e21aeb64916f309eb0506d4",
+      "size_bytes": 14050569,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:weezing-galar:base",
+      "object_key": "optional-assets/pokemon_3d/weezing-galar/base/v1-48fc5c37c8a899dc2ad26a625503ae59ca8080c8acb4f9f0f84d89630838517c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "48fc5c37c8a899dc2ad26a625503ae59ca8080c8acb4f9f0f84d89630838517c",
+      "size_bytes": 17651695,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:wooper-paldea:base",
+      "object_key": "optional-assets/pokemon_3d/wooper-paldea/base/v1-4e088325219b409c44c179345a0846be96d9ad0dacf2c224401d683e103171cb.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "4e088325219b409c44c179345a0846be96d9ad0dacf2c224401d683e103171cb",
+      "size_bytes": 6549371,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:yamask-galar:base",
+      "object_key": "optional-assets/pokemon_3d/yamask-galar/base/v1-5dfe54e8a7ba1b781e8d3239e23293933a31d8df3dd82784568d6be418c2f2d9.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "5dfe54e8a7ba1b781e8d3239e23293933a31d8df3dd82784568d6be418c2f2d9",
+      "size_bytes": 6958775,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zigzagoon-galar:base",
+      "object_key": "optional-assets/pokemon_3d/zigzagoon-galar/base/v1-d73d1548a4cc4dca62f845783579ad35f5c6eda1cc2510c25417557468b74b2c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "d73d1548a4cc4dca62f845783579ad35f5c6eda1cc2510c25417557468b74b2c",
+      "size_bytes": 3855299,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zoroark-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/zoroark-hisui/base/v1-54a0143d66faa3e86070b82b1eefa62e9aae8e06eca5ebf7e3ad45bdc6d26a4c.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "54a0143d66faa3e86070b82b1eefa62e9aae8e06eca5ebf7e3ad45bdc6d26a4c",
+      "size_bytes": 27118439,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zorua-hisui:base",
+      "object_key": "optional-assets/pokemon_3d/zorua-hisui/base/v1-ce461ac272cc4e401e4c20a7fea64e2cb3413bf4064fbe82e5e022c8d281ec32.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "ce461ac272cc4e401e4c20a7fea64e2cb3413bf4064fbe82e5e022c8d281ec32",
+      "size_bytes": 33644826,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "regional-58-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/regional-58-approved-v1-87a56a6d81d93ab5a892e0e2330cd2ce428bbf105621edebca1b87de4ea8a00f.json",
+    "sha256": "87a56a6d81d93ab5a892e0e2330cd2ce428bbf105621edebca1b87de4ea8a00f",
+    "size_bytes": 53286
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/regional-58-approved-v1-87a56a6d81d93ab5a892e0e2330cd2ce428bbf105621edebca1b87de4ea8a00f.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "87a56a6d81d93ab5a892e0e2330cd2ce428bbf105621edebca1b87de4ea8a00f",
+    "size_bytes": 53286,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 58,
+  "permitted_forms": [
+    "base"
+  ],
+  "profile_count": 58,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 59,
+  "public_head_size_verified_objects": 59,
+  "reviewed_catalog_sha256": "c3371469a80010fb0accbe55fa44452e35f852906a5e97429ad78dc681eccf6a",
+  "schema": 1,
+  "scope": "Qualified pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-05T20:10:49.434381+00:00"
+}

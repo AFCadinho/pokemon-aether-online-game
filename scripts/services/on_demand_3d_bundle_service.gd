@@ -4,6 +4,7 @@ extends Node
 const RELEASE = preload("res://data/approved_3d_release_v7.json")
 const RELEASE_V8 = preload("res://data/approved_3d_release_v8.json")
 const RELEASE_V9 = preload("res://data/approved_3d_release_v9.json")
+const RELEASE_V10 = preload("res://data/approved_3d_release_v10.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
@@ -275,12 +276,12 @@ func _asset_id(identity: String) -> String:
 func _selected_release() -> Dictionary:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path():
-		for release: Dictionary in [RELEASE_V9.data, RELEASE_V8.data]:
+		for release: Dictionary in [RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
 			var pin: Dictionary = release.index
 			if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 				return release
 	# Editor runs use the latest published, hash-pinned project index.
-	for release: Dictionary in [RELEASE_V9.data, RELEASE_V8.data]:
+	for release: Dictionary in [RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
 		var editor_path := _editor_local_index_path(release)
 		var pin: Dictionary = release.index
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
@@ -291,6 +292,8 @@ func _selected_release() -> Dictionary:
 static func _editor_local_index_path(release: Dictionary) -> String:
 	if not OS.has_feature("editor"):
 		return ""
+	if release.revision == RELEASE_V10.data.revision:
+		return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v10_index.json")
 	if release.revision == RELEASE_V9.data.revision:
 		return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v9_index.json")
 	if release.revision == RELEASE_V8.data.revision:
@@ -362,7 +365,7 @@ func _local_index_path(release: Dictionary) -> String:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 		return launcher_path
-	elif release.revision in [RELEASE_V9.data.revision, RELEASE_V8.data.revision]:
+	elif release.revision in [RELEASE_V10.data.revision, RELEASE_V9.data.revision, RELEASE_V8.data.revision]:
 		var editor_path := _editor_local_index_path(release)
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
 			return editor_path

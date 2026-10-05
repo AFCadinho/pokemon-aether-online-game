@@ -59,8 +59,8 @@ func _run() -> void:
 	else:
 		OS.set_environment("POKEAETHER_MODEL_INDEX", previous)
 	if OS.has_feature("editor"):
-		assert(service._selected_release().revision == Service.RELEASE_V9.data.revision, "Editor runs should select the latest published catalog")
+		assert(service._selected_release().revision == Service.RELEASE_V10.data.revision, "Editor runs should select the latest published catalog")
 		var local_approved: Dictionary = await service._approved_index()
-		assert(local_approved.error.is_empty() and local_approved.index.assets.size() == 1142, "Editor should read the local v9 index without an environment variable")
+		assert(local_approved.error.is_empty() and local_approved.index.assets.size() == 1200, "Editor should read the local v10 index without an environment variable")
 	print("APPROVED_3D_RELEASE_V9_OK bundles=1142 appearances=2284 all_form_ids=true on_demand=true")
 	quit()
