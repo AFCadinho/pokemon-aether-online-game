@@ -1,14 +1,16 @@
-# Source-textured battle moves: Ember live, Water Gun review
+# Source-textured battle moves: Ember and Water Gun
 
 ## Review status
 
 - **Ember: visually approved by the user and enabled in normal 3D battles.**
   Uses the same masks, first sampled colors, sizes, atlas frames, travel and
   impact layout as the approved `da06b8d89` pilot.
-- **Water Gun: candidate, awaiting visual approval.** Available in the offline
-  source-move preview; normal 3D battles keep the previous Water Gun effect.
+- **Water Gun: visually approved by the user and enabled in normal 3D battles.**
+  Uses the same source-textured recipe reviewed in the offline preview.
+- **Tackle, Scratch and Bite: implemented, awaiting visual approval.** See
+  [contact move effects](contact-move-effects.md) for sources and conversion limits.
 
-`experimental_battle_3d.gd` selects `SourceMoveEffect` only for Ember. This class
+`experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,
 miss/blocked outcomes, impact/recovery and cancellation remain shared. It draws
 into the driver's existing mesh pool instead of running a second visual clock.
@@ -34,7 +36,7 @@ now explicitly supports the inspected BC5 swizzles alongside Ember's BC4 masks:
 - BC5 R/G/G/G preserves the same channel selection in RGBA for inspection.
 
 The packaged water subset uses the source foam/particle atlas, splash atlas
-and scrolling noise mask. The Godot candidate authors the beam geometry,
+and scrolling noise mask. The Godot implementation authors the beam geometry,
 travel, particle placement, timing, normalized water palette and blending.
 These are **source-textured reconstructions**, not complete native SV effect
 playback. Native emitter simulation, compiled shaders, attachment/bone rules
@@ -52,8 +54,8 @@ ops/worktrees/slot-env slot-b -- godot \
 
 Water Gun is selected initially; choose Ember to inspect the normal live
 implementation. **Bronmateriaal** toggles the next playback between the new
-look and the old procedural look. The preview only overrides Water Gun when
-enabled, or Ember when comparing with its old look. Overrides share the
+look and the old procedural look. Both moves use the production renderer by
+default; disabling the toggle compares against their old look. Overrides share the
 original clock and are removed when the original effect exits.
 
 Hit/miss/blocked, direction, models, arena, camera orbit, pause and cancellation
@@ -91,7 +93,7 @@ provenance file. Imported caches remain slot-local.
   historical pilot to use the newly requested on-target miss aim. The external
   argument is optional and only used for comparison with the historical pilot.
 - `battle_move_effects_3d_check.tscn`: six moves, four slots, audio, impact,
-  Substitute, cancellation and explicit Ember-live/Water-Gun-preview gating.
+  Substitute, cancellation and explicit live-source routing for both approved moves.
 - `battle_move_presentation_routes_check.tscn`: ordinary routes and 2D fallback.
 - `battle_3d_impact_pacing_check.tscn`: impact recovery, gem-before-attack and faint.
 - `source_moves_preview.gd -- --moves --smoke-source-moves`: rendered Dragonite/
@@ -101,5 +103,5 @@ provenance file. Imported caches remain slot-local.
 
 Anatomical origins now use the [move attachment profiles](move-attachments.md)
 for Charmander, Squirtle and Blastoise. Other models retain bounds-based origins.
-Water Gun still needs the user's visual review before enabling its new source-textured
-look in normal battles; both Water Gun renderers support paired cannon origins.
+Both Water Gun renderers support paired cannon origins. The approved source-textured
+version is now also selected by normal battles.

@@ -3,8 +3,9 @@
 `move_attachments_3d.gd` maps a move to an anatomical part, then resolves a
 species/form profile to one or more bone-local offsets. This is independent of
 the move's damage category: Bite and Ember can both use a mouth, while Scratch
-uses a hand. Physical hit graphics still appear at the target; this system
-does not move the attacker across the arena.
+uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch and Bite now
+use a separate [contact approach](contact-move-effects.md) to move the attacker
+to the target and back on the same native action clock.
 
 ## Initial profiles
 
@@ -52,9 +53,9 @@ Choose Charmander + Ember, Squirtle + Water Gun, or Blastoise + Water Gun.
 Purple markers label the current emitting part (`mouth`, `cannons`, or the
 `bounds` fallback). They are debug visuals only and can be hidden with
 **Aanvalspunten tonen**. Pause during the attack and orbit the camera to check
-placement. The **Bronmateriaal** toggle compares the Water Gun candidate
-against its normal procedural rendering. The candidate's visual approval is
-still pending; this task does not promote it.
+placement. The **Bronmateriaal** toggle compares the approved Water Gun effect
+against its previous procedural rendering. Both Ember and Water Gun are now
+approved and use the source-textured effects in normal battles.
 
 ## Checks
 

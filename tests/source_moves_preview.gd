@@ -1,5 +1,5 @@
 extends "res://tests/battle_dialogue_preview.gd"
-## Normal live Ember plus opt-in Water Gun candidate, without local dump dependencies.
+## Approved live Ember/Water Gun, with an optional comparison to the old effects.
 const SourceEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const LegacyEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 var candidate_enabled := true
@@ -14,14 +14,14 @@ func _start() -> void:
 	if "--smoke-source-moves" in OS.get_cmdline_user_args():
 		create_timer(90.0).timeout.connect(func(): printerr("SOURCE_MOVES_TIMEOUT"); quit(1))
 	await super._start()
-	root.title = "PokeAether — Ember goedgekeurd / Water Gun review"
+	root.title = "PokeAether — Ember / Water Gun goedgekeurd"
 	move_picker.select(3 if "--ember" in OS.get_cmdline_user_args() else 4)
 	var toggle := CheckButton.new()
 	toggle.text = "Bronmateriaal (uit = oude vormgeving)"
 	toggle.button_pressed = true
 	toggle.toggled.connect(func(enabled): candidate_enabled = enabled)
 	toolbar.add_child(toggle)
-	status.text = "Ember: goedgekeurd en actief. Water Gun: nieuwe proef. Afspelen om te vergelijken."
+	status.text = "Ember en Water Gun: goedgekeurd en actief. Afspelen om te vergelijken."
 	if "--smoke-source-moves" in OS.get_cmdline_user_args(): await _check_source_moves()
 
 func _load_preview() -> void:
@@ -38,9 +38,7 @@ func _effect_added(node: Node) -> void:
 func _override(effect: Node) -> void:
 	if not is_instance_valid(effect) or effect.done: return
 	var replacement: Node3D
-	if effect.key == "watergun" and candidate_enabled:
-		replacement = SourceEffect.new()
-	elif effect.key == "ember" and not candidate_enabled:
+	if effect.key in ["ember", "watergun"] and not candidate_enabled:
 		replacement = LegacyEffect.new()
 	else: return
 	replacement.set_meta("preview_override", true)
@@ -50,7 +48,7 @@ func _override(effect: Node) -> void:
 	overrides.append(replacement)
 	replacement.tree_exiting.connect(func(): overrides.erase(replacement), CONNECT_ONE_SHOT)
 	effect.tree_exiting.connect(replacement.cancel, CONNECT_ONE_SHOT)
-	replacement.start(effect.key, {"frames":effect.duration * 60.0, "impact_frame":effect.impact * 60.0},
+	replacement.start(effect.key, {"frames":effect.duration * 60.0, "impact_frame":effect.impact * 60.0, "launch_frame":effect.launch * 60.0},
 		{"show_impact":effect.hit, "result":"miss" if effect.miss else ""}, effect.clock, effect.anchors, effect.valid)
 	compared_count += 1
 
@@ -89,7 +87,7 @@ func _check_source_moves() -> void:
 		var frozen: float = effect.elapsed
 		await create_timer(0.1).timeout
 		assert(is_equal_approx(frozen, effect.elapsed))
-		var visible_effect: Node = effect if move_index == 3 else overrides[0]
+		var visible_effect: Node = effect
 		assert(is_equal_approx(frozen, visible_effect.elapsed))
 		renderer.user_camera_yaw += 0.65
 		renderer.user_camera_pitch = 0.1
@@ -116,6 +114,6 @@ func _check_source_moves() -> void:
 		await process_frame
 		assert(renderer.common_effects.is_empty() and overrides.is_empty())
 		candidate_enabled = true
-	assert(compared_count >= 8)
+	assert(compared_count >= 2)
 	print("SOURCE_MOVES_PREVIEW_OK moves=2 directions=2 outcomes=3 pause=true orbit=true comparison=true cancel=true cleanup=true")
 	quit()

@@ -37,7 +37,7 @@ ops/worktrees/slot-env slot-b -- godot \
 **Ontwijken (miss)** is selected initially. Play Water Gun, Ember or a contact
 move, reverse the attacker, pause and orbit. The trainer's localized Dodge
 callout appears before movement. The existing **Bronmateriaal** switch retains
-the Water Gun comparison; its source-textured candidate remains preview-only.
+the Water Gun comparison; its source-textured version is now approved and live.
 
 ## Focused checks
 

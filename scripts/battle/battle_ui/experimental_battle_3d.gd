@@ -12,11 +12,15 @@ const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
+const ContactMoveEffect = preload("res://scripts/battle/battle_ui/contact_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 var move_command_holds := [false, false, false, false]
 var move_dodges: Array[Dictionary] = [{}, {}, {}, {}]
 var dodge_offsets := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+var move_contacts: Array[Dictionary] = [{}, {}, {}, {}]
+var contact_offsets := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+var contact_yaws := [0.0, 0.0, 0.0, 0.0]
 const StatusEffect = preload("res://scripts/battle/battle_ui/status_effect_3d.gd")
 var status_conditions := ["", "", "", ""]
 var status_effects: Array = [null, null, null, null]
@@ -683,6 +687,7 @@ func cancel_actions() -> void:
 func _cancel_common_effects() -> void:
 	for index in 4:
 		_clear_move_dodge(index)
+		_clear_move_contact(index)
 		move_command_holds[index] = false
 	for effect: Node in common_effects.duplicate():
 		if is_instance_valid(effect):
@@ -716,9 +721,10 @@ func _sync_substitute_models() -> void:
 			doll.build(_effect_bounds(index).height, common_effect_speed)
 			substitute_models[index] = doll
 		var doll: Node3D = substitute_models[index]
-		doll.position = _position(index) + dodge_offsets[index]
-		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - doll.position
-		doll.rotation.y = atan2(direction.x,direction.z)
+		doll.position = _position(index) + dodge_offsets[index] + contact_offsets[index]
+		var facing_origin: Vector3 = _position(index) if not move_contacts[index].is_empty() else doll.position
+		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - facing_origin
+		doll.rotation.y = atan2(direction.x,direction.z) + contact_yaws[index]
 		doll.visible = _substitute_visible(index) and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty", "send_out", "recall", "capture"]
 		actors[index].visible = actor_shown[index] and not doll.visible
 
@@ -941,6 +947,68 @@ func wait_move_dodge(target: String) -> void:
 		_update_move_dodges()
 		if not move_dodges[index].is_empty(): await get_tree().process_frame
 
+func _start_move_contact(actor: String, target: String, timing: Dictionary, effect: Node) -> void:
+	var index := actor_index(actor)
+	if index < 0 or index == actor_index(target): return
+	_clear_move_contact(index)
+	var a := _move_bounds(actor)
+	var b := _move_bounds(target)
+	var delta: Vector3 = b.position - a.position
+	delta.y = 0
+	var distance := delta.length()
+	if distance < 0.01: return
+	# Bound the approach by both bodies: a large model must not pass through a small one.
+	var clearance := maxf(0.25, float(a.radius) + float(b.radius) + 0.08)
+	var displacement := delta.normalized() * maxf(0.0, distance - clearance)
+	var source := _move_visual(actor)
+	var destination := _move_visual(target)
+	var partner: Vector3 = _position(index + 1 if index % 2 == 0 else index - 1) - _position(index)
+	var turn := wrapf(atan2(delta.x, delta.z) - atan2(partner.x, partner.z), -PI, PI)
+	var motion := {"source":source, "target":destination, "actor":actor, "target_ident":target,
+		"clock":bind_action_clock(actor), "duration":float(timing.frames)/60.0,
+		"impact":float(timing.impact_frame)/60.0, "displacement":displacement, "yaw":turn,
+		"nodes":[actors[index], substitute_models[index]], "hud_transform":actors[index].global_transform}
+	if source != actors[index] and source.get("body") is Node3D:
+		motion.hud_sub_transform = source.body.global_transform
+	move_contacts[index] = motion
+	effect.finished.connect(func():
+		if move_contacts[index] == motion: _clear_move_contact(index), CONNECT_ONE_SHOT)
+
+func _set_contact_pose(index: int, offset: Vector3, yaw: float) -> void:
+	var change: Vector3 = offset - contact_offsets[index]
+	var turn: float = yaw - contact_yaws[index]
+	contact_offsets[index] = offset
+	contact_yaws[index] = yaw
+	# Immediate restoration also works during pause/cancel, without waiting for a frame.
+	for node in move_contacts[index].get("nodes", [actors[index], substitute_models[index]]):
+		if is_instance_valid(node):
+			node.position += change
+			node.rotation.y += turn
+
+func _clear_move_contact(index: int) -> void:
+	_set_contact_pose(index, Vector3.ZERO, 0.0)
+	move_contacts[index] = {}
+
+func _update_move_contacts() -> void:
+	for index in 4:
+		var motion: Dictionary = move_contacts[index]
+		if motion.is_empty(): continue
+		if not active or _move_visual(motion.actor) != motion.source or _move_visual(motion.target_ident) != motion.target:
+			_clear_move_contact(index)
+			continue
+		var seconds: float = motion.clock.call()
+		var duration: float = motion.duration
+		if seconds >= duration - 0.00001:
+			_clear_move_contact(index)
+			continue
+		var approach_start := minf(duration * 0.08, float(motion.impact) * 0.15)
+		var contact_time := float(motion.impact) * 0.96
+		var outward := smoothstep(approach_start, contact_time, seconds)
+		var return_start := minf(float(motion.impact) + duration * 0.08, duration * 0.72)
+		var returning := smoothstep(return_start, duration * 0.94, seconds)
+		var weight := outward * (1.0 - returning)
+		_set_contact_pose(index, motion.displacement * weight, float(motion.yaw) * weight)
+
 func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float) -> Dictionary:
 	var anchors := _move_anchors(actor, target, move)
 	anchors.target = point
@@ -990,16 +1058,22 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	if source == null or destination == null: return null
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
-	var effect := SourceMoveEffect.new() if MoveEffect.move_key(move) == "ember" else MoveEffect.new()
+	var effect: Node3D
+	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
+		effect = ContactMoveEffect.new()
+	else:
+		effect = SourceMoveEffect.new() if MoveEffect.move_key(move) in ["ember", "watergun"] else MoveEffect.new()
 	world.add_child(effect)
 	effect.view_camera = camera
 	common_effects.append(effect)
 	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
 	var positions := _move_anchors.bind(actor, target, move)
-	if str(options.get("result", "")).strip_edges().to_lower() == "miss":
+	if str(options.get("result", "")).strip_edges().to_lower() == "miss" or MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
 		var aim := _move_anchors(actor, target, move)
 		# Aim at the original position; a dodging target must not drag the beam.
 		positions = _fixed_target_move_anchors.bind(actor, target, move, aim.target, aim.radius)
+	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
+		_start_move_contact(actor, target, timing, effect)
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
 	return effect
@@ -1873,23 +1947,25 @@ func _visual_rect(index: int) -> Rect2:
 	# bounds keep the HP HUD and hover/effect anchors attached to the battlefield.
 	var doll: Node3D = substitute_models[index]
 	if is_instance_valid(doll) and doll.visible:
-		return _project_visual_bounds(doll.visual_bounds, doll.body.global_transform)
+		var home: Transform3D = move_contacts[index].get("hud_sub_transform", doll.body.global_transform)
+		return _project_visual_bounds(doll.visual_bounds, home)
 	if actors[index] == null or not actors[index].visible:
 		return Rect2()
+	var home: Transform3D = move_contacts[index].get("hud_transform", actors[index].global_transform)
 	var data: Dictionary = visual_bounds.get(identities[index], {}).get(current_actions[index], {})
 	if not data.is_empty():
 		var box := AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
-		return _project_visual_bounds(box, actors[index].global_transform)
+		return _project_visual_bounds(box, home)
 	if _is_hybrid_presentation():
 		# Older approved models lack sampled bounds. Reuse the posed envelope
 		# already cached for effects instead of placing their HUD 3 metres up.
 		_effect_bounds(index)
 		var box: AABB = fallback_effect_bounds.get(identities[index], AABB())
 		if box.has_volume():
-			return _project_visual_bounds(box, actors[index].global_transform)
+			return _project_visual_bounds(box, home)
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
-	var top := _project_to_ui(actors[index].position + Vector3(0, 3, 0))
+	var top := _project_to_ui(actors[index].position - contact_offsets[index] + Vector3(0, 3, 0))
 	var extent := absf(bottom.y - top.y)
 	return Rect2(Vector2(bottom.x - extent * 0.7, top.y), Vector2(extent * 1.4, extent))
 
@@ -2135,6 +2211,7 @@ func _process(delta: float) -> void:
 	for i in _slot_count():
 		if desired[i].is_empty():
 			_clear_move_dodge(i)
+			_clear_move_contact(i)
 			move_command_holds[i] = false
 			action_generation[i] += 1
 			if is_instance_valid(actors[i]):
@@ -2145,6 +2222,7 @@ func _process(delta: float) -> void:
 			continue
 		if identities[i] != desired[i]:
 			_clear_move_dodge(i)
+			_clear_move_contact(i)
 			move_command_holds[i] = false
 			var actor_started := Time.get_ticks_usec()
 			if is_instance_valid(actors[i]):
@@ -2185,9 +2263,10 @@ func _process(delta: float) -> void:
 			# grounding, recall scale or the attack/faint motion correction.
 			actors[i].position = _position(i)
 			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
-			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
-		actors[i].position = _position(i) + actor_transition_offsets[i] + dodge_offsets[i]
+			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees)) + contact_yaws[i]
+		actors[i].position = _position(i) + actor_transition_offsets[i] + dodge_offsets[i] + contact_offsets[i]
 		actors[i].position.y += float(placements[identities[i]].lift) + motion_offsets[i] + hover_offsets[i]
+	_update_move_contacts()
 	_update_move_dodges()
 	_sync_substitute_models()
 	_sync_status_effects()
