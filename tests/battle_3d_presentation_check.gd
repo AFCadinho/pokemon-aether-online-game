@@ -167,7 +167,12 @@ func _run() -> void:
 		await battle._play_lead_summon("poke-ball", "Dragonite", null, "back")
 		await battle._play_switch_recall("poke-ball", null, "back")
 		assert(stage.lifecycle[0] == "hidden")
+		var switch_cues: Array[String] = []
+		var record_switch := func(_ident: String, cue: String): switch_cues.append(cue)
+		stage.ball_cue.connect(record_switch)
 		await battle._play_switch_release("poke-ball", "Dragonite", null, "back")
+		stage.ball_cue.disconnect(record_switch)
+		assert(switch_cues == ["summon_throw", "summon_release", "cry"], "Switch release must include the throw before opening")
 		assert(stage.lifecycle[0] == "idle")
 		var old_capture_player: Node = battle.capture_ball_animation_player
 		battle.capture_ball_animation_player = null

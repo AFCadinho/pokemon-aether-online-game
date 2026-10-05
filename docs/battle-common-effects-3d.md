@@ -161,7 +161,7 @@ Only explicit player approval completes an entry.
 - [x] Paralysis — persistent tint only
 - [ ] Freeze — player could not visually test it yet
 - [x] Sleep — Z glyph layout follows camera rotation
-- [ ] Substitute — imported textured doll; visual review pending
+- [x] Substitute — imported textured doll approved; HUD placement correction awaiting review
 - [x] Mega evolution
 
 Gem activation events emitted after a move announcement are presented before
@@ -189,8 +189,8 @@ reverse sampling for closing. Imported cameras are removed. No second capture
 asset is included. Other ball types currently share this shape with shell palette
 variants; their individual markings/shapes are not yet authored.
 
-All ball motion/effects live in arena coordinates. Initial send-out has a short
-throw; switch release opens in place. Recall shrinks the target toward a nearby
+All ball motion/effects live in arena coordinates. Initial send-out and switch release both have a short
+throw before opening. Recall shrinks the target toward a nearby
 ball with a pink beam. Capture throws, absorbs, closes, drops, bounces, shakes the
 server-reported number of times and presents either success or breakout. Capture
 never rolls its own result. The existing summon/capture sounds play at their
@@ -203,8 +203,18 @@ success and failure, pause, cancellation after absorption, and replacement.
 `battle_3d_presentation_check.gd` exercises the real battle host with its 2D ball
 players disconnected. Substitute/status lifecycle checks remain applicable.
 
-Additional visual review pending:
-- [ ] Textured Substitute doll replacement.
+Battle prop review:
+
+- [x] Textured Substitute doll replacement.
 - [ ] Poké Ball summon / switch release.
-- [ ] Poké Ball return.
-- [ ] Capture success and breakout (including camera rotation).
+- [x] Poké Ball return.
+- [x] Capture success and breakout.
+
+Follow-up: summon now throws by default in every native slot, including switch
+release and co-op, with a 0.40 s arc from slightly farther back. Return/capture
+choreography is unchanged. Substitute supplies its own projected model envelope
+and center while the original Pokémon is hidden, so the HP HUD no longer uses
+its fixed screen fallback. Projection follows camera rotation, pop-in and hits;
+revealing the Pokémon for an attack returns its original bounds.
+
+- [ ] Corrected Substitute HP HUD placement.

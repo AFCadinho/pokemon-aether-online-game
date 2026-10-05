@@ -143,8 +143,8 @@ func send_out(with_throw: bool) -> bool:
 	ball.position = origin if with_throw else target
 	if with_throw:
 		cue.emit("summon_throw")
-		if not await _step(0.28, func(p: float):
-			ball.position = origin.lerp(target,p) + Vector3.UP * sin(p*PI)*0.8
+		if not await _step(0.40, func(p: float):
+			ball.position = origin.lerp(target,p) + Vector3.UP * sin(p*PI)*1.1
 			ball.rotation.x = -TAU*p
 		): return false
 	ball.rotation = Vector3.ZERO

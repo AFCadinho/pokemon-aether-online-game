@@ -1,5 +1,4 @@
 extends Node
-const Stage = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
 var stage: Node
 var cues: Array[String] = []
 var complete := false
@@ -14,7 +13,7 @@ func _start_capture(caught: bool, shakes := 3) -> void:
 	complete = true
 
 func _run() -> void:
-	stage = Stage.new()
+	stage = preload("res://tests/fixtures/prepared_ball_stage.gd").new()
 	add_child(stage)
 	stage.set_process(false)
 	stage.active = true
@@ -37,7 +36,7 @@ func _run() -> void:
 		var index: int = stage.actor_index(ident)
 		stage.set_actor_shown(index,false)
 		cues.clear()
-		assert(await stage.send_out(ident,"poke-ball","",true))
+		assert(await stage.send_out(ident,"poke-ball"))
 		assert(cues == ["summon_throw","summon_release","cry"])
 		assert(stage.actor_shown[index] and stage.lifecycle[index] == "idle")
 		assert(await stage.recall(ident,"poke-ball"))
@@ -45,6 +44,13 @@ func _run() -> void:
 		assert(stage.actor_scale[index] == 1.0 and stage.actor_transition_offsets[index] == Vector3.ZERO)
 		assert(stage.ball_effects[index] == null)
 		stage.set_actor_shown(index,true)
+	var battle := preload("res://scripts/battle/battle.gd").new()
+	battle.animation_router.model_presenter = stage
+	cues.clear()
+	await battle._play_switch_release("poke-ball", "", null, "back")
+	assert(cues == ["summon_throw","summon_release","cry"], "The actual switch host must throw even with no 2D player")
+	battle.animation_router.release_threaded_resource_requests()
+	battle.free()
 	for caught in [false,true]:
 		for shakes in [0,1,3]:
 			cues.clear()

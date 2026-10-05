@@ -944,7 +944,7 @@ func set_actor_shown(index: int, shown: bool) -> void:
 	actor_scale[index] = 1.0
 	lifecycle[index] = "idle" if shown else "hidden"
 
-func send_out(ident: String, item_id := "poke-ball", cry_species := "", with_throw := false) -> bool:
+func send_out(ident: String, item_id := "poke-ball", cry_species := "", with_throw := true) -> bool:
 	if not handles(ident): return false
 	return await _play_ball(ident, "send_out", item_id, 0, false, cry_species, with_throw)
 
@@ -956,7 +956,7 @@ func capture(ident: String, item_id: String, shakes: int, caught: bool) -> bool:
 	if not handles(ident): return false
 	return await _play_ball(ident, "capture", item_id, shakes, caught)
 
-func _play_ball(ident: String, kind: String, item_id: String, shakes := 0, caught := false, cry_species := "", with_throw := false) -> bool:
+func _play_ball(ident: String, kind: String, item_id: String, shakes := 0, caught := false, cry_species := "", with_throw := true) -> bool:
 	var index := actor_index(ident)
 	_stop_transition(index)
 	var generation: int = transition_generation[index]
@@ -966,7 +966,7 @@ func _play_ball(ident: String, kind: String, item_id: String, shakes := 0, caugh
 	var center: Vector3 = bounds.position + Vector3.UP * maxf(bounds.height * 0.5, 0.4)
 	var opponent := _position(index + 1 if index % 2 == 0 else index - 1)
 	var away := (ground - opponent).normalized()
-	var start := ground + away * 2.2 + Vector3.UP * 1.0
+	var start := ground + away * (3.4 if kind == "send_out" else 2.2) + Vector3.UP * 1.0
 	if kind == "capture": start = opponent + Vector3.UP * 0.8
 	var original_shown: bool = actor_shown[index]
 	var original_lifecycle: String = lifecycle[index]
@@ -1665,25 +1665,36 @@ func _project_to_ui(point: Vector3) -> Vector2:
 func _anchor(body: bool, index: int) -> Vector2:
 	if actors[index] == null:
 		return Vector2.ZERO
+	var doll: Node3D = substitute_models[index]
+	if body and is_instance_valid(doll) and doll.visible:
+		return _project_to_ui(doll.body.global_transform * doll.visual_bounds.get_center())
 	var point: Vector3 = actors[index].position + Vector3(0,1.2,0) if body else _position(index)
 	return _project_to_ui(point)
 
 func _visual_rect(index: int) -> Rect2:
+	# Substitute owns the visible model while the Pokémon is hidden. Its projected
+	# bounds keep the HP HUD and hover/effect anchors attached to the battlefield.
+	var doll: Node3D = substitute_models[index]
+	if is_instance_valid(doll) and doll.visible:
+		return _project_visual_bounds(doll.visual_bounds, doll.body.global_transform)
 	if actors[index] == null or not actors[index].visible:
 		return Rect2()
 	var data: Dictionary = visual_bounds.get(identities[index], {}).get(current_actions[index], {})
 	if not data.is_empty():
 		var box := AABB(Vector3(data.min[0], data.min[1], data.min[2]), Vector3(data.size[0], data.size[1], data.size[2]))
-		var rect := Rect2()
-		for corner in 8:
-			var point := _project_to_ui(actors[index].global_transform * box.get_endpoint(corner))
-			rect = Rect2(point, Vector2.ZERO) if corner == 0 else rect.expand(point)
-		return rect
+		return _project_visual_bounds(box, actors[index].global_transform)
 	# Conservative presentation bounds; source skeletal mesh AABBs include rest pose.
 	var bottom := _anchor(false, index)
 	var top := _project_to_ui(actors[index].position + Vector3(0, 3, 0))
 	var extent := absf(bottom.y - top.y)
 	return Rect2(Vector2(bottom.x - extent * 0.7, top.y), Vector2(extent * 1.4, extent))
+
+func _project_visual_bounds(box: AABB, placement: Transform3D) -> Rect2:
+	var rect := Rect2()
+	for corner in 8:
+		var point := _project_to_ui(placement * box.get_endpoint(corner))
+		rect = Rect2(point, Vector2.ZERO) if corner == 0 else rect.expand(point)
+	return rect
 
 func actor_visual_rect(ident: String) -> Rect2:
 	return _visual_rect(actor_index(ident)) if handles(ident) else Rect2()

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a clearer Poké Ball throw on every 3D summon, including switches, and keep the HP HUD anchored to the visible Substitute model.
+
 - Make Galarian Articuno, Zapdos and Moltres available through the updated 3D download catalog; include them in the launcher’s full collection download.
 
 - Use a textured 3D Substitute doll and an animated Poké Ball for 3D send-out, recall and capture, with world-space effects and synchronized existing sounds.

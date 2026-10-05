@@ -21,6 +21,7 @@ func _run() -> void:
 	stage.active = true
 	stage.viewport = SubViewport.new()
 	stage.viewport.size = Vector2i(640,480)
+	stage.size = Vector2(640,480)
 	stage.add_child(stage.viewport)
 	stage.world = Node3D.new()
 	stage.viewport.add_child(stage.world)
@@ -120,13 +121,25 @@ func _substitute() -> void:
 		var doll: Node = stage.substitute_models[index]
 		assert(stage.active and is_instance_valid(doll) and doll.visible and not stage.actors[index].visible)
 		assert(not stage.boxes[index].substitute_sprite.visible and stage.boxes[index].single_sprite.self_modulate.a == 0.0)
+		var camera_pose: Transform3D = stage.camera.transform
+		for angle in [0.0, PI * 0.5, PI, PI * 1.5]:
+			stage.camera.position = doll.position + Vector3(sin(angle)*8,4,cos(angle)*8)
+			stage.camera.look_at(doll.position + Vector3.UP * 0.5)
+			var bounds: Rect2 = stage.actor_visual_rect(ident)
+			assert(bounds.has_area(), "Hidden Pokémon must retain visible Substitute bounds for the HP HUD")
+			assert(bounds.has_point(stage.actor_anchor(ident)), "The effect/hover anchor must follow the doll through camera rotation")
+			var via_box: Rect2 = stage.boxes[index].get_single_sprite_hover_rect()
+			assert(via_box.is_equal_approx(bounds), "SpriteBox must expose the same native doll rectangle")
+		stage.camera.transform = camera_pose
 		var heal: Node = stage.create_common_effect("health_up",ident)
 		assert(is_instance_valid(heal), "Common effects can target a visible Substitute")
 		heal.cancel()
 		assert(await router.reveal_pokemon_from_substitute_for_move(ident))
 		assert(stage.actors[index].visible and not doll.visible)
+		assert(stage.actor_visual_rect(ident).has_area(), "Revealing the Pokémon restores its native HUD bounds")
 		await router.restore_substitute_after_move(ident)
 		assert(doll.visible and not stage.actors[index].visible)
+		assert(stage.actor_visual_rect(ident).has_area(), "Restoring Substitute must not fall back to a screen corner")
 		await router.play_substitute_damage_tween(ident)
 		assert(doll.hit_left == 0.0)
 		router.clear_substitute_for_ident(ident)
@@ -173,7 +186,7 @@ func _mega() -> void:
 	router.cancel_render()
 	while not done: await get_tree().process_frame
 	assert(reveals == 2, "Cancellation before the reveal beat must not transform a stale actor")
-	assert(not Registry.supports("moltres-galar"), "Missing form must never substitute ordinary Moltres art")
+	assert(not Registry.supports("moltres-unreviewed-test-form"), "An unreviewed form must never substitute ordinary Moltres art")
 
 func _audio() -> void:
 	var item: Node = stage.create_common_effect("use_item","p1")

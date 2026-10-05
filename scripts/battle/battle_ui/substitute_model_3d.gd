@@ -3,6 +3,7 @@ extends Node3D
 var clock := 0.0
 var hit_left := 0.0
 var body: Node3D
+var visual_bounds := AABB()
 var speed_provider: Callable
 var idle_scale := 1.0
 
@@ -17,6 +18,10 @@ func build(height: float, speed: Callable) -> void:
 	# Match the former doll's one-unit envelope and retain the species-relative scale.
 	model.scale = Vector3.ONE / 1.446603
 	model.position.y = 0.013297 / 1.446603
+	# Cache the normalized doll envelope in body space, independent of its pop-in/hit motion.
+	for mesh: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+		var box: AABB = (body.global_transform.affine_inverse() * mesh.global_transform) * mesh.get_aabb()
+		visual_bounds = visual_bounds.merge(box) if visual_bounds.has_volume() else box
 	body.scale = Vector3.ONE * idle_scale
 
 func hit() -> void:
