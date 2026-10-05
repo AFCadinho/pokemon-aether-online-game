@@ -2,9 +2,9 @@
 
 ## Unreleased
 
-- Enlarge Pokémon in 2.5D battles while keeping their feet aligned with the field, fitting very large models, and placing HP panels closer to older models.
+- Give 3D Trick Room a moving blue/purple mosaic cube with cyan highlights and transparent walls that keep Pokémon and the arena visible.
 
-- Make the 3D Trick Room grid and borders clearer against the PvP arena's purple lighting while keeping the walls transparent.
+- Enlarge Pokémon in 2.5D battles while keeping their feet aligned with the field, fitting very large models, and placing HP panels closer to older models.
 
 - Add native 3D visuals for Grassy, Electric, Misty and Psychic Terrain and Trick Room, including weather combinations and replay pause/speed support.
 
