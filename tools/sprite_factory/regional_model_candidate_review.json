@@ -28,7 +28,15 @@
     "eyes-followup-v2/audit.json": "a40286e1d4fd47299cb58d07f84951ea652c8101cc87a6f36315da688b02a7ad",
     "eyes-followup-v2/geometry-proof.json": "a62da9b8faff3930010b04ca92ac62d48da9ba40fef27f46854e7d881aaeec8a",
     "eyes-followup-v2/appearance/godot-review.json": "fe492502d30dd051c47a13b463eef073a9ce10370434c348119c5d668d55f8fa",
-    "eyes-review-v1/evidence.json": "38890882c1c25928103de4ae5280d0ccb82ead9584c084051a65d08c27e6f87b"
+    "eyes-review-v1/evidence.json": "38890882c1c25928103de4ae5280d0ccb82ead9584c084051a65d08c27e6f87b",
+    "runtime-final-v4.json": "f13697f819977324dfd9773fb32501368f7f409a1cb35c582abb4f995831fb96",
+    "eye-last-two-v2/catalog.json": "f1a35ae3ad33953e750ab0ea93106c3ed63dab182136cbcb9726d882b2e892ee",
+    "eye-last-two-v2/placement.json": "d28d28934d58d585523013df0c4316284cbe96ce8f6da103da7f91f44924b780",
+    "eye-last-two-v2/stage.json": "b81bbe438b6c19e934f39f0d60487cea83bef852cc7a41e7efb9bf88ae693013",
+    "eye-last-two-v2/source-proof.json": "e02cb7219b79b5698138f7d961416bb521ed2ea6dfb8a3d87d506cf61ec10e21",
+    "eye-last-two-v2/geometry-proof.json": "30372351e1b410df59c43a34a379bb5f1f17b918cd001408da8a544cd173bb54",
+    "eye-last-two-v2/appearance/godot-review.json": "8fbb5929dcd5b9e7ac56cb04e31a4d9e34f8d068ffa8c1dfb8ad59136a8370a6",
+    "eyes-last-two-review-v1/evidence.json": "b0cc52828cfcf8e88d43a85dffc2ecded5cceebb8e9b7dfe9fecfb5e24153f5b"
   },
   "entries": [
     {
@@ -613,21 +621,21 @@
     },
     {
       "species": "pikachu-alola",
-      "glb_sha256": "fd6304c71e5d33b124b5d9aa4014c400b47b22c0b187450b0c5142c70eb7bdb5",
-      "runtime_sha256": "8918610dfed6bff5d02146f206f5c12585a60485f08c7c711e48d6449de050f5",
-      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/pikachu-alola.glb",
-      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/pikachu-alola.scn",
-      "motion_profile_sha256": "418b8c15f933dac1df618e2c0d22298bb5b3385bd11935cbe206d58be39d91a0",
+      "glb_sha256": "b2f3e1c432a9d4bc2a19d5a3d9965593eda0e0aba3aad332307c417d983aae73",
+      "runtime_sha256": "964469a1f1ee938b5562891bcb7824db9ee1c779774c699d3a01d2e05e0ba6af",
+      "candidate_path": ".tmp/regional-production-v1/eye-last-two-v2/pikachu-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eye-last-two-v2/runtime/pikachu-alola.scn",
+      "motion_profile_sha256": "3b6941ab951bb6ee74d1e80b8a89e96cb99eb53ad859c1ab482beedbc75526af",
       "readability_factor": 2.907921363195703,
       "hover_height": 0.0
     },
     {
       "species": "pikachu-alola-shiny",
-      "glb_sha256": "fd6304c71e5d33b124b5d9aa4014c400b47b22c0b187450b0c5142c70eb7bdb5",
-      "runtime_sha256": "fd27c5d8da0213b1b65061b2779ddbb175e62f2a4ab5ec0e38a66111c849bfc0",
-      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/pikachu-alola-shiny.glb",
-      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/pikachu-alola-shiny.scn",
-      "motion_profile_sha256": "418b8c15f933dac1df618e2c0d22298bb5b3385bd11935cbe206d58be39d91a0",
+      "glb_sha256": "b2f3e1c432a9d4bc2a19d5a3d9965593eda0e0aba3aad332307c417d983aae73",
+      "runtime_sha256": "c40bced021d0834814c744a15a06c3b043410f0e7cac081b7f9699879252f650",
+      "candidate_path": ".tmp/regional-production-v1/eye-last-two-v2/pikachu-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eye-last-two-v2/runtime/pikachu-alola-shiny.scn",
+      "motion_profile_sha256": "3b6941ab951bb6ee74d1e80b8a89e96cb99eb53ad859c1ab482beedbc75526af",
       "readability_factor": 2.907921363195703,
       "hover_height": 0.0
     },
@@ -1014,20 +1022,20 @@
     {
       "species": "typhlosion-hisui",
       "glb_sha256": "a9d0b9d0250bbb8c0f5742a7a61a9e9033335c77fc4b733baa6d431e13caf9ae",
-      "runtime_sha256": "b41855463371f037e5665743ac92282dee9f09d2c4f8bd83aefd97f55bad86c7",
-      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/typhlosion-hisui.glb",
-      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/typhlosion-hisui.scn",
-      "motion_profile_sha256": "16d51756a4a9ec728abf901b4b2d72bdc3a4301919487a10dbc04c7df8009374",
+      "runtime_sha256": "889c67521d714f9ccb0833644d177ce9972fac0c0102eab3fa78cb74eac362a0",
+      "candidate_path": ".tmp/regional-production-v1/eye-last-two-v2/typhlosion-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eye-last-two-v2/runtime/typhlosion-hisui.scn",
+      "motion_profile_sha256": "afbca6fbaf4164bf743f9981a9a68be9a0972db3615827102f8d58ea05e2e53f",
       "readability_factor": 1.0,
       "hover_height": 0.0
     },
     {
       "species": "typhlosion-hisui-shiny",
       "glb_sha256": "8cba4f8294cc16e321f10c7c8af1cb29a785aad74dd8c863cdfc238538980afe",
-      "runtime_sha256": "e60b2bfe406996a725ec6e675063d36f26cd7cd624b6c7078cbd30ea3cc0420c",
-      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/typhlosion-hisui-shiny.glb",
-      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/typhlosion-hisui-shiny.scn",
-      "motion_profile_sha256": "38053b9eedd423b64db109f830cee4429946233bbcad2c2b31a7cd77bcf9a888",
+      "runtime_sha256": "0740d83004bbd5473fc07f40ece9e7b942b998d4745b3cc5d3d426c437c1619e",
+      "candidate_path": ".tmp/regional-production-v1/eye-last-two-v2/typhlosion-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eye-last-two-v2/runtime/typhlosion-hisui-shiny.scn",
+      "motion_profile_sha256": "889d9ceef8ae6b514f4a6967d6d63753773d70e33378907577a8ba42381e2d5b",
       "readability_factor": 1.0,
       "hover_height": 0.0
     },
@@ -1194,7 +1202,12 @@
   ],
   "body_visual_feedback": "User reports bodies otherwise look good; eye review pending.",
   "eye_corrected_pairs": 22,
-  "current_runtime_report": "runtime-final-v3.json",
-  "current_placement": "eyes-followup-v2/placement.json",
-  "geometry_qualification_scope": "Prior 120 Hz gate retained with exact mesh/skin/animation signature parity and fresh runtime pose bounds for all 44 material-only revisions; see eyes-followup-v2/geometry-proof.json."
+  "current_runtime_report": "runtime-final-v4.json",
+  "current_placement": "eye-last-two-v2/placement.json",
+  "geometry_qualification_scope": "Prior 120 Hz gate retained with exact mesh/skin/animation signature parity and fresh runtime pose bounds for all 44 material-only revisions; see eyes-followup-v2/geometry-proof.json. Four subsequent eye-only revisions retain the same geometry; see eye-last-two-v2/geometry-proof.json.",
+  "last_eye_review": "eyes-last-two-review-v1/index.html",
+  "last_eye_correction_pairs": [
+    "pikachu-alola",
+    "typhlosion-hisui"
+  ]
 }

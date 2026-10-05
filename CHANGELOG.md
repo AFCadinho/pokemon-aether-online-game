@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Restore missing eye details in regional Pokémon 3D model imports.
 - Correct shiny Dreepy's follower facing directions when standing and walking.
 - Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
 

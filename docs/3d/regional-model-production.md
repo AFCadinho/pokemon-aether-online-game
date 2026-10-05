@@ -105,3 +105,30 @@ The prior geometric battle qualification is retained with explicit parity
 provenance; no new performance or full game certification is claimed.
 Current combined eye comparison: `eyes-review-v1/index.html` (22 revised pairs
 by default, all 58 selectable). Visual acceptance remains pending.
+
+## Pikachu and Typhlosion follow-up
+
+The user subsequently reported Alola-cap Pikachu and Hisuian Typhlosion.
+Pikachu's native Eye shader requests a white fifth highlight layer; no explicit
+highlight bitmap exists in that source. The review candidate uses a small
+static specular lobe baked from its authored convex eye normal map. This is
+an explicitly proposed portable approximation, not an exact native shader
+translation. The dark/brown eye colours and closed-eye expressions remain.
+
+Typhlosion's imported idle UV offsets moved the iris behind the narrow eyelids.
+Neutral and negated-offset diagnostic renders are retained in `eye-last-two-v1`.
+The proposed correction uses the material's neutral default gaze in idle only;
+attack, damage, sleep and faint eye tracks remain unchanged.
+
+`regional_last_eye_followup.py` prepares these four variants.
+`regional_last_eye_review.py` verifies hashes, exact GLB geometry/skin/skeletal
+motion parity and fresh runtime pose bounds, then records the candidate set.
+All four runtime scenes load and switch poses without errors; all sampled
+bounds remain within 0.00001 m of the previous revision. Six focused existing
+eye-motion and geometry-parity tests pass. No performance admission is implied.
+
+Current runtime report: `runtime-final-v4.json`; placement and technical proof:
+`eye-last-two-v2/placement.json` and `eye-last-two-v2/geometry-proof.json`.
+The new comparison is `eyes-last-two-review-v1/index.html`, with eye close-ups
+and all captured attack/sleep/faint poses. Both pairs still require visual
+approval. The previous comparison remains as historical evidence.
