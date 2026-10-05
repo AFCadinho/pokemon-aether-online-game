@@ -4,6 +4,10 @@
 
 - Keep native mobile Pokédex and quest-tracker collapse controls beside their own rows in fixed positions, with separate touch space and no overlap from the global-buff tray.
 
+- Make the 3D item activation effect golden, with light bands and particles sweeping up and back down around the Pokémon.
+
+- Preserve full 1080p detail in the animated grass battle background and its fallback image, with higher-quality video compression.
+
 - Show animated wild grass battles without visible platforms so Pokémon stand directly in the meadow.
 
 - Give Gliscor its native flying stance and matching battle animations, including in the Pokédex and summary preview; preserve normal/shiny colors and remove the extra hover offset.

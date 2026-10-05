@@ -7,7 +7,7 @@ const MOVE_EFFECTS := ["future_sight_impact", "solar_beam_charge", "electro_shot
 const PROFILES := {
 	"stat_up": ["rise", "73b7ff", 0.65], "stat_down": ["fall", "ec638b", 0.65],
 	"health_up": ["heal", "45ef95", 0.85], "wish_fulfilled": ["wish", "ffdc72", 0.7],
-	"use_item": ["item", "a5e7ff", 0.85], "eat_berry": ["berry", "f3798b", 0.75],
+	"use_item": ["item", "ffce62", 0.85], "eat_berry": ["berry", "f3798b", 0.75],
 	"shiny_sparkle": ["shiny", "ffe685", 0.7], "protect_block": ["shield", "67d9ff", 0.65],
 	"status_paralysis": ["electric", "ffe14f", 0.65],
 	"status_poisoned": ["poison", "c07dea", 0.7], "status_badly_poisoned": ["poison", "ae47e5", 0.75],
@@ -245,6 +245,7 @@ func _update_visuals() -> void:
 	var progress := clampf(elapsed / duration, 0.0, 1.0)
 	var envelope := minf(progress / 0.12, (1.0 - progress) / 0.22)
 	envelope = clampf(envelope, 0.0, 1.0)
+	var item_sweep := 0.5 - 0.5 * cos(progress * TAU)
 	for index in particles.size():
 		var node := particles[index]
 		var offset := float(index) / maxf(particles.size(), 1)
@@ -265,7 +266,10 @@ func _update_visuals() -> void:
 			"confused": y = height * 1.1 + sin(angle * 2.0) * 0.1; angle += progress * TAU; spread *= 0.7; size *= 0.65
 			"wish": y = height * (1.45 - progress * 0.9 + offset * 0.15); spread *= 1.0 - progress * 0.65; size *= 0.75
 			"shiny": y = height * (0.2 + offset * 0.8); spread *= 0.4 + progress * 1.1
-			"item": y = height * (0.02 + progress * 1.1 - offset * 0.28); spread *= 0.65; size *= 0.65 + 0.35 * sin(index * 2.0)
+			"item":
+				y = height * (0.1 + item_sweep * 0.84 + sin(angle * 2.0) * 0.05)
+				spread *= 1.06
+				size *= 0.65 + 0.35 * sin(index * 2.0)
 			"power": y = height * (0.05 + phase * 1.2); spread *= 1.4 - progress * 0.65; size *= 0.8 + progress
 			"berry": y = height * 0.65 - maxf(0.0,progress - 0.32) * height * 0.4; spread *= maxf(0.0,progress - 0.32) * 0.6; size = 0.5 * (1.0 - progress)
 			"shield": y = height * (0.2 + offset * 0.6); spread *= 1.1; size *= 0.5
@@ -294,6 +298,9 @@ func _update_visuals() -> void:
 		if style == "shield":
 			ring.position.y = height * (0.2 + index * 0.3)
 			scale_factor = 1.1 - 0.08 * sin(progress * PI)
+		if style == "item":
+			ring.position.y = height * (0.07 + item_sweep * 0.84 + index * 0.06)
+			scale_factor = 1.04 + sin(progress * PI) * 0.04 + index * 0.025
 		if style == "power": scale_factor = 0.8 + maxf(0.0,progress - 0.5) * 3.5 + index * 0.18
 		if style == "terrain": scale_factor = 1.0 + progress * 3.0 + index * 0.7
 		if style == "fall": scale_factor = 1.3 - progress * 0.45

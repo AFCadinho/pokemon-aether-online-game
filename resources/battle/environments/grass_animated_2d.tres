@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="BattleEnvironmentProfile" load_steps=6 format=3]
+[gd_resource type="Resource" script_class="BattleEnvironmentProfile" format=3 uid="uid://btir3nhvrlcxw"]
 
-[ext_resource type="Script" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
-[ext_resource type="Texture2D" path="res://assets/background/battle/environments/grass_animated_fallback.jpg" id="2_background"]
-[ext_resource type="VideoStream" path="res://assets/video/battle/grass_meadow.ogv" id="3_video"]
+[ext_resource type="Script" uid="uid://b2d38kdsao3in" path="res://scripts/battle/battle_environment_profile.gd" id="1_profile"]
+[ext_resource type="Texture2D" uid="uid://daggtgs2siaa6" path="res://assets/background/battle/environments/grass_animated_fallback.jpg" id="2_background"]
+[ext_resource type="VideoStream" uid="uid://bh2t007r4s5a0" path="res://assets/video/battle/grass_meadow.ogv" id="3_video"]
 
 [sub_resource type="Gradient" id="Gradient_transparent"]
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0)

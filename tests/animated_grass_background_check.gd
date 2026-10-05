@@ -13,9 +13,9 @@ func _init() -> void:
 func _run() -> void:
 	var animated := Catalog.get_profile(&"grass").get_2d_profile(true)
 	assert(animated.is_valid() and animated.background_video is VideoStreamTheora)
-	assert(animated.background_texture.get_size() == Vector2(1152, 648))
+	assert(animated.background_texture.get_size() == Vector2(1920, 1080))
 	var file := FileAccess.open(VIDEO, FileAccess.READ)
-	assert(file != null and file.get_length() <= 2 * 1024 * 1024, "grass video fits the existing 2 MiB battle-video budget")
+	assert(file != null and file.get_length() <= 12 * 1024 * 1024, "1080p grass video stays within its 12 MiB budget")
 	for id: String in GRASS_IDS:
 		var location := Catalog.get_profile(StringName(id))
 		assert(location.get_2d_profile(true) == animated, "%s wild battles share animated grass" % id)
@@ -44,7 +44,7 @@ func _run() -> void:
 	assert(battle.enemy_battle_platform.get_platform_texture() == animated.platform_texture)
 	await create_timer(0.3).timeout
 	assert(player.is_playing() and player.stream_position > 0.0)
-	assert(player.get_video_texture().get_size() == Vector2(1152, 648))
+	assert(player.get_video_texture().get_size() == Vector2(1920, 1080))
 	battle.hide()
 	battle._sync_battle_background_video()
 	assert(player.paused, "hidden/prewarmed battles do not decode video")
