@@ -53,6 +53,21 @@ func _run() -> void:
 	_check(large_home_display_size.x <= first.HOME_SPRITE_MAX_DISPLAY_SIZE.x + 0.01, "wide HOME fallbacks fit the battle width budget")
 	_check(large_home_display_size.y <= first.HOME_SPRITE_MAX_DISPLAY_SIZE.y + 0.01, "tall HOME fallbacks fit the battle height budget")
 	_check(is_equal_approx(large_home_display_size.aspect(), large_home_bounds.size.aspect()), "HOME fallback scaling preserves aspect ratio")
+	# A sprite node is reused across switches and asynchronous web upgrades.
+	var sprite := AnimatedSprite2D.new()
+	var pixel_frames := SpriteFrames.new()
+	first._set_sprite_target_scale_from_frames(sprite, pixel_frames)
+	_check(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "pixel sprites stay crisp when enlarged")
+	var pixel_scale: Vector2 = first._get_sprite_target_scale(sprite)
+	for artwork_kind in ["home_fallback", "rendered_asset", "dratini_hd_poc"]:
+		var artwork_frames := SpriteFrames.new()
+		artwork_frames.set_meta(artwork_kind, true)
+		first._set_sprite_target_scale_from_frames(sprite, artwork_frames)
+		_check(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_LINEAR, "%s keeps smooth filtering" % artwork_kind)
+		first._set_sprite_target_scale_from_frames(sprite, pixel_frames)
+		_check(sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "switching from %s restores crisp pixels" % artwork_kind)
+		_check(first._get_sprite_target_scale(sprite) == pixel_scale, "filter changes preserve pixel sprite size")
+	sprite.free()
 	var retained := Resource.new()
 	var cache := {}
 	Appearance._remember_appearance_resource(cache, "retained", retained)

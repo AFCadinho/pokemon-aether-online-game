@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep animated pixel-art Pokémon crisp when enlarged in 2D battles, while retaining smooth filtering for HOME artwork and rendered HD sprites.
+
 - Keep native mobile Pokédex and quest-tracker collapse controls beside their own rows in fixed positions, with separate touch space and no overlap from the global-buff tray.
 
 - Make the 3D item activation effect golden, with light bands and particles sweeping up and back down around the Pokémon.
