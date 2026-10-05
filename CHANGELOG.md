@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add 3D Flamethrower, Bubble and Bubble Beam with animated mouth/cannon origins, shared move sounds and Dodge-aware impacts.
+
 - Match 3D battle rendering to the actual window resolution, avoiding unnecessary GPU work in smaller windows while keeping larger windows sharp.
 - Restore missing eye details in regional Pokémon 3D model imports.
 - Prepare normal and shiny 3D bundles for 58 regional and related forms, ready for publication; preload Galarian Darmanitan's Zen form before battle when installed.

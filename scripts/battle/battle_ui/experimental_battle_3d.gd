@@ -15,6 +15,8 @@ const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_eff
 const ContactMoveEffect = preload("res://scripts/battle/battle_ui/contact_move_effect_3d.gd")
 const ElectricMoveEffect = preload("res://scripts/battle/battle_ui/electric_move_effect_3d.gd")
 const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbolt_move_effect_3d.gd")
+const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
+const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 var move_command_holds := [false, false, false, false]
@@ -569,7 +571,7 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
-	if key == "ember" and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
+	if key in ["ember", "flamethrower"] and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
 		if entries.get(identities[index], {}).get("action_timing", {}).has("special_attack_2"):
 			return "special_attack_2"
 	if str(move_categories.get(key, {}).get("category", "")).to_lower() != "physical":
@@ -1038,7 +1040,7 @@ func _move_bounds(ident: String) -> Dictionary:
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var a := _move_bounds(actor)
 	var b := _move_bounds(target)
-	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun"] else 0.6
+	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam"] else 0.6
 	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
 	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
 	var direction := (end-source).normalized()
@@ -1067,6 +1069,10 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = ElectricMoveEffect.new()
 	elif MoveEffect.move_key(move) == "thunderbolt":
 		effect = ThunderboltMoveEffect.new()
+	elif MoveEffect.move_key(move) == "flamethrower":
+		effect = FireStreamMoveEffect.new()
+	elif MoveEffect.move_key(move) in ["bubble", "bubblebeam"]:
+		effect = BubbleMoveEffect.new()
 	else:
 		effect = SourceMoveEffect.new() if MoveEffect.move_key(move) in ["ember", "watergun"] else MoveEffect.new()
 	world.add_child(effect)

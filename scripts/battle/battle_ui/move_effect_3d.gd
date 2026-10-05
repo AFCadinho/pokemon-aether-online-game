@@ -1,8 +1,8 @@
 extends Node3D
 ## First native move VFX. Samples the model clock; never changes HP or outcomes.
 signal finished
-const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt"]
-const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448")]
+const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam"]
+const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff")]
 var key := ""
 var elapsed := 0.0
 var duration := 1.0
@@ -35,6 +35,11 @@ static func move_key(move: String) -> String:
 
 static func supports(move: String) -> bool:
 	return move_key(move) in KEYS
+
+static func audio_source_key(move: String) -> String:
+	# No separate Bubble Beam sample is packaged yet; reuse Bubble only in 3D.
+	var normalized := move_key(move)
+	return "bubble" if normalized == "bubblebeam" else normalized
 
 static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 	if source.is_empty() or timing.is_empty(): return {}

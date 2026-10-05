@@ -1,0 +1,41 @@
+{
+  "source_move": "bubblebeam",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_0_bubble0202.png",
+      "source_particle": "ew0061_at_start.ptcl",
+      "source_sha256": "f0aaedf607d62b51a0c0e28d9a758fc6627fc22ae28a6f497bd731572520c6e9",
+      "png_sha256": "932e7766c1721298d4dd05284ddbed68527b01c0648771ccf5011723683db9c3",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_2_bubble0003.png",
+      "source_particle": "ew0061_beam_bubble.ptcl",
+      "source_sha256": "1b33699011ff305f81cf98dc4f16d233b5bdd91a8753ac29b086b43364224ff0",
+      "png_sha256": "d96f32cc46dd6d8e7771702ef1b2905128b8fc40e6d6777b5a0595c747707cae",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_2_water0009.png",
+      "source_particle": "ew0061_df_hit.ptcl",
+      "source_sha256": "13f339660f583c55955a506d3501522663d2b888cc1ebd703fd1004d52716615",
+      "png_sha256": "6dd7724971c7bf1a04662d1be586c519d18f163e56f6061ee654cd47d7c228f9",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "L"
+    }
+  ]
+}

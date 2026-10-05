@@ -1,0 +1,52 @@
+{
+  "source_move": "flamethrower",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_2_fire0007s.png",
+      "source_particle": "ew0053_fire.ptcl",
+      "source_sha256": "a85f7e1f20be492693119977327e05b6db2a23613ba41ff18116a99b892db1df",
+      "png_sha256": "d04e26ce8da16ad791b7a8aa4a95e26112619f97ef475ac9727d67870abcd79c",
+      "size": [
+        512,
+        64
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_flow0703s.png",
+      "source_particle": "ew0053_fire.ptcl",
+      "source_sha256": "a85f7e1f20be492693119977327e05b6db2a23613ba41ff18116a99b892db1df",
+      "png_sha256": "97fed258aa3e01e9ea130767878d2c2146b9c795feb8b435d2838c515a9c7ff3",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_fire0005.png",
+      "source_particle": "ew0053_fire_muzzle.ptcl",
+      "source_sha256": "e8c9bb5c771257501bb0af2eeb1d77317804ca4df99f6c5951cfc0aac3121562",
+      "png_sha256": "70034a7b3f77027fe6c14097a3f8e295178d273ccd6d6f79d1d2d1c427255af6",
+      "size": [
+        1024,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_2_fire0008.png",
+      "source_particle": "ew0053_fire_muzzle.ptcl",
+      "source_sha256": "e8c9bb5c771257501bb0af2eeb1d77317804ca4df99f6c5951cfc0aac3121562",
+      "png_sha256": "c78695c1afb3a09980b9c806c9ce66b981b244fc1354dcd53c6d14dd9e0ed8cb",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    }
+  ]
+}

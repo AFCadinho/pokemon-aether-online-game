@@ -190,7 +190,7 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		var audio: Node
 		if model_presenter.has_method("can_present_move") and model_presenter.can_present_move(move_name) and not pilot.is_empty():
 			var key := NativeMoveEffect.move_key(move_name)
-			var plan := NativeMoveEffect.audio_plan(audio_catalog.get_plan("move", key), pilot)
+			var plan := NativeMoveEffect.audio_plan(audio_catalog.get_plan("move", NativeMoveEffect.audio_source_key(key)), pilot)
 			audio = await _start_3d_audio("move", key, plan, false)
 			if is_instance_valid(audio): audio.set_process(false)
 		if owned_generation != render_generation or not uses_realtime_3d():

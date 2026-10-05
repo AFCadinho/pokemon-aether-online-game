@@ -12,11 +12,11 @@ to the target and back on the same native action clock.
 | Model | Move/part | Bone(s) |
 | --- | --- | --- |
 | Pikachu | Thunder Shock, Thunderbolt / electric body | `spine_02` |
-| Charmander | Ember, Water Gun, Bite / mouth | `head` |
+| Charmander | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Bite / mouth | `head` |
 | Charmander | Scratch / hand | `right_hand` |
-| Squirtle | Ember, Water Gun, Bite / mouth | `head` |
-| Blastoise | Water Gun / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
-| Blastoise | Ember, Bite / mouth | `head` |
+| Squirtle | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Bite / mouth | `head` |
+| Blastoise | Water Gun, Bubble Beam / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
+| Blastoise | Ember, Flamethrower, Bubble, Bite / mouth | `head` |
 
 The primary visual review is Charmander + Ember, Squirtle + Water Gun, and
 Blastoise + Water Gun. Profiles are shared with the shiny version, but never
