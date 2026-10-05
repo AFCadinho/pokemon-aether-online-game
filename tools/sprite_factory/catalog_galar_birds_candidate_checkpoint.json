@@ -1,0 +1,447 @@
+{
+  "schema": 1,
+  "task": "galar-birds-candidates",
+  "date": "2026-10-05",
+  "status": "appearance_review_pending",
+  "source_intake": {
+    "path": "tools/sprite_factory/catalog_galar_birds_source_intake.json",
+    "sha256": "f773b8df48007c4496995ef2902ce6b91065378d252ed9d9502e91b534910b3c",
+    "bytes": 51068
+  },
+  "tools": [
+    {
+      "path": "tools/sprite_factory/catalog_galar_birds_candidates.py",
+      "sha256": "5ab64b3c9b8b894c22901706efdc5958ce004cabf09d3b91e4b94fcb399f73e8",
+      "bytes": 15664
+    },
+    {
+      "path": "tools/sprite_factory/catalog_galar_birds_transition_check.gd",
+      "sha256": "33007fd4f4d0186d478ba50cd0518909dee4eced59c915184202a5ad3393dbf2",
+      "bytes": 3675
+    },
+    {
+      "path": "tools/sprite_factory/scvi_import_worker.py",
+      "sha256": "f4ad0558083f337e5e8213968bae3cd787a030943dbf904bc1b7863c28eae4f7",
+      "bytes": 11278
+    },
+    {
+      "path": "tools/sprite_factory/phase5_godot_export_worker.py",
+      "sha256": "9628db5e4ac10ce18c416eb611f50ce1b4a56a91080260fd6f48c5b749da375d",
+      "bytes": 24394
+    },
+    {
+      "path": "tools/sprite_factory/prepare_battle_3d_runtime.gd",
+      "sha256": "879c64e6787c727d0e67b675c49ae03436cbe3dbcfaa2c3566b661942bd3910b",
+      "bytes": 10035
+    },
+    {
+      "path": "tools/sprite_factory/catalog_dlc_runtime_review.gd",
+      "sha256": "c65b1bd8f7749eec275e9850b4830f2d9250bf76a19f96f39a5dd27fb299736d",
+      "bytes": 9810
+    }
+  ],
+  "entries": [
+    {
+      "species": "articuno-galar",
+      "source_sha256": "5e3c196fcef4e4fdee2b2f087a166237a214294db16cb723735b29f69759162c",
+      "glb_sha256": "af69bc624b9fcba4ddb35152588b393924c57cc231da52fda2f85af20bccd3c2",
+      "runtime_sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+      "native_export_receipt_sha256": "99aab87dbbbc69e862297799c9a10b0722b60fb2399abf4153e679a6de161762",
+      "material_table_sha256": "6f7b3963f32256de2bebbcd2dcf25592788cb29735d1c8f057f2c102ccde520a",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/articuno-galar/normal/model.glb",
+        "sha256": "af69bc624b9fcba4ddb35152588b393924c57cc231da52fda2f85af20bccd3c2",
+        "bytes": 13330252
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/articuno-galar.scn",
+        "sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+        "bytes": 11718957
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/articuno-galar/normal/receipt.json",
+        "sha256": "3791021526dce2c12510c458b8de67038eb1ff015a64503a4f4efd2c5c72a139",
+        "bytes": 20406
+      },
+      "geometry_motion_parity": "fb701dfbad14262513b5da61f49a40e8d84e49e5e993e6892967795e1da50750",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/articuno-galar/import.json",
+        "sha256": "489e11bcf661c954d63a63fbced08386265f86af1ff89d6928c8656495f5c9f3",
+        "bytes": 19641
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/articuno-galar/export.json",
+        "sha256": "99aab87dbbbc69e862297799c9a10b0722b60fb2399abf4153e679a6de161762",
+        "bytes": 4353
+      },
+      "material_effect_proposals": []
+    },
+    {
+      "species": "articuno-galar-shiny",
+      "source_sha256": "5e3c196fcef4e4fdee2b2f087a166237a214294db16cb723735b29f69759162c",
+      "glb_sha256": "89f351e34a5b7b3a17862fae6dbfcc36705e0cdaee28ab7d62ef541c577715b9",
+      "runtime_sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+      "native_export_receipt_sha256": "99aab87dbbbc69e862297799c9a10b0722b60fb2399abf4153e679a6de161762",
+      "material_table_sha256": "4de892037f0947a4785b36b58a5369ed399f1973f93bfacacf7a04281394a0ae",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/articuno-galar/shiny/model.glb",
+        "sha256": "89f351e34a5b7b3a17862fae6dbfcc36705e0cdaee28ab7d62ef541c577715b9",
+        "bytes": 13345520
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/articuno-galar-shiny.scn",
+        "sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+        "bytes": 11877582
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/articuno-galar/shiny/receipt.json",
+        "sha256": "7c0c5cdfc3dabdf2a14881ec93760169114d69b2d0bc16ff6cd02af472f95220",
+        "bytes": 20411
+      },
+      "geometry_motion_parity": "fb701dfbad14262513b5da61f49a40e8d84e49e5e993e6892967795e1da50750",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/articuno-galar/import.json",
+        "sha256": "489e11bcf661c954d63a63fbced08386265f86af1ff89d6928c8656495f5c9f3",
+        "bytes": 19641
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/articuno-galar/export.json",
+        "sha256": "99aab87dbbbc69e862297799c9a10b0722b60fb2399abf4153e679a6de161762",
+        "bytes": 4353
+      },
+      "material_effect_proposals": []
+    },
+    {
+      "species": "zapdos-galar",
+      "source_sha256": "606d8be1417af0aab18fcc850737e4105f62f6bc8aeac4b08bb2bc78d0f3dba3",
+      "glb_sha256": "7ff98bb4c4e528d12255d4d8beec5cc24d17a0313889fb3fc2c371f59c8f5d30",
+      "runtime_sha256": "195fa01ac5df7e258805dd878e2e95191c84aaa49e4944d7de992677cf7a1f6b",
+      "native_export_receipt_sha256": "0e49254ff59c89fca4948caca40b64afecdb4d0eb6267d00532eb052551b74db",
+      "material_table_sha256": "6ad9a69c38c57e2708f780f3ec1fa34eaada55234017e93e05ee0198fbb7913d",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/zapdos-galar/normal/model.glb",
+        "sha256": "7ff98bb4c4e528d12255d4d8beec5cc24d17a0313889fb3fc2c371f59c8f5d30",
+        "bytes": 10296660
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/zapdos-galar.scn",
+        "sha256": "195fa01ac5df7e258805dd878e2e95191c84aaa49e4944d7de992677cf7a1f6b",
+        "bytes": 10212205
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/zapdos-galar/normal/receipt.json",
+        "sha256": "467257e12394273b9f9ee505729c2c67120b133286c1858278956afb16906841",
+        "bytes": 122021
+      },
+      "geometry_motion_parity": "b15ae385a62629db140a318bf1f41c1573d235d4e1c0bc92b897b46421c4f1d1",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/zapdos-galar/import.json",
+        "sha256": "18d2c81b6f9cc7cf78518b6366ff47007f292555aeb2527ebc37dc96e7e77f05",
+        "bytes": 18632
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/zapdos-galar/export.json",
+        "sha256": "0e49254ff59c89fca4948caca40b64afecdb4d0eb6267d00532eb052551b74db",
+        "bytes": 3939
+      },
+      "material_effect_proposals": []
+    },
+    {
+      "species": "zapdos-galar-shiny",
+      "source_sha256": "606d8be1417af0aab18fcc850737e4105f62f6bc8aeac4b08bb2bc78d0f3dba3",
+      "glb_sha256": "1921a27ac89b0601d708fcdda264582da6d5d5e94a54fb0b61474c2c23eaa27e",
+      "runtime_sha256": "89f859336f60f8cb6082da994e8e508352a816386c70db7392ddcdca7d6d8b54",
+      "native_export_receipt_sha256": "0e49254ff59c89fca4948caca40b64afecdb4d0eb6267d00532eb052551b74db",
+      "material_table_sha256": "3d5728b3e2c2723471b3d71edc109e756cc7f75137f99b4a3873d98e3dbf4b8c",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/zapdos-galar/shiny/model.glb",
+        "sha256": "1921a27ac89b0601d708fcdda264582da6d5d5e94a54fb0b61474c2c23eaa27e",
+        "bytes": 10138932
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/zapdos-galar-shiny.scn",
+        "sha256": "89f859336f60f8cb6082da994e8e508352a816386c70db7392ddcdca7d6d8b54",
+        "bytes": 10115759
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/zapdos-galar/shiny/receipt.json",
+        "sha256": "e16daafa3ea1016aafdd87c27733244fb0430e4fbb470535a2cd4e3d01699e95",
+        "bytes": 122026
+      },
+      "geometry_motion_parity": "b15ae385a62629db140a318bf1f41c1573d235d4e1c0bc92b897b46421c4f1d1",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/zapdos-galar/import.json",
+        "sha256": "18d2c81b6f9cc7cf78518b6366ff47007f292555aeb2527ebc37dc96e7e77f05",
+        "bytes": 18632
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/zapdos-galar/export.json",
+        "sha256": "0e49254ff59c89fca4948caca40b64afecdb4d0eb6267d00532eb052551b74db",
+        "bytes": 3939
+      },
+      "material_effect_proposals": []
+    },
+    {
+      "species": "moltres-galar",
+      "source_sha256": "b0d916c6388e414894a50e84232a11a8342c25cc2d735d45f052ffb14a422a43",
+      "glb_sha256": "0106633868d9aa36d2d96be15d263bcae3bbdb31df644acc2d7826b4fb196246",
+      "runtime_sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+      "native_export_receipt_sha256": "54175bf0320e75743310e6a93c6c7decd26a6e15262d7280541bda52b01e7144",
+      "material_table_sha256": "894cebb8ffa4eabcb5cb71ff308e8486b264e469558904a1d3d06f27c31729d8",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/moltres-galar/normal/model.glb",
+        "sha256": "0106633868d9aa36d2d96be15d263bcae3bbdb31df644acc2d7826b4fb196246",
+        "bytes": 11468624
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/moltres-galar.scn",
+        "sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+        "bytes": 11435714
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/moltres-galar/normal/receipt.json",
+        "sha256": "4bb20f6d1bae063bf21d858b5f5f69cfbac9dfefc20ff4720cd662226ca842e4",
+        "bytes": 444967
+      },
+      "geometry_motion_parity": "30d51e9d7ea511425e058045a1413ffc46d2b35f1ed6883a50f39e0672943a10",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/moltres-galar/import.json",
+        "sha256": "a32ff0d962fb41bf78d207829543f95f3e9895b4cb2fbd5acfe065cf40a1ad40",
+        "bytes": 22895
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/moltres-galar/export.json",
+        "sha256": "54175bf0320e75743310e6a93c6c7decd26a6e15262d7280541bda52b01e7144",
+        "bytes": 4910
+      },
+      "material_effect_proposals": [
+        {
+          "material": "fire_a_00",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.25,
+          "visual_approved": false
+        },
+        {
+          "material": "fire_a_01",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.200000002980232,
+          "visual_approved": false
+        },
+        {
+          "material": "fire_b",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.180000007152557,
+          "visual_approved": false
+        }
+      ]
+    },
+    {
+      "species": "moltres-galar-shiny",
+      "source_sha256": "b0d916c6388e414894a50e84232a11a8342c25cc2d735d45f052ffb14a422a43",
+      "glb_sha256": "cf47bc6036a91f5e0215b84a17cda81e03fea33e0bb00ad3a84fa4ee91731689",
+      "runtime_sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+      "native_export_receipt_sha256": "54175bf0320e75743310e6a93c6c7decd26a6e15262d7280541bda52b01e7144",
+      "material_table_sha256": "f7fb2b45f0a463e4d6cad3aa40ac5b5af612de78ef1cd4fdf13a6478da5e6b99",
+      "glb": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/moltres-galar/shiny/model.glb",
+        "sha256": "cf47bc6036a91f5e0215b84a17cda81e03fea33e0bb00ad3a84fa4ee91731689",
+        "bytes": 11729400
+      },
+      "runtime": {
+        "path": ".tmp/galar-birds-candidates-v3/runtime-v1/moltres-galar-shiny.scn",
+        "sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+        "bytes": 12034329
+      },
+      "receipt": {
+        "path": ".tmp/galar-birds-candidates-v3/materials/moltres-galar/shiny/receipt.json",
+        "sha256": "8e4546b627e166727322a19a4ac8ecbdd525cc9c2d08e8547f7b8487e8937544",
+        "bytes": 444989
+      },
+      "geometry_motion_parity": "30d51e9d7ea511425e058045a1413ffc46d2b35f1ed6883a50f39e0672943a10",
+      "clips": [
+        "damage",
+        "faint_loop",
+        "faint_start",
+        "idle",
+        "physical_attack",
+        "physical_attack_2",
+        "sleep",
+        "special_attack"
+      ],
+      "native_import_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/import/moltres-galar/import.json",
+        "sha256": "a32ff0d962fb41bf78d207829543f95f3e9895b4cb2fbd5acfe065cf40a1ad40",
+        "bytes": 22895
+      },
+      "native_export_receipt": {
+        "path": ".tmp/galar-birds-candidates-v2/export/moltres-galar/export.json",
+        "sha256": "54175bf0320e75743310e6a93c6c7decd26a6e15262d7280541bda52b01e7144",
+        "bytes": 4910
+      },
+      "material_effect_proposals": [
+        {
+          "material": "fire_a_00",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.25,
+          "visual_approved": false
+        },
+        {
+          "material": "fire_a_01",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.200000002980232,
+          "visual_approved": false
+        },
+        {
+          "material": "fire_b",
+          "height": 0.0,
+          "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
+          "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
+          "source_height": 0.180000007152557,
+          "visual_approved": false
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "path": ".tmp/galar-birds-candidates-v3/stage.json",
+      "sha256": "42f04a28beacd13e73cd789be54d83b15e9fa725c492330810d6b3e351bf3b83",
+      "bytes": 1273097
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/material-status.json",
+      "sha256": "18884d227081f3b2a42f91ca2470dd2aa5cc2366109992279035609b2574a612",
+      "bytes": 1568713
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/runtime-v1/report.json",
+      "sha256": "10bc1e40321d32f5891925e1a0e05b4e6d735726247f751be8fd1677f2e956ce",
+      "bytes": 842232
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/captures-v1/catalog.json",
+      "sha256": "a4051c6f38c83b5e727eae6cb66d04958d8c66531dd3a8d6034767197d9e029d",
+      "bytes": 1365148
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/captures-v1/godot-review.json",
+      "sha256": "ba308fccd346a8019cfc3614320ca0bb71f2c939f7eb1e639f5549d98e509107",
+      "bytes": 78060
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/transitions-graphics.json",
+      "sha256": "cfb35f950d94613151d9b6a96e96d6bc57df26ec585c3fb94b267ea779746e05",
+      "bytes": 1319
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/transitions-graphics.log",
+      "sha256": "8585c67cb98011c96e85750bdbc78f4c997b4599a131005fa040f9b43ee182c6",
+      "bytes": 1451
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/conversion-v1.log",
+      "sha256": "23ec1825ccadaf3462dc84e88382f822f0e08ac7e8772c3fcfb1b019cb3d4941",
+      "bytes": 5843
+    },
+    {
+      "path": ".tmp/galar-birds-candidates-v3/review-v1/manifest.json",
+      "sha256": "1ec2a4044f07f1a559cab5bdb994af664771290debdb13e3ceda5c994a666a62",
+      "bytes": 30800
+    }
+  ],
+  "checks": {
+    "stage_contract": true,
+    "normal_shiny_geometry_motion_parity": true,
+    "runtime_clip_counts": [
+      8,
+      8,
+      8,
+      8,
+      8,
+      8
+    ],
+    "godot_captures": 126,
+    "review_pinned_files": 253,
+    "animation_switches": 384,
+    "idle_sleep_blends": 12,
+    "transition_failures": []
+  },
+  "approvals": {
+    "appearance": false,
+    "battle": false,
+    "performance": false,
+    "runtime": false,
+    "bundles": false
+  },
+  "remaining": [
+    "User appearance review of the six candidates, including Moltres authored surface proposal",
+    "Battle scale, floor clearance and both cameras",
+    "Investigate Godot null-material diagnostics from conversion/transition runs before runtime admission",
+    "Performance, runtime form resolution/preloading, bundles and separately authorized upload"
+  ],
+  "limitations": [
+    "Biochao export v1 rejected because motion clocks differed from SCVI material clocks; current geometry and skeletal clips use native SCVI import",
+    "Moltres auxiliary normal displacement disabled after tearing diagnostic; native skeleton and source UV colour motion retained. This is a visual proposal, not full source-effect equivalence",
+    "No approved catalog, gameplay code or R2 objects changed"
+  ]
+}
