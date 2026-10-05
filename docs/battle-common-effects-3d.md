@@ -161,7 +161,7 @@ Only explicit player approval completes an entry.
 - [x] Paralysis — persistent tint only
 - [ ] Freeze — player could not visually test it yet
 - [x] Sleep — Z glyph layout follows camera rotation
-- [x] Substitute — imported textured doll approved; HUD placement correction awaiting review
+- [x] Substitute — imported textured doll and corrected HP HUD placement approved
 - [x] Mega evolution
 
 Gem activation events emitted after a move announcement are presented before
@@ -206,7 +206,7 @@ players disconnected. Substitute/status lifecycle checks remain applicable.
 Battle prop review:
 
 - [x] Textured Substitute doll replacement.
-- [ ] Poké Ball summon / switch release.
+- [x] Poké Ball summon / switch release — approved with the clearer throw.
 - [x] Poké Ball return.
 - [x] Capture success and breakout.
 
@@ -217,4 +217,4 @@ and center while the original Pokémon is hidden, so the HP HUD no longer uses
 its fixed screen fallback. Projection follows camera rotation, pop-in and hits;
 revealing the Pokémon for an attack returns its original bounds.
 
-- [ ] Corrected Substitute HP HUD placement.
+- [x] Corrected Substitute HP HUD placement.
