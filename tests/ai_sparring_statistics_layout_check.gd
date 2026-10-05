@@ -37,7 +37,8 @@ func _run() -> void:
 			var intermediate_card := list.get_node("AiSparringStatsCard_ai5_intermediate_v1") as PanelContainer
 			var hard_card := list.get_node("AiSparringStatsCard_ai5_hard_v5") as PanelContainer
 			_check(intermediate_card.get_index() < hard_card.get_index(), "Intermediate appears before Hard")
-			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_elite_v1", "ai5_nightmare_v1"]:
+			_check(not list.has_node("AiSparringStatsCard_ai5_elite_v1"), "Retired Elite is hidden even in stale statistics responses")
+			for bot: String in ["ai4_beginner_v1", "ai5_hard_v5", "ai5_intermediate_v1", "ai5_nightmare_v1"]:
 				var card := list.get_node("AiSparringStatsCard_" + bot) as PanelContainer
 				_check(card.get_global_rect().end.x <= width + 1, "Card fits viewport: " + locale + str(width))
 				var grid := card.find_child("Metrics", true, false) as GridContainer

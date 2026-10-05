@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Retire Grandmaster Elite from AI Sparring. Intermediate, Hard and Nightmare remain available; historical Elite matches keep their original labels.
+
 - Improve text readability inside compact 3D stat and effect badges while keeping the HP panel visually dominant.
 
 - Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.

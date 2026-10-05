@@ -90,7 +90,7 @@ func _ready() -> void:
 	for entry: Array in [["", _t("all_tiers")], ["none", "Open"], ["aether-ou", "Aether OU"], ["aether-uu", "Aether UU"]]:
 		tier.add_item(entry[1])
 		tier.set_item_metadata(tier.item_count - 1, entry[0])
-	for entry: Array in [["", _t("all_levels")], ["ai4", "Scholar"], ["intermediate", "Grandmaster Intermediate"], ["active", "Grandmaster Hard"], ["elite", "Grandmaster Elite"], ["nightmare", "Grandmaster Nightmare"]]:
+	for entry: Array in [["", _t("all_levels")], ["ai4", "Scholar"], ["intermediate", "Grandmaster Intermediate"], ["active", "Grandmaster Hard"], ["nightmare", "Grandmaster Nightmare"]]:
 		difficulty.add_item(entry[1])
 		difficulty.set_item_metadata(difficulty.item_count - 1, entry[0])
 	refresh = Button.new()
