@@ -128,3 +128,66 @@ Focused evidence checks passed: all three archive hashes, 24 selected action
 names and their 48 raw motion files, recognized material profiles, official
 rare comparisons and all 41 expected source images. There are no runtime code
 changes, so no Godot gameplay tests or full release gate were run.
+
+## Candidate checkpoint: 2026-10-05
+
+Task `galar-birds-candidates` produced six Godot appearance candidates.
+`catalog_galar_birds_candidate_checkpoint.json` pins their GLBs, standalone
+SCNs, native import/export receipts, production tools and review evidence.
+The original source-investigation findings above remain historical evidence;
+normal/shiny candidates have now been rendered, but user approval is pending.
+No approved catalog or gameplay selection changed.
+
+Production uses `catalog_galar_birds_candidates.py` in phases `export`,
+`material`, `stage`, with the pinned intake and mounted source directory.
+Use a new `--work` directory inside the assigned frontend `.tmp`. The native
+SCVI importer must be present in the slot's `.tmp/scvi-importer` at commit
+`b0c98d9fcaab85a04ad35e2d111bae4cad6c1e04`, with its local Python dependencies.
+Then run `prepare_battle_3d_runtime.gd` through `slot-env`, supplying the stage
+report and a fresh runtime output directory. Review with
+`catalog_dlc_runtime_review.gd` and test consecutive clips using
+`catalog_galar_birds_transition_check.gd` (`POKEAETHER_GALAR_RUNTIME` points to
+runtime report; `POKEAETHER_GALAR_TRANSITIONS` to output JSON).
+
+### Corrections and explicit limitations
+
+- The first Biochao export used a 24 fps action clock incompatible with the
+  matching SCVI material tracks. It was rejected. Current geometry and all
+  eight skeletal clips come from the native SCVI files; visibility and eyelid
+  UV tracks use the matching material files. Full pose channels prevent stale
+  transforms when switching between flight and grounded sleep.
+- Official rare material tables supply body textures and eye colours.
+  Normal/shiny geometry and motion hashes match for each pair.
+- Moltres' custom flame graph needs an explicit albedo binding before the
+  source-table reconstruction. Layer colours are blended in linear light and
+  encoded to sRGB, avoiding saturated red/orange output.
+- The generic auxiliary displacement approximation tore Moltres' thin fire
+  surfaces. A controlled height-zero versus double-sided comparison showed
+  displacement was the cause. The candidates retain native skeletal motion
+  and source UV colour animation, with auxiliary normal displacement set to
+  zero. Original heights and the unapproved visual proposal are recorded in
+  both variant receipts. This is not claimed as exact source-effect parity.
+
+### Evidence and checks
+
+The native export remains in `.tmp/galar-birds-candidates-v2/`; the final
+materials, runtime scenes, captures and review are in
+`.tmp/galar-birds-candidates-v3/`. Its `export` link reuses the same task's
+native export. Failed/intermediate evidence is retained separately.
+
+- Stage metadata/file preflight passes.
+- Six standalone scenes retain eight clips each. Godot capture checks report
+  no missing actions, invalid geometry or pose errors.
+- 126 captures cover seven poses, three viewing angles and both variants.
+- All 384 consecutive clip switches and 12 idle/sleep blends match their
+  independently reset reference poses, including eyelid UV and visibility.
+- The review manifest pins 253 page/image files. Appearance review is served
+  locally at `http://127.0.0.1:8801/`; browser automation was unavailable, so
+  the user was asked to open it directly.
+
+The conversion and transition logs contain Godot `Parameter "material" is
+null` diagnostics even though the structural/pose checks pass. Their cause
+must be resolved before runtime admission; they are not counted as a clean
+runtime qualification. Battle scale/floor clearance, user appearance and
+battle approval, performance, form resolution/preloading and bundles remain
+separate next steps. No R2 upload or release was performed.
