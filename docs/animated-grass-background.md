@@ -6,16 +6,17 @@ The shared 2D grass video is selected through `BattleEnvironmentProfile.wild_2d_
 
 - User source: `NEW BACKGROUND (2).mp4`, 1920×1080, 24 fps, 20 seconds.
 - Source SHA-256: `31c4662d5d699d29c65bd922217b43b864af41b7bc15ddb3157d643d19fd7297`.
-- Runtime asset: `assets/video/battle/grass_meadow.ogv`, silent Ogg Theora, 1152×648, 24 fps, 19 seconds, 1,345,267 bytes.
+- Runtime asset: `assets/video/battle/grass_meadow.ogv`, silent Ogg Theora, 1920×1080, 24 fps, 19 seconds, 9,631,399 bytes.
 - Crossfade the last second into the original first second and begin at source second 1. This joins the end to the start without reversing the animation.
-- Encode with FFmpeg `libtheora`, quality 6, keyframe interval 64, `yuv420p`.
+- Preserve the original 1080p resolution for fullscreen battles; the grass-specific asset budget is 12 MiB. This replaces the earlier 648p quality-6 encode and its 2 MiB budget.
+- Encode with FFmpeg `libtheora`, quality 9, keyframe interval 64, `yuv420p`.
 - Extract the first decoded video frame as `assets/background/battle/environments/grass_animated_fallback.jpg` (FFmpeg JPEG quality 2).
 - Animated wild grass battles currently use a fully transparent 1536×1024 `GradientTexture2D` in `grass_animated_2d.tres`. This removes the visible platform while preserving its layout canvas, Pokémon anchors, hazards and screen effects. Other grass profiles retain `grass_platform_v3.png`.
 
 Recreate from the source with:
 
 ```sh
-ffmpeg -i 'NEW BACKGROUND (2).mp4' -filter_complex '[0:v]scale=1152:648:flags=lanczos,split[a][b];[a]trim=start=1:end=20,setpts=PTS-STARTPTS[body];[b]trim=start=0:end=1,setpts=PTS-STARTPTS[head];[body][head]xfade=transition=fade:duration=1:offset=18,format=yuv420p[out]' -map '[out]' -an -c:v libtheora -q:v 6 -g 64 grass_meadow.ogv
+ffmpeg -i 'NEW BACKGROUND (2).mp4' -filter_complex '[0:v]split[a][b];[a]trim=start=1:end=20,setpts=PTS-STARTPTS[body];[b]trim=start=0:end=1,setpts=PTS-STARTPTS[head];[body][head]xfade=transition=fade:duration=1:offset=18,format=yuv420p[out]' -map '[out]' -an -c:v libtheora -q:v 9 -g 64 grass_meadow.ogv
 ffmpeg -i grass_meadow.ogv -frames:v 1 -q:v 2 grass_animated_fallback.jpg
 ```
 
