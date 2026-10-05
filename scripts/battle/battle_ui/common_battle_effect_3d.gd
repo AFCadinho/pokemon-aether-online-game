@@ -258,7 +258,7 @@ func _update_visuals() -> void:
 			"rise": y = height * (0.05 + progress * 0.85 + offset * 0.1)
 			"fall": y = height * (0.95 - progress * 0.85 - offset * 0.1)
 			"heal": spread *= 0.75
-			"poison": size = 0.65 + phase; y = height * (0.1 + phase * 0.7)
+			"poison": size = (0.65 + phase) * 0.6; y = height * (0.1 + phase * 0.7)
 			"fire": size = 0.8 + 0.4 * sin(progress * 22.0 + index); y = height * (0.15 + phase * 0.65)
 			"ice": size = 0.9; y = height * (0.2 + offset * 0.65); angle = offset * TAU
 			"electric": y = height * (0.25 + offset * 0.55); size *= 1.1; spread *= 0.75
