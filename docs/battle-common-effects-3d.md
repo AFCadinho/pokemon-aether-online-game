@@ -4,7 +4,7 @@ The existing 2D effect catalog supplies canonical event keys, aliases and sound
 metadata. Active desktop 3D battles present general events using short native
 geometry from `common_battle_effect_3d.gd`, owned by the arena. One-shot effects leave model poses/materials and gameplay state alone. Persistent
 status presentation separately owns a reversible tint overlay and quiet repeating
-sleep/freeze particles; native sleep/frozen idle playback follows the displayed condition. Actual 2D fallback retains its current presentation.
+sleep particles; native sleep/frozen idle playback follows the displayed condition. Actual 2D fallback retains its current presentation.
 
 ## Coverage
 
@@ -26,7 +26,7 @@ same catalog as 2D, before native selection. No per-move authoring is required.
 | `status_poisoned` | Rising purple bubbles | 0.70 |
 | `status_badly_poisoned` | Rising darker purple bubbles | 0.75 |
 | `status_burned` | Flickering orange embers | 0.70 |
-| `status_frozen` | Blue crystals around the body | 0.75 |
+| `status_frozen` | Blue crystals only when Freeze blocks an action | 0.75 |
 | `status_sleeping` | Rising blue Z glyphs | 0.80 |
 | `status_confused` | Small gold stars orbiting above the head | 0.70 |
 | `grassy_terrain_start` | Expanding green rings centered on the battlefield | 0.75 |
@@ -100,8 +100,10 @@ slots feed the same displayed condition into the native presenter, preserving
 pending-status event order.
 
 Native poison/toxic, burn and paralysis keep only the quiet model tint between
-events. Their one-shot activation/damage/block effects retain particles. Sleep
-and freeze retain silent particle pulses following replay pause. Sleep glyphs
+events. Their one-shot activation/damage/block effects retain particles. Freeze
+also uses only the model tint, with a short ice burst only when it blocks an
+action. Applying Freeze does not play a native particle burst. Sleep retains
+silent particle pulses following replay pause. Sleep glyphs
 use a camera-relative layout above the model, updated as the camera rotates;
 their materials face the camera and their anchor follows the Pokémon.
 Frozen resting playback pauses; sleep retains the native sleep clip. Per-actor
@@ -159,7 +161,7 @@ Only explicit player approval completes an entry.
 - [x] Toxic — persistent tint only; short event particles
 - [x] Burn — persistent tint only
 - [x] Paralysis — persistent tint only
-- [ ] Freeze — player could not visually test it yet
+- [ ] Freeze — tint-only idle; ice burst only on blocked actions, awaiting re-review
 - [x] Sleep — Z glyph layout follows camera rotation
 - [x] Substitute — imported textured doll and corrected HP HUD placement approved
 - [x] Mega evolution

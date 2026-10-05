@@ -34,7 +34,9 @@ ops/worktrees/slot-env slot-b -- godot --path .worktrees/slot-b/frontend --scrip
 ```
 
 It selects 3D, shows Dragonite and Pikachu, and immediately freezes Pikachu.
-Use **Bevries links**, **Bevries rechts**, and **Ontdooi alles**. Drag the arena
+Use **Bevries links**, **Bevries rechts**, and **Ontdooi alles**. Freeze uses
+only a tint and paused idle. **Aanval geblokkeerd (rechts)** forces a failed
+action with a short ice burst on Pikachu through the real event renderer. Drag the arena
 to rotate the camera. The controls force only the native visual status, frozen
 idle and HUD indicator; no gameplay status, party, save, or server battle changes.
 Without an explicit `POKEAETHER_3D_STAGE_REPORT`, this mode uses the normal pinned
