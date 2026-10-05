@@ -66,11 +66,13 @@ def main():
     if not name or name[0].strip() != args.name:
         raise RuntimeError("Virtual device identity changed; refusing to launch an app")
     if started:
-        # Rotate the desktop presentation; keep the AVD's portrait framebuffer
-        # so Android retains its normal landscape resolution and cutout layout.
-        result = device("emu", "rotate")
-        if result.returncode or "KO:" in result.stdout:
-            raise RuntimeError(result.stderr + result.stdout)
+        # Android's fixed landscape and the host's clockwise rotation use
+        # opposite directions. Three clockwise turns keep the game upright.
+        # Retain the portrait framebuffer for its normal cutout layout.
+        for _ in range(3):
+            result = device("emu", "rotate")
+            if result.returncode or "KO:" in result.stdout:
+                raise RuntimeError(result.stderr + result.stdout)
     installed = device("shell", "pm", "path", args.package)
     if not installed.stdout.startswith("package:"):
         raise RuntimeError("The requested app is not installed on the virtual device")
