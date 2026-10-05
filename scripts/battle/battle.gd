@@ -10461,6 +10461,7 @@ func _render_battle_events(
 				if move_animation_result != "":
 					presentation["move_animation_result"] = move_animation_result
 				if SettingsManager.battle_animations and animation_router.uses_realtime_3d():
+					presentation["3d_move_hit"] = preload("res://scripts/battle/battle_3d_move_timing.gd").has_target_hit(ordered_events, event_index)
 					var pilot_hit := preload("res://scripts/battle/battle_3d_move_timing.gd").damage_index(ordered_events, event_index)
 					presentation["3d_impact_bridge"] = pilot_hit >= 0 and move_animation_result == "" and (
 						hp_event_helper.event_has_hp_loss(ordered_events[pilot_hit])

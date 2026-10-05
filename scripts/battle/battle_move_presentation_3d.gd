@@ -5,15 +5,20 @@ extends RefCounted
 var generation := 0
 var started: Dictionary = {}
 var recovery: Dictionary = {}
+var effects: Array[Node] = []
 
 func begin_attack(presenter: Node, actor: String, move: String) -> void:
 	if not is_instance_valid(presenter) or not presenter.handles(actor):
 		return
 	started[actor] = move
-	presenter.start_action(actor, presenter.attack_action_for(move, actor))
+	if presenter.has_method("start_move_action"):
+		presenter.start_move_action(actor, move)
+	else:
+		presenter.start_action(actor, presenter.attack_action_for(move, actor))
 
-func play_move(presenter: Node, move: String, actor: String, _target: String, options: Dictionary, audio: Node = null) -> void:
+func play_move(presenter: Node, move: String, actor: String, _target: String, options: Dictionary, audio: Node = null, effect: Node = null) -> void:
 	var owned_generation := generation
+	if is_instance_valid(effect): effects.append(effect)
 	if not is_instance_valid(presenter):
 		return
 	if presenter.handles(actor):
@@ -28,6 +33,9 @@ func play_move(presenter: Node, move: String, actor: String, _target: String, op
 			started.erase(actor)
 			return
 		await presenter.wait_action(actor)
+	while owned_generation == generation and is_instance_valid(effect) and not effect.done:
+		await presenter.get_tree().process_frame
+	effects = effects.filter(func(live): return is_instance_valid(live) and not live.done)
 	# Model-only routes pass no move audio. Optional future native-effect audio
 	# stays inside this boundary; pilot recovery joins the ordered damage event.
 	while owned_generation == generation and is_instance_valid(audio) and not audio.done:
@@ -48,6 +56,9 @@ func play_effect(_presenter: Node, _effect: String, _target: String) -> void:
 
 func cancel() -> void:
 	generation += 1
+	for effect: Node in effects:
+		if is_instance_valid(effect): effect.cancel()
+	effects.clear()
 	started.clear()
 	recovery.clear()
 
@@ -61,5 +72,8 @@ func finish_recovery(presenter: Node, target: String = "") -> void:
 	var owned_generation := generation
 	if is_instance_valid(presenter):
 		await presenter.wait_action(actor)
+	while owned_generation == generation and is_instance_valid(presenter) and not effects.is_empty():
+		effects = effects.filter(func(effect): return is_instance_valid(effect) and not effect.done)
+		if not effects.is_empty(): await presenter.get_tree().process_frame
 	if owned_generation == generation:
 		recovery.clear()

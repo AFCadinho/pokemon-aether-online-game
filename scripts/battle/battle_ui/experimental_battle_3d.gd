@@ -10,6 +10,7 @@ signal ball_cue(ident: String, key: String)
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
+const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 const StatusEffect = preload("res://scripts/battle/battle_ui/status_effect_3d.gd")
@@ -859,6 +860,60 @@ func create_common_effect(key: String, ident: String) -> Node:
 	effect.start(key, body_height, body_radius, guard, common_effect_speed)
 	return effect
 
+func can_present_move(move: String) -> bool:
+	return active and is_instance_valid(world) and MoveEffect.supports(move)
+
+func _move_visual(ident: String) -> Node3D:
+	if not handles(ident): return null
+	var index := actor_index(ident)
+	if not actor_shown[index] or lifecycle[index] in ["hidden", "empty", "fainted"]: return null
+	var doll: Node3D = substitute_models[index]
+	var visual: Node3D = doll if is_instance_valid(doll) and doll.visible else actors[index]
+	return visual if is_instance_valid(visual) and visual.visible else null
+
+func _move_bounds(ident: String) -> Dictionary:
+	var index := actor_index(ident)
+	var visual := _move_visual(ident)
+	if visual != actors[index]:
+		return {"position": world.to_local(visual.global_position), "height": visual.idle_scale * 1.2, "radius": visual.idle_scale * 0.6}
+	return _effect_bounds(index)
+
+func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
+	var a := _move_bounds(actor)
+	var b := _move_bounds(target)
+	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun"] else 0.6
+	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
+	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
+	var direction := (end-source).normalized()
+	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
+	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
+	return {"source": source, "target": end, "radius": b.radius}
+
+func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
+	if not can_present_move(move): return null
+	var source := _move_visual(actor)
+	var destination := _move_visual(target)
+	if source == null or destination == null: return null
+	var timing := move_timing(move, actor)
+	if timing.is_empty(): return null
+	var effect := MoveEffect.new()
+	world.add_child(effect)
+	effect.view_camera = camera
+	common_effects.append(effect)
+	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
+	effect.start(move, timing, options, bind_action_clock(actor), _move_anchors.bind(actor,target,move),
+		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
+	return effect
+
+func start_move_action(ident: String, move: String) -> void:
+	if handles(ident):
+		var index := actor_index(ident)
+		_action(attack_action_for(move, ident), index, 1.25 if MoveEffect.supports(move) else 0.0)
+		# play() schedules its reset; sample frame zero before binding a VFX clock.
+		if MoveEffect.supports(move) and players[index] != null:
+			players[index].seek(0.0, true)
+			players[index].advance(0.0)
+
 func prepare_mega_form(ident: String, species: String, shiny: bool, timeout_ms := 5000) -> bool:
 	var index := actor_index(ident)
 	var key := ReviewedModels.key(species, shiny)
@@ -947,7 +1002,13 @@ func move_timing(move: String, ident: String) -> Dictionary:
 	var mapped := ActionMap.resolve(attack_action_for(move, ident), players[index].get_animation_list(), timing)
 	if mapped.is_empty():
 		return {}
-	return preload("res://scripts/battle/battle_3d_move_timing.gd").profile(identities[index], move, mapped.action, timing)
+	var profile := preload("res://scripts/battle/battle_3d_move_timing.gd").profile(identities[index], move, mapped.action, timing)
+	if MoveEffect.supports(move) and not mapped.loop:
+		# Baseline choreography for unreviewed species; preserve authored pilot markers.
+		if profile.is_empty():
+			profile = {"action": mapped.action, "frames": mapped.duration * 60.0, "impact_frame": mapped.duration * 60.0 * 0.45}
+		profile["move_key"] = MoveEffect.move_key(move)
+	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:
 	if not handles(ident):
@@ -1746,7 +1807,7 @@ func actor_visual_rect(ident: String) -> Rect2:
 func actor_anchor(ident: String) -> Vector2:
 	return _anchor(true, actor_index(ident)) if handles(ident) else Vector2.ZERO
 
-func _action(action: String, index: int) -> void:
+func _action(action: String, index: int, max_seconds := 0.0) -> void:
 	if not active or players[index] == null:
 		return
 	if lifecycle[index] == "fainted" and action != "faint_loop":
@@ -1772,7 +1833,9 @@ func _action(action: String, index: int) -> void:
 	animation.length = mapped.duration
 	animation.loop_mode = Animation.LOOP_LINEAR if mapped.loop else Animation.LOOP_NONE
 	players[index].speed_scale = playback_speed
-	players[index].play(mapped.clip, -1, mapped.speed * ActionMap.presentation_speed(action, mapped.duration / mapped.speed))
+	var clip_speed: float = mapped.speed * ActionMap.presentation_speed(action, mapped.duration / mapped.speed)
+	if max_seconds > 0.0: clip_speed = maxf(clip_speed, mapped.duration / max_seconds)
+	players[index].play(mapped.clip, -1, clip_speed)
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 
 func _hybrid_size_limit() -> float:

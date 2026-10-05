@@ -42,6 +42,7 @@ var audio_catalog := preload("res://scripts/battle/animations/battle_audio_catal
 var active_audio_nodes: Array[Node] = []
 var prepared_moves: Dictionary = {}
 var model_presenter: Node
+const NativeMoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 var move_presentation_3d := preload("res://scripts/battle/battle_move_presentation_3d.gd").new()
 
 func uses_realtime_3d() -> bool:
@@ -186,10 +187,19 @@ func play_attack_tween_for_actor(actor_ident: String, move_name: String = "") ->
 		if owned_generation != render_generation or not uses_realtime_3d():
 			return
 		var pilot: Dictionary = model_presenter.move_timing(move_name, actor_ident) if model_presenter.has_method("move_timing") else {}
-		# Model-only attacks have no move VFX, so their 2D animation sounds
-		# are neither prepared nor played. Damage/heal/stat audio is separate.
+		var audio: Node
+		if model_presenter.has_method("can_present_move") and model_presenter.can_present_move(move_name) and not pilot.is_empty():
+			var key := NativeMoveEffect.move_key(move_name)
+			var plan := NativeMoveEffect.audio_plan(audio_catalog.get_plan("move", key), pilot)
+			audio = await _start_3d_audio("move", key, plan, false)
+			if is_instance_valid(audio): audio.set_process(false)
+		if owned_generation != render_generation or not uses_realtime_3d():
+			_release_3d_audio(audio)
+			return
+		# Prepare optional native-move audio before starting the model clock.
+		# Unimplemented moves stay silent; common damage/heal/stat audio is separate.
 		move_presentation_3d.begin_attack(model_presenter, actor_ident, move_name)
-		prepared_moves[actor_ident] = {"move": move_name, "pilot": pilot}
+		prepared_moves[actor_ident] = {"move": move_name, "pilot": pilot, "audio": audio}
 		return
 
 	match _get_player_id_from_ident(actor_ident):
@@ -223,7 +233,23 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 		prepared_moves.erase(actor_ident)
 		var playback_options := options.duplicate()
 		playback_options["native_timing"] = prepared.get("pilot", {})
-		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options)
+		var effect: Node
+		if model_presenter.has_method("create_move_effect"):
+			effect = model_presenter.create_move_effect(move_name, actor_ident, _target_ident, playback_options)
+		var audio: Node = prepared.get("audio")
+		if is_instance_valid(effect) and not effect.done:
+			if is_instance_valid(audio):
+				# Contact sounds also describe a swing on a miss; no hit burst is shown.
+				audio.clock = effect.seconds
+				audio.set_process(true)
+				audio.begin()
+				effect.finished.connect(func():
+					if is_instance_valid(audio):
+						if not effect.cancelled: audio._process(0.0)
+						_release_3d_audio(audio, not effect.cancelled and owned_generation == render_generation), CONNECT_ONE_SHOT)
+		else:
+			_release_3d_audio(audio)
+		await move_presentation_3d.play_move(model_presenter, move_name, actor_ident, _target_ident, playback_options, null, effect)
 		return
 
 	var move_key: String = _normalize_move_name(move_name)
