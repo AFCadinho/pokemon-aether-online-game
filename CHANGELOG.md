@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep animated pixel-art Pokémon crisp when enlarged in 2D battles, while retaining smooth filtering for HOME artwork and rendered HD sprites.
+
 - Make the 3D item activation effect golden, with light bands and particles sweeping up and back down around the Pokémon.
 
 - Preserve full 1080p detail in the animated grass battle background and its fallback image, with higher-quality video compression.
