@@ -1,0 +1,108 @@
+{
+  "schema": 1,
+  "task": "mega-garchomp-posture",
+  "date": "2026-10-05",
+  "finding": {
+    "garchomp-mega": "current 20001 battlewait is horizontal flight; native 00001 battlewait stands upright",
+    "garchomp-mega-z": "native 20001 battlewait is upright; no analogous posture problem found"
+  },
+  "candidate_policy": "review-only full native bank-00 skeletal set on the exact approved Mega Garchomp normal/shiny scenes; materials and meshes retained",
+  "appearance_approved": false,
+  "battle_approved": false,
+  "runtime_changed": false,
+  "published": false,
+  "checks": {
+    "skeletons_match": true,
+    "normal_and_shiny": true,
+    "pose_order_independent": true,
+    "comparison_entries": 6,
+    "captures": 36
+  },
+  "evidence": [
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/ground/import.json",
+      "sha256": "1696f8ce2a38ef609afdb1076af4ea886c8fd9e7dc57f2e0c5f700f7ed397939"
+    },
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/ground/export/motion.json",
+      "sha256": "c7a905dad942160577d83a83df951e9cfad7fd0c65a2a8697285f1e10cdce6cb"
+    },
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/ground/export/motion.glb",
+      "sha256": "2e148add263e2517b69f7406d43aebc6fecd8422f25ba7e945b32c0fffb671c0"
+    },
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/candidates/catalog.json",
+      "sha256": "21e8201d3d4b8816e18cf4468495ed673d26fbcd05b859f2cd014ae36e5337cb"
+    },
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/review/catalog.json",
+      "sha256": "4d92967a13970bbe2f8c69d74e806afe9167fa089e9bee2b10dcba4f62dcc29d"
+    },
+    {
+      "path": ".tmp/mega-garchomp-posture-v1/review/godot-review.json",
+      "sha256": "b978db877c40a79f548e1304f1e6d64deb2d00a7373e395e90d6842c62e0ff96"
+    }
+  ],
+  "review_files": {
+    "garchompmega-ground-idle-front.png": "1f7040d38b47193cb8047827c21938d51fbc3918b11d7e9e26612b7d0080fdde",
+    "garchompmega-ground-idle-side.png": "39c4745499eb06ffb99f5130b477f350c05268fbe8bf9d6cd0095e2bb99ef323",
+    "garchompmega-ground-physical_attack-front.png": "4479a8359ed7002c0ab80f5d56ae4867aa2ebc0dad37796462b6a0708fcd6fe8",
+    "garchompmega-ground-special_attack-front.png": "96aaaf890ef2bd0716a7bdaf36f7fa4da14ad22e095576a6239bfea728488885",
+    "garchompmega-ground-sleep-front.png": "222e7f634cfdc488c3284f487008461973c9c453164ad64ce3ffc1543c7ef864",
+    "garchompmega-ground-faint_start-front.png": "432aa375aacdfd8530114944a69aa843bc5d15d8c7acc99aa7ca3957b0ef661f",
+    "garchompmega-shiny-ground-idle-front.png": "6377c9a462805fb008625420624cd16e924a2e62bd103120c717f194c542213f",
+    "garchompmega-shiny-ground-idle-side.png": "a8948ffb496eec151901805ef3a9bb901eeb37f92c16e08bb2d4394be55071cd",
+    "garchompmega-shiny-ground-physical_attack-front.png": "3b060652cb04328f65da1a4f5c5b4eeaa1c89619ce0ebecd88981c327cb4e5bb",
+    "garchompmega-shiny-ground-special_attack-front.png": "32def602fc13f3c0179c44733a387421c57a39b0220270bcb881d2726e79a4f9",
+    "garchompmega-shiny-ground-sleep-front.png": "8d5aafc8631fee8e8c229baf4bf1c009dd3f1b2f86fe3b9775bbf56dbb987e45",
+    "garchompmega-shiny-ground-faint_start-front.png": "00a3d84f68c4547e2403267b63974a25b3d7bf35912aabe11aa79cff1bb8b5cb",
+    "garchompmega-current-idle-front.png": "75b9c1d2593b4fab5664b85217d5835232710d784fd3a500b5a06d701d253038",
+    "garchompmega-current-idle-side.png": "e60b79ac2b6ac09f1a68f33f4a2d3e6a51e673cbcfac99571952aa12bcdec6d9",
+    "garchompmega-current-physical_attack-front.png": "ba81c894b001cf0c389a3b500aa72c7d8a38550d2a5d983e82d589437f42355f",
+    "garchompmega-current-special_attack-front.png": "47385533e85d3fa560e28cf8750a0c23fa85cc06c7a3181a2f399bfe4e5dc5d4",
+    "garchompmega-current-sleep-front.png": "ce9a23b20a7be4ea5e23f160424360df682bbdc6dadec317215ce7904acdda55",
+    "garchompmega-current-faint_start-front.png": "bfa9265a1bc0d7773f65bae5eb420c374ae5f8577040709be0fb532f5ffc7f6f",
+    "garchompmega-shiny-current-idle-front.png": "222605f1238f45e0645ab0038c4cbc5a852dd0b2454efc78c8cad4458fc19a05",
+    "garchompmega-shiny-current-idle-side.png": "91c723fac6d3778715e64fcc3832a476c9685b7ca02c972df19c0cce553684d4",
+    "garchompmega-shiny-current-physical_attack-front.png": "f16c8ffe29d6f4ba70685d5eeafd8005a5098f848970353de3e8d84de4cc97e6",
+    "garchompmega-shiny-current-special_attack-front.png": "1ea1f0843a8447734a41c8cab716b9a47ea42e931929e73c08d3738cb5c86c0f",
+    "garchompmega-shiny-current-sleep-front.png": "399632fd4118ca2912f1529fc210cd3ff14574301d0929dd2c24b18cc9715b74",
+    "garchompmega-shiny-current-faint_start-front.png": "48c9500b27bc9ddceab2fcfbeef8bed9aa345772f6330f66345633f8c73aeb75",
+    "garchompmegaz-current-idle-front.png": "ae7103c5de4abb087c586d01553d5aa3ff8750b883af48ab5f3a30d42c1b77ea",
+    "garchompmegaz-current-idle-side.png": "6ab9d6ae5097c8ac32b4c02c210e8b1c6106a33521a8a5dda09d49431a8e2f67",
+    "garchompmegaz-current-physical_attack-front.png": "6047eeac3685825d8e89fd41b4b9f288abf8a95f76d286171f166f3b4d8ee41d",
+    "garchompmegaz-current-special_attack-front.png": "cf9201a7c14cd35041975e4badeca709384bf1cfc36ae0147678874103300e2c",
+    "garchompmegaz-current-sleep-front.png": "9848d689c6146e9ef1b0ae18e8bb4b958420531bd1ce41a3792151d7c581ac50",
+    "garchompmegaz-current-faint_start-front.png": "27464be94a7e153475db1668378f5daf53a3b2e9d87dc8afab392260af203a21",
+    "garchompmegaz-shiny-current-idle-front.png": "144939977b2b5c3addc3d8519a875df67c10219e45fe79c26ae48a9fa3a3e263",
+    "garchompmegaz-shiny-current-idle-side.png": "7a16efcd8e9b413ab1acd71066daf36c9f5b4e8fb1d193ee6a6bcbc0ec2ca71f",
+    "garchompmegaz-shiny-current-physical_attack-front.png": "b184121ff1ffa9c16a5113dabad5f7301db97c1c01f2cfaa43589a7facf32a14",
+    "garchompmegaz-shiny-current-special_attack-front.png": "0ecb9f01e153cc495df3a2da5dad956bed7b5ed557d3ab77011b229fd796085d",
+    "garchompmegaz-shiny-current-sleep-front.png": "4692fdca5d02b7da6c7fb887f97eb0a69eb6a7f5904321e11b7ba966b90ae021",
+    "garchompmegaz-shiny-current-faint_start-front.png": "29ed06d6558c3c0387cf7cf74356f9fe80d9b04a9fc9125db00c275f80b71aa1",
+    "index.html": "3847b2c5e740ba68c48c160ed9665947173398ba909976662df5ddd90c6b7e50"
+  },
+  "tools": [
+    {
+      "path": "tools/sprite_factory/mega_garchomp_motion_export.py",
+      "sha256": "f7ac29a41de0d51517a0e0d3322344cc7a83a8e2b6c2b92814447f54758db18b"
+    },
+    {
+      "path": "tools/sprite_factory/mega_garchomp_posture_import.py",
+      "sha256": "18952ff6a75d3c2d2d91ae61bce563a1e22eba2fb8544a3089d2f731f54d9178"
+    },
+    {
+      "path": "tools/sprite_factory/mega_garchomp_posture_candidate.gd",
+      "sha256": "829f2152909fb7dd3a8d5d89a320bb82fb91ef78336813104adc73a5c9c3c720"
+    },
+    {
+      "path": "tools/sprite_factory/mega_garchomp_posture_review.html",
+      "sha256": "3847b2c5e740ba68c48c160ed9665947173398ba909976662df5ddd90c6b7e50"
+    }
+  ],
+  "remaining": [
+    "User visual comparison of native standing proposal",
+    "Battle placement, geometry/material parity and transition qualification before runtime application"
+  ]
+}
