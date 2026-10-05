@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
 - Show a trainer’s “Dodge!” command before a missed 3D attack; Pokémon and Substitutes sidestep while the move passes through their original position.
 
 - Center the shiny replay favorite prompt in the screen UI and size it to its message.
