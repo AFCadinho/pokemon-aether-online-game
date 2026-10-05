@@ -185,6 +185,7 @@ func _process(_delta: float) -> void:
 	player = _find_player(actor)
 	if player != null:
 		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
+		preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(player, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
 		var clips := player.get_animation_list()
 		if "idle" in clips:
 			player.play("idle")

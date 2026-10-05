@@ -112,6 +112,7 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 		return {}
 	var profile: Dictionary = profiles[model.profile].duplicate(true)
 	profile = preload("res://scripts/battle/animations/gliscor_flight.gd").profile_for(identity, digest, profile)
+	profile = preload("res://scripts/battle/animations/mega_garchomp_standing.gd").profile_for(identity, digest, profile)
 	# The screened cohort has source timing and placement only. It has not passed
 	# arena grounding or motion-clearance calibration, so keep those optional and
 	# let the presenter select its existing safe classic-arena fallback.

@@ -7,9 +7,9 @@
     "garchomp-mega-z": "native 20001 battlewait is upright; no analogous posture problem found"
   },
   "candidate_policy": "review-only full native bank-00 skeletal set on the exact approved Mega Garchomp normal/shiny scenes; materials and meshes retained",
-  "appearance_approved": false,
+  "appearance_approved": true,
   "battle_approved": false,
-  "runtime_changed": false,
+  "runtime_changed": true,
   "published": false,
   "checks": {
     "skeletons_match": true,
@@ -101,8 +101,12 @@
       "sha256": "3847b2c5e740ba68c48c160ed9665947173398ba909976662df5ddd90c6b7e50"
     }
   ],
-  "remaining": [
-    "User visual comparison of native standing proposal",
-    "Battle placement, geometry/material parity and transition qualification before runtime application"
-  ]
+  "remaining": [],
+  "appearance_approval": {
+    "date": "2026-10-05",
+    "user_reply": "ja goedgekeurd",
+    "review_html_sha256": "3847b2c5e740ba68c48c160ed9665947173398ba909976662df5ddd90c6b7e50",
+    "scope": "native standing Mega Garchomp normal/shiny set; Mega Garchomp Z remains unchanged"
+  },
+  "followup": "tools/sprite_factory/mega_garchomp_standing_checkpoint.json"
 }

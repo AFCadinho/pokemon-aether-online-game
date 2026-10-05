@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "task": "mega-garchomp-standing",
+  "date": "2026-10-05",
+  "approval": {
+    "user_reply": "ja goedgekeurd",
+    "checkpoint": "tools/sprite_factory/mega_garchomp_posture_checkpoint.json",
+    "review_html_sha256": "3847b2c5e740ba68c48c160ed9665947173398ba909976662df5ddd90c6b7e50"
+  },
+  "runtime_changed": true,
+  "published": false,
+  "models": [
+    "garchomp-mega",
+    "garchomp-mega@shiny"
+  ],
+  "unchanged": [
+    "garchomp-mega-z",
+    "garchomp-mega-z@shiny"
+  ],
+  "checks": {
+    "candidate_pose_parity": 70,
+    "battle_variants": 2,
+    "battle_cameras": 2,
+    "battle_actions": 7,
+    "battle_playback_speeds": [
+      1,
+      4
+    ],
+    "battle_minimum_y": 0.0266221165657,
+    "pokedex_summary_normal_shiny": true,
+    "hash_and_library_isolation": true,
+    "gliscor_regression": true
+  },
+  "delivery": "client animation override; existing bundle and v9 index bytes unchanged",
+  "evidence": [
+    {
+      "path": ".tmp/mega-garchomp-standing-check.log",
+      "sha256": "f60191237f1a5c2af2493fef392b32107505513780fcdd48b7ffd30a5466776a"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-gliscor-regression.log",
+      "sha256": "5f50fe319c9bd3b97d47a7bab855a94f80985115910aa69dfaef088e68fa06ac"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-review-parity.log",
+      "sha256": "3dcdc0bf32320c16e400aeb2399b988a46b1b5d65a88f4e8d1c194642b4c044e"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-battle.log",
+      "sha256": "4adb25cc0ab257a0b714332c4d015830ebde296e9b2fb5dae3a7442b56d07e43"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-previews.log",
+      "sha256": "051ffce95dbdac5ca61551fcbdf1e00119010b9bdcee58ec414221be8d6dd038"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/catalog.json",
+      "sha256": "9299eb13b5edbb99a9029fb12e6164365f2bc679a7ddffd960e1264ddc394512"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/measurement/profile.json",
+      "sha256": "00ad9ab2f8098bd4b992c30eb3f093b3fbe1c635dd19753572e6970d478b1933"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/previews.png",
+      "sha256": "69c762d9f21016a642d3b46c76bde1a2c00cb656f6fecd25a23a22a24c6f83f1"
+    },
+    {
+      "path": "resources/battle/model_animations/mega_garchomp_standing.json",
+      "sha256": "bc84e5a84f1c4363169bb622d57778ef77f4715d03f1988d9e5c8bc62c26648c"
+    },
+    {
+      "path": "resources/battle/model_animations/mega_garchomp_standing.res",
+      "sha256": "87c77aaf8eb21a0edb17da1f1a14c4e31bf76f19de0a033593c3dbdd7b76091c"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-damage-0.png",
+      "sha256": "755fbb6e3a2d10e2230e7010a960b9d723963816c9d042e3102e75c50bff4a4a"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-damage-1.png",
+      "sha256": "1b64967a1dc6efdd4bbed14b03db91c63097baaa6c3353af38e230c2d1919876"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-faint_loop-0.png",
+      "sha256": "6ee9edc0cb4e378d8981a12814518c28d43a3c0604ff49f70988bb929d5d1c7f"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-faint_loop-1.png",
+      "sha256": "bb65f2f5a171aad9b4f3df27b844b2807065d66987f1134f5e9eaf705c5e1354"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-faint_start-0.png",
+      "sha256": "1e606fd0768481e2d76e1add433ca377ea9a6ab0f4b000b45265f1339316d444"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-faint_start-1.png",
+      "sha256": "e2bbec0ca51a1fcb42caabf14b7f94d02aa3baae99996e7c90dbf13893bb6a6f"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-idle-0.png",
+      "sha256": "4fcfcd1a2fe060c970b349ac2088f26208512b43e35b1a846d1e15a642144cfc"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-idle-1.png",
+      "sha256": "2bba0c8c84b6b57b76fcf3bc5782007f86009b3552d5570849dcd35c2befdfbd"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-physical_attack-0.png",
+      "sha256": "fb77ba9c93710b986caf44bd0b2149bfd7136482aa9b8d85449ff60ed40a1187"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-physical_attack-1.png",
+      "sha256": "9b9dc7095e0c2bce3098e5f3419449ffa9b0cc6689493074ddc6e2543f92dc27"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-sleep-0.png",
+      "sha256": "6ee9edc0cb4e378d8981a12814518c28d43a3c0604ff49f70988bb929d5d1c7f"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-sleep-1.png",
+      "sha256": "bb65f2f5a171aad9b4f3df27b844b2807065d66987f1134f5e9eaf705c5e1354"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-special_attack-0.png",
+      "sha256": "9a41c76b0aceaa0b435c4e9b3cfaef0ca3fa4752c39e070dfd76df14991e00ec"
+    },
+    {
+      "path": ".tmp/mega-garchomp-standing-v1/battle/battle-special_attack-1.png",
+      "sha256": "2f22ce0d52f0df8685b0471b0b6f63c35de2fe26a1713bd5f9031f0042e73472"
+    }
+  ]
+}
