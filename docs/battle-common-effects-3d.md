@@ -150,7 +150,7 @@ fixture; native status lifecycle and real-model probes exit cleanly.
 Only explicit player approval completes an entry.
 
 - [x] Z-Moves / Z-Power
-- [ ] Item activation — golden bands and particles sweeping up and down; awaiting visual review
+- [x] Item activation — golden bands and particles sweeping up and down; approved after gem-before-attack timing fix
 - [ ] Berry eating
 - [ ] Poison
 - [ ] Toxic
