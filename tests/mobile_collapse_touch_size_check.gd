@@ -88,15 +88,15 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 	var rects: Array[Rect2] = []
 	for button: Control in buttons:
 		var rect := _screen_rect(button)
-		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.9, 0.9)), "enlarged target blocks touch movement: " + context)
+		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.1, 0.9)), "enlarged target blocks touch movement: " + context)
 		_check(rect.size.x >= 47.99 and rect.size.y >= 47.99, "48-pixel target: " + context + " " + str(rect))
 		_check(bounds.grow(0.1).encloses(rect), "target stays on screen: " + context + " " + str(rect))
 		if not root.get_node("WindowFit").is_mobile_browser_ui():
 			for state: String in ["normal", "hover", "pressed"]:
 				var visual := _visual_rect(button, state)
 				var expected := Vector2(28, 32) if button == overlay.quest_journal_view.tracker_collapse_button else Vector2(28, 28)
-				_check(visual.size.is_equal_approx(expected), "original UI-scaled surface in " + state + ": " + context)
-				_check(not visual.has_point(button.size * 0.9), "edge press lies in transparent padding: " + context)
+				_check(visual.size.is_equal_approx(expected), "original UI-scaled surface %s %s visual=%s rect=%s minimum=%s: %s" % [button.name, state, visual.size, button.size, button.get_combined_minimum_size(), context])
+				_check(not visual.has_point(button.size * Vector2(0.1, 0.9)), "edge press lies in transparent padding: " + context)
 			if button == overlay.chat_resize_button:
 				_check(button.get_theme_constant("icon_max_width") == 16, "resize icon follows the chosen UI scale: " + context)
 			else:
@@ -114,7 +114,7 @@ func _tap_edge(button: Control) -> void:
 	# 28-unit button area. Godot emulates mouse input for touchscreen UI buttons.
 	var click := InputEventMouseButton.new()
 	click.button_index = MOUSE_BUTTON_LEFT
-	click.position = button.get_global_rect().position + button.size * Vector2(0.9, 0.9)
+	click.position = button.get_global_rect().position + button.size * Vector2(0.1, 0.9)
 	var motion := InputEventMouseMotion.new()
 	motion.position = click.position
 	root.push_input(motion, true)
