@@ -14,9 +14,9 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	_span("presenter process (inclusive)", started)
 
-func _load_catalog(path: String) -> void:
+func _load_catalog(path: String, preserve_actors := false) -> void:
 	var started := Time.get_ticks_usec()
-	super._load_catalog(path)
+	super._load_catalog(path, preserve_actors)
 	_span("catalog (inclusive validation)", started)
 
 func _queue_needed_models() -> void:
