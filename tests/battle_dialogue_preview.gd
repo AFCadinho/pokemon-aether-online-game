@@ -17,7 +17,7 @@ var move_outcome: OptionButton
 var move_reverse: CheckButton
 var move_busy := false
 var left_species := "Dragonite"
-const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam"]
+const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam", "Ice Beam", "Razor Leaf", "Quick Attack"]
 var terrain_picker: OptionButton
 var terrain_enabled: CheckButton
 var trick_room_toggle: CheckButton
@@ -441,7 +441,7 @@ func _field_screenshot(output: String, key: String) -> void:
 
 func _build_move_controls() -> void:
 	var models := OptionButton.new()
-	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise"]:
+	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise", "Bulbasaur"]:
 		models.add_item(species)
 		if species == left_species: models.select(models.item_count - 1)
 	models.item_selected.connect(func(index):

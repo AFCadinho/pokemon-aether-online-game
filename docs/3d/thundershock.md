@@ -1,7 +1,7 @@
 # Thunder Shock
 
-Implemented and available in normal 3D battles; awaiting the user's visual
-approval. Ember, Water Gun, Tackle, Scratch and Bite are already approved.
+Implemented and available in normal 3D battles; visually approved by the user.
+Ember, Water Gun, Tackle, Scratch and Bite are also approved.
 
 `electric_move_effect_3d.gd` uses the inspected SV `ew0084_thunder` and
 `ew0084_thunder_hit` textures: the electrical pulse mask, eight-frame spark

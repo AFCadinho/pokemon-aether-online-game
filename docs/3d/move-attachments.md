@@ -3,7 +3,7 @@
 `move_attachments_3d.gd` maps a move to an anatomical part, then resolves a
 species/form profile to one or more bone-local offsets. This is independent of
 the move's damage category: Bite and Ember can both use a mouth, while Scratch
-uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch and Bite now
+uses a hand. Physical hit graphics still appear at the target. Tackle, Scratch, Bite and Quick Attack now
 use a separate [contact approach](contact-move-effects.md) to move the attacker
 to the target and back on the same native action clock.
 
@@ -12,10 +12,10 @@ to the target and back on the same native action clock.
 | Model | Move/part | Bone(s) |
 | --- | --- | --- |
 | Pikachu | Thunder Shock, Thunderbolt / electric body | `spine_02` |
-| Charmander | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Bite / mouth | `head` |
+| Charmander | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
 | Charmander | Scratch / hand | `right_hand` |
-| Squirtle | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Bite / mouth | `head` |
-| Blastoise | Water Gun, Bubble Beam / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
+| Squirtle | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
+| Blastoise | Water Gun, Bubble Beam, Ice Beam / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
 | Blastoise | Ember, Flamethrower, Bubble, Bite / mouth | `head` |
 
 The primary visual review is Charmander + Ember, Squirtle + Water Gun, and

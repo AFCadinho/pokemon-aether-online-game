@@ -26,6 +26,9 @@ MOVE_PARTS.update({
     'thunderbolt': ('ew0085_start', 'ew0085_beam01', 'ew0085_hit_start', 'ew0085_hit', 'ew0085_hit_end'),
     'flamethrower': ('ew0053_fire_muzzle', 'ew0053_fire', 'ew0053_hit', 'ew0053_minihit'),
     'bubblebeam': ('ew0061_at_start', 'ew0061_muzzle', 'ew0061_beam', 'ew0061_beam_bubble', 'ew0061_df_hit', 'ew0061_df_hit02'),
+    'icebeam': ('ew0058_charge', 'ew0058_muzzle', 'ew0058_beam', 'ew0058_beam_ice', 'ew0058_hit', 'ew0058_hit_ice', 'ew0058_hit_last'),
+    'razorleaf': ('ew0075_start', 'ew0075_hit'),
+    'quickattack': ('ew0098_at_bgkem', 'ew0098_at_srash01', 'ew0098_hideline', 'ew0098_df_hit'),
 })
 
 
@@ -178,9 +181,9 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam"),
-                                      allow_bc3=move in ("scratch", "thundershock", "thunderbolt", "flamethrower", "bubblebeam"),
-                                      allow_r8=move == "flamethrower", allow_bc7=move == "bubblebeam"))
+        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
+                                      allow_bc3=move in ("scratch", "thundershock", "thunderbolt", "flamethrower", "bubblebeam", "icebeam", "razorleaf", "quickattack"),
+                                      allow_r8=move == "flamethrower", allow_bc7=move in ("bubblebeam", "icebeam")))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
                              cwd=folder, capture_output=True, text=True, timeout=60)
         (folder / 'decoder.log').write_text(run.stdout + run.stderr)

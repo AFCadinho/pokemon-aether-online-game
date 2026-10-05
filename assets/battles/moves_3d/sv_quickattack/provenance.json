@@ -1,0 +1,52 @@
+{
+  "source_move": "quickattack",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_0_shock0003.png",
+      "source_particle": "ew0098_hideline.ptcl",
+      "source_sha256": "067534138cc754842864e19939c7c3145ab1d5154c9a3448004500ad3801b32b",
+      "png_sha256": "95f927ee15142ea07da245373b464a8d9b13bfa566237081cf50785323d7a13d",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_0_shock0002.png",
+      "source_particle": "ew0098_at_srash01.ptcl",
+      "source_sha256": "6b459cd81a20882fde01350b570044485cd4b26515eb74813a569b38b14ad765",
+      "png_sha256": "84601a5eca50d96ec8f94628f4c1bf8d04868ec5e8dbab5971ea8e8fa09eaef3",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_0_circle0007.png",
+      "source_particle": "ew0098_df_hit.ptcl",
+      "source_sha256": "7b0c1b45b6af2a2d027922dd4ca94530b0f05de985d1caa732aa8cfa9ecb53d0",
+      "png_sha256": "8f2c1298e05fdd152249ed101a1965d03f8ad697f60b0d59793973ff48763303",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_0_circle0010.png",
+      "source_particle": "ew0098_df_hit.ptcl",
+      "source_sha256": "7b0c1b45b6af2a2d027922dd4ca94530b0f05de985d1caa732aa8cfa9ecb53d0",
+      "png_sha256": "9284adb8eb6a5832352106fc2cb7b531fa57a89658c37146255830a7c862b5d2",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

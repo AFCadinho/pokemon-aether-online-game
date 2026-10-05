@@ -107,7 +107,7 @@ func _case(species: String, move: String) -> void:
 		await get_tree().process_frame
 	assert(stage.players[0].is_playing(), "Move must release events at impact, before recovery ends")
 	# Pikachu's two-second native clip now uses the supported-VFX 1.25s cap.
-	assert(is_equal_approx(stage.players[0].get_playing_speed(), 1.6 if move == "Thunderbolt" else 1.5))
+	assert(is_equal_approx(stage.players[0].get_playing_speed(), 1.6 if move == "Thunderbolt" else ((407.5/60.0)/1.25 if move == "Ice Beam" else 1.5)))
 	assert(stage.players[0].current_animation_position >= float(pilot.impact_frame) / 60.0)
 	assert(router.active_audio_nodes.is_empty(), "Pilot sounds are also silent without move VFX")
 	assert(not router.has_3d_impact_damage("p1") and router.has_3d_impact_damage("p2"))

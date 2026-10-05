@@ -17,6 +17,8 @@ const ElectricMoveEffect = preload("res://scripts/battle/battle_ui/electric_move
 const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbolt_move_effect_3d.gd")
 const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
 const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
+const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
+const LeafMoveEffect = preload("res://scripts/battle/battle_ui/leaf_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 var move_command_holds := [false, false, false, false]
@@ -571,6 +573,9 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
+	# Razor Leaf is a ranged release despite its physical damage category.
+	if key in ["razorleaf", "razor-leaf"]: return "special_attack"
+	if key in ["quickattack", "quick-attack"]: return "physical_attack"
 	if key in ["ember", "flamethrower"] and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
 		if entries.get(identities[index], {}).get("action_timing", {}).has("special_attack_2"):
 			return "special_attack_2"
@@ -970,6 +975,7 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	var turn := wrapf(atan2(delta.x, delta.z) - atan2(partner.x, partner.z), -PI, PI)
 	var motion := {"source":source, "target":destination, "actor":actor, "target_ident":target,
 		"clock":bind_action_clock(actor), "duration":float(timing.frames)/60.0,
+		"quick": str(timing.get("move_key", "")) == "quickattack",
 		"impact":float(timing.impact_frame)/60.0, "displacement":displacement, "yaw":turn,
 		"nodes":[actors[index], substitute_models[index]], "hud_transform":actors[index].global_transform}
 	if source != actors[index] and source.get("body") is Node3D:
@@ -1006,6 +1012,7 @@ func _update_move_contacts() -> void:
 			_clear_move_contact(index)
 			continue
 		var approach_start := minf(duration * 0.08, float(motion.impact) * 0.15)
+		if motion.get("quick",false): approach_start = float(motion.impact)*0.4
 		var contact_time := float(motion.impact) * 0.96
 		var outward := smoothstep(approach_start, contact_time, seconds)
 		var return_start := minf(float(motion.impact) + duration * 0.08, duration * 0.72)
@@ -1040,7 +1047,7 @@ func _move_bounds(ident: String) -> Dictionary:
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var a := _move_bounds(actor)
 	var b := _move_bounds(target)
-	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam"] else 0.6
+	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam"] else 0.6
 	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
 	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
 	var direction := (end-source).normalized()
@@ -1073,6 +1080,10 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 		effect = FireStreamMoveEffect.new()
 	elif MoveEffect.move_key(move) in ["bubble", "bubblebeam"]:
 		effect = BubbleMoveEffect.new()
+	elif MoveEffect.move_key(move) == "icebeam":
+		effect = IceBeamMoveEffect.new()
+	elif MoveEffect.move_key(move) == "razorleaf":
+		effect = LeafMoveEffect.new()
 	else:
 		effect = SourceMoveEffect.new() if MoveEffect.move_key(move) in ["ember", "watergun"] else MoveEffect.new()
 	world.add_child(effect)
@@ -1093,7 +1104,8 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 func start_move_action(ident: String, move: String) -> void:
 	if handles(ident):
 		var index := actor_index(ident)
-		_action(attack_action_for(move, ident), index, 1.25 if MoveEffect.supports(move) else 0.0)
+		var max_seconds := 0.8 if MoveEffect.move_key(move)=="quickattack" else (1.25 if MoveEffect.supports(move) else 0.0)
+		_action(attack_action_for(move, ident), index, max_seconds)
 		# play() schedules its reset; sample frame zero before binding a VFX clock.
 		if MoveEffect.supports(move) and players[index] != null:
 			players[index].seek(0.0, true)

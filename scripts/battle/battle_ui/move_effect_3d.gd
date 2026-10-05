@@ -1,8 +1,8 @@
 extends Node3D
 ## First native move VFX. Samples the model clock; never changes HP or outcomes.
 signal finished
-const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam"]
-const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff")]
+const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam", "icebeam", "razorleaf", "quickattack"]
+const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff"), Color("83e3ff"), Color("81ed42"), Color("e5f8ff")]
 var key := ""
 var elapsed := 0.0
 var duration := 1.0
@@ -56,6 +56,8 @@ static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 		var at_seconds := cue_time
 		# Thunderbolt has a discharge sound and a separate impact sound in 2D.
 		if str(timing.get("move_key", "")) == "thunderbolt" and name == "PRSFX- Thunderbolt1.wav":
+			at_seconds = impact_seconds
+		if str(timing.get("move_key", "")) == "razorleaf" and name == "PRSFX- Razor Leaf2.wav":
 			at_seconds = impact_seconds
 		cues.append({"at_seconds": at_seconds, "event": cue.event.duplicate(true)})
 	cues.sort_custom(func(a, b): return a.at_seconds < b.at_seconds)
