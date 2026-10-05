@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make the 3D Trick Room grid and borders clearer against the PvP arena's purple lighting while keeping the walls transparent.
+
 - Add native 3D visuals for Grassy, Electric, Misty and Psychic Terrain and Trick Room, including weather combinations and replay pause/speed support.
 
 - Render rain, sun, sandstorm, snow, hail and primal weather inside 3D battles, with camera-stable effects and replay pause/speed support.

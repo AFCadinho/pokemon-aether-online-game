@@ -30,7 +30,7 @@ func _init() -> void:
 
 func _start() -> void:
 	freeze_preview = "--freeze" in OS.get_cmdline_user_args()
-	terrain_preview = "--terrain" in OS.get_cmdline_user_args()
+	terrain_preview = "--terrain" in OS.get_cmdline_user_args() or "--trick-room" in OS.get_cmdline_user_args()
 	weather_preview = terrain_preview or "--weather" in OS.get_cmdline_user_args()
 	if freeze_preview or weather_preview: right_species = "Pikachu"
 	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
@@ -103,7 +103,7 @@ func _start() -> void:
 	if terrain_preview:
 		terrain_picker = OptionButton.new()
 		for label in TERRAIN_LABELS: terrain_picker.add_item(label)
-		terrain_picker.select(1)
+		terrain_picker.select(0 if "--trick-room" in OS.get_cmdline_user_args() else 1)
 		terrain_picker.item_selected.connect(func(_index): _terrain())
 		toolbar.add_child(terrain_picker)
 		var field_row := HBoxContainer.new()
@@ -115,6 +115,7 @@ func _start() -> void:
 		field_row.add_child(terrain_enabled)
 		trick_room_toggle = CheckButton.new()
 		trick_room_toggle.text = "Trick Room"
+		trick_room_toggle.button_pressed = "--trick-room" in OS.get_cmdline_user_args()
 		trick_room_toggle.toggled.connect(func(_enabled): _terrain())
 		field_row.add_child(trick_room_toggle)
 	status = Label.new()
