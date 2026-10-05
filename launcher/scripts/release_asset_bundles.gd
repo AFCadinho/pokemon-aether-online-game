@@ -8,6 +8,7 @@ const V6 = preload("res://data/approved_3d_release_v6.json")
 const V7 = preload("res://data/approved_3d_release_v7.json")
 const V8 = preload("res://data/approved_3d_release_v8.json")
 const V9 = preload("res://data/approved_3d_release_v9.json")
+const V10 = preload("res://data/approved_3d_release_v10.json")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
@@ -75,9 +76,11 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 	v7.sort()
 	var v8 := _v8_ids()
 	v8.sort()
+	var v10 := _v10_ids()
+	v10.sort()
 	var v9 := _v9_ids()
 	v9.sort()
-	if normalized != original and normalized != expanded and normalized != v5 and normalized != v6 and normalized != v7 and normalized != v8 and normalized != v9:
+	if normalized != original and normalized != expanded and normalized != v5 and normalized != v6 and normalized != v7 and normalized != v8 and normalized != v9 and normalized != v10:
 		return "Asset bundle release set is not approved."
 	if normalized == v5:
 		var pinned: Dictionary = V5.data.index
@@ -109,6 +112,12 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 				or descriptor.sizeBytes != pinned.size_bytes
 				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
 			return "Catalog v9 release index differs from the approved index."
+	if normalized == v10:
+		var pinned: Dictionary = V10.data.index
+		if (descriptor.revision != V10.data.revision or descriptor.sha256 != pinned.sha256
+				or descriptor.sizeBytes != pinned.size_bytes
+				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
+			return "Catalog v10 release index differs from the approved index."
 	return ""
 
 
@@ -143,6 +152,13 @@ static func _v8_ids() -> Array[String]:
 static func _v9_ids() -> Array[String]:
 	var result: Array[String] = []
 	for asset_id: String in V9.data.requiredAssetIds:
+		result.append(asset_id)
+	return result
+
+
+static func _v10_ids() -> Array[String]:
+	var result: Array[String] = []
+	for asset_id: String in V10.data.requiredAssetIds:
 		result.append(asset_id)
 	return result
 
@@ -221,7 +237,7 @@ func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String)
 	if not error.is_empty():
 		return {"error": error}
 	if (asset_id not in RELEASE_ASSET_IDS and asset_id not in _v5_ids() and asset_id not in _v6_ids()
-			and asset_id not in _v7_ids() and asset_id not in _v8_ids() and asset_id not in _v9_ids()):
+			and asset_id not in _v7_ids() and asset_id not in _v8_ids() and asset_id not in _v9_ids() and asset_id not in _v10_ids()):
 		return {"error": "Asset bundle is outside the approved release set."}
 	return store.install_archive(index, asset_id, downloaded_path)
 
@@ -294,6 +310,8 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 			expected = _v5_ids()
 		elif assets is Array and assets.size() == _v6_ids().size():
 			expected = _v6_ids()
+		elif assets is Array and assets.size() == _v10_ids().size():
+			expected = _v10_ids()
 		elif assets is Array and assets.size() == _v9_ids().size():
 			expected = _v9_ids()
 		elif assets is Array and assets.size() == _v8_ids().size():

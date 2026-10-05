@@ -349,9 +349,9 @@ def _build_asset_bundle_index(entry: str, base_url: str) -> dict:
         "pokemon_3d:roaring-moon:base",
         "pokemon_3d:snorlax:base",
     ]
-    if revision in {"approved-pokemon-3d-v2", "approved-pokemon-3d-v5", "approved-pokemon-3d-v6", "approved-pokemon-3d-v7", "approved-pokemon-3d-v8", "approved-pokemon-3d-v9"}:
+    if revision in {"approved-pokemon-3d-v2", "approved-pokemon-3d-v5", "approved-pokemon-3d-v6", "approved-pokemon-3d-v7", "approved-pokemon-3d-v8", "approved-pokemon-3d-v9", "approved-pokemon-3d-v10"}:
         version = revision.rsplit("-", 1)[-1]
-        expected_count = {"v2": 21, "v5": 83, "v6": 154, "v7": 160, "v8": 1139, "v9": 1142}[version]
+        expected_count = {"v2": 21, "v5": 83, "v6": 154, "v7": 160, "v8": 1139, "v9": 1142, "v10": 1200}[version]
         receipt = json.loads((Path(__file__).resolve().parents[1] / f"release/approved_3d_bundles_{version}.json").read_text())
         pinned = receipt["index"]
         if (pinned["object_key"] != object_key or pinned["size_bytes"] != size_bytes

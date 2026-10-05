@@ -10,8 +10,10 @@ previously accepted Galarian birds are outside this batch.
 All 58 pairs have appearance and battle approval. The 58 local bundles have
 passed installation and the 116 scenes have passed on-demand runtime checks.
 The 116 scenes are now runtime approved in the local game and launcher catalogs.
-All bundle, runtime and full performance gates pass. R2 publication and release
-activation remain separate steps. Earlier sections retain the
+All bundle, runtime and full performance gates pass. The approved bundles are
+published to R2 and included in catalog v10 for local development. Production
+activation requires the matching game/launcher release; see
+`docs/approved-3d-bundle-release-v10.md`. Earlier sections retain the
 chronology of candidate review and its limitations.
 
 ## Reproducible inputs and tooling
@@ -263,3 +265,18 @@ The final Thunderbolt integration adds an effect-dispatch branch outside the
 measured model lifecycle. Native raster sizing and all 58 admitted runtime pairs
 were rerun successfully after that merge. The receipt retains separate commit
 and source hashes for performance evidence and the final runtime replay.
+
+## R2 publication and local download selection
+
+On 2026-10-05 all 58 approved bundles and their cohort index were published
+and read back through the public CDN with exact SHA-256 and size checks.
+Catalog v10 adds those records to the unchanged 1,142 v9 records and matches
+all 2,400 reviewed normal/shiny identities. Every public bundle passed HEAD
+size validation; the combined index passed public GET hash validation.
+
+The editor selects v10 automatically; launcher and release packaging now
+accept its exact descriptor and support the full 1,200-bundle download plan.
+Earlier qualification/checkpoint files are historical snapshots; the new
+publication receipts record the completed upload. The active desktop manifest
+is unchanged. Production availability requires the matching certified client
+release, as described in `docs/approved-3d-bundle-release-v10.md`.
