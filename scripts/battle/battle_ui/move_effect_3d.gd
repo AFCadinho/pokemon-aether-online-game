@@ -24,6 +24,11 @@ var sphere := SphereMesh.new()
 var tube := CylinderMesh.new()
 var tooth := CylinderMesh.new()
 var cursor := 0
+var emission_sources: Array = []
+
+func _init() -> void:
+	# Sample attachment poses after the stage has applied its actor transforms.
+	process_priority = 11
 
 static func move_key(move: String) -> String:
 	return move.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
@@ -142,7 +147,9 @@ func _process(_delta: float) -> void:
 		_finish()
 		return
 	var points: Dictionary = anchors.call()
-	var from: Vector3 = points.source
+	emission_sources = points.get("sources", [points.source])
+	if emission_sources.is_empty(): emission_sources = [points.source]
+	var from: Vector3 = emission_sources[0]
 	var to: Vector3 = points.target
 	var size := clampf(float(points.radius), 0.35, 1.4)
 	var right := Vector3.RIGHT
@@ -202,15 +209,16 @@ func _process(_delta: float) -> void:
 						var behind := maxf(0, phase-tail*0.026)
 						_ball(from.lerp(to,behind)+up*sin(behind*PI)*0.5+right*(ember-1)*sin(behind*PI)*0.2,(0.15-tail*0.028)*fade,edge)
 			"watergun":
-				for i in 18:
-					var t := float(i)/18.0
-					if t > travel: continue
-					var next := minf(t+1.0/18.0,travel)
-					var a := from.lerp(to,t)+up*sin(t*PI)*0.18
-					var b := from.lerp(to,next)+up*sin(next*PI)*0.18
-					var width := (0.07 + t*0.07)*(0.85+0.15*sin(t*35-elapsed*25))*fade
-					_line(a,b,width,edge)
-					_line(a+up*0.025,b+up*0.025,width*0.35,core)
+				for origin: Vector3 in emission_sources:
+					for i in 18:
+						var t := float(i)/18.0
+						if t > travel: continue
+						var next := minf(t+1.0/18.0,travel)
+						var a := origin.lerp(to,t)+up*sin(t*PI)*0.18
+						var b := origin.lerp(to,next)+up*sin(next*PI)*0.18
+						var width := (0.07 + t*0.07)*(0.85+0.15*sin(t*35-elapsed*25))*fade
+						_line(a,b,width,edge)
+						_line(a+up*0.025,b+up*0.025,width*0.35,core)
 			"thundershock":
 				var end := from.lerp(to,travel)
 				for branch in 2:
