@@ -52,7 +52,7 @@ def main():
             before = report()
             button = before["liveButtons"][panel_id]
             foreground()
-            x = round(button["x"] + button["width"] * 0.9)
+			x = round(button["x"] + button["width"] * 0.1)
             y = round(button["y"] + button["height"] * 0.9)
             adb("shell", "input", "tap", str(x), str(y))
             deadline = time.monotonic() + 5

@@ -19,12 +19,15 @@ static func font_size_for(control: Control, desktop_size: int, minimum: float = 
 	return maxi(desktop_size, ceili(minimum / screen_scale(control).y))
 
 
-static func compact_button_style(button: Button, visual_size: Vector2 = Vector2(28, 28)) -> void:
-	# Keep the full Button rect for input, with the original UI-scaled surface
-	# centred inside it. Transparent padding accepts taps and blocks movement.
+static func compact_button_style(button: Button, visual_size: Vector2 = Vector2(28, 28), alignment: Vector2 = Vector2(0.5, 0.5)) -> void:
+	# Keep the full input rect, with the original surface aligned inside it.
+	# Use the requested size: old theme margins can briefly keep the Control
+	# larger while changing scale. Padding must not retain that stale size.
 	var window_fit := button.get_node_or_null("/root/WindowFit")
 	var compact: bool = window_fit != null and window_fit.is_touch_ui() and not window_fit.is_mobile_browser_ui()
-	var inset := (button.size - visual_size).max(Vector2.ZERO) * 0.5 if compact else Vector2.ZERO
+	var padding := (button.custom_minimum_size - visual_size).max(Vector2.ZERO) if compact else Vector2.ZERO
+	var inset := padding * alignment.clamp(Vector2.ZERO, Vector2.ONE)
+	var end_inset := padding - inset
 	for state: String in ["normal", "hover", "pressed", "focus", "disabled"]:
 		var style := button.get_theme_stylebox(state) as StyleBoxFlat
 		if style == null:
@@ -32,10 +35,19 @@ static func compact_button_style(button: Button, visual_size: Vector2 = Vector2(
 		if not button.has_theme_stylebox_override(state):
 			style = style.duplicate() as StyleBoxFlat
 			button.add_theme_stylebox_override(state, style)
+		if not style.has_meta("touch_original_margins"):
+			style.set_meta("touch_original_margins", Vector4(style.get_margin(SIDE_LEFT), style.get_margin(SIDE_TOP), style.get_margin(SIDE_RIGHT), style.get_margin(SIDE_BOTTOM)))
+		var margins: Vector4 = style.get_meta("touch_original_margins")
 		style.expand_margin_left = -inset.x
-		style.expand_margin_right = -inset.x
+		style.expand_margin_right = -end_inset.x
 		style.expand_margin_top = -inset.y
-		style.expand_margin_bottom = -inset.y
+		style.expand_margin_bottom = -end_inset.y
+		style.content_margin_left = margins.x + inset.x
+		style.content_margin_top = margins.y + inset.y
+		style.content_margin_right = margins.z + end_inset.x
+		style.content_margin_bottom = margins.w + end_inset.y
+	if compact:
+		button.size = button.custom_minimum_size
 
 
 static func screen_scale(control: Control) -> Vector2:

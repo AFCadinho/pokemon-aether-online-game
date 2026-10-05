@@ -111,6 +111,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/mobile_keyboard_avoidance_check.gd",
 	"res://tests/mobile_browser_ui_check.gd",
 	"res://tests/mobile_collapse_touch_size_check.gd",
+	"res://tests/mobile_top_right_collapse_check.gd",
 	"res://tests/web_memory_probe_check.gd",
 	"res://tests/privacy_account_controls_check.gd",
 	"res://tests/client_version_contract_check.gd",

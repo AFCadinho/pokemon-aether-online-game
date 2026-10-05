@@ -2216,19 +2216,33 @@ func _refresh_quest_tracker_layout() -> void:
 	if quest_journal_view == null:
 		return
 	var right_action_bar_bottom := 0.0
+	var native_touch := WindowFit.is_touch_ui() and not WindowFit.is_mobile_browser_ui()
+	var touch_size := TouchTargetSize.size_for(root_control, COLLAPSE_BUTTON_SIZE)
+	var row_gap := maxf(ACTION_BAR_SLOT_GAP, 4.0 / TouchTargetSize.screen_scale(root_control).y) if native_touch else ACTION_BAR_SLOT_GAP
+	var next_top := 0.0
 	for panel_id in ["actions", "dex_actions"]:
 		var state: Dictionary = collapsible_panels.get(panel_id, {})
 		if state.is_empty() or not bool(state.get("available", true)):
 			continue
 		var panel: Control = state.get("panel") as Control
 		if panel != null:
-			right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
-	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + ACTION_BAR_SLOT_GAP)
+			if native_touch:
+				var height := panel.size.y
+				panel.offset_top = next_top
+				panel.offset_bottom = next_top + height
+				next_top += maxf(height, touch_size.y) + row_gap
+				right_action_bar_bottom = next_top - row_gap
+			else:
+				right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
+	quest_journal_view.set_tracker_top_offset(right_action_bar_bottom + row_gap)
 	var viewport_height: float = root_control.size.y
 	if viewport_height <= 0.0:
 		viewport_height = get_viewport().get_visible_rect().size.y
+	var tracker_bottom: float = quest_journal_view.get_visible_tracker_bottom()
+	if native_touch and quest_journal_view.tracker_collapse_button.visible:
+		tracker_bottom = maxf(tracker_bottom, quest_journal_view.tracker_collapse_button.get_rect().end.y)
 	var tracker_bottom_offset: float = (
-		quest_journal_view.get_visible_tracker_bottom()
+		tracker_bottom
 		+ HOTBAR_TRACKER_GAP
 		- viewport_height * 0.5
 	)
@@ -31538,12 +31552,35 @@ func _invalidate_collapsible_layout() -> void:
 
 func _position_collapsible_buttons() -> void:
 	_collapsible_layout_dirty = false
+	_refresh_quest_tracker_layout()
 	for panel_id_value: Variant in collapsible_panels.keys():
 		var panel_id := str(panel_id_value)
 		_position_collapsible_button(panel_id)
 	_position_chat_tabs_panel()
 	_position_chat_resize_button()
+	_fit_native_global_buff_dock()
 	_fit_collapse_touch_controls()
+
+
+func _fit_native_global_buff_dock() -> void:
+	if not WindowFit.is_touch_ui() or WindowFit.is_mobile_browser_ui():
+		return
+	if not global_buffs_panel.has_meta("native_dock_offsets"):
+		global_buffs_panel.set_meta("native_dock_offsets", Vector2(global_buffs_panel.offset_left, global_buffs_panel.offset_top))
+	var offsets: Vector2 = global_buffs_panel.get_meta("native_dock_offsets")
+	var desired := Rect2(Vector2(root_control.size.x * global_buffs_panel.anchor_left, 0) + offsets, global_buffs_panel.size)
+	var occupied: Array[Rect2] = [_collapse_touch_rect(location_panel), _collapse_touch_rect(options_panel)]
+	for id: String in ["actions", "dex_actions"]:
+		occupied.append(_collapse_touch_rect(collapsible_panels[id]["panel"]))
+		occupied.append(_collapse_touch_rect(collapsible_panels[id]["button"]))
+	if quest_journal_view != null:
+		if quest_journal_view.tracker_collapse_button.visible:
+			occupied.append(_collapse_touch_rect(quest_journal_view.tracker_collapse_button))
+		for panel: Control in [quest_journal_view.tracker_panel, quest_journal_view.side_tracker_panel]:
+			if panel.visible:
+				occupied.append(_collapse_touch_rect(panel))
+	var gap := maxf(4.0, 4.0 / TouchTargetSize.screen_scale(root_control).x)
+	global_buffs_panel.position = TouchTargetSize.fit_rect(desired, Rect2(Vector2.ZERO, root_control.size), occupied, gap).position
 
 
 func _mobile_navigation_cell_size() -> Vector2:
@@ -31556,10 +31593,14 @@ func _fit_collapse_touch_controls() -> void:
 		return
 	var occupied: Array[Rect2] = []
 	var buttons: Array[Control] = []
-	for state: Dictionary in collapsible_panels.values():
+	var native_touch := not WindowFit.is_mobile_browser_ui()
+	# Reserve these rows even while collapsed; reopening must not move a nearby
+	# button into the space that used to belong to the closed panel.
+	for panel_id: String in collapsible_panels:
+		var state: Dictionary = collapsible_panels[panel_id]
 		var panel: Control = state["panel"]
 		var button: Control = state["button"]
-		if panel.visible:
+		if panel.visible or (native_touch and panel_id in ["actions", "dex_actions"]):
 			occupied.append(_collapse_touch_rect(panel))
 		if button.visible:
 			buttons.append(button)
@@ -31568,12 +31609,21 @@ func _fit_collapse_touch_controls() -> void:
 			occupied.append(_collapse_touch_rect(companion))
 	if quest_journal_view != null:
 		for panel: Control in [quest_journal_view.tracker_panel, quest_journal_view.side_tracker_panel]:
-			if panel.visible:
+			var has_tracker: bool = quest_journal_view.has_main_tracker if panel == quest_journal_view.tracker_panel else quest_journal_view.has_side_tracker
+			if panel.visible or (native_touch and has_tracker and quest_journal_view.tracker_available):
 				occupied.append(_collapse_touch_rect(panel))
 		if quest_journal_view.tracker_collapse_button.visible:
 			buttons.append(quest_journal_view.tracker_collapse_button)
 	if chat_resize_button != null and chat_resize_button.visible:
 		buttons.append(chat_resize_button)
+	if native_touch:
+		var priority: Array[Control] = [collapsible_panels["actions"]["button"], collapsible_panels["dex_actions"]["button"]]
+		if quest_journal_view != null:
+			priority.append(quest_journal_view.tracker_collapse_button)
+		for index in range(priority.size() - 1, -1, -1):
+			if buttons.has(priority[index]):
+				buttons.erase(priority[index])
+				buttons.push_front(priority[index])
 	var bounds := Rect2(Vector2.ZERO, root_control.size)
 	var gap := maxf(4.0, 4.0 / TouchTargetSize.screen_scale(root_control).x)
 	for button: Control in buttons:
@@ -31662,6 +31712,11 @@ func _position_collapsible_button(panel_id: String) -> void:
 		else:
 			position.x = rect.position.x + rect.size.x + COLLAPSE_BUTTON_MARGIN
 			position.y = rect.position.y + rect.size.y - button_size.y
+	var visual_alignment := Vector2(0.5, 0.5)
+	if WindowFit.is_touch_ui() and not WindowFit.is_mobile_browser_ui() and panel_id in ["actions", "dex_actions"]:
+		# Draw next to the owning row; grow the input area toward the world.
+		position = rect.position - Vector2(button_size.x + maxf(COLLAPSE_BUTTON_MARGIN, 4.0 / TouchTargetSize.screen_scale(button).x), 0.0)
+		visual_alignment = Vector2(1.0, clampf((rect.size.y - COLLAPSE_BUTTON_SIZE.y) * 0.5 / maxf(button_size.y - COLLAPSE_BUTTON_SIZE.y, 0.001), 0.0, 1.0))
 	if WindowFit.is_mobile_browser_ui():
 		var order: Array[String] = ["options", "actions", "party", "chat", "location", "dex_actions", "hotkey_sidebar", "player_status"]
 		var index := order.find(panel_id)
@@ -31672,7 +31727,7 @@ func _position_collapsible_button(panel_id: String) -> void:
 		button.add_theme_font_size_override("font_size", 16)
 	button.position = position
 	button.size = button_size
-	TouchTargetSize.compact_button_style(button)
+	TouchTargetSize.compact_button_style(button, COLLAPSE_BUTTON_SIZE, visual_alignment)
 
 func _position_chat_resize_button() -> void:
 	if chat_resize_button == null:
