@@ -1690,7 +1690,10 @@ func _sync_render_size() -> void:
 		return
 	# Include both the battlefield/UI scale and the window's stretch transform.
 	# The texture's raster size is independent of the HUD's design coordinates.
-	var screen := get_screen_transform()
+	# CanvasItem's screen transform omits Window's content stretch here. Apply
+	# the viewport's final transform explicitly so a 720p window renders 720p,
+	# rather than the 1080p UI design canvas (and HiDPI output stays sharp).
+	var screen := get_viewport().get_final_transform() * get_global_transform_with_canvas()
 	var target := Vector2i(maxi(2, ceili(size.x * screen.x.length())), maxi(2, ceili(size.y * screen.y.length())))
 	if viewport.size != target:
 		viewport.size = target

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Match 3D battle rendering to the actual window resolution, avoiding unnecessary GPU work in smaller windows while keeping larger windows sharp.
 - Restore missing eye details in regional Pokémon 3D model imports.
 - Prepare normal and shiny 3D bundles for 58 regional and related forms, pending performance approval and publication; preload Galarian Darmanitan's Zen form once approved.
 - Correct shiny Dreepy's follower facing directions when standing and walking.
