@@ -258,3 +258,8 @@ check passes all 58 pairs with exact placement/action profiles, Mr. Mime aliases
 Zen preloading, and no downloads on normal/shiny swaps. The qualification receipt
 is `regional_model_bundle_qualification.json`. No public index or R2 object has
 been changed by this task.
+
+The final Thunderbolt integration adds an effect-dispatch branch outside the
+measured model lifecycle. Native raster sizing and all 58 admitted runtime pairs
+were rerun successfully after that merge. The receipt retains separate commit
+and source hashes for performance evidence and the final runtime replay.

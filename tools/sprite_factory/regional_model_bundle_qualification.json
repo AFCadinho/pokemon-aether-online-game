@@ -1437,9 +1437,13 @@
     "tools/sprite_factory/regional_model_admission.py": "e8fd8a6aa9743f41246e595c6e7d8d1a35a7f51dc013490c85aaa987e7406aae"
   },
   "installed_runtime_check_passed": true,
+  "integration_followup": "Later approved Thunderbolt dispatch was merged; the native raster check and all 58 admitted runtime pairs were repeated. Performance evidence retains the exact earlier measured code hash.",
   "local_download_before_reveal_check_passed": true,
   "models": 116,
   "pairs": 58,
+  "performance_code_commit": "414d01dba1b0cf0bbd461b67481070918426dcce",
+  "post_admission_presenter_sha256": "a6eec80d23a783ae41c94d6fb328da5448a17b5eb49341552aac44a83ebbaf2a",
+  "post_admission_runtime_code_commit": "916c7f7f758c2c159ec43862d4ccd8ebc710afb3",
   "published": false,
   "release_approved": false,
   "remaining": [
