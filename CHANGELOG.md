@@ -2,149 +2,24 @@
 
 ## Unreleased
 
-- Give 3D Trick Room a moving blue/purple mosaic cube with cyan highlights and transparent walls that keep Pokémon and the arena visible.
+### Adventure and quests
 
-- Enlarge Pokémon in 2.5D battles while keeping their feet aligned with the field, fitting very large models, and placing HP panels closer to older models.
+- Add fishing encounters to Vermilion City and continue the Fishing Guru’s quest on Route 12, where his brother rewards you with the Super Rod.
+- Restore NPC interactions in Vermilion City and Route 6.
 
-- Add native 3D visuals for Grassy, Electric, Misty and Psychic Terrain and Trick Room, including weather combinations and replay pause/speed support.
+### Battles
 
-- Render rain, sun, sandstorm, snow, hail and primal weather inside 3D battles, with camera-stable effects and replay pause/speed support.
+- Add more natural 3D battle scenes, with weather, terrain and status effects, clearer Pokémon animations, and improved battle effects.
+- Add 3D appearances for more Pokémon, including Mega forms and Galarian Articuno, Zapdos and Moltres.
+- Let desktop players choose 2D or 3D battles, with examples at login and the option to change the choice in Settings.
+- Improve wild grass battles with a smoothly looping meadow background.
+- Make battle loading clearer while Pokémon and arenas prepare.
 
-- Restore smooth filtering for enlarged 2D battle Pokémon after reviewing the sharper pixel-art presentation.
+### Playing on desktop, browser and mobile
 
-- Download and prepare possible Mega forms before their battle transformations, including shiny variants; include these forms in background party and area downloads.
-
-- Keep frozen 3D Pokémon tinted and still without repeating particles; show ice crystals only when Freeze blocks an action.
-
-- Give Mega Garchomp its reviewed standing stance and matching battle animations, including normal/shiny Pokédex and summary previews.
-
-- Show a clearer Poké Ball throw on every 3D summon, including switches, and keep the HP HUD anchored to the visible Substitute model.
-
-- Make Galarian Articuno, Zapdos and Moltres available through the updated 3D download catalog; include them in the launcher’s full collection download.
-
-- Use a textured 3D Substitute doll and an animated Poké Ball for 3D send-out, recall and capture, with world-space effects and synchronized existing sounds.
-
-- Add reviewed normal and shiny 3D models for Galarian Articuno, Zapdos and Moltres, with calibrated battle poses and flight heights.
-
-- Keep sleeping Pokémon’s Z glyphs positioned consistently when rotating the battle camera; show only the persistent tint between poison, toxic, burn and paralysis events.
-
-- Reduce 3D poison and toxic bubble diameter by 40% for subtler status effects.
-
-- Play Ground Gem and other offensive gem activations before their attack animation, keeping the attack and damage reaction together.
-
-- Keep native mobile Pokédex and quest-tracker collapse controls beside their own rows in fixed positions, with separate touch space and no overlap from the global-buff tray.
-
-- Make the 3D item activation effect golden, with light bands and particles sweeping up and back down around the Pokémon.
-
-- Preserve full 1080p detail in the animated grass battle background and its fallback image, with higher-quality video compression.
-
-- Show animated wild grass battles without visible platforms so Pokémon stand directly in the meadow.
-
-- Give Gliscor its native flying stance and matching battle animations, including in the Pokédex and summary preview; preserve normal/shiny colors and remove the extra hover offset.
-
-- Restore the original UI-scaled appearance of native HUD collapse/reopen buttons and chat resize, keeping the enlarged touch padding invisible.
-
-- Make native mobile HUD collapse/reopen controls look compact, while retaining their 48 dp touch area independently of UI scale.
-
-- Raise Gliscor and Weezing to a natural battle hover height, with smooth descent for sleep and fainting and a gentle rise when waking.
-
-- Use Android’s actual display density for mobile HUD collapse/reopen targets, preserving a 48 dp minimum even when Godot caps its screen scale.
-
-- Replace the old oval platforms in animated wild grass battles with painted meadow clearings and natural grass edges.
-
-- Keep poison, burn and other persistent statuses on 3D Pokémon without exposing 2D sprites; add a native Substitute doll, rising item particles and a berry bite with shared sounds, stronger power auras, and prepare reviewed Mega forms before their 3D reveal.
-
-- Use a smoothly looping animated meadow for wild 2D grass encounters, including route and city grassfields.
-
-- Offer existing desktop players the 2D/3D visual choice once after updating, then remember their confirmed choice across restarts and later updates.
-
-- Update the first-play 2D battle example and clearly explain that players can switch between 2D and 3D at any time in Settings.
-
-- Add an Open PC Box quick action to developer tools for direct access to Pokémon storage.
-
-- Show real 2D and 3D battle screenshots in the first-play visual choice so players can compare Pokémon and arenas before choosing.
-
-- Align 2.5D Pokémon with their visible platform surfaces and use a stable, shallow camera that follows screen layout without drifting or orbiting away from the 2D background.
-
-- Add short native 3D battle effects for stat changes, healing, items and berries, shiny sparkles, Protect, status conditions, terrain and power activations, with shared sounds synchronized to their animation.
-
-- Match settings dropdowns, including battle layout and visuals, to the menu's styled arrows, selection indicators and popup lists.
-
-- Keep mobile HUD and quest-tracker collapse/reopen buttons comfortable to tap at smaller UI scales, and place enlarged controls clear of neighbouring HUD surfaces.
-
-- Fade desktop 3D encounters into their prepared arena while Pokémon load, without temporary 2D sprites; keep battle actions locked until preparation finishes.
-
-- Restore browser Weekly Boss battle starts and allow the original music and move-sound filenames through versioned browser asset routes.
-
-- Restore forum announcements on the browser login screen by reading the shared updates feed instead of the browser asset bucket.
-
-- Speed up desktop 3D faint animations to at least 2× and cap their full movement at about 1.25 seconds, while preserving the resting faint pose and ordered replacement transition.
-
-- Enable permission-based staff and creator tools in the browser, including account impersonation and downloadable Photo Mode screenshots.
-
-- Fix browser Pokémon HOME icons remaining as question marks in Party, Storage and the Pokédex when reading the release's asset configuration.
-
-- Make downloaded Pokémon storage settings clearer, explain disabled removal actions, allow removal outside battles when a hidden battle screen is prewarmed, and ask for confirmation with Cancel selected by default.
-
-- Omit 2D move-animation sounds from model-only 3D attacks while retaining Pokémon animations, impact timing and shared damage, healing and stat-change sounds.
-
-- Browser players can now trade, lend, use Aether Exchange and the Guild Bank, and send or claim mail attachments through the shared game API.
-
-- Keep local 3D battle preparation quiet; show simple download progress only when missing Pokémon files are actually downloading.
-
-- Play desktop 3D attack and damage reactions at 1.5× speed, and synchronize HP changes and damage reactions with an earlier impact beat for the initial Pikachu Thunderbolt/Tackle and Blastoise Ice Beam pilots while the attacker recovers.
-
-- Prevent 2D sprites from flashing over 3D Pokémon when switching or refreshing their sprite frames.
-
-- Speed up repeated desktop 3D encounters by reusing already verified Pokémon resources and warmed arenas, while keeping complete checks for new or damaged files.
-
-- Restore NPC interactions in Vermilion City and Route 6 by setting their interaction reach to one tile.
-
-- Simplify the first-play 2D/3D choice with clearer examples, approximate storage sizes and an explanation of automatic downloads and optional launcher downloads.
-
-- Open battles with already installed 3D models without waiting for unrelated background downloads or rewriting their catalog; spread cached map prefetch work across frames.
-
-- Add Vermilion City fishing encounters based on FireRed/LeafGreen and HeartGold/SoulSilver.
-
-- Connect Vermilion City's map to its fishing encounter area so fishing encounters load there.
-
-- Wait for desktop 3D battle models and arenas before revealing wild encounters, with loading progress instead of briefly showing 2D sprites.
-
-- Prevent the login screen from failing after an update when its new 2D/3D example images have not yet been imported by the editor.
-
-- Let new desktop players choose 2D or 3D at login, with visual examples and full collection download/storage sizes; remember the choice on the device and preserve existing player preferences.
-
-- Preserve land and water arrival surfaces when crossing between Routes 12 and 13.
-
-- Allow fishing from a land mount beside water and preserve the mount afterward.
-
-- Include Route 12's Fishing Brother's House in the browser's extended map module.
-
-- Have Route 12's Fishing Guru's brother send players to Vermilion City before he offers his reward.
-
-- Require completing the Vermilion City Fishing Guru lesson before using the Super Rod.
-
-- Add optional complete 3D and 2D Pokémon downloads to the desktop launcher, with size estimates, overall progress, pause/resume and updates for selected assets.
-
-- Fix riders sitting too high on Glaceon and Shiny Glaceon mounts in all directions.
-
-- Add the Route 12 Fishing Brother's House interior and connect its entrance, return exit, and arrival spawns.
-
-- Place the Fishing Guru's younger brother in his Route 12 house, where he gives the one-time Super Rod.
-
-- Prevent settings from freezing the desktop game while counting downloaded sprites and 3D models on large installations.
-
-- Download approved normal and shiny 3D models when opening the Pokédex or a summary card, with loading progress and a sprite fallback if the download fails.
-
-- Prepare both Pokémon's 3D models before revealing wild encounters, including opponents that have not been downloaded yet.
-
-- Remember each successfully installed desktop update component immediately, so a later failed download does not force the game and asset packs to download again after restarting the launcher.
-
-- Fix desktop update packaging listing seven models for the full v8 3D catalog, which blocked launcher installation.
-
-- Add an asset-only recovery path for active Android releases missing their Pokémon icons, cries or login video.
-
-- Prevent Android updates from being activated before their matching Pokémon HOME icons, cries and login video have been verified on the public download route.
+- Let browser players trade, lend Pokémon, use the Aether Exchange and Guild Bank, and send or claim mail attachments.
+- Offer optional Pokémon artwork and 3D collections through the desktop launcher.
+- Make mobile controls easier to use at different screen sizes.
 
 ## 0.3.92
 
