@@ -169,6 +169,14 @@ func _run() -> void:
 		assert(stage.lifecycle[0] == "hidden")
 		await battle._play_switch_release("poke-ball", "Dragonite", null, "back")
 		assert(stage.lifecycle[0] == "idle")
+		var old_capture_player: Node = battle.capture_ball_animation_player
+		battle.capture_ball_animation_player = null
+		await battle._play_capture_animation("poke-ball", 0, false)
+		assert(stage.actor_shown[1] and stage.lifecycle[1] == "idle")
+		await battle._play_capture_animation("poke-ball", 3, true)
+		assert(not stage.actor_shown[1] and stage.lifecycle[1] == "hidden")
+		stage.set_actor_shown(1, true)
+		battle.capture_ball_animation_player = old_capture_player
 		battle.pokeball_summon_animation_player = old_ball_player
 		stage.recall("p1")
 		stage.set_combatant(0, "Dragonite", false, true)

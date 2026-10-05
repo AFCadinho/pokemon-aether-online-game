@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use a textured 3D Substitute doll and an animated Poké Ball for 3D send-out, recall and capture, with world-space effects and synchronized existing sounds.
+
 - Add reviewed normal and shiny 3D models for Galarian Articuno, Zapdos and Moltres, with calibrated battle poses and flight heights.
 
 - Keep sleeping Pokémon’s Z glyphs positioned consistently when rotating the battle camera; show only the persistent tint between poison, toxic, burn and paralysis events.
