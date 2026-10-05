@@ -1,6 +1,6 @@
 extends SceneTree
 
-const Renderer = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
+
 const CameraInput = preload("res://scripts/battle/battle_ui/immersive_camera_input.gd")
 const PLATFORM = preload("res://assets/background/platform/grass_platform_v3.png")
 
@@ -25,7 +25,7 @@ func _run() -> void:
 		image.size = Vector2(500, 300)
 		platform.add_child(image)
 		platforms.append(platform)
-	var stage := Renderer.new()
+	var stage = load("res://scripts/battle/battle_ui/experimental_battle_3d.gd").new()
 	parent.add_child(stage)
 	stage.setup([], platforms)
 	stage.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -50,7 +50,7 @@ func _run() -> void:
 		stage.user_camera_pitch = 0.4
 		stage.user_camera_zoom = 1.7
 		stage._update_camera(0.5)
-		var fixed_camera := stage.camera.transform
+		var fixed_camera: Transform3D = stage.camera.transform
 		for frame in 4:
 			stage._update_camera(0.5)
 			assert(stage.camera.transform.is_equal_approx(fixed_camera), "Idle camera movement must not shift a hybrid Pokémon")
@@ -74,6 +74,35 @@ func _run() -> void:
 			var second: Vector2 = image.get_global_transform().affine_inverse() * stage._project_to_ui(stage._position(side + 2))
 			assert(absf(first.y - second.y) < 0.01 and second.x - first.x > 100.0, "Double slots retain separate landing positions on the same platform")
 		stage.double_mode = false
+	# Small pairs get a clear increase without changing authored model scale.
+	parent.scale = Vector2.ONE
+	parent.position = Vector2.ZERO
+	parent.size = Vector2(1280,720)
+	stage.size = parent.size
+	stage._sync_render_size()
+	stage.combatants[0] = {"species":"azumarill", "shiny":false}
+	stage.combatants[1] = {"species":"rattata", "shiny":false}
+	for identity in ["azumarill","rattata"]:
+		stage.placements[identity] = {"scale":1.0,"yaw_degrees":0.0}
+		stage.visual_bounds[identity] = {"idle":{"min":[-0.4,0,-0.4],"size":[0.8,1.0,0.8]}}
+	stage._update_camera(0)
+	assert(is_equal_approx(stage.camera.size,6.5))
+	var floor: Vector2 = stage._project_to_ui(stage._position(0))
+	var large_span: float = floor.distance_to(stage._project_to_ui(stage._position(0)+Vector3.UP))
+	stage.camera.size=10.0
+	var old_span: float = stage._project_to_ui(stage._position(0)).distance_to(stage._project_to_ui(stage._position(0)+Vector3.UP))
+	assert(large_span/old_span>1.5, "Small Pokémon become at least 50% clearer at the same anchor")
+	# Very large envelopes widen the common frame; both sides retain one scale.
+	stage.visual_bounds.rattata.idle = {"min":[-4,0,-4],"size":[8,7,8]}
+	stage._update_camera(0)
+	assert(stage.camera.size>6.5)
+	assert(is_equal_approx(stage._hybrid_size_limit(),1.0), "The large silhouette fits within its screen budget")
+	var fitted: float = stage.camera.size
+	stage.current_actions[1]="physical_attack"
+	stage._update_camera(0)
+	assert(is_equal_approx(stage.camera.size,fitted), "Attacks must not pump the framing")
+	assert(stage.placements.azumarill.scale==1.0 and stage.placements.rattata.scale==1.0)
+	stage.current_actions[1]="idle"
 	# Full 3D retains perspective, its existing world spawns and camera input.
 	settings.battle_presentation_mode = "3d"
 	settings.battle_3d_camera_motion = false
