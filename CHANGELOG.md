@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep sleeping Pokémon’s Z glyphs positioned consistently when rotating the battle camera; show only the persistent tint between poison, toxic, burn and paralysis events.
+
 - Reduce 3D poison and toxic bubble diameter by 40% for subtler status effects.
 
 - Play Ground Gem and other offensive gem activations before their attack animation, keeping the attack and damage reaction together.

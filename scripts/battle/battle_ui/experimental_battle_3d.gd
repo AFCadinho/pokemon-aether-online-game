@@ -729,6 +729,7 @@ func _sync_status_effects() -> void:
 			world.add_child(effect)
 			var bounds := _effect_bounds(index)
 			effect.position = bounds.position
+			effect.view_camera = camera
 			effect.start(key, bounds.height, bounds.radius, func(): return active and handles(ident) and actors[index] == actor and actor.visible and actor_shown[index], common_effect_speed)
 			effect.attach_model(actor)
 			status_effects[index] = effect
@@ -778,6 +779,7 @@ func create_common_effect(key: String, ident: String) -> Node:
 	if key == "mega_evolution":
 		guard = func(): return active and is_instance_valid(world)
 	world.add_child(effect)
+	effect.view_camera = camera
 	effect.position = anchor
 	if is_instance_valid(camera):
 		var toward_camera: Vector3 = world.to_local(camera.global_position) - anchor
