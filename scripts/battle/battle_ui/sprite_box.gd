@@ -23,7 +23,7 @@ const BATTLE_SPRITE_SCALE := Vector2(2, 2)
 const BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 0.85
 const RENDERED_BATTLE_PLATFORM_Y_OFFSET := 12.0
 const GEN5_BATTLE_SPRITE_DISPLAY_SCALE_MULTIPLIER := 1.25
-const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_NEAREST
+const BATTLE_SPRITE_TEXTURE_FILTER := CanvasItem.TEXTURE_FILTER_LINEAR
 const BATTLE_SPRITE_STYLE_ORDER: Array[String] = ["legacy_showdown", "showdown", "gen5"]
 const PIXEL_SPRITE_STYLE_ORDER: Array[String] = ["gen5", "legacy_showdown", "showdown"]
 const HOME_SPRITE_RENDER_SCALE := 2.0
@@ -995,14 +995,6 @@ func _get_base_sprite_position(sprite: AnimatedSprite2D) -> Vector2:
 	return sprite.position + _get_sprite_frames_position_offset(sprite.sprite_frames)
 
 func _set_sprite_target_scale_from_frames(sprite: AnimatedSprite2D, sprite_frames: SpriteFrames) -> void:
-	# Re-evaluate on every replacement, including HOME -> downloaded web frames.
-	sprite.texture_filter = BATTLE_SPRITE_TEXTURE_FILTER
-	if sprite_frames != null and (
-		sprite_frames.has_meta("rendered_asset")
-		or sprite_frames.has_meta("dratini_hd_poc")
-		or bool(sprite_frames.get_meta("home_fallback", false))
-	):
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	var render_scale: float = _get_sprite_frames_render_scale(sprite_frames)
 	if render_scale <= 0.0:
 		sprite_target_scales[_get_sprite_key(sprite)] = BATTLE_SPRITE_SCALE
