@@ -1109,7 +1109,10 @@ func start_move_action(ident: String, move: String) -> void:
 	if handles(ident):
 		var index := actor_index(ident)
 		var max_seconds := 0.8 if MoveEffect.move_key(move)=="quickattack" else (1.25 if MoveEffect.supports(move) else 0.0)
-		_action(attack_action_for(move, ident), index, max_seconds)
+		# Moonblast gets a full two-second performance: 0.9s charge, 0.35s
+		# flight, then impact/recovery. The native clock still owns every cue.
+		var duration_override := 2.0 if MoveEffect.move_key(move)=="moonblast" else 0.0
+		_action(attack_action_for(move, ident), index, max_seconds, duration_override)
 		# play() schedules its reset; sample frame zero before binding a VFX clock.
 		if MoveEffect.supports(move) and players[index] != null:
 			players[index].seek(0.0, true)
@@ -1209,6 +1212,9 @@ func move_timing(move: String, ident: String) -> Dictionary:
 		if profile.is_empty():
 			profile = {"action": mapped.action, "frames": mapped.duration * 60.0, "impact_frame": mapped.duration * 60.0 * 0.45}
 		profile["move_key"] = MoveEffect.move_key(move)
+		if profile.move_key == "moonblast":
+			profile["launch_frame"] = float(profile.frames) * 0.45
+			profile["impact_frame"] = float(profile.frames) * 0.625
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:
@@ -2013,7 +2019,7 @@ func actor_visual_rect(ident: String) -> Rect2:
 func actor_anchor(ident: String) -> Vector2:
 	return _anchor(true, actor_index(ident)) if handles(ident) else Vector2.ZERO
 
-func _action(action: String, index: int, max_seconds := 0.0) -> void:
+func _action(action: String, index: int, max_seconds := 0.0, duration_override := 0.0) -> void:
 	if not active or players[index] == null:
 		return
 	if lifecycle[index] == "fainted" and action != "faint_loop":
@@ -2041,6 +2047,7 @@ func _action(action: String, index: int, max_seconds := 0.0) -> void:
 	players[index].speed_scale = playback_speed
 	var clip_speed: float = mapped.speed * ActionMap.presentation_speed(action, mapped.duration / mapped.speed)
 	if max_seconds > 0.0: clip_speed = maxf(clip_speed, mapped.duration / max_seconds)
+	if duration_override > 0.0 and not mapped.loop: clip_speed = mapped.duration / duration_override
 	players[index].play(mapped.clip, -1, clip_speed)
 	resting[index] = action in ["idle", "sleep", "faint_start", "faint_loop"]
 

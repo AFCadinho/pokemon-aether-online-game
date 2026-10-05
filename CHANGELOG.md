@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give 3D Moonblast a two-second presentation with a longer moon reveal and energy charge, a quick release, and matching charge audio.
+
 - Enlarge all 23 native 3D move effects, with stronger Moonblast and Flash Cannon silhouettes, wider beams and clearer impacts while preserving attack origins and trajectories.
 
 - Give the animated meadow a dark blue night sky with subdued moving clouds and subtle stars, fading with the world clock.
