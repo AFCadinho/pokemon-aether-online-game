@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enlarge stat changes and effect badges below 3D battle HP panels, preserving room between the labels and Pokémon.
+
 - Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.
 
 - Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
