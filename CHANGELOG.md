@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve full 1080p detail in the animated grass battle background and its fallback image, with higher-quality video compression.
+
 - Show animated wild grass battles without visible platforms so Pokémon stand directly in the meadow.
 
 - Give Gliscor its native flying stance and matching battle animations, including in the Pokédex and summary preview; preserve normal/shiny colors and remove the extra hover offset.
