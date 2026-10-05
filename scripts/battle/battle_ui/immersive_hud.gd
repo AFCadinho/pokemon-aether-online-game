@@ -1,5 +1,9 @@
 extends Node
 ## Screen-space presentation only; the existing battle owns every control/signal.
+# Stage-space clearance includes room for the stat/effect rows below each HP card.
+const MODEL_HUD_CLEARANCE := 52.0
+const MODEL_LABEL_BODY_GAP := 20.0
+const HUD_LABEL_GAP := 3.0
 const COOP_SLOTS := ["p1", "p3", "p2", "p4"]
 const COOP_HUD_SCENE := preload("res://scenes/battle/pokemon_hud_panel.tscn")
 var battle: Control
@@ -7,12 +11,12 @@ var initialized := [false, false]
 var coop_huds: Dictionary = {}
 var coop_huds_active := false
 
-static func clear_model_hud(target: Vector2, extent: Vector2, bounds: Rect2) -> Vector2:
-	# The sprite HUD's 62px top margin can intersect a tall 3D animation.
-	# Use the available space above that model, preserving the screen margin.
-	if not bounds.has_area() or not Rect2(target, extent).intersects(bounds):
+static func clear_model_hud(target: Vector2, extent: Vector2, bounds: Rect2, clearance := 12.0) -> Vector2:
+	# Keep the reserved label space clear too when the top clamp is reached.
+	# Use available space above the model while preserving the screen margin.
+	if not bounds.has_area() or not Rect2(target, extent + Vector2(0, clearance)).intersects(bounds):
 		return target
-	var candidate := Vector2(target.x, maxf(16.0, bounds.position.y - extent.y - 12.0))
+	var candidate := Vector2(target.x, maxf(16.0, bounds.position.y - extent.y - clearance))
 	return candidate if not Rect2(candidate, extent).intersects(bounds) else target
 
 func _ready() -> void:
@@ -136,7 +140,8 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		var sprite_box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
 		var badges: Control = sprite_box.single_stat_stage_panel
 		var extent := hud.size * 0.65
-		var badge_height := badges.size.y * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
+		var badge_height := maxf(badges.size.y, badges.get_combined_minimum_size().y) * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
+		var model_clearance := maxf(MODEL_HUD_CLEARANCE, badge_height + HUD_LABEL_GAP + MODEL_LABEL_BODY_GAP)
 		var target := Vector2(area.x * (0.27 if index == 0 else 0.73) - extent.x * 0.5, 160)
 		var anchored_to_sprite := false
 		var model_bounds := Rect2()
@@ -146,7 +151,7 @@ func layout_now(delta := 0.0, snap := false) -> void:
 				var inverse := stage.get_global_transform().affine_inverse()
 				model_bounds = Rect2(inverse * bounds.position, inverse * bounds.end - inverse * bounds.position)
 				var top := Vector2(model_bounds.get_center().x, model_bounds.position.y)
-				target = top - Vector2(extent.x * 0.5, extent.y + 12)
+				target = top - Vector2(extent.x * 0.5, extent.y + (model_clearance if realtime_3d else 12.0))
 				anchored_to_sprite = true
 		else:
 			var bounds := Rect2()
@@ -169,7 +174,7 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		target.x = clampf(target.x, 16, area.x - extent.x - 16)
 		target.y = clampf(target.y, 62, area.y - 230 - extent.y)
 		if realtime_3d and anchored_to_sprite:
-			target = clear_model_hud(target, extent, model_bounds)
+			target = clear_model_hud(target, extent, model_bounds, model_clearance)
 		var position_next := hud.position.lerp(target, 1.0 - exp(-12.0 * delta)) if initialized[index] and not snap else target
 		# Keep the HP panel above a newly revealed or rising 3D model.
 		# Easing upwards can otherwise leave it inside the model for a few frames.
@@ -186,7 +191,7 @@ func layout_now(delta := 0.0, snap := false) -> void:
 			badges.set_meta("immersive_positioned", true)
 			var parent_inverse := (badges.get_parent() as CanvasItem).get_global_transform().affine_inverse()
 			var badge_scale := 0.5 * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
-			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + 3))), badges.size, badge_scale)
+			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + HUD_LABEL_GAP))), badges.size, badge_scale)
 		var effects: Control = battle.get_node("%SideFieldEffectsPanel" if index == 0 else "%SideFieldEffectsPanel2")
 		var side_rail: Control = team_preview if index == 0 else opponent_rail
 		var effects_extent := effects.size * 0.5
