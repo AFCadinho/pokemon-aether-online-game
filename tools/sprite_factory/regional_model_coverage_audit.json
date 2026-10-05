@@ -1,0 +1,1810 @@
+{
+  "schema": 1,
+  "scope": "local regional Pokédex coverage; no production access or visual approval",
+  "frontend_revision": "5dfecafcf2c05ed8deb58d0dd546b2d95d3adc20",
+  "backend_revision": "5e5f6f3dcdb7b59f604e41157b3b6b45dd06308d",
+  "pokedex_module_sha256": "72bd9ba2f2400c73d7688d0a2c39fd07d756f22750bd2a6f8798897ce62738b7",
+  "visible_pokedex_rows": 1438,
+  "reviewed_catalog_sha256": "94ede365070e55c201f4e253e1d5ec0f5525fdcab31aef1e556f62f71772066c",
+  "release_sha256": "8b110a6e2c382c808e860f58482dcaca8d124437fec62c66e5d2c6fedbe2d633",
+  "index_sha256": "021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa",
+  "release_revision": "approved-pokemon-3d-v9",
+  "client_launcher_equal": true,
+  "regional_summary": {
+    "alola": {
+      "total": 18,
+      "ready_pairs": 0,
+      "missing_pairs": 18
+    },
+    "galar": {
+      "total": 19,
+      "ready_pairs": 3,
+      "missing_pairs": 16
+    },
+    "hisui": {
+      "total": 16,
+      "ready_pairs": 0,
+      "missing_pairs": 16
+    },
+    "paldea": {
+      "total": 4,
+      "ready_pairs": 0,
+      "missing_pairs": 4
+    }
+  },
+  "extra_variants": {
+    "darmanitan-galar-zen": false,
+    "marowak-alola-totem": false,
+    "pikachu-alola": false,
+    "raticate-alola-totem": false
+  },
+  "entries": [
+    {
+      "species": "arcanine-hisui",
+      "name": "Arcanine Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "64e22319635cd5622c912afb8e7fcaef7092ceab1d43e7a8f07ba0da7b91c097",
+      "asset_id": "pokemon_3d:arcanine-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "arcanine-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "arcanine-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "articuno-galar",
+      "name": "Articuno Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "5d792832f8a62f9eb227dd91228cc7e9617662c1e82935a4f72d2cf290cb1802",
+      "asset_id": "pokemon_3d:articuno-galar:base",
+      "release_listed": true,
+      "variants": {
+        "normal": {
+          "identity": "articuno-galar",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        },
+        "shiny": {
+          "identity": "articuno-galar@shiny",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        }
+      },
+      "ready_pair": true
+    },
+    {
+      "species": "avalugg-hisui",
+      "name": "Avalugg Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "577853b88a66fd8a4a53b8a62e3bac7ccbed337a2d12000513fe06b706a92d6c",
+      "asset_id": "pokemon_3d:avalugg-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "avalugg-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "avalugg-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "braviary-hisui",
+      "name": "Braviary Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "7c7956d0f65945a504ba368e4ab4114c7c8d5cb9f701d83d649a1c998933dfb3",
+      "asset_id": "pokemon_3d:braviary-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "braviary-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "braviary-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "corsola-galar",
+      "name": "Corsola Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "8cf9e3181f1f093b6047437a19d6eac87a2cdecca1a1f2a207efe2dea1c4f8db",
+      "asset_id": "pokemon_3d:corsola-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "corsola-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "corsola-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "darmanitan-galar-zen",
+      "name": "Darmanitan Galar Zen",
+      "region": "galar",
+      "kind": "battle transformation",
+      "species_data_sha256": "f60d732fb95800baf99fc1dcde25fc142ac1516dbc3cb294b3c776d6b2c4adff",
+      "asset_id": "pokemon_3d:darmanitan-galar-zen:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "darmanitan-galar-zen",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "darmanitan-galar-zen@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "darmanitan-galar",
+      "name": "Darmanitan Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "057d69989557f395b184b57858c164336c0f16c42ca68de91fa03dbfca40a05b",
+      "asset_id": "pokemon_3d:darmanitan-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "darmanitan-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "darmanitan-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "darumaka-galar",
+      "name": "Darumaka Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "ad726af1a014e5d74c85b4107e7371e7023a49bd2245ff39f6307610e41b82f2",
+      "asset_id": "pokemon_3d:darumaka-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "darumaka-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "darumaka-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "decidueye-hisui",
+      "name": "Decidueye Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "cdf14b4587d4bc6f6a27ae14cd1f49526c7949f7722b154386b48bf137098e12",
+      "asset_id": "pokemon_3d:decidueye-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "decidueye-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "decidueye-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "diglett-alola",
+      "name": "Diglett Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "b1992484b0cbe1afc29c3029874ccf691452ca1f8ae854f971041ec2718bfcf6",
+      "asset_id": "pokemon_3d:diglett-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "diglett-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "diglett-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "dugtrio-alola",
+      "name": "Dugtrio Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "51489ea990d5c9cc4fd77e9bafef3e6d217036c9025a1ec3453b8efc5d1c59b4",
+      "asset_id": "pokemon_3d:dugtrio-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "dugtrio-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "dugtrio-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "electrode-hisui",
+      "name": "Electrode Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "1cc47a2bd696a0ca5366d2c352635c820a4c13a79cdcac32af5cce651623bc21",
+      "asset_id": "pokemon_3d:electrode-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "electrode-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "electrode-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "exeggutor-alola",
+      "name": "Exeggutor Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "75f93094383159f053947dc47dd714eccc4946839544e156207484a9fd46a38c",
+      "asset_id": "pokemon_3d:exeggutor-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "exeggutor-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "exeggutor-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "farfetchd-galar",
+      "name": "Farfetchd Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "ea16a03472aea30b979b385bbcec6d8ed2c768c235dfb0c5f94cafe60af81fc3",
+      "asset_id": "pokemon_3d:farfetchd-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "farfetchd-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "farfetchd-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "geodude-alola",
+      "name": "Geodude Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "e2542507abe4611e27a08ccd40034cd67138f173e4535d087501f15bfdbab3ff",
+      "asset_id": "pokemon_3d:geodude-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "geodude-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "geodude-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "golem-alola",
+      "name": "Golem Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "fa5ab9a9a07e64e4d12e53a64a533d0951c19d37d795536812fc595d79d67d28",
+      "asset_id": "pokemon_3d:golem-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "golem-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "golem-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "goodra-hisui",
+      "name": "Goodra Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "409c337ca355aa6daca709bb7a20dacb67a6add0f056116d23f6527bbfcafbbc",
+      "asset_id": "pokemon_3d:goodra-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "goodra-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "goodra-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "graveler-alola",
+      "name": "Graveler Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "dde3e288a8924978ccf4871127a35d5d624cb5a8f3e62e1848e8ce3c859f4b53",
+      "asset_id": "pokemon_3d:graveler-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "graveler-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "graveler-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "grimer-alola",
+      "name": "Grimer Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "c6eda7062091be3f16c66e6cd558becdb65c5492b677f0b5771a4f75e0c2130e",
+      "asset_id": "pokemon_3d:grimer-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "grimer-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "grimer-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "growlithe-hisui",
+      "name": "Growlithe Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "b553e021e439b6fad5c3b06a2decce23b925f308ee21544e34df46fd27b1652e",
+      "asset_id": "pokemon_3d:growlithe-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "growlithe-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "growlithe-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "lilligant-hisui",
+      "name": "Lilligant Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "f0a65f820fcfecbcd2a2649c1c3a0789c87760e5f5a9248fafdca61abee04b6c",
+      "asset_id": "pokemon_3d:lilligant-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "lilligant-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "lilligant-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "linoone-galar",
+      "name": "Linoone Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "eece5802b6e5e614806316dbe818b670fcf9e43e1edbac70a7893f2c96f51497",
+      "asset_id": "pokemon_3d:linoone-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "linoone-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "linoone-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "marowak-alola-totem",
+      "name": "Marowak Alola Totem",
+      "region": "alola",
+      "kind": "totem variant",
+      "species_data_sha256": "17130084719379f3da1aadd4035cf2cce4ac6ace24315b218c8c72f40925e401",
+      "asset_id": "pokemon_3d:marowak-alola-totem:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "marowak-alola-totem",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "marowak-alola-totem@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "marowak-alola",
+      "name": "Marowak Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "ad733e253651172321e05285b5f2095bb1a28a6ee992190989f06036c12bc7c8",
+      "asset_id": "pokemon_3d:marowak-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "marowak-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "marowak-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "meowth-alola",
+      "name": "Meowth Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "18af89edbd8821ec3977a3ce65de34a4e9551aba0c3c5171055fb48568c76cf1",
+      "asset_id": "pokemon_3d:meowth-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "meowth-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "meowth-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "meowth-galar",
+      "name": "Meowth Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "9361a2bf2211f68c7f464defe1e030af0030b7512551d4462b28c25f2c92eed5",
+      "asset_id": "pokemon_3d:meowth-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "meowth-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "meowth-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "moltres-galar",
+      "name": "Moltres Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "15ea8a7103852de2cf9ecf5f34718b4abfd61c97671d8293c560c3f64b63502c",
+      "asset_id": "pokemon_3d:moltres-galar:base",
+      "release_listed": true,
+      "variants": {
+        "normal": {
+          "identity": "moltres-galar",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        },
+        "shiny": {
+          "identity": "moltres-galar@shiny",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        }
+      },
+      "ready_pair": true
+    },
+    {
+      "species": "mr-mime-galar",
+      "name": "Mr. Mime Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "7dd8cef2654cad8717c1c5b25f5ea728d07545df8fdd697d5e4dd7df79b71ee1",
+      "asset_id": "pokemon_3d:mr-mime-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "mr-mime-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "mr-mime-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "muk-alola",
+      "name": "Muk Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "f9dbf0841e609b0928bf02721816100b957644428a0c33855bb85890bbd06097",
+      "asset_id": "pokemon_3d:muk-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "muk-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "muk-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "ninetales-alola",
+      "name": "Ninetales Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "ae3d12ec54867da89b0dcd36c426faa9c116db1ae1f4255ceaf6459b62e0b4ee",
+      "asset_id": "pokemon_3d:ninetales-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "ninetales-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "ninetales-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "persian-alola",
+      "name": "Persian Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "baa9309b6b5ef2301fd4e4ace591fcc98daa5a147d14e5c1ba0dc2fc954159d2",
+      "asset_id": "pokemon_3d:persian-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "persian-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "persian-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "pikachu-alola",
+      "name": "Pikachu Alola",
+      "region": "alola",
+      "kind": "cap variant",
+      "species_data_sha256": "fbe377c248f510860c80c05960fea0b86f4c7b02af50897a28b37b133891e498",
+      "asset_id": "pokemon_3d:pikachu-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "pikachu-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "pikachu-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "ponyta-galar",
+      "name": "Ponyta Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "59f41a317fd19d9c45c4c7ec46f19ea4e3e76296d2dd5cd1bade4024f01fc274",
+      "asset_id": "pokemon_3d:ponyta-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "ponyta-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "ponyta-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "qwilfish-hisui",
+      "name": "Qwilfish Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "645b9617b39e5771190df70e3cb3b191f043aadd9c30848bac7ef9d502b4f892",
+      "asset_id": "pokemon_3d:qwilfish-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "qwilfish-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "qwilfish-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "raichu-alola",
+      "name": "Raichu Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "2959c86528007c53ee7337d0a17f930db80a736241bcd029ea8685ac26f4cf24",
+      "asset_id": "pokemon_3d:raichu-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "raichu-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "raichu-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "rapidash-galar",
+      "name": "Rapidash Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "0a38debfa05f3b6bfa86b093c99e5c2aa8a6c675504c1d095c296c273f9f2bff",
+      "asset_id": "pokemon_3d:rapidash-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "rapidash-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "rapidash-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "raticate-alola-totem",
+      "name": "Raticate Alola Totem",
+      "region": "alola",
+      "kind": "totem variant",
+      "species_data_sha256": "534805af2cd091f628ca5c2252bd55bbe8667fab0df81b7f7e625352621cbebd",
+      "asset_id": "pokemon_3d:raticate-alola-totem:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "raticate-alola-totem",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "raticate-alola-totem@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "raticate-alola",
+      "name": "Raticate Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "38987369eaee6b7e368ff14f34f620ab9b3793d38282077ee47889c9081dc989",
+      "asset_id": "pokemon_3d:raticate-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "raticate-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "raticate-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "rattata-alola",
+      "name": "Rattata Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "8cd135550e2b3b69a90d1f73740b196cd9040e8ac345440777d88cf57a9cba0a",
+      "asset_id": "pokemon_3d:rattata-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "rattata-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "rattata-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "samurott-hisui",
+      "name": "Samurott Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "dcb0beea0f341233d30c4ee7f1d0518ed8b76de2680ee804e9a0fa56b75a156d",
+      "asset_id": "pokemon_3d:samurott-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "samurott-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "samurott-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "sandshrew-alola",
+      "name": "Sandshrew Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "8fbc972a45b729ca2c2d27de7a5532ec087f140c833dfa9d412ba246dd9a9fdd",
+      "asset_id": "pokemon_3d:sandshrew-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "sandshrew-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "sandshrew-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "sandslash-alola",
+      "name": "Sandslash Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "31b74acb1495f371237b8b494e8ab73449cd76caf9418fc643198f29dac54a7e",
+      "asset_id": "pokemon_3d:sandslash-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "sandslash-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "sandslash-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "sliggoo-hisui",
+      "name": "Sliggoo Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "7a39b96c2951dc7bea128ed9180f739dc9dbdfaf2d68b07b0c45ecc518f135e0",
+      "asset_id": "pokemon_3d:sliggoo-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "sliggoo-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "sliggoo-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "slowbro-galar",
+      "name": "Slowbro Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "e319ee7c5cdbc2bebd0592bca1ab7c8a991f00ccd877d6ea2c060e5b25a46208",
+      "asset_id": "pokemon_3d:slowbro-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "slowbro-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "slowbro-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "slowking-galar",
+      "name": "Slowking Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "8bdf2a97ea60a9ebc1ef1e78f809eb20f29a7b8380509202c2d67253c5895b10",
+      "asset_id": "pokemon_3d:slowking-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "slowking-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "slowking-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "slowpoke-galar",
+      "name": "Slowpoke Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "d590215872e3ac65e437c1aef9c02b16da8f03b7a35299db63dea4e708a962da",
+      "asset_id": "pokemon_3d:slowpoke-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "slowpoke-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "slowpoke-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "sneasel-hisui",
+      "name": "Sneasel Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "cc5a0bd1ec30bbd86d4eaeebcfc662b8bf70ec2745405799a6dc7113f8f78a9a",
+      "asset_id": "pokemon_3d:sneasel-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "sneasel-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "sneasel-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "stunfisk-galar",
+      "name": "Stunfisk Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "7f51d4117bc8d90e82df3f4fe91af0291324acaf55189a2e952aa32c47ee6bc0",
+      "asset_id": "pokemon_3d:stunfisk-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "stunfisk-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "stunfisk-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "tauros-paldea-aqua",
+      "name": "Tauros Paldea Aqua",
+      "region": "paldea",
+      "kind": "regional form",
+      "species_data_sha256": "5779f95ac3c5b4777b215e756f3912f640e0de76d7cba236a2a112133a6e5e73",
+      "asset_id": "pokemon_3d:tauros-paldea-aqua:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "tauros-paldea-aqua",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "tauros-paldea-aqua@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "tauros-paldea-blaze",
+      "name": "Tauros Paldea Blaze",
+      "region": "paldea",
+      "kind": "regional form",
+      "species_data_sha256": "a9f2136f7a08db23055c4bc01afa2ea0058f3522f8c4190f631638fb3c181ac2",
+      "asset_id": "pokemon_3d:tauros-paldea-blaze:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "tauros-paldea-blaze",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "tauros-paldea-blaze@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "tauros-paldea-combat",
+      "name": "Tauros Paldea Combat",
+      "region": "paldea",
+      "kind": "regional form",
+      "species_data_sha256": "f095c94fbdd9dab2776900f7c1518462bcfd10551fd41e95b529e2f15fc0ce96",
+      "asset_id": "pokemon_3d:tauros-paldea-combat:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "tauros-paldea-combat",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "tauros-paldea-combat@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "typhlosion-hisui",
+      "name": "Typhlosion Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "7879e1d1d57c17a4552f6ada46a02d1962d8d7d886f24410872ab9f9c565c122",
+      "asset_id": "pokemon_3d:typhlosion-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "typhlosion-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "typhlosion-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "voltorb-hisui",
+      "name": "Voltorb Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "5984d0cc0fe43ea79a5e98755807e300b97061d90721794190d412c5ec93b62f",
+      "asset_id": "pokemon_3d:voltorb-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "voltorb-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "voltorb-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "vulpix-alola",
+      "name": "Vulpix Alola",
+      "region": "alola",
+      "kind": "regional form",
+      "species_data_sha256": "d6f220b8f891f712bb5c8e749ef499eeb147c36b55cdf654f68c5b64f4ef36cd",
+      "asset_id": "pokemon_3d:vulpix-alola:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "vulpix-alola",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "vulpix-alola@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "weezing-galar",
+      "name": "Weezing Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "d07d1fee622835ed2015cd519082eb8709fd520027ef53717fcb6872cb82d753",
+      "asset_id": "pokemon_3d:weezing-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "weezing-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "weezing-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "wooper-paldea",
+      "name": "Wooper Paldea",
+      "region": "paldea",
+      "kind": "regional form",
+      "species_data_sha256": "d70ebfd1c7f1d3d96a36cfcd0f27cd1cb2c6988ef96c192b2b24786ba6269cf9",
+      "asset_id": "pokemon_3d:wooper-paldea:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "wooper-paldea",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "wooper-paldea@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "yamask-galar",
+      "name": "Yamask Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "a0ec631c3a5c91f74de89a628704ab9d8be30b1dcfe7bb68eefd426ee15ab322",
+      "asset_id": "pokemon_3d:yamask-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "yamask-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "yamask-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "zapdos-galar",
+      "name": "Zapdos Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "768a048fb614358c3cbdec3afd6867eb5b5b5ed92725eafc84df64923d0814a2",
+      "asset_id": "pokemon_3d:zapdos-galar:base",
+      "release_listed": true,
+      "variants": {
+        "normal": {
+          "identity": "zapdos-galar",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        },
+        "shiny": {
+          "identity": "zapdos-galar@shiny",
+          "reviewed": true,
+          "screened_only": false,
+          "indexed": true,
+          "digest_matches": true
+        }
+      },
+      "ready_pair": true
+    },
+    {
+      "species": "zigzagoon-galar",
+      "name": "Zigzagoon Galar",
+      "region": "galar",
+      "kind": "regional form",
+      "species_data_sha256": "a6f2b54a630ba648e18527384a8f06860de9cab44896d42348b8111761723bd6",
+      "asset_id": "pokemon_3d:zigzagoon-galar:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "zigzagoon-galar",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "zigzagoon-galar@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "zoroark-hisui",
+      "name": "Zoroark Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "9f54d5f80003641e32064ec7519a22323c2bfa5569d638ea851e33e26b342657",
+      "asset_id": "pokemon_3d:zoroark-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "zoroark-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "zoroark-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    },
+    {
+      "species": "zorua-hisui",
+      "name": "Zorua Hisui",
+      "region": "hisui",
+      "kind": "regional form",
+      "species_data_sha256": "7dfc25866577598cc2200f41b20b71f73b066e9f96d8bca9cde46ec20c21bd0c",
+      "asset_id": "pokemon_3d:zorua-hisui:base",
+      "release_listed": false,
+      "variants": {
+        "normal": {
+          "identity": "zorua-hisui",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        },
+        "shiny": {
+          "identity": "zorua-hisui@shiny",
+          "reviewed": false,
+          "screened_only": false,
+          "indexed": false,
+          "digest_matches": false
+        }
+      },
+      "ready_pair": false
+    }
+  ],
+  "samurott_hisui_source": {
+    "internal_species_id": 503,
+    "national_dex_id": 503,
+    "form": 1,
+    "gender_code": 0,
+    "resource_id": "pm0503_00_41",
+    "model_path": "pm0503/pm0503_00_41/pm0503_00_41.trmdl",
+    "material_table_path": "pm0503/pm0503_00_41/pm0503_00_41.trmmt",
+    "config_path": "pm0503/pm0503_00_41/pm0503_00_41.trpokecfg",
+    "animation_catalog_paths": [
+      "pm0503/pm0503_00_41/pm0503_00_41.tracn"
+    ],
+    "icon_path": "pm0503/pm0503_00_41/pm0503_00_41_00.bntx",
+    "catalog_sha256": "24b322e3d9575f8c6648862c3a08db1940eb9e2e03d2efa490e5b21c55c9f96e",
+    "model_directory": "/run/media/adinho/AFC_Adinho/3d_models/Pokémon SCVI Base + DLC Model Dump/pm0503/pm0503_00_41",
+    "motion_directory": "/run/media/adinho/AFC_Adinho/3d_models/SV Every File/romfs/pokemon/data/pm0503/pm0503_00_41",
+    "source_file_sha256": {
+      "pm0503_00_41.trmdl": "b63984d4306cf4b0d2664bc4da2a08844cb95a445336f2a71fdcf399836e81fb",
+      "pm0503_00_41.trmsh": "4f62520a92970b329ce48981b057f6a8d698d714dae1c59c1c61ad35ad269b5a",
+      "pm0503_00_41.trmbf": "52815114c4e34152ab9d7edbc6cfe85435d57864a7ce62b0c56daf0f9e0fc680",
+      "pm0503_00_41.trskl": "e1df744ec755d6c037074369742a32e22231f43cf7615367d51e55f9587d2e18",
+      "pm0503_00_41.trmtr": "10513e8573282043a69b53519e0433bf498f3ef405fcda5c0c8b6a41d67aba05",
+      "pm0503_00_41_rare.trmtr": "a96413be052a4602cfaa98038ada46e028482916d5f851d1776c92a58b7dfeb3"
+    },
+    "skeletal_motions": [
+      "pm0503_00_41_00000_defaultwait01_loop.tranm",
+      "pm0503_00_41_00001_battlewait01_loop.tranm",
+      "pm0503_00_41_00010_defaultidle01.tranm",
+      "pm0503_00_41_00011_defaultidle02.tranm",
+      "pm0503_00_41_00021_turn_r090.tranm",
+      "pm0503_00_41_00024_turn_l090.tranm",
+      "pm0503_00_41_00030_walk01_loop.tranm",
+      "pm0503_00_41_00100_run01_loop.tranm",
+      "pm0503_00_41_00145_stepout01_start.tranm",
+      "pm0503_00_41_00146_stepout01.tranm",
+      "pm0503_00_41_00147_stepout01_end.tranm",
+      "pm0503_00_41_00150_jumpup01_start.tranm",
+      "pm0503_00_41_00151_jumpup01_loop.tranm",
+      "pm0503_00_41_00152_jumpdown01_start.tranm",
+      "pm0503_00_41_00153_jumpdown01_loop.tranm",
+      "pm0503_00_41_00155_land02.tranm",
+      "pm0503_00_41_00270_rest01_start.tranm",
+      "pm0503_00_41_00271_rest01_loop.tranm",
+      "pm0503_00_41_00272_rest01_end.tranm",
+      "pm0503_00_41_00280_sleep01_start.tranm",
+      "pm0503_00_41_00281_sleep01_loop.tranm",
+      "pm0503_00_41_00282_sleep01_end.tranm",
+      "pm0503_00_41_00290_eat01_start.tranm",
+      "pm0503_00_41_00291_eat01_loop.tranm",
+      "pm0503_00_41_00292_eat01_end.tranm",
+      "pm0503_00_41_00300_roar01.tranm",
+      "pm0503_00_41_00320_refresh01.tranm",
+      "pm0503_00_41_00400_attack01.tranm",
+      "pm0503_00_41_00410_attack02.tranm",
+      "pm0503_00_41_00450_rangeattack01.tranm",
+      "pm0503_00_41_00460_rangeattack02_start.tranm",
+      "pm0503_00_41_00461_rangeattack02_loop.tranm",
+      "pm0503_00_41_00462_rangeattack02_end.tranm",
+      "pm0503_00_41_00500_damage01.tranm",
+      "pm0503_00_41_00501_damage02.tranm",
+      "pm0503_00_41_00510_stun01_start.tranm",
+      "pm0503_00_41_00511_stun01_loop.tranm",
+      "pm0503_00_41_00512_stun01_end.tranm",
+      "pm0503_00_41_00520_down01_start.tranm",
+      "pm0503_00_41_00521_down01_loop.tranm",
+      "pm0503_00_41_00522_down01_end.tranm",
+      "pm0503_00_41_00550_glad01.tranm",
+      "pm0503_00_41_00560_notice01.tranm",
+      "pm0503_00_41_00563_hate01.tranm",
+      "pm0503_00_41_08000_eye01.tranm",
+      "pm0503_00_41_08100_mouth01.tranm",
+      "pm0503_00_41_10000_defaultwait01_loop.tranm",
+      "pm0503_00_41_10010_defaultidle01.tranm",
+      "pm0503_00_41_10021_turn_r090.tranm",
+      "pm0503_00_41_10024_turn_l090.tranm",
+      "pm0503_00_41_10030_walk01_loop.tranm",
+      "pm0503_00_41_10100_run01_loop.tranm",
+      "pm0503_00_41_10145_stepout01_start.tranm",
+      "pm0503_00_41_10146_stepout01.tranm",
+      "pm0503_00_41_10147_stepout01_end.tranm",
+      "pm0503_00_41_10150_jumpup01_start.tranm",
+      "pm0503_00_41_10151_jumpup01_loop.tranm",
+      "pm0503_00_41_10152_jumpdown01_start.tranm",
+      "pm0503_00_41_10153_jumpdown01_loop.tranm",
+      "pm0503_00_41_10155_land02.tranm",
+      "pm0503_00_41_10300_roar01.tranm",
+      "pm0503_00_41_10400_attack01.tranm",
+      "pm0503_00_41_10460_rangeattack02_start.tranm",
+      "pm0503_00_41_10461_rangeattack02_loop.tranm",
+      "pm0503_00_41_10462_rangeattack02_end.tranm",
+      "pm0503_00_41_10500_damage01.tranm",
+      "pm0503_00_41_10501_damage02.tranm",
+      "pm0503_00_41_10510_stun01_start.tranm",
+      "pm0503_00_41_10511_stun01_loop.tranm",
+      "pm0503_00_41_10512_stun01_end.tranm",
+      "pm0503_00_41_10520_down01_start.tranm",
+      "pm0503_00_41_10521_down01_loop.tranm",
+      "pm0503_00_41_10522_down01_end.tranm",
+      "pm0503_00_41_10560_notice01.tranm"
+    ],
+    "material_motions": [
+      "pm0503_00_41_00000_defaultwait01_loop.tracm",
+      "pm0503_00_41_00001_battlewait01_loop.tracm",
+      "pm0503_00_41_00010_defaultidle01.tracm",
+      "pm0503_00_41_00011_defaultidle02.tracm",
+      "pm0503_00_41_00021_turn_r090.tracm",
+      "pm0503_00_41_00024_turn_l090.tracm",
+      "pm0503_00_41_00030_walk01_loop.tracm",
+      "pm0503_00_41_00100_run01_loop.tracm",
+      "pm0503_00_41_00145_stepout01_start.tracm",
+      "pm0503_00_41_00146_stepout01.tracm",
+      "pm0503_00_41_00147_stepout01_end.tracm",
+      "pm0503_00_41_00150_jumpup01_start.tracm",
+      "pm0503_00_41_00151_jumpup01_loop.tracm",
+      "pm0503_00_41_00152_jumpdown01_start.tracm",
+      "pm0503_00_41_00153_jumpdown01_loop.tracm",
+      "pm0503_00_41_00155_land02.tracm",
+      "pm0503_00_41_00270_rest01_start.tracm",
+      "pm0503_00_41_00271_rest01_loop.tracm",
+      "pm0503_00_41_00272_rest01_end.tracm",
+      "pm0503_00_41_00280_sleep01_start.tracm",
+      "pm0503_00_41_00281_sleep01_loop.tracm",
+      "pm0503_00_41_00282_sleep01_end.tracm",
+      "pm0503_00_41_00290_eat01_start.tracm",
+      "pm0503_00_41_00291_eat01_loop.tracm",
+      "pm0503_00_41_00292_eat01_end.tracm",
+      "pm0503_00_41_00300_roar01.tracm",
+      "pm0503_00_41_00320_refresh01.tracm",
+      "pm0503_00_41_00400_attack01.tracm",
+      "pm0503_00_41_00410_attack02.tracm",
+      "pm0503_00_41_00450_rangeattack01.tracm",
+      "pm0503_00_41_00460_rangeattack02_start.tracm",
+      "pm0503_00_41_00461_rangeattack02_loop.tracm",
+      "pm0503_00_41_00462_rangeattack02_end.tracm",
+      "pm0503_00_41_00500_damage01.tracm",
+      "pm0503_00_41_00501_damage02.tracm",
+      "pm0503_00_41_00510_stun01_start.tracm",
+      "pm0503_00_41_00511_stun01_loop.tracm",
+      "pm0503_00_41_00512_stun01_end.tracm",
+      "pm0503_00_41_00520_down01_start.tracm",
+      "pm0503_00_41_00521_down01_loop.tracm",
+      "pm0503_00_41_00522_down01_end.tracm",
+      "pm0503_00_41_00550_glad01.tracm",
+      "pm0503_00_41_00560_notice01.tracm",
+      "pm0503_00_41_00563_hate01.tracm",
+      "pm0503_00_41_08000_eye01.tracm",
+      "pm0503_00_41_08100_mouth01.tracm",
+      "pm0503_00_41_10000_defaultwait01_loop.tracm",
+      "pm0503_00_41_10010_defaultidle01.tracm",
+      "pm0503_00_41_10021_turn_r090.tracm",
+      "pm0503_00_41_10024_turn_l090.tracm",
+      "pm0503_00_41_10030_walk01_loop.tracm",
+      "pm0503_00_41_10100_run01_loop.tracm",
+      "pm0503_00_41_10145_stepout01_start.tracm",
+      "pm0503_00_41_10146_stepout01.tracm",
+      "pm0503_00_41_10147_stepout01_end.tracm",
+      "pm0503_00_41_10150_jumpup01_start.tracm",
+      "pm0503_00_41_10151_jumpup01_loop.tracm",
+      "pm0503_00_41_10152_jumpdown01_start.tracm",
+      "pm0503_00_41_10153_jumpdown01_loop.tracm",
+      "pm0503_00_41_10155_land02.tracm",
+      "pm0503_00_41_10300_roar01.tracm",
+      "pm0503_00_41_10400_attack01.tracm",
+      "pm0503_00_41_10460_rangeattack02_start.tracm",
+      "pm0503_00_41_10461_rangeattack02_loop.tracm",
+      "pm0503_00_41_10462_rangeattack02_end.tracm",
+      "pm0503_00_41_10500_damage01.tracm",
+      "pm0503_00_41_10501_damage02.tracm",
+      "pm0503_00_41_10510_stun01_start.tracm",
+      "pm0503_00_41_10511_stun01_loop.tracm",
+      "pm0503_00_41_10512_stun01_end.tracm",
+      "pm0503_00_41_10520_down01_start.tracm",
+      "pm0503_00_41_10521_down01_loop.tracm",
+      "pm0503_00_41_10522_down01_end.tracm",
+      "pm0503_00_41_10560_notice01.tracm"
+    ],
+    "rare_textures": [
+      "pm0503_00_41_body_b_rare_alb.png"
+    ],
+    "runtime_approved": false
+  }
+}
