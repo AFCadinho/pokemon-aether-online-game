@@ -89,7 +89,8 @@ func _run() -> void:
 			await process_frame
 			_check(stage.viewport == retained_viewport and stage.is_visible_in_tree(), "arena stays visible throughout local model preparation")
 			_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "sprite frame refresh cannot flash a 2D Pokémon")
-		_check(probe.requested == ["dragonite", "garchomp@shiny"], "normal and shiny leads are both requested")
+		_check(probe.requested == ["dragonite", "garchomp@shiny", "dragonite-mega", "garchomp-mega@shiny", "garchomp-mega-z@shiny"],
+			"normal and shiny leads plus their possible Mega forms are requested: %s" % str(probe.requested))
 		_check(not waiting.finished and battle.battle_input_locked and not battle.battle_actions_ready and battle.has_meta("battle_screen_preparing"), "early fade does not release the intro or first-turn controls")
 		_check(not host.loading_label.is_visible_in_tree(), "local preparation stays quiet on the arena")
 		await _capture("loading-%d" % round_index)

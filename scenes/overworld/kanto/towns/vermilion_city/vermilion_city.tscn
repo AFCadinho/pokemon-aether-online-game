@@ -479,12 +479,10 @@ transition_id = "kanto_vermilion_city__to_pokemon_center"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToPokecenter" unique_id=422639044]
-position = Vector2(0, -16)
 shape = SubResource("shape_center_door")
 
 [node name="DoorTransitionHint" parent="Exits/ToPokecenter" unique_id=245838150 instance=ExtResource("center_door_hint")]
 z_as_relative = false
-position = Vector2(0, -16)
 
 [node name="ToGym" type="Area2D" parent="Exits" unique_id=1736835789]
 position = Vector2(464, 1264)

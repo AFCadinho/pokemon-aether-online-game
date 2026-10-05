@@ -39,10 +39,10 @@ func _init() -> void:
 		"permission-gated My Powers opens in both browser and desktop builds"
 	)
 	_check(
-		visibility.contains("can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode and not is_web")
-		and visibility.contains("can_use_content_creator_generation_here := can_use_content_creator_generation and not is_web")
+		visibility.contains("can_use_content_creator_photo_mode_here := can_use_content_creator_photo_mode\n")
+		and visibility.contains("can_use_content_creator_generation_here := can_use_content_creator_generation\n")
 		and visibility.contains("or can_open_dev_actions"),
-		"browser My Powers keeps player creator tools desktop-only while retaining Developer Tools"
+		"browser My Powers retains permission-gated creator and Developer Tools"
 	)
 	_check(
 		visibility.contains("dev_add_pokemon_button.visible = can_generate_dev_pokemon")
