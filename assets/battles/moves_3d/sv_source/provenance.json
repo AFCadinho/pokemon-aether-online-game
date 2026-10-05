@@ -1,0 +1,97 @@
+{
+  "conversion": "source-textures-with-authored-motion",
+  "moves": {
+    "ember": [
+      {
+        "file": "cpt_2_fire0005.png",
+        "source_particle": "ew0052_fire_muzzle.ptcl",
+        "source_sha256": "aeaa7b41fd144e298012a2478264c4ff911055daef91611b6c35ec6b8dec81f7",
+        "png_sha256": "70034a7b3f77027fe6c14097a3f8e295178d273ccd6d6f79d1d2d1c427255af6",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_2_fire0010.png",
+        "source_particle": "ew0052_bullet.ptcl",
+        "source_sha256": "ba648f92bb89e6f811e7292eac18a0cab22b00c5d6fcb199e676979a0cd2c027",
+        "png_sha256": "94389526e8070bb263f3354f8aca39150053bd84a64f892b48d4e522730fcb48",
+        "size": [
+          1024,
+          256
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_2_dust0702.png",
+        "source_particle": "ew0052_bullet.ptcl",
+        "source_sha256": "ba648f92bb89e6f811e7292eac18a0cab22b00c5d6fcb199e676979a0cd2c027",
+        "png_sha256": "48f609ee3ce972062d04610cc22f2d5fa3cf79fa66c247fb63b55066f8e3b1d3",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_2_fire0004.png",
+        "source_particle": "ew0052_hit.ptcl",
+        "source_sha256": "284aea1c111bff7d5ce622872520d8b010191a11c33b678277678df0ed329d64",
+        "png_sha256": "99c2404b0483e2a53858eee2143a88949448559e67bd90789d83c0b4f0d0937f",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "L"
+      }
+    ],
+    "watergun": [
+      {
+        "file": "cpt_2_fire0007.png",
+        "source_particle": "ew0055_shot01.ptcl",
+        "source_sha256": "e65aabff5db6dd9459a089ed838cd3ec4467b549505e75d946f72be7046c9a15",
+        "png_sha256": "208672fec59634ccd8869f968d86a572184f71d621577a4a131c6a3bfb428b67",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_2_water0009.png",
+        "source_particle": "ew0055_shot01.ptcl",
+        "source_sha256": "e65aabff5db6dd9459a089ed838cd3ec4467b549505e75d946f72be7046c9a15",
+        "png_sha256": "6dd7724971c7bf1a04662d1be586c519d18f163e56f6061ee654cd47d7c228f9",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_3_smoke0207.png",
+        "source_particle": "ew0055_shot01.ptcl",
+        "source_sha256": "e65aabff5db6dd9459a089ed838cd3ec4467b549505e75d946f72be7046c9a15",
+        "png_sha256": "f0417f47065356cbe5aa581aa67853b318552cae7fc29429502692dfb2caff78",
+        "size": [
+          512,
+          512
+        ],
+        "mode": "L"
+      },
+      {
+        "file": "cpt_2_water0013.png",
+        "source_particle": "ew0055_hit01.ptcl",
+        "source_sha256": "b9beafbf4ce457f5e77eef56fe34a55881c016d68a4072b120ceecbfb7c514fb",
+        "png_sha256": "0e80cc84dda6a334b3fb525c9a651638e4432514fa7d01f35f8ec256272cdbac",
+        "size": [
+          1024,
+          128
+        ],
+        "mode": "RGBA"
+      }
+    ]
+  }
+}

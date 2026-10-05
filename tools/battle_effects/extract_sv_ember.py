@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract the bounded Ember VFXB v22 pilot, not a general particle converter.
+"""Extract the bounded Ember/Water Gun VFXB v22 pilots, not a general particle converter.
 
 Format references and limitations: docs/3d/ember-sv-effect-pilot.md.
 BNTX decoding runs an explicitly supplied external BNTX-Extractor checkout.
@@ -17,6 +17,7 @@ import sys
 
 NULL = 0xFFFFFFFF
 PARTS = ('ew0052_fire_muzzle', 'ew0052_bullet', 'ew0052_hit')
+MOVE_PARTS = {'ember': PARTS, 'watergun': ('ew0055_muzzle01', 'ew0055_shot01', 'ew0055_hit01')}
 
 
 def read(data, pos, fmt):
@@ -117,7 +118,7 @@ def inspect_particle(data):
     return dict(emitters=emitters, sections=rows), bntx
 
 
-def legacy_bntx(data):
+def legacy_bntx(data, allow_bc5=False):
     """Adapt BRTI flags/tile enum for external BNTX-Extractor 0.6 only.
 
     Current struct: flags:u8, dim:u8, tile:u16. Old extractor reads
@@ -136,15 +137,17 @@ def legacy_bntx(data):
         if data[pos:pos + 4] != b'BRTI':
             raise ValueError('Missing BRTI')
         flags, dim, tile = read(data, pos + 16, 'BBH')
-        if tile not in (0, 1) or dim != 2 or read(data, pos + 28, 'I')[0] != 0x1D01:
-            raise ValueError('Pilot accepts only inspected 2D BC4_UNORM textures')
-        if read(data, pos + 88, '4B') != (2, 2, 2, 2):
-            raise ValueError('Pilot expects R/R/R/R texture swizzle')
+        fmt = read(data, pos + 28, 'I')[0]
+        channels = read(data, pos + 88, '4B')
+        supported = fmt == 0x1D01 and channels == (2, 2, 2, 2)
+        supported |= allow_bc5 and fmt == 0x1E01 and channels in ((2, 2, 2, 3), (2, 3, 3, 3))
+        if tile not in (0, 1) or dim != 2 or not supported:
+            raise ValueError('Unsupported pilot texture format/swizzle/tile mode')
         struct.pack_into('<BBH', out, pos + 16, 1 - tile, dim, flags)
     return out
 
 
-def extract(source, output, decoder):
+def extract(source, output, decoder, move="ember"):
     from PIL import Image
     if output.exists():
         raise ValueError('Output directory must be new (source files are never overwritten)')
@@ -152,9 +155,9 @@ def extract(source, output, decoder):
     if not decoder.is_file():
         raise ValueError('Supply external bntx_extract.py with its dds.py and swizzle.py siblings')
     # Inspect every source before producing output.
-    inspected = [(stem, (source / (stem + '.ptcl')).read_bytes()) for stem in PARTS]
+    inspected = [(stem, (source / (stem + '.ptcl')).read_bytes()) for stem in MOVE_PARTS[move]]
     parsed = [(stem, raw, *inspect_particle(raw)) for stem, raw in inspected]
-    manifest = dict(schema=1, move='ember', conversion='partial-textures-and-colors',
+    manifest = dict(schema=1, move=move, conversion='partial-textures-and-colors',
                     native_timeline_converted=False, native_simulation_converted=False,
                     decoder_sha256=hashlib.sha256(decoder.read_bytes()).hexdigest(), parts={})
     output.mkdir(parents=True)
@@ -163,24 +166,40 @@ def extract(source, output, decoder):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx))
+        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move == "watergun"))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
                              cwd=folder, capture_output=True, text=True, timeout=60)
         (folder / 'decoder.log').write_text(run.stdout + run.stderr)
         if run.returncode:
             raise ValueError('Texture decoder failed; see ' + str(folder / 'decoder.log'))
         textures = sorted({name for e in info['emitters'] for name in e['textures'] if name})
+        metadata = {}
+        for i in range(read(bntx, 36, 'I')[0]):
+            pos = read(bntx, read(bntx, 40, 'Q')[0] + i * 8, 'Q')[0]
+            name_pos = read(bntx, pos + 96, 'Q')[0]
+            name = text(bntx, name_pos + 2, read(bntx, name_pos, 'H')[0])
+            metadata[name] = {'format': read(bntx, pos + 28, 'I')[0],
+                              'channels': read(bntx, pos + 88, '4B')}
         for name in textures:
             image = Image.open(folder / (name + '.dds'))
-            if image.mode != 'L':
-                raise ValueError('Unexpected decoded BC4 image mode')
-            # Preserve the raw single-channel mask. Preview shader samples red.
+            meta = metadata[name]
+            if meta['format'] == 0x1D01:
+                if image.mode != 'L':
+                    raise ValueError('Unexpected decoded BC4 image mode')
+            else:
+                if image.mode != 'RGB':
+                    raise ValueError('Unexpected decoded BC5 image mode')
+                red, green, _ = image.split()
+                channels = {2: red, 3: green}
+                image = Image.merge('RGBA', [channels[c] for c in meta['channels']])
             image.save(folder / (name + '.png'))
+        info['texture_metadata'] = metadata
         info.update(source_sha256=hashlib.sha256(raw).hexdigest(), textures=textures)
         manifest['parts'][stem] = info
-    timeline = (source / 'ew0052.trtml').read_bytes()
+    effect_id = MOVE_PARTS[move][0].split('_')[0]
+    timeline = (source / (effect_id + '.trtml')).read_bytes()
     manifest['timeline'] = dict(source_sha256=hashlib.sha256(timeline).hexdigest(),
-                               audio_event_names=sorted({s.decode() for s in re.findall(rb'PLAY_EW0052_\d+', timeline)}),
+                               audio_event_names=sorted({s.decode() for s in re.findall(('PLAY_' + effect_id.upper() + r'_\d+').encode(), timeline)}),
                                note='String inventory only; event timing not decoded.')
     (output / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
     print(json.dumps(dict(output=str(output), emitters=sum(len(p['emitters']) for p in manifest['parts'].values()),
@@ -192,9 +211,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, required=True, help='SV romfs/effect/battle_ew/ew0052')
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--move', choices=sorted(MOVE_PARTS), default='ember')
     parser.add_argument('--bntx-extractor', type=Path, required=True)
     args = parser.parse_args()
     try:
-        extract(args.source, args.output, args.bntx_extractor)
+        extract(args.source, args.output, args.bntx_extractor, args.move)
     except (ValueError, OSError, struct.error) as exc:
         parser.exit(1, str(exc) + '\n')

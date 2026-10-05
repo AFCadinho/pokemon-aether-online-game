@@ -1,13 +1,13 @@
 # Eerste zes native 3D-moves
 
-Geïmplementeerd; alle zes wachten op visuele goedkeuring. De bestaande
+Geïmplementeerd; Ember is visueel goedgekeurd. De overige vijf wachten op goedkeuring. De bestaande
 Pokémon-aanvalsclips en algemene damage/status-effecten blijven in gebruik.
 
 - [ ] **Tackle** — korte bewegingsstrepen en een compacte contactinslag.
 - [ ] **Scratch** — drie taps toelopende snijstrepen op het doelwit.
 - [ ] **Bite** — twee sluitende bogen met tanden rondom het doelwit.
-- [ ] **Ember** — drie kleine vuurprojectielen, korte trails en vonken bij de inslag.
-- [ ] **Water Gun** — een blauwe stroom met lichte kern en een korte watersplash.
+- [x] **Ember** — goedgekeurde SV-vuurtextures, drie kleine projectielen en korte trails/inslag; actief in normale 3D-battles.
+- [ ] **Water Gun** — nieuwe proef met SV-watertextures, stromende straal en splash. Alleen in de bronmateriaalpreview; normale battles behouden de bestaande versie.
 - [ ] **Thunder Shock** — vertakte gele elektriciteit met lichte kern en impactaccenten.
 
 ## Offline visuele review
@@ -35,7 +35,7 @@ worden screenshots bij de inslag opgeslagen.
 volgen de huidige modelbounds of de zichtbare Substitute-doll. Krassen/kaken en
 inslagaccenten gebruiken de actuele camerabasis; projectielen en stralen volgen
 wereldcoördinaten. Tijdelijke meshes worden niet naar de irradiancepass gekopieerd.
-Er worden geen 2D-spritesheets geladen en geen camerabewegingen toegevoegd.
+Er worden geen 2D-moveconfiguraties geladen en geen camerabewegingen toegevoegd. Ember gebruikt bron-atlassen als textures op camera-gerichte 3D-quads.
 
 De zes specifieke bestaande 2D-movesamples blijven behouden. Contactgeluiden
 spelen bij het contactmoment, vuur/water/elektriciteit bij het lanceren. Bronvolume
@@ -79,3 +79,11 @@ gebruiken; moves buiten deze zes blijven zonder move-VFX en move-audio in 3D.
 
 Deze tests vervangen de bovenstaande zes visuele goedkeuringen niet. Niet ieder
 Pokémon-model, iedere clip of ieder mondanker is daarmee individueel gereviewd.
+
+## Bronmateriaalpreview
+
+`tests/source_moves_preview.gd -- --moves` opent Water Gun als reviewkandidaat.
+Kies Ember om de live-versie te bekijken. **Bronmateriaal** vergelijkt de volgende
+aanval met de oude vormgeving. Geen lokale dump of externe extractiemap nodig.
+`--smoke-source-moves` controleert beide effecten, uitkomsten, beide richtingen,
+pauze, camera-orbit, annuleren en de vergelijkingsschakelaar.

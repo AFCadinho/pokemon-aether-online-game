@@ -11,6 +11,7 @@ signal ball_cue(ident: String, key: String)
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
 const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
+const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
 const StatusEffect = preload("res://scripts/battle/battle_ui/status_effect_3d.gd")
@@ -896,7 +897,7 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	if source == null or destination == null: return null
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
-	var effect := MoveEffect.new()
+	var effect := SourceMoveEffect.new() if MoveEffect.move_key(move) == "ember" else MoveEffect.new()
 	world.add_child(effect)
 	effect.view_camera = camera
 	common_effects.append(effect)

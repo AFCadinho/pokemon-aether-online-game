@@ -80,6 +80,8 @@ func _run() -> void:
 			stage.start_move_action(actor,move)
 			var effect: Node = stage.create_move_effect(move,actor,target,{"show_impact":true})
 			assert(is_instance_valid(effect))
+			if move == "ember": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Ember must use packaged source textures")
+			if move == "watergun": assert(effect.get_script() == Effect, "Water Gun candidate must remain preview-only until reviewed")
 			effect.set_process(false)
 			stage.players[slot].seek(effect.impact+0.04,true)
 			effect._process(0)

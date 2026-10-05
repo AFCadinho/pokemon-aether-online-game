@@ -14,7 +14,7 @@ def rejected(raw):
     raise AssertionError('Malformed particle source accepted')
 
 
-def main(source):
+def main(source, watergun=None):
     expected = {'ew0052_fire_muzzle': (3, 'fire', 'cpt_2_fire0005'),
                 'ew0052_bullet': (4, 'fire_core', 'cpt_2_fire0010'),
                 'ew0052_hit': (6, 'fire_Child', 'cpt_2_fire0008')}
@@ -47,10 +47,27 @@ def main(source):
             pass
         else:
             raise AssertionError('Unsupported BNTX tile mode accepted')
+    if watergun is not None:
+        expected_water = {'ew0055_muzzle01': 2, 'ew0055_shot01': 13, 'ew0055_hit01': 8}
+        for stem, count in expected_water.items():
+            raw = (watergun / (stem + '.ptcl')).read_bytes()
+            parsed, bntx = inspect_particle(raw)
+            assert len(parsed['emitters']) == count
+            adapted = legacy_bntx(bntx, allow_bc5=True)
+            assert len(adapted) == len(bntx) and adapted != bntx
+            try:
+                legacy_bntx(bntx)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError('BC5 requires explicit opt-in')
+        print('SV_WATERGUN_EXTRACTION_OK parts=3 emitters=23 bc5_explicit=true')
     print('SV_EMBER_EXTRACTION_OK parts=3 emitters=13 invalid_inputs_rejected=18 source_unchanged=true')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source', type=Path, required=True)
-    main(parser.parse_args().source)
+    parser.add_argument('--watergun', type=Path)
+    args = parser.parse_args()
+    main(args.source, args.watergun)
