@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the inspected fire/bubble subset without modifying other move assets."""
+"""Package inspected move subsets without modifying other move assets."""
 import argparse
 import hashlib
 import json
@@ -12,6 +12,13 @@ SELECTION = {
     'bubblebeam': {'ew0061_at_start': ['cpt_0_bubble0202'],
                    'ew0061_beam_bubble': ['cpt_2_bubble0003'],
                    'ew0061_df_hit': ['cpt_2_water0009']},
+    'icebeam': {'ew0058_beam': ['cpt_3_ice0201', 'cpt_3_flow0016'],
+                'ew0058_muzzle': ['cpt_2_hit0010'], 'ew0058_hit': ['cpt_2_hit0003']},
+    'razorleaf': {'ew0075_start': ['cpt_0_obj0001'],
+                  'ew0075_hit': ['cpt_2_obj0006', 'cpt_2_shock0008']},
+    'quickattack': {'ew0098_hideline': ['cpt_0_shock0003'],
+                    'ew0098_at_srash01': ['cpt_0_shock0002'],
+                    'ew0098_df_hit': ['cpt_0_circle0007', 'cpt_0_circle0010']},
 }
 
 
@@ -19,7 +26,7 @@ def package(source, output):
     manifest = json.loads((source / 'manifest.json').read_text())
     move = manifest['move']
     if move not in SELECTION or manifest['conversion'] != 'partial-textures-and-colors':
-        raise ValueError('Expected inspected fire/bubble extraction')
+        raise ValueError('Expected inspected move extraction')
     report = {'source_move': move, 'conversion': 'source-textures-with-authored-3d-motion',
               'native_timeline_converted': False, 'native_simulation_converted': False, 'textures': []}
     output.mkdir(parents=True, exist_ok=True)
@@ -28,7 +35,8 @@ def package(source, output):
             if name not in manifest['parts'][part]['textures']:
                 raise ValueError('Missing source binding ' + name)
             with Image.open(source / part / (name + '.png')) as image:
-                expected = 'RGBA' if 'bubble' in name else 'L'
+                fmt = manifest['parts'][part]['texture_metadata'][name]['format']
+                expected = 'L' if fmt in (0x1D01, 0x0201) else 'RGBA'
                 if image.mode != expected:
                     raise ValueError('Unexpected decoded mask mode')
                 path = output / (name + '.png')

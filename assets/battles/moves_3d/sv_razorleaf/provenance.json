@@ -1,0 +1,41 @@
+{
+  "source_move": "razorleaf",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_0_obj0001.png",
+      "source_particle": "ew0075_start.ptcl",
+      "source_sha256": "2e79e4a9985911f268e3c9329758039fad565f42a96dff1e27b86a09924758bd",
+      "png_sha256": "ab5a3758e39b44d17ca46a55392bc11db281892a8117f28c171e90cc7db3058a",
+      "size": [
+        128,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_2_obj0006.png",
+      "source_particle": "ew0075_hit.ptcl",
+      "source_sha256": "97f6c527cb3a63f50b8d31ca1edc980c28cc55201b52428d04715746c397c939",
+      "png_sha256": "cba7a4d5cfc7e7af017ecf79ab1f9def3caf0ac0ea790c1b4331791992b1ad2b",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_2_shock0008.png",
+      "source_particle": "ew0075_hit.ptcl",
+      "source_sha256": "97f6c527cb3a63f50b8d31ca1edc980c28cc55201b52428d04715746c397c939",
+      "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+      "size": [
+        1024,
+        256
+      ],
+      "mode": "L"
+    }
+  ]
+}

@@ -10,8 +10,9 @@ const PILOTS := {
 		"sounds": {"PRSFX- Thunderbolt2.wav": 20.0, "PRSFX- Thunderbolt1.wav": 48.0}},
 	"pikachu:tackle": {"action": "physical_attack", "frames": 110.0, "impact_frame": 42.0,
 		"sounds": {"PRSFX- Tackle.wav": 42.0}},
-	"blastoise:icebeam": {"action": "special_attack", "frames": 407.5, "impact_frame": 120.0,
-		"sounds": {"PRSFX- Ice Beam.wav": 120.0}},
+	"pikachu:quickattack": {"action": "physical_attack", "frames": 110.0, "launch_frame": 12.0, "impact_frame": 42.0},
+	"blastoise:icebeam": {"action": "special_attack", "frames": 407.5, "launch_frame": 60.0, "impact_frame": 120.0,
+		"sounds": {"PRSFX- Ice Beam.wav": 60.0}},
 }
 
 static func profile(species: String, move: String, action: String, timing: Dictionary) -> Dictionary:

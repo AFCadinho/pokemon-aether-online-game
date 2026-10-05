@@ -1,8 +1,12 @@
 extends "res://scripts/battle/battle_ui/source_move_effect_3d.gd"
 ## Inspected SV contact textures; authored 3D choreography on the native move clock.
 ## Pokémon keep their reviewed native body/claw/bite action selection.
-const CONTACT_KEYS := ["tackle", "scratch", "bite"]
+const CONTACT_KEYS := ["tackle", "scratch", "bite", "quickattack"]
 const CONTACT_SPRITES := {
+	"quick_trail": [preload("res://assets/battles/moves_3d/sv_quickattack/cpt_0_shock0003.png"), Vector3(0.65, 0.88, 1.0), 1.0, false],
+	"quick_rush": [preload("res://assets/battles/moves_3d/sv_quickattack/cpt_0_shock0002.png"), Vector3(0.76, 0.93, 1.0), 1.0, false],
+	"quick_hit": [preload("res://assets/battles/moves_3d/sv_quickattack/cpt_0_circle0010.png"), Vector3(0.9, 0.97, 1.0), 1.0, false],
+	"quick_ring": [preload("res://assets/battles/moves_3d/sv_quickattack/cpt_0_circle0007.png"), Vector3(0.6, 0.86, 1.0), 1.0, false],
 	"tackle_dash": [preload("res://assets/battles/moves_3d/sv_contact/cpt_2_shock0017.png"), Vector3(0.944, 0.636, 0.464), 8.0, false],
 	"tackle_hit": [preload("res://assets/battles/moves_3d/sv_contact/cpt_2_shock0008.png"), Vector3(1, 1, 0.65), 4.0, false],
 	"tackle_ring": [preload("res://assets/battles/moves_3d/sv_contact/cpt_0_circle0007.png"), Vector3(1, 0.65, 0.25), 1.0, false],
@@ -12,6 +16,8 @@ const CONTACT_SPRITES := {
 	"bite_hit": [preload("res://assets/battles/moves_3d/sv_contact/cpt_0_shock0001.png"), Vector3(1, 0.58, 0.13), 1.0, false],
 	"bite_flash": [preload("res://assets/battles/moves_3d/sv_contact/cpt_0_flash0602.png"), Vector3(1, 0.92, 0.75), 1.0, false],
 }
+var quick_origin := Vector3.ZERO
+var quick_origin_set := false
 var target_radius := 0.8
 var claw_mesh: ArrayMesh
 var claw_material: ShaderMaterial
@@ -30,6 +36,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 		"tackle": _draw_tackle(from, to, facing)
 		"scratch": _draw_scratch(from, to, facing)
 		"bite": _draw_bite(to, facing)
+		"quickattack": _draw_quick(from, to, facing)
 	return true
 
 func _draw_tackle(from: Vector3, to: Vector3, facing: Basis) -> void:
@@ -149,3 +156,27 @@ func _build_fang() -> void:
 	fang_material.emission_energy_multiplier = 0.45
 	fang_material.roughness = 0.3
 	fang_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+
+func _draw_quick(from: Vector3, to: Vector3, facing: Basis) -> void:
+	if not quick_origin_set:
+		quick_origin = from
+		quick_origin_set = true
+	var travel := (elapsed - launch) / maxf(impact - launch, 0.01)
+	var after := (elapsed - impact) / maxf(duration * 0.18, 0.01)
+	if travel >= 0 and travel < 1:
+		var delta := from - quick_origin
+		var distance := minf(delta.length(), 2.0)
+		if distance > 0.01:
+			var y := delta.normalized()
+			var x := y.cross(Vector3.UP if absf(y.y) < 0.95 else Vector3.RIGHT).normalized()
+			var center := from - y * distance * 0.5
+			# Crossed ribbons follow the moving body and remain in world space.
+			for turn in [0.0, PI * 0.5]:
+				var orientation := Basis(x, y, x.cross(y)) * Basis(Vector3.UP, turn)
+				_source_sprite(center, 1.0, "quick_trail", 0, sin(travel * PI) * 0.75,
+					orientation, 0, Vector2(target_radius * 0.7, distance))
+		_source_sprite(from, target_radius * (1.1 + travel * 0.4), "quick_rush", 0,
+			sin(travel * PI) * 0.65, facing)
+	if hit and after >= 0 and after < 1:
+		_source_sprite(to, target_radius * (1.4 + after * 0.8), "quick_hit", 0, 1.0 - after, facing)
+		_source_sprite(to, target_radius * (0.7 + after * 1.8), "quick_ring", 0, (1.0 - after) * 0.65, facing)

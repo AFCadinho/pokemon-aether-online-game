@@ -9,12 +9,15 @@
   Uses the same source-textured recipe reviewed in the offline preview.
 - **Tackle, Scratch and Bite: visually approved by the user.** See
   [contact move effects](contact-move-effects.md) for sources and conversion limits.
-- **Thunder Shock: implemented, awaiting visual approval.** See
+- **Thunder Shock: visually approved by the user.** See
   [Thunder Shock](thundershock.md) for sources, timing and review.
 - **Thunderbolt: visually approved by the user.** See
   [Thunderbolt](thunderbolt.md) for source ribbons, sound timing and review.
 - **Flamethrower, Bubble and Bubble Beam: visually approved by the user.**
   See [fire and bubble effects](fire-bubble-effects.md) for source reuse and review.
+
+- **Ice Beam, Razor Leaf and Quick Attack: implemented; visual approval pending.**
+  See [ice, leaf and quick effects](ice-leaf-quick-effects.md).
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,
@@ -98,7 +101,7 @@ provenance file. Imported caches remain slot-local.
   placement/count/frame/opacity/tint parity over six timestamps, adjusting the
   historical pilot to use the newly requested on-target miss aim. The external
   argument is optional and only used for comparison with the historical pilot.
-- `battle_move_effects_3d_check.tscn`: ten moves, four slots, audio, impact,
+- `battle_move_effects_3d_check.tscn`: thirteen moves, four slots, audio, impact,
   Substitute, cancellation and explicit live-source routing for both approved moves.
 - `battle_move_presentation_routes_check.tscn`: ordinary routes and 2D fallback.
 - `battle_3d_impact_pacing_check.tscn`: impact recovery, gem-before-attack and faint.

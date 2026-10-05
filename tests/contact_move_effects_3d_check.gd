@@ -29,7 +29,7 @@ func _run() -> void:
 					assert(piece.transform.is_finite() and piece.visible)
 					seen = true
 					if i >= effect.sprite_keys.size(): continue
-					if effect.sprite_keys[i].ends_with("_hit") or effect.sprite_keys[i] in ["bite_flash", "tackle_ring"]:
+					if effect.sprite_keys[i].ends_with("_hit") or effect.sprite_keys[i] in ["bite_flash", "tackle_ring", "quick_ring"]:
 						assert(outcome == "hit" and t >= effect.impact, "No contact flash on miss/block or before damage")
 				if is_equal_approx(t,0.49):
 					var frozen: float = effect.elapsed
@@ -61,7 +61,7 @@ func _run() -> void:
 	router = null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("CONTACT_MOVES_3D_OK moves=3 outcomes=3 bounded_pool=true orbit_pause=true hit_gating=true impact_bridge=true")
+	print("CONTACT_MOVES_3D_OK moves=4 outcomes=3 bounded_pool=true orbit_pause=true hit_gating=true impact_bridge=true")
 	get_tree().quit()
 
 func _check_approach() -> void:
@@ -149,4 +149,4 @@ func _check_approach() -> void:
 		assert(stage.move_contacts[0].is_empty() and stage.contact_offsets[0] == Vector3.ZERO)
 		stage.active = true
 		await get_tree().process_frame
-	print("CONTACT_APPROACH_OK moves=3 slots=4 grounded=true pause=true dodge=true return=true substitute=true replacement=true")
+	print("CONTACT_APPROACH_OK moves=4 slots=4 grounded=true pause=true dodge=true return=true substitute=true replacement=true")
