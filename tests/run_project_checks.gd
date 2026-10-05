@@ -433,6 +433,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/player_hotbar_interactive_check.gd",
 	"res://tests/pokemon_summary_loan_remaining_check.gd",
 	"res://tests/legacy_market_cleanup_check.gd",
+	"res://tests/project_check_runner_timeout_check.gd",
 	"res://tests/wild_battle_experience_reward_check.gd",
 	"res://tests/boss_battle_npc_check.gd",
 	"res://tests/weekly_boss_base_check.gd",
@@ -475,12 +476,10 @@ func _init() -> void:
 	quit(1 if failed else 0)
 
 
-func _run_check(executable: String, project_path: String, script_path: String) -> void:
+func _run_check(executable: String, project_path: String, script_path: String, timeout_seconds: int = 180, report_failure: bool = true) -> void:
 	var output: Array = []
 	var log_file := "%s/%s.log" % [log_dir, _script_log_name(script_path)]
-	var exit_code := OS.execute(
-		executable,
-		PackedStringArray([
+	var arguments := PackedStringArray([
 			"--no-header",
 			"--headless",
 			"--log-file",
@@ -489,12 +488,21 @@ func _run_check(executable: String, project_path: String, script_path: String) -
 			project_path,
 			"--script",
 			script_path,
-		]),
+		])
+	var child_executable := executable
+	if OS.get_name() == "Linux":
+		# Script errors can leave a headless SceneTree running indefinitely.
+		# Bound each child and kill it even if graceful termination fails.
+		arguments = PackedStringArray(["--kill-after=10s", "%ds" % timeout_seconds, executable]) + arguments
+		child_executable = "timeout"
+	var exit_code := OS.execute(
+		child_executable,
+		arguments,
 		output,
 		true
 	)
 
-	if exit_code == 0:
+	if exit_code == 0 and not _format_output(output).contains("SCRIPT ERROR:"):
 		passed_count += 1
 		if verbose:
 			print("PASS %s" % script_path)
@@ -502,6 +510,10 @@ func _run_check(executable: String, project_path: String, script_path: String) -
 
 	failed = true
 	failed_count += 1
+	if not report_failure:
+		return
+	if exit_code in [124, 137]:
+		push_error("TIMEOUT %s after %ds" % [script_path, timeout_seconds])
 	push_error(
 		"FAIL %s exit_code=%d log=%s\n%s" % [script_path, exit_code, log_file, _format_output(output)]
 	)

@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
+
 ## 0.3.98
 
 ### Adventure and quests

@@ -3,6 +3,7 @@ extends SceneTree
 const ENTRANCES := [
 	["res://scenes/overworld/kanto/towns/pallet_town/pallet_town.tscn", "ToRivalsHouse", "FromRivalsHouse", Vector2(1136, 400)],
 	["res://scenes/overworld/kanto/towns/cerulean_city/cerulean_city.tscn", "ToBikeStore", "FromBikeStore", Vector2(624, 1648)],
+	["res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn", "ToPokecenter", "FromPokecenter", Vector2(400, 464)],
 ]
 const PLAYER_SCRIPT := "res://scripts/world/player.gd"
 
