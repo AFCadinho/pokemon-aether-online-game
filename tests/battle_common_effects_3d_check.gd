@@ -7,6 +7,10 @@ const Effects2D = preload("res://data/battle_effect_animations.json")
 
 class Router extends BattleAnimationRouter:
 	var audio_history: Array = []
+	var effect_history: Array[String] = []
+	func play_effect_animation(key: String, target: String = "", reveal: Callable = Callable()) -> void:
+		effect_history.append(key)
+		await super.play_effect_animation(key, target, reveal)
 	func _get_effect_animation_config(_key: String) -> Dictionary:
 		assert(false, "Native common effects must not request legacy visuals")
 		return {}
@@ -22,6 +26,12 @@ class Router extends BattleAnimationRouter:
 
 class SilentCatalog extends Catalog:
 	func get_plan(_kind: String, _key: String) -> Dictionary:
+		return {}
+
+class LegacyRouter extends BattleAnimationRouter:
+	var requested: Array[String] = []
+	func _get_effect_animation_config(key: String) -> Dictionary:
+		requested.append(key)
 		return {}
 
 class ActionPanel extends CurrentActionPanel:
@@ -258,6 +268,16 @@ func _renderer() -> void:
 	# 2D stat and heal shapes are never invoked by an active 3D scene.
 	await renderer.render_event({"type":"statChange"}, {"stat_change_target_ident":"p3", "stat_change_amount":1, "effect_animation_key":"stat_up", "effect_animation_target_ident":"p3"}, true)
 	await renderer.render_event({"type":"status"}, {"effect_animation_key":"status_paralysis", "effect_animation_target_ident":"p2"}, true)
+	router.effect_history.clear()
+	await renderer.render_event({"type":"status", "status":"frz"}, {"effect_animation_key":"status_frozen", "effect_animation_target_ident":"p2"}, true)
+	assert(router.effect_history.is_empty(), "Acquiring native Freeze uses only the persistent tint")
+	await renderer.render_event({"type":"cant", "reason":"frz"}, {"effect_animation_key":"status_frozen", "effect_animation_target_ident":"p2"}, true)
+	assert(router.effect_history == ["status_frozen"], "A Freeze-blocked action retains its ice burst")
+	var legacy := LegacyRouter.new()
+	renderer.animation_router = legacy
+	await renderer.render_event({"type":"status", "status":"frz"}, {"effect_animation_key":"status_frozen", "effect_animation_target_ident":"p2"}, true)
+	assert(legacy.requested == ["status_frozen"], "2D still requests its original Freeze activation effect")
+	renderer.animation_router = router
 	router.cancel_render()
 	panel.queue_free()
 	await _drain_frames()

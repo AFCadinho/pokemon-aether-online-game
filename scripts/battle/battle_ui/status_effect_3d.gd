@@ -20,7 +20,7 @@ var tint_materials: Array[ShaderMaterial] = []
 func _build(color: Color) -> void:
 	# These persistent statuses need only their model tint. Their separate
 	# one-shot activation/damage effects retain the short particle feedback.
-	if key in ["status_poisoned", "status_badly_poisoned", "status_burned", "status_paralysis"]:
+	if key in ["status_poisoned", "status_badly_poisoned", "status_burned", "status_paralysis", "status_frozen"]:
 		return
 	super._build(color)
 
@@ -51,7 +51,7 @@ func _process(delta: float) -> void:
 		return
 	var speed := maxf(float(speed_provider.call()), 0.0) if speed_provider.is_valid() else 1.0
 	cycle += maxf(delta,0.0) * speed
-	# Sleep/freeze retain quiet particle pulses; other statuses only tint the model.
+	# Only sleep retains quiet particle pulses; other statuses only tint the model.
 	elapsed = minf(fmod(cycle, 2.4), duration)
 	_update_visuals()
 	var strength := 0.13 + 0.16 * (0.5 + 0.5 * sin(cycle * TAU * 0.65))

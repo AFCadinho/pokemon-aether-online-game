@@ -75,13 +75,13 @@ func _status() -> void:
 			stage.set_status_condition(index,condition)
 			var effect: Node = stage.status_effects[index]
 			assert(is_instance_valid(effect) and effect.actor == stage.actors[index])
-			if condition in ["psn","tox","brn","par"]:
+			if condition in ["psn","tox","brn","par","frz"]:
 				assert(effect.particles.is_empty(), "Persistent status tint must not repeat distracting particles")
 				var pulse: Node = stage.create_common_effect(effect.key,"p%d" % (index+1))
-				assert(not pulse.particles.is_empty(), "Activation/damage feedback still has short particles")
+				assert(not pulse.particles.is_empty(), "One-shot event feedback still has short particles")
 				pulse.cancel()
 			else:
-				assert(not effect.particles.is_empty(), "Sleep and freeze retain their persistent visuals")
+				assert(not effect.particles.is_empty(), "Sleep retains its persistent Z glyphs")
 			effect._process(8.0)
 			assert(not effect.done and stage.actors[index].material_overlay != original)
 			var elapsed: float = effect.cycle

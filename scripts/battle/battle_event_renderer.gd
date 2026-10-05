@@ -110,6 +110,10 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 	var effect_animation_key: String = str(presentation.get("effect_animation_key", ""))
 	var effect_animation_target_ident: String = str(presentation.get("effect_animation_target_ident", ""))
 	var effect_reveal_3d: Callable = presentation.get("effect_reveal_3d", Callable())
+	# Native Freeze is represented by its persistent tint and paused idle.
+	# Reserve the ice burst for a failed action (cant); retain the 2D status effect.
+	if event_data.get("type", "") == "status" and effect_animation_key == "status_frozen" and animation_router.uses_realtime_3d():
+		effect_animation_key = ""
 
 	if pre_log_message != "":
 		if not suppress_player_gap:
