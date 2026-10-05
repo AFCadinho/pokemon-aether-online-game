@@ -1,6 +1,6 @@
 extends "res://scripts/battle/battle_ui/move_effect_3d.gd"
 ## SV textures and sampled colors with authored Godot motion, sharing the normal move clock.
-## Ember is approved/live; Water Gun is enabled only by the offline comparison preview.
+## Ember and Water Gun are approved and enabled in normal 3D battles.
 const SPRITES := {
 	"ember_muzzle": [preload("res://assets/battles/moves_3d/sv_source/cpt_2_fire0005.png"), Vector3(1.0, 1.0, 0.8174603), 8.0, false],
 	"ember_core": [preload("res://assets/battles/moves_3d/sv_source/cpt_2_fire0010.png"), Vector3(1.0, 0.43650791, 0.071428567), 4.0, false],
@@ -41,10 +41,13 @@ void fragment() {
 }
 """
 
-func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha: float, facing: Basis, rotation_value := 0.0) -> void:
+func _sprite_values(id: String) -> Array:
+	return SPRITES[id]
+
+func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha: float, facing: Basis, rotation_value := 0.0, aspect := Vector2.ONE) -> void:
 	if size < 0.001 or alpha < 0.001: return
 	if not sprite_templates.has(id):
-		var values: Array = SPRITES[id]
+		var values: Array = _sprite_values(id)
 		var template := ShaderMaterial.new()
 		template.shader = sprite_shader
 		template.set_shader_parameter("source_mask", values[0])
@@ -59,10 +62,10 @@ func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha
 		sprite_materials[cursor] = sprite_templates[id].duplicate()
 		sprite_keys[cursor] = id
 	var mat := sprite_materials[cursor]
-	var frames: float = SPRITES[id][2]
+	var frames: float = _sprite_values(id)[2]
 	mat.set_shader_parameter("frame_index", minf(floor(clampf(phase, 0, 0.999) * frames), frames - 1.0))
 	mat.set_shader_parameter("opacity", alpha)
-	_piece(quad, mat, point, Vector3.ONE * size, facing * Basis(Vector3.FORWARD, rotation_value))
+	_piece(quad, mat, point, Vector3(aspect.x, aspect.y, 1.0) * size, facing * Basis(Vector3.FORWARD, rotation_value))
 
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	var facing := Basis(right, up, right.cross(up))

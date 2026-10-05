@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add source-textured 3D effects for Tackle, Scratch and Bite with approach/return movement, synchronized contact sounds and Dodge; enable the approved source-textured Water Gun in normal battles.
+
 - Use Charmander’s native forward-facing breath animation for Ember, with mouth launch and sound synchronized for normal and shiny models.
 - Retire Grandmaster Elite from AI Sparring. Intermediate, Hard and Nightmare remain available; historical Elite matches keep their original labels.
 

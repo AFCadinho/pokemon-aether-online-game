@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extract the bounded Ember/Water Gun VFXB v22 pilots, not a general particle converter.
+"""Extract inspected VFXB v22 move textures, not a general particle converter.
 
 Format references and limitations: docs/3d/ember-sv-effect-pilot.md.
 BNTX decoding runs an explicitly supplied external BNTX-Extractor checkout.
@@ -18,6 +18,11 @@ import sys
 NULL = 0xFFFFFFFF
 PARTS = ('ew0052_fire_muzzle', 'ew0052_bullet', 'ew0052_hit')
 MOVE_PARTS = {'ember': PARTS, 'watergun': ('ew0055_muzzle01', 'ew0055_shot01', 'ew0055_hit01')}
+MOVE_PARTS.update({
+    'tackle': ('ew0033_at_bgkem', 'ew0033_at_srash01', 'ew0033_df_hit'),
+    'scratch': ('ew0010_hit',),
+    'bite': ('ew0044_tooth', 'ew0044_df_hit'),
+})
 
 
 def read(data, pos, fmt):
@@ -118,7 +123,7 @@ def inspect_particle(data):
     return dict(emitters=emitters, sections=rows), bntx
 
 
-def legacy_bntx(data, allow_bc5=False):
+def legacy_bntx(data, allow_bc5=False, allow_bc3=False):
     """Adapt BRTI flags/tile enum for external BNTX-Extractor 0.6 only.
 
     Current struct: flags:u8, dim:u8, tile:u16. Old extractor reads
@@ -141,6 +146,7 @@ def legacy_bntx(data, allow_bc5=False):
         channels = read(data, pos + 88, '4B')
         supported = fmt == 0x1D01 and channels == (2, 2, 2, 2)
         supported |= allow_bc5 and fmt == 0x1E01 and channels in ((2, 2, 2, 3), (2, 3, 3, 3))
+        supported |= allow_bc3 and fmt == 0x1C06 and channels == (2, 3, 4, 5)
         if tile not in (0, 1) or dim != 2 or not supported:
             raise ValueError('Unsupported pilot texture format/swizzle/tile mode')
         struct.pack_into('<BBH', out, pos + 16, 1 - tile, dim, flags)
@@ -166,7 +172,7 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move == "watergun"))
+        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move == "watergun", allow_bc3=move == "scratch"))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
                              cwd=folder, capture_output=True, text=True, timeout=60)
         (folder / 'decoder.log').write_text(run.stdout + run.stderr)
@@ -186,6 +192,9 @@ def extract(source, output, decoder, move="ember"):
             if meta['format'] == 0x1D01:
                 if image.mode != 'L':
                     raise ValueError('Unexpected decoded BC4 image mode')
+            elif meta['format'] == 0x1C06:
+                if image.mode != 'RGBA':
+                    raise ValueError('Unexpected decoded BC3 image mode')
             else:
                 if image.mode != 'RGB':
                     raise ValueError('Unexpected decoded BC5 image mode')
