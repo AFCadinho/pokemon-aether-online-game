@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore smooth filtering for enlarged 2D battle Pokémon after reviewing the sharper pixel-art presentation.
+
 - Download and prepare possible Mega forms before their battle transformations, including shiny variants; include these forms in background party and area downloads.
 
 - Keep frozen 3D Pokémon tinted and still without repeating particles; show ice crystals only when Freeze blocks an action.
@@ -21,8 +23,6 @@
 - Reduce 3D poison and toxic bubble diameter by 40% for subtler status effects.
 
 - Play Ground Gem and other offensive gem activations before their attack animation, keeping the attack and damage reaction together.
-
-- Keep animated pixel-art Pokémon crisp when enlarged in 2D battles, while retaining smooth filtering for HOME artwork and rendered HD sprites.
 
 - Keep native mobile Pokédex and quest-tracker collapse controls beside their own rows in fixed positions, with separate touch space and no overlap from the global-buff tray.
 
