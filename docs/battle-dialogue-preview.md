@@ -24,3 +24,22 @@ battle. Normal battle action buttons are disabled. Preview settings are assigned
 in memory and are not saved; teams, rewards and server state are untouched.
 
 Focused check: append `-- --smoke` to exercise both speakers and their lifetime.
+
+## Forced Freeze review
+
+Launch the same harness through the assigned slot with `-- --freeze`:
+
+```sh
+ops/worktrees/slot-env slot-b -- godot --path .worktrees/slot-b/frontend --script res://tests/battle_dialogue_preview.gd -- --freeze
+```
+
+It selects 3D, shows Dragonite and Pikachu, and immediately freezes Pikachu.
+Use **Bevries links**, **Bevries rechts**, and **Ontdooi alles**. Drag the arena
+to rotate the camera. The controls force only the native visual status, frozen
+idle and HUD indicator; no gameplay status, party, save, or server battle changes.
+Without an explicit `POKEAETHER_3D_STAGE_REPORT`, this mode uses the normal pinned
+model downloader and the assigned slot's own asset cache. Settings remain in memory.
+
+Append `--smoke-freeze` to test freezing/thawing both sides and exit. With a display,
+`POKEAETHER_STAGE_OUTPUT` also writes `freeze-preview.png` before thawing.
+Freeze remains unapproved in the review checklist until the player reviews it.
