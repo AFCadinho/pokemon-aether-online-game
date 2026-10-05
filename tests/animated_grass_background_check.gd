@@ -2,6 +2,7 @@ extends SceneTree
 
 const Catalog := preload("res://scripts/battle/battle_environment_catalog.gd")
 const Resolver := preload("res://scripts/battle/battle_environment_resolver.gd")
+const DayNight := preload("res://scripts/world/day_night_controller.gd")
 const VIDEO := "res://assets/video/battle/grass_meadow.ogv"
 const GRASS_IDS := ["grass", "pallet_town", "viridian_city", "pewter_city", "cerulean_city", "route_1", "route_2", "route_3", "route_4", "route_22", "route_24", "route_25"]
 
@@ -29,6 +30,8 @@ func _run() -> void:
 	assert(Resolver.resolve({"battle_kind": "wild", "map_id": "kanto_route_22", "encounter_type": "surf"}) == &"route_22_water")
 	assert(Resolver.resolve({"battle_kind": "wild", "map_environment_id": "cave"}) == &"cave")
 	var settings := root.get_node("SettingsManager")
+	var world_time := root.get_node("WorldTimeService")
+	world_time.set_debug_time(12)
 	settings.battle_presentation_mode = "2d"
 	root.size = Vector2i(1400, 800)
 	var battle = load("res://scenes/battle/battle.tscn").instantiate()
@@ -42,6 +45,24 @@ func _run() -> void:
 	assert(battle.battle_background.texture == animated.background_texture)
 	assert(battle.player_battle_platform.get_platform_texture() == animated.platform_texture)
 	assert(battle.enemy_battle_platform.get_platform_texture() == animated.platform_texture)
+	assert(battle.battle_background.self_modulate == Color.WHITE, "day retains original background colors")
+	var hud_color: Color = battle.player_hud_panel.modulate
+	var sprite_color: Color = battle.player_sprite_box.modulate
+	for hour in [6, 19, 23]:
+		world_time.set_debug_time(hour)
+		var expected := DayNight.color_for_seconds(hour * 3600.0)
+		assert(battle.battle_background.self_modulate.is_equal_approx(expected), "fallback follows outdoor time")
+		assert(player.self_modulate.is_equal_approx(expected), "video follows outdoor time")
+	assert(battle.player_hud_panel.modulate == hud_color and battle.player_sprite_box.modulate == sprite_color, "background lighting preserves HUD and sprite readability")
+	battle.weather_presentation.update_weather("raindance")
+	assert(player.self_modulate == DayNight.NIGHT_COLOR and player.modulate != Color.WHITE, "weather and night lighting compose")
+	battle.weather_presentation.update_weather("")
+	assert(player.modulate == Color.WHITE and player.self_modulate == DayNight.NIGHT_COLOR, "clearing weather retains nighttime")
+	# Clock progression between synchronization signals must also refresh lighting.
+	world_time._debug_seconds_since_midnight = 12 * 3600
+	await create_timer(1.1).timeout
+	assert(player.self_modulate == Color.WHITE, "ongoing battle polls clock progression")
+	world_time.set_debug_time(23)
 	await create_timer(0.3).timeout
 	assert(player.is_playing() and player.stream_position > 0.0)
 	assert(player.get_video_texture().get_size() == Vector2(1920, 1080))
@@ -81,11 +102,15 @@ func _run() -> void:
 	assert(player.stream == null and not player.visible and not player.is_playing())
 	assert(battle.battle_background.texture == Catalog.get_profile(&"route_22").background_texture)
 	assert(battle.player_battle_platform.get_platform_texture() == Catalog.get_profile(&"route_22").platform_texture)
+	assert(player.self_modulate == Color.WHITE and battle.battle_background.self_modulate == Color.WHITE, "other backgrounds reset the meadow tint")
 	battle.battle_type = battle.BattleType.WILD
 	battle._apply_battle_environment(&"route_22_water")
 	assert(player.stream == null and not player.visible)
 	battle._apply_battle_environment(&"pvp_stadium")
 	assert(player.stream == Catalog.get_profile(&"pvp_stadium").background_video and player.is_playing())
+	world_time.set_debug_time(6)
+	assert(player.self_modulate == Color.WHITE, "stadium keeps its own lighting")
+	world_time.clear_debug_time()
 	battle.queue_free()
 	await process_frame
 	print("animated_grass_background_check: PASS (selection, decode, looping, visibility, environment switches)")
