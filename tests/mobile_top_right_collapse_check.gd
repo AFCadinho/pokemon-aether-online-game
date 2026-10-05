@@ -39,11 +39,16 @@ func _run() -> void:
 			for id: String in IDS:
 				var button := _button(id)
 				var rect := button.get_global_rect()
-				_check(rect.position.is_equal_approx(baseline[id].position), "%s stays in place at %s state %s" % [id, factor, mask])
+				_check(is_equal_approx(rect.position.y, baseline[id].position.y), "%s keeps its row height at %s state %s" % [id, factor, mask])
 				_check(button.visible, id + " stays visible")
 				var visual := _visual(button)
 				var owner := _owner(id).get_global_rect()
-				_check(visual.end.x <= owner.position.x and owner.position.x - visual.end.x <= 12.0 / _scale(button).x, "%s beside its row scale=%s visual=%s owner=%s" % [id, factor, visual, owner])
+				if _collapsed(id):
+					_check(is_equal_approx(visual.end.x, owner.end.x), "%s docks at the right edge when collapsed scale=%s visual=%s owner=%s" % [id, factor, visual, owner])
+					_check(rect.position.x > baseline[id].position.x, id + " moves right when collapsed")
+				else:
+					_check(rect.position.is_equal_approx(baseline[id].position), id + " returns beside its expanded row")
+					_check(visual.end.x <= owner.position.x and owner.position.x - visual.end.x <= 12.0 / _scale(button).x, "%s beside its row scale=%s visual=%s owner=%s" % [id, factor, visual, owner])
 				_check(visual.get_center().y >= owner.position.y and visual.get_center().y <= owner.end.y, "%s aligns with row scale=%s visual=%s owner=%s" % [id, factor, visual, owner])
 				var pixels := (root.get_screen_transform() * button.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, button.size)
 				_check(pixels.size.x >= 47.99 and pixels.size.y >= 47.99, id + " keeps its touch area")
@@ -55,7 +60,7 @@ func _run() -> void:
 				_check(_collapsed(id) != before, id + " receives a tap on its visible arrow")
 				await _tap(button.get_global_rect().position + button.size * Vector2(0.1, 0.9))
 				_check(_collapsed(id) == before, id + " receives a tap in transparent padding")
-				_check(button.get_global_rect().position.is_equal_approx(baseline[id].position), id + " does not jump after reopening")
+				_check(button.get_global_rect().position.is_equal_approx(rect.position), id + " returns to its position after toggling twice")
 	overlay.queue_free()
 	await process_frame
 	print("mobile_top_right_collapse_check: %d checks, %d failures" % [checks, failures])
