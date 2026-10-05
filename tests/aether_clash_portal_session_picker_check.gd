@@ -108,8 +108,46 @@ func _ready() -> void:
 		]:
 			_check(catalog.has(key), "%s contains portal picker key %s" % [locale, key])
 
+	await _check_camera_space(sessions)
 	picker.queue_free()
 	get_tree().quit(1 if failed else 0)
+
+
+func _check_camera_space(sessions: Array[Dictionary]) -> void:
+	var original_scene := get_tree().current_scene
+	var world := Node2D.new()
+	get_tree().root.add_child(world)
+	get_tree().current_scene = world
+	# Attach the controller after entering the tree so its full lobby setup is
+	# unnecessary for exercising the real portal dialog flow.
+	world.set_script(load(LOBBY_SCRIPT_PATH))
+	var camera := Camera2D.new()
+	camera.position = Vector2(800, 600)
+	camera.zoom = Vector2(1.4, 1.4)
+	world.add_child(camera)
+	camera.make_current()
+	camera.force_update_scroll()
+	world.call("_select_session", sessions)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var dialog := world.find_child("AetherClashPortalSessionDialog", true, false) as AetherConfirmationDialog
+	_check(dialog != null, "Portal session dialog opens from a world controller")
+	if dialog != null:
+		var panel := dialog.panel
+		var transform := panel.get_global_transform_with_canvas()
+		_check(
+			(transform * (panel.size / 2.0)).is_equal_approx(get_viewport().get_visible_rect().get_center()),
+			"Portal session dialog stays screen-centered with a moved and zoomed camera"
+		)
+		_check(transform.get_scale().is_equal_approx(Vector2.ONE), "Portal session dialog avoids world camera magnification")
+		var screen_layer := dialog.get_parent()
+		dialog.cancel_button.pressed.emit()
+		await get_tree().process_frame
+		await get_tree().process_frame
+		_check(not is_instance_valid(screen_layer), "Canceling the portal dialog removes its screen layer")
+	get_tree().current_scene = original_scene
+	world.queue_free()
+	await get_tree().process_frame
 
 
 func _check(condition: bool, label: String) -> void:

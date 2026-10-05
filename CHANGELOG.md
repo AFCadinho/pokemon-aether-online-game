@@ -5,6 +5,29 @@
 - Match 3D battle rendering to the actual window resolution, avoiding unnecessary GPU work in smaller windows while keeping larger windows sharp.
 - Restore missing eye details in regional Pokémon 3D model imports.
 - Prepare normal and shiny 3D bundles for 58 regional and related forms, pending performance approval and publication; preload Galarian Darmanitan's Zen form once approved.
+- Add source-textured Thunder Shock in 3D battles, with jagged lightning, synchronized sound and impact, and a moving discharge origin for Pikachu.
+
+- Add source-textured 3D effects for Tackle, Scratch and Bite with approach/return movement, synchronized contact sounds and Dodge; enable the approved source-textured Water Gun in normal battles.
+
+- Use Charmander’s native forward-facing breath animation for Ember, with mouth launch and sound synchronized for normal and shiny models.
+- Retire Grandmaster Elite from AI Sparring. Intermediate, Hard and Nightmare remain available; historical Elite matches keep their original labels.
+
+- Improve text readability inside compact 3D stat and effect badges while keeping the HP panel visually dominant.
+
+- Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.
+
+- Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
+- Show a trainer’s “Dodge!” command before a missed 3D attack; Pokémon and Substitutes sidestep while the move passes through their original position.
+
+- Center the shiny replay favorite prompt in the screen UI and size it to its message.
+- Anchor 3D move effects to animated mouth points for Charmander and Squirtle, and fire Blastoise’s Water Gun from both moving cannons.
+
+- Reduce the shiny replay favorite prompt to fit its short message more closely.
+- Use the approved source-textured Ember effect in 3D battles, retaining synchronized move sounds and hit reactions.
+
+- Add native 3D effects for Tackle, Scratch, Bite, Ember, Water Gun and Thunder Shock, with synchronized existing move sounds, compact attack playback and event-confirmed impacts.
+
+- Move mobile action-bar, Pokédex and quest-tracker reopen buttons to the right edge when their panels are collapsed, while retaining separate touch areas.
 - Correct shiny Dreepy's follower facing directions when standing and walking.
 - Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
 

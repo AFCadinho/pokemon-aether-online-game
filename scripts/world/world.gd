@@ -4680,7 +4680,10 @@ func _show_shiny_replay_favorite_dialog(battle_id: String, species: String) -> v
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	if dialog == null:
 		return
-	add_child(dialog)
+	var ui_overlay := get_tree().get_first_node_in_group("ui_overlay") as CanvasLayer
+	if ui_overlay == null:
+		return
+	ui_overlay.add_child(dialog)
 	dialog.configure(
 		LocalizationManager.text("ui.replays.shiny_dialog.title"),
 		LocalizationManager.text("ui.replays.shiny_dialog.message", {"species": species}),
@@ -4690,7 +4693,7 @@ func _show_shiny_replay_favorite_dialog(battle_id: String, species: String) -> v
 	dialog.confirmed.connect(func(): _save_shiny_replay_as_favorite.call_deferred(battle_id))
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(560, 250))
+	dialog.popup_centered(Vector2i(420, 220), true)
 
 
 func _save_shiny_replay_as_favorite(battle_id: String) -> void:

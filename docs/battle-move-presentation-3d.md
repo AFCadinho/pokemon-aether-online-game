@@ -5,6 +5,12 @@ event renderer. BattleAnimationRouter selects presentation by the active model
 presenter, not the preference alone. An inactive presenter (actual 2D fallback)
 keeps the existing sprite catalogs and playback code.
 
+## First native move group
+
+Tackle, Scratch, Bite, Ember, Water Gun and Thunder Shock now have native arena
+VFX in `move_effect_3d.gd`. See [the review checklist](battle-moves-first-six-3d.md)
+for visuals, limitations and the offline preview. Other moves retain the baseline below.
+
 ## Model-only baseline
 
 `battle_move_presentation_3d.gd` owns the 3D attack/move presentation boundary.
@@ -84,7 +90,7 @@ cancellation and scene teardown. Effects must not apply damage, alter battle
 state, invent outcomes or bypass the event renderer's completion boundary.
 General non-move effects use the router’s separate `play_effect_animation`
 event route and the arena’s `create_common_effect` boundary.
-No native move VFX or attack-camera shots are shipped by this foundation.
+The first six native move VFX now extend this foundation. No attack-camera shots are added.
 
 ## Focused checks
 

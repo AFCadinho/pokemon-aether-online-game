@@ -268,13 +268,13 @@ func _check_pvp_runtime_translation() -> void:
 		var expected_sprite := "scientist-gen7.png" if bot_id == "ai4" else "veteran-gen7.png"
 		_check(portrait.texture.resource_path.ends_with(expected_sprite), "Each bot uses its assigned trainer")
 	var difficulty_cards := overlay.find_child("AiSparringDifficultyCards", true, false) as VBoxContainer
-	_check(difficulty_cards != null and difficulty_cards.get_child_count() == 4, "Grandmaster difficulties have four separate hierarchy cards")
-	for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+	_check(difficulty_cards != null and difficulty_cards.get_child_count() == 3, "Grandmaster difficulties have three separate hierarchy cards")
+	for mode_id: String in ["intermediate", "ai5", "nightmare"]:
 		_check(difficulty_cards.get_node_or_null("AiSparringDifficultyCard_" + mode_id) != null, "About has a distinct card for " + mode_id)
 	_check(overlay.find_child("AiSparringRecommendation_intermediate", true, false) != null, "Intermediate displays its recommendation")
 	_check(overlay.find_child("AiSparringRecommendation_ai5", true, false) != null, "Hard displays its recommendation")
 	var bot_versions: Dictionary = overlay.get("pvp_ai_sparring_about_versions")
-	_check(bot_versions.size() == 5, "About has independent status for all five difficulties")
+	_check(bot_versions.size() == 4, "About has independent status for the four remaining difficulties")
 	overlay.call("_apply_ai_sparring_bot_versions", {"success": true, "bots": [
 		{"id": "ai5", "version": "v4", "available": false},
 		{"id": "intermediate", "version": "v1", "available": false},
@@ -398,10 +398,9 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_bot_select.item_count == 2, "MMO OU offers Scholar and Grandmaster")
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
-	_check(training_ai_mode_select.item_count == 3, "MMO OU offers Hard, Elite and Nightmare")
+	_check(training_ai_mode_select.item_count == 2, "MMO OU offers Hard and Nightmare")
 	_check(str(training_ai_mode_select.get_item_metadata(0)) == "active", "MMO OU lists Grandmaster Hard first")
-	_check(str(training_ai_mode_select.get_item_metadata(1)) == "elite", "MMO OU offers Grandmaster Elite")
-	_check(str(training_ai_mode_select.get_item_metadata(2)) == "nightmare", "MMO OU offers Grandmaster Nightmare")
+	_check(str(training_ai_mode_select.get_item_metadata(1)) == "nightmare", "MMO OU offers Grandmaster Nightmare")
 	ai_sparring_tier_select.select(0)
 	overlay.call("_on_ai_sparring_tier_selected", 0)
 	_check(ai_sparring_catalog_results != null and ai_sparring_catalog_results.get_child_count() == 1, "Catalog renders matching team cards")
@@ -707,13 +706,11 @@ func _check_pvp_runtime_translation() -> void:
 	_check(training_ai_mode_select.item_count == 1 and training_ai_mode_select.get_item_text(0) == "Beginner", "Scholar exposes only Beginner")
 	training_ai_bot_select.select(1)
 	overlay.call("_on_pvp_training_ai_bot_selected", 1)
-	_check(training_ai_mode_select.item_count == 4, "Grandmaster exposes all four server-enabled difficulties")
-	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Elite" and training_ai_mode_select.get_item_text(3) == "Nightmare", "Elite sits between Hard and Nightmare")
+	_check(training_ai_mode_select.item_count == 3, "Grandmaster excludes retired Elite even when an older server advertises it")
+	_check(training_ai_mode_select.get_item_text(0) == "Intermediate" and training_ai_mode_select.get_item_text(1) == "Hard" and training_ai_mode_select.get_item_text(2) == "Nightmare", "Grandmaster offers Intermediate, Hard and Nightmare")
 	training_ai_mode_select.select(0)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "intermediate", "Intermediate selection preserves its server mode")
 	training_ai_mode_select.select(2)
-	_check(overlay.call("_selected_pvp_training_ai_mode") == "elite", "Elite selection preserves its server mode")
-	training_ai_mode_select.select(3)
 	_check(overlay.call("_selected_pvp_training_ai_mode") == "nightmare", "Nightmare selection preserves its server mode")
 	training_ai_available_modes.assign(["ai4", "active"])
 	training_ai_bot_select.select(0)

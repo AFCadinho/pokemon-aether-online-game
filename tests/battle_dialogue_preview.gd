@@ -11,6 +11,13 @@ var loading := false
 var freeze_preview := false
 var weather_preview := false
 var terrain_preview := false
+var move_preview := false
+var move_picker: OptionButton
+var move_outcome: OptionButton
+var move_reverse: CheckButton
+var move_busy := false
+var left_species := "Dragonite"
+const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock"]
 var terrain_picker: OptionButton
 var terrain_enabled: CheckButton
 var trick_room_toggle: CheckButton
@@ -29,12 +36,14 @@ func _init() -> void:
 	_start.call_deferred()
 
 func _start() -> void:
+	move_preview = "--moves" in OS.get_cmdline_user_args()
 	freeze_preview = "--freeze" in OS.get_cmdline_user_args()
 	terrain_preview = "--terrain" in OS.get_cmdline_user_args() or "--trick-room" in OS.get_cmdline_user_args()
 	weather_preview = terrain_preview or "--weather" in OS.get_cmdline_user_args()
-	if freeze_preview or weather_preview: right_species = "Pikachu"
+	if freeze_preview or weather_preview or move_preview: right_species = "Pikachu"
 	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
 	if weather_preview: root.title = "PokeAether — 3D weather preview"
+	if move_preview: root.title = "PokeAether — eerste zes 3D-moves"
 	if terrain_preview: root.title = "PokeAether — 3D terrain / Trick Room preview"
 	var layer := CanvasLayer.new()
 	layer.layer = 110
@@ -44,7 +53,7 @@ func _start() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.offset_left = 12
 	panel.offset_right = 450
-	panel.offset_top = -395 if terrain_preview else (-300 if weather_preview else (-275 if freeze_preview else -205))
+	panel.offset_top = -395 if terrain_preview or move_preview else (-300 if weather_preview else (-275 if freeze_preview else -205))
 	panel.offset_bottom = -12
 	toolbar = VBoxContainer.new()
 	panel.add_child(toolbar)
@@ -53,7 +62,7 @@ func _start() -> void:
 	mode = OptionButton.new()
 	mode.add_item("2.5D")
 	mode.add_item("3D")
-	if freeze_preview or weather_preview: mode.select(1)
+	if freeze_preview or weather_preview or move_preview: mode.select(1)
 	row.add_child(mode)
 	arena = OptionButton.new()
 	for id in ARENAS:
@@ -118,6 +127,7 @@ func _start() -> void:
 		trick_room_toggle.button_pressed = "--trick-room" in OS.get_cmdline_user_args()
 		trick_room_toggle.toggled.connect(func(_enabled): _terrain())
 		field_row.add_child(trick_room_toggle)
+	if move_preview: _build_move_controls()
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.custom_minimum_size.x = 420
@@ -140,6 +150,11 @@ func _start() -> void:
 		print("TERRAIN_PREVIEW_READY")
 		if "--smoke-terrain" in OS.get_cmdline_user_args():
 			await _check_terrain()
+			return
+	if move_preview:
+		print("MOVE_PREVIEW_READY")
+		if "--smoke-moves" in OS.get_cmdline_user_args():
+			await _check_moves()
 			return
 	if "--smoke" in OS.get_cmdline_user_args():
 		await create_timer(0.4).timeout
@@ -171,7 +186,7 @@ func _button(parent: Node, text: String, action: Callable) -> Button:
 	return button
 
 func _load_preview() -> void:
-	if loading:
+	if loading or move_busy:
 		return
 	loading = true
 	if is_instance_valid(host):
@@ -183,11 +198,11 @@ func _load_preview() -> void:
 	settings.battle_ui_layout = "immersive"
 	settings.battle_presentation_mode = "2.5d" if mode.selected == 0 else "3d"
 	settings.battle_3d_arena = ARENAS[arena.selected]
-	if freeze_preview or weather_preview: settings.battle_animations = true
+	if freeze_preview or weather_preview or move_preview: settings.battle_animations = true
 	var catalog := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	if not catalog.is_empty():
 		settings.battle_3d_catalog_path = catalog
-	elif freeze_preview or weather_preview:
+	elif freeze_preview or weather_preview or move_preview:
 		# Use the normal pinned asset service in this slot, never another checkout's cache.
 		settings.battle_3d_catalog_path = ""
 		settings._manual_model_catalog_this_session = false
@@ -203,13 +218,13 @@ func _load_preview() -> void:
 	var appearance: Dictionary = root.get_node("PlayerSave").to_appearance_state()
 	battle.enemy_trainer_sprite.show_player(appearance, Vector2.LEFT)
 	battle.vs_panel_container.set_names("You", "Preview rival")
-	battle.player_sprite_box.set_single_pokemon_species("Dragonite", "back")
+	battle.player_sprite_box.set_single_pokemon_species(left_species, "back")
 	battle.enemy_sprite_box.set_single_pokemon_species(right_species, "front")
-	battle.player_hud_panel.set_pokemon_data("Dragonite", 100, 323, 323)
+	battle.player_hud_panel.set_pokemon_data(left_species, 100, 323, 323)
 	battle.enemy_hud_panel.set_pokemon_data(right_species, 100, 351, 351)
 	var party := []
-	for species in ["Dragonite", "Typhlosion", "Scizor", "Arcanine", "Charizard", right_species]:
-		party.append({"species":species,"hp":100,"max_hp":100,"active":species == "Dragonite"})
+	for species in [left_species, "Typhlosion", "Scizor", "Arcanine", "Charizard", right_species]:
+		party.append({"species":species,"hp":100,"max_hp":100,"active":species == left_species})
 	battle.player_party_grid.set_party(party)
 	battle.get_node("%PlayerStagePartyGrid").set_party(party)
 	var opponent_party: Array = party.duplicate(true)
@@ -226,7 +241,7 @@ func _load_preview() -> void:
 	_disable_gameplay(battle)
 	var renderer = battle.animation_router.model_presenter
 	if mode.selected == 1 and is_instance_valid(renderer):
-		renderer.set_combatant(0, "Dragonite")
+		renderer.set_combatant(0, left_species)
 		renderer.set_combatant(1, right_species)
 		await renderer.await_prepared(true, 30000)
 		if renderer.preparation_failed or not renderer.active:
@@ -238,6 +253,7 @@ func _load_preview() -> void:
 	else:
 		status.text = "Ready — 2.5D dialogue preview. Arena selection applies to 3D."
 	if weather_preview: battle.current_action_panel.set_message("Weertest — kies een weertype en draai de camera")
+	if move_preview: battle.current_action_panel.set_message("Movetest — kies een aanval en druk op Afspelen")
 	if terrain_preview: battle.current_action_panel.set_message("Terraintest — kies een terrain; Trick Room en weer kunnen erbij")
 	var reveal_deadline := Time.get_ticks_msec() + 35000
 	while host.get_node("Cover").visible and Time.get_ticks_msec() < reveal_deadline:
@@ -422,3 +438,117 @@ func _field_screenshot(output: String, key: String) -> void:
 	if not output.is_empty() and DisplayServer.get_name() != "headless":
 		RenderingServer.force_draw()
 		root.get_texture().get_image().save_png(output.path_join("field-%s.png" % key))
+
+func _build_move_controls() -> void:
+	var models := OptionButton.new()
+	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise"]:
+		models.add_item(species)
+		if species == left_species: models.select(models.item_count - 1)
+	models.item_selected.connect(func(index):
+		if move_busy: return
+		left_species = models.get_item_text(index)
+		_load_preview())
+	toolbar.add_child(models)
+	move_picker = OptionButton.new()
+	for move in FIRST_MOVES: move_picker.add_item(move)
+	toolbar.add_child(move_picker)
+	var row := HBoxContainer.new()
+	toolbar.add_child(row)
+	move_outcome = OptionButton.new()
+	for result in ["Raak", "Ontwijken (miss)", "Geblokkeerd / immuun"]: move_outcome.add_item(result)
+	row.add_child(move_outcome)
+	move_reverse = CheckButton.new()
+	move_reverse.text = "Rechts valt aan"
+	row.add_child(move_reverse)
+	var actions := HBoxContainer.new()
+	toolbar.add_child(actions)
+	_button(actions, "Afspelen", _preview_move)
+	_button(actions, "Annuleren", func():
+		if is_instance_valid(battle): battle.animation_router.cancel_render())
+	var pause := CheckButton.new()
+	pause.text = "Pauze"
+	pause.toggled.connect(func(paused):
+		if is_instance_valid(battle): battle.animation_router.playback_speed = 0.0 if paused else 1.0)
+	actions.add_child(pause)
+
+func _preview_move() -> void:
+	if move_busy or loading or not is_instance_valid(battle): return
+	var renderer = battle.animation_router.model_presenter
+	if not renderer.active: return
+	move_busy = true
+	var router = battle.animation_router
+	var generation: int = router.render_generation
+	var actor := "p2" if move_reverse.button_pressed else "p1"
+	var target := "p1" if move_reverse.button_pressed else "p2"
+	var move: String = FIRST_MOVES[move_picker.selected]
+	var outcome := move_outcome.selected
+	battle.current_action_panel.set_message(move + " — " + move_outcome.get_item_text(outcome))
+	await router.play_attack_tween_for_actor(actor,move)
+	await router.play_move_animation(move,actor,target,{"stop_at_impact":outcome == 0,"show_impact":outcome == 0,"result":"miss" if outcome == 1 else "","on_dodge_started":_preview_dodge_command.bind(target)})
+	if generation == router.render_generation:
+		if outcome == 0: await router.play_damage_tween_for_target(target)
+		elif outcome == 2: await router.play_effect_animation("protect_block",target)
+		await router.finish_3d_impact_damage()
+	move_busy = false
+	status.text = "Klaar — " + move + ". Kies de volgende move of draai de camera."
+
+func _preview_dodge_command(target: String) -> void:
+	var species := left_species if target == "p1" else right_species
+	var text: String = root.get_node("LocalizationManager").text("battle.command.dodge", {"pokemon": species})
+	battle._show_trainer_command_text(target, text, battle.DODGE_COMMAND_DISPLAY_SECONDS)
+	await create_timer(0.32).timeout
+
+func _check_moves() -> void:
+	var renderer = battle.animation_router.model_presenter
+	assert(renderer.active and battle.battle_state.battle_id.is_empty())
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	for reverse in [false,true]:
+		move_reverse.button_pressed = reverse
+		for i in FIRST_MOVES.size():
+			move_picker.select(i)
+			_preview_move()
+			var captured := false
+			var deadline := Time.get_ticks_msec() + 8000
+			while move_busy:
+				if Time.get_ticks_msec() > deadline:
+					print("MOVE_TIMEOUT ",renderer.current_actions," effects=",renderer.common_effects," recovery=",battle.animation_router.move_presentation_3d.recovery)
+					for live: Node in renderer.common_effects: print("EFFECT_CLOCK ",live.elapsed," duration=",live.duration," clock=",live.clock.call())
+					quit(1)
+					return
+				for effect: Node in renderer.common_effects:
+					if not captured and effect.get("key") == FIRST_MOVES[i].to_lower().replace(" ", "") and effect.get("impact") != null and effect.elapsed >= effect.impact:
+						captured = true
+						if not output.is_empty() and DisplayServer.get_name() != "headless":
+							await RenderingServer.frame_post_draw
+							root.get_texture().get_image().save_png(output.path_join("move-%s-%s.png" % [effect.key,"reverse" if reverse else "forward"]))
+				await process_frame
+			assert(captured,"Move must have a native visual: " + FIRST_MOVES[i])
+			await process_frame
+			assert(renderer.common_effects.is_empty())
+	move_reverse.button_pressed = false
+	for result in [1,2]:
+		move_outcome.select(result)
+		await _preview_move()
+		await process_frame
+	move_outcome.select(0)
+	move_picker.select(3)
+	_preview_move()
+	while renderer.common_effects.is_empty(): await process_frame
+	var effect: Node = renderer.common_effects[0]
+	battle.animation_router.playback_speed = 0
+	await process_frame
+	var time: float = effect.elapsed
+	await create_timer(0.12).timeout
+	assert(is_equal_approx(effect.elapsed,time),"Paused model and move must share a frozen clock")
+	battle.animation_router.cancel_render()
+	battle.animation_router.playback_speed = 1
+	while move_busy: await process_frame
+	await process_frame
+	assert(renderer.common_effects.is_empty() and battle.animation_router.active_audio_nodes.is_empty())
+	host.release()
+	host.queue_free()
+	host = null
+	await process_frame
+	await process_frame
+	print("MOVE_PREVIEW_OK moves=6 directions=2 miss=true block=true pause=true cancel=true offline=true")
+	quit()

@@ -2,6 +2,9 @@ extends RefCounted
 ## Initial pose-reviewed pilot. Frame markers use the native clip clock, not
 ## sprite frames or wall time. Unreviewed moves retain their existing timeline.
 const PILOTS := {
+	# Same reviewed Pikachu discharge pose used by the Thunderbolt pilot.
+	"pikachu:thundershock": {"action": "special_attack", "frames": 120.0, "launch_frame": 20.0, "impact_frame": 48.0},
+	"charmander:ember": {"action": "special_attack_2", "frames": 138.0, "launch_frame": 40.0, "impact_frame": 64.0},
 	"pikachu:thunderbolt": {"action": "special_attack", "frames": 120.0, "impact_frame": 48.0,
 		"sounds": {"PRSFX- Thunderbolt2.wav": 20.0, "PRSFX- Thunderbolt1.wav": 48.0}},
 	"pikachu:tackle": {"action": "physical_attack", "frames": 110.0, "impact_frame": 42.0,
@@ -21,7 +24,7 @@ static func profile(species: String, move: String, action: String, timing: Dicti
 	return candidate.duplicate(true)
 
 static func audio_plan(source: Dictionary, pilot: Dictionary) -> Dictionary:
-	if source.is_empty() or pilot.is_empty():
+	if source.is_empty() or pilot.is_empty() or not pilot.has("sounds"):
 		return source
 	var result := source.duplicate(true)
 	var seen := {}
@@ -67,3 +70,19 @@ static func damage_index(events: Array, move_index: int) -> int:
 		elif hit < 0 and kind not in ["criticalHit", "effectiveness"]:
 			return -1
 	return hit
+
+static func has_target_hit(events: Array, move_index: int) -> bool:
+	if move_index < 0 or move_index >= events.size() or not events[move_index] is Dictionary: return false
+	var move: Dictionary = events[move_index]
+	var target := str(move.get("target", "")).strip_edges().to_lower()
+	if move.get("type") != "move" or target.is_empty(): return false
+	for index in range(move_index + 1, events.size()):
+		if not events[index] is Dictionary: continue
+		var event: Dictionary = events[index]
+		if str(event.get("type", "")) in ["move", "turn", "switch", "drag", "win"]: break
+		if str(event.get("target", event.get("pokemon", ""))).strip_edges().to_lower() != target: continue
+		if event.get("type") in ["miss", "immune", "fail"]: return false
+		if event.get("type") == "damage" and str(event.get("source", "")).is_empty(): return true
+		var effect := str(event.get("effect", "")).to_lower().replace("move:", "").strip_edges()
+		if event.get("type") == "pokemonEffect" and effect == "substitute" and event.get("state") in ["activate", "end"]: return true
+	return false
