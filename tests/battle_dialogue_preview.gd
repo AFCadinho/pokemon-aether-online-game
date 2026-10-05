@@ -8,13 +8,18 @@ var message: LineEdit
 var status: Label
 var toolbar: VBoxContainer
 var loading := false
+var freeze_preview := false
+var right_species := "Roaring Moon"
+var freeze_buttons: Array[Button] = []
 const ARENAS := ["stadium", "forest", "cave", "sea"]
 
 func _init() -> void:
 	_start.call_deferred()
 
 func _start() -> void:
-	root.title = "PokeAether — Offline trainer dialogue preview"
+	freeze_preview = "--freeze" in OS.get_cmdline_user_args()
+	if freeze_preview: right_species = "Pikachu"
+	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
 	var layer := CanvasLayer.new()
 	layer.layer = 110
 	root.add_child(layer)
@@ -23,7 +28,7 @@ func _start() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.offset_left = 12
 	panel.offset_right = 450
-	panel.offset_top = -205
+	panel.offset_top = -245 if freeze_preview else -205
 	panel.offset_bottom = -12
 	toolbar = VBoxContainer.new()
 	panel.add_child(toolbar)
@@ -32,6 +37,7 @@ func _start() -> void:
 	mode = OptionButton.new()
 	mode.add_item("2.5D")
 	mode.add_item("3D")
+	if freeze_preview: mode.select(1)
 	row.add_child(mode)
 	arena = OptionButton.new()
 	for id in ARENAS:
@@ -52,11 +58,24 @@ func _start() -> void:
 		if is_instance_valid(battle):
 			battle.player_trainer_sprite.command_callout.clear_command()
 			battle.enemy_trainer_sprite.command_callout.clear_command())
+	if freeze_preview:
+		var freezing := HBoxContainer.new()
+		toolbar.add_child(freezing)
+		freeze_buttons.append(_button(freezing, "Bevries links", func(): _freeze(0, true)))
+		freeze_buttons.append(_button(freezing, "Bevries rechts", func(): _freeze(1, true)))
+		freeze_buttons.append(_button(freezing, "Ontdooi alles", func(): _freeze(0, false); _freeze(1, false)))
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.custom_minimum_size.x = 420
 	toolbar.add_child(status)
 	await _load_preview()
+	if freeze_preview:
+		await _freeze(1, true)
+		if battle.animation_router.model_presenter.active:
+			print("FREEZE_PREVIEW_READY")
+		if "--smoke-freeze" in OS.get_cmdline_user_args():
+			await _check_freeze()
+			return
 	if "--smoke" in OS.get_cmdline_user_args():
 		await create_timer(0.4).timeout
 		_say(0)
@@ -79,11 +98,12 @@ func _start() -> void:
 		print("OFFLINE_DIALOGUE_PREVIEW_OK")
 		quit()
 
-func _button(parent: Node, text: String, action: Callable) -> void:
+func _button(parent: Node, text: String, action: Callable) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.pressed.connect(action)
 	parent.add_child(button)
+	return button
 
 func _load_preview() -> void:
 	if loading:
@@ -98,9 +118,17 @@ func _load_preview() -> void:
 	settings.battle_ui_layout = "immersive"
 	settings.battle_presentation_mode = "2.5d" if mode.selected == 0 else "3d"
 	settings.battle_3d_arena = ARENAS[arena.selected]
+	if freeze_preview: settings.battle_animations = true
 	var catalog := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	if not catalog.is_empty():
 		settings.battle_3d_catalog_path = catalog
+	elif freeze_preview:
+		# Use the normal pinned asset service in this slot, never another checkout's cache.
+		settings.battle_3d_catalog_path = ""
+		settings._manual_model_catalog_this_session = false
+	else:
+		# The ordinary dialogue preview uses only the selected local catalog.
+		settings._manual_model_catalog_this_session = true
 	status.text = "Loading… No server battle is created."
 	host = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	root.add_child(host)
@@ -111,32 +139,32 @@ func _load_preview() -> void:
 	battle.enemy_trainer_sprite.show_player(appearance, Vector2.LEFT)
 	battle.vs_panel_container.set_names("You", "Preview rival")
 	battle.player_sprite_box.set_single_pokemon_species("Dragonite", "back")
-	battle.enemy_sprite_box.set_single_pokemon_species("Roaring Moon", "front")
+	battle.enemy_sprite_box.set_single_pokemon_species(right_species, "front")
 	battle.player_hud_panel.set_pokemon_data("Dragonite", 100, 323, 323)
-	battle.enemy_hud_panel.set_pokemon_data("Roaring Moon", 100, 351, 351)
+	battle.enemy_hud_panel.set_pokemon_data(right_species, 100, 351, 351)
 	var party := []
-	for species in ["Dragonite", "Typhlosion", "Scizor", "Arcanine", "Charizard", "Roaring Moon"]:
+	for species in ["Dragonite", "Typhlosion", "Scizor", "Arcanine", "Charizard", right_species]:
 		party.append({"species":species,"hp":100,"max_hp":100,"active":species == "Dragonite"})
 	battle.player_party_grid.set_party(party)
 	battle.get_node("%PlayerStagePartyGrid").set_party(party)
 	var opponent_party: Array = party.duplicate(true)
 	opponent_party.reverse()
 	for pokemon in opponent_party:
-		pokemon.active = pokemon.species == "Roaring Moon"
+		pokemon.active = pokemon.species == right_species
 	battle.opponent_party_grid.set_party(opponent_party)
 	var parent: Control = battle.player_party_grid
 	while parent != battle:
 		parent.show()
 		parent = parent.get_parent() as Control
-	battle.current_action_panel.set_message("Offline preview — dialogue controls at bottom left")
+	battle.current_action_panel.set_message("Freeze-test — draai de camera en gebruik Bevriezen / Ontdooien" if freeze_preview else "Offline preview — dialogue controls at bottom left")
 	# The real controls are display-only: no moves, bags, switches or requests.
 	_disable_gameplay(battle)
 	var renderer = battle.animation_router.model_presenter
 	if mode.selected == 1 and is_instance_valid(renderer):
 		renderer.set_combatant(0, "Dragonite")
-		renderer.set_combatant(1, "Roaring Moon")
+		renderer.set_combatant(1, right_species)
 		await renderer.await_prepared(true, 30000)
-		if renderer.preparation_failed:
+		if renderer.preparation_failed or not renderer.active:
 			status.text = "3D unavailable: " + renderer.reason + " — choose 2.5D or use the fallback button."
 		else:
 			renderer.set_actor_shown(0, true)
@@ -144,7 +172,12 @@ func _load_preview() -> void:
 			status.text = "Ready — drag the arena to orbit. Arena: " + renderer.arena_id
 	else:
 		status.text = "Ready — 2.5D dialogue preview. Arena selection applies to 3D."
+	var reveal_deadline := Time.get_ticks_msec() + 35000
+	while host.get_node("Cover").visible and Time.get_ticks_msec() < reveal_deadline:
+		await process_frame
 	loading = false
+	for button in freeze_buttons:
+		button.disabled = not is_instance_valid(renderer) or not renderer.active or mode.selected != 1
 
 func _disable_gameplay(node: Node) -> void:
 	node.set_process_input(false)
@@ -163,6 +196,51 @@ func _say(side: int) -> void:
 	if text.is_empty():
 		text = "Dragonite, use Dragon Dance!" if side == 0 else "Roaring Moon, show them what you can do!"
 	battle._show_trainer_command_text("p1" if side == 0 else "p2", text, 3.0)
+
+func _freeze(side: int, enabled: bool) -> void:
+	if loading or not is_instance_valid(battle): return
+	var renderer: Node = battle.animation_router.model_presenter
+	if not is_instance_valid(renderer) or not renderer.handles("p%d" % (side+1)): return
+	# Presentation only: no BattleState, party, save or server status is changed.
+	renderer.set_status_condition(side, "frz" if enabled else "")
+	var hud: Control = battle.player_hud_panel if side == 0 else battle.enemy_hud_panel
+	var hp := 323 if side == 0 else 351
+	hud.set_pokemon_data("Dragonite" if side == 0 else right_species, 100, hp, hp, "frz" if enabled else "")
+	status.text = "Freeze geforceerd — draai de camera; Ontdooi alles verwijdert het effect." if enabled else "Ontdooid — normale animatie hervat."
+	if enabled:
+		await battle.animation_router.play_effect_animation("status_frozen", "p%d" % (side+1))
+
+func _check_freeze() -> void:
+	var renderer: Node = battle.animation_router.model_presenter
+	if not renderer.active or not is_instance_valid(renderer.status_effects[1]):
+		push_error("Freeze preview could not prepare native models: " + renderer.reason)
+		quit(1)
+		return
+	assert(battle.battle_state.battle_id.is_empty())
+	assert(renderer.status_conditions[1] == "frozen")
+	await process_frame
+	assert(renderer.players[1].speed_scale == 0.0)
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	if not output.is_empty() and DisplayServer.get_name() != "headless":
+		DirAccess.make_dir_recursive_absolute(output)
+		for i in 20: await process_frame
+		RenderingServer.force_draw()
+		root.get_texture().get_image().save_png(output.path_join("freeze-preview.png"))
+	await _freeze(1, false)
+	await process_frame
+	assert(renderer.status_effects[1] == null and renderer.players[1].speed_scale > 0.0)
+	await _freeze(0, true)
+	await process_frame
+	assert(renderer.status_conditions[0] == "frozen" and renderer.players[0].speed_scale == 0.0)
+	await _freeze(0, false)
+	await process_frame
+	assert(renderer.status_effects[0] == null and renderer.players[0].speed_scale > 0.0)
+	assert(battle.battle_state.battle_id.is_empty())
+	print("FREEZE_PREVIEW_OK both_sides=true thaw=true offline_battle=true")
+	host.release()
+	host.queue_free()
+	await process_frame
+	quit.call_deferred()
 
 func _finalize() -> void:
 	if is_instance_valid(host):
