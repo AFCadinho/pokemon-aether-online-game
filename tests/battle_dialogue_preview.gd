@@ -9,6 +9,11 @@ var status: Label
 var toolbar: VBoxContainer
 var loading := false
 var freeze_preview := false
+var weather_preview := false
+var weather_picker: OptionButton
+var weather_enabled: CheckButton
+const WEATHER_KEYS := ["", "RainDance", "SunnyDay", "Sandstorm", "Snowscape", "Hail", "PrimordialSea", "DesolateLand", "DeltaStream"]
+const WEATHER_LABELS := ["Helder", "Regen", "Zon", "Zandstorm", "Sneeuw", "Hagel", "Primordial Sea", "Desolate Land", "Delta Stream"]
 var right_species := "Roaring Moon"
 var freeze_buttons: Array[Button] = []
 const ARENAS := ["stadium", "forest", "cave", "sea"]
@@ -18,8 +23,10 @@ func _init() -> void:
 
 func _start() -> void:
 	freeze_preview = "--freeze" in OS.get_cmdline_user_args()
-	if freeze_preview: right_species = "Pikachu"
+	weather_preview = "--weather" in OS.get_cmdline_user_args()
+	if freeze_preview or weather_preview: right_species = "Pikachu"
 	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
+	if weather_preview: root.title = "PokeAether — 3D weather preview"
 	var layer := CanvasLayer.new()
 	layer.layer = 110
 	root.add_child(layer)
@@ -28,7 +35,7 @@ func _start() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.offset_left = 12
 	panel.offset_right = 450
-	panel.offset_top = -275 if freeze_preview else -205
+	panel.offset_top = -300 if weather_preview else (-275 if freeze_preview else -205)
 	panel.offset_bottom = -12
 	toolbar = VBoxContainer.new()
 	panel.add_child(toolbar)
@@ -37,7 +44,7 @@ func _start() -> void:
 	mode = OptionButton.new()
 	mode.add_item("2.5D")
 	mode.add_item("3D")
-	if freeze_preview: mode.select(1)
+	if freeze_preview or weather_preview: mode.select(1)
 	row.add_child(mode)
 	arena = OptionButton.new()
 	for id in ARENAS:
@@ -65,6 +72,24 @@ func _start() -> void:
 		freeze_buttons.append(_button(freezing, "Bevries rechts", func(): _freeze(1, true)))
 		freeze_buttons.append(_button(freezing, "Ontdooi alles", func(): _freeze(0, false); _freeze(1, false)))
 		freeze_buttons.append(_button(toolbar, "Aanval geblokkeerd (rechts)", _freeze_blocked))
+	if weather_preview:
+		weather_picker = OptionButton.new()
+		for label in WEATHER_LABELS: weather_picker.add_item(label)
+		weather_picker.select(1)
+		weather_picker.item_selected.connect(func(_index): _weather())
+		toolbar.add_child(weather_picker)
+		var weather_row := HBoxContainer.new()
+		toolbar.add_child(weather_row)
+		weather_enabled = CheckButton.new()
+		weather_enabled.text = "Weereffecten"
+		weather_enabled.button_pressed = true
+		weather_enabled.toggled.connect(func(_enabled): _weather())
+		weather_row.add_child(weather_enabled)
+		var pause := CheckButton.new()
+		pause.text = "Pauze"
+		pause.toggled.connect(func(paused):
+			if is_instance_valid(battle): battle.animation_router.model_presenter.playback_speed = 0.0 if paused else 1.0)
+		weather_row.add_child(pause)
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.custom_minimum_size.x = 420
@@ -76,6 +101,12 @@ func _start() -> void:
 			print("FREEZE_PREVIEW_READY")
 		if "--smoke-freeze" in OS.get_cmdline_user_args():
 			await _check_freeze()
+			return
+	if weather_preview:
+		_weather()
+		print("WEATHER_PREVIEW_READY")
+		if "--smoke-weather" in OS.get_cmdline_user_args():
+			await _check_weather()
 			return
 	if "--smoke" in OS.get_cmdline_user_args():
 		await create_timer(0.4).timeout
@@ -119,11 +150,11 @@ func _load_preview() -> void:
 	settings.battle_ui_layout = "immersive"
 	settings.battle_presentation_mode = "2.5d" if mode.selected == 0 else "3d"
 	settings.battle_3d_arena = ARENAS[arena.selected]
-	if freeze_preview: settings.battle_animations = true
+	if freeze_preview or weather_preview: settings.battle_animations = true
 	var catalog := OS.get_environment("POKEAETHER_3D_STAGE_REPORT")
 	if not catalog.is_empty():
 		settings.battle_3d_catalog_path = catalog
-	elif freeze_preview:
+	elif freeze_preview or weather_preview:
 		# Use the normal pinned asset service in this slot, never another checkout's cache.
 		settings.battle_3d_catalog_path = ""
 		settings._manual_model_catalog_this_session = false
@@ -173,10 +204,12 @@ func _load_preview() -> void:
 			status.text = "Ready — drag the arena to orbit. Arena: " + renderer.arena_id
 	else:
 		status.text = "Ready — 2.5D dialogue preview. Arena selection applies to 3D."
+	if weather_preview: battle.current_action_panel.set_message("Weertest — kies een weertype en draai de camera")
 	var reveal_deadline := Time.get_ticks_msec() + 35000
 	while host.get_node("Cover").visible and Time.get_ticks_msec() < reveal_deadline:
 		await process_frame
 	loading = false
+	if weather_preview: _weather()
 	for button in freeze_buttons:
 		button.disabled = not is_instance_valid(renderer) or not renderer.active or mode.selected != 1
 
@@ -261,3 +294,36 @@ func _check_freeze() -> void:
 func _finalize() -> void:
 	if is_instance_valid(host):
 		host.release()
+
+func _weather() -> void:
+	if loading or not is_instance_valid(battle): return
+	root.get_node("SettingsManager").weather_effects = weather_enabled.button_pressed
+	battle.weather_presentation.update_weather(WEATHER_KEYS[weather_picker.selected])
+	status.text = "Weertest: " + WEATHER_LABELS[weather_picker.selected] + " — draai de camera, pauzeer of schakel het effect uit."
+
+func _check_weather() -> void:
+	var renderer: Node = battle.animation_router.model_presenter
+	if not renderer.active:
+		push_error("Weather preview could not prepare native models: " + renderer.reason)
+		quit(1)
+		return
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	if not output.is_empty(): DirAccess.make_dir_recursive_absolute(output)
+	for i in range(1, WEATHER_KEYS.size()):
+		weather_picker.select(i)
+		_weather()
+		await create_timer(0.8).timeout
+		assert(is_instance_valid(renderer.weather_effect))
+		assert(not battle.weather_particles.visible and not battle.weather_tint.visible)
+		assert(battle.battle_state.battle_id.is_empty())
+		if not output.is_empty() and DisplayServer.get_name() != "headless":
+			RenderingServer.force_draw()
+			root.get_texture().get_image().save_png(output.path_join("weather-%s.png" % renderer.weather_effect.key))
+	weather_picker.select(0)
+	_weather()
+	assert(renderer.weather_effect == null)
+	print("WEATHER_PREVIEW_OK conditions=8 offline_battle=true")
+	host.release()
+	host.queue_free()
+	await process_frame
+	quit.call_deferred()

@@ -786,6 +786,7 @@ func _ready() -> void:
 		battle_stage.move_child(desktop_3d, battle_background_video.get_index() + 1)
 		desktop_3d.setup([player_sprite_box, enemy_sprite_box], [player_battle_platform, enemy_battle_platform])
 		animation_router.model_presenter = desktop_3d
+		weather_presentation.model_presenter = desktop_3d
 	_setup_side_condition_presentation()
 	action_flow.setup(battle_state, battle_request, _remember_public_confirmed_abilities_from_response)
 	force_switch_flow.setup(battle_state)

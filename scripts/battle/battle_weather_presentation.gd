@@ -30,6 +30,10 @@ var sandstorm_weather_time := 0.0
 var grassy_terrain_time := 0.0
 var trick_room_time := 0.0
 var active_terrain_effect := ""
+var active_weather_effect := ""
+var model_presenter: Node
+var native_weather_owned := false
+var weather_enabled := true
 
 func setup(
 	weather_particles_node: GPUParticles2D,
@@ -73,7 +77,12 @@ func setup(
 	trick_room_layer = trick_room_layer_node
 
 func update_weather(weather_effect: String) -> void:
-	if not SettingsManager.weather_effects:
+	active_weather_effect = weather_effect
+	weather_enabled = SettingsManager.weather_effects
+	native_weather_owned = is_instance_valid(model_presenter) and model_presenter.owns_weather()
+	if is_instance_valid(model_presenter):
+		model_presenter.set_weather_condition(weather_effect)
+	if native_weather_owned or not weather_enabled:
 		_hide_weather_effects()
 		return
 
@@ -142,6 +151,10 @@ func update_weather(weather_effect: String) -> void:
 		snow_particles.emitting = should_emit_snow
 
 func animate(delta: float) -> void:
+	# Preparation/fallback can change ownership without a new weather event.
+	var owns_native: bool = is_instance_valid(model_presenter) and model_presenter.owns_weather()
+	if owns_native != native_weather_owned or weather_enabled != SettingsManager.weather_effects:
+		update_weather(active_weather_effect)
 	if not SettingsManager.weather_effects and not SettingsManager.terrain_effects:
 		return
 

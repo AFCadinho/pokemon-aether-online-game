@@ -45,3 +45,8 @@ model downloader and the assigned slot's own asset cache. Settings remain in mem
 Append `--smoke-freeze` to test freezing/thawing both sides and exit. With a display,
 `POKEAETHER_STAGE_OUTPUT` also writes `freeze-preview.png` before thawing.
 Freeze is approved with tint-only idle and a short ice burst/sound on blocked actions.
+
+## Weather review
+
+Use `-- --weather` for the native weather picker, pause and effects toggle.
+See [3D weather review](battle-weather-3d.md) for the eight conditions and checklist.
