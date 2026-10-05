@@ -82,7 +82,7 @@ func _run() -> void:
 	router.cancel_render()
 	await get_tree().process_frame
 	# Production routing: one command before flight, including model-only moves.
-	for move in ["Ember", "Outrage"]:
+	for move in ["Ember", "Surf"]:
 		await router.play_move_animation(move, "p1", "p2", {"result": "miss", "on_dodge_started": _command})
 		assert(stage.move_dodges[1].is_empty() and stage.dodge_offsets[1] == Vector3.ZERO)
 	assert(commands == 2)

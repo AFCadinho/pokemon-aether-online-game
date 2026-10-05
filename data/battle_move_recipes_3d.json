@@ -1,0 +1,4996 @@
+{
+  "schema": 1,
+  "note": "First-pass 3D recipes. Native SV timelines/simulation are not converted; source masks drive authored geometry. Individually tunable; existing dedicated moves are outside this table.",
+  "moves": {
+    "aquajet": {
+      "name": "Aqua Jet",
+      "family": "contact",
+      "variant": "dash",
+      "type": "water",
+      "color": "58caff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 453,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Aqua Jet.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/aquajet_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 70
+        }
+      ]
+    },
+    "bodypress": {
+      "name": "Body Press",
+      "family": "contact",
+      "variant": "dash",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 776,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "Slam",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bodypress_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "extremespeed": {
+      "name": "Extreme Speed",
+      "family": "contact",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 245,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Extremespeed1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Extremespeed2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "fakeout": {
+      "name": "Fake Out",
+      "family": "contact",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 252,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Fake Out1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Fake Out2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "flipturn": {
+      "name": "Flip Turn",
+      "family": "contact",
+      "variant": "dash",
+      "type": "water",
+      "color": "58caff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 812,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- U-Turn2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/flipturn_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "frustration": {
+      "name": "Frustration",
+      "family": "contact",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 218,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Frustration1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/frustration_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 70
+        },
+        {
+          "name": "PRSFX- Frustration2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/frustration_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "gigaimpact": {
+      "name": "Giga Impact",
+      "family": "contact",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 416,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Giga Impact2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Giga Impact1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "grassyglide": {
+      "name": "Grassy Glide",
+      "family": "contact",
+      "variant": "dash",
+      "type": "grass",
+      "color": "80e657",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 803,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Leaf Blade.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_launch.wav",
+          "role": "launch",
+          "volume": 92,
+          "pitch": 112
+        },
+        {
+          "name": "PRSFX- Leafage 2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "headsmash": {
+      "name": "Head Smash",
+      "family": "contact",
+      "variant": "dash",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 457,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Head Smash.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/headsmash_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "headlongrush": {
+      "name": "Headlong Rush",
+      "family": "contact",
+      "variant": "quakes",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 838,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Bulldoze",
+          "path": "res://assets/battles/moves_3d/audio_recipes/headlongrush_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "ironhead": {
+      "name": "Iron Head",
+      "family": "contact",
+      "variant": "dash",
+      "type": "steel",
+      "color": "bdedff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 442,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Iron Head.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/ironhead_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 65
+        }
+      ]
+    },
+    "knockoff": {
+      "name": "Knock Off",
+      "family": "contact",
+      "variant": "dash",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 282,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Knock Off.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/knockoff_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "outrage": {
+      "name": "Outrage",
+      "family": "contact",
+      "variant": "dash",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 200,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Outrage1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/outrage_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Outrage2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/outrage_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "pursuit": {
+      "name": "Pursuit",
+      "family": "contact",
+      "variant": "dash",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 228,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Pursuit1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 50
+        },
+        {
+          "name": "PRSFX- Pursuit2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "rapidspin": {
+      "name": "Rapid Spin",
+      "family": "contact",
+      "variant": "spin",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 229,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Rapid Spin.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rapidspin_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "return": {
+      "name": "Return",
+      "family": "contact",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 216,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Return1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/return_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Return2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/return_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "rollout": {
+      "name": "Rollout",
+      "family": "contact",
+      "variant": "spin",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 205,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Rollout1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rollout_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Rollout2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rollout_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "spark": {
+      "name": "Spark",
+      "family": "contact",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 209,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Spark1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spark_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Spark2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spark_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 120
+        }
+      ]
+    },
+    "uturn": {
+      "name": "U-turn",
+      "family": "contact",
+      "variant": "dash",
+      "type": "bug",
+      "color": "c4e577",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 369,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- U-Turn2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/uturn_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 75
+        }
+      ]
+    },
+    "woodhammer": {
+      "name": "Wood Hammer",
+      "family": "contact",
+      "variant": "dash",
+      "type": "grass",
+      "color": "80e657",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 452,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Wood Hammer.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/woodhammer_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "bulletpunch": {
+      "name": "Bullet Punch",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "steel",
+      "color": "bdedff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 418,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Bullet Punch.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bulletpunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "closecombat": {
+      "name": "Close Combat",
+      "family": "strikes",
+      "variant": "flurry",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 370,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "doublekick": {
+      "name": "Double Kick",
+      "family": "strikes",
+      "variant": "kick",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 24,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Double Kick.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/doublekick_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "drainpunch": {
+      "name": "Drain Punch",
+      "family": "strikes",
+      "variant": "drain",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 409,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Drain Punch1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 85
+        },
+        {
+          "name": "PRSFX- Drain Punch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 90
+        }
+      ]
+    },
+    "firepunch": {
+      "name": "Fire Punch",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "fire",
+      "color": "ff8d38",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 7,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Fire Punch3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 80
+        },
+        {
+          "name": "PRSFX- Fire Punch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "highjumpkick": {
+      "name": "High Jump Kick",
+      "family": "strikes",
+      "variant": "kick",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 136,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hi Jump Kick1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Hi Jump Kick2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "icepunch": {
+      "name": "Ice Punch",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 8,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Ice Punch1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Ice Punch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "lowkick": {
+      "name": "Low Kick",
+      "family": "strikes",
+      "variant": "kick",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 67,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Low Kick.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/lowkick_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 101
+        }
+      ]
+    },
+    "pound": {
+      "name": "Pound",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 1,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Pound.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pound_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 50
+        }
+      ]
+    },
+    "rocksmash": {
+      "name": "Rock Smash",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 249,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Rock Smash.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rocksmash_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "suckerpunch": {
+      "name": "Sucker Punch",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 389,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sucker Punch1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Sucker Punch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "superpower": {
+      "name": "Superpower",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 276,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Superpower1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/superpower_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Superpower2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/superpower_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "thunderpunch": {
+      "name": "Thunder Punch",
+      "family": "strikes",
+      "variant": "punch",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 9,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Thunder Punch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Thunder Punch1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "astonish": {
+      "name": "Astonish",
+      "family": "claws",
+      "variant": "slash",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 310,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Astonish1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/astonish_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Astonish2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/astonish_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "bugbite": {
+      "name": "Bug Bite",
+      "family": "claws",
+      "variant": "bite",
+      "type": "bug",
+      "color": "c4e577",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 450,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Bug Bite.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bugbite_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 85
+        }
+      ]
+    },
+    "ceaselessedge": {
+      "name": "Ceaseless Edge",
+      "family": "claws",
+      "variant": "slash",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 845,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Night Slash2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 90
+        },
+        {
+          "name": "PRSFX- Night Slash1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "dragonclaw": {
+      "name": "Dragon Claw",
+      "family": "claws",
+      "variant": "slash",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 337,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Dragon Claw.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/dragonclaw_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 54
+        }
+      ]
+    },
+    "furyattack": {
+      "name": "Fury Attack",
+      "family": "claws",
+      "variant": "flurry",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 31,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Fury Attack.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/furyattack_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "kowtowcleave": {
+      "name": "Kowtow Cleave",
+      "family": "claws",
+      "variant": "slash",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 869,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "Darkness2",
+          "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 70
+        },
+        {
+          "name": "Ace",
+          "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 80
+        }
+      ]
+    },
+    "lick": {
+      "name": "Lick",
+      "family": "claws",
+      "variant": "whip",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 122,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Lick.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/lick_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "peck": {
+      "name": "Peck",
+      "family": "claws",
+      "variant": "slash",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 64,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Peck.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/peck_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "razorshell": {
+      "name": "Razor Shell",
+      "family": "claws",
+      "variant": "slash",
+      "type": "water",
+      "color": "58caff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 534,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Razor Shell.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/razorshell_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 130
+        }
+      ]
+    },
+    "vinewhip": {
+      "name": "Vine Whip",
+      "family": "claws",
+      "variant": "whip",
+      "type": "grass",
+      "color": "80e657",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 22,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Vine Whip.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/vinewhip_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "wingattack": {
+      "name": "Wing Attack",
+      "family": "claws",
+      "variant": "slash",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.1,
+      "launch_fraction": 0.14,
+      "impact_fraction": 0.52,
+      "scale": 1.45,
+      "attachment": "hand",
+      "source_id": 17,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Wing Attack1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Wing Attack2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "dragonbreath": {
+      "name": "Dragon Breath",
+      "family": "beams",
+      "variant": "beam",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 225,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Dragon Breath.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/dragonbreath_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "electroshot": {
+      "name": "Electro Shot",
+      "family": "beams",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 905,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Thunderbolt2",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Wild Charge2",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "hyperbeam": {
+      "name": "Hyper Beam",
+      "family": "beams",
+      "variant": "beam",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.65,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 63,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hyper Beam.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hyperbeam_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 75
+        }
+      ]
+    },
+    "scald": {
+      "name": "Scald",
+      "family": "beams",
+      "variant": "beam",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 503,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Scald1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/scald_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Scald2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/scald_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "solarbeam": {
+      "name": "Solar Beam",
+      "family": "beams",
+      "variant": "beam",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.65,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 76,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Solar Beam2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/solarbeam_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "voltswitch": {
+      "name": "Volt Switch",
+      "family": "beams",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 521,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Volt Switch2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Volt Switch1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "fairywind": {
+      "name": "Fairy Wind",
+      "family": "projectiles",
+      "variant": "orb",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 584,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Fairy Wind.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/fairywind_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "hiddenpower": {
+      "name": "Hidden Power",
+      "family": "projectiles",
+      "variant": "orb",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 237,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hidden Power1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Hidden Power2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "leafage": {
+      "name": "Leafage",
+      "family": "projectiles",
+      "variant": "leaves",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 670,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Leafage 1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/leafage_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Leafage 2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/leafage_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "mudslap": {
+      "name": "Mud-Slap",
+      "family": "projectiles",
+      "variant": "arc",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 189,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Mud Slap.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/mudslap_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "pyroball": {
+      "name": "Pyro Ball",
+      "family": "projectiles",
+      "variant": "arc",
+      "type": "fire",
+      "color": "ff8d38",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 780,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "Fire1",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_launch.wav",
+          "role": "launch",
+          "volume": 25,
+          "pitch": 85
+        },
+        {
+          "name": "Explosion1",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 95
+        }
+      ]
+    },
+    "rockthrow": {
+      "name": "Rock Throw",
+      "family": "projectiles",
+      "variant": "shards",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 88,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Rock Throw1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Rock Throw2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "watershuriken": {
+      "name": "Water Shuriken",
+      "family": "projectiles",
+      "variant": "shards",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 594,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Water Shurkein.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/watershuriken_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "weatherball": {
+      "name": "Weather Ball",
+      "family": "projectiles",
+      "variant": "orb",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 311,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Weather Ball2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Weather Ball1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 150
+        }
+      ]
+    },
+    "absorb": {
+      "name": "Absorb",
+      "family": "waves",
+      "variant": "drain",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 71,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Absorb1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/absorb_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Absorb2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/absorb_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "confusion": {
+      "name": "Confusion",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 93,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Confusion.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/confusion_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "darkpulse": {
+      "name": "Dark Pulse",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 399,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Dark Pulse1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Dark Pulse2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "disarmingvoice": {
+      "name": "Disarming Voice",
+      "family": "waves",
+      "variant": "sound",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 574,
+      "review": "first-pass",
+      "audio": []
+    },
+    "drainingkiss": {
+      "name": "Draining Kiss",
+      "family": "waves",
+      "variant": "hearts",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 577,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Draining Kiss1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Draining Kiss2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "gust": {
+      "name": "Gust",
+      "family": "waves",
+      "variant": "storm",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 16,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Gust.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/gust_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "hex": {
+      "name": "Hex",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 506,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hex.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hex_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "psychic": {
+      "name": "Psychic",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 94,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Psychic.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychic_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "psychicnoise": {
+      "name": "Psychic Noise",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 917,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Calm Mind.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Disable",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "psyshock": {
+      "name": "Psyshock",
+      "family": "waves",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 473,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Psyshock1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Psyshock2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "screech": {
+      "name": "Screech",
+      "family": "waves",
+      "variant": "sound",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 103,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Screech.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/screech_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "sparklingaria": {
+      "name": "Sparkling Aria",
+      "family": "waves",
+      "variant": "sound",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 664,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sparkling Aria1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Sparkling Aria2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "supersonic": {
+      "name": "Supersonic",
+      "family": "waves",
+      "variant": "sound",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 1.15,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 48,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Supersonic.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/supersonic_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 87
+        }
+      ]
+    },
+    "bleakwindstorm": {
+      "name": "Bleakwind Storm",
+      "family": "area",
+      "variant": "storm",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 846,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Icy Wind1",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bleakwindstorm_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "blizzard": {
+      "name": "Blizzard",
+      "family": "area",
+      "variant": "snow",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 59,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Blizzard.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/blizzard_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 150
+        }
+      ]
+    },
+    "earthpower": {
+      "name": "Earth Power",
+      "family": "area",
+      "variant": "quakes",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 414,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Earth Power.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/earthpower_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "earthquake": {
+      "name": "Earthquake",
+      "family": "area",
+      "variant": "quakes",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 89,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Earthquake1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Earthquake2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "explosion": {
+      "name": "Explosion",
+      "family": "area",
+      "variant": "burst",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 153,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Selfdestruct1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 225
+        },
+        {
+          "name": "PRSFX- Explosion.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 90
+        }
+      ]
+    },
+    "freezedry": {
+      "name": "Freeze-Dry",
+      "family": "area",
+      "variant": "snow",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 573,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Freeze Dry1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 65
+        },
+        {
+          "name": "PRSFX- Freeze Dry3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 85
+        }
+      ]
+    },
+    "heatwave": {
+      "name": "Heat Wave",
+      "family": "area",
+      "variant": "flames",
+      "type": "fire",
+      "color": "ff8d38",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 257,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Heat Wave.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/heatwave_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "hurricane": {
+      "name": "Hurricane",
+      "family": "area",
+      "variant": "storm",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 542,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hurricane.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hurricane_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "makeitrain": {
+      "name": "Make It Rain",
+      "family": "area",
+      "variant": "rain",
+      "type": "steel",
+      "color": "bdedff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 874,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Zing Zap3",
+          "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Pay Day2",
+          "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "powdersnow": {
+      "name": "Powder Snow",
+      "family": "area",
+      "variant": "snow",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 181,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Powder Snow1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/powdersnow_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "terastarstorm": {
+      "name": "Tera Starstorm",
+      "family": "area",
+      "variant": "burst",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 1.35,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 906,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Barrier",
+          "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_launch.wav",
+          "role": "launch",
+          "volume": 85,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Recover",
+          "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 95
+        }
+      ]
+    },
+    "babydolleyes": {
+      "name": "Baby-Doll Eyes",
+      "family": "status",
+      "variant": "hearts",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 608,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Baby Doll Eyes.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/babydolleyes_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "charm": {
+      "name": "Charm",
+      "family": "status",
+      "variant": "hearts",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 204,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Charm.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/charm_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "encore": {
+      "name": "Encore",
+      "family": "status",
+      "variant": "debuff",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 227,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Encore.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/encore_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "growl": {
+      "name": "Growl",
+      "family": "status",
+      "variant": "sound",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "mouth",
+      "source_id": 45,
+      "review": "first-pass",
+      "audio": []
+    },
+    "leechseed": {
+      "name": "Leech Seed",
+      "family": "status",
+      "variant": "arc",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 73,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Leech Seed2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/leechseed_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "leer": {
+      "name": "Leer",
+      "family": "status",
+      "variant": "eye",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 43,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Leer.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/leer_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "poisonpowder": {
+      "name": "Poison Powder",
+      "family": "status",
+      "variant": "powder",
+      "type": "poison",
+      "color": "bd62e6",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 77,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Poison Powder.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/poisonpowder_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "sandattack": {
+      "name": "Sand Attack",
+      "family": "status",
+      "variant": "powder",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 28,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sand Attack.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sandattack_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "sleeppowder": {
+      "name": "Sleep Powder",
+      "family": "status",
+      "variant": "powder",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 79,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sleep Powder.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sleeppowder_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "smokescreen": {
+      "name": "Smokescreen",
+      "family": "status",
+      "variant": "powder",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 108,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Smokescreen.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/smokescreen_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "spore": {
+      "name": "Spore",
+      "family": "status",
+      "variant": "powder",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 147,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Spore.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spore_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "stringshot": {
+      "name": "String Shot",
+      "family": "status",
+      "variant": "web",
+      "type": "bug",
+      "color": "c4e577",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 81,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- String Shot1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- String Shot2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "sweetscent": {
+      "name": "Sweet Scent",
+      "family": "status",
+      "variant": "powder",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 230,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Heal Order2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sweetscent_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "tailwhip": {
+      "name": "Tail Whip",
+      "family": "status",
+      "variant": "debuff",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 39,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Tail Whip.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/tailwhip_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "taunt": {
+      "name": "Taunt",
+      "family": "status",
+      "variant": "eye",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 269,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Taunt1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Taunt3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "thunderwave": {
+      "name": "Thunder Wave",
+      "family": "status",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 86,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Thunder Wave.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/thunderwave_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "toxic": {
+      "name": "Toxic",
+      "family": "status",
+      "variant": "arc",
+      "type": "poison",
+      "color": "bd62e6",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 92,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Toxic2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Toxic1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "willowisp": {
+      "name": "Will-O-Wisp",
+      "family": "status",
+      "variant": "flames",
+      "type": "fire",
+      "color": "ff8d38",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 261,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Will O Wisp1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Will O Wisp2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "agility": {
+      "name": "Agility",
+      "family": "self",
+      "variant": "spin",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 97,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Agility.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/agility_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "calmmind": {
+      "name": "Calm Mind",
+      "family": "self",
+      "variant": "charge",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 347,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Calm Mind.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/calmmind_cast.wav",
+          "role": "cast",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "charge": {
+      "name": "Charge",
+      "family": "self",
+      "variant": "charge",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 268,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Charge.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/charge_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "defensecurl": {
+      "name": "Defense Curl",
+      "family": "self",
+      "variant": "shield",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 111,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Defense Curl1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/defensecurl_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "doubleteam": {
+      "name": "Double Team",
+      "family": "self",
+      "variant": "spin",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 104,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Double Team.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/doubleteam_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 140
+        }
+      ]
+    },
+    "dragondance": {
+      "name": "Dragon Dance",
+      "family": "self",
+      "variant": "spin",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 349,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Dragon Dance.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/dragondance_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "focusenergy": {
+      "name": "Focus Energy",
+      "family": "self",
+      "variant": "charge",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 116,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Focus Energy.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/focusenergy_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "growth": {
+      "name": "Growth",
+      "family": "self",
+      "variant": "charge",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 74,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Growth.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/growth_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "harden": {
+      "name": "Harden",
+      "family": "self",
+      "variant": "shield",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 106,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Harden.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/harden_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "howl": {
+      "name": "Howl",
+      "family": "self",
+      "variant": "sound",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 336,
+      "review": "first-pass",
+      "audio": []
+    },
+    "nastyplot": {
+      "name": "Nasty Plot",
+      "family": "self",
+      "variant": "eye",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 417,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Nasty Plot.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/nastyplot_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 65
+        }
+      ]
+    },
+    "recover": {
+      "name": "Recover",
+      "family": "self",
+      "variant": "heal",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 105,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Recover.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/recover_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "roost": {
+      "name": "Roost",
+      "family": "self",
+      "variant": "heal",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 355,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Roost2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/roost_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "swordsdance": {
+      "name": "Swords Dance",
+      "family": "self",
+      "variant": "swords",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 14,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Swords Dance2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Swords Dance1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "withdraw": {
+      "name": "Withdraw",
+      "family": "self",
+      "variant": "shield",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 110,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Withdraw.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/withdraw_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "auroraveil": {
+      "name": "Aurora Veil",
+      "family": "field",
+      "variant": "shield",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 694,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Aurora Veil1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Aurora Veil3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "chillyreception": {
+      "name": "Chilly Reception",
+      "family": "field",
+      "variant": "snow",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 881,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Parting Shot",
+          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast.wav",
+          "role": "cast",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Sketch",
+          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast.wav",
+          "role": "cast",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "courtchange": {
+      "name": "Court Change",
+      "family": "field",
+      "variant": "portal",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 756,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Ally Switch.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/courtchange_cast.wav",
+          "role": "cast",
+          "volume": 90,
+          "pitch": 100
+        }
+      ]
+    },
+    "defog": {
+      "name": "Defog",
+      "family": "field",
+      "variant": "mist",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 432,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Defog.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/defog_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "electricterrain": {
+      "name": "Electric Terrain",
+      "family": "field",
+      "variant": "terrain",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 604,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Electric Terrain.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Electric Terrain2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast.wav",
+          "role": "cast",
+          "volume": 60,
+          "pitch": 100
+        }
+      ]
+    },
+    "futuresight": {
+      "name": "Future Sight",
+      "family": "field",
+      "variant": "eye",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 248,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Future Sight1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/futuresight_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 59
+        }
+      ]
+    },
+    "grassyterrain": {
+      "name": "Grassy Terrain",
+      "family": "field",
+      "variant": "terrain",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 580,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Grassy Terrain.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/grassyterrain_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 105
+        }
+      ]
+    },
+    "haze": {
+      "name": "Haze",
+      "family": "field",
+      "variant": "mist",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 114,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Haze.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/haze_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 85
+        }
+      ]
+    },
+    "lightscreen": {
+      "name": "Light Screen",
+      "family": "field",
+      "variant": "shield",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 113,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Light Screen.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/lightscreen_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "mistyterrain": {
+      "name": "Misty Terrain",
+      "family": "field",
+      "variant": "terrain",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 581,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Misty Terrain.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/mistyterrain_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "protect": {
+      "name": "Protect",
+      "family": "field",
+      "variant": "shield",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 182,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Protect.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/protect_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "psychicterrain": {
+      "name": "Psychic Terrain",
+      "family": "field",
+      "variant": "terrain",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 678,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Psychic Terrain1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Psychic Terrain3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 130
+        }
+      ]
+    },
+    "reflect": {
+      "name": "Reflect",
+      "family": "field",
+      "variant": "shield",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 115,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Reflect.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/reflect_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "spikes": {
+      "name": "Spikes",
+      "family": "field",
+      "variant": "spikes",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 191,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Spikes1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast.wav",
+          "role": "cast",
+          "volume": 30,
+          "pitch": 50
+        },
+        {
+          "name": "PRSFX- Spikes2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast.wav",
+          "role": "cast",
+          "volume": 60,
+          "pitch": 100
+        }
+      ]
+    },
+    "stealthrock": {
+      "name": "Stealth Rock",
+      "family": "field",
+      "variant": "spikes",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 446,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Stealth Rocks.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stealthrock_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "stickyweb": {
+      "name": "Sticky Web",
+      "family": "field",
+      "variant": "web",
+      "type": "bug",
+      "color": "c4e577",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 564,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sticky Web.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stickyweb_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "substitute": {
+      "name": "Substitute",
+      "family": "field",
+      "variant": "portal",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 164,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Substitute2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Substitute1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "teleport": {
+      "name": "Teleport",
+      "family": "field",
+      "variant": "portal",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 100,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Teleport.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/teleport_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 90
+        }
+      ]
+    },
+    "toxicspikes": {
+      "name": "Toxic Spikes",
+      "family": "field",
+      "variant": "spikes",
+      "type": "poison",
+      "color": "bd62e6",
+      "contact": false,
+      "target": "target",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 390,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Spikes1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast.wav",
+          "role": "cast",
+          "volume": 30,
+          "pitch": 50
+        },
+        {
+          "name": "PRSFX- Toxic Spikes2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast.wav",
+          "role": "cast",
+          "volume": 80,
+          "pitch": 80
+        }
+      ]
+    },
+    "wish": {
+      "name": "Wish",
+      "family": "field",
+      "variant": "heal",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 0.95,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.62,
+      "scale": 1.45,
+      "attachment": "body",
+      "source_id": 273,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Wish.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/wish_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "10000000voltthunderbolt": {
+      "name": "10,000,000 Volt Thunderbolt",
+      "family": "z",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 719,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Catastropika1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Catastropika3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "aciddownpour": {
+      "name": "Acid Downpour",
+      "family": "z",
+      "variant": "orb",
+      "type": "poison",
+      "color": "bd62e6",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 628,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Acid Downpour3",
+          "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 115
+        },
+        {
+          "name": "PRSFX- Acid Downpour7",
+          "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "alloutpummeling": {
+      "name": "All-Out Pummeling",
+      "family": "z",
+      "variant": "flurry",
+      "type": "fighting",
+      "color": "ffa977",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 624,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- All Out Pummeling1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 110
+        },
+        {
+          "name": "PRSFX- All Out Pummeling3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "blackholeeclipse": {
+      "name": "Black Hole Eclipse",
+      "family": "z",
+      "variant": "pulse",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 654,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Black Hole Eclipse2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 110
+        },
+        {
+          "name": "PRSFX- Black Hole Eclipse3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 105
+        }
+      ]
+    },
+    "bloomdoom": {
+      "name": "Bloom Doom",
+      "family": "z",
+      "variant": "leaves",
+      "type": "grass",
+      "color": "80e657",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 644,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Bloom Doom2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 110
+        },
+        {
+          "name": "PRSFX- Bloom Doom3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "breakneckblitz": {
+      "name": "Breakneck Blitz",
+      "family": "z",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 622,
+      "review": "first-pass",
+      "audio": []
+    },
+    "catastropika": {
+      "name": "Catastropika",
+      "family": "z",
+      "variant": "dash",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 658,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Catastropika1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Catastropika3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "clangoroussoulblaze": {
+      "name": "Clangorous Soulblaze",
+      "family": "z",
+      "variant": "sound",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 728,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Clangorous Soulblaze2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_launch.wav",
+          "role": "launch",
+          "volume": 50,
+          "pitch": 125
+        },
+        {
+          "name": "PRSFX- Clangorous Soulblaze1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 108
+        }
+      ]
+    },
+    "continentalcrush": {
+      "name": "Continental Crush",
+      "family": "z",
+      "variant": "rain",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 632,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Continental Crush3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Continental Crush5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "corkscrewcrash": {
+      "name": "Corkscrew Crash",
+      "family": "z",
+      "variant": "spin",
+      "type": "steel",
+      "color": "bdedff",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 638,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Corkscrew Crash1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Corkscrew Crash9.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_impact.wav",
+          "role": "impact",
+          "volume": 70,
+          "pitch": 110
+        }
+      ]
+    },
+    "devastatingdrake": {
+      "name": "Devastating Drake",
+      "family": "z",
+      "variant": "orb",
+      "type": "dragon",
+      "color": "ae92ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 652,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Devastating Drake2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Devastating Drake1",
+          "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "extremeevoboost": {
+      "name": "Extreme Evoboost",
+      "family": "z",
+      "variant": "portal",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": false,
+      "target": "actor",
+      "damaging": false,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 702,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Extreme Evoboost1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/extremeevoboost_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Extreme Evoboost3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/extremeevoboost_cast.wav",
+          "role": "cast",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "genesissupernova": {
+      "name": "Genesis Supernova",
+      "family": "z",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 703,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Genesis Supernova1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Genesis Supernova11.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "gigavolthavoc": {
+      "name": "Gigavolt Havoc",
+      "family": "z",
+      "variant": "electric",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 646,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Gigavolt Havoc3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_launch.wav",
+          "role": "launch",
+          "volume": 70,
+          "pitch": 150
+        },
+        {
+          "name": "PRSFX- Gigavolt Havoc2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 75
+        }
+      ]
+    },
+    "guardianofalola": {
+      "name": "Guardian of Alola",
+      "family": "z",
+      "variant": "orb",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 698,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Gaurdian of Alola1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Gaurdian of Alola2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "hydrovortex": {
+      "name": "Hydro Vortex",
+      "family": "z",
+      "variant": "storm",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 642,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Hydro Vortex2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 120
+        },
+        {
+          "name": "PRSFX- Hydro Vortex3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "infernooverdrive": {
+      "name": "Inferno Overdrive",
+      "family": "z",
+      "variant": "flames",
+      "type": "fire",
+      "color": "ff8d38",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 640,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Inferno Overdrive4.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Inferno Overdrive5",
+          "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "letssnuggleforever": {
+      "name": "Let\u2019s Snuggle Forever",
+      "family": "z",
+      "variant": "hearts",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 726,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Let's Snuggle Forever1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Let's Snuggle Forever12.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "lightthatburnsthesky": {
+      "name": "Light That Burns the Sky",
+      "family": "z",
+      "variant": "burst",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 723,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- LTBTS1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 90
+        },
+        {
+          "name": "PRSFX- LTBTS4.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "maliciousmoonsault": {
+      "name": "Malicious Moonsault",
+      "family": "z",
+      "variant": "kick",
+      "type": "dark",
+      "color": "9a6fae",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 696,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Malicious Moonsault3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Malicious Moonsault6.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 110
+        }
+      ]
+    },
+    "menacingmoonrazemaelstrom": {
+      "name": "Menacing Moonraze Maelstrom",
+      "family": "z",
+      "variant": "pulse",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 725,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- SSS1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_launch.wav",
+          "role": "launch",
+          "volume": 60,
+          "pitch": 40
+        },
+        {
+          "name": "PRSFX- MMM4.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 80
+        }
+      ]
+    },
+    "neverendingnightmare": {
+      "name": "Never-Ending Nightmare",
+      "family": "z",
+      "variant": "pulse",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 636,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- NeverEndingNightmare5.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_launch.wav",
+          "role": "launch",
+          "volume": 80,
+          "pitch": 105
+        },
+        {
+          "name": "PRSFX- NeverEndingNightmare4.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 100
+        }
+      ]
+    },
+    "oceanicoperetta": {
+      "name": "Oceanic Operetta",
+      "family": "z",
+      "variant": "sound",
+      "type": "water",
+      "color": "58caff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 697,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Oceanic Operetta1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 25
+        },
+        {
+          "name": "PRSFX- Oceanic Operetta2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_impact.wav",
+          "role": "impact",
+          "volume": 90,
+          "pitch": 100
+        }
+      ]
+    },
+    "pulverizingpancake": {
+      "name": "Pulverizing Pancake",
+      "family": "z",
+      "variant": "dash",
+      "type": "normal",
+      "color": "e8d7b7",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 701,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Sleep.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 120
+        },
+        {
+          "name": "PRSFX- Pulverizing Pancake5.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "savagespinout": {
+      "name": "Savage Spin-Out",
+      "family": "z",
+      "variant": "web",
+      "type": "bug",
+      "color": "c4e577",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 634,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- SSO1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 105
+        },
+        {
+          "name": "PRSFX- SSO6.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 60
+        }
+      ]
+    },
+    "searingsunrazesmash": {
+      "name": "Searing Sunraze Smash",
+      "family": "z",
+      "variant": "burst",
+      "type": "steel",
+      "color": "bdedff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 724,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- SSS1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_launch.wav",
+          "role": "launch",
+          "volume": 60,
+          "pitch": 40
+        },
+        {
+          "name": "PRSFX- Searing Sunraze Smash2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_impact.wav",
+          "role": "impact",
+          "volume": 60,
+          "pitch": 110
+        }
+      ]
+    },
+    "shatteredpsyche": {
+      "name": "Shattered Psyche",
+      "family": "z",
+      "variant": "pulse",
+      "type": "psychic",
+      "color": "ff85cf",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 648,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Shattered Psyche2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 90
+        },
+        {
+          "name": "PRSFX- Shattered Psyche3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 90
+        }
+      ]
+    },
+    "sinisterarrowraid": {
+      "name": "Sinister Arrow Raid",
+      "family": "z",
+      "variant": "orb",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 695,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- SinisterArrowRaid5.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 150
+        },
+        {
+          "name": "PRSFX- SinisterArrowRaid1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "soulstealing7starstrike": {
+      "name": "Soul-Stealing 7-Star Strike",
+      "family": "z",
+      "variant": "flurry",
+      "type": "ghost",
+      "color": "ad6bed",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 699,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- S-S7-SS1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- S-S7-SS7.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "splinteredstormshards": {
+      "name": "Splintered Stormshards",
+      "family": "z",
+      "variant": "rain",
+      "type": "rock",
+      "color": "d2ba81",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 727,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Splintered Stormshards4.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 110
+        },
+        {
+          "name": "PRSFX- Splintered Stormshards1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 70
+        }
+      ]
+    },
+    "stokedsparksurfer": {
+      "name": "Stoked Sparksurfer",
+      "family": "z",
+      "variant": "dash",
+      "type": "electric",
+      "color": "ffe95f",
+      "contact": true,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 700,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Stoked Sparksurfer1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 130
+        },
+        {
+          "name": "PRSFX- Stoked Sparksurfer6.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 75
+        }
+      ]
+    },
+    "subzeroslammer": {
+      "name": "Subzero Slammer",
+      "family": "z",
+      "variant": "snow",
+      "type": "ice",
+      "color": "b6f5ff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 650,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Subzero Slammer1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Subzero Slammer4.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100
+        }
+      ]
+    },
+    "supersonicskystrike": {
+      "name": "Supersonic Skystrike",
+      "family": "z",
+      "variant": "storm",
+      "type": "flying",
+      "color": "b9efff",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 626,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Brave Bird1.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "Explosion",
+          "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 50
+        }
+      ]
+    },
+    "tectonicrage": {
+      "name": "Tectonic Rage",
+      "family": "z",
+      "variant": "quakes",
+      "type": "ground",
+      "color": "d2a068",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 630,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Tectonic Rage6.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 115
+        },
+        {
+          "name": "PRSFX- Tectonic Rage5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 50
+        }
+      ]
+    },
+    "twinkletackle": {
+      "name": "Twinkle Tackle",
+      "family": "z",
+      "variant": "hearts",
+      "type": "fairy",
+      "color": "ffb8e8",
+      "contact": false,
+      "target": "target",
+      "damaging": true,
+      "duration_seconds": 2.1,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.68,
+      "scale": 2.0,
+      "attachment": "body",
+      "source_id": 656,
+      "review": "first-pass",
+      "audio": [
+        {
+          "name": "PRSFX- Twinkle Tackle2.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_launch.wav",
+          "role": "launch",
+          "volume": 100,
+          "pitch": 100
+        },
+        {
+          "name": "PRSFX- Twinkle Tackle3.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_impact.wav",
+          "role": "impact",
+          "volume": 80,
+          "pitch": 110
+        }
+      ]
+    }
+  }
+}

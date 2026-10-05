@@ -1,6 +1,7 @@
 extends RefCounted
 ## Anatomical emitters, independent of a move's physical/special damage category.
 ## Offsets are in the named bone's local coordinates (metres in these reviewed rigs).
+const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const MOVE_PARTS := {
 	"dracometeor": "body",
 	"shadowball": "mouth", "sludgebomb": "mouth", "focusblast": "body", "moonblast": "body",
@@ -23,13 +24,13 @@ const PROFILES := {
 		"cannons": [["left_feeler_b_02", Vector3(0.261, 0, 0)], ["right_feeler_b_02", Vector3(0.261, 0, 0)]],
 	},
 }
-const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons", "flashcannon": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
+const MOVE_OVERRIDES := {"blastoise": {"scald": "cannons", "hydrovortex": "cannons", "watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons", "flashcannon": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
 const CACHE_META := &"move_attachment_bindings"
 
 static func part_for(identity: String, move_key: String) -> String:
 	# Shiny uses the same rig; alternate/Mega forms require their own profile.
 	var species := identity.trim_suffix("@shiny")
-	return MOVE_OVERRIDES.get(species, {}).get(move_key, MOVE_PARTS.get(move_key, "body"))
+	return MOVE_OVERRIDES.get(species, {}).get(move_key, MOVE_PARTS.get(move_key, Recipes.get_recipe(move_key).get("attachment", "body")))
 
 static func sample(actor: Node3D, identity: String, move_key: String, world: Node3D) -> Dictionary:
 	var species := identity.trim_suffix("@shiny")

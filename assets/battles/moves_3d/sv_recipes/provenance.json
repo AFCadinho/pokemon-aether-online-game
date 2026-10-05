@@ -1,0 +1,4749 @@
+{
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "decoder_sha256": "53af17cc61f99a24d12c6b312fe3d30dd567ae02f735542b7b97a77112cc56f8",
+  "id_reference": "PokeAPI data/v2/csv/moves.csv; numeric IDs stored per recipe",
+  "moves": {
+    "aquajet": {
+      "source_id": 453,
+      "source_directory": "ew0453",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ba2c2b958b945bd4_cpt_2_water0008.png",
+          "source_particle": "ew0453_hit.ptcl",
+          "source_name": "cpt_2_water0008",
+          "source_sha256": "104e75b3b6ae8b70756bb8c470db4c67eeee479b45ad6e30bad75d0f80374ecd",
+          "png_sha256": "910fd48f8b836c4176054dad3df4f59dc6605fd503dab95aa8f76563cb42aa7d",
+          "emitters": [
+            "pri_base01_nor"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/41077a29465a4281_cpt_2_water0010.png",
+          "source_particle": "ew0453_hit.ptcl",
+          "source_name": "cpt_2_water0010",
+          "source_sha256": "104e75b3b6ae8b70756bb8c470db4c67eeee479b45ad6e30bad75d0f80374ecd",
+          "png_sha256": "d943d79db1ce7461769f58b3de3484cb76e49d5d5ab2ff4b34189c41d77c6ac8",
+          "emitters": [
+            "sprash_side",
+            "water_bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "bodypress": {
+      "source_id": 776,
+      "source_directory": "ew0776",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/84eb854e3a9edde7_cpt_2_shock0014.png",
+          "source_particle": "ew0776_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "7020c2d7747a5167b84aa2338039a875cd7c7937d7ed520e2ba1b65f09d2e2f4",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "fire01_add",
+            "hit"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ea7d90e2ef9b6298_cpt_2_shock0015.png",
+          "source_particle": "ew0776_hit.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "7020c2d7747a5167b84aa2338039a875cd7c7937d7ed520e2ba1b65f09d2e2f4",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "fire02_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "extremespeed": {
+      "source_id": 245,
+      "source_directory": "ew0245",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7292ed76e3eb7736_cpt_0_shock0009.png",
+          "source_particle": "ew0245_hit.ptcl",
+          "source_name": "cpt_0_shock0009",
+          "source_sha256": "7724093ac1ddff68d77470844afbe88aa7d016ca64e15278d2ced8520abb2352",
+          "png_sha256": "6bfd38872a3c10cd54b088084bf90b856eb0b7e65bfb335339e81d6cabf9f317",
+          "emitters": [
+            "hit_line_Child"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ea8ea78796005825_cpt_2_shock0008.png",
+          "source_particle": "ew0245_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "7724093ac1ddff68d77470844afbe88aa7d016ca64e15278d2ced8520abb2352",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hit_many"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "fakeout": {
+      "source_id": 252,
+      "source_directory": "ew0252",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f30acb6398abcfe8_cpt_2_shock0014.png",
+          "source_particle": "ew0252_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "4d0aab30eeaa8e6dc7e70021cdfa802eeb2d0d130e458b43112e1ea7d2a1ec0d",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a971a5e47b70067c_cpt_0_circle0007.png",
+          "source_particle": "ew0252_hit.ptcl",
+          "source_name": "cpt_0_circle0007",
+          "source_sha256": "4d0aab30eeaa8e6dc7e70021cdfa802eeb2d0d130e458b43112e1ea7d2a1ec0d",
+          "png_sha256": "8f2c1298e05fdd152249ed101a1965d03f8ad697f60b0d59793973ff48763303",
+          "emitters": [
+            "ring_impact"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "flipturn": {
+      "source_id": 812,
+      "source_directory": "ew0812",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/1a56d449bb94cc51_cpt_2_water0009.png",
+          "source_particle": "ew0812_hit.ptcl",
+          "source_name": "cpt_2_water0009",
+          "source_sha256": "64a4f8c446bafe78cadf2a2c3b043b2199fcfcac684995cea4c56fe49b16eedb",
+          "png_sha256": "6dd7724971c7bf1a04662d1be586c519d18f163e56f6061ee654cd47d7c228f9",
+          "emitters": [
+            "base_water_01"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e1d6b08f2291ec47_cpt_2_water0010.png",
+          "source_particle": "ew0812_hit.ptcl",
+          "source_name": "cpt_2_water0010",
+          "source_sha256": "64a4f8c446bafe78cadf2a2c3b043b2199fcfcac684995cea4c56fe49b16eedb",
+          "png_sha256": "d943d79db1ce7461769f58b3de3484cb76e49d5d5ab2ff4b34189c41d77c6ac8",
+          "emitters": [
+            "shock_00"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "frustration": {
+      "source_id": 218,
+      "source_directory": "ew0218",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "gigaimpact": {
+      "source_id": 416,
+      "source_directory": "ew0416",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c5a8733f10d92ea6_cpt_2_shock0011.png",
+          "source_particle": "ew0416_hit_01.ptcl",
+          "source_name": "cpt_2_shock0011",
+          "source_sha256": "a90a04eebb9162b56551a6205221fd50083fdfaf4dab15c6aa899a5b795205d5",
+          "png_sha256": "8081de5463e1e0930c4dfb55b867e8e119a44b20305b9e1a1e50731945013909",
+          "emitters": [
+            "ring_smoke_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ab30d2a44a3234d4_cpt_2_shock0006.png",
+          "source_particle": "ew0416_hit_02.ptcl",
+          "source_name": "cpt_2_shock0006",
+          "source_sha256": "4421cd6100b74209b471cfa1f6c4c045dfc1e66fd862a2b10b6a28a229cab7c3",
+          "png_sha256": "86cf099167c1e5e681bf3dafcaaf97850ba94b874a9aa7908af27e733bf92d80",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "grassyglide": {
+      "source_id": 803,
+      "source_directory": "ew0803",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b488d42051dc0e6a_cpt_2_shock0003.png",
+          "source_particle": "ew0803_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "cc6d2dff422a5d6e9ee5bcbdc6cff6631fc9924566f775fddf8d00e6248322d4",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "bashi_kona_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/786a291d6a958ced_cpt_2_shock0026.png",
+          "source_particle": "ew0803_hit.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "cc6d2dff422a5d6e9ee5bcbdc6cff6631fc9924566f775fddf8d00e6248322d4",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "wind",
+            "wind_bashi_up"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "headsmash": {
+      "source_id": 457,
+      "source_directory": "ew0457",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/53f498b521ba5c62_cpt_0_shock0009.png",
+          "source_particle": "ew0457_df_hitend.ptcl",
+          "source_name": "cpt_0_shock0009",
+          "source_sha256": "150ebecff956e905b2f529468f10b9f05a0527b46553f5f8c9236419e44086ed",
+          "png_sha256": "6bfd38872a3c10cd54b088084bf90b856eb0b7e65bfb335339e81d6cabf9f317",
+          "emitters": [
+            "hit_start"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8a65e71ab76a104f_cpt_2_shock0003.png",
+          "source_particle": "ew0457_df_hitend.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "150ebecff956e905b2f529468f10b9f05a0527b46553f5f8c9236419e44086ed",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "headlongrush": {
+      "source_id": 838,
+      "source_directory": "ew0838",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a3081e01676bda9e_cpt_0_water0803.png",
+          "source_particle": "ew0838_df_hit.ptcl",
+          "source_name": "cpt_0_water0803",
+          "source_sha256": "d48462275c620cee5a99026b01ffb1ffb8346e4d0cbe2d8d957202b8ed8f39e9",
+          "png_sha256": "406a3703f6dc3bd71c74c4fde6c0bf1fac7c90b01911df5f3e0a1446d5695dd3",
+          "emitters": [
+            "kona_mod"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d3a07582e03d1ee9_cpt_1_circle0004.png",
+          "source_particle": "ew0838_df_hit.ptcl",
+          "source_name": "cpt_1_circle0004",
+          "source_sha256": "d48462275c620cee5a99026b01ffb1ffb8346e4d0cbe2d8d957202b8ed8f39e9",
+          "png_sha256": "a1e871f6c443d5ae60608c97e60bba3bf718fac7ba692b329acbdff1dcb98c91",
+          "emitters": [
+            "flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "ironhead": {
+      "source_id": 442,
+      "source_directory": "ew0442",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/210fbf3d739c850b_cpt_0_shock0002.png",
+          "source_particle": "ew0442_hit.ptcl",
+          "source_name": "cpt_0_shock0002",
+          "source_sha256": "ec15e467eba594d3f88dd8835363efde637255b8d6a1f0538950a951281c7667",
+          "png_sha256": "84601a5eca50d96ec8f94628f4c1bf8d04868ec5e8dbab5971ea8e8fa09eaef3",
+          "emitters": [
+            "koukasen"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6417ca72fbd8e3b9_cpt_2_shock0003.png",
+          "source_particle": "ew0442_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "ec15e467eba594d3f88dd8835363efde637255b8d6a1f0538950a951281c7667",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "bashi_kona_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "knockoff": {
+      "source_id": 282,
+      "source_directory": "ew0282",
+      "rejected_particles": [
+        {
+          "particle": "ew0282_hand.ptcl",
+          "reason": "Offset outside source buffer"
+        }
+      ],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0010e3cba9c51022_cpt_2_shock0014.png",
+          "source_particle": "ew0282_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "b68ba19628c8c49b7437e5473d7af5c2820f64efd32d6d64ea3e504053570cec",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/408988b61c6af73b_cpt_2_shock0026.png",
+          "source_particle": "ew0282_hit.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "b68ba19628c8c49b7437e5473d7af5c2820f64efd32d6d64ea3e504053570cec",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "shock"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "outrage": {
+      "source_id": 200,
+      "source_directory": "ew0200",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/83ae1f63b7371d90_cpt_2_shock0008.png",
+          "source_particle": "ew0200_hit_many.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "85ca8b5844d95506b318723b4062f2cefe4ea52bf9e0bf850c3e5c658f6b6a78",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hit_many"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f9ebb4bb910e7e6d_cpt_2_shock0012.png",
+          "source_particle": "ew0200_hit_many.ptcl",
+          "source_name": "cpt_2_shock0012",
+          "source_sha256": "85ca8b5844d95506b318723b4062f2cefe4ea52bf9e0bf850c3e5c658f6b6a78",
+          "png_sha256": "f65a33167a460aef0ac90dede5f6411dcfed356a5820897a5f0ed28d23e69bc5",
+          "emitters": [
+            "hit_many_Child"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "pursuit": {
+      "source_id": 228,
+      "source_directory": "ew0228",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "rapidspin": {
+      "source_id": 229,
+      "source_directory": "ew0229",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9b6123dad4bc7c3d_cpt_0_shock0009.png",
+          "source_particle": "ew0229_df_hit.ptcl",
+          "source_name": "cpt_0_shock0009",
+          "source_sha256": "ace365a3aea1d20bc4765ac06246b0f120b29bf5b425bda04a10350aac7b508f",
+          "png_sha256": "6bfd38872a3c10cd54b088084bf90b856eb0b7e65bfb335339e81d6cabf9f317",
+          "emitters": [
+            "hit01"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8d2c0c0486451721_cpt_2_shock0004.png",
+          "source_particle": "ew0229_df_hit.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "ace365a3aea1d20bc4765ac06246b0f120b29bf5b425bda04a10350aac7b508f",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "hit03"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "return": {
+      "source_id": 216,
+      "source_directory": "ew0216",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "rollout": {
+      "source_id": 205,
+      "source_directory": "ew0205",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/11f2e0829d40dc3c_cpt_2_shock0012.png",
+          "source_particle": "ew0205_hit.ptcl",
+          "source_name": "cpt_2_shock0012",
+          "source_sha256": "84364731bb210890609d9c518c42f53d6433797a17df0e5ab7580c0c53fdb481",
+          "png_sha256": "f65a33167a460aef0ac90dede5f6411dcfed356a5820897a5f0ed28d23e69bc5",
+          "emitters": [
+            "bashi_kona"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6aabcf88966df0b8_cpt_2_shock0014.png",
+          "source_particle": "ew0205_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "84364731bb210890609d9c518c42f53d6433797a17df0e5ab7580c0c53fdb481",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "spark": {
+      "source_id": 209,
+      "source_directory": "ew0209",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/82f7b47f99bcd81d_cpt_2_shock0011.png",
+          "source_particle": "ew0209_hit.ptcl",
+          "source_name": "cpt_2_shock0011",
+          "source_sha256": "18f4bdeb9838a7e2a948b7d0769289ddce5fd277469515c71713e6948617c1f2",
+          "png_sha256": "8081de5463e1e0930c4dfb55b867e8e119a44b20305b9e1a1e50731945013909",
+          "emitters": [
+            "hit"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6861a2568febcd36_cpt_2_shock0014.png",
+          "source_particle": "ew0209_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "18f4bdeb9838a7e2a948b7d0769289ddce5fd277469515c71713e6948617c1f2",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "bachi"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "uturn": {
+      "source_id": 369,
+      "source_directory": "ew0369",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8207c9bf876cb1de_cpt_2_shock0010.png",
+          "source_particle": "ew0369_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "0d77b4f0f3e1a6a20022f3cf371bc5341674e9f09ff0e983413148d2493ba14f",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/34ba4f0f26157a10_cpt_2_shock0026.png",
+          "source_particle": "ew0369_hit.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "0d77b4f0f3e1a6a20022f3cf371bc5341674e9f09ff0e983413148d2493ba14f",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "wind_bashi"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "woodhammer": {
+      "source_id": 452,
+      "source_directory": "ew0452",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/5d072e47b47aaee9_cpt_2_obj0006.png",
+          "source_particle": "ew0452_hit.ptcl",
+          "source_name": "cpt_2_obj0006",
+          "source_sha256": "374bdcac2baf06a9cc85ebad59f6c7dc466e36897bea4d80d2d94cebad44a5a8",
+          "png_sha256": "cba7a4d5cfc7e7af017ecf79ab1f9def3caf0ac0ea790c1b4331791992b1ad2b",
+          "emitters": [
+            "fly_grass"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/fa6db4a176f6e83b_cpt_2_obj0010.png",
+          "source_particle": "ew0452_hit.ptcl",
+          "source_name": "cpt_2_obj0010",
+          "source_sha256": "374bdcac2baf06a9cc85ebad59f6c7dc466e36897bea4d80d2d94cebad44a5a8",
+          "png_sha256": "cfa2c21f6552600a48b06048ff9b0bbd9d0ac9d3c14c764ad422d6001abbc486",
+          "emitters": [
+            "dust_wood"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "bulletpunch": {
+      "source_id": 418,
+      "source_directory": "ew0418",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/bdcd8f03e83ef6f5_cpt_2_shock0010.png",
+          "source_particle": "ew0418_punch_mark01.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "ef75f8793e770257fd575abc677e059058d2940496d8d78f5fe66e3ae2364c16",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/de6f4c4f2a186bc9_cpt_2_shock0014.png",
+          "source_particle": "ew0418_punch_mark01.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "ef75f8793e770257fd575abc677e059058d2940496d8d78f5fe66e3ae2364c16",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "closecombat": {
+      "source_id": 370,
+      "source_directory": "ew0370",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ee0ff05b06a39743_cpt_0_shock0002.png",
+          "source_particle": "ew0370_def_hit.ptcl",
+          "source_name": "cpt_0_shock0002",
+          "source_sha256": "3d9e66306aa1f5c20b5e42d732a0f99990316445b24c4310bb88b6ed34edd9d4",
+          "png_sha256": "84601a5eca50d96ec8f94628f4c1bf8d04868ec5e8dbab5971ea8e8fa09eaef3",
+          "emitters": [
+            "koukasen"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/673953d7edb5fbc9_cpt_2_shock0014.png",
+          "source_particle": "ew0370_def_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "3d9e66306aa1f5c20b5e42d732a0f99990316445b24c4310bb88b6ed34edd9d4",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "doublekick": {
+      "source_id": 24,
+      "source_directory": "ew0024",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/17f442e0cd997328_cpt_0_shock0008.png",
+          "source_particle": "ew0024_df_hit.ptcl",
+          "source_name": "cpt_0_shock0008",
+          "source_sha256": "b7b3ce73f61c625d3d6a3f364e29bd9997a31f334efa51ed1b949874cc9f18d1",
+          "png_sha256": "63193f9cc99fed3ddc6212d3997cfc888f75e3bbdc1dcb5cbfa432bf57aa0f24",
+          "emitters": [
+            "srash01_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/506f4189a6ad40ed_cpt_0_shock0009.png",
+          "source_particle": "ew0024_df_hit.ptcl",
+          "source_name": "cpt_0_shock0009",
+          "source_sha256": "b7b3ce73f61c625d3d6a3f364e29bd9997a31f334efa51ed1b949874cc9f18d1",
+          "png_sha256": "6bfd38872a3c10cd54b088084bf90b856eb0b7e65bfb335339e81d6cabf9f317",
+          "emitters": [
+            "srash02_nor"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "drainpunch": {
+      "source_id": 409,
+      "source_directory": "ew0409",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4c67af4aa46bf702_cpt_2_shock0010.png",
+          "source_particle": "ew0409_df_hit_punch.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "672d3ccbc5f9655dfa8d3a26ca6cb44bd09fb2faf2a3bb62a11727b403579bef",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7b5387930a96f9ef_cpt_2_shock0012.png",
+          "source_particle": "ew0409_df_hit_punch.ptcl",
+          "source_name": "cpt_2_shock0012",
+          "source_sha256": "672d3ccbc5f9655dfa8d3a26ca6cb44bd09fb2faf2a3bb62a11727b403579bef",
+          "png_sha256": "f65a33167a460aef0ac90dede5f6411dcfed356a5820897a5f0ed28d23e69bc5",
+          "emitters": [
+            "bashi_kona"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "firepunch": {
+      "source_id": 7,
+      "source_directory": "ew0007",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/2723594494c56b9e_cpt_2_fire0004.png",
+          "source_particle": "ew007_hit.ptcl",
+          "source_name": "cpt_2_fire0004",
+          "source_sha256": "960052d083ab20dc2ab983465cd9d013eedb38f34b1eecfec53b3621a7630f3f",
+          "png_sha256": "99c2404b0483e2a53858eee2143a88949448559e67bd90789d83c0b4f0d0937f",
+          "emitters": [
+            "fire_core_add"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/be52f445005108a8_cpt_0_flash0002.png",
+          "source_particle": "ew007_hit.ptcl",
+          "source_name": "cpt_0_flash0002",
+          "source_sha256": "960052d083ab20dc2ab983465cd9d013eedb38f34b1eecfec53b3621a7630f3f",
+          "png_sha256": "80fcfeb774a173c9aa8e4c293b0d268eb66ebe7514cf9bfb6d16e2a0caa13a0d",
+          "emitters": [
+            "kona_plus02"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "highjumpkick": {
+      "source_id": 136,
+      "source_directory": "ew0136",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/dd51e38cc1ea2694_cpt_2_shock0014.png",
+          "source_particle": "ew0136_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "1d0d961a5361db0190fda0f8b4fd1b39178a400a598b1e0c03f578acce370c81",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "center"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/cf815f9f13a0ad07_cpt_2_shock0015.png",
+          "source_particle": "ew0136_hit.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "1d0d961a5361db0190fda0f8b4fd1b39178a400a598b1e0c03f578acce370c81",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "shock_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "icepunch": {
+      "source_id": 8,
+      "source_directory": "ew0008",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7347af881ea35887_cpt_3_ice0001.png",
+          "source_particle": "ew0008_hit.ptcl",
+          "source_name": "cpt_3_ice0001",
+          "source_sha256": "75562bbca57ed037d001aa28c969870c28a46f88a3f5626b2dcfc14f4b07c383",
+          "png_sha256": "c34239f6122a053e17beb43c9f92dbe652042d1e0f2b9a09668d95de87677017",
+          "emitters": [
+            "ice_rock"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/201990e9aeb5aada_cpt_3_ice0001spe.png",
+          "source_particle": "ew0008_hit.ptcl",
+          "source_name": "cpt_3_ice0001spe",
+          "source_sha256": "75562bbca57ed037d001aa28c969870c28a46f88a3f5626b2dcfc14f4b07c383",
+          "png_sha256": "f3e5bb01738259dfbd23f89696469ea43130f8c1dbd3450e497d8f31d62aa873",
+          "emitters": [
+            "ice_rock"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "lowkick": {
+      "source_id": 67,
+      "source_directory": "ew0067",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/fa87474e86f224de_cpt_2_shock0004.png",
+          "source_particle": "ew0067_df_hit.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "8e301fff70dc7b24f07ed904a6b5fa24f41dde396b5c8b5de31f03cbc5b6680b",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "hit03"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/326248c1a97fd4c6_cpt_2_shock0006.png",
+          "source_particle": "ew0067_df_hit.ptcl",
+          "source_name": "cpt_2_shock0006",
+          "source_sha256": "8e301fff70dc7b24f07ed904a6b5fa24f41dde396b5c8b5de31f03cbc5b6680b",
+          "png_sha256": "86cf099167c1e5e681bf3dafcaaf97850ba94b874a9aa7908af27e733bf92d80",
+          "emitters": [
+            "hit02"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "pound": {
+      "source_id": 1,
+      "source_directory": "ew0001",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/bd396b43dbcb2ee0_cpt_2_shock0008.png",
+          "source_particle": "ew0001_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "c9ccc244cfe7825abfd33cd45b9dc53c609f91b1982eac2a57f5289be2000a44",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hit00"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d9e7bbee21769d4c_cpt_0_circle0007.png",
+          "source_particle": "ew0001_hit.ptcl",
+          "source_name": "cpt_0_circle0007",
+          "source_sha256": "c9ccc244cfe7825abfd33cd45b9dc53c609f91b1982eac2a57f5289be2000a44",
+          "png_sha256": "8f2c1298e05fdd152249ed101a1965d03f8ad697f60b0d59793973ff48763303",
+          "emitters": [
+            "impact00"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "rocksmash": {
+      "source_id": 249,
+      "source_directory": "ew0249",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b829b9f436737b22_cpt_2_shock0014.png",
+          "source_particle": "ew0249_df_hit01.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "4474f838aedf7b5b44ee92d173933b2f2233850a9bd19057c550d694352b2c8a",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0b447eda9fe2835e_cpt_2_shock0004.png",
+          "source_particle": "ew0249_rock_break.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "e11d22741973243b20f6fce4bbf668876eaef40ad6bb17560c911f1317dde3a6",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "hit03"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "suckerpunch": {
+      "source_id": 389,
+      "source_directory": "ew0389",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e797732c903e0fde_cpt_2_shock0010.png",
+          "source_particle": "ew0389_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "28f84c5b78afe8d4003a9a4e7fa523888ee19ca68bd008cc10e55f0ff44610a0",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "fire"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/29d5c31429962d71_cpt_2_shock0014.png",
+          "source_particle": "ew0389_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "28f84c5b78afe8d4003a9a4e7fa523888ee19ca68bd008cc10e55f0ff44610a0",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "superpower": {
+      "source_id": 276,
+      "source_directory": "ew0276",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7faa37a6d873b7b1_cpt_0_shock0008.png",
+          "source_particle": "ew0276_hit.ptcl",
+          "source_name": "cpt_0_shock0008",
+          "source_sha256": "fca9c8e97823f257cc8f02d0538ae3e66590d45300995c0d649e47154e832ac6",
+          "png_sha256": "63193f9cc99fed3ddc6212d3997cfc888f75e3bbdc1dcb5cbfa432bf57aa0f24",
+          "emitters": [
+            "hit_center"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/211bdafd013f2068_cpt_2_shock0010.png",
+          "source_particle": "ew0276_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "fca9c8e97823f257cc8f02d0538ae3e66590d45300995c0d649e47154e832ac6",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "thunderpunch": {
+      "source_id": 9,
+      "source_directory": "ew0009",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/396f2f324164cca4_cpt_2_shock0014.png",
+          "source_particle": "ew0009_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "9ee7226fa7276ed72b6ffc48d2410030c53e3e2cc58d036f870a34f353d56f9e",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/054cbf77c7c8caae_cpt_0_circle0005.png",
+          "source_particle": "ew0009_hit.ptcl",
+          "source_name": "cpt_0_circle0005",
+          "source_sha256": "9ee7226fa7276ed72b6ffc48d2410030c53e3e2cc58d036f870a34f353d56f9e",
+          "png_sha256": "790efa2793c033a26276cc4ce4d090b26dc6fd4796ecf933345ea4ef0f82a07c",
+          "emitters": [
+            "particle"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "astonish": {
+      "source_id": 310,
+      "source_directory": "ew0310",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d3aa5da9e85e4d9c_cpt_3_smoke0001.png",
+          "source_particle": "ew0310_df_hit.ptcl",
+          "source_name": "cpt_3_smoke0001",
+          "source_sha256": "d8a4d6aeccea6cde64bf8fe99fe7fc480092877678c0d6e283fdd16cf9de2eb7",
+          "png_sha256": "03d0dfea57e13c947148cdab015286bc936bcd4b3b171728b90abce40e4c7765",
+          "emitters": [
+            "parts1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3c1eb26ee8f97467_cpt_2_shock0010.png",
+          "source_particle": "ew0310_df_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "d8a4d6aeccea6cde64bf8fe99fe7fc480092877678c0d6e283fdd16cf9de2eb7",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "shock01"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "bugbite": {
+      "source_id": 450,
+      "source_directory": "ew0450",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/dd7eb706a1b9e2d4_cpt_0_shock0002.png",
+          "source_particle": "ew0450_hit.ptcl",
+          "source_name": "cpt_0_shock0002",
+          "source_sha256": "763134a38201bc959133745db2c0ea8fcc0e4c219a89b0a0363c1fae6350a8fd",
+          "png_sha256": "84601a5eca50d96ec8f94628f4c1bf8d04868ec5e8dbab5971ea8e8fa09eaef3",
+          "emitters": [
+            "koukasen"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/07e471bddb7f98b2_cpt_2_shock0005.png",
+          "source_particle": "ew0450_hit.ptcl",
+          "source_name": "cpt_2_shock0005",
+          "source_sha256": "763134a38201bc959133745db2c0ea8fcc0e4c219a89b0a0363c1fae6350a8fd",
+          "png_sha256": "045e1c9c82aad7ea6df1ea052338130f44200705dda48cdb96a4957ddad8e592",
+          "emitters": [
+            "hit_cross"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "ceaselessedge": {
+      "source_id": 845,
+      "source_directory": "ew0845",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6275caf72ed0e69d_cpt_2_shock0008.png",
+          "source_particle": "ew0845_df_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "d90ef8415a8893874686bac809a254ca95b8b07293784d3efed0e258a6f9dcdb",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hit_s"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/47c287104d5bc3cb_cpt_2_shock0014.png",
+          "source_particle": "ew0845_df_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "d90ef8415a8893874686bac809a254ca95b8b07293784d3efed0e258a6f9dcdb",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_hit"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "dragonclaw": {
+      "source_id": 337,
+      "source_directory": "ew0337",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/73bbbb0f0ca57994_cpt_0_shock0001.png",
+          "source_particle": "ew0337_hit.ptcl",
+          "source_name": "cpt_0_shock0001",
+          "source_sha256": "b79518bb7c2766899f42148eb8fe56726a37e17fb910aff836fe582d60b4f368",
+          "png_sha256": "299297688914a84f1d3f32915b060f3f2fd27f9131b3ebb4e9d835a53dd18433",
+          "emitters": [
+            "shock_ring"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/22f7645eb5ce5317_cpt_2_shock0008.png",
+          "source_particle": "ew0337_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "b79518bb7c2766899f42148eb8fe56726a37e17fb910aff836fe582d60b4f368",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "01_ring2"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "furyattack": {
+      "source_id": 31,
+      "source_directory": "ew0031",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e2dbefe8eb792f55_cpt_2_shock0005.png",
+          "source_particle": "ew0031_def_hit.ptcl",
+          "source_name": "cpt_2_shock0005",
+          "source_sha256": "ed29c9ad54f34eed0c7141724dcc7523d062d1e720bdb004b188900a28e02773",
+          "png_sha256": "045e1c9c82aad7ea6df1ea052338130f44200705dda48cdb96a4957ddad8e592",
+          "emitters": [
+            "x"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/be26c6fe077fff3f_cpt_2_shock0014.png",
+          "source_particle": "ew0031_def_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "ed29c9ad54f34eed0c7141724dcc7523d062d1e720bdb004b188900a28e02773",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "kowtowcleave": {
+      "source_id": 869,
+      "source_directory": "ew0869",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0ebd8498fafe9b27_cpt_2_shock0006.png",
+          "source_particle": "ew0869_hit.ptcl",
+          "source_name": "cpt_2_shock0006",
+          "source_sha256": "d2200e9bc2c48a0d69f0142880f775db5dea0d1e151890c493ab92739acf4b4f",
+          "png_sha256": "86cf099167c1e5e681bf3dafcaaf97850ba94b874a9aa7908af27e733bf92d80",
+          "emitters": [
+            "bashi",
+            "bashi_red"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8cac44736d6a4c80_cpt_2_shock0008.png",
+          "source_particle": "ew0869_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "d2200e9bc2c48a0d69f0142880f775db5dea0d1e151890c493ab92739acf4b4f",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hitmark"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "lick": {
+      "source_id": 122,
+      "source_directory": "ew0122",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/71a97a780e6b821c_cpt_0_smoke0203.png",
+          "source_particle": "ew0122_hit.ptcl",
+          "source_name": "cpt_0_smoke0203",
+          "source_sha256": "17e5207965730a7b0bc10806d64b94b0046e6001ef08683f7a59e57f366115df",
+          "png_sha256": "26224fac561dfa8dbe62551e13a46afe180f9bb8993ce0b2a4d0b7a0afd57e81",
+          "emitters": [
+            "sprash"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f537ff550366a421_cpt_0_mark0004.png",
+          "source_particle": "ew0122_hit.ptcl",
+          "source_name": "cpt_0_mark0004",
+          "source_sha256": "17e5207965730a7b0bc10806d64b94b0046e6001ef08683f7a59e57f366115df",
+          "png_sha256": "d87b2c8dbfc71ec138b3d4fd70db23bc18c1cafa65d882bfe00600bf23ca9265",
+          "emitters": [
+            "dust_star",
+            "dust_star_randam"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "peck": {
+      "source_id": 64,
+      "source_directory": "ew0064",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/fd5d206309942333_cpt_2_shock0011.png",
+          "source_particle": "ew0064_hit.ptcl",
+          "source_name": "cpt_2_shock0011",
+          "source_sha256": "14217360fc94ec482634c0cd15ec82a00b31a1d241f36ebdf3522ad4eef3ebb5",
+          "png_sha256": "8081de5463e1e0930c4dfb55b867e8e119a44b20305b9e1a1e50731945013909",
+          "emitters": [
+            "center"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9692946d307696bc_cpt_0_flash0202.png",
+          "source_particle": "ew0064_hit.ptcl",
+          "source_name": "cpt_0_flash0202",
+          "source_sha256": "14217360fc94ec482634c0cd15ec82a00b31a1d241f36ebdf3522ad4eef3ebb5",
+          "png_sha256": "97ab65329543995b62a6feeff82a52ff37a64801dbeae05b06b1cad8a423d8f0",
+          "emitters": [
+            "flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "razorshell": {
+      "source_id": 534,
+      "source_directory": "ew0534",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f3227bf093f848d0_cpt_2_water0009.png",
+          "source_particle": "ew0534_df_hit.ptcl",
+          "source_name": "cpt_2_water0009",
+          "source_sha256": "dbb6e9d815c18f76f8f82f382c7642e385e9e208be33edfec11be251231a4105",
+          "png_sha256": "6dd7724971c7bf1a04662d1be586c519d18f163e56f6061ee654cd47d7c228f9",
+          "emitters": [
+            "water_bashi_add_0350"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/29849ccd70e740e8_cpt_2_water0010.png",
+          "source_particle": "ew0534_df_hit.ptcl",
+          "source_name": "cpt_2_water0010",
+          "source_sha256": "dbb6e9d815c18f76f8f82f382c7642e385e9e208be33edfec11be251231a4105",
+          "png_sha256": "d943d79db1ce7461769f58b3de3484cb76e49d5d5ab2ff4b34189c41d77c6ac8",
+          "emitters": [
+            "water_bashi_hicol"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "vinewhip": {
+      "source_id": 22,
+      "source_directory": "ew0022",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/24c013ba1aebac2b_cpt_2_shock0014.png",
+          "source_particle": "ew022_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "86ffb012bf69470ca6e562d3b53b6f86244883445a6ec4df813541b7b8a00477",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/46eca654bbb1774b_cpt_0_circle0007.png",
+          "source_particle": "ew022_hit.ptcl",
+          "source_name": "cpt_0_circle0007",
+          "source_sha256": "86ffb012bf69470ca6e562d3b53b6f86244883445a6ec4df813541b7b8a00477",
+          "png_sha256": "8f2c1298e05fdd152249ed101a1965d03f8ad697f60b0d59793973ff48763303",
+          "emitters": [
+            "ring"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "wingattack": {
+      "source_id": 17,
+      "source_directory": "ew0017",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f9e3c5fe80637a09_cpt_2_shock0010.png",
+          "source_particle": "ew0017_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "8cbbbc4b29a69121c106388770e0e3cc2e660241d70ddd4037f56c2ceea331f0",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/421f3dcecd37a3bc_cpt_2_shock0014.png",
+          "source_particle": "ew0017_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "8cbbbc4b29a69121c106388770e0e3cc2e660241d70ddd4037f56c2ceea331f0",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "dragonbreath": {
+      "source_id": 225,
+      "source_directory": "ew0225",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/643cc3baca3c066d_cpt_2_shock0008.png",
+          "source_particle": "ew0225_charge.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "53f72fa65ea4058bceeb4690159daad1ba85de26abf611f8ba487ebe51401815",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "fllash_grow01_Child"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d9175ce68e6d9d0b_cpt_2_shock0010.png",
+          "source_particle": "ew0225_start.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "7abad50f5055904f5457394e556726af4b075a292dd23b8bb88f9336c5c3dd76",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "base01_main"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "electroshot": {
+      "source_id": 905,
+      "source_directory": "ew0905",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "hyperbeam": {
+      "source_id": 63,
+      "source_directory": "ew0063",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7fc16c23225f7d48_cpt_2_shock0021.png",
+          "source_particle": "ew0063_bom.ptcl",
+          "source_name": "cpt_2_shock0021",
+          "source_sha256": "3244366a7549c86b143af01b232e172e4279fd0a320384a66d0ad086264f0cb8",
+          "png_sha256": "f4023f57700ed17f2839deb9dd57935d1a0352e16bd7b4c588699c64355e370b",
+          "emitters": [
+            "fire"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b233d2c393052c74_cpt_0_flash0602.png",
+          "source_particle": "ew0063_pika.ptcl",
+          "source_name": "cpt_0_flash0602",
+          "source_sha256": "f9d5d4e2eec2331afca44fe2fd02718c5b67560dbd9a574fa3d29e4d344cba7a",
+          "png_sha256": "36b21edbdc07941e4f37ae9b8fe7d33d624c6245bb6e28ee14e0fc2edbdaf21d",
+          "emitters": [
+            "center"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "scald": {
+      "source_id": 503,
+      "source_directory": "ew0503",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d49bbd79b726a673_cpt_2_water0003.png",
+          "source_particle": "ew0503_df_hit.ptcl",
+          "source_name": "cpt_2_water0003",
+          "source_sha256": "1ac48ed637e150b897f99ef75fd958a2173adc39c281e0a01898ef8d4b05c64d",
+          "png_sha256": "56d35dde1114a982269156465ea3f5a944ea01ab19df94cee288029c3fcd47c3",
+          "emitters": [
+            "base_war01"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/569ff6ad821e7c02_cpt_2_water0010.png",
+          "source_particle": "ew0503_df_hit.ptcl",
+          "source_name": "cpt_2_water0010",
+          "source_sha256": "1ac48ed637e150b897f99ef75fd958a2173adc39c281e0a01898ef8d4b05c64d",
+          "png_sha256": "d943d79db1ce7461769f58b3de3484cb76e49d5d5ab2ff4b34189c41d77c6ac8",
+          "emitters": [
+            "sprash_nor"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "solarbeam": {
+      "source_id": 76,
+      "source_directory": "ew0076",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6c0ac52a813a2a05_cpt_2_shock0004.png",
+          "source_particle": "ew0076_hit.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "40d9ff47e84f5090bd8d2403e0970b7e62cee6cd2dce408920e69a66009cf3d1",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "fire_muzzle_03"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4ec2f6b7c85a2c22_cpt_0_line0401.png",
+          "source_particle": "ew0076_hit.ptcl",
+          "source_name": "cpt_0_line0401",
+          "source_sha256": "40d9ff47e84f5090bd8d2403e0970b7e62cee6cd2dce408920e69a66009cf3d1",
+          "png_sha256": "4de4437d562c9eaee86b2b4857c439dbe7c27976dac9ef25be710ae33c2f5ebf",
+          "emitters": [
+            "ring_add1"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "voltswitch": {
+      "source_id": 521,
+      "source_directory": "ew0521",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/42985b85fe848a6f_cpt_1_shock0701.png",
+          "source_particle": "ew0521_hit.ptcl",
+          "source_name": "cpt_1_shock0701",
+          "source_sha256": "ea932123b09b47b01d5cbed0d9608bde6314ef70fb7573698f618492a621c121",
+          "png_sha256": "3e4c2bb88ea48c563dcd90966f1b9bbef56af5dff38680953e9eb9dd40d00aba",
+          "emitters": [
+            "hit_big"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a1630f8519ff6d03_cpt_2_shock0011.png",
+          "source_particle": "ew0521_hit.ptcl",
+          "source_name": "cpt_2_shock0011",
+          "source_sha256": "ea932123b09b47b01d5cbed0d9608bde6314ef70fb7573698f618492a621c121",
+          "png_sha256": "8081de5463e1e0930c4dfb55b867e8e119a44b20305b9e1a1e50731945013909",
+          "emitters": [
+            "hit"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "fairywind": {
+      "source_id": 584,
+      "source_directory": "ew0584",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/98cf30b876d27f49_cpt_1_shock0701.png",
+          "source_particle": "ew0584_hit.ptcl",
+          "source_name": "cpt_1_shock0701",
+          "source_sha256": "87f1b260e226ca5aa6d1f0a025ac69514eb10b8e0f7d080e52f400dfdd41eb16",
+          "png_sha256": "3e4c2bb88ea48c563dcd90966f1b9bbef56af5dff38680953e9eb9dd40d00aba",
+          "emitters": [
+            "up_wind"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/bdb12c2eff1e505e_cpt_2_obj0003.png",
+          "source_particle": "ew0584_hit.ptcl",
+          "source_name": "cpt_2_obj0003",
+          "source_sha256": "87f1b260e226ca5aa6d1f0a025ac69514eb10b8e0f7d080e52f400dfdd41eb16",
+          "png_sha256": "65952cd704c6890641b6cf7405ac91ea5c714060e261cfcf0b88115ce5fde8ed",
+          "emitters": [
+            "tip"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "hiddenpower": {
+      "source_id": 237,
+      "source_directory": "ew0237",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "leafage": {
+      "source_id": 670,
+      "source_directory": "ew0670",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7da2b773ea34f97a_cpt_2_shock0014.png",
+          "source_particle": "ew0670_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "9681eab9e0aeecb157ac34cdc5e0c4869f0e1f371edea30955b9187424e36edd",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d6436459dbf4c17c_cpt_1_circle0004.png",
+          "source_particle": "ew0670_hit.ptcl",
+          "source_name": "cpt_1_circle0004",
+          "source_sha256": "9681eab9e0aeecb157ac34cdc5e0c4869f0e1f371edea30955b9187424e36edd",
+          "png_sha256": "a1e871f6c443d5ae60608c97e60bba3bf718fac7ba692b329acbdff1dcb98c91",
+          "emitters": [
+            "flash_Copy1",
+            "flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "mudslap": {
+      "source_id": 189,
+      "source_directory": "ew0189",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a9a63754b5648a91_cpt_2_shock0008.png",
+          "source_particle": "ew0189_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "9951bd80fbb2332485e3e773d73720f3910117e5e73cf511c4a60a7ff14af4b7",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hit01_ster2"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9e050c0ba6ec0794_cpt_2_shock0011.png",
+          "source_particle": "ew0189_hit.ptcl",
+          "source_name": "cpt_2_shock0011",
+          "source_sha256": "9951bd80fbb2332485e3e773d73720f3910117e5e73cf511c4a60a7ff14af4b7",
+          "png_sha256": "8081de5463e1e0930c4dfb55b867e8e119a44b20305b9e1a1e50731945013909",
+          "emitters": [
+            "hit01_ster"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "pyroball": {
+      "source_id": 780,
+      "source_directory": "ew0780",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4aea616227b8f827_cpt_2_fire0004.png",
+          "source_particle": "ew780_hit.ptcl",
+          "source_name": "cpt_2_fire0004",
+          "source_sha256": "791faee031ce8d2aa33e32245cd3f60961c9c07ae1ab9a5e26547c39facdf991",
+          "png_sha256": "99c2404b0483e2a53858eee2143a88949448559e67bd90789d83c0b4f0d0937f",
+          "emitters": [
+            "shock_add",
+            "shock_nor"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3194ee2503d9a030_cpt_2_fire0005.png",
+          "source_particle": "ew780_hit.ptcl",
+          "source_name": "cpt_2_fire0005",
+          "source_sha256": "791faee031ce8d2aa33e32245cd3f60961c9c07ae1ab9a5e26547c39facdf991",
+          "png_sha256": "70034a7b3f77027fe6c14097a3f8e295178d273ccd6d6f79d1d2d1c427255af6",
+          "emitters": [
+            "fire_body2",
+            "fire"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "rockthrow": {
+      "source_id": 88,
+      "source_directory": "ew0088",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/46853cf6e735cef8_cpt_2_shock0004.png",
+          "source_particle": "ew0088_hit.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "ff47a8bbd5a6f12a09a8a096c6c446c937c32808feba22daf61ea52694557036",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "hit03"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/38a5e2a5569c969a_cpt_2_shock0014.png",
+          "source_particle": "ew0088_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "ff47a8bbd5a6f12a09a8a096c6c446c937c32808feba22daf61ea52694557036",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "watershuriken": {
+      "source_id": 594,
+      "source_directory": "ew0594",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/bc216a3da52cbc82_cpt_2_water0005.png",
+          "source_particle": "ew0594_hit.ptcl",
+          "source_name": "cpt_2_water0005",
+          "source_sha256": "8760988cf4eb339a4e4e49b969d3d287d4187d7d91b6f9829b084f9ee74c68e2",
+          "png_sha256": "798bf74f6c19d23b76b65e1883a2ea39d319cd9101ef4803a2a81ce6406c7ada",
+          "emitters": [
+            "hit_mark_01"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3ebf404f6667332a_cpt_2_water0013.png",
+          "source_particle": "ew0594_hit.ptcl",
+          "source_name": "cpt_2_water0013",
+          "source_sha256": "8760988cf4eb339a4e4e49b969d3d287d4187d7d91b6f9829b084f9ee74c68e2",
+          "png_sha256": "0e80cc84dda6a334b3fb525c9a651638e4432514fa7d01f35f8ec256272cdbac",
+          "emitters": [
+            "shock_00"
+          ],
+          "frames": 8,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "weatherball": {
+      "source_id": 311,
+      "source_directory": "ew0311",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/5ff619e474f86ace_cpt_2_shock0026.png",
+          "source_particle": "ew0311_hit_fire.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "c2dd5f100989258f57c94672c357905915d61ce93414b313c8b7215b9668fa76",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "wind"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e11a784b062782d9_cpt_0_flash0009.png",
+          "source_particle": "ew0311_hit_fire.ptcl",
+          "source_name": "cpt_0_flash0009",
+          "source_sha256": "c2dd5f100989258f57c94672c357905915d61ce93414b313c8b7215b9668fa76",
+          "png_sha256": "72048529ac2ce26b8a3401fdaed6c63773efec76bc7f3da77c56d43b42547cf4",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "absorb": {
+      "source_id": 71,
+      "source_directory": "ew0071",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7650fa247ed1a1d0_cpt_1_circle0004.png",
+          "source_particle": "ew0071_at_hit_n.ptcl",
+          "source_name": "cpt_1_circle0004",
+          "source_sha256": "5b48a89d2df2d11b68cf60b639b8f8846839fa9aabd7e3e1acefe3505baa69b2",
+          "png_sha256": "a1e871f6c443d5ae60608c97e60bba3bf718fac7ba692b329acbdff1dcb98c91",
+          "emitters": [
+            "glow"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/cae3e1bea5134ce8_cpt_1_circle0005.png",
+          "source_particle": "ew0071_at_hit_n.ptcl",
+          "source_name": "cpt_1_circle0005",
+          "source_sha256": "5b48a89d2df2d11b68cf60b639b8f8846839fa9aabd7e3e1acefe3505baa69b2",
+          "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+          "emitters": [
+            "particle_First"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "confusion": {
+      "source_id": 93,
+      "source_directory": "ew0093",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/1e6d921582f3afee_cpt_1_circle0003.png",
+          "source_particle": "ew0093_dist_hit01.ptcl",
+          "source_name": "cpt_1_circle0003",
+          "source_sha256": "b82c02e4bcaa1de40b6597c2ba1d2177c42f46068ed56a6dfd83aace6f9d71f1",
+          "png_sha256": "050b5595014b08c9f03449c62fc4f37cce3e753219453afeb75b064fa4c51f43",
+          "emitters": [
+            "dist_prim_sph01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/558fe1b00e05ef84_cpt_3_smoke0207.png",
+          "source_particle": "ew0093_dist_hit01.ptcl",
+          "source_name": "cpt_3_smoke0207",
+          "source_sha256": "b82c02e4bcaa1de40b6597c2ba1d2177c42f46068ed56a6dfd83aace6f9d71f1",
+          "png_sha256": "f0417f47065356cbe5aa581aa67853b318552cae7fc29429502692dfb2caff78",
+          "emitters": [
+            "dist_prim_sph01",
+            "dist_prim_ring01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "darkpulse": {
+      "source_id": 399,
+      "source_directory": "ew0399",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a4a7700d30865c05_cpt_2_shock0003.png",
+          "source_particle": "ew0399_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "bbb77aaa02da6f25fd7fe6a9c224c6ecd31c89afdfac5a97f9769e130bb18fda",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "hit02"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/1b230ad624ee96ea_cpt_2_shock0014.png",
+          "source_particle": "ew0399_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "bbb77aaa02da6f25fd7fe6a9c224c6ecd31c89afdfac5a97f9769e130bb18fda",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_many"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "disarmingvoice": {
+      "source_id": 574,
+      "source_directory": "ew0574",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9c2277fec6e2e768_cpt_0_flash0004.png",
+          "source_particle": "ew0574_hit.ptcl",
+          "source_name": "cpt_0_flash0004",
+          "source_sha256": "ed61da25cd5136796683596aeaeb1c8aec55ab067096f56968250cf68e588f68",
+          "png_sha256": "1fca8ff0e5a7e00c56eb0e25647eebb32d121c656b2bf76557f9c60ffcf28198",
+          "emitters": [
+            "flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/801c8eef7c452779_cpt_0_circle0001.png",
+          "source_particle": "ew0574_hit.ptcl",
+          "source_name": "cpt_0_circle0001",
+          "source_sha256": "ed61da25cd5136796683596aeaeb1c8aec55ab067096f56968250cf68e588f68",
+          "png_sha256": "896afe2f632c399e1d17458df29fcc55fd67e89aae8f0633f68583ed4de48a72",
+          "emitters": [
+            "ring_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "drainingkiss": {
+      "source_id": 577,
+      "source_directory": "ew0577",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9193738175fbf93a_cpt_2_shock0003.png",
+          "source_particle": "ew0577_df_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "429eecf994fe3eaee5b41298374a12f436a651413a1c5c42fb6f6015e8ddfbed",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "base_o"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8029d6d464b928d7_cpt_2_shock0026.png",
+          "source_particle": "ew0577_df_hit.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "429eecf994fe3eaee5b41298374a12f436a651413a1c5c42fb6f6015e8ddfbed",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "wind"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "gust": {
+      "source_id": 16,
+      "source_directory": "ew0016",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/756e3a72a79d7147_cpt_2_obj0003.png",
+          "source_particle": "ew0016_hit.ptcl",
+          "source_name": "cpt_2_obj0003",
+          "source_sha256": "54ecd123c6f2c849eea4390a03116730ec8b367dcbec369c1c28517ce633455e",
+          "png_sha256": "65952cd704c6890641b6cf7405ac91ea5c714060e261cfcf0b88115ce5fde8ed",
+          "emitters": [
+            "tip"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/eeec64ca3ea224d1_cpt_0_smoke0005.png",
+          "source_particle": "ew0016_wind.ptcl",
+          "source_name": "cpt_0_smoke0005",
+          "source_sha256": "23cf09aa90628c391f3c81b772cec374dab7ab77f26698ac64f900d31a875273",
+          "png_sha256": "0f80bd0bf7526941beb72c7889f965d32a83f38fac1ad1082f1d78f3df5ee5e8",
+          "emitters": [
+            "smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "hex": {
+      "source_id": 506,
+      "source_directory": "ew0506",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/951d252778009a30_cpt_0_smoke0002.png",
+          "source_particle": "ew0506_hit.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "76566544893ea7209c3aed94d50015d755fcd464d8aeefa00a993683aa5e44e5",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "kem_01_sub",
+            "kem_01_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d03e030cc1490f3d_cpt_0_smoke0701.png",
+          "source_particle": "ew0506_hit_smoke.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "6a4ea6f2e3deaba9bbc163c2b5817c574c4fd51ff39a113f5b8435162729d4c6",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "kem_01_sub"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "psychic": {
+      "source_id": 94,
+      "source_directory": "ew0094",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/90c77eba4f354ccc_cpt_1_circle0004.png",
+          "source_particle": "ew0094_df_hit.ptcl",
+          "source_name": "cpt_1_circle0004",
+          "source_sha256": "b502d61bf6bf7890601b30cf999d73f3ba462aca2fb47791122761f5c7a77dd0",
+          "png_sha256": "a1e871f6c443d5ae60608c97e60bba3bf718fac7ba692b329acbdff1dcb98c91",
+          "emitters": [
+            "ninusglow"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ebf7f2f2c9f3905a_cpt_3_smoke0207.png",
+          "source_particle": "ew0094_df_hit.ptcl",
+          "source_name": "cpt_3_smoke0207",
+          "source_sha256": "b502d61bf6bf7890601b30cf999d73f3ba462aca2fb47791122761f5c7a77dd0",
+          "png_sha256": "f0417f47065356cbe5aa581aa67853b318552cae7fc29429502692dfb2caff78",
+          "emitters": [
+            "dist_prim_ring01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "psychicnoise": {
+      "source_id": 917,
+      "source_directory": "ew0917",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "psyshock": {
+      "source_id": 473,
+      "source_directory": "ew0473",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/00e7b521d96cfd09_cpt_2_shock0010.png",
+          "source_particle": "ew0473_df_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "ca3d92107c584ec96bb08ef86b9dedb03158296446e4309bb1a3267caa35782d",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi_red",
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/807435498fdb7e7b_cpt_2_shock0014.png",
+          "source_particle": "ew0473_df_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "ca3d92107c584ec96bb08ef86b9dedb03158296446e4309bb1a3267caa35782d",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "1stHit",
+            "nigiyakaHits"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "screech": {
+      "source_id": 103,
+      "source_directory": "ew0103",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/1d1a5ff1af6c4662_cpt_0_flash0004.png",
+          "source_particle": "ew0103_df_hit01.ptcl",
+          "source_name": "cpt_0_flash0004",
+          "source_sha256": "fbe65bcc777aec2f9962f10cec4a1f0efc0fd6df28a1bd7b2537e3b11b946b64",
+          "png_sha256": "1fca8ff0e5a7e00c56eb0e25647eebb32d121c656b2bf76557f9c60ffcf28198",
+          "emitters": [
+            "base_add_z_off",
+            "base02_add_z_off"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0801ffacb9e8f646_cpt_0_line0702.png",
+          "source_particle": "ew0103_df_hit01.ptcl",
+          "source_name": "cpt_0_line0702",
+          "source_sha256": "fbe65bcc777aec2f9962f10cec4a1f0efc0fd6df28a1bd7b2537e3b11b946b64",
+          "png_sha256": "b1322edac4864e07a3d1314dca443011d9346a70cc95c7b6a64501c6002ce605",
+          "emitters": [
+            "down_ring",
+            "up_ring"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "sparklingaria": {
+      "source_id": 664,
+      "source_directory": "ew0664",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "supersonic": {
+      "source_id": 48,
+      "source_directory": "ew0048",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a88d86be675d4cbe_cpt_0_flash0001.png",
+          "source_particle": "ew0048_df_hit.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "d003d80fad1782c9e34f4ac086aecafc451da9ea495024bf4b2915464dae1189",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "flash01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a2496570d1a5588a_cpt_0_circle0005.png",
+          "source_particle": "ew0048_df_hit.ptcl",
+          "source_name": "cpt_0_circle0005",
+          "source_sha256": "d003d80fad1782c9e34f4ac086aecafc451da9ea495024bf4b2915464dae1189",
+          "png_sha256": "790efa2793c033a26276cc4ce4d090b26dc6fd4796ecf933345ea4ef0f82a07c",
+          "emitters": [
+            "ring_k3_nor",
+            "ring_k3_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "bleakwindstorm": {
+      "source_id": 846,
+      "source_directory": "ew0846",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/dceac9e11bc26fb4_cpt_0_shock0001.png",
+          "source_particle": "ew0846_charge_oneshot.ptcl",
+          "source_name": "cpt_0_shock0001",
+          "source_sha256": "8a765e6541e0d607cbcc130e9b216ddbc81c0a2167931e1ee935708fadefd16b",
+          "png_sha256": "299297688914a84f1d3f32915b060f3f2fd27f9131b3ebb4e9d835a53dd18433",
+          "emitters": [
+            "wind"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8f7a82d7d614c391_cpt_2_shock0014.png",
+          "source_particle": "ew0846_tornado.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "ef8fd300419f5c87018e76880d04e0e3b93712ee720e9639079fa1e819d30708",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_loop",
+            "hit_oya"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "blizzard": {
+      "source_id": 59,
+      "source_directory": "ew0059",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0e1e06e07f8220ad_cpt_0_smoke0203.png",
+          "source_particle": "ew0059_df_hit.ptcl",
+          "source_name": "cpt_0_smoke0203",
+          "source_sha256": "c4b381ce3b500641ebc4112d336381726ebe06db019f896db95ac5be3567001d",
+          "png_sha256": "26224fac561dfa8dbe62551e13a46afe180f9bb8993ce0b2a4d0b7a0afd57e81",
+          "emitters": [
+            "snow"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c3f2773a3c918caa_cpt_0_smoke0701.png",
+          "source_particle": "ew0059_df_hit.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "c4b381ce3b500641ebc4112d336381726ebe06db019f896db95ac5be3567001d",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "earthpower": {
+      "source_id": 414,
+      "source_directory": "ew0414",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f14952d50b775b5a_cpt_2_shock0014.png",
+          "source_particle": "ew0414_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "4095f4b7e2d94d31ad4ca78ee7774741e5775b694789fd38cb151899e1dcdc62",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_many"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/89b95fbaa8b4f2ac_cpt_2_shock0004.png",
+          "source_particle": "ew0414_shock.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "651492400bc827835f3c5f057ebe867152808c7d39c23a3eb2c376e99d733509",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "hit_ring"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "earthquake": {
+      "source_id": 89,
+      "source_directory": "ew0089",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ad1cdd2414a012ed_cpt_0_shock0001.png",
+          "source_particle": "ew0089_df_hit.ptcl",
+          "source_name": "cpt_0_shock0001",
+          "source_sha256": "4e564f9f932592846bf92c7b843b523f681718f2f60411400828170513147a8c",
+          "png_sha256": "299297688914a84f1d3f32915b060f3f2fd27f9131b3ebb4e9d835a53dd18433",
+          "emitters": [
+            "ice_hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/920eec2b6e8154cd_cpt_0_flash0602.png",
+          "source_particle": "ew0089_df_hit.ptcl",
+          "source_name": "cpt_0_flash0602",
+          "source_sha256": "4e564f9f932592846bf92c7b843b523f681718f2f60411400828170513147a8c",
+          "png_sha256": "36b21edbdc07941e4f37ae9b8fe7d33d624c6245bb6e28ee14e0fc2edbdaf21d",
+          "emitters": [
+            "hit_s"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "explosion": {
+      "source_id": 153,
+      "source_directory": "ew0153",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/fffd2fd42c0b1ba4_cpt_2_shock0014.png",
+          "source_particle": "ew0153_hit.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "af533e1d1d030f51bdaa7697582025a860d28597373fb1c09a1f275ba710b894",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6cc15a7cba1696a8_cpt_2_shock0004.png",
+          "source_particle": "ew0153_charge.ptcl",
+          "source_name": "cpt_2_shock0004",
+          "source_sha256": "04f92250b5ce7c223bcd211f5b59f13d6473a994d111898d3166570f477bd0cb",
+          "png_sha256": "d129f2e8fe4169fa103eedb7c3b8f8d8fe7a5bcc1a3b8136050817970267186d",
+          "emitters": [
+            "shock_last_enb"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "freezedry": {
+      "source_id": 573,
+      "source_directory": "ew0573",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e282eb9910efa739_cpt_0_smoke0002.png",
+          "source_particle": "ew0573_hit.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "c17c6d29f1f434ba37008dfb78b99f69a8f2e495201ceb10643c952e8e6a991e",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3b4f6df31c9211bf_cpt_0_smoke1602_n.png",
+          "source_particle": "ew0573_hit.ptcl",
+          "source_name": "cpt_0_smoke1602_n",
+          "source_sha256": "c17c6d29f1f434ba37008dfb78b99f69a8f2e495201ceb10643c952e8e6a991e",
+          "png_sha256": "76a86a7013797e491c8b630abb5321839a8689eab889433201dd7c09c823500d",
+          "emitters": [
+            "abberation_smoke"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "heatwave": {
+      "source_id": 257,
+      "source_directory": "ew0257",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9b5e6178a353e172_cpt_0_shock0001.png",
+          "source_particle": "ew0257_fire_hit.ptcl",
+          "source_name": "cpt_0_shock0001",
+          "source_sha256": "21c0cdcc854a4a1532427b31d49adb359e9eb88f7dced213082d344973946198",
+          "png_sha256": "299297688914a84f1d3f32915b060f3f2fd27f9131b3ebb4e9d835a53dd18433",
+          "emitters": [
+            "hit_mark"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8bc71541853f6b16_cpt_2_shock0026.png",
+          "source_particle": "ew0257_fire_hit.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "21c0cdcc854a4a1532427b31d49adb359e9eb88f7dced213082d344973946198",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "wind_bashi"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "hurricane": {
+      "source_id": 542,
+      "source_directory": "ew0542",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4ae7e3f9c4a4fdd9_cpt_2_shock0014.png",
+          "source_particle": "ew0542_hit01.ptcl",
+          "source_name": "cpt_2_shock0014",
+          "source_sha256": "bc02e8ce6e4272ceaa69610c2d2fb45ab84fe39300b0b7bd7dc8ef198bc413fd",
+          "png_sha256": "384ec413f198e0c0c36464054356af5ba1013a1c6e4fb044f50082d1cf3d03d8",
+          "emitters": [
+            "hit_loop",
+            "hit_oya"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b9954c67995b6b2b_cpt_2_shock0015.png",
+          "source_particle": "ew0542_hit01.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "bc02e8ce6e4272ceaa69610c2d2fb45ab84fe39300b0b7bd7dc8ef198bc413fd",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "shock",
+            "shock_migi"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "makeitrain": {
+      "source_id": 874,
+      "source_directory": "ew0874",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3a824430bacdf68c_cpt_0_flash0008.png",
+          "source_particle": "ew0874_hit.ptcl",
+          "source_name": "cpt_0_flash0008",
+          "source_sha256": "6380423fc2d93c2aa1ae44bf3fb669fd1423c20930970b91b578c6e70ca8e69a",
+          "png_sha256": "9581e4a78e72d888070914311c9cf8e28b08fd77b9385a39915c4ad08313be5e",
+          "emitters": [
+            "kira_1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d475279e02e13716_cpt_0_line0202s.png",
+          "source_particle": "ew0874_hit.ptcl",
+          "source_name": "cpt_0_line0202s",
+          "source_sha256": "6380423fc2d93c2aa1ae44bf3fb669fd1423c20930970b91b578c6e70ca8e69a",
+          "png_sha256": "018464066a8123e850bd91e31fd7b9842b2b4f8271f1ef953414e5d41e5ee429",
+          "emitters": [
+            "coin_end"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "powdersnow": {
+      "source_id": 181,
+      "source_directory": "ew0181",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9caebc0e704fb314_cpt_0_smoke0002.png",
+          "source_particle": "ew0181_hit01.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "0dc438fb0fabc404d04ae63ebeab97d0c2335ae88df95b8ad86f72ef56b1145a",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8b2fe60c0e731cf8_cpt_0_smoke0701.png",
+          "source_particle": "ew0181_start.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "faa7415bb76ba05e4da3d164443881840fc0fb180d9c974cbe2522bbbb3877c9",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "first02",
+            "second01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "terastarstorm": {
+      "source_id": 906,
+      "source_directory": "ew0906",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "babydolleyes": {
+      "source_id": 608,
+      "source_directory": "ew0608",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/2c2014aa3a3a688e_cpt_1_flash0001.png",
+          "source_particle": "ew0608_eyering.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "73fe8740db154b2d01b9627e29cdb9e4e9e331e2c28f2089fc1c4fd7283318a6",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "kira01_add_L",
+            "kira01_add_R"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/28157de645374a91_cpt_0_circle0301.png",
+          "source_particle": "ew0608_eye.ptcl",
+          "source_name": "cpt_0_circle0301",
+          "source_sha256": "f8a9bc3c46fc1763d2784e87c3e6110cc92d36c36b7de31bb5cae2f259c46dd4",
+          "png_sha256": "5db5cee3d30204831f546829350a90471c21784ada7c8bf172fc40d1666b8554",
+          "emitters": [
+            "eye_LR1",
+            "eye_LR2"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "charm": {
+      "source_id": 204,
+      "source_directory": "ew0204",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/96d80cf57dfd5ba0_cpt_1_flash0001.png",
+          "source_particle": "ew0204_heart.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "aa67ec2024520892f565e33a98c0844fb038c53a122d9b6771f64803ec94229b",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "ster"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b278c20c7175cc9e_cpt_0_mark0009.png",
+          "source_particle": "ew0204_heart.ptcl",
+          "source_name": "cpt_0_mark0009",
+          "source_sha256": "aa67ec2024520892f565e33a98c0844fb038c53a122d9b6771f64803ec94229b",
+          "png_sha256": "a217f9c576deb82c9686e1de9bddcf55f31152e5e04119e032864f8ed4a5268e",
+          "emitters": [
+            "heart"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "encore": {
+      "source_id": 227,
+      "source_directory": "ew0227",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3c2185f0a02d217e_cpt_1_circle0005.png",
+          "source_particle": "ew0227_center.ptcl",
+          "source_name": "cpt_1_circle0005",
+          "source_sha256": "706655b568220046fdd48037936ce1826c6ac89aa4158de137b1c1724a976bbc",
+          "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+          "emitters": [
+            "dust"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "growl": {
+      "source_id": 45,
+      "source_directory": "ew0045",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e1c54bfb440ccae1_cpt_0_flash0003.png",
+          "source_particle": "ew0045_voice.ptcl",
+          "source_name": "cpt_0_flash0003",
+          "source_sha256": "5a6dd46fda2cd00d72916347ede2c65085a6fbd47515997a13ac73305f038532",
+          "png_sha256": "415206b8cebdeb48c53fe21332cba8d865a10a4eab44c31fa216148edda3b853",
+          "emitters": [
+            "tubu_line"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d963d5f75fcc24a5_cpt_0_line0401.png",
+          "source_particle": "ew0045_voice.ptcl",
+          "source_name": "cpt_0_line0401",
+          "source_sha256": "5a6dd46fda2cd00d72916347ede2c65085a6fbd47515997a13ac73305f038532",
+          "png_sha256": "4de4437d562c9eaee86b2b4857c439dbe7c27976dac9ef25be710ae33c2f5ebf",
+          "emitters": [
+            "circle01_nor_Child"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "leechseed": {
+      "source_id": 73,
+      "source_directory": "ew0073",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7b44a3bcde13b15a_cpt_0_flash0002.png",
+          "source_particle": "ew0073_df_hit.ptcl",
+          "source_name": "cpt_0_flash0002",
+          "source_sha256": "4a9d0d28431e78c80faa605eb263c7974f922eeb3ae9c77688d25466d1985ace",
+          "png_sha256": "80fcfeb774a173c9aa8e4c293b0d268eb66ebe7514cf9bfb6d16e2a0caa13a0d",
+          "emitters": [
+            "00_aa01_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c0c15c494cb9800d_cpt_1_flash0001.png",
+          "source_particle": "ew0073_df_hit.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "4a9d0d28431e78c80faa605eb263c7974f922eeb3ae9c77688d25466d1985ace",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "kira_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "leer": {
+      "source_id": 43,
+      "source_directory": "ew0043",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/80cbf9024bedb8fc_cpt_2_shock0005.png",
+          "source_particle": "ew0043_at_start.ptcl",
+          "source_name": "cpt_2_shock0005",
+          "source_sha256": "15229dff10bbf7d9e760752e6896eb9baff7edc3659828c9e335cbb6f746ce28",
+          "png_sha256": "045e1c9c82aad7ea6df1ea052338130f44200705dda48cdb96a4957ddad8e592",
+          "emitters": [
+            "center_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0c35418efc1b7f32_cpt_0_flash0003.png",
+          "source_particle": "ew0043_at_start.ptcl",
+          "source_name": "cpt_0_flash0003",
+          "source_sha256": "15229dff10bbf7d9e760752e6896eb9baff7edc3659828c9e335cbb6f746ce28",
+          "png_sha256": "415206b8cebdeb48c53fe21332cba8d865a10a4eab44c31fa216148edda3b853",
+          "emitters": [
+            "side_line",
+            "side_line02"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "poisonpowder": {
+      "source_id": 77,
+      "source_directory": "ew0077",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/594797cfcdc1d16c_cpt_0_smoke0002.png",
+          "source_particle": "ew0077_df_hit_kona.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "080ba529cb8a85a4a307bc48efb0208b09c426a3d58d814693e37ad3e6c6877b",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke00"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e37d482fa4326d93_cpt_2_bubble0008.png",
+          "source_particle": "ew0077_df_hit_kona.ptcl",
+          "source_name": "cpt_2_bubble0008",
+          "source_sha256": "080ba529cb8a85a4a307bc48efb0208b09c426a3d58d814693e37ad3e6c6877b",
+          "png_sha256": "c6801fd0d6e30348d7129c65b92457e428441e28810248e51f62415226b84d9a",
+          "emitters": [
+            "bubble"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "sandattack": {
+      "source_id": 28,
+      "source_directory": "ew0028",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/99165c37e0714464_cpt_0_smoke0002.png",
+          "source_particle": "ew0028_hit_sand.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "44b2e94edcfa7970a4a396e464ebac167c476593f28d56945ee8fb27184e4ff9",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke02_anim",
+            "smoke_anim"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/66eaced2ed91694b_cpt_0_smoke0701.png",
+          "source_particle": "ew0028_hit_sand.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "44b2e94edcfa7970a4a396e464ebac167c476593f28d56945ee8fb27184e4ff9",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "smoke02_anim"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "sleeppowder": {
+      "source_id": 79,
+      "source_directory": "ew0079",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/594797cfcdc1d16c_cpt_0_smoke0002.png",
+          "source_particle": "ew0079_df_hit_kona.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "8dae3bd68ca6cf33955200f946b30059b5be5bce63ac0c75b6a74db207895080",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke00"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/52ab36fb691d8fa4_cpt_0_smoke0701.png",
+          "source_particle": "ew0079_at_bullet.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "312a672b27f911b94b10fb103b65f4af4d61b44d79b8eec4a589dfee52f8c20d",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "muzzle_smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "smokescreen": {
+      "source_id": 108,
+      "source_directory": "ew0108",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d58022fa682a44a7_cpt_0_smoke0002.png",
+          "source_particle": "ew0108_df_hit.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "4fe61ea65de24985c03cc36b8cdfae9f153649b20c4aa316416b6922819e27fb",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke00_base"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e201e487f575a717_cpt_2_smoke0002.png",
+          "source_particle": "ew0108_df_hit.ptcl",
+          "source_name": "cpt_2_smoke0002",
+          "source_sha256": "4fe61ea65de24985c03cc36b8cdfae9f153649b20c4aa316416b6922819e27fb",
+          "png_sha256": "7673be74d961cbc5652d17fc5fdb755317cc89741188e49c4f32fd4e3b9adb33",
+          "emitters": [
+            "smoke_child",
+            "smoke03_amim",
+            "smoke04_amim_many"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "spore": {
+      "source_id": 147,
+      "source_directory": "ew0147",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9511c0962406b80b_cpt_0_smoke0701.png",
+          "source_particle": "ew0147_df_hit.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "4784d580b0f7ab69027cfc19b0917691a6606d004e8c34cb3b50a593e4523a86",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "base_smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4fd34519ff3b67af_cpt_2_smoke0002.png",
+          "source_particle": "ew0147_at_start_mushroom.ptcl",
+          "source_name": "cpt_2_smoke0002",
+          "source_sha256": "6b57bcc31279b952a650d5dcf97f3d712f5d817d0d7ca8ff66eda0df4c342723",
+          "png_sha256": "7673be74d961cbc5652d17fc5fdb755317cc89741188e49c4f32fd4e3b9adb33",
+          "emitters": [
+            "smoke_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "stringshot": {
+      "source_id": 81,
+      "source_directory": "ew0081",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9a5a242096ef39d9_cpt_0_shock0005.png",
+          "source_particle": "ew0081_at_start01.ptcl",
+          "source_name": "cpt_0_shock0005",
+          "source_sha256": "27b37e0af009584b4089aa62b8dcf92df1726eed57cea0beb6e82d5a46e60a5e",
+          "png_sha256": "67922d11597bffaad51758ef0d86d58bb714a345c0232d1239d6814fcd044567",
+          "emitters": [
+            "muzzle02_03_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/932dd1b1cee77204_cpt_0_line0202.png",
+          "source_particle": "ew0081_df_hit01.ptcl",
+          "source_name": "cpt_0_line0202",
+          "source_sha256": "52fa89484b14431e276a5c5cc5f3f45a89c9b659de2b4451041631476bccea7c",
+          "png_sha256": "22cfee73f88534e4cb1c385fe9cdd33687fca526694b0cbb5f1f0ccfa7bc96bd",
+          "emitters": [
+            "pri_roll02_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "sweetscent": {
+      "source_id": 230,
+      "source_directory": "ew0230",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/d7ac0047fb99e848_cpt_0_smoke0002.png",
+          "source_particle": "ew0230_at_flow.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "e57669192351ea02afeccfc128356f1a1306e18392e9ee4a316c0322e614abe3",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "smoke01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/85993dcabefb703e_cpt_0_smoke0005.png",
+          "source_particle": "ew0230_at_flow.ptcl",
+          "source_name": "cpt_0_smoke0005",
+          "source_sha256": "e57669192351ea02afeccfc128356f1a1306e18392e9ee4a316c0322e614abe3",
+          "png_sha256": "0f80bd0bf7526941beb72c7889f965d32a83f38fac1ad1082f1d78f3df5ee5e8",
+          "emitters": [
+            "smoke02"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "tailwhip": {
+      "source_id": 39,
+      "source_directory": "ew0039",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/19fd8a549a23a42b_cpt_0_flash0001.png",
+          "source_particle": "ew0039_kira.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "eec2537646fb31505d130baa33387b7d18eeb819acf5ecf0e55efdbaa4aaf28b",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "kira_mark01_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/374a3ae1ccd1e7d0_cpt_2_flash0001.png",
+          "source_particle": "ew0039_kira.ptcl",
+          "source_name": "cpt_2_flash0001",
+          "source_sha256": "eec2537646fb31505d130baa33387b7d18eeb819acf5ecf0e55efdbaa4aaf28b",
+          "png_sha256": "c55b1262e972a24de252c8a37c2533faa12c9b1c14e7904cecd5ddd1c52d0e3b",
+          "emitters": [
+            "kira_mark01_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "taunt": {
+      "source_id": 269,
+      "source_directory": "ew0269",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0508709e69aa8601_cpt_0_mark0303.png",
+          "source_particle": "ew0269_df_hit.ptcl",
+          "source_name": "cpt_0_mark0303",
+          "source_sha256": "1635bf9e71e09468e7c9f8981ae49b8619df0f974a81360282d3f293c4584904",
+          "png_sha256": "6e975c1e714db410d06c80cc4e6d65b547a6eefc89653cf2e2152e9e517399d4",
+          "emitters": [
+            "mark01_alp",
+            "mark01_add",
+            "mark00_alp",
+            "mark00_add"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "thunderwave": {
+      "source_id": 86,
+      "source_directory": "ew0086",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c113336796b382ed_cpt_0_flash0005.png",
+          "source_particle": "ew0086_df_hit.ptcl",
+          "source_name": "cpt_0_flash0005",
+          "source_sha256": "a4def107b42227c0aed0d3e7b6ad3e49f9a82738b19316fd902ae0d9077e2c4f",
+          "png_sha256": "62d11cb4780d5a5d32a211ac91463db07c6116210a0de195cbb6121a00db5edf",
+          "emitters": [
+            "kira_bachi"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/87ac951cb546c92f_cpt_2_line0004.png",
+          "source_particle": "ew0086_at_start.ptcl",
+          "source_name": "cpt_2_line0004",
+          "source_sha256": "b5268b6f893dadfeaf34bc840fbde4f511fce94322b25a2c8977b46911d53a04",
+          "png_sha256": "ffd584ecb010d0060592a7cb6a97f5883b1c1c1f48b1976678f494f404ba2b88",
+          "emitters": [
+            "line",
+            "start_line"
+          ],
+          "frames": 2,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "toxic": {
+      "source_id": 92,
+      "source_directory": "ew0092",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/9d8eb463211deef7_cpt_0_bubble0202.png",
+          "source_particle": "ew0092_hit.ptcl",
+          "source_name": "cpt_0_bubble0202",
+          "source_sha256": "02c51eeb83938a95e70ffc36acf6b7051628d5efb17ef8ffe9f7e04780bfbf87",
+          "png_sha256": "932e7766c1721298d4dd05284ddbed68527b01c0648771ccf5011723683db9c3",
+          "emitters": [
+            "babble"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ca0140538a101a9b_cpt_2_bubble0004.png",
+          "source_particle": "ew0092_hit.ptcl",
+          "source_name": "cpt_2_bubble0004",
+          "source_sha256": "02c51eeb83938a95e70ffc36acf6b7051628d5efb17ef8ffe9f7e04780bfbf87",
+          "png_sha256": "729c5bc3896f48e5995b52a7800c7e4ea65b0fd138a0802c3a28a8eba1650b9b",
+          "emitters": [
+            "par_buble02_in_nor_Copy1"
+          ],
+          "frames": 8,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "willowisp": {
+      "source_id": 261,
+      "source_directory": "ew0261",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/5d370a1be7cdb7cd_cpt_2_fire0004.png",
+          "source_particle": "ew0261_df_hit01.ptcl",
+          "source_name": "cpt_2_fire0004",
+          "source_sha256": "47b9dfa569a38d22e251fa24b1930d89021cf934aafa53e52928729c97aeed4f",
+          "png_sha256": "99c2404b0483e2a53858eee2143a88949448559e67bd90789d83c0b4f0d0937f",
+          "emitters": [
+            "fire02_nor_stay"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4060d6d597a408b4_cpt_2_fire0008.png",
+          "source_particle": "ew0261_df_hit01.ptcl",
+          "source_name": "cpt_2_fire0008",
+          "source_sha256": "47b9dfa569a38d22e251fa24b1930d89021cf934aafa53e52928729c97aeed4f",
+          "png_sha256": "c78695c1afb3a09980b9c806c9ce66b981b244fc1354dcd53c6d14dd9e0ed8cb",
+          "emitters": [
+            "fire02_nor_stay"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "agility": {
+      "source_id": 97,
+      "source_directory": "ew0097",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/16088b167d7833e4_cpt_0_shock0003.png",
+          "source_particle": "ew0097_chara_line.ptcl",
+          "source_name": "cpt_0_shock0003",
+          "source_sha256": "7cd33abc0d6f809ad0afe2af066cdaceb0c6902f29882a2f58167be5557d73b1",
+          "png_sha256": "95f927ee15142ea07da245373b464a8d9b13bfa566237081cf50785323d7a13d",
+          "emitters": [
+            "line_blue_00",
+            "line_blue_01",
+            "line_blue_02",
+            "line_blue_03"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a64201a9d55b69bd_cpt_0_smoke0701.png",
+          "source_particle": "ew0097_chara_line.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "7cd33abc0d6f809ad0afe2af066cdaceb0c6902f29882a2f58167be5557d73b1",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "line_white_00",
+            "line_white_01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "calmmind": {
+      "source_id": 347,
+      "source_directory": "ew0347",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/03c038dcbf0de742_cpt_2_shock0003.png",
+          "source_particle": "ew0347_rain.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "3c537522695927c879a35e93e7f9bb550197dc2135759d965918a9d2094b1405",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "rainwater_alp"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e89f6bf16a26d84c_cpt_0_line0702.png",
+          "source_particle": "ew0347_hit_01.ptcl",
+          "source_name": "cpt_0_line0702",
+          "source_sha256": "742366b8dede65fe1c5f646ccaaab8e980c15be36b667da3342d28e4379f3471",
+          "png_sha256": "b1322edac4864e07a3d1314dca443011d9346a70cc95c7b6a64501c6002ce605",
+          "emitters": [
+            "ring_yugami"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "charge": {
+      "source_id": 268,
+      "source_directory": "ew0268",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/e9595626ad9846c0_cpt_1_circle0001.png",
+          "source_particle": "ew0268_at_charge.ptcl",
+          "source_name": "cpt_1_circle0001",
+          "source_sha256": "441378cccae50ca0be9f4ed4773017287d92b00db0719b83c5e7fbe2b15baad1",
+          "png_sha256": "f373ea816e00a78d9840a917a9ae4b2b3c03a6f4bf1f127605b0ddd3e0bcb309",
+          "emitters": [
+            "glow_charge",
+            "core"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c83199b98ac8c085_cpt_1_circle0005.png",
+          "source_particle": "ew0268_at_charge.ptcl",
+          "source_name": "cpt_1_circle0005",
+          "source_sha256": "441378cccae50ca0be9f4ed4773017287d92b00db0719b83c5e7fbe2b15baad1",
+          "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+          "emitters": [
+            "light_main_add",
+            "tubu_s"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "defensecurl": {
+      "source_id": 111,
+      "source_directory": "ew0111",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6e6c05a90ee4c14b_cpt_0_circle0002.png",
+          "source_particle": "ew0111_circle.ptcl",
+          "source_name": "cpt_0_circle0002",
+          "source_sha256": "e521f1bfe2bccaf62959a3f160c549bfbed99d741ae61d9bdfb39cc1ff92310f",
+          "png_sha256": "430eff0a0884918002c1c3d80214c6f6c4d04aa2f0e14f22489841df2f3b464f",
+          "emitters": [
+            "ring_Copy1_Copy2"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c20e6c1c57876c53_cpt_1_circle0005.png",
+          "source_particle": "ew0111_circle.ptcl",
+          "source_name": "cpt_1_circle0005",
+          "source_sha256": "e521f1bfe2bccaf62959a3f160c549bfbed99d741ae61d9bdfb39cc1ff92310f",
+          "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+          "emitters": [
+            "kira01_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "doubleteam": {
+      "source_id": 104,
+      "source_directory": "ew0104",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/16088b167d7833e4_cpt_0_shock0003.png",
+          "source_particle": "ew0104_chara_line.ptcl",
+          "source_name": "cpt_0_shock0003",
+          "source_sha256": "7cfb4e7c22f0297f2f8b65e4727dbf9b44a6d69c5061e257e987a8347f846532",
+          "png_sha256": "95f927ee15142ea07da245373b464a8d9b13bfa566237081cf50785323d7a13d",
+          "emitters": [
+            "line_blue_00",
+            "line_blue_01",
+            "line_blue_02",
+            "line_blue_03"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a64201a9d55b69bd_cpt_0_smoke0701.png",
+          "source_particle": "ew0104_chara_line.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "7cfb4e7c22f0297f2f8b65e4727dbf9b44a6d69c5061e257e987a8347f846532",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "line_white_00",
+            "line_white_01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "dragondance": {
+      "source_id": 349,
+      "source_directory": "ew0349",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0e88c78844a62dc1_cpt_0_circle0001.png",
+          "source_particle": "ew0349_burst.ptcl",
+          "source_name": "cpt_0_circle0001",
+          "source_sha256": "5b2f63f507e00d93dd0faaf24799ceb1d3f35bf238c1fdbbd2343801373e19b4",
+          "png_sha256": "896afe2f632c399e1d17458df29fcc55fd67e89aae8f0633f68583ed4de48a72",
+          "emitters": [
+            "ring_large"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/89bb9638bf02ea47_cpt_1_circle0004.png",
+          "source_particle": "ew0349_burst.ptcl",
+          "source_name": "cpt_1_circle0004",
+          "source_sha256": "5b2f63f507e00d93dd0faaf24799ceb1d3f35bf238c1fdbbd2343801373e19b4",
+          "png_sha256": "a1e871f6c443d5ae60608c97e60bba3bf718fac7ba692b329acbdff1dcb98c91",
+          "emitters": [
+            "flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "focusenergy": {
+      "source_id": 116,
+      "source_directory": "ew0116",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f306b38c3e0ec74f_cpt_3_shock0001.png",
+          "source_particle": "ew0116_aura_up01.ptcl",
+          "source_name": "cpt_3_shock0001",
+          "source_sha256": "7afde215fafe6f0e9459130a09ab26203e0e1c473967bfd642f15e2007eac25a",
+          "png_sha256": "7fb631e8721c4c693754cb4354697f40134e3a733c0e19f9a9dd037d95ddbe27",
+          "emitters": [
+            "00_pri_base01_nor",
+            "00_pri_base04_no",
+            "00_pri_base02_nor",
+            "00_pri_base03_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f6dba1765d56098c_cpt_1_circle0002.png",
+          "source_particle": "ew0116_boost.ptcl",
+          "source_name": "cpt_1_circle0002",
+          "source_sha256": "a7ebb9ba88bf528fac404fae757e6aa2b8b8c3d4dc0687591cf4db3ee2010702",
+          "png_sha256": "83899307bb8e15c0e3f24a7e157b3cc4f6cf1f32cd3d3acefd0f60e0a9b8d6b2",
+          "emitters": [
+            "fly"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "growth": {
+      "source_id": 74,
+      "source_directory": "ew0074",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/6160843d09256053_cpt_1_circle0005.png",
+          "source_particle": "ew0074_up.ptcl",
+          "source_name": "cpt_1_circle0005",
+          "source_sha256": "109a7bc5341ffca1e3529760c9a1da35332f6cda4f3b13721bd60370225940e6",
+          "png_sha256": "82d756932dcc3048199c16f9d2085355cef643c7ef28bab67fb2c03b4e131298",
+          "emitters": [
+            "kona_up"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/769823db5d90b429_cpt_3_line0201.png",
+          "source_particle": "ew0074_up.ptcl",
+          "source_name": "cpt_3_line0201",
+          "source_sha256": "109a7bc5341ffca1e3529760c9a1da35332f6cda4f3b13721bd60370225940e6",
+          "png_sha256": "c8c632af064ee5dbe7a981ed9f30684b1537f7a48d706bba642da83e0a589056",
+          "emitters": [
+            "power"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "harden": {
+      "source_id": 106,
+      "source_directory": "ew0106",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/47cb1e87d748f477_cpt_1_flash0001.png",
+          "source_particle": "ew0106_release.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "1901df101388f81d3213169d8cd1f17a8a5a5d0a0f4fb8e7958db47e87ddc568",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "kirakira"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f6f87434b08f26bc_cpt_0_mark0002.png",
+          "source_particle": "ew0106_charge.ptcl",
+          "source_name": "cpt_0_mark0002",
+          "source_sha256": "3ccc448b2f4ea68cec1f914f501b17fb51faa2de2f6d0b90e1cc67787147d7a5",
+          "png_sha256": "84c050701e4585eb980920ef856f0486a4043a5a65314b626cbfee8d8252e06b",
+          "emitters": [
+            "fly",
+            "fly2",
+            "fly3"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "howl": {
+      "source_id": 336,
+      "source_directory": "ew0336",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/32b9fec06aa08b0d_cpt_2_shock0026.png",
+          "source_particle": "ew0336_at_howring.ptcl",
+          "source_name": "cpt_2_shock0026",
+          "source_sha256": "548a4a6c90b25e66a25bb930e3232b57e68ef849b53e6e245bcaf6c4fea5a2ea",
+          "png_sha256": "42cc20f09016ab50f4856f63f65587cd117ce073830c4e98e014cf8e6325eaa4",
+          "emitters": [
+            "shock01_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b351179d756cbd9a_cpt_0_flash0003.png",
+          "source_particle": "ew0336_at_howring.ptcl",
+          "source_name": "cpt_0_flash0003",
+          "source_sha256": "548a4a6c90b25e66a25bb930e3232b57e68ef849b53e6e245bcaf6c4fea5a2ea",
+          "png_sha256": "415206b8cebdeb48c53fe21332cba8d865a10a4eab44c31fa216148edda3b853",
+          "emitters": [
+            "line01"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "nastyplot": {
+      "source_id": 417,
+      "source_directory": "ew0417",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/2c0b79693a1de1a3_cpt_0_mark0401.png",
+          "source_particle": "ew0417_at_hit.ptcl",
+          "source_name": "cpt_0_mark0401",
+          "source_sha256": "652177d31e055abd3f0e4deba874c782788de523cb85667251ad6039fa7ba324",
+          "png_sha256": "27b37a06bdf2e9a90a0d663d3576441ed32085b29a898c7679e5d1bedb9a146f",
+          "emitters": [
+            "laugh01_alp",
+            "laugh02_alp"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a50e72875491632e_upt_ew417_obj_03.png",
+          "source_particle": "ew0417_at_mark01.ptcl",
+          "source_name": "upt_ew417_obj_03",
+          "source_sha256": "9d8900a6f1db84def1bbb9b340377738b3b624bb977ce44ee42895196eb5d0ec",
+          "png_sha256": "526d0685427850d455826fcd8ca85b0df5a0c84203aa6be129fdb228c7f22b5e",
+          "emitters": [
+            "mark02_alp"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "recover": {
+      "source_id": 105,
+      "source_directory": "ew0105",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/f294e5dd1f2e6321_cpt_0_flash0001.png",
+          "source_particle": "ew0105_charge.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "cf1afafee7102ed7123f5f7a37041e8d3cd48af05b5c440ccd55beb76900a2a5",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "end_grow03"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/58f8d910bbf80734_cpt_0_flash0602.png",
+          "source_particle": "ew0105_charge.ptcl",
+          "source_name": "cpt_0_flash0602",
+          "source_sha256": "cf1afafee7102ed7123f5f7a37041e8d3cd48af05b5c440ccd55beb76900a2a5",
+          "png_sha256": "36b21edbdc07941e4f37ae9b8fe7d33d624c6245bb6e28ee14e0fc2edbdaf21d",
+          "emitters": [
+            "end_grow02"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "roost": {
+      "source_id": 355,
+      "source_directory": "ew0355",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/2612e36cc6d1cea8_cpt_1_flash0001.png",
+          "source_particle": "ew0355_at_featherfly.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "05bc888867372844f9ecf5fc7852e5b514f00c259247d63c0509ced2335f7ddf",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "feather_Child"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c3f8dbcf5727dd21_cpt_2_mark0004.png",
+          "source_particle": "ew0355_at_feather.ptcl",
+          "source_name": "cpt_2_mark0004",
+          "source_sha256": "192dad04978f67318beeaf2d01233940ae314ab017ec3ea5c1767417603b9ec7",
+          "png_sha256": "bad661adab1978b67a40057e6005ff525475ba4bd0ae5f762365185fff413c2b",
+          "emitters": [
+            "feather_model",
+            "feather_tex"
+          ],
+          "frames": 1,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "swordsdance": {
+      "source_id": 14,
+      "source_directory": "ew0014",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ed9a79c9368b26db_cpt_0_flash0002.png",
+          "source_particle": "ew0014_up.ptcl",
+          "source_name": "cpt_0_flash0002",
+          "source_sha256": "db89da46815c055519d24c2a390b2883f54822a05aae282033fb9e79335a26bf",
+          "png_sha256": "80fcfeb774a173c9aa8e4c293b0d268eb66ebe7514cf9bfb6d16e2a0caa13a0d",
+          "emitters": [
+            "any_flash"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0111ef638206a04e_cpt_0_fire0002.png",
+          "source_particle": "ew0014_sword00.ptcl",
+          "source_name": "cpt_0_fire0002",
+          "source_sha256": "57b95180914e2d3cddb7391ae247d76ecdfda888d12d81ff584a346873a40328",
+          "png_sha256": "c2145ae6a918eccbd4501d54bdeb313b4bb10a038d68cadff4d54befcc5d4e81",
+          "emitters": [
+            "slash0",
+            "slash1",
+            "slash0_180"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "withdraw": {
+      "source_id": 110,
+      "source_directory": "ew0110",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/cf4d8cc1b41d964d_cpt_1_circle0003.png",
+          "source_particle": "ew0110_close.ptcl",
+          "source_name": "cpt_1_circle0003",
+          "source_sha256": "0f0e6ce5f1d46a17d5b76611db506193ba9768d43a61980c9e1f988d3d61471e",
+          "png_sha256": "050b5595014b08c9f03449c62fc4f37cce3e753219453afeb75b064fa4c51f43",
+          "emitters": [
+            "tips",
+            "tips_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c07dcfbe4b41ac84_cpt_0_smoke0701.png",
+          "source_particle": "ew0110_smoke.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "93fa9e876ea620748f77c79c7904dfbe8829c05fb57246977f10e72c5166f2f2",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "auroraveil": {
+      "source_id": 694,
+      "source_directory": "ew0694",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/b92702c0dbab9e0f_cpt_1_flash0001.png",
+          "source_particle": "ew0694_particle.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "367578750839a8f7f89c701b9bd976b12221a4df0f9d84db8de77e6a475a8f53",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "kira01_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/598b1e356ccb0260_cpt_1_circle0001.png",
+          "source_particle": "ew0694_at_light.ptcl",
+          "source_name": "cpt_1_circle0001",
+          "source_sha256": "c2a04d75671e29388c4335ef4e72f88190e2f68c9002e565b38bbe1f0ccaf3c0",
+          "png_sha256": "f373ea816e00a78d9840a917a9ae4b2b3c03a6f4bf1f127605b0ddd3e0bcb309",
+          "emitters": [
+            "glow"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "chillyreception": {
+      "source_id": 881,
+      "source_directory": "ew0881",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/8484ae027a3ea650_cpt_2_smoke0002.png",
+          "source_particle": "ew0881_flash.ptcl",
+          "source_name": "cpt_2_smoke0002",
+          "source_sha256": "1afd7c315d6905b471c5b4ada195d420a708043c2c26c7adc0bb2c4d79a7ec74",
+          "png_sha256": "7673be74d961cbc5652d17fc5fdb755317cc89741188e49c4f32fd4e3b9adb33",
+          "emitters": [
+            "smoke_Copy1"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/c679a55eb9c00844_cpt_2_smoke0009.png",
+          "source_particle": "ew0881_flash.ptcl",
+          "source_name": "cpt_2_smoke0009",
+          "source_sha256": "1afd7c315d6905b471c5b4ada195d420a708043c2c26c7adc0bb2c4d79a7ec74",
+          "png_sha256": "1dbff2746589dab7d246af77a406ef8c9d6f08e3745f884129188779a2a5a633",
+          "emitters": [
+            "smoke"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "courtchange": {
+      "source_id": 756,
+      "source_directory": "ew0756",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/75db14532bc681cf_cpt_0_circle0003.png",
+          "source_particle": "ew0756_Court.ptcl",
+          "source_name": "cpt_0_circle0003",
+          "source_sha256": "b4c513d792050e67dfb39f8fd7deaef6ed8581aaabdd79e755d250a25818aa74",
+          "png_sha256": "c0a1a1a0564f0d9c9887902d673ea41650d00f9ea60ae1a1deb1b89fc5b30de5",
+          "emitters": [
+            "balls",
+            "balls_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0d86cae5d5cf9384_cpt_0_circle0201.png",
+          "source_particle": "ew0756_Court.ptcl",
+          "source_name": "cpt_0_circle0201",
+          "source_sha256": "b4c513d792050e67dfb39f8fd7deaef6ed8581aaabdd79e755d250a25818aa74",
+          "png_sha256": "f1f7c7cc7c0ffb1ccc0cecb897a3c832e9a633239f7b88862a09aa5126c4ba8c",
+          "emitters": [
+            "balls_Copy1_Copy1",
+            "balls_Copy1_Copy1_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "defog": {
+      "source_id": 432,
+      "source_directory": "ew0432",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7800e1151c645cd2_cpt_0_smoke0002.png",
+          "source_particle": "ew0432_burst.ptcl",
+          "source_name": "cpt_0_smoke0002",
+          "source_sha256": "330537ba6a5bae8cde7c7d32ab48f130119203b7b10357810013235834c47be0",
+          "png_sha256": "e99ec437f1c91fcd545f6157012fcae6450343768ec8c7eb3b386ec2d35f793e",
+          "emitters": [
+            "kem_02"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/93de0ee4c9f280fe_cpt_0_smoke0005.png",
+          "source_particle": "ew0432_burst.ptcl",
+          "source_name": "cpt_0_smoke0005",
+          "source_sha256": "330537ba6a5bae8cde7c7d32ab48f130119203b7b10357810013235834c47be0",
+          "png_sha256": "0f80bd0bf7526941beb72c7889f965d32a83f38fac1ad1082f1d78f3df5ee5e8",
+          "emitters": [
+            "dust",
+            "wind"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "electricterrain": {
+      "source_id": 604,
+      "source_directory": "ew0604",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/313c383e95915fe6_cpt_2_shock0015.png",
+          "source_particle": "ew0604_start01.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "8fa2a74c8d93255c49bac8f3f2e61e8cd6129bbe4a8d5ac64e3ba2684db8e079",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "03_flash_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/39fa30ee2334f63e_cpt_0_flash0001.png",
+          "source_particle": "ew0604_start01.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "8fa2a74c8d93255c49bac8f3f2e61e8cd6129bbe4a8d5ac64e3ba2684db8e079",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "03_star03_nor_Child"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "futuresight": {
+      "source_id": 248,
+      "source_directory": "ew0248",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7c5aa45730b9feaf_cpt_2_shock0008.png",
+          "source_particle": "ew0248_hit.ptcl",
+          "source_name": "cpt_2_shock0008",
+          "source_sha256": "3b598f521ac10c88420e07b64693e3ce084d315882a9b5eba9262893f663f64a",
+          "png_sha256": "4bb2290d0f560741217a4a6fa8ee4aef7579870afb97ccab2f62c8e7aca36176",
+          "emitters": [
+            "hitmark"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3f776e4b9562d6ac_cpt_2_shock0010.png",
+          "source_particle": "ew0248_hit.ptcl",
+          "source_name": "cpt_2_shock0010",
+          "source_sha256": "3b598f521ac10c88420e07b64693e3ce084d315882a9b5eba9262893f663f64a",
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552",
+          "emitters": [
+            "bashi"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "grassyterrain": {
+      "source_id": 580,
+      "source_directory": "ew0580",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/a79962728e623217_cpt_2_obj0006.png",
+          "source_particle": "ew0580_start_bg01.ptcl",
+          "source_name": "cpt_2_obj0006",
+          "source_sha256": "7c2dff05959c889f5064702a4fa7ea2704c5c3661083faea007766e45016aef0",
+          "png_sha256": "cba7a4d5cfc7e7af017ecf79ab1f9def3caf0ac0ea790c1b4331791992b1ad2b",
+          "emitters": [
+            "01_reaf_alp"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/313c383e95915fe6_cpt_2_shock0015.png",
+          "source_particle": "ew0580_start01.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "c03f51542a4aa36c79d11e948fa191f95ef26c517247bc290209e5505e7ea0fa",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "03_flash_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "haze": {
+      "source_id": 114,
+      "source_directory": "ew0114",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/68592815c658f56a_cpt_0_smoke0701.png",
+          "source_particle": "ew0114_start.ptcl",
+          "source_name": "cpt_0_smoke0701",
+          "source_sha256": "79be3d9aa64b94a2b6b293f09375961fa4db44bb28eef9f8f908c9f491d2921d",
+          "png_sha256": "631fc9a73568c7066a213da7a18cc535728be642b6caa33b6f2b515adf3b8c01",
+          "emitters": [
+            "kem_01_nor"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/59951dd92ba0e89b_cpt_2_smoke0002.png",
+          "source_particle": "ew0114_start.ptcl",
+          "source_name": "cpt_2_smoke0002",
+          "source_sha256": "79be3d9aa64b94a2b6b293f09375961fa4db44bb28eef9f8f908c9f491d2921d",
+          "png_sha256": "7673be74d961cbc5652d17fc5fdb755317cc89741188e49c4f32fd4e3b9adb33",
+          "emitters": [
+            "sprash_02_nor",
+            "sprash_03_nor",
+            "sprash_05_nor"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "lightscreen": {
+      "source_id": 113,
+      "source_directory": "ew0113",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/38499b6ebbd1e095_cpt_0_flash0003.png",
+          "source_particle": "ew0113_at_start.ptcl",
+          "source_name": "cpt_0_flash0003",
+          "source_sha256": "7e9124401a0689ddc3736151978341d04e578cf8cde8a25a60c825646530fb0c",
+          "png_sha256": "415206b8cebdeb48c53fe21332cba8d865a10a4eab44c31fa216148edda3b853",
+          "emitters": [
+            "kira_line",
+            "kira_line_Y"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0c5f36327753e580_cpt_1_flash0001.png",
+          "source_particle": "ew0113_at_start.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "7e9124401a0689ddc3736151978341d04e578cf8cde8a25a60c825646530fb0c",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "grain_End"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "mistyterrain": {
+      "source_id": 581,
+      "source_directory": "ew0581",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/313c383e95915fe6_cpt_2_shock0015.png",
+          "source_particle": "ew0581_start01.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "4716abd7e20b4dd4a0f9670cb2c383a3e9f8825acb306fc2fdff30a2f03333cd",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "03_flash_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/39fa30ee2334f63e_cpt_0_flash0001.png",
+          "source_particle": "ew0581_start01.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "4716abd7e20b4dd4a0f9670cb2c383a3e9f8825acb306fc2fdff30a2f03333cd",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "03_star03_nor_Child"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "protect": {
+      "source_id": 182,
+      "source_directory": "ew0182",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0058ed524e94ed50_cpt_1_circle0003.png",
+          "source_particle": "ew0182_end.ptcl",
+          "source_name": "cpt_1_circle0003",
+          "source_sha256": "dfe3e57874d42db696b94dd1701c9ee08dedb21e8bf858812ccebf7164c7a917",
+          "png_sha256": "050b5595014b08c9f03449c62fc4f37cce3e753219453afeb75b064fa4c51f43",
+          "emitters": [
+            "baseflash_01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/54873560386a4552_cpt_2_line0004.png",
+          "source_particle": "ew0182_end.ptcl",
+          "source_name": "cpt_2_line0004",
+          "source_sha256": "dfe3e57874d42db696b94dd1701c9ee08dedb21e8bf858812ccebf7164c7a917",
+          "png_sha256": "ffd584ecb010d0060592a7cb6a97f5883b1c1c1f48b1976678f494f404ba2b88",
+          "emitters": [
+            "ring"
+          ],
+          "frames": 2,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "psychicterrain": {
+      "source_id": 678,
+      "source_directory": "ew0678",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/313c383e95915fe6_cpt_2_shock0015.png",
+          "source_particle": "ew0678_start01.ptcl",
+          "source_name": "cpt_2_shock0015",
+          "source_sha256": "371fbec7a01bb737eeb00fb131390c9c6f3996af0758bd327bb07adf4acf3299",
+          "png_sha256": "dee662a34009a92588f3e4ffd5536532ae884cd9add7408a17c9665b3b3fba43",
+          "emitters": [
+            "03_flash_add"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/39fa30ee2334f63e_cpt_0_flash0001.png",
+          "source_particle": "ew0678_start01.ptcl",
+          "source_name": "cpt_0_flash0001",
+          "source_sha256": "371fbec7a01bb737eeb00fb131390c9c6f3996af0758bd327bb07adf4acf3299",
+          "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+          "emitters": [
+            "03_star03_nor_Child"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "reflect": {
+      "source_id": 115,
+      "source_directory": "ew0115",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/38499b6ebbd1e095_cpt_0_flash0003.png",
+          "source_particle": "ew0115_at_start.ptcl",
+          "source_name": "cpt_0_flash0003",
+          "source_sha256": "d8c3fe703a4ea9dd8250156d9d7329a835340157d1b482ad33fa4adf91ee75fc",
+          "png_sha256": "415206b8cebdeb48c53fe21332cba8d865a10a4eab44c31fa216148edda3b853",
+          "emitters": [
+            "kira_line",
+            "kira_line_Y"
+          ],
+          "frames": 8,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0c5f36327753e580_cpt_1_flash0001.png",
+          "source_particle": "ew0115_at_start.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "d8c3fe703a4ea9dd8250156d9d7329a835340157d1b482ad33fa4adf91ee75fc",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "grain_End"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "spikes": {
+      "source_id": 191,
+      "source_directory": "ew0191",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/74258d535446562f_cpt_2_shock0003.png",
+          "source_particle": "ew0191_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "db48dee3cb944ecac80179055959df2bd3f0f69eb77568915258ca6f36365d6a",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "shock"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "stealthrock": {
+      "source_id": 446,
+      "source_directory": "ew0446",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/433706b9733f7d88_cpt_2_shock0003.png",
+          "source_particle": "ew0446_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "306dcebc304fbe30cb0e71217ef04bdac0280b38ee035ca4eb72706737729ee6",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "shock"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "stickyweb": {
+      "source_id": 564,
+      "source_directory": "ew0564",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/7efaebf5a19cc77a_cpt_0_mark0405.png",
+          "source_particle": "ew0564_net_hit.ptcl",
+          "source_name": "cpt_0_mark0405",
+          "source_sha256": "7534dbcac48d8c03e77338213a754fae3e32d15dd97ff6a5036dc9b8c2fe010f",
+          "png_sha256": "cd08b5d2d53a7887732901a9e58c7b7ac32b1d774e844d9535f90d17196daad7",
+          "emitters": [
+            "net"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/bf6b14c84f1c135b_cpt_2_smoke0002.png",
+          "source_particle": "ew0564_net_hit.ptcl",
+          "source_name": "cpt_2_smoke0002",
+          "source_sha256": "7534dbcac48d8c03e77338213a754fae3e32d15dd97ff6a5036dc9b8c2fe010f",
+          "png_sha256": "7673be74d961cbc5652d17fc5fdb755317cc89741188e49c4f32fd4e3b9adb33",
+          "emitters": [
+            "smoke02"
+          ],
+          "frames": 4,
+          "source_alpha": true
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "substitute": {
+      "source_id": 164,
+      "source_directory": "ew0164",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "No supported emitter-bound mask in this source"
+    },
+    "teleport": {
+      "source_id": 100,
+      "source_directory": "ew0100",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/58a6f766a1665b38_cpt_1_circle0001.png",
+          "source_particle": "ew0100_pre.ptcl",
+          "source_name": "cpt_1_circle0001",
+          "source_sha256": "f9afe7fbf7d3dd9b9af094563f02a3d86f14f1e13741aa01d760011bef83cd2b",
+          "png_sha256": "f373ea816e00a78d9840a917a9ae4b2b3c03a6f4bf1f127605b0ddd3e0bcb309",
+          "emitters": [
+            "Emitter1",
+            "grow_nor",
+            "base02_sub",
+            "grow_add"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/3a23a072e80f6dd8_cpt_3_smoke0207.png",
+          "source_particle": "ew0100_pre.ptcl",
+          "source_name": "cpt_3_smoke0207",
+          "source_sha256": "f9afe7fbf7d3dd9b9af094563f02a3d86f14f1e13741aa01d760011bef83cd2b",
+          "png_sha256": "f0417f47065356cbe5aa581aa67853b318552cae7fc29429502692dfb2caff78",
+          "emitters": [
+            "00_pri_dist01"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "toxicspikes": {
+      "source_id": 390,
+      "source_directory": "ew0390",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/ce8bcae38e43d573_cpt_2_shock0003.png",
+          "source_particle": "ew0390_hit.ptcl",
+          "source_name": "cpt_2_shock0003",
+          "source_sha256": "6eb50a47478964f5474ac0075a478512bc8e9252f13acfc930786fd54d1759ed",
+          "png_sha256": "eeb9ab8fb57830c9f02c6b24f500e672a1a3c45cc968685a475e6f7d1eb125a1",
+          "emitters": [
+            "shock"
+          ],
+          "frames": 4,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "wish": {
+      "source_id": 273,
+      "source_directory": "ew0273",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/0ea254837f5b5261_cpt_1_flash0001.png",
+          "source_particle": "ew0273_body.ptcl",
+          "source_name": "cpt_1_flash0001",
+          "source_sha256": "049b6fd09f31490ac2f357141c04a2475dfd97ec9e3d2c2ce6e53597e525b3d4",
+          "png_sha256": "8b148460d420b999b0772035b3a4d577095d683a84a28cf1af85ee5aed017ac4",
+          "emitters": [
+            "star"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        },
+        {
+          "path": "res://assets/battles/moves_3d/sv_recipes/4daa3727b3225fa6_cpt_0_flash0004.png",
+          "source_particle": "ew0273_meteor.ptcl",
+          "source_name": "cpt_0_flash0004",
+          "source_sha256": "6346716bc98d270d8c414ee78221ee31a4b0c9bfc3b3009e8b43e06a23f0d52e",
+          "png_sha256": "1fca8ff0e5a7e00c56eb0e25647eebb32d121c656b2bf76557f9c60ffcf28198",
+          "emitters": [
+            "light1_Copy1"
+          ],
+          "frames": 1,
+          "source_alpha": false
+        }
+      ],
+      "source_mode": "own-move-masks"
+    },
+    "10000000voltthunderbolt": {
+      "source_id": 719,
+      "source_directory": "ew0719",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "aciddownpour": {
+      "source_id": 628,
+      "source_directory": "ew0628",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "alloutpummeling": {
+      "source_id": 624,
+      "source_directory": "ew0624",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "blackholeeclipse": {
+      "source_id": 654,
+      "source_directory": "ew0654",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "bloomdoom": {
+      "source_id": 644,
+      "source_directory": "ew0644",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "breakneckblitz": {
+      "source_id": 622,
+      "source_directory": "ew0622",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "catastropika": {
+      "source_id": 658,
+      "source_directory": "ew0658",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "clangoroussoulblaze": {
+      "source_id": 728,
+      "source_directory": "ew0728",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "continentalcrush": {
+      "source_id": 632,
+      "source_directory": "ew0632",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "corkscrewcrash": {
+      "source_id": 638,
+      "source_directory": "ew0638",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "devastatingdrake": {
+      "source_id": 652,
+      "source_directory": "ew0652",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "extremeevoboost": {
+      "source_id": 702,
+      "source_directory": "ew0702",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "genesissupernova": {
+      "source_id": 703,
+      "source_directory": "ew0703",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "gigavolthavoc": {
+      "source_id": 646,
+      "source_directory": "ew0646",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "guardianofalola": {
+      "source_id": 698,
+      "source_directory": "ew0698",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "hydrovortex": {
+      "source_id": 642,
+      "source_directory": "ew0642",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "infernooverdrive": {
+      "source_id": 640,
+      "source_directory": "ew0640",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "letssnuggleforever": {
+      "source_id": 726,
+      "source_directory": "ew0726",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "lightthatburnsthesky": {
+      "source_id": 723,
+      "source_directory": "ew0723",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "maliciousmoonsault": {
+      "source_id": 696,
+      "source_directory": "ew0696",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "menacingmoonrazemaelstrom": {
+      "source_id": 725,
+      "source_directory": "ew0725",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "neverendingnightmare": {
+      "source_id": 636,
+      "source_directory": "ew0636",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "oceanicoperetta": {
+      "source_id": 697,
+      "source_directory": "ew0697",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "pulverizingpancake": {
+      "source_id": 701,
+      "source_directory": "ew0701",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "savagespinout": {
+      "source_id": 634,
+      "source_directory": "ew0634",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "searingsunrazesmash": {
+      "source_id": 724,
+      "source_directory": "ew0724",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "shatteredpsyche": {
+      "source_id": 648,
+      "source_directory": "ew0648",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "sinisterarrowraid": {
+      "source_id": 695,
+      "source_directory": "ew0695",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "soulstealing7starstrike": {
+      "source_id": 699,
+      "source_directory": "ew0699",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "splinteredstormshards": {
+      "source_id": 727,
+      "source_directory": "ew0727",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "stokedsparksurfer": {
+      "source_id": 700,
+      "source_directory": "ew0700",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "subzeroslammer": {
+      "source_id": 650,
+      "source_directory": "ew0650",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "supersonicskystrike": {
+      "source_id": 626,
+      "source_directory": "ew0626",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "tectonicrage": {
+      "source_id": 630,
+      "source_directory": "ew0630",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    },
+    "twinkletackle": {
+      "source_id": 656,
+      "source_directory": "ew0656",
+      "rejected_particles": [],
+      "textures": [
+        {
+          "path": "res://assets/battles/moves_3d/sv_shadowball/cpt_2_shock0010.png",
+          "source_name": "shared_shadowball_hit",
+          "frames": 8,
+          "source_alpha": false,
+          "png_sha256": "c232242ce0ff96f30c42bd7a514e50e23b3f8999ed9a780a56720b44a103f552"
+        }
+      ],
+      "source_mode": "shared-SV-mask",
+      "fallback_reason": "Move directory absent from this SV dump"
+    }
+  }
+}

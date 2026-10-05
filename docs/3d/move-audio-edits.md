@@ -73,6 +73,6 @@ Focused checks:
 
 The user approved the previous 23-move presentation/audio batch on 6 October
 2026. Draco Meteor uses a 1.376s charge/ascent edit and 0.65s impact edit of its existing
-WAVs; its subjective review remains pending. Open the existing batch preview with
+WAVs; the user approved its presentation on 6 October 2026. Open the existing batch preview with
 `--moves --audio-review` through the assigned slot's `slot-env`. Its move picker
 also includes the previously approved moves.
