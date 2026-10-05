@@ -4690,7 +4690,7 @@ func _show_shiny_replay_favorite_dialog(battle_id: String, species: String) -> v
 	dialog.confirmed.connect(func(): _save_shiny_replay_as_favorite.call_deferred(battle_id))
 	dialog.confirmed.connect(dialog.queue_free, CONNECT_ONE_SHOT)
 	dialog.canceled.connect(dialog.queue_free, CONNECT_ONE_SHOT)
-	dialog.popup_centered(Vector2i(560, 250))
+	dialog.popup_centered(Vector2i(480, 210))
 
 
 func _save_shiny_replay_as_favorite(battle_id: String) -> void:

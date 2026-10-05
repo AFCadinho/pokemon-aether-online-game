@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Reduce the shiny replay favorite prompt to fit its short message more closely.
 - Use the approved source-textured Ember effect in 3D battles, retaining synchronized move sounds and hit reactions.
 
 - Add native 3D effects for Tackle, Scratch, Bite, Ember, Water Gun and Thunder Shock, with synchronized existing move sounds, compact attack playback and event-confirmed impacts.
