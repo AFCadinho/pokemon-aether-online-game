@@ -22,6 +22,7 @@ var substitute_models: Array = [null, null, null, null]
 var fallback_effect_bounds := {}
 const ModelPlacement = preload("res://scripts/battle/battle_ui/model_placement.gd")
 const ModelCache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
+const MoveAttachments = preload("res://scripts/battle/battle_ui/move_attachments_3d.gd")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const ActionMap = preload("res://scripts/battle/animations/model_action_map.gd")
 const AttackSelection = preload("res://scripts/battle/animations/model_attack_selection.gd")
@@ -888,7 +889,14 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var direction := (end-source).normalized()
 	source += direction * minf(a.radius * 0.55, (end-source).length()*0.15)
 	end -= direction * minf(b.radius * 0.5, (end-source).length()*0.15)
-	return {"source": source, "target": end, "radius": b.radius}
+	var attachment := {}
+	var index := actor_index(actor)
+	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
+	if _move_visual(actor) == actors[index]:
+		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world)
+	var sources: Array = attachment.get("sources", [source])
+	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
+		"attachment_part": attachment.get("part", "bounds"), "attachment_bones": attachment.get("bones", [])}
 
 func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
 	if not can_present_move(move): return null

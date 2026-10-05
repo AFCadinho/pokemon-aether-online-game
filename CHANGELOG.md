@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Anchor 3D move effects to animated mouth points for Charmander and Squirtle, and fire Blastoise’s Water Gun from both moving cannons.
+
 - Use the approved source-textured Ember effect in 3D battles, retaining synchronized move sounds and hit reactions.
 
 - Add native 3D effects for Tackle, Scratch, Bite, Ember, Water Gun and Thunder Shock, with synchronized existing move sounds, compact attack playback and event-confirmed impacts.

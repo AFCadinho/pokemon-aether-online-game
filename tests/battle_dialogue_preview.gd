@@ -441,7 +441,9 @@ func _field_screenshot(output: String, key: String) -> void:
 
 func _build_move_controls() -> void:
 	var models := OptionButton.new()
-	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise"]: models.add_item(species)
+	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise"]:
+		models.add_item(species)
+		if species == left_species: models.select(models.item_count - 1)
 	models.item_selected.connect(func(index):
 		if move_busy: return
 		left_species = models.get_item_text(index)
