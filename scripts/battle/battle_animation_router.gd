@@ -233,6 +233,14 @@ func play_move_animation(move_name: String, actor_ident: String = "", _target_id
 		prepared_moves.erase(actor_ident)
 		var playback_options := options.duplicate()
 		playback_options["native_timing"] = prepared.get("pilot", {})
+		if _is_miss_animation(playback_options):
+			if model_presenter.has_method("hold_move_command"): model_presenter.hold_move_command(actor_ident, true)
+			await _notify_dodge_started(playback_options)
+			if owned_generation != render_generation or not uses_realtime_3d():
+				if is_instance_valid(prepared.get("audio")): _release_3d_audio(prepared.get("audio"))
+				return
+			if model_presenter.has_method("hold_move_command"): model_presenter.hold_move_command(actor_ident, false)
+			if model_presenter.has_method("start_move_dodge"): model_presenter.start_move_dodge(actor_ident, _target_ident, move_name)
 		var effect: Node
 		if model_presenter.has_method("create_move_effect"):
 			effect = model_presenter.create_move_effect(move_name, actor_ident, _target_ident, playback_options)

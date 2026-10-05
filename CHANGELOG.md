@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a trainer’s “Dodge!” command before a missed 3D attack; Pokémon and Substitutes sidestep while the move passes through their original position.
+
 - Center the shiny replay favorite prompt in the screen UI and size it to its message.
 - Anchor 3D move effects to animated mouth points for Charmander and Squirtle, and fire Blastoise’s Water Gun from both moving cannons.
 

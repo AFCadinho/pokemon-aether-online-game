@@ -74,7 +74,7 @@ func _run() -> void:
 	assert(not completed)
 	router.cancel_render()
 	await get_tree().process_frame
-	assert(completed and misses == 1, "Cancellation must release waits and suppress stale miss callbacks")
+	assert(completed and misses == 2, "Dodge is announced before the attack; cancellation must not repeat it")
 	assert(router.active_audio_nodes.is_empty(), "Cancellation must release audio ownership")
 	presenter.active = false
 	await router.play_move_animation("Outrage", "p1", "p2")
@@ -83,7 +83,7 @@ func _run() -> void:
 	presenter.active = true
 	SettingsManager.battle_animations = false
 	await router.play_move_animation("Outrage", "p1", "p2", {"result":"miss","on_dodge_started":_miss})
-	assert(misses == 2, "Animation preference must preserve the miss callback")
+	assert(misses == 3, "Animation preference must preserve the miss callback")
 	router.cancel_render()
 	presenter.queue_free()
 	await get_tree().process_frame

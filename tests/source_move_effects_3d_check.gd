@@ -34,6 +34,8 @@ func _run() -> void:
 				old.view_camera = camera
 				old.start(move, {"frames":60.0, "impact_frame":27.0}, options, func(): return seconds, func(): return anchors, func(): return true)
 				old.set_process(false)
+				# Keep the approved visual recipe; misses now aim straight while the target dodges.
+				old.miss = false
 				approved = ApprovedPilot.new()
 				add_child(approved)
 				approved.configure(old, source_dir, manifest)

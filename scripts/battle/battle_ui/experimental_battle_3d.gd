@@ -14,6 +14,9 @@ const MoveEffect = preload("res://scripts/battle/battle_ui/move_effect_3d.gd")
 const SourceMoveEffect = preload("res://scripts/battle/battle_ui/source_move_effect_3d.gd")
 const CommonBattleEffect = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
 var common_effects: Array[Node] = []
+var move_command_holds := [false, false, false, false]
+var move_dodges: Array[Dictionary] = [{}, {}, {}, {}]
+var dodge_offsets := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
 const StatusEffect = preload("res://scripts/battle/battle_ui/status_effect_3d.gd")
 var status_conditions := ["", "", "", ""]
 var status_effects: Array = [null, null, null, null]
@@ -675,6 +678,9 @@ func cancel_actions() -> void:
 		_action("reset", index)
 
 func _cancel_common_effects() -> void:
+	for index in 4:
+		_clear_move_dodge(index)
+		move_command_holds[index] = false
 	for effect: Node in common_effects.duplicate():
 		if is_instance_valid(effect):
 			effect.cancel()
@@ -707,7 +713,7 @@ func _sync_substitute_models() -> void:
 			doll.build(_effect_bounds(index).height, common_effect_speed)
 			substitute_models[index] = doll
 		var doll: Node3D = substitute_models[index]
-		doll.position = _position(index)
+		doll.position = _position(index) + dodge_offsets[index]
 		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - doll.position
 		doll.rotation.y = atan2(direction.x,direction.z)
 		doll.visible = _substitute_visible(index) and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty", "send_out", "recall", "capture"]
@@ -862,6 +868,82 @@ func create_common_effect(key: String, ident: String) -> Node:
 	effect.start(key, body_height, body_radius, guard, common_effect_speed)
 	return effect
 
+func hold_move_command(ident: String, held: bool) -> void:
+	if not handles(ident): return
+	var index := actor_index(ident)
+	move_command_holds[index] = held
+	if is_instance_valid(players[index]): players[index].speed_scale = 0.0 if held else playback_speed
+
+func start_move_dodge(actor: String, target: String, move: String) -> void:
+	var source := _move_visual(actor)
+	var destination := _move_visual(target)
+	if source == null or destination == null or actor_index(actor) == actor_index(target): return
+	var source_index := actor_index(actor)
+	var index := actor_index(target)
+	if not is_instance_valid(players[source_index]): return
+	var clock := bind_action_clock(actor)
+	if not clock.is_valid(): return
+	_clear_move_dodge(index)
+	var duration: float = players[source_index].current_animation_length
+	if duration <= 0.0: return
+	var timing := move_timing(move, actor)
+	var impact := clampf(float(timing.get("impact_frame", duration * 60.0 * 0.45)) / 60.0, duration * 0.2, duration * 0.65)
+	var bounds := _move_bounds(target)
+	var forward: Vector3 = bounds.position - _move_bounds(actor).position
+	forward.y = 0
+	if forward.length_squared() < 0.001: forward = Vector3.FORWARD
+	var side := Vector3.UP.cross(forward.normalized())
+	var distance := clampf(float(bounds.radius) * 1.4 + 0.35, 0.8, 2.4)
+	move_dodges[index] = {"source": source, "target": destination, "actor": actor, "target_ident": target,
+		"clock": clock, "duration": duration, "impact": impact, "displacement": side * distance,
+		"hop": minf(float(bounds.height) * 0.08, 0.16)}
+
+func _set_dodge_offset(index: int, offset: Vector3) -> void:
+	var change: Vector3 = offset - dodge_offsets[index]
+	dodge_offsets[index] = offset
+	# Apply immediately too: cancellation restores the pose even while paused.
+	if is_instance_valid(actors[index]): actors[index].position += change
+	if is_instance_valid(substitute_models[index]): substitute_models[index].position += change
+
+func _clear_move_dodge(index: int) -> void:
+	_set_dodge_offset(index, Vector3.ZERO)
+	move_dodges[index] = {}
+
+func _update_move_dodges() -> void:
+	for index in 4:
+		var dodge: Dictionary = move_dodges[index]
+		if dodge.is_empty(): continue
+		if not active or _move_visual(dodge.actor) != dodge.source or _move_visual(dodge.target_ident) != dodge.target:
+			_clear_move_dodge(index)
+			continue
+		var seconds: float = dodge.clock.call()
+		var duration: float = dodge.duration
+		if seconds >= duration - 0.00001:
+			_clear_move_dodge(index)
+			continue
+		# Snap aside before contact, hold until the beam/tail passes, then return.
+		# Native-clock sampling makes pause and playback speed match the move.
+		var out_start := maxf(0, float(dodge.impact) - duration * 0.2)
+		var out_phase := clampf((seconds - out_start) / (duration * 0.16), 0, 1)
+		var return_start := minf(maxf(float(dodge.impact) + duration * 0.3, duration * 0.7), duration * 0.82)
+		var return_phase := clampf((seconds - return_start) / (duration * 0.18), 0, 1)
+		var weight := (1.0 - pow(1.0 - out_phase, 3)) * (1.0 - smoothstep(0, 1, return_phase))
+		var hop := sin(out_phase * PI) if return_phase <= 0 else sin(return_phase * PI) * 0.5
+		_set_dodge_offset(index, dodge.displacement * weight + Vector3.UP * hop * float(dodge.hop))
+
+func wait_move_dodge(target: String) -> void:
+	var index := actor_index(target)
+	if index < 0: return
+	while is_inside_tree() and active and not move_dodges[index].is_empty():
+		_update_move_dodges()
+		if not move_dodges[index].is_empty(): await get_tree().process_frame
+
+func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float) -> Dictionary:
+	var anchors := _move_anchors(actor, target, move)
+	anchors.target = point
+	anchors.radius = radius
+	return anchors
+
 func can_present_move(move: String) -> bool:
 	return active and is_instance_valid(world) and MoveEffect.supports(move)
 
@@ -910,7 +992,12 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	effect.view_camera = camera
 	common_effects.append(effect)
 	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
-	effect.start(move, timing, options, bind_action_clock(actor), _move_anchors.bind(actor,target,move),
+	var positions := _move_anchors.bind(actor, target, move)
+	if str(options.get("result", "")).strip_edges().to_lower() == "miss":
+		var aim := _move_anchors(actor, target, move)
+		# Aim at the original position; a dodging target must not drag the beam.
+		positions = _fixed_target_move_anchors.bind(actor, target, move, aim.target, aim.radius)
+	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
 	return effect
 
@@ -2044,6 +2131,8 @@ func _process(delta: float) -> void:
 	reason = "Experimental 3D active"
 	for i in _slot_count():
 		if desired[i].is_empty():
+			_clear_move_dodge(i)
+			move_command_holds[i] = false
 			action_generation[i] += 1
 			if is_instance_valid(actors[i]):
 				actors[i].queue_free()
@@ -2052,6 +2141,8 @@ func _process(delta: float) -> void:
 			identities[i] = ""
 			continue
 		if identities[i] != desired[i]:
+			_clear_move_dodge(i)
+			move_command_holds[i] = false
 			var actor_started := Time.get_ticks_usec()
 			if is_instance_valid(actors[i]):
 				actors[i].queue_free()
@@ -2073,7 +2164,7 @@ func _process(delta: float) -> void:
 			_action(restoring[i], i)
 			hover_offsets[i] = ModelPlacement.hover_target(placements[desired[i]], current_actions[i], 0.0, players[i].current_animation_length)
 			actor_build_ms += (Time.get_ticks_usec() - actor_started) / 1000.0
-		players[i].speed_scale = 0.0 if status_conditions[i] == "frozen" and resting[i] else playback_speed
+		players[i].speed_scale = 0.0 if move_command_holds[i] or (status_conditions[i] == "frozen" and resting[i]) else playback_speed
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
 			_action(restoring[i], i)
 		actors[i].visible = warming_render or actor_shown[i]
@@ -2091,8 +2182,9 @@ func _process(delta: float) -> void:
 			actors[i].position = _position(i)
 			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
-		actors[i].position = _position(i) + actor_transition_offsets[i]
+		actors[i].position = _position(i) + actor_transition_offsets[i] + dodge_offsets[i]
 		actors[i].position.y += float(placements[identities[i]].lift) + motion_offsets[i] + hover_offsets[i]
+	_update_move_dodges()
 	_sync_substitute_models()
 	_sync_status_effects()
 	_prune_models()

@@ -67,8 +67,7 @@ func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha
 func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) -> bool:
 	var facing := Basis(right, up, right.cross(up))
 	if key == "ember":
-		# Preserve the approved pilot's world-up miss offset.
-		_draw_ember(from, to + (Vector3.UP - up) * 0.4 if miss else to, right, facing)
+		_draw_ember(from, to, right, facing)
 		return true
 	if key == "watergun":
 		_draw_watergun(from, to, facing)
