@@ -4,7 +4,7 @@ The existing 2D effect catalog supplies canonical event keys, aliases and sound
 metadata. Active desktop 3D battles present general events using short native
 geometry from `common_battle_effect_3d.gd`, owned by the arena. One-shot effects leave model poses/materials and gameplay state alone. Persistent
 status presentation separately owns a reversible tint overlay and quiet repeating
-particles; native sleep/frozen idle playback follows the displayed condition. Actual 2D fallback retains its current presentation.
+sleep/freeze particles; native sleep/frozen idle playback follows the displayed condition. Actual 2D fallback retains its current presentation.
 
 ## Coverage
 
@@ -99,8 +99,11 @@ condition is retained for actual 2D fallback. Single battles and all four co-op
 slots feed the same displayed condition into the native presenter, preserving
 pending-status event order.
 
-Native poison/toxic, burn, paralysis, freeze and sleep use a quiet model tint
-between periodic particle pulses. The loops are silent and follow replay pause.
+Native poison/toxic, burn and paralysis keep only the quiet model tint between
+events. Their one-shot activation/damage/block effects retain particles. Sleep
+and freeze retain silent particle pulses following replay pause. Sleep glyphs
+use a camera-relative layout above the model, updated as the camera rotates;
+their materials face the camera and their anchor follows the Pokémon.
 Frozen resting playback pauses; sleep retains the native sleep clip. Per-actor
 material overlays preserve existing materials and co-op target outlines; cure,
 visibility changes, replacement and arena cleanup restore their ownership.
@@ -152,12 +155,12 @@ Only explicit player approval completes an entry.
 - [x] Z-Moves / Z-Power
 - [x] Item activation — golden bands and particles sweeping up and down; approved after gem-before-attack timing fix
 - [x] Berry eating
-- [ ] Poison — bubble diameter reduced by 40%; awaiting visual approval
-- [ ] Toxic — same smaller bubbles; awaiting visual approval
-- [ ] Burn
-- [ ] Paralysis
+- [ ] Poison — persistent tint only; short event particles; awaiting visual approval
+- [ ] Toxic — persistent tint only; short event particles; awaiting visual approval
+- [ ] Burn — persistent tint only; awaiting visual approval
+- [ ] Paralysis — persistent tint only; awaiting visual approval
 - [ ] Freeze
-- [ ] Sleep
+- [ ] Sleep — Z glyph layout follows camera rotation; awaiting visual approval
 - [ ] Substitute
 - [ ] Mega evolution
 
@@ -165,3 +168,9 @@ Gem activation events emitted after a move announcement are presented before
 that move's animation. This uses the same ordered batch for rendering and HP
 rewind, including replays. Only the attacker's gem consumption moves; defensive
 items, berries, recoil and end-of-turn effects retain their event order.
+
+Camera regression coverage checks the projected sleep glyph layout from four
+orbit angles for both persistent and one-shot effects, plus model movement.
+The status lifecycle check also confirms quiet statuses allocate no persistent
+particles while their event effects still do. Rendered previews were reviewed
+from four camera angles, alongside poison/burn tint-only previews.

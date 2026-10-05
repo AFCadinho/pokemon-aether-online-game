@@ -47,6 +47,7 @@ func _run() -> void:
 	router.model_presenter = stage
 	router.animation_parent = stage
 	await _status()
+	_sleep_camera()
 	await _substitute()
 	await _mega()
 	_audio()
@@ -73,6 +74,13 @@ func _status() -> void:
 			stage.set_status_condition(index,condition)
 			var effect: Node = stage.status_effects[index]
 			assert(is_instance_valid(effect) and effect.actor == stage.actors[index])
+			if condition in ["psn","tox","brn","par"]:
+				assert(effect.particles.is_empty(), "Persistent status tint must not repeat distracting particles")
+				var pulse: Node = stage.create_common_effect(effect.key,"p%d" % (index+1))
+				assert(not pulse.particles.is_empty(), "Activation/damage feedback still has short particles")
+				pulse.cancel()
+			else:
+				assert(not effect.particles.is_empty(), "Sleep and freeze retain their persistent visuals")
 			effect._process(8.0)
 			assert(not effect.done and stage.actors[index].material_overlay != original)
 			var elapsed: float = effect.cycle
@@ -189,3 +197,29 @@ func _audio() -> void:
 			assert(path.ends_with("PRSFX- Bite.wav") and is_equal_approx(cue.at_seconds,plan.duration_seconds*0.32))
 		else:
 			assert(path.ends_with("UseItem.ogg") and cue.at_seconds == 0.0)
+
+
+func _sleep_camera() -> void:
+	stage.set_status_condition(0,"slp")
+	var persistent: Node = stage.status_effects[0]
+	var pulse: Node = stage.create_common_effect("status_sleeping","p1")
+	for effect: Node in [persistent,pulse]:
+		effect.set_process(false)
+		effect.elapsed = effect.duration * 0.45
+		var reference: Array[Vector2] = []
+		for direction in [Vector3(0,1,6),Vector3(6,3,0),Vector3(0,4,-6),Vector3(-6,1,0)]:
+			var anchor: Vector3 = effect.to_global(Vector3.UP * effect.height)
+			stage.camera.position = anchor + direction.normalized() * 6.0
+			stage.camera.look_at(anchor)
+			effect._update_visuals()
+			for index in effect.particles.size():
+				var offset: Vector2 = stage.camera.unproject_position(effect.particles[index].global_position) - stage.camera.unproject_position(anchor)
+				assert(offset.x > 0 and offset.y < 0, "Zs remain above and beside the model at every camera angle")
+				if reference.size() <= index: reference.append(offset)
+				else: assert(offset.distance_to(reference[index]) < 0.01, "Camera orbit must preserve the Z layout")
+	stage.actors[0].position += Vector3(1,0.5,0)
+	stage._sync_status_effects()
+	assert(persistent.position.is_equal_approx(stage._effect_bounds(0).position), "Persistent Zs follow their Pokemon's anchor")
+	stage.actors[0].position = Vector3.ZERO
+	pulse.cancel()
+	stage.set_status_condition(0,"")

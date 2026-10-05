@@ -33,6 +33,7 @@ var shell: MeshInstance3D
 var aura: MeshInstance3D
 var berry_parts: Array[MeshInstance3D] = []
 var front := Vector3(0,0,1)
+var view_camera: Camera3D
 
 static func supports(effect: String) -> bool:
 	return PROFILES.has(effect)
@@ -245,6 +246,11 @@ func _update_visuals() -> void:
 	var progress := clampf(elapsed / duration, 0.0, 1.0)
 	var envelope := minf(progress / 0.12, (1.0 - progress) / 0.22)
 	envelope = clampf(envelope, 0.0, 1.0)
+	# Billboard materials turn each glyph, but their layout must follow the
+	# camera too, or orbiting moves the Zs behind/across the sleeping model.
+	var sleep_basis := Basis.IDENTITY
+	if style == "sleep" and is_instance_valid(view_camera):
+		sleep_basis = global_basis.inverse() * view_camera.global_basis.orthonormalized()
 	var item_sweep := 0.5 - 0.5 * cos(progress * TAU)
 	for index in particles.size():
 		var node := particles[index]
@@ -262,7 +268,7 @@ func _update_visuals() -> void:
 			"fire": size = 0.8 + 0.4 * sin(progress * 22.0 + index); y = height * (0.15 + phase * 0.65)
 			"ice": size = 0.9; y = height * (0.2 + offset * 0.65); angle = offset * TAU
 			"electric": y = height * (0.25 + offset * 0.55); size *= 1.1; spread *= 0.75
-			"sleep": y = height * (0.85 + offset * 0.5 + progress * 0.3); spread *= 0.35; size *= 1.0 + offset
+			"sleep": size *= 0.8 * (1.0 + offset)
 			"confused": y = height * 1.1 + sin(angle * 2.0) * 0.1; angle += progress * TAU; spread *= 0.7; size *= 0.65
 			"wish": y = height * (1.45 - progress * 0.9 + offset * 0.15); spread *= 1.0 - progress * 0.65; size *= 0.75
 			"shiny": y = height * (0.2 + offset * 0.8); spread *= 0.4 + progress * 1.1
@@ -274,6 +280,8 @@ func _update_visuals() -> void:
 			"berry": y = height * 0.65 - maxf(0.0,progress - 0.32) * height * 0.4; spread *= maxf(0.0,progress - 0.32) * 0.6; size = 0.5 * (1.0 - progress)
 			"shield": y = height * (0.2 + offset * 0.6); spread *= 1.1; size *= 0.5
 		node.position = Vector3(cos(angle) * spread, y, sin(angle) * spread)
+		if style == "sleep":
+			node.position = Vector3.UP * height + sleep_basis.x * radius * (0.08 + offset * 0.35) + sleep_basis.y * (index * clampf(height * 0.15, 0.16, 0.4) * 1.1 + height * progress * 0.18)
 		if style == "berry": node.position += front * radius * 0.9
 		node.scale = Vector3.ONE * maxf(size, 0.01)
 		if style == "fire": node.scale.y *= 2.0
