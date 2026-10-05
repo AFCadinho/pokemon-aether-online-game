@@ -2,6 +2,8 @@ extends RefCounted
 ## Initial pose-reviewed pilot. Frame markers use the native clip clock, not
 ## sprite frames or wall time. Unreviewed moves retain their existing timeline.
 const PILOTS := {
+	# Same reviewed Pikachu discharge pose used by the Thunderbolt pilot.
+	"pikachu:thundershock": {"action": "special_attack", "frames": 120.0, "launch_frame": 20.0, "impact_frame": 48.0},
 	"charmander:ember": {"action": "special_attack_2", "frames": 138.0, "launch_frame": 40.0, "impact_frame": 64.0},
 	"pikachu:thunderbolt": {"action": "special_attack", "frames": 120.0, "impact_frame": 48.0,
 		"sounds": {"PRSFX- Thunderbolt2.wav": 20.0, "PRSFX- Thunderbolt1.wav": 48.0}},

@@ -82,6 +82,7 @@ func _run() -> void:
 			assert(is_instance_valid(effect))
 			if move == "ember": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Ember must use packaged source textures")
 			if move in ["tackle", "scratch", "bite"]: assert(effect.get_script() == Stage.ContactMoveEffect)
+			if move == "thundershock": assert(effect.get_script() == Stage.ElectricMoveEffect)
 			if move == "watergun": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Water Gun must use packaged source textures")
 			effect.set_process(false)
 			stage.players[slot].seek(effect.impact+0.04,true)

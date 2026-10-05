@@ -6,6 +6,7 @@ const MOVE_PARTS := {
 	"ember": "mouth", "watergun": "mouth", "thundershock": "body",
 }
 const PROFILES := {
+	"pikachu": {"electric_body": [["spine_02", Vector3.ZERO]]},
 	"charmander": {
 		"mouth": [["head", Vector3(0.05, 0, 0.195)]],
 		"hand": [["right_hand", Vector3(0.033, 0, 0)]],
@@ -16,7 +17,7 @@ const PROFILES := {
 		"cannons": [["left_feeler_b_02", Vector3(0.261, 0, 0)], ["right_feeler_b_02", Vector3(0.261, 0, 0)]],
 	},
 }
-const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons"}}
+const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons"}, "pikachu": {"thundershock": "electric_body"}}
 const CACHE_META := &"move_attachment_bindings"
 
 static func part_for(identity: String, move_key: String) -> String:
