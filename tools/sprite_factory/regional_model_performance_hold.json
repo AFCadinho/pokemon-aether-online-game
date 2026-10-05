@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "resolved_by_raster_fix_and_complete_requalification",
+  "pairs": 58,
+  "models": 116,
+  "bundles": 58,
+  "bundle_size_bytes": 807233937,
+  "installation_passed": true,
+  "on_demand_runtime_passed": true,
+  "performance_qualified": false,
+  "registry_admitted": false,
+  "published": false,
+  "p95_limit_ms": 20.0,
+  "control_species": [
+    "blastoise",
+    "furret",
+    "yanma",
+    "pikachu-alola",
+    "zigzagoon-galar",
+    "growlithe-hisui"
+  ],
+  "control_steady_frame_p95_ms": {
+    "classic": {
+      "p95_ms": 17.224,
+      "samples": 2880.0
+    },
+    "stadium": {
+      "p95_ms": 21.632,
+      "samples": 1440.0
+    }
+  },
+  "control_window_size": [
+    1280,
+    720
+  ],
+  "control_forced_test_frames": 1,
+  "scope": "Local AMD Compatibility. Control includes previously admitted Blastoise, Furret and Yanma alongside three candidates. No complete passing 58-pair stress run exists.",
+  "evidence_sha256": {
+    ".tmp/regional-production-v1/admission-v1/install.log": "f4a0ca96588d749cf73554bf18e21d3b15362f674eb975b5cf24388247efa09d",
+    ".tmp/regional-production-v1/admission-v1/diagnostic-control-stress.json": "259246107d4a62fb6377651765c3fdb47c2916269655b3b217e99ebd1c927d66",
+    ".tmp/regional-production-v1/admission-v1/diagnostic-control.log": "59af55be04989cf596c818324eac858e42f3d09a657a429b56a872ed4aee1e70",
+    ".tmp/regional-production-v1/admission-v1/diagnostic-control-command.json": "353a29b53246df3a59ed1b681994a6c49704e8b2e77589e1167a4f6245f220e6",
+    ".tmp/regional-production-v1/admission-v1/stress-incomplete-competing-preview.log": "4997615d0424d99aeea97e57f4251eecf068e3ab4f4cd25f134c40acb233d2c8",
+    ".tmp/regional-production-v1/admission-v1/stress-incomplete-frame-force-diagnostic.log": "42c81271b9a9e5d62b4178126d4a3361a5cfeaeaec16f7b7ccef0c1362714f19",
+    ".tmp/regional-production-v1/admission-v1/runtime-before-development-merge.log": "3057fd188f2234e4c291315faef58f22009d57fc963bc0cce7bcd07519d212d4",
+    ".tmp/regional-production-v1/admission-v1/runtime.log": "3057fd188f2234e4c291315faef58f22009d57fc963bc0cce7bcd07519d212d4",
+    ".tmp/regional-production-v1/performance-investigation/raster-fixed-control.json": "dd08dcfb6db4457cc5f9bd05cd6ad11573f64d0a77fcf20ffbe4a124b88dcb9e",
+    ".tmp/regional-production-v1/admission-v1/stress-incomplete-restart-and-thunderbolt-preview.log": "d875e664eb67d735c1c404df50371cbfcdf59930a04a0fd465dc0b0af687763d"
+  },
+  "remaining": [
+    "Local integration",
+    "Separately authorized R2 upload and release index activation"
+  ],
+  "followup": {
+    "status": "qualified_locally_not_published",
+    "fix_commit": "6a59803ae",
+    "development_merge": "8b007e1f9",
+    "runtime_pairs_passed": 58,
+    "remaining": "Local integration, then separately authorized R2 upload and index activation",
+    "qualification_sha256": "792032fcc4fdd004588ea88fb1ea0fe19b4c31c8fa2fb0aa43137eac1e207dd0"
+  }
+}
