@@ -99,8 +99,10 @@ closing and reopening the virtual device.
 ## Laptop viewing size
 
 When starting the dedicated AVD, the launcher writes `window.scale = 0.700000`
-to its local `emulator-user.ini` and rotates the emulator's presentation once
-before opening the app. This displays the landscape game at 1680×756 desktop
+to its local `emulator-user.ini` and rotates the emulator's presentation three
+clockwise quarter-turns (90° counterclockwise) before opening the app. One
+clockwise turn leaves Godot's fixed landscape image upside down in the host
+window. This displays the upright landscape game at 1680×756 desktop
 pixels on the 1920×1080 laptop panel. Use `--window-scale 0.5`, for example, for
 a smaller view on the next cold start. An already-open emulator is left alone.
 
@@ -112,7 +114,12 @@ The obsolete emulator `-scale` option is ignored by current SDK versions.
 The emulator resets its stored viewing scale on exit, so the launcher applies
 the preference before each cold start. App data is retained.
 
+Verify orientation using a capture of the actual emulator desktop window.
+An ADB screenshot shows only Android's framebuffer and cannot reveal the
+host-window rotation.
+
 This viewing configuration passed 541 native UI checks and Android edge taps.
-An occasional first app launch after a cold boot exits during Android's late
-resource configuration change. Reopening the same desktop shortcut works;
-the host-window size and installed apps are retained.
+An occasional first app launch after a cold boot runs before Android resolves
+the installed activity, or exits during its late resource configuration change.
+Reopening the same desktop shortcut works; the host-window size, orientation
+and installed apps are retained.
