@@ -72,7 +72,7 @@ func _run() -> void:
 		var copy := source.duplicate(true)
 		var plan := Effect.audio_plan(source,timing)
 		assert(source == copy and plan.cues.size() == (2 if move in ["thunderbolt","razorleaf"] or Effect.IMPACT_SOUNDS.has(move) else 1) and plan.sound_paths != source.sound_paths)
-		var expected: float = 0.0 if move == "moonblast" else (timing.impact_frame/60.0 if move in ["tackle","scratch","bite"] else timing.impact_frame/60.0-0.28)
+		var expected: float = 0.0 if move in ["moonblast","dracometeor"] else (timing.impact_frame/60.0 if move in ["tackle","scratch","bite"] else timing.impact_frame/60.0-0.28)
 		assert(is_equal_approx(plan.cues[0].at_seconds,expected))
 		if move in ["thunderbolt","razorleaf"] or Effect.IMPACT_SOUNDS.has(move): assert(is_equal_approx(plan.cues[1].at_seconds,timing.impact_frame/60.0))
 		for slot in 4:
@@ -85,6 +85,7 @@ func _run() -> void:
 			if move in ["tackle", "scratch", "bite", "quickattack"]: assert(effect.get_script() == Stage.ContactMoveEffect)
 			if move == "thundershock": assert(effect.get_script() == Stage.ElectricMoveEffect)
 			if move == "thunderbolt": assert(effect.get_script() == Stage.ThunderboltMoveEffect)
+			if move=="dracometeor": assert(effect.get_script()==Stage.DracoMeteorEffect)
 			if move in Stage.BatchFourMoveEffect.MOVE_KEYS: assert(effect.get_script() == Stage.BatchFourMoveEffect)
 			if move == "icebeam": assert(effect.get_script() == Stage.IceBeamMoveEffect)
 			if move == "razorleaf": assert(effect.get_script() == Stage.LeafMoveEffect)

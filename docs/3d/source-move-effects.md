@@ -19,10 +19,12 @@
 - **Ice Beam, Razor Leaf and Quick Attack: visually approved by the user.**
   See [ice, leaf and quick effects](ice-leaf-quick-effects.md).
 
-- **Fourth batch: ten moves implemented; visual approval pending.**
+- **Fourth batch: all ten visually approved by the user (6 October 2026).**
   Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting,
   Swift, Flash Cannon, Magical Leaf and Water Pulse. See
   [fourth source batch](source-move-batch-four.md).
+
+- **Draco Meteor: implemented; visual approval pending.** See [Draco Meteor](draco-meteor.md).
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,

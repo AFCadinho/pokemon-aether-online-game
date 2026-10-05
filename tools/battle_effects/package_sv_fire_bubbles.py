@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 from PIL import Image
 from sv_batch_four import TEXTURES as BATCH_FOUR_TEXTURES
+from sv_draco_meteor import TEXTURES as DRACO_TEXTURES
 
 SELECTION = {
     'flamethrower': {'ew0053_fire': ['cpt_2_fire0007s', 'cpt_3_flow0703s'],
@@ -23,6 +24,7 @@ SELECTION = {
 }
 
 SELECTION.update(BATCH_FOUR_TEXTURES)
+SELECTION['dracometeor'] = DRACO_TEXTURES
 
 
 def package(source, output):

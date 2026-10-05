@@ -1,6 +1,6 @@
 # Fourth source move batch: ten ranged moves
 
-Implemented in normal 3D battles. **Visual approval pending for all ten.**
+Implemented in normal 3D battles. **All ten visually approved by the user on 6 October 2026**, including the later size, audio and Moonblast revisions.
 The previous thirteen moves retain their approved effects.
 
 | Move | Own SV source | Inspected emitters | Presentation |
@@ -48,8 +48,8 @@ still fail closed. Extraction and packaging do not modify the dump.
 - Focus Blast, Moonblast, Ice Shard, Swift and Magical Leaf use body origins.
   Released projectiles hold their launch position; subsequent head movement
   cannot drag them. Flash Cannon continuously follows its emitting bones.
-- Geometry, audio and impact share the native action clock. The existing
-  supported-move cap of 1.25 seconds remains in place. No wall-clock shader
+- Geometry, audio and impact share the native action clock. The supported-move cap is 1.25 seconds, with a reviewed two-second
+  Moonblast presentation. No wall-clock shader
   `TIME`, random placement per frame or independent particle timer is used.
 - All ten now use [short 3D edits](move-audio-edits.md) of their existing sounds.
   Shadow Ball, Sludge Bomb, Moonblast,

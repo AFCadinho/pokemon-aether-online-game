@@ -1,6 +1,28 @@
 {
   "note": "Authored 3D edits of existing 2D assets; no original SV audio.",
   "entries": {
+    "PRSFX- Draco Meteor2.wav": {
+      "role": "charge",
+      "path": "res://assets/battles/moves_3d/audio_edited/dracometeor_charge.wav",
+      "source": "res://assets/battles/animations/dracometeor/PRSFX- Draco Meteor2.wav",
+      "source_sha256": "22e9e5d483c30a12342f0d9e3797a7f65bc4d0e9eb30a5027283c870d375ff40",
+      "sha256": "9bde32050a52c1bffbebe794142f77cb8637022053ce5cd79e7672e1adf5c445",
+      "source_start": 0,
+      "source_end": 1.7,
+      "duration_seconds": 1.3760090702947845,
+      "filters": "atrim=start=0:end=1.7,asetpts=PTS-STARTPTS,atempo=1.235465116,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.376,atrim=duration=1.376,afade=t=in:d=0.005,afade=t=out:st=1.321000:d=0.055"
+    },
+    "PRSFX- Draco Meteor1.wav": {
+      "role": "impact",
+      "path": "res://assets/battles/moves_3d/audio_edited/dracometeor_impact.wav",
+      "source": "res://assets/battles/animations/dracometeor/PRSFX- Draco Meteor1.wav",
+      "source_sha256": "55471a82bde1098e60be9e574797e6db6ccec7e84f9a5fef6a628a1c63d0b13d",
+      "sha256": "1b39253f683bc2b645ba35290a1433debcf1ec46c8f6e24bfbbd57474cfad073",
+      "source_start": 0,
+      "source_end": 0.85,
+      "duration_seconds": 0.65,
+      "filters": "atrim=start=0:end=0.85,asetpts=PTS-STARTPTS,atempo=1.307692308,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.65,atrim=duration=0.65,afade=t=in:d=0.005,afade=t=out:st=0.595000:d=0.055"
+    },
     "PRSFX- Tackle.wav": {
       "role": "impact",
       "path": "res://assets/battles/moves_3d/audio_edited/tackle_impact.wav",

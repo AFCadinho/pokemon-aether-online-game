@@ -18,7 +18,7 @@ var move_outcome: OptionButton
 var move_reverse: CheckButton
 var move_busy := false
 var left_species := "Dragonite"
-const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam", "Ice Beam", "Razor Leaf", "Quick Attack", "Shadow Ball", "Sludge Bomb", "Focus Blast", "Moonblast", "Ice Shard", "Poison Sting", "Swift", "Flash Cannon", "Magical Leaf", "Water Pulse"]
+const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam", "Ice Beam", "Razor Leaf", "Quick Attack", "Shadow Ball", "Sludge Bomb", "Focus Blast", "Moonblast", "Ice Shard", "Poison Sting", "Swift", "Flash Cannon", "Magical Leaf", "Water Pulse", "Draco Meteor"]
 var terrain_picker: OptionButton
 var terrain_enabled: CheckButton
 var trick_room_toggle: CheckButton

@@ -18,6 +18,8 @@ OUT = ROOT / 'assets/battles/moves_3d/audio_edited'
 # Magical Leaf removes the second repeated 2D volley; Flash Cannon removes its
 # delayed second swell. Short attacks retain their initial transient.
 EDITS = [
+ ('dracometeor','Draco Meteor2','charge',0,1.7,1.376),
+ ('dracometeor','Draco Meteor1','impact',0,.85,.65),
  ('tackle','Tackle','impact',0,.454,.454),
  ('scratch','Scratch','impact',0,.558,.558),
  ('bite','Bite','impact',0,.407,.407),
@@ -71,8 +73,8 @@ def audit():
             assert max(abs(value) for value in samples[:2] + samples[-2:]) < 150, name
             duration = wav.getnframes() / wav.getframerate()
             assert abs(duration - entry['duration_seconds']) < .0001, name
-            assert 0 < duration <= (.901 if name == 'PRSFX- Moonblast1.wav' else .56), name
-    print('PCM_AUDIT_OK files=30 source_hashes=true edited_hashes=true '
+            assert 0 < duration <= (1.377 if name == 'PRSFX- Draco Meteor2.wav' else (.901 if name == 'PRSFX- Moonblast1.wav' else (.651 if name == 'PRSFX- Draco Meteor1.wav' else .56))), name
+    print(f'PCM_AUDIT_OK files={len(EDITS)} source_hashes=true edited_hashes=true '
           'non_silent=true clipping=false faded_edges=true')
 
 

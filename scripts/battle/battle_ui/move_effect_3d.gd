@@ -1,10 +1,11 @@
 extends Node3D
 ## First native move VFX. Samples the model clock; never changes HP or outcomes.
 signal finished
-const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam", "icebeam", "razorleaf", "quickattack", "shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse"]
-const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff"), Color("83e3ff"), Color("81ed42"), Color("e5f8ff"), Color("9b38e8"), Color("bc58d4"), Color("84f4ff"), Color("ffb3ed"), Color("d7f6ff"), Color("d4a0ff"), Color("fff1a1"), Color("e4fbff"), Color("bdff75"), Color("8eedff")]
+const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam", "icebeam", "razorleaf", "quickattack", "shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse", "dracometeor"]
+const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff"), Color("83e3ff"), Color("81ed42"), Color("e5f8ff"), Color("9b38e8"), Color("bc58d4"), Color("84f4ff"), Color("ffb3ed"), Color("d7f6ff"), Color("d4a0ff"), Color("fff1a1"), Color("e4fbff"), Color("bdff75"), Color("8eedff"), Color("ffb33c")]
 const AUDIO_EDITS = preload("res://assets/battles/moves_3d/audio_edited/manifest.json")
 const IMPACT_SOUNDS := {
+	"dracometeor": "PRSFX- Draco Meteor1.wav",
 	"shadowball": "PRSFX- Shadow Ball2.wav", "sludgebomb": "PRSFX- Sludge Bomb2.wav",
 	"moonblast": "PRSFX- Moonblast2.wav", "swift": "PRSFX- Swift2.wav",
 	"magicalleaf": "PRSFX- Magical Leaf2.wav", "waterpulse": "PRSFX- Water Pulse2.wav",
@@ -17,7 +18,7 @@ const PRESENTATION_SCALES := {
 	"flamethrower": 1.7, "bubble": 1.6, "bubblebeam": 1.7, "icebeam": 1.8,
 	"razorleaf": 1.6, "shadowball": 2.0, "sludgebomb": 1.8, "focusblast": 2.2,
 	"moonblast": 2.5, "iceshard": 1.7, "poisonsting": 1.6, "swift": 1.8,
-	"flashcannon": 2.5, "magicalleaf": 1.7, "waterpulse": 1.8,
+	"flashcannon": 2.5, "magicalleaf": 1.7, "waterpulse": 1.8, "dracometeor": 1.8,
 }
 var presentation_scale := 1.0
 var key := ""
@@ -81,6 +82,8 @@ static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 		if role == "charge":
 			at_seconds = 0.0
 			end_seconds = release
+			if timing.get("move_key", "") == "dracometeor":
+				end_seconds = duration_seconds * 0.43 # Charge continues through ascent and sky burst.
 		elif role == "impact":
 			at_seconds = impact_seconds
 			end_seconds = impact_seconds + duration_seconds * 0.25

@@ -2,6 +2,7 @@ extends RefCounted
 ## Anatomical emitters, independent of a move's physical/special damage category.
 ## Offsets are in the named bone's local coordinates (metres in these reviewed rigs).
 const MOVE_PARTS := {
+	"dracometeor": "body",
 	"shadowball": "mouth", "sludgebomb": "mouth", "focusblast": "body", "moonblast": "body",
 	"iceshard": "body", "poisonsting": "mouth", "swift": "body", "flashcannon": "mouth",
 	"magicalleaf": "body", "waterpulse": "mouth",
