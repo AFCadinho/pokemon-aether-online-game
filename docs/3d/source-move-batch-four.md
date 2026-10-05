@@ -51,9 +51,11 @@ still fail closed. Extraction and packaging do not modify the dump.
 - Geometry, audio and impact share the native action clock. The existing
   supported-move cap of 1.25 seconds remains in place. No wall-clock shader
   `TIME`, random placement per frame or independent particle timer is used.
-- All ten reuse their current 2D sounds. Shadow Ball, Sludge Bomb, Moonblast,
+- All ten now use [short 3D edits](move-audio-edits.md) of their existing sounds.
+  Shadow Ball, Sludge Bomb, Moonblast,
   Swift, Magical Leaf and Water Pulse have separate launch and impact samples;
-  the other four have one launch sample. The 2D catalog is unchanged.
+  the other four have one launch sample. Moonblast’s first sample accompanies
+  charge. Impact samples require a confirmed hit. The 2D catalog is unchanged.
 - Confirmed-hit geometry requires battle outcome evidence. Misses retain the
   original aim while the target dodges. This does not alter accuracy rules;
   forced misses for Swift/Magical Leaf exist only in the offline harness.

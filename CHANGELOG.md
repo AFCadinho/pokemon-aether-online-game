@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fit the 23 supported 3D moves with short, pitch-preserving sound edits, animation-timed fades and hit-only impact audio; preserve the original 2D sounds.
+
 - Add source-textured 3D Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting, Swift, Flash Cannon, Magical Leaf and Water Pulse, with shared move sounds and Dodge-aware impacts.
 - Match the animated grass battle background and its fallback to the outdoor day/night cycle, with warmer dusk and darker, cooler nights.
 

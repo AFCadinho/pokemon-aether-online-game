@@ -3,6 +3,7 @@ extends Node3D
 signal finished
 const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam", "icebeam", "razorleaf", "quickattack", "shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse"]
 const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff"), Color("83e3ff"), Color("81ed42"), Color("e5f8ff"), Color("9b38e8"), Color("bc58d4"), Color("84f4ff"), Color("ffb3ed"), Color("d7f6ff"), Color("d4a0ff"), Color("fff1a1"), Color("e4fbff"), Color("bdff75"), Color("8eedff")]
+const AUDIO_EDITS = preload("res://assets/battles/moves_3d/audio_edited/manifest.json")
 const IMPACT_SOUNDS := {
 	"shadowball": "PRSFX- Shadow Ball2.wav", "sludgebomb": "PRSFX- Sludge Bomb2.wav",
 	"moonblast": "PRSFX- Moonblast2.wav", "swift": "PRSFX- Swift2.wav",
@@ -49,28 +50,46 @@ static func audio_source_key(move: String) -> String:
 static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 	if source.is_empty() or timing.is_empty(): return {}
 	var plan := source.duplicate(true)
-	var contact: bool = str(timing.get("move_key", "")) in ["tackle", "scratch", "bite"]
+	var duration_seconds := float(timing.frames) / 60.0
 	var impact_seconds := float(timing.impact_frame) / 60.0
-	var cue_time := impact_seconds if contact else launch_time(timing)
+	var release := launch_time(timing)
 	var cues: Array = []
+	var paths := {}
 	var seen := {}
-	for cue: Dictionary in plan.get("cues", []):
+	for cue: Dictionary in source.get("cues", []):
 		var name := str(cue.event.get("name", ""))
 		if seen.has(name): continue
 		seen[name] = true
-		var at_seconds := cue_time
-		# Thunderbolt has a discharge sound and a separate impact sound in 2D.
-		if str(timing.get("move_key", "")) == "thunderbolt" and name == "PRSFX- Thunderbolt1.wav":
+		# Fail closed for a changed catalog: never accidentally restore a full
+		# multi-second 2D sample to a native move that has not been reviewed.
+		var edit: Dictionary = AUDIO_EDITS.data.entries.get(name, {})
+		if edit.is_empty(): continue
+		var role := str(edit.role)
+		var at_seconds := release
+		var end_seconds := impact_seconds + duration_seconds * 0.06
+		if role == "charge":
+			at_seconds = 0.0
+			end_seconds = release
+		elif role == "impact":
 			at_seconds = impact_seconds
-		if str(timing.get("move_key", "")) == "razorleaf" and name == "PRSFX- Razor Leaf2.wav":
-			at_seconds = impact_seconds
-		if IMPACT_SOUNDS.get(str(timing.get("move_key", "")), "") == name and not name.is_empty():
-			at_seconds = impact_seconds
-		cues.append({"at_seconds": at_seconds, "event": cue.event.duplicate(true)})
+			end_seconds = impact_seconds + duration_seconds * 0.25
+		elif role == "stream":
+			end_seconds = impact_seconds + duration_seconds * 0.18
+		end_seconds = minf(end_seconds, duration_seconds)
+		if end_seconds <= at_seconds: continue
+		var event: Dictionary = cue.event.duplicate(true)
+		event["role"] = role
+		event["requires_hit"] = role == "impact"
+		event["end_seconds"] = end_seconds
+		event["fade_seconds"] = minf(duration_seconds * 0.06, (end_seconds-at_seconds) * 0.25)
+		cues.append({"at_seconds": at_seconds, "event": event})
+		paths[name] = edit.path
 	cues.sort_custom(func(a, b): return a.at_seconds < b.at_seconds)
 	plan.cues = cues
-	plan.duration_seconds = float(timing.frames) / 60.0
+	plan.sound_paths = paths
+	plan.duration_seconds = duration_seconds
 	plan.speed_scale = 1.0
+	plan["bounded_to_action"] = true
 	return plan
 
 static func launch_time(timing: Dictionary) -> float:
