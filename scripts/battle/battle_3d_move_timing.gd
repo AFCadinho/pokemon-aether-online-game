@@ -2,6 +2,7 @@ extends RefCounted
 ## Initial pose-reviewed pilot. Frame markers use the native clip clock, not
 ## sprite frames or wall time. Unreviewed moves retain their existing timeline.
 const PILOTS := {
+	"charmander:ember": {"action": "special_attack_2", "frames": 138.0, "launch_frame": 40.0, "impact_frame": 64.0},
 	"pikachu:thunderbolt": {"action": "special_attack", "frames": 120.0, "impact_frame": 48.0,
 		"sounds": {"PRSFX- Thunderbolt2.wav": 20.0, "PRSFX- Thunderbolt1.wav": 48.0}},
 	"pikachu:tackle": {"action": "physical_attack", "frames": 110.0, "impact_frame": 42.0,
@@ -21,7 +22,7 @@ static func profile(species: String, move: String, action: String, timing: Dicti
 	return candidate.duplicate(true)
 
 static func audio_plan(source: Dictionary, pilot: Dictionary) -> Dictionary:
-	if source.is_empty() or pilot.is_empty():
+	if source.is_empty() or pilot.is_empty() or not pilot.has("sounds"):
 		return source
 	var result := source.duplicate(true)
 	var seen := {}
