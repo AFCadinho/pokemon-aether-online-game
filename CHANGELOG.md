@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.
+
 - Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
 - Show a trainer’s “Dodge!” command before a missed 3D attack; Pokémon and Substitutes sidestep while the move passes through their original position.
 
