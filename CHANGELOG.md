@@ -4,6 +4,8 @@
 
 - Load and refresh both Pokémon battle sprites on each side of Android double battles, preventing uncached Pokémon from remaining HOME icons.
 
+- Restore the riding pose after Thieving so moving on a mount no longer plays the player's running or walking animation.
+
 - Add first-pass native 3D effects and timed audio for all 193 moves in the 2D animation catalog, preserving the 24 approved presentations; include Solar Beam/Electro Shot charging, Future Sight impact, and a complete move preview selector.
 
 - Add a source-textured 3D Draco Meteor with a rising charge, sky burst, seven fiery meteors and timed impacts; retain native dodge, damage and stat-drop ordering.
