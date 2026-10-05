@@ -9,6 +9,17 @@ const IMPACT_SOUNDS := {
 	"moonblast": "PRSFX- Moonblast2.wav", "swift": "PRSFX- Swift2.wav",
 	"magicalleaf": "PRSFX- Magical Leaf2.wav", "waterpulse": "PRSFX- Water Pulse2.wav",
 }
+# World-space size, independent of camera angle. Scale geometry around each
+# sampled anchor, never the effect root (which would move mouths and targets).
+const PRESENTATION_SCALES := {
+	"tackle": 1.3, "scratch": 1.3, "bite": 1.2, "quickattack": 1.35,
+	"ember": 1.6, "watergun": 1.8, "thundershock": 1.7, "thunderbolt": 1.8,
+	"flamethrower": 1.7, "bubble": 1.6, "bubblebeam": 1.7, "icebeam": 1.8,
+	"razorleaf": 1.6, "shadowball": 2.0, "sludgebomb": 1.8, "focusblast": 2.2,
+	"moonblast": 2.5, "iceshard": 1.7, "poisonsting": 1.6, "swift": 1.8,
+	"flashcannon": 2.5, "magicalleaf": 1.7, "waterpulse": 1.8,
+}
+var presentation_scale := 1.0
 var key := ""
 var elapsed := 0.0
 var duration := 1.0
@@ -98,6 +109,7 @@ static func launch_time(timing: Dictionary) -> float:
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	key = move_key(move)
+	presentation_scale = float(PRESENTATION_SCALES.get(key, 1.0))
 	duration = float(timing.frames) / 60.0
 	impact = float(timing.impact_frame) / 60.0
 	launch = launch_time(timing)
@@ -155,7 +167,10 @@ func _finish() -> void:
 	finished.emit()
 	queue_free()
 
-func _piece(mesh: Mesh, material: Material, point: Vector3, scale_value: Vector3, basis_value := Basis.IDENTITY) -> void:
+func _geometry_scale() -> float:
+	return presentation_scale
+
+func _piece(mesh: Mesh, material: Material, point: Vector3, scale_value: Vector3, basis_value := Basis.IDENTITY, preserve_length := false) -> void:
 	if cursor >= pieces.size():
 		var node := MeshInstance3D.new()
 		node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -165,7 +180,11 @@ func _piece(mesh: Mesh, material: Material, point: Vector3, scale_value: Vector3
 	cursor += 1
 	node.mesh = mesh
 	node.material_override = material
-	node.transform = Transform3D(basis_value * Basis.from_scale(scale_value), point)
+	var dimensions := scale_value * _geometry_scale()
+	# Beam/cone length is the measured source-to-tip distance, not an artistic
+	# dimension. Only widen it, so it cannot overshoot the target or emitter.
+	if preserve_length: dimensions.y = scale_value.y
+	node.transform = Transform3D(basis_value * Basis.from_scale(dimensions), point)
 	node.visible = true
 
 func _ball(point: Vector3, radius: float, material: Material) -> void:
@@ -176,7 +195,7 @@ func _line(a: Vector3, b: Vector3, width: float, material: Material) -> void:
 	if delta.length() < 0.001 or width <= 0.001: return
 	var y := delta.normalized()
 	var x := y.cross(Vector3.UP if absf(y.y) < 0.95 else Vector3.RIGHT).normalized()
-	_piece(tube, material, (a+b)*0.5, Vector3(width, delta.length()+width*0.65, width), Basis(x,y,x.cross(y)))
+	_piece(tube, material, (a+b)*0.5, Vector3(width, delta.length()+width*0.65, width), Basis(x,y,x.cross(y)), true)
 
 func _process(_delta: float) -> void:
 	if done: return

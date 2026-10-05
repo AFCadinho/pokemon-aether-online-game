@@ -26,6 +26,7 @@ func _run() -> void:
 			var options := {"show_impact":outcome == "hit", "result":"miss" if outcome == "miss" else ""}
 			effect.start(move, {"frames":60.0, "impact_frame":27.0}, options, func(): return seconds, func(): return anchors, func(): return true)
 			effect.set_process(false)
+			if not manifest.is_empty(): effect.presentation_scale = 1.0 # Compare the historical recipe before the size review.
 			var old: Node3D
 			var approved: Node3D
 			if move == "ember" and not manifest.is_empty():

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enlarge all 23 native 3D move effects, with stronger Moonblast and Flash Cannon silhouettes, wider beams and clearer impacts while preserving attack origins and trajectories.
+
 - Give the animated meadow a dark blue night sky with subdued moving clouds and subtle stars, fading with the world clock.
 
 - Fit the 23 supported 3D moves with short, pitch-preserving sound edits, animation-timed fades and hit-only impact audio; preserve the original 2D sounds.

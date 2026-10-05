@@ -105,4 +105,4 @@ void fragment() {
 	stream_material.set_shader_parameter("opacity",fade)
 	var y := delta.normalized()
 	var x := y.cross(Vector3.UP if absf(y.y)<0.95 else Vector3.RIGHT).normalized()
-	_piece(flame_cone,stream_material,(from+to)*0.5,Vector3(0.22,delta.length(),0.22),Basis(x,y,x.cross(y)))
+	_piece(flame_cone,stream_material,(from+to)*0.5,Vector3(0.22,delta.length(),0.22),Basis(x,y,x.cross(y)),true)
