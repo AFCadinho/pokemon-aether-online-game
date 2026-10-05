@@ -109,7 +109,8 @@ def build(index_output: Path, metadata_output: Path) -> dict:
             if not model or model.get("sha256") != appearance.get("runtime_sha256"):
                 raise ValueError(f"runtime hash is not in the reviewed catalog: {identity}")
             covered.add(identity)
-    if covered != set(approved_models):
+    # v8 is historical; newer releases may add approved identities.
+    if not covered.issubset(approved_models):
         missing = sorted(set(approved_models) - covered)
         extra = sorted(covered - set(approved_models))
         raise ValueError(f"approved catalog coverage differs; missing={missing[:8]} extra={extra[:8]}")

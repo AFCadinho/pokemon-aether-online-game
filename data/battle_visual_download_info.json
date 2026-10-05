@@ -37,9 +37,9 @@
     "installed_bytes": 472514199
   },
   "3d": {
-    "index_sha256": "89ea2fcf0747c9cb2bb6c37f82b23607d4c2ff6d617ae3f5de0e968346533f2b",
-    "bundle_count": 1139,
-    "download_bytes": 18988742373,
-    "installed_bytes": 18988793898
+    "index_sha256": "021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa",
+    "bundle_count": 1142,
+    "download_bytes": 19056140138,
+    "installed_bytes": 19056190649
   }
 }

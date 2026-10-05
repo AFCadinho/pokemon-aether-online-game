@@ -25,7 +25,7 @@ PACKS = {
 
 
 def pins():
-    index_path = ROOT / "release/approved_3d_bundles_v8_index.json"
+    index_path = ROOT / "release/approved_3d_bundles_v9_index.json"
     index = json.loads(index_path.read_text())
     workflow = (ROOT / ".github/workflows/deploy-desktop-r2.yml").read_text()
     packs = {}

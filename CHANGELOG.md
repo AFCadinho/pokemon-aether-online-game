@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Galarian Articuno, Zapdos and Moltres available through the updated 3D download catalog; include them in the launcher’s full collection download.
+
 - Use a textured 3D Substitute doll and an animated Poké Ball for 3D send-out, recall and capture, with world-space effects and synchronized existing sounds.
 
 - Add reviewed normal and shiny 3D models for Galarian Articuno, Zapdos and Moltres, with calibrated battle poses and flight heights.
