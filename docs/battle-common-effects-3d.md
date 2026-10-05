@@ -108,7 +108,7 @@ Frozen resting playback pauses; sleep retains the native sleep clip. Per-actor
 material overlays preserve existing materials and co-op target outlines; cure,
 visibility changes, replacement and arena cleanup restore their ownership.
 
-Substitute no longer excludes a reviewed Pokémon from 3D. An original procedural
+Substitute no longer excludes a reviewed Pokémon from 3D. A textured imported
 3D doll owns the visible placeholder, reveals the Pokémon for its attack, returns
 afterward and takes its own short hit reaction. Item/heal/common effects may target
 the visible doll. Existing SpriteBox state remains authoritative for 2D fallback,
@@ -161,7 +161,7 @@ Only explicit player approval completes an entry.
 - [x] Paralysis — persistent tint only
 - [ ] Freeze — player could not visually test it yet
 - [x] Sleep — Z glyph layout follows camera rotation
-- [ ] Substitute — procedural doll; dedicated 3D asset still to review
+- [ ] Substitute — imported textured doll; visual review pending
 - [x] Mega evolution
 
 Gem activation events emitted after a move announcement are presented before
@@ -174,3 +174,37 @@ orbit angles for both persistent and one-shot effects, plus model movement.
 The status lifecycle check also confirms quiet statuses allocate no persistent
 particles while their event effects still do. Rendered previews were reviewed
 from four camera angles, alongside poison/burn tint-only previews.
+
+## Imported battle props and ball transitions
+
+Substitute now uses the textured FBX from zuzu's Egg + Substitute pack;
+source details and the absence of an explicit archive/page license are recorded
+in `assets/models/battle/substitute/SOURCE.md`. Its original texture, grounding,
+pop-in, hit response and reveal-during-attack behavior are preserved.
+
+The Poké Ball uses MCStevebrine12's Openable pokeball, supplied by the project
+owner, credited under CC Attribution in `assets/models/battle/pokeball/SOURCE.md`.
+The 0–0.375 second opening section is sampled under the battle clock, including
+reverse sampling for closing. Imported cameras are removed. No second capture
+asset is included. Other ball types currently share this shape with shell palette
+variants; their individual markings/shapes are not yet authored.
+
+All ball motion/effects live in arena coordinates. Initial send-out has a short
+throw; switch release opens in place. Recall shrinks the target toward a nearby
+ball with a pink beam. Capture throws, absorbs, closes, drops, bounces, shakes the
+server-reported number of times and presents either success or breakout. Capture
+never rolls its own result. The existing summon/capture sounds play at their
+corresponding phase, and Pokémon cries begin at release. These routes cover
+single battles, replay captures and native co-op targets, retaining actual 2D
+fallback. The imported models are bundled; no runtime asset download is needed.
+
+`battle_ball_effects_3d_check.tscn` exercises all four slots, zero/one/three shake
+success and failure, pause, cancellation after absorption, and replacement.
+`battle_3d_presentation_check.gd` exercises the real battle host with its 2D ball
+players disconnected. Substitute/status lifecycle checks remain applicable.
+
+Additional visual review pending:
+- [ ] Textured Substitute doll replacement.
+- [ ] Poké Ball summon / switch release.
+- [ ] Poké Ball return.
+- [ ] Capture success and breakout (including camera rotation).

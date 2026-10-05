@@ -1141,6 +1141,11 @@ func _capture_round_ready(view: Dictionary, chosen_turn: int) -> bool:
 
 
 func _play_native_capture_preview(item_id: String, accepted: Dictionary) -> void:
+	var model := _model_presenter()
+	if model != null and model.handles(_capture_target_controller):
+		await model.capture(_capture_target_controller, str(accepted.get("itemId", item_id)),
+			clampi(int(accepted.get("shakeCount", 0)), 0, 3), bool(accepted.get("caught", false)))
+		return
 	var target := _native_sprite(_capture_target_controller)
 	var capture_player: CaptureBallAnimationPlayer = embedded_hosts.get("capture_player") as CaptureBallAnimationPlayer
 	if target == null or capture_player == null:

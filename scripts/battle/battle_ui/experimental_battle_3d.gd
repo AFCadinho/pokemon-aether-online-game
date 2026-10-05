@@ -1,6 +1,12 @@
 extends Control
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
-## Missing reviewed models fall back as a whole battle; Substitute has native geometry.
+## Missing reviewed models fall back as a whole battle; Substitute has a bundled 3D model.
+
+const BallEffect = preload("res://scripts/battle/battle_ui/pokeball_effect_3d.gd")
+var ball_effects: Array = [null, null, null, null]
+var ball_restore: Array = [{}, {}, {}, {}]
+var actor_transition_offsets := [Vector3.ZERO, Vector3.ZERO, Vector3.ZERO, Vector3.ZERO]
+signal ball_cue(ident: String, key: String)
 
 const SUPPORTED := ["dragonite", "roaring-moon"]
 const MegaEvolutionEffect = preload("res://scripts/battle/battle_ui/mega_evolution_effect_3d.gd")
@@ -445,7 +451,6 @@ var combatants := [{"species": "", "shiny": false}, {"species": "", "shiny": fal
 	{"species": "", "shiny": false}, {"species": "", "shiny": false}]
 var actor_shown := [true, true, true, true]
 var actor_scale := [1.0, 1.0, 1.0, 1.0]
-var transition_tweens: Array = [null, null, null, null]
 var transition_generation := [0, 0, 0, 0]
 var lifecycle := ["empty", "empty", "empty", "empty"]
 var double_mode := false
@@ -637,7 +642,7 @@ func _sync_substitute_models() -> void:
 		doll.position = _position(index)
 		var direction := _position(index + 1 if index % 2 == 0 else index - 1) - doll.position
 		doll.rotation.y = atan2(direction.x,direction.z)
-		doll.visible = _substitute_visible(index) and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty"]
+		doll.visible = _substitute_visible(index) and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty", "send_out", "recall", "capture"]
 		actors[index].visible = actor_shown[index] and not doll.visible
 
 func set_substitute_active(ident: String, enabled: bool) -> void:
@@ -715,7 +720,7 @@ func _sync_status_effects() -> void:
 	for index in _slot_count():
 		var ident := "p%d" % (index + 1)
 		var actor: Node3D = actors[index]
-		var enabled: bool = active and is_instance_valid(world) and handles(ident) and actor.visible and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty"] and get_tree().root.get_node("SettingsManager").battle_animations
+		var enabled: bool = active and is_instance_valid(world) and handles(ident) and actor.visible and actor_shown[index] and lifecycle[index] not in ["fainted", "hidden", "empty", "send_out", "recall", "capture"] and get_tree().root.get_node("SettingsManager").battle_animations
 		var key := "status_" + str(status_conditions[index]) if enabled and not status_conditions[index].is_empty() else ""
 		var effect: Node = status_effects[index]
 		if is_instance_valid(effect) and (effect.done or effect.key != key or effect.actor != actor):
@@ -921,9 +926,17 @@ func play_action(ident: String, action: String) -> void:
 
 func _stop_transition(index: int) -> void:
 	transition_generation[index] += 1
-	if transition_tweens[index] != null and transition_tweens[index].is_valid():
-		transition_tweens[index].kill()
-	transition_tweens[index] = null
+	if is_instance_valid(ball_effects[index]):
+		ball_effects[index].cancel()
+		# The awaiting coroutine owns disposal; freeing it here would strand its caller.
+		if not ball_restore[index].is_empty():
+			actor_shown[index] = ball_restore[index].shown
+			actor_scale[index] = 1.0
+			lifecycle[index] = ball_restore[index].lifecycle
+			if is_instance_valid(actors[index]): actors[index].visible = actor_shown[index]
+	ball_effects[index] = null
+	ball_restore[index] = {}
+	actor_transition_offsets[index] = Vector3.ZERO
 
 func set_actor_shown(index: int, shown: bool) -> void:
 	_stop_transition(index)
@@ -931,33 +944,67 @@ func set_actor_shown(index: int, shown: bool) -> void:
 	actor_scale[index] = 1.0
 	lifecycle[index] = "idle" if shown else "hidden"
 
-func send_out(ident: String) -> bool:
-	if not handles(ident):
-		return false
-	return await _transition_actor(actor_index(ident), true, 0.32)
+func send_out(ident: String, item_id := "poke-ball", cry_species := "", with_throw := false) -> bool:
+	if not handles(ident): return false
+	return await _play_ball(ident, "send_out", item_id, 0, false, cry_species, with_throw)
 
-func recall(ident: String) -> bool:
-	if not handles(ident):
-		return false
-	return await _transition_actor(actor_index(ident), false, 0.26)
+func recall(ident: String, item_id := "poke-ball") -> bool:
+	if not handles(ident): return false
+	return await _play_ball(ident, "recall", item_id)
 
-func _transition_actor(index: int, entering: bool, duration: float) -> bool:
+func capture(ident: String, item_id: String, shakes: int, caught: bool) -> bool:
+	if not handles(ident): return false
+	return await _play_ball(ident, "capture", item_id, shakes, caught)
+
+func _play_ball(ident: String, kind: String, item_id: String, shakes := 0, caught := false, cry_species := "", with_throw := false) -> bool:
+	var index := actor_index(ident)
 	_stop_transition(index)
 	var generation: int = transition_generation[index]
-	lifecycle[index] = "send_out" if entering else "recall"
-	actor_shown[index] = true
-	actor_scale[index] = 0.05 if entering else 1.0
-	var tween := create_tween().set_speed_scale(playback_speed)
-	transition_tweens[index] = tween
-	tween.tween_method(func(value: float): actor_scale[index] = value,
-		actor_scale[index], 1.0 if entering else 0.05, duration).set_trans(Tween.TRANS_SINE)
-	tween.tween_callback(func():
-		actor_shown[index] = entering
-		lifecycle[index] = "idle" if entering else "hidden"
-		transition_tweens[index] = null)
-	while is_inside_tree() and active and generation == transition_generation[index] and tween.is_valid() and tween.is_running():
-		await get_tree().process_frame
-	return is_inside_tree() and active and generation == transition_generation[index]
+	var actor: Node3D = actors[index]
+	var bounds := _effect_bounds(index)
+	var ground := _position(index)
+	var center: Vector3 = bounds.position + Vector3.UP * maxf(bounds.height * 0.5, 0.4)
+	var opponent := _position(index + 1 if index % 2 == 0 else index - 1)
+	var away := (ground - opponent).normalized()
+	var start := ground + away * 2.2 + Vector3.UP * 1.0
+	if kind == "capture": start = opponent + Vector3.UP * 0.8
+	var original_shown: bool = actor_shown[index]
+	var original_lifecycle: String = lifecycle[index]
+	ball_restore[index] = {"shown": original_shown, "lifecycle": original_lifecycle}
+	lifecycle[index] = kind
+	var effect := BallEffect.new()
+	world.add_child(effect)
+	ball_effects[index] = effect
+	effect.build(start, center, ground, item_id, common_effect_speed, func(amount: float, offset: Vector3):
+		if generation != transition_generation[index] or actors[index] != actor: return
+		actor_scale[index] = maxf(amount, 0.001)
+		actor_transition_offsets[index] = offset
+		actor_shown[index] = amount > 0.001
+		actor.visible = actor_shown[index]
+	)
+	effect.cue.connect(func(key: String):
+		if generation != transition_generation[index]: return
+		ball_cue.emit(ident, key)
+		if key == "cry":
+			if not cry_species.is_empty(): get_tree().root.get_node("SfxManager").play_pokemon_cry(cry_species)
+		else:
+			get_tree().root.get_node("SfxManager").play(key)
+	)
+	var completed := false
+	match kind:
+		"send_out": completed = await effect.send_out(with_throw)
+		"recall": completed = await effect.recall()
+		"capture": completed = await effect.capture(shakes, caught)
+	if is_instance_valid(effect): effect.queue_free()
+	if generation != transition_generation[index] or actors[index] != actor: return false
+	ball_effects[index] = null
+	ball_restore[index] = {}
+	actor_transition_offsets[index] = Vector3.ZERO
+	actor_scale[index] = 1.0
+	actor_shown[index] = (kind == "send_out" or (kind == "capture" and not caught)) if completed else original_shown
+	lifecycle[index] = ("idle" if actor_shown[index] else "hidden") if completed else original_lifecycle
+	actor.visible = actor_shown[index]
+	return completed and active
 
 func setup(sprite_boxes: Array = [], stage_platforms: Array = []) -> void:
 	boxes = sprite_boxes
@@ -1871,8 +1918,6 @@ func _process(delta: float) -> void:
 			hover_offsets[i] = ModelPlacement.hover_target(placements[desired[i]], current_actions[i], 0.0, players[i].current_animation_length)
 			actor_build_ms += (Time.get_ticks_usec() - actor_started) / 1000.0
 		players[i].speed_scale = 0.0 if status_conditions[i] == "frozen" and resting[i] else playback_speed
-		if transition_tweens[i] != null and transition_tweens[i].is_valid():
-			transition_tweens[i].set_speed_scale(playback_speed)
 		if resting[i] and not players[i].is_playing() and current_actions[i] not in ["faint_start", "faint_loop"]:
 			_action(restoring[i], i)
 		actors[i].visible = warming_render or actor_shown[i]
@@ -1890,7 +1935,8 @@ func _process(delta: float) -> void:
 			actors[i].position = _position(i)
 			var direction: Vector3 = _position(i + 1 if i % 2 == 0 else i - 1) - actors[i].position
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[identities[i]].yaw_degrees))
-		actors[i].position.y = _position(i).y + float(placements[identities[i]].lift) + motion_offsets[i] + hover_offsets[i]
+		actors[i].position = _position(i) + actor_transition_offsets[i]
+		actors[i].position.y += float(placements[identities[i]].lift) + motion_offsets[i] + hover_offsets[i]
 	_sync_substitute_models()
 	_sync_status_effects()
 	_prune_models()

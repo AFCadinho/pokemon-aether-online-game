@@ -1,2 +1,6 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Keep vendor FBX assets byte-for-byte, including ASCII FBX exports.
+assets/models/battle/substitute/*.fbx binary
+assets/models/battle/pokeball/*.fbx binary

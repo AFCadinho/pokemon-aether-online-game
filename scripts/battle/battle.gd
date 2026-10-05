@@ -4521,7 +4521,7 @@ func _on_bag_grid_item_selected(item_data: Dictionary) -> void:
 	var caught := bool(capture_result.get("caught", false))
 	var shake_count := clampi(int(capture_result.get("shakeCount", 0)), 0, 3)
 	_reset_capture_target_visibility()
-	await capture_ball_animation_player.play_capture_preview(item_id, shake_count, caught, enemy_sprite_box.get_global_rect())
+	await _play_capture_animation(item_id, shake_count, caught)
 
 	var capture_message := str(capture_result.get("message", ""))
 	if capture_message.is_empty():
@@ -4629,6 +4629,13 @@ func _capture_result_message_with_storage(capture_result: Dictionary, fallback_m
 				"location": PokemonStorageService.storage_location_label(location),
 			})
 	return fallback_message
+
+func _play_capture_animation(item_id: String, shakes: int, caught: bool) -> void:
+	var model: Node = animation_router.model_presenter
+	if is_instance_valid(model) and model.handles("p2"):
+		await model.capture("p2", item_id, shakes, caught)
+		return
+	await capture_ball_animation_player.play_capture_preview(item_id, shakes, caught, enemy_sprite_box.get_global_rect())
 
 func _on_capture_ball_thrown() -> void:
 	SfxManager.play("capture_throw")
@@ -8714,9 +8721,7 @@ func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Co
 		await desktop_stage.await_prepared()
 		var actor_ident := "p1" if side == "back" else "p2"
 		if desktop_stage.handles(actor_ident):
-			SfxManager.play("summon_release")
-			SfxManager.play_pokemon_cry(cry_species)
-			await desktop_stage.send_out(actor_ident)
+			await desktop_stage.send_out(actor_ident, ball_item_id, cry_species, true)
 			return
 	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
@@ -8760,8 +8765,7 @@ func _play_summon_release_cry() -> void:
 func _play_switch_recall(ball_item_id: String, sprite_box: Control, side: String) -> void:
 	var actor_ident := "p1" if side == "back" else "p2"
 	if is_instance_valid(animation_router.model_presenter) and animation_router.model_presenter.handles(actor_ident):
-		SfxManager.play("summon_release")
-		await animation_router.model_presenter.recall(actor_ident)
+		await animation_router.model_presenter.recall(actor_ident, ball_item_id)
 		return
 	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
@@ -8802,8 +8806,7 @@ func _play_switch_release(ball_item_id: String, cry_species: String, sprite_box:
 		animation_router.model_presenter.set_actor_shown(0 if side == "back" else 1, false)
 		await animation_router.model_presenter.await_prepared()
 		if animation_router.model_presenter.handles(actor_ident):
-			SfxManager.play_pokemon_cry(cry_species)
-			await animation_router.model_presenter.send_out(actor_ident)
+			await animation_router.model_presenter.send_out(actor_ident, ball_item_id, cry_species)
 			return
 	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
@@ -10421,11 +10424,10 @@ func _render_battle_events(
 				_update_active_pokemon_presentation_for_ident(ability_target)
 		if replay_mode and event_type == "capture":
 			_reset_capture_target_visibility()
-			await capture_ball_animation_player.play_capture_preview(
+			await _play_capture_animation(
 				str(event_data.get("itemId", "poke-ball")),
 				clampi(int(event_data.get("shakeCount", 3)), 0, 3),
-				bool(event_data.get("caught", false)),
-				enemy_sprite_box.get_global_rect()
+				bool(event_data.get("caught", false))
 			)
 			if owned_replay_generation != replay_generation:
 				return
