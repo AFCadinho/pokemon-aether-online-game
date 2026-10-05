@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give Mega Garchomp its reviewed standing stance and matching battle animations, including normal/shiny Pokédex and summary previews.
+
 - Show a clearer Poké Ball throw on every 3D summon, including switches, and keep the HP HUD anchored to the visible Substitute model.
 
 - Make Galarian Articuno, Zapdos and Moltres available through the updated 3D download catalog; include them in the launcher’s full collection download.

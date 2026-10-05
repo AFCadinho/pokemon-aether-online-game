@@ -24,7 +24,7 @@ matching set avoids abruptly returning to the flying bank during attacks.
 The original approved normal/shiny geometry and materials remain in the scenes;
 the candidate replaces skeletal animation only and preserves existing other
 animation tracks. Skeleton names, order and rest transforms match exactly.
-This is a proposal, not runtime admission or publication.
+This was the review proposal; the approved client integration is documented below.
 
 Reproducible tools:
 
@@ -48,6 +48,56 @@ checks. All 36 screenshots rendered successfully. This is an appearance review,
 not a battle scale/performance qualification. Browser automation was unavailable;
 `xdg-open` was invoked and page/image HTTP 200 responses were verified.
 
-The standing proposal, sleep and faint poses still require visual review. Battle
-placement and transitions must be qualified before applying the change. Game
-registries, approved bundles, R2 and production were not changed by this task.
+The investigation itself left game registries, approved bundles, R2 and production
+unchanged.
+
+## Approved standing integration
+
+2026-10-05, task `mega-garchomp-standing`. The user's response **“ja goedgekeurd”**
+approves the exact comparison above. The checkpoint binds this to its HTML and
+36 screenshots. Mega Garchomp Z remains on its existing native animation set.
+
+The correction follows the existing Gliscor client animation override:
+`resources/battle/model_animations/mega_garchomp_standing.res` contains only skeletal
+tracks from the same native bank 00. Missing bone channels receive constant rest
+keys so prior actions cannot leak into later ones. All 70 sampled normal/shiny
+poses match the approved candidate's bone transforms. Existing non-skeletal
+tracks were confirmed to be static `visible=true` on already visible meshes;
+no new mesh/material/property tracks are shipped.
+
+The override is restricted to the two exact approved SCN hashes in
+`mega_garchomp_standing.json`. It updates action timing and measured placement
+through `ReviewedModels.resolve`, and installs actor-owned animation libraries
+in the battle presenter and Pokédex/summary preview. It never mutates a shared
+library or applies to Mega Garchomp Z, an unrelated identity, or a future model
+revision. Attack clips keep their native entry/exit motion; idle/sleep retain
+a 0.2-second blend, verified through the live presenter.
+
+All seven actions were measured at 120 Hz. Idle grounding lift is
+0.0392560351 units, with 60 Hz conservative clearance curves for other actions.
+The real battle presenter passed both cameras, both appearances, and repeated
+idle/attack/damage/sleep/faint transitions at 1× and 4× playback. Minimum observed
+floor clearance was 0.0266221166 units, above the existing 0.005 check threshold.
+Pokédex and summary controls both loaded the standing two-second idle for normal
+and shiny. Runtime screenshots were visually inspected.
+
+Focused checks and reproducible tools (run through `slot-env slot-a`):
+
+- `tests/mega_garchomp_standing_check.gd`: exact hashes, safe skeletal tracks,
+  per-actor library isolation, timing/placement and unchanged Mega Z profiles.
+- `tools/sprite_factory/build_mega_garchomp_standing_library.gd -- MOTION_GLB APPROVED_SCN OUTPUT_RES`:
+  source hash, exact skeleton compatibility and static visibility guards.
+- `measure_mega_garchomp_standing.gd -- APPROVED_SCN OUTPUT_DIRECTORY`:
+  posed-vertex envelopes and floor clearance curves.
+- `check_mega_garchomp_standing_review.gd`: 70 approved candidate pose comparisons.
+- `check_mega_garchomp_standing_battle.gd -- LOCAL_CATALOG OUTPUT_DIRECTORY`:
+  actual presenter, 14 screenshots and live transitions at 120 Hz.
+- `check_mega_garchomp_standing_previews.gd -- LOCAL_CATALOG OUTPUT_PNG`:
+  actual normal/shiny Pokédex and summary controls.
+
+Retained local evidence is in `.tmp/mega-garchomp-standing-v1/`; its digests and
+results are recorded in `mega_garchomp_standing_checkpoint.json`.
+The approved SCN files and public v9 index stay byte-identical. No R2 upload is
+needed for this correction: the library ships with the game client. Local
+integration enables it in newly started development clients; production requires
+a later client release. This task does not certify or publish a release.
