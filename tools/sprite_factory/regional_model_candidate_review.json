@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "awaiting_combined_user_visual_review",
+  "status": "awaiting_corrected_eye_visual_review",
   "runtime_approved": false,
   "appearance_visual_approved": false,
   "battle_visual_approved": false,
@@ -21,26 +21,33 @@
     "battle-final-combined-v2/qualification.json": "ce593a9b49c9f0d6e382b4bc533a3af5948995b269c0575018002bdfe79d7779",
     "battle-clearance-v1/placement.json": "b2d9af50a59a2a8f0d2343244f3a51472ff0280eef25a281956a69058f7f96a5",
     "battle-clearance-v1/receipt.json": "6ba3dab054312dab90c0289d5f4d83a6b4f3f5ad631dc84a85935eb19796dc70",
-    "review-v1/evidence.json": "e8d5cf7b7caac1a0801f3e128a279ac1efa23c9d84ada528244939663b60bf19"
+    "review-v1/evidence.json": "e8d5cf7b7caac1a0801f3e128a279ac1efa23c9d84ada528244939663b60bf19",
+    "runtime-final-v3.json": "72ad6eb3536067411644cb605d270fd94bd1a60427f740c95b4f5fe65fcaee2a",
+    "eyes-followup-v2/catalog.json": "6f4e6ca03313bef2f031dc966f5e5a13fc673a175881b7271d535ef7462428a9",
+    "eyes-followup-v2/placement.json": "8bab84ff7f92bb8c840fd0c74ded5b07bc37b56ffd9b5264d8c76aabfd2656d2",
+    "eyes-followup-v2/audit.json": "a40286e1d4fd47299cb58d07f84951ea652c8101cc87a6f36315da688b02a7ad",
+    "eyes-followup-v2/geometry-proof.json": "a62da9b8faff3930010b04ca92ac62d48da9ba40fef27f46854e7d881aaeec8a",
+    "eyes-followup-v2/appearance/godot-review.json": "fe492502d30dd051c47a13b463eef073a9ce10370434c348119c5d668d55f8fa",
+    "eyes-review-v1/evidence.json": "38890882c1c25928103de4ae5280d0ccb82ead9584c084051a65d08c27e6f87b"
   },
   "entries": [
     {
       "species": "arcanine-hisui",
-      "glb_sha256": "90503fdd56dea06779430c2e7ecd8362347251b8c0b1fb2a0b55504136d0e275",
-      "runtime_sha256": "73763f7b29f51ded85ec8c121379ca7f7299dfbae3826b6858a098b548bad788",
-      "candidate_path": ".tmp/regional-production-v1/materials/arcanine-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/arcanine-hisui.scn",
-      "motion_profile_sha256": "f2bb6c0bf1bcff3632e8624a403f12e6468cd32591fb358d29d19dd9524b1804",
+      "glb_sha256": "a98733f29b5b0a9810a6aff394d1ef87e09f8b13202f5a531b0542a9a963e56a",
+      "runtime_sha256": "7b9d5b3ee45edec5ffeb864ea9f02576788c83abdd2ce7b97b11989f72689c76",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/arcanine-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/arcanine-hisui.scn",
+      "motion_profile_sha256": "bdb54d03858e3c6c320aa525391093c4571df0adfb0f334e9a1bcd727f66aef2",
       "readability_factor": 1.0,
       "hover_height": 0.0
     },
     {
       "species": "arcanine-hisui-shiny",
-      "glb_sha256": "0a0f06e0c64c2a630646e7e94d6a8f57757ebdaa48494e41b416c14efff69896",
-      "runtime_sha256": "80ae266c418e6a5f90c265d67049ff00f9517c4bdc668db371cab69c3c5ab1d5",
-      "candidate_path": ".tmp/regional-production-v1/materials/arcanine-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/arcanine-hisui-shiny.scn",
-      "motion_profile_sha256": "9c3f07c39a11b4e75e28b039c90a5dc6ee97c859f7fe15a762839012a01783f4",
+      "glb_sha256": "aece84ce99ebfbca10daea2d7fe2ace3ab9bd13c1c887ba05c21b9820cdf783f",
+      "runtime_sha256": "9b6a88ca08d827c0d740ecbdd0a7cac0ae8c7d1ad8cdadde32bcf70a812a8a09",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/arcanine-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/arcanine-hisui-shiny.scn",
+      "motion_profile_sha256": "43bffa67fcb302ebbd6b0fa7ffedc3bdff2e62d51953724ae165ad9fca5353b3",
       "readability_factor": 1.0,
       "hover_height": 0.0
     },
@@ -67,9 +74,9 @@
     {
       "species": "braviary-hisui",
       "glb_sha256": "87aae85beca6e9f5e128b2b8572da3eba7d5aac03589344b2f5ba0dffe7ac390",
-      "runtime_sha256": "e90d8a0f71d05a9c564f4affd0fb22c524dd037404603888a57f0a062fedf7dc",
-      "candidate_path": ".tmp/regional-production-v1/materials/braviary-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/braviary-hisui.scn",
+      "runtime_sha256": "46f89004bad7ccaa2c34aa870f12775805e2c8e4b7dd6214d38183f846d83650",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/braviary-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/braviary-hisui.scn",
       "motion_profile_sha256": "41d2baa61002ef488495071440b87647c22efa72f56b9bdb903ea319cf054abf",
       "readability_factor": 1.0,
       "hover_height": 0.0071291444301605006
@@ -77,9 +84,9 @@
     {
       "species": "braviary-hisui-shiny",
       "glb_sha256": "0ff137b036622fad3c26684e68fa7fbf6037ee74b3bed1c10991b0c9f30f1a99",
-      "runtime_sha256": "1ff98fdd3f3d6a5ce22b65ccce5f123aa3dfa38f549f03274c57f27411f54f9b",
-      "candidate_path": ".tmp/regional-production-v1/materials/braviary-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/braviary-hisui-shiny.scn",
+      "runtime_sha256": "e6b5ea1cfca13a27ad90cab4ceca7c734ea85cfcdc4a152cd1031305ac974a16",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/braviary-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/braviary-hisui-shiny.scn",
       "motion_profile_sha256": "0138bc2f78634baee365f9c8a346402bb143e54632a517ee2e2886b3ef362061",
       "readability_factor": 1.0,
       "hover_height": 0.0071291444301605006
@@ -167,9 +174,9 @@
     {
       "species": "decidueye-hisui",
       "glb_sha256": "6bf4a253ee80bec50c5c9a3977d09b2abe0124ad7de6fbaeba182ec06faeecb1",
-      "runtime_sha256": "bfce33282787b2c641ac542edd5285ead34e40847fe1e77fd06a5f8e60bf4119",
-      "candidate_path": ".tmp/regional-production-v1/materials/decidueye-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/decidueye-hisui.scn",
+      "runtime_sha256": "9809e37d1ee5ee4c01fa52dd5e7df44e3ddc2ca1de1a70dcdd47f7f35fa9fc9b",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/decidueye-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/decidueye-hisui.scn",
       "motion_profile_sha256": "c2fcfa5bb58111d464ced755a962cd708701d8ef8f974ae6457cfd3086173af5",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -177,9 +184,9 @@
     {
       "species": "decidueye-hisui-shiny",
       "glb_sha256": "a85bed9993e28c25299f652bce1f4db25ee415e7df0b317423835602073831d8",
-      "runtime_sha256": "e12ccc27354a6e3bb1614e0406ae02f727283154d425798ba39e2a484715ddcc",
-      "candidate_path": ".tmp/regional-production-v1/materials/decidueye-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/decidueye-hisui-shiny.scn",
+      "runtime_sha256": "48c259c1bf86f578d0d90e9727d3910e06b8fc0ca11ed7128f937bc3c0e98095",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/decidueye-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/decidueye-hisui-shiny.scn",
       "motion_profile_sha256": "293b47f32afdf568e9f7b40c0ec46ca6c41bb1aadf8f836c3c66e8df958af838",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -327,9 +334,9 @@
     {
       "species": "goodra-hisui",
       "glb_sha256": "ef87c1ed23bc98b51077527c18e08fff933637cb7b58fbdd06d9f8e5fcdaa139",
-      "runtime_sha256": "609199f9c934bd5e6a72d4f0e7609f33671ac116f8a791e1b858acf35c9eff3e",
-      "candidate_path": ".tmp/regional-production-v1/materials/goodra-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/goodra-hisui.scn",
+      "runtime_sha256": "fc106f6f38866e576a6776380f91092461788a5108c98e6016d5eee234f8416a",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/goodra-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/goodra-hisui.scn",
       "motion_profile_sha256": "2daa0fa4872f8e9dc5eb97139ef1867d5313fb84b3bc36468d6e69327bb5e99d",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -337,9 +344,9 @@
     {
       "species": "goodra-hisui-shiny",
       "glb_sha256": "391144fdb74d52b13d4c3eaa562d13c310f4dbe24f483f256f57e37cc64b8f27",
-      "runtime_sha256": "506409b21148770b66a53a6baf448afe7aca81c741fa1b7754c538e82b0aca9f",
-      "candidate_path": ".tmp/regional-production-v1/materials/goodra-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/goodra-hisui-shiny.scn",
+      "runtime_sha256": "7c3557ddf3cce2f29b72ab436a493e75dc78ae93709273e5a69b788458d42b5f",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/goodra-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/goodra-hisui-shiny.scn",
       "motion_profile_sha256": "1b32dc8537e4ddcbc9f659869f3a91c679d2aa3b71d66856479bbfa3e0787679",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -367,9 +374,9 @@
     {
       "species": "grimer-alola",
       "glb_sha256": "a3f206951831e50aadd1b612d333f6fe68269607dc6cac27aa2388ea60c82fb2",
-      "runtime_sha256": "743dda901559efb505231bf2ce94c4d5772bc67597edf36287a85f279ee45831",
-      "candidate_path": ".tmp/regional-production-v1/materials/grimer-alola/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/grimer-alola.scn",
+      "runtime_sha256": "517de55bfd9cc4e5eae4e5e6438d68d35607db34c1daf886aa7cd93fc397f7f7",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/grimer-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/grimer-alola.scn",
       "motion_profile_sha256": "98ae47c195d023d85969750765c77e507f138c27617be54b7d1a73aef630a3fa",
       "readability_factor": 1.666964446064804,
       "hover_height": 0.0
@@ -377,9 +384,9 @@
     {
       "species": "grimer-alola-shiny",
       "glb_sha256": "60019406c0bcdca13012c7059cc8397fadc4fb5cbbb497edfe75f9c0f5ce48e5",
-      "runtime_sha256": "773110413e7de3206eccef13ae3352b46933c84366a653667823b46f75e99d6c",
-      "candidate_path": ".tmp/regional-production-v1/materials/grimer-alola/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/grimer-alola-shiny.scn",
+      "runtime_sha256": "59ae89242be3babcd1a279ba768a6bd44e70d427b78cb24cb9271bb5193a62b1",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/grimer-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/grimer-alola-shiny.scn",
       "motion_profile_sha256": "dab93344cc5f4ee8a575d1d87a5ca68c3fca4dc5fe15c92ff6698dc4d48af265",
       "readability_factor": 1.666964446064804,
       "hover_height": 0.0
@@ -487,9 +494,9 @@
     {
       "species": "meowth-alola",
       "glb_sha256": "060f87c31b70fae15ec94f858d0ba5428476a9bad255a8fcd4c42601af428411",
-      "runtime_sha256": "5ce79cc239a576b99ebe57cc981119217e39b5bf2277dc03a399cbe4b7c994b5",
-      "candidate_path": ".tmp/regional-production-v1/materials/meowth-alola/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/meowth-alola.scn",
+      "runtime_sha256": "e5a53165e58040797fd06ab72bd0161962331ba261ab5556ce6d152d4c7292f7",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/meowth-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/meowth-alola.scn",
       "motion_profile_sha256": "f17e6171d8306f2061f58de1c306c2f6614e96b51281d48a7e2cf8f42a06ba17",
       "readability_factor": 2.980957986274316,
       "hover_height": 0.0
@@ -497,9 +504,9 @@
     {
       "species": "meowth-alola-shiny",
       "glb_sha256": "7d41ab4be82bc620244d189a496ea55335a73f963d75c6561e24c843fb462219",
-      "runtime_sha256": "63382d6e3bf24a50d143e626ed5950f0accf252348c9041e68d2a3ab437725a0",
-      "candidate_path": ".tmp/regional-production-v1/materials/meowth-alola/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/meowth-alola-shiny.scn",
+      "runtime_sha256": "36de4da4df43361865c039e32e82cea1e0f10b53379b73957372f9e09d8bf9ec",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/meowth-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/meowth-alola-shiny.scn",
       "motion_profile_sha256": "0556410d28febd40d2dd66a15227827f936e8598ad2f023d5f0fa2bb9d9e5e8e",
       "readability_factor": 2.980957986274316,
       "hover_height": 0.0
@@ -507,9 +514,9 @@
     {
       "species": "meowth-galar",
       "glb_sha256": "5e5f5388e8c691620c9f53af4dbe05f783d1a92895238e5ea324b9445b7b3653",
-      "runtime_sha256": "e1c3cc1fd2d3c03fe7416282aa212ddce205a0f2e3cdf7fd38e8800c51fb7fdb",
-      "candidate_path": ".tmp/regional-production-v1/materials/meowth-galar/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/meowth-galar.scn",
+      "runtime_sha256": "00cb475ad6aa493c6b6fa3c157b31694fb37e9ccc8c5c8a43f2efb5d2e19e533",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/meowth-galar.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/meowth-galar.scn",
       "motion_profile_sha256": "9f8a997466e354618cae93f6978cf5f7d5639c5c54de0f132d1e56ba76febfa7",
       "readability_factor": 3.2753161825173103,
       "hover_height": 0.0
@@ -517,9 +524,9 @@
     {
       "species": "meowth-galar-shiny",
       "glb_sha256": "ad9f44a5cd8a8da037dffc7fb380bad54c715eff7ec4c47f55289169a7501b40",
-      "runtime_sha256": "70ae7124abc3c55a6d0617ffdbf2325c57d56f4207b89a3fc192b96391f7f62c",
-      "candidate_path": ".tmp/regional-production-v1/materials/meowth-galar/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/meowth-galar-shiny.scn",
+      "runtime_sha256": "5814ec635a83a44a1726b556e1bc493cc1aeb2d21e6f983d444ff0f26d1f16ad",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/meowth-galar-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/meowth-galar-shiny.scn",
       "motion_profile_sha256": "5b48cc390945bfde8d47f6389f17c365a2eaccf201080ddb6e8271f020037a06",
       "readability_factor": 3.2753161825173103,
       "hover_height": 0.0
@@ -547,9 +554,9 @@
     {
       "species": "muk-alola",
       "glb_sha256": "9f23c9cbe5672ae752236c11544889dbd8b39b5888d7bc75fc077a94734c4d13",
-      "runtime_sha256": "544c3f41580fbca5a2249530f4c42627c32e13e128b75e779d7246a213d50092",
-      "candidate_path": ".tmp/regional-production-v1/materials/muk-alola/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/muk-alola.scn",
+      "runtime_sha256": "4ba1534cf9ccb6e7f69cfbe43724862434ad83f4269dbdba0791c3ed1357e997",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/muk-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/muk-alola.scn",
       "motion_profile_sha256": "13468955ae1a0ccc79aee8041385e2345fc0ede24e3761fd4761ba73288d8f9c",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -557,9 +564,9 @@
     {
       "species": "muk-alola-shiny",
       "glb_sha256": "c85f3fe463fdf202fccaa179a16e8960f75f2c4f24b941e74ad816f8e008c106",
-      "runtime_sha256": "3b70e538e55f40da658c65cdb798f84658159a0375948287a93a88b686358bf7",
-      "candidate_path": ".tmp/regional-production-v1/materials/muk-alola/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/muk-alola-shiny.scn",
+      "runtime_sha256": "2ba02cebb53892c93ae77a035dcad2d460984b4b49494f44b7fc0f895114557c",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/muk-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/muk-alola-shiny.scn",
       "motion_profile_sha256": "5bc39d6d48ab2af731eaa2601a6b342fafd671746788ab1353ed931fc4f501bc",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -587,9 +594,9 @@
     {
       "species": "persian-alola",
       "glb_sha256": "159f2dd3778b91baf9976796a28e7065cd8dd020a2e79eec15e6eb6f3f4677ab",
-      "runtime_sha256": "970b530b5c9d814299b94ec7f5ae96613b7db43885036e76606da3736bb6c402",
-      "candidate_path": ".tmp/regional-production-v1/materials/persian-alola/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/persian-alola.scn",
+      "runtime_sha256": "22b2f3be09533c8a0c34dc4329605a6c0558c4cde7911ff0a556ec9cb3afb737",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/persian-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/persian-alola.scn",
       "motion_profile_sha256": "719c6f494dc4b7ad34acf9573963fee969305e9ff3e8b43389870783cd503e3a",
       "readability_factor": 1.158619270891371,
       "hover_height": 0.0
@@ -597,9 +604,9 @@
     {
       "species": "persian-alola-shiny",
       "glb_sha256": "cd681783af8f123270dc96943ff6a7a07bb40de5ae52e185987de2523d1fac9f",
-      "runtime_sha256": "cf226b5aba0c7b5600e8720ccfe525213da7f350bd9a4f59e009fead6cfe1a2e",
-      "candidate_path": ".tmp/regional-production-v1/materials/persian-alola/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/persian-alola-shiny.scn",
+      "runtime_sha256": "595db10c260de64854888a666598139bc64ef56f76b7c20dc6ec4adc61d94013",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/persian-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/persian-alola-shiny.scn",
       "motion_profile_sha256": "fd121db4e55541b72fe07399b667829546e6dbbd17b0ddc7180f463a9a6fbe1f",
       "readability_factor": 1.158619270891371,
       "hover_height": 0.0
@@ -607,9 +614,9 @@
     {
       "species": "pikachu-alola",
       "glb_sha256": "fd6304c71e5d33b124b5d9aa4014c400b47b22c0b187450b0c5142c70eb7bdb5",
-      "runtime_sha256": "136b30d706e4f48d40772f2f49c1be6d3d11f75a8852e336ad7f75d0c55502e3",
-      "candidate_path": ".tmp/regional-production-v1/materials/pikachu-alola/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/pikachu-alola.scn",
+      "runtime_sha256": "8918610dfed6bff5d02146f206f5c12585a60485f08c7c711e48d6449de050f5",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/pikachu-alola.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/pikachu-alola.scn",
       "motion_profile_sha256": "418b8c15f933dac1df618e2c0d22298bb5b3385bd11935cbe206d58be39d91a0",
       "readability_factor": 2.907921363195703,
       "hover_height": 0.0
@@ -617,9 +624,9 @@
     {
       "species": "pikachu-alola-shiny",
       "glb_sha256": "fd6304c71e5d33b124b5d9aa4014c400b47b22c0b187450b0c5142c70eb7bdb5",
-      "runtime_sha256": "58a3d82ae6c9be82f6051b1461257e5ec324f62f2e405303c17b09836bbe41b5",
-      "candidate_path": ".tmp/regional-production-v1/materials/pikachu-alola/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/pikachu-alola-shiny.scn",
+      "runtime_sha256": "fd27c5d8da0213b1b65061b2779ddbb175e62f2a4ab5ec0e38a66111c849bfc0",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/pikachu-alola-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/pikachu-alola-shiny.scn",
       "motion_profile_sha256": "418b8c15f933dac1df618e2c0d22298bb5b3385bd11935cbe206d58be39d91a0",
       "readability_factor": 2.907921363195703,
       "hover_height": 0.0
@@ -647,9 +654,9 @@
     {
       "species": "qwilfish-hisui",
       "glb_sha256": "3f17f8b5d7486749f4395ca99beca81003ba08c8720f3c32bebb34e065f8a824",
-      "runtime_sha256": "98cc6bd3d0e556e234a37254ad6ceefe47c7c56cb8119edfd3e174ed1c2ce33e",
-      "candidate_path": ".tmp/regional-production-v1/materials/qwilfish-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/qwilfish-hisui.scn",
+      "runtime_sha256": "2ff999c275108069c4b8f4d66a4151a14f17de26f202d3298c8a4415075c081b",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/qwilfish-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/qwilfish-hisui.scn",
       "motion_profile_sha256": "7c848173e44c7e655b21325fba7c4a7d835970252f43d366ba13cda977a4e604",
       "readability_factor": 1.9959374091523674,
       "hover_height": 0.0
@@ -657,9 +664,9 @@
     {
       "species": "qwilfish-hisui-shiny",
       "glb_sha256": "4d9a493322d74c94073e5d501ba66732f74b91f4f5a550189111a515213a5180",
-      "runtime_sha256": "a5004e10d49b46f8f5a93345f483a93e72879af92b0cd65d03cf7a3df2bb4e4e",
-      "candidate_path": ".tmp/regional-production-v1/materials/qwilfish-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/qwilfish-hisui-shiny.scn",
+      "runtime_sha256": "1a3d69a85f72da7d35d11bb0ba83055a2e296d52e7529c3534c2351083150864",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/qwilfish-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/qwilfish-hisui-shiny.scn",
       "motion_profile_sha256": "337f9955595b6da3d388f96818290446d074180ad320f2701e5e9b2ef4c1e640",
       "readability_factor": 1.9959374091523674,
       "hover_height": 0.0
@@ -767,9 +774,9 @@
     {
       "species": "samurott-hisui",
       "glb_sha256": "b4c0d9e05bd3001bc8eb28facf3aa6fe3113877b918816079ccff9c5a2ee198e",
-      "runtime_sha256": "8fc12d84dfbeb2aeb5095ca778bf13baaaa24d0f5fdec6b4622ccefaf2c24874",
-      "candidate_path": ".tmp/regional-production-v1/materials/samurott-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/samurott-hisui.scn",
+      "runtime_sha256": "d9f5f812aef7b894b2d261716ba82fb28dbf7a9a6cf0c6f793f3ae5711538482",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/samurott-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/samurott-hisui.scn",
       "motion_profile_sha256": "74561baffda7e98bce8a36961d4d027288337efd265773db702c2ad5a7dc2662",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -777,9 +784,9 @@
     {
       "species": "samurott-hisui-shiny",
       "glb_sha256": "909930a739a429256f2a7b8294f161289e7b3deede6c1cc334476f648bd38ab7",
-      "runtime_sha256": "2ee0e869fed632190d2f428b03e9f42b7e210d83e18b2c88f6adcdd0c829f400",
-      "candidate_path": ".tmp/regional-production-v1/materials/samurott-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/samurott-hisui-shiny.scn",
+      "runtime_sha256": "eb643c38c5381c4b4e51d517bdc09c7540380b6284b744b4c39f8d9cf2221006",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/samurott-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/samurott-hisui-shiny.scn",
       "motion_profile_sha256": "28a6e9fd2431b3d8ca3d3ea93f6fb23d320dc51f2baac8275732c42f9e198288",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -847,9 +854,9 @@
     {
       "species": "slowbro-galar",
       "glb_sha256": "cbd19283f9c3f81473f7c570ff6483e3cd37ac76bba252ff0de8256b61f127e1",
-      "runtime_sha256": "64a0026ea487ce0ae589e5535aa334ccf5260b7cc62ba784e47081e5baa9732f",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowbro-galar/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowbro-galar.scn",
+      "runtime_sha256": "ff1dfbc59b4a7cb8f2dd511c546159aec0e193f2a53bc297daa1b370583798bc",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowbro-galar.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowbro-galar.scn",
       "motion_profile_sha256": "80f45ab75885683abae401aad069e76809a777ee5d04cf91903690808f46cc33",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -857,9 +864,9 @@
     {
       "species": "slowbro-galar-shiny",
       "glb_sha256": "388c36b33b9b5085c5d0ee538a1a6e1116e658c6425690fc1f1aacc7aba95b62",
-      "runtime_sha256": "cc3db9dc09147553becd0d17ba8098c32f49db10ecffae9f772365f5b2349f1f",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowbro-galar/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowbro-galar-shiny.scn",
+      "runtime_sha256": "67e2a86581f8795cffc9049e4b929a14c23a11081dd73622b84c00c42e47c11c",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowbro-galar-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowbro-galar-shiny.scn",
       "motion_profile_sha256": "28816603b2a4ed1f0cda1a2fb71e261620f2c0f1fdf77949fd49ea608ea1ab4b",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -867,9 +874,9 @@
     {
       "species": "slowking-galar",
       "glb_sha256": "e655491fd37cf6385cd84ed7163dff59df88f0d4a499e510a03765a9c6d362a3",
-      "runtime_sha256": "97ab6658eeceb12c7b4934200ac2bbc5f594de80424888117e3f27e9b909576a",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowking-galar/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowking-galar.scn",
+      "runtime_sha256": "3775fa65f1f5d56388329e799a452c600b42f1d869762f72c2468f2eb58c0ddd",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowking-galar.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowking-galar.scn",
       "motion_profile_sha256": "0c58fd7914bde295b66dcffa19c72d63fbea8fbc89ee5b67a57e87d85b058faf",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -877,9 +884,9 @@
     {
       "species": "slowking-galar-shiny",
       "glb_sha256": "3e96f2e64e12ce5644b49ab465074c634b954cd64b6ac0de5e04d9e86407cee7",
-      "runtime_sha256": "497d55c7a132ca5bf660d18ae9cf586b96276386eb3b4f2feb1f60dad2dddd4c",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowking-galar/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowking-galar-shiny.scn",
+      "runtime_sha256": "a0a8141036a3c7b84126072df009369eb8d58794a8e64d7b93e7a260698f9d06",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowking-galar-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowking-galar-shiny.scn",
       "motion_profile_sha256": "f888aebbc6b166e70f52f6007c737a3221a2a3cc63bb91bb5b88be67b8f0d6e9",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -887,9 +894,9 @@
     {
       "species": "slowpoke-galar",
       "glb_sha256": "63246e66cfbea6834e128e98b36264290d64dff27ddfda47f71d76467fa2ef13",
-      "runtime_sha256": "ca7d2edf382754ef35c346f3a421b89fe77202185c57707e0cda3c986f6884ee",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowpoke-galar/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowpoke-galar.scn",
+      "runtime_sha256": "96b0f0a5d2fa9d9f844367790421c585242e85bc1ebb5ef668bb9d90be1bbc5b",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowpoke-galar.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowpoke-galar.scn",
       "motion_profile_sha256": "96d22dc6b791673c0ecbe8dfac39b671c10dd96c559ec81f54b4e054b0d734d6",
       "readability_factor": 1.4164229211993733,
       "hover_height": 0.0
@@ -897,9 +904,9 @@
     {
       "species": "slowpoke-galar-shiny",
       "glb_sha256": "8598e3ab996b8bef694039048bee37aa6bc907fe921b8651f4e4b6614b33b0fb",
-      "runtime_sha256": "671712bf06e5a756b6fae2d2444ae4980d8074ba777287d3f1f4952e3b94d31f",
-      "candidate_path": ".tmp/regional-production-v1/materials/slowpoke-galar/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/slowpoke-galar-shiny.scn",
+      "runtime_sha256": "05c50900e7e9feee9add5abd4c5708cb3f04465657f75a17c77cd7daea7f7bf3",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/slowpoke-galar-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/slowpoke-galar-shiny.scn",
       "motion_profile_sha256": "74fe0617d5f0a35126935b91db6ef2d94cc8f2ada161a0b5883fde30438048e2",
       "readability_factor": 1.4164229211993733,
       "hover_height": 0.0
@@ -907,9 +914,9 @@
     {
       "species": "sneasel-hisui",
       "glb_sha256": "55b8d903802728318cc45e605bd4e84ec03254c03d6dc0a821c1f324890f8691",
-      "runtime_sha256": "0cc58f9582e6f217ed3106d0c1e56011cc97577543ecb400704612b1226dc068",
-      "candidate_path": ".tmp/regional-production-v1/materials/sneasel-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/sneasel-hisui.scn",
+      "runtime_sha256": "6b3807d6ef9b1b32dc73f86631c211c1ae6d4e60db55d32074dc990fca423a21",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/sneasel-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/sneasel-hisui.scn",
       "motion_profile_sha256": "b03d97c05cad73bd0da6b26bae5d67df0bf9e62d4a528340ba89ecef87dff6ca",
       "readability_factor": 1.6998896445043907,
       "hover_height": 0.0
@@ -917,9 +924,9 @@
     {
       "species": "sneasel-hisui-shiny",
       "glb_sha256": "45847e385c695c9f831f9a3c9aff3e4558d2197c70e7f5f1d34e83a35635d652",
-      "runtime_sha256": "4d945f1fcf978feff0fc07c5d870cc3a3ce3a619d08aad06ea0fc63b3d215615",
-      "candidate_path": ".tmp/regional-production-v1/materials/sneasel-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/sneasel-hisui-shiny.scn",
+      "runtime_sha256": "413d7a4fe35600d04083f37a174d713958698fe7d6a1f13490f08ccecec3882b",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/sneasel-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/sneasel-hisui-shiny.scn",
       "motion_profile_sha256": "ed4507b078c292009173f87eb6a597a9461e2da5b2e75b048d27aeeb32c554a9",
       "readability_factor": 1.6998896445043907,
       "hover_height": 0.0
@@ -947,9 +954,9 @@
     {
       "species": "tauros-paldea-aqua",
       "glb_sha256": "e1024fe2a3eba971a76ec11e221214021fb68cb92a5958d2d730e668fba6d7cf",
-      "runtime_sha256": "a5603db886b8904af7cb621a9aa8a0d917a3b1c4fc84a0f5fc5431e969283f43",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-aqua/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-aqua.scn",
+      "runtime_sha256": "0653793cefd0d8046b699b8b911aa7ae8801cf6c85ff03c9bc9af2329b578308",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-aqua.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-aqua.scn",
       "motion_profile_sha256": "14d0d95cd5a7076be51567e503ed65a785661cddadf89d0f9c68c4200ee5e097",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -957,9 +964,9 @@
     {
       "species": "tauros-paldea-aqua-shiny",
       "glb_sha256": "b26997d4b98cf5b98ff4d45336ef9f1b3a4c20e291a426eacc185f39cc6e587e",
-      "runtime_sha256": "e16c3d2ce0ac088eb84fcff0058f9916dc13c6a5dc803907c87f60403984c95d",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-aqua/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-aqua-shiny.scn",
+      "runtime_sha256": "3aa5ea58e20ea2b762796a358f224a4e8b364b0d947fae95b276092447dae786",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-aqua-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-aqua-shiny.scn",
       "motion_profile_sha256": "afe7c86357e1eab718805e01a1bc73c785742725685b41507258f4946539ee58",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -967,9 +974,9 @@
     {
       "species": "tauros-paldea-blaze",
       "glb_sha256": "5529385718a3b6706613ea1a1b0e9eedfbc9a181121aeb7ebf4a972f8bee2ac6",
-      "runtime_sha256": "7d213a4765404593246e8e26547a5babee66ada7bf1b0bcadaa95a6221e18f5b",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-blaze/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-blaze.scn",
+      "runtime_sha256": "01385d53aa67322f2ded66ab3ae574fddd15a57c332e7e6530fca1272b23fb89",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-blaze.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-blaze.scn",
       "motion_profile_sha256": "d4a9bc657d3cce5aee6284946f67dbb5d2b5a0d501e07b54a6b0b3f1bea8d5ad",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -977,9 +984,9 @@
     {
       "species": "tauros-paldea-blaze-shiny",
       "glb_sha256": "9bf6c3e3040c09bb344e0d5b82a0796c9d3c88e7153d3a921a99ebbc0859eb67",
-      "runtime_sha256": "8da533409c3c52dc9bf8eb7719911b11973b7995b84c5e3aecb008aea9bc288e",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-blaze/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-blaze-shiny.scn",
+      "runtime_sha256": "69db56e8eeae96312c2dfc5957605e0ce21ef180065ee9fb3b1788e90b677d5d",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-blaze-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-blaze-shiny.scn",
       "motion_profile_sha256": "a29c02e47737779023e34b5b83427c3408bd2275282a5a6fcc2e5b593e0ab3dc",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -987,9 +994,9 @@
     {
       "species": "tauros-paldea-combat",
       "glb_sha256": "516e2ed3ce6c6fa934f0d0a1bc6b6f4bc3edfa7735c0b2b37f7ff9a8190215a7",
-      "runtime_sha256": "c9fa4531197a77af6c21e6d5647e5fbf37716caa3565fe9131f235cfdbee7c1f",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-combat/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-combat.scn",
+      "runtime_sha256": "78bcb098038f475cc0488f6a91ab11c4932c2bda6ed4fedbcf75194244773837",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-combat.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-combat.scn",
       "motion_profile_sha256": "7ae2e0eadda1860762659a2ae3fe72afdcd8a3052b483645d86dcad52470f42f",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -997,9 +1004,9 @@
     {
       "species": "tauros-paldea-combat-shiny",
       "glb_sha256": "c208aa46806c35694f13fcc33d83b842306ddd440027a9536ccfaa1591ac9f32",
-      "runtime_sha256": "99686d8899cd807add4f06d6c5f571b8597a6d1b02051cba27fa6d27929451c4",
-      "candidate_path": ".tmp/regional-production-v1/materials/tauros-paldea-combat/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/tauros-paldea-combat-shiny.scn",
+      "runtime_sha256": "1041b8811d6fd782b7a690bbd415e03a8fea8ce6715163bfec000a5cfa2a73e7",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/tauros-paldea-combat-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/tauros-paldea-combat-shiny.scn",
       "motion_profile_sha256": "ca243dbf5b0a69b5be637b3cdac1d02ae659b0271ed8c5073ecec3e17933ca22",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -1007,9 +1014,9 @@
     {
       "species": "typhlosion-hisui",
       "glb_sha256": "a9d0b9d0250bbb8c0f5742a7a61a9e9033335c77fc4b733baa6d431e13caf9ae",
-      "runtime_sha256": "d375384db834d3f6dd87a4f684c8bf29663e5b07bc3a812da220f3f73a241734",
-      "candidate_path": ".tmp/regional-production-v1/materials/typhlosion-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/typhlosion-hisui.scn",
+      "runtime_sha256": "b41855463371f037e5665743ac92282dee9f09d2c4f8bd83aefd97f55bad86c7",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/typhlosion-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/typhlosion-hisui.scn",
       "motion_profile_sha256": "16d51756a4a9ec728abf901b4b2d72bdc3a4301919487a10dbc04c7df8009374",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -1017,9 +1024,9 @@
     {
       "species": "typhlosion-hisui-shiny",
       "glb_sha256": "8cba4f8294cc16e321f10c7c8af1cb29a785aad74dd8c863cdfc238538980afe",
-      "runtime_sha256": "65d5465ab2e46bcaeb816a1c3bc94fcc8928aabe5f37e37ff25563f2b2dbc3bc",
-      "candidate_path": ".tmp/regional-production-v1/materials/typhlosion-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/typhlosion-hisui-shiny.scn",
+      "runtime_sha256": "e60b2bfe406996a725ec6e675063d36f26cd7cd624b6c7078cbd30ea3cc0420c",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/typhlosion-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/typhlosion-hisui-shiny.scn",
       "motion_profile_sha256": "38053b9eedd423b64db109f830cee4429946233bbcad2c2b31a7cd77bcf9a888",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -1147,9 +1154,9 @@
     {
       "species": "zoroark-hisui",
       "glb_sha256": "544750a7284f6abdc2675480a9ffd93db04475b3c6ed551f6002616481e0d52d",
-      "runtime_sha256": "829e52c1bd19798fecc2879443fb8c4294f8545a46af4c0fed0ec38decbb6b6d",
-      "candidate_path": ".tmp/regional-production-v1/materials/zoroark-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/zoroark-hisui.scn",
+      "runtime_sha256": "3bb5f2b8fba0038eb53ed36cc01aa4a09da5dd8befd1250190a5bf83cec74a23",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/zoroark-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/zoroark-hisui.scn",
       "motion_profile_sha256": "2ce6e5a915031c635e775f8a0b3000a271deac443001b841dde0879145314a5c",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -1157,9 +1164,9 @@
     {
       "species": "zoroark-hisui-shiny",
       "glb_sha256": "aadeaf3f9d40429eace8d0a1afac7fdc1ad87d2622f33d9019fb5d8300b721c5",
-      "runtime_sha256": "27ffc20473833c151c56ac95f01de63958c9732eb20b67e6873f700846531100",
-      "candidate_path": ".tmp/regional-production-v1/materials/zoroark-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/zoroark-hisui-shiny.scn",
+      "runtime_sha256": "ef56587bba24b0c553d13e0daf207689b1dc7df187463ffc2f3ee03f11ab4553",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/zoroark-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/zoroark-hisui-shiny.scn",
       "motion_profile_sha256": "f5687ba60444a75951b6850a2f671a47c4efa4358472dee23edf11cd100a849e",
       "readability_factor": 1.0,
       "hover_height": 0.0
@@ -1167,9 +1174,9 @@
     {
       "species": "zorua-hisui",
       "glb_sha256": "3a273ef36774bd69b4c39b6787c2ef8f88dee0368c399ffbf989ea024abb7be3",
-      "runtime_sha256": "1f3523c5eda0ea4d6dafddb3d1421dd402b255fa0e300c6e1f3816377195fca6",
-      "candidate_path": ".tmp/regional-production-v1/materials/zorua-hisui/normal/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/zorua-hisui.scn",
+      "runtime_sha256": "b9aa28138252128889c354963f9f07b96a2fda1b33983c3cb22d375aafe5ee9b",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/zorua-hisui.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/zorua-hisui.scn",
       "motion_profile_sha256": "713a57d1172475e21c66e970c982196f33f02f49beae894b0e90406772eb7a03",
       "readability_factor": 1.4661903854745526,
       "hover_height": 0.0
@@ -1177,12 +1184,17 @@
     {
       "species": "zorua-hisui-shiny",
       "glb_sha256": "a4c3328fa8bbfe2b8ff37c26e2e8299bfc0132314ad6a3b683ed59b00b33f5ed",
-      "runtime_sha256": "eff70db750dfa83f2ec93893f9b44defeadf71c5370384ec2072eca40b4e0d09",
-      "candidate_path": ".tmp/regional-production-v1/materials/zorua-hisui/shiny/model.glb",
-      "runtime_path": ".tmp/regional-production-v1/runtime-v4/zorua-hisui-shiny.scn",
+      "runtime_sha256": "9f4b61300a9cd72b659b918a21f5752637d2f4d19043270937120fb2f8d25f85",
+      "candidate_path": ".tmp/regional-production-v1/eyes-followup-v2/zorua-hisui-shiny.glb",
+      "runtime_path": ".tmp/regional-production-v1/eyes-followup-v2/runtime/zorua-hisui-shiny.scn",
       "motion_profile_sha256": "1082743e0ba1266acaf1cb45340732cedd00105b86369a0c47ce2923d2dd4823",
       "readability_factor": 1.4661903854745526,
       "hover_height": 0.0
     }
-  ]
+  ],
+  "body_visual_feedback": "User reports bodies otherwise look good; eye review pending.",
+  "eye_corrected_pairs": 22,
+  "current_runtime_report": "runtime-final-v3.json",
+  "current_placement": "eyes-followup-v2/placement.json",
+  "geometry_qualification_scope": "Prior 120 Hz gate retained with exact mesh/skin/animation signature parity and fresh runtime pose bounds for all 44 material-only revisions; see eyes-followup-v2/geometry-proof.json."
 }

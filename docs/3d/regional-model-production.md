@@ -82,3 +82,26 @@ The combined review is `.tmp/regional-production-v1/review-v1/index.html`.
 The normal checkout and runtime registries remain unchanged. Keep slot-a and
 its generated artifacts for the final review, performance check and admission.
 User visual approval is still required before building approved bundles.
+
+## Eye review follow-up
+
+The user accepted the bodies generally, but reported blank/missing eye details,
+especially Zorua, Slowpoke and Arcanine. Visual contact sheets cover all 58
+normal/shiny pairs. An audit of the native UV domain across source eye clips
+found 21 pairs whose repeat samplers had been replaced by clamp during eye
+animation packing. The base eye now retains native repeat; separate lid passes
+still clamp. This restores idle eyes and details lost during other expressions.
+
+Arcanine additionally receives source-mask metallic/roughness layers on its
+two eye materials, and opaque rendering of its fully opaque eye texture. No
+body materials, vertices, bones or skeletal animation data changed.
+`regional_eye_followup.py` records source sampler evidence and exact geometry
+parity. All 44 revised runtime scenes load and switch poses without errors;
+matched runtime pose bounds differ by less than 0.00001 m.
+
+Current 116-entry runtime report: `.tmp/regional-production-v1/runtime-final-v3.json`.
+Current placement: `eyes-followup-v2/placement.json` in that artifact root.
+The prior geometric battle qualification is retained with explicit parity
+provenance; no new performance or full game certification is claimed.
+Current combined eye comparison: `eyes-review-v1/index.html` (22 revised pairs
+by default, all 58 selectable). Visual acceptance remains pending.
