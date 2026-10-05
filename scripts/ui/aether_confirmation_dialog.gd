@@ -19,6 +19,7 @@ const COLOR_MUTED := Color("9eb3c5")
 @onready var accent_icon: TextureRect = $Center/Panel/Margin/Content/Header/AccentIcon
 @onready var title_label: Label = $Center/Panel/Margin/Content/Header/Title
 @onready var close_button: Button = $Center/Panel/Margin/Content/Header/CloseButton
+@onready var message_panel: PanelContainer = $Center/Panel/Margin/Content/MessagePanel
 @onready var message_label: Label = $Center/Panel/Margin/Content/MessagePanel/MessageMargin/Message
 @onready var custom_content: VBoxContainer = $Center/Panel/Margin/Content/CustomContent
 @onready var option_checkbox: CheckBox = $Center/Panel/Margin/Content/OptionCheckBox
@@ -141,11 +142,14 @@ func focus_spin_box(input: SpinBox) -> void:
 	line_edit.select_all.call_deferred()
 
 
-func popup_centered(requested_size: Vector2i = Vector2i.ZERO) -> void:
+func popup_centered(requested_size: Vector2i = Vector2i.ZERO, compact := false) -> void:
 	_fit_to_viewport()
 	var target_size := Vector2(requested_size)
 	if target_size == Vector2.ZERO:
 		target_size = DEFAULT_SIZE
+	if compact:
+		panel.custom_minimum_size = Vector2.ZERO
+		message_panel.custom_minimum_size.y = 76.0
 	var viewport_size := get_viewport().get_visible_rect().size
 	panel.custom_minimum_size = Vector2(
 		minf(target_size.x, maxf(viewport_size.x - 32.0, 300.0)),
