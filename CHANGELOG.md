@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add reviewed normal and shiny 3D models for Galarian Articuno, Zapdos and Moltres, with calibrated battle poses and flight heights.
+
 - Keep sleeping Pokémon’s Z glyphs positioned consistently when rotating the battle camera; show only the persistent tint between poison, toxic, burn and paralysis events.
 
 - Reduce 3D poison and toxic bubble diameter by 40% for subtler status effects.

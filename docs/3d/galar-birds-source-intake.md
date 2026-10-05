@@ -244,3 +244,65 @@ runtime/catalog hashes and framing inputs are unchanged. Moltres uses its new
 0.9-scale pass. The shared page at `http://127.0.0.1:8802/` pins 337 files.
 Browser control is unavailable, so the review link was sent for manual opening.
 The single-model headless conversion also passes without material errors.
+
+## Local runtime admission and bundles
+
+Task `galar-birds-admission`, 2026-10-05. The user approved the battle page
+with **“goedgekeurd”**. That approval is pinned to the original battle manifest.
+All six original SCNs remain unchanged. The game and launcher registries now
+contain the exact six hashes and three shared normal/shiny presentation
+profiles. Their normal Kanto counterparts remain separate and unchanged.
+
+Before admission, independent Zapdos samples exposed only 2.44 mm clearance
+in one attack, below the existing 25 mm admission margin. A 30 mm offset was
+added to both physical attack correction curves for normal and shiny. Scale,
+idle, sleep, flight-height and source animations remain as approved. Repeated
+120 Hz verification passes the unchanged margin. This small floor-safety
+correction is recorded in `placement-v3.json`, with its own native measurements.
+
+`catalog_galar_birds_admission.py` prepares, admits and finalizes the cohort.
+Evidence stays under `.tmp/galar-birds-admission-v1/`; the committed receipt is
+`catalog_galar_birds_bundle_qualification.json`. Local bundle metadata is in
+`release/approved_3d_galar_birds_index.json`.
+
+- Three archives, six scenes, **67,397,765 bytes** combined (about 67.4 MB).
+- Transactional launcher installation passes, including hashes, no-op plans
+  and restart reuse. The installer check runs in the **launcher** project.
+- The real game downloader/presenter check resolves all three Galar names,
+  loads normal/shiny before reveal, applies the approved hover heights and
+  attack selection, and swaps variants without another download.
+- The same check passes after admission, using checked-in registry entries
+  rather than injecting candidate models/profiles.
+- Full-battle stress passes classic, stadium, classic at 1280×720. Round p95:
+  **16.860 / 17.392 / 16.864 ms**, with the existing 20 ms ceiling. Prepared
+  observation p95: classic **16.842 ms** (1,440 frames), stadium **17.326 ms**
+  (720 frames). Cache bounds, dispatch time, covered-stall and retained-memory
+  gates also pass. No threshold was relaxed.
+
+### Test failures retained and diagnosed
+
+The first installer invocation targeted the game project instead of the
+launcher; the two preload paths correctly failed. The old legendary runtime
+fixture mutated an older release descriptor, while the editor now selects v8.
+The Galar fixture explicitly supplies its candidate descriptor. Neither issue
+required a change to runtime model validation.
+
+The stress adapter's `_load_catalog` override was missing the new optional
+`preserve_actors` argument. Its signature now matches and forwards the argument
+to the real presenter; all measurements and assertions remain unchanged.
+
+Two graphical readiness attempts timed out. Diagnostics showed that both
+models had loaded, no pipeline compilations were pending, and the desktop
+window had drawn **zero frames**. Explicitly showing the test window above
+other windows resolves this. The unchanged readiness check passes with a new
+empty Mesa driver-cache directory as well as after final registry admission.
+This is a visible test-window setup correction, not a shader-wait bypass.
+The earlier logs remain pinned in the qualification receipt. Existing
+unrelated texture UID warnings fell back to their valid text paths; the final
+qualification logs have no Godot ERROR/SCRIPT ERROR entries.
+
+Only local Compatibility rendering was qualified. The bundles have **not**
+been uploaded, the public release content index has not been expanded, and no
+release was built or deployed. R2 upload, content-index activation and release
+certification remain next steps. The normal editor/client therefore cannot
+automatically download these three from the current public index yet.

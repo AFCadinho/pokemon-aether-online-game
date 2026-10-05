@@ -1,0 +1,83 @@
+{
+  "assets": [
+    {
+      "appearances": [
+        {
+          "runtime_identity": "articuno-galar",
+          "runtime_sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "articuno-galar@shiny",
+          "runtime_sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:articuno-galar:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 144,
+      "object_key": "optional-assets/pokemon_3d/articuno-galar/base/v1-4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8.zip",
+      "sha256": "4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8",
+      "size_bytes": 23597616,
+      "species_id": "articuno-galar",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "moltres-galar",
+          "runtime_sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "moltres-galar@shiny",
+          "runtime_sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:moltres-galar:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 146,
+      "object_key": "optional-assets/pokemon_3d/moltres-galar/base/v1-c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf.zip",
+      "sha256": "c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf",
+      "size_bytes": 23471116,
+      "species_id": "moltres-galar",
+      "version": 1
+    },
+    {
+      "appearances": [
+        {
+          "runtime_identity": "zapdos-galar",
+          "runtime_sha256": "195fa01ac5df7e258805dd878e2e95191c84aaa49e4944d7de992677cf7a1f6b",
+          "variant": "normal"
+        },
+        {
+          "runtime_identity": "zapdos-galar@shiny",
+          "runtime_sha256": "89f859336f60f8cb6082da994e8e508352a816386c70db7392ddcdca7d6d8b54",
+          "variant": "shiny"
+        }
+      ],
+      "asset_id": "pokemon_3d:zapdos-galar:base",
+      "asset_type": "pokemon_3d",
+      "dependencies": [],
+      "form_id": "base",
+      "national_dex": 145,
+      "object_key": "optional-assets/pokemon_3d/zapdos-galar/base/v1-4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2.zip",
+      "sha256": "4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2",
+      "size_bytes": 20329033,
+      "species_id": "zapdos-galar",
+      "version": 1
+    }
+  ],
+  "catalog_revision": "galar-birds-approved-v1",
+  "kind": "pokeaether-optional-asset-index",
+  "runtime_contract": {
+    "godot": "4.6",
+    "pokemon_3d": 1
+  },
+  "schema": 1
+}
