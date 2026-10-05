@@ -1238,5 +1238,5 @@
   "local_bundle_work": "admission-v1",
   "installed_runtime_check_passed": true,
   "performance_hold_report": "tools/sprite_factory/regional_model_performance_hold.json",
-  "performance_hold_sha256": "64d48c7052e42da5a8c1a64e924016c10ea13a8968902a3fe47755ff5158f52e"
+  "performance_hold_sha256": "f83abae37e6f21558a74f54af73e5253a675eb2e2b53f08dbf043e947bb28ccc"
 }

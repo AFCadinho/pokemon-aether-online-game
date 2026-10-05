@@ -206,3 +206,27 @@ performance hold. The small control is diagnostic, not a replacement for the
 full 58-pair qualification. `regional_model_performance_hold.json` pins the
 evidence. Registry admission, post-admission replay, local integration and
 separately authorized publication remain outstanding.
+
+## Native raster correction
+
+The follow-up profiler isolated crowd animation/rendering without changing the
+admission test. It also exposed a production resolution bug: a 1280 x 720 window
+rendered the full battle viewport at 1921 x 1080. The presenter's CanvasItem
+screen transform omitted the Window content stretch (2/3 at 720p), while the
+viewport final transform contained it. The production calculation now applies
+that final transform to the canvas transform, preserving logical layout and
+matching the actual output pixels rather than the UI design canvas.
+
+`battle_3d_raster_size_check.gd` independently checks expected pixel sizes at
+720p, 1080p and 1440p with nonuniform parent scaling. All three pass. The existing
+presentation check uses the corrected transform and retains its anchor checks.
+The six-pair control after this production correction measured 18.917 ms steady
+stadium p95 and 17.635 ms classic, with zero forced frames. Full-batch validation
+runs separately after merging current local development into this task; the
+new move-effect assets were imported into this slot's own cache.
+
+The full run after merging development overlapped a daemon restart and then a
+new slot-b Thunderbolt preview. Its log is retained and excluded from admission.
+The complete 58-pair on-demand runtime check was repeated on the merged code and
+passes again with zero forced frames. An exclusive measurement period has been
+requested before repeating the full performance test.

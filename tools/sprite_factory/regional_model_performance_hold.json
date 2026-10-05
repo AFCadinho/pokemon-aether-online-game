@@ -37,12 +37,15 @@
   "scope": "Local AMD Compatibility. Control includes previously admitted Blastoise, Furret and Yanma alongside three candidates. No complete passing 58-pair stress run exists.",
   "evidence_sha256": {
     ".tmp/regional-production-v1/admission-v1/install.log": "f4a0ca96588d749cf73554bf18e21d3b15362f674eb975b5cf24388247efa09d",
-    ".tmp/regional-production-v1/admission-v1/runtime.log": "3057fd188f2234e4c291315faef58f22009d57fc963bc0cce7bcd07519d212d4",
     ".tmp/regional-production-v1/admission-v1/diagnostic-control-stress.json": "259246107d4a62fb6377651765c3fdb47c2916269655b3b217e99ebd1c927d66",
     ".tmp/regional-production-v1/admission-v1/diagnostic-control.log": "59af55be04989cf596c818324eac858e42f3d09a657a429b56a872ed4aee1e70",
     ".tmp/regional-production-v1/admission-v1/diagnostic-control-command.json": "353a29b53246df3a59ed1b681994a6c49704e8b2e77589e1167a4f6245f220e6",
     ".tmp/regional-production-v1/admission-v1/stress-incomplete-competing-preview.log": "4997615d0424d99aeea97e57f4251eecf068e3ab4f4cd25f134c40acb233d2c8",
-    ".tmp/regional-production-v1/admission-v1/stress-incomplete-frame-force-diagnostic.log": "42c81271b9a9e5d62b4178126d4a3361a5cfeaeaec16f7b7ccef0c1362714f19"
+    ".tmp/regional-production-v1/admission-v1/stress-incomplete-frame-force-diagnostic.log": "42c81271b9a9e5d62b4178126d4a3361a5cfeaeaec16f7b7ccef0c1362714f19",
+    ".tmp/regional-production-v1/admission-v1/runtime-before-development-merge.log": "3057fd188f2234e4c291315faef58f22009d57fc963bc0cce7bcd07519d212d4",
+    ".tmp/regional-production-v1/admission-v1/runtime.log": "3057fd188f2234e4c291315faef58f22009d57fc963bc0cce7bcd07519d212d4",
+    ".tmp/regional-production-v1/performance-investigation/raster-fixed-control.json": "dd08dcfb6db4457cc5f9bd05cd6ad11573f64d0a77fcf20ffbe4a124b88dcb9e",
+    ".tmp/regional-production-v1/admission-v1/stress-incomplete-restart-and-thunderbolt-preview.log": "d875e664eb67d735c1c404df50371cbfcdf59930a04a0fd465dc0b0af687763d"
   },
   "remaining": [
     "Resolve stadium performance hold under controlled rendering conditions",
@@ -50,5 +53,12 @@
     "Registry admission and post-admission runtime check",
     "Local integration",
     "Separately authorized R2 upload and release index activation"
-  ]
+  ],
+  "followup": {
+    "status": "raster_fix_passes_control_full_run_awaits_exclusive_gpu",
+    "fix_commit": "6a59803ae",
+    "development_merge": "8b007e1f9",
+    "runtime_pairs_passed": 58,
+    "remaining": "Full 58-pair stress run without competing Godot preview, then admission and integration"
+  }
 }

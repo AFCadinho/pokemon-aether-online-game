@@ -158,6 +158,10 @@ def admit():
         ROOT/'tools/sprite_factory/catalog_mega_bundle_install_check.gd',
         ROOT/'scripts/battle/battle_ui/model_form_dependencies.gd',
         ROOT/'scripts/battle/battle_ui/reviewed_model_catalog.gd',
+        ROOT/'scripts/battle/battle_ui/experimental_battle_3d.gd',
+        ROOT/'tests/battle_3d_raster_size_check.gd',
+        BASE/'performance-investigation/transforms.log',
+        BASE/'performance-investigation/raster-fixed-control.json',
         ROOT/'tests/battle_3d_legendary_stress_check.gd',ROOT/'tests/catalog_batch_01_candidate_stress_check.gd',
         BASE/'battle-eyes-final-v1/receipt.json',BASE/'battle-eyes-final-v1/qualification.json']
     receipt = {'schema':1,'pairs':58,'models':116,'appearance_approved':True,'battle_approved':True,
