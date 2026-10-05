@@ -1,6 +1,6 @@
 # Ice Beam, Razor Leaf and Quick Attack
 
-Implemented in normal 3D battles; **visual approval pending** for all three.
+Implemented in normal 3D battles; **all three visually approved by the user**.
 Thunder Shock was approved before this batch.
 
 | Move | Inspected SV source | Authored 3D presentation |

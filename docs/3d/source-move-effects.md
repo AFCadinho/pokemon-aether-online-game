@@ -16,7 +16,7 @@
 - **Flamethrower, Bubble and Bubble Beam: visually approved by the user.**
   See [fire and bubble effects](fire-bubble-effects.md) for source reuse and review.
 
-- **Ice Beam, Razor Leaf and Quick Attack: implemented; visual approval pending.**
+- **Ice Beam, Razor Leaf and Quick Attack: visually approved by the user.**
   See [ice, leaf and quick effects](ice-leaf-quick-effects.md).
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
