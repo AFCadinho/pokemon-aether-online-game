@@ -306,3 +306,15 @@ been uploaded, the public release content index has not been expanded, and no
 release was built or deployed. R2 upload, content-index activation and release
 certification remain next steps. The normal editor/client therefore cannot
 automatically download these three from the current public index yet.
+
+## R2 publication and v9 download integration
+
+Task `galar-birds-r2`, 2026-10-05: the user authorized the next publication step.
+All three exact qualified archives and the cohort index are now published and
+publicly hash-verified. The combined v9 index is published after checking all
+1,142 referenced objects. Matching game/launcher pins, editor selection,
+packaging and the desktop workflow now support v9 in local development.
+The active desktop manifest is unchanged; production activation follows the
+normal paired release procedure. Details and focused test results are in
+`docs/approved-3d-bundle-release-v9.md`. The earlier qualification receipt is
+retained unchanged as evidence of the pre-publication gate.

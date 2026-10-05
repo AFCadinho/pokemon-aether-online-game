@@ -1,0 +1,23 @@
+{
+  "active_manifest_activated": false,
+  "active_manifest_sha256_unchanged": "64f213afb06c5492527d5415a7b48ef72bdc78d855ef13c0c3e406cc42d388a4",
+  "appearance_count": 2284,
+  "bundle_count": 1142,
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v9-021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa.json",
+    "sha256": "021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa",
+    "size_bytes": 768804
+  },
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v9-021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "021520abce95ef6e6a61ae6db0a720b16ebb378d36a12c23cc6faeee8ee92baa",
+    "size_bytes": 768804,
+    "uploaded": true
+  },
+  "public_bundle_head_verified": 1142,
+  "revision": "approved-pokemon-3d-v9",
+  "schema": 1,
+  "verified_at_utc": "2026-10-05T01:50:08.245231+00:00"
+}

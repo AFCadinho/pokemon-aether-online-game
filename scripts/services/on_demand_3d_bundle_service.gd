@@ -3,6 +3,7 @@ extends Node
 
 const RELEASE = preload("res://data/approved_3d_release_v7.json")
 const RELEASE_V8 = preload("res://data/approved_3d_release_v8.json")
+const RELEASE_V9 = preload("res://data/approved_3d_release_v9.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
@@ -274,18 +275,27 @@ func _asset_id(identity: String) -> String:
 func _selected_release() -> Dictionary:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path():
-		var pin: Dictionary = RELEASE_V8.data.index
-		if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
-			return RELEASE_V8.data
-	# The development editor has the reviewed v8 index in the project itself.
-	# Use it automatically for local editor runs; exported clients keep their
-	# launcher-selected release and otherwise use the pinned production release.
-	var editor_path := _editor_local_v8_index_path()
-	if not editor_path.is_empty():
-		var editor_pin: Dictionary = RELEASE_V8.data.index
-		if _valid_file(editor_path, int(editor_pin.size_bytes), str(editor_pin.sha256)):
-			return RELEASE_V8.data
+		for release: Dictionary in [RELEASE_V9.data, RELEASE_V8.data]:
+			var pin: Dictionary = release.index
+			if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
+				return release
+	# Editor runs use the latest published, hash-pinned project index.
+	for release: Dictionary in [RELEASE_V9.data, RELEASE_V8.data]:
+		var editor_path := _editor_local_index_path(release)
+		var pin: Dictionary = release.index
+		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
+			return release
 	return RELEASE.data
+
+
+static func _editor_local_index_path(release: Dictionary) -> String:
+	if not OS.has_feature("editor"):
+		return ""
+	if release.revision == RELEASE_V9.data.revision:
+		return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v9_index.json")
+	if release.revision == RELEASE_V8.data.revision:
+		return _editor_local_v8_index_path()
+	return ""
 
 
 static func _editor_local_v8_index_path() -> String:
@@ -352,8 +362,8 @@ func _local_index_path(release: Dictionary) -> String:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 		return launcher_path
-	elif release.revision == RELEASE_V8.data.revision:
-		var editor_path := _editor_local_v8_index_path()
+	elif release.revision in [RELEASE_V9.data.revision, RELEASE_V8.data.revision]:
+		var editor_path := _editor_local_index_path(release)
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
 			return editor_path
 	return ROOT.path_join("index-%s.json" % pin.sha256)

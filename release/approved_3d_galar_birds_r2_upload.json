@@ -1,0 +1,62 @@
+{
+  "active_manifest_sha256_unchanged": "64f213afb06c5492527d5415a7b48ef72bdc78d855ef13c0c3e406cc42d388a4",
+  "appearance_count": 6,
+  "bundle_bytes": 67397765,
+  "bundle_qualification_sha256": "10de6254a113a1472e48168d3f94d7115dc1e85dd90ff5f17b3eca1b3a37f901",
+  "bundles": [
+    {
+      "asset_id": "pokemon_3d:articuno-galar:base",
+      "object_key": "optional-assets/pokemon_3d/articuno-galar/base/v1-4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "4ae760330252b7fd81a48fbe2864d035ebc8861e2246735995197f23131f0ac8",
+      "size_bytes": 23597616,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:moltres-galar:base",
+      "object_key": "optional-assets/pokemon_3d/moltres-galar/base/v1-c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "c64d2bcb81c96e47167a4b039e929bde58588af7ed307419ecb7b6206407abbf",
+      "size_bytes": 23471116,
+      "uploaded": true
+    },
+    {
+      "asset_id": "pokemon_3d:zapdos-galar:base",
+      "object_key": "optional-assets/pokemon_3d/zapdos-galar/base/v1-4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2.zip",
+      "public_get_sha256_verified": true,
+      "public_head_size_verified": true,
+      "sha256": "4d57beb595f0914f1aef1d1c98b7fecb6a701dd90b9da54ddf926b487fff3ed2",
+      "size_bytes": 20329033,
+      "uploaded": true
+    }
+  ],
+  "catalog_revision": "galar-birds-approved-v1",
+  "content_index": {
+    "object_key": "optional-assets/pokemon_3d/index/galar-birds-approved-v1-346a060c151293ddb5df72d26345b085eb11bd5a976d8161ab39309b3044f08e.json",
+    "sha256": "346a060c151293ddb5df72d26345b085eb11bd5a976d8161ab39309b3044f08e",
+    "size_bytes": 2932
+  },
+  "desktop_manifest_activated": false,
+  "index_verification": {
+    "object_key": "optional-assets/pokemon_3d/index/galar-birds-approved-v1-346a060c151293ddb5df72d26345b085eb11bd5a976d8161ab39309b3044f08e.json",
+    "public_get_sha256_verified": true,
+    "public_head_size_verified": true,
+    "sha256": "346a060c151293ddb5df72d26345b085eb11bd5a976d8161ab39309b3044f08e",
+    "size_bytes": 2932,
+    "uploaded": true
+  },
+  "new_bundle_objects_uploaded": 3,
+  "permitted_forms": [
+    "base"
+  ],
+  "profile_count": 3,
+  "public_base_url": "https://updates.pokeaether.com",
+  "public_get_sha256_verified_objects": 4,
+  "public_head_size_verified_objects": 4,
+  "reviewed_catalog_sha256": "94ede365070e55c201f4e253e1d5ec0f5525fdcab31aef1e556f62f71772066c",
+  "schema": 1,
+  "scope": "Qualified pairs only; immutable content publication",
+  "verified_at_utc": "2026-10-05T01:47:33.029584+00:00"
+}

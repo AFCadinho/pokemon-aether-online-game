@@ -17,7 +17,7 @@ on:
         description: Select the already published approved 3D bundle index.
         required: false
         type: choice
-        options: [v1, v2, v5, v6, v7, v8]
+        options: [v1, v2, v5, v6, v7, v8, v9]
         default: v1
       build_macos:
         description: Build and include macOS artifacts.
@@ -447,6 +447,15 @@ jobs:
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
         run: python3 tools/publish_approved_3d_index_v8.py --apply
 
+      - name: Publish approved 3D v9 index after verifying its bundles
+        if: inputs.approved_3d_release == 'v9'
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: python3 tools/publish_approved_3d_index_v9.py --apply
+
       - name: Register approved 3D Pokemon bundle index
         env:
           INPUT_APPROVED_3D_RELEASE: ${{ inputs.approved_3d_release }}
@@ -458,15 +467,15 @@ jobs:
           from urllib.request import Request, urlopen
 
           selected = os.environ.get("INPUT_APPROVED_3D_RELEASE") or "v1"
-          if selected not in {"v1", "v2", "v5", "v6", "v7", "v8"}:
+          if selected not in {"v1", "v2", "v5", "v6", "v7", "v8", "v9"}:
               raise SystemExit("unsupported approved 3D release selection")
-          if selected in {"v2", "v5", "v6", "v7", "v8"} and os.environ.get("BUILD_LAUNCHER") != "true":
+          if selected in {"v2", "v5", "v6", "v7", "v8", "v9"} and os.environ.get("BUILD_LAUNCHER") != "true":
               raise SystemExit("expanded 3D releases must rebuild the launcher")
           metadata = json.loads(Path(f"release/approved_3d_bundles_{selected}.json").read_text(encoding="utf-8"))
           if metadata.get("schema") != 1 or metadata.get("kind") != "pokeaether-approved-3d-release":
               raise SystemExit("invalid approved 3D release metadata")
           entries = [metadata["index"], *metadata.get("bundles", [])]
-          expected = {"v1": 8, "v2": 22, "v5": 84, "v6": 155, "v7": 161, "v8": 1140}[selected]
+          expected = {"v1": 8, "v2": 22, "v5": 84, "v6": 155, "v7": 161, "v8": 1140, "v9": 1143}[selected]
           if len(entries) != expected:
               raise SystemExit("approved 3D release object count is incomplete")
           for entry in entries:
