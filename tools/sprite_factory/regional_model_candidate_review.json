@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "status": "awaiting_corrected_eye_visual_review",
+  "status": "awaiting_final_battle_visual_review",
   "runtime_approved": false,
   "appearance_visual_approved": false,
   "battle_visual_approved": false,
@@ -36,7 +36,13 @@
     "eye-last-two-v2/source-proof.json": "e02cb7219b79b5698138f7d961416bb521ed2ea6dfb8a3d87d506cf61ec10e21",
     "eye-last-two-v2/geometry-proof.json": "30372351e1b410df59c43a34a379bb5f1f17b918cd001408da8a544cd173bb54",
     "eye-last-two-v2/appearance/godot-review.json": "8fbb5929dcd5b9e7ac56cb04e31a4d9e34f8d068ffa8c1dfb8ad59136a8370a6",
-    "eyes-last-two-review-v1/evidence.json": "b0cc52828cfcf8e88d43a85dffc2ecded5cceebb8e9b7dfe9fecfb5e24153f5b"
+    "eyes-last-two-review-v1/evidence.json": "b0cc52828cfcf8e88d43a85dffc2ecded5cceebb8e9b7dfe9fecfb5e24153f5b",
+    "battle-eyes-final-v1/receipt.json": "35bbcdaa9da0ca5d481c359e392c96f41acec8fdc0b455e354e128d7310f9be0",
+    "battle-eyes-final-v1/battle-review.json": "508ac62b17911e9ec579c09efffb3c869320d058ee742a56d8b8717a6006074a",
+    "battle-eyes-final-v1/qualification.json": "050f46482414af15061ae2ade612886417b214493a9dc9a2668840c84cb3525c",
+    "battle-eyes-final-v1/render/battle-review.json": "78a3a714327fc8166708ec08fe73bd4630f466a231f1087cce48b067a1bbb7fb",
+    "battle-eyes-final-v1/appearance/godot-review.json": "bcb29892412399860f962fd4e3ffb5bebfcf7a7c5ab837af04559b9c5a2175dc",
+    "battle-review-final-v1/evidence.json": "7c9b61a7007f19337346b57865eddb481f02dab4131210df2bcf93fe3a8a4e65"
   },
   "entries": [
     {
@@ -1209,5 +1215,18 @@
   "last_eye_correction_pairs": [
     "pikachu-alola",
     "typhlosion-hisui"
-  ]
+  ],
+  "visual_feedback": {
+    "last_two_eyes": {
+      "pairs": [
+        "pikachu-alola",
+        "typhlosion-hisui"
+      ],
+      "answer": "allebei goed",
+      "approved": true,
+      "review": "eyes-last-two-review-v1/index.html"
+    },
+    "remaining_batch": "Bodies generally accepted; eye follow-up limited to Pikachu/Typhlosion, now accepted. Final consolidated battle review pending."
+  },
+  "current_battle_review": "battle-review-final-v1/index.html"
 }

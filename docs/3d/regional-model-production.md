@@ -130,5 +130,22 @@ eye-motion and geometry-parity tests pass. No performance admission is implied.
 Current runtime report: `runtime-final-v4.json`; placement and technical proof:
 `eye-last-two-v2/placement.json` and `eye-last-two-v2/geometry-proof.json`.
 The new comparison is `eyes-last-two-review-v1/index.html`, with eye close-ups
-and all captured attack/sleep/faint poses. Both pairs still require visual
-approval. The previous comparison remains as historical evidence.
+and all captured attack/sleep/faint poses. The user explicitly approved both
+pairs with “allebei goed”. This approval covers these two appearance corrections;
+the combined battle review remains pending.
+
+## Final battle gallery after eye corrections
+
+`regional_battle_eye_refresh.py` checks exact GLB geometry/skin/skeletal-motion
+parity and identical battle placement for all 116 variants against the previous
+qualified batch. It retains that pinned 120 Hz geometry evidence. Its Godot
+capture companion generates fresh battle pictures for the 44 eye revisions;
+the 72 unchanged variants retain their original pictures. This is explicitly
+image refresh with retained measurements, not a new native measurement run.
+The existing qualification thresholds are applied unchanged to the combined
+report and updated camera/HUD captures.
+
+The final gallery is `battle-review-final-v1/index.html`, defaulting to battle
+view and retaining a switch to the latest appearance images. Its receipt,
+combined report and qualification are in `battle-eyes-final-v1`. Performance,
+registry admission, bundles, integration and upload remain pending.
