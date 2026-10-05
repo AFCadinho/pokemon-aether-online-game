@@ -105,6 +105,7 @@ func _run() -> void:
 	_check(service.calls == 1 and player.style == "", "One attempt submits once and restores the player's pose")
 	await create_timer(1.0).timeout
 	_check(npc.get_node_or_null("ThievingAttemptFeedback") == null, "Completed NPC attempt leaves no meter behind")
+	await _check_player_pose_restoration(npc, service)
 	npc.queue_free()
 	player.queue_free()
 	service.queue_free()
@@ -112,6 +113,50 @@ func _run() -> void:
 	target.queue_free()
 	await process_frame
 	quit(1 if failed else 0)
+
+func _check_player_pose_restoration(npc: Node2D, service: FakeThieving) -> void:
+	var player: Node2D = load("res://scenes/player.tscn").instantiate()
+	player.set_script(load("res://tests/fixtures/mount_depth_player.gd"))
+	root.add_child(player)
+	var game_state := root.get_node("GameState")
+	var previous_running: bool = game_state.running_shoes_enabled
+	for mounted: bool in [true, false]:
+		for running: bool in [true, false]:
+			game_state.running_shoes_enabled = running
+			for succeeded: bool in [true, false]:
+				service.reply = {"success": true, "outcome": "success"} if succeeded \
+					else {"success": false, "error": "Test request failed"}
+				var expected_style := "ride" if mounted else "walk"
+				var expected_mount := "cyclizar" if mounted else ""
+				player.set("land_mount_activity_active", mounted)
+				player.set("active_mount_id", expected_mount)
+				player.call("set_activity_style", expected_style)
+				var move_duration: float = player.call("_get_current_tile_move_duration")
+				await npc.call("_start_pickpocket", player)
+				var label := "mounted=%s running=%s success=%s" % [mounted, running, succeeded]
+				_check(player.call("get_activity_style") == expected_style,
+					"Thieving restores the previous pose (%s)" % label)
+				_check(player.call("get_active_mount_id") == expected_mount
+					and player.call("is_land_mount_activity_active") == mounted
+					and is_equal_approx(player.call("_get_current_tile_move_duration"), move_duration),
+					"Thieving preserves mount state and movement speed (%s)" % label)
+				var expected_body_style := "ride" if mounted else ("run" if running else "walk")
+				_check(player.get("body_sprite_frames_movement_style") == expected_body_style,
+					"Thieving restores the correct body frames (%s)" % label)
+				if mounted:
+					var movement: Dictionary = player.call("get_network_movement_state")
+					_check(movement.get("activityStyle") == "ride" and movement.get("mountId") == "cyclizar",
+						"World presence retains the mounted pose (%s)" % label)
+					for direction: Vector2 in [Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT, Vector2.UP]:
+						player.call("play_walk_animation", direction)
+						var body := player.get_node("Look/Rider/BodySprite") as AnimatedSprite2D
+						var mount := player.get_node("Look/MountSprite") as AnimatedSprite2D
+						_check(not body.is_playing() and mount.visible and mount.is_playing(),
+							"Moving after thieving keeps the rider seated (%s direction=%s)" % [label, direction])
+	game_state.running_shoes_enabled = previous_running
+	player.queue_free()
+	await process_frame
+
 
 func _check(condition: bool, label: String) -> void:
 	if condition:

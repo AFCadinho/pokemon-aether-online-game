@@ -1312,13 +1312,17 @@ func _start_pickpocket(body: Node2D) -> void:
 		add_child(feedback)
 		feedback.begin(self)
 		_sync_thieving_prompt()
+		var previous_activity_style := CharacterAppearanceService.BODY_MOVEMENT_DEFAULT
+		if body.has_method("get_activity_style"):
+			previous_activity_style = str(body.call("get_activity_style"))
 		if body.has_method("set_activity_style"):
 			body.call("set_activity_style", CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET)
 		await get_tree().create_timer(0.55).timeout
 		if is_instance_valid(body) and body.has_method("get_activity_style") \
 				and CharacterAppearanceService.normalize_movement_style(str(body.call("get_activity_style"))) \
 				== CharacterAppearanceService.BODY_MOVEMENT_PICKPOCKET:
-			body.call("clear_activity_style")
+			# The temporary hand pose must preserve the mounted riding pose.
+			body.call("set_activity_style", previous_activity_style)
 		var result: Dictionary = await ThievingService.attempt_pickpocket(target_id, true)
 		if is_instance_valid(feedback):
 			feedback.finish(result)
