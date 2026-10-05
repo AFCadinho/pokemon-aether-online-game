@@ -126,8 +126,7 @@ func set_trick_room(enabled: bool) -> void:
 	_sync_field_effects()
 
 func _sync_field_effects() -> void:
-	var settings := get_tree().root.get_node("SettingsManager")
-	var enabled: bool = owns_field_effects() and settings.terrain_effects and is_instance_valid(world)
+	var enabled: bool = owns_field_effects() and get_tree().root.get_node("SettingsManager").terrain_effects and is_instance_valid(world)
 	terrain_effect = _sync_field_effect(terrain_effect, terrain_condition if enabled else "")
 	trick_room_effect = _sync_field_effect(trick_room_effect, "trickroom" if enabled and trick_room_active else "")
 
@@ -157,8 +156,7 @@ func _clear_weather() -> void:
 	weather_effect = null
 
 func _sync_weather() -> void:
-	var settings := get_tree().root.get_node("SettingsManager")
-	var enabled: bool = owns_weather() and settings.weather_effects and not weather_condition.is_empty()
+	var enabled: bool = owns_weather() and get_tree().root.get_node("SettingsManager").weather_effects and not weather_condition.is_empty()
 	if not enabled or not is_instance_valid(world) or not is_instance_valid(camera):
 		_clear_weather()
 		return
