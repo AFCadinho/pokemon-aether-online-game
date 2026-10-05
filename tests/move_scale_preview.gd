@@ -9,7 +9,33 @@ func _start() -> void:
 		await _check_move_scale()
 	if "--smoke-moonblast-charge" in OS.get_cmdline_user_args():
 		await _check_moonblast_charge()
+	if "--smoke-moonblast-clearance" in OS.get_cmdline_user_args():
+		await _check_moonblast_clearance()
 	print("MOVE_SCALE_PREVIEW_READY")
+
+func _check_moonblast_clearance() -> void:
+	create_timer(30).timeout.connect(func(): printerr("MOONBLAST_CLEARANCE_TIMEOUT"); quit(1))
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	assert(not output.is_empty())
+	DirAccess.make_dir_recursive_absolute(output)
+	_preview_move()
+	var renderer = battle.animation_router.model_presenter
+	while renderer.common_effects.is_empty(): await process_frame
+	var effect: Node = renderer.common_effects[0]
+	while effect.elapsed<effect.launch*0.92: await process_frame
+	battle.animation_router.playback_speed = 0
+	await process_frame
+	var anchor: Vector3 = effect.anchors.call().source
+	for yaw in [0.0,0.75,-0.65]:
+		renderer.user_camera_yaw = yaw
+		for frame in 3: await process_frame
+		assert(effect.anchors.call().source.is_equal_approx(anchor))
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png(output.path_join("moonblast-clearance-%s.png" % yaw))
+	battle.animation_router.playback_speed = 1
+	while move_busy: await process_frame
+	print("MOONBLAST_CLEARANCE_OK full_charge=true camera_angles=3 stable_anchor=true")
+	quit()
 
 func _check_moonblast_charge() -> void:
 	create_timer(30).timeout.connect(func(): printerr("MOONBLAST_CHARGE_TIMEOUT"); quit(1))

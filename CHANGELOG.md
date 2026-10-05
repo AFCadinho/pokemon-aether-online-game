@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Build Moonblast's energy orb in front of the attacker with room for its full size, while keeping the moon above the Pokémon.
+
 - Give 3D Moonblast a two-second presentation with a longer moon reveal and energy charge, a quick release, and matching charge audio.
 
 - Enlarge all 23 native 3D move effects, with stronger Moonblast and Flash Cannon silhouettes, wider beams and clearer impacts while preserving attack origins and trajectories.

@@ -1,6 +1,7 @@
 extends "res://scripts/battle/battle_ui/source_move_effect_3d.gd"
 ## Ten inspected SV sources, with authored 3D geometry on the shared native clock.
 const MOVE_KEYS := ["shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse"]
+const MOONBLAST_ORB_RADIUS := 0.29
 const PALETTES := {
 	"shadowball": [Color("21062e"), Color("9b38e8")],
 	"sludgebomb": [Color("421052"), Color("bc58d4")],
@@ -53,6 +54,7 @@ var ring := TorusMesh.new()
 var shape: ArrayMesh
 var leaf_materials: Array[ShaderMaterial] = []
 var launch_origin := Vector3.ZERO
+var moon_origin := Vector3.ZERO
 var launched := false
 
 func _sprite_values(id: String) -> Array:
@@ -105,6 +107,8 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	if surface_material != null: surface_material.set_shader_parameter("seconds", elapsed)
 	edge.albedo_color.a = 0.85*(1.0-clampf(after,0,1))
 	gold_material.albedo_color.a = 0.85*(1.0-clampf(after,0,1))
+	if key=="moonblast" and not launched:
+		moon_origin = anchors.call().get("moon_source",from)
 	if travel >= 0 and not launched:
 		launch_origin = from
 		launched = true
@@ -128,7 +132,7 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
 	if elapsed<=0: return
 	if key=="moonblast" and travel<0.6:
-		_source_sprite(from+Vector3.UP*(1.35+0.3*(presentation_scale-1.0)),0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
+		_source_sprite(moon_origin+Vector3.UP*(1.35+0.3*(presentation_scale-1.0)),0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
 		if cursor>0 and sprite_keys[cursor-1]=="moon":
 			sprite_materials[cursor-1].set_shader_parameter("moon_disc",true)
 	if travel>=1: return
@@ -137,7 +141,8 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	if key=="sludgebomb": point.y += sin(t*PI)*0.6
 	# Let the moon appear first, build the orb, then hold it briefly at full size.
 	var orb_charge := clampf((charge-0.25)/0.65,0,1) if key=="moonblast" else charge
-	var radius := (0.34 if key=="sludgebomb" else 0.29) * (orb_charge if travel<0 else 1.0)
+	var base_radius := MOONBLAST_ORB_RADIUS if key=="moonblast" else (0.34 if key=="sludgebomb" else 0.29)
+	var radius := base_radius * (orb_charge if travel<0 else 1.0)
 	var orb_scale := Vector3.ONE * radius
 	if key=="sludgebomb": orb_scale *= Vector3(1.0+sin(elapsed*15)*0.12,0.9,1.1)
 	_piece(sphere,surface_material,point,orb_scale)
