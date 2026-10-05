@@ -4,7 +4,6 @@ extends Node
 const MODEL_HUD_CLEARANCE := 52.0
 const MODEL_LABEL_BODY_GAP := 20.0
 const HUD_LABEL_GAP := 3.0
-const MODEL_BADGE_SCALE := 0.75
 const COOP_SLOTS := ["p1", "p3", "p2", "p4"]
 const COOP_HUD_SCENE := preload("res://scenes/battle/pokemon_hud_panel.tscn")
 var battle: Control
@@ -136,14 +135,12 @@ func layout_now(delta := 0.0, snap := false) -> void:
 	if is_instance_valid(presenter) and is_instance_valid(presenter.mode_label):
 		presenter.mode_label.hide()
 	var occupied := Rect2()
-	var badge_stage_scale := MODEL_BADGE_SCALE if realtime_3d else 0.5
 	for index in 2:
 		var hud: Control = battle.player_hud_panel if index == 0 else battle.enemy_hud_panel
 		var sprite_box = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
 		var badges: Control = sprite_box.single_stat_stage_panel
 		var extent := hud.size * 0.65
-		var badge_height := maxf(badges.size.y, badges.get_combined_minimum_size().y) * badge_stage_scale if is_instance_valid(badges) and badges.visible else 0.0
-		var below_hud_extent := maxf(48.0, badge_height + HUD_LABEL_GAP)
+		var badge_height := maxf(badges.size.y, badges.get_combined_minimum_size().y) * 0.5 if is_instance_valid(badges) and badges.visible else 0.0
 		var model_clearance := maxf(MODEL_HUD_CLEARANCE, badge_height + HUD_LABEL_GAP + MODEL_LABEL_BODY_GAP)
 		var target := Vector2(area.x * (0.27 if index == 0 else 0.73) - extent.x * 0.5, 160)
 		var anchored_to_sprite := false
@@ -183,17 +180,17 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		# Easing upwards can otherwise leave it inside the model for a few frames.
 		if realtime_3d and anchored_to_sprite:
 			position_next.y = minf(position_next.y, target.y)
-		if index == 1 and occupied.intersects(Rect2(position_next, extent + Vector2(0, below_hud_extent))):
-			position_next.y = occupied.position.y - extent.y - below_hud_extent - 4
+		if index == 1 and occupied.intersects(Rect2(position_next, extent + Vector2(0, 48))):
+			position_next.y = occupied.position.y - extent.y - 52
 			if position_next.y < 62:
 				position_next.y = occupied.end.y + 8
 		_place(hud, position_next, hud.size, 0.65)
-		occupied = Rect2(position_next, extent + Vector2(0, below_hud_extent))
+		occupied = Rect2(position_next, extent + Vector2(0, 48))
 		initialized[index] = true
 		if is_instance_valid(badges):
 			badges.set_meta("immersive_positioned", true)
 			var parent_inverse := (badges.get_parent() as CanvasItem).get_global_transform().affine_inverse()
-			var badge_scale := badge_stage_scale * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
+			var badge_scale := 0.5 * stage.get_global_transform().get_scale().y / maxf(0.01, (badges.get_parent() as CanvasItem).get_global_transform().get_scale().y)
 			_place(badges, parent_inverse * (stage.get_global_transform() * (hud.position + Vector2(0, extent.y + HUD_LABEL_GAP))), badges.size, badge_scale)
 		var effects: Control = battle.get_node("%SideFieldEffectsPanel" if index == 0 else "%SideFieldEffectsPanel2")
 		var side_rail: Control = team_preview if index == 0 else opponent_rail
