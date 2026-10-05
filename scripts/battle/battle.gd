@@ -253,6 +253,7 @@ const TRAINER_TEAM_DEBUG_PREFIX := "[PAO Trainer Team Display Debug]"
 const STATUS_CONDITION_OVERLAY_SCRIPT := preload("res://scripts/battle/animations/status_condition_overlay.gd")
 const BATTLE_PARTY_SLOT_RESOLVER := preload("res://scripts/battle/battle_party_slot_resolver.gd")
 const BATTLE_TRAINING_TEAM_CONTEXT := preload("res://scripts/battle/battle_training_team_context.gd")
+const BATTLE_GEM_EVENT_ORDER := preload("res://scripts/battle/battle_gem_event_order.gd")
 const BATTLE_DISGUISE_EVENT_ORDER := preload("res://scripts/battle/battle_disguise_event_order.gd")
 const BATTLE_SUPREME_OVERLORD_EFFECT := preload("res://scripts/battle/battle_supreme_overlord_effect.gd")
 const BATTLE_PUBLIC_POKEMON_KNOWLEDGE := preload("res://scripts/battle/battle_public_pokemon_knowledge.gd")
@@ -10330,6 +10331,7 @@ func _render_battle_events(
 			_order_form_change_events_before_moves(events)
 		)
 	)
+	ordered_events = BATTLE_GEM_EVENT_ORDER.before_moves(ordered_events)
 	_debug_battle_start("render.begin source=%s renderTurns=%s input=%s ordered=%s lastRenderedSeq=%d" % [
 		source,
 		str(render_turn_headers),
@@ -11894,6 +11896,7 @@ func _rewind_active_hud_hp_for_events(events: Array) -> void:
 			_order_form_change_events_before_moves(events)
 		)
 	)
+	ordered_events = BATTLE_GEM_EVENT_ORDER.before_moves(ordered_events)
 	var normalized_events := hp_event_helper.normalize_damage_event_continuity(ordered_events)
 	events.clear()
 	events.append_array(normalized_events)
