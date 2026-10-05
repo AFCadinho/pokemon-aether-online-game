@@ -17,6 +17,7 @@ def main():
     parser.add_argument("--avd-home", type=Path,
                         default=Path.home() / ".local/share/pokeaether/android-emulator/avd")
     parser.add_argument("--name", default="PokeAether_Android13")
+    parser.add_argument("--gpu", choices=["auto", "host", "software", "swiftshader", "swangle"], default="host")
     parser.add_argument("--package", choices=["com.pokeaether.game", "com.pokeaether.mobilecollapseqa"],
                         default="com.pokeaether.game")
     args = parser.parse_args()
@@ -39,7 +40,7 @@ def main():
         log_dir = args.avd_home.parent
         with (log_dir / "emulator.log").open("a") as log:
             subprocess.Popen([str(emulator), "-avd", args.name, "-port", "5580",
-                              "-gpu", "software", "-no-snapshot", "-no-boot-anim",
+                              "-gpu", args.gpu, "-no-snapshot", "-no-boot-anim",
                               "-camera-back", "none", "-camera-front", "none", "-no-skin", "-scale", "0.6"],
                              env=environment, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
 

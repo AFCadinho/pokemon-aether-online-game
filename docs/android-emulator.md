@@ -2,7 +2,7 @@
 
 Use the official Android SDK emulator for mobile UI work before physical-device
 testing. The dedicated `PokeAether_Android13` AVD uses Android 13 (API 33),
-x86_64, KVM, a software GPU, 3 GB RAM, 1080×2400 pixels and 480 dpi. In
+x86_64, KVM, the host GPU, 3 GB RAM, 1080×2400 pixels and 480 dpi. In
 landscape its 2400×1080 resolution/density match the Samsung SM-G780F test
 phone. This does not reproduce Samsung firmware or touchscreen hardware.
 
@@ -25,7 +25,7 @@ ANDROID_AVD_HOME="$HOME/.local/share/pokeaether/android-emulator/avd" /home/adin
 
 Set `hw.lcd.width=1080`, `hw.lcd.height=2400`, `hw.lcd.density=480`,
 `hw.ramSize=3072`, `disk.dataPartition.size=6G`, `hw.gpu.enabled=yes`,
-`hw.gpu.mode=software`, `hw.initialOrientation=landscape` and
+`hw.gpu.mode=host`, `hw.initialOrientation=landscape` and
 `showDeviceFrame=no` in that AVD's `config.ini`. KVM must be available to the
 current user (`emulator -accel-check`). SDK downloads and AVD creation do not
 run Godot or change project source.
@@ -67,3 +67,31 @@ new exports still belongs in an assigned slot.
 Sources: [Android emulator command line](https://developer.android.com/studio/run/emulator-commandline),
 [SDK manager](https://developer.android.com/tools/sdkmanager),
 [AVD manager](https://developer.android.com/tools/avdmanager).
+
+## Verified local setup (2026-10-05)
+
+The Android 13 AVD with host graphics passed 541 native HUD checks at
+75/100/150% scale, followed
+by 18 actual Android edge taps on `emulator-5580`. Independently reported
+Android density was 480 dpi and the smallest input target was 48.125 dp. The
+first-use Android fullscreen tutorial was dismissed before OS-level input
+checks; it otherwise intercepts taps over the centre of the app.
+
+Both exported APKs were checked for x86_64 native libraries. The offline UI
+package has no Internet permission. The full signed game
+`0.3.92-emulator.1`/code 16 passed package, certificate and demand-asset export
+checks and was installed on the emulator. Its game source commit is
+`ac25906b2`. Its login screen was visually checked after enabling host
+graphics; no account was signed in. Cold-start and already-running emulator
+launches were exercised. This is a local development build, not release
+certification.
+
+Desktop/application-menu launchers are named **PokeAether Android** and
+**PokeAether Android knoppen-test**. No physical-phone input, installs, app
+data transfer or tests are part of this emulator setup.
+
+The full game needs host graphics on this machine. Software/SwiftShader hit
+a GLES fragment-uniform limit and could not render the login scene. The
+launcher defaults to `--gpu host`; use `--gpu software` only for UI-only
+diagnostics if host rendering is unavailable. Changing GPU mode requires
+closing and reopening the virtual device.

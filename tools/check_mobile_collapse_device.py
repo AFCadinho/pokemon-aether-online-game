@@ -26,7 +26,16 @@ def main():
         return subprocess.check_output(prefix + list(arguments), text=True, timeout=15)
 
     def report():
-        return json.loads(adb("exec-out", "run-as", PACKAGE, "cat", "files/mobile-collapse-details.json"))
+        # The diagnostic rewrites its report after each press. ADB can read
+        # between truncation and the completed write; retry that transient read.
+        deadline = time.monotonic() + 2
+        while True:
+            try:
+                return json.loads(adb("exec-out", "run-as", PACKAGE, "cat", "files/mobile-collapse-details.json"))
+            except json.JSONDecodeError:
+                if time.monotonic() >= deadline:
+                    raise
+                time.sleep(0.1)
 
     def foreground():
         activities = adb("shell", "dumpsys", "activity", "activities")
@@ -52,7 +61,7 @@ def main():
             before = report()
             button = before["liveButtons"][panel_id]
             foreground()
-			x = round(button["x"] + button["width"] * 0.1)
+            x = round(button["x"] + button["width"] * 0.1)
             y = round(button["y"] + button["height"] * 0.9)
             adb("shell", "input", "tap", str(x), str(y))
             deadline = time.monotonic() + 5
