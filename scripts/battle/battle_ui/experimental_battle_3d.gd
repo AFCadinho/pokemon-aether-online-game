@@ -1350,43 +1350,13 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 		reason = catalog_problem
 
 func _anticipated_form_keys() -> Array[String]:
-	# Keep reviewed ability/stance forms ready before revealing the battle.
-	# This loads art only; it does not infer an enemy item or activate a form.
+	# Prepare all public possible forms of the visible combatants, including
+	# Megas, without relying on hidden enemy items or waiting for a form event.
 	var result: Array[String] = []
 	for index in _slot_count():
-		var species: String = combatants[index].species
-		var targets: Array[String] = []
-		if species == "terapagos":
-			targets.assign(["terapagos-terastal", "terapagos-stellar"])
-		elif species == "terapagos-terastal":
-			targets.assign(["terapagos-stellar"])
-		elif species in ["mimikyu", "mimikyu-disguised"]:
-			targets.assign(["mimikyu-busted"])
-		elif species == "palafin":
-			targets.assign(["palafin-hero"])
-		elif species == "eiscue":
-			targets.assign(["eiscue-noice"])
-		elif species == "eiscue-noice":
-			targets.assign(["eiscue"])
-		elif species in ["aegislash", "aegislash-shield"]:
-			targets.assign(["aegislash-blade"])
-		elif species == "aegislash-blade":
-			targets.assign(["aegislash-shield"])
-		elif species == "wishiwashi":
-			targets.assign(["wishiwashi-school"])
-		elif species == "wishiwashi-school":
-			targets.assign(["wishiwashi"])
-		elif species == "morpeko":
-			targets.assign(["morpeko-hangry"])
-		elif species == "morpeko-hangry":
-			targets.assign(["morpeko"])
-		elif species in ["darmanitan", "darmanitan-standard"]:
-			targets.assign(["darmanitan-zen"])
-		elif species == "darmanitan-zen":
-			targets.assign(["darmanitan-standard"])
-		for target in targets:
-			var key := ReviewedModels.key(target, combatants[index].shiny)
-			if ReviewedModels.supports(key) and key not in result:
+		var identity := ReviewedModels.key(combatants[index].species, combatants[index].shiny)
+		for key in preload("res://scripts/battle/battle_ui/model_form_dependencies.gd").anticipated(identity):
+			if key not in result:
 				result.append(key)
 	return result
 

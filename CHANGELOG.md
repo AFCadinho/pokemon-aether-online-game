@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Download and prepare possible Mega forms before their battle transformations, including shiny variants; include these forms in background party and area downloads.
+
 - Keep frozen 3D Pokémon tinted and still without repeating particles; show ice crystals only when Freeze blocks an action.
 
 - Give Mega Garchomp its reviewed standing stance and matching battle animations, including normal/shiny Pokédex and summary previews.
