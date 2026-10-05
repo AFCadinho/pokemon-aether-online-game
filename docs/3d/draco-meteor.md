@@ -1,6 +1,6 @@
 # Draco Meteor
 
-Implemented in normal 3D battles; **visual approval pending**. The user approved
+Implemented in normal 3D battles; **visually approved by the user on 6 October 2026**. The user also approved
 all 23 preceding moves, including their size/audio changes and Moonblast
 charge/clearance revisions, on 6 October 2026.
 

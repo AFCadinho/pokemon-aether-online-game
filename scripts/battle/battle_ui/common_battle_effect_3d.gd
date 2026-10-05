@@ -5,6 +5,9 @@ signal finished
 const MOVE_EFFECTS := ["future_sight_impact", "solar_beam_charge", "electro_shot_charge"]
 
 const PROFILES := {
+	"solar_beam_charge": ["charge", "dcf58a", 0.95],
+	"electro_shot_charge": ["charge", "ffe66b", 0.95],
+	"future_sight_impact": ["future", "ee94ff", 0.85],
 	"stat_up": ["rise", "73b7ff", 0.65], "stat_down": ["fall", "ec638b", 0.65],
 	"health_up": ["heal", "45ef95", 0.85], "wish_fulfilled": ["wish", "ffdc72", 0.7],
 	"use_item": ["item", "ffce62", 0.85], "eat_berry": ["berry", "f3798b", 0.75],
@@ -57,6 +60,11 @@ static func audio_plan(source: Dictionary, effect: String) -> Dictionary:
 		cues[0].at_seconds = native_duration * 0.32
 	if effect == "mega_evolution" and cues.size() >= 2:
 		cues[1].at_seconds = native_duration * 0.55
+	if effect in MOVE_EFFECTS:
+		for cue: Dictionary in cues:
+			cue.event["end_seconds"] = native_duration
+			cue.event["fade_seconds"] = native_duration * 0.15
+		result["bounded_to_action"] = true
 	result.cues = cues
 	result.duration_seconds = native_duration
 	result.speed_scale = 1.0
@@ -173,7 +181,7 @@ func _build(color: Color) -> void:
 		"electric": icon = "bolt"
 		"sleep": icon = "sleep"
 		"wish", "confused": icon = "star"
-		"shiny", "power", "item": icon = "sparkle"
+		"shiny", "power", "item", "charge", "future": icon = "sparkle"
 	if not icon.is_empty():
 		particle_mesh = _icon(icon)
 	elif style == "ice":
@@ -200,7 +208,7 @@ func _build(color: Color) -> void:
 	var material := _material(color, not icon.is_empty())
 	for index in count:
 		particles.append(_mesh(particle_mesh, material))
-	if style in ["rise", "fall", "heal", "item", "power", "shield", "terrain"]:
+	if style in ["rise", "fall", "heal", "item", "power", "shield", "terrain", "charge", "future"]:
 		for index in (3 if style in ["shield", "terrain"] else 2):
 			var torus := TorusMesh.new()
 			torus.inner_radius = radius * 0.96
@@ -232,6 +240,14 @@ func _build(color: Color) -> void:
 		material_aura.set_shader_parameter("flame_color",color)
 		aura = _mesh(cylinder,material_aura)
 		aura.position.y = height * 0.6
+	if style in ["charge", "future"]:
+		var orb := SphereMesh.new()
+		orb.radius = 0.3
+		orb.height = 0.6
+		orb.radial_segments = 20
+		orb.rings = 10
+		shell = _mesh(orb, _material(color, false, 0.55))
+		shell.position.y = height * 0.75
 	if style == "shield":
 		var sphere := SphereMesh.new()
 		sphere.radius = 1.0
@@ -261,6 +277,13 @@ func _update_visuals() -> void:
 		var y := height * (0.12 + phase * 0.8)
 		var size := clampf(height * 0.15, 0.16, 0.4)
 		match style:
+			"charge":
+				spread *= 1.25 - progress
+				y = height * 0.75 + sin(angle * 2) * height * 0.3 * (1-progress)
+				size *= 0.7
+			"future":
+				spread *= 0.2 + progress * 1.6
+				y = height * 0.65 + sin(angle * 3) * progress * height * 0.45
 			"rise": y = height * (0.05 + progress * 0.85 + offset * 0.1)
 			"fall": y = height * (0.95 - progress * 0.85 - offset * 0.1)
 			"heal": spread *= 0.75
@@ -309,6 +332,14 @@ func _update_visuals() -> void:
 		if style == "item":
 			ring.position.y = height * (0.07 + item_sweep * 0.84 + index * 0.06)
 			scale_factor = 1.04 + sin(progress * PI) * 0.04 + index * 0.025
+		if style == "charge":
+			ring.position.y = height * 0.65
+			ring.rotation = Vector3(progress * PI, index * PI * 0.5, 0)
+			scale_factor = 1.3 - progress * 0.8
+		if style == "future":
+			ring.position.y = height * 0.6
+			ring.rotation.x = PI * index / 2.0
+			scale_factor = 0.2 + progress * 1.8
 		if style == "power": scale_factor = 0.8 + maxf(0.0,progress - 0.5) * 3.5 + index * 0.18
 		if style == "terrain": scale_factor = 1.0 + progress * 3.0 + index * 0.7
 		if style == "fall": scale_factor = 1.3 - progress * 0.45
@@ -316,5 +347,7 @@ func _update_visuals() -> void:
 		ring.visible = envelope > 0.01
 		ring.transparency = 1.0 - envelope * 0.7
 	if is_instance_valid(shell):
+		if style == "charge": shell.scale = Vector3.ONE * (0.25 + progress)
+		if style == "future": shell.scale = Vector3.ONE * (0.4 + progress * 2.0)
 		shell.visible = envelope > 0.01
 		shell.transparency = 1.0 - envelope * 0.8

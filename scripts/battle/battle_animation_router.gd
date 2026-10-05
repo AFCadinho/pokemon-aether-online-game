@@ -297,8 +297,6 @@ func play_effect_animation(effect_key: String, target_ident: String = "", reveal
 		var owned_generation := render_generation
 		var key := audio_catalog.resolve_key("effect", _normalize_animation_key(effect_key))
 		var native = preload("res://scripts/battle/battle_ui/common_battle_effect_3d.gd")
-		if key in native.MOVE_EFFECTS:
-			return # Specific move VFX/audio remain deferred with model-only moves.
 		var plan: Dictionary = native.audio_plan(audio_catalog.get_plan("effect", key), key)
 		var audio := await _start_3d_audio("effect", key, plan, false)
 		if owned_generation != render_generation or not uses_realtime_3d():

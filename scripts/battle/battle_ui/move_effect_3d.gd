@@ -1,6 +1,7 @@
 extends Node3D
 ## First native move VFX. Samples the model clock; never changes HP or outcomes.
 signal finished
+const RecipeCatalog = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const KEYS := ["tackle", "scratch", "bite", "ember", "watergun", "thundershock", "thunderbolt", "flamethrower", "bubble", "bubblebeam", "icebeam", "razorleaf", "quickattack", "shadowball", "sludgebomb", "focusblast", "moonblast", "iceshard", "poisonsting", "swift", "flashcannon", "magicalleaf", "waterpulse", "dracometeor"]
 const COLORS := [Color("ffd798"), Color("ffeac2"), Color("fff1d0"), Color("ff6b16"), Color("29baff"), Color("ffdc25"), Color("ffe448"), Color("ff671b"), Color("69dcff"), Color("3fc7ff"), Color("83e3ff"), Color("81ed42"), Color("e5f8ff"), Color("9b38e8"), Color("bc58d4"), Color("84f4ff"), Color("ffb3ed"), Color("d7f6ff"), Color("d4a0ff"), Color("fff1a1"), Color("e4fbff"), Color("bdff75"), Color("8eedff"), Color("ffb33c")]
 const AUDIO_EDITS = preload("res://assets/battles/moves_3d/audio_edited/manifest.json")
@@ -49,10 +50,10 @@ func _init() -> void:
 	process_priority = 11
 
 static func move_key(move: String) -> String:
-	return move.strip_edges().to_lower().replace(" ", "").replace("-", "").replace("_", "")
+	return RecipeCatalog.key(move)
 
 static func supports(move: String) -> bool:
-	return move_key(move) in KEYS
+	return move_key(move) in KEYS or RecipeCatalog.supports(move)
 
 static func audio_source_key(move: String) -> String:
 	# No separate Bubble Beam sample is packaged yet; reuse Bubble only in 3D.
@@ -60,6 +61,7 @@ static func audio_source_key(move: String) -> String:
 	return "bubble" if normalized == "bubblebeam" else normalized
 
 static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
+	if RecipeCatalog.supports(str(timing.get("move_key", ""))): return RecipeCatalog.audio_plan(timing)
 	if source.is_empty() or timing.is_empty(): return {}
 	var plan := source.duplicate(true)
 	var duration_seconds := float(timing.frames) / 60.0
@@ -112,7 +114,7 @@ static func launch_time(timing: Dictionary) -> float:
 
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	key = move_key(move)
-	presentation_scale = float(PRESENTATION_SCALES.get(key, 1.0))
+	presentation_scale = float(PRESENTATION_SCALES.get(key, RecipeCatalog.get_recipe(key).get("scale",1.0)))
 	duration = float(timing.frames) / 60.0
 	impact = float(timing.impact_frame) / 60.0
 	launch = launch_time(timing)
@@ -122,7 +124,7 @@ func start(move: String, timing: Dictionary, options: Dictionary, native_clock: 
 	miss = str(options.get("result", "")).strip_edges().to_lower() == "miss"
 	hit = bool(options.get("show_impact", options.get("stop_at_impact", false))) and not miss
 	set_meta("battle_field_visual", true) # Exclude temporary geometry from irradiance copies.
-	var color: Color = COLORS[KEYS.find(key)]
+	var color: Color = COLORS[KEYS.find(key)] if key in KEYS else Color(str(RecipeCatalog.get_recipe(key).get("color","ffffff")))
 	core = _material(color.lerp(Color.WHITE, 0.8), 0.95)
 	edge = _material(color, 0.85)
 	glow = _material(color, 0.18)

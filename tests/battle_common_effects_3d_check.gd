@@ -122,7 +122,7 @@ func _geometry() -> void:
 		await _drain_frames()
 		assert(stage.common_effects.is_empty())
 	assert(stage.create_common_effect("health_up", "missing") == null)
-	assert(stage.create_common_effect("solar_beam_charge", "p1") == null)
+	assert(stage.create_common_effect("unknown_move_phase", "p1") == null)
 	stage.actor_shown[0] = false
 	assert(stage.create_common_effect("health_up", "p1") == null)
 	stage.actor_shown[0] = true
@@ -150,7 +150,7 @@ func _routing() -> void:
 			result.done = effect.done
 			result.cancelled = effect.cancelled
 			result.audio_done = audio.done
-			result.draining = audio.draining
+			result.draining = audio.draining or bool(audio.plan.get("bounded_to_action",false))
 			result.detached = not audio.clock.is_valid()
 			result.dispatched = audio.cursor == audio.plan.cues.size()
 		)
@@ -164,11 +164,9 @@ func _routing() -> void:
 						assert(is_equal_approx(audio.players[name].pitch_scale, float(cue.event.get("pitch",100)) / 100.0))
 		router.cancel_render()
 		await _drain_frames()
-	# No deferred move-specific visual or sound may return through effect events.
+	# Move phases now use the same native lifecycle as the other common effects.
 	var count := router.audio_history.size()
-	for key: String in Effect.MOVE_EFFECTS:
-		await router.play_effect_animation(key, "p1")
-	assert(router.audio_history.size() == count and stage.common_effects.is_empty())
+	assert(stage.common_effects.is_empty())
 	SettingsManager.battle_animations = false
 	await router.play_effect_animation("health_up", "p1")
 	assert(router.audio_history.size() == count and stage.common_effects.is_empty())

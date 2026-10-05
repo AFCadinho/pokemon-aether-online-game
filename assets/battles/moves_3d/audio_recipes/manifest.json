@@ -1,0 +1,1917 @@
+{
+  "note": "Authored edits of existing 2D WAVs. Original SV audio is not present in this dump.",
+  "entries": {
+    "aquajet_impact.wav": {
+      "source": "res://assets/battles/animations/aquajet/PRSFX- Aqua Jet.wav",
+      "source_sha256": "700926f20c872e3db2b861c5280805234e471d65aa1d12f439aa68e06043ebea",
+      "path": "res://assets/battles/moves_3d/audio_recipes/aquajet_impact.wav",
+      "sha256": "75fb118ff8fe18fec0dc17773472144b2511e759b03a6af24e4d2068d8e63f5e",
+      "filters": "atrim=end=0.327250000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.192500000,atrim=duration=0.192500000,afade=t=in:d=0.005,afade=t=out:st=0.142500000:d=0.05",
+      "duration_seconds": 0.1925
+    },
+    "bodypress_impact.wav": {
+      "source": "res://assets/battles/animations/bodypress/Slam.ogg",
+      "source_sha256": "eef4a5a6a07e767d5ef80ebc69bf389b8158cc70489bde29929ece7561f37cef",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bodypress_impact.wav",
+      "sha256": "8666e1388fbc3e746009ebcad08ce236e7f4057315f255f1d599efe06d77c9d8",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "extremespeed_launch.wav": {
+      "source": "res://assets/battles/animations/extremespeed/PRSFX- Extremespeed1.wav",
+      "source_sha256": "53936ea414807bfe03faffe423007c6442a5f79c0d4fdeaea94af2cdc2e93b35",
+      "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_launch.wav",
+      "sha256": "7e84a3b5e456640863e6f4259c88cfb854e666992a03446d13abd73074b56fb4",
+      "filters": "atrim=end=0.684583000,asetpts=PTS-STARTPTS,atempo=1.352930830,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "extremespeed_impact.wav": {
+      "source": "res://assets/battles/animations/extremespeed/PRSFX- Extremespeed2.wav",
+      "source_sha256": "bced35762ab9acc090fc0e26413ff59b921478de8594b6e8404ab17e572f3971",
+      "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_impact.wav",
+      "sha256": "c9e93e1bcbeb9bbf9f5c31295f5ac5f5aeaa95d5b453b36ea758171812f93ef9",
+      "filters": "atrim=end=0.385500000,asetpts=PTS-STARTPTS,atempo=1.401818182,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "fakeout_launch.wav": {
+      "source": "res://assets/battles/animations/fakeout/PRSFX- Fake Out1.wav",
+      "source_sha256": "18ef1dd0da645dd2ea36c07aae4009a28ae46a94fbf511040763b0eab12c1d70",
+      "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_launch.wav",
+      "sha256": "7561381dc46972525e7f26f1035a232cc71d5744d5883f40ca02f8bd9dd85f16",
+      "filters": "atrim=end=0.860200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "fakeout_impact.wav": {
+      "source": "res://assets/battles/animations/fakeout/PRSFX- Fake Out2.wav",
+      "source_sha256": "3538beefd86472969bd645c9b8f5e7c685f2f31e94c2711a9467af5722e9f1ba",
+      "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_impact.wav",
+      "sha256": "2e938e16975ac110ad6b14ee20aa3c25262b8c93fd5a3429b701ade72d52237d",
+      "filters": "atrim=end=0.191250000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.191250000,atrim=duration=0.191250000,afade=t=in:d=0.005,afade=t=out:st=0.141250000:d=0.05",
+      "duration_seconds": 0.19125
+    },
+    "flipturn_impact.wav": {
+      "source": "res://assets/battles/animations/uturn/PRSFX- U-Turn2.wav",
+      "source_sha256": "22b83352593ea236923c0abeebf1822ea8103d77d8daa21e22c20eaf54353725",
+      "path": "res://assets/battles/moves_3d/audio_recipes/flipturn_impact.wav",
+      "sha256": "7acb1a1a808142cf8ae1428c32b0bfe09657cc31a14e768bf775eb9ae3d4c3dd",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "frustration_launch.wav": {
+      "source": "res://assets/battles/animations/frustration/PRSFX- Frustration1.wav",
+      "source_sha256": "a176d427a1372319cd305c39d9245b18a12fadc3407a0c100278aaef6ce183af",
+      "path": "res://assets/battles/moves_3d/audio_recipes/frustration_launch.wav",
+      "sha256": "18005372c0c8209e8909a180597538a1cc869aa3e483e9fa5d2148d34b4d0a98",
+      "filters": "atrim=end=0.423333000,asetpts=PTS-STARTPTS,atempo=1.195180689,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.354200000,atrim=duration=0.354200000,afade=t=in:d=0.005,afade=t=out:st=0.304200000:d=0.05",
+      "duration_seconds": 0.35420000000000007
+    },
+    "frustration_impact.wav": {
+      "source": "res://assets/battles/animations/frustration/PRSFX- Frustration2.wav",
+      "source_sha256": "23185897c82ae008a5ca5f558ce23f29581d73d2af21d7b09181002f7947d9df",
+      "path": "res://assets/battles/moves_3d/audio_recipes/frustration_impact.wav",
+      "sha256": "956f0195026fa20edd40d29d62b0da13e4af73b097cbaaff4c05e4f3a1168038",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "gigaimpact_launch.wav": {
+      "source": "res://assets/battles/animations/gigaimpact/PRSFX- Giga Impact2.wav",
+      "source_sha256": "178e70539f35fc2c4693ff1cf3757dd0c7c996ef1e52c0cc6fdcbe21908c0f26",
+      "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_launch.wav",
+      "sha256": "62d3ce6bf252596959c8e4cc5c0aa64f0cc658756166c8e610b35f8204302089",
+      "filters": "atrim=end=0.860200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "gigaimpact_impact.wav": {
+      "source": "res://assets/battles/animations/gigaimpact/PRSFX- Giga Impact1.wav",
+      "source_sha256": "ae7a0cfb0b0b8255c165f6d5beb3d7457b11557a5299068366adada26820b087",
+      "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_impact.wav",
+      "sha256": "ed3e38ae9b9daf0e1c44cb1b496561ee923aac94e402190843f7709ee68879a6",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "grassyglide_launch.wav": {
+      "source": "res://assets/battles/animations/grassyglide/PRSFX- Leaf Blade.wav",
+      "source_sha256": "a9cbc775815f36c037fb8908ea6a4a6eb32466c6dd4aea09abb04d979b1aa3d5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_launch.wav",
+      "sha256": "b71d68c590184736af7b1cd5078d96dbcac23ce1e56149cfb7e2fe81812bbfed",
+      "filters": "atrim=end=0.963424000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.566720000,atrim=duration=0.566720000,afade=t=in:d=0.005,afade=t=out:st=0.516720000:d=0.05",
+      "duration_seconds": 0.5667200000000002
+    },
+    "grassyglide_impact.wav": {
+      "source": "res://assets/battles/animations/grassyglide/PRSFX- Leafage 2.wav",
+      "source_sha256": "c618a58cc2fbf3e109cdbf414cd127c69466cbc359f8803eda5505fa2c90fa38",
+      "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_impact.wav",
+      "sha256": "bf7f8f9eff904129ba7fcc0666800805b7427afe22a60b4ceb575958790db2b9",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "headsmash_impact.wav": {
+      "source": "res://assets/battles/animations/headsmash/PRSFX- Head Smash.wav",
+      "source_sha256": "26115b1b3a42f4f3ad0c585e8b805da44728c49f325ef90491c12361002b1947",
+      "path": "res://assets/battles/moves_3d/audio_recipes/headsmash_impact.wav",
+      "sha256": "6f4feda48f32aff108d8eb35247bac93ffaccec2e463d06703b3f7dc802fae5f",
+      "filters": "atrim=end=0.374000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.220000000,atrim=duration=0.220000000,afade=t=in:d=0.005,afade=t=out:st=0.170000000:d=0.05",
+      "duration_seconds": 0.22000000000000003
+    },
+    "headlongrush_impact.wav": {
+      "source": "res://assets/battles/animations/headlongrush/PRSFX- Bulldoze.wav",
+      "source_sha256": "38bf6999d93e984cd23c1bc5c16f0e38889796b67f14de1b42ca60833580d615",
+      "path": "res://assets/battles/moves_3d/audio_recipes/headlongrush_impact.wav",
+      "sha256": "99682f0f19ff92d6293478e09193e7f4cc08d57d66fa3b1bc594c59a3eee7a64",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "ironhead_impact.wav": {
+      "source": "res://assets/battles/animations/ironhead/PRSFX- Iron Head.wav",
+      "source_sha256": "d3eb17f7a169ec3e0ad8c701545a44584f0cec943076085e76023c2e3fc2366b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/ironhead_impact.wav",
+      "sha256": "e3625b0daa445bfc70f7479ab68a18c1f3a3cfa11fe9f71e3d9d949d01030d1c",
+      "filters": "atrim=end=0.303875000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.178750000,atrim=duration=0.178750000,afade=t=in:d=0.005,afade=t=out:st=0.128750000:d=0.05",
+      "duration_seconds": 0.17875000000000002
+    },
+    "knockoff_impact.wav": {
+      "source": "res://assets/battles/animations/knockoff/PRSFX- Knock Off.wav",
+      "source_sha256": "02bf8dc15fb262fa30d07caf964f1d83abcac94b40c2fb0ed926b02432281e40",
+      "path": "res://assets/battles/moves_3d/audio_recipes/knockoff_impact.wav",
+      "sha256": "d0e5607e49ef6b97a9e22234a156ef0c16d7d4e9ea1caa4fcdbce67d88c048ea",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "outrage_launch.wav": {
+      "source": "res://assets/battles/animations/outrage/PRSFX- Outrage1.wav",
+      "source_sha256": "7fdf014b50509bd8a15d8a3b92d4a773321935a12ec3238f9eb0a0ef06150731",
+      "path": "res://assets/battles/moves_3d/audio_recipes/outrage_launch.wav",
+      "sha256": "2ad1d784b7ba92fe1a0025b6b3a8c8436da4a7fde0cedec48801c5d7490ca648",
+      "filters": "atrim=end=0.860200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "outrage_impact.wav": {
+      "source": "res://assets/battles/animations/outrage/PRSFX- Outrage2.wav",
+      "source_sha256": "5f8d5e31c08cf5e70dac01f873d615b6dfede212068d07a3b0e5b2e3b59f74fb",
+      "path": "res://assets/battles/moves_3d/audio_recipes/outrage_impact.wav",
+      "sha256": "c1f2c33b85f780e4696d0d05e8f3b2ecfc65b545f69cf7e396b630d5e71de0b4",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "pursuit_launch.wav": {
+      "source": "res://assets/battles/animations/pursuit/PRSFX- Pursuit1.wav",
+      "source_sha256": "0601bfbd8295525116be895abb7099f5c03171063b8162d45061ff90597c7c77",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_launch.wav",
+      "sha256": "0764531c2cb3d89048c94c38cdcb438a32bb62aa4ffc16e394943550f1f916c4",
+      "filters": "atrim=end=0.430100000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.253000000,atrim=duration=0.253000000,afade=t=in:d=0.005,afade=t=out:st=0.203000000:d=0.05",
+      "duration_seconds": 0.25300000000000006
+    },
+    "pursuit_impact.wav": {
+      "source": "res://assets/battles/animations/pursuit/PRSFX- Pursuit2.wav",
+      "source_sha256": "c235d3ee4601d296f605de114a6203c5089216b06675177ac8d463abb8660a76",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_impact.wav",
+      "sha256": "beab871f9d61bd2375036b4c0579e4d80b2afabfac9b59247901e6aac402a8b8",
+      "filters": "atrim=end=0.135500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.135500000,atrim=duration=0.135500000,afade=t=in:d=0.005,afade=t=out:st=0.085500000:d=0.05",
+      "duration_seconds": 0.1355
+    },
+    "rapidspin_impact.wav": {
+      "source": "res://assets/battles/animations/rapidspin/PRSFX- Rapid Spin.wav",
+      "source_sha256": "af41278beef8b93bd836db01874884bbdbb5578c5fced3b97fbe2754a26ea7b6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rapidspin_impact.wav",
+      "sha256": "af3abee4728c3ea49b94a7e8b4875d83437b427d0cd68af3a0c1b721125377da",
+      "filters": "atrim=end=0.374000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.220000000,atrim=duration=0.220000000,afade=t=in:d=0.005,afade=t=out:st=0.170000000:d=0.05",
+      "duration_seconds": 0.22000000000000003
+    },
+    "return_launch.wav": {
+      "source": "res://assets/battles/animations/return/PRSFX- Return1.wav",
+      "source_sha256": "504c0f2e81447de9c1e4855705692def724394630e29bdcb6d8833871e24ccfa",
+      "path": "res://assets/battles/moves_3d/audio_recipes/return_launch.wav",
+      "sha256": "025e57eee3477f51720bee3afe4c622d7134c220057ebbaeb1237eda72aba30d",
+      "filters": "atrim=end=0.641250000,asetpts=PTS-STARTPTS,atempo=1.267292490,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "return_impact.wav": {
+      "source": "res://assets/battles/animations/return/PRSFX- Return2.wav",
+      "source_sha256": "23185897c82ae008a5ca5f558ce23f29581d73d2af21d7b09181002f7947d9df",
+      "path": "res://assets/battles/moves_3d/audio_recipes/return_impact.wav",
+      "sha256": "956f0195026fa20edd40d29d62b0da13e4af73b097cbaaff4c05e4f3a1168038",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "rollout_launch.wav": {
+      "source": "res://assets/battles/animations/rollout/PRSFX- Rollout1.wav",
+      "source_sha256": "63715cfcb8c7197fd8c3e40a62c9d1b58ae57c8a1b81d72557d3cd788532cac5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rollout_launch.wav",
+      "sha256": "d85ad51e249488947f8d6bd29dff695d6a89730e77605f3b8a710aa74bc909d2",
+      "filters": "atrim=end=0.860200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "rollout_impact.wav": {
+      "source": "res://assets/battles/animations/rollout/PRSFX- Rollout2.wav",
+      "source_sha256": "1d211d966f733e819dd3f1055b9b12b5ae0ca1f3a8448d5eedf64d7c0310b726",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rollout_impact.wav",
+      "sha256": "11d3d4a9c041bc5324229015201affbbe9182717186ec8982a89382f12eb3e4d",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "spark_launch.wav": {
+      "source": "res://assets/battles/animations/spark/PRSFX- Spark1.wav",
+      "source_sha256": "705103adfede8356ec9a7a23b1550c2bf296cefb5529ad5c0d858f998dc4e9f9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/spark_launch.wav",
+      "sha256": "e989bb44363864a8d440525c9eb9f8ad246108b89de54138c9e408179e52fa74",
+      "filters": "atrim=end=0.635333000,asetpts=PTS-STARTPTS,atempo=1.255598814,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "spark_impact.wav": {
+      "source": "res://assets/battles/animations/spark/PRSFX- Spark2.wav",
+      "source_sha256": "8be48f2e72b80e604ecbfa221fcb05d60a95e975f600bf8ebd213df9c27a6eca",
+      "path": "res://assets/battles/moves_3d/audio_recipes/spark_impact.wav",
+      "sha256": "8e25d0a05beb1dc1842ab90bac66e12d1167ccf1941147fca177366d08182dd5",
+      "filters": "atrim=end=0.561000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.330000000,atrim=duration=0.330000000,afade=t=in:d=0.005,afade=t=out:st=0.280000000:d=0.05",
+      "duration_seconds": 0.33
+    },
+    "uturn_impact.wav": {
+      "source": "res://assets/battles/animations/uturn/PRSFX- U-Turn2.wav",
+      "source_sha256": "22b83352593ea236923c0abeebf1822ea8103d77d8daa21e22c20eaf54353725",
+      "path": "res://assets/battles/moves_3d/audio_recipes/uturn_impact.wav",
+      "sha256": "fea7a3084200d661cac85d7a4cd057554c0638c5537833788b1d3b402698f731",
+      "filters": "atrim=end=0.350625000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.206250000,atrim=duration=0.206250000,afade=t=in:d=0.005,afade=t=out:st=0.156250000:d=0.05",
+      "duration_seconds": 0.20625000000000002
+    },
+    "woodhammer_impact.wav": {
+      "source": "res://assets/battles/animations/woodhammer/PRSFX- Wood Hammer.wav",
+      "source_sha256": "33108da920353f0f3c08ae67335e50f61ea5fbe43f9cf6677f8651a279399a99",
+      "path": "res://assets/battles/moves_3d/audio_recipes/woodhammer_impact.wav",
+      "sha256": "71208b927eb84e54d314997ec1740c5dfc6acdb8b170b8e7d3b328954f1ed5ce",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "bulletpunch_impact.wav": {
+      "source": "res://assets/battles/animations/bulletpunch/PRSFX- Bullet Punch.wav",
+      "source_sha256": "7fc77007c3c7b611233026a340c0e314dad5badfa87bd88bc25488f6226b2d5b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bulletpunch_impact.wav",
+      "sha256": "3a6cbc90b5232b1fdee1a142eedbbef234d546e8b5e950bf86e1da3a68a5bf9e",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "closecombat_impact.wav": {
+      "source": "res://assets/battles/animations/closecombat/PRSFX- Close Combat.wav",
+      "source_sha256": "3eccb4fdc58a9e0c776d8c794451a2ff0f1ff474bed1234f7fb8310184becddc",
+      "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+      "sha256": "a865b1cfd7f073a6bba760664d983facc3da65d2bf682acdb4a57ce1a984a953",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "doublekick_impact.wav": {
+      "source": "res://assets/battles/animations/doublekick/PRSFX- Double Kick.wav",
+      "source_sha256": "0bb6e41d0f89f2571ad1e6b465285a12a3eb491c83798873962c020aa645df61",
+      "path": "res://assets/battles/moves_3d/audio_recipes/doublekick_impact.wav",
+      "sha256": "77b63fd039605e69f61ed742a283f44cc00e129768468633c42c7fde64af5bf8",
+      "filters": "atrim=end=0.305833000,asetpts=PTS-STARTPTS,atempo=1.112120000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "drainpunch_launch.wav": {
+      "source": "res://assets/battles/animations/drainpunch/PRSFX- Drain Punch1.wav",
+      "source_sha256": "be95bea4193a2300920c74dbbffeabc6141c03d0e24f34da0ae723fb0b9151aa",
+      "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_launch.wav",
+      "sha256": "f7c074b1aed708655591702a891abb6b13fa51a2b56bc99458322b92af627f7b",
+      "filters": "atrim=end=0.331750000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.331750000,atrim=duration=0.331750000,afade=t=in:d=0.005,afade=t=out:st=0.281750000:d=0.05",
+      "duration_seconds": 0.33175
+    },
+    "drainpunch_impact.wav": {
+      "source": "res://assets/battles/animations/drainpunch/PRSFX- Drain Punch2.wav",
+      "source_sha256": "5b08031ec97625dbe7eb748b338aa1707d864d040c86f8197018216cd1e45d0c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_impact.wav",
+      "sha256": "61b812e93a7e365416d1ca4da4c0849dd52a90f368d14d67c61ef88072fd26d8",
+      "filters": "atrim=end=0.420750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.247500000,atrim=duration=0.247500000,afade=t=in:d=0.005,afade=t=out:st=0.197500000:d=0.05",
+      "duration_seconds": 0.24750000000000003
+    },
+    "firepunch_launch.wav": {
+      "source": "res://assets/battles/animations/firepunch/PRSFX- Fire Punch3.wav",
+      "source_sha256": "a9c80ccb0391553519ab1eeb0fb75899c4e3c901a75b4137867c0592bf10cdc9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_launch.wav",
+      "sha256": "bcd5d94b13a738676f40667893ef711f177727794ad1bdf6ce89cb8d1413abe2",
+      "filters": "atrim=end=0.392083000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.392083000,atrim=duration=0.392083000,afade=t=in:d=0.005,afade=t=out:st=0.342083000:d=0.05",
+      "duration_seconds": 0.392083
+    },
+    "firepunch_impact.wav": {
+      "source": "res://assets/battles/animations/firepunch/PRSFX- Fire Punch2.wav",
+      "source_sha256": "a5c47a33ba0390e1ccc114308a6658a9661c81becfb75e53071b9e8e366bdfd2",
+      "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_impact.wav",
+      "sha256": "b02253a44c27639286e35eea6f2e13adea8c000b29e3336a30e3c9ff128e2aef",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "highjumpkick_launch.wav": {
+      "source": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick1.wav",
+      "source_sha256": "75df6ee2e98ced4b50d9d8d2f942c9c417e130a67bec16a9cf23d1d58c74f98f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_launch.wav",
+      "sha256": "b3119f97ae0ae705da9a850f1b8ce5ea56f5ba88f670054ea56e796f527aa45c",
+      "filters": "atrim=end=0.534917000,asetpts=PTS-STARTPTS,atempo=1.057148221,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "highjumpkick_impact.wav": {
+      "source": "res://assets/battles/animations/highjumpkick/PRSFX- Hi Jump Kick2.wav",
+      "source_sha256": "a0398f60ff1ec522c32d81d25ae03e07beff87d3f6fa89a45aa1aa01640efcde",
+      "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_impact.wav",
+      "sha256": "e6606d736c032d43c405fd28ed87d4d5d094b897540a746e826715dbb2c938e7",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "icepunch_launch.wav": {
+      "source": "res://assets/battles/animations/icepunch/PRSFX- Ice Punch1.wav",
+      "source_sha256": "e5d2919ed5535a27c180a0525e928932373ac72b714f73c9016e7b2869c31b26",
+      "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_launch.wav",
+      "sha256": "a2e080dda0761dad81c24670313531c67ee005e3d4f5570cc60006d027f109e1",
+      "filters": "atrim=end=0.821833000,asetpts=PTS-STARTPTS,atempo=1.624175889,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "icepunch_impact.wav": {
+      "source": "res://assets/battles/animations/icepunch/PRSFX- Ice Punch2.wav",
+      "source_sha256": "d9919577892010cb53d97c1200d806e5ac04e1c5b75d029a27185ccd6837323d",
+      "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_impact.wav",
+      "sha256": "de799967ea758f3a47f18cc01d917861cefe10d20f4e278a76dee2c6805fa530",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "lowkick_impact.wav": {
+      "source": "res://assets/battles/animations/lowkick/PRSFX- Low Kick.wav",
+      "source_sha256": "eada86c7ef8404fd79dde7ef2c4f993a59143317e800802dabc022cac057076b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/lowkick_impact.wav",
+      "sha256": "855ee44ec396fd3fed0129071443a00eb7dd91e0313d7fd077c83ee5c16ec0a3",
+      "filters": "atrim=end=0.376000000,asetpts=PTS-STARTPTS,atempo=1.353735374,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.277750000,atrim=duration=0.277750000,afade=t=in:d=0.005,afade=t=out:st=0.227750000:d=0.05",
+      "duration_seconds": 0.27775000000000005
+    },
+    "pound_impact.wav": {
+      "source": "res://assets/battles/animations/pound/PRSFX- Pound.wav",
+      "source_sha256": "848c8c6d06e29b3f3e37d5a627ffe7a937e94f34711d1e480cb2472875a5fe2a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pound_impact.wav",
+      "sha256": "c6442fea70924fbfd831f347eafa504bf0b9db1a9779a67eceae0207b2eecda5",
+      "filters": "atrim=end=0.233750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.137500000,atrim=duration=0.137500000,afade=t=in:d=0.005,afade=t=out:st=0.087500000:d=0.05",
+      "duration_seconds": 0.1375
+    },
+    "rocksmash_impact.wav": {
+      "source": "res://assets/battles/animations/rocksmash/PRSFX- Rock Smash.wav",
+      "source_sha256": "384ddea3c9b5a26b9af93651b385bd290a4a46cc6b2e702e47a05b86426c704b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rocksmash_impact.wav",
+      "sha256": "47d0c448f8ab42f2cb7ce2c1561112eec9c2b29b0597b86729ed0aee9756494b",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "suckerpunch_launch.wav": {
+      "source": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch1.wav",
+      "source_sha256": "bb959ad7d88a4dd5fd7038b1a038e0b20152a3311b691104af9c340cf23e585e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_launch.wav",
+      "sha256": "5c9d165bbe21e5126880e15cd0aa7a8717413d53e07cac650e0fb3e677d1d80f",
+      "filters": "atrim=end=0.416583000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.416583000,atrim=duration=0.416583000,afade=t=in:d=0.005,afade=t=out:st=0.366583000:d=0.05",
+      "duration_seconds": 0.416583
+    },
+    "suckerpunch_impact.wav": {
+      "source": "res://assets/battles/animations/suckerpunch/PRSFX- Sucker Punch2.wav",
+      "source_sha256": "5f555ec64704357a4be4e7d08bba6c79f7f3b190c40368a90e59a91daa3d0fc6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_impact.wav",
+      "sha256": "df93dcb8ef95c49021056092f1f9e742d9a078b05e0b8652ef41368963682c67",
+      "filters": "atrim=end=0.348083000,asetpts=PTS-STARTPTS,atempo=1.265756364,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "superpower_launch.wav": {
+      "source": "res://assets/battles/animations/superpower/PRSFX- Superpower1.wav",
+      "source_sha256": "fe26ad03c204fea47ab7de1e08c5c8ec44c1f0cdcc516ee991f7321d7c8aeb63",
+      "path": "res://assets/battles/moves_3d/audio_recipes/superpower_launch.wav",
+      "sha256": "a3ff8ca506590335d37805601bbeb6871fb30e87ea36ca3f4ae9c2b734aeb3a4",
+      "filters": "atrim=end=0.860200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "superpower_impact.wav": {
+      "source": "res://assets/battles/animations/superpower/PRSFX- Superpower2.wav",
+      "source_sha256": "2adbc79a7185fcb54d9abf0493db96aeed5f73623e9fb3385f524f9246050bcc",
+      "path": "res://assets/battles/moves_3d/audio_recipes/superpower_impact.wav",
+      "sha256": "232587f51e5b0c4764ca9a7f377105902dc5db9bc0189daa8db848f4d7ce3b03",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "thunderpunch_launch.wav": {
+      "source": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch2.wav",
+      "source_sha256": "389006214d05b5166a280d5169c3fa6bb25a6c2c41a552c2b0055bc320e304cf",
+      "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_launch.wav",
+      "sha256": "334202fb3ab1273ae99433d96b558aa649240f85b43608e23d75a2dc5d38c883",
+      "filters": "atrim=end=0.540417000,asetpts=PTS-STARTPTS,atempo=1.068017787,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "thunderpunch_impact.wav": {
+      "source": "res://assets/battles/animations/thunderpunch/PRSFX- Thunder Punch1.wav",
+      "source_sha256": "400f8915be2aa4ea67b617fee6df19bd5a4ab60eb19bd51eb6a16ac530bc103c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_impact.wav",
+      "sha256": "c1a298ddc88385d568b6ee583ca4b191bf8cb8531123e8430797d3cb9a5111d8",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "astonish_launch.wav": {
+      "source": "res://assets/battles/animations/astonish/PRSFX- Astonish1.wav",
+      "source_sha256": "3fc402109f5b716e60422b1c3868e42b80d5c6e681eb7606b4f9541339b4ed41",
+      "path": "res://assets/battles/moves_3d/audio_recipes/astonish_launch.wav",
+      "sha256": "ad014ee48d0566a167d585cb95d2abce4ab560b9f4ddde8d625c0e9c3a8d67f8",
+      "filters": "atrim=end=0.597917000,asetpts=PTS-STARTPTS,atempo=1.181654150,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.506000000,atrim=duration=0.506000000,afade=t=in:d=0.005,afade=t=out:st=0.456000000:d=0.05",
+      "duration_seconds": 0.5060000000000001
+    },
+    "astonish_impact.wav": {
+      "source": "res://assets/battles/animations/astonish/PRSFX- Astonish2.wav",
+      "source_sha256": "333c17bc67a58024f9f97876633d49efb7717de39052f6ce017322ed247f3f00",
+      "path": "res://assets/battles/moves_3d/audio_recipes/astonish_impact.wav",
+      "sha256": "7d95c05b15279b057d02ef1f8e88b5f583af67c811c68c83e936cb3a5e631a8a",
+      "filters": "atrim=end=0.367583000,asetpts=PTS-STARTPTS,atempo=1.336665455,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "bugbite_impact.wav": {
+      "source": "res://assets/battles/animations/bugbite/PRSFX- Bug Bite.wav",
+      "source_sha256": "848c8c6d06e29b3f3e37d5a627ffe7a937e94f34711d1e480cb2472875a5fe2a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bugbite_impact.wav",
+      "sha256": "c796466fc1989be634f339b0b6610328425aa0f0fdb84ab9b8e10fb2e1bd5e23",
+      "filters": "atrim=end=0.397375000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.233750000,atrim=duration=0.233750000,afade=t=in:d=0.005,afade=t=out:st=0.183750000:d=0.05",
+      "duration_seconds": 0.23375
+    },
+    "ceaselessedge_launch.wav": {
+      "source": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash2.wav",
+      "source_sha256": "0531092089621e517f17e1759a5bdfe74ea174e97bd93aee0048e2ad4855769f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_launch.wav",
+      "sha256": "d0eb2d3f748eb0348f4191077c947cc9757800792a4e12483863e60bfdeff805",
+      "filters": "atrim=end=0.623583000,asetpts=PTS-STARTPTS,atempo=1.369308300,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.455400000,atrim=duration=0.455400000,afade=t=in:d=0.005,afade=t=out:st=0.405400000:d=0.05",
+      "duration_seconds": 0.45540000000000014
+    },
+    "ceaselessedge_impact.wav": {
+      "source": "res://assets/battles/animations/ceaselessedge/PRSFX- Night Slash1.wav",
+      "source_sha256": "2614756adb7e0f722d0063071020ef985f9721d21dfb4619c71ea13126935af5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_impact.wav",
+      "sha256": "73762983c19012f2c675171e20327e39d43f54bdf5018b972084d7da261ddfaa",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "dragonclaw_impact.wav": {
+      "source": "res://assets/battles/animations/dragonclaw/PRSFX- Dragon Claw.wav",
+      "source_sha256": "25656c1ed5e705799344bdb1db586afa18119079d7d3e6e96ffd4710695fa176",
+      "path": "res://assets/battles/moves_3d/audio_recipes/dragonclaw_impact.wav",
+      "sha256": "179adbb9e084d076dfdb481ce743fa6144e0ff8de298aca574f25d5c04ac16a6",
+      "filters": "atrim=end=0.252450000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.148500000,atrim=duration=0.148500000,afade=t=in:d=0.005,afade=t=out:st=0.098500000:d=0.05",
+      "duration_seconds": 0.14850000000000002
+    },
+    "furyattack_impact.wav": {
+      "source": "res://assets/battles/animations/furyattack/PRSFX- Fury Attack.wav",
+      "source_sha256": "6478a6294fb024a2a80fcde6ba289a14b59088cdf8ff999b3b510bc6bcd0e7d8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/furyattack_impact.wav",
+      "sha256": "5e29376c21f4925d1811083eadb9234904a701e9a5d613f5c5842e5bf346984a",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "kowtowcleave_launch.wav": {
+      "source": "res://assets/battles/animations/kowtowcleave/Darkness2.ogg",
+      "source_sha256": "873382e34e5cb435bbf020180faef1eb32b1b04ae10cc8fd2a37c920c3ba0e80",
+      "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_launch.wav",
+      "sha256": "2c907ba75e1ab433225356eea36ae124d84a8b1612d4fb306f6a6860f2a51090",
+      "filters": "atrim=end=0.602140000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.354200000,atrim=duration=0.354200000,afade=t=in:d=0.005,afade=t=out:st=0.304200000:d=0.05",
+      "duration_seconds": 0.35420000000000007
+    },
+    "kowtowcleave_impact.wav": {
+      "source": "res://assets/battles/animations/kowtowcleave/Ace.ogg",
+      "source_sha256": "97fa58ebe1a70aace32200393a4b24091a418ce54b90c20f3c3a73c93e95f534",
+      "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_impact.wav",
+      "sha256": "b99bc6cc969a0a8cd5aa8b84e06de6239ddf085117cdc17409706e94748cae85",
+      "filters": "atrim=end=0.374000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.220000000,atrim=duration=0.220000000,afade=t=in:d=0.005,afade=t=out:st=0.170000000:d=0.05",
+      "duration_seconds": 0.22000000000000003
+    },
+    "lick_impact.wav": {
+      "source": "res://assets/battles/animations/lick/PRSFX- Lick.wav",
+      "source_sha256": "4e252185d06cb6026dbd83327003725c88908c5906ffa3cba3f82ca7d7f45d71",
+      "path": "res://assets/battles/moves_3d/audio_recipes/lick_impact.wav",
+      "sha256": "0eab6d1f9b3ac58b9aa77e5e0f5cb97af1ef07cd6bb906c2a58b03ec14f343b6",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "peck_impact.wav": {
+      "source": "res://assets/battles/animations/peck/PRSFX- Peck.wav",
+      "source_sha256": "556cca252af84c7e81e510abad6e3c6931d2aac5a439f0e8b5609040a3a0f19d",
+      "path": "res://assets/battles/moves_3d/audio_recipes/peck_impact.wav",
+      "sha256": "0f75e203868ef53df67007c21529e9641b38ed36430a0c17cd39e0fc557623a6",
+      "filters": "atrim=end=0.401750000,asetpts=PTS-STARTPTS,atempo=1.460909091,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "razorshell_impact.wav": {
+      "source": "res://assets/battles/animations/razorshell/PRSFX- Razor Shell.wav",
+      "source_sha256": "dcc4bea7b209d886071492c7b943ce6305f65c0bff9586cf004b25d8532208e4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/razorshell_impact.wav",
+      "sha256": "858f95b269e34f25119e0086edbc2da6c8752bbdbdd8b640aa145261141c0aa8",
+      "filters": "atrim=end=0.607750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.357500000,atrim=duration=0.357500000,afade=t=in:d=0.005,afade=t=out:st=0.307500000:d=0.05",
+      "duration_seconds": 0.35750000000000004
+    },
+    "vinewhip_impact.wav": {
+      "source": "res://assets/battles/animations/vinewhip/PRSFX- Vine Whip.wav",
+      "source_sha256": "f814cd898c75dbf5f650f3bff5b2ed47eee1c93c480a8d87192fb2c2bae6037b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/vinewhip_impact.wav",
+      "sha256": "9819806f9f24027e897f522fff2a0268e2c7bacd88cd57a2e66e9b4b330dacf5",
+      "filters": "atrim=end=0.467500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "wingattack_launch.wav": {
+      "source": "res://assets/battles/animations/wingattack/PRSFX- Wing Attack1.wav",
+      "source_sha256": "a7c269414eeeb6cd812816d38563d7bb6c523bb9d7902b9127f07aa4108cc873",
+      "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_launch.wav",
+      "sha256": "2d62304181df85633957abe47b89492544bf6c68f6137d147683b5cfbed1d09e",
+      "filters": "atrim=end=0.448500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.448500000,atrim=duration=0.448500000,afade=t=in:d=0.005,afade=t=out:st=0.398500000:d=0.05",
+      "duration_seconds": 0.4485
+    },
+    "wingattack_impact.wav": {
+      "source": "res://assets/battles/animations/wingattack/PRSFX- Wing Attack2.wav",
+      "source_sha256": "97611cbe47c173d637ff5f2cf80b93fddb432c245f22fdb7afb571ff02baaf04",
+      "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_impact.wav",
+      "sha256": "c6715baedc39f9b1f2d0bbde1beb86e3ffa356d6ef84a52c658b9c4d6b85c41c",
+      "filters": "atrim=end=0.428917000,asetpts=PTS-STARTPTS,atempo=1.559698182,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.275000000,atrim=duration=0.275000000,afade=t=in:d=0.005,afade=t=out:st=0.225000000:d=0.05",
+      "duration_seconds": 0.275
+    },
+    "dragonbreath_launch.wav": {
+      "source": "res://assets/battles/animations/dragonbreath/PRSFX- Dragon Breath.wav",
+      "source_sha256": "411b663a5bc242a1e2623ae715b2b998ad97acca38bc4c7ddc6b19b1240660a4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/dragonbreath_launch.wav",
+      "sha256": "b94de05d59b59272c0ddc9cf91fc923fbe66061c1f6987b5621b2c4a7e001ca2",
+      "filters": "atrim=end=0.884250000,asetpts=PTS-STARTPTS,atempo=1.423913043,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "electroshot_launch.wav": {
+      "source": "res://assets/battles/animations/electroshot/PRSFX- Thunderbolt2.wav",
+      "source_sha256": "d319b7c2280117e4231856492f6cec52bf53e44aa3657dfb75d90fe76519d96c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_launch.wav",
+      "sha256": "46d59d210d59db2994ae50357a486d09d514a553c7f956b109b67d1d47d49428",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "electroshot_impact.wav": {
+      "source": "res://assets/battles/animations/electroshot/PRSFX- Wild Charge2.wav",
+      "source_sha256": "1c745eafb11e5434a8080ca3214621bb6c50c655c5fc761ccd2da2859b9228bc",
+      "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_impact.wav",
+      "sha256": "6c30e55e9f59da5a9b909444a249e5121003a342cffae9d0b173f985cf16d046",
+      "filters": "atrim=end=0.573750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.337500000,atrim=duration=0.337500000,afade=t=in:d=0.005,afade=t=out:st=0.287500000:d=0.05",
+      "duration_seconds": 0.3375
+    },
+    "hyperbeam_launch.wav": {
+      "source": "res://assets/battles/animations/hyperbeam/PRSFX- Hyper Beam.wav",
+      "source_sha256": "486380f5d23eb5cc07cd07f9fa69e91e30ed9dad774204e362ed64d02f4660b4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hyperbeam_launch.wav",
+      "sha256": "3fcef4821134c335dd411e00ccfe6b16f6048c30c48534906cbb777cfcd0987b",
+      "filters": "atrim=end=0.967725000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.569250000,atrim=duration=0.569250000,afade=t=in:d=0.005,afade=t=out:st=0.519250000:d=0.05",
+      "duration_seconds": 0.56925
+    },
+    "scald_launch.wav": {
+      "source": "res://assets/battles/animations/scald/PRSFX- Scald1.wav",
+      "source_sha256": "bc06d924e521ea876ac242b117d7e6899f1aab58da7c0063e77f40b5bcf2a242",
+      "path": "res://assets/battles/moves_3d/audio_recipes/scald_launch.wav",
+      "sha256": "a3d494352f52e104bdf7a96b7c8082485d6ede58c1fd756cef6244c64e024995",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "scald_impact.wav": {
+      "source": "res://assets/battles/animations/scald/PRSFX- Scald2.wav",
+      "source_sha256": "8df53547fa31371c8ae7ce80e82d9202f2154eed42d75c35900cd2bb8dad5374",
+      "path": "res://assets/battles/moves_3d/audio_recipes/scald_impact.wav",
+      "sha256": "b7d438aabb95a2915b4fbea3f58bcc5d32a70a8ec1fa0f11323f25b9bead9ee7",
+      "filters": "atrim=end=0.573750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.337500000,atrim=duration=0.337500000,afade=t=in:d=0.005,afade=t=out:st=0.287500000:d=0.05",
+      "duration_seconds": 0.3375
+    },
+    "solarbeam_launch.wav": {
+      "source": "res://assets/battles/animations/solarbeam/PRSFX- Solar Beam2.wav",
+      "source_sha256": "1194fd19c3b5d5de42ca2b39bc5184bfed4ea585094b9579e6399ed8f15c81ad",
+      "path": "res://assets/battles/moves_3d/audio_recipes/solarbeam_launch.wav",
+      "sha256": "7cdea8600dd4fb9d94d4ed4712a03441d18abdecd5d21c3c0c0ec427f347412a",
+      "filters": "atrim=end=1.290300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.759000000,atrim=duration=0.759000000,afade=t=in:d=0.005,afade=t=out:st=0.709000000:d=0.05",
+      "duration_seconds": 0.759
+    },
+    "voltswitch_launch.wav": {
+      "source": "res://assets/battles/animations/voltswitch/PRSFX- Volt Switch2.wav",
+      "source_sha256": "e86f77bd6fbbc65cd1a03375cd1c091fc968012970ca58e01bd30b6b95c82a58",
+      "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_launch.wav",
+      "sha256": "58f737473214c650da3ac0bf9d03db1121cca5b30de7f131872e3b233d56c25d",
+      "filters": "atrim=end=1.002583000,asetpts=PTS-STARTPTS,atempo=1.614465378,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "voltswitch_impact.wav": {
+      "source": "res://assets/battles/animations/voltswitch/PRSFX- Volt Switch1.wav",
+      "source_sha256": "2cac8bd267a916de397a3f15c5ecaecea6a84739e78c013d27f200916c9e4194",
+      "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_impact.wav",
+      "sha256": "2ca0fb39a84be98bd31b7db8bba5bc6d8e513bf288343cc70f46c6387861581d",
+      "filters": "atrim=end=0.573750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.337500000,atrim=duration=0.337500000,afade=t=in:d=0.005,afade=t=out:st=0.287500000:d=0.05",
+      "duration_seconds": 0.3375
+    },
+    "fairywind_launch.wav": {
+      "source": "res://assets/battles/animations/fairywind/PRSFX- Fairy Wind.wav",
+      "source_sha256": "441edd351a99cf4fb242e255ba6cc36544adb8e51243f80994cc3bc622620649",
+      "path": "res://assets/battles/moves_3d/audio_recipes/fairywind_launch.wav",
+      "sha256": "25741e1a293394b1c330caa3757469771fcf4887491939e81f3008df7fc775b2",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "hiddenpower_launch.wav": {
+      "source": "res://assets/battles/animations/hiddenpower/PRSFX- Hidden Power1.wav",
+      "source_sha256": "9dc1adca942bbea9bdef78620ee287d3e977e6bcfc95070667e9992a35eddbd7",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_launch.wav",
+      "sha256": "096a2defac91b505573757b8a207902e64e5f10aceca49646cbf5fee37c7ef01",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "hiddenpower_impact.wav": {
+      "source": "res://assets/battles/animations/hiddenpower/PRSFX- Hidden Power2.wav",
+      "source_sha256": "b33857b7710dd72da71d5099809cb7b5274c46b48987465406415797be527dc8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_impact.wav",
+      "sha256": "198a70be95c01eccb8c5b93def790db84a260cec36fe4700ecc6b7cb761cc624",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "leafage_launch.wav": {
+      "source": "res://assets/battles/animations/leafage/PRSFX- Leafage 1.wav",
+      "source_sha256": "58b81fd3a66c704eea71ed56a36c197cffbaffd504ad8413882f736734dbd717",
+      "path": "res://assets/battles/moves_3d/audio_recipes/leafage_launch.wav",
+      "sha256": "7bab3d28b2b17ad99a2394a6f0733fb4c52bf4eb2657d099b6cedbcfc6719d44",
+      "filters": "atrim=end=0.671250000,asetpts=PTS-STARTPTS,atempo=1.268903592,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "leafage_impact.wav": {
+      "source": "res://assets/battles/animations/leafage/PRSFX- Leafage 2.wav",
+      "source_sha256": "c618a58cc2fbf3e109cdbf414cd127c69466cbc359f8803eda5505fa2c90fa38",
+      "path": "res://assets/battles/moves_3d/audio_recipes/leafage_impact.wav",
+      "sha256": "73516b0671f1e8190b8e7b8e816d4e1f3a9a38e919a1bd7fe450726998817310",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "mudslap_launch.wav": {
+      "source": "res://assets/battles/animations/mudslap/PRSFX- Mud Slap.wav",
+      "source_sha256": "3079cfa4040d7968fb7fefa0e27fd8d22498d23cd2ccbd2af634198715be5f72",
+      "path": "res://assets/battles/moves_3d/audio_recipes/mudslap_launch.wav",
+      "sha256": "381284dcd5a62bb90a1a1b8a4366ca95bd714003d2c5fc76e517849c0cd478b1",
+      "filters": "atrim=end=0.557917000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.557917000,atrim=duration=0.557917000,afade=t=in:d=0.005,afade=t=out:st=0.507917000:d=0.05",
+      "duration_seconds": 0.557917
+    },
+    "pyroball_launch.wav": {
+      "source": "res://assets/battles/animations/pyroball/Fire1.ogg",
+      "source_sha256": "dcfbd49f5ec6b083b10126b7b928942a04574eaac01e14fd5e623095404ba70a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_launch.wav",
+      "sha256": "6000c5ed360482f97752753525d20872836714f2c8238300b02fccde3fee871f",
+      "filters": "atrim=end=0.764405000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.449650000,atrim=duration=0.449650000,afade=t=in:d=0.005,afade=t=out:st=0.399650000:d=0.05",
+      "duration_seconds": 0.44965
+    },
+    "pyroball_impact.wav": {
+      "source": "res://assets/battles/animations/pyroball/Explosion1.ogg",
+      "source_sha256": "5ed57a847d466da6e2e0d995d2b6e907b80b36a3be746e62bea3537958750ec8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_impact.wav",
+      "sha256": "0dfcd48836f0406574cdd55440465cc2a52b854e4dc21d6c146abf4ffc1ab36d",
+      "filters": "atrim=end=0.464312500,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.273125000,atrim=duration=0.273125000,afade=t=in:d=0.005,afade=t=out:st=0.223125000:d=0.05",
+      "duration_seconds": 0.27312499999999995
+    },
+    "rockthrow_launch.wav": {
+      "source": "res://assets/battles/animations/rockthrow/PRSFX- Rock Throw1.wav",
+      "source_sha256": "bd5e437019434998483fcfbdb17c8447434a80b95d7210ada385eb5914ba0afb",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_launch.wav",
+      "sha256": "22309b72a00a196a40cda2eeb1e5af3758c5d92ed7352a712e167fb23393b4c1",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "rockthrow_impact.wav": {
+      "source": "res://assets/battles/animations/rockthrow/PRSFX- Rock Throw2.wav",
+      "source_sha256": "b1936de5d81652fb3ac9883f9c0fb8d05a5b1b3212cd93d7460a218a0665448b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_impact.wav",
+      "sha256": "7268cb9362c7e50c4da7a831a455a3cd1862be5f6026f061dfd8f050628c2e57",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "watershuriken_launch.wav": {
+      "source": "res://assets/battles/animations/watershuriken/PRSFX- Water Shurkein.wav",
+      "source_sha256": "8ff3635a5064a1d15e2a98a2dbbb20f139e17e952b86f467c5375f4c81bc688f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/watershuriken_launch.wav",
+      "sha256": "b95288eee8ff2b7f1789e37b167284c7e158419c59224a016fdaa1c3c3850982",
+      "filters": "atrim=end=0.848333000,asetpts=PTS-STARTPTS,atempo=1.603654064,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "weatherball_launch.wav": {
+      "source": "res://assets/battles/animations/weatherball/PRSFX- Weather Ball2.wav",
+      "source_sha256": "b8fe551928ee1529774f3f7cc2f42c9601f057ae7160f7835f1f990c21178833",
+      "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_launch.wav",
+      "sha256": "e42b12ebd3f1e19fe592387adbc2c645e4d02094e9fafff486b751399244eb34",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "weatherball_impact.wav": {
+      "source": "res://assets/battles/animations/weatherball/PRSFX- Weather Ball1.wav",
+      "source_sha256": "b119784fa411a92cb5de95d8917c0d80b305487098c9fede05576f5bf893070f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_impact.wav",
+      "sha256": "a4d1d84fe0d7541738aca5b006d2fcd0767d9f30bd4fadc6c578337491d2dfb3",
+      "filters": "atrim=end=0.733125000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.431250000,atrim=duration=0.431250000,afade=t=in:d=0.005,afade=t=out:st=0.381250000:d=0.05",
+      "duration_seconds": 0.43124999999999997
+    },
+    "absorb_launch.wav": {
+      "source": "res://assets/battles/animations/absorb/PRSFX- Absorb1.wav",
+      "source_sha256": "fea6b6815f88d17dc350f2b0dfeacb551d7112294992d44a738b94872f5b97a5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/absorb_launch.wav",
+      "sha256": "6efc5dc37104d86b39773c0d355d275311ec9fbf82de45274507ce625440b1e3",
+      "filters": "atrim=end=0.360333000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.360333000,atrim=duration=0.360333000,afade=t=in:d=0.005,afade=t=out:st=0.310333000:d=0.05",
+      "duration_seconds": 0.360333
+    },
+    "absorb_impact.wav": {
+      "source": "res://assets/battles/animations/absorb/PRSFX- Absorb2.wav",
+      "source_sha256": "a4cccbf8477e73d9130be123464fb2943a78d51ef3c85c213ef0578dff6d7b41",
+      "path": "res://assets/battles/moves_3d/audio_recipes/absorb_impact.wav",
+      "sha256": "4fc98bad9c1dcc15d9d7730b2787547a6c7b40fb89bd6073d218f33a4365c9df",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "confusion_launch.wav": {
+      "source": "res://assets/battles/animations/confusion/PRSFX- Confusion.wav",
+      "source_sha256": "9ada4d94c1d0959892cbef13b9abfd6260f4386bca4c34b10477860cb73ef48c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/confusion_launch.wav",
+      "sha256": "546283a2ccb7b1c0dce46a35e6fae8eac37e3cd7ea59beaaba11af28d9c20c22",
+      "filters": "atrim=end=0.641917000,asetpts=PTS-STARTPTS,atempo=1.213453686,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "darkpulse_launch.wav": {
+      "source": "res://assets/battles/animations/darkpulse/PRSFX- Dark Pulse1.wav",
+      "source_sha256": "ebdbd70394f1317d61fad6444606f07365edc4bd1b7eb75d5380bd6b32f4619c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_launch.wav",
+      "sha256": "cbf212ea02d2112439de1dba33bd2949a1364db97f8b37236b9840fd435b9107",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "darkpulse_impact.wav": {
+      "source": "res://assets/battles/animations/darkpulse/PRSFX- Dark Pulse2.wav",
+      "source_sha256": "1b750592db4708e0dcbdb30c00b07f310f82f462efae076d1bd2107bc29a798c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_impact.wav",
+      "sha256": "5b3762c7be39c58e4c98439d6df03e880cafe8cd5a46af888fa54e7486bc7b11",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "drainingkiss_launch.wav": {
+      "source": "res://assets/battles/animations/drainingkiss/PRSFX- Draining Kiss1.wav",
+      "source_sha256": "c881b24cdcda07a382fbc8e30d2c966c29286bd28012f5f6bcd32bbddc53a6d2",
+      "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_launch.wav",
+      "sha256": "8d2a39e71124bd1e300738dfbd498116603a43fd79bc0e1f9c4b70f1e7699481",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "drainingkiss_impact.wav": {
+      "source": "res://assets/battles/animations/drainingkiss/PRSFX- Draining Kiss2.wav",
+      "source_sha256": "25d4b48d461d1b8ca3cfad97b43a3e0fb07bc222ac768571cc8f9c06c4bec9da",
+      "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_impact.wav",
+      "sha256": "cdf046029507cdd7aa29732facd0efd774bd0bc33323e1cc8949345a86079d3b",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "gust_launch.wav": {
+      "source": "res://assets/battles/animations/gust/PRSFX- Gust.wav",
+      "source_sha256": "627982338973fc54febee2033c999a639caec8377ffecc224c886b83e4318182",
+      "path": "res://assets/battles/moves_3d/audio_recipes/gust_launch.wav",
+      "sha256": "86b14e331cdb28e3e6c255b2626bc9516c7dc5ffc1ea8772d1ef8bba83b1bf37",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "hex_launch.wav": {
+      "source": "res://assets/battles/animations/hex/PRSFX- Hex.wav",
+      "source_sha256": "af8b7a72b2ba041bc8264a45d774153964ef60b8db78ff9fb47a60a22ac60da0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hex_launch.wav",
+      "sha256": "131ec50cc839381150e5107151cdb01eebc7a2c9807311f39688110102d63496",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "psychic_launch.wav": {
+      "source": "res://assets/battles/animations/psychic/PRSFX- Psychic.wav",
+      "source_sha256": "0880f33845d36453722959a5a92d055e470bc96757404df63047c0219c22a1ec",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psychic_launch.wav",
+      "sha256": "243fccda132036a0873560010f137a6df14b43e81e6bf5446e4c6db4d8df49a8",
+      "filters": "atrim=end=0.891500000,asetpts=PTS-STARTPTS,atempo=1.685255198,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "psychicnoise_launch.wav": {
+      "source": "res://assets/battles/animations/psychicnoise/PRSFX- Calm Mind.wav",
+      "source_sha256": "bba491692da1203b6851c59a7da44aaba89cc763fc20a4544ff66baac22b9644",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_launch.wav",
+      "sha256": "a1e713e2ff4785461fd3291bf9adfcf2893c2eeb567591d71d090bbb1cba5e4b",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "psychicnoise_impact.wav": {
+      "source": "res://assets/battles/animations/psychicnoise/PRSFX- Disable.wav",
+      "source_sha256": "77b83bfc5c5f7a8b6d4ba1ef5add36403f676f521de4844b7e907145ab7a1aa0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_impact.wav",
+      "sha256": "e283fa8085098f2fb35c348a0c52a8094f93ab6559546b42ae87fa7793235ff3",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "psyshock_launch.wav": {
+      "source": "res://assets/battles/animations/psyshock/PRSFX- Psyshock1.wav",
+      "source_sha256": "ff8fb634ea4cef58b683f1a61b4b47e54a780db4c683023ae387da83db09b7b3",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_launch.wav",
+      "sha256": "91d33875d402eeaac39c28fe399046b8b4900fa2051609c9adb833e258f65c8e",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "psyshock_impact.wav": {
+      "source": "res://assets/battles/animations/psyshock/PRSFX- Psyshock2.wav",
+      "source_sha256": "bee36e5609bd89da341ffb9a099a71fcf3258d564f082b1cf7cc159150a2d9d6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_impact.wav",
+      "sha256": "a28c917299af32561377d8bf6b116d8c9ae54a734a17b97e8b5fd27bc39db5b0",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "screech_cast.wav": {
+      "source": "res://assets/battles/animations/screech/PRSFX- Screech.wav",
+      "source_sha256": "1541b5dc267f9893e50f7cf511c5b604780f45c9c09cec9fb870b9042b7c9179",
+      "path": "res://assets/battles/moves_3d/audio_recipes/screech_cast.wav",
+      "sha256": "5af45b1b03e88f28b6debb0abd3a7f16cc4eda2a2a3ba72f5f3b1c182424a3d1",
+      "filters": "atrim=end=0.719440000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.423200000,atrim=duration=0.423200000,afade=t=in:d=0.005,afade=t=out:st=0.373200000:d=0.05",
+      "duration_seconds": 0.4232
+    },
+    "sparklingaria_launch.wav": {
+      "source": "res://assets/battles/animations/sparklingaria/PRSFX- Sparkling Aria1.wav",
+      "source_sha256": "2db7ab0b40d330419bf7bd7b62b89390ef082ac1a195cab67c94dd856f741e38",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_launch.wav",
+      "sha256": "6812af2d4ff4cb006d65eb0b4751e3de5c7323fc2ff071762935abd00bbe69c4",
+      "filters": "atrim=end=0.899300000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.529000000,atrim=duration=0.529000000,afade=t=in:d=0.005,afade=t=out:st=0.479000000:d=0.05",
+      "duration_seconds": 0.529
+    },
+    "sparklingaria_impact.wav": {
+      "source": "res://assets/battles/animations/sparklingaria/PRSFX- Sparkling Aria2.wav",
+      "source_sha256": "0740d8fe9b20db16d2b7d188b25a1dd9df96334f1a26aae95738d9cf294f5483",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_impact.wav",
+      "sha256": "b52c08c1f5681dfbddf02937b345c7d3982d12dab9e0819aa2202233ede84d32",
+      "filters": "atrim=end=0.488750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.287500000,atrim=duration=0.287500000,afade=t=in:d=0.005,afade=t=out:st=0.237500000:d=0.05",
+      "duration_seconds": 0.2875
+    },
+    "supersonic_cast.wav": {
+      "source": "res://assets/battles/animations/supersonic/PRSFX- Supersonic.wav",
+      "source_sha256": "2e8d3ea9cde6d71f529ec442f4e4a5be9d544d09e036e72ed972e199cedce801",
+      "path": "res://assets/battles/moves_3d/audio_recipes/supersonic_cast.wav",
+      "sha256": "f85b738776b45400246e797a4c5a1ae683d6715117e67b9fb35fc8db45d6bdc9",
+      "filters": "atrim=end=0.782391000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.460230000,atrim=duration=0.460230000,afade=t=in:d=0.005,afade=t=out:st=0.410230000:d=0.05",
+      "duration_seconds": 0.46023000000000003
+    },
+    "bleakwindstorm_launch.wav": {
+      "source": "res://assets/battles/animations/bleakwindstorm/PRSFX- Icy Wind1.wav",
+      "source_sha256": "7e6b4519bc21fa39217b6840903b750e99d0ebbcf4febbe493e4c2ca4f789b94",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bleakwindstorm_launch.wav",
+      "sha256": "c5f5fa70d4efade892711e593196e71c35389a8ab21424738d30da38424cdf10",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "blizzard_launch.wav": {
+      "source": "res://assets/battles/animations/blizzard/PRSFX- Blizzard.wav",
+      "source_sha256": "1c27682521c37456b130edf309bdf0702566dac2dc793401a2ee161d76baba48",
+      "path": "res://assets/battles/moves_3d/audio_recipes/blizzard_launch.wav",
+      "sha256": "99e888e0e132952540f07c741f5586e0b3b1c76f75635382bd0a333235a0589a",
+      "filters": "atrim=end=1.583550000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.931500000,atrim=duration=0.931500000,afade=t=in:d=0.005,afade=t=out:st=0.881500000:d=0.05",
+      "duration_seconds": 0.9315000000000002
+    },
+    "earthpower_launch.wav": {
+      "source": "res://assets/battles/animations/earthpower/PRSFX- Earth Power.wav",
+      "source_sha256": "3d2b4109c233c00ed3c6f6917da7b387a74d1a7dab5bd64a325b89c0be270d21",
+      "path": "res://assets/battles/moves_3d/audio_recipes/earthpower_launch.wav",
+      "sha256": "58e1be7504bbdff2555979f4b240addc652adb4da0bb7bb2a23592aa251d120c",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "earthquake_launch.wav": {
+      "source": "res://assets/battles/animations/earthquake/PRSFX- Earthquake1.wav",
+      "source_sha256": "4beba30d23752713159c4a703ed088ca55c67c4d8b88d0c6a5fb92f3618ea957",
+      "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_launch.wav",
+      "sha256": "e1d1f11846d0d8027141e89cac08fc0318276bb4d76ddb111c2e95775859933f",
+      "filters": "atrim=end=0.959583000,asetpts=PTS-STARTPTS,atempo=1.545222222,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "earthquake_impact.wav": {
+      "source": "res://assets/battles/animations/earthquake/PRSFX- Earthquake2.wav",
+      "source_sha256": "38bf6999d93e984cd23c1bc5c16f0e38889796b67f14de1b42ca60833580d615",
+      "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_impact.wav",
+      "sha256": "385c16b52aca9f30939b87b231df566ab99850a63e2182532b1870effc8a47ea",
+      "filters": "atrim=end=0.573750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.337500000,atrim=duration=0.337500000,afade=t=in:d=0.005,afade=t=out:st=0.287500000:d=0.05",
+      "duration_seconds": 0.3375
+    },
+    "explosion_launch.wav": {
+      "source": "res://assets/battles/animations/explosion/PRSFX- Selfdestruct1.wav",
+      "source_sha256": "27048b9f77893d1cfcdde5703d45d29ea5e1b5dc557e7e76a37b9ce50579c2a7",
+      "path": "res://assets/battles/moves_3d/audio_recipes/explosion_launch.wav",
+      "sha256": "81fde21d4a844d752e7dff00acf6a47e851b4fde652adf129df5548f51eb4e4d",
+      "filters": "atrim=end=2.375325000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.397250000,atrim=duration=1.397250000,afade=t=in:d=0.005,afade=t=out:st=1.347250000:d=0.05",
+      "duration_seconds": 1.3972500000000003
+    },
+    "explosion_impact.wav": {
+      "source": "res://assets/battles/animations/explosion/PRSFX- Explosion.wav",
+      "source_sha256": "60396a8fb1b9878cab5387d42460e2a79f2e8a3ec15aca9e62bd9076d7689681",
+      "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
+      "sha256": "ab1da61494402ee015a76fdeccffe1639cec0dd3b82c00de093d80030b9dae87",
+      "filters": "atrim=end=0.516375000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.303750000,atrim=duration=0.303750000,afade=t=in:d=0.005,afade=t=out:st=0.253750000:d=0.05",
+      "duration_seconds": 0.30375
+    },
+    "freezedry_launch.wav": {
+      "source": "res://assets/battles/animations/freezedry/PRSFX- Freeze Dry1.wav",
+      "source_sha256": "0c79e32e68a6e3c6ee3c67cd6dbb82de7491f6498891003dec24b9eb7fc95aaf",
+      "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_launch.wav",
+      "sha256": "5127ce2e3b29307d8713de7c7768a6be1f8bc114bd927397e022b05caaa2e278",
+      "filters": "atrim=end=0.586833000,asetpts=PTS-STARTPTS,atempo=1.453816425,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.403650000,atrim=duration=0.403650000,afade=t=in:d=0.005,afade=t=out:st=0.353650000:d=0.05",
+      "duration_seconds": 0.40365000000000006
+    },
+    "freezedry_impact.wav": {
+      "source": "res://assets/battles/animations/freezedry/PRSFX- Freeze Dry3.wav",
+      "source_sha256": "c4db839bb33ca1b133bd51dcd6c5b005d8ce271ba1e34932b32e0cfd4f9d4e49",
+      "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_impact.wav",
+      "sha256": "ec011d8ff1997ee4c2baa41fb1173dbe95f8388d2393c27bcd0a00ffc3a5430d",
+      "filters": "atrim=end=0.487687500,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.286875000,atrim=duration=0.286875000,afade=t=in:d=0.005,afade=t=out:st=0.236875000:d=0.05",
+      "duration_seconds": 0.286875
+    },
+    "heatwave_launch.wav": {
+      "source": "res://assets/battles/animations/heatwave/PRSFX- Heat Wave.wav",
+      "source_sha256": "2807ff5a5642fa9c11b763060f878ac494608d5a4a515e186554646f45cb0988",
+      "path": "res://assets/battles/moves_3d/audio_recipes/heatwave_launch.wav",
+      "sha256": "237f437a6d7e5dc150a1ae4ccf4c28a91faf94655e84fdce0d1b5b67f21fc593",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "hurricane_launch.wav": {
+      "source": "res://assets/battles/animations/hurricane/PRSFX- Hurricane.wav",
+      "source_sha256": "e51bf862dc60be6aaace0e07245849cab32074b5dcd6cd1a8d35427f80549f6f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hurricane_launch.wav",
+      "sha256": "7c1d60b153feffb3f23b0410ea420d06b170cc99044ac874a82cc732045c043e",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "makeitrain_launch.wav": {
+      "source": "res://assets/battles/animations/makeitrain/PRSFX- Zing Zap3.wav",
+      "source_sha256": "8f434e77fe60cae665b9cfff2fe314ad0982037666214f41f10e3a0febb27ab4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_launch.wav",
+      "sha256": "afee95211b25509521dde8bd750407f900ad917ff72ab837370780455bea8d5c",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "makeitrain_impact.wav": {
+      "source": "res://assets/battles/animations/makeitrain/PRSFX- Pay Day2.wav",
+      "source_sha256": "ffcd0f6cda6148d50d85a6c1df738feb3088b50f10e6f7e7e9bd4d9151e64ab9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_impact.wav",
+      "sha256": "9aee8c90a823d829cb925a75f44f953caaea3f847a2360a1ada50b5b020e47af",
+      "filters": "atrim=end=0.573750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.337500000,atrim=duration=0.337500000,afade=t=in:d=0.005,afade=t=out:st=0.287500000:d=0.05",
+      "duration_seconds": 0.3375
+    },
+    "powdersnow_launch.wav": {
+      "source": "res://assets/battles/animations/powdersnow/PRSFX- Powder Snow1.wav",
+      "source_sha256": "ec46ee378482d74ad12e9dc63a36729a93a8507e5af57ddeb022b598a20a2f46",
+      "path": "res://assets/battles/moves_3d/audio_recipes/powdersnow_launch.wav",
+      "sha256": "f7e80cb3e19f38bbb7eb7820449d59c2b8469dd448d6ae72c37f522312d6edd7",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "terastarstorm_launch.wav": {
+      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
+      "source_sha256": "7687e8d2ef7bc9635d73adbb67a9a2b5e2b298dd12ed9eaaa94057ab1576123e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_launch.wav",
+      "sha256": "946149369e7d6ec47c1902e2ba71cd2fa59295dcca610708ce2856005df665af",
+      "filters": "atrim=end=1.055700000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.621000000,atrim=duration=0.621000000,afade=t=in:d=0.005,afade=t=out:st=0.571000000:d=0.05",
+      "duration_seconds": 0.6210000000000001
+    },
+    "terastarstorm_impact.wav": {
+      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav",
+      "source_sha256": "041f7a94bed145331bed9697df0592f2b2d4867bd52e32c4cf51ef2eab35d84a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_impact.wav",
+      "sha256": "2082a7d274b7b329d9fd778a56155f676b68666395b6932548bbc00317f7be4b",
+      "filters": "atrim=end=0.545062500,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.320625000,atrim=duration=0.320625000,afade=t=in:d=0.005,afade=t=out:st=0.270625000:d=0.05",
+      "duration_seconds": 0.320625
+    },
+    "babydolleyes_cast.wav": {
+      "source": "res://assets/battles/animations/babydolleyes/PRSFX- Baby Doll Eyes.wav",
+      "source_sha256": "6db85e6c811b8268a83959fb225a72ad7d3e57107abfae0a818e8226aaee03c9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/babydolleyes_cast.wav",
+      "sha256": "aa50577afabf36b2d568398cde1bcffb8d5a7b34fbc224b365ba614180d79dde",
+      "filters": "atrim=end=0.739417000,asetpts=PTS-STARTPTS,atempo=1.538208862,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.480700000,atrim=duration=0.480700000,afade=t=in:d=0.005,afade=t=out:st=0.430700000:d=0.05",
+      "duration_seconds": 0.4807
+    },
+    "charm_cast.wav": {
+      "source": "res://assets/battles/animations/charm/PRSFX- Charm.wav",
+      "source_sha256": "e0fd80b4fb517efec96d0d937f4181b3bfab58e4546487d08ef47b9a4f457124",
+      "path": "res://assets/battles/moves_3d/audio_recipes/charm_cast.wav",
+      "sha256": "ac4d2839e56ac264209f9b873368134cbca9ad2a9291692a262a008e25c40d0a",
+      "filters": "atrim=end=0.555917000,asetpts=PTS-STARTPTS,atempo=1.272121281,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "encore_cast.wav": {
+      "source": "res://assets/battles/animations/encore/PRSFX- Encore.wav",
+      "source_sha256": "b20d32695c425e24ee9d526b5be81861a8d2a6fe4bd40b29cabea164390e5ef0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/encore_cast.wav",
+      "sha256": "dd10a14ea21c3fe9e7942935190d67e34692ae2e1f74050cac96182dfa73b373",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "leechseed_cast.wav": {
+      "source": "res://assets/battles/animations/leechseed/PRSFX- Leech Seed2.wav",
+      "source_sha256": "e7b989569d67095e8500fe8d76a86a98d2b76366838e0515da5db8c96ac29446",
+      "path": "res://assets/battles/moves_3d/audio_recipes/leechseed_cast.wav",
+      "sha256": "ac8071ffeb53efeba910ed772620ece4d1be0f4a38cf0c9f2b15c3736577108f",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "leer_cast.wav": {
+      "source": "res://assets/battles/animations/leer/PRSFX- Leer.wav",
+      "source_sha256": "e879fd341595270e970f27b4642e7860b87f551db344cef0db97bbdb82ff6d60",
+      "path": "res://assets/battles/moves_3d/audio_recipes/leer_cast.wav",
+      "sha256": "0f545a0028b7eb55bfc41e0809bcb3aa7fc6e4e9adca69c0fdd13cc44f4be186",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "poisonpowder_cast.wav": {
+      "source": "res://assets/battles/animations/poisonpowder/PRSFX- Poison Powder.wav",
+      "source_sha256": "c2ca3c365fe45af7672f7262f7eda801f8cc5bc243affeef1e3c9bafe22a7ef5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/poisonpowder_cast.wav",
+      "sha256": "c586e467686c691165fda04a1e68891c92974c913df366df7e3414c190f8720c",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "sandattack_cast.wav": {
+      "source": "res://assets/battles/animations/sandattack/PRSFX- Sand Attack.wav",
+      "source_sha256": "067c185354d16be60a9e1dda02f41e7cd6c872df9cc2c3bc45098eedc2cf62c1",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sandattack_cast.wav",
+      "sha256": "2a0517c1a92f9bd10caf151c0838763ad4aa8ebbbe5baf6c4d94d3c796520285",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "sleeppowder_cast.wav": {
+      "source": "res://assets/battles/animations/sleeppowder/PRSFX- Sleep Powder.wav",
+      "source_sha256": "c2ca3c365fe45af7672f7262f7eda801f8cc5bc243affeef1e3c9bafe22a7ef5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sleeppowder_cast.wav",
+      "sha256": "c586e467686c691165fda04a1e68891c92974c913df366df7e3414c190f8720c",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "smokescreen_cast.wav": {
+      "source": "res://assets/battles/animations/smokescreen/PRSFX- Smokescreen.wav",
+      "source_sha256": "77f020a1c44f396d3e7e61237a5fc1995c93cb05e3407581a9e362f1f86a0639",
+      "path": "res://assets/battles/moves_3d/audio_recipes/smokescreen_cast.wav",
+      "sha256": "1c32b9dcd8037a1045d884002bf3eccbf6b0d9652e23dc29563856fd80f00e6c",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "spore_cast.wav": {
+      "source": "res://assets/battles/animations/spore/PRSFX- Spore.wav",
+      "source_sha256": "c2ca3c365fe45af7672f7262f7eda801f8cc5bc243affeef1e3c9bafe22a7ef5",
+      "path": "res://assets/battles/moves_3d/audio_recipes/spore_cast.wav",
+      "sha256": "c586e467686c691165fda04a1e68891c92974c913df366df7e3414c190f8720c",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "stringshot_cast.wav": {
+      "source": "res://assets/battles/animations/stringshot/PRSFX- String Shot2.wav",
+      "source_sha256": "1ac2a4972084ec8d74caa370bf4b167936f3a89c933a8b68ad6ece907824fc32",
+      "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast.wav",
+      "sha256": "cc7148f9cbfc2ff251cddd5f9f26d1651486e4e590a11640559917216a2f002d",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "sweetscent_cast.wav": {
+      "source": "res://assets/battles/animations/sweetscent/PRSFX- Heal Order2.wav",
+      "source_sha256": "4139b4cf970345e6bd5c7ae3d5f68c16d2543f987e0e0e9f7175d3a749b99b1c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sweetscent_cast.wav",
+      "sha256": "735f4bf25e367ffb6fda3d9ba8015d592e67afe87b98f6a364636120f358ca1d",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "tailwhip_cast.wav": {
+      "source": "res://assets/battles/animations/tailwhip/PRSFX- Tail Whip.wav",
+      "source_sha256": "c305f5172b6ac8997ff765f5d3da5434fa413a03ff1f0434c82ffc128bf342b9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/tailwhip_cast.wav",
+      "sha256": "0d07aecb38bbf5705c92cdadb3460730a83e9cefb19392e534b8d164abf2a8a3",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "taunt_cast.wav": {
+      "source": "res://assets/battles/animations/taunt/PRSFX- Taunt3.wav",
+      "source_sha256": "389006214d05b5166a280d5169c3fa6bb25a6c2c41a552c2b0055bc320e304cf",
+      "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast.wav",
+      "sha256": "37cadddd2ae96d85c18a44093199d6a03704ac0157ae74977d08af93abc5cec2",
+      "filters": "atrim=end=0.540417000,asetpts=PTS-STARTPTS,atempo=1.236652174,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "thunderwave_cast.wav": {
+      "source": "res://assets/battles/animations/thunderwave/PRSFX- Thunder Wave.wav",
+      "source_sha256": "705103adfede8356ec9a7a23b1550c2bf296cefb5529ad5c0d858f998dc4e9f9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/thunderwave_cast.wav",
+      "sha256": "57f39dfaaf3314eef0f90f9e70ff4b0b7e47123e94bf4ae3308b17bdb555624f",
+      "filters": "atrim=end=0.635333000,asetpts=PTS-STARTPTS,atempo=1.453851259,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "toxic_cast.wav": {
+      "source": "res://assets/battles/animations/toxic/PRSFX- Toxic1.wav",
+      "source_sha256": "f6c304c909417565bcbbabd84f7b94be9f545b45cba9462efea9df7f8215975b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast.wav",
+      "sha256": "e78fae5de206c8e87451108e8b456ff00a19b0dfdc36774caaefc8c0f4afefd3",
+      "filters": "atrim=end=0.519750000,asetpts=PTS-STARTPTS,atempo=1.189359268,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "willowisp_cast.wav": {
+      "source": "res://assets/battles/animations/willowisp/PRSFX- Will O Wisp2.wav",
+      "source_sha256": "e3f149200c489f8ecc0d682bddd567fba9b4891f5f670691afd82080e935a0b9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast.wav",
+      "sha256": "6cb090db916d5548e31aa0eab475af13705e449b8a1c9b098c261767803b1907",
+      "filters": "atrim=end=0.681833000,asetpts=PTS-STARTPTS,atempo=1.560258581,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "agility_cast.wav": {
+      "source": "res://assets/battles/animations/agility/PRSFX- Agility.wav",
+      "source_sha256": "3c5ebab69d4d3d85677c898520b22cb07d1ac4f853dd27165cc7f91591ac2ea0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/agility_cast.wav",
+      "sha256": "6c058a388f089b2697d257f423a9b93abf870d8e028e1c2acff9614272832c71",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "calmmind_cast.wav": {
+      "source": "res://assets/battles/animations/calmmind/PRSFX- Calm Mind.wav",
+      "source_sha256": "bba491692da1203b6851c59a7da44aaba89cc763fc20a4544ff66baac22b9644",
+      "path": "res://assets/battles/moves_3d/audio_recipes/calmmind_cast.wav",
+      "sha256": "6d0c31c41a14f6cdd96bc40b1c201f268b522508b4857d91e498b140eab0032e",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "charge_cast.wav": {
+      "source": "res://assets/battles/animations/charge/PRSFX- Charge.wav",
+      "source_sha256": "8f434e77fe60cae665b9cfff2fe314ad0982037666214f41f10e3a0febb27ab4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/charge_cast.wav",
+      "sha256": "9bafd1543f964f5ac31f9e0028b9e5c4a417e4ee30b7f51ae75a54bff8c587e1",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "defensecurl_cast.wav": {
+      "source": "res://assets/battles/animations/defensecurl/PRSFX- Defense Curl1.wav",
+      "source_sha256": "c9a086241a03dbd992f0ea947212ac78975210f957aa6e1baa71b69cabd4fb38",
+      "path": "res://assets/battles/moves_3d/audio_recipes/defensecurl_cast.wav",
+      "sha256": "8d07065c31b677e22aebc612c3aa39ddcaa5323be2395fa7262cfd6852e05f24",
+      "filters": "atrim=end=0.524917000,asetpts=PTS-STARTPTS,atempo=1.201183066,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "doubleteam_cast.wav": {
+      "source": "res://assets/battles/animations/doubleteam/PRSFX- Double Team.wav",
+      "source_sha256": "b83bef72249fc01837f9d1fc114395594dbc07fdb96c41ad1869668d3b02d6bb",
+      "path": "res://assets/battles/moves_3d/audio_recipes/doubleteam_cast.wav",
+      "sha256": "f03188ac1cb678751b72dfbb63aa80e9ec7472e05721856a48c0ca297d813e23",
+      "filters": "atrim=end=0.774083000,asetpts=PTS-STARTPTS,atempo=1.265254985,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.611800000,atrim=duration=0.611800000,afade=t=in:d=0.005,afade=t=out:st=0.561800000:d=0.05",
+      "duration_seconds": 0.6118
+    },
+    "dragondance_cast.wav": {
+      "source": "res://assets/battles/animations/dragondance/PRSFX- Dragon Dance.wav",
+      "source_sha256": "e24998c413d6d9e73a34a398dbfe42ed847c49f492075c7fcbaff236f6652290",
+      "path": "res://assets/battles/moves_3d/audio_recipes/dragondance_cast.wav",
+      "sha256": "abf3381cdaf77693ef27d512239efdde075f537c493e0ce30cd892359af9f9f5",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "focusenergy_cast.wav": {
+      "source": "res://assets/battles/animations/focusenergy/PRSFX- Focus Energy.wav",
+      "source_sha256": "8c91f30be6f7c43038c8499af68eaeb18919b2374bb7fd0aa62d66cd7cf28a6b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/focusenergy_cast.wav",
+      "sha256": "7c39e3d8b6516b127ec3a39c892e618b9aaa9764bb6e4c0b589da9b31b93b530",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "growth_cast.wav": {
+      "source": "res://assets/battles/animations/growth/PRSFX- Growth.wav",
+      "source_sha256": "7d85d9f6df018712bbe12b4a76ebba15cdc15540bce1f3d95c1ef31e9d064f40",
+      "path": "res://assets/battles/moves_3d/audio_recipes/growth_cast.wav",
+      "sha256": "a60d4a6f70835e497907d5de30c0cb4ec877b3c7084c10b161988246552b4348",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "harden_cast.wav": {
+      "source": "res://assets/battles/animations/harden/PRSFX- Harden.wav",
+      "source_sha256": "a3a5c029a3f525f0833533c1f83dd64edad3d692e2507512c0cb65c60592e5d6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/harden_cast.wav",
+      "sha256": "1b92d0a470d9fe589c1494701abbcaf66bee7dbdcce57312aeb70fce01c3947f",
+      "filters": "atrim=end=0.653250000,asetpts=PTS-STARTPTS,atempo=1.494851259,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "nastyplot_cast.wav": {
+      "source": "res://assets/battles/animations/nastyplot/PRSFX- Nasty Plot.wav",
+      "source_sha256": "33f1f39ebacd2ca46ee18307b120a11888f3f552ac3d12805344786be4cf08ce",
+      "path": "res://assets/battles/moves_3d/audio_recipes/nastyplot_cast.wav",
+      "sha256": "72e4f2378ca5d237fc05f8f25508c00abcd7a4aa7670e2fdb8fdf1438e2a5472",
+      "filters": "atrim=end=0.482885000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.284050000,atrim=duration=0.284050000,afade=t=in:d=0.005,afade=t=out:st=0.234050000:d=0.05",
+      "duration_seconds": 0.28405
+    },
+    "recover_cast.wav": {
+      "source": "res://assets/battles/animations/recover/PRSFX- Recover.wav",
+      "source_sha256": "041f7a94bed145331bed9697df0592f2b2d4867bd52e32c4cf51ef2eab35d84a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/recover_cast.wav",
+      "sha256": "9130bea47c89df522580b6147e1757c65aa1268e3bac569ce42d65c15375d604",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "roost_cast.wav": {
+      "source": "res://assets/battles/animations/roost/PRSFX- Roost2.wav",
+      "source_sha256": "f88a335f3d2afd0a499d63dff79360e9cb9226b64041c9560bf2f347c3a5b118",
+      "path": "res://assets/battles/moves_3d/audio_recipes/roost_cast.wav",
+      "sha256": "0dfbd722b96b1f03657d949f5dfb74a9f4a73268b0f402a8562cceddfa089623",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "swordsdance_cast.wav": {
+      "source": "res://assets/battles/animations/swordsdance/PRSFX- Swords Dance1.wav",
+      "source_sha256": "c2723eea465be28c45f721c291e09d939a2110b220df663b85145cc755ac414b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast.wav",
+      "sha256": "1b620198bf4b48261e12476d61756595c7076c085f43279574b6bc0391d62bdf",
+      "filters": "atrim=end=0.508250000,asetpts=PTS-STARTPTS,atempo=1.163043478,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "withdraw_cast.wav": {
+      "source": "res://assets/battles/animations/withdraw/PRSFX- Withdraw.wav",
+      "source_sha256": "4bb5714a6c8604de417c5ba3c1235760e3d90867981cd634a6143767feee8a63",
+      "path": "res://assets/battles/moves_3d/audio_recipes/withdraw_cast.wav",
+      "sha256": "75650c495f4a84bf38da006344a4bad70af59cf573a66348de71d35635bddc5d",
+      "filters": "atrim=end=0.407500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.407500000,atrim=duration=0.407500000,afade=t=in:d=0.005,afade=t=out:st=0.357500000:d=0.05",
+      "duration_seconds": 0.4075
+    },
+    "auroraveil_cast.wav": {
+      "source": "res://assets/battles/animations/auroraveil/PRSFX- Aurora Veil3.wav",
+      "source_sha256": "6a7be4dda6cfc0f35660152749ce546775564917795b1801488295942a436877",
+      "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast.wav",
+      "sha256": "a9427ebd4806aea1aa96b4888bc0a15cc38a141eb0fe35fa4bed0c22696f9b0d",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "chillyreception_cast.wav": {
+      "source": "res://assets/battles/animations/chillyreception/PRSFX- Sketch.wav",
+      "source_sha256": "bd5dc398d01a303ba45709ec30c831052db57a3175e47f79fa6a64655d65bff3",
+      "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast.wav",
+      "sha256": "eda5827286839f5767375dfca3721692fdfea5277ace4a4cc1b84b84a12af4d6",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "courtchange_cast.wav": {
+      "source": "res://assets/battles/animations/courtchange/PRSFX- Ally Switch.wav",
+      "source_sha256": "88621aee297b8ae6411b84d3535cf491bc2745f6eb46f48d396c2aca5eee51fc",
+      "path": "res://assets/battles/moves_3d/audio_recipes/courtchange_cast.wav",
+      "sha256": "f174d466a1aaa412310be5692df38d76cbfa1ba739583d4e63784bd4c2d8f18d",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "defog_cast.wav": {
+      "source": "res://assets/battles/animations/defog/PRSFX- Defog.wav",
+      "source_sha256": "d8e04eb37b932dfc90fad58910f5fc73cea76c37a094d41c75d50fa01e9f7bea",
+      "path": "res://assets/battles/moves_3d/audio_recipes/defog_cast.wav",
+      "sha256": "a0b5f833dd20ada09634108eda1a92cd7a7dd61491ba10e7393e499b4548f918",
+      "filters": "atrim=end=0.817190000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.480700000,atrim=duration=0.480700000,afade=t=in:d=0.005,afade=t=out:st=0.430700000:d=0.05",
+      "duration_seconds": 0.4807
+    },
+    "electricterrain_cast.wav": {
+      "source": "res://assets/battles/animations/electricterrain/PRSFX- Electric Terrain2.wav",
+      "source_sha256": "d319b7c2280117e4231856492f6cec52bf53e44aa3657dfb75d90fe76519d96c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast.wav",
+      "sha256": "fdebf32bdab004ca6333f4baff6fc89e2442b9f37abb1324d92fe522fd43c8cc",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "futuresight_launch.wav": {
+      "source": "res://assets/battles/animations/futuresight/PRSFX- Future Sight1.wav",
+      "source_sha256": "ae12e77d56e549696ad4a4c3012361f011f5b8ca379e38bae17cf9a972b7eef7",
+      "path": "res://assets/battles/moves_3d/audio_recipes/futuresight_launch.wav",
+      "sha256": "173bdcb45b3fd647cd3b21bf56f4863b53756e328d21d82bb113ac958306a84d",
+      "filters": "atrim=end=0.438311000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.257830000,atrim=duration=0.257830000,afade=t=in:d=0.005,afade=t=out:st=0.207830000:d=0.05",
+      "duration_seconds": 0.25783
+    },
+    "grassyterrain_cast.wav": {
+      "source": "res://assets/battles/animations/grassyterrain/PRSFX- Grassy Terrain.wav",
+      "source_sha256": "0c7d79cc0d3ac387bf7c99f59ddd15c260a070d60c383a7ddddfa53f032a246c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/grassyterrain_cast.wav",
+      "sha256": "2319c2cb691e18b009668cb101025cb2604505581e31dd536cb867afeec1e8ea",
+      "filters": "atrim=end=0.780045000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.458850000,atrim=duration=0.458850000,afade=t=in:d=0.005,afade=t=out:st=0.408850000:d=0.05",
+      "duration_seconds": 0.45885000000000004
+    },
+    "haze_cast.wav": {
+      "source": "res://assets/battles/animations/haze/PRSFX- Haze.wav",
+      "source_sha256": "7b3dab90f60944bc2de4af004ebfd49caff1962ddab3e9c3ae85fa36513c54a7",
+      "path": "res://assets/battles/moves_3d/audio_recipes/haze_cast.wav",
+      "sha256": "8e91e89d2753157f729b148d44216668b79c4edefd839c04d4933c4059c708d5",
+      "filters": "atrim=end=0.631465000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.371450000,atrim=duration=0.371450000,afade=t=in:d=0.005,afade=t=out:st=0.321450000:d=0.05",
+      "duration_seconds": 0.37145
+    },
+    "lightscreen_cast.wav": {
+      "source": "res://assets/battles/animations/lightscreen/PRSFX- Light Screen.wav",
+      "source_sha256": "a37cc1b3bf9d652c506d036ab32789e4a6d2100d764718e4942cf9a481f52cf0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/lightscreen_cast.wav",
+      "sha256": "e774da2bfa15b483e1ae3972ca3da2f00bd84be4ba0a6191fa6a38ffe0133cac",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "mistyterrain_cast.wav": {
+      "source": "res://assets/battles/animations/mistyterrain/PRSFX- Misty Terrain.wav",
+      "source_sha256": "38c9381d086c9d96dcf7815609cb6c3301a549bd4672cb3d4f965da9f65cd5c2",
+      "path": "res://assets/battles/moves_3d/audio_recipes/mistyterrain_cast.wav",
+      "sha256": "530a71e69877b4ee42de6b4d3d484bd3c16482cd9e5986f44cc2d6df38819395",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "protect_cast.wav": {
+      "source": "res://assets/battles/animations/protect/PRSFX- Protect.wav",
+      "source_sha256": "3d3bfd7f9c80b17383c945aad1968e9bbe13d04bfd0f72e8553fb6636c2a4dbf",
+      "path": "res://assets/battles/moves_3d/audio_recipes/protect_cast.wav",
+      "sha256": "bf511661bdf8bdb0e4684f04d7c6080675575cdf16f67f6a306a796f84568c68",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "psychicterrain_cast.wav": {
+      "source": "res://assets/battles/animations/psychicterrain/PRSFX- Psychic Terrain3.wav",
+      "source_sha256": "ff0ce22a1a1959d8db4aaeff1f5c7ef03062d1e24f39e1709adb7928b9763db8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast.wav",
+      "sha256": "95f3881946f6a40426fb1416e91e9e9c1c8dcbdf36a36c232f4bfc38039f9f6b",
+      "filters": "atrim=end=0.965770000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.568100000,atrim=duration=0.568100000,afade=t=in:d=0.005,afade=t=out:st=0.518100000:d=0.05",
+      "duration_seconds": 0.5681
+    },
+    "reflect_cast.wav": {
+      "source": "res://assets/battles/animations/reflect/PRSFX- Reflect.wav",
+      "source_sha256": "a37cc1b3bf9d652c506d036ab32789e4a6d2100d764718e4942cf9a481f52cf0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/reflect_cast.wav",
+      "sha256": "e774da2bfa15b483e1ae3972ca3da2f00bd84be4ba0a6191fa6a38ffe0133cac",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "spikes_cast.wav": {
+      "source": "res://assets/battles/animations/spikes/PRSFX- Spikes2.wav",
+      "source_sha256": "5f1568545cef923557b74a42ddc1934ff3dcc57bee18cc8a5ba5b67cf043f768",
+      "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast.wav",
+      "sha256": "b67e7716966c2883867cd2bf72a1cddfe98cfe0c187ffc6d001a77b1838bafcb",
+      "filters": "atrim=end=0.580583000,asetpts=PTS-STARTPTS,atempo=1.328565217,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "stealthrock_cast.wav": {
+      "source": "res://assets/battles/animations/stealthrock/PRSFX- Stealth Rocks.wav",
+      "source_sha256": "7c51f204ed1147e2fc061c2d98bdbce41bea5360216404664566bd44e74bbf4a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/stealthrock_cast.wav",
+      "sha256": "3a9bceb1c4695b72c126e6eb05d3e60c8ed6ab4e25d753d68ad656413bd2a836",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "stickyweb_cast.wav": {
+      "source": "res://assets/battles/animations/stickyweb/PRSFX- Sticky Web.wav",
+      "source_sha256": "1ac2a4972084ec8d74caa370bf4b167936f3a89c933a8b68ad6ece907824fc32",
+      "path": "res://assets/battles/moves_3d/audio_recipes/stickyweb_cast.wav",
+      "sha256": "cc7148f9cbfc2ff251cddd5f9f26d1651486e4e590a11640559917216a2f002d",
+      "filters": "atrim=end=0.742900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "substitute_cast.wav": {
+      "source": "res://assets/battles/animations/substitute/PRSFX- Substitute1.wav",
+      "source_sha256": "0833ec5cdb176b698e066332d5d466317d0af1309b3ec9e49fc6f7eec0300777",
+      "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast.wav",
+      "sha256": "b0bf1c9ef53f216bc63703dfb0c21ab0018cc5a67add94ec97e38e22cc4cc394",
+      "filters": "atrim=end=0.681917000,asetpts=PTS-STARTPTS,atempo=1.560450801,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.437000000,atrim=duration=0.437000000,afade=t=in:d=0.005,afade=t=out:st=0.387000000:d=0.05",
+      "duration_seconds": 0.437
+    },
+    "teleport_cast.wav": {
+      "source": "res://assets/battles/animations/teleport/PRSFX- Teleport.wav",
+      "source_sha256": "2def4828882ca3308d8dfc60a232e8cd85a1025eeadc8b8ccdf55d03c7db3c56",
+      "path": "res://assets/battles/moves_3d/audio_recipes/teleport_cast.wav",
+      "sha256": "c23185b63c4ea83694e6c6fdbecc4ebe8df00fd43d1dba5b578edaea12bd1f48",
+      "filters": "atrim=end=0.668610000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.393300000,atrim=duration=0.393300000,afade=t=in:d=0.005,afade=t=out:st=0.343300000:d=0.05",
+      "duration_seconds": 0.3933
+    },
+    "toxicspikes_cast.wav": {
+      "source": "res://assets/battles/animations/toxicspikes/PRSFX- Toxic Spikes2.wav",
+      "source_sha256": "7f51afe77af1380a349eb47d4dbf93ae9fe6d8ac053fa3b175ee7f7b5e461826",
+      "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast.wav",
+      "sha256": "79608f98221d2c417e0fd423ff4c02ea204094b3e01abe78380f4b28a483eb6a",
+      "filters": "atrim=end=0.260500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.260500000,atrim=duration=0.260500000,afade=t=in:d=0.005,afade=t=out:st=0.210500000:d=0.05",
+      "duration_seconds": 0.2605
+    },
+    "wish_cast.wav": {
+      "source": "res://assets/battles/animations/wish/PRSFX- Wish.wav",
+      "source_sha256": "f2134ba63410034d6045995c057042e1ea94e2f03e6c00f995afb66b7ed08f64",
+      "path": "res://assets/battles/moves_3d/audio_recipes/wish_cast.wav",
+      "sha256": "04b3c7043783a422fad80bbd71afc336581d355ad15434532d5a2337a817d3ae",
+      "filters": "atrim=end=0.594320000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.349600000,atrim=duration=0.349600000,afade=t=in:d=0.005,afade=t=out:st=0.299600000:d=0.05",
+      "duration_seconds": 0.3496
+    },
+    "10000000voltthunderbolt_launch.wav": {
+      "source": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
+      "source_sha256": "277c5e21718f477d8a322638ad0a55baebbfe1d53dab7359901235cb5992f4df",
+      "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_launch.wav",
+      "sha256": "0f5ca2f0c0c66d0f6fa939810ce2976e44226a5fff24093cbce99ebe7031711a",
+      "filters": "atrim=end=0.850181000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.850181000,atrim=duration=0.850181000,afade=t=in:d=0.005,afade=t=out:st=0.800181000:d=0.05",
+      "duration_seconds": 0.850181
+    },
+    "10000000voltthunderbolt_impact.wav": {
+      "source": "res://assets/battles/animations/catastropika/PRSFX- Catastropika3.wav",
+      "source_sha256": "400f8915be2aa4ea67b617fee6df19bd5a4ab60eb19bd51eb6a16ac530bc103c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_impact.wav",
+      "sha256": "17eea9529227471ec71900e0a76d7df9ace2e86a530162112fa2f3c97f9abe6f",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "aciddownpour_launch.wav": {
+      "source": "res://assets/battles/animations/aciddownpour/PRSFX- Acid Downpour3.ogg",
+      "source_sha256": "fe38a76913104c77bb3b3004ee8a9c0d6f35b5f98de186c29a063f17b1caa07b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_launch.wav",
+      "sha256": "1d11aebbeb3092c5d62ee07b33394e8737c7153c665e861f4a53e3575825d347",
+      "filters": "atrim=end=0.690813000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.690813000,atrim=duration=0.690813000,afade=t=in:d=0.005,afade=t=out:st=0.640813000:d=0.05",
+      "duration_seconds": 0.690813
+    },
+    "aciddownpour_impact.wav": {
+      "source": "res://assets/battles/animations/aciddownpour/PRSFX- Acid Downpour7.ogg",
+      "source_sha256": "ae1a5a9b1279ffd2e71acd469dec70a87f249a9cb23d19066a600b7268273019",
+      "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_impact.wav",
+      "sha256": "c2e670c5a3f5e0c6882a44480bac30adc66d8210f6eff703d2d29e36610e478e",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "alloutpummeling_launch.wav": {
+      "source": "res://assets/battles/animations/alloutpummeling/PRSFX- All Out Pummeling1.wav",
+      "source_sha256": "a0398f60ff1ec522c32d81d25ae03e07beff87d3f6fa89a45aa1aa01640efcde",
+      "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_launch.wav",
+      "sha256": "d247cfd5d5df23d194eb492568fc0454ff7f593a532030110b071c2ab57186fb",
+      "filters": "atrim=end=1.134000000,asetpts=PTS-STARTPTS,atempo=1.067193676,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.062600000,atrim=duration=1.062600000,afade=t=in:d=0.005,afade=t=out:st=1.012600000:d=0.05",
+      "duration_seconds": 1.0626000000000002
+    },
+    "alloutpummeling_impact.wav": {
+      "source": "res://assets/battles/animations/alloutpummeling/PRSFX- All Out Pummeling3.wav",
+      "source_sha256": "384ddea3c9b5a26b9af93651b385bd290a4a46cc6b2e702e47a05b86426c704b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_impact.wav",
+      "sha256": "53cfb1c723bf05fc91dbb1f5a3976e9af84ed40e0fb1112b9790ed56f2790620",
+      "filters": "atrim=end=0.981750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.577500000,atrim=duration=0.577500000,afade=t=in:d=0.005,afade=t=out:st=0.527500000:d=0.05",
+      "duration_seconds": 0.5775000000000001
+    },
+    "blackholeeclipse_launch.wav": {
+      "source": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse2.wav",
+      "source_sha256": "721a7edc42cd1d00cc53f61dd4e989226153d2f520daf607b5dd8c728c8088b9",
+      "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_launch.wav",
+      "sha256": "bff0bda1916808109754e04b980af333ab9cac975edf8a707f43771744335f0e",
+      "filters": "atrim=end=1.734167000,asetpts=PTS-STARTPTS,atempo=1.632003576,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.062600000,atrim=duration=1.062600000,afade=t=in:d=0.005,afade=t=out:st=1.012600000:d=0.05",
+      "duration_seconds": 1.0626000000000002
+    },
+    "blackholeeclipse_impact.wav": {
+      "source": "res://assets/battles/animations/blackholeeclipse/PRSFX- Black Hole Eclipse3.wav",
+      "source_sha256": "6bee216ebaeec8cd360825bc110d1fb488ef5da69e18042a3aaef001763e5395",
+      "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_impact.wav",
+      "sha256": "9c82724c5f9f40e65f535376ef006e793b62d67d1ce1f51eab553311bc87383c",
+      "filters": "atrim=end=0.937125000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.551250000,atrim=duration=0.551250000,afade=t=in:d=0.005,afade=t=out:st=0.501250000:d=0.05",
+      "duration_seconds": 0.55125
+    },
+    "bloomdoom_launch.wav": {
+      "source": "res://assets/battles/animations/bloomdoom/PRSFX- Bloom Doom2.wav",
+      "source_sha256": "b8fe551928ee1529774f3f7cc2f42c9601f057ae7160f7835f1f990c21178833",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_launch.wav",
+      "sha256": "753d7170eb3135f2d6abdd5c7a33576920b3a930060c7374846e908e5a2b56c9",
+      "filters": "atrim=end=1.806420000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.062600000,atrim=duration=1.062600000,afade=t=in:d=0.005,afade=t=out:st=1.012600000:d=0.05",
+      "duration_seconds": 1.0626000000000002
+    },
+    "bloomdoom_impact.wav": {
+      "source": "res://assets/battles/animations/bloomdoom/PRSFX- Bloom Doom3.wav",
+      "source_sha256": "b1e2934f7d204abc6cf0b4efe0534d69ad0be061c13cd0d7a4808d8ab2765bfa",
+      "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_impact.wav",
+      "sha256": "a25851e55b1e100a1d5467538297953266e252034b0cd49f43ab84159d17d2e5",
+      "filters": "atrim=end=0.714000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.420000000,atrim=duration=0.420000000,afade=t=in:d=0.005,afade=t=out:st=0.370000000:d=0.05",
+      "duration_seconds": 0.42000000000000004
+    },
+    "catastropika_launch.wav": {
+      "source": "res://assets/battles/animations/catastropika/PRSFX- Catastropika1.wav",
+      "source_sha256": "277c5e21718f477d8a322638ad0a55baebbfe1d53dab7359901235cb5992f4df",
+      "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_launch.wav",
+      "sha256": "0f5ca2f0c0c66d0f6fa939810ce2976e44226a5fff24093cbce99ebe7031711a",
+      "filters": "atrim=end=0.850181000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.850181000,atrim=duration=0.850181000,afade=t=in:d=0.005,afade=t=out:st=0.800181000:d=0.05",
+      "duration_seconds": 0.850181
+    },
+    "catastropika_impact.wav": {
+      "source": "res://assets/battles/animations/catastropika/PRSFX- Catastropika3.wav",
+      "source_sha256": "400f8915be2aa4ea67b617fee6df19bd5a4ab60eb19bd51eb6a16ac530bc103c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_impact.wav",
+      "sha256": "17eea9529227471ec71900e0a76d7df9ace2e86a530162112fa2f3c97f9abe6f",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "clangoroussoulblaze_launch.wav": {
+      "source": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze2.ogg",
+      "source_sha256": "59f51b9c5248ad0e5c98fd832df5b2af63b16c0e76f10127badeadecad5e35ca",
+      "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_launch.wav",
+      "sha256": "985179b21f4f245b3fab6f9de6e3d7c043a526b6ced251a1af77781eff9659b7",
+      "filters": "atrim=end=2.052750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.207500000,atrim=duration=1.207500000,afade=t=in:d=0.005,afade=t=out:st=1.157500000:d=0.05",
+      "duration_seconds": 1.2075
+    },
+    "clangoroussoulblaze_impact.wav": {
+      "source": "res://assets/battles/animations/clangoroussoulblaze/PRSFX- Clangorous Soulblaze1.ogg",
+      "source_sha256": "0e320bdb2dadda6b6324e92cef897e4da96fca3eff094ebe063559663849be9b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_impact.wav",
+      "sha256": "4bd748df5706eb6709dd8c38b3941b657476974612e2953ce9de631a5054942d",
+      "filters": "atrim=end=0.963900000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.567000000,atrim=duration=0.567000000,afade=t=in:d=0.005,afade=t=out:st=0.517000000:d=0.05",
+      "duration_seconds": 0.5670000000000001
+    },
+    "continentalcrush_launch.wav": {
+      "source": "res://assets/battles/animations/continentalcrush/PRSFX- Continental Crush3.ogg",
+      "source_sha256": "1e9b313cb70af7299677859a8527b80f8722a46ee530b799d45b04be0d587258",
+      "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_launch.wav",
+      "sha256": "2e2d3889544304b5fde0f818977abebdc73e86d66b714acb1cc5aa019d0df797",
+      "filters": "atrim=end=1.642200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.966000000,atrim=duration=0.966000000,afade=t=in:d=0.005,afade=t=out:st=0.916000000:d=0.05",
+      "duration_seconds": 0.9660000000000001
+    },
+    "continentalcrush_impact.wav": {
+      "source": "res://assets/battles/animations/continentalcrush/PRSFX- Continental Crush5.ogg",
+      "source_sha256": "5876eeb0515d375fe2a55038ecf1710d96df098cb007e5b1ba8756612650b90c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_impact.wav",
+      "sha256": "251c95904a45def5affc217984294ba18373015bc85da2c592fdf7786ab0ce27",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "corkscrewcrash_launch.wav": {
+      "source": "res://assets/battles/animations/corkscrewcrash/PRSFX- Corkscrew Crash1.ogg",
+      "source_sha256": "8aa23869715e058fe033805350dc431d55f63102952782b382becf6896997388",
+      "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_launch.wav",
+      "sha256": "b0eb8155f5780f3581448d003e4a676bababc85a8ae38ee4365ae35dc31a5996",
+      "filters": "atrim=end=0.637500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.637500000,atrim=duration=0.637500000,afade=t=in:d=0.005,afade=t=out:st=0.587500000:d=0.05",
+      "duration_seconds": 0.6375
+    },
+    "corkscrewcrash_impact.wav": {
+      "source": "res://assets/battles/animations/corkscrewcrash/PRSFX- Corkscrew Crash9.ogg",
+      "source_sha256": "36ea9fefbfd4a2589c0642f5b06c5066b3c16fa8131674549902cc1aebd9d3b1",
+      "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_impact.wav",
+      "sha256": "66420812f0ee140eb436c43bd99a5ca9aa8cbf211440bc56d7d5c322cd600278",
+      "filters": "atrim=end=0.408000000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.408000000,atrim=duration=0.408000000,afade=t=in:d=0.005,afade=t=out:st=0.358000000:d=0.05",
+      "duration_seconds": 0.408
+    },
+    "devastatingdrake_launch.wav": {
+      "source": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake2.wav",
+      "source_sha256": "e8fe7c9dd383a4ff0da506e510962ef93f8d709b09803c043e7bf30a0898fec4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_launch.wav",
+      "sha256": "f8cff58d2fbf36d6a228474d663925b8fc468c00bb85f226fc2d38010228e477",
+      "filters": "atrim=end=0.905333000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.905333000,atrim=duration=0.905333000,afade=t=in:d=0.005,afade=t=out:st=0.855333000:d=0.05",
+      "duration_seconds": 0.905333
+    },
+    "devastatingdrake_impact.wav": {
+      "source": "res://assets/battles/animations/devastatingdrake/PRSFX- Devastating Drake1.wav",
+      "source_sha256": "d5be5d4d5df497e8c8838904b91f0ba84c0d09aefa7a26c42bd5e0ad3745adde",
+      "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_impact.wav",
+      "sha256": "2fb65a377fe27427520d5700d02fb09ba86f99b3cb6440563079ebfa5d23e93d",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "extremeevoboost_cast.wav": {
+      "source": "res://assets/battles/animations/extremeevoboost/PRSFX- Extreme Evoboost3.wav",
+      "source_sha256": "3674d2568764e105f05aacbe88f862bd2f362efae4f0a0cfa631e3344d8cc5da",
+      "path": "res://assets/battles/moves_3d/audio_recipes/extremeevoboost_cast.wav",
+      "sha256": "7f5af1409a58bb98560086aaa29186d51763a9b6fbfe4a46dc71ccbd4fc62526",
+      "filters": "atrim=end=1.519500000,asetpts=PTS-STARTPTS,atempo=1.429983060,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.062600000,atrim=duration=1.062600000,afade=t=in:d=0.005,afade=t=out:st=1.012600000:d=0.05",
+      "duration_seconds": 1.0626000000000002
+    },
+    "genesissupernova_launch.wav": {
+      "source": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova1.ogg",
+      "source_sha256": "70e191ae5fef703cd86926743480f51a51bd13e2f1e0e2a17f1c469741ad3e88",
+      "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_launch.wav",
+      "sha256": "c65935a7ed2929cbae2334ecc71f6bd0a22efbdde0a3e480edb245a92f388c0c",
+      "filters": "atrim=end=0.829833000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.829833000,atrim=duration=0.829833000,afade=t=in:d=0.005,afade=t=out:st=0.779833000:d=0.05",
+      "duration_seconds": 0.829833
+    },
+    "genesissupernova_impact.wav": {
+      "source": "res://assets/battles/animations/genesissupernova/PRSFX- Genesis Supernova11.ogg",
+      "source_sha256": "26c23a8d968fb98a7a9dcd48bad0dae248bccba5f983312b2cb637d51697f493",
+      "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_impact.wav",
+      "sha256": "963fd7658630dae018949de23e2d5b2b28efe47be683ba89d22ebe1e11d60780",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "gigavolthavoc_launch.wav": {
+      "source": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc3.wav",
+      "source_sha256": "d319b7c2280117e4231856492f6cec52bf53e44aa3657dfb75d90fe76519d96c",
+      "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_launch.wav",
+      "sha256": "0ae4c4a5ade4a351d4407eb54974642a5e41d165d457dbccd370eb318ddf5d93",
+      "filters": "atrim=end=1.579417000,asetpts=PTS-STARTPTS,atempo=1.090004831,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.449000000,atrim=duration=1.449000000,afade=t=in:d=0.005,afade=t=out:st=1.399000000:d=0.05",
+      "duration_seconds": 1.449
+    },
+    "gigavolthavoc_impact.wav": {
+      "source": "res://assets/battles/animations/gigavolthavoc/PRSFX- Gigavolt Havoc2.wav",
+      "source_sha256": "1c42e76c0b018710d88ac38e3f41eda58b7d8b69da9685c2187a77c445605f9e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_impact.wav",
+      "sha256": "97b77e6b3d1145a08270f64cf6b18652f614b99a37c96a73ae25f58c971eba49",
+      "filters": "atrim=end=0.669375000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.393750000,atrim=duration=0.393750000,afade=t=in:d=0.005,afade=t=out:st=0.343750000:d=0.05",
+      "duration_seconds": 0.39375000000000004
+    },
+    "guardianofalola_launch.wav": {
+      "source": "res://assets/battles/animations/guardianofalola/PRSFX- Gaurdian of Alola1.ogg",
+      "source_sha256": "508884a40ccdb67a44cefdfd0064c87e2c602be0722996292e53d89c38dd486a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_launch.wav",
+      "sha256": "0eed4e9be5d9be5cbb0ccf46f8e7c14396ac06573cc902b1d7c39369b32674a0",
+      "filters": "atrim=end=1.539500000,asetpts=PTS-STARTPTS,atempo=1.593685300,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.966000000,atrim=duration=0.966000000,afade=t=in:d=0.005,afade=t=out:st=0.916000000:d=0.05",
+      "duration_seconds": 0.9660000000000001
+    },
+    "guardianofalola_impact.wav": {
+      "source": "res://assets/battles/animations/guardianofalola/PRSFX- Gaurdian of Alola2.ogg",
+      "source_sha256": "c54aa5d19a54a82a527cc876dc98c2226157106002da1fb64a2eb630c68b2076",
+      "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_impact.wav",
+      "sha256": "ca2d92a9cb8e3b026c9c6d1dc6e342ab0a20f2c3ee9e19ef6e5da0b809510fe7",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "hydrovortex_launch.wav": {
+      "source": "res://assets/battles/animations/hydrovortex/PRSFX- Hydro Vortex2.wav",
+      "source_sha256": "0638061d6cb8eca6894e521b9e1be9356d8b4c91936bed3a1d54a5dac25e2b10",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_launch.wav",
+      "sha256": "752bbe7a77fe92154a9d688e19a6d950acab3a5964896c18870967b01b261ce4",
+      "filters": "atrim=end=1.788000000,asetpts=PTS-STARTPTS,atempo=1.542443064,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.159200000,atrim=duration=1.159200000,afade=t=in:d=0.005,afade=t=out:st=1.109200000:d=0.05",
+      "duration_seconds": 1.1592
+    },
+    "hydrovortex_impact.wav": {
+      "source": "res://assets/battles/animations/hydrovortex/PRSFX- Hydro Vortex3.wav",
+      "source_sha256": "4e0d1756f52bd7dd83d7099579fdb3754b60521c65a7e3afc5644da31b8634ea",
+      "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_impact.wav",
+      "sha256": "bdfb0b7cec5d48c65c454f082990681775207c4de6bbdaea0b50a492fc4f8a3f",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "infernooverdrive_launch.wav": {
+      "source": "res://assets/battles/animations/infernooverdrive/PRSFX- Inferno Overdrive4.wav",
+      "source_sha256": "a5c47a33ba0390e1ccc114308a6658a9661c81becfb75e53071b9e8e366bdfd2",
+      "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_launch.wav",
+      "sha256": "e32c8d62ce67e58745d5942ad5b33b001218f742c2e3535e175ebad2844b88f8",
+      "filters": "atrim=end=0.760000000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.760000000,atrim=duration=0.760000000,afade=t=in:d=0.005,afade=t=out:st=0.710000000:d=0.05",
+      "duration_seconds": 0.76
+    },
+    "infernooverdrive_impact.wav": {
+      "source": "res://assets/battles/animations/infernooverdrive/PRSFX- Inferno Overdrive5.wav",
+      "source_sha256": "7fc77007c3c7b611233026a340c0e314dad5badfa87bd88bc25488f6226b2d5b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_impact.wav",
+      "sha256": "b583a7571d2a47e224069405c28bba31c4f1b47fd18f1cbdd7be8d88ed287cab",
+      "filters": "atrim=end=0.789750000,asetpts=PTS-STARTPTS,atempo=1.504285714,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "letssnuggleforever_launch.wav": {
+      "source": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever1.ogg",
+      "source_sha256": "e386a5309fe48074c3f383e70576516e88a70e66b4cebb4457cac0a217ee0794",
+      "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_launch.wav",
+      "sha256": "d1f74bcc81c04b992854fcfb3ff5fee4f90e3d8ae31a8d350872e9f06aa72990",
+      "filters": "atrim=end=0.359813000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.359813000,atrim=duration=0.359813000,afade=t=in:d=0.005,afade=t=out:st=0.309813000:d=0.05",
+      "duration_seconds": 0.359813
+    },
+    "letssnuggleforever_impact.wav": {
+      "source": "res://assets/battles/animations/letssnuggleforever/PRSFX- Let's Snuggle Forever12.ogg",
+      "source_sha256": "f214a826afd1844959f30fe64590aa1f0c8e1f7526026eb9f0de37f6c6c43e90",
+      "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_impact.wav",
+      "sha256": "09f8c16634df27f10464b320e8dbec743a6936f38e19e886566765ebbed09933",
+      "filters": "atrim=end=0.361625000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.361625000,atrim=duration=0.361625000,afade=t=in:d=0.005,afade=t=out:st=0.311625000:d=0.05",
+      "duration_seconds": 0.361625
+    },
+    "lightthatburnsthesky_launch.wav": {
+      "source": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS1.wav",
+      "source_sha256": "0275f439f73483089bf9d041678a76b6f5f36c4848a011bc72fb7202ac533b9d",
+      "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_launch.wav",
+      "sha256": "0fdd288876613d49b609c2e4d5e33b1ffeffa9d6a71ca0e96c7bf1c94c9dda48",
+      "filters": "atrim=end=1.477980000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.869400000,atrim=duration=0.869400000,afade=t=in:d=0.005,afade=t=out:st=0.819400000:d=0.05",
+      "duration_seconds": 0.8694000000000001
+    },
+    "lightthatburnsthesky_impact.wav": {
+      "source": "res://assets/battles/animations/lightthatburnsthesky/PRSFX- LTBTS4.wav",
+      "source_sha256": "dd32b2d18a387764777eb359c3154945d0b55af37fa38c9bf73c3bd8bd0dd3ee",
+      "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_impact.wav",
+      "sha256": "7b18c275f09f67dfe8ea6d4aca0b08e534994e05321bd4f4efe2c9d7e7ff85c5",
+      "filters": "atrim=end=0.824333000,asetpts=PTS-STARTPTS,atempo=1.570158095,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "maliciousmoonsault_launch.wav": {
+      "source": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault3.ogg",
+      "source_sha256": "e57ed572bdd14161bd8281e730e85d6568209c3eb03c1e0e8d2e252b9532455a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_launch.wav",
+      "sha256": "f28db9350322bf216a3d9e7e447b410b5cae0709ab2612e01d757151bb90aa10",
+      "filters": "atrim=end=0.271000000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.271000000,atrim=duration=0.271000000,afade=t=in:d=0.005,afade=t=out:st=0.221000000:d=0.05",
+      "duration_seconds": 0.271
+    },
+    "maliciousmoonsault_impact.wav": {
+      "source": "res://assets/battles/animations/maliciousmoonsault/PRSFX- Malicious Moonsault6.ogg",
+      "source_sha256": "9b3f9a5145c8f9bed877705fe12e4adfbb64ef9b77191bcfb7ca1ab4a43d9d71",
+      "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_impact.wav",
+      "sha256": "7abd6812a83e64202602a78c4b2f8a6d89a8cba9e6a51e49f58c3452cf900acb",
+      "filters": "atrim=end=0.844625000,asetpts=PTS-STARTPTS,atempo=1.462554113,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.577500000,atrim=duration=0.577500000,afade=t=in:d=0.005,afade=t=out:st=0.527500000:d=0.05",
+      "duration_seconds": 0.5775000000000001
+    },
+    "menacingmoonrazemaelstrom_launch.wav": {
+      "source": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- SSS1.ogg",
+      "source_sha256": "51d7f6c4334e58979f0725348ff2ddd8e2b0d63c6ccfb74f9c01b0b1c9a60907",
+      "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_launch.wav",
+      "sha256": "2de1dabdca69dfc61ed35ca61cd6739f9864348443577d5fe026d7f1ffcff8e7",
+      "filters": "atrim=end=0.656880000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.386400000,atrim=duration=0.386400000,afade=t=in:d=0.005,afade=t=out:st=0.336400000:d=0.05",
+      "duration_seconds": 0.3864000000000001
+    },
+    "menacingmoonrazemaelstrom_impact.wav": {
+      "source": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRSFX- MMM4.ogg",
+      "source_sha256": "819ef7231e41e102bbe5d1a4df376339aedc6420a3c97f3c65fc060856644654",
+      "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_impact.wav",
+      "sha256": "8672dae09fb3448155a7745f06df6a945a4ed32ec56d01a817c650f11debb1ed",
+      "filters": "atrim=end=0.714000000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.420000000,atrim=duration=0.420000000,afade=t=in:d=0.005,afade=t=out:st=0.370000000:d=0.05",
+      "duration_seconds": 0.42000000000000004
+    },
+    "neverendingnightmare_launch.wav": {
+      "source": "res://assets/battles/animations/neverendingnightmare/PRSFX- NeverEndingNightmare5.wav",
+      "source_sha256": "9c72101fcef1fc802545a03a689476d7f26836bfb82afdd630967096fe280616",
+      "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_launch.wav",
+      "sha256": "7789c3ab5c3682b19afc0b779066d0f2162701935907d5567e2d939fb7fa3198",
+      "filters": "atrim=end=1.724310000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.014300000,atrim=duration=1.014300000,afade=t=in:d=0.005,afade=t=out:st=0.964300000:d=0.05",
+      "duration_seconds": 1.0143000000000002
+    },
+    "neverendingnightmare_impact.wav": {
+      "source": "res://assets/battles/animations/neverendingnightmare/PRSFX- NeverEndingNightmare4.wav",
+      "source_sha256": "af8b7a72b2ba041bc8264a45d774153964ef60b8db78ff9fb47a60a22ac60da0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_impact.wav",
+      "sha256": "110f70c07e41e6be6af2b91a6f89849840d86260d165562e0be580d4d71c5002",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "oceanicoperetta_launch.wav": {
+      "source": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta1.wav",
+      "source_sha256": "294169f97553d9ab4988dc8d350e27ad8583386ec0447f5a2cfac02899f0f2fb",
+      "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_launch.wav",
+      "sha256": "adc17037b9df1887ee82a915ed7afa85dec3194b574a51c2741e76b5c64e48e3",
+      "filters": "atrim=end=0.410550000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.241500000,atrim=duration=0.241500000,afade=t=in:d=0.005,afade=t=out:st=0.191500000:d=0.05",
+      "duration_seconds": 0.24150000000000002
+    },
+    "oceanicoperetta_impact.wav": {
+      "source": "res://assets/battles/animations/oceanicoperetta/PRSFX- Oceanic Operetta2.wav",
+      "source_sha256": "4e0d1756f52bd7dd83d7099579fdb3754b60521c65a7e3afc5644da31b8634ea",
+      "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_impact.wav",
+      "sha256": "bdfb0b7cec5d48c65c454f082990681775207c4de6bbdaea0b50a492fc4f8a3f",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "pulverizingpancake_launch.wav": {
+      "source": "res://assets/battles/animations/pulverizingpancake/PRSFX- Sleep.wav",
+      "source_sha256": "2e664492b52cea6aa267727aab9918463471e6f10d6dd17c86c376ef7a5b885a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_launch.wav",
+      "sha256": "4f950f208082ddabcb683a5475f2211d7f99fae025d13b97cc65c1eec076524e",
+      "filters": "atrim=end=0.596667000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.596667000,atrim=duration=0.596667000,afade=t=in:d=0.005,afade=t=out:st=0.546667000:d=0.05",
+      "duration_seconds": 0.596667
+    },
+    "pulverizingpancake_impact.wav": {
+      "source": "res://assets/battles/animations/pulverizingpancake/PRSFX- Pulverizing Pancake5.wav",
+      "source_sha256": "ca4f9574364fc2554fe8ae37980408966dd030617c4cca6f7a6556344e721ebd",
+      "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_impact.wav",
+      "sha256": "a94d0231fd6afbc8f1ee8617de25d75b534166b6ad73304b52d342d2f7ab2da4",
+      "filters": "atrim=end=0.517917000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.517917000,atrim=duration=0.517917000,afade=t=in:d=0.005,afade=t=out:st=0.467917000:d=0.05",
+      "duration_seconds": 0.517917
+    },
+    "savagespinout_launch.wav": {
+      "source": "res://assets/battles/animations/savagespinout/PRSFX- SSO1.ogg",
+      "source_sha256": "5a8a9ed8698d7691531476f382f7322d57ec40ecc5fa6e7e2e894ca3b91362c2",
+      "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_launch.wav",
+      "sha256": "7030f23cd8b12f545235d96ce96adf54ab3f26277ba3af93d91376e67da24d10",
+      "filters": "atrim=end=1.033500000,asetpts=PTS-STARTPTS,atempo=1.018929311,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.014300000,atrim=duration=1.014300000,afade=t=in:d=0.005,afade=t=out:st=0.964300000:d=0.05",
+      "duration_seconds": 1.0143000000000002
+    },
+    "savagespinout_impact.wav": {
+      "source": "res://assets/battles/animations/savagespinout/PRSFX- SSO6.ogg",
+      "source_sha256": "af09e23b2290a43fb10bbb7cdcfd5abafa95143f2302bbac669e4e1e03deaf5e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_impact.wav",
+      "sha256": "dc2122072285823041601ec84f63ac970785976e34a871e78e84b2f74ebd5fd6",
+      "filters": "atrim=end=0.411000000,asetpts=PTS-STARTPTS,atempo=1.304761905,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.315000000,atrim=duration=0.315000000,afade=t=in:d=0.005,afade=t=out:st=0.265000000:d=0.05",
+      "duration_seconds": 0.315
+    },
+    "searingsunrazesmash_launch.wav": {
+      "source": "res://assets/battles/animations/searingsunrazesmash/PRSFX- SSS1.ogg",
+      "source_sha256": "51d7f6c4334e58979f0725348ff2ddd8e2b0d63c6ccfb74f9c01b0b1c9a60907",
+      "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_launch.wav",
+      "sha256": "2de1dabdca69dfc61ed35ca61cd6739f9864348443577d5fe026d7f1ffcff8e7",
+      "filters": "atrim=end=0.656880000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.386400000,atrim=duration=0.386400000,afade=t=in:d=0.005,afade=t=out:st=0.336400000:d=0.05",
+      "duration_seconds": 0.3864000000000001
+    },
+    "searingsunrazesmash_impact.wav": {
+      "source": "res://assets/battles/animations/searingsunrazesmash/PRSFX- Searing Sunraze Smash2.ogg",
+      "source_sha256": "dd2f52407bdc9b2cd442f6a5060f5f22516467eca58aed1bb97467eb0d3796a0",
+      "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_impact.wav",
+      "sha256": "33b5e252868f5585ff1e4f2fede58a3da69c2f04e1c1305f1c066d8208e0a59c",
+      "filters": "atrim=end=0.981750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.577500000,atrim=duration=0.577500000,afade=t=in:d=0.005,afade=t=out:st=0.527500000:d=0.05",
+      "duration_seconds": 0.5775000000000001
+    },
+    "shatteredpsyche_launch.wav": {
+      "source": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche2.wav",
+      "source_sha256": "406e39097b35c7576fa4fb87c2a7909236587b070303727b26feef1262fdcbf6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_launch.wav",
+      "sha256": "d07abc9823492a0a7cd0c073295f018e2d79cb7332411a58a0c3a487c61bdba8",
+      "filters": "atrim=end=1.477980000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.869400000,atrim=duration=0.869400000,afade=t=in:d=0.005,afade=t=out:st=0.819400000:d=0.05",
+      "duration_seconds": 0.8694000000000001
+    },
+    "shatteredpsyche_impact.wav": {
+      "source": "res://assets/battles/animations/shatteredpsyche/PRSFX- Shattered Psyche3.wav",
+      "source_sha256": "f7409c927cb42f7f2ef265449383c018840aef76442bc1d0d65786c9ec2cfe24",
+      "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_impact.wav",
+      "sha256": "70294aba9af5d798b8658f115e9ab170b38d8b379e81e4e2c040c2be63a0678d",
+      "filters": "atrim=end=0.803250000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.472500000,atrim=duration=0.472500000,afade=t=in:d=0.005,afade=t=out:st=0.422500000:d=0.05",
+      "duration_seconds": 0.47250000000000003
+    },
+    "sinisterarrowraid_launch.wav": {
+      "source": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid5.wav",
+      "source_sha256": "f476cc0c72d4bec7831cc7e9c2ec7601d26c25f38ccd1d40654f2e14e07cbe0f",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_launch.wav",
+      "sha256": "eefec2f2562aa35c1dd0c1b81ea0994d5d1c20526cda56e16d8425f639c17d81",
+      "filters": "atrim=end=0.620750000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.620750000,atrim=duration=0.620750000,afade=t=in:d=0.005,afade=t=out:st=0.570750000:d=0.05",
+      "duration_seconds": 0.62075
+    },
+    "sinisterarrowraid_impact.wav": {
+      "source": "res://assets/battles/animations/sinisterarrowraid/PRSFX- SinisterArrowRaid1.wav",
+      "source_sha256": "7fc77007c3c7b611233026a340c0e314dad5badfa87bd88bc25488f6226b2d5b",
+      "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_impact.wav",
+      "sha256": "b583a7571d2a47e224069405c28bba31c4f1b47fd18f1cbdd7be8d88ed287cab",
+      "filters": "atrim=end=0.789750000,asetpts=PTS-STARTPTS,atempo=1.504285714,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "soulstealing7starstrike_launch.wav": {
+      "source": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS1.ogg",
+      "source_sha256": "b48c0a0b1b2251af1355e0c35bb43bf692107c1862ff17584ec783e0d9726a60",
+      "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_launch.wav",
+      "sha256": "7934307d40a9e234bf906612b8c1c81097503c67faaaf26764c4f65cbe0cb442",
+      "filters": "atrim=end=1.183651000,asetpts=PTS-STARTPTS,atempo=1.225311594,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.966000000,atrim=duration=0.966000000,afade=t=in:d=0.005,afade=t=out:st=0.916000000:d=0.05",
+      "duration_seconds": 0.9660000000000001
+    },
+    "soulstealing7starstrike_impact.wav": {
+      "source": "res://assets/battles/animations/soulstealing7starstrike/PRSFX- S-S7-SS7.ogg",
+      "source_sha256": "ca0e369691e5ae05e05df4490bf3e82135775e35ee830f2b5b15aebf3ba17ea6",
+      "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_impact.wav",
+      "sha256": "1bbd0f77a2c60447db6a09c8f2c8bbe99be1ad7cba17901c9c8b5235c1aa48fc",
+      "filters": "atrim=end=0.892500000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "splinteredstormshards_launch.wav": {
+      "source": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards4.ogg",
+      "source_sha256": "14f3cb5199a51913efdac3faecd3c4860f7428b4a253a63ec5153aac15565edd",
+      "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_launch.wav",
+      "sha256": "baf9af9d76e7c517d211d5e85cdcbe79319dbdbed5cabe2e310ae1d6db45ba05",
+      "filters": "atrim=end=1.806420000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.062600000,atrim=duration=1.062600000,afade=t=in:d=0.005,afade=t=out:st=1.012600000:d=0.05",
+      "duration_seconds": 1.0626000000000002
+    },
+    "splinteredstormshards_impact.wav": {
+      "source": "res://assets/battles/animations/splinteredstormshards/PRSFX- Splintered Stormshards1.ogg",
+      "source_sha256": "6282b04b95312497be95b3a64a668339b0cfe36e29ba83794c5e693f3c5ee0d8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_impact.wav",
+      "sha256": "e0193b402e117f946cd61f28744f867f6c191d91ba97395b6bd8bd16b018c263",
+      "filters": "atrim=end=0.624750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.367500000,atrim=duration=0.367500000,afade=t=in:d=0.005,afade=t=out:st=0.317500000:d=0.05",
+      "duration_seconds": 0.3675
+    },
+    "stokedsparksurfer_launch.wav": {
+      "source": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer1.ogg",
+      "source_sha256": "25705286327fedd5a0b51e585bfe7e79d0e52e822068ad0156a51c03d15f3849",
+      "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_launch.wav",
+      "sha256": "8d348d4a88d113bf29a7c4f0f47c41322b2413f3ce70204d6c5f15c15eed4c40",
+      "filters": "atrim=end=1.863188000,asetpts=PTS-STARTPTS,atempo=1.483666189,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.255800000,atrim=duration=1.255800000,afade=t=in:d=0.005,afade=t=out:st=1.205800000:d=0.05",
+      "duration_seconds": 1.2558000000000002
+    },
+    "stokedsparksurfer_impact.wav": {
+      "source": "res://assets/battles/animations/stokedsparksurfer/PRSFX- Stoked Sparksurfer6.ogg",
+      "source_sha256": "7739e59bba1a14053e1645e0611b0075c2a0955b69f769debfbb757cd2f141fe",
+      "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_impact.wav",
+      "sha256": "2fcf2ff09ed09797b46d71179e3a0c982fb6f0febf12b9c3613d358d31ed08f2",
+      "filters": "atrim=end=0.669375000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.393750000,atrim=duration=0.393750000,afade=t=in:d=0.005,afade=t=out:st=0.343750000:d=0.05",
+      "duration_seconds": 0.39375000000000004
+    },
+    "subzeroslammer_launch.wav": {
+      "source": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer1.wav",
+      "source_sha256": "5544bab5a19dea6ff0492d7f50c24e88ee0877f8f1ffc122bba20fd8f4b916f4",
+      "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_launch.wav",
+      "sha256": "08c95df135bdc2869be77a4a8b6dbe9fbd0f8e5e1e8819689119213ddc8a315a",
+      "filters": "atrim=end=0.758250000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.758250000,atrim=duration=0.758250000,afade=t=in:d=0.005,afade=t=out:st=0.708250000:d=0.05",
+      "duration_seconds": 0.75825
+    },
+    "subzeroslammer_impact.wav": {
+      "source": "res://assets/battles/animations/subzeroslammer/PRSFX- Subzero Slammer4.wav",
+      "source_sha256": "cb45cfb00b16a63353ecf3a4197590b0b3a63726408cf7507893212720538ae8",
+      "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_impact.wav",
+      "sha256": "45acf46d37c5f234bf773492bf74f3f0cfb4fc43f23902ff54b2f097097fd89e",
+      "filters": "atrim=end=0.623500000,asetpts=PTS-STARTPTS,atempo=1.187619048,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
+      "duration_seconds": 0.525
+    },
+    "supersonicskystrike_launch.wav": {
+      "source": "res://assets/battles/animations/supersonicskystrike/PRSFX- Brave Bird1.wav",
+      "source_sha256": "d730ef7924fe7fa8033372a3bf80c9791cffa042c50b3699241fa6f30b15a65e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_launch.wav",
+      "sha256": "026bfa3318849755ffcb05b47b519f374943ff3e966f022c46b5a0843d2266b9",
+      "filters": "atrim=end=1.642200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.966000000,atrim=duration=0.966000000,afade=t=in:d=0.005,afade=t=out:st=0.916000000:d=0.05",
+      "duration_seconds": 0.9660000000000001
+    },
+    "supersonicskystrike_impact.wav": {
+      "source": "res://assets/battles/animations/supersonicskystrike/Explosion.ogg",
+      "source_sha256": "d9f3b251e03217a36daf31a9108d033db8db9f31024317e08519cb537b41aa65",
+      "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_impact.wav",
+      "sha256": "74298c026cbe75c6c62e8646c994cb444f3c8a295560a81692b1c2f4b4743265",
+      "filters": "atrim=end=0.446250000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.262500000,atrim=duration=0.262500000,afade=t=in:d=0.005,afade=t=out:st=0.212500000:d=0.05",
+      "duration_seconds": 0.2625
+    },
+    "tectonicrage_launch.wav": {
+      "source": "res://assets/battles/animations/tectonicrage/PRSFX- Tectonic Rage6.ogg",
+      "source_sha256": "1c099efe521aab133481e23346b89b3ed2abf010c88caaefb641e024dc700c65",
+      "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_launch.wav",
+      "sha256": "0d7e2878fdea8b4761b3bc041483e6ae49a767f7ac6acb8d37e0b262ca26e4d8",
+      "filters": "atrim=end=0.463500000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.463500000,atrim=duration=0.463500000,afade=t=in:d=0.005,afade=t=out:st=0.413500000:d=0.05",
+      "duration_seconds": 0.4635
+    },
+    "tectonicrage_impact.wav": {
+      "source": "res://assets/battles/animations/tectonicrage/PRSFX- Tectonic Rage5.ogg",
+      "source_sha256": "4784bea11bc182817d345311eccc4a0fd332ee5a2cd02fadc5b9669b00ff88ad",
+      "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_impact.wav",
+      "sha256": "3fac35a8c16176d3fa107e0e5f0ea627e4bd025dadd5d70611a1517c2d839f93",
+      "filters": "atrim=end=0.446250000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.262500000,atrim=duration=0.262500000,afade=t=in:d=0.005,afade=t=out:st=0.212500000:d=0.05",
+      "duration_seconds": 0.2625
+    },
+    "twinkletackle_launch.wav": {
+      "source": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle2.wav",
+      "source_sha256": "b8fe551928ee1529774f3f7cc2f42c9601f057ae7160f7835f1f990c21178833",
+      "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_launch.wav",
+      "sha256": "79b1734ae47daa9d9c001898558da3d118aed2fb7957c2e0f68fc48c143ed095",
+      "filters": "atrim=end=1.642200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.966000000,atrim=duration=0.966000000,afade=t=in:d=0.005,afade=t=out:st=0.916000000:d=0.05",
+      "duration_seconds": 0.9660000000000001
+    },
+    "twinkletackle_impact.wav": {
+      "source": "res://assets/battles/animations/twinkletackle/PRSFX- Twinkle Tackle3.wav",
+      "source_sha256": "64447a94ef5fbdf419b1d9669f52cd0c54f0e55b1cec72ea69590b5c3bbf0d36",
+      "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_impact.wav",
+      "sha256": "4e4741ad76b7e04b70a95f6f6f2bb7bfe15c5618ddd198407f10e8f97e68128c",
+      "filters": "atrim=end=0.981750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.577500000,atrim=duration=0.577500000,afade=t=in:d=0.005,afade=t=out:st=0.527500000:d=0.05",
+      "duration_seconds": 0.5775000000000001
+    }
+  }
+}

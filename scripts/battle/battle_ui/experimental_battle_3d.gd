@@ -18,6 +18,8 @@ const ThunderboltMoveEffect = preload("res://scripts/battle/battle_ui/thunderbol
 const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream_move_effect_3d.gd")
 const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
+const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+const FamilyMoveEffect = preload("res://scripts/battle/battle_ui/family_move_effect_3d.gd")
 const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
 const LeafMoveEffect = preload("res://scripts/battle/battle_ui/leaf_move_effect_3d.gd")
@@ -575,6 +577,9 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
 	var index := actor_index(actor)
+	if MoveRecipes.supports(move_name):
+		if not MoveRecipes.contact(move_name): return "special_attack"
+		if MoveRecipes.get_recipe(move_name).family == "z": return "physical_attack"
 	# Projectile motion uses a release clip even for physical damage moves.
 	if MoveEffect.move_key(move_name)=="dracometeor" or MoveEffect.move_key(move_name) in BatchFourMoveEffect.MOVE_KEYS: return "special_attack"
 	if key in ["razorleaf", "razor-leaf"]: return "special_attack"
@@ -1024,10 +1029,11 @@ func _update_move_contacts() -> void:
 		var weight := outward * (1.0 - returning)
 		_set_contact_pose(index, motion.displacement * weight, float(motion.yaw) * weight)
 
-func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float) -> Dictionary:
+func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float, ground: Variant = null) -> Dictionary:
 	var anchors := _move_anchors(actor, target, move)
 	anchors.target = point
 	anchors.radius = radius
+	if ground is Vector3: anchors["target_ground"] = ground
 	return anchors
 
 func can_present_move(move: String) -> bool:
@@ -1049,9 +1055,11 @@ func _move_bounds(ident: String) -> Dictionary:
 	return _effect_bounds(index)
 
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
+	var recipe := MoveRecipes.get_recipe(move)
 	var a := _move_bounds(actor)
 	var b := _move_bounds(target)
 	var source_height := 0.82 if MoveEffect.move_key(move) in ["ember", "watergun", "flamethrower", "bubble", "bubblebeam", "icebeam", "shadowball", "sludgebomb", "poisonsting", "flashcannon", "waterpulse", "dracometeor"] else 0.6
+	if recipe.get("attachment", "") == "mouth": source_height = 0.82
 	var source: Vector3 = a.position + Vector3.UP * a.height * source_height
 	var end: Vector3 = b.position + Vector3.UP * b.height * 0.55
 	var direction := (end-source).normalized()
@@ -1068,6 +1076,13 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
 			"moon_source":moon_source,"target_ground":Vector3(end.x,_position(actor_index(target)).y+0.04,end.z),
 			"attachment_part":"bounds","attachment_bones":[]}
+	if not recipe.is_empty() and not bool(recipe.contact):
+		# Unprofiled body emitters reserve room for the projectile, including its
+		# full visual radius; the orb must not grow through the attacker.
+		var forward := Vector3(direction.x,0,direction.z).normalized()
+		var extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
+		var clearance := 0.3 * float(recipe.scale) if recipe.family in ["projectiles","z"] else 0.12
+		source = a.position + Vector3.UP*a.height*source_height + forward*(extent+clearance)
 	var attachment := {}
 	var index := actor_index(actor)
 	# A visible Substitute owns the emitter; never emit from the hidden Pokémon.
@@ -1075,17 +1090,31 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world)
 	var sources: Array = attachment.get("sources", [source])
 	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
-		"attachment_part": attachment.get("part", "bounds"), "attachment_bones": attachment.get("bones", [])}
+		"attachment_part": attachment.get("part", "bounds"), "attachment_bones": attachment.get("bones", []),
+		"actor_center":a.position+Vector3.UP*a.height*0.55,"actor_radius":a.radius,
+		"actor_ground":Vector3(a.position.x,_position(actor_index(actor)).y+0.04,a.position.z),
+		"target_ground":Vector3(b.position.x,_position(actor_index(target)).y+0.04,b.position.z)}
 
 func create_move_effect(move: String, actor: String, target: String, options: Dictionary) -> Node:
 	if not can_present_move(move): return null
+	var recipe := MoveRecipes.get_recipe(move)
+	if recipe.get("target", "") == "actor": target = actor
+	elif not handles(target) and recipe.get("family", "") == "field":
+		# Side/field events may have no explicit combatant target.
+		for slot in _slot_count():
+			var candidate := "p%d" % (slot+1)
+			if slot%2!=actor_index(actor)%2 and _move_visual(candidate)!=null:
+				target = candidate
+				break
 	var source := _move_visual(actor)
 	var destination := _move_visual(target)
 	if source == null or destination == null: return null
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
 	var effect: Node3D
-	if MoveEffect.move_key(move)=="dracometeor":
+	if MoveRecipes.supports(move):
+		effect = FamilyMoveEffect.new()
+	elif MoveEffect.move_key(move)=="dracometeor":
 		effect = DracoMeteorEffect.new()
 	elif MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
 		effect = ContactMoveEffect.new()
@@ -1110,11 +1139,11 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	common_effects.append(effect)
 	effect.tree_exiting.connect(func(): common_effects.erase(effect), CONNECT_ONE_SHOT)
 	var positions := _move_anchors.bind(actor, target, move)
-	if str(options.get("result", "")).strip_edges().to_lower() == "miss" or MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
+	if str(options.get("result", "")).strip_edges().to_lower() == "miss" or MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS or MoveRecipes.contact(move):
 		var aim := _move_anchors(actor, target, move)
 		# Aim at the original position; a dodging target must not drag the beam.
-		positions = _fixed_target_move_anchors.bind(actor, target, move, aim.target, aim.radius)
-	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:
+		positions = _fixed_target_move_anchors.bind(actor, target, move, aim.target, aim.radius, aim.get("target_ground"))
+	if MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS or MoveRecipes.contact(move):
 		_start_move_contact(actor, target, timing, effect)
 	effect.start(move, timing, options, bind_action_clock(actor), positions,
 		func(): return active and _move_visual(actor) == source and _move_visual(target) == destination)
@@ -1128,6 +1157,7 @@ func start_move_action(ident: String, move: String) -> void:
 		# flight, then impact/recovery. Draco Meteor takes 3.2s for its ascent
 		# and shower. The native clock still owns every cue.
 		var duration_override := 2.0 if MoveEffect.move_key(move)=="moonblast" else (3.2 if MoveEffect.move_key(move)=="dracometeor" else 0.0)
+		if MoveRecipes.supports(move): duration_override = float(MoveRecipes.get_recipe(move).duration_seconds)
 		_action(attack_action_for(move, ident), index, max_seconds, duration_override)
 		# play() schedules its reset; sample frame zero before binding a VFX clock.
 		if MoveEffect.supports(move) and players[index] != null:
@@ -1228,7 +1258,11 @@ func move_timing(move: String, ident: String) -> Dictionary:
 		if profile.is_empty():
 			profile = {"action": mapped.action, "frames": mapped.duration * 60.0, "impact_frame": mapped.duration * 60.0 * 0.45}
 		profile["move_key"] = MoveEffect.move_key(move)
-		if profile.move_key == "moonblast":
+		if MoveRecipes.supports(move):
+			var recipe := MoveRecipes.get_recipe(move)
+			profile["launch_frame"] = float(profile.frames) * float(recipe.launch_fraction)
+			profile["impact_frame"] = float(profile.frames) * float(recipe.impact_fraction)
+		elif profile.move_key == "moonblast":
 			profile["launch_frame"] = float(profile.frames) * 0.45
 			profile["impact_frame"] = float(profile.frames) * 0.625
 		elif profile.move_key == "dracometeor":
