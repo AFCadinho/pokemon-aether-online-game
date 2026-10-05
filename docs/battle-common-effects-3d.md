@@ -155,12 +155,12 @@ Only explicit player approval completes an entry.
 - [x] Z-Moves / Z-Power
 - [x] Item activation — golden bands and particles sweeping up and down; approved after gem-before-attack timing fix
 - [x] Berry eating
-- [ ] Poison — persistent tint only; short event particles; awaiting visual approval
-- [ ] Toxic — persistent tint only; short event particles; awaiting visual approval
-- [ ] Burn — persistent tint only; awaiting visual approval
-- [ ] Paralysis — persistent tint only; awaiting visual approval
+- [x] Poison — persistent tint only; short event particles
+- [x] Toxic — persistent tint only; short event particles
+- [x] Burn — persistent tint only
+- [x] Paralysis — persistent tint only
 - [ ] Freeze
-- [ ] Sleep — Z glyph layout follows camera rotation; awaiting visual approval
+- [x] Sleep — Z glyph layout follows camera rotation
 - [ ] Substitute
 - [ ] Mega evolution
 
