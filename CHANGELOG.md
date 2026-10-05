@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Correct shiny Dreepy's follower facing directions when standing and walking.
 - Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
 
 ## 0.3.98
