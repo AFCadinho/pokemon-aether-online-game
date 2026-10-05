@@ -192,6 +192,7 @@ func _render_event(event_data: Dictionary, presentation: Dictionary, suppress_pr
 				"result": move_animation_result,
 				"on_dodge_started": dodge_command,
 				"stop_at_impact": bool(presentation.get("3d_impact_bridge", false)),
+				"show_impact": bool(presentation.get("3d_move_hit", presentation.get("3d_impact_bridge", false))),
 			})
 			if owned_generation != render_generation:
 				return

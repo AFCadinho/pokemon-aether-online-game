@@ -67,3 +67,19 @@ static func damage_index(events: Array, move_index: int) -> int:
 		elif hit < 0 and kind not in ["criticalHit", "effectiveness"]:
 			return -1
 	return hit
+
+static func has_target_hit(events: Array, move_index: int) -> bool:
+	if move_index < 0 or move_index >= events.size() or not events[move_index] is Dictionary: return false
+	var move: Dictionary = events[move_index]
+	var target := str(move.get("target", "")).strip_edges().to_lower()
+	if move.get("type") != "move" or target.is_empty(): return false
+	for index in range(move_index + 1, events.size()):
+		if not events[index] is Dictionary: continue
+		var event: Dictionary = events[index]
+		if str(event.get("type", "")) in ["move", "turn", "switch", "drag", "win"]: break
+		if str(event.get("target", event.get("pokemon", ""))).strip_edges().to_lower() != target: continue
+		if event.get("type") in ["miss", "immune", "fail"]: return false
+		if event.get("type") == "damage" and str(event.get("source", "")).is_empty(): return true
+		var effect := str(event.get("effect", "")).to_lower().replace("move:", "").strip_edges()
+		if event.get("type") == "pokemonEffect" and effect == "substitute" and event.get("state") in ["activate", "end"]: return true
+	return false

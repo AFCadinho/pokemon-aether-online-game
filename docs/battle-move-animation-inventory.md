@@ -2,6 +2,9 @@
 
 Momentopname: 5 oktober 2026, lokale `development`-basis `21de5ad077ae96c5c4623d6f3b9a763ec0277a4d`.
 Dit document inventariseert de bestaande bronnen en stelt productiegroepen voor.
+
+Vervolg: [de eerste zes moves zijn geïmplementeerd en wachten op visuele goedkeuring](battle-moves-first-six-3d.md).
+De aantallen/dekking hieronder en in het CSV beschrijven de oorspronkelijke inventarisatiemomentopname.
 Het implementeert geen nieuwe animaties en keurt geen moves visueel goed.
 
 ## Omvang en huidige dekking
@@ -29,7 +32,7 @@ Het implementeert geen nieuwe animaties en keurt geen moves visueel goed.
 
 De volledige bronverwijzingen, typen, categorieën, actieve 2D-modules, geluidsbestanden,
 bronframes en timing staan per move in
-[battle-move-animation-inventory.csv](battle-move-animation-inventory.csv).
+[battle-move-animation-inventory.csv](move-inventory/battle-move-animation-inventory.csv).
 `source_frame_duration_seconds` is uitsluitend de getrimde 2D-frameduur gedeeld door
 `speed_scale`; het is geen gewenste 3D-duur en telt audiostaarten of overige eventwachttijden niet mee.
 
