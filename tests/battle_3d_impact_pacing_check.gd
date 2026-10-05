@@ -22,7 +22,7 @@ class RecordingRouter extends BattleAnimationRouter:
 		await super.play_damage_tween_for_target(target,variant)
 	var damage_sounds: Array = []
 	func _start_3d_audio(kind: String, key: String, plan: Dictionary = {}, begin_immediately := true) -> Node:
-		assert(kind == "effect" or (kind == "move" and key == "thunderbolt" and model_presenter.can_present_move(key)),
+		assert(kind == "effect" or (kind == "move" and model_presenter.can_present_move(key)),
 			"Move audio requires an available native move effect")
 		var audio := await super._start_3d_audio(kind, key, plan, begin_immediately)
 		assert(is_instance_valid(audio) and not audio.streams.is_empty(), "Shared effect sounds remain available")
@@ -225,8 +225,8 @@ func _unreviewed_move_check() -> void:
 	_actor(0, "garchomp")
 	_actor(1, "pikachu")
 	move_done = false
-	assert(stage.move_timing("Earthquake", "p1").is_empty())
-	_move("Earthquake", false)
+	assert(stage.move_timing("Dragon Tail", "p1").is_empty())
+	_move("Dragon Tail", false)
 	assert(stage.current_actions[0] == "physical_attack")
 	while not move_done:
 		assert(router.active_audio_nodes.is_empty())

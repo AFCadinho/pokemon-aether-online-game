@@ -44,7 +44,7 @@ func _start() -> void:
 	if freeze_preview or weather_preview or move_preview: right_species = "Pikachu"
 	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
 	if weather_preview: root.title = "PokeAether — 3D weather preview"
-	if move_preview: root.title = "PokeAether — eerste zes 3D-moves"
+	if move_preview: root.title = "PokeAether — alle 3D-moves"
 	if terrain_preview: root.title = "PokeAether — 3D terrain / Trick Room preview"
 	var layer := CanvasLayer.new()
 	layer.layer = 110
@@ -453,6 +453,8 @@ func _build_move_controls() -> void:
 	toolbar.add_child(models)
 	move_picker = OptionButton.new()
 	for move in FIRST_MOVES: move_picker.add_item(move)
+	var recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+	for recipe: Dictionary in recipes.DATA.data.moves.values(): move_picker.add_item(str(recipe.name))
 	toolbar.add_child(move_picker)
 	var row := HBoxContainer.new()
 	toolbar.add_child(row)
@@ -482,13 +484,15 @@ func _preview_move() -> void:
 	var generation: int = router.render_generation
 	var actor := "p2" if move_reverse.button_pressed else "p1"
 	var target := "p1" if move_reverse.button_pressed else "p2"
-	var move: String = FIRST_MOVES[move_picker.selected]
+	var move: String = move_picker.get_item_text(move_picker.selected)
 	var outcome := move_outcome.selected
+	var recipe := preload("res://scripts/battle/battle_ui/move_recipe_3d.gd").get_recipe(move)
+	var damaging := bool(recipe.get("damaging",true))
 	battle.current_action_panel.set_message(move + " — " + move_outcome.get_item_text(outcome))
 	await router.play_attack_tween_for_actor(actor,move)
-	await router.play_move_animation(move,actor,target,{"stop_at_impact":outcome == 0,"show_impact":outcome == 0,"result":"miss" if outcome == 1 else "","on_dodge_started":_preview_dodge_command.bind(target)})
+	await router.play_move_animation(move,actor,target,{"stop_at_impact":outcome == 0 and damaging,"show_impact":outcome == 0 and damaging,"result":"miss" if outcome == 1 else "","on_dodge_started":_preview_dodge_command.bind(target)})
 	if generation == router.render_generation:
-		if outcome == 0: await router.play_damage_tween_for_target(target)
+		if outcome == 0 and damaging: await router.play_damage_tween_for_target(target)
 		elif outcome == 2: await router.play_effect_animation("protect_block",target)
 		await router.finish_3d_impact_damage()
 	move_busy = false

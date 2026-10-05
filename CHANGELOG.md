@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add first-pass native 3D effects and timed audio for all 193 moves in the 2D animation catalog, preserving the 24 approved presentations; include Solar Beam/Electro Shot charging, Future Sight impact, and a complete move preview selector.
+
 - Add a source-textured 3D Draco Meteor with a rising charge, sky burst, seven fiery meteors and timed impacts; retain native dodge, damage and stat-drop ordering.
 
 - Build Moonblast's energy orb in front of the attacker with room for its full size, while keeping the moon above the Pokémon.

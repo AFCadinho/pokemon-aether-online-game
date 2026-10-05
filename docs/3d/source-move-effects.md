@@ -1,5 +1,9 @@
 # Source-textured battle moves: Ember and Water Gun
 
+The complete current coverage and new tuning checklist are in
+[all move recipes](all-move-recipes.md): 194 supported moves, including all
+193 existing 2D catalog entries.
+
 ## Review status
 
 - **Ember: visually approved by the user and enabled in normal 3D battles.**
@@ -24,7 +28,7 @@
   Swift, Flash Cannon, Magical Leaf and Water Pulse. See
   [fourth source batch](source-move-batch-four.md).
 
-- **Draco Meteor: implemented; visual approval pending.** See [Draco Meteor](draco-meteor.md).
+- **Draco Meteor: visually approved by the user (6 October 2026).** See [Draco Meteor](draco-meteor.md).
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,
