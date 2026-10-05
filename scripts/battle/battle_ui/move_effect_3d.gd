@@ -41,7 +41,7 @@ static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 	var plan := source.duplicate(true)
 	var contact: bool = str(timing.get("move_key", "")) in ["tackle", "scratch", "bite"]
 	var impact_seconds := float(timing.impact_frame) / 60.0
-	var cue_time := impact_seconds if contact else maxf(0.0, impact_seconds - float(timing.frames) / 60.0 * 0.28)
+	var cue_time := impact_seconds if contact else launch_time(timing)
 	var cues: Array = []
 	var seen := {}
 	for cue: Dictionary in plan.get("cues", []):
@@ -54,11 +54,15 @@ static func audio_plan(source: Dictionary, timing: Dictionary) -> Dictionary:
 	plan.speed_scale = 1.0
 	return plan
 
+static func launch_time(timing: Dictionary) -> float:
+	var impact_seconds := float(timing.impact_frame) / 60.0
+	return clampf(float(timing.get("launch_frame", float(timing.impact_frame) - float(timing.frames) * 0.28)) / 60.0, 0.0, impact_seconds)
+
 func start(move: String, timing: Dictionary, options: Dictionary, native_clock: Callable, positions: Callable, guard: Callable) -> void:
 	key = move_key(move)
 	duration = float(timing.frames) / 60.0
 	impact = float(timing.impact_frame) / 60.0
-	launch = maxf(0.0, impact - duration * 0.28)
+	launch = launch_time(timing)
 	clock = native_clock
 	anchors = positions
 	valid = guard

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use Charmander’s native forward-facing breath animation for Ember, with mouth launch and sound synchronized for normal and shiny models.
+
 - Improve text readability inside compact 3D stat and effect badges while keeping the HP panel visually dominant.
 
 - Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.

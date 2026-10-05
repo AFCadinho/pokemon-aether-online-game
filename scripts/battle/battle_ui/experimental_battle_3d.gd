@@ -562,10 +562,13 @@ func attack_action_for(move_name: String, actor: String = "") -> String:
 		if parsed is Dictionary:
 			move_categories = parsed
 	var key := AttackSelection.move_key(move_name)
+	var index := actor_index(actor)
+	if key == "ember" and index >= 0 and index < identities.size() and identities[index].trim_suffix("@shiny") == "charmander":
+		if entries.get(identities[index], {}).get("action_timing", {}).has("special_attack_2"):
+			return "special_attack_2"
 	if str(move_categories.get(key, {}).get("category", "")).to_lower() != "physical":
 		return "special_attack"
 	var family_actions := {}
-	var index := actor_index(actor)
 	if index >= 0 and index < identities.size() and entries.has(identities[index]):
 		family_actions = entries[identities[index]].get("attack_family_actions", {})
 	return AttackSelection.request_for(key, family_actions)
@@ -2159,6 +2162,7 @@ func _process(delta: float) -> void:
 			players[i] = _find_player(actors[i])
 			preload("res://scripts/battle/animations/gliscor_flight.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
 			preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
+			preload("res://scripts/battle/animations/charmander_breath.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
 			identities[i] = desired[i]
 			resting[i] = true
 			_action(restoring[i], i)
