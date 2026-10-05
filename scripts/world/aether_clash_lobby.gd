@@ -115,7 +115,10 @@ func _refresh_portals() -> void:
 func _select_session(sessions: Array[Dictionary]) -> Dictionary:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	dialog.name = "AetherClashPortalSessionDialog"
-	get_tree().current_scene.add_child(dialog)
+	var screen_layer := CanvasLayer.new()
+	screen_layer.layer = 120
+	get_tree().current_scene.add_child(screen_layer)
+	screen_layer.add_child(dialog)
 	dialog.configure(
 		_text("world.aether_clash.portal.choose_title"),
 		_text("world.aether_clash.portal.choose_hint"),
@@ -139,7 +142,7 @@ func _select_session(sessions: Array[Dictionary]) -> Dictionary:
 	var selected: Dictionary = {}
 	if bool(resolution["confirmed"]):
 		selected = picker.selected_session()
-	dialog.queue_free()
+	screen_layer.queue_free()
 	return selected
 
 

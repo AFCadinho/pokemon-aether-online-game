@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
 - Center the shiny replay favorite prompt in the screen UI and size it to its message.
 - Anchor 3D move effects to animated mouth points for Charmander and Squirtle, and fire Blastoise’s Water Gun from both moving cannons.
 
