@@ -24,6 +24,8 @@ MOVE_PARTS.update({
     'bite': ('ew0044_tooth', 'ew0044_df_hit'),
     'thundershock': ('ew0084_thunder', 'ew0084_thunder_hit'),
     'thunderbolt': ('ew0085_start', 'ew0085_beam01', 'ew0085_hit_start', 'ew0085_hit', 'ew0085_hit_end'),
+    'flamethrower': ('ew0053_fire_muzzle', 'ew0053_fire', 'ew0053_hit', 'ew0053_minihit'),
+    'bubblebeam': ('ew0061_at_start', 'ew0061_muzzle', 'ew0061_beam', 'ew0061_beam_bubble', 'ew0061_df_hit', 'ew0061_df_hit02'),
 })
 
 
@@ -125,7 +127,7 @@ def inspect_particle(data):
     return dict(emitters=emitters, sections=rows), bntx
 
 
-def legacy_bntx(data, allow_bc5=False, allow_bc3=False):
+def legacy_bntx(data, allow_bc5=False, allow_bc3=False, allow_r8=False, allow_bc7=False):
     """Adapt BRTI flags/tile enum for external BNTX-Extractor 0.6 only.
 
     Current struct: flags:u8, dim:u8, tile:u16. Old extractor reads
@@ -149,6 +151,8 @@ def legacy_bntx(data, allow_bc5=False, allow_bc3=False):
         supported = fmt == 0x1D01 and channels == (2, 2, 2, 2)
         supported |= allow_bc5 and fmt == 0x1E01 and channels in ((2, 2, 2, 3), (2, 3, 3, 3))
         supported |= allow_bc3 and fmt == 0x1C06 and channels == (2, 3, 4, 5)
+        supported |= allow_r8 and fmt == 0x0201 and channels == (2, 2, 2, 2)
+        supported |= allow_bc7 and fmt == 0x2006 and channels == (2, 3, 4, 5)
         if tile not in (0, 1) or dim != 2 or not supported:
             raise ValueError('Unsupported pilot texture format/swizzle/tile mode')
         struct.pack_into('<BBH', out, pos + 16, 1 - tile, dim, flags)
@@ -174,8 +178,9 @@ def extract(source, output, decoder, move="ember"):
         folder.mkdir()
         (folder / 'source.bntx').write_bytes(bntx)
         legacy = folder / 'decoder-input.bntx'
-        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt"),
-                                      allow_bc3=move in ("scratch", "thundershock", "thunderbolt")))
+        legacy.write_bytes(legacy_bntx(bntx, allow_bc5=move in ("watergun", "thunderbolt", "flamethrower", "bubblebeam"),
+                                      allow_bc3=move in ("scratch", "thundershock", "thunderbolt", "flamethrower", "bubblebeam"),
+                                      allow_r8=move == "flamethrower", allow_bc7=move == "bubblebeam"))
         run = subprocess.run([sys.executable, str(decoder), str(legacy.resolve())],
                              cwd=folder, capture_output=True, text=True, timeout=60)
         (folder / 'decoder.log').write_text(run.stdout + run.stderr)
@@ -192,10 +197,10 @@ def extract(source, output, decoder, move="ember"):
         for name in textures:
             image = Image.open(folder / (name + '.dds'))
             meta = metadata[name]
-            if meta['format'] == 0x1D01:
+            if meta['format'] in (0x1D01, 0x0201):
                 if image.mode != 'L':
                     raise ValueError('Unexpected decoded BC4 image mode')
-            elif meta['format'] == 0x1C06:
+            elif meta['format'] in (0x1C06, 0x2006):
                 if image.mode != 'RGBA':
                     raise ValueError('Unexpected decoded BC3 image mode')
             else:

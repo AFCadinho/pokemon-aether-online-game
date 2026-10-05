@@ -17,7 +17,7 @@ var move_outcome: OptionButton
 var move_reverse: CheckButton
 var move_busy := false
 var left_species := "Dragonite"
-const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt"]
+const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam"]
 var terrain_picker: OptionButton
 var terrain_enabled: CheckButton
 var trick_room_toggle: CheckButton

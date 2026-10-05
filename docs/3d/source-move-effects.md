@@ -13,6 +13,8 @@
   [Thunder Shock](thundershock.md) for sources, timing and review.
 - **Thunderbolt: visually approved by the user.** See
   [Thunderbolt](thunderbolt.md) for source ribbons, sound timing and review.
+- **Flamethrower, Bubble and Bubble Beam: implemented, awaiting visual approval.**
+  See [fire and bubble effects](fire-bubble-effects.md) for source reuse and review.
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,
@@ -96,7 +98,7 @@ provenance file. Imported caches remain slot-local.
   placement/count/frame/opacity/tint parity over six timestamps, adjusting the
   historical pilot to use the newly requested on-target miss aim. The external
   argument is optional and only used for comparison with the historical pilot.
-- `battle_move_effects_3d_check.tscn`: six moves, four slots, audio, impact,
+- `battle_move_effects_3d_check.tscn`: ten moves, four slots, audio, impact,
   Substitute, cancellation and explicit live-source routing for both approved moves.
 - `battle_move_presentation_routes_check.tscn`: ordinary routes and 2D fallback.
 - `battle_3d_impact_pacing_check.tscn`: impact recovery, gem-before-attack and faint.

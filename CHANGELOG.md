@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add 3D Flamethrower, Bubble and Bubble Beam with animated mouth/cannon origins, shared move sounds and Dodge-aware impacts.
+
 - Add source-textured Thunderbolt in 3D battles, with animated lightning, separate discharge/impact sounds and Pikachu's moving discharge origin.
 
 - Add source-textured Thunder Shock in 3D battles, with jagged lightning, synchronized sound and impact, and a moving discharge origin for Pikachu.

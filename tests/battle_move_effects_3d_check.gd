@@ -68,7 +68,7 @@ func _run() -> void:
 	var catalog := Catalog.new()
 	for move: String in Effect.KEYS:
 		var timing: Dictionary = stage.move_timing(move,"p1")
-		var source := catalog.get_plan("move",move)
+		var source := catalog.get_plan("move",Effect.audio_source_key(move))
 		var copy := source.duplicate(true)
 		var plan := Effect.audio_plan(source,timing)
 		assert(source == copy and plan.cues.size() == (2 if move == "thunderbolt" else 1) and plan.sound_paths == source.sound_paths)
@@ -85,6 +85,8 @@ func _run() -> void:
 			if move in ["tackle", "scratch", "bite"]: assert(effect.get_script() == Stage.ContactMoveEffect)
 			if move == "thundershock": assert(effect.get_script() == Stage.ElectricMoveEffect)
 			if move == "thunderbolt": assert(effect.get_script() == Stage.ThunderboltMoveEffect)
+			if move == "flamethrower": assert(effect.get_script() == Stage.FireStreamMoveEffect)
+			if move in ["bubble","bubblebeam"]: assert(effect.get_script() == Stage.BubbleMoveEffect)
 			if move == "watergun": assert(effect.get_script() == Stage.SourceMoveEffect, "Approved Water Gun must use packaged source textures")
 			effect.set_process(false)
 			stage.players[slot].seek(effect.impact+0.04,true)
