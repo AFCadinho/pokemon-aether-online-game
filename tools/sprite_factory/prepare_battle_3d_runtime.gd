@@ -179,6 +179,9 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 	var target := output.path_join(species + ".scn")
 	if code == OK:
 		code = ResourceSaver.save(packed, target, ResourceSaver.FLAG_COMPRESS)
+	# Complete pending material dependencies before destroying the temporary
+	# graph. Compatibility can otherwise inspect already-freed next-pass RIDs.
+	RenderingServer.force_draw(false)
 	node.free()
 	if code != OK:
 		errors.append(species + ": scene save failed: " + error_string(code))
@@ -215,6 +218,7 @@ func _convert(entry: Dictionary, output: String) -> Dictionary:
 		errors.append(species + ": visual grounding lost on reload")
 		verified.free()
 		return {}
+	RenderingServer.force_draw(false)
 	verified.free()
 	var prepared := entry.duplicate(true)
 	prepared.runtime_path = target

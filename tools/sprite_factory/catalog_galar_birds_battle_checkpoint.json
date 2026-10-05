@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "task": "galar-birds-battle-review",
+  "appearance_approved": true,
+  "battle_approved": false,
+  "performance_approved": false,
+  "runtime_approved": false,
+  "scope": "flat floor, both runtime cameras/sides, HUD proxy; full UI/arena collision and performance remain separate",
+  "checks": [
+    {
+      "species": "articuno-galar",
+      "minimum_clearance": 0.0300000309944153,
+      "samples_120hz": 1868,
+      "shots": 28,
+      "scale": 1.0,
+      "hover_height": 0.45
+    },
+    {
+      "species": "articuno-galar-shiny",
+      "minimum_clearance": 0.0300000309944153,
+      "samples_120hz": 1868,
+      "shots": 28,
+      "scale": 1.0,
+      "hover_height": 0.45
+    },
+    {
+      "species": "zapdos-galar",
+      "minimum_clearance": 0.00243877246975899,
+      "samples_120hz": 1846,
+      "shots": 28,
+      "scale": 1.0,
+      "hover_height": 0.0
+    },
+    {
+      "species": "zapdos-galar-shiny",
+      "minimum_clearance": 0.00243877246975899,
+      "samples_120hz": 1846,
+      "shots": 28,
+      "scale": 1.0,
+      "hover_height": 0.0
+    },
+    {
+      "species": "moltres-galar",
+      "minimum_clearance": 0.0299999807029963,
+      "samples_120hz": 2096,
+      "shots": 28,
+      "scale": 0.9,
+      "hover_height": 0.45
+    },
+    {
+      "species": "moltres-galar-shiny",
+      "minimum_clearance": 0.0299999807029963,
+      "samples_120hz": 2096,
+      "shots": 28,
+      "scale": 0.9,
+      "hover_height": 0.45
+    }
+  ],
+  "reports": [
+    {
+      "path": ".tmp/galar-birds-battle-v1/catalog.json",
+      "sha256": "7b9777e0ee0ec42358a5845c7c5a37a9eae40e8ec3dec0482f454e86d2bcd19d"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/baseline/battle-review.json",
+      "sha256": "fb567910ea326e93118ed022aa88c97eb25955d9da98b5ddce3f36e4c10f0847"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/calibrated/battle-review.json",
+      "sha256": "fdfb91a65a8d6bc460bd6cba7f1d863e39d67954da40f41e2a0f71aa6cbbf9b0"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/moltres-v2/battle-review.json",
+      "sha256": "64072353498ca3cbe24701faeb08bbbdd232a461c8625a1132bdc9b0396994c6"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/placement-v1.json",
+      "sha256": "2e940af76fde7adc66adf7838c95c55e04514e840fca17d8fc294ca247b76258"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/placement-v2.json",
+      "sha256": "9a920809c504599757eebb95bda50b476ee26fcd1ed4de422fa014c6d7ad8a63"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/final/battle-review.json",
+      "sha256": "239553b28af9a921a802c0ea9e3519a95b72303bdb29a6f9c38768da0ab59c52"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/review-v1/manifest.json",
+      "sha256": "b8ccd7dacd8dc9388e871825ae7a67ecccca28e5e8dbc41a8595fa3a4b6764b1"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/transitions.json",
+      "sha256": "cfb35f950d94613151d9b6a96e96d6bc57df26ec585c3fb94b267ea779746e05"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/transitions.log",
+      "sha256": "7094f0b57a628987fcd2233857a118d4786a8840bc8271f358f7d7e6276ba3a5"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-control.log",
+      "sha256": "4ec90382a3f65ed3836acf4f7b78ecd4d0e86a163f7c18fa2eb99498dee48c51"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-flush.log",
+      "sha256": "68115fbf64039656fb57a10d0d9454a7c84a883ac211c01751b29e887b1cb5dd"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-verified/report.json",
+      "sha256": "8381a34b812c38b23f9fd4c9bb3422df14c355bf88af9f26f16863dbc8e6b9a9"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-verified.log",
+      "sha256": "1028e0a310fa0631baca4e278d9c08d74452e504fe4f64784a4b81d90f451113"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-parity.json",
+      "sha256": "538c19daa4cd9c4fc6c187ebae1d39358a57bf51c0188be9677bce1332978326"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-headless/report.json",
+      "sha256": "800a26b4543ff5643d9aef77f77b8ea3c329a67df4b6536f1477ab39612f8626"
+    },
+    {
+      "path": ".tmp/galar-birds-battle-v1/conversion-headless.log",
+      "sha256": "b1d1596db05d4a774bbd46f014be0b7bf2aa1d43dc8baede42b881c7b00f9143"
+    }
+  ],
+  "tools": [
+    {
+      "path": "tools/sprite_factory/catalog_galar_birds_calibrate.py",
+      "sha256": "ac6b77b69a785f608e0b9c3b295c5250a9ae80d121b1accb8425eb5d5fdfe77f"
+    },
+    {
+      "path": "tools/sprite_factory/catalog_galar_birds_battle_review.gd",
+      "sha256": "86d6e9cee11b9171ef0fcca631145fc4dfad8b4adc987f6204d7aa91771f20bc"
+    },
+    {
+      "path": "tools/sprite_factory/catalog_galar_birds_transition_check.gd",
+      "sha256": "84d439fbff8a5b59f5a9b1d95ac338f9dc24cb190e0fa18723e861a53bee1cb0"
+    },
+    {
+      "path": "tools/sprite_factory/prepare_battle_3d_runtime.gd",
+      "sha256": "e72a521699a807a8c8c3378755f9d258b70df6bff5a3197ad9cb37bdc7951052"
+    }
+  ],
+  "remaining": [
+    "User battle review of size, hover height and poses",
+    "Performance and runtime form resolution/preloading",
+    "Bundles and separately authorized upload"
+  ],
+  "runtime_assets": "Original appearance-approved SCNs, unchanged; diagnostic reconversions are not substituted"
+}
