@@ -7,9 +7,11 @@ This batch covers the 58 missing entries from `tools/sprite_factory/regional_mod
 Pikachu with the Alola cap. It produces 116 normal/shiny candidates. The three
 previously accepted Galarian birds are outside this batch.
 
-Candidates are **not runtime approved**. Registry admission, bundle generation,
-performance qualification and R2 publication remain separate steps after the
-combined visual review. No release index or runtime registry is changed here.
+All 58 pairs have appearance and battle approval. The 58 local bundles have
+passed installation and the 116 scenes have passed on-demand runtime checks.
+Performance qualification is held; no registry admission or publication has
+occurred. R2 publication and release activation are separate steps. Earlier sections retain the
+chronology of candidate review and its limitations.
 
 ## Reproducible inputs and tooling
 
@@ -132,7 +134,7 @@ Current runtime report: `runtime-final-v4.json`; placement and technical proof:
 The new comparison is `eyes-last-two-review-v1/index.html`, with eye close-ups
 and all captured attack/sleep/faint poses. The user explicitly approved both
 pairs with “allebei goed”. This approval covers these two appearance corrections;
-the combined battle review remains pending.
+the later combined battle approval is recorded below.
 
 ## Final battle gallery after eye corrections
 
@@ -147,5 +149,60 @@ report and updated camera/HUD captures.
 
 The final gallery is `battle-review-final-v1/index.html`, defaulting to battle
 view and retaining a switch to the latest appearance images. Its receipt,
-combined report and qualification are in `battle-eyes-final-v1`. Performance,
-registry admission, bundles, integration and upload remain pending.
+combined report and qualification are in `battle-eyes-final-v1`. The subsequent
+bundle qualification is described below.
+
+## Bundle qualification: performance hold
+
+The user approved the final 58-pair battle page with “Alle 58 in battle goed”.
+Appearance and battle approval are recorded in the candidate checkpoint.
+`regional_model_admission.py prepare` builds 58 individual bundles containing
+116 exact accepted scenes; the source scenes and published runtime hashes stay
+pinned in `admission-v1/runtime-fixture.json`. No registry admission is implied
+by local bundle creation.
+
+Qualification exercises transactional launcher installation/restart/no-op, the
+real on-demand service and presenter, normal/shiny swaps, calibrated placement
+and action timing, then three complete real-battle performance rounds. The
+existing 20 ms p95, 64 MiB retained-source, 100 ms uncovered-stall and one-frame
+load-dispatch limits remain unchanged. `regional_model_admission.py admit` is
+guarded by all completed reports; post-admission replay is separate.
+
+Qualification diagnostics are retained in `admission-v1`: the initial launcher
+check reached its orchestration time limit and was restarted against the same
+transactional store. A first test adapter incorrectly required a separate faint
+loop for legacy sources; it now verifies the exact approved animation channels
+and leaves final-frame faint fallback to the inherited lifecycle stress test.
+Two preparation stalls showed loaded models but suppressed desktop draws (three
+drawn frames in 30 seconds). Test-only frame forcing now renders actual frames
+when the compositor suppresses automatic drawing; readiness is not bypassed.
+The subsequent full 58-pair runtime run passed without needing forced frames.
+An interrupted performance run overlapped a newly launched ordinary game and
+is excluded; the user closed that game before the fresh measurement.
+
+Galarian Darmanitan's base/Zen forms are now preloaded together, and Mr. Mime
+Galar's display name and compact spelling resolve to the canonical model. The
+runtime test checks both aliases and no-download Zen transformations.
+
+The final installation check passed all 58 bundles/116 exact scene hashes,
+including restart, no-op and coexistence checks. The on-demand renderer check
+passed all 58 normal/shiny pairs, exact profiles, aliases and Zen preloading.
+Total compressed bundle size is 807,233,937 bytes.
+
+Performance is **not admitted**. A second full attempt overlapped a slot-b
+animation preview and later stalled during Pikachu preparation. That failed
+log is retained. The following diagnostics exposed two test-setup issues:
+forcing a render after just one skipped draw can submit unnecessary work, and
+deferred WindowFit startup changed the requested 1280 x 720 window to 1600 x
+900. The regional test now waits for startup, asserts 1280 x 720 after every
+pair, and only forces a draw after a sustained 250 ms stall. Admission requires
+zero forced frames and the original performance limits.
+
+The corrected six-pair control (three previously admitted models and three
+candidates) completes all lifecycle rounds, but still measures 21.632 ms steady
+stadium p95 against the unchanged 20 ms limit, with one forced frame. Classic
+measures 17.224 ms. The setup correction therefore does **not** resolve the
+performance hold. The small control is diagnostic, not a replacement for the
+full 58-pair qualification. `regional_model_performance_hold.json` pins the
+evidence. Registry admission, post-admission replay, local integration and
+separately authorized publication remain outstanding.

@@ -1,15 +1,15 @@
 {
   "schema": 1,
-  "status": "awaiting_final_battle_visual_review",
+  "status": "bundled_runtime_checked_performance_held",
   "runtime_approved": false,
-  "appearance_visual_approved": false,
-  "battle_visual_approved": false,
+  "appearance_visual_approved": true,
+  "battle_visual_approved": true,
   "pair_count": 58,
   "variant_count": 116,
   "technical_battle_variants_passed": 116,
   "performance_qualified": false,
   "registry_admitted": false,
-  "bundles_built": false,
+  "bundles_built": true,
   "r2_uploaded": false,
   "worktree_artifacts": ".tmp/regional-production-v1",
   "reports": {
@@ -1226,7 +1226,17 @@
       "approved": true,
       "review": "eyes-last-two-review-v1/index.html"
     },
-    "remaining_batch": "Bodies generally accepted; eye follow-up limited to Pikachu/Typhlosion, now accepted. Final consolidated battle review pending."
+    "remaining_batch": "Bodies generally accepted; eye follow-up limited to Pikachu/Typhlosion, now accepted. Final consolidated battle review pending.",
+    "final_battle": {
+      "answer": "Alle 58 in battle goed",
+      "pairs": 58,
+      "review": "battle-review-final-v1/index.html",
+      "review_evidence_sha256": "7c9b61a7007f19337346b57865eddb481f02dab4131210df2bcf93fe3a8a4e65"
+    }
   },
-  "current_battle_review": "battle-review-final-v1/index.html"
+  "current_battle_review": "battle-review-final-v1/index.html",
+  "local_bundle_work": "admission-v1",
+  "installed_runtime_check_passed": true,
+  "performance_hold_report": "tools/sprite_factory/regional_model_performance_hold.json",
+  "performance_hold_sha256": "64d48c7052e42da5a8c1a64e924016c10ea13a8968902a3fe47755ff5158f52e"
 }

@@ -14,12 +14,17 @@ static func canonical_identity(identity: String) -> String:
 	var base := identity.trim_suffix("@shiny") if shiny else identity
 	if base == "meowstic-f-mega":
 		base = "meowstic-m-mega"
+	if base in ["mr.-mime-galar", "mrmime-galar"]:
+		base = "mr-mime-galar"
 	return base + ("@shiny" if shiny else "")
 
 static func aliases_for(identity: String) -> Array[String]:
 	var base := identity.trim_suffix("@shiny")
 	if base == "meowstic-m-mega":
 		return ["meowstic-f-mega" + ("@shiny" if identity.ends_with("@shiny") else "")]
+	if base == "mr-mime-galar":
+		var suffix := "@shiny" if identity.ends_with("@shiny") else ""
+		return ["mr.-mime-galar" + suffix, "mrmime-galar" + suffix]
 	return []
 
 static func add_alias_entries(entries: Dictionary) -> void:
