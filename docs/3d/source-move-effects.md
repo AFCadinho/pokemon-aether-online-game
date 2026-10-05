@@ -11,6 +11,8 @@
   [contact move effects](contact-move-effects.md) for sources and conversion limits.
 - **Thunder Shock: implemented, awaiting visual approval.** See
   [Thunder Shock](thundershock.md) for sources, timing and review.
+- **Thunderbolt: implemented, awaiting visual approval.** See
+  [Thunderbolt](thunderbolt.md) for source ribbons, sound timing and review.
 
 `experimental_battle_3d.gd` selects `SourceMoveEffect` for Ember and Water Gun. This class
 inherits the normal move driver, so model clocks, audio routing, target guards,

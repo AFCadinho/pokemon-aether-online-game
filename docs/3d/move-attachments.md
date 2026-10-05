@@ -11,7 +11,7 @@ to the target and back on the same native action clock.
 
 | Model | Move/part | Bone(s) |
 | --- | --- | --- |
-| Pikachu | Thunder Shock / electric body | `spine_02` |
+| Pikachu | Thunder Shock, Thunderbolt / electric body | `spine_02` |
 | Charmander | Ember, Water Gun, Bite / mouth | `head` |
 | Charmander | Scratch / hand | `right_hand` |
 | Squirtle | Ember, Water Gun, Bite / mouth | `head` |
@@ -22,7 +22,7 @@ The primary visual review is Charmander + Ember, Squirtle + Water Gun, and
 Blastoise + Water Gun. Profiles are shared with the shiny version, but never
 implicitly inherited by Mega or other alternate forms. Unconfigured parts,
 unknown rigs, missing bones, and visible Substitutes retain the previous
-bounds-based origins. Tackle retains this fallback. Thunder Shock follows Pikachu’s upper-body bone
+bounds-based origins. Tackle retains this fallback. Thunder Shock and Thunderbolt follow Pikachu’s upper-body bone
 through its jumping attack; other species retain the body fallback. Additional hands, feet, tails and species can be calibrated
 as moves need them, without changing the physical/special classifier.
 
