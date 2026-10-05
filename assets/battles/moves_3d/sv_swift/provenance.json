@@ -1,0 +1,41 @@
+{
+  "source_move": "swift",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "cpt_0_mark0004.png",
+      "source_particle": "ew0129_start_star.ptcl",
+      "source_sha256": "b8fb1430b3a159b5bd7dff25dffe89e3082cf1eedebf59a496d8c5fbf697e607",
+      "png_sha256": "d87b2c8dbfc71ec138b3d4fd70db23bc18c1cafa65d882bfe00600bf23ca9265",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_blur0012.png",
+      "source_particle": "ew0129_bullet.ptcl",
+      "source_sha256": "2ae6bed7f1b1f85626ba0aad6cbbd35bb4f4c3f0dbd9865c70c4544b367bc821",
+      "png_sha256": "273f4f3d957c38b0fe328f35bc65a98b84c9d83478a3e049b54d3cf395e68136",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA"
+    },
+    {
+      "file": "cpt_0_flash0002.png",
+      "source_particle": "ew0129_hit.ptcl",
+      "source_sha256": "26180705e368723d2f1ddfa221ebc49d513ffec9a81093cbc169852242660287",
+      "png_sha256": "80fcfeb774a173c9aa8e4c293b0d268eb66ebe7514cf9bfb6d16e2a0caa13a0d",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    }
+  ]
+}

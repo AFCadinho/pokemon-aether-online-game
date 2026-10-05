@@ -3,7 +3,7 @@
 Momentopname: 5 oktober 2026, lokale `development`-basis `21de5ad077ae96c5c4623d6f3b9a763ec0277a4d`.
 Dit document inventariseert de bestaande bronnen en stelt productiegroepen voor.
 
-Vervolg: [de eerste zes moves zijn geïmplementeerd en wachten op visuele goedkeuring](battle-moves-first-six-3d.md).
+Actuele implementatie en visuele goedkeuring: [checklist van de source-move-effecten](3d/source-move-effects.md).
 De aantallen/dekking hieronder en in het CSV beschrijven de oorspronkelijke inventarisatiemomentopname.
 Het implementeert geen nieuwe animaties en keurt geen moves visueel goed.
 

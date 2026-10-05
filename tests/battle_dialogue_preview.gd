@@ -12,12 +12,13 @@ var freeze_preview := false
 var weather_preview := false
 var terrain_preview := false
 var move_preview := false
+var move_model_picker: OptionButton
 var move_picker: OptionButton
 var move_outcome: OptionButton
 var move_reverse: CheckButton
 var move_busy := false
 var left_species := "Dragonite"
-const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam", "Ice Beam", "Razor Leaf", "Quick Attack"]
+const FIRST_MOVES := ["Tackle", "Scratch", "Bite", "Ember", "Water Gun", "Thunder Shock", "Thunderbolt", "Flamethrower", "Bubble", "Bubble Beam", "Ice Beam", "Razor Leaf", "Quick Attack", "Shadow Ball", "Sludge Bomb", "Focus Blast", "Moonblast", "Ice Shard", "Poison Sting", "Swift", "Flash Cannon", "Magical Leaf", "Water Pulse"]
 var terrain_picker: OptionButton
 var terrain_enabled: CheckButton
 var trick_room_toggle: CheckButton
@@ -441,6 +442,7 @@ func _field_screenshot(output: String, key: String) -> void:
 
 func _build_move_controls() -> void:
 	var models := OptionButton.new()
+	move_model_picker = models
 	for species in ["Dragonite", "Pikachu", "Charmander", "Squirtle", "Arcanine", "Blastoise", "Bulbasaur"]:
 		models.add_item(species)
 		if species == left_species: models.select(models.item_count - 1)

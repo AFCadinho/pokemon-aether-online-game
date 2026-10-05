@@ -2,6 +2,9 @@ extends RefCounted
 ## Anatomical emitters, independent of a move's physical/special damage category.
 ## Offsets are in the named bone's local coordinates (metres in these reviewed rigs).
 const MOVE_PARTS := {
+	"shadowball": "mouth", "sludgebomb": "mouth", "focusblast": "body", "moonblast": "body",
+	"iceshard": "body", "poisonsting": "mouth", "swift": "body", "flashcannon": "mouth",
+	"magicalleaf": "body", "waterpulse": "mouth",
 	"tackle": "body", "scratch": "hand", "bite": "mouth",
 	"ember": "mouth", "watergun": "mouth", "thundershock": "body",
 	"flamethrower": "mouth", "bubble": "mouth", "bubblebeam": "mouth",
@@ -19,7 +22,7 @@ const PROFILES := {
 		"cannons": [["left_feeler_b_02", Vector3(0.261, 0, 0)], ["right_feeler_b_02", Vector3(0.261, 0, 0)]],
 	},
 }
-const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
+const MOVE_OVERRIDES := {"blastoise": {"watergun": "cannons", "bubblebeam": "cannons", "icebeam": "cannons", "flashcannon": "cannons"}, "pikachu": {"thundershock": "electric_body", "thunderbolt": "electric_body"}}
 const CACHE_META := &"move_attachment_bindings"
 
 static func part_for(identity: String, move_key: String) -> String:

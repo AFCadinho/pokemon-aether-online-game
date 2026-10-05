@@ -1,0 +1,52 @@
+{
+  "source_move": "moonblast",
+  "conversion": "source-textures-with-authored-3d-motion",
+  "native_timeline_converted": false,
+  "native_simulation_converted": false,
+  "textures": [
+    {
+      "file": "upt_ew585_moon_07.png",
+      "source_particle": "ew0585_moon.ptcl",
+      "source_sha256": "8638072342a4b1d128eb9a626eb5476a84378b5a3e18aea5ed04cd96e662de51",
+      "png_sha256": "09b7b47a86767b11d2945f30c612c716020b75d8f267de1c474dfd56fe45d78c",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_3_flow0703s.png",
+      "source_particle": "ew0585_bullet.ptcl",
+      "source_sha256": "c7fb11ae882e1e34197fcfff299490fc182d036c759ca37b22e196d83a0dd4f0",
+      "png_sha256": "97fed258aa3e01e9ea130767878d2c2146b9c795feb8b435d2838c515a9c7ff3",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_0_flash0001.png",
+      "source_particle": "ew0585_bullet.ptcl",
+      "source_sha256": "c7fb11ae882e1e34197fcfff299490fc182d036c759ca37b22e196d83a0dd4f0",
+      "png_sha256": "87b6c34999d2cee26ec8be27ff7456b3a3488b4f24e6ec600b272efb3ddee845",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "L"
+    },
+    {
+      "file": "cpt_0_circle0601.png",
+      "source_particle": "ew0585_hit.ptcl",
+      "source_sha256": "3f01a18254e8be03774c3ef8c85e2d7d413c557c3613a58ea3bd761b990814f0",
+      "png_sha256": "65146d815e55cedd40d2f3913baab50bbe1331a2c2db5694ac7ce449724e4174",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA"
+    }
+  ]
+}

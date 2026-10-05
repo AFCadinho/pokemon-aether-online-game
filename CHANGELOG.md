@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add source-textured 3D Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting, Swift, Flash Cannon, Magical Leaf and Water Pulse, with shared move sounds and Dodge-aware impacts.
 - Match the animated grass battle background and its fallback to the outdoor day/night cycle, with warmer dusk and darker, cooler nights.
 
 - Add 3D Ice Beam, Razor Leaf and Quick Attack with source textures, shared move sounds, cannon/mouth origins and fast contact movement.
