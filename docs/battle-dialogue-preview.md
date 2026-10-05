@@ -50,3 +50,8 @@ Freeze is approved with tint-only idle and a short ice burst/sound on blocked ac
 
 Use `-- --weather` for the native weather picker, pause and effects toggle.
 See [3D weather review](battle-weather-3d.md) for the eight conditions and checklist.
+
+## Terrain and Trick Room review
+
+Use `-- --terrain` for the terrain picker and independent Trick Room toggle,
+including weather combinations. See [3D terrain review](battle-terrain-3d.md).

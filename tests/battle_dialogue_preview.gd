@@ -10,6 +10,13 @@ var toolbar: VBoxContainer
 var loading := false
 var freeze_preview := false
 var weather_preview := false
+var terrain_preview := false
+var terrain_picker: OptionButton
+var terrain_enabled: CheckButton
+var trick_room_toggle: CheckButton
+var preview_paused := false
+const TERRAIN_KEYS := ["", "GrassyTerrain", "ElectricTerrain", "MistyTerrain", "PsychicTerrain"]
+const TERRAIN_LABELS := ["Geen terrain", "Grassy Terrain", "Electric Terrain", "Misty Terrain", "Psychic Terrain"]
 var weather_picker: OptionButton
 var weather_enabled: CheckButton
 const WEATHER_KEYS := ["", "RainDance", "SunnyDay", "Sandstorm", "Snowscape", "Hail", "PrimordialSea", "DesolateLand", "DeltaStream"]
@@ -23,10 +30,12 @@ func _init() -> void:
 
 func _start() -> void:
 	freeze_preview = "--freeze" in OS.get_cmdline_user_args()
-	weather_preview = "--weather" in OS.get_cmdline_user_args()
+	terrain_preview = "--terrain" in OS.get_cmdline_user_args()
+	weather_preview = terrain_preview or "--weather" in OS.get_cmdline_user_args()
 	if freeze_preview or weather_preview: right_species = "Pikachu"
 	root.title = "PokeAether — Freeze preview" if freeze_preview else "PokeAether — Offline trainer dialogue preview"
 	if weather_preview: root.title = "PokeAether — 3D weather preview"
+	if terrain_preview: root.title = "PokeAether — 3D terrain / Trick Room preview"
 	var layer := CanvasLayer.new()
 	layer.layer = 110
 	root.add_child(layer)
@@ -35,7 +44,7 @@ func _start() -> void:
 	panel.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
 	panel.offset_left = 12
 	panel.offset_right = 450
-	panel.offset_top = -300 if weather_preview else (-275 if freeze_preview else -205)
+	panel.offset_top = -395 if terrain_preview else (-300 if weather_preview else (-275 if freeze_preview else -205))
 	panel.offset_bottom = -12
 	toolbar = VBoxContainer.new()
 	panel.add_child(toolbar)
@@ -75,7 +84,7 @@ func _start() -> void:
 	if weather_preview:
 		weather_picker = OptionButton.new()
 		for label in WEATHER_LABELS: weather_picker.add_item(label)
-		weather_picker.select(1)
+		weather_picker.select(0 if terrain_preview else 1)
 		weather_picker.item_selected.connect(func(_index): _weather())
 		toolbar.add_child(weather_picker)
 		var weather_row := HBoxContainer.new()
@@ -88,8 +97,26 @@ func _start() -> void:
 		var pause := CheckButton.new()
 		pause.text = "Pauze"
 		pause.toggled.connect(func(paused):
+			preview_paused = paused
 			if is_instance_valid(battle): battle.animation_router.model_presenter.playback_speed = 0.0 if paused else 1.0)
 		weather_row.add_child(pause)
+	if terrain_preview:
+		terrain_picker = OptionButton.new()
+		for label in TERRAIN_LABELS: terrain_picker.add_item(label)
+		terrain_picker.select(1)
+		terrain_picker.item_selected.connect(func(_index): _terrain())
+		toolbar.add_child(terrain_picker)
+		var field_row := HBoxContainer.new()
+		toolbar.add_child(field_row)
+		terrain_enabled = CheckButton.new()
+		terrain_enabled.text = "Terraineffecten"
+		terrain_enabled.button_pressed = true
+		terrain_enabled.toggled.connect(func(_enabled): _terrain())
+		field_row.add_child(terrain_enabled)
+		trick_room_toggle = CheckButton.new()
+		trick_room_toggle.text = "Trick Room"
+		trick_room_toggle.toggled.connect(func(_enabled): _terrain())
+		field_row.add_child(trick_room_toggle)
 	status = Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	status.custom_minimum_size.x = 420
@@ -107,6 +134,11 @@ func _start() -> void:
 		print("WEATHER_PREVIEW_READY")
 		if "--smoke-weather" in OS.get_cmdline_user_args():
 			await _check_weather()
+			return
+	if terrain_preview:
+		print("TERRAIN_PREVIEW_READY")
+		if "--smoke-terrain" in OS.get_cmdline_user_args():
+			await _check_terrain()
 			return
 	if "--smoke" in OS.get_cmdline_user_args():
 		await create_timer(0.4).timeout
@@ -205,6 +237,7 @@ func _load_preview() -> void:
 	else:
 		status.text = "Ready — 2.5D dialogue preview. Arena selection applies to 3D."
 	if weather_preview: battle.current_action_panel.set_message("Weertest — kies een weertype en draai de camera")
+	if terrain_preview: battle.current_action_panel.set_message("Terraintest — kies een terrain; Trick Room en weer kunnen erbij")
 	var reveal_deadline := Time.get_ticks_msec() + 35000
 	while host.get_node("Cover").visible and Time.get_ticks_msec() < reveal_deadline:
 		await process_frame
@@ -297,9 +330,12 @@ func _finalize() -> void:
 
 func _weather() -> void:
 	if loading or not is_instance_valid(battle): return
+	battle.animation_router.model_presenter.playback_speed = 0.0 if preview_paused else 1.0
 	root.get_node("SettingsManager").weather_effects = weather_enabled.button_pressed
 	battle.weather_presentation.update_weather(WEATHER_KEYS[weather_picker.selected])
 	status.text = "Weertest: " + WEATHER_LABELS[weather_picker.selected] + " — draai de camera, pauzeer of schakel het effect uit."
+
+	if terrain_preview: _terrain()
 
 func _check_weather() -> void:
 	var renderer: Node = battle.animation_router.model_presenter
@@ -327,3 +363,61 @@ func _check_weather() -> void:
 	host.queue_free()
 	await process_frame
 	quit.call_deferred()
+
+func _terrain() -> void:
+	if loading or not is_instance_valid(battle): return
+	root.get_node("SettingsManager").terrain_effects = terrain_enabled.button_pressed
+	battle.weather_presentation.update_terrain(TERRAIN_KEYS[terrain_picker.selected])
+	battle.weather_presentation.update_trick_room(trick_room_toggle.button_pressed)
+	status.text = "Terraintest: " + TERRAIN_LABELS[terrain_picker.selected] + (" + Trick Room" if trick_room_toggle.button_pressed else "") + " — draai de camera of combineer met weer."
+
+func _check_terrain() -> void:
+	var renderer: Node = battle.animation_router.model_presenter
+	if not renderer.active:
+		push_error("Terrain preview could not prepare native models: " + renderer.reason)
+		quit(1)
+		return
+	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
+	if not output.is_empty(): DirAccess.make_dir_recursive_absolute(output)
+	for i in range(1, TERRAIN_KEYS.size()):
+		terrain_picker.select(i)
+		_terrain()
+		await create_timer(1.2).timeout
+		assert(is_instance_valid(renderer.terrain_effect))
+		assert(not battle.weather_presentation.terrain_tint.visible)
+		assert(battle.battle_state.battle_id.is_empty())
+		await _field_screenshot(output, renderer.terrain_effect.key)
+		trick_room_toggle.set_pressed_no_signal(true)
+		_terrain()
+		weather_picker.select(1)
+		_weather()
+		await create_timer(0.5).timeout
+		assert(is_instance_valid(renderer.terrain_effect) and is_instance_valid(renderer.trick_room_effect) and is_instance_valid(renderer.weather_effect))
+		if i == TERRAIN_KEYS.size() - 1:
+			renderer.user_camera_yaw = 0.65
+			await create_timer(0.2).timeout
+			await _field_screenshot(output, "combined-orbit")
+			renderer.reset_user_camera()
+		trick_room_toggle.set_pressed_no_signal(false)
+		weather_picker.select(0)
+		_weather()
+	terrain_picker.select(0)
+	trick_room_toggle.set_pressed_no_signal(true)
+	_terrain()
+	await create_timer(1.0).timeout
+	assert(renderer.terrain_effect == null and renderer.trick_room_effect != null)
+	assert(not battle.weather_presentation.trick_room_layer.visible)
+	await _field_screenshot(output, "trickroom")
+	trick_room_toggle.set_pressed_no_signal(false)
+	_terrain()
+	assert(renderer.terrain_effect == null and renderer.trick_room_effect == null)
+	print("TERRAIN_PREVIEW_OK terrain=4 trick_room=true combinations=true offline_battle=true")
+	host.release()
+	host.queue_free()
+	await process_frame
+	quit.call_deferred()
+
+func _field_screenshot(output: String, key: String) -> void:
+	if not output.is_empty() and DisplayServer.get_name() != "headless":
+		RenderingServer.force_draw()
+		root.get_texture().get_image().save_png(output.path_join("field-%s.png" % key))
