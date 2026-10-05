@@ -59,6 +59,10 @@ func _sprite_values(id: String) -> Array:
 	return ART[id] if ART.has(id) else super._sprite_values(id)
 
 func _build_surface() -> void:
+	# The source moon mask includes a gray square border; crop it in the shader
+	# while retaining the original packaged pixels and source provenance.
+	sprite_shader.code = sprite_shader.code.replace("void fragment() {", "uniform bool moon_disc = false;\nvoid fragment() {")
+	sprite_shader.code = sprite_shader.code.replace("* opacity;", "* opacity;\n\tif (moon_disc) { ALPHA *= 1.0 - smoothstep(0.43, 0.46, length(UV - vec2(0.5))); }")
 	ring.inner_radius = 0.83
 	ring.outer_radius = 1.0
 	ring.rings = 24
@@ -124,7 +128,9 @@ func _draw_orb(from: Vector3, to: Vector3, travel: float, _after: float, facing:
 	var charge := clampf(elapsed/maxf(launch,0.01),0,1)
 	if elapsed<=0: return
 	if key=="moonblast" and travel<0.6:
-		_source_sprite(from+Vector3.UP*0.85,0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
+		_source_sprite(from+Vector3.UP*1.35,0.85,"moon",0,sin(charge*PI*0.5)*(1.0-clampf(travel/0.6,0,1))*0.7,facing)
+		if cursor>0 and sprite_keys[cursor-1]=="moon":
+			sprite_materials[cursor-1].set_shader_parameter("moon_disc",true)
 	if travel>=1: return
 	var t := maxf(travel,0)
 	var point := from.lerp(to,t)
