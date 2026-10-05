@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Use Charmander’s native forward-facing breath animation for Ember, with mouth launch and sound synchronized for normal and shiny models.
+- Retire Grandmaster Elite from AI Sparring. Intermediate, Hard and Nightmare remain available; historical Elite matches keep their original labels.
 
 - Improve text readability inside compact 3D stat and effect badges while keeping the HP panel visually dominant.
 

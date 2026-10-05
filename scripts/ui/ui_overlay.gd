@@ -8071,11 +8071,10 @@ func _create_pvp_ai_sparring_tab() -> VBoxContainer:
 		difficulty_list.name = "AiSparringDifficultyCards"
 		difficulty_list.add_theme_constant_override("separation", 12)
 		content.add_child(difficulty_list)
-		for mode_id: String in ["intermediate", "ai5", "elite", "nightmare"]:
+		for mode_id: String in ["intermediate", "ai5", "nightmare"]:
 			var mode_accent := Color("#7fc8e8")
 			match mode_id:
 				"ai5": mode_accent = Color("#efd080")
-				"elite": mode_accent = Color("#f09a68")
 				"nightmare": mode_accent = Color("#b490f4")
 			var difficulty_card := PanelContainer.new()
 			difficulty_card.name = "AiSparringDifficultyCard_" + mode_id
@@ -8220,7 +8219,7 @@ func _render_ai_sparring_stats() -> void:
 	if not bots is Array:
 		return
 	var ordered_bots: Array = []
-	for ordered_difficulty: String in ["beginner", "intermediate", "hard", "elite", "nightmare"]:
+	for ordered_difficulty: String in ["beginner", "intermediate", "hard", "nightmare"]:
 		for candidate: Variant in bots:
 			if not candidate is Dictionary:
 				continue
@@ -8239,9 +8238,9 @@ func _render_ai_sparring_stats() -> void:
 			continue
 		var is_ai5 := str(entry["bot"]) == "ai5"
 		var difficulty := str(entry.get("difficulty", "hard" if is_ai5 else "beginner"))
-		if difficulty not in (["intermediate", "hard", "elite", "nightmare"] if is_ai5 else ["beginner"]):
+		if difficulty not in (["intermediate", "hard", "nightmare"] if is_ai5 else ["beginner"]):
 			continue
-		if difficulty in ["intermediate", "elite"] and difficulty not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
+		if difficulty == "intermediate" and difficulty not in pvp_training_ai_available_modes and int(entry.get("completed", 0)) + int(entry.get("unconfirmed", 0)) == 0:
 			continue
 		var has_choice_rates := is_ai5 and difficulty == "hard"
 		var accent := Color("#efd080") if is_ai5 else Color("#87d5ec")
@@ -45856,7 +45855,7 @@ func _apply_ai_sparring_bot_versions(response: Dictionary) -> void:
 	var bots_value: Variant = response.get("bots", []) if bool(response.get("success", false)) else []
 	if bots_value is Array:
 		for bot: Variant in bots_value:
-			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "elite", "nightmare"]:
+			if bot is Dictionary and str(bot.get("id", "")) in ["ai4", "ai5", "intermediate", "nightmare"]:
 				pvp_ai_sparring_bot_versions[str(bot["id"])] = bot
 	_refresh_ai_sparring_about()
 
@@ -46205,25 +46204,25 @@ func _refresh_pvp_training_ai_mode_options() -> void:
 			allowed_modes.append(mode)
 	pvp_training_ai_bot_select.clear()
 	for bot: String in ["ai4", "ai5"]:
-		var supported := ("ai4" in allowed_modes or "shadow" in allowed_modes) if bot == "ai4" else ("intermediate" in allowed_modes or "active" in allowed_modes or "elite" in allowed_modes or "nightmare" in allowed_modes)
+		var supported := ("ai4" in allowed_modes or "shadow" in allowed_modes) if bot == "ai4" else ("intermediate" in allowed_modes or "active" in allowed_modes or "nightmare" in allowed_modes)
 		if supported:
 			pvp_training_ai_bot_select.add_item("AI4 Scholar" if bot == "ai4" else "AI5 Grandmaster")
 			pvp_training_ai_bot_select.set_item_metadata(pvp_training_ai_bot_select.item_count - 1, bot)
 	if previous_mode not in allowed_modes:
 		previous_mode = pvp_training_ai_default_mode if pvp_training_ai_default_mode in allowed_modes else ""
 	if previous_mode == "":
-		for fallback: String in ["active", "ai4", "shadow", "intermediate", "elite", "nightmare"]:
+		for fallback: String in ["active", "ai4", "shadow", "intermediate", "nightmare"]:
 			if fallback in allowed_modes:
 				previous_mode = fallback
 				break
-	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "elite", "nightmare"] else "ai4")
+	_select_option_by_metadata(pvp_training_ai_bot_select, "ai5" if previous_mode in ["intermediate", "active", "nightmare"] else "ai4")
 	_refresh_pvp_training_ai_difficulty_options(previous_mode)
 
 
 func _refresh_pvp_training_ai_difficulty_options(preferred_mode: String = "") -> void:
 	pvp_training_ai_mode_select.clear()
 	var grandmaster := str(pvp_training_ai_bot_select.get_selected_metadata()) == "ai5"
-	var modes: Array = ["intermediate", "active", "elite", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
+	var modes: Array = ["intermediate", "active", "nightmare"] if grandmaster else (["ai4"] if "ai4" in pvp_training_ai_available_modes else ["shadow"])
 	for mode: String in modes:
 		if mode not in pvp_training_ai_available_modes or not _ai_sparring_mode_allowed_for_tier(mode):
 			continue
@@ -46419,7 +46418,7 @@ func _resolved_pvp_training_ai_team_id() -> String:
 
 func _refresh_pvp_training_ai_opponent_preview() -> void:
 	if pvp_ai_sparring_trainer_portrait != null:
-		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "elite", "nightmare"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
+		pvp_ai_sparring_trainer_portrait.texture = load("res://assets/sprites/trainer_cards/showdown/veteran-gen7.png" if _selected_pvp_training_ai_mode() in ["active", "intermediate", "nightmare"] else "res://assets/sprites/trainer_cards/showdown/scientist-gen7.png") as Texture2D
 	if pvp_training_ai_opponent_preview == null or pvp_training_ai_opponent_preview_grid == null:
 		return
 	if _selected_pvp_training_ai_team_source() == "paste":
@@ -46516,7 +46515,7 @@ func _load_pvp_training_ai_catalog() -> void:
 		if modes_value is Array:
 			for mode_value: Variant in modes_value:
 				var mode := str(mode_value).strip_edges().to_lower()
-				if mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] and mode not in raw_modes:
+				if mode in ["ai4", "shadow", "intermediate", "active", "nightmare"] and mode not in raw_modes:
 					raw_modes.append(mode)
 		# A bot marked available is the same server-side availability gate used by
 		# the mode list. Keep Intermediate selectable if an older gateway response
@@ -46539,8 +46538,6 @@ func _load_pvp_training_ai_catalog() -> void:
 			pvp_training_ai_available_modes.append("intermediate")
 		if "nightmare" in raw_modes:
 			pvp_training_ai_available_modes.append("nightmare")
-		if "elite" in raw_modes:
-			pvp_training_ai_available_modes.append("elite")
 		pvp_training_ai_default_mode = str(response.get("defaultMode", "ai4")).strip_edges().to_lower()
 		if pvp_training_ai_default_mode not in pvp_training_ai_available_modes:
 			pvp_training_ai_default_mode = (
@@ -47213,7 +47210,7 @@ func _selected_ai_sparring_tier_id() -> String:
 
 
 func _ai_sparring_mode_allowed_for_tier(mode: String) -> bool:
-	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active", "elite", "nightmare"]
+	return _selected_ai_sparring_tier_id() != "pokemmo-ou" or mode in ["ai4", "shadow", "active", "nightmare"]
 
 
 func _ai_sparring_tier_label(tier_id: String) -> String:
@@ -47283,7 +47280,7 @@ func _selected_pvp_training_ai_mode() -> String:
 	if pvp_training_ai_mode_select == null or pvp_training_ai_mode_select.item_count == 0:
 		return pvp_training_ai_default_mode
 	var selected_mode := str(pvp_training_ai_mode_select.get_selected_metadata()).strip_edges().to_lower()
-	return selected_mode if selected_mode in ["ai4", "shadow", "intermediate", "active", "elite", "nightmare"] else pvp_training_ai_default_mode
+	return selected_mode if selected_mode in ["ai4", "shadow", "intermediate", "active", "nightmare"] else pvp_training_ai_default_mode
 
 
 func _selected_pvp_training_ai_archetype() -> String:
