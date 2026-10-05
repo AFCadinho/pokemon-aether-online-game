@@ -19,4 +19,5 @@ environment_id = &"grass"
 arena_3d_id = "forest"
 background_texture = ExtResource("2_background")
 background_video = ExtResource("3_video")
+background_uses_world_lighting = true
 platform_texture = SubResource("Texture_transparent_platform")
