@@ -9,6 +9,8 @@ class_name BattleEnvironmentProfile
 @export var loop_background_video := true
 ## Apply the shared outdoor clock tint to this 2D background and its fallback.
 @export var background_uses_world_lighting := false
+## Optional background effect with a night_amount uniform driven by the world clock.
+@export var background_shader: Shader
 @export var platform_texture: Texture2D
 ## Optional 2D art override; encounter location and 3D arena remain on this profile.
 @export var wild_2d_background: BattleEnvironmentProfile

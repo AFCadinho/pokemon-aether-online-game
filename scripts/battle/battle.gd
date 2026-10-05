@@ -1160,6 +1160,12 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 	profile = profile.get_2d_profile(battle_type == BattleType.WILD)
 	active_battle_environment_loops_video = profile.loop_background_video
 	active_background_uses_world_lighting = profile.background_uses_world_lighting
+	var background_material: ShaderMaterial
+	if profile.background_shader != null:
+		background_material = ShaderMaterial.new()
+		background_material.shader = profile.background_shader
+	battle_background.material = background_material
+	battle_background_video.material = background_material
 	_refresh_battle_background_lighting()
 	battle_background.texture = profile.background_texture
 	battle_background.visible = true
@@ -1179,8 +1185,13 @@ func _apply_battle_environment(environment_id: StringName) -> void:
 func _refresh_battle_background_lighting() -> void:
 	background_lighting_elapsed = 0.0
 	var color := Color.WHITE
+	var night_amount := 0.0
 	if active_background_uses_world_lighting:
-		color = BATTLE_DAY_NIGHT.color_for_seconds(WorldTimeService.get_seconds_since_midnight())
+		var seconds := WorldTimeService.get_seconds_since_midnight()
+		color = BATTLE_DAY_NIGHT.color_for_seconds(seconds)
+		night_amount = BATTLE_DAY_NIGHT.night_intensity_for_seconds(seconds)
+	if battle_background.material is ShaderMaterial:
+		battle_background.material.set_shader_parameter("night_amount", night_amount)
 	# Weather owns modulate; self_modulate composes with it without dimming HUD/sprites.
 	battle_background.self_modulate = color
 	battle_background_video.self_modulate = color
