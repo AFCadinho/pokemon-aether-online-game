@@ -3,7 +3,7 @@ extends Node3D
 const COLORS := {
 	"grassyterrain": Color("80d46e"), "electricterrain": Color("ffe785"),
 	"mistyterrain": Color("efb6e8"), "psychicterrain": Color("ce88ed"),
-	"trickroom": Color("ad95ed"),
+	"trickroom": Color("d8ccff"),
 }
 const FLOOR_SHADER := """
 shader_type spatial;
@@ -51,12 +51,15 @@ uniform float opacity = 0.0;
 uniform vec2 cells = vec2(8.0, 4.0);
 void fragment() {
 	vec2 grid = abs(fract(UV * cells - 0.5) - 0.5) / max(fwidth(UV * cells), vec2(0.0001));
-	float lines = 1.0 - clamp(min(grid.x, grid.y), 0.0, 1.0);
+	float distance_to_line = min(grid.x, grid.y);
+	float lines = 1.0 - smoothstep(0.6, 1.6, distance_to_line);
+	float outline = 1.0 - smoothstep(1.6, 2.8, distance_to_line);
 	vec2 border = min(UV, vec2(1.0) - UV);
-	float frame = 1.0 - smoothstep(0.003, 0.009, min(border.x, border.y));
-	float pulse = 0.85 + 0.15 * sin(clock * 0.8 + UV.x * 5.0 + UV.y * 3.0);
-	ALBEDO = tint.rgb;
-	ALPHA = (0.012 + lines * 0.13 + frame * 0.2) * pulse * opacity;
+	float frame = 1.0 - smoothstep(0.002, 0.007, min(border.x, border.y));
+	float pulse = 0.92 + 0.08 * sin(clock * 0.8 + UV.x * 5.0 + UV.y * 3.0);
+	// Pale cores and dark outlines stay legible against the stadium's purple lights.
+	ALBEDO = mix(vec3(0.09, 0.045, 0.18), tint.rgb, max(lines, frame));
+	ALPHA = (0.012 + outline * 0.14 + lines * 0.27 + frame * 0.38) * pulse * opacity;
 }
 """
 var key := ""

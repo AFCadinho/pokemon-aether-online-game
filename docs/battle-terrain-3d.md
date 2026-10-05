@@ -14,7 +14,7 @@ Implemented and awaiting player review:
 - [ ] Electric Terrain — warm ground glow and brief low lightning arcs.
 - [ ] Misty Terrain — pale pink ground haze and gently drifting mist patches.
 - [ ] Psychic Terrain — violet ground ripples and small rising rings.
-- [ ] Trick Room — a translucent violet grid enclosing the battlefield.
+- [ ] Trick Room — translucent walls with brighter lilac grid lines, dark outlines and stronger borders for visibility in the PvP stadium; awaiting re-review.
 
 ## Offline review
 
@@ -29,6 +29,8 @@ ends only the terrain. **Terraineffecten** toggles terrain and Trick Room togeth
 matching the existing setting. **Pauze** stops their replay clocks, including shader
 motion. Rotate the camera and use **Load preview** to switch arena or 2.5D/3D mode.
 The preview does not create a server battle or change gameplay state or saved settings.
+
+Use `-- --trick-room` to start directly with Trick Room active and no terrain.
 
 Append `--smoke-terrain` to exercise all four terrains, Trick Room and weather
 combinations, then exit. Set `POKEAETHER_STAGE_OUTPUT` to capture the five effects
