@@ -455,7 +455,7 @@ func _build_move_controls() -> void:
 	var row := HBoxContainer.new()
 	toolbar.add_child(row)
 	move_outcome = OptionButton.new()
-	for result in ["Raak", "Mis", "Geblokkeerd / immuun"]: move_outcome.add_item(result)
+	for result in ["Raak", "Ontwijken (miss)", "Geblokkeerd / immuun"]: move_outcome.add_item(result)
 	row.add_child(move_outcome)
 	move_reverse = CheckButton.new()
 	move_reverse.text = "Rechts valt aan"
@@ -484,13 +484,19 @@ func _preview_move() -> void:
 	var outcome := move_outcome.selected
 	battle.current_action_panel.set_message(move + " — " + move_outcome.get_item_text(outcome))
 	await router.play_attack_tween_for_actor(actor,move)
-	await router.play_move_animation(move,actor,target,{"stop_at_impact":outcome == 0,"show_impact":outcome == 0,"result":"miss" if outcome == 1 else ""})
+	await router.play_move_animation(move,actor,target,{"stop_at_impact":outcome == 0,"show_impact":outcome == 0,"result":"miss" if outcome == 1 else "","on_dodge_started":_preview_dodge_command.bind(target)})
 	if generation == router.render_generation:
 		if outcome == 0: await router.play_damage_tween_for_target(target)
 		elif outcome == 2: await router.play_effect_animation("protect_block",target)
 		await router.finish_3d_impact_damage()
 	move_busy = false
 	status.text = "Klaar — " + move + ". Kies de volgende move of draai de camera."
+
+func _preview_dodge_command(target: String) -> void:
+	var species := left_species if target == "p1" else right_species
+	var text: String = root.get_node("LocalizationManager").text("battle.command.dodge", {"pokemon": species})
+	battle._show_trainer_command_text(target, text, battle.DODGE_COMMAND_DISPLAY_SECONDS)
+	await create_timer(0.32).timeout
 
 func _check_moves() -> void:
 	var renderer = battle.animation_router.model_presenter
