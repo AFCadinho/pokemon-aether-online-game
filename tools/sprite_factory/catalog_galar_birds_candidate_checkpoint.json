@@ -2,7 +2,7 @@
   "schema": 1,
   "task": "galar-birds-candidates",
   "date": "2026-10-05",
-  "status": "appearance_review_pending",
+  "status": "appearance_approved_battle_pending",
   "source_intake": {
     "path": "tools/sprite_factory/catalog_galar_birds_source_intake.json",
     "sha256": "f773b8df48007c4496995ef2902ce6b91065378d252ed9d9502e91b534910b3c",
@@ -271,7 +271,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.25,
-          "visual_approved": false
+          "visual_approved": true
         },
         {
           "material": "fire_a_01",
@@ -279,7 +279,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.200000002980232,
-          "visual_approved": false
+          "visual_approved": true
         },
         {
           "material": "fire_b",
@@ -287,7 +287,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.180000007152557,
-          "visual_approved": false
+          "visual_approved": true
         }
       ]
     },
@@ -341,7 +341,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.25,
-          "visual_approved": false
+          "visual_approved": true
         },
         {
           "material": "fire_a_01",
@@ -349,7 +349,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.200000002980232,
-          "visual_approved": false
+          "visual_approved": true
         },
         {
           "material": "fire_b",
@@ -357,7 +357,7 @@
           "mode": "native_skeletal_fire_without_auxiliary_normal_displacement",
           "reason": "Height-zero diagnostic retains connected flames; double-sided rendering does not",
           "source_height": 0.180000007152557,
-          "visual_approved": false
+          "visual_approved": true
         }
       ]
     }
@@ -427,21 +427,28 @@
     "transition_failures": []
   },
   "approvals": {
-    "appearance": false,
+    "appearance": true,
     "battle": false,
     "performance": false,
     "runtime": false,
     "bundles": false
   },
   "remaining": [
-    "User appearance review of the six candidates, including Moltres authored surface proposal",
-    "Battle scale, floor clearance and both cameras",
-    "Investigate Godot null-material diagnostics from conversion/transition runs before runtime admission",
-    "Performance, runtime form resolution/preloading, bundles and separately authorized upload"
+    "User battle review of size, hover height and poses",
+    "Performance and runtime form resolution/preloading",
+    "Bundles and separately authorized upload"
   ],
   "limitations": [
     "Biochao export v1 rejected because motion clocks differed from SCVI material clocks; current geometry and skeletal clips use native SCVI import",
     "Moltres auxiliary normal displacement disabled after tearing diagnostic; native skeleton and source UV colour motion retained. This is a visual proposal, not full source-effect equivalence",
     "No approved catalog, gameplay code or R2 objects changed"
-  ]
+  ],
+  "appearance_review": {
+    "user_reply": "ik keur ze goed",
+    "date": "2026-10-05",
+    "manifest_sha256": "1ec2a4044f07f1a559cab5bdb994af664771290debdb13e3ceda5c994a666a62",
+    "scope": "all three normal/shiny pairs and Moltres authored fire surfaces; battle size not yet approved"
+  },
+  "battle_checkpoint": "tools/sprite_factory/catalog_galar_birds_battle_checkpoint.json",
+  "material_diagnostics": "Resolved in offline graph cleanup and transition harness; see battle checkpoint control/fix evidence"
 }

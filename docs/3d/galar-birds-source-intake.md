@@ -191,3 +191,56 @@ must be resolved before runtime admission; they are not counted as a clean
 runtime qualification. Battle scale/floor clearance, user appearance and
 battle approval, performance, form resolution/preloading and bundles remain
 separate next steps. No R2 upload or release was performed.
+
+## Appearance accepted; battle placement follow-up
+
+The user approved all three normal/shiny pairs with **“ik keur ze goed”**.
+The candidate checkpoint records that approval against the exact appearance
+manifest and six original SCN hashes, including Moltres' authored fire proposal.
+Battle size, performance and runtime admission remain separate approvals.
+
+Task `galar-birds-battle-review` measures the same approved scenes at 60 Hz,
+bakes floor correction, and independently samples at 120 Hz. The source idle,
+attacks and sleep clips are unchanged. `catalog_galar_birds_calibrate.py`
+produces a review-only proposal: original scale for Articuno/Zapdos, 0.9 scale
+for Moltres, and 0.45 m extra flight height for Articuno/Moltres. Runtime
+`model_placement.hover_target()` removes that flight height during sleep and
+faint-loop and descends during faint-start. Source floor correction is separate
+from this extra flight height. Moltres at full scale touched the classic HUD
+proxy during physical attack 2; both normal/shiny variants are rechecked at
+the smaller scale. No gameplay catalog is modified by this task.
+
+The extra flight offset is exercised by
+`catalog_galar_birds_battle_review.gd`, inheriting the standard measurements,
+cameras, placement validation and independent floor sampling. Baseline and
+follow-up evidence is retained in `.tmp/galar-birds-battle-v1/`. The battle
+checkpoint records exact inputs, per-cohort checks and review hashes.
+
+### Material diagnostic resolution
+
+A controlled conversion of the same Articuno input reproduced the null-material
+messages at `verified.free()`. Flushing pending rendering work before destroying
+the temporary graphs removed them. The offline converter now performs that
+flush before releasing both its source and verification graphs. All six
+candidates convert successfully with no Godot ERROR/SCRIPT ERROR messages;
+exact node transforms, mesh arrays, skins, bones and animation keys match the
+original scenes. Resource IDs make serialized hashes differ between fresh
+conversions, so the previously approved original SCNs remain the review inputs.
+The conversion test does not replace those assets or grant new visual approval.
+
+The transition harness separately hid each actor, drew a frame, then freed it.
+That removes the same dependency-lifetime diagnostic there; retaining scene
+references alone did not. All 384 clip switches and 12 idle/sleep blends pass
+with the corrected harness and unchanged model hashes. Earlier diagnostic logs
+remain preserved as evidence; their historical failure is not erased.
+
+Final battle evidence: 168 shots (seven poses × two cameras × two sides × six
+variants), with no off-screen bounds or HUD-proxy intersections. Independent
+120 Hz sampling covers 11,620 poses with positive floor clearance; the smallest
+margin is approximately 2.44 mm for Zapdos. Normal/shiny measured geometry and
+clearance match within each pair. Articuno/Zapdos checks from the first pass
+are reused only after verifying their placement profiles, hover heights,
+runtime/catalog hashes and framing inputs are unchanged. Moltres uses its new
+0.9-scale pass. The shared page at `http://127.0.0.1:8802/` pins 337 files.
+Browser control is unavailable, so the review link was sent for manual opening.
+The single-model headless conversion also passes without material errors.

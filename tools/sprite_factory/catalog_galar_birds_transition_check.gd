@@ -79,6 +79,11 @@ func _run() -> void:
 				failures.append(entry.species + ": blended " + str(pair))
 		checked.append({"species": entry.species, "runtime_sha256": entry.runtime_sha256,
 			"switches": switches, "flight_sleep_blends": 2})
+		# Flush visibility before releasing animated material passes. Otherwise
+		# Compatibility may still process their queued render dependencies.
+		actor.visible = false
+		await process_frame
+		RenderingServer.force_draw(false)
 		actor.queue_free()
 		await process_frame
 	var file := FileAccess.open(output, FileAccess.WRITE)
