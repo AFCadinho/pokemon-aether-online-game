@@ -18,7 +18,7 @@ same catalog as 2D, before native selection. No per-move authoring is required.
 | `stat_down` | Pink falling chevrons and contracting rings | 0.65 |
 | `health_up` | Rising green crosses and rings | 0.85 |
 | `wish_fulfilled` | Falling gold stars | 0.70 |
-| `use_item` | Blue-white particles rising from the feet | 0.85 |
+| `use_item` | Golden light bands and particles sweeping up and down | 0.85 |
 | `eat_berry` | A native berry in front of the body, bite and crumbs | 0.75 |
 | `shiny_sparkle` | Gold radial sparkles | 0.70 |
 | `protect_block` | Translucent blue shell and shield rings | 0.65 |
@@ -52,8 +52,7 @@ generic attack sound.
 The router prepares optional common sounds, then starts native visuals and sound
 from one effect clock. Each distinct source sample is cued once, retaining its
 file, volume and pitch. Cue offsets are scaled to the short native duration;
-repeated sheet cues do not restart a sample. `UseItem.ogg` starts with the rising
-particles; the existing berry `PRSFX- Bite.wav` plays at the visible bite (32%).
+repeated sheet cues do not restart a sample. `UseItem.ogg` starts with the golden vertical sweep; the existing berry `PRSFX- Bite.wav` plays at the visible bite (32%).
 The second generic Mega sound is aligned with the 55% reveal beat. A sound's natural tail may finish
 after the effect without holding the next battle event. Tail players remain
 owned by the router and cancellable until they finish. Missing audio never
@@ -132,7 +131,7 @@ unavailable during this task.
 Additional focused evidence: `battle_3d_status_lifecycle_check.tscn` exercises
 persistent status ownership/cure/pause, 2D suppression/restoration, co-op outlines,
 all four Substitute slots, native hits/reveal/cleanup, normal/shiny Mega staging,
-reveal cancellation, rising item motion and the exact item/berry audio resources.
+reveal cancellation, up-and-down item motion and the exact item/berry audio resources.
 Rendered Hippowdon's poison/toxic/burn, Pikachu's status/item/berry/Z-Power/Substitute
 and shiny Garchomp-Mega-Z. The actual reviewed shiny Garchomp → Mega-Z preparation
 and reveal ran through the pinned on-demand service and real presenter without
@@ -145,3 +144,19 @@ cure. Existing Substitute contracts, specialized Mega, move routing and impact/
 faint pacing checks passed. Co-op gameplay assertions passed in the compatibility
 renderer (exit 0), with a five-resource teardown warning still present in that
 fixture; native status lifecycle and real-model probes exit cleanly.
+
+## Visual approval checklist
+
+Only explicit player approval completes an entry.
+
+- [x] Z-Moves / Z-Power
+- [ ] Item activation — golden bands and particles sweeping up and down; awaiting visual review
+- [ ] Berry eating
+- [ ] Poison
+- [ ] Toxic
+- [ ] Burn
+- [ ] Paralysis
+- [ ] Freeze
+- [ ] Sleep
+- [ ] Substitute
+- [ ] Mega evolution

@@ -172,8 +172,12 @@ func _audio() -> void:
 	item.set_process(false)
 	item._process(item.duration*0.2)
 	var first_y: float = item.particles[0].position.y
-	item._process(item.duration*0.4)
-	assert(item.particles[0].position.y > first_y, "Item particles rise from the feet")
+	item._process(item.duration*0.3)
+	var peak_y: float = item.particles[0].position.y
+	var peak_ring_y: float = item.rings[0].position.y
+	assert(peak_y > first_y, "Item particles rise from the feet")
+	item._process(item.duration*0.35)
+	assert(item.particles[0].position.y < peak_y and item.rings[0].position.y < peak_ring_y, "Item band and particles return downward")
 	item.cancel()
 	for key in ["use_item","eat_berry"]:
 		var plan: Dictionary = Common.audio_plan(router.audio_catalog.get_plan("effect",key),key)
