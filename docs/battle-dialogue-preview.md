@@ -44,4 +44,4 @@ model downloader and the assigned slot's own asset cache. Settings remain in mem
 
 Append `--smoke-freeze` to test freezing/thawing both sides and exit. With a display,
 `POKEAETHER_STAGE_OUTPUT` also writes `freeze-preview.png` before thawing.
-Freeze remains unapproved in the review checklist until the player reviews it.
+Freeze is approved with tint-only idle and a short ice burst/sound on blocked actions.
