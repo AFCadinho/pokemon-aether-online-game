@@ -101,3 +101,39 @@ one NPC appearance and one area. Moving frames, interpolation, all cosmetic
 combinations, transformed layers and other tree families still need relevant
 checks when a production implementation is made. No runtime fix, promotion,
 push or deployment was performed during this investigation.
+
+## Implemented correction
+
+The follow-up implementation adds `scripts/world/tree_lower_depth_sorting.gd`
+to world normalization after each crown layer's final depth groups are built.
+It explicitly supports the investigated evergreen family using eight RGBA
+artwork hashes. It does not instantiate a reference map or depend on map GIDs
+at runtime. Tile identification and image caches last only for the current
+construction pass.
+
+Only complete, unflipped trees with an aligned, unambiguous bottom layer and
+one shared crown depth group are moved. Lower layers retain the original
+layer settings and shared tile/animation resources and draw before the crown
+groups at equal depth. Existing actor depth, crown boundaries, grass cells
+and collision rules are unchanged.
+
+The production helper and initial/repeated normalization were checked on the
+same 26 maps. They move 20,672 cells from 5,168 supported trees, preserving
+all visual cells. Compared with the scratch prototype, one tree at `(22, 57)`
+on Route 2 is deliberately excluded: its crown is duplicated in `Objects`,
+so ownership is ambiguous. Viridian City still corrects all 329 recognized
+trees. Viridian Forest and Cerulean City's other artwork remains unchanged.
+
+The seven focused checks pass, including the new `tree_lower_depth_check`.
+It covers mixed grass, layer settings, translated/scaled maps, repeat calls,
+incomplete/unknown/flipped patterns, duplicate crowns/bottoms, custom layers
+and six actual map assets. The production render comparisons reproduce the
+448-pair investigation matrix. A further 288 pairs cover local and remote
+Rayquaza, shiny Rayquaza and Shadow Lugia using all four walk frames and
+facings, hover phases, and a midpoint between walkable tiles. Ground depth
+stays fixed to the actor's world position throughout those cases.
+
+The measured extra construction time was approximately 21 ms for Viridian
+City and at most 28 ms across these map checks on this workstation; this work
+runs at map construction, not each frame. These focused checks are not a full
+release certificate. Unknown tree families remain outside this correction.

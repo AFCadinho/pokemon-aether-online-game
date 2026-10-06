@@ -15,6 +15,7 @@ const TrainerBattleMusicResolverScript := preload("res://scripts/world/npcs/trai
 const TallGrassDepthSortingScript := preload("res://scripts/world/tall_grass_depth_sorting.gd")
 const AetherClashJailDepthScript := preload("res://scripts/world/aether_clash_jail_depth.gd")
 const MapDepthSortingScript := preload("res://scripts/world/map_depth_sorting.gd")
+const TreeLowerDepthSortingScript := preload("res://scripts/world/tree_lower_depth_sorting.gd")
 const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const WildEncounterProvider := preload("res://scripts/world/map_encounter_provider.gd")
 const POSITION_AUTOSAVE_INTERVAL_SECONDS := 12.0
@@ -2690,6 +2691,7 @@ func _build_structure_top_visual_depth_groups(map: Node) -> void:
 
 		structure_layer.visible = false
 		structure_layer.set_meta(STRUCTURE_TOP_DEPTH_GROUPS_BUILT_META, true)
+		TreeLowerDepthSortingScript.build_depth_layers(structure_layer, group_root)
 
 func _collect_structure_top_visual_layers_recursive(node: Node, structure_layers: Array[TileMapLayer]) -> void:
 	var tile_map_layer := node as TileMapLayer
