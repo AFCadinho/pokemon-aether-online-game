@@ -63,11 +63,11 @@
     "usedTiles": 222.0
   },
   "lobby": {
-    "baseRGBABytes": 5953536.0,
-    "cells": 8570.0,
-    "fingerprint": "a3d325298a121d50a0f2993b17812c71f0fe7929a8657b5afdbe991ebb59acd9",
+    "baseRGBABytes": 7133184.0,
+    "cells": 8586.0,
+    "fingerprint": "49e7437c7b41958000752759a6a35f99030619cc823a32f4ab8198aeffd37ad2",
     "layers": 6.0,
-    "usedTiles": 333.0
+    "usedTiles": 341.0
   },
   "mt_moon_1f": {
     "baseRGBABytes": 3612672.0,

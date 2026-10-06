@@ -12,15 +12,24 @@ func _run() -> void:
 	intake = JSON.parse_string(FileAccess.get_file_as_string(INTAKE))
 	var path := _path("lobby")
 	var visual := _load(path)
-	if visual.has_node("FountainWater"):
-		var existing: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FOUNTAIN_REPORT))
-		assert(_check_visual(visual, path, existing.before, existing.preserved_animations))
-		visual.free()
-		print("LOBBY_FOUNTAIN already imported; no changes")
-		quit()
-		return
 	var before := Fingerprint.new().capture(visual)
 	var prior := _animation_signatures(visual)
+	if visual.has_node("FountainWater"):
+		var existing: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FOUNTAIN_REPORT))
+		if JSON.stringify(existing.catalog, "", true) == JSON.stringify(intake.catalog, "", true):
+			assert(_check_visual(visual, path, existing.before, existing.preserved_animations))
+			visual.free()
+			print("LOBBY_FOUNTAIN already imported; no changes")
+			quit()
+			return
+		# Replace only the previous fountain overlay; retain the original static
+		# reference and all pre-fountain animation timelines across revisions.
+		before = existing.before
+		prior = existing.preserved_animations
+		var old_water := visual.get_node("FountainWater")
+		old_water.owner = null
+		visual.remove_child(old_water)
+		old_water.free()
 	scratch = "user://lobby_fountain_%d" % OS.get_process_id()
 	var library_path := scratch.path_join("library/library.visual.tscn")
 	var result := VisualImporter.new().import_tmx(ProjectSettings.globalize_path("res://tools/lobby_fountain_assets/FountainWater.tmx"), library_path)
@@ -81,7 +90,7 @@ func _run() -> void:
 func _check_visual(visual: Node, path: String, before: Dictionary, prior: Dictionary) -> bool:
 	var errors := Validator.new().validate(visual, path.trim_suffix(".tscn") + ".tileset.tres")
 	var water := visual.get_node("FountainWater") as TileMapLayer
-	assert(water.z_index == 2 and water.get_used_cells().size() == intake.cells.size(), "Fountain layer/placement differs")
+	assert(water.z_index == int(intake.z_index) and water.get_used_cells().size() == intake.cells.size(), "Fountain layer/placement differs")
 	for cell: Dictionary in intake.cells:
 		var pos := Vector2i(int(cell.x), int(cell.y))
 		var source := water.tile_set.get_source(water.get_cell_source_id(pos)) as TileSetAtlasSource
