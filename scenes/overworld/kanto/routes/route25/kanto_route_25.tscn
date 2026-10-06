@@ -520,7 +520,7 @@ item_id = "oran-berry"
 [node name="CheriBerry" parent="Entities/Interactables/Items" unique_id=1476144820 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(880, 1232)
 pickup_id = "kanto_route_25_bluk_berry"
-item_id = "cheri-berry"
+item_id = "super-repel"
 
 [node name="Ether" parent="Entities/Interactables/Items" unique_id=1844119967 instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(1776, 784)

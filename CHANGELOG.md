@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace eight duplicate or modest overworld rewards with three Repels, three Super Repels and two Max Repels, keeping pickup locations and collected-item history intact. Register the three existing Route 14 pickups so they can be claimed.
+
 - Put recently popular cosmetics and mounts at the top of their default Gift Store lists.
 
 - Add the Thor Outfit Box to the Aether Gift Store for 550 Gems for both models, including armor, trousers, boots, and the hammer with its moving cape and electric effects.
