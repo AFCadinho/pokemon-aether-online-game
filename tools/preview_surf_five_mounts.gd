@@ -11,8 +11,11 @@ func _init() -> void:
 
 func _run() -> void:
 	var output := "user://surf_five_previews"
+	var mount_ids: Array[String] = ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]
 	var adinho_outfit := "--adinho" in OS.get_cmdline_user_args()
 	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--mount="):
+			mount_ids = [arg.trim_prefix("--mount=")]
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
 	DirAccess.make_dir_recursive_absolute(output)
@@ -82,7 +85,7 @@ func _run() -> void:
 			if adinho_outfit and gender == "male":
 				appearance.merge({"headgear": "", "hair": "Adinho_Hair", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}, true)
 			previews.append({"actor": actor, "label": label, "appearance": appearance, "gender": gender, "direction": DIRS[row], "position": position})
-	for base_id: String in ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]:
+	for base_id: String in mount_ids:
 		var id := base_id + ("_shiny" if "--shiny" in OS.get_cmdline_user_args() else "")
 		for activity: String in ["ride", "surf-fish"]:
 			for item: Dictionary in previews:
@@ -117,5 +120,5 @@ func _run() -> void:
 						push_error("Cannot save mount preview")
 						quit(1)
 						return
-	print("Five Surf mount runtime previews saved to ", output)
+	print("Surf mount runtime previews saved to ", output)
 	quit()

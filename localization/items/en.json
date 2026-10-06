@@ -1,4 +1,5 @@
 {
+  "gyarados-mount": {"name": "Gyarados Mount", "shortDesc": "Unlocks Gyarados as a Surf mount."},
   "repel": {"name": "Repel", "shortDesc": "Adds 100 steps to your Repel charge (maximum 10,000)."},
   "super-repel": {"name": "Super Repel", "shortDesc": "Adds 200 steps to your Repel charge (maximum 10,000)."},
   "max-repel": {"name": "Max Repel", "shortDesc": "Adds 250 steps to your Repel charge (maximum 10,000)."},
