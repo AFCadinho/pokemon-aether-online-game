@@ -6,6 +6,8 @@ dense foam, rising droplets and expanding ripples. The 24 frames last 80 ms each
 (1.92 s); highlights travel downward at two source pixels per frame. Sixteen
 overlay tiles are placed twice, immediately above the statue's ObjectsTop render
 plane (`pao_z_index = 2052`) so the water is visible at its actual outlet.
+Every segment of the sampled parabolas is rasterized before shading; their
+opaque bodies remain continuous while the highlight pixels flow downward.
 
 The artist source is
 `/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/aether_clash/Lobby.tmx`.
@@ -28,7 +30,9 @@ Verification:
   the rendered water layer repeats after one complete cycle. Tiled's rasterizer
   retains the previous frame at the exact boundary, so the loop sample is 1921 ms.
 - Two source-generator reruns reproduce byte-identical TMX/TSX/PNG/GIF files.
-- `lobby_fountain_animation_check.gd` checks 768 native frame samples, timing,
+- `lobby_fountain_animation_check.gd` checks a continuous three-pixel stream
+  core along all three jets on both fountains in every frame, including tile
+  boundaries. It also checks 768 native frame samples, timing,
   placement, mouth origin, downward motion on both fountains and exact original artwork/
   geometry/TileData after excluding only the new overlay.
 - `migrated_visuals_check.gd`, `map_animation_rollout_check.gd`,
