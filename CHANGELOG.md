@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the Gift Store payment method and its compact Tradable/Untradable label visible beside checkout, and shorten currency information.
+
 - Drag the Aether Gift Store by its header while keeping the window inside the screen and its header buttons clickable.
 
 - Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
