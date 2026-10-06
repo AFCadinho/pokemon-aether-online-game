@@ -738,7 +738,7 @@ func _render_mount_tracker() -> void:
 	var active_box_found := false
 	if active_id not in ["", "<null>"]:
 		for box: Variant in boxes:
-			if box is Dictionary and str(box.get("itemId", "")) == active_id:
+			if box is Dictionary and str(box.get("itemId", "")).trim_suffix("-bound") == active_id:
 				mount_box_list.add_child(_build_mount_box_card(box))
 				active_box_found = true
 				break

@@ -36,6 +36,13 @@ func _run() -> void:
 		_check(overlay.messages[-1].contains("Glaceon") and overlay.messages[-1].contains("50%"), "Chat reports server reward and used chance")
 		_check(popup.tracker_state["mounts"]["activeBoxItemId"] == "glaceon-mount-box" and popup.mount_open_buttons.size() == 1, "Existing signal updates last opened box in tracker")
 
+	box["id"] = "glaceon-mount-box-bound"
+	inventory_service.response["mountBox"]["opening"]["rewardItemId"] = "glaceon-mount-bound"
+	await overlay._on_bag_item_selected(box)
+	_check(inventory_service.used_items[-1] == "glaceon-mount-box-bound" and overlay.tracker_opens == 0, "Bag opens voucher box directly using its bound ID")
+	_check(overlay.messages[-1].contains("Glaceon"), "Bound rewards keep their localized mount name")
+	var service_source := FileAccess.get_file_as_string("res://scripts/services/inventory_service.gd")
+	_check(service_source.contains('normalized_item_id.trim_suffix("-bound").ends_with("-mount-box")'), "Voucher box requests retain mount opening idempotency keys")
 	inventory_service.response["mountBox"]["opening"]["alreadyOwned"] = true
 	await overlay._on_bag_item_selected(box)
 	_check(overlay.messages[-1].contains("duplicate"), "Duplicate reward is disclosed in chat")

@@ -25001,7 +25001,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		var mount_box := open_result.get("mountBox", {}) as Dictionary
 		var opening := mount_box.get("opening", {}) as Dictionary
 		var message := LocalizationManager.text("ui.shiny_tracker.mounts.result", {
-			"mount": ItemLocalization.display_name(str(opening.get("rewardItemId", "")), str(opening.get("mountId", ""))),
+			"mount": ItemLocalization.display_name(_canonical_display_item_id(str(opening.get("rewardItemId", ""))), str(opening.get("mountId", ""))),
 			"chance": int(opening.get("shinyChancePercent", 50)),
 		})
 		if bool(opening.get("alreadyOwned", false)):
