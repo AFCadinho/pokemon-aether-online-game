@@ -1,5 +1,11 @@
 # Lossless model rollout validation
 
+Follow-up: [renderer lifetime/reference validation](lossless-material-reference-validation.md)
+corrects the Archen interpretation: immediate fixture teardown triggered the
+error; a full 2,400-scene lifecycle now passes without model changes. The
+historical reports below remain failed and unchanged. Warm image repeatability
+remains a separate hold.
+
 Local task `lossless-model-rollout-validation`, slot-a, 2026-10-06. This follows
 the [complete catalog preparation](lossless-model-catalog-preparation.md).
 No published pins, approved model hashes, R2 objects or player installations

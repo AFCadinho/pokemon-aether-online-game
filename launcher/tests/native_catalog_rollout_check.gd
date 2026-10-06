@@ -3,6 +3,17 @@ const Release = preload("res://scripts/release_asset_bundles.gd")
 const Demand = preload("res://scripts/services/on_demand_3d_bundle_service.gd")
 var report := {"complete": false, "production_approved": false, "prototype_only": true}
 var output: String
+
+func release_actor(actor: Node3D) -> void:
+	# Let RenderingServer observe scene/material creation and teardown in the
+	# same order as the client. Immediate detached free races override RIDs.
+	root.add_child(actor)
+	await process_frame
+	await RenderingServer.frame_post_draw
+	actor.queue_free()
+	await process_frame
+	await process_frame
+
 class ErrorSink extends Logger:
 	var tree: SceneTree
 	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, _kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
@@ -32,6 +43,34 @@ func _run() -> void:
 	sink.tree = self
 	OS.add_logger(sink)
 	output = OS.get_environment("NATIVE_ROLLOUT_OUTPUT")
+	var lifetime_catalog := OS.get_environment("NATIVE_ROLLOUT_LIFETIME_CATALOG")
+	if not lifetime_catalog.is_empty():
+		var rows: Array = JSON.parse_string(FileAccess.get_file_as_string(lifetime_catalog))
+		assert(rows.size() == int(OS.get_environment("NATIVE_ROLLOUT_EXPECTED_SCENES")))
+		var loaded := 0
+		for row: Dictionary in rows:
+			assert(FileAccess.get_sha256(row.runtime_path) == row.runtime_sha256)
+			assert(ResourceLoader.get_dependencies(row.runtime_path).is_empty())
+			var packed: PackedScene = ResourceLoader.load(row.runtime_path,"PackedScene",ResourceLoader.CACHE_MODE_IGNORE_DEEP)
+			assert(packed != null)
+			var reference: WeakRef = weakref(packed)
+			var actor := packed.instantiate() as Node3D
+			assert(actor != null)
+			await release_actor(actor)
+			packed = null
+			await process_frame
+			assert(reference.get_ref() == null, "Scene retained after actor cleanup")
+			loaded += 1
+			if loaded % 100 == 0: print("NATIVE_CATALOG_LIFETIME_OK ", loaded, "/", rows.size())
+		report["phase"] = "native_load_instantiate_render_release"
+		report["native_scenes_loaded"] = loaded
+		report["scene_references_released"] = true
+		report["renderer"] = RenderingServer.get_current_rendering_method()
+		report["godot"] = Engine.get_version_info().string
+		report.complete = true
+		save()
+		quit()
+		return
 	var load_catalog := OS.get_environment("NATIVE_ROLLOUT_LOAD_ONLY_CATALOG")
 	if not load_catalog.is_empty():
 		# A distinct deserialization check. This does not certify instantiation
@@ -157,7 +196,7 @@ func _run() -> void:
 		assert(packed != null)
 		var node := packed.instantiate() as Node3D
 		assert(node != null)
-		node.free()
+		await release_actor(node)
 		packed = null
 		loaded += 1
 		await process_frame
