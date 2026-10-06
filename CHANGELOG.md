@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.
+
 - Give 3D Heat Wave broad, shimmering waves of hot air with sparse embers, and expand Tera Starstorm into a four-second constellation, central star strike and prismatic field burst with retimed audio.
 
 - Expand nine more 3D moves across the battlefield, including sweeping heat and snow, wind funnels, ground eruptions, a caster-centered explosion, falling coins and prismatic stars.
