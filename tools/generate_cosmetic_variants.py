@@ -37,12 +37,19 @@ def build_catalog(items_dir: Path) -> dict:
             tint = unlock.get("tint")
             if tint and (slot not in {"hair", "facial_hair", "facegear", "top", "bottom", "shoes"} or tint != slot + "_color"):
                 raise ValueError(f"{item_id}: invalid tint field for {slot}")
+            battle_rendering = unlock.get("battle_rendering", "authored")
+            if battle_rendering not in {"authored", "fallback"}:
+                raise ValueError(f"{item_id}: invalid battle_rendering policy")
             for gender, sprite_id in variants.items():
                 if not isinstance(sprite_id, str) or not re.fullmatch(r"[A-Za-z0-9_]+", sprite_id):
                     raise ValueError(f"{item_id}: invalid sprite ID")
                 if not (ROOT / f"assets/player/{gender}/{slot}/{sprite_id}.png").is_file():
                     raise ValueError(f"{item_id}: missing {gender} overworld art")
                 art = battle["genders"][gender]["categories"].get(slot, {}).get("parts", {}).get(sprite_id, {})
+                # Overworld-only collections can explicitly retain the game's
+                # normal portrait fallback; missing authored art still fails by default.
+                if battle_rendering == "fallback" and not art:
+                    continue
                 if not art or not (ROOT / art["path"].removeprefix("res://")).is_file():
                     raise ValueError(f"{item_id}: missing {gender} battle art")
             definition = {"render_variants": variants, "item_id": item_id}

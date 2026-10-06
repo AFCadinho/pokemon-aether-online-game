@@ -1,6 +1,6 @@
-# Male adventure outfit collection
+# Adaptive adventure outfit collection
 
-Six male-only outfits from the approved `pokeaether_assets/outfit/overworld/skins/Outfit Designs` collection.
+Six outfits for male and female trainers from the approved `pokeaether_assets/outfit/overworld/skins/Outfit Designs` collection.
 
 | Outfit | Box item ID | Parts |
 | --- | --- | --- |
@@ -13,11 +13,11 @@ Six male-only outfits from the approved `pokeaether_assets/outfit/overworld/skin
 
 Boxes yield separate `-shirt`, `-trousers`, `-shoes` items; Rotom Engineer and Lugia Sky Captain also yield `-goggles`. Grant a box through the existing local admin item-grant flow and open it in the Bag, then activate its items in Character Customization. These are tradeable fixed-colour cosmetics using the same lifecycle as the Tuxedo outfit. No shop pricing or public reward source is assigned.
 
-The backend rejects opening or activating these items on female trainers without consuming them. Ownership and gender are also enforced when saving appearance. Female manifests contain none of these male parts.
+The same box and part item IDs support both genders. Each unlock declares male and female render variants using the same logical appearance ID. The existing gender-change service retains both ownership and equipped clothing; no database migration, second purchase or duplicate female item is needed.
 
 ## Rendering and source mapping
 
-- 60 transparent sheets: 20 parts × walking, fishing and riding, each 256×256 (4×4 frames of 64×64).
+- 120 transparent sheets: 20 parts × 2 models × walking, fishing and riding, each 256×256 (4×4 frames of 64×64).
 - Row order: down, left, right, up. Walking columns: idle, step 1, idle, step 2. Run uses the existing walking fallback; surf and mount resolve to ride.
 - Tops include each outfit's scarf/gloves where present; goggles use the existing facegear slot. No new equipment slots or animation clocks are introduced.
 - The user's selected body, skin tone and hair remain independent. No preview Base or Hair layers are installed.
@@ -32,7 +32,11 @@ This collection supplies overworld clothing. Authored battle trainer layers have
 
 Run via `game/ops/worktrees/slot-env SLOT -- godot --headless --path PATH`:
 
-- `--script res://tests/male_adventure_outfits_check.gd`: male availability, female exclusion, fixed colours, all six movement aliases, exact texture selection/frame sizes, localized icons and 18 composited engine renders in slot-local userdata.
+- `--script res://tests/male_adventure_outfits_check.gd`: male and female availability, fixed colours, all six movement aliases, exact texture selection/frame sizes, localized icons and 36 composited engine renders in slot-local userdata.
 - `--script res://tests/appearance_animation_clock_check.gd`: local and remote body/clothing frame synchronization.
 
-Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, rejected female use without consuming inventory and absence from the Gift Store.
+Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, female box activation and four gender changes per outfit without returning, losing or duplicating items and absence from the Gift Store.
+
+Gender variants are generated from the backend catalog using `tools/generate_cosmetic_variants.py`. These overworld-only items explicitly declare `battle_rendering: fallback`; all other adaptive cosmetics still require authored battle art by default. This preserves the prior portrait behavior without presenting borrowed starter art as a new outfit design.
+
+`tests/adventure_outfit_gender_ui_check.gd` applies the actual trainer-service UI response for all six outfits and both genders, checking retained selection, ownership, source items and localized wardrobe names.
