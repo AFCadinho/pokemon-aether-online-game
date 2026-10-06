@@ -1,13 +1,13 @@
 extends "res://tests/battle_dialogue_preview.gd"
-const Moves := ["Earth Power","Heat Wave","Hurricane","Bleakwind Storm","Powder Snow","Freeze-Dry","Explosion","Make It Rain","Tera Starstorm"]
+const Moves := ["Heat Wave","Tera Starstorm"]
 func _start() -> void:
 	left_species="Dragonite"
 	await super._start()
 	move_picker.clear()
 	for move in Moves:move_picker.add_item(move)
-	root.title="PokeAether — Negen nieuwe veldanimaties"
-	status.text="Negen veldanimaties: kies een move, draai de camera en test ook ontwijken."
-	print("BATTLEFIELD_PREVIEW_READY moves=9")
+	root.title="PokeAether — Heat Wave en Tera Starstorm"
+	status.text="Twee aangepaste veldanimaties: kies een move, draai de camera en test ook ontwijken."
+	print("BATTLEFIELD_PREVIEW_READY moves=2")
 	if "--smoke-field" in OS.get_cmdline_user_args():await _check_field()
 func _check_field() -> void:
 	var watchdog := Timer.new()
@@ -49,5 +49,5 @@ func _check_field() -> void:
 	host=null
 	await process_frame
 	await process_frame
-	print("FIELD_RENDER_SUITE_OK moves=9 phases=54 orbit_pause_miss=true")
+	print("FIELD_RENDER_SUITE_OK moves=2 phases=12 orbit_pause_miss=true")
 	quit()

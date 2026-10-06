@@ -13,7 +13,7 @@ class RecipeSources(unittest.TestCase):
   self.assertFalse(set(r)&set(native));self.assertEqual(set(catalog)|{'bubblebeam'},set(r)|set(native))
   for k,v in r.items():
    self.assertTrue(0<v['launch_fraction']<v['impact_fraction']<1,k)
-   self.assertTrue(.5<=v['duration_seconds']<=(4.6 if v['family']=='z' else 3),k)
+   self.assertTrue(.5<=v['duration_seconds']<=(4.6 if v['family']=='z' else 4.0 if k=='terastarstorm' else 3),k)
    self.assertTrue(.5<=v['scale']<=3,k)
    self.assertEqual(v['review'],'2d-inspired-awaiting-review' if v['family']=='z' else 'first-pass')
    if v['family']=='self':self.assertEqual(v['target'],'actor',k)

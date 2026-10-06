@@ -2601,7 +2601,7 @@
         }
       ],
       "presentation_review": "battlefield-staging-awaiting-visual-review",
-      "battlefield_staging": "heat-front"
+      "battlefield_staging": "red-hot-curling-fire-front"
     },
     "hurricane": {
       "name": "Hurricane",
@@ -2711,9 +2711,9 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 3.0,
-      "launch_fraction": 0.25,
-      "impact_fraction": 0.62,
+      "duration_seconds": 4.0,
+      "launch_fraction": 0.3,
+      "impact_fraction": 0.72,
       "scale": 1.45,
       "attachment": "body",
       "source_id": 906,
@@ -2725,8 +2725,8 @@
           "role": "launch",
           "volume": 85,
           "pitch": 100,
-          "at_fraction": 0.25,
-          "end_fraction": 0.73
+          "at_fraction": 0.3,
+          "end_fraction": 0.78
         },
         {
           "name": "PRSFX- Recover",
@@ -2734,12 +2734,12 @@
           "role": "impact",
           "volume": 80,
           "pitch": 95,
-          "at_fraction": 0.62,
-          "end_fraction": 0.9
+          "at_fraction": 0.72,
+          "end_fraction": 1.0
         }
       ],
       "presentation_review": "battlefield-staging-awaiting-visual-review",
-      "battlefield_staging": "constellation-salvos"
+      "battlefield_staging": "prismatic-constellation-and-burst"
     },
     "babydolleyes": {
       "name": "Baby-Doll Eyes",
