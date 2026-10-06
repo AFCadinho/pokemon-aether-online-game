@@ -76,7 +76,7 @@ size = Vector2(112, 32)
 size = Vector2(32, 192)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_door_exit"]
-size = Vector2(48, 32)
+size = Vector2(32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gary_mugshot"]
 atlas = ExtResource("24_gary_mugshot")
@@ -706,6 +706,7 @@ transition_id = "kanto_cerulean_city__to_bike_store"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToBikeStore" unique_id=706782338]
+position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_door_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToBikeStore" unique_id=22415696 instance=ExtResource("8_door_hint")]
@@ -1083,6 +1084,7 @@ z_index = 912
 position = Vector2(1584, 912)
 destination_id = "kanto_cerulean_city"
 interactable_id = "kanto_cerulean_city_aether_beacon"
+display_name = "Aether Beacon"
 
 [node name="Signs" type="Node2D" parent="Entities/Interactables" unique_id=948633989]
 
