@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Drag the Aether Gift Store by its header while keeping the window inside the screen and its header buttons clickable.
+
 - Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.
 
 - Keep Gift Store payment options compact with consistently sized currency icons, aligned text and clear spacing.
