@@ -609,13 +609,16 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	if not mount_box.is_empty():
 		apply_inventory_state(inventory)
 		mount_box_opened.emit(mount_box)
+	# Non-Repel item responses explicitly contain JSON null. Dictionary.get's
+	# default only handles an absent key, and int(null) aborts this response.
+	var repel_steps: Variant = body.get("repelSteps")
 	return {
 		"success": true,
 		"itemId": str(body.get("itemId", normalized_item_id)),
 		"useAction": str(body.get("useAction", "")),
 		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
 		"creditAmount": maxi(int(body.get("creditAmount", 0)), 0),
-		"repelSteps": int(body.get("repelSteps", 0)),
+		"repelSteps": 0 if repel_steps == null else int(repel_steps),
 		"addedRepelSteps": int(body.get("addedRepelSteps", 0)),
 		"wallet": wallet,
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
