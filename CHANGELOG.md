@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Metagross and Salamence as grantable land mounts with the approved rider poses, layered wings, and existing regional Mount License requirements.
+
 - Add Gift Store filters for Gem affordability and Gift Voucher eligibility/affordability, plus name and price sorting alongside existing category filters and search.
 
 - Start single 3D battles from a three-quarter camera angle; camera reset restores this view while free orbit remains available.

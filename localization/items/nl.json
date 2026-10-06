@@ -530,5 +530,13 @@
   "reshiram-mount-box": {
     "name": "Reshiram-mountbox",
     "shortDesc": "Bevat een Reshiram-mount. Shiny-basiskans: 50%."
+  },
+  "metagross-mount": {
+    "name": "Metagross-mount",
+    "shortDesc": "Ontgrendelt Metagross als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "salamence-mount": {
+    "name": "Salamence-mount",
+    "shortDesc": "Ontgrendelt Salamence als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }

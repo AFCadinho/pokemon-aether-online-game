@@ -530,5 +530,13 @@
   "reshiram-mount-box": {
     "name": "Caixa de montaria Reshiram",
     "shortDesc": "Contém uma montaria Reshiram. Chance shiny inicial: 50%."
+  },
+  "metagross-mount": {
+    "name": "Montaria Metagross",
+    "shortDesc": "Desbloqueia Metagross como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "salamence-mount": {
+    "name": "Montaria Salamence",
+    "shortDesc": "Desbloqueia Salamence como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }
