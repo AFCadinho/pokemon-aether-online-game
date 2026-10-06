@@ -3579,6 +3579,546 @@
           10
         ]
       }
+    },
+    "wailmer": {
+      "displayName": "Wailmer",
+      "movementMode": "surf",
+      "unlockItemId": "wailmer-mount",
+      "iconTexture": "res://assets/mounts/wailmer/icon.png",
+      "spriteSheet": "res://assets/mounts/wailmer/mount.png",
+      "foregroundSheet": "res://assets/mounts/wailmer/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/wailmer/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/wailmer/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -30
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -30
+          ],
+          [
+            0,
+            -28
+          ]
+        ],
+        "left": [
+          [
+            3,
+            -31
+          ],
+          [
+            3,
+            -29
+          ],
+          [
+            3,
+            -31
+          ],
+          [
+            3,
+            -29
+          ]
+        ],
+        "right": [
+          [
+            -3,
+            -31
+          ],
+          [
+            -3,
+            -29
+          ],
+          [
+            -3,
+            -31
+          ],
+          [
+            -3,
+            -29
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -17
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -17
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "drednaw": {
+      "displayName": "Drednaw",
+      "movementMode": "surf",
+      "unlockItemId": "drednaw-mount",
+      "iconTexture": "res://assets/mounts/drednaw/icon.png",
+      "spriteSheet": "res://assets/mounts/drednaw/mount.png",
+      "foregroundSheet": "res://assets/mounts/drednaw/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/drednaw/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/drednaw/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            -1,
+            -30
+          ],
+          [
+            -1,
+            -28
+          ],
+          [
+            -1,
+            -30
+          ],
+          [
+            -1,
+            -28
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -26
+          ],
+          [
+            4,
+            -24
+          ],
+          [
+            4,
+            -26
+          ],
+          [
+            4,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -26
+          ],
+          [
+            -4,
+            -24
+          ],
+          [
+            -4,
+            -26
+          ],
+          [
+            -4,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            -1,
+            -10
+          ],
+          [
+            -1,
+            -8
+          ],
+          [
+            -1,
+            -10
+          ],
+          [
+            -1,
+            -8
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "mantine": {
+      "displayName": "Mantine",
+      "movementMode": "surf",
+      "unlockItemId": "mantine-mount",
+      "iconTexture": "res://assets/mounts/mantine/icon.png",
+      "spriteSheet": "res://assets/mounts/mantine/mount.png",
+      "foregroundSheet": "res://assets/mounts/mantine/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/mantine/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/mantine/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "left": [
+          [
+            -1,
+            -26
+          ],
+          [
+            -1,
+            -24
+          ],
+          [
+            -1,
+            -26
+          ],
+          [
+            -1,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            1,
+            -26
+          ],
+          [
+            1,
+            -24
+          ],
+          [
+            1,
+            -26
+          ],
+          [
+            1,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "basculegion": {
+      "displayName": "Basculegion",
+      "movementMode": "surf",
+      "unlockItemId": "basculegion-mount",
+      "iconTexture": "res://assets/mounts/basculegion/icon.png",
+      "spriteSheet": "res://assets/mounts/basculegion/mount.png",
+      "foregroundSheet": "res://assets/mounts/basculegion/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/basculegion/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/basculegion/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -32
+          ]
+        ],
+        "left": [
+          [
+            5,
+            -28
+          ],
+          [
+            5,
+            -26
+          ],
+          [
+            5,
+            -28
+          ],
+          [
+            5,
+            -28
+          ]
+        ],
+        "right": [
+          [
+            -5,
+            -30
+          ],
+          [
+            -5,
+            -30
+          ],
+          [
+            -5,
+            -30
+          ],
+          [
+            -5,
+            -28
+          ]
+        ],
+        "up": [
+          [
+            -2,
+            -14
+          ],
+          [
+            -2,
+            -12
+          ],
+          [
+            -2,
+            -14
+          ],
+          [
+            -2,
+            -12
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "wailord": {
+      "displayName": "Wailord",
+      "movementMode": "surf",
+      "unlockItemId": "wailord-mount",
+      "iconTexture": "res://assets/mounts/wailord/icon.png",
+      "spriteSheet": "res://assets/mounts/wailord/mount.png",
+      "foregroundSheet": "res://assets/mounts/wailord/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/wailord/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/wailord/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -32
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
     }
   }
 }

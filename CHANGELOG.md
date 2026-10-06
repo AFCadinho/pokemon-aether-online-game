@@ -4,6 +4,8 @@
 
 - Make the Aether Clash fountains pour from the statues' mouth outlets, with a broad waterfall, two arcing jets and fuller impact foam and spray.
 
+- Add Wailmer, Drednaw, Mantine, Basculegion and Wailord as Surf mounts for admin-granted testing, with submerged lower bodies, synchronized foam/wakes and fishing poses.
+
 - Use Kyogre's mouth height for side interactions with NPCs and objects, without moving the rider, mount or collision position.
 
 - Align normal and shiny Kyogre's face with the occupied tile's interaction line, keeping its rider and water effects together.
