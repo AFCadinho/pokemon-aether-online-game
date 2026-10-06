@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Stage 3D Earthquake, Blizzard and Bloom Doom across the battle circle, with travelling ground fractures, sweeping snow and a flowering field that gathers into the final impact.
+
 - Review all 194 native 3D moves for smoother visual flow, individual pacing, blended source effects and clearer cast shapes; keep unsupported moves fast, align late dodges and restore distinct sound cues for twelve casts.
 
 - Rework all 35 3D Z-moves with distinct buildup, larger signature effects and climaxes inspired by their 2D animations, with synchronized sound cues and aerial contact movement.

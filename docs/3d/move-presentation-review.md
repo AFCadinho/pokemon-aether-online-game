@@ -8,6 +8,11 @@ duration is only a priority for moves without an effect.
 
 ## Changes and findings
 
+Follow-up: [battlefield staging](battlefield-move-staging.md) replaces the
+target-local rendering for Earthquake, Blizzard and Bloom Doom. Their current
+durations are 2.8, 3.0 and 3.8 seconds respectively; the register below preserves
+the earlier all-move review snapshot.
+
 - Every supported move now has an explicit normal-speed presentation duration.
   Ordinary attacks/casts are individually assigned 0.95–2.5 seconds, rather than
   sharing a 0.95–1.65-second family default. Dedicated moves have explicit

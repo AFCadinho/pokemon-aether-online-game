@@ -21,6 +21,7 @@ const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
 const FamilyMoveEffect = preload("res://scripts/battle/battle_ui/family_move_effect_3d.gd")
+const BattlefieldMoveEffect = preload("res://scripts/battle/battle_ui/battlefield_move_effect_3d.gd")
 const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
 const LeafMoveEffect = preload("res://scripts/battle/battle_ui/leaf_move_effect_3d.gd")
@@ -1069,6 +1070,16 @@ func _move_bounds(ident: String) -> Dictionary:
 		return {"position": world.to_local(visual.global_position), "height": visual.idle_scale * 1.2, "radius": visual.idle_scale * 0.6}
 	return _effect_bounds(index)
 
+func _move_field() -> Dictionary:
+	# Resting spawn positions, not animated/dodging actors or camera coordinates.
+	var center := Vector3.ZERO
+	for slot in _slot_count(): center += _position(slot)
+	center /= float(_slot_count())
+	var radius := 5.8 # Matches the stadium's painted outer battle circle.
+	for slot in _slot_count(): radius = maxf(radius, _position(slot).distance_to(center)+1.5)
+	center.y += .055
+	return {"center":center,"radius":radius}
+
 func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 	var recipe := MoveRecipes.get_recipe(move)
 	var a := _move_bounds(actor)
@@ -1107,6 +1118,7 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		attachment = MoveAttachments.sample(actors[index], identities[index], MoveEffect.move_key(move), world)
 	var sources: Array = attachment.get("sources", [source])
 	return {"source": sources[0], "sources": sources, "target": end, "radius": b.radius,
+		"field":_move_field(),
 		"attachment_part": attachment.get("part", "bounds"), "attachment_bones": attachment.get("bones", []),
 		"actor_center":a.position+Vector3.UP*a.height*0.55,"actor_radius":a.radius,
 		"actor_ground":Vector3(a.position.x,_position(actor_index(actor)).y+0.04,a.position.z),
@@ -1129,7 +1141,9 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
 	var effect: Node3D
-	if recipe.has("z_choreography"):
+	if MoveEffect.move_key(move) in BattlefieldMoveEffect.FIELD_KEYS:
+		effect = BattlefieldMoveEffect.new()
+	elif recipe.has("z_choreography"):
 		effect = ZMoveEffect.new()
 	elif MoveRecipes.supports(move):
 		effect = FamilyMoveEffect.new()
