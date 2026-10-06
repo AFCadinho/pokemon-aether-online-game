@@ -1,0 +1,100 @@
+name: Qualify lossless desktop model files
+
+on:
+  workflow_dispatch:
+    inputs:
+      fixture_url:
+        description: HTTPS URL of the prepared qualification input ZIP (test assets only).
+        required: true
+        type: string
+      fixture_sha256:
+        description: SHA-256 from the local qualification input receipt.
+        required: true
+        type: string
+  push:
+    branches: ["ci/lossless-models-*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lossless-models-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  inputs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      url: ${{ steps.validate.outputs.url }}
+      sha256: ${{ steps.validate.outputs.sha256 }}
+    steps:
+      - name: Validate explicit fixture selection
+        id: validate
+        env:
+          FIXTURE_URL: ${{ inputs.fixture_url || vars.LOSSLESS_MODELS_FIXTURE_URL }}
+          FIXTURE_SHA256: ${{ inputs.fixture_sha256 || vars.LOSSLESS_MODELS_FIXTURE_SHA256 }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          from urllib.parse import urlsplit
+          url, sha = os.environ['FIXTURE_URL'], os.environ['FIXTURE_SHA256']
+          parsed = urlsplit(url)
+          if parsed.scheme != 'https' or not parsed.hostname or parsed.username or parsed.password or '\n' in url or '\r' in url or not re.fullmatch('[0-9a-f]{64}', sha):
+              raise SystemExit('Set a qualification fixture HTTPS URL and SHA-256 before starting this workflow.')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('url=' + url + '\nsha256=' + sha + '\n')
+          PY
+
+  qualify:
+    needs: inputs
+    name: Native files — ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {target: linux-x64, runner: ubuntu-24.04, platform: Linux, architecture: x86_64}
+          - {target: windows-x64, runner: windows-2022, platform: Windows, architecture: x86_64}
+          - {target: macos-intel, runner: macos-15-intel, platform: Darwin, architecture: x86_64}
+          - {target: macos-arm64, runner: macos-15, platform: Darwin, architecture: arm64}
+    env:
+      FIXTURE_URL: ${{ needs.inputs.outputs.url }}
+      FIXTURE_SHA256: ${{ needs.inputs.outputs.sha256 }}
+      EXPECTED_PLATFORM: ${{ matrix.platform }}
+      EXPECTED_ARCHITECTURE: ${{ matrix.architecture }}
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.13"
+      - name: Fetch verified test assets and pinned official engine
+        shell: bash
+        run: |
+          python launcher/tests/native_qualification_fixture.py download "$FIXTURE_URL" .tmp/native-ci/input.zip
+          python launcher/tests/native_qualification_fixture.py unpack .tmp/native-ci/input.zip "$FIXTURE_SHA256" .tmp/native-ci/fixtures
+          python launcher/tests/install_qualification_godot.py .tmp/native-ci/engine > .tmp/native-ci/engine-path.txt
+      - name: Run native load, update, pause/restart/resume and rollback checks
+        shell: bash
+        run: |
+          export GODOT_BIN="$(tr -d '\r' < .tmp/native-ci/engine-path.txt)"
+          python launcher/tests/run_native_compression_install_check.py \
+            .tmp/native-ci/fixtures/fixture.json .tmp/native-ci/results \
+            --streaming --materialize-sources --expected-platform "$EXPECTED_PLATFORM" --expected-architecture "$EXPECTED_ARCHITECTURE"
+      - name: Keep qualification receipts and errors
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: lossless-models-${{ matrix.target }}-${{ github.sha }}
+          path: |
+            .tmp/native-ci/results/*.log
+            .tmp/native-ci/results/report.json
+            .tmp/native-ci/results/installed/*-report.json
+            .tmp/native-ci/fixtures/input-receipt.json
+          if-no-files-found: warn
+          include-hidden-files: true # Only the explicit JSON/log allowlist under .tmp above.
+          retention-days: 14

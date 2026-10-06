@@ -8,6 +8,8 @@ import argparse
 import hashlib
 import json
 import os
+import platform
+import shutil
 from pathlib import Path
 import subprocess
 import threading
@@ -71,7 +73,15 @@ def main():
     parser.add_argument("fixture", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--streaming", action="store_true", help="Exercise the actual Downloads UI and restart recovery")
+    parser.add_argument("--materialize-sources", action="store_true", help="Write only allowlisted source files into fresh projects; no symlink privileges needed")
+    parser.add_argument("--expected-platform", choices=["Linux", "Windows", "Darwin"])
+    parser.add_argument("--expected-architecture", choices=["x86_64", "arm64"])
     args = parser.parse_args()
+    if args.expected_platform and platform.system() != args.expected_platform:
+        raise ValueError("Qualification must run on the requested native platform")
+    host_arch = {"AMD64": "x86_64", "aarch64": "arm64"}.get(platform.machine(), platform.machine())
+    if args.expected_architecture and host_arch != args.expected_architecture:
+        raise ValueError("Qualification must run on the requested native architecture")
     launcher = Path(__file__).resolve().parents[1]
     frontend = launcher.parent
     output = args.output.resolve()
@@ -104,6 +114,9 @@ def main():
         POKEAETHER_NATIVE_FIXTURE=str(args.fixture.resolve()),
         POKEAETHER_NATIVE_INSTALL_OUTPUT=str(output / "installed"))
     godot = os.environ.get("GODOT_BIN", "godot")
+    version = subprocess.check_output([godot, "--log-file", str(output / "version-engine.log"), "--version"], text=True).strip()
+    if not version.startswith("4.6.2.stable."):
+        raise ValueError("Qualification requires the pinned Godot 4.6.2 stable engine")
     try:
         reports = []
         phases = ["policy", "original-pause", "original", "native-256k", "rollback"] if args.streaming else ["policy", "original", "native-256k", "native-1m", "rollback"]
@@ -128,10 +141,16 @@ def main():
                         approval["models"][identity] = model
                     target.write_text(json.dumps(approval) + "\n")
                 else:
-                    target.symlink_to(source)
+                    if args.materialize_sources:
+                        shutil.copyfile(source, target) # Only the explicit tracked source allowlist above.
+                    else:
+                        target.symlink_to(source)
                 uid = Path(str(source) + ".uid")
                 if uid.exists():
-                    Path(str(target) + ".uid").symlink_to(uid)
+                    if args.materialize_sources:
+                        shutil.copyfile(uid, Path(str(target) + ".uid"))
+                    else:
+                        Path(str(target) + ".uid").symlink_to(uid)
             project_settings = (launcher / "project.godot").read_text() if args.streaming else 'config_version=5\n[application]\nconfig/name="Native bundle launcher fixture"\n'
             if args.streaming:
                 user_dir = "lossless-collection-" + hashlib.sha256(str(output).encode()).hexdigest()[:16]
@@ -152,8 +171,16 @@ def main():
                 raise ValueError("Launcher emitted an engine/script error: " + phase)
             if not result["complete"] or result.get("failure"):
                 raise ValueError("Launcher qualification did not complete: " + phase)
+            if args.streaming and phase != "policy" and result.get("engine_os") != {"Linux": "Linux", "Windows": "Windows", "Darwin": "macOS"}[platform.system()]:
+                raise ValueError("The tested Godot executable is not native to this platform")
+            if args.expected_architecture and phase != "policy" and result.get("engine_architecture") != args.expected_architecture:
+                raise ValueError("The tested Godot architecture differs from the qualification target")
             reports.append(result)
-        (output / "report.json").write_text(json.dumps({"complete": True, "production_approved": False, "phases": reports}, indent=2) + "\n")
+        (output / "report.json").write_text(json.dumps({"complete": True, "production_approved": False,
+            "host_os": platform.system(), "host_architecture": platform.machine(), "godot_version": version,
+            "fixture_sha256": hashlib.sha256(args.fixture.read_bytes()).hexdigest(),
+            "commit": subprocess.check_output(["git", "-C", str(frontend), "rev-parse", "HEAD"], text=True).strip(),
+            "phases": reports}, indent=2) + "\n")
         print("NATIVE_HTTP_INSTALLATION_OK", flush=True)
     finally:
         server.shutdown()
