@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.
+
 - Make the Aether Clash fountains pour from the statues' mouth outlets, with a broad waterfall, two arcing jets and fuller impact foam and spray.
 
 - Add Wailmer, Drednaw, Mantine, Basculegion and Wailord as Surf mounts for admin-granted testing, with submerged lower bodies, synchronized foam/wakes and fishing poses.

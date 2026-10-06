@@ -1379,12 +1379,16 @@ func _is_player_facing_npc(body: Node2D) -> bool:
 	var direction := direction_value as Vector2
 	if direction == Vector2.ZERO:
 		return false
-	var player_tile := _to_tile(_get_body_interaction_position(body))
+	var origins: Array[Vector2] = [_get_body_interaction_position(body)]
+	if body.has_method("get_interaction_positions"):
+		origins = body.call("get_interaction_positions")
 	var cardinal_direction := Vector2i(roundi(direction.x), roundi(direction.y))
 	var npc_tile := _to_tile(get_feet_position())
-	for distance: int in range(1, manual_interaction_reach_tiles + 1):
-		if player_tile + cardinal_direction * distance == npc_tile:
-			return true
+	for origin: Vector2 in origins:
+		var player_tile := _to_tile(origin)
+		for distance: int in range(1, manual_interaction_reach_tiles + 1):
+			if player_tile + cardinal_direction * distance == npc_tile:
+				return true
 	return false
 
 
