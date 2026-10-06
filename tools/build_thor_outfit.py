@@ -37,19 +37,28 @@ def shade(im,palette):
             if p[3]:out.putpixel((x,y),colors[min(3,int(sum(p[:3])/3)//64)])
     return out
 
-def cape(d,pose,phase,off):
+def cape(d,pose,phase,off,wide_idle=False):
     im=blank(); draw=ImageDraw.Draw(im); dx,dy=off
     # Four-direction authored cloth silhouettes; the centre stays below the head.
     if d in [0,3]:
-        if pose==0:pts=[(11,20),(20,20),(23,26),(23,28),(19,27),(16,28),(12,27),(8,28),(9,24)]
-        elif pose==1:pts=[(11,20),(20,20),(25,19),(28,17),(28,22),(25,25),(20,27),(16,27),(10,27),(5,24),(3,20),(3,17),(8,20)]
+        if pose==0:
+            # A hanging cape should remain visible beyond both arms from the
+            # front. Widen the hem by three native pixels per side, keeping
+            # the shoulders attached and the folded fish/ride poses intact.
+            pts=([(11,20),(20,20),(23,22),(25,25),(26,28),(24,29),(20,28),(16,29),(11,28),(7,29),(5,28),(6,25),(8,22)]
+                 if wide_idle else [(11,20),(20,20),(23,26),(23,28),(19,27),(16,28),(12,27),(8,28),(9,24)])
+        elif pose==1:pts=[(11,20),(20,20),(24,22),(27,25),(26,28),(22,27),(16,28),(9,27),(5,28),(4,25),(7,22)]
         else:
             flutter=1 if phase in [1,3] else 0
-            pts=[(11,20),(20,20),(24,18),(29,13+flutter),(31,12+flutter),(30,18),(27,22),(22,24),(20,27),(11,27),(9,24),(4,22),(1,18),(0,12+flutter),(2,13+flutter),(7,18)]
+            # Wind lifts the continuous hem a little; never raise separate
+            # tips beside the head, which reads as wings instead of cloth.
+            pts=[(11,20),(20,20),(24,21),(28,23),(27,26+flutter),(23,27),(20,26+flutter),(16,27),(12,26+flutter),(8,27),(4,26+flutter),(3,23),(7,21)]
     else:
-        if pose==0:pts=[(12,20),(18,20),(21,27),(19,29),(14,27),(11,26)]
-        elif pose==1:pts=[(12,20),(18,20),(26,20),(28,18),(27,24),(23,26),(17,27),(12,25)]
-        else:pts=[(12,20),(18,20),(23,18),(29,14+(phase%2)),(30,17),(28,22),(24,25),(17,27),(12,25)]
+        if pose==0:
+            pts=([(12,20),(18,20),(21,22),(24,26),(24,28),(21,29),(17,28),(14,27),(11,26)]
+                 if wide_idle else [(12,20),(18,20),(21,27),(19,29),(14,27),(11,26)])
+        elif pose==1:pts=[(12,20),(18,20),(23,21),(27,23),(27,26),(23,28),(17,27),(12,25)]
+        else:pts=[(12,20),(18,20),(23,20),(29,21+(phase%2)),(30,23+(phase%2)),(27,26),(22,27),(17,27),(12,25)]
         if d==2:pts=[(31-x,y) for x,y in pts]
     pts=[(x+dx,y+dy) for x,y in pts];draw.polygon(pts,fill=INK)
     mask=im.getchannel('A')
@@ -117,6 +126,18 @@ for gender in ['male','female']:
                     if c in [0,2]:
                         for x in [10,20]:mask.putpixel((x,26),255);art.putpixel((x,26),(0,0,0,255))
                 art.putalpha(mask)
+                if d==0:
+                    # Taper the illuminated abdominal plate instead of carrying
+                    # the broad chest highlight down into a rounded belly.
+                    # Preserve the established sleeve/skin coverage in each pose.
+                    waist={24:[DARK,STEEL,MID,'#39d5e7',MID,STEEL,DARK],
+                           25:[INK,DARK,MID,MID,MID,DARK,INK],
+                           26:[INK,DARK,DARK,STEEL,DARK,DARK,INK],
+                           27:[INK,INK,DARK,DARK,DARK,INK,INK]}
+                    for y,colors in waist.items():
+                        for x,color in enumerate(colors,12):
+                            if 0<=x+dx<32 and 0<=y+dy<32 and mask.getpixel((x+dx,y+dy)):
+                                art.putpixel((x+dx,y+dy),Image.new('RGBA',(1,1),color).getpixel((0,0)))
                 for y in range(32):
                     for x in range(32):
                         if skin(b.getpixel((x,y))) and ((y<21+dy) or (d==0 and 13+dx<=x<=17+dx and y<=22+dy) or (d==1 and x==15+dx and y<=22+dy) or (d==2 and x==16+dx and y<=22+dy)):
@@ -124,10 +145,15 @@ for gender in ['male','female']:
                 layers['top'].paste(art,(c*32,d*32))
                 weapon,head=hammer(b,d,off,style);heads.append(list(head))
                 for pose in range(3):
-                    cloth=cape(d,pose,c,off);rear=blank();front=blank()
-                    if d==3:front.alpha_composite(cloth)
-                    else:rear.alpha_composite(cloth)
-                    front.alpha_composite(weapon)
+                    cloth=cape(d,pose,c,off,wide_idle=not style);rear=blank();front=blank()
+                    # Viewed from behind, cloth occludes the hand-held hammer.
+                    # Keep exposed hammer pixels outside the cape silhouette.
+                    if d==3:
+                        front.alpha_composite(weapon)
+                        front.alpha_composite(cloth)
+                    else:
+                        rear.alpha_composite(cloth)
+                        front.alpha_composite(weapon)
                     if d < 3:
                         reference=cell(walkbase,d,0)
                         for fy in range(6,21):

@@ -4,6 +4,10 @@
 
 - Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
 
+- Refine Thor’s silhouette with a wider resting cape, a continuous trailing cloth shape while walking, a slimmer armor waist, and the hammer behind the cape when viewed from the back.
+
+- Fix opening outfit boxes and activating cosmetics failing when the server returns an empty Repel-step value, while preserving numeric Repel charges.
+
 - Replace free Repel with a persistent charge of up to 10,000 encounter-area steps; use Repel, Super Repel and Max Repel items to refill, with no item consumed when full.
 
 - Add the Thor outfit for both models, with a hammer-linked red cape that lifts while walking, settles after stopping and emits electric sparks for local and remote players.
