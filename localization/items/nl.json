@@ -586,5 +586,13 @@
   "palkia-mount-box": {
     "name": "Palkia-mountbox",
     "shortDesc": "Bevat een Palkia-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-dialga-mount": {
+    "name": "Shiny Dialga-mount",
+    "shortDesc": "Ontgrendelt Shiny Dialga als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "dialga-mount-box": {
+    "name": "Dialga-mountbox",
+    "shortDesc": "Bevat een Dialga-mount. Shiny-basiskans: 50%."
   }
 }

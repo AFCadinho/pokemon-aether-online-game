@@ -586,5 +586,13 @@
   "palkia-mount-box": {
     "name": "Palkia Mount Box",
     "shortDesc": "Contains a Palkia mount. Base shiny chance: 50%."
+  },
+  "shiny-dialga-mount": {
+    "name": "Shiny Dialga Mount",
+    "shortDesc": "Unlocks Shiny Dialga as a land mount. Requires a Mount License for the current region."
+  },
+  "dialga-mount-box": {
+    "name": "Dialga Mount Box",
+    "shortDesc": "Contains a Dialga mount. Base shiny chance: 50%."
   }
 }

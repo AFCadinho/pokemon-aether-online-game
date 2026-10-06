@@ -586,5 +586,13 @@
   "palkia-mount-box": {
     "name": "Caixa de montaria Palkia",
     "shortDesc": "Contém uma montaria Palkia. Chance shiny inicial: 50%."
+  },
+  "shiny-dialga-mount": {
+    "name": "Montaria Dialga Brilhante",
+    "shortDesc": "Desbloqueia Dialga Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "dialga-mount-box": {
+    "name": "Caixa de montaria Dialga",
+    "shortDesc": "Contém uma montaria Dialga. Chance shiny inicial: 50%."
   }
 }
