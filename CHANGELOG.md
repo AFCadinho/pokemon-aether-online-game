@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Expand nine more 3D moves across the battlefield, including sweeping heat and snow, wind funnels, ground eruptions, a caster-centered explosion, falling coins and prismatic stars.
+
 - Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.
 
 - Stage 3D Earthquake, Blizzard and Bloom Doom across the battle circle, with travelling ground fractures, sweeping snow and a flowering field that gathers into the final impact.

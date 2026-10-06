@@ -1,26 +1,26 @@
 extends "res://tests/battle_dialogue_preview.gd"
-const Moves := ["Earthquake","Blizzard","Bloom Doom"]
+const Moves := ["Earth Power","Heat Wave","Hurricane","Bleakwind Storm","Powder Snow","Freeze-Dry","Explosion","Make It Rain","Tera Starstorm"]
 func _start() -> void:
 	left_species="Dragonite"
 	await super._start()
 	move_picker.clear()
 	for move in Moves:move_picker.add_item(move)
-	root.title="PokeAether — Earthquake, Blizzard en Bloom Doom over het strijdveld"
-	status.text="Drie veldanimaties: kies een move, draai de camera en test ook ontwijken."
-	print("BATTLEFIELD_PREVIEW_READY moves=3")
+	root.title="PokeAether — Negen nieuwe veldanimaties"
+	status.text="Negen veldanimaties: kies een move, draai de camera en test ook ontwijken."
+	print("BATTLEFIELD_PREVIEW_READY moves=9")
 	if "--smoke-field" in OS.get_cmdline_user_args():await _check_field()
 func _check_field() -> void:
 	var watchdog := Timer.new()
 	root.add_child(watchdog)
 	watchdog.one_shot=true
 	watchdog.timeout.connect(func():printerr("FIELD_PREVIEW_TIMEOUT");quit(1))
-	watchdog.start(180)
+	watchdog.start(300)
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")
 	DirAccess.make_dir_recursive_absolute(output)
 	var renderer = battle.animation_router.model_presenter
 	for reverse in [false,true]:
 		move_reverse.button_pressed=reverse
-		for i in 3:
+		for i in Moves.size():
 			move_picker.select(i)
 			move_outcome.select(1 if reverse else 0)
 			_preview_move()
@@ -49,5 +49,5 @@ func _check_field() -> void:
 	host=null
 	await process_frame
 	await process_frame
-	print("FIELD_RENDER_SUITE_OK moves=3 phases=18 orbit_pause_miss=true")
+	print("FIELD_RENDER_SUITE_OK moves=9 phases=54 orbit_pause_miss=true")
 	quit()

@@ -1,7 +1,11 @@
 extends "res://scripts/battle/battle_ui/family_move_effect_3d.gd"
 ## Stage-wide pilots. World coordinates are captured once; only sprite facing
 ## follows the camera. Ground decoration never changes arena/gameplay state.
-const FIELD_KEYS := ["earthquake", "blizzard", "bloomdoom"]
+const APPROVED_KEYS := ["earthquake", "blizzard", "bloomdoom"]
+const NEXT_KEYS := ["earthpower", "heatwave", "hurricane", "bleakwindstorm", "powdersnow", "freezedry", "explosion", "makeitrain", "terastarstorm"]
+const FIELD_KEYS := APPROVED_KEYS + NEXT_KEYS
+# Existing packaged SV masks reused where a generic shock sheet is unsuitable.
+const SHARED_CAST_ART := {"earthpower":"powdersnow", "explosion":"powdersnow", "hurricane":"powdersnow", "bleakwindstorm":"powdersnow", "heatwave":"pyroball"}
 var field_center := Vector3.ZERO
 var field_radius := 5.8
 var forward := Vector3.RIGHT
@@ -16,6 +20,13 @@ var flower_mesh: ArrayMesh
 var ground_basis := Basis.IDENTITY
 var shaft_mesh := QuadMesh.new()
 var shaft_material: ShaderMaterial
+var gold: StandardMaterial3D
+var spectrum: Array[StandardMaterial3D] = []
+var wind_mesh: ArrayMesh
+var star_mesh: ArrayMesh
+var wind_material: ShaderMaterial
+var blast_material: ShaderMaterial
+var shock_ring := TorusMesh.new()
 
 func _geometry_scale() -> float:
 	# The arena dimensions are world meters, independent of projectile magnification.
@@ -23,8 +34,15 @@ func _geometry_scale() -> float:
 
 func _prepare() -> void:
 	super._prepare()
+	if key in SHARED_CAST_ART:
+		art=art.duplicate()
+		var shared: Array=Art.MANIFEST.data.moves[SHARED_CAST_ART[key]].textures
+		art[0]=shared[0 if key=="heatwave" else 1]
+		if key=="heatwave":art[1]=shared[1]
 	soil = _material(Color("675344"),.9)
 	leaf = _material(Color("66a849"),.85)
+	gold = _material(Color("ffcd53"),.9)
+	for color in ["ffc2e3","b2e9ff","d1b5ff","fff4a3"]:spectrum.append(_material(Color(color),.85))
 	for color in ["ffb9e1","ffe099","f4dcff"]:petals.append(_material(Color(color),.9))
 	floor_mesh.size=Vector2.ONE
 	var shader := Shader.new()
@@ -99,6 +117,61 @@ void fragment() {
 			tool.add_vertex(Vector3(cos(b),.13,sin(b))*(.55+.45*sin(segment*PI/5)))
 			tool.add_vertex(Vector3(cos(c),.13,sin(c))*(.55+.45*sin((segment+1)*PI/5)))
 	flower_mesh=tool.commit()
+	_prepare_wide_meshes()
+
+func _prepare_wide_meshes() -> void:
+	if key not in NEXT_KEYS:return
+	shock_ring.inner_radius=.99
+	shock_ring.outer_radius=1.0
+	shock_ring.rings=64
+	shock_ring.ring_segments=6
+	var wind_shader := Shader.new()
+	wind_shader.code="""
+shader_type spatial;
+render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
+uniform float opacity;
+void fragment() {
+	float across=sin(UV.y*3.14159);
+	float ends=sin(UV.x*3.14159);
+	ALBEDO=vec3(.63,.84,.91);
+	ALPHA=pow(across,2.)*ends*opacity;
+}
+"""
+	wind_material=ShaderMaterial.new()
+	wind_material.shader=wind_shader
+	var blast_shader := Shader.new()
+	blast_shader.code="""
+shader_type spatial;
+render_mode unshaded, cull_back, blend_add, depth_draw_never;
+uniform float opacity;
+void fragment() {
+	float rim=pow(1.-abs(dot(normalize(NORMAL),normalize(VIEW))),3.);
+	ALBEDO=vec3(1.,.73,.42);
+	ALPHA=rim*opacity;
+}
+"""
+	blast_material=ShaderMaterial.new()
+	blast_material.shader=blast_shader
+	var ribbon := SurfaceTool.new()
+	ribbon.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for j in 64:
+		for corner: Vector2 in [Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)]:
+			var h := (j+corner.x)/64.0
+			var a := h*TAU*1.4
+			var radius := (1.25+h*.7)/field_radius if key=="bleakwindstorm" else .82-h*.48
+			ribbon.set_uv(Vector2(h,corner.y))
+			ribbon.add_vertex(Vector3(cos(a)*radius,.12+h*3.2+(corner.y-.5)*.25,sin(a)*radius))
+	wind_mesh=ribbon.commit()
+	var star := SurfaceTool.new()
+	star.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for face in [-1,1]:
+		for i in 8:
+			var a := i*TAU/8
+			var b := (i+1)*TAU/8
+			star.add_vertex(Vector3(0,0,.2*face))
+			star.add_vertex(Vector3(cos(a),sin(a),0)*(1.0 if i%2==0 else .25))
+			star.add_vertex(Vector3(cos(b),sin(b),0)*(1.0 if (i+1)%2==0 else .25))
+	star_mesh=star.commit()
 
 func _field_point(along: float, across: float, height: float = 0.0) -> Vector3:
 	return field_center+forward*along+lateral*across+Vector3.UP*height
@@ -137,11 +210,20 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	surface.set_shader_parameter("seconds",elapsed)
 	floor_material.set_shader_parameter("progress",travel if key!="bloomdoom" else smoothstep(0,.52,t))
 	floor_material.set_shader_parameter("opacity",envelope)
-	_piece(floor_mesh,floor_material,field_center,Vector3(field_radius*2,1,field_radius*2),ground_basis)
+	if key in APPROVED_KEYS:
+		_piece(floor_mesh,floor_material,field_center,Vector3(field_radius*2,1,field_radius*2),ground_basis)
 	match key:
 		"earthquake":_earthquake(travel,after,envelope,facing)
 		"blizzard":_blizzard(travel,after,envelope,facing)
 		"bloomdoom":_bloom_field(t,travel,after,envelope,facing)
+		"earthpower":_earth_power(travel,after,envelope,facing)
+		"heatwave":_heat_wave(travel,after,envelope,facing)
+		"hurricane", "bleakwindstorm":_wide_storm(travel,after,envelope,facing)
+		"powdersnow":_powder_snow(travel,after,envelope,facing)
+		"freezedry":_freeze_dry(travel,after,envelope,facing)
+		"explosion":_explosion(travel,after,envelope,facing)
+		"makeitrain":_coin_rain(travel,after,envelope,facing)
+		"terastarstorm":_star_storm(travel,after,envelope,facing)
 	impact_drawn=hit and after>=0
 	if impact_drawn:
 		var fade := 1-clampf(after,0,1)
@@ -229,3 +311,149 @@ func _bloom_field(t: float,travel: float,after: float,alpha: float,facing: Basis
 		for i in 8:
 			var a := i*TAU/8+elapsed
 			_piece(flower_mesh,petals[i%3],aim+Vector3(cos(a),after*1.4,sin(a))*(.4+after*1.6),Vector3.ONE*.18*fade,Basis(Vector3.RIGHT,a))
+
+func _earth_power(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	# Underground energy fans out, followed by staggered vents across the floor.
+	var warm := clampf(elapsed/maxf(launch,.01),0,1)
+	_source_sprite(origin+Vector3.UP*.1,1.4*warm,"0",warm,alpha*.5,facing)
+	if elapsed<launch:return
+	for i in 7:
+		var end := _seed_point(i*2+3,18)
+		var previous := origin
+		for j in 3:
+			var p := (j+1)/3.0*travel
+			var point := origin.lerp(end,p)+lateral*sin(p*PI)*sin(i*4+j*3)*.45
+			_line(previous,point,.025*alpha,edge)
+			previous=point
+	for i in 18:
+		var base := _seed_point(i,18)
+		var arrival := ((base-field_center).dot(forward)/field_radius+1)*.32
+		var eruption := sin(clampf((travel-arrival)/.48,0,1)*PI)
+		if eruption<=0:continue
+		var top := base+Vector3.UP*eruption*(.7+(i%3)*.45)
+		_piece(tooth,surface,base.lerp(top,.5),Vector3(.22*eruption,top.y-base.y,.22*eruption))
+		_source_sprite(top,.8*eruption,"1",travel,alpha*eruption*.65,facing,i)
+	if after>=0:
+		var fade := 1-clampf(after,0,1)
+		_source_sprite(aim,2.6,"1",after,alpha*fade*.65,facing)
+
+func _heat_wave(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	# A curved, full-width front advances from the caster's side of the circle.
+	if elapsed<launch:
+		_source_sprite(origin+Vector3.UP*.5,1.4,"0",0,alpha*.4,facing)
+		return
+	var fade := 1-smoothstep(0,.75,after)
+	for row in 3:
+		var q := travel*1.22-row*.12
+		if q<0 or q>1.18:continue
+		for i in 13:
+			var across := (i-6)/6.0*field_radius*.85
+			var along := lerpf(-field_radius*.9,field_radius*.9,q)-absf(across)*.18
+			if Vector2(along,across).length()>field_radius:continue
+			var rise := .4+sin(i*2.4+elapsed*3)*.2+row*.45
+			var point := _field_point(along,across,rise)
+			_source_sprite(point,1.25-row*.15,"1",fmod(elapsed*.6+i*.1,1),alpha*fade*(.65-row*.15),facing,i*.17)
+			if row==0 and i%2==0:
+				_line(point-forward*.7,point,.018*alpha*fade,core)
+
+func _wide_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	var icy := key=="bleakwindstorm"
+	var grow := smoothstep(0,launch/maxf(duration,.01),elapsed/duration)
+	var fade := 1-smoothstep(.15,1,after)
+	wind_material.set_shader_parameter("opacity",alpha*fade*.65)
+	# Hurricane is one broad funnel; Bleakwind has two opposed icy spirals.
+	for funnel in (2 if icy else 1):
+		var center := field_center+lateral*(funnel*2-1)*field_radius*.38 if icy else field_center
+		for ribbon in 2:
+			_piece(wind_mesh,wind_material,center,Vector3(field_radius,1,field_radius)*grow,Basis(Vector3.UP,elapsed*(3.5 if funnel==0 else -3.5)+ribbon*PI))
+	for i in 18:
+		var angle := elapsed*2.8+i*2.4
+		var radius := field_radius*(.4+(i%3)*.23)*grow
+		var point := field_center+Vector3(cos(angle)*radius,.3+(i%4)*.48,sin(angle)*radius)
+		_source_sprite(point,.75 if icy else 1.0,"0",fmod(elapsed*.5+i*.13,1),alpha*fade*.4,facing,angle)
+
+func _powder_snow(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	if elapsed<launch:return
+	# Low drifting powder opens into a wide cone, unlike Blizzard's high storm.
+	for i in 42:
+		var p := clampf(travel*1.35-i*.009,0,1)
+		var across := sin(i*2.4)*field_radius*.82*p
+		var along := lerpf(-field_radius*.9,field_radius*.9,p)
+		var point := _field_point(along,across,.2+fmod(i*.37,.7)+sin(p*PI)*.35)
+		if Vector2(along,across).length()>field_radius:continue
+		# Seeds behind the front retain a brief drifting tail across both halves.
+		point-=forward*fmod(i*.57,3.8)*p
+		var fade := alpha*sin(p*PI)*(1-smoothstep(0,.8,after))
+		_source_sprite(point,.3+(i%4)*.13,"0",p,fade*.65,facing,i+elapsed*.3)
+		if i%5==0:_source_sprite(point-forward*.5,.6,"1",p,fade*.2,facing)
+
+func _freeze_dry(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	if elapsed<launch:
+		_source_sprite(origin+Vector3.UP*.4,1.0,"0",0,alpha*.35,facing)
+		return
+	for i in 24:
+		var p := _seed_point(i,24)
+		var arrival := ((p-field_center).dot(forward)/field_radius+1)*.35
+		var grow := smoothstep(arrival,arrival+.22,travel)*alpha
+		var height_value := (.4+(i%4)*.2)*grow
+		_piece(tooth,surface,p+Vector3.UP*height_value*.5,Vector3(.14*grow,height_value,.14*grow),Basis(Vector3.FORWARD,sin(i)*.2))
+		_source_sprite(p+Vector3.UP*.12,.85,"0",travel,grow*.28,facing,i)
+		if i%2==0:
+			var neighbor := _seed_point((i+5)%24,24)
+			_line(p,p.lerp(neighbor,grow),.012*grow,core)
+	if after>=0:
+		for i in 5:
+			var a := i*TAU/5
+			var fade := 1-clampf(after,0,1)
+			_piece(tooth,surface,aim+Vector3(cos(a)*.7,-.25,sin(a)*.7),Vector3(.15,.85,.15)*fade,Basis(Vector3.FORWARD,cos(a)*.3))
+
+func _explosion(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	var center := origin+Vector3.UP*.7
+	if elapsed<launch:
+		var charge := elapsed/maxf(launch,.01)
+		_source_sprite(center,1.2+charge,"0",charge,alpha*.7,facing)
+		_piece(ring,edge,origin,Vector3.ONE*(1.4-charge*.8))
+		return
+	var radius := travel*(field_radius+origin.distance_to(field_center))
+	var fade := 1-smoothstep(0,1,after)
+	blast_material.set_shader_parameter("opacity",alpha*fade*.16)
+	_piece(shock_ring,glow,origin+Vector3.UP*.04,Vector3.ONE*radius)
+	_piece(sphere,blast_material,center,Vector3(radius,radius*.4,radius))
+	_source_sprite(center,3.6,"1",travel,alpha*fade*(1-travel*.6),facing)
+	for i in 24:
+		var a := i*TAU/24
+		var point := origin+Vector3(cos(a)*radius,.15+sin(travel*PI)*(i%3)*.4,sin(a)*radius)
+		_source_sprite(point,1.2,"0",travel,alpha*fade*.4,facing,i)
+
+func _coin_rain(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	gold.albedo_color.a=alpha*.9
+	var charge := clampf(elapsed/maxf(launch,.01),0,1)
+	for i in 24:
+		var destination := _seed_point(i,24)
+		var sky := destination+Vector3.UP*(3.8+(i%3)*.4)
+		var p := clampf(travel*1.25-i*.009,0,1)
+		var point := origin.lerp(sky,charge)+Vector3.UP*sin(charge*PI)*1.1 if elapsed<launch else sky.lerp(destination,p*p)
+		if p>=1:point+=Vector3.UP*sin(clampf(after*2+(i%3)*.1,0,1)*PI)*.3
+		_piece(tube,gold,point,Vector3(.16,.04,.16),Basis(Vector3.FORWARD,elapsed*4+i)*Basis(Vector3.RIGHT,.6))
+		_source_sprite(point,.5,"0",p,alpha*.3,facing,i)
+		if i%3==0 and elapsed>=launch:
+			_line(point+Vector3.UP*.45,point,.016*alpha,core)
+
+func _star_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
+	for mat in spectrum:mat.albedo_color.a=alpha*.8
+	var charge := clampf(elapsed/maxf(launch,.01),0,1)
+	var sky_center := field_center+Vector3.UP*4.0
+	# A constellation forms over the circle, then sends diagonal colored salvos.
+	for i in 12:
+		var a := i*2.399963
+		var radius := field_radius*(.3+(i%3)*.25)
+		var sky := sky_center+Vector3(cos(a)*radius,(i%2)*.35,sin(a)*radius)
+		var destination := _seed_point(i,12)+Vector3.UP*.3
+		var p := smoothstep(0,1,clampf(travel*1.35-i*.015,0,1))
+		var point := origin.lerp(sky,charge) if elapsed<launch else sky.lerp(destination,p)
+		var mat := spectrum[i%4]
+		var size_value := .17+sin(charge*PI)*.12
+		_piece(star_mesh,mat,point,Vector3(size_value*1.5,size_value*2.2,size_value),facing*Basis(Vector3.FORWARD,elapsed*.4+i))
+		_source_sprite(point,.8,"0",p,alpha*.55,facing,a)
+		if elapsed>=launch:
+			_line(sky.lerp(destination,maxf(0,p-.18)),point,.028*alpha,mat)
