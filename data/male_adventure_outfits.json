@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Aether Voyager",
+    "slug": "aether-voyager",
+    "parts": {
+      "top": "AetherVoyager_Shirt",
+      "bottom": "AetherVoyager_Trousers",
+      "shoes": "AetherVoyager_Shoes"
+    }
+  },
+  {
+    "name": "Rotom Engineer",
+    "slug": "rotom-engineer",
+    "parts": {
+      "top": "RotomEngineer_Shirt",
+      "bottom": "RotomEngineer_Trousers",
+      "shoes": "RotomEngineer_Shoes",
+      "facegear": "RotomEngineer_Goggles"
+    }
+  },
+  {
+    "name": "Celebi Forest Ranger",
+    "slug": "celebi-forest-ranger",
+    "parts": {
+      "top": "CelebiForestRanger_Shirt",
+      "bottom": "CelebiForestRanger_Trousers",
+      "shoes": "CelebiForestRanger_Shoes"
+    }
+  },
+  {
+    "name": "Lucario Aura Fighter",
+    "slug": "lucario-aura-fighter",
+    "parts": {
+      "top": "LucarioAuraFighter_Shirt",
+      "bottom": "LucarioAuraFighter_Trousers",
+      "shoes": "LucarioAuraFighter_Shoes"
+    }
+  },
+  {
+    "name": "Relic Explorer",
+    "slug": "relic-explorer",
+    "parts": {
+      "top": "RelicExplorer_Shirt",
+      "bottom": "RelicExplorer_Trousers",
+      "shoes": "RelicExplorer_Shoes"
+    }
+  },
+  {
+    "name": "Lugia Sky Captain",
+    "slug": "lugia-sky-captain",
+    "parts": {
+      "top": "LugiaSkyCaptain_Shirt",
+      "bottom": "LugiaSkyCaptain_Trousers",
+      "shoes": "LugiaSkyCaptain_Shoes",
+      "facegear": "LugiaSkyCaptain_Goggles"
+    }
+  }
+]

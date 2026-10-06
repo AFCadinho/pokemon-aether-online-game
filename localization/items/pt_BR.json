@@ -594,5 +594,109 @@
   "dialga-mount-box": {
     "name": "Caixa de montaria Dialga",
     "shortDesc": "Contém uma montaria Dialga. Chance shiny inicial: 50%."
+  },
+  "aether-voyager-shirt": {
+    "name": "Aether Voyager Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Aether Voyager à personalização do personagem."
+  },
+  "aether-voyager-trousers": {
+    "name": "Aether Voyager Calças",
+    "shortDesc": "Adicione esta peça masculina de Aether Voyager à personalização do personagem."
+  },
+  "aether-voyager-shoes": {
+    "name": "Aether Voyager Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Aether Voyager à personalização do personagem."
+  },
+  "aether-voyager-outfit": {
+    "name": "Aether Voyager Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Aether Voyager."
+  },
+  "rotom-engineer-shirt": {
+    "name": "Rotom Engineer Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Rotom Engineer à personalização do personagem."
+  },
+  "rotom-engineer-trousers": {
+    "name": "Rotom Engineer Calças",
+    "shortDesc": "Adicione esta peça masculina de Rotom Engineer à personalização do personagem."
+  },
+  "rotom-engineer-shoes": {
+    "name": "Rotom Engineer Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Rotom Engineer à personalização do personagem."
+  },
+  "rotom-engineer-goggles": {
+    "name": "Rotom Engineer Óculos",
+    "shortDesc": "Adicione esta peça masculina de Rotom Engineer à personalização do personagem."
+  },
+  "rotom-engineer-outfit": {
+    "name": "Rotom Engineer Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Rotom Engineer."
+  },
+  "celebi-forest-ranger-shirt": {
+    "name": "Celebi Forest Ranger Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Celebi Forest Ranger à personalização do personagem."
+  },
+  "celebi-forest-ranger-trousers": {
+    "name": "Celebi Forest Ranger Calças",
+    "shortDesc": "Adicione esta peça masculina de Celebi Forest Ranger à personalização do personagem."
+  },
+  "celebi-forest-ranger-shoes": {
+    "name": "Celebi Forest Ranger Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Celebi Forest Ranger à personalização do personagem."
+  },
+  "celebi-forest-ranger-outfit": {
+    "name": "Celebi Forest Ranger Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Celebi Forest Ranger."
+  },
+  "lucario-aura-fighter-shirt": {
+    "name": "Lucario Aura Fighter Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Lucario Aura Fighter à personalização do personagem."
+  },
+  "lucario-aura-fighter-trousers": {
+    "name": "Lucario Aura Fighter Calças",
+    "shortDesc": "Adicione esta peça masculina de Lucario Aura Fighter à personalização do personagem."
+  },
+  "lucario-aura-fighter-shoes": {
+    "name": "Lucario Aura Fighter Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Lucario Aura Fighter à personalização do personagem."
+  },
+  "lucario-aura-fighter-outfit": {
+    "name": "Lucario Aura Fighter Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Lucario Aura Fighter."
+  },
+  "relic-explorer-shirt": {
+    "name": "Relic Explorer Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Relic Explorer à personalização do personagem."
+  },
+  "relic-explorer-trousers": {
+    "name": "Relic Explorer Calças",
+    "shortDesc": "Adicione esta peça masculina de Relic Explorer à personalização do personagem."
+  },
+  "relic-explorer-shoes": {
+    "name": "Relic Explorer Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Relic Explorer à personalização do personagem."
+  },
+  "relic-explorer-outfit": {
+    "name": "Relic Explorer Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Relic Explorer."
+  },
+  "lugia-sky-captain-shirt": {
+    "name": "Lugia Sky Captain Parte superior",
+    "shortDesc": "Adicione esta peça masculina de Lugia Sky Captain à personalização do personagem."
+  },
+  "lugia-sky-captain-trousers": {
+    "name": "Lugia Sky Captain Calças",
+    "shortDesc": "Adicione esta peça masculina de Lugia Sky Captain à personalização do personagem."
+  },
+  "lugia-sky-captain-shoes": {
+    "name": "Lugia Sky Captain Sapatos",
+    "shortDesc": "Adicione esta peça masculina de Lugia Sky Captain à personalização do personagem."
+  },
+  "lugia-sky-captain-goggles": {
+    "name": "Lugia Sky Captain Óculos",
+    "shortDesc": "Adicione esta peça masculina de Lugia Sky Captain à personalização do personagem."
+  },
+  "lugia-sky-captain-outfit": {
+    "name": "Lugia Sky Captain Caixa de traje",
+    "shortDesc": "Abra esta caixa masculina para receber as peças de Lugia Sky Captain."
   }
 }
