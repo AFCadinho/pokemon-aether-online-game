@@ -20,6 +20,11 @@ from http.server import ThreadingHTTPServer
 from asset_bundle_http_server import Handler
 
 
+def source_relative_path(path, root):
+    """Use one spelling for source allowlists and generated fixture overrides."""
+    return path.relative_to(root).as_posix()
+
+
 class NativeHandler(Handler):
     paced = False
 
@@ -91,14 +96,14 @@ def main():
     files = ["scripts/release_asset_bundles.gd", "scripts/asset_bundle_store.gd",
         "scripts/asset_bundle_index.gd", "scripts/resumable_download_service.gd",
         "scripts/model_pack_manifest.gd", "tests/native_compression_install_check.gd"]
-    files += [str(p.relative_to(launcher)) for p in (launcher / "data").glob("approved_3d_release_v*.json")]
+    files += [source_relative_path(p, launcher) for p in (launcher / "data").glob("approved_3d_release_v*.json")]
     files += ["data/reviewed_model_catalog.json", "data/screened_model_catalog.json"]
     if args.streaming:
         tracked = subprocess.check_output(["git", "-C", str(frontend), "ls-files", "-z", "--",
             "launcher/scripts", "launcher/scenes", "launcher/assets", "launcher/localization"])
         # Git emits POSIX paths even on Windows. Keep them POSIX so the exact
         # generated-pin comparisons below also match on Windows.
-        files += [PurePosixPath(p).relative_to("launcher").as_posix() for p in tracked.decode().split("\0")
+        files += [source_relative_path(PurePosixPath(p), PurePosixPath("launcher")) for p in tracked.decode().split("\0")
                   if p and Path(p).suffix not in [".uid", ".import"]]
         files += ["tests/fixtures/offline_bulk_launcher.gd", "tests/native_streaming_collection_check.gd"]
         files = sorted(set(files))
