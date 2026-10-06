@@ -6505,5 +6505,6 @@
   "ui.bag.mounts.tab_boxes": "Mount Boxes",
   "ui.bag.mounts.filter_all": "All trade statuses",
   "ui.bag.mounts.filter_tradeable": "Tradeable",
-  "ui.bag.mounts.empty": "No mounts match this tab or these filters."
+  "ui.bag.mounts.empty": "No mounts match this tab or these filters.",
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Contains a Gyarados Surf mount. Base shiny chance: 50%."
 }

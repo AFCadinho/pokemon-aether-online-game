@@ -23,10 +23,13 @@ func _run() -> void:
 	if settings_manager == null or localization_manager == null:
 		quit(1)
 		return
-	_check(
-		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras", "magikarp", "magikarp_shiny", "primal_kyogre", "primal_kyogre_shiny"],
-		"Surf catalog includes Lapras, Magikarp and both Primal Kyogre variants"
-	)
+	var surf_mounts := MountServiceScript.get_mount_ids_for_mode("surf")
+	for id: String in ["lapras", "magikarp", "magikarp_shiny", "primal_kyogre", "primal_kyogre_shiny", "wailmer", "wailmer_shiny", "drednaw", "drednaw_shiny", "mantine", "mantine_shiny", "basculegion", "basculegion_shiny", "wailord", "wailord_shiny", "gyarados", "gyarados_shiny"]:
+		_check(surf_mounts.has(id), "Surf catalog exposes " + id)
+	for id: String in ["gyarados", "gyarados_shiny"]:
+		var item_id := str(MountServiceScript.get_mount_definition(id).unlockItemId)
+		_check(MountServiceScript.get_unlocked_mount_ids_for_mode("surf", [item_id]) == [id, "lapras"], "Gyarados ownership unlocks only its matching variant")
+		_check(MountServiceScript.get_unlocked_mount_ids_for_mode("surf", [item_id + "-bound"]) == [id, "lapras"], "Bound Gyarados remains rideable")
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("surf", []) == ["lapras"]
 		and MountServiceScript.get_unlocked_mount_ids_for_mode("surf", ["primal-kyogre-mount"]) == ["lapras", "primal_kyogre"],

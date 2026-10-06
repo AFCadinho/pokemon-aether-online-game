@@ -4772,6 +4772,117 @@
       "idleSpriteSheet": "res://assets/mounts/gyarados/idle_mount.png",
       "idleForegroundSheet": "res://assets/mounts/gyarados/idle_foreground.png",
       "idleRiderMaskSheet": "res://assets/mounts/gyarados/idle_rider_mask.png"
+    },
+    "gyarados_shiny": {
+      "displayName": "Shiny Gyarados",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-gyarados-mount",
+      "iconTexture": "res://assets/mounts/gyarados_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/gyarados_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/gyarados_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/gyarados/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/gyarados/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            6,
+            -25
+          ],
+          [
+            6,
+            -23
+          ],
+          [
+            6,
+            -27
+          ],
+          [
+            6,
+            -25
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -19
+          ],
+          [
+            16,
+            -17
+          ],
+          [
+            16,
+            -17
+          ],
+          [
+            16,
+            -16
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -19
+          ],
+          [
+            -16,
+            -17
+          ],
+          [
+            -16,
+            -17
+          ],
+          [
+            -16,
+            -16
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -7
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/gyarados_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/gyarados_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/gyarados/idle_rider_mask.png"
     }
   }
 }

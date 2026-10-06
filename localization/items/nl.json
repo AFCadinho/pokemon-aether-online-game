@@ -822,5 +822,13 @@
   "thor-outfit": {
     "name": "Thor-outfitbox",
     "shortDesc": "Vier items met vaste kleuren voor beide modellen: pantser, broek, laarzen en een hamer met bewegende cape en elektrische vonken. Open de box in je tas."
+  },
+  "shiny-gyarados-mount": {
+    "name": "Shiny Gyarados-mount",
+    "shortDesc": "Ontgrendelt Shiny Gyarados als surfmount."
+  },
+  "gyarados-mount-box": {
+    "name": "Gyarados Surf Mount Box",
+    "shortDesc": "Bevat een Gyarados-surfmount. Shiny-basiskans: 50%."
   }
 }

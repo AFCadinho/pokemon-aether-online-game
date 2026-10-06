@@ -801,6 +801,16 @@ const CATALOG: Array[Dictionary] = [
 	},
 
 	{
+		"id": "gyarados-mount-box",
+		"name": "Gyarados Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_gyarados",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
 		"id": "wailmer-mount-box",
 		"name": "Wailmer Surf Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description_wailmer",
