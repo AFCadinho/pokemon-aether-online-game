@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add shared outfit preview hair rules: neutral Store card hairstyles, personal hair in detail previews, preserved included hair and explicit hood/headwear exceptions; clarify purchase contents and restore missing body/head layers in composed outfit icons.
+
 - Add Latios and Latias as grantable land mounts with the approved V2 rider poses, layered wings and existing regional Mount License requirements.
 
 - Add all six gender-adaptive adventure outfit boxes to the Aether Gift Store for 350 Gems each and price the four existing outfit boxes at 550 Gems each.

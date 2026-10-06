@@ -2,6 +2,7 @@ extends RefCounted
 
 class_name CharacterAppearanceService
 
+const STORE_PREVIEW_POLICY := preload("res://scripts/services/store_preview_appearance_policy.gd")
 const VARIANTS := preload("res://scripts/services/cosmetic_variant_catalog.gd")
 
 const PLAYER_DIRECTORY := "res://assets/player"
@@ -260,6 +261,14 @@ static func get_default_appearance(gender: String = "") -> Dictionary:
 
 
 static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> Texture2D:
+	return _get_cosmetic_item_icon(item_id, gender, false)
+
+
+static func get_store_cosmetic_item_icon(item_id: String, gender: String = "male") -> Texture2D:
+	return _get_cosmetic_item_icon(item_id, gender, true)
+
+
+static func _get_cosmetic_item_icon(item_id: String, gender: String, store_presentation: bool) -> Texture2D:
 	var normalized_item_id := item_id.strip_edges().to_lower()
 	var normalized_gender := normalize_gender(gender)
 	if normalized_gender == "":
@@ -268,7 +277,7 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 		normalized_gender,
 		get_cosmetic_item_allowed_genders(normalized_item_id)
 	)
-	var cache_key := "%s:%s" % [normalized_gender, normalized_item_id]
+	var cache_key := "%s:%s:%s" % ["store" if store_presentation else "item", normalized_gender, normalized_item_id]
 	if _cosmetic_item_icon_cache.has(cache_key):
 		return _cosmetic_item_icon_cache.get(cache_key) as Texture2D
 
@@ -509,6 +518,9 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			if layers.is_empty():
 				return null
 
+	if store_presentation:
+		layers = STORE_PREVIEW_POLICY.decorate_card_layers(normalized_item_id, normalized_gender, layers)
+
 	var battle_icon := _create_battle_appearance_icon(layers, normalized_gender)
 	if battle_icon != null:
 		_remember_appearance_resource(_cosmetic_item_icon_cache, cache_key, battle_icon)
@@ -640,7 +652,8 @@ static func _create_battle_appearance_icon(parts: Array[Dictionary], gender: Str
 		if category == BODY_CATEGORY and not include_body:
 			continue
 		if not requested.has(category) and not (
-			(category == "top_accessory" and requested.has(TOP_CATEGORY))
+			(category == BODY_CATEGORY and include_body)
+			or (category == "top_accessory" and requested.has(TOP_CATEGORY))
 			or (category == CAPE_OVERLAY_CATEGORY and requested.has(CAPE_CATEGORY))
 			or (category == EYEBROWS_CATEGORY and requested.has(HAIR_CATEGORY))
 		):
@@ -648,7 +661,9 @@ static func _create_battle_appearance_icon(parts: Array[Dictionary], gender: Str
 		var texture := layer.get("texture") as Texture2D
 		if texture == null:
 			continue
-		var source := texture.get_image()
+		# Resizing a shared source image can compound scale on later icon renders,
+		# especially with image-backed textures in the headless renderer.
+		var source := texture.get_image().duplicate() as Image
 		var scale := float(layer.get("scale", 1.0))
 		if not is_equal_approx(scale, 1.0):
 			source.resize(roundi(source.get_width() * scale), roundi(source.get_height() * scale), Image.INTERPOLATE_NEAREST)

@@ -3108,6 +3108,7 @@
   "ui.store.preview.choose_color": "选择自定义颜色",
   "ui.store.preview.hex_tooltip": "输入十六进制颜色代码，例如#7a46c5",
   "ui.store.preview.chroma_included": "购买时包含选定的 Chroma 颜色",
+  "ui.store.preview.hair_not_included": "此服装不包含发型。",
   "ui.store.preview.fixed_colours": "此套装使用固定颜色。",
   "ui.store.preview.direction.down": "正面",
   "ui.store.preview.direction.left": "左",

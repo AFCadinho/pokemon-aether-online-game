@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "defaults": {
+    "card": "neutral",
+    "detail": "player"
+  },
+  "neutral_hair": {
+    "male": {"id": "Hair", "color": "#5a3728"},
+    "female": {"id": "Hair", "color": "#6b4632"}
+  },
+  "outfits": {
+    "mysterious-outfit": {"card": "hidden", "detail": "hidden"}
+  },
+  "headgear": {
+    "Cap": {"card": "neutral", "detail": "neutral"},
+    "AetherRoyal_Crown": {"card": "neutral", "detail": "neutral"}
+  }
+}
