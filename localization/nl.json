@@ -1454,6 +1454,8 @@
   "ui.bag.categories": "CATEGORIEËN",
   "ui.bag.items": "ITEMS",
   "ui.bag.inventory_hint": "Klik om te bekijken · sleep of klik rechts voor acties",
+  "ui.bag.untradeable": "Niet verhandelbaar",
+  "ui.bag.untradeable_quantity": "Niet verhandelbaar · ×{quantity}",
   "ui.bag.selected_item": "GESELECTEERD ITEM",
   "ui.bag.select_item": "Selecteer een item",
   "ui.bag.select_item_action": "Selecteer een item",

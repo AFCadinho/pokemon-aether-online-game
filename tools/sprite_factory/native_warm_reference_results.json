@@ -1,0 +1,452 @@
+{
+  "task": "lossless-warm-reference-fix",
+  "rollout_qualified": false,
+  "reason": "Original-only warm reference remains non-exact; coincident Roaring Moon wings isolated, Dragonite response remains open.",
+  "strict_warm_expected_exit": 2,
+  "strict_positive_expected_exit": 0,
+  "positive_comparisons": 84,
+  "warm_comparisons_before_failure": 313,
+  "warm_source_fixture_sha256": "3bad521465678cef8302666a9216aba717d679fc894ee9007a23dce69351cc7c",
+  "failure": {
+    "identity": "roaring-moon",
+    "pixel_exact": false,
+    "pose": "damage:0.0",
+    "repeat_exact": true,
+    "response": false,
+    "sha256_candidate": "38d6ef0632e59c373ec01c49992e67906d2eb5a03f5f2957195f6154f58bbd67",
+    "sha256_original": "6603199aa35c2a2016ef2881dc2cca55af001816fdcb6f0df414d7e40bf78dd1"
+  },
+  "failure_evidence": {
+    "alpha_changed_pixels": 0,
+    "changed_pixels": 2912,
+    "maximum_channel_delta": [
+      33,
+      39,
+      39,
+      0
+    ],
+    "samples": [
+      {
+        "a": [
+          108,
+          55,
+          65,
+          64
+        ],
+        "b": [
+          108,
+          54,
+          64,
+          64
+        ],
+        "x": 306,
+        "y": 142
+      },
+      {
+        "a": [
+          102,
+          49,
+          61,
+          64
+        ],
+        "b": [
+          102,
+          49,
+          60,
+          64
+        ],
+        "x": 307,
+        "y": 142
+      },
+      {
+        "a": [
+          142,
+          56,
+          72,
+          127
+        ],
+        "b": [
+          144,
+          56,
+          72,
+          127
+        ],
+        "x": 308,
+        "y": 142
+      },
+      {
+        "a": [
+          86,
+          25,
+          38,
+          191
+        ],
+        "b": [
+          83,
+          24,
+          37,
+          191
+        ],
+        "x": 304,
+        "y": 143
+      },
+      {
+        "a": [
+          103,
+          20,
+          37,
+          255
+        ],
+        "b": [
+          95,
+          17,
+          33,
+          255
+        ],
+        "x": 305,
+        "y": 143
+      },
+      {
+        "a": [
+          96,
+          19,
+          34,
+          255
+        ],
+        "b": [
+          97,
+          19,
+          34,
+          255
+        ],
+        "x": 306,
+        "y": 143
+      },
+      {
+        "a": [
+          94,
+          18,
+          34,
+          255
+        ],
+        "b": [
+          95,
+          18,
+          33,
+          255
+        ],
+        "x": 307,
+        "y": 143
+      },
+      {
+        "a": [
+          95,
+          17,
+          33,
+          255
+        ],
+        "b": [
+          96,
+          17,
+          33,
+          255
+        ],
+        "x": 308,
+        "y": 143
+      },
+      {
+        "a": [
+          40,
+          33,
+          41,
+          64
+        ],
+        "b": [
+          41,
+          33,
+          41,
+          64
+        ],
+        "x": 304,
+        "y": 144
+      },
+      {
+        "a": [
+          75,
+          11,
+          24,
+          255
+        ],
+        "b": [
+          82,
+          13,
+          27,
+          255
+        ],
+        "x": 305,
+        "y": 144
+      },
+      {
+        "a": [
+          76,
+          12,
+          25,
+          255
+        ],
+        "b": [
+          77,
+          11,
+          25,
+          255
+        ],
+        "x": 306,
+        "y": 144
+      },
+      {
+        "a": [
+          84,
+          13,
+          28,
+          255
+        ],
+        "b": [
+          88,
+          14,
+          29,
+          255
+        ],
+        "x": 307,
+        "y": 144
+      },
+      {
+        "a": [
+          87,
+          15,
+          30,
+          255
+        ],
+        "b": [
+          91,
+          15,
+          31,
+          255
+        ],
+        "x": 308,
+        "y": 144
+      },
+      {
+        "a": [
+          88,
+          14,
+          30,
+          255
+        ],
+        "b": [
+          90,
+          14,
+          30,
+          255
+        ],
+        "x": 309,
+        "y": 144
+      },
+      {
+        "a": [
+          83,
+          15,
+          29,
+          255
+        ],
+        "b": [
+          82,
+          15,
+          29,
+          255
+        ],
+        "x": 330,
+        "y": 144
+      },
+      {
+        "a": [
+          82,
+          15,
+          28,
+          255
+        ],
+        "b": [
+          83,
+          15,
+          29,
+          255
+        ],
+        "x": 332,
+        "y": 144
+      }
+    ]
+  },
+  "probes": [
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 2912,
+      "maximum_channel_delta": [
+        33,
+        39,
+        39,
+        0
+      ],
+      "pixel_exact": false,
+      "probe": "settled",
+      "sha_a": "6603199aa35c2a2016ef2881dc2cca55af001816fdcb6f0df414d7e40bf78dd1",
+      "sha_b": "38d6ef0632e59c373ec01c49992e67906d2eb5a03f5f2957195f6154f58bbd67"
+    },
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 0,
+      "maximum_channel_delta": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pixel_exact": true,
+      "probe": "without-pm1089_00_00_wing_b_mesh",
+      "sha_a": "1372ff2c1ee6b19cd39a5d9fcf0f684e76e3109f841f9308e726a042e3c768e9",
+      "sha_b": "1372ff2c1ee6b19cd39a5d9fcf0f684e76e3109f841f9308e726a042e3c768e9"
+    },
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 0,
+      "maximum_channel_delta": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pixel_exact": true,
+      "probe": "without-pm1089_00_00_wing_a_mesh",
+      "sha_a": "34220891ffe92326c8faaac1f09365655289ace3f702a6c7df9f216463464803",
+      "sha_b": "34220891ffe92326c8faaac1f09365655289ace3f702a6c7df9f216463464803"
+    },
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 2912,
+      "maximum_channel_delta": [
+        33,
+        39,
+        39,
+        0
+      ],
+      "pixel_exact": false,
+      "probe": "restored-meshes",
+      "sha_a": "6603199aa35c2a2016ef2881dc2cca55af001816fdcb6f0df414d7e40bf78dd1",
+      "sha_b": "38d6ef0632e59c373ec01c49992e67906d2eb5a03f5f2957195f6154f58bbd67"
+    },
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 2910,
+      "maximum_channel_delta": [
+        33,
+        39,
+        39,
+        0
+      ],
+      "pixel_exact": false,
+      "probe": "no-shadow",
+      "sha_a": "7698ae570f61aceab092ff0169923a36d591172c04f722f96f97f67865756408",
+      "sha_b": "6efb70eeaf694d43902c30e2b7336827d01460ae61cd49d52233cf112c1957e2"
+    },
+    {
+      "alpha_changed_pixels": 0,
+      "changed_pixels": 2876,
+      "maximum_channel_delta": [
+        20,
+        39,
+        38,
+        0
+      ],
+      "pixel_exact": false,
+      "probe": "no-shadow-no-normal",
+      "sha_a": "304d216e12044adf2d60c4022f5b3563065666a886932b1e6f06e38ecb4d30d0",
+      "sha_b": "ac0bfa66d8f88a9e8bd360413d9ea8aca6574df8c5649f27bef045d02eca64e9"
+    }
+  ],
+  "pipeline_before": [
+    79.0,
+    10.0,
+    64.0,
+    83.0
+  ],
+  "pipeline_after_wait": [
+    79.0,
+    10.0,
+    64.0,
+    83.0
+  ],
+  "overlap_source_sha256": "e6abb71e192cf5715b8efa21ad55ac73f709c69ff46c79942e570fea1ff937be",
+  "ray_hits": [
+    [
+      {
+        "hits": [
+          {
+            "distance": 19.6232051849365,
+            "geometry_rid": 4458176053252,
+            "material": "body_b",
+            "material_rid": 5274219839514,
+            "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_a_mesh",
+            "surface": 1,
+            "triangle": 60
+          },
+          {
+            "distance": 19.6232051849365,
+            "geometry_rid": 4539780431877,
+            "material": "body_b",
+            "material_rid": 5287104741404,
+            "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_b_mesh",
+            "surface": 1,
+            "triangle": 864
+          }
+        ],
+        "pixel": "(223.5, 220.5)"
+      }
+    ],
+    [
+      {
+        "hits": [
+          {
+            "distance": 19.6232051849365,
+            "geometry_rid": 5085241278474,
+            "material": "body_b",
+            "material_rid": 5342939316260,
+            "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_a_mesh",
+            "surface": 1,
+            "triangle": 60
+          },
+          {
+            "distance": 19.6232051849365,
+            "geometry_rid": 5166845657099,
+            "material": "body_b",
+            "material_rid": 5355824218150,
+            "mesh": "pm1089_00_00/Skeleton3D/pm1089_00_00_wing_b_mesh",
+            "surface": 1,
+            "triangle": 864
+          }
+        ],
+        "pixel": "(223.5, 220.5)"
+      }
+    ]
+  ],
+  "evidence_files": {
+    "tracked-diagnostic/check.json": "87c41828d734ffb7992e93fae46572b2094596b30d228d9322299828338acd41",
+    "positive/check.json": "57db8eb4427452c8b5b8dd8b7949536b6a66ab0f259af61f4e5926b9a10cfcca",
+    "tracked-overlap.json": "be3f79f72015b779a012a9975025112756fac3d198f70559d282df7e9b4243ae",
+    "invalid-source-hash.json": "ce72bf9de0350756d611ce5a7fed41b6462c4eacd8451c9d9367b5e0b3f6eaaa",
+    "overlap.json": "e253cb685211467d951d4a38869a641658379fd09f1ec7b78aed998f010d84ea",
+    "dragonite-msaa-overlap.json": "f5c00b8e0cd41a5ba51e7af7cf6447a02f347bb51d43b25b344fbcc41bd36b60"
+  },
+  "tools": {
+    "native_paired_reference_check.gd": "25e9fdec6f53d2b2d0efcda58a8da4b375d8da2fa5b30d4196495fcd6acfa9d6",
+    "native_warm_reference_diagnostic.gd": "9c54f8e8537274d04120b539ba845588d9d7fed02bbbcdefe13c51e7c7e490a6",
+    "native_surface_overlap_diagnostic.gd": "92851feb69c2be7e3037e4f929cf970db79e2e3d93fa4e29cd0dc03f74e02051",
+    "native_resource_probe_project.py": "35542fd89877adb0df45c915b87adc43d60b97db9dc078ecdc9456e4379caf1d"
+  }
+}

@@ -1454,6 +1454,8 @@
   "ui.bag.categories": "CATEGORIES",
   "ui.bag.items": "ITEMS",
   "ui.bag.inventory_hint": "Click to inspect · drag or right-click for actions",
+  "ui.bag.untradeable": "Untradeable",
+  "ui.bag.untradeable_quantity": "Untradeable · ×{quantity}",
   "ui.bag.selected_item": "SELECTED ITEM",
   "ui.bag.select_item": "Select an item",
   "ui.bag.select_item_action": "Select an Item",

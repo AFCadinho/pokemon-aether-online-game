@@ -93,3 +93,13 @@ comparisons. Unsupported response skips are explicit in each phase receipt.
 This clears the fixture-lifetime blocker and qualifies the bounded cold image
 reference. The original-only warm-sequence failure remains open; global runtime
 qualification and production approval are still false.
+
+
+## Warm investigation follow-up
+
+The [warm reference investigation](lossless-warm-reference-investigation.md)
+now isolates Roaring Moon's failure to coincident original wing meshes.
+It is 2,912 changed pixels, distinct from Dragonite's earlier one-pixel response
+failure. Either wing alone matches exactly; restoring both restores the same
+failure. The strict warm hold remains open, and no model geometry or tolerance
+was changed.

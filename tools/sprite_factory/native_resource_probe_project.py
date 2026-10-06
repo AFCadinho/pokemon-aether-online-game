@@ -19,6 +19,9 @@ def main():
         raise ValueError("A fresh task-local probe project is required")
     output.mkdir(parents=True)
     files = ["tools/sprite_factory/native_resource_compression_check.gd",
+             "tools/sprite_factory/native_paired_reference_check.gd",
+             "tools/sprite_factory/native_warm_reference_diagnostic.gd",
+             "tools/sprite_factory/native_surface_overlap_diagnostic.gd",
              "tools/sprite_factory/storage_components_check.gd",
              "tools/sprite_factory/storage_components.gd",
              "scripts/battle/battle_ui/material_response.gd",

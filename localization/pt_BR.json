@@ -1419,6 +1419,8 @@
   "ui.bag.categories": "CATEGORIAS",
   "ui.bag.items": "ITENS",
   "ui.bag.inventory_hint": "Clique para ver · arraste ou clique com o botão direito para ações",
+  "ui.bag.untradeable": "Não negociável",
+  "ui.bag.untradeable_quantity": "Não negociável · ×{quantity}",
   "ui.bag.selected_item": "ITEM SELECIONADO",
   "ui.bag.select_item": "Selecione um item",
   "ui.bag.select_item_action": "Selecione um item",

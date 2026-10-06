@@ -1305,6 +1305,8 @@ var bag_summary_label: Label
 var bag_detail_icon: TextureRect
 var bag_detail_name_label: Label
 var bag_detail_meta_label: Label
+var bag_detail_tradeability_badge: PanelContainer
+var bag_detail_tradeability_label: Label
 var bag_detail_description_label: Label
 var bag_detail_use_button: Button
 var bag_detail_hotbar_button: Button
@@ -22620,6 +22622,24 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	bag_detail_meta_label.add_theme_color_override("font_color", UI_MONEY)
 	layout.add_child(bag_detail_meta_label)
 
+	bag_detail_tradeability_badge = PanelContainer.new()
+	bag_detail_tradeability_badge.name = "TradeabilityBadge"
+	bag_detail_tradeability_badge.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	bag_detail_tradeability_badge.visible = false
+	var badge_style := _make_panel_style(Color("#292419"), Color("#766338"), 5, 1)
+	badge_style.content_margin_left = 9
+	badge_style.content_margin_right = 9
+	badge_style.content_margin_top = 3
+	badge_style.content_margin_bottom = 3
+	bag_detail_tradeability_badge.add_theme_stylebox_override("panel", badge_style)
+	layout.add_child(bag_detail_tradeability_badge)
+
+	bag_detail_tradeability_label = Label.new()
+	bag_detail_tradeability_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	bag_detail_tradeability_label.add_theme_font_size_override("font_size", 11)
+	bag_detail_tradeability_label.add_theme_color_override("font_color", UI_MONEY)
+	bag_detail_tradeability_badge.add_child(bag_detail_tradeability_label)
+
 	bag_detail_description_label = Label.new()
 	bag_detail_description_label.text = LocalizationManager.text("ui.bag.details_placeholder")
 	bag_detail_description_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -24571,6 +24591,9 @@ func _select_bag_item(item: Dictionary) -> void:
 func _refresh_bag_detail() -> void:
 	if bag_detail_icon == null:
 		return
+	var tradeability_text := _bag_item_tradeability_label(bag_selected_item)
+	bag_detail_tradeability_badge.visible = not tradeability_text.is_empty()
+	bag_detail_tradeability_label.text = tradeability_text
 	if bag_selected_item.is_empty():
 		bag_detail_icon.texture = BAG_INTERFACE_ICON
 		bag_detail_icon.modulate = Color(1, 1, 1, 0.35)
@@ -24619,13 +24642,45 @@ func _refresh_bag_detail() -> void:
 	)
 	bag_detail_hotbar_button.disabled = not can_assign
 
+func _bag_item_tradeability_label(item: Dictionary) -> String:
+	if item.is_empty():
+		return ""
+	if str(item.get("ownershipVariant", "")) == "grouped":
+		var bound_quantity := int(item.get("boundQuantity", 0))
+		if bound_quantity <= 0:
+			return ""
+		if int(item.get("tradeableQuantity", 0)) > 0:
+			return LocalizationManager.text("ui.bag.untradeable_quantity", {"quantity": bound_quantity})
+		return LocalizationManager.text("ui.bag.untradeable")
+	if bool(item.get("borrowed", false)) or bool(item.get("permanent", false)) or (
+		item.has("tradable") and not bool(item["tradable"])
+	):
+		return LocalizationManager.text("ui.bag.untradeable")
+	return ""
+
+
+func _bag_description_without_tradeability_prefix(description: String, item: Dictionary) -> String:
+	if _bag_item_tradeability_label(item).is_empty():
+		return description
+	# Only remove standalone status prefixes; keep binding rules and gameplay text.
+	for prefix: String in [
+		"Untradeable.", "Untradable.", "Niet verhandelbaar.", "Onverhandelbaar.",
+		"Não negociável.", "Intransferível.", "不可交易。",
+	]:
+		if description.to_lower().begins_with(prefix.to_lower()):
+			return description.substr(prefix.length()).strip_edges()
+	return description
+
+
 func _bag_item_detail_description(item: Dictionary) -> String:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		var allowed_models := _bag_item_allowed_genders(item)
 		var model_label := " or ".join(allowed_models).capitalize()
 		return LocalizationManager.text("ui.bag.description.wrong_model", {"models": model_label})
-	var description := str(item.get("shortDesc", item.get("description", ""))).strip_edges()
+	var description := _bag_description_without_tradeability_prefix(
+		str(item.get("shortDesc", item.get("description", ""))).strip_edges(), item
+	)
 	if description != "":
 		return description
 	var use_notice := _staff_dictionary_from_variant(item.get("useNotice", {}))
