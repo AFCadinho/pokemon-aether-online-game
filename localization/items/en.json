@@ -570,5 +570,13 @@
   "palkia-mount": {
     "name": "Palkia Mount",
     "shortDesc": "Unlocks Palkia as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-zekrom-mount": {
+    "name": "Shiny Zekrom Mount",
+    "shortDesc": "Unlocks Shiny Zekrom as a land mount. Requires a Mount License for the current region."
+  },
+  "zekrom-mount-box": {
+    "name": "Zekrom Mount Box",
+    "shortDesc": "Contains a Zekrom mount. Base shiny chance: 50%."
   }
 }

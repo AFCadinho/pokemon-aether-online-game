@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add Shiny Zekrom and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
+- Align Dialga and Palkia with the normal ground line and move Dialga’s side crest clear of the rider’s face.
+
 - Count all successful Gift Store purchases for popular picks, including Gift Vouchers, generated Gems and staff purchases; combine bound cosmetics with the original product and count each buyer once across payment methods.
 
 - Show varied Gift Store popular picks from distinct buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.

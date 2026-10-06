@@ -2,7 +2,7 @@ extends SceneTree
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 var failed := false
 
@@ -16,7 +16,7 @@ func _run() -> void:
 	for base: String in IDS:
 		all_ids.append(base + "_shiny")
 	all_ids.append("metagross_black_gold")
-	all_ids.append_array(["dialga", "zekrom", "palkia"])
+	all_ids.append_array(["dialga", "palkia"])
 	for id: String in all_ids:
 		var item := ("shiny-" if id.ends_with("_shiny") else "") + id.trim_suffix("_shiny").replace("_", "-") + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " item resolves")
@@ -66,6 +66,7 @@ func _run() -> void:
 						var first := Mounts._get_texture_image(frames.get_frame_texture(StringName("walk_"+DIRECTIONS[row]),0))
 						_check(art.get_data() == first.get_data(), id + " idle starts at the reviewed pose")
 	_check_repaired_anatomy()
+	_check_grounded_dragon_mounts()
 	print("Land mount collection checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -74,6 +75,20 @@ func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failed = true
 		push_error(message)
+
+
+func _check_grounded_dragon_mounts() -> void:
+	# Ground mounts must reach the same foot line as the existing Cobalion.
+	# The former 112px atlas anchor left both dragons 16px above this line.
+	var reference := Mounts._get_texture_image(Mounts.get_mount_frames("cobalion").get_frame_texture("idle_down", 0))
+	var ground_y := reference.get_used_rect().end.y - reference.get_height() / 2
+	for id: String in ["dialga", "palkia"]:
+		var frames := Mounts.get_mount_frames(id)
+		for direction: String in DIRECTIONS:
+			for phase in range(4):
+				var art := Mounts._get_texture_image(frames.get_frame_texture("walk_" + direction, phase))
+				var foot_y := art.get_used_rect().end.y - art.get_height() / 2
+				_check(foot_y == ground_y + 2 * (phase % 2), id + " shares the grounded foot line and retains its animation bob")
 
 
 func _check_repaired_anatomy() -> void:

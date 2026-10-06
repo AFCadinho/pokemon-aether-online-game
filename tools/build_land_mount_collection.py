@@ -9,9 +9,9 @@ import json
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence')
+BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence', 'zekrom')
 SPECIAL_VARIANTS = {'metagross_black_gold': 'metagross'}
-GRANT_ONLY_IDS = ('dialga', 'zekrom', 'palkia')
+GRANT_ONLY_IDS = ('dialga', 'palkia')
 IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS) + GRANT_ONLY_IDS
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
@@ -50,7 +50,9 @@ def build(mount_id):
                 art.alpha_composite(relocated)
             arts.append(art)
             front_heads.append(relocated if spec and spec.get('foreground', False) else None)
-        base_x, base_y = 96-width//2, 112-arts[0].getbbox()[3]
+        # Shift the whole rig: mount, foreground, mask and rider share this origin.
+        # Grounded dragons need +16 to match the normal walking foot line.
+        base_x, base_y = 96-width//2, 112-arts[0].getbbox()[3] + design.get('groundOffsetY', 0)
         offsets[direction] = []
         for col, art in enumerate(arts):
             dx,dy = design['frameShifts'][direction][col]
