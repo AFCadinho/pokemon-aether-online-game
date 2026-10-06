@@ -1,0 +1,255 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "production_approved": false,
+  "strict_visual_gate_passed": false,
+  "scope": "offline lossless native-container follow-up; no runtime or publication changes",
+  "source_script_sha256": "b465863b947890cf9805d9f5908580367cb37593e9ed0dc49c896ba7cc3d1201",
+  "random_sample": {
+    "seed": 20261006,
+    "selection": "uniform bundle sample without replacement from locally available current-v10 archives",
+    "catalog_bundles": 1200,
+    "available_bundles": 1138,
+    "missing_asset_ids": [
+      "pokemon_3d:azumarill:base",
+      "pokemon_3d:blissey:base",
+      "pokemon_3d:chansey:base",
+      "pokemon_3d:charizard:base",
+      "pokemon_3d:corviknight:base",
+      "pokemon_3d:delibird:base",
+      "pokemon_3d:diglett:base",
+      "pokemon_3d:dondozo:base",
+      "pokemon_3d:donphan:base",
+      "pokemon_3d:dragonite:mega",
+      "pokemon_3d:dratini:base",
+      "pokemon_3d:drifblim:base",
+      "pokemon_3d:drowzee:base",
+      "pokemon_3d:electrode:base",
+      "pokemon_3d:espeon:base",
+      "pokemon_3d:flareon:base",
+      "pokemon_3d:garchomp:base",
+      "pokemon_3d:gardevoir:base",
+      "pokemon_3d:golduck:base",
+      "pokemon_3d:gyarados:base",
+      "pokemon_3d:hariyama:base",
+      "pokemon_3d:haunter:base",
+      "pokemon_3d:heracross:base",
+      "pokemon_3d:hoopa:base",
+      "pokemon_3d:hoppip:base",
+      "pokemon_3d:hydreigon:base",
+      "pokemon_3d:jigglypuff:base",
+      "pokemon_3d:jumpluff:base",
+      "pokemon_3d:magnemite:base",
+      "pokemon_3d:magneton:base",
+      "pokemon_3d:magnezone:base",
+      "pokemon_3d:mankey:base",
+      "pokemon_3d:marill:base",
+      "pokemon_3d:mew:base",
+      "pokemon_3d:mewtwo:base",
+      "pokemon_3d:misdreavus:base",
+      "pokemon_3d:oricorio:base",
+      "pokemon_3d:orthworm:base",
+      "pokemon_3d:pichu:base",
+      "pokemon_3d:primeape:base",
+      "pokemon_3d:psyduck:base",
+      "pokemon_3d:quagsire:base",
+      "pokemon_3d:qwilfish:base",
+      "pokemon_3d:raichu:base",
+      "pokemon_3d:scizor:base",
+      "pokemon_3d:scyther:base",
+      "pokemon_3d:seviper:base",
+      "pokemon_3d:shellder:base",
+      "pokemon_3d:slaking:base",
+      "pokemon_3d:slowpoke:base",
+      "pokemon_3d:staraptor:base",
+      "pokemon_3d:sudowoodo:base",
+      "pokemon_3d:tauros:base",
+      "pokemon_3d:tyranitar:base",
+      "pokemon_3d:umbreon:base",
+      "pokemon_3d:vaporeon:base",
+      "pokemon_3d:venonat:base",
+      "pokemon_3d:volcarona:base",
+      "pokemon_3d:voltorb:base",
+      "pokemon_3d:wigglytuff:base",
+      "pokemon_3d:wooper:base",
+      "pokemon_3d:zapdos:base"
+    ],
+    "selected_asset_ids": [
+      "pokemon_3d:togepi:base",
+      "pokemon_3d:clauncher:base",
+      "pokemon_3d:manaphy:base",
+      "pokemon_3d:mantyke:base",
+      "pokemon_3d:tyrunt:base",
+      "pokemon_3d:gouging-fire:base",
+      "pokemon_3d:iron-moth:base",
+      "pokemon_3d:voltorb-hisui:base",
+      "pokemon_3d:vulpix-alola:base",
+      "pokemon_3d:yungoos:base",
+      "pokemon_3d:basculegion:base",
+      "pokemon_3d:darumaka-galar:base",
+      "pokemon_3d:ampharos:base",
+      "pokemon_3d:ivysaur:base",
+      "pokemon_3d:diggersby:base",
+      "pokemon_3d:cinderace:base",
+      "pokemon_3d:lapras:base",
+      "pokemon_3d:starly:base",
+      "pokemon_3d:shinx:base",
+      "pokemon_3d:ponyta:base",
+      "pokemon_3d:herdier:base",
+      "pokemon_3d:aggron:base",
+      "pokemon_3d:cloyster:base",
+      "pokemon_3d:floragato:base",
+      "pokemon_3d:toucannon:base",
+      "pokemon_3d:dusknoir:base",
+      "pokemon_3d:hatterene:base",
+      "pokemon_3d:drizzile:base",
+      "pokemon_3d:forretress:base",
+      "pokemon_3d:sprigatito:base",
+      "pokemon_3d:calyrex:base",
+      "pokemon_3d:banette:base"
+    ],
+    "report_sha256": "b90c59b5406a6e8735dac84474425f74a9f52671fa0228e3953af4c6ce54cfe5",
+    "original_native_bytes": 667838550,
+    "recompressed_native_bytes": [
+      {
+        "block_size": 262144,
+        "level": 9,
+        "bytes": 439592433,
+        "saving_percent": 34.176840645093044
+      },
+      {
+        "block_size": 1048576,
+        "level": 9,
+        "bytes": 431966501,
+        "saving_percent": 35.31872321536396
+      }
+    ],
+    "recompressed_appearances": 62,
+    "unchanged_appearances": [
+      {
+        "identity": "toucannon",
+        "source_sha256": "135359e7ef537f24f25fedd3351282d48d62d53322038d86b9b5aac9e767e3db",
+        "source_bytes": 20152891,
+        "reason": "Uncompressed RSRC; retained unchanged"
+      },
+      {
+        "identity": "toucannon@shiny",
+        "source_sha256": "7f6233d1dc4ee195e67851e6670c07c917e3a9a9f37383d25bfa439e9de8187f",
+        "source_bytes": 20152835,
+        "reason": "Uncompressed RSRC; retained unchanged"
+      }
+    ],
+    "byte_exact_roundtrips": 124
+  },
+  "native_lifecycle": {
+    "report_sha256": "a7ef07d68a7a48c9ba0f4a7e36723dc7fdfff03844f012b025196ed9797d78ed",
+    "godot": "4.6.2-stable (official)",
+    "renderer": "forward_plus",
+    "paired_checks": 66,
+    "pose_state_comparisons": 1494,
+    "cache_hits": 132,
+    "uncached_loads": 132,
+    "engine_errors": [],
+    "scene_references_released": true,
+    "warm_filesystem_uncertified_timings": {
+      "original": {
+        "n": 66,
+        "median_ms": 157.0265,
+        "max_ms": 343.366
+      },
+      "candidate": {
+        "n": 66,
+        "median_ms": 120.50200000000001,
+        "max_ms": 239.817
+      }
+    },
+    "memory_before_cycles": {
+      "buffer_bytes": 2639928,
+      "godot_static_bytes": 54284228,
+      "rss_bytes": 525172736,
+      "texture_bytes": 34390016
+    },
+    "cycles": [
+      {
+        "after_clear": {
+          "buffer_bytes": 3954012,
+          "godot_static_bytes": 56810770,
+          "rss_bytes": 541954048,
+          "texture_bytes": 36052992
+        },
+        "cycle": 0,
+        "elapsed_ms": 9725.43
+      },
+      {
+        "after_clear": {
+          "buffer_bytes": 3954012,
+          "godot_static_bytes": 56971378,
+          "rss_bytes": 541999104,
+          "texture_bytes": 36052992
+        },
+        "cycle": 1,
+        "elapsed_ms": 10298.919
+      },
+      {
+        "after_clear": {
+          "buffer_bytes": 3954012,
+          "godot_static_bytes": 57127298,
+          "rss_bytes": 542023680,
+          "texture_bytes": 36052992
+        },
+        "cycle": 2,
+        "elapsed_ms": 9564.435
+      }
+    ],
+    "performance_gate_passed": false
+  },
+  "render_diagnostics": {
+    "original_only_report_sha256": "8df2c1715c572090ffca928831d8f14b41c367e103623fd04c648967e5100764",
+    "candidate_report_sha256": "6fa1d86ea20e572058c1ac13c28d07f0be0797b19905a2d2753bd579bd1a198f",
+    "immutable_native_resource_lease": true,
+    "diagnostic_only": true,
+    "original_only_differences": [
+      {
+        "original_vs_original_pixels": 0,
+        "original_vs_recompressed_pixels": 1,
+        "pose": "faint_start:0.999",
+        "response": true
+      }
+    ],
+    "candidate_differences": [
+      {
+        "original_vs_original_pixels": 0,
+        "original_vs_recompressed_pixels": 1,
+        "pose": "faint_start:0.999",
+        "response": true
+      }
+    ],
+    "interpretation": "Third-capture label is historical: in original-only mode this is another original, not a candidate. The leased graph does not remove the sequence-dependent failure."
+  },
+  "transfer_restoration": {
+    "report_sha256": "329deeb74250a25e08e047566930c7980d615406db28354137f6aecd4e015c73",
+    "libzstd": "1.5.7",
+    "appearances": 22,
+    "exact_install_and_replacement_roundtrips": 44,
+    "runtime_files_byte_exact": true,
+    "installed_storage_saved": false,
+    "launcher_integration_qualified": false
+  },
+  "expected_failure": {
+    "report_sha256": "ad41326c83d65a92e88537a420659c342cc64af9a16a8d5eb97ed06a17942079",
+    "exit_code": 2,
+    "complete": false,
+    "reason": "Assertion failed: Retention diagnostic cannot qualify eviction"
+  },
+  "focused_tests": {
+    "python_tests": 7,
+    "uid_sidecars_complete": true,
+    "diff_check_passed": true
+  },
+  "holds": [
+    "Strict original image reference remains sequence-dependent",
+    "Real battle latency/FPS and memory budget not qualified",
+    "256 KiB runtime and all desktop platform checks not yet qualified",
+    "Production catalog packaging/hashes/receipts and installer update/fallback not implemented"
+  ]
+}

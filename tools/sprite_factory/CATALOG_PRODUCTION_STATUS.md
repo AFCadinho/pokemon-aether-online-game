@@ -9,6 +9,11 @@ Zstandard block framing; it does not reactivate component assembly in a game
 loader. The 22-scene sample saves 35.22% with exact decompressed bytes and
 passing native load/semantic checks. Strict rendered comparisons are held: an
 unchanged-original control reproduces the same Dragonite pixel mismatch.
+Follow-up: a seeded 32-bundle sample saves 35.32% in native file bytes, including
+two unsupported appearances retained unchanged. The initial 22 scenes pass
+three native lifetime/pose-isolation rounds; 44 transfer-only reconstructions
+restore the exact approved files. Original-only resource-retention diagnostics
+still expose sequence-dependent pixels, so the visual gate remains held.
 No production assets, admissions or distribution indexes changed. See
 [research evidence](../../docs/lossless-native-model-compression-research.md).
 

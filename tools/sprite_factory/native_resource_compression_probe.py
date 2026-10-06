@@ -109,6 +109,8 @@ def main():
     parser.add_argument("--levels", nargs="+", type=int, default=[3, 9])
     parser.add_argument("--save-block", type=int, default=1048576)
     parser.add_argument("--save-level", type=int, default=9)
+    parser.add_argument("--measure-only", action="store_true",
+                        help="Measure and validate containers without retaining candidate SCNs")
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError("Fresh output required")
@@ -119,7 +121,8 @@ def main():
     codec = Zstd()
     report = {"schema": 1, "prototype_only": True, "production_approved": False,
               "index_sha256": sha(index_bytes), "libzstd": codec.version,
-              "source_script_sha256": sha(Path(__file__).read_bytes()), "entries": []}
+              "source_script_sha256": sha(Path(__file__).read_bytes()),
+              "measure_only": args.measure_only, "entries": [], "unmodified": []}
     configurations = [(block, level) for block in args.blocks for level in args.levels]
     assert (args.save_block, args.save_level) in configurations
     for asset_id in args.identities:
@@ -132,6 +135,14 @@ def main():
                 variant = appearance["variant"]
                 original = archive.read("models/" + variant + ".scn")
                 assert sha(original) == appearance["runtime_sha256"]
+                if args.measure_only and original[:4] == b"RSRC" and original[-4:] == b"RSRC":
+                    # Keep uncompressed native files in the denominator. This
+                    # probe qualifies RSCC reframing only, not RSRC conversion.
+                    report["unmodified"].append({"identity": appearance["runtime_identity"],
+                        "source_archive": str(path), "source_sha256": sha(original),
+                        "source_bytes": len(original), "reason": "Uncompressed RSRC; retained unchanged"})
+                    print("NATIVE_UNMODIFIED", appearance["runtime_identity"], len(original), flush=True)
+                    continue
                 started = time.perf_counter()
                 raw = decode(original, codec)
                 original_decode_ms = (time.perf_counter() - started) * 1000
@@ -151,7 +162,7 @@ def main():
                         "bytes": len(candidate), "sha256": sha(candidate),
                         "encoding_ms": encoding_ms, "decoding_ms": decoding_ms,
                         "raw_byte_exact": True})
-                    if (block, level) == (args.save_block, args.save_level):
+                    if not args.measure_only and (block, level) == (args.save_block, args.save_level):
                         target = args.output / (appearance["runtime_identity"] + ".scn")
                         target.write_bytes(candidate)
                         entry["candidate_path"] = str(target.resolve())
