@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Documentation
+
+- Prepare English screenshots and captions for the official Item Dex guide, covering navigation, search and item sources.
+
 ### Adventure and exploration
 
 - Claim three previously unavailable pickups on Route 14, and find Repel items among updated overworld rewards.
