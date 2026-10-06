@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.
+
 - Stage 3D Earthquake, Blizzard and Bloom Doom across the battle circle, with travelling ground fractures, sweeping snow and a flowering field that gathers into the final impact.
 
 - Review all 194 native 3D moves for smoother visual flow, individual pacing, blended source effects and clearer cast shapes; keep unsupported moves fast, align late dodges and restore distinct sound cues for twelve casts.
