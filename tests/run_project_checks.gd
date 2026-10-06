@@ -442,6 +442,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/ironfanton_appearance_unlock_check.gd",
 	"res://tests/smoking_outfit_check.gd",
 	"res://tests/male_adventure_outfits_check.gd",
+	"res://tests/thor_outfit_check.gd",
 	"res://tests/adventure_trainer_sprites_check.gd",
 	"res://tests/adventure_outfit_gender_ui_check.gd",
 	"res://tests/cosmetic_variant_ui_check.gd",

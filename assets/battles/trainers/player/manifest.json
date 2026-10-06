@@ -80,6 +80,10 @@
             "LugiaSkyCaptain_Trousers": {
               "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/bottom.png",
               "scale": 1.0
+            },
+            "Thor_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/thor/bottom.png",
+              "scale": 1.0
             }
           }
         },
@@ -146,6 +150,10 @@
             "LugiaSkyCaptain_Shoes": {
               "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/shoes.png",
               "scale": 1.0
+            },
+            "Thor_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/thor/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -211,6 +219,10 @@
             },
             "LugiaSkyCaptain_Shirt": {
               "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/top.png",
+              "scale": 1.0
+            },
+            "Thor_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/thor/top.png",
               "scale": 1.0
             }
           }
@@ -316,6 +328,10 @@
             "AetherRoyal_Cape": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/cape.png",
               "scale": 1.0
+            },
+            "Thor_Hammer": {
+              "path": "res://assets/battles/trainers/player/male/thor/cape.png",
+              "scale": 1.0
             }
           }
         },
@@ -323,6 +339,10 @@
           "parts": {
             "AetherRoyal_Cape": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/cape_overlay.png",
+              "scale": 1.0
+            },
+            "Thor_Hammer": {
+              "path": "res://assets/battles/trainers/player/male/thor/cape_overlay.png",
               "scale": 1.0
             }
           }
@@ -381,6 +401,10 @@
             },
             "LugiaSkyCaptain_Trousers": {
               "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/bottom.png",
+              "scale": 1.0
+            },
+            "Thor_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/thor/bottom.png",
               "scale": 1.0
             }
           }
@@ -448,6 +472,10 @@
             "LugiaSkyCaptain_Shoes": {
               "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/shoes.png",
               "scale": 1.0
+            },
+            "Thor_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/thor/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -508,6 +536,10 @@
             },
             "LugiaSkyCaptain_Shirt": {
               "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/top.png",
+              "scale": 1.0
+            },
+            "Thor_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/thor/top.png",
               "scale": 1.0
             }
           }
@@ -605,6 +637,10 @@
             "AetherRoyal_Cape": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/cape.png",
               "scale": 1.0
+            },
+            "Thor_Hammer": {
+              "path": "res://assets/battles/trainers/player/female/thor/cape.png",
+              "scale": 1.0
             }
           }
         },
@@ -612,6 +648,10 @@
           "parts": {
             "AetherRoyal_Cape": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/cape_overlay.png",
+              "scale": 1.0
+            },
+            "Thor_Hammer": {
+              "path": "res://assets/battles/trainers/player/female/thor/cape_overlay.png",
               "scale": 1.0
             }
           }

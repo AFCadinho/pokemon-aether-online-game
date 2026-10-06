@@ -798,5 +798,25 @@
   "aether-credit-voucher-1000": {
     "name": "Aether Credit Voucher · 1,000",
     "shortDesc": "Claim om 1000 tegoed toe te voegen aan je Aether Credit Card. Verhandelbaar tot het claimen. Kaartaankopen zijn accountgebonden."
+  },
+  "thor-shirt": {
+    "name": "Thor-pantser",
+    "shortDesc": "Geschikt voor beide modellen. Bij de hamer horen een cape die tijdens lopen omhoogkomt en na het stoppen zakt, en elektrische vonken. Draag de hamer via het rugslot."
+  },
+  "thor-trousers": {
+    "name": "Thor-broek",
+    "shortDesc": "Geschikt voor beide modellen. Bij de hamer horen een cape die tijdens lopen omhoogkomt en na het stoppen zakt, en elektrische vonken. Draag de hamer via het rugslot."
+  },
+  "thor-shoes": {
+    "name": "Thor-laarzen",
+    "shortDesc": "Geschikt voor beide modellen. Bij de hamer horen een cape die tijdens lopen omhoogkomt en na het stoppen zakt, en elektrische vonken. Draag de hamer via het rugslot."
+  },
+  "thor-hammer": {
+    "name": "Thor-hamer en cape",
+    "shortDesc": "Geschikt voor beide modellen. Bij de hamer horen een cape die tijdens lopen omhoogkomt en na het stoppen zakt, en elektrische vonken. Draag de hamer via het rugslot."
+  },
+  "thor-outfit": {
+    "name": "Thor-outfitbox",
+    "shortDesc": "Geschikt voor beide modellen. Bij de hamer horen een cape die tijdens lopen omhoogkomt en na het stoppen zakt, en elektrische vonken. Draag de hamer via het rugslot."
   }
 }
