@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.
+
 - Keep mounted player nameplates, badges, chat bubbles and battle indicators above the rider and mount, with stable animation clearance and normal placement after dismounting.
 
 - Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.

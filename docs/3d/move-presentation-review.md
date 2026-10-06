@@ -6,6 +6,10 @@ Review scope: **all 194 supported 3D move keys** (24 dedicated renderers,
 move. The user's priority is smooth flow, then attractive presentation; short
 duration is only a priority for moves without an effect.
 
+Current follow-up: [completed move staging](completed-move-staging.md) covers the
+remaining 124 ordinary and 34 Z-moves after both battlefield batches. The register
+below is the earlier presentation review snapshot.
+
 ## Changes and findings
 
 Follow-up: [battlefield staging](battlefield-move-staging.md) replaces the
