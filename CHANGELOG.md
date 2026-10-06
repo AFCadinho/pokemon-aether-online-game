@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Introduce the Aether Credit Card and tradeable Gem-only top-up vouchers for 100, 250, 500 and 1,000 credit. Personal Store items, including Blessing vouchers, charms and trainer services, accept card credit and remain account-bound; guild products and credit vouchers require Gems. Blessing activates only when its voucher is used.
+
 - Make mount exchange confirmation clearer with shiny/normal previews, a separate voucher reward, binding labels and a highlighted last-shiny warning.
 
 - Browse shiny mounts with search, Land/Surf tabs, binding filters and compact cards. Duplicates-only exchanges preserve one shiny of each type, counting bound and tradeable copies together.

@@ -61,8 +61,13 @@ func localize_item(item: Dictionary, locale: String = "") -> Dictionary:
 
 	var translated_description := short_description(item_id, source_description, locale)
 	var actual_id := str(localized.get("itemId", localized.get("id", "")))
-	if actual_id.ends_with("-bound") and str(localized.get("category", "")) == "cosmetics":
-		translated_description = LocalizationManager.text("ui.store.voucher.bound_item")
+	if actual_id.ends_with("-bound"):
+		if item_id.begins_with("aether-blessing-voucher-"):
+			translated_description = LocalizationManager.text("ui.credit_card.blessing_bound")
+		elif str(localized.get("category", "")) == "cosmetics":
+			translated_description = LocalizationManager.text("ui.store.voucher.bound_item")
+		else:
+			translated_description = LocalizationManager.text("ui.store.voucher.bound_item") + "\n" + translated_description
 	if item_id == "aether-gift-voucher" and localized.get("voucherBalance") != null:
 		translated_description = LocalizationManager.text("ui.store.voucher.bag_description", {
 			"amount": str(maxi(int(localized.get("voucherBalance", 0)), 0))

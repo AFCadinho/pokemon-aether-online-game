@@ -9,7 +9,7 @@ func open_balance() -> void:
 	_refresh_generation += 1
 	var generation := _refresh_generation
 	configure(
-		get_node("/root/ItemLocalization").display_name("aether-gift-voucher", "Aether Gift Voucher"),
+		get_node("/root/ItemLocalization").display_name("aether-gift-voucher", "Aether Credit Card"),
 		get_node("/root/LocalizationManager").text("ui.voucher.loading"),
 		get_node("/root/LocalizationManager").text("common.close"),
 		get_node("/root/LocalizationManager").text("common.close")

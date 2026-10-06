@@ -420,8 +420,8 @@
     "shortDesc": "Desbloqueia Mega Absol Z como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   },
   "aether-gift-voucher": {
-    "name": "Aether Gift Voucher",
-    "shortDesc": "Crédito de voucher disponível: {amount}. Use em cosméticos e montarias elegíveis da Gift Store. Compras e conteúdo das caixas são inegociáveis. Somente a equipe PokeAether pode adicionar crédito."
+    "name": "Aether Credit Card",
+    "shortDesc": "Crédito disponível: 0. Use em itens pessoais da Gift Store. Compras e conteúdos de caixas são intransferíveis. Resgate Credit Vouchers para adicionar crédito."
   },
   "mega-alakazam-mount-box": {
     "name": "Caixa de montaria Mega Alakazam",
@@ -782,5 +782,21 @@
   "magikarp-mount-box": {
     "name": "Caixa de Montaria Magikarp",
     "shortDesc": "Contém uma montaria de Surf Magikarp. Chance shiny inicial: 50%."
+  },
+  "aether-credit-voucher-100": {
+    "name": "Aether Credit Voucher · 100",
+    "shortDesc": "Resgate para adicionar 100 créditos ao seu Aether Credit Card. Negociável até o resgate. Compras com o cartão são vinculadas à conta."
+  },
+  "aether-credit-voucher-250": {
+    "name": "Aether Credit Voucher · 250",
+    "shortDesc": "Resgate para adicionar 250 créditos ao seu Aether Credit Card. Negociável até o resgate. Compras com o cartão são vinculadas à conta."
+  },
+  "aether-credit-voucher-500": {
+    "name": "Aether Credit Voucher · 500",
+    "shortDesc": "Resgate para adicionar 500 créditos ao seu Aether Credit Card. Negociável até o resgate. Compras com o cartão são vinculadas à conta."
+  },
+  "aether-credit-voucher-1000": {
+    "name": "Aether Credit Voucher · 1,000",
+    "shortDesc": "Resgate para adicionar 1000 créditos ao seu Aether Credit Card. Negociável até o resgate. Compras com o cartão são vinculadas à conta."
   }
 }

@@ -420,8 +420,8 @@
     "shortDesc": "Ontgrendelt Mega Absol Z als land-mount. Vereist een Mount License voor de huidige regio."
   },
   "aether-gift-voucher": {
-    "name": "Aether Gift Voucher",
-    "shortDesc": "Beschikbaar vouchertegoed: {amount}. Te besteden aan geschikte cosmetics en mounts in de Gift Store. Aankopen en alle boxinhoud zijn untradeable. Alleen PokeAether kan tegoed toevoegen."
+    "name": "Aether Credit Card",
+    "shortDesc": "Beschikbaar kaarttegoed: 0. Te besteden aan persoonlijke Gift Store-items. Alle aankopen en boxinhoud zijn niet verhandelbaar. Claim Credit Vouchers om tegoed toe te voegen."
   },
   "mega-alakazam-mount-box": {
     "name": "Mega Alakazam-mountbox",
@@ -782,5 +782,21 @@
   "magikarp-mount-box": {
     "name": "Magikarp Mount Box",
     "shortDesc": "Bevat een Magikarp-surfmount. Shiny-basiskans: 50%."
+  },
+  "aether-credit-voucher-100": {
+    "name": "Aether Credit Voucher · 100",
+    "shortDesc": "Claim om 100 tegoed toe te voegen aan je Aether Credit Card. Verhandelbaar tot het claimen. Kaartaankopen zijn accountgebonden."
+  },
+  "aether-credit-voucher-250": {
+    "name": "Aether Credit Voucher · 250",
+    "shortDesc": "Claim om 250 tegoed toe te voegen aan je Aether Credit Card. Verhandelbaar tot het claimen. Kaartaankopen zijn accountgebonden."
+  },
+  "aether-credit-voucher-500": {
+    "name": "Aether Credit Voucher · 500",
+    "shortDesc": "Claim om 500 tegoed toe te voegen aan je Aether Credit Card. Verhandelbaar tot het claimen. Kaartaankopen zijn accountgebonden."
+  },
+  "aether-credit-voucher-1000": {
+    "name": "Aether Credit Voucher · 1,000",
+    "shortDesc": "Claim om 1000 tegoed toe te voegen aan je Aether Credit Card. Verhandelbaar tot het claimen. Kaartaankopen zijn accountgebonden."
   }
 }
