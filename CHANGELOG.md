@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the Thor Outfit Box to the Aether Gift Store for 550 Gems for both models, including armor, trousers, boots, and the hammer with its moving cape and electric effects.
+
 - Lengthen Thor’s walking cape and lift its rounded hem more visibly for both models, preserving the approved idle poses and matching electric sparks to the extended cloth.
 
 - Add a Repel refill amount selector with Max, keep hotbar use at one item per click, and recognize Repels in older inventory responses without a use action.
