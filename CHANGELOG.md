@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Switch Gift Store cosmetic previews between Overworld and Trainer sprites, with matching outfit parts and Chroma colours.
+
 - Give normal and shiny Primal Kyogre submerged fins/tail, hull foam and a swimming wake while preserving rider poses, fishing and map depth.
 
 - Style the Bag mount tradeability dropdown with a dark rounded menu, gold accents, custom selection icons and clearer hover states.
