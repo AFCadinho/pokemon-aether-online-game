@@ -597,6 +597,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "dialga-mount-box",
+		"name": "Dialga Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_dialga",
+		"price": 750,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "rayquaza-mount-box",
 		"name": "Rayquaza Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description",

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Dialga and its Land Gift Store box for 750 Aether Gems, preserving the approved rider pose and existing shiny chance and pity rules.
+
 - Add Shiny Palkia and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
 - Restore Dialga’s original side head/neck connection and move the rider back on the saddle to keep the face clear.
 

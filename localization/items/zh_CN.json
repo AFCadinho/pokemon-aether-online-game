@@ -586,5 +586,13 @@
   "palkia-mount-box": {
     "name": "帕路奇亚坐骑箱",
     "shortDesc": "包含一只帕路奇亚坐骑。初始异色概率：50%。"
+  },
+  "shiny-dialga-mount": {
+    "name": "异色帝牙卢卡坐骑",
+    "shortDesc": "解锁异色帝牙卢卡陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "dialga-mount-box": {
+    "name": "帝牙卢卡坐骑箱",
+    "shortDesc": "包含一只帝牙卢卡坐骑。初始异色概率：50%。"
   }
 }

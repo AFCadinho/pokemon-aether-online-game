@@ -3,6 +3,7 @@
 | Land mount | Permanent grant item |
 | --- | --- |
 | Dialga | `dialga-mount` |
+| Shiny Dialga | `shiny-dialga-mount` |
 | Zekrom | `zekrom-mount` |
 | Shiny Zekrom | `shiny-zekrom-mount` |
 | Palkia | `palkia-mount` |
@@ -10,8 +11,8 @@
 
 These mounts can be granted through existing administration/reward
 tooling. Ownership unlocks the corresponding Land selector entry; the current
-region's Mount License remains required. Dialga remains grant-only.
-Zekrom and Palkia each have a Land Gift Store box for 750 Aether Gems or
+region's Mount License remains required.
+Dialga, Zekrom and Palkia each have a Land Gift Store box for 750 Aether Gems or
 eligible Gift Voucher credits. Each grants the corresponding normal or shiny
 mount using the shared 50/60/70/80 pity
 rules; the short description shows the mount and 50% base chance.
@@ -53,3 +54,8 @@ with `--mounts=palkia --shiny`.
 
 Use `--adinho` to additionally check the male Adinho hair, beard, glasses and
 outfit on the game rig; the female preview retains its default appearance.
+
+Shiny Dialga uses the matching turquoise/green shiny follower palette with
+pale gold armor. It shares the approved front head pose, original side neck
+connection, rear seat, grounded height, animation and rider masks exactly.
+Render with `--mounts=dialga --shiny` (optionally `--adinho`).

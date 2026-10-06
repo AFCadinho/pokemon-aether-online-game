@@ -2080,6 +2080,105 @@
         0,
         8
       ]
+    },
+    "dialga_shiny": {
+      "displayName": "Shiny Dialga",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/dialga_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/dialga_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/dialga_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -26
+          ],
+          [
+            16,
+            -24
+          ],
+          [
+            16,
+            -26
+          ],
+          [
+            16,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -26
+          ],
+          [
+            -16,
+            -24
+          ],
+          [
+            -16,
+            -26
+          ],
+          [
+            -16,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -10
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/dialga_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/dialga_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/dialga_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/dialga_shiny/icon.png",
+      "unlockItemId": "shiny-dialga-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }
