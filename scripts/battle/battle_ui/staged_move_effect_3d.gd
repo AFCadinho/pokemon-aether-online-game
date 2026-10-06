@@ -16,14 +16,20 @@ var feather: ArrayMesh
 var pearl: StandardMaterial3D
 var soft: ShaderMaterial
 var soft_quad := QuadMesh.new()
-var combo_hand: StandardMaterial3D
-var combo_knuckles: StandardMaterial3D
+var combo_hands: Array[StandardMaterial3D] = []
+var combo_knuckles: Array[StandardMaterial3D] = []
+var combo_trails: Array[StandardMaterial3D] = []
 var combo_spotlight: ShaderMaterial
 var combo_beats_drawn: Array[int] = []
 
 func _geometry_scale() -> float:return presentation_scale
 
 func _sprite_values(id: String) -> Array:
+	if id in ["combo_red","combo_blue"]:
+		var values := super._sprite_values("1")
+		var tint := Color("ff3155") if id=="combo_red" else Color("258fff")
+		values[1]=Vector3(tint.r,tint.g,tint.b)
+		return values
 	if id=="fire":
 		var c := Color("996fff") if motif=="ghost-flames" else Color(str(recipe.color))
 		return [SPRITES.ember_core[0],Vector3(c.r,c.g,c.b),4.0,false]
@@ -59,14 +65,19 @@ void fragment() {
 	soft=ShaderMaterial.new();soft.shader=shader
 	soft.set_shader_parameter("tint",Color(str(recipe.color)))
 	if key=="closecombat":
-		combo_hand=_material(Color("657d74"),.98)
-		combo_hand.shading_mode=BaseMaterial3D.SHADING_MODE_PER_PIXEL
-		combo_hand.roughness=.65
-		combo_hand.transparency=BaseMaterial3D.TRANSPARENCY_DISABLED
-		combo_hand.cull_mode=BaseMaterial3D.CULL_BACK
-		combo_hand.emission_energy_multiplier=.15
-		combo_knuckles=combo_hand.duplicate()
-		combo_knuckles.albedo_color=Color("c0d0b7")
+		for color in [Color("e52e50"),Color("246ee5")]:
+			var hand := _material(color,1.)
+			hand.shading_mode=BaseMaterial3D.SHADING_MODE_PER_PIXEL
+			hand.roughness=.55
+			hand.transparency=BaseMaterial3D.TRANSPARENCY_DISABLED
+			hand.cull_mode=BaseMaterial3D.CULL_BACK
+			hand.emission_energy_multiplier=.3
+			combo_hands.append(hand)
+			var knuckles: StandardMaterial3D=hand.duplicate()
+			knuckles.albedo_color=color.lerp(Color.WHITE,.35)
+			combo_knuckles.append(knuckles)
+			combo_trails.append(_material(color, .9))
+		soft.set_shader_parameter("tint",Color("258fff"))
 		combo_spotlight=soft.duplicate()
 		combo_spotlight.set_shader_parameter("tint",Color("36b9fa"))
 	var tool := SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -125,7 +136,7 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	impact_drawn=hit and bool(recipe.damaging) and after>=0
 	if impact_drawn:
 		var fade := 1-clampf(after,0,1)
-		_source_sprite(aim,(1.3+after)*weight,"1",clampf(after,0,1),fade*.65,facing)
+		_source_sprite(aim,(1.3+after)*weight,"combo_blue" if key=="closecombat" else "1",clampf(after,0,1),fade*.65,facing)
 		_piece(soft_quad,soft,aim,Vector3.ONE*weight*(2.+after),facing)
 		for i in 6:
 			var a := i*TAU/6
@@ -442,17 +453,17 @@ func _field_stage(center: Vector3,t: float,flight: float,after: float,alpha: flo
 
 # Preserve the 2D beat positions/order in a world-space combat plane. These
 # symbolic hands are authored geometry; no imported 2D strike sprites are used.
-func _combo_fist(point: Vector3, size_value: float, orientation: Basis, palm: bool) -> void:
+func _combo_fist(point: Vector3, size_value: float, orientation: Basis, palm: bool, palette: int) -> void:
 	# Broad knuckle row, curled fingers and an opposed thumb: readable at battle distance.
-	_piece(sphere,combo_hand,point,Vector3(.48,.27,.32)*size_value,orientation)
+	_piece(sphere,combo_hands[palette],point,Vector3(.48,.27,.32)*size_value,orientation)
 	for finger in 4:
 		var tip := Vector3((finger-1.5)*.25,.32,-.18)
 		var shape := Vector3(.13,.23,.23)
 		if palm:
 			tip.y=.42+sin((finger+1)*PI/5)*.12
 			shape=Vector3(.11,.34,.13)
-		_piece(sphere,combo_knuckles,point+orientation*tip*size_value,shape*size_value,orientation)
-	_piece(sphere,combo_hand,point+orientation*Vector3(-.46,-.10,-.12)*size_value,Vector3(.20,.24,.25)*size_value,orientation)
+		_piece(sphere,combo_knuckles[1-palette if palm else palette],point+orientation*tip*size_value,shape*size_value,orientation)
+	_piece(sphere,combo_hands[palette],point+orientation*Vector3(-.46,-.10,-.12)*size_value,Vector3(.20,.24,.25)*size_value,orientation)
 
 func _close_combat(t: float,alpha: float,facing: Basis) -> void:
 	var combo: Dictionary=recipe.close_choreography
@@ -464,15 +475,14 @@ func _close_combat(t: float,alpha: float,facing: Basis) -> void:
 	var side := forward.cross(Vector3.UP).normalized()
 	var hand_basis := Basis(side,Vector3.UP,-forward)
 	var target_size := clampf(float(anchors.call().radius),.8,1.3)
-	combo_hand.albedo_color.a=alpha*.98
-	combo_knuckles.albedo_color.a=alpha
+	for trail in combo_trails:trail.albedo_color.a=alpha*.9
 	combo_spotlight.set_shader_parameter("opacity",alpha*.48)
 	var middle := caster_ground.lerp(target_ground,.68)
 	_piece(soft_quad,combo_spotlight,middle+Vector3.UP*.04,Vector3(6,6,1),Basis(Vector3.RIGHT,-PI/2))
 	for i in 8:
 		var lane := caster_ground.lerp(target_ground,clampf(t*5-i*.06,0,1))
 		var offset := side*(i%2*2-1)*(.7+i*.09)
-		_line(lane+offset-forward*.8,lane+offset,.025*alpha*(1-smoothstep(.18,.4,t)),pearl)
+		_line(lane+offset-forward*.8,lane+offset,.025*alpha*(1-smoothstep(.18,.4,t)),combo_trails[i%2])
 	combo_beats_drawn.clear()
 	for index in combo.beats.size():
 		var beat: Dictionary=combo.beats[index]
@@ -498,24 +508,25 @@ func _close_combat(t: float,alpha: float,facing: Basis) -> void:
 			var hand := contact-forward*(1-advance)*(2.4 if finishing else 1.75)
 			hand+=side*handedness*arc*.55*target_size
 			var orientation := hand_basis*Basis(Vector3.FORWARD,handedness*(.28+(1-advance)*.6))
-			_combo_fist(hand,size_value*fade,orientation,finishing)
+			var palette: int = (index+hand_index)%2
+			_combo_fist(hand,size_value*fade,orientation,finishing,palette)
 			# Short curved speed ribbons follow the actual punch, with a bright core.
 			for streak in 3:
 				var point := hand+side*(streak-1)*size_value*.4
 				var tail := point-forward*(.8+size_value)+side*handedness*.3
-				_line(tail,point,.025*fade,pearl)
-				_line(tail-forward*.35,tail,.045*fade,edge)
+				_line(tail,point,.025*fade,combo_knuckles[palette])
+				_line(tail-forward*.35,tail,.045*fade,combo_trails[palette])
 			var flash_age := age-1.
 			if hit and flash_age>=0:
 				var flare := 1-clampf(flash_age/(4. if finishing else 1.65),0,1)
 				var extent := (2.1 if finishing else .75)*target_size
 				var flare_point := contact+forward*.25
-				_source_sprite(flare_point,extent*2,"1",clampf(flash_age/3,0,1),flare*.9,facing)
+				_source_sprite(flare_point,extent*2,"combo_red" if palette==0 else "combo_blue",clampf(flash_age/3,0,1),flare*.9,facing)
 				for ray in (10 if finishing else 5):
 					var a: float=ray*TAU/(10 if finishing else 5)+index*.7
 					var direction := side*cos(a)+Vector3.UP*sin(a)
-					_line(flare_point+direction*extent*.35,flare_point+direction*extent*(1+flash_age*.4),.045*flare,pearl)
+					_line(flare_point+direction*extent*.35,flare_point+direction*extent*(1+flash_age*.4),.045*flare,combo_trails[ray%2 if finishing else palette])
 				if finishing:
 					for wave in 2:
 						var spread := maxf(0,flash_age-wave*.6)
-						_piece(ring,edge,target_ground+Vector3.UP*(.06+wave*.06),Vector3.ONE*(.6+spread*.9)*flare)
+						_piece(ring,combo_trails[wave],target_ground+Vector3.UP*(.06+wave*.06),Vector3.ONE*(.6+spread*.9)*flare)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give 3D Close Combat alternating red and blue fists, matching punch trails and a two-color finishing impact.
+
 - Intensify 3D Close Combat with a continuous left/right fist barrage, larger readable hands, curved punch trails, attacker weight shifts and a stronger finishing blow.
 
 - Rework 3D Close Combat around its 2D combo: a quick approach, alternating fists and strike flashes, repeated pitched hit sounds and a larger final blow, with early dodge and a full contact hold.

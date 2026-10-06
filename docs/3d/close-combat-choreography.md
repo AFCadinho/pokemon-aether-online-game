@@ -8,6 +8,9 @@ The attacker advances by frame 3, stays at contact distance through frame 31,
 and returns by frame 35. The attacker shifts weight and turns through the barrage, staying behind the
 contact boundary, then draws back before the final blow. Each original accent
 now leads an overlapping left/right pair: 26 large fists and one closing palm.
+The fists alternate saturated red and blue, with matching source-mask flashes
+and punch trails. The final palm combines both colors, including alternating
+impact rays and red/blue ground rings.
 Curved trails, broad knuckle rows and stronger source-textured flashes emphasize
 the combination, followed by a larger closing palm/impact
 at frame 28. A translucent blue floor spotlight recalls the original background
