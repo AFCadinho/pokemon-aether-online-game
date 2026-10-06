@@ -103,7 +103,9 @@ func _can_start_manual_interaction() -> bool:
 func _start_manual_interaction(body: Node2D) -> void:
 	is_interacting = true
 	_lock_overworld_input()
-	if body.has_method("face_world_position"):
+	if body.has_method("face_interaction_position"):
+		body.call("face_interaction_position", global_position)
+	elif body.has_method("face_world_position"):
 		body.face_world_position(global_position)
 
 	var result := await _run_story_or_legacy_interaction(body, "interact")
@@ -166,7 +168,9 @@ func _is_player_facing_interactable(player: Node2D) -> bool:
 		return false
 
 	var player_feet_position := player.global_position
-	if player.has_method("get_feet_position"):
+	if player.has_method("get_interaction_position"):
+		player_feet_position = player.call("get_interaction_position") as Vector2
+	elif player.has_method("get_feet_position"):
 		player_feet_position = player.call("get_feet_position") as Vector2
 
 	var player_tile := _to_tile(player_feet_position)

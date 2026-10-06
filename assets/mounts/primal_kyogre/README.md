@@ -5,7 +5,7 @@ flippers and tail fade into the map water, with contact foam and a directional
 wake while swimming. Native source scale and the riding pose are retained from
 the approved V4 rig. The complete rig sits 18 native pixels above the ordinary
 player anchor, putting the center of Kyogre's side-view face on the occupied
-tile's horizontal interaction line (within 0.5px in both side views/all phases).
+tile's horizontal physical-origin line (within 0.5px in both side views/all phases).
 The same correction in every direction keeps the rider steady when turning.
 
 `source.png` remains the unmodified supplied art. Rebuild both color variants
@@ -33,8 +33,16 @@ Lapras's ripples and all fishing splashes keep their existing behavior.
 The authored seat defines the riding geometry. `FACE_ANCHOR_Y` then translates
 the mount, foreground, rider mask, contact foam, wake and rider together, without
 changing the actual movement/collision/interaction position. The earlier player-
-aligned rig placed the side face 18.5px below the interaction line; the face is now
+aligned rig placed the side face 18.5px below that line; the face is now
 the visual reference. Fishing keeps its existing saddle-relative pose correction.
+
+Manual interaction is separate from rendering and collision. While surfing,
+`interactionHeightOffsets` lowers the left/right interaction origin by 16px to
+the mouth. NPC and generic object facing checks select the adjacent tile from
+that origin and keep the player facing sideways when dialogue starts. Front/back,
+other mounts, walking, movement, fishing targets and world depth retain their
+physical origin. The existing NPC proximity area is sufficient for this lower
+row; interaction distance is not increased. No sprite assets change for this fix.
 
 Runtime captures (both player models, idle/swimming/fishing, all directions):
 

@@ -38,6 +38,7 @@ def definition(shiny=False):
             'foregroundSheet':f'res://assets/mounts/{folder}/foreground.png',
             'waterContactSheet':'res://assets/mounts/primal_kyogre/water_contact.png',
             'frameSize':list(FRAME), 'movementAnimationSpeed':7.5,
+            'interactionHeightOffsets':{'left':16,'right':16},
             'storePreviewScale':1.0, 'storePreviewOffset':[0,-16],
             'surfFishingFullForeground':False,
             'surfFishingRiderOffsets':{'down':[0,18],'left':[0,4],'right':[0,4],'up':[0,10]},
