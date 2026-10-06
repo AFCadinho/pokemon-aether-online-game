@@ -416,12 +416,12 @@ item_id = "tiny-mushroom"
 [node name="TinyMushroomNorth" parent="Entities/Interactables/Items" unique_id=981982621 instance=ExtResource("99_item")]
 position = Vector2(2224, 144)
 pickup_id = "kanto_mt_moon_b1f_tinymushroomnorth"
-item_id = "tiny-mushroom"
+item_id = "repel"
 
 [node name="TinyMushroomWest" parent="Entities/Interactables/Items" unique_id=553039475 instance=ExtResource("99_item")]
 position = Vector2(112, 1072)
 pickup_id = "kanto_mt_moon_b1f_tinymushroomwest"
-item_id = "tiny-mushroom"
+item_id = "super-repel"
 
 [node name="BigMushroomEast" parent="Entities/Interactables/Items" unique_id=1847783994 instance=ExtResource("99_item")]
 position = Vector2(1008, 848)

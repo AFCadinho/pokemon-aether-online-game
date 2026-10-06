@@ -588,7 +588,7 @@ item_id = "tm-roar"
 [node name="PersimBerry" parent="Entities/Interactables/Items" unique_id=396244342 instance=ExtResource("6_overworld_item")]
 position = Vector2(304, 1328)
 pickup_id = "kanto_route_4_persim_berry"
-item_id = "persim-berry"
+item_id = "super-repel"
 
 [node name="GreatBallRoute4" parent="Entities/Interactables/Items" unique_id=2022890880 instance=ExtResource("6_overworld_item")]
 position = Vector2(944, 560)
@@ -598,7 +598,7 @@ item_id = "great-ball"
 [node name="OranBerry" parent="Entities/Interactables/Items" unique_id=1676823010 instance=ExtResource("6_overworld_item")]
 position = Vector2(1456, 1008)
 pickup_id = "kanto_route_4_razz_berry"
-item_id = "oran-berry"
+item_id = "repel"
 
 [node name="BigMushroom" parent="Entities/Interactables/Items" unique_id=1968961886 instance=ExtResource("6_overworld_item")]
 position = Vector2(2032, 1200)

@@ -200,7 +200,7 @@ item_id = "hyper-potion"
 [node name="Revive" parent="Entities/Interactables/Items" instance=ExtResource("overworld_pickup_extra")]
 position = Vector2(2000, 1200)
 pickup_id = "kanto_cerulean_cave_revive"
-item_id = "revive"
+item_id = "max-repel"
 
 
 [node name="Players" type="Node2D" parent="Entities"]
