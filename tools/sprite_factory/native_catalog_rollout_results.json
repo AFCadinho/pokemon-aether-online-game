@@ -1,0 +1,134 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "prototype_only": true,
+  "production_approved": false,
+  "qualification_complete": false,
+  "source_report_sha256": "7560b21f8615aa0363dc293724e314b09d9df5946cf762ad957e4a82edb361f2",
+  "source_registry_sha256": "c3371469a80010fb0accbe55fa44452e35f852906a5e97429ad78dc681eccf6a",
+  "compression": {
+    "libzstd": "1.5.7",
+    "block_size": 262144,
+    "level": 9,
+    "pairs": 1200,
+    "appearances": 2400,
+    "changed_pairs": 1198,
+    "original_download_bytes": 19863374075,
+    "candidate_download_bytes": 12857317549,
+    "original_scene_bytes": 19862546766,
+    "candidate_scene_bytes": 12856054300
+  },
+  "decompressed_stream_byte_exact": true,
+  "decoded_bytes": 66709515818,
+  "linux_installation": {
+    "complete_install_ms": 333388.214,
+    "pairs_installed": 1200,
+    "appearances_installed": 2400,
+    "failed_batch_preserves_active_generation": true,
+    "restart_no_op": true,
+    "on_demand_pin_selection_cached_reuse_and_repair": true
+  },
+  "linux_deserialization": {
+    "complete": true,
+    "godot": "4.6.2-stable (official)",
+    "native_scenes_deserialized": 2400,
+    "phase": "full_native_deserialization_only",
+    "production_approved": false,
+    "prototype_only": true,
+    "runtime_instantiation_qualified": false
+  },
+  "control_pairs_rollback": {
+    "appearances_restored": 18,
+    "complete": true,
+    "control_pairs_rollback": 9,
+    "phase": "nine_control_pairs_rollback_only",
+    "production_approved": false,
+    "prototype_only": true,
+    "other_native_appearances_preserved": 2382,
+    "active_generation": "53e66f8da0ea3ab12ff1bee323d92f7a973bb533f384eff631b98abdf00e205b",
+    "active_catalog_sha256": "3ad8f249a985b328f1a340a54c2cd1a599a929fa63498e0a2f888e408092e27a"
+  },
+  "battle": {
+    "pairs": 9,
+    "rounds_each": 3,
+    "viewport": [
+      1280,
+      720
+    ],
+    "p95_limit_ms": 20,
+    "identical_cache_observations": 54,
+    "registry_restored_exactly": true,
+    "original": {
+      "round_p95_ms": [
+        17.652,
+        19.402,
+        17.197
+      ],
+      "prepared_frames": {
+        "classic": {
+          "p95_ms": 17.301,
+          "samples": 4320.0
+        },
+        "stadium": {
+          "p95_ms": 19.306,
+          "samples": 2160.0
+        }
+      },
+      "sampled_memory_peak": {
+        "buffer_bytes": 82660660,
+        "rss_bytes": 3066822656,
+        "static_bytes": 660426969,
+        "texture_bytes": 1348889088
+      }
+    },
+    "native_256k": {
+      "round_p95_ms": [
+        17.199,
+        17.197,
+        17.211
+      ],
+      "prepared_frames": {
+        "classic": {
+          "p95_ms": 17.194,
+          "samples": 4320.0
+        },
+        "stadium": {
+          "p95_ms": 17.187,
+          "samples": 2160.0
+        }
+      },
+      "sampled_memory_peak": {
+        "buffer_bytes": 82867104,
+        "rss_bytes": 2895908864,
+        "static_bytes": 620473225,
+        "texture_bytes": 1300811776
+      }
+    }
+  },
+  "holds": [
+    "Original and native Archen normal/shiny produce null-material instantiation errors in Forward+ using production loading mode; full runtime gate remains failed.",
+    "Strict rendered image reference remains held, including original-only control mismatches.",
+    "Windows/macOS actual loading/update/rollback qualification has not run.",
+    "Collection API is not wired to the streaming download UI; pause/resume/space/recovery integration remains."
+  ],
+  "evidence": {
+    ".tmp/lossless-rollout-v1/full-check-v4/report.json": "d6db88a73c219e1016301c96b316b767985e43edb43f2fa4c823381612e76b0d",
+    ".tmp/lossless-rollout-v1/full-check-v4/receipt.json": "8c0a8cdee82b3bf81c84f7b3a1ddf933c40e6daabd5c03569bfa567ce2145ae1",
+    ".tmp/lossless-rollout-v1/engine-load-v1/report.json": "674ab8f4506dfbdd9092a06276dd60b56824bccebf9e54d7ec93b53cfda626a8",
+    ".tmp/lossless-rollout-v1/engine-load-v1/check.log": "8a26de2442ddcd2b3b1794de6da961454ff5a2cd92fa5e8939c8933483ddf0c1",
+    ".tmp/lossless-rollout-v1/rollback-9-v1/report.json": "34b62e9cc950911cb42de0e52374e9dacdb9cc0bdb397f3660fe8b4d28ff33ca",
+    ".tmp/lossless-rollout-v1/battle-original-memory-v1/battle-report.json": "5229fb1d7108be560529ca3ab80a274beb23f65368a7345daa691292fef9db2d",
+    ".tmp/lossless-rollout-v1/battle-original-memory-v1/receipt.json": "af4c70dc7b395087cec782bcfbcea1e4afff3bf27e39423e6e1b89c934bd073f",
+    ".tmp/lossless-rollout-v1/battle-native-memory-v1/battle-report.json": "ea9a20cd02a9fc71478ec99a253c0af20db08ab3af25d21d731ea558fd8f9591",
+    ".tmp/lossless-rollout-v1/battle-native-memory-v1/receipt.json": "f9a5d311c1a4e41f6358ba8c44bdb72ea64723e7da8f738b5da323f5139cf586",
+    ".tmp/lossless-rollout-v1/load-probe-original-archen.log": "53071f8412225a11b3bbb1438033c3c6421c836976dc5cce609503d920fa99b3",
+    ".tmp/lossless-rollout-v1/load-probe-first-100.log": "61d7f66459566299a839a3a2e3d043b94fa3f88dde3e9ec7ef8000c04a5deb76"
+  },
+  "memory_scope": "One sequential Linux comparison, component peaks are not additive and exclude some GPU-driver allocations; no universal RAM saving or speed improvement claimed.",
+  "current_qualification_harness_sha256": {
+    "launcher/tests/native_catalog_rollout_check.gd": "19ea20e4da73a8c0c1317675ac0d58434c65792e17e28715db598ff6af612e18",
+    "tests/native_cache_memory_check.gd": "62d2e3ed3f68da886003c062b4d65ffbc3be3a82eb502fd5a7a0d12ea1a0a0a0",
+    "tools/sprite_factory/run_native_catalog_rollout_check.py": "6245573e5cd9922024229e3f47f4e868157017b03e6b13bc8952a3276ceacb8f",
+    "tools/sprite_factory/run_native_bundle_battle_validation.py": "9756c798e4c127cfa3e03aa5e763b58630d828d5ad202a5cb867d01997d2bd05"
+  }
+}

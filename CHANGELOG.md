@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
+
 - Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.
 
 - Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.

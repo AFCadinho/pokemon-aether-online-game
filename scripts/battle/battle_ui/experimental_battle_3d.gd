@@ -1716,7 +1716,7 @@ func _load_catalog(path: String, preserve_actors := false) -> void:
 		if not raw is Dictionary:
 			continue
 		var entry: Dictionary = raw.duplicate(true)
-		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_resource_cache_key", "_reviewed_model", "_screened_model"]:
+		for internal_key in ["_verified_runtime_hash", "_source_bytes", "_cache_source_bytes", "_resource_cache_key", "_reviewed_model", "_screened_model"]:
 			entry.erase(internal_key) # Local catalogs cannot forge loader/cache state.
 		var identity := ReviewedModels.entry_key(entry)
 		if not _catalog_species_allowed(identity):
@@ -1856,6 +1856,7 @@ func _finish_validation(entry: Dictionary, check: IntegrityRead) -> bool:
 		visual_bounds[species] = reviewed.bounds
 	entry["_verified_runtime_hash"] = check.digest
 	entry["_source_bytes"] = check.bytes
+	entry["_cache_source_bytes"] = maxi(check.bytes, int(reviewed.get("cache_source_bytes", 0)))
 	entry["_resource_cache_key"] = ModelCache.key(entry.runtime_path, check.digest, entry.action_timing) if ResourceLoader.get_dependencies(entry.runtime_path).is_empty() else ""
 	validated_entries[species] = entry.duplicate(true)
 	return true
@@ -1937,7 +1938,7 @@ func _import_next_model() -> void:
 			import_times_ms[loading_entry.species] = (Time.get_ticks_usec() - loading_started) / 1000.0
 			var cache_key := str(loading_entry.get("_resource_cache_key", ""))
 			if not cache_key.is_empty():
-				ModelCache.retain(cache_key, scene, int(loading_entry._source_bytes))
+				ModelCache.retain(cache_key, scene, int(loading_entry._cache_source_bytes))
 	elif status == ResourceLoader.THREAD_LOAD_FAILED:
 		failed_models[loading_entry.species] = true
 		catalog_problem = "Could not load prepared 3D model: " + str(loading_entry.species)

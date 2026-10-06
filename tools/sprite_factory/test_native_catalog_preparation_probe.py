@@ -49,6 +49,7 @@ class CatalogPreparationTests(unittest.TestCase):
                 self.assertEqual(archive.read('author-note.txt'), payloads['author-note.txt'])
                 self.assertEqual(json.loads(archive.read('bundle.json'))['version'], 8)
             self.assertIn(registry['models']['fixture']['sha256'], models['fixture']['previous_sha256'])
+            self.assertEqual(models['fixture']['cache_source_bytes'], len(payloads['models/normal.scn']))
             self.assertEqual(source.read_bytes(), before)
             self.assertEqual(asset, original_asset)
             self.assertEqual(registry, original_registry)

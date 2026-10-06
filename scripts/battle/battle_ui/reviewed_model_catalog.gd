@@ -116,6 +116,11 @@ static func resolve(identity: String, digest: String) -> Dictionary:
 	if not accepted or not profiles.has(model.get("profile", "")):
 		return {}
 	var profile: Dictionary = profiles[model.profile].duplicate(true)
+	# A qualified smaller container keeps its original cache admission cost.
+	# This comes only from the checked-in approval, never from a local catalog.
+	var cache_bytes: Variant = model.get("cache_source_bytes", 0)
+	if (cache_bytes is int or cache_bytes is float) and is_finite(float(cache_bytes)) and cache_bytes == floor(float(cache_bytes)) and cache_bytes > 0 and cache_bytes <= 134217728:
+		profile["cache_source_bytes"] = int(cache_bytes)
 	profile = preload("res://scripts/battle/animations/gliscor_flight.gd").profile_for(identity, digest, profile)
 	profile = preload("res://scripts/battle/animations/mega_garchomp_standing.gd").profile_for(identity, digest, profile)
 	profile = preload("res://scripts/battle/animations/charmander_breath.gd").profile_for(identity, digest, profile)

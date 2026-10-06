@@ -68,58 +68,34 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 	original.sort()
 	var expanded := RELEASE_ASSET_IDS.duplicate()
 	expanded.sort()
-	var v5 := _v5_ids()
-	v5.sort()
-	var v6 := _v6_ids()
-	v6.sort()
-	var v7 := _v7_ids()
-	v7.sort()
-	var v8 := _v8_ids()
-	v8.sort()
-	var v10 := _v10_ids()
-	v10.sort()
-	var v9 := _v9_ids()
-	v9.sort()
-	if normalized != original and normalized != expanded and normalized != v5 and normalized != v6 and normalized != v7 and normalized != v8 and normalized != v9 and normalized != v10:
-		return "Asset bundle release set is not approved."
-	if normalized == v5:
-		var pinned: Dictionary = V5.data.index
-		if (descriptor.revision != V5.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Mega Dragonite release index differs from the approved v5 index."
-	if normalized == v6:
-		var pinned: Dictionary = V6.data.index
-		if (descriptor.revision != V6.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Catalog v6 release index differs from the approved index."
-	if normalized == v7:
-		var pinned: Dictionary = V7.data.index
-		if (descriptor.revision != V7.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Catalog v7 release index differs from the approved index."
-	if normalized == v8:
-		var pinned: Dictionary = V8.data.index
-		if (descriptor.revision != V8.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Catalog v8 release index differs from the approved index."
-	if normalized == v9:
-		var pinned: Dictionary = V9.data.index
-		if (descriptor.revision != V9.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Catalog v9 release index differs from the approved index."
-	if normalized == v10:
-		var pinned: Dictionary = V10.data.index
-		if (descriptor.revision != V10.data.revision or descriptor.sha256 != pinned.sha256
-				or descriptor.sizeBytes != pinned.size_bytes
-				or not str(descriptor.url).ends_with("/" + str(pinned.object_key))):
-			return "Catalog v10 release index differs from the approved index."
-	return ""
+	var matched_pinned_set := false
+	for release: Dictionary in _pinned_releases():
+		var ids := _release_ids(release)
+		ids.sort()
+		if normalized != ids:
+			continue
+		matched_pinned_set = true
+		var pin: Dictionary = release.index
+		if (descriptor.revision == release.revision and descriptor.sha256 == pin.sha256
+				and descriptor.sizeBytes == pin.size_bytes
+				and str(descriptor.url).ends_with("/" + str(pin.object_key))):
+			return ""
+	# Successive pinned releases may intentionally contain the same IDs. Match
+	# one complete revision/hash/size/key tuple, rather than requiring all pins.
+	if matched_pinned_set:
+		return "Asset bundle release index differs from the approved pinned revisions."
+	return "" if normalized == original or normalized == expanded else "Asset bundle release set is not approved."
 
+
+static func _pinned_releases() -> Array[Dictionary]:
+	return [V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
+
+
+static func _release_ids(release: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	for asset_id: String in release.requiredAssetIds:
+		result.append(asset_id)
+	return result
 
 static func _v5_ids() -> Array[String]:
 	var result: Array[String] = []
@@ -242,6 +218,13 @@ func accept_bundle(index: Dictionary, asset_id: String, downloaded_path: String)
 	return store.install_archive(index, asset_id, downloaded_path)
 
 
+func accept_bundles(index: Dictionary, archives: Dictionary) -> Dictionary:
+	var error := _release_index_error(index)
+	if not error.is_empty():
+		return {"error": error}
+	return store.install_archives(index, archives)
+
+
 func catalog_path() -> String:
 	return store.catalog_path()
 
@@ -301,23 +284,22 @@ func _release_index_error(index: Dictionary, descriptor: Dictionary = {}) -> Str
 	if descriptor.has("requiredAssetIds"):
 		for asset_id: String in descriptor.requiredAssetIds:
 			expected.append(asset_id)
+		if index.get("catalog_revision") != descriptor.get("revision"):
+			return "Asset bundle index revision does not match its descriptor."
 	else:
-		if assets is Array and assets.size() == V1_ASSET_IDS.size():
-			expected = V1_ASSET_IDS.duplicate()
-		elif assets is Array and assets.size() == RELEASE_ASSET_IDS.size():
-			expected = RELEASE_ASSET_IDS.duplicate()
-		elif assets is Array and assets.size() == _v5_ids().size():
-			expected = _v5_ids()
-		elif assets is Array and assets.size() == _v6_ids().size():
-			expected = _v6_ids()
-		elif assets is Array and assets.size() == _v10_ids().size():
-			expected = _v10_ids()
-		elif assets is Array and assets.size() == _v9_ids().size():
-			expected = _v9_ids()
-		elif assets is Array and assets.size() == _v8_ids().size():
-			expected = _v8_ids()
-		else:
-			expected = _v7_ids()
+		for release: Dictionary in _pinned_releases():
+			if release.revision == index.get("catalog_revision"):
+				expected = _release_ids(release)
+				break
+		if expected.is_empty():
+			# Keep the two historical, unpinned small catalogs compatible. Larger
+			# catalogs must name a known revision, even if their sizes are equal.
+			if assets is Array and assets.size() == V1_ASSET_IDS.size():
+				expected = V1_ASSET_IDS.duplicate()
+			elif assets is Array and assets.size() == RELEASE_ASSET_IDS.size():
+				expected = RELEASE_ASSET_IDS.duplicate()
+			else:
+				return "Asset bundle index revision is not approved."
 	if not assets is Array or assets.size() != expected.size():
 		return "Asset bundle index does not contain the exact approved release set."
 	var seen: Array[String] = []

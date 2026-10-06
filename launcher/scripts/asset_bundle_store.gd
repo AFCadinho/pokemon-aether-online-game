@@ -93,18 +93,47 @@ func plan(index: Dictionary, requested_ids: Array[String]) -> Dictionary:
 
 
 func install_archive(index: Dictionary, asset_id: String, archive_path: String) -> Dictionary:
+	var result := install_archives(index, {asset_id: archive_path})
+	if str(result.get("error", "")).is_empty():
+		result["asset_id"] = asset_id
+	return result
+
+
+func install_archives(index: Dictionary, archives: Dictionary) -> Dictionary:
+	# One explicit transaction for a complete collection. Every archive and
+	# extracted model is verified; only the final complete generation activates.
+	# This avoids validating an ever-growing collection after every single ZIP.
 	var index_error := Index.validate(index)
 	if not index_error.is_empty():
 		return {"error": index_error}
-	var indexed: Dictionary = Index.by_id(index)
-	if not indexed.has(asset_id):
-		return {"error": "Asset is absent from the index."}
-	var asset: Dictionary = indexed[asset_id]
-	var current: Dictionary = state().get("assets", {}).get(asset_id, {})
+	if archives.is_empty():
+		return {"error": "No bundle archives supplied."}
+	var indexed := Index.by_id(index)
+	var next := state().duplicate(true)
+	var installed: Dictionary = next.get("assets", {}).duplicate(true)
+	for asset_id: String in archives:
+		if not indexed.has(asset_id) or not archives[asset_id] is String:
+			return {"error": "Asset is absent from the index or archive path is invalid."}
+		var prepared := _prepare_archive(indexed[asset_id], archives[asset_id], installed)
+		if not str(prepared.get("error", "")).is_empty():
+			return prepared
+		installed[asset_id] = _state_entry(indexed[asset_id], prepared.manifest)
+	next["catalog_revision"] = str(index.catalog_revision)
+	next["assets"] = installed
+	var activation := _write_generation(next)
+	if not activation.is_empty():
+		return {"error": activation}
+	var generation := active_generation()
+	return {"error": "", "generation": generation,
+		"catalog_path": _generations_root().path_join(generation).path_join("runtime-catalog.json")}
+
+
+func _prepare_archive(asset: Dictionary, archive_path: String, installed: Dictionary) -> Dictionary:
+	var current: Dictionary = installed.get(str(asset.asset_id), {})
 	if not current.is_empty() and current.get("version") == asset.version and current.get("archive_sha256") != asset.sha256:
 		return {"error": "An installed asset version cannot change its immutable checksum."}
 	for dependency: String in asset.get("dependencies", []):
-		if not state().get("assets", {}).has(dependency):
+		if not installed.has(dependency):
 			return {"error": "Asset dependency is not installed: " + dependency}
 	var archive := FileAccess.open(archive_path, FileAccess.READ)
 	if archive == null or archive.get_length() != int(asset.size_bytes) or archive.get_length() > MAX_ARCHIVE:
@@ -158,15 +187,7 @@ func install_archive(index: Dictionary, asset_id: String, archive_path: String) 
 		if DirAccess.rename_absolute(staging, destination) != OK:
 			_remove_tree(staging)
 			return {"error": "Cannot publish immutable bundle object."}
-	var next := state().duplicate(true)
-	next["catalog_revision"] = str(index.catalog_revision)
-	var installed: Dictionary = next.get("assets", {}).duplicate(true)
-	installed[asset_id] = _state_entry(asset, manifest)
-	next["assets"] = installed
-	var activation := _write_generation(next)
-	if not activation.is_empty():
-		return {"error": activation}
-	return {"error": "", "asset_id": asset_id, "generation": active_generation(), "catalog_path": catalog_path()}
+	return {"error": "", "manifest": manifest}
 
 
 func remove(asset_id: String) -> Dictionary:
