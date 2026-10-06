@@ -6394,5 +6394,10 @@
   "ui.visual_choice.choose.3d": "选择3D",
   "ui.visual_choice.size": "全部宝可梦约需：{installed}",
   "ui.visual_choice.hint": "宝可梦图片和模型会在游戏中按需自动下载，之后保存在此设备上。首次下载可能需要稍等。\n想提前备好全部宝可梦？请在启动器的“下载”页面一次下载全部文件。",
-  "ui.visual_choice.save_error": "无法保存选择。请检查设备的可用空间并重试。"
+  "ui.visual_choice.save_error": "无法保存选择。请检查设备的可用空间并重试。",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "包含一只骑拉帝纳起源形态坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "包含一只凤王坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "包含一只伊裴尔塔尔坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "包含一只密勒顿坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "包含一只莱希拉姆坐骑。初始异色概率：50%。"
 }

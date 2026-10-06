@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add shiny Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram mounts and Land Gift Store boxes: Giratina Origin/Yveltal cost 1,000 Aether Gems; Ho-Oh/Miraidon/Reshiram cost 750, with the existing shiny pity rules.
+
 - Intensify 3D Close Combat with a continuous left/right fist barrage, larger readable hands, curved punch trails, attacker weight shifts and a stronger finishing blow.
 
 - Rework 3D Close Combat around its 2D combo: a quick approach, alternating fists and strike flashes, repeated pitched hit sounds and a larger final blow, with early dodge and a full contact hold.

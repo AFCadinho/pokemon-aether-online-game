@@ -490,5 +490,45 @@
   "reshiram-mount": {
     "name": "Reshiram-mount",
     "shortDesc": "Ontgrendelt Reshiram als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-giratina-origin-mount": {
+    "name": "Shiny Giratina Origin-mount",
+    "shortDesc": "Ontgrendelt Shiny Giratina Origin als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "giratina-origin-mount-box": {
+    "name": "Giratina Origin-mountbox",
+    "shortDesc": "Bevat een Giratina Origin-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-ho-oh-mount": {
+    "name": "Shiny Ho-Oh-mount",
+    "shortDesc": "Ontgrendelt Shiny Ho-Oh als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "ho-oh-mount-box": {
+    "name": "Ho-Oh-mountbox",
+    "shortDesc": "Bevat een Ho-Oh-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-yveltal-mount": {
+    "name": "Shiny Yveltal-mount",
+    "shortDesc": "Ontgrendelt Shiny Yveltal als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "yveltal-mount-box": {
+    "name": "Yveltal-mountbox",
+    "shortDesc": "Bevat een Yveltal-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-miraidon-mount": {
+    "name": "Shiny Miraidon-mount",
+    "shortDesc": "Ontgrendelt Shiny Miraidon als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "miraidon-mount-box": {
+    "name": "Miraidon-mountbox",
+    "shortDesc": "Bevat een Miraidon-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-reshiram-mount": {
+    "name": "Shiny Reshiram-mount",
+    "shortDesc": "Ontgrendelt Shiny Reshiram als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "reshiram-mount-box": {
+    "name": "Reshiram-mountbox",
+    "shortDesc": "Bevat een Reshiram-mount. Shiny-basiskans: 50%."
   }
 }

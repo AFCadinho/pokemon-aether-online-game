@@ -6398,5 +6398,10 @@
   "ui.visual_choice.choose.3d": "Choose 3D",
   "ui.visual_choice.size": "Space for all Pokémon: about {installed}",
   "ui.visual_choice.hint": "Pokémon images and models download automatically as you play. They stay on this device after downloading. The first download may take a moment.\nWant all Pokémon ready beforehand? Download them all from Downloads in the launcher.",
-  "ui.visual_choice.save_error": "Could not save your choice. Check that your device has available space and try again."
+  "ui.visual_choice.save_error": "Could not save your choice. Check that your device has available space and try again.",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "Contains a Giratina Origin mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "Contains a Ho-Oh mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "Contains a Yveltal mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "Contains a Miraidon mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "Contains a Reshiram mount. Base shiny chance: 50%."
 }
