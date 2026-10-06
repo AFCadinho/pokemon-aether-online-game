@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.
+
 - Keep mounted player nameplates, badges, chat bubbles and battle indicators above the rider and mount, with stable animation clearance and normal placement after dismounting.
 
 - Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.

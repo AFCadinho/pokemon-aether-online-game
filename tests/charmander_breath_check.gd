@@ -44,8 +44,10 @@ func _init() -> void:
 		assert(profile.motion.clips.has("special_attack_2"))
 		assert(Timing.profile(identity, "Water Gun", "special_attack", profile.action_timing).is_empty())
 		assert(ActionMap.resolve("special_attack_2", PackedStringArray(["special_attack"]), profile.action_timing).action == "special_attack")
-		var source := {"cues":[{"at_seconds":0.0,"event":{"name":"Ember.wav"}}]}
+		# Use the real, reviewed sound name; unknown cues are deliberately rejected.
+		var source := {"cues":[{"at_seconds":0.0,"event":{"name":"PRSFX- Ember.wav"}}]}
 		var audio := Effect.audio_plan(source, timing)
+		assert(audio.cues.size() == 1 and audio.cues[0].event.name == "PRSFX- Ember.wav")
 		assert(is_equal_approx(audio.cues[0].at_seconds, 40.0/60.0))
 		assert(Effect.launch_time(timing) == audio.cues[0].at_seconds)
 		assert(source.cues[0].at_seconds == 0.0)
