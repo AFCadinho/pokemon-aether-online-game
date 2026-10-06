@@ -33,7 +33,8 @@
     "kanto_viridian_city_pokemon_center_nurse_joy": "showdown_pokemoncenterlady",
     "kanto_viridian_city_rocket_grunt_rook": "showdown_rainbowrocketgrunt",
     "kanto_viridian_city_south_route_guard": "showdown_policeman_gen7",
-    "kanto_viridian_city_west_route_guard": "showdown_policeman_gen7"
+    "kanto_viridian_city_west_route_guard": "showdown_policeman_gen7",
+    "kanto_cerulean_city_shiny_mount_collector": "showdown_collector_gen6"
   },
   "npc_definition_ids": {
     "aether_atelier_tailor": "showdown_beauty_gen6",

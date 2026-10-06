@@ -42,6 +42,39 @@ func _npc_quest_item_turn_in_endpoint(turn_in_id: String) -> String:
 	return endpoint
 
 var mount_box_pending_requests: Dictionary = {}
+var mount_collector_pending_requests: Dictionary = {}
+
+
+func load_mount_collector() -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(base_url + "/game/mount-collector", HTTPClient.METHOD_GET, GatewayApiConfig.get_accept_headers(), "")
+	if not bool(response.get("success", false)):
+		return response
+	return {"success": true, "catalog": _dictionary_from_value(response.get("body", {}))}
+
+
+func exchange_shiny_mount(item_id: String) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {"success": false, "error": "Not authenticated."}
+	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), item_id]
+	if not mount_collector_pending_requests.has(request_key):
+		mount_collector_pending_requests[request_key] = _new_request_id()
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response := await _request_json(
+		base_url + "/game/mount-collector/exchange", HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"itemId": item_id, "requestId": mount_collector_pending_requests[request_key]})
+	)
+	if not bool(response.get("success", false)):
+		if int(response.get("status", 0)) >= 400 and int(response.get("status", 0)) < 500:
+			mount_collector_pending_requests.erase(request_key)
+		return response
+	mount_collector_pending_requests.erase(request_key)
+	var body := _dictionary_from_value(response.get("body", {}))
+	apply_inventory_state(_dictionary_from_value(body.get("inventory", {})))
+	PlayerWalletService.apply_wallet_result({"success": true, "wallet": _dictionary_from_value(body.get("wallet", {}))})
+	return {"success": true, "exchange": body}
 
 var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []

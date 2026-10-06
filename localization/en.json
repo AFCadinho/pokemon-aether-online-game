@@ -6430,5 +6430,22 @@
   "ui.shiny_tracker.mounts.store_description_latios": "Contains a Latios mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_latias": "Contains a Latias mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_caterpie": "Contains a Caterpie mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_magikarp": "Contains a Magikarp Surf mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Contains a Magikarp Surf mount. Base shiny chance: 50%.",
+  "ui.mount_collector.title": "Shiny Mount Collector",
+  "ui.mount_collector.intro": "I collect shiny mounts! Prefer the original colours? Trade me a shiny mount for its normal version and 100 Gift Voucher credit. You can trade as often as you like.",
+  "ui.mount_collector.empty": "You do not have any shiny mounts to trade. Bring me one when you prefer its normal colours!",
+  "ui.mount_collector.choose": "Choose a shiny mount to trade for its normal version and {credit} Gift Voucher credit.",
+  "ui.mount_collector.bound": "Account-bound",
+  "ui.mount_collector.previous": "Previous mounts",
+  "ui.mount_collector.next": "More mounts",
+  "ui.mount_collector.confirm": "Trade one {shiny} for one {normal} and {credit} Gift Voucher credit? Your shiny mount will be removed. This does not change your Mount Box odds or tracker counters.",
+  "ui.mount_collector.binding_bound": "The normal mount stays account-bound. Purchases made with the voucher credit are also account-bound.",
+  "ui.mount_collector.binding_tradeable": "The normal mount remains tradeable. Purchases made with the voucher credit are account-bound.",
+  "ui.mount_collector.duplicate": "You already own this normal mount. You will receive another copy.",
+  "ui.mount_collector.trade": "Trade mount",
+  "ui.mount_collector.back": "Back",
+  "ui.mount_collector.received": "You received {mount} and {credit} Gift Voucher credit!",
+  "ui.mount_collector.error.context": "Speak to the Shiny Mount Collector in the Cerulean Bike Shop when you are not busy.",
+  "ui.mount_collector.error.shiny": "Choose a shiny mount with a matching normal version.",
+  "ui.mount_collector.error.wallet_full": "Spend some Gift Voucher credit before exchanging this mount."
 }

@@ -6429,5 +6429,22 @@
   "ui.shiny_tracker.mounts.store_description_latios": "Contém uma montaria Latios. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_latias": "Contém uma montaria Latias. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_caterpie": "Contém uma montaria Caterpie. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_magikarp": "Contém uma montaria de Surf Magikarp. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Contém uma montaria de Surf Magikarp. Chance shiny inicial: 50%.",
+  "ui.mount_collector.title": "Colecionador de Montarias Shiny",
+  "ui.mount_collector.intro": "Eu coleciono montarias shiny! Prefere as cores originais? Troque uma montaria shiny pela versão normal e 100 créditos de Gift Voucher. Pode trocar quantas vezes quiser.",
+  "ui.mount_collector.empty": "Você não tem montarias shiny para trocar. Volte quando preferir as cores normais!",
+  "ui.mount_collector.choose": "Escolha uma montaria shiny para receber a versão normal e {credit} créditos de Gift Voucher.",
+  "ui.mount_collector.bound": "Vinculada à conta",
+  "ui.mount_collector.previous": "Montarias anteriores",
+  "ui.mount_collector.next": "Mais montarias",
+  "ui.mount_collector.confirm": "Trocar uma {shiny} por uma {normal} e {credit} créditos de Gift Voucher? Sua montaria shiny será removida. Isso não altera as chances das caixas nem os contadores do rastreador.",
+  "ui.mount_collector.binding_bound": "A montaria normal continua vinculada à conta. Compras com os créditos também ficam vinculadas.",
+  "ui.mount_collector.binding_tradeable": "A montaria normal continua negociável. Compras com os créditos ficam vinculadas à conta.",
+  "ui.mount_collector.duplicate": "Você já possui esta montaria normal. Receberá outra cópia.",
+  "ui.mount_collector.trade": "Trocar montaria",
+  "ui.mount_collector.back": "Voltar",
+  "ui.mount_collector.received": "Você recebeu {mount} e {credit} créditos de Gift Voucher!",
+  "ui.mount_collector.error.context": "Fale com o Colecionador de Montarias Shiny na loja de bicicletas de Cerulean quando não estiver ocupado.",
+  "ui.mount_collector.error.shiny": "Escolha uma montaria shiny com uma versão normal correspondente.",
+  "ui.mount_collector.error.wallet_full": "Gaste alguns créditos de Gift Voucher antes de trocar esta montaria."
 }
