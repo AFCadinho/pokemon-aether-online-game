@@ -17,7 +17,7 @@ const MAP_PICKUPS := {
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_3.tscn": [
 		["kanto_route_3_awakening", "awakening", Vector2i(1488, 368)],
-		["kanto_route_3_oran_berry", "oran-berry", Vector2i(1520, 1136)],
+		["kanto_route_3_oran_berry", "repel", Vector2i(1520, 1136)],
 	],
 	"res://scenes/overworld/kanto/routes/kanto_route_4.tscn": [
 		["kanto_route_4_tm_roar", "tm-roar", Vector2i(1296, 976)],
@@ -54,7 +54,7 @@ func _init() -> void:
 	_check(all_source.count('pickup_id = "kanto_route_2_') == 2, "Route 2 has two unique pickups")
 	_check(all_source.count('pickup_id = "kanto_viridian_forest_') == 4, "Viridian Forest has four unique pickups")
 	_check(all_source.count('pickup_id = "kanto_route_3_awakening"') == 1, "Route 3's Awakening pickup id is unique")
-	_check(all_source.count('pickup_id = "kanto_route_3_oran_berry"') == 1, "Route 3's Oran Berry pickup id is unique")
+	_check(all_source.count('pickup_id = "kanto_route_3_oran_berry"') == 1, "Route 3's Repel keeps its unique legacy pickup id")
 	_check(all_source.count('pickup_id = "kanto_route_4_tm_roar"') == 1, "Route 4's TM05 id is unique")
 	_check(all_source.count('pickup_id = "kanto_route_22_') == 2, "Route 22 has two unique pickups")
 	quit(1 if failed else 0)

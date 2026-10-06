@@ -11,7 +11,7 @@ const TRAINER_IDS := [
 	"kanto_route_14_biker_gerald",
 ]
 const PICKUPS := {
-	"kanto_route_14_pinap_berry": "pinap-berry",
+	"kanto_route_14_pinap_berry": "max-repel",
 	"kanto_route_14_zinc": "zinc",
 	"kanto_route_14_poison_barb": "poison-barb",
 }

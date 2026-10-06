@@ -27,6 +27,9 @@ func _run() -> void:
 	for item_id: String in selected:
 		var item: Dictionary = store.call("_catalog_item", item_id)
 		offers.append({"itemId": item_id, "voucherEligible": true, "costs": [{"currency": "gems", "amount": int(item.get("price", 0))}]})
+	for item_id: String in ["thor-outfit", "cobalion-mount-box", "shadow-lugia-mount-box"]:
+		var item: Dictionary = store.call("_catalog_item", item_id)
+		offers.append({"itemId": item_id, "voucherEligible": true, "costs": [{"currency": "gems", "amount": int(item.get("price", 0))}]})
 	# Unknown, unavailable and duplicate server IDs must never create cards.
 	var server_ids := selected.duplicate()
 	server_ids.insert(0, "unknown-product")
@@ -45,8 +48,10 @@ func _run() -> void:
 	store.call("_select_category", "cosmetics")
 	store.call("_select_cosmetic_filter_group", "all")
 	_check(store.product_buttons.keys().front() == selected[0], "Default Cosmetics order puts the recent bestseller first")
+	_check_nonpopular_prices_descending(store, "Default Cosmetics remainder is ordered by highest price")
 	store.call("_select_category", "mounts")
 	_check(store.product_buttons.keys().front() == selected[2], "Default Mounts order puts the recent bestseller first")
+	_check_nonpopular_prices_descending(store, "Default Mounts remainder is ordered by highest price")
 	store.call("_select_category", "featured")
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--capture="):
@@ -100,3 +105,15 @@ func _check(condition: bool, message: String) -> void:
 	else:
 		failed = true
 		push_error("FAIL " + message)
+
+
+func _check_nonpopular_prices_descending(store: DonatorStorePopup, message: String) -> void:
+	var item_ids: Array = store.product_buttons.keys()
+	var previous_price := 2147483647
+	for index: int in range(1, item_ids.size()):
+		var price := int(store.call("_gem_price", str(item_ids[index])))
+		if price > previous_price:
+			_check(false, message)
+			return
+		previous_price = price
+	_check(true, message)

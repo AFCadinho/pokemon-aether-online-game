@@ -486,7 +486,7 @@ item_id = "awakening"
 [node name="OranBerry" parent="Entities/Interactables/Items" unique_id=1612219391 instance=ExtResource("16_overworld_item")]
 position = Vector2(1520, 1136)
 pickup_id = "kanto_route_3_oran_berry"
-item_id = "oran-berry"
+item_id = "repel"
 
 [node name="StarPieceSouth" parent="Entities/Interactables/Items" unique_id=1159141877 instance=ExtResource("16_overworld_item")]
 position = Vector2(1168, 1296)

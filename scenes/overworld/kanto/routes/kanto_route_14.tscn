@@ -532,7 +532,7 @@ npc_sprite_frames = ExtResource("r14_biker")
 [node name="PinapBerry" parent="Entities/Interactables" unique_id=1268524342 instance=ExtResource("r14_item")]
 position = Vector2(432, 144)
 pickup_id = "kanto_route_14_pinap_berry"
-item_id = "pinap-berry"
+item_id = "max-repel"
 
 [node name="Zinc" parent="Entities/Interactables" unique_id=651401206 instance=ExtResource("r14_item")]
 position = Vector2(1008, 560)
