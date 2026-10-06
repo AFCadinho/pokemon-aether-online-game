@@ -30,11 +30,49 @@ func _run() -> void:
 	for direction: String in ["down", "left", "right", "up"]:
 		_check(frames.has_animation("walk_" + direction) and frames.get_frame_count("walk_" + direction) == 4, "Collector overworld sprite supports direction " + direction)
 	var offer := {"itemId": "shiny-glaceon-mount-bound", "quantity": 2, "shinyMountId": "glaceon_shiny", "normalMountId": "glaceon", "rewardItemId": "glaceon-mount-bound", "accountBound": true, "normalAlreadyOwned": true}
-	var text: String = collector.call("_confirmation_text", offer, 100)
-	_check(text.contains("100") and text.contains("removed") and text.contains("account-bound") and text.contains("already own"), "Confirmation discloses consumption, credit, binding and duplicate normal rewards")
+	var confirmation_script := load("res://scripts/ui/mount_collector_confirmation.gd") as GDScript
+	var confirmation = confirmation_script.new()
+	root.add_child(confirmation)
+	confirmation.call("_build_confirmation", offer, 100, false)
+	for _frame: int in range(3):
+		await process_frame
+	_check(confirmation.find_child("ShinyPreview", true, false).texture != null and confirmation.find_child("NormalPreview", true, false).texture != null, "Confirmation shows the actual shiny input and normal reward images")
+	_check(confirmation.find_child("VoucherCredit", true, false).text == "+100" and confirmation.find_child("RewardBinding", true, false).text == "Account-bound", "Confirmation separates voucher credit and normal mount binding")
+	_check(confirmation.find_child("NormalAlreadyOwned", true, false) != null, "Already-owned normal mount is marked beside the reward")
+	_check(confirmation.back_button.has_focus(), "Confirmation starts with Back focused")
+	var cancelled: Array[String] = []
+	confirmation.topic_selected.connect(func(choice: String) -> void: cancelled.append(choice))
+	confirmation.back_button.pressed.emit()
+	_check(cancelled == [""], "Back cancels without confirming an exchange")
+	confirmation.queue_free()
+	await process_frame
 	var last_copy: Dictionary = offer.duplicate()
 	last_copy["shinyOwnedQuantity"] = 1
-	_check(str(collector.call("_confirmation_text", last_copy, 100)).contains("last shiny"), "Ordinary conversion warns before consuming the last shiny of a type")
+	last_copy["accountBound"] = false
+	last_copy["normalAlreadyOwned"] = false
+	var last_dialog = confirmation_script.new()
+	root.add_child(last_dialog)
+	last_dialog.call("_build_confirmation", last_copy, 100, false)
+	_check(last_dialog.find_child("LastShinyWarning", true, false) != null and last_dialog.find_child("RewardBinding", true, false).text == "Tradeable", "The last-shiny warning is highlighted separately for tradeable conversion")
+	var confirmed: Array[String] = []
+	last_dialog.topic_selected.connect(func(choice: String) -> void: confirmed.append(choice))
+	last_dialog.confirm_button.pressed.emit()
+	last_dialog.confirm_button.pressed.emit()
+	_check(confirmed == ["confirm"], "Explicit exchange confirmation resolves only once")
+	last_dialog.queue_free()
+	await process_frame
+	var confirmation_viewport := SubViewport.new()
+	confirmation_viewport.size = Vector2i(480, 540)
+	root.add_child(confirmation_viewport)
+	var protected_dialog = confirmation_script.new()
+	confirmation_viewport.add_child(protected_dialog)
+	protected_dialog.call("_build_confirmation", offer, 100, true)
+	for _frame: int in range(4):
+		await process_frame
+	_check(protected_dialog.find_child("ProtectedShinyNotice", true, false) != null and protected_dialog.find_child("LastShinyWarning", true, false) == null, "Duplicates-only shows keep-one protection instead of a last-copy warning")
+	_check(protected_dialog.confirmation_panel.size.x <= 480 and protected_dialog.confirmation_panel.size.y <= 540 and protected_dialog.back_button.is_visible_in_tree(), "Preview and action buttons fit a narrow screen with scrollable details")
+	confirmation_viewport.queue_free()
+	await process_frame
 	var menu_script := load("res://scripts/ui/mount_collector_grid.gd") as GDScript
 	var menu = menu_script.new()
 	root.add_child(menu)
@@ -161,7 +199,7 @@ func _run() -> void:
 	inventory.set_script(original_script)
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		var translations: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://localization/" + locale + ".json"))
-		_check(translations.has("ui.mount_collector.confirm") and translations.has("ui.mount_collector.received"), "Collector is localized for " + locale)
+		_check(translations.has("ui.mount_collector.confirmation_title") and translations.has("ui.mount_collector.last_body") and translations.has("ui.mount_collector.received"), "Collector is localized for " + locale)
 	quit.call_deferred(1 if failures else 0)
 
 func _check(condition: bool, message: String) -> void:

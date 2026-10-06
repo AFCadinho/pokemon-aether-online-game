@@ -6458,5 +6458,17 @@
   "ui.mount_collector.spares": "合计多余 {count} 只",
   "ui.mount_collector.no_results": "没有符合筛选条件的坐骑。请清除搜索或调整筛选。",
   "ui.mount_collector.last_copy": "这是你最后一只该种闪光坐骑。兑换后将从闪光收藏中移除。",
-  "ui.mount_collector.error.last_shiny": "仅重复：你现在仅剩一只该种闪光坐骑。请保留它或关闭重复筛选。"
+  "ui.mount_collector.error.last_shiny": "仅重复：你现在仅剩一只该种闪光坐骑。请保留它或关闭重复筛选。",
+  "ui.mount_collector.confirmation_title": "确认坐骑兑换",
+  "ui.mount_collector.you_give": "你交出",
+  "ui.mount_collector.you_receive": "你获得",
+  "ui.mount_collector.voucher_credit": "Gift Voucher 额度",
+  "ui.mount_collector.voucher_binding": "使用兑换券购买的物品绑定账号。",
+  "ui.mount_collector.normal_owned": "已拥有：你将获得额外一份。",
+  "ui.mount_collector.source_removed": "将从背包中移除",
+  "ui.mount_collector.last_title": "你最后一只闪光",
+  "ui.mount_collector.last_body": "兑换后你将不再拥有闪光{mount}。",
+  "ui.mount_collector.protected_title": "保留一只闪光",
+  "ui.mount_collector.protected_body": "已启用仅重复。该种类最后一只闪光坐骑不能兑换。",
+  "ui.mount_collector.tracker_unchanged": "坐骑箱概率和追踪器进度保持不变。"
 }

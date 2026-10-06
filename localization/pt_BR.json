@@ -6461,5 +6461,17 @@
   "ui.mount_collector.spares": "{count} extras no total",
   "ui.mount_collector.no_results": "Nenhuma montaria corresponde. Limpe a busca ou ajuste os filtros.",
   "ui.mount_collector.last_copy": "Esta é sua última montaria shiny deste tipo. A troca irá removê-la da sua coleção shiny.",
-  "ui.mount_collector.error.last_shiny": "Só duplicadas: agora você tem apenas uma shiny deste tipo. Guarde-a ou desative o filtro."
+  "ui.mount_collector.error.last_shiny": "Só duplicadas: agora você tem apenas uma shiny deste tipo. Guarde-a ou desative o filtro.",
+  "ui.mount_collector.confirmation_title": "Confirmar troca de montaria",
+  "ui.mount_collector.you_give": "Você entrega",
+  "ui.mount_collector.you_receive": "Você recebe",
+  "ui.mount_collector.voucher_credit": "Créditos Gift Voucher",
+  "ui.mount_collector.voucher_binding": "Compras com voucher ficam vinculadas à conta.",
+  "ui.mount_collector.normal_owned": "Já possuída: você recebe outra cópia.",
+  "ui.mount_collector.source_removed": "Removida do seu inventário",
+  "ui.mount_collector.last_title": "Sua última shiny",
+  "ui.mount_collector.last_body": "Após a troca, você não terá mais nenhum {mount} shiny.",
+  "ui.mount_collector.protected_title": "Uma shiny será mantida",
+  "ui.mount_collector.protected_body": "Só duplicadas está ativo. Sua última shiny deste tipo não pode ser trocada.",
+  "ui.mount_collector.tracker_unchanged": "As chances das Mount Boxes e o progresso do tracker não mudam."
 }

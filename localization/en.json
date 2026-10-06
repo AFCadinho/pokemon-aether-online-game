@@ -6462,5 +6462,17 @@
   "ui.mount_collector.spares": "{count} spare in total",
   "ui.mount_collector.no_results": "No mounts match these filters. Clear your search or adjust the filters.",
   "ui.mount_collector.last_copy": "This is your last shiny mount of this type. Trading it will remove it from your shiny collection.",
-  "ui.mount_collector.error.last_shiny": "Duplicates only: you now have only one shiny of this type. Keep it or turn off the duplicates filter."
+  "ui.mount_collector.error.last_shiny": "Duplicates only: you now have only one shiny of this type. Keep it or turn off the duplicates filter.",
+  "ui.mount_collector.confirmation_title": "Confirm mount exchange",
+  "ui.mount_collector.you_give": "You give",
+  "ui.mount_collector.you_receive": "You receive",
+  "ui.mount_collector.voucher_credit": "Gift Voucher credit",
+  "ui.mount_collector.voucher_binding": "Voucher purchases are account-bound.",
+  "ui.mount_collector.normal_owned": "Already owned: you receive another copy.",
+  "ui.mount_collector.source_removed": "Removed from your inventory",
+  "ui.mount_collector.last_title": "Your last shiny",
+  "ui.mount_collector.last_body": "You will have no shiny {mount} left after this exchange.",
+  "ui.mount_collector.protected_title": "One shiny stays",
+  "ui.mount_collector.protected_body": "Duplicates-only is on. Your last shiny of this type cannot be exchanged.",
+  "ui.mount_collector.tracker_unchanged": "Mount Box odds and tracker progress stay unchanged."
 }
