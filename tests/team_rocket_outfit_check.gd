@@ -15,7 +15,7 @@ func _run() -> void:
 	for category: String in PARTS:
 		var part_id: String = PARTS[category]
 		_check(APPEARANCE.get_available_part_ids(category, "male").has(part_id), "%s is available for male models" % part_id)
-		_check(not APPEARANCE.get_available_part_ids(category, "female").has(part_id), "%s is male-only" % part_id)
+		_check(APPEARANCE.get_available_part_ids(category, "female").has(part_id), "%s is a shared wardrobe identity" % part_id)
 		_check(not APPEARANCE.is_free_part_id(category, part_id), "%s requires its wardrobe item" % part_id)
 		_check(not APPEARANCE.is_tintable_part(category, part_id), "%s keeps its authored colours" % part_id)
 		for movement: String in ["walk", "run", "fish", "ride", "surf", "mount"]:
@@ -46,7 +46,7 @@ func _run() -> void:
 	for layer: Dictionary in BATTLE.build_layers(appearance):
 		_check(not str(layer.get("part_id", "")).begins_with("TeamRocket_"), "female trainer does not use male Team Rocket art")
 	for item: String in ITEMS:
-		var expected_genders := ["male", "female"] if item == "team-rocket-outfit" else ["male"]
+		var expected_genders := ["male", "female"]
 		_check(APPEARANCE.get_cosmetic_item_allowed_genders(item) == expected_genders, "%s declares its compatible model" % item)
 		for gender: String in ["male", "female"]:
 			var icon: Texture2D = APPEARANCE.get_cosmetic_item_icon(item, gender)

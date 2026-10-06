@@ -112,8 +112,7 @@ func _claim_lesson_reward() -> void:
 			"reward": LocalizationManager.text("ui.quest.thieving_lesson_reward", {
 				"tm": ItemLocalization.display_name("tm-thief", "TM Thief"),
 				"glasses": ItemLocalization.display_name("black-glasses", "Black Glasses"),
-				"male_outfit": ItemLocalization.display_name("team-rocket-outfit", "Team Rocket Outfit Box"),
-				"female_outfit": ItemLocalization.display_name("team-rocket-female-outfit", "Female Team Rocket Outfit Box"),
+				"outfit": ItemLocalization.display_name("team-rocket-outfit", "Team Rocket Outfit Box"),
 			}),
 		})
 	)

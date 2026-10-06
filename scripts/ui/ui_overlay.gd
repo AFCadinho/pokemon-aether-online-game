@@ -19095,6 +19095,11 @@ func _format_appearance_category_name(category_id: String) -> String:
 	return _humanize_appearance_id(category_id)
 
 func _format_appearance_option_name(category_id: String, part_id: String) -> String:
+	var variant_definition := CharacterAppearanceService.VARIANTS.part_definition(
+		CharacterAppearanceService.normalize_part_category(category_id), part_id
+	)
+	if not variant_definition.is_empty():
+		return ItemLocalization.display_name(str(variant_definition.get("item_id", "")))
 	var normalized_category: String = CharacterAppearanceService.normalize_part_category(category_id)
 	var normalized_part_id: String = part_id.strip_edges()
 	if normalized_category == "body":
@@ -25166,6 +25171,9 @@ func _apply_trainer_service_result(result: Dictionary, gender_changed: bool) -> 
 		PlayerSave.gender = CharacterAppearanceService.normalize_gender(str(updated_user.get("gender", PlayerSave.gender)))
 	if gender_changed:
 		_reset_impersonated_appearance_to_defaults()
+		var updated_appearance: Variant = updated_user.get("appearance", {})
+		if updated_appearance is Dictionary and not (updated_appearance as Dictionary).is_empty():
+			PlayerSave.apply_appearance_state(updated_appearance as Dictionary)
 	_apply_owned_appearance_unlocks(result.get("appearanceUnlocks", []), int(result.get("appearanceSlotLimit", DEFAULT_APPEARANCE_SLOT_LIMIT)), result.get("appearanceSlotCounts", {}))
 	bag_inventory_items = _normalize_bag_inventory_items(result.get("inventory", []))
 	bag_inventory_loaded = true

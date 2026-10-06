@@ -2,6 +2,8 @@ extends RefCounted
 
 class_name CharacterAppearanceService
 
+const VARIANTS := preload("res://scripts/services/cosmetic_variant_catalog.gd")
+
 const PLAYER_DIRECTORY := "res://assets/player"
 const BODY_CATEGORY := "body"
 const BODY_DIRECTORY := "res://assets/player/body"
@@ -193,6 +195,12 @@ static func resolve_cosmetic_icon_gender(gender: String, allowed_genders_value: 
 
 static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 	var normalized_item_id := item_id.strip_edges().to_lower()
+	var definition := VARIANTS.item_definition(normalized_item_id)
+	if not definition.is_empty():
+		var genders: Array[String] = []
+		for value: Variant in definition.get("genders", []):
+			genders.append(str(value))
+		return genders
 	if normalized_item_id in [
 		"team-rocket-outfit", "team-rocket-female-outfit", "aether-ronin-outfit",
 		"adinho-classic-sunglasses", "adinho-chroma-glasses",
@@ -264,8 +272,10 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 	if _cosmetic_item_icon_cache.has(cache_key):
 		return _cosmetic_item_icon_cache.get(cache_key) as Texture2D
 
-	var layers: Array[Dictionary] = []
-	match normalized_item_id:
+	var layers: Array[Dictionary] = VARIANTS.icon_layers(normalized_item_id, normalized_gender)
+	# Authored variant data takes precedence over the legacy icon cases.
+	var fallback_item_id := normalized_item_id if layers.is_empty() else ""
+	match fallback_item_id:
 		"aether-royal-outfit":
 			layers = [
 				{"category": CAPE_CATEGORY, "id": "AetherRoyal_Cape"},
@@ -337,41 +347,6 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 			layers = [{"category": BOTTOM_CATEGORY, "id": "Smoking_Trousers"}]
 		"smoking-shoes":
 			layers = [{"category": SHOES_CATEGORY, "id": "Smoking_Shoes"}]
-		"team-rocket-female-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": BOTTOM_CATEGORY, "id": "TeamRocketFemale_Skirt"},
-				{"category": SHOES_CATEGORY, "id": "TeamRocketFemale_Boots"},
-				{"category": TOP_CATEGORY, "id": "TeamRocketFemale_Shirt"},
-				{"category": HAIR_CATEGORY, "id": "TeamRocketFemale_Hair"},
-				{"category": HEADGEAR_CATEGORY, "id": "TeamRocketFemale_Cap"},
-			]
-		"team-rocket-female-shirt":
-			layers = [{"category": TOP_CATEGORY, "id": "TeamRocketFemale_Shirt"}]
-		"team-rocket-female-skirt":
-			layers = [{"category": BOTTOM_CATEGORY, "id": "TeamRocketFemale_Skirt"}]
-		"team-rocket-female-boots":
-			layers = [{"category": SHOES_CATEGORY, "id": "TeamRocketFemale_Boots"}]
-		"team-rocket-female-hair":
-			layers = [{"category": HAIR_CATEGORY, "id": "TeamRocketFemale_Hair"}]
-		"team-rocket-female-cap":
-			layers = [{"category": HEADGEAR_CATEGORY, "id": "TeamRocketFemale_Cap"}]
-		"team-rocket-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": BOTTOM_CATEGORY, "id": "TeamRocket_Trousers"},
-				{"category": SHOES_CATEGORY, "id": "TeamRocket_Shoes"},
-				{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"},
-				{"category": HEADGEAR_CATEGORY, "id": "TeamRocket_Cap"},
-			]
-		"team-rocket-cap":
-			layers = [{"category": HEADGEAR_CATEGORY, "id": "TeamRocket_Cap"}]
-		"team-rocket-shirt":
-			layers = [{"category": TOP_CATEGORY, "id": "TeamRocket_Shirt"}]
-		"team-rocket-trousers":
-			layers = [{"category": BOTTOM_CATEGORY, "id": "TeamRocket_Trousers"}]
-		"team-rocket-shoes":
-			layers = [{"category": SHOES_CATEGORY, "id": "TeamRocket_Shoes"}]
 		"mysterious-outfit":
 			layers = [
 				{"kind": "body"},
@@ -531,7 +506,8 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 				{"category": TOP_CATEGORY, "id": "IronFanton_Shirt"},
 			]
 		_:
-			return null
+			if layers.is_empty():
+				return null
 
 	var battle_icon := _create_battle_appearance_icon(layers, normalized_gender)
 	if battle_icon != null:
@@ -648,7 +624,7 @@ static func _create_battle_appearance_icon(parts: Array[Dictionary], gender: Str
 			if layer_value is Dictionary:
 				var layer := layer_value as Dictionary
 				if str(layer.get("category", "")) == category \
-					and str(layer.get("part_id", "")) == str(requested[category]) \
+					and str(layer.get("requested_part_id", layer.get("part_id", ""))) == str(requested[category]) \
 					and not bool(layer.get("fallback", false)):
 					found = true
 					break
@@ -858,6 +834,9 @@ static func is_free_part_id(category: String, part_id: String) -> bool:
 static func is_tintable_part(category: String, part_id: String) -> bool:
 	var normalized_category: String = normalize_part_category(category)
 	var normalized_part_id: String = part_id.strip_edges()
+	var definition := VARIANTS.part_definition(normalized_category, normalized_part_id)
+	if not definition.is_empty():
+		return not str(definition.get("tint", "")).is_empty()
 	if normalized_category == HAIR_CATEGORY or normalized_category == FACIAL_HAIR_CATEGORY:
 		return normalized_part_id not in ["Aether_Blossom_Hair", "Wishmaker_Hair", "TeamRocketFemale_Hair"]
 	if normalized_category == FACEGEAR_CATEGORY:
@@ -903,7 +882,7 @@ static func get_directional_part_z_index(
 
 
 static func get_eyebrows_for_hair(hair_id: String, gender: String = "") -> String:
-	var normalized_hair_id := hair_id.strip_edges()
+	var normalized_hair_id := VARIANTS.render_part_id(HAIR_CATEGORY, hair_id.strip_edges(), normalize_gender(gender))
 	if normalized_hair_id == "":
 		return ""
 	var mapping_key := "%s:%s" % [normalize_gender(gender), normalized_hair_id]
@@ -981,7 +960,11 @@ static func get_available_part_ids(category: String, gender: String = "") -> Arr
 
 	var normalized_gender: String = normalize_gender(gender)
 	var part_directory: String = _get_gender_part_directory(normalized_gender, normalized_category)
-	var manifest_ids: Array[String] = _get_manifest_part_ids(part_directory)
+	var manifest_ids: Array[String] = []
+	for sprite_id: String in _get_manifest_part_ids(part_directory):
+		var logical_id := VARIANTS.logical_part_id(normalized_category, sprite_id, normalized_gender)
+		if not manifest_ids.has(logical_id):
+			manifest_ids.append(logical_id)
 	if FileAccess.file_exists("%s/parts_manifest.json" % part_directory):
 		return _sort_part_ids(manifest_ids, normalized_category, normalized_gender)
 	if not manifest_ids.is_empty():
@@ -1043,7 +1026,7 @@ static func has_authored_movement_pose(category: String, part_id: String, gender
 		return false
 	var atlas := frames.get_frame_texture(&"idle_down", 0) as AtlasTexture
 	return atlas != null and atlas.atlas != null and atlas.atlas.resource_path.ends_with(
-		"/%s/%s_%s.png" % [style, part_id, style]
+		"/%s/%s_%s.png" % [style, VARIANTS.render_part_id(normalize_part_category(category), part_id, normalize_gender(gender)), style]
 	)
 
 
@@ -1409,6 +1392,9 @@ static func _is_selectable_body_id(body_id: String) -> bool:
 static func _load_part_texture_for_movement(category: String, part_id: String, gender: String, movement_style: String) -> Texture2D:
 	var normalized_category := normalize_part_category(category)
 	var normalized_movement_style := resolve_layer_movement_style(movement_style, category)
+	part_id = VARIANTS.render_part_id(normalized_category, part_id, normalize_gender(gender))
+	if part_id.is_empty():
+		return null
 	if normalized_movement_style != BODY_MOVEMENT_DEFAULT:
 		var movement_part_id: String = _get_movement_body_id(part_id, normalized_movement_style)
 		var movement_texture: Texture2D = _load_part_texture(category, movement_part_id, gender)
@@ -1458,6 +1444,9 @@ static func _load_part_texture(category: String, part_id: String, gender: String
 		return null
 
 	var normalized_gender: String = normalize_gender(gender)
+	normalized_part_id = VARIANTS.render_part_id(normalized_category, normalized_part_id, normalized_gender)
+	if normalized_part_id.is_empty():
+		return null
 	if normalized_gender != "":
 		var gender_path: String = "%s/%s.png" % [_get_gender_part_directory(normalized_gender, normalized_category), normalized_part_id]
 		if ResourceLoader.exists(gender_path):

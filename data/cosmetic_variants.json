@@ -1,0 +1,290 @@
+{
+  "items": {
+    "team-rocket-cap": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Cap"
+        }
+      ]
+    },
+    "team-rocket-female-boots": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shoes"
+        }
+      ]
+    },
+    "team-rocket-female-cap": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Cap"
+        }
+      ]
+    },
+    "team-rocket-female-hair": {
+      "bundle": false,
+      "genders": [
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "hair",
+          "genders": [
+            "female"
+          ],
+          "id": "TeamRocketFemale_Hair"
+        }
+      ]
+    },
+    "team-rocket-female-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shoes"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Cap"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "female"
+          ],
+          "id": "TeamRocketFemale_Hair"
+        }
+      ]
+    },
+    "team-rocket-female-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shirt"
+        }
+      ]
+    },
+    "team-rocket-female-skirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Trousers"
+        }
+      ]
+    },
+    "team-rocket-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shoes"
+        },
+        {
+          "category": "headgear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Cap"
+        },
+        {
+          "category": "hair",
+          "genders": [
+            "female"
+          ],
+          "id": "TeamRocketFemale_Hair"
+        }
+      ]
+    },
+    "team-rocket-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shirt"
+        }
+      ]
+    },
+    "team-rocket-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Shoes"
+        }
+      ]
+    },
+    "team-rocket-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "TeamRocket_Trousers"
+        }
+      ]
+    }
+  },
+  "parts": {
+    "bottom": {
+      "TeamRocket_Trousers": {
+        "item_id": "team-rocket-trousers",
+        "render_variants": {
+          "female": "TeamRocketFemale_Skirt",
+          "male": "TeamRocket_Trousers"
+        }
+      }
+    },
+    "headgear": {
+      "TeamRocket_Cap": {
+        "item_id": "team-rocket-cap",
+        "render_variants": {
+          "female": "TeamRocketFemale_Cap",
+          "male": "TeamRocket_Cap"
+        }
+      }
+    },
+    "shoes": {
+      "TeamRocket_Shoes": {
+        "item_id": "team-rocket-shoes",
+        "render_variants": {
+          "female": "TeamRocketFemale_Boots",
+          "male": "TeamRocket_Shoes"
+        }
+      }
+    },
+    "top": {
+      "TeamRocket_Shirt": {
+        "item_id": "team-rocket-shirt",
+        "render_variants": {
+          "female": "TeamRocketFemale_Shirt",
+          "male": "TeamRocket_Shirt"
+        }
+      }
+    }
+  },
+  "version": 1
+}

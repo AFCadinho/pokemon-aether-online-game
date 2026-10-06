@@ -2,7 +2,7 @@ extends SceneTree
 
 const APPEARANCE := preload("res://scripts/services/character_appearance_service.gd")
 const BATTLE := preload("res://scripts/battle/battle_ui/battle_player_trainer_catalog.gd")
-const PARTS := {"top": "TeamRocketFemale_Shirt", "bottom": "TeamRocketFemale_Skirt", "shoes": "TeamRocketFemale_Boots", "headgear": "TeamRocketFemale_Cap", "hair": "TeamRocketFemale_Hair"}
+const PARTS := {"top": "TeamRocket_Shirt", "bottom": "TeamRocket_Trousers", "shoes": "TeamRocket_Shoes", "headgear": "TeamRocket_Cap", "hair": "TeamRocketFemale_Hair"}
 const ITEMS := ["team-rocket-female-outfit", "team-rocket-female-shirt", "team-rocket-female-skirt", "team-rocket-female-boots", "team-rocket-female-cap", "team-rocket-female-hair"]
 var failed := false
 
@@ -15,12 +15,13 @@ func _run() -> void:
 	for category: String in PARTS:
 		var part_id: String = PARTS[category]
 		_check(APPEARANCE.get_available_part_ids(category, "female").has(part_id), "%s is available for female models" % part_id)
-		_check(not APPEARANCE.get_available_part_ids(category, "male").has(part_id), "%s is female-only" % part_id)
+		_check(APPEARANCE.get_available_part_ids(category, "male").has(part_id) == (category != "hair"), "%s shares ownership except for the optional bob" % part_id)
 		_check(not APPEARANCE.is_free_part_id(category, part_id), "%s requires its wardrobe item" % part_id)
 		_check(not APPEARANCE.is_tintable_part(category, part_id), "%s keeps its authored colours" % part_id)
 		for movement: String in ["walk", "run", "fish", "ride", "surf", "mount"]:
 			var suffix := "fish" if movement == "fish" else ("ride" if movement in ["ride", "surf", "mount"] else "")
-			var expected := "res://assets/player/female/%s/%s%s%s.png" % [category, suffix + "/" if not suffix.is_empty() else "", part_id, "_" + suffix if not suffix.is_empty() else ""]
+			var sprite_id := APPEARANCE.VARIANTS.render_part_id(category, part_id, "female")
+			var expected := "res://assets/player/female/%s/%s%s%s.png" % [category, suffix + "/" if not suffix.is_empty() else "", sprite_id, "_" + suffix if not suffix.is_empty() else ""]
 			var frames: SpriteFrames = APPEARANCE.get_part_frames(category, part_id, "female", movement)
 			_check(frames != null, "%s loads %s" % [part_id, movement])
 			if frames == null:
@@ -32,7 +33,8 @@ func _run() -> void:
 					var atlas := frames.get_frame_texture(animation, index) as AtlasTexture
 					if atlas == null or atlas.atlas.resource_path != expected or atlas.region.size != Vector2(64, 64):
 						_check(false, "%s %s uses its own registered sheet, not a starter fallback" % [part_id, movement])
-	var appearance := {"gender": "female", "top": "TeamRocketFemale_Shirt", "bottom": "TeamRocketFemale_Skirt", "shoes": "TeamRocketFemale_Boots", "headgear": "TeamRocketFemale_Cap", "hair": "TeamRocketFemale_Hair"}
+	var appearance := PARTS.duplicate()
+	appearance["gender"] = "female"
 	var battle_layers: Array[Dictionary] = BATTLE.build_layers(appearance)
 	for category: String in PARTS:
 		var found := false
@@ -40,13 +42,13 @@ func _run() -> void:
 			if str(layer.get("category")) != category:
 				continue
 			var texture := layer.get("texture") as Texture2D
-			found = str(layer.get("part_id")) == PARTS[category] and not bool(layer.get("fallback", true)) and texture != null and texture.get_size() == Vector2(160, 160) and is_equal_approx(float(layer.get("scale", 0)), 1.0)
+			found = str(layer.get("part_id")) == APPEARANCE.VARIANTS.render_part_id(category, PARTS[category], "female") and str(layer.get("requested_part_id")) == PARTS[category] and not bool(layer.get("fallback", true)) and texture != null and texture.get_size() == Vector2(160, 160) and is_equal_approx(float(layer.get("scale", 0)), 1.0)
 		_check(found, "%s resolves its 160px trainer sprite without fallback" % category)
 	appearance["gender"] = "male"
 	for layer: Dictionary in BATTLE.build_layers(appearance):
 		_check(not str(layer.get("part_id", "")).begins_with("TeamRocketFemale_"), "male trainer does not use female Team Rocket art")
 	for item: String in ITEMS:
-		var expected_genders := ["male", "female"] if item == "team-rocket-female-outfit" else ["female"]
+		var expected_genders := ["female"] if item == "team-rocket-female-hair" else ["male", "female"]
 		_check(APPEARANCE.get_cosmetic_item_allowed_genders(item) == expected_genders, "%s declares its compatible model" % item)
 		for gender: String in ["female", "male"]:
 			var icon: Texture2D = APPEARANCE.get_cosmetic_item_icon(item, gender)

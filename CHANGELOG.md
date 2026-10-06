@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Unify Team Rocket clothing into gender-adaptive items and one reward box; keep adaptive cosmetics equipped through gender changes and preserve existing ownership.
+
 - Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
 
 - Add Black & Gold Metagross as a separate grantable land mount, outside the Gift Store and mount boxes.
