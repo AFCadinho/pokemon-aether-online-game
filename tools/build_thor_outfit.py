@@ -68,8 +68,12 @@ def cape(d,pose,phase,off,wide_idle=False):
         if pose==0:
             pts=([(12,20),(18,20),(21,22),(24,26),(24,28),(21,29),(17,28),(14,27),(11,26)]
                  if wide_idle else [(12,20),(18,20),(21,27),(19,29),(14,27),(11,26)])
-        elif pose==1:pts=[(12,20),(18,20),(24,20),(30,21),(33,23),(32,26),(28,28),(23,29),(17,28),(12,25)]
-        else:pts=[(12,20),(18,20),(24,19),(31,17+(phase%2)),(36,17+(phase%2)),(38,19+(phase%2)),(37,23),(33,25),(28,26),(23,26),(17,27),(12,25)]
+        elif pose==1:
+            # Rise from the shoulder instead of extending straight behind it.
+            pts=[(12,20),(18,20),(21,17),(25,15),(28,16),(29,19),(28,22),(25,24),(21,26),(17,27),(12,25)]
+        else:
+            lift=phase%2
+            pts=[(12,20),(18,20),(21,16),(24,12+lift),(27,11+lift),(29,13+lift),(29,16+lift),(27,19),(24,22),(20,25),(17,27),(12,25)]
         if d==2:pts=[(31-x,y) for x,y in pts]
     pts=[(x+dx+pad,y+dy+pad) for x,y in pts];draw.polygon(pts,fill=INK)
     mask=im.getchannel('A')
@@ -154,6 +158,17 @@ for gender in ['male','female']:
                     for x in range(32):
                         if skin(b.getpixel((x,y))) and ((y<21+dy) or (d==0 and 13+dx<=x<=17+dx and y<=22+dy) or (d==1 and x==15+dx and y<=22+dy) or (d==2 and x==16+dx and y<=22+dy)):
                             art.putpixel((x,y),(0,0,0,0))
+                if gender=='male':
+                    # A small raised collar frames the neck when facial hair is
+                    # unequipped. Keep three native skin pixels visible in front.
+                    collar={0:{21:[12,13,17,18],22:[13,17]},
+                            1:{21:[14,15]},2:{21:[16,17]},
+                            3:{21:[12,18]}}[d]
+                    for y,xs in collar.items():
+                        for x in xs:
+                            px,py=x+dx,y+dy
+                            if 0<=px<32 and 0<=py<32 and skin(b.getpixel((px,py))):
+                                art.putpixel((px,py),Image.new('RGBA',(1,1),DARK if y==21 else MID).getpixel((0,0)))
                 layers['top'].paste(art,(c*32,d*32))
                 weapon,head=hammer(b,d,off,style);heads.append(list(head))
                 for pose in range(3):
