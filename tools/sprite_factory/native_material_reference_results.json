@@ -1,0 +1,594 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "production_approved": false,
+  "qualification_complete": false,
+  "full_native_lifetime": {
+    "complete": true,
+    "godot": "4.6.2-stable (official)",
+    "native_scenes_loaded": 2400,
+    "phase": "native_load_instantiate_render_release",
+    "production_approved": false,
+    "prototype_only": true,
+    "renderer": "forward_plus",
+    "scene_references_released": true
+  },
+  "cold_paired_reference": {
+    "complete": true,
+    "production_approved": false,
+    "entries": [
+      {
+        "identity": "arcanine-hisui",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui"
+        ],
+        "report_sha256": "bb20bcb112d39f768598969b65c164c5ab0e926931b730a43339a5c998ff62bd"
+      },
+      {
+        "identity": "arcanine-hisui",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui"
+        ],
+        "report_sha256": "9816edf339e99f037523818c63305db03c371cbcb4aaa11363a0a472bd3340d1"
+      },
+      {
+        "identity": "arcanine-hisui",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui"
+        ],
+        "report_sha256": "5e348d1a34255c411a9fa8eb78eee5d139b37ce77f0594887556259fbea01a53"
+      },
+      {
+        "identity": "arcanine-hisui@shiny",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui@shiny"
+        ],
+        "report_sha256": "0d17cc6405aaa46c3160ef670ce8e0277d4056d9e0fe2e4f9de248eb8c5ef49d"
+      },
+      {
+        "identity": "arcanine-hisui@shiny",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui@shiny"
+        ],
+        "report_sha256": "98910a723e9e177f67a3e616c53cb42d6da973ed84889072466e90456eb3966d"
+      },
+      {
+        "identity": "arcanine-hisui@shiny",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "arcanine-hisui@shiny"
+        ],
+        "report_sha256": "84b2496ff394160efa598464cba98cf0316560666db322476eee6a831b291f0e"
+      },
+      {
+        "identity": "samurott-hisui",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui"
+        ],
+        "report_sha256": "98cce388ee5c2f3d29cf41968345b5b6066d683d4d007ced16cfba22b60927be"
+      },
+      {
+        "identity": "samurott-hisui",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui"
+        ],
+        "report_sha256": "2d8adfaf6ab28b459193b26905eae114431b4a7af63a5164edac3fe716efb370"
+      },
+      {
+        "identity": "samurott-hisui",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui"
+        ],
+        "report_sha256": "45fd8eaee6ec40b160aa008f5b29b81fc160de2f7ce379fe09bcba4ba8e8a334"
+      },
+      {
+        "identity": "samurott-hisui@shiny",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui@shiny"
+        ],
+        "report_sha256": "77deb1791ed7833b6bab332594ce65b358dc12063a340b304522dd1202aaa8f4"
+      },
+      {
+        "identity": "samurott-hisui@shiny",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui@shiny"
+        ],
+        "report_sha256": "191f81d5f9f0abb2cc9a4d3275e938c0e5616f2bfa8f8a459437adfe33445a02"
+      },
+      {
+        "identity": "samurott-hisui@shiny",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "samurott-hisui@shiny"
+        ],
+        "report_sha256": "77b72467bc4e9351d7ba3d23d0fda0f8fccf2d52d9f61a6d0a4fc5a14eef3bbe"
+      },
+      {
+        "identity": "darmanitan-galar-zen",
+        "phase": "original-control",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen"
+        ],
+        "report_sha256": "ca0534171de263f314677dcbf2bbdf73d7dfc6aee53ee1ac8a7c58d7c43265cd"
+      },
+      {
+        "identity": "darmanitan-galar-zen",
+        "phase": "candidate",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen"
+        ],
+        "report_sha256": "92c13e24793ec22ecfe7319c09ddc2de9ac58aac3a244994458fdcd0d29918c4"
+      },
+      {
+        "identity": "darmanitan-galar-zen",
+        "phase": "candidate-first",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen"
+        ],
+        "report_sha256": "6dc481a4e89c6fbe6b7accf5aabb205111da2d92dffb5692f2acdd53976adcad"
+      },
+      {
+        "identity": "darmanitan-galar-zen@shiny",
+        "phase": "original-control",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen@shiny"
+        ],
+        "report_sha256": "06e9bceb86b24c555c3183edf0f48b5451fa9e4bf0a510228535f679c6117f02"
+      },
+      {
+        "identity": "darmanitan-galar-zen@shiny",
+        "phase": "candidate",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen@shiny"
+        ],
+        "report_sha256": "63136061ac18b4d4da524e0ef73d0188be12ced602402ac6e3893751bc69a875"
+      },
+      {
+        "identity": "darmanitan-galar-zen@shiny",
+        "phase": "candidate-first",
+        "comparisons": 18,
+        "response_skipped": [
+          "darmanitan-galar-zen@shiny"
+        ],
+        "report_sha256": "d3f82f2d415df0d66046ea4d655ec6cf04a97e00e498ce0dc4e615078b502454"
+      },
+      {
+        "identity": "goodra-hisui",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui"
+        ],
+        "report_sha256": "4fa2d396063cae649ffa24611b5be7404595f4fc1d9219392adfe3a9d2d815df"
+      },
+      {
+        "identity": "goodra-hisui",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui"
+        ],
+        "report_sha256": "24b2e7c2a878110dc0ef4fbd00a1cca9dbb93940669bba6de7189623f1d2dcf7"
+      },
+      {
+        "identity": "goodra-hisui",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui"
+        ],
+        "report_sha256": "b972f40658aed212ea3d8862732abe49a21c09b7fd76dfea5b1caf670491077d"
+      },
+      {
+        "identity": "goodra-hisui@shiny",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui@shiny"
+        ],
+        "report_sha256": "94fff01115a5b22f7b76a315e93b6da321dacc670c86a9ebb4eaccaf7203e605"
+      },
+      {
+        "identity": "goodra-hisui@shiny",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui@shiny"
+        ],
+        "report_sha256": "f3f343dae78c73404259ffd306bbd3fa8599755334888eb45a708d2f18ecf1f7"
+      },
+      {
+        "identity": "goodra-hisui@shiny",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "goodra-hisui@shiny"
+        ],
+        "report_sha256": "bc49f0d975fb535bb4760715efc4e29505eec6bf8f79cfda2f04c7ea74f4bca7"
+      },
+      {
+        "identity": "zorua-hisui",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui"
+        ],
+        "report_sha256": "b8b29c160684b6f6f0e1329a0b80bd4858318000965e0adc7559143e7dac7083"
+      },
+      {
+        "identity": "zorua-hisui",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui"
+        ],
+        "report_sha256": "365f2171f9608f70350ecb64afeca73c316a8c6b0ea0f6448d97b86de682bf20"
+      },
+      {
+        "identity": "zorua-hisui",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui"
+        ],
+        "report_sha256": "a870a8b5cf618b2e22585dd097725543b029f34fd23e9b1df6a2d7228ba866a6"
+      },
+      {
+        "identity": "zorua-hisui@shiny",
+        "phase": "original-control",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui@shiny"
+        ],
+        "report_sha256": "9843dad1c519fbdbf5c5429843140dfea12ece333db94718681ada7df2222e43"
+      },
+      {
+        "identity": "zorua-hisui@shiny",
+        "phase": "candidate",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui@shiny"
+        ],
+        "report_sha256": "007aff1e08dfc469c9b62bc1f949a50585c8965ab0f3701d17064d5ddccdf410"
+      },
+      {
+        "identity": "zorua-hisui@shiny",
+        "phase": "candidate-first",
+        "comparisons": 24,
+        "response_skipped": [
+          "zorua-hisui@shiny"
+        ],
+        "report_sha256": "6e813581286f20aa9b1b81c6670ce1b287d3117fa6b83b2ab9ecbb87bd4e8ba3"
+      },
+      {
+        "identity": "dragonite",
+        "phase": "original-control",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "f85fee4f9720ba8e5a78d1c279635fe7bdbe4df037cfb37563ac4a8c37e8b94e"
+      },
+      {
+        "identity": "dragonite",
+        "phase": "candidate",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "87d2d8fa111cbb419960270bc31fe660e60b377b3a00edf66297cb50ab9777b7"
+      },
+      {
+        "identity": "dragonite",
+        "phase": "candidate-first",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "575941717340f537e0b0b314903e1aabbf654b867c08adeead7de58771c54d89"
+      },
+      {
+        "identity": "dragonite@shiny",
+        "phase": "original-control",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "5544fafa157b79a2eccbaab9de43cafe9e6555fca85d1bef94c9c736a9328f8e"
+      },
+      {
+        "identity": "dragonite@shiny",
+        "phase": "candidate",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "4a1f803cb27842d670f6291e3a579ad49fe6f458d7f5bf80456b45efbcfeeacb"
+      },
+      {
+        "identity": "dragonite@shiny",
+        "phase": "candidate-first",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "baf074fdef11f9a339e117cb0db9e3330848d1bcc331d1dc36d44aa769be22fb"
+      },
+      {
+        "identity": "roaring-moon",
+        "phase": "original-control",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "50fb262323e3ff17583b8bc6644d5c58af00d9b7a82baeec3fd7f0fd026ddabe"
+      },
+      {
+        "identity": "roaring-moon",
+        "phase": "candidate",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "833ae18940ec0f06ad7670d15efd22d24dd2963ea93fd5c5079addcc5de16a1a"
+      },
+      {
+        "identity": "roaring-moon",
+        "phase": "candidate-first",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "deadbcac6aad620f30fda92a3b87940fd3e863754264ed5eeee62831466c925b"
+      },
+      {
+        "identity": "roaring-moon@shiny",
+        "phase": "original-control",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "9bb34f13c384d4bff43d9ae04ae0af98fa5da049d8d6db9afe9686b7c9114cf7"
+      },
+      {
+        "identity": "roaring-moon@shiny",
+        "phase": "candidate",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "279a11a4986c2c87d9a3f126066d5c8aa9618a3f24dd0000e1c060909a057d24"
+      },
+      {
+        "identity": "roaring-moon@shiny",
+        "phase": "candidate-first",
+        "comparisons": 42,
+        "response_skipped": [],
+        "report_sha256": "7a6b9ab523f788575c76fc685a1335209026be85c0a6edf57f4d982fdf927fba"
+      },
+      {
+        "identity": "cloyster",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "cc8ab41ea26b8cc423e2aaaeb57e640e8aaefa5ed354ac33bac283165cf1cce0"
+      },
+      {
+        "identity": "cloyster",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "b2f4318f7b0215637477bc9c31c174a1b425b8c0fe09d18b984ca67eca418666"
+      },
+      {
+        "identity": "cloyster",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "aa1ad5df2cae16f82cf764fb6b5f369e453a1edafff0ca4ce88ceb04e5ced081"
+      },
+      {
+        "identity": "cloyster@shiny",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "09d65b2e9432b6f85dfd00396304f4f6ea77c31a01e173f330e68debd4517f18"
+      },
+      {
+        "identity": "cloyster@shiny",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "dfdd37625968807f547b9873a727ac91daca88156287d78e7538caab32318d75"
+      },
+      {
+        "identity": "cloyster@shiny",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "b5d00171377987d63ad12786f68ff0e7c6760a3dc45ec547f19b55f78949c5b6"
+      },
+      {
+        "identity": "grimmsnarl",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "197fc44e87dcb8a49a2e0d0267d665c70377172a5fbeefa64b9130fa994c70fe"
+      },
+      {
+        "identity": "grimmsnarl",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "86e23d6c1e0e525cfcd62b6f7fa5bfdc611b83b22b3feaeca4b4285f7a9597bf"
+      },
+      {
+        "identity": "grimmsnarl",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "7e53ca6546cc58863714e18b2d78bbe8bf9f86b761bd5aa9d3b91d08af48bbb7"
+      },
+      {
+        "identity": "grimmsnarl@shiny",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "0a33a7cdf540d016c1beebce169319afc49702f298c8f423c300fe2a0d670143"
+      },
+      {
+        "identity": "grimmsnarl@shiny",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "0bf27ef4f0e247c7f652fb7b91387d2ff9e9d661ab80f4779dc0f88bab898e4a"
+      },
+      {
+        "identity": "grimmsnarl@shiny",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "5e079fc58432c80f74b0315a128feb5dc13048681602d873e7a9a750ad88856a"
+      },
+      {
+        "identity": "floragato",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "547c4f8ed63a5bea0b9cb7eebedd66408ab144b15aed9bb405c764221187cfa3"
+      },
+      {
+        "identity": "floragato",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "e3a52f6668c1778d12d6224b1d93dc1540ffbafd163ac076444a37ce1d7c1777"
+      },
+      {
+        "identity": "floragato",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "98e94f2e0573bba34354e5d414b89e4c5062d4a793bbb1f818d1d4673ba9f21a"
+      },
+      {
+        "identity": "floragato@shiny",
+        "phase": "original-control",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "cf645cf6b8117bbfbd89dd9078fb623f4469a39f66589133ee75c439ec7ea73e"
+      },
+      {
+        "identity": "floragato@shiny",
+        "phase": "candidate",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "6e0546446b76b02b88b3e7cb7edc036732fc6bad20740ba65c1744c692f5cac7"
+      },
+      {
+        "identity": "floragato@shiny",
+        "phase": "candidate-first",
+        "comparisons": 48,
+        "response_skipped": [],
+        "report_sha256": "14eb04564fdba232e0b42467bf0a9ed86c9b6e404378ab529c7424089ee90bc3"
+      },
+      {
+        "identity": "steelix-mega",
+        "phase": "original-control",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega"
+        ],
+        "report_sha256": "97df5b8406be074542366ff92b42dbc0470744fb9a7368f2cb41b7038f353663"
+      },
+      {
+        "identity": "steelix-mega",
+        "phase": "candidate",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega"
+        ],
+        "report_sha256": "91ae6968e02d74516e21a7ed868f5d00ebd8cea9407e800178b7b7f6de826881"
+      },
+      {
+        "identity": "steelix-mega",
+        "phase": "candidate-first",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega"
+        ],
+        "report_sha256": "36f98a62e1b244b9d99facc7fa843c90154d957ed2a34c459c3e210e47b06216"
+      },
+      {
+        "identity": "steelix-mega@shiny",
+        "phase": "original-control",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega@shiny"
+        ],
+        "report_sha256": "c5e67e6e68cb2e832106dbbc0904520e298de21d3c65979aff70063bde73450e"
+      },
+      {
+        "identity": "steelix-mega@shiny",
+        "phase": "candidate",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega@shiny"
+        ],
+        "report_sha256": "53558653ccf03a28df73274c496651ac10ba99cc5190e7b7609c7152887e666a"
+      },
+      {
+        "identity": "steelix-mega@shiny",
+        "phase": "candidate-first",
+        "comparisons": 21,
+        "response_skipped": [
+          "steelix-mega@shiny"
+        ],
+        "report_sha256": "3af722ca4d85055f1dbf6d2aca41f2ca316eeddace57f1fba34103e209466e9c"
+      }
+    ],
+    "fixture_sha256": "3bad521465678cef8302666a9216aba717d679fc894ee9007a23dce69351cc7c",
+    "appearances": 22,
+    "comparisons": 2178,
+    "scope": "Cold per-appearance renderer qualification. Warm multi-model reference remains separately observable."
+  },
+  "corrected_hold": "Archen source materials were not faulty: immediate detached teardown caused renderer errors. Standard tree/queued lifecycle succeeds with unchanged files.",
+  "warm_reference_hold": "A 22-appearance original-only sequence still mismatches at Roaring Moon damage:0.0. Cold per-appearance pass does not certify arbitrary warm histories.",
+  "unchanged_guards": [
+    "SHA256 input verification",
+    "independent scenes and actors",
+    "byte-exact full RGBA images",
+    "A/B/A repeat equality",
+    "same camera/lights/MSAA4/shaders",
+    "same internal geometry/visibility/material priorities",
+    "released PackedScene weak references"
+  ],
+  "remaining": [
+    "Warm multi-model renderer allocation/overlap diagnosis",
+    "Windows/macOS loading/update/rollback",
+    "Streaming collection installer integration"
+  ],
+  "evidence": {
+    ".tmp/lossless-material-v1/archen-inspect.log": "d0db4a39d06f66e9f3ff994dad2e8a5bd3b3fac20fe61c10adc47275954d29ba",
+    ".tmp/lossless-material-v1/archen-lifetime.log": "75c7feceee37e84942d22393a18d14b447d9b8dc53427e9617c5b98805892d42",
+    ".tmp/lossless-material-v1/archen-four/report.json": "bd709250ae8ac4db6743da53b8bd9b011b3488583afb823f6070eb682bb3adf4",
+    ".tmp/lossless-material-v1/archen-four/clean-check.log": "63b365ae02c175afffca73f94a028ee0c16e3df40e5dd5089022405e3e687ec2",
+    ".tmp/lossless-material-v1/full-lifetime/report.json": "196beab636820a880d4a235c25b5816f1de28a543f67c708dfeeeb720451de06",
+    ".tmp/lossless-material-v1/full-lifetime/check.log": "d97923093bf13b75e42eb26adef691da3e8c75d36b7d05071501834f71a5bcc2",
+    ".tmp/lossless-material-v1/reference-aa/check.json": "1dc7d52311fd31710027fe06057bbbdd2ad4cceb2f1bfa9cf5dfd3745db92779",
+    ".tmp/lossless-material-v1/paired-22-aa-v2/check.json": "bb8ffe9299ddb3d40c57bad84a7fbea31e7adc1cab490aa8eb43907923ccf274",
+    ".tmp/lossless-material-v1/isolated-22/report.json": "a769ad0de7da1618342d3ac13cbd49fb1f44d6fa6929193d7ae5aae16eee5596",
+    ".tmp/lossless-material-v1/paired-native/check.json": "a55c5ded128d0df3c8465b76163536d51486df33dd40e9bfc680173b3ee42372",
+    ".tmp/lossless-material-v1/paired-native-reverse/check.json": "a55c5ded128d0df3c8465b76163536d51486df33dd40e9bfc680173b3ee42372"
+  },
+  "current_harness_sha256": {
+    "launcher/tests/native_catalog_rollout_check.gd": "8954f9e8ed4bd32596e25f6f83999fd8eb6d771990ee763855e70d4d3bbdafe5",
+    "tools/sprite_factory/native_paired_reference_check.gd": "751e4fd1fabde32b6ed4a881cb1280f0d76e5849f9958ba59100cb27b42548f1",
+    "tools/sprite_factory/run_native_paired_reference_check.py": "75ee71e5310bc31b8730be86cde85ff4b0742952f46a108c07ab2119638faf43"
+  }
+}

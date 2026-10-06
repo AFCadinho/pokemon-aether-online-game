@@ -58,6 +58,23 @@ platform/update checks, the Archen material issue, and download-UI integration
 remain open. No candidate is admitted or published. See
 [rollout validation](../../docs/lossless-model-rollout-validation.md).
 
+
+### Renderer lifetime and bounded image-reference follow-up
+
+The Archen failure is now traced to premature fixture teardown: the actor was
+instantiated and immediately freed while material/instance work was pending.
+The same unchanged scenes pass after normal tree attachment, render-server
+processing and queued cleanup. All 2,400 candidates now load/instantiate/attach/
+release with zero engine errors and released scene references. No model or game
+material is changed. Earlier failed evidence remains historical, not overwritten.
+
+An independent A/B/A actor comparison is exact for the known Dragonite/Roaring
+Moon cases, in both load orders. The broader warm original-only sequence still
+has a Roaring Moon pixel mismatch; cold per-appearance renderer comparisons are
+separately measured. This is not a waiver of the warm-reference hold or desktop
+platform/update checks. See
+[renderer lifetime/reference evidence](../../docs/lossless-material-reference-validation.md).
+
 ## Batch 04 — initial intake and composition probes (2026-09-27)
 
 The first review-only pipeline pass processed all 226 candidates. Source intake
