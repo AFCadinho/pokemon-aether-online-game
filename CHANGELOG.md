@@ -4,6 +4,8 @@
 
 - Refine all six male adventure outfits with lower, narrower trousers and shoes, plus more room below the chin, across walking, fishing and riding poses.
 
+- Give all Aether Clash lobby flowers the continuous sway used by the Kanto towns and routes, preserving their pink colours and the fountain animations.
+
 - Lower the complete Wailmer, Drednaw, Mantine, Basculegion and Wailord Surf rigs by 12 pixels to match Lapras and nearby water Pokémon, preserving rider poses and interaction tiles.
 
 - Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.
