@@ -5,7 +5,8 @@ func shot(stage: Stage, actors: Array, active: int, action: String, fraction: fl
 		pose(actors[i],action,fraction)
 	for frame in 3: await process_frame
 	await RenderingServer.frame_post_draw
-	return {"bytes":stage.viewport.get_texture().get_image().get_data(),"signature":signature(actors[active]),"bounds":bounds(actors[active])}
+	var image := stage.viewport.get_texture().get_image()
+	return {"image":image,"bytes":image.get_data(),"signature":signature(actors[active]),"bounds":bounds(actors[active])}
 func _run() -> void:
 	sink.tree=self
 	OS.add_logger(sink)
@@ -76,6 +77,11 @@ func _run() -> void:
 					assert(aa.signature==bb.signature and aa.bounds==bb.bounds)
 					report.comparisons.append({"identity":entry.identity,"response":response,"pose":str(action)+":"+str(fraction),"pixel_exact":same,"repeat_exact":aa.bytes==again.bytes,"sha256_original":Components.sha(aa.bytes),"sha256_candidate":Components.sha(bb.bytes)})
 					if not same:
+						report["failure_evidence"] = difference(aa,bb)
+						for label in {"original":aa,"candidate":bb,"repeat":again}:
+							var capture: Dictionary={"original":aa,"candidate":bb,"repeat":again}[label]
+							assert(capture.image.save_png(directory.path_join("mismatch-"+label+".png"))==OK)
+						await failure_diagnostics(stage,actors,action,fraction)
 						report["failure"]="Paired reference mismatch"
 						save_report()
 						push_error("Paired reference mismatch "+entry.identity+" "+str(action)+" "+str(fraction))
@@ -91,3 +97,28 @@ func _run() -> void:
 	report.complete=sink.errors.is_empty()
 	save_report()
 	quit()
+
+func difference(a: Dictionary,b: Dictionary) -> Dictionary:
+	assert(a.image.get_format()==Image.FORMAT_RGBA8 and b.image.get_format()==Image.FORMAT_RGBA8)
+	assert(a.image.get_size()==b.image.get_size())
+	var changed:=0
+	var alpha_changed:=0
+	var maximum: Array[int]=[0,0,0,0]
+	var samples:=[]
+	for offset in range(0,a.bytes.size(),4):
+		var different:=false
+		for channel in 4:
+			var delta: int=absi(int(a.bytes[offset+channel])-int(b.bytes[offset+channel]))
+			maximum[channel]=maxi(maximum[channel],delta)
+			different=different or delta!=0
+		if not different:continue
+		changed+=1
+		if a.bytes[offset+3]!=b.bytes[offset+3]:alpha_changed+=1
+		if samples.size()<16:
+			var pixel: int=offset/4
+			samples.append({"x":pixel%a.image.get_width(),"y":pixel/a.image.get_width(),"a":Array(a.bytes.slice(offset,offset+4)),"b":Array(b.bytes.slice(offset,offset+4))})
+	return {"changed_pixels":changed,"alpha_changed_pixels":alpha_changed,"maximum_channel_delta":maximum,"samples":samples}
+
+func failure_diagnostics(_stage: Stage,_actors: Array,_action: String,_fraction: float) -> void:
+	# Default strict comparator never changes rendering to make a failure pass.
+	pass
