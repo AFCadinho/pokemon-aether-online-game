@@ -530,5 +530,13 @@
   "reshiram-mount-box": {
     "name": "Reshiram Mount Box",
     "shortDesc": "Contains a Reshiram mount. Base shiny chance: 50%."
+  },
+  "metagross-mount": {
+    "name": "Metagross Mount",
+    "shortDesc": "Unlocks Metagross as a land mount. Requires a Mount License for the current region."
+  },
+  "salamence-mount": {
+    "name": "Salamence Mount",
+    "shortDesc": "Unlocks Salamence as a land mount. Requires a Mount License for the current region."
   }
 }

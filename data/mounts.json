@@ -1090,6 +1090,204 @@
       "idleSpriteSheet": "res://assets/mounts/reshiram_shiny/idle_mount.png",
       "idleForegroundSheet": "res://assets/mounts/reshiram_shiny/idle_foreground.png",
       "idleRiderMaskSheet": "res://assets/mounts/reshiram_shiny/idle_rider_mask.png"
+    },
+    "metagross": {
+      "displayName": "Metagross",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/metagross/mount.png",
+      "foregroundSheet": "res://assets/mounts/metagross/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/metagross/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 6,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -42
+          ],
+          [
+            4,
+            -40
+          ],
+          [
+            4,
+            -42
+          ],
+          [
+            4,
+            -40
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -42
+          ],
+          [
+            -4,
+            -40
+          ],
+          [
+            -4,
+            -42
+          ],
+          [
+            -4,
+            -40
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -34
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/metagross/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/metagross/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/metagross/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/metagross/icon.png",
+      "unlockItemId": "metagross-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "salamence": {
+      "displayName": "Salamence",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/salamence/mount.png",
+      "foregroundSheet": "res://assets/mounts/salamence/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/salamence/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -32
+          ],
+          [
+            4,
+            -30
+          ],
+          [
+            4,
+            -32
+          ],
+          [
+            4,
+            -30
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -32
+          ],
+          [
+            -4,
+            -30
+          ],
+          [
+            -4,
+            -32
+          ],
+          [
+            -4,
+            -30
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/salamence/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/salamence/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/salamence/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/salamence/icon.png",
+      "unlockItemId": "salamence-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }

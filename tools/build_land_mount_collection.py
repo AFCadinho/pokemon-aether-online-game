@@ -1,4 +1,4 @@
-"""Rebuild the five land mounts from their checked-in native source sheets.
+"""Rebuild the land mount collection from checked-in native source sheets.
 
 Run with --check to compare the generated artwork and seat offsets without writes.
 Requires Pillow. Design JSON records seats, foreground masks and head cutouts.
@@ -10,7 +10,8 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram')
-IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS)
+NORMAL_ONLY_IDS = ('metagross', 'salamence')
+IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + NORMAL_ONLY_IDS
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
 
@@ -51,8 +52,10 @@ def build(mount_id):
             offsets[direction].append([base_x+sx+dx-32-64, base_y+sy+dy-52-64])
             selection = Image.new('L',art.size)
             draw = ImageDraw.Draw(selection)
-            for key in ('head','near'):
-                polygon = design[key][1 if row == 2 else row]
+            polygons = [design[key][1 if row == 2 else row] for key in ('head', 'near')]
+            if row in (1, 2) and 'side_wing' in design:
+                polygons.append(design['side_wing'])
+            for polygon in polygons:
                 if row == 2: polygon = [(width-x,y) for x,y in polygon]
                 if polygon: draw.polygon([(x+dx,y+dy) for x,y in polygon],fill=255)
             selected = Image.new('RGBA',art.size)

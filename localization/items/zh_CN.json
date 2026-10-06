@@ -530,5 +530,13 @@
   "reshiram-mount-box": {
     "name": "莱希拉姆坐骑箱",
     "shortDesc": "包含一只莱希拉姆坐骑。初始异色概率：50%。"
+  },
+  "metagross-mount": {
+    "name": "巨金怪坐骑",
+    "shortDesc": "解锁巨金怪作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "salamence-mount": {
+    "name": "暴飞龙坐骑",
+    "shortDesc": "解锁暴飞龙作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }
