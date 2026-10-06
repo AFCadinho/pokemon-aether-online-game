@@ -5,7 +5,7 @@
   "hover": 8,
   "seats": [
     [
-      32,
+      34,
       30
     ],
     [
@@ -82,7 +82,24 @@
     []
   ],
   "near": [
-    [],
+    [
+      [
+        0,
+        32
+      ],
+      [
+        64,
+        32
+      ],
+      [
+        64,
+        64
+      ],
+      [
+        0,
+        64
+      ]
+    ],
     [
       [
         34,
@@ -150,7 +167,7 @@
       39
     ]
   ],
-  "note": "Approved V2: original scale, low hover, rider between wings.",
+  "note": "Front rider moves two native pixels right to align the authored sprite centers. Both wing roots cover the hands when raised.",
   "frameShifts": {
     "down": [
       [

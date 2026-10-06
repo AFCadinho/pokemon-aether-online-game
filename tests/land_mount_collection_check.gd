@@ -2,8 +2,8 @@ extends SceneTree
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga"]
-const GRANT_ONLY_IDS := ["toucannon", "arcanine", "aerodactyl"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga", "arcanine", "aerodactyl"]
+const GRANT_ONLY_IDS := ["toucannon"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 var failed := false
 

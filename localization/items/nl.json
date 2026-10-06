@@ -710,5 +710,21 @@
   "aerodactyl-mount": {
     "name": "Aerodactyl-mount",
     "shortDesc": "Ontgrendelt Aerodactyl als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-arcanine-mount": {
+    "name": "Shiny Arcanine-mount",
+    "shortDesc": "Ontgrendelt Shiny Arcanine als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "arcanine-mount-box": {
+    "name": "Arcanine-mountbox",
+    "shortDesc": "Bevat een Arcanine-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-aerodactyl-mount": {
+    "name": "Shiny Aerodactyl-mount",
+    "shortDesc": "Ontgrendelt Shiny Aerodactyl als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "aerodactyl-mount-box": {
+    "name": "Aerodactyl-mountbox",
+    "shortDesc": "Bevat een Aerodactyl-mount. Shiny-basiskans: 50%."
   }
 }

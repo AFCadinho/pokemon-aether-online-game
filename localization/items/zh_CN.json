@@ -710,5 +710,21 @@
   "aerodactyl-mount": {
     "name": "化石翼龙坐骑",
     "shortDesc": "解锁化石翼龙作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-arcanine-mount": {
+    "name": "异色风速狗坐骑",
+    "shortDesc": "解锁异色风速狗陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "arcanine-mount-box": {
+    "name": "风速狗坐骑箱",
+    "shortDesc": "包含一只风速狗坐骑。初始异色概率：50%。"
+  },
+  "shiny-aerodactyl-mount": {
+    "name": "异色化石翼龙坐骑",
+    "shortDesc": "解锁异色化石翼龙陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "aerodactyl-mount-box": {
+    "name": "化石翼龙坐骑箱",
+    "shortDesc": "包含一只化石翼龙坐骑。初始异色概率：50%。"
   }
 }

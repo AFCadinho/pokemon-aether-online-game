@@ -710,5 +710,21 @@
   "aerodactyl-mount": {
     "name": "Aerodactyl Mount",
     "shortDesc": "Unlocks Aerodactyl as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-arcanine-mount": {
+    "name": "Shiny Arcanine Mount",
+    "shortDesc": "Unlocks Shiny Arcanine as a land mount. Requires a Mount License for the current region."
+  },
+  "arcanine-mount-box": {
+    "name": "Arcanine Mount Box",
+    "shortDesc": "Contains an Arcanine mount. Base shiny chance: 50%."
+  },
+  "shiny-aerodactyl-mount": {
+    "name": "Shiny Aerodactyl Mount",
+    "shortDesc": "Unlocks Shiny Aerodactyl as a land mount. Requires a Mount License for the current region."
+  },
+  "aerodactyl-mount-box": {
+    "name": "Aerodactyl Mount Box",
+    "shortDesc": "Contains an Aerodactyl mount. Base shiny chance: 50%."
   }
 }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Arcanine and Shiny Aerodactyl and their Land Gift Store boxes for 500 Aether Gems each. Center Toucannon’s front rider and balance the hand/wing overlap.
+
 - Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
 - Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
 
