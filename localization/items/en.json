@@ -798,5 +798,25 @@
   "aether-credit-voucher-1000": {
     "name": "Aether Credit Voucher · 1,000",
     "shortDesc": "Claim to add 1000 credit to your Aether Credit Card. Tradeable until claimed. Card purchases are account-bound."
+  },
+  "thor-shirt": {
+    "name": "Thor Armor",
+    "shortDesc": "Fits both genders. The hammer includes a cape that rises while walking, settles when stopping, and emits electric sparks. Equip the hammer in the Back slot."
+  },
+  "thor-trousers": {
+    "name": "Thor Trousers",
+    "shortDesc": "Fits both genders. The hammer includes a cape that rises while walking, settles when stopping, and emits electric sparks. Equip the hammer in the Back slot."
+  },
+  "thor-shoes": {
+    "name": "Thor Boots",
+    "shortDesc": "Fits both genders. The hammer includes a cape that rises while walking, settles when stopping, and emits electric sparks. Equip the hammer in the Back slot."
+  },
+  "thor-hammer": {
+    "name": "Thor Hammer & Cape",
+    "shortDesc": "Fits both genders. The hammer includes a cape that rises while walking, settles when stopping, and emits electric sparks. Equip the hammer in the Back slot."
+  },
+  "thor-outfit": {
+    "name": "Thor Outfit Box",
+    "shortDesc": "Fits both genders. The hammer includes a cape that rises while walking, settles when stopping, and emits electric sparks. Equip the hammer in the Back slot."
   }
 }

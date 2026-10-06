@@ -800,6 +800,115 @@
           "id": "TeamRocket_Trousers"
         }
       ]
+    },
+    "thor-hammer": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Hammer"
+        }
+      ]
+    },
+    "thor-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Shoes"
+        },
+        {
+          "category": "cape",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Hammer"
+        }
+      ]
+    },
+    "thor-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Shirt"
+        }
+      ]
+    },
+    "thor-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Shoes"
+        }
+      ]
+    },
+    "thor-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "Thor_Trousers"
+        }
+      ]
     }
   },
   "parts": {
@@ -851,6 +960,22 @@
         "render_variants": {
           "female": "TeamRocketFemale_Skirt",
           "male": "TeamRocket_Trousers"
+        }
+      },
+      "Thor_Trousers": {
+        "item_id": "thor-trousers",
+        "render_variants": {
+          "female": "Thor_Trousers",
+          "male": "Thor_Trousers"
+        }
+      }
+    },
+    "cape": {
+      "Thor_Hammer": {
+        "item_id": "thor-hammer",
+        "render_variants": {
+          "female": "Thor_Hammer",
+          "male": "Thor_Hammer"
         }
       }
     },
@@ -928,6 +1053,13 @@
           "female": "TeamRocketFemale_Boots",
           "male": "TeamRocket_Shoes"
         }
+      },
+      "Thor_Shoes": {
+        "item_id": "thor-shoes",
+        "render_variants": {
+          "female": "Thor_Shoes",
+          "male": "Thor_Shoes"
+        }
       }
     },
     "top": {
@@ -978,6 +1110,13 @@
         "render_variants": {
           "female": "TeamRocketFemale_Shirt",
           "male": "TeamRocket_Shirt"
+        }
+      },
+      "Thor_Shirt": {
+        "item_id": "thor-shirt",
+        "render_variants": {
+          "female": "Thor_Shirt",
+          "male": "Thor_Shirt"
         }
       }
     }
