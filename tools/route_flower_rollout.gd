@@ -6,11 +6,13 @@ const INTAKE := "res://tools/route_flower_rollout_intake.json"
 const ROUTE_REPORT := "res://tools/route_flower_rollout_report.json"
 const VisualImporter := preload("res://addons/tiled_tmx_importer/importer/tmx_visual_importer.gd")
 var library_sources := {}
+var intake_path := INTAKE
+var output_report := ROUTE_REPORT
 
 
 func _run() -> void:
 	var apply := "--apply" in OS.get_cmdline_user_args()
-	var intake: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(INTAKE))
+	var intake: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(intake_path))
 	catalog = intake.catalog
 	scratch = "user://route_flower_rollout_%d" % OS.get_process_id()
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(scratch))
@@ -91,14 +93,19 @@ func _run() -> void:
 				if not saved_tileset.contains(texture):
 					DirAccess.remove_absolute(ProjectSettings.globalize_path(texture))
 		if not changed.is_empty():
-			_write(ROUTE_REPORT, {"version": 1, "catalog": catalog, "maps": results,
+			_write(output_report, {"version": 1, "catalog": catalog, "maps": results,
 				"changed_visuals": changed, "godot_backup": intake.godot_backup,
 				"source_backup": intake.source_backup, "unused_sources": intake.unused_sources,
 				"gameplay_and_original_visual_geometry_preserved": true})
+			_after_apply(results, changed)
 	library_sources.clear()
 	_cleanup(scratch)
 	print("ROUTE_FLOWER_ROLLOUT ", JSON.stringify({"reviewed": results.size(), "changed": changed.size(), "applied": apply, "success": true}))
 	quit()
+
+
+func _after_apply(_results: Dictionary, _changed: Array) -> void:
+	pass
 
 
 func _flower_plan(visual: Node) -> Dictionary:
