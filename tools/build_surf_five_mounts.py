@@ -7,6 +7,9 @@ from import_player_layered_sprites import write_texture_import
 
 ROOT = Path(__file__).resolve().parents[1]
 FRAME = 192
+# Lapras and ordinary follower NPCs end 12px below their physical origin:
+# native bottom 60 - half cell 32 - Look offset 16. Move the entire rig.
+WORLD_WATERLINE_Y = 12
 DIRECTIONS = ('down', 'left', 'right', 'up')
 CONFIG = json.loads((ROOT/'tools/surf_five_designs.json').read_text())
 
@@ -78,7 +81,9 @@ def definition(mid, cfg):
                 spriteSheet=folder+'/mount.png', foregroundSheet=folder+'/foreground.png',
                 riderMaskSheet=folder+'/rider_mask.png', waterContactSheet=folder+'/water_contact.png',
                 frameSize=[FRAME, FRAME], movementAnimationSpeed=4.0,
-                riderOffsets=cfg['riderOffsets'], surfFishingFullForeground=False,
+                riderOffsets={direction: [[x, y+WORLD_WATERLINE_Y] for x,y in offsets]
+                              for direction,offsets in cfg['riderOffsets'].items()},
+                surfFishingFullForeground=False,
                 surfFishingRiderOffsets={'down':[0,18], 'left':[0,4], 'right':[0,4], 'up':[0,10]})
 
 
@@ -95,7 +100,7 @@ def build(update_catalog=False):
             for col in range(4):
                 art = source.crop((col*size,row*size,(col+1)*size,(row+1)*size))
                 dx, dy = cfg['phaseShifts'][row][col]
-                base = ((FRAME-size)//2, 112-cfg['anchor'][row])
+                base = ((FRAME-size)//2, 112+WORLD_WATERLINE_Y-cfg['anchor'][row])
                 selection = Image.new('L', (size, size))
                 draw = ImageDraw.Draw(selection)
                 for part in ('foreground', 'near'):

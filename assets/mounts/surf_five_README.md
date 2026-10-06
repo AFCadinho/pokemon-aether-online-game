@@ -34,8 +34,12 @@ seat correction, retaining idle foam without a moving wake.
 
 ## Position and verification
 
-The resting lower silhouette reaches the occupied tile's origin. The native
-swimming cycle can move a fin or tail below that line. Physical player position,
+The resting lower silhouette matches Lapras and follower NPCs: its lower edge
+is 12 pixels below the physical origin (native lower edge 60, half-cell 32,
+sprite offset -16). `WORLD_WATERLINE_Y` in the builder translates the complete
+approved rig down by 12 pixels: mount, foreground, opaque mask, contact foam,
+wake and rider offsets. The original design coordinates remain in the config.
+The native swimming cycle can move a fin or tail below that line. Physical player position,
 collision, map sorting and ordinary adjacent interaction are unchanged. These
 smaller rigs do not need Kyogre's side-specific interaction-height correction.
 
@@ -47,6 +51,8 @@ the assigned slot's `ops/worktrees/slot-env` wrapper.
 `tools/preview_surf_five_mounts.gd -- --output=/absolute/output/path` captures
 both player bodies in all four directions, riding, swimming and fishing with
 the actual runtime renderer. `--anchors` adds the occupied tile and its origin;
-`--adinho` uses the custom outfit for the male row. Captures use integer 2x
+`--adinho` uses the custom outfit for the male row. `--poliwag` adds the real
+follower sprite on the same physical tile row, one tile to the side, using the
+NPC's normal sprite offset. Captures use integer 2x
 magnification. They supplement a manual map test near NPCs, shore edges and
 foreground scenery; they are not captures of a connected multiplayer session.
