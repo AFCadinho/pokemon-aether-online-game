@@ -21,6 +21,21 @@ const PRESENTATION_SCALES := {
 	"moonblast": 2.5, "iceshard": 1.7, "poisonsting": 1.6, "swift": 1.8,
 	"flashcannon": 2.5, "magicalleaf": 1.7, "waterpulse": 1.8, "dracometeor": 1.8,
 }
+# Room for the authored effect, independent of a species' native clip length.
+# Quick strikes still have a crisp delivery; sustained/charged effects can breathe.
+const PRESENTATION_SECONDS := {
+	"tackle": 0.95, "scratch": 1.0, "bite": 1.1, "quickattack": 0.8,
+	"ember": 1.25, "watergun": 1.35, "thundershock": 1.25, "thunderbolt": 1.8,
+	"flamethrower": 1.9, "bubble": 1.45, "bubblebeam": 1.8, "icebeam": 1.9,
+	"razorleaf": 1.45, "shadowball": 1.7, "sludgebomb": 1.6, "focusblast": 1.9,
+	"moonblast": 2.0, "iceshard": 1.15, "poisonsting": 1.05, "swift": 1.45,
+	"flashcannon": 1.9, "magicalleaf": 1.55, "waterpulse": 1.6, "dracometeor": 3.2,
+}
+const MODEL_ONLY_MAX_SECONDS := 0.65
+
+static func presentation_seconds(move: String) -> float:
+	var normalized := move_key(move)
+	return float(RecipeCatalog.get_recipe(normalized).get("duration_seconds", PRESENTATION_SECONDS.get(normalized, 0.0)))
 var presentation_scale := 1.0
 var key := ""
 var elapsed := 0.0
@@ -130,12 +145,12 @@ func start(move: String, timing: Dictionary, options: Dictionary, native_clock: 
 	glow = _material(color, 0.18)
 	sphere.radius = 1.0
 	sphere.height = 2.0
-	sphere.radial_segments = 12
-	sphere.rings = 6
+	sphere.radial_segments = 24
+	sphere.rings = 12
 	tube.top_radius = 1.0
 	tube.bottom_radius = 1.0
 	tube.height = 1.0
-	tube.radial_segments = 10
+	tube.radial_segments = 16
 	tooth.top_radius = 0.0
 	tooth.bottom_radius = 1.0
 	tooth.height = 1.0

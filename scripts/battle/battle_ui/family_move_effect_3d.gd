@@ -22,7 +22,7 @@ func _sprite_values(id: String) -> Array:
 func _prepare() -> void:
 	recipe = Recipes.get_recipe(key)
 	art = Art.MANIFEST.data.moves[key].textures
-	ring.inner_radius = 0.90
+	ring.inner_radius = 0.965
 	ring.outer_radius = 1.0
 	ring.rings = 24
 	ring.ring_segments = 6
@@ -41,8 +41,9 @@ uniform float opacity = 1.0;
 void fragment() {
 	float n = texture(mask, UV * vec2(2., 1.) + vec2(seconds * .3, seconds * -.65)).r;
 	float rim = pow(1. - max(dot(normalize(NORMAL), normalize(VIEW)), 0.), 2.);
-	ALBEDO = mix(tint.rgb * .45, tint.rgb, n * .65 + rim * .35) + vec3(.16) * n;
-	ALPHA = opacity;
+	ALBEDO = mix(tint.rgb * .35, tint.rgb, n * .55 + rim * .45) + vec3(.24) * pow(n, 3.);
+	EMISSION = tint.rgb * rim * .35;
+	ALPHA = opacity * (.55 + rim * .45);
 }
 """
 	surface = ShaderMaterial.new()
@@ -60,7 +61,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 	var t := elapsed/duration
 	var travel := (elapsed-launch)/maxf(impact-launch,0.01)
 	var after := (elapsed-impact)/maxf(duration-impact,0.01)
-	var envelope := clampf(minf(t/0.12,(1-t)/0.22),0,1)
+	var envelope := smoothstep(0,.12,t) * (1-smoothstep(.76,1,t))
 	var variant := str(recipe.variant)
 	var family := str(recipe.family)
 	if not launched and elapsed>=launch:
@@ -85,7 +86,7 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 		_contact(from,target,center,body,travel,after,envelope,variant,facing,side,path_basis)
 	elif family=="beams" or family=="z" and variant in ["beam","electric"]:
 		_beam(target,travel,after,envelope,variant,facing)
-	elif family=="self" or recipe.target=="actor" and family!="area":
+	elif family=="self" or recipe.target=="actor" and family not in ["area","field"]:
 		_self_cast(center,points.get("actor_ground",center-Vector3.UP*0.7),body,t,envelope,variant,facing)
 	elif family=="field":
 		_field_cast(target,ground,t,envelope,variant,facing)
@@ -107,6 +108,8 @@ func _draw_source_move(from: Vector3, to: Vector3, right: Vector3, up: Vector3) 
 			var a := TAU*i/6.0
 			var offset := (side*cos(a)+Vector3.UP*sin(a))*p*1.1
 			_line(target+offset*0.35,target+offset,0.025*(1-p),core)
+		if recipe.family in ["area", "beams", "projectiles"]:
+			_piece(ring,edge,ground,Vector3.ONE*(.2+sin(p*PI*.5)*1.35)*(1-p))
 	return true
 
 func _charge(center: Vector3, radius: float, phase: float, alpha: float, facing: Basis) -> void:
@@ -118,6 +121,16 @@ func _charge(center: Vector3, radius: float, phase: float, alpha: float, facing:
 
 func _contact(from: Vector3,to: Vector3,center: Vector3,body: float,travel: float,after: float,alpha: float,variant: String,facing: Basis,side: Vector3,path_basis: Basis) -> void:
 	if travel<0: return
+	# Elemental rushes carry their own source art along with the moving actor.
+	# This remains attack decoration; hit-only art below still follows the outcome.
+	if key in ["aquajet","flipturn","grassyglide","spark","outrage","gigaimpact","headlongrush"]:
+		var wake := smoothstep(0,.35,travel)*(1-smoothstep(0,.45,after))*alpha
+		for i in 5:
+			var a := elapsed*5+i*TAU/5
+			var point := center+(side*cos(a)+Vector3.UP*sin(a))*body*.65-path_basis.y*i*.12
+			_source_sprite(point,(.6+i*.08)*wake,"0",fmod(elapsed+i*.13,1),wake*.65,facing,a)
+		if key in ["aquajet","gigaimpact"]:
+			_source_sprite(center,body*1.6,"0",fmod(elapsed,1),wake*.3,facing)
 	if after<0.15:
 		for i in 4:
 			var offset := side*(i-1.5)*0.17+Vector3.UP*sin(i*2.2)*body*0.4
@@ -138,9 +151,11 @@ func _contact(from: Vector3,to: Vector3,center: Vector3,body: float,travel: floa
 				_piece(tooth,core,to+offset,Vector3(.11,.22,.11),Basis(Vector3.FORWARD,PI if i<3 else 0))
 		"kick", "punch", "flurry", "drain":
 			for i in (3 if variant=="flurry" else 2 if key=="doublekick" else 1):
+				var beat := clampf((travel-.86-i*.07)/.25,0,1)
+				var strike := sin(beat*PI)*fade
 				var offset := side*(i-1)*.2+Vector3.UP*sin(i*3)*.3
-				_piece(box,edge,to+offset,Vector3(.22,.15,.42 if variant=="kick" else .23)*fade,facing*Basis(Vector3.FORWARD,swipe*1.1))
-				_source_sprite(to+offset,.95,"0",swipe,fade*.65,facing)
+				_piece(sphere,edge,to+offset,Vector3(.22,.15,.42 if variant=="kick" else .23)*strike,facing*Basis(Vector3.FORWARD,swipe*1.1))
+				_source_sprite(to+offset,.95,"0",beat,strike*.65,facing)
 		_:
 			_piece(ring,edge,to,Vector3.ONE*(.25+swipe*.45)*fade,path_basis)
 
@@ -150,7 +165,8 @@ func _beam(to: Vector3,travel: float,after: float,alpha: float,variant: String,f
 			_source_sprite(source,.6*clampf(elapsed/maxf(launch,.01),0,1),"0",0,alpha,facing)
 		elif after<.45:
 			var end := source.lerp(to,clampf(travel,0,1))
-			var width := (.16 if key in ["hyperbeam","solarbeam"] else .11)*(1-clampf(after/.45,0,1))
+			var width := (.21 if key in ["hyperbeam","solarbeam"] else .13)*smoothstep(0,.15,travel)*(1-smoothstep(0,.45,after))
+			_line(source,end,width*1.9,glow)
 			_line(source,end,width,surface)
 			_line(source,end,width*.3,core)
 			for i in 4:
@@ -166,10 +182,12 @@ func _projectile(from: Vector3,to: Vector3,travel: float,alpha: float,variant: S
 	if travel<0:
 		_source_sprite(from,.5*clampf(elapsed/maxf(launch,.01),0,1),"0",0,alpha*.5,facing)
 		return
-	if travel>=1.05: return
+	var dissolve := 1-smoothstep(1,1.22,travel)
+	if dissolve<=0: return
+	surface.set_shader_parameter("opacity",alpha*.92*dissolve)
 	var count := 5 if variant in ["leaves","shards","hearts"] else 3 if variant in ["electric","web"] else 1
 	for i in count:
-		var p := clampf(travel-i*.015,0,1)
+		var p := smoothstep(0,1,clampf(travel-i*.015,0,1))
 		var point := from.lerp(to,p)+side*sin(p*PI)*(i-(count-1)*.5)*.35
 		if variant=="arc":point.y+=sin(p*PI)*1.1
 		if variant=="leaves":
@@ -180,20 +198,33 @@ func _projectile(from: Vector3,to: Vector3,travel: float,alpha: float,variant: S
 			_heart(point,.22,facing,edge)
 		else:
 			_piece(sphere,surface,point,Vector3.ONE*(.28 if count==1 else .13))
-		_source_sprite(point,.70 if count==1 else .38,"0",fmod(elapsed*2,1),alpha*.55,facing,elapsed+i)
+		_source_sprite(point,.70 if count==1 else .38,"0",fmod(elapsed*2,1),alpha*.55*dissolve,facing,elapsed+i)
 		for j in 3:
 			var q := maxf(p-(j+1)*.04,0)
 			var tail := from.lerp(to,q)+side*sin(q*PI)*(i-(count-1)*.5)*.35
 			if variant=="arc": tail.y+=sin(q*PI)*1.1
-			_source_sprite(tail,.28-j*.05,"0",j/3.0,alpha*.42,facing)
+			_source_sprite(tail,.28-j*.05,"0",j/3.0,alpha*.42*dissolve,facing)
 
 func _wave(from: Vector3,to: Vector3,travel: float,after: float,alpha: float,variant: String,facing: Basis,path_basis: Basis) -> void:
 	if travel<0: return
+	if variant=="hearts":
+		_status_cast(from,to,travel,alpha,variant,facing,path_basis.x)
+		return
+	if variant=="storm":
+		# A moving spiral has depth from an orbiting camera; Gust is not a sound ring.
+		for i in 12:
+			var p := travel-i*.025
+			if p<0 or p>1:continue
+			var a := elapsed*7+i*.8
+			var radius := sin(p*PI)*.6
+			var point := from.lerp(to,p)+(path_basis.x*cos(a)+path_basis.z*sin(a))*radius
+			_source_sprite(point,.55,"0",p,alpha*sin(p*PI)*.65,facing,a)
+		return
 	for i in 4:
 		var p := travel-i*.1
 		if p<0 or p>1:continue
 		var point := from.lerp(to,p)
-		_piece(ring,edge,point,Vector3.ONE*(.2+p*.6),path_basis)
+		_piece(ring,edge,point,Vector3.ONE*(.2+p*.6)*sin(p*PI),path_basis)
 		if variant=="pulse":_source_sprite(point,.9,"0",p,alpha*.6,facing)
 	# Drain return is only a visual consequence of a confirmed hit.
 	if variant=="drain" and hit and after>=0:
@@ -204,7 +235,10 @@ func _wave(from: Vector3,to: Vector3,travel: float,after: float,alpha: float,var
 func _status_cast(from: Vector3,to: Vector3,travel: float,alpha: float,variant: String,facing: Basis,side: Vector3) -> void:
 	if travel<0 or travel>1.18:return
 	var p := clampf(travel,0,1)
-	if variant=="hearts":
+	if variant=="sound":
+		var forward := (to-from).normalized()
+		_wave(from,to,travel,0,alpha,variant,facing,Basis(side,forward,side.cross(forward)))
+	elif variant=="hearts":
 		for i in 3: _heart(from.lerp(to,p)+side*(i-1)*sin(p*PI)*.5+Vector3.UP*sin(p*PI)*.3,.17, facing,edge)
 	elif variant=="web":
 		var center := from.lerp(to,p)
@@ -235,6 +269,11 @@ func _heart(point: Vector3,size_value: float,facing: Basis,mat: Material) -> voi
 
 func _self_cast(center: Vector3,ground: Vector3,body: float,t: float,alpha: float,variant: String,facing: Basis) -> void:
 	match variant:
+		"sound":
+			for i in 4:
+				var phase := t*1.4-i*.12
+				if phase<0 or phase>1:continue
+				_piece(ring,edge,center,Vector3.ONE*body*(.25+phase*1.6)*sin(phase*PI),facing*Basis(Vector3.RIGHT,PI/2))
 		"swords":
 			for i in 3:
 				var a := TAU*i/3+elapsed*2.5
@@ -266,6 +305,17 @@ func _self_cast(center: Vector3,ground: Vector3,body: float,t: float,alpha: floa
 func _field_cast(target: Vector3,ground: Vector3,t: float,alpha: float,variant: String,facing: Basis) -> void:
 	var size_value := 1.0+1.2*t
 	match variant:
+		"heal":
+			_self_cast(target,ground,.75,t,alpha,variant,facing)
+		"shield":
+			# Screen-like casts need a readable vertical surface, not floor rings.
+			var grow := smoothstep(0,.3,t)
+			_piece(box,glow,target,Vector3(1.5,1.8,.10)*grow,facing)
+			for i in 4:
+				var a := PI/4+i*PI/2
+				var b := a+PI/2
+				_line(target+(facing.x*cos(a)*1.05+facing.y*sin(a)*1.25)*grow,target+(facing.x*cos(b)*1.05+facing.y*sin(b)*1.25)*grow,.025*alpha,edge)
+			_source_sprite(target,1.3*grow,"0",t,alpha*.35,facing)
 		"spikes":
 			for i in 7:
 				var a := TAU*i/7

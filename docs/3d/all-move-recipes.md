@@ -16,7 +16,9 @@ model-only until a recipe is added; they cannot silently load a 2D move sheet.
 own family, variant, color, size, attachment, target, launch/impact fractions,
 wall-clock duration and audio cues. `family_move_effect_3d.gd` draws geometry
 and source-mask particles on the native model clock. Dedicated approved moves
-keep their existing renderer, timing, scales, textures and audio edits.
+keep their existing renderer, scales, textures and audio edits.
+The [presentation review](move-presentation-review.md) assigns explicit durations
+to all 194 moves and improves shared visual flow.
 
 Contact moves approach and return using the existing actor/HUD displacement
 lifecycle. Beams sample current anatomical emitters; projectiles retain their
@@ -46,7 +48,7 @@ explicit. These are original source textures with authored Godot motion;
 Nintendo's particle simulation, animation timeline and original audio have
 **not** been converted. Source IDs are retained from PokeAPI's move-ID table.
 
-172 short, faded, pitch-preserving ordinary-move WAV edits use the existing 2D audio and its
+184 short, faded, pitch-preserving ordinary-move WAV edits use the existing 2D audio and its
 configured volume/pitch. Another 112 Z-move edits follow their 2D storyboard markers. Ordinary cues follow cast, launch or impact; the native clock
 bounds their tails and cancellation. The 24 approved sound edits stay intact.
 Disarming Voice, Growl, Howl and Breakneck Blitz have no playable sound in their
@@ -78,7 +80,7 @@ Focused checks:
 - `move_attachments_3d_check.tscn`: bone/cannon/body/Substitute anchors.
 - `tools/battle_effects/test_move_recipe_sources.py`: coverage, source and PNG
   hashes, explicit shared-source exceptions, static export dependencies.
-- `tools/battle_audio/build_recipe_edits.py --check`: all 172 ordinary source/edit
+- `tools/battle_audio/build_recipe_edits.py --check`: all 184 ordinary source/edit
   hashes, PCM durations, non-silent samples, no clipping and faded edges.
 
 The shared recipes are a first pass. Individual silhouettes, species poses,

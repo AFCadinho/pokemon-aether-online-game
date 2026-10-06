@@ -24,9 +24,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/aquajet_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 70
+          "pitch": 70,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "bodypress": {
       "name": "Body Press",
@@ -37,7 +40,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -50,9 +53,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/bodypress_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "extremespeed": {
       "name": "Extreme Speed",
@@ -76,16 +82,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Extremespeed2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/extremespeed_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "fakeout": {
       "name": "Fake Out",
@@ -96,7 +107,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 0.95,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -109,16 +120,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Fake Out2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/fakeout_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "flipturn": {
       "name": "Flip Turn",
@@ -129,7 +145,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -142,9 +158,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/flipturn_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "frustration": {
       "name": "Frustration",
@@ -155,7 +174,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -168,16 +187,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/frustration_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 70
+          "pitch": 70,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Frustration2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/frustration_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "gigaimpact": {
       "name": "Giga Impact",
@@ -188,7 +212,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -201,16 +225,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Giga Impact1.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/gigaimpact_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "grassyglide": {
       "name": "Grassy Glide",
@@ -221,7 +250,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -234,16 +263,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_launch.wav",
           "role": "launch",
           "volume": 92,
-          "pitch": 112
+          "pitch": 112,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Leafage 2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/grassyglide_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "headsmash": {
       "name": "Head Smash",
@@ -254,7 +288,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -267,9 +301,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/headsmash_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "headlongrush": {
       "name": "Headlong Rush",
@@ -280,7 +317,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -293,9 +330,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/headlongrush_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "ironhead": {
       "name": "Iron Head",
@@ -306,7 +346,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -319,9 +359,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/ironhead_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 65
+          "pitch": 65,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "knockoff": {
       "name": "Knock Off",
@@ -332,7 +375,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -345,9 +388,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/knockoff_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "outrage": {
       "name": "Outrage",
@@ -358,7 +404,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -371,16 +417,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/outrage_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Outrage2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/outrage_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "pursuit": {
       "name": "Pursuit",
@@ -391,7 +442,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -404,16 +455,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 50
+          "pitch": 50,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Pursuit2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/pursuit_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "rapidspin": {
       "name": "Rapid Spin",
@@ -424,7 +480,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -437,9 +493,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/rapidspin_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "return": {
       "name": "Return",
@@ -450,7 +509,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -463,16 +522,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/return_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Return2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/return_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "rollout": {
       "name": "Rollout",
@@ -483,7 +547,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -496,16 +560,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/rollout_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Rollout2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/rollout_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "spark": {
       "name": "Spark",
@@ -516,7 +585,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -529,16 +598,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/spark_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Spark2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/spark_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 120
+          "pitch": 120,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "uturn": {
       "name": "U-turn",
@@ -549,7 +623,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -562,9 +636,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/uturn_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 75
+          "pitch": 75,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "woodhammer": {
       "name": "Wood Hammer",
@@ -575,7 +652,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -588,9 +665,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/woodhammer_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "bulletpunch": {
       "name": "Bullet Punch",
@@ -601,7 +681,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 0.95,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -614,9 +694,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/bulletpunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "closecombat": {
       "name": "Close Combat",
@@ -627,7 +710,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -640,9 +723,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "doublekick": {
       "name": "Double Kick",
@@ -653,7 +739,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -666,9 +752,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/doublekick_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "drainpunch": {
       "name": "Drain Punch",
@@ -679,7 +768,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -692,16 +781,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 85
+          "pitch": 85,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Drain Punch2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/drainpunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "firepunch": {
       "name": "Fire Punch",
@@ -712,7 +806,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -725,16 +819,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Fire Punch2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/firepunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "highjumpkick": {
       "name": "High Jump Kick",
@@ -745,7 +844,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -758,16 +857,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Hi Jump Kick2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/highjumpkick_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "icepunch": {
       "name": "Ice Punch",
@@ -778,7 +882,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -791,16 +895,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Ice Punch2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/icepunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "lowkick": {
       "name": "Low Kick",
@@ -811,7 +920,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -824,9 +933,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/lowkick_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 101
+          "pitch": 101,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "pound": {
       "name": "Pound",
@@ -850,9 +962,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/pound_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 50
+          "pitch": 50,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "rocksmash": {
       "name": "Rock Smash",
@@ -863,7 +978,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -876,9 +991,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/rocksmash_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "suckerpunch": {
       "name": "Sucker Punch",
@@ -889,7 +1007,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 0.95,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -902,16 +1020,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Sucker Punch2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/suckerpunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "superpower": {
       "name": "Superpower",
@@ -922,7 +1045,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -935,16 +1058,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/superpower_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Superpower2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/superpower_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "thunderpunch": {
       "name": "Thunder Punch",
@@ -955,7 +1083,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -968,16 +1096,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Thunder Punch1.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/thunderpunch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "astonish": {
       "name": "Astonish",
@@ -988,7 +1121,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1001,16 +1134,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/astonish_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Astonish2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/astonish_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "bugbite": {
       "name": "Bug Bite",
@@ -1021,7 +1159,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1034,9 +1172,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/bugbite_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 85
+          "pitch": 85,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "ceaselessedge": {
       "name": "Ceaseless Edge",
@@ -1047,7 +1188,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1060,16 +1201,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Night Slash1.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/ceaselessedge_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "dragonclaw": {
       "name": "Dragon Claw",
@@ -1080,7 +1226,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1093,9 +1239,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/dragonclaw_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 54
+          "pitch": 54,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "furyattack": {
       "name": "Fury Attack",
@@ -1106,7 +1255,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1119,9 +1268,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/furyattack_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "kowtowcleave": {
       "name": "Kowtow Cleave",
@@ -1132,7 +1284,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1145,16 +1297,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 70
+          "pitch": 70,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "Ace",
           "path": "res://assets/battles/moves_3d/audio_recipes/kowtowcleave_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "lick": {
       "name": "Lick",
@@ -1165,7 +1322,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1178,9 +1335,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/lick_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "peck": {
       "name": "Peck",
@@ -1204,9 +1364,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/peck_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "razorshell": {
       "name": "Razor Shell",
@@ -1217,7 +1380,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1230,9 +1393,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/razorshell_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 130
+          "pitch": 130,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "vinewhip": {
       "name": "Vine Whip",
@@ -1243,7 +1409,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1256,9 +1422,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/vinewhip_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "wingattack": {
       "name": "Wing Attack",
@@ -1269,7 +1438,7 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.1,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.14,
       "impact_fraction": 0.52,
       "scale": 1.45,
@@ -1282,16 +1451,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14,
+          "end_fraction": 0.62
         },
         {
           "name": "PRSFX- Wing Attack2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/wingattack_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.52,
+          "end_fraction": 0.8
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "dragonbreath": {
       "name": "Dragon Breath",
@@ -1302,7 +1476,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1315,9 +1489,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/dragonbreath_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "electroshot": {
       "name": "Electro Shot",
@@ -1328,7 +1505,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1341,16 +1518,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Wild Charge2",
           "path": "res://assets/battles/moves_3d/audio_recipes/electroshot_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "hyperbeam": {
       "name": "Hyper Beam",
@@ -1361,7 +1543,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.65,
+      "duration_seconds": 2.5,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1374,9 +1556,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/hyperbeam_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 75
+          "pitch": 75,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "scald": {
       "name": "Scald",
@@ -1387,7 +1572,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1400,16 +1585,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/scald_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Scald2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/scald_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "solarbeam": {
       "name": "Solar Beam",
@@ -1420,7 +1610,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.65,
+      "duration_seconds": 2.5,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1433,9 +1623,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/solarbeam_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "voltswitch": {
       "name": "Volt Switch",
@@ -1446,7 +1639,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1459,16 +1652,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Volt Switch1.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/voltswitch_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "fairywind": {
       "name": "Fairy Wind",
@@ -1479,7 +1677,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1492,9 +1690,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/fairywind_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "hiddenpower": {
       "name": "Hidden Power",
@@ -1505,7 +1706,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1518,16 +1719,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Hidden Power2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/hiddenpower_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "leafage": {
       "name": "Leafage",
@@ -1538,7 +1744,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1551,16 +1757,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/leafage_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Leafage 2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/leafage_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "mudslap": {
       "name": "Mud-Slap",
@@ -1571,7 +1782,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.2,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1584,9 +1795,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/mudslap_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "pyroball": {
       "name": "Pyro Ball",
@@ -1597,7 +1811,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1610,16 +1824,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_launch.wav",
           "role": "launch",
           "volume": 25,
-          "pitch": 85
+          "pitch": 85,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "Explosion1",
           "path": "res://assets/battles/moves_3d/audio_recipes/pyroball_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 95
+          "pitch": 95,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "rockthrow": {
       "name": "Rock Throw",
@@ -1630,7 +1849,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1643,16 +1862,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Rock Throw2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/rockthrow_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "watershuriken": {
       "name": "Water Shuriken",
@@ -1663,7 +1887,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.3,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1676,9 +1900,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/watershuriken_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "weatherball": {
       "name": "Weather Ball",
@@ -1689,7 +1916,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.45,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1702,16 +1929,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Weather Ball1.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/weatherball_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 150
+          "pitch": 150,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "absorb": {
       "name": "Absorb",
@@ -1722,7 +1954,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1735,16 +1967,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/absorb_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Absorb2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/absorb_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "confusion": {
       "name": "Confusion",
@@ -1755,7 +1992,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1768,9 +2005,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/confusion_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "darkpulse": {
       "name": "Dark Pulse",
@@ -1781,7 +2021,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1794,16 +2034,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Dark Pulse2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/darkpulse_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "disarmingvoice": {
       "name": "Disarming Voice",
@@ -1814,14 +2059,15 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
       "attachment": "body",
       "source_id": 574,
       "review": "first-pass",
-      "audio": []
+      "audio": [],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "drainingkiss": {
       "name": "Draining Kiss",
@@ -1832,7 +2078,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1845,16 +2091,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Draining Kiss2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/drainingkiss_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "gust": {
       "name": "Gust",
@@ -1865,7 +2116,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1878,9 +2129,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/gust_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "hex": {
       "name": "Hex",
@@ -1891,7 +2145,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1904,9 +2158,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/hex_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "psychic": {
       "name": "Psychic",
@@ -1917,7 +2174,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1930,9 +2187,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/psychic_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "psychicnoise": {
       "name": "Psychic Noise",
@@ -1943,7 +2203,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1956,16 +2216,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Disable",
           "path": "res://assets/battles/moves_3d/audio_recipes/psychicnoise_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "psyshock": {
       "name": "Psyshock",
@@ -1976,7 +2241,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -1989,16 +2254,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Psyshock2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/psyshock_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "screech": {
       "name": "Screech",
@@ -2009,7 +2279,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2022,9 +2292,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/screech_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "sparklingaria": {
       "name": "Sparkling Aria",
@@ -2035,7 +2308,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2048,16 +2321,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Sparkling Aria2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/sparklingaria_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "supersonic": {
       "name": "Supersonic",
@@ -2068,7 +2346,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 1.15,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2081,9 +2359,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/supersonic_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 87
+          "pitch": 87,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "bleakwindstorm": {
       "name": "Bleakwind Storm",
@@ -2094,7 +2375,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2107,9 +2388,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/bleakwindstorm_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "blizzard": {
       "name": "Blizzard",
@@ -2120,7 +2404,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2133,9 +2417,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/blizzard_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 150
+          "pitch": 150,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "earthpower": {
       "name": "Earth Power",
@@ -2146,7 +2433,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2159,9 +2446,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/earthpower_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "earthquake": {
       "name": "Earthquake",
@@ -2172,7 +2462,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2185,16 +2475,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Earthquake2.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/earthquake_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "explosion": {
       "name": "Explosion",
@@ -2205,7 +2500,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.5,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2218,16 +2513,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/explosion_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 225
+          "pitch": 225,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Explosion.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/explosion_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "freezedry": {
       "name": "Freeze-Dry",
@@ -2238,7 +2538,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2251,16 +2551,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 65
+          "pitch": 65,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Freeze Dry3.wav",
           "path": "res://assets/battles/moves_3d/audio_recipes/freezedry_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 85
+          "pitch": 85,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "heatwave": {
       "name": "Heat Wave",
@@ -2271,7 +2576,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2284,9 +2589,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/heatwave_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "hurricane": {
       "name": "Hurricane",
@@ -2297,7 +2605,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2310,9 +2618,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/hurricane_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "makeitrain": {
       "name": "Make It Rain",
@@ -2323,7 +2634,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.1,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2336,16 +2647,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_launch.wav",
           "role": "launch",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Pay Day2",
           "path": "res://assets/battles/moves_3d/audio_recipes/makeitrain_impact.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "powdersnow": {
       "name": "Powder Snow",
@@ -2356,7 +2672,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 1.6,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2369,9 +2685,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/powdersnow_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "terastarstorm": {
       "name": "Tera Starstorm",
@@ -2382,7 +2701,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 1.35,
+      "duration_seconds": 2.5,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2395,16 +2714,21 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_launch.wav",
           "role": "launch",
           "volume": 85,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         },
         {
           "name": "PRSFX- Recover",
           "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_impact.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 95
+          "pitch": 95,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "babydolleyes": {
       "name": "Baby-Doll Eyes",
@@ -2415,7 +2739,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2428,9 +2752,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/babydolleyes_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "charm": {
       "name": "Charm",
@@ -2441,7 +2768,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2454,9 +2781,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/charm_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "encore": {
       "name": "Encore",
@@ -2467,7 +2797,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2480,9 +2810,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/encore_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "growl": {
       "name": "Growl",
@@ -2493,14 +2826,15 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
       "attachment": "mouth",
       "source_id": 45,
       "review": "first-pass",
-      "audio": []
+      "audio": [],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "leechseed": {
       "name": "Leech Seed",
@@ -2511,7 +2845,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2524,9 +2858,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/leechseed_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "leer": {
       "name": "Leer",
@@ -2537,7 +2874,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2550,9 +2887,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/leer_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "poisonpowder": {
       "name": "Poison Powder",
@@ -2563,7 +2903,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2576,9 +2916,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/poisonpowder_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "sandattack": {
       "name": "Sand Attack",
@@ -2589,7 +2932,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2602,9 +2945,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/sandattack_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "sleeppowder": {
       "name": "Sleep Powder",
@@ -2615,7 +2961,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2628,9 +2974,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/sleeppowder_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "smokescreen": {
       "name": "Smokescreen",
@@ -2641,7 +2990,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2654,9 +3003,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/smokescreen_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "spore": {
       "name": "Spore",
@@ -2667,7 +3019,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2680,9 +3032,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/spore_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "stringshot": {
       "name": "String Shot",
@@ -2693,7 +3048,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2703,19 +3058,24 @@
       "audio": [
         {
           "name": "PRSFX- String Shot1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- String Shot2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/stringshot_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.28,
+          "end_fraction": 0.76
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "sweetscent": {
       "name": "Sweet Scent",
@@ -2726,7 +3086,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2739,9 +3099,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/sweetscent_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "tailwhip": {
       "name": "Tail Whip",
@@ -2752,7 +3115,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2765,9 +3128,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/tailwhip_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "taunt": {
       "name": "Taunt",
@@ -2778,7 +3144,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2788,19 +3154,24 @@
       "audio": [
         {
           "name": "PRSFX- Taunt1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Taunt3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/taunt_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "thunderwave": {
       "name": "Thunder Wave",
@@ -2811,7 +3182,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2824,9 +3195,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/thunderwave_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "toxic": {
       "name": "Toxic",
@@ -2837,7 +3211,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2847,19 +3221,24 @@
       "audio": [
         {
           "name": "PRSFX- Toxic2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Toxic1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxic_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.28,
+          "end_fraction": 0.76
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "willowisp": {
       "name": "Will-O-Wisp",
@@ -2870,7 +3249,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2880,19 +3259,24 @@
       "audio": [
         {
           "name": "PRSFX- Will O Wisp1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Will O Wisp2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/willowisp_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "agility": {
       "name": "Agility",
@@ -2903,7 +3287,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2916,9 +3300,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/agility_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "calmmind": {
       "name": "Calm Mind",
@@ -2929,7 +3316,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2942,9 +3329,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/calmmind_cast.wav",
           "role": "cast",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "charge": {
       "name": "Charge",
@@ -2955,7 +3345,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2968,9 +3358,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/charge_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "defensecurl": {
       "name": "Defense Curl",
@@ -2981,7 +3374,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2994,9 +3387,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/defensecurl_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "doubleteam": {
       "name": "Double Team",
@@ -3007,7 +3403,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3020,9 +3416,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/doubleteam_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 140
+          "pitch": 140,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "dragondance": {
       "name": "Dragon Dance",
@@ -3033,7 +3432,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3046,9 +3445,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/dragondance_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "focusenergy": {
       "name": "Focus Energy",
@@ -3059,7 +3461,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3072,9 +3474,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/focusenergy_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "growth": {
       "name": "Growth",
@@ -3085,7 +3490,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3098,9 +3503,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/growth_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "harden": {
       "name": "Harden",
@@ -3111,7 +3519,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3124,9 +3532,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/harden_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "howl": {
       "name": "Howl",
@@ -3137,14 +3548,15 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
       "attachment": "body",
       "source_id": 336,
       "review": "first-pass",
-      "audio": []
+      "audio": [],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "nastyplot": {
       "name": "Nasty Plot",
@@ -3155,7 +3567,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3168,9 +3580,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/nastyplot_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 65
+          "pitch": 65,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "recover": {
       "name": "Recover",
@@ -3181,7 +3596,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3194,9 +3609,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/recover_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "roost": {
       "name": "Roost",
@@ -3207,7 +3625,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3220,9 +3638,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/roost_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "swordsdance": {
       "name": "Swords Dance",
@@ -3233,7 +3654,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3243,19 +3664,24 @@
       "audio": [
         {
           "name": "PRSFX- Swords Dance2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Swords Dance1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/swordsdance_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "withdraw": {
       "name": "Withdraw",
@@ -3266,7 +3692,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.15,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3279,9 +3705,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/withdraw_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "auroraveil": {
       "name": "Aurora Veil",
@@ -3292,7 +3721,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3302,19 +3731,24 @@
       "audio": [
         {
           "name": "PRSFX- Aurora Veil1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Aurora Veil3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/auroraveil_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.3877551020408163,
+          "end_fraction": 0.8677551020408163
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "chillyreception": {
       "name": "Chilly Reception",
@@ -3325,7 +3759,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3335,19 +3769,24 @@
       "audio": [
         {
           "name": "PRSFX- Parting Shot",
-          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast_0.wav",
           "role": "cast",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Sketch",
-          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/chillyreception_cast_1.wav",
           "role": "cast",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.62,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "courtchange": {
       "name": "Court Change",
@@ -3358,7 +3797,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3371,9 +3810,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/courtchange_cast.wav",
           "role": "cast",
           "volume": 90,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "defog": {
       "name": "Defog",
@@ -3384,7 +3826,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3397,9 +3839,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/defog_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "electricterrain": {
       "name": "Electric Terrain",
@@ -3410,7 +3855,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3420,19 +3865,24 @@
       "audio": [
         {
           "name": "PRSFX- Electric Terrain.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Electric Terrain2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/electricterrain_cast_1.wav",
           "role": "cast",
           "volume": 60,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.28,
+          "end_fraction": 0.76
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "futuresight": {
       "name": "Future Sight",
@@ -3443,7 +3893,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3456,9 +3906,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/futuresight_launch.wav",
           "role": "launch",
           "volume": 100,
-          "pitch": 59
+          "pitch": 59,
+          "at_fraction": 0.25,
+          "end_fraction": 0.73
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "grassyterrain": {
       "name": "Grassy Terrain",
@@ -3469,7 +3922,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3482,9 +3935,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/grassyterrain_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 105
+          "pitch": 105,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "haze": {
       "name": "Haze",
@@ -3495,7 +3951,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3508,9 +3964,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/haze_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 85
+          "pitch": 85,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "lightscreen": {
       "name": "Light Screen",
@@ -3521,7 +3980,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3534,9 +3993,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/lightscreen_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "mistyterrain": {
       "name": "Misty Terrain",
@@ -3547,7 +4009,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3560,9 +4022,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/mistyterrain_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "protect": {
       "name": "Protect",
@@ -3573,7 +4038,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3586,9 +4051,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/protect_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "psychicterrain": {
       "name": "Psychic Terrain",
@@ -3599,7 +4067,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3609,19 +4077,24 @@
       "audio": [
         {
           "name": "PRSFX- Psychic Terrain1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Psychic Terrain3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/psychicterrain_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 130
+          "pitch": 130,
+          "at_fraction": 0.47619047619047616,
+          "end_fraction": 0.9561904761904761
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "reflect": {
       "name": "Reflect",
@@ -3632,7 +4105,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3645,9 +4118,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/reflect_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "spikes": {
       "name": "Spikes",
@@ -3658,7 +4134,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3668,19 +4144,24 @@
       "audio": [
         {
           "name": "PRSFX- Spikes1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast_0.wav",
           "role": "cast",
           "volume": 30,
-          "pitch": 50
+          "pitch": 50,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Spikes2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/spikes_cast_1.wav",
           "role": "cast",
           "volume": 60,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.28,
+          "end_fraction": 0.76
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "stealthrock": {
       "name": "Stealth Rock",
@@ -3691,7 +4172,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3704,9 +4185,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/stealthrock_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "stickyweb": {
       "name": "Sticky Web",
@@ -3717,7 +4201,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3730,9 +4214,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/stickyweb_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "substitute": {
       "name": "Substitute",
@@ -3743,7 +4230,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3753,19 +4240,24 @@
       "audio": [
         {
           "name": "PRSFX- Substitute2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast_0.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Substitute1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/substitute_cast_1.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.6153846153846154,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "teleport": {
       "name": "Teleport",
@@ -3776,7 +4268,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.35,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3789,9 +4281,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/teleport_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "toxicspikes": {
       "name": "Toxic Spikes",
@@ -3802,7 +4297,7 @@
       "contact": false,
       "target": "target",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3812,19 +4307,24 @@
       "audio": [
         {
           "name": "PRSFX- Spikes1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast_0.wav",
           "role": "cast",
           "volume": 30,
-          "pitch": 50
+          "pitch": 50,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         },
         {
           "name": "PRSFX- Toxic Spikes2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/toxicspikes_cast_1.wav",
           "role": "cast",
           "volume": 80,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.62,
+          "end_fraction": 1.0
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "wish": {
       "name": "Wish",
@@ -3835,7 +4335,7 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 0.95,
+      "duration_seconds": 1.65,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -3848,9 +4348,12 @@
           "path": "res://assets/battles/moves_3d/audio_recipes/wish_cast.wav",
           "role": "cast",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.08,
+          "end_fraction": 0.5599999999999999
         }
-      ]
+      ],
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
     },
     "10000000voltthunderbolt": {
       "name": "10,000,000 Volt Thunderbolt",

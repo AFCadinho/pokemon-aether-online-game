@@ -12,7 +12,8 @@ action and climax. Contact approaches start after charging; aerial contact
 moves follow an arc and return using the existing actor/HUD lifecycle. Misses
 retain their original aim while the target dodges, and confirmed-hit flashes
 and impact sounds remain outcome-gated. Existing event ordering owns HP/status
-changes. The 135 ordinary recipes and 24 approved dedicated renderers are unchanged.
+changes. The subsequent [presentation review](move-presentation-review.md) covers all
+194 moves, including shared smoothing and late-impact dodge corrections.
 
 Audio uses 112 short edits of the packaged 2D Z-move samples. Up to four distinct
 cues per move follow source timing relationships; the final cue is aligned to
@@ -96,7 +97,7 @@ Focused checks completed:
 - `test_move_recipe_sources.py`: source JSON/sheet hashes, source sound paths,
   complete catalog coverage and exported source-mask dependencies.
 - Both audio builders with `--check`: source/edit hashes, duration, faded edges,
-  non-silent PCM and no clipping (172 ordinary + 112 Z edits).
+  non-silent PCM and no clipping (184 ordinary + 112 Z edits).
 - Rendered 35 moves in three phases, plus ten reversed miss/block cases;
   screenshots inspected for distinctive silhouettes and arena readability.
 

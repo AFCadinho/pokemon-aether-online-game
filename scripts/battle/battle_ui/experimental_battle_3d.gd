@@ -915,7 +915,7 @@ func start_move_dodge(actor: String, target: String, move: String) -> void:
 	var duration: float = players[source_index].current_animation_length
 	if duration <= 0.0: return
 	var timing := move_timing(move, actor)
-	var impact := clampf(float(timing.get("impact_frame", duration * 60.0 * 0.45)) / 60.0, duration * 0.2, duration * 0.65)
+	var impact := clampf(float(timing.get("impact_frame", duration * 60.0 * 0.45)) / 60.0, duration * 0.05, duration * 0.95)
 	var bounds := _move_bounds(target)
 	var forward: Vector3 = bounds.position - _move_bounds(actor).position
 	forward.y = 0
@@ -953,8 +953,8 @@ func _update_move_dodges() -> void:
 		# Native-clock sampling makes pause and playback speed match the move.
 		var out_start := maxf(0, float(dodge.impact) - duration * 0.2)
 		var out_phase := clampf((seconds - out_start) / (duration * 0.16), 0, 1)
-		var return_start := minf(maxf(float(dodge.impact) + duration * 0.3, duration * 0.7), duration * 0.82)
-		var return_phase := clampf((seconds - return_start) / (duration * 0.18), 0, 1)
+		var return_start := maxf(float(dodge.impact) + (duration-float(dodge.impact))*.30, duration*.72)
+		var return_phase := clampf((seconds - return_start) / maxf(duration-return_start,.001), 0, 1)
 		var weight := (1.0 - pow(1.0 - out_phase, 3)) * (1.0 - smoothstep(0, 1, return_phase))
 		var hop := sin(out_phase * PI) if return_phase <= 0 else sin(return_phase * PI) * 0.5
 		_set_dodge_offset(index, dodge.displacement * weight + Vector3.UP * hop * float(dodge.hop))
@@ -1171,12 +1171,8 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 func start_move_action(ident: String, move: String) -> void:
 	if handles(ident):
 		var index := actor_index(ident)
-		var max_seconds := 0.8 if MoveEffect.move_key(move)=="quickattack" else (1.25 if MoveEffect.supports(move) else 0.0)
-		# Moonblast gets a full two-second performance: 0.9s charge, 0.35s
-		# flight, then impact/recovery. Draco Meteor takes 3.2s for its ascent
-		# and shower. The native clock still owns every cue.
-		var duration_override := 2.0 if MoveEffect.move_key(move)=="moonblast" else (3.2 if MoveEffect.move_key(move)=="dracometeor" else 0.0)
-		if MoveRecipes.supports(move): duration_override = float(MoveRecipes.get_recipe(move).duration_seconds)
+		var max_seconds := 0.0 if MoveEffect.supports(move) else MoveEffect.MODEL_ONLY_MAX_SECONDS
+		var duration_override := MoveEffect.presentation_seconds(move)
 		_action(attack_action_for(move, ident), index, max_seconds, duration_override)
 		# play() schedules its reset; sample frame zero before binding a VFX clock.
 		if MoveEffect.supports(move) and players[index] != null:
