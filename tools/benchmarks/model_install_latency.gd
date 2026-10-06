@@ -19,6 +19,19 @@ class InstallProbe extends RefCounted:
 			result = service._unpack_asset(asset, archive)
 		duration_ms = (Time.get_ticks_usec() - start) / 1000.0
 
+class PipelineProbe extends Service:
+	var archive_path := ""
+	func _fetch(_url: String, path: String, expected: int, digest: String, _limit: int, _label: String) -> String:
+		# Supply an already downloaded approved input, then exercise the real
+		# verification/publication/install path without network variability.
+		var absolute := ProjectSettings.globalize_path(path)
+		var copied: bool = await _run_storage_work(_copy_download.bind(absolute))
+		if not copied:
+			return "Could not prepare the benchmark archive."
+		return await _run_storage_work(_publish_verified_download.bind(absolute, expected, digest))
+	func _copy_download(absolute: String) -> bool:
+		return DirAccess.make_dir_recursive_absolute(absolute.get_base_dir()) == OK and DirAccess.copy_absolute(archive_path, absolute + ".partial") == OK
+
 
 func _init() -> void:
 	process_frame.connect(_frame)
@@ -84,7 +97,21 @@ func _run() -> void:
 	assert(str(probe.result.get("error", "")).is_empty())
 	var worker := {"work_ms": probe.duration_ms, "frames_during_work": frame_count - frames_before,
 		"longest_frame_ms": longest_frame_usec / 1000.0}
+	var pipeline := PipelineProbe.new()
+	pipeline.archive_path = archive
+	root.add_child(pipeline)
+	pipeline._busy = true
+	longest_frame_usec = 0
+	frames_before = frame_count
+	var started := Time.get_ticks_usec()
+	var installed: Dictionary = await pipeline._install_asset(asset)
+	assert(str(installed.get("error", "")).is_empty())
+	var application := {"elapsed_ms": (Time.get_ticks_usec() - started) / 1000.0,
+		"frames_during_work": frame_count - frames_before, "longest_frame_ms": longest_frame_usec / 1000.0}
+	pipeline._busy = false
+	pipeline.free()
 	print("MODEL_INSTALL_LATENCY " + JSON.stringify({"asset_id": asset.asset_id,
-		"archive_bytes": asset.size_bytes, "headless": true, "measurements": rows, "worker_comparison": worker}))
+		"archive_bytes": asset.size_bytes, "headless": true, "measurements": rows,
+		"worker_comparison": worker, "application_install_comparison": application}))
 	service.free()
 	quit()

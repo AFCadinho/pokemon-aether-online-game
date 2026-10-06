@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the game responsive while new 3D models are verified and installed by moving local model storage work off the main thread.
+
 - Make Gift Store mount boxes and their normal/shiny rewards tradeable when purchased with Gems. Voucher purchases and rewards remain account-bound; existing inventory with ambiguous Gem/voucher provenance stays bound.
 
 - Open Gift Store mount boxes directly from the Bag and show the reward in chat, including your first box and boxes different from the last opened type.

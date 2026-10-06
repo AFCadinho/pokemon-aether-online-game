@@ -1,5 +1,28 @@
 # Model installation and displayed ping, 2026-10-06
 
+## Local fix following this investigation
+
+The application now awaits storage workers for new-download verification,
+atomic file publication, archive installation, index/catalog reads, installed
+entry checks, and catalog publication. HTTPRequest uses its download thread;
+Node/progress state and the downloader lock stay on the main thread. Full
+archive/model SHA checks, reviewed-model admission, temporary-file publication,
+and cache-clear guards are retained. Pending storage work never joins on the
+main thread; only completed jobs are collected.
+
+The updated benchmark also exercises the actual application `_install_asset`
+path, with a completed download supplied from the benchmark's own approved
+input file. The Litten installation took **144.858 ms** in total while **21
+frames** continued; the longest frame was **6.993 ms**. Direct synchronous
+reference work in the same run blocked frames for **114–127 ms**. This excludes
+network variability and GPU/model instantiation, and is not a live RTT forecast.
+
+`model_install_worker_check.gd` deliberately holds archive work and checks
+continued frames, cache-clear protection, one download for concurrent callers,
+full SHA admission, corrupt-body rejection, retry, and invalid model digest
+rejection. Existing cached-battle and Pokédex checks also pass. Runtime changes
+need a new client release; this local result does not change an installed client.
+
 ## Finding
 
 A newly downloaded model can block the client main thread while the archive
