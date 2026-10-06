@@ -554,5 +554,9 @@
   "salamence-mount-box": {
     "name": "暴飞龙坐骑箱",
     "shortDesc": "包含一只暴飞龙坐骑。初始异色概率：50%。"
+  },
+  "metagross-black-gold-mount": {
+    "name": "黑金巨金怪坐骑",
+    "shortDesc": "解锁黑金巨金怪作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

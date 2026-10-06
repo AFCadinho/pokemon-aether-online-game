@@ -20,6 +20,8 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate() as DonatorStorePopup
 	host.add_child(store)
 	store.show()
+	for item: Dictionary in store.CATALOG:
+		_check(not str(item.get("id", "")).begins_with("metagross-black-gold"), "Black & Gold Metagross is not a Gift Store product")
 	var items: Array = []
 	for item: Dictionary in store.CATALOG:
 		if item.has("price"):

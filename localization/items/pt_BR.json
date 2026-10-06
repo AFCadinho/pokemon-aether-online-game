@@ -554,5 +554,9 @@
   "salamence-mount-box": {
     "name": "Caixa de montaria Salamence",
     "shortDesc": "Contém uma montaria Salamence. Chance shiny inicial: 50%."
+  },
+  "metagross-black-gold-mount": {
+    "name": "Montaria Metagross Preto e Dourado",
+    "shortDesc": "Desbloqueia Metagross Preto e Dourado como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

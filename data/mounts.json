@@ -1486,6 +1486,105 @@
         0,
         8
       ]
+    },
+    "metagross_black_gold": {
+      "displayName": "Black & Gold Metagross",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/metagross_black_gold/mount.png",
+      "foregroundSheet": "res://assets/mounts/metagross_black_gold/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/metagross_black_gold/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 6,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -42
+          ],
+          [
+            4,
+            -40
+          ],
+          [
+            4,
+            -42
+          ],
+          [
+            4,
+            -40
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -42
+          ],
+          [
+            -4,
+            -40
+          ],
+          [
+            -4,
+            -42
+          ],
+          [
+            -4,
+            -40
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -34
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -34
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/metagross_black_gold/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/metagross_black_gold/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/metagross_black_gold/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/metagross_black_gold/icon.png",
+      "unlockItemId": "metagross-black-gold-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }
