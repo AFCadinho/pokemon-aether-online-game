@@ -10,7 +10,8 @@ import json
 import os
 import platform
 import shutil
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+import re
 import subprocess
 import threading
 import time
@@ -95,7 +96,9 @@ def main():
     if args.streaming:
         tracked = subprocess.check_output(["git", "-C", str(frontend), "ls-files", "-z", "--",
             "launcher/scripts", "launcher/scenes", "launcher/assets", "launcher/localization"])
-        files += [str(Path(p).relative_to("launcher")) for p in tracked.decode().split("\0")
+        # Git emits POSIX paths even on Windows. Keep them POSIX so the exact
+        # generated-pin comparisons below also match on Windows.
+        files += [PurePosixPath(p).relative_to("launcher").as_posix() for p in tracked.decode().split("\0")
                   if p and Path(p).suffix not in [".uid", ".import"]]
         files += ["tests/fixtures/offline_bulk_launcher.gd", "tests/native_streaming_collection_check.gd"]
         files = sorted(set(files))
@@ -155,18 +158,29 @@ def main():
             if args.streaming:
                 user_dir = "lossless-collection-" + hashlib.sha256(str(output).encode()).hexdigest()[:16]
                 project_settings = project_settings.replace("[application]", '[application]\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir="' + user_dir + '"')
-            (project / "project.godot").write_text(project_settings)
+            # A fresh project's font/texture import must precede autoloads that
+            # preload those resources. Both passes own this project's new cache.
+            cold_settings = re.sub(r"(?ms)^\[autoload\]\n.*?(?=^\[|\Z)", "", project_settings)
+            cold_settings = re.sub(r"(?m)^run/main_scene=.*\n", "", cold_settings)
+            (project / "project.godot").write_text(cold_settings, encoding="utf-8", newline="\n")
             env["POKEAETHER_NATIVE_PHASE"] = phase
-            with (output / (phase + "-import.log")).open("w") as log:
-                subprocess.run([godot, "--headless", "--path", str(project), "--log-file", str(output / (phase + "-import-engine.log")), "--editor", "--import"],
-                               env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=120)
+            for import_pass in ["assets-import", "import"]:
+                if import_pass == "import":
+                    (project / "project.godot").write_text(project_settings, encoding="utf-8", newline="\n")
+                log_path = output / (phase + "-" + import_pass + ".log")
+                with log_path.open("w") as log:
+                    subprocess.run([godot, "--headless", "--path", str(project), "--log-file", str(output / (phase + "-" + import_pass + "-engine.log")), "--editor", "--import"],
+                                   env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=120)
+                import_log = log_path.read_text(encoding="utf-8")
+                if "\nERROR:" in import_log or "\nSCRIPT ERROR:" in import_log:
+                    raise ValueError("Launcher import emitted an engine/script error: " + phase + " " + import_pass)
             with (output / (phase + "-launcher.log")).open("w") as log:
                 script = "native_streaming_collection_check.gd" if args.streaming else "native_compression_install_check.gd"
                 subprocess.run([godot, "--headless", "--path", str(project), "--log-file", str(output / (phase + "-engine.log")), "--script",
                     "res://tests/" + script], env=env,
                     stdout=log, stderr=subprocess.STDOUT, check=True, timeout=360)
             result = json.loads((output / ("installed/" + phase + "-report.json")).read_text())
-            log_text = (output / (phase + "-launcher.log")).read_text()
+            log_text = (output / (phase + "-launcher.log")).read_text(encoding="utf-8")
             if "\nERROR:" in log_text or "\nSCRIPT ERROR:" in log_text:
                 raise ValueError("Launcher emitted an engine/script error: " + phase)
             if not result["complete"] or result.get("failure"):
