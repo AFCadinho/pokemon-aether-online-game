@@ -1,0 +1,166 @@
+{
+  "capturedAt": "2026-10-06T23:37:53.228028+00:00",
+  "guide": "https://forums.pokeaether.com/t/item-dex-where-to-find-items/95",
+  "frontendRevision": "27fbf557522a11f50ba820e69ee2a9ea4850d0cb",
+  "backendRevision": "7ebd72cf78c3024312deb6435b5f8a0abfe0edb4",
+  "locale": "en",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "authenticatedSession": false,
+  "item": {
+    "id": "heart-scale",
+    "name": "Heart Scale",
+    "category": "treasures",
+    "shortDesc": "No effect. Can be traded for prior Level-up moves.",
+    "desc": "Trade one to the Move Relearner near the shore in Pastoria City or with the Move Deleter in Blackthorn City to teach one party Pokemon a prior level-up move.",
+    "cost": 100,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "fishing_treasure",
+        "name": "Fishing treasure with Old Rod",
+        "rod_id": "old_rod",
+        "location_names": [
+          "Cerulean Cave B1F",
+          "Cerulean City",
+          "Cinnabar Island",
+          "Pallet Town",
+          "Route 10",
+          "Route 11",
+          "Route 12",
+          "Route 13",
+          "Route 22",
+          "Route 24",
+          "Route 25",
+          "Route 4",
+          "Route 6",
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.0075,
+          "maximum": 0.012
+        },
+        "chance_context": "won_fishing_battle",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "fishing_level",
+            "minimum": 1
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "fishing_treasure",
+        "name": "Fishing treasure with Good Rod",
+        "rod_id": "good_rod",
+        "location_names": [
+          "Cerulean Cave B1F",
+          "Cerulean City",
+          "Cinnabar Island",
+          "Pallet Town",
+          "Route 10",
+          "Route 11",
+          "Route 12",
+          "Route 13",
+          "Route 22",
+          "Route 24",
+          "Route 25",
+          "Route 4",
+          "Route 6",
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.012,
+          "maximum": 0.0165
+        },
+        "chance_context": "won_fishing_battle",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "fishing_level",
+            "minimum": 10
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "fishing_treasure",
+        "name": "Fishing treasure with Super Rod",
+        "rod_id": "super_rod",
+        "location_names": [
+          "Cerulean Cave B1F",
+          "Cerulean City",
+          "Cinnabar Island",
+          "Pallet Town",
+          "Route 10",
+          "Route 11",
+          "Route 12",
+          "Route 13",
+          "Route 22",
+          "Route 24",
+          "Route 25",
+          "Route 4",
+          "Route 6",
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.024,
+          "maximum": 0.03
+        },
+        "chance_context": "won_fishing_battle",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "fishing_level",
+            "minimum": 25
+          }
+        ]
+      }
+    ],
+    "availabilityStatus": "available"
+  },
+  "images": {
+    "01-open-item-dex-full.png": [
+      1920,
+      1080
+    ],
+    "01-open-item-dex-original-full.png": [
+      1920,
+      1080
+    ],
+    "01-open-item-dex.png": [
+      360,
+      260
+    ],
+    "02-search-heart-scale-full.png": [
+      1920,
+      1080
+    ],
+    "02-search-heart-scale.png": [
+      962,
+      652
+    ],
+    "03-where-to-get-full.png": [
+      1920,
+      1080
+    ],
+    "03-where-to-get.png": [
+      962,
+      652
+    ],
+    "04-compare-fishing-sources-full.png": [
+      1920,
+      1080
+    ],
+    "04-compare-fishing-sources.png": [
+      962,
+      652
+    ]
+  }
+}
