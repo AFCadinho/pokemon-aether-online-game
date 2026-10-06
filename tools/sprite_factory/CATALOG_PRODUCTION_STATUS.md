@@ -36,6 +36,28 @@ release pins remain unchanged. Strict image reference, full runtime/memory and
 platform/update qualification remain required before rollout. See
 [complete-catalog preparation](../../docs/lossless-model-catalog-preparation.md).
 
+
+### Linux collection installation and memory follow-up
+
+The unpublished candidate installs all 1,200 pairs / 2,400 appearances, survives
+restart with no new jobs, and passes cached on-demand selection/reuse/repair.
+A failed collection transaction preserves the active generation. Independent
+file hashing/deserialization succeeds for all 2,400 standalone scenes.
+Full instantiation remains **held**: Archen triggers null-material errors with
+both the original and candidate files in Forward+, including a fresh original
+control using the production loading mode. The failed gate remains red.
+
+The nine-pair original/candidate real-battle comparison passes the unchanged
+three-round 1280×720 / 20 ms p95 gate. All 54 LRU admission/residency observations
+match exactly; approved original byte costs prevent compressed files admitting
+more cached actors. Peak process RSS is 3.067 GB original / 2.896 GB candidate
+in this single Linux comparison. This is not a general RAM-saving guarantee.
+Native download bytes remain 12.857 GB versus 19.863 GB originally, with exactly
+unchanged decompressed resource streams. Strict rendered-reference and desktop
+platform/update checks, the Archen material issue, and download-UI integration
+remain open. No candidate is admitted or published. See
+[rollout validation](../../docs/lossless-model-rollout-validation.md).
+
 ## Batch 04 — initial intake and composition probes (2026-09-27)
 
 The first review-only pipeline pass processed all 226 candidates. Source intake

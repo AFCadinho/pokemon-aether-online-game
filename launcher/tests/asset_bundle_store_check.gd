@@ -271,5 +271,21 @@ func _run() -> void:
 	invalid.assets[1].dependencies = [invalid.assets[0].asset_id]
 	invalid.assets[0].dependencies = [invalid.assets[1].asset_id]
 	assert(not Index.validate(invalid).is_empty())
+	# A later corrupt member cannot expose the successful prefix of a batch.
+	var collection := Store.new(output.path_join("collection"))
+	var first := collection.install_archive(updated_index, dragonite_v2.asset.asset_id, dragonite_v2.archive_path)
+	assert(first.error.is_empty())
+	var pinned_generation := collection.active_generation()
+	var corrupt_member := output.path_join("collection-corrupt.zip")
+	_copy_corrupt(bundles[2].archive_path, corrupt_member, false)
+	var paths := {bundles[1].asset.asset_id: bundles[1].archive_path, bundles[2].asset.asset_id: corrupt_member}
+	assert(not collection.install_archives(updated_index, paths).error.is_empty())
+	assert(collection.active_generation() == pinned_generation and collection.state().assets.size() == 1)
+	paths[bundles[2].asset.asset_id] = bundles[2].archive_path
+	assert(collection.install_archives(updated_index, paths).error.is_empty())
+	var recovered := Store.new(output.path_join("collection"))
+	assert(recovered.state().assets.size() == 3 and recovered.plan(updated_index, ids).downloads.is_empty())
+	assert(not recovered.install_archives(updated_index, {}).error.is_empty())
+	print("ASSET_BUNDLE_BATCH_OK atomic_failure=true restart=true checksums=true")
 	print("ASSET_BUNDLE_STORE_OK initial=3 no_op=0 update=dragonite corrupt_rollback=true restart=true removed=arcanine")
 	quit()

@@ -78,6 +78,7 @@ def prepare_asset(original_asset, source, directory, registry, codec):
             appearance['runtime_sha256'] = sha(candidate)
             manifest_row.update(runtime_sha256=sha(candidate), bytes=len(candidate))
             model['sha256'] = sha(candidate)
+            model['cache_source_bytes'] = len(original)
             model['previous_sha256'] = sorted(set([digest, *model.get('previous_sha256', [])]) - {sha(candidate)})
             models[identity] = model
     changed = any(r['source_sha256'] != r['candidate_sha256'] for r in rows)
@@ -153,7 +154,7 @@ def main():
     draft = copy.deepcopy(index)
     draft.update(catalog_revision='lossless-native-256k-draft', assets=assets,
                  prototype_only=True, production_approved=False)
-    write_json(output / 'draft-index.json', draft)
+    (output / 'draft-index.json').write_text(json.dumps(draft, separators=(',', ':')) + '\n')
     # This standalone candidate metadata is never placed in an active catalog.
     write_json(output / 'draft-models.json', {'models': models, 'prototype_only': True,
         'production_approved': False, 'source_registry_sha256': sha(registry_bytes)})

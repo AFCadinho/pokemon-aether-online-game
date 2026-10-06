@@ -33,6 +33,7 @@ def main():
     parser.add_argument("installation", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--phase", choices=["original", "native-256k", "native-1m"], required=True)
+    parser.add_argument("--memory", action="store_true", help="Keep the existing gate and record memory/cache costs")
     args = parser.parse_args()
     frontend = Path(__file__).resolve().parents[2]
     if frontend.parent.name not in ["slot-a", "slot-b", "slot-c"] or frontend.name != "frontend":
@@ -65,7 +66,7 @@ def main():
         registry_path.write_bytes(generated)
         with (output / "battle.log").open("w") as log:
             result = subprocess.run([os.environ.get("GODOT_BIN", "godot"), "--path", str(frontend),
-                "--script", "res://tests/battle_3d_regional_stress_check.gd"], env=env,
+                "--script", "res://tests/native_cache_memory_check.gd" if args.memory else "res://tests/battle_3d_regional_stress_check.gd"], env=env,
                 stdout=log, stderr=subprocess.STDOUT, timeout=360)
         receipt["exit_code"] = result.returncode
         receipt["peak_child_rss_bytes"] = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * 1024

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
+
 - Add Black & Gold Metagross as a separate grantable land mount, outside the Gift Store and mount boxes.
 
 - Add shiny Metagross and Salamence land mounts and their Gift Store boxes at 750 Aether Gems each, with the existing shiny chance and pity rules.
