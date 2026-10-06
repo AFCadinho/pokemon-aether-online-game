@@ -2,152 +2,35 @@
 
 ## Unreleased
 
-- Fit Gift Store mount previews to a shared padded frame using the visible mount, rider and animation bounds, with stable zoom across directions and animation controls.
-
-- Add shared outfit preview hair rules: neutral Store card hairstyles, personal hair in detail previews, preserved included hair and explicit hood/headwear exceptions; clarify purchase contents and restore missing body/head layers in composed outfit icons.
-
-- Add Shiny Latios and Shiny Latias with their Land Gift Store boxes for 750 Aether Gems each, preserving the approved V2 rider poses and shared mount box rules.
-
-- Add Latios and Latias as grantable land mounts with the approved V2 rider poses, layered wings and existing regional Mount License requirements.
-
-- Add all six gender-adaptive adventure outfit boxes to the Aether Gift Store for 350 Gems each and price the four existing outfit boxes at 550 Gems each.
-
-- Add Shiny Toucannon and its Land Gift Store box for 500 Aether Gems, preserving the approved rider alignment and existing shiny chance and pity rules.
-
-- Added matching male and female battle trainer and dialogue portraits for all six adventure outfits, preserving shared wardrobe items across gender changes.
-
-- Download complete 3D model collections with one verified activation, reuse completed files after interruption, and check free space before downloading and unpacking.
-
-- Add Shiny Arcanine and Shiny Aerodactyl and their Land Gift Store boxes for 500 Aether Gems each. Center Toucannon’s front rider and balance the hand/wing overlap.
-
-- Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
-- Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
-
-- Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
-
-- Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.
-
-- Added six male-only adventure outfit boxes and separate wardrobe items: Aether Voyager, Rotom Engineer, Celebi Forest Ranger, Lucario Aura Fighter, Relic Explorer and Lugia Sky Captain, with authored overworld walking, fishing and riding outfits.
-
-- Add Shiny Dialga and its Land Gift Store box for 750 Aether Gems, preserving the approved rider pose and existing shiny chance and pity rules.
-
-- Add Shiny Palkia and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
-- Restore Dialga’s original side head/neck connection and move the rider back on the saddle to keep the face clear.
-
-- Add Shiny Zekrom and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
-- Align Dialga and Palkia with the normal ground line and move Dialga’s side crest clear of the rider’s face.
-
-- Count all successful Gift Store purchases for popular picks, including Gift Vouchers, generated Gems and staff purchases; combine bound cosmetics with the original product and count each buyer once across payment methods.
-
-- Show varied Gift Store popular picks from distinct buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
-
-- Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.
-
-- Add Dialga, Zekrom and Palkia as grantable land mounts with the approved rider poses and regional Mount License requirements.
-
-- Unify Team Rocket clothing into gender-adaptive items and one reward box; keep adaptive cosmetics equipped through gender changes and preserve existing ownership.
-
-- Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
-
-- Add Black & Gold Metagross as a separate grantable land mount, outside the Gift Store and mount boxes.
-
-- Add shiny Metagross and Salamence land mounts and their Gift Store boxes at 750 Aether Gems each, with the existing shiny chance and pity rules.
-
-- Keep PvP thinking time and bank displays frozen until both 2D/3D clients confirm animation completion, including slow animation batches and reconnect recovery.
-
-- Add Metagross and Salamence as grantable land mounts with the approved rider poses, layered wings, and existing regional Mount License requirements.
-
-- Add Gift Store filters for Gem affordability and Gift Voucher eligibility/affordability, plus name and price sorting alongside existing category filters and search.
-
-- Start single 3D battles from a three-quarter camera angle; camera reset restores this view while free orbit remains available.
-
-- Add shiny Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram mounts and Land Gift Store boxes: Giratina Origin/Yveltal cost 1,000 Aether Gems; Ho-Oh/Miraidon/Reshiram cost 750, with the existing shiny pity rules.
-
-- Give 3D Close Combat alternating red and blue fists, matching punch trails and a two-color finishing impact.
-
-- Intensify 3D Close Combat with a continuous left/right fist barrage, larger readable hands, curved punch trails, attacker weight shifts and a stronger finishing blow.
-
-- Rework 3D Close Combat around its 2D combo: a quick approach, alternating fists and strike flashes, repeated pitched hit sounds and a larger final blow, with early dodge and a full contact hold.
-
-- Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.
-
-- Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.
-
-- Restore Miraidon mount limb and torso details, clear the rider’s face in front view, and keep Miraidon and Yveltal rear tails visible in front of the rider’s lower body.
-
-- Keep mounted player nameplates, badges, chat bubbles and battle indicators above the rider and mount, with stable animation clearance and normal placement after dismounting.
-
-- Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.
-
-- Give 3D Heat Wave broad, shimmering waves of hot air with sparse embers, and expand Tera Starstorm into a four-second constellation, central star strike and prismatic field burst with retimed audio.
-
-- Expand nine more 3D moves across the battlefield, including sweeping heat and snow, wind funnels, ground eruptions, a caster-centered explosion, falling coins and prismatic stars.
-
-- Add Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram land mounts with animated artwork, synchronized rider masks and compact Bag icons.
-
-- Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.
-
-- Stage 3D Earthquake, Blizzard and Bloom Doom across the battle circle, with travelling ground fractures, sweeping snow and a flowering field that gathers into the final impact.
-
-- Review all 194 native 3D moves for smoother visual flow, individual pacing, blended source effects and clearer cast shapes; keep unsupported moves fast, align late dodges and restore distinct sound cues for twelve casts.
-
-- Rework all 35 3D Z-moves with distinct buildup, larger signature effects and climaxes inspired by their 2D animations, with synchronized sound cues and aerial contact movement.
-
-- Load and refresh both Pokémon battle sprites on each side of Android double battles, preventing uncached Pokémon from remaining HOME icons.
-
-- Restore the riding pose after Thieving so moving on a mount no longer plays the player's running or walking animation.
-
-- Add first-pass native 3D effects and timed audio for all 193 moves in the 2D animation catalog, preserving the 24 approved presentations; include Solar Beam/Electro Shot charging, Future Sight impact, and a complete move preview selector.
-
-- Add a source-textured 3D Draco Meteor with a rising charge, sky burst, seven fiery meteors and timed impacts; retain native dodge, damage and stat-drop ordering.
-
-- Build Moonblast's energy orb in front of the attacker with room for its full size, while keeping the moon above the Pokémon.
-
-- Give 3D Moonblast a two-second presentation with a longer moon reveal and energy charge, a quick release, and matching charge audio.
-
-- Enlarge all 23 native 3D move effects, with stronger Moonblast and Flash Cannon silhouettes, wider beams and clearer impacts while preserving attack origins and trajectories.
-
-- Give the animated meadow a dark blue night sky with subdued moving clouds and subtle stars, fading with the world clock.
-
-- Fit the 23 supported 3D moves with short, pitch-preserving sound edits, animation-timed fades and hit-only impact audio; preserve the original 2D sounds.
-
-- Add source-textured 3D Shadow Ball, Sludge Bomb, Focus Blast, Moonblast, Ice Shard, Poison Sting, Swift, Flash Cannon, Magical Leaf and Water Pulse, with shared move sounds and Dodge-aware impacts.
-- Match the animated grass battle background and its fallback to the outdoor day/night cycle, with warmer dusk and darker, cooler nights.
-
-- Add 3D Ice Beam, Razor Leaf and Quick Attack with source textures, shared move sounds, cannon/mouth origins and fast contact movement.
-
-- Add 3D Flamethrower, Bubble and Bubble Beam with animated mouth/cannon origins, shared move sounds and Dodge-aware impacts.
-
-- Match 3D battle rendering to the actual window resolution, avoiding unnecessary GPU work in smaller windows while keeping larger windows sharp.
-- Restore missing eye details in regional Pokémon 3D model imports.
-- Prepare normal and shiny 3D bundles for 58 regional and related forms, available for on-demand download with catalog v10; preload Galarian Darmanitan's Zen form before battle when installed.
-- Add source-textured Thunderbolt in 3D battles, with animated lightning, separate discharge/impact sounds and Pikachu's moving discharge origin.
-
-- Add source-textured Thunder Shock in 3D battles, with jagged lightning, synchronized sound and impact, and a moving discharge origin for Pikachu.
-
-- Add source-textured 3D effects for Tackle, Scratch and Bite with approach/return movement, synchronized contact sounds and Dodge; enable the approved source-textured Water Gun in normal battles.
-
-- Use Charmander’s native forward-facing breath animation for Ember, with mouth launch and sound synchronized for normal and shiny models.
-- Retire Grandmaster Elite from AI Sparring. Intermediate, Hard and Nightmare remain available; historical Elite matches keep their original labels.
-
-- Improve text readability inside compact 3D stat and effect badges while keeping the HP panel visually dominant.
-
-- Give 3D Pokémon more space below their HP panels, reserving room for stat changes and effect labels.
-
-- Keep the Aether Clash portal session picker centered and at UI scale when the world camera moves or zooms.
-- Show a trainer’s “Dodge!” command before a missed 3D attack; Pokémon and Substitutes sidestep while the move passes through their original position.
-
-- Center the shiny replay favorite prompt in the screen UI and size it to its message.
-- Anchor 3D move effects to animated mouth points for Charmander and Squirtle, and fire Blastoise’s Water Gun from both moving cannons.
-
-- Reduce the shiny replay favorite prompt to fit its short message more closely.
-- Use the approved source-textured Ember effect in 3D battles, retaining synchronized move sounds and hit reactions.
-
-- Add native 3D effects for Tackle, Scratch, Bite, Ember, Water Gun and Thunder Shock, with synchronized existing move sounds, compact attack playback and event-confirmed impacts.
-
-- Move mobile action-bar, Pokédex and quest-tracker reopen buttons to the right edge when their panels are collapsed, while retaining separate touch areas.
-- Correct shiny Dreepy's follower facing directions when standing and walking.
-- Restore the reachable entrances to Gary's house in Pallet Town and the Pokémon Center in Vermilion City.
+### Adventure and exploration
+
+- Reopen the entrances to Gary’s house in Pallet Town and the Pokémon Center in Vermilion City.
+- Keep your mount’s riding animation after Thieving, and show nameplates and battle indicators clearly while mounted.
+
+### Outfits and mounts
+
+- Add six adventure outfit styles: Aether Voyager, Rotom Engineer, Celebi Forest Ranger, Lucario Aura Fighter, Relic Explorer and Lugia Sky Captain.
+- Make adventure and Team Rocket outfits adapt to your Trainer’s appearance, and keep owned outfits equipped when you change character gender.
+- Add six new gender-adaptive outfit boxes for 350 Aether Gems each; four existing outfit boxes cost 550 Gems each.
+- Add new shiny mount boxes: Toucannon, Arcanine and Aerodactyl for 500 Gems each; Latias, Latios, Dialga, Palkia, Zekrom, Metagross and Salamence for 750 Gems each; and Giratina Origin and Yveltal for 1,000 Gems each. Shiny Ho-Oh, Miraidon and Reshiram boxes cost 750 Gems each.
+- Browse Gift Store mounts with clearer previews, and filter or sort items by price, name, Gem affordability and Gift Voucher eligibility.
+- See popular Gift Store picks based on recent purchases.
+- Find a clear Untradeable label on items in your Bag.
+
+### Battles
+
+- See a growing range of 3D move and Z-Move animations, including attacks such as Close Combat, Draco Meteor, Moonblast, Earthquake and Blizzard, with more distinct effects and matching sounds.
+- See Pokémon visibly dodge missed attacks when a Trainer calls “Dodge!”.
+- Start single 3D battles from a clear three-quarter view, with the option to orbit the camera as before.
+- Find more regional Pokémon forms in the optional 3D collection, including normal and Shiny appearances.
+- Watch the wild-battle meadow shift with the time of day, from warm dusk colors to a starry night sky.
+- In Android double battles, see animated sprites for both Pokémon on each side, including Pokémon that were not already loaded.
+
+### Downloads and controls
+
+- Resume an interrupted full 3D collection download without starting over, and check available storage before installing.
+- Use easier-to-find reopen controls for the action bar, Pokédex and quest tracker on mobile.
+- Choose from Intermediate, Hard and Nightmare in AI Sparring; Grandmaster Elite is being retired. Past Elite results keep their original labels.
 
 ## 0.3.98
 
