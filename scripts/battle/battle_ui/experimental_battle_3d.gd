@@ -926,6 +926,9 @@ func start_move_dodge(actor: String, target: String, move: String) -> void:
 	move_dodges[index] = {"source": source, "target": destination, "actor": actor, "target_ident": target,
 		"clock": clock, "duration": duration, "impact": impact, "displacement": side * distance,
 		"hop": minf(float(bounds.height) * 0.08, 0.16)}
+	var combo: Dictionary = MoveRecipes.get_recipe(move).get("close_choreography",{})
+	if not combo.is_empty():
+		move_dodges[index]["first_strike"] = duration*float(combo.first_strike_frame)/float(combo.source_frames)
 
 func _set_dodge_offset(index: int, offset: Vector3) -> void:
 	var change: Vector3 = offset - dodge_offsets[index]
@@ -952,8 +955,10 @@ func _update_move_dodges() -> void:
 			continue
 		# Snap aside before contact, hold until the beam/tail passes, then return.
 		# Native-clock sampling makes pause and playback speed match the move.
-		var out_start := maxf(0, float(dodge.impact) - duration * 0.2)
-		var out_phase := clampf((seconds - out_start) / (duration * 0.16), 0, 1)
+		var first_strike := float(dodge.get("first_strike",dodge.impact))
+		var out_length := minf(duration*.16,first_strike*.9) if dodge.has("first_strike") else duration*.16
+		var out_start := maxf(0,first_strike-out_length) if dodge.has("first_strike") else maxf(0,first_strike-duration*.2)
+		var out_phase := clampf((seconds-out_start)/maxf(out_length,.001),0,1)
 		var return_start := maxf(float(dodge.impact) + (duration-float(dodge.impact))*.30, duration*.72)
 		var return_phase := clampf((seconds - return_start) / maxf(duration-return_start,.001), 0, 1)
 		var weight := (1.0 - pow(1.0 - out_phase, 3)) * (1.0 - smoothstep(0, 1, return_phase))
@@ -992,6 +997,8 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	if source != actors[index] and source.get("body") is Node3D:
 		motion.hud_sub_transform = source.body.global_transform
 	var z_recipe := MoveRecipes.get_recipe(str(timing.get("move_key", "")))
+	if z_recipe.has("close_choreography"):
+		motion["combo"] = z_recipe.close_choreography
 	if z_recipe.has("z_choreography"):
 		motion["z_style"] = z_recipe.z_choreography.style
 		motion["launch"] = float(timing.launch_frame)/60.0
@@ -1033,11 +1040,18 @@ func _update_move_contacts() -> void:
 		if not z_style.is_empty():
 			approach_start = float(motion.launch)
 			if z_style in ["barrage","seven_stars"]: contact_time = lerpf(approach_start,contact_time,.42)
+		if motion.has("combo"):
+			approach_start=0.0
+			contact_time=duration*float(motion.combo.approach_end_frame)/float(motion.combo.source_frames)
 		var outward := smoothstep(approach_start, contact_time, seconds)
 		var return_start := minf(float(motion.impact) + duration * 0.08, duration * 0.72)
 		if not z_style.is_empty():
 			return_start = lerpf(float(motion.impact),duration,.15)
-		var returning := smoothstep(return_start, duration * 0.94, seconds)
+		var return_end := duration*.94
+		if motion.has("combo"):
+			return_start=duration*float(motion.combo.return_start_frame)/float(motion.combo.source_frames)
+			return_end=duration*float(motion.combo.return_end_frame)/float(motion.combo.source_frames)
+		var returning := smoothstep(return_start, return_end, seconds)
 		var weight := outward * (1.0 - returning)
 		var offset: Vector3 = motion.displacement * weight
 		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:

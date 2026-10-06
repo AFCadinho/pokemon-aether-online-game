@@ -710,9 +710,9 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.14,
-      "impact_fraction": 0.52,
+      "duration_seconds": 2.6,
+      "launch_fraction": 0.05405405405405406,
+      "impact_fraction": 0.7567567567567568,
       "scale": 1.45,
       "attachment": "hand",
       "source_id": 370,
@@ -724,11 +724,172 @@
           "role": "impact",
           "volume": 100,
           "pitch": 100,
-          "at_fraction": 0.52,
-          "end_fraction": 0.8
+          "at_fraction": 0.08108108108108109,
+          "end_fraction": 0.16216216216216217,
+          "source_frame": 3
+        },
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 85,
+          "at_fraction": 0.16216216216216217,
+          "end_fraction": 0.2972972972972973,
+          "source_frame": 6
+        },
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 110,
+          "at_fraction": 0.2972972972972973,
+          "end_fraction": 0.35135135135135137,
+          "source_frame": 11
+        },
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.35135135135135137,
+          "end_fraction": 0.43243243243243246,
+          "source_frame": 13
+        },
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 65,
+          "at_fraction": 0.43243243243243246,
+          "end_fraction": 0.6124324324324324,
+          "source_frame": 16
+        },
+        {
+          "name": "PRSFX- Close Combat.wav",
+          "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+          "role": "impact",
+          "volume": 100,
+          "pitch": 65,
+          "at_fraction": 0.7567567567567568,
+          "end_fraction": 0.9367567567567567,
+          "source_frame": 16
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review",
+      "close_choreography": {
+        "reference_path": "res://assets/battles/animations/closecombat/closecombat.json",
+        "reference_sha256": "1e2a840b2aaf7febae28382ba858d736019ed3032fa0dd967649f8646941008f",
+        "source_frames": 37,
+        "approach_end_frame": 3,
+        "return_start_frame": 31,
+        "return_end_frame": 35,
+        "first_strike_frame": 3,
+        "impact_frame": 28,
+        "beats": [
+          {
+            "frame": 3,
+            "pattern": 1,
+            "x": -41,
+            "y": 16,
+            "finisher": false
+          },
+          {
+            "frame": 5,
+            "pattern": 2,
+            "x": 34,
+            "y": -26,
+            "finisher": false
+          },
+          {
+            "frame": 7,
+            "pattern": 0,
+            "x": -40,
+            "y": -28,
+            "finisher": false
+          },
+          {
+            "frame": 9,
+            "pattern": 1,
+            "x": 8,
+            "y": 16,
+            "finisher": false
+          },
+          {
+            "frame": 10,
+            "pattern": 11,
+            "x": 24,
+            "y": -52,
+            "finisher": false
+          },
+          {
+            "frame": 12,
+            "pattern": 0,
+            "x": -39,
+            "y": -23,
+            "finisher": false
+          },
+          {
+            "frame": 13,
+            "pattern": 2,
+            "x": 23,
+            "y": 23,
+            "finisher": false
+          },
+          {
+            "frame": 16,
+            "pattern": 11,
+            "x": -4,
+            "y": -40,
+            "finisher": false
+          },
+          {
+            "frame": 16,
+            "pattern": 0,
+            "x": -25,
+            "y": 52,
+            "finisher": false
+          },
+          {
+            "frame": 18,
+            "pattern": 1,
+            "x": 35,
+            "y": 22,
+            "finisher": false
+          },
+          {
+            "frame": 20,
+            "pattern": 2,
+            "x": -27,
+            "y": -9,
+            "finisher": false
+          },
+          {
+            "frame": 21,
+            "pattern": 0,
+            "x": 41,
+            "y": -44,
+            "finisher": false
+          },
+          {
+            "frame": 22,
+            "pattern": 1,
+            "x": 20,
+            "y": 32,
+            "finisher": false
+          },
+          {
+            "frame": 27,
+            "pattern": 11,
+            "x": 0,
+            "y": 0,
+            "finisher": true
+          }
+        ]
+      }
     },
     "doublekick": {
       "name": "Double Kick",

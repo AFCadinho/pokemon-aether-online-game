@@ -129,7 +129,7 @@
       "review": "implemented-awaiting-user-review"
     },
     "closecombat": {
-      "motif": "punch-barrage",
+      "motif": "2d-combo",
       "space": "path",
       "weight": 1.0,
       "review": "implemented-awaiting-user-review"

@@ -6,6 +6,25 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'assets/battles/moves_3d/audio_recipes'
 RECIPE=ROOT/'data/battle_move_recipes_3d.json'
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
+def build_close_combat(recipe, config, source_data, entries):
+    """Keep the repeated 2D cue train instead of deduplicating it to one hit."""
+    events=[e for e in source_data['timings'] if e.get('type')==0 and e.get('name')]
+    name=events[0]['name'];source=ROOT/config['sound_paths'][name].removeprefix('res://')
+    out=OUT/'closecombat_impact.wav'
+    length=.24
+    filters='atrim=end=0.38,asetpts=PTS-STARTPTS,atempo=1.583333333,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.24,atrim=duration=0.24,afade=t=in:d=0.005,afade=t=out:st=0.215:d=0.025'
+    subprocess.run(['ffmpeg','-hide_banner','-loglevel','error','-y','-i',str(source),'-af',filters,'-ar','44100','-c:a','pcm_s16le','-map_metadata','-1',str(out)],check=True)
+    path='res://'+str(out.relative_to(ROOT))
+    entries[out.name]={'source':'res://'+str(source.relative_to(ROOT)),'source_sha256':sha(source),'path':path,'sha256':sha(out),'filters':filters,'duration_seconds':length}
+    frames=recipe['close_choreography']['source_frames']
+    # Five original repeats/pitches, then reuse the weightiest cue for the final palm.
+    timeline=[(e,e['frame']) for e in events]+[(events[-1],recipe['close_choreography']['impact_frame'])]
+    recipe['audio']=[]
+    for i,(e,frame) in enumerate(timeline):
+        at=frame/frames
+        end=min(.97,timeline[i+1][1]/frames if i+1<len(timeline) else .97,at+.18)
+        recipe['audio'].append({'name':name,'path':path,'role':'impact','volume':e.get('volume',100),'pitch':e.get('pitch',100),'at_fraction':at,'end_fraction':end,'source_frame':e['frame']})
+
 def build(move_keys=None):
     doc=json.loads(RECIPE.read_text());catalog=json.loads((ROOT/'data/battle_move_animations.json').read_text())['moves'];entries={}
     OUT.mkdir(parents=True,exist_ok=True)
@@ -22,6 +41,9 @@ def build(move_keys=None):
         if end<0:end=len(data['frames'])-1
         events=[] if config.get('disable_data_sound_events',False) else [e for e in data.get('timings',[]) if e.get('type')==0]
         events+=config.get('custom_sound_events',[])
+        if key=='closecombat' and 'close_choreography' in r:
+            build_close_combat(r,config,data,entries)
+            continue
         unique={}
         for e in sorted(events,key=lambda e:e.get('frame',0)):
             name=e.get('name','')

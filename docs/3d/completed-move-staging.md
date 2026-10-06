@@ -103,7 +103,7 @@ All entries below are implemented and awaiting individual user approval.
 | U-turn | return-rush | path | 1.3 | Pending |
 | Wood Hammer | heavy-ram | path | 1.6 | Pending |
 | Bullet Punch | heavy-punch | path | 0.95 | Pending |
-| Close Combat | punch-barrage | path | 2.1 | Pending |
+| Close Combat | [2D-inspired combo](close-combat-choreography.md) | path | 2.6 | Pending |
 | Double Kick | rising-kick | path | 1.6 | Pending |
 | Drain Punch | draining-punch | path | 1.45 | Pending |
 | Fire Punch | elemental-punch | path | 1.45 | Pending |

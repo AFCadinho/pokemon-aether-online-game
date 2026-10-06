@@ -249,14 +249,6 @@
       "filters": "atrim=end=0.403750000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.237500000,atrim=duration=0.237500000,afade=t=in:d=0.005,afade=t=out:st=0.187500000:d=0.05",
       "duration_seconds": 0.2375
     },
-    "closecombat_impact.wav": {
-      "source": "res://assets/battles/animations/closecombat/PRSFX- Close Combat.wav",
-      "source_sha256": "3eccb4fdc58a9e0c776d8c794451a2ff0f1ff474bed1234f7fb8310184becddc",
-      "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
-      "sha256": "841f055ef878c2a498e8427867499deb67dec53b8e81c4b56946b0b1140d3a53",
-      "filters": "atrim=end=0.695083000,asetpts=PTS-STARTPTS,atempo=1.323967619,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.525000000,atrim=duration=0.525000000,afade=t=in:d=0.005,afade=t=out:st=0.475000000:d=0.05",
-      "duration_seconds": 0.525
-    },
     "doublekick_impact.wav": {
       "source": "res://assets/battles/animations/doublekick/PRSFX- Double Kick.wav",
       "source_sha256": "0bb6e41d0f89f2571ad1e6b465285a12a3eb491c83798873962c020aa645df61",
@@ -1472,6 +1464,14 @@
       "sha256": "efedcd262af4d61e68b82b597b0dc8b7e9e594ca08926f079cebb3160d5f67e8",
       "filters": "atrim=end=1.084000000,asetpts=PTS-STARTPTS,atempo=1.141052632,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.950000000,atrim=duration=0.950000000,afade=t=in:d=0.005,afade=t=out:st=0.900000000:d=0.05",
       "duration_seconds": 0.95
+    },
+    "closecombat_impact.wav": {
+      "source": "res://assets/battles/animations/closecombat/PRSFX- Close Combat.wav",
+      "source_sha256": "3eccb4fdc58a9e0c776d8c794451a2ff0f1ff474bed1234f7fb8310184becddc",
+      "path": "res://assets/battles/moves_3d/audio_recipes/closecombat_impact.wav",
+      "sha256": "ea548364cc5d79cc5853d3114e65fd8f9e4ff3bc23772f5e539bfdc76e354a92",
+      "filters": "atrim=end=0.38,asetpts=PTS-STARTPTS,atempo=1.583333333,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.24,atrim=duration=0.24,afade=t=in:d=0.005,afade=t=out:st=0.215:d=0.025",
+      "duration_seconds": 0.24
     }
   }
 }
