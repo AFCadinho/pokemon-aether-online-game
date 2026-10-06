@@ -597,106 +597,134 @@
   },
   "aether-voyager-shirt": {
     "name": "Aether Voyager 上衣",
-    "shortDesc": "将这件Aether Voyager男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "aether-voyager-trousers": {
     "name": "Aether Voyager 裤子",
-    "shortDesc": "将这件Aether Voyager男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "aether-voyager-shoes": {
     "name": "Aether Voyager 鞋子",
-    "shortDesc": "将这件Aether Voyager男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "aether-voyager-outfit": {
     "name": "Aether Voyager 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Aether Voyager的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Aether Voyager独立服装部件。适用于男性和女性训练家。"
   },
   "rotom-engineer-shirt": {
     "name": "Rotom Engineer 上衣",
-    "shortDesc": "将这件Rotom Engineer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "rotom-engineer-trousers": {
     "name": "Rotom Engineer 裤子",
-    "shortDesc": "将这件Rotom Engineer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "rotom-engineer-shoes": {
     "name": "Rotom Engineer 鞋子",
-    "shortDesc": "将这件Rotom Engineer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "rotom-engineer-goggles": {
     "name": "Rotom Engineer 护目镜",
-    "shortDesc": "将这件Rotom Engineer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "rotom-engineer-outfit": {
     "name": "Rotom Engineer 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Rotom Engineer的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Rotom Engineer独立服装部件。适用于男性和女性训练家。"
   },
   "celebi-forest-ranger-shirt": {
     "name": "Celebi Forest Ranger 上衣",
-    "shortDesc": "将这件Celebi Forest Ranger男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "celebi-forest-ranger-trousers": {
     "name": "Celebi Forest Ranger 裤子",
-    "shortDesc": "将这件Celebi Forest Ranger男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "celebi-forest-ranger-shoes": {
     "name": "Celebi Forest Ranger 鞋子",
-    "shortDesc": "将这件Celebi Forest Ranger男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "celebi-forest-ranger-outfit": {
     "name": "Celebi Forest Ranger 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Celebi Forest Ranger的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Celebi Forest Ranger独立服装部件。适用于男性和女性训练家。"
   },
   "lucario-aura-fighter-shirt": {
     "name": "Lucario Aura Fighter 上衣",
-    "shortDesc": "将这件Lucario Aura Fighter男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lucario-aura-fighter-trousers": {
     "name": "Lucario Aura Fighter 裤子",
-    "shortDesc": "将这件Lucario Aura Fighter男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lucario-aura-fighter-shoes": {
     "name": "Lucario Aura Fighter 鞋子",
-    "shortDesc": "将这件Lucario Aura Fighter男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lucario-aura-fighter-outfit": {
     "name": "Lucario Aura Fighter 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Lucario Aura Fighter的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Lucario Aura Fighter独立服装部件。适用于男性和女性训练家。"
   },
   "relic-explorer-shirt": {
     "name": "Relic Explorer 上衣",
-    "shortDesc": "将这件Relic Explorer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "relic-explorer-trousers": {
     "name": "Relic Explorer 裤子",
-    "shortDesc": "将这件Relic Explorer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "relic-explorer-shoes": {
     "name": "Relic Explorer 鞋子",
-    "shortDesc": "将这件Relic Explorer男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "relic-explorer-outfit": {
     "name": "Relic Explorer 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Relic Explorer的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Relic Explorer独立服装部件。适用于男性和女性训练家。"
   },
   "lugia-sky-captain-shirt": {
     "name": "Lugia Sky Captain 上衣",
-    "shortDesc": "将这件Lugia Sky Captain男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lugia-sky-captain-trousers": {
     "name": "Lugia Sky Captain 裤子",
-    "shortDesc": "将这件Lugia Sky Captain男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lugia-sky-captain-shoes": {
     "name": "Lugia Sky Captain 鞋子",
-    "shortDesc": "将这件Lugia Sky Captain男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lugia-sky-captain-goggles": {
     "name": "Lugia Sky Captain 护目镜",
-    "shortDesc": "将这件Lugia Sky Captain男性专用服装加入角色自定义。"
+    "shortDesc": "将此服装加入角色自定义。随训练家性别自动适配。"
   },
   "lugia-sky-captain-outfit": {
     "name": "Lugia Sky Captain 服装礼盒",
-    "shortDesc": "打开此男性专用礼盒，获得Lugia Sky Captain的独立服装部件。"
+    "shortDesc": "打开礼盒，获得Lugia Sky Captain独立服装部件。适用于男性和女性训练家。"
+  },
+  "toucannon-mount": {
+    "name": "铳嘴大鸟坐骑",
+    "shortDesc": "解锁铳嘴大鸟作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "arcanine-mount": {
+    "name": "风速狗坐骑",
+    "shortDesc": "解锁风速狗作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "aerodactyl-mount": {
+    "name": "化石翼龙坐骑",
+    "shortDesc": "解锁化石翼龙作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-arcanine-mount": {
+    "name": "异色风速狗坐骑",
+    "shortDesc": "解锁异色风速狗陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "arcanine-mount-box": {
+    "name": "风速狗坐骑箱",
+    "shortDesc": "包含一只风速狗坐骑。初始异色概率：50%。"
+  },
+  "shiny-aerodactyl-mount": {
+    "name": "异色化石翼龙坐骑",
+    "shortDesc": "解锁异色化石翼龙陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "aerodactyl-mount-box": {
+    "name": "化石翼龙坐骑箱",
+    "shortDesc": "包含一只化石翼龙坐骑。初始异色概率：50%。"
   }
 }

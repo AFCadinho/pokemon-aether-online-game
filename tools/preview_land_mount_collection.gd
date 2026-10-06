@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Appearance := preload("res://scripts/services/character_appearance_service.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga", "arcanine", "aerodactyl"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 
 
@@ -14,6 +14,8 @@ func _run() -> void:
 	var shiny := "--shiny" in OS.get_cmdline_user_args()
 	var adinho_outfit := "--adinho" in OS.get_cmdline_user_args()
 	var selected_ids: Array = IDS.duplicate()
+	if not shiny:
+		selected_ids.append_array(["toucannon"])
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")

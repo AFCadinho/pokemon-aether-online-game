@@ -2,7 +2,8 @@ extends SceneTree
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga", "arcanine", "aerodactyl"]
+const GRANT_ONLY_IDS := ["toucannon"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 var failed := false
 
@@ -16,6 +17,7 @@ func _run() -> void:
 	for base: String in IDS:
 		all_ids.append(base + "_shiny")
 	all_ids.append("metagross_black_gold")
+	all_ids.append_array(GRANT_ONLY_IDS)
 	for id: String in all_ids:
 		var item := ("shiny-" if id.ends_with("_shiny") else "") + id.trim_suffix("_shiny").replace("_", "-") + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " item resolves")
@@ -82,7 +84,7 @@ func _check_grounded_dragon_mounts() -> void:
 	# The former 112px atlas anchor left both dragons 16px above this line.
 	var reference := Mounts._get_texture_image(Mounts.get_mount_frames("cobalion").get_frame_texture("idle_down", 0))
 	var ground_y := reference.get_used_rect().end.y - reference.get_height() / 2
-	for id: String in ["dialga", "palkia"]:
+	for id: String in ["dialga", "palkia", "arcanine"]:
 		var frames := Mounts.get_mount_frames(id)
 		for direction: String in DIRECTIONS:
 			for phase in range(4):

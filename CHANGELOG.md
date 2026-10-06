@@ -4,6 +4,11 @@
 
 - Download complete 3D model collections with one verified activation, reuse completed files after interruption, and check free space before downloading and unpacking.
 
+- Add Shiny Arcanine and Shiny Aerodactyl and their Land Gift Store boxes for 500 Aether Gems each. Center Toucannon’s front rider and balance the hand/wing overlap.
+
+- Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
+- Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
+
 - Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
 
 - Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.

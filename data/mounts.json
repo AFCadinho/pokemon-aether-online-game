@@ -2179,6 +2179,501 @@
         0,
         8
       ]
+    },
+    "toucannon": {
+      "displayName": "Toucannon",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/toucannon/mount.png",
+      "foregroundSheet": "res://assets/mounts/toucannon/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/toucannon/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            2,
+            -28
+          ],
+          [
+            2,
+            -26
+          ],
+          [
+            2,
+            -32
+          ],
+          [
+            2,
+            -30
+          ]
+        ],
+        "left": [
+          [
+            8,
+            -24
+          ],
+          [
+            8,
+            -22
+          ],
+          [
+            8,
+            -28
+          ],
+          [
+            8,
+            -26
+          ]
+        ],
+        "right": [
+          [
+            -8,
+            -24
+          ],
+          [
+            -8,
+            -22
+          ],
+          [
+            -8,
+            -28
+          ],
+          [
+            -8,
+            -26
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/toucannon/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/toucannon/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/toucannon/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/toucannon/icon.png",
+      "unlockItemId": "toucannon-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "arcanine": {
+      "displayName": "Arcanine",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/arcanine/mount.png",
+      "foregroundSheet": "res://assets/mounts/arcanine/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/arcanine/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ]
+        ],
+        "left": [
+          [
+            6,
+            -14
+          ],
+          [
+            6,
+            -12
+          ],
+          [
+            6,
+            -14
+          ],
+          [
+            6,
+            -12
+          ]
+        ],
+        "right": [
+          [
+            -6,
+            -14
+          ],
+          [
+            -6,
+            -12
+          ],
+          [
+            -6,
+            -14
+          ],
+          [
+            -6,
+            -12
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -8
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -8
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/arcanine/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/arcanine/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/arcanine/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/arcanine/icon.png",
+      "unlockItemId": "arcanine-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "aerodactyl": {
+      "displayName": "Aerodactyl",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/aerodactyl/mount.png",
+      "foregroundSheet": "res://assets/mounts/aerodactyl/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/aerodactyl/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -37
+          ],
+          [
+            0,
+            -35
+          ],
+          [
+            0,
+            -37
+          ],
+          [
+            0,
+            -35
+          ]
+        ],
+        "left": [
+          [
+            12,
+            -28
+          ],
+          [
+            12,
+            -26
+          ],
+          [
+            12,
+            -28
+          ],
+          [
+            12,
+            -26
+          ]
+        ],
+        "right": [
+          [
+            -12,
+            -28
+          ],
+          [
+            -12,
+            -26
+          ],
+          [
+            -12,
+            -28
+          ],
+          [
+            -12,
+            -26
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -18
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/aerodactyl/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/aerodactyl/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/aerodactyl/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/aerodactyl/icon.png",
+      "unlockItemId": "aerodactyl-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "arcanine_shiny": {
+      "displayName": "Shiny Arcanine",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/arcanine_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/arcanine_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/arcanine_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ]
+        ],
+        "left": [
+          [
+            6,
+            -14
+          ],
+          [
+            6,
+            -12
+          ],
+          [
+            6,
+            -14
+          ],
+          [
+            6,
+            -12
+          ]
+        ],
+        "right": [
+          [
+            -6,
+            -14
+          ],
+          [
+            -6,
+            -12
+          ],
+          [
+            -6,
+            -14
+          ],
+          [
+            -6,
+            -12
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -8
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -8
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/arcanine_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/arcanine_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/arcanine_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/arcanine_shiny/icon.png",
+      "unlockItemId": "shiny-arcanine-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "aerodactyl_shiny": {
+      "displayName": "Shiny Aerodactyl",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/aerodactyl_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/aerodactyl_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/aerodactyl_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -37
+          ],
+          [
+            0,
+            -35
+          ],
+          [
+            0,
+            -37
+          ],
+          [
+            0,
+            -35
+          ]
+        ],
+        "left": [
+          [
+            12,
+            -28
+          ],
+          [
+            12,
+            -26
+          ],
+          [
+            12,
+            -28
+          ],
+          [
+            12,
+            -26
+          ]
+        ],
+        "right": [
+          [
+            -12,
+            -28
+          ],
+          [
+            -12,
+            -26
+          ],
+          [
+            -12,
+            -28
+          ],
+          [
+            -12,
+            -26
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -18
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/aerodactyl_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/aerodactyl_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/aerodactyl_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/aerodactyl_shiny/icon.png",
+      "unlockItemId": "shiny-aerodactyl-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }
