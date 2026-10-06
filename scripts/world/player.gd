@@ -1806,6 +1806,7 @@ func refresh_pokemon_follower() -> void:
 	var lead_pokemon: Pokemon = null
 	if (
 		GameState.show_follower
+		and not surf_activity_active
 		and not land_mount_activity_active
 		and not PlayerSave.party.is_empty()
 	):
@@ -2022,6 +2023,7 @@ func _resolve_owned_surf_mount(mount_id: String) -> String:
 
 func _start_surf_activity(clear_input := true) -> void:
 	surf_activity_active = true
+	refresh_pokemon_follower()
 	active_mount_id = _resolve_owned_surf_mount(
 		SettingsManager.get_selected_mount_id(SettingsManager.MOUNT_MODE_SURF)
 	)
@@ -2119,6 +2121,8 @@ func _finish_surf_activity(reason := "left_water") -> void:
 	clear_activity_style()
 	_sync_fishing_prompt_visibility()
 	_sync_surf_prompt_visibility()
+	refresh_pokemon_follower()
+	reset_pokemon_follower_position()
 	_debug_surf_check("finish", {
 		"allowed": false,
 		"reason": reason,

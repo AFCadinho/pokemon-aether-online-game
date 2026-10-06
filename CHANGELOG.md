@@ -4,6 +4,8 @@
 
 - Anchor normal and shiny Kyogre to the player's ordinary position in every direction, moving the complete mount and water effect with the rider.
 
+- Hide follower Pokémon while surfing and restore them when returning to land.
+
 - Switch Gift Store cosmetic previews between Overworld and Trainer sprites, with matching outfit parts and Chroma colours.
 
 - Give Pallet Town, Viridian City, Cerulean City and Vermilion City the flowing flower sway from Lavender Town, and gently animate Vermilion's small grass tufts.

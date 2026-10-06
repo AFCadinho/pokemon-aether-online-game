@@ -3491,6 +3491,11 @@ func _get_current_follower_presence_state() -> Dictionary:
 			and player.has_method("is_land_mount_activity_active")
 			and bool(player.call("is_land_mount_activity_active"))
 		)
+		or (
+			player != null
+			and player.has_method("is_surfing_activity_active")
+			and bool(player.call("is_surfing_activity_active"))
+		)
 	):
 		return {"visible": false}
 
