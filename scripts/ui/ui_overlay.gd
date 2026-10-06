@@ -24765,7 +24765,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "redeem_credit_voucher", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24802,7 +24802,7 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 			if use_action == "open_item_bundle"
 			else LocalizationManager.text("ui.bag.action.move_to_customization")
 		)
-	if use_action == "redeem_aether_blessing":
+	if use_action in ["redeem_aether_blessing", "redeem_credit_voucher"]:
 		return LocalizationManager.text("ui.bag.action.redeem_voucher")
 	if use_action == "activate_shiny_charm":
 		return LocalizationManager.text("ui.bag.action.activate")
@@ -25088,6 +25088,18 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	if use_action == "open_gift_voucher":
 		_show_gift_voucher_balance()
+		return
+	if use_action == "redeem_credit_voucher":
+		var credit_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		if not bool(credit_result.get("success", false)):
+			_add_chat_message(str(credit_result.get("error", LocalizationManager.text("ui.bag.message.voucher_failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(credit_result.get("inventory", []))
+		InventoryService.apply_inventory_state({"items": credit_result.get("inventory", [])})
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		_add_chat_message(LocalizationManager.text("ui.credit_card.claimed", {"amount": int(credit_result.get("creditAmount", 0))}))
 		return
 	if use_action == "open_shiny_tracker":
 		_show_shiny_tracker()

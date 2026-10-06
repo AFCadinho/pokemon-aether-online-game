@@ -41,7 +41,7 @@ func _npc_quest_item_turn_in_endpoint(turn_in_id: String) -> String:
 	var endpoint := NPC_QUEST_ITEM_TURN_IN_ENDPOINT % turn_in_id.uri_encode()
 	return endpoint
 
-var mount_box_pending_requests: Dictionary = {}
+var inventory_use_pending_requests: Dictionary = {}
 var mount_collector_pending_requests: Dictionary = {}
 
 
@@ -581,11 +581,11 @@ func use_inventory_item(item_id: String) -> Dictionary:
 
 	var headers := GatewayApiConfig.get_json_headers()
 	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), normalized_item_id]
-	var is_mount_box := normalized_item_id.trim_suffix("-bound").ends_with("-mount-box")
-	if is_mount_box:
-		if not mount_box_pending_requests.has(request_key):
-			mount_box_pending_requests[request_key] = _new_request_id()
-		headers.append("Idempotency-Key: " + str(mount_box_pending_requests[request_key]))
+	var is_replayable_use := normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
+	if is_replayable_use:
+		if not inventory_use_pending_requests.has(request_key):
+			inventory_use_pending_requests[request_key] = _new_request_id()
+		headers.append("Idempotency-Key: " + str(inventory_use_pending_requests[request_key]))
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + INVENTORY_ITEM_USE_ENDPOINT % normalized_item_id.uri_encode(),
@@ -595,11 +595,14 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	)
 	if not bool(response.get("success", false)):
 		if int(response.get("status", 0)) >= 400 and int(response.get("status", 0)) < 500:
-			mount_box_pending_requests.erase(request_key)
+			inventory_use_pending_requests.erase(request_key)
 		return response
-	if is_mount_box:
-		mount_box_pending_requests.erase(request_key)
+	if is_replayable_use:
+		inventory_use_pending_requests.erase(request_key)
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	var wallet := _dictionary_from_value(body.get("wallet", {}))
+	if not wallet.is_empty():
+		get_node("/root/PlayerWalletService").apply_wallet_result({"success": true, "wallet": wallet})
 	var inventory: Dictionary = _dictionary_from_value(body.get("inventory", {}))
 	var appearance_inventory: Dictionary = _dictionary_from_value(body.get("appearanceInventory", {}))
 	var mount_box := _dictionary_from_value(body.get("mountBox", {}))
@@ -611,6 +614,8 @@ func use_inventory_item(item_id: String) -> Dictionary:
 		"itemId": str(body.get("itemId", normalized_item_id)),
 		"useAction": str(body.get("useAction", "")),
 		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
+		"creditAmount": maxi(int(body.get("creditAmount", 0)), 0),
+		"wallet": wallet,
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
 		"mountBox": mount_box,
 		"guild": _dictionary_from_value(body.get("guild", {})),

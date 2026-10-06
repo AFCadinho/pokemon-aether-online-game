@@ -420,8 +420,8 @@
     "shortDesc": "解锁超级阿勃梭鲁Z作为陆地坐骑。需要当前地区的坐骑许可证。"
   },
   "aether-gift-voucher": {
-    "name": "Aether Gift Voucher",
-    "shortDesc": "可用礼券余额：{amount}。可用于 Gift Store 中符合条件的外观和坐骑。购买的物品及所有箱内物品不可交易。只有 PokeAether 工作人员可以充值。"
+    "name": "Aether Credit Card",
+    "shortDesc": "可用额度：0。可购买 Gift Store 个人物品。所有购买物品和箱内物品不可交易。兑换 Credit Voucher 可充值。"
   },
   "mega-alakazam-mount-box": {
     "name": "超级胡地坐骑箱",
@@ -782,5 +782,21 @@
   "magikarp-mount-box": {
     "name": "鲤鱼王坐骑箱",
     "shortDesc": "包含一只鲤鱼王冲浪坐骑。初始异色概率：50%。"
+  },
+  "aether-credit-voucher-100": {
+    "name": "Aether Credit Voucher · 100",
+    "shortDesc": "兑换后为 Aether Credit Card 添加 100 额度。兑换前可交易。卡内额度购买的物品绑定账号。"
+  },
+  "aether-credit-voucher-250": {
+    "name": "Aether Credit Voucher · 250",
+    "shortDesc": "兑换后为 Aether Credit Card 添加 250 额度。兑换前可交易。卡内额度购买的物品绑定账号。"
+  },
+  "aether-credit-voucher-500": {
+    "name": "Aether Credit Voucher · 500",
+    "shortDesc": "兑换后为 Aether Credit Card 添加 500 额度。兑换前可交易。卡内额度购买的物品绑定账号。"
+  },
+  "aether-credit-voucher-1000": {
+    "name": "Aether Credit Voucher · 1,000",
+    "shortDesc": "兑换后为 Aether Credit Card 添加 1000 额度。兑换前可交易。卡内额度购买的物品绑定账号。"
   }
 }

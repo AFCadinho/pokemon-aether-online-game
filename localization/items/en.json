@@ -420,8 +420,8 @@
     "shortDesc": "Unlocks Mega Absol Z as a land mount. Requires a Mount License for the current region."
   },
   "aether-gift-voucher": {
-    "name": "Aether Gift Voucher",
-    "shortDesc": "Available voucher credit: {amount}. Spend it on eligible Gift Store cosmetics and mounts. Purchases and all box contents are untradeable. Only PokeAether staff can add credit."
+    "name": "Aether Credit Card",
+    "shortDesc": "Available card credit: 0. Spend it on personal Gift Store items. All purchases and box contents are untradeable. Claim Credit Vouchers to add credit."
   },
   "mega-alakazam-mount-box": {
     "name": "Mega Alakazam Mount Box",
@@ -782,5 +782,21 @@
   "magikarp-mount-box": {
     "name": "Magikarp Mount Box",
     "shortDesc": "Contains a Magikarp Surf mount. Base shiny chance: 50%."
+  },
+  "aether-credit-voucher-100": {
+    "name": "Aether Credit Voucher · 100",
+    "shortDesc": "Claim to add 100 credit to your Aether Credit Card. Tradeable until claimed. Card purchases are account-bound."
+  },
+  "aether-credit-voucher-250": {
+    "name": "Aether Credit Voucher · 250",
+    "shortDesc": "Claim to add 250 credit to your Aether Credit Card. Tradeable until claimed. Card purchases are account-bound."
+  },
+  "aether-credit-voucher-500": {
+    "name": "Aether Credit Voucher · 500",
+    "shortDesc": "Claim to add 500 credit to your Aether Credit Card. Tradeable until claimed. Card purchases are account-bound."
+  },
+  "aether-credit-voucher-1000": {
+    "name": "Aether Credit Voucher · 1,000",
+    "shortDesc": "Claim to add 1000 credit to your Aether Credit Card. Tradeable until claimed. Card purchases are account-bound."
   }
 }

@@ -77,6 +77,7 @@ const CATEGORY_ORDER: Array[String] = [
 	"mounts",
 	"charms",
 	"services",
+	"credits",
 ]
 const FEATURED_FALLBACK_ITEM_ORDER: Array[String] = [
 	"mysterious-outfit",
@@ -94,6 +95,7 @@ const CATEGORY_LABELS := {
 	"mounts": "Mounts",
 	"charms": "Charms",
 	"services": "Trainer Services",
+	"credits": "Credit Vouchers",
 }
 const CATEGORY_DESCRIPTIONS := {
 	"featured": "Popular picks across categories, with featured selections to fill the gaps.",
@@ -103,6 +105,7 @@ const CATEGORY_DESCRIPTIONS := {
 	"mounts": "Travel through the overworld in your own style.",
 	"charms": "Use supported field moves without carrying a Pokémon that knows them. Progression and area rules still apply.",
 	"services": "Optional changes to your trainer identity and account.",
+	"credits": "Tradeable vouchers bought with Gems. Claim one to add personal card credit.",
 }
 const CATEGORY_PROMISES := {
 	"featured": "FAIR SUPPORT",
@@ -112,6 +115,7 @@ const CATEGORY_PROMISES := {
 	"mounts": "TRAVEL STYLE",
 	"charms": "FIELD CONVENIENCE",
 	"services": "TRAINER SERVICE",
+	"credits": "PERSONAL CREDIT",
 }
 const COSMETIC_FILTER_GROUP_ORDER: Array[String] = [
 	"all",
@@ -146,6 +150,10 @@ const COSMETIC_SUBCATEGORY_LABELS := {
 }
 const STORE_PREVIEW_POLICY := preload("res://scripts/services/store_preview_appearance_policy.gd")
 const CATALOG: Array[Dictionary] = [
+	{"id": "aether-credit-voucher-100", "name": "Aether Credit Voucher · 100", "description": "Tradeable until claimed. Adds 100 credit to your personal Aether Credit Card.", "price": 100, "categories": ["credits"], "badge": "TRADEABLE", "icon": preload("res://assets/ui/store_voucher.svg")},
+	{"id": "aether-credit-voucher-250", "name": "Aether Credit Voucher · 250", "description": "Tradeable until claimed. Adds 250 credit to your personal Aether Credit Card.", "price": 250, "categories": ["credits"], "badge": "TRADEABLE", "icon": preload("res://assets/ui/store_voucher.svg")},
+	{"id": "aether-credit-voucher-500", "name": "Aether Credit Voucher · 500", "description": "Tradeable until claimed. Adds 500 credit to your personal Aether Credit Card.", "price": 500, "categories": ["credits"], "badge": "TRADEABLE", "icon": preload("res://assets/ui/store_voucher.svg")},
+	{"id": "aether-credit-voucher-1000", "name": "Aether Credit Voucher · 1,000", "description": "Tradeable until claimed. Adds 1,000 credit to your personal Aether Credit Card.", "price": 1000, "categories": ["credits"], "badge": "TRADEABLE", "icon": preload("res://assets/ui/store_voucher.svg")},
 	{
 		"id": "patreon-supporter-preview",
 		"name_key": "ui.store.patreon.name",
@@ -1452,7 +1460,7 @@ func _create_balance_pill() -> Control:
 	balances.add_theme_constant_override("v_separation", 4)
 	margin.add_child(balances)
 
-	for texture: Texture2D in [GEM_ICON, preload("res://assets/ui/store_voucher.svg")]:
+	for texture: Texture2D in [GEM_ICON, preload("res://assets/ui/store_credit_card.svg")]:
 		var icon := TextureRect.new()
 		icon.custom_minimum_size = Vector2(18, 18)
 		icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -1967,7 +1975,7 @@ func _create_character_preview_panel() -> Control:
 	payment_select.add_item(_t("ui.store.voucher.pay_gems"))
 	payment_select.add_item(_t("ui.store.voucher.pay_voucher"))
 	payment_select.set_item_icon(0, GEM_ICON)
-	payment_select.set_item_icon(1, preload("res://assets/ui/store_voucher.svg"))
+	payment_select.set_item_icon(1, preload("res://assets/ui/store_credit_card.svg"))
 	payment_select.item_selected.connect(func(_index: int) -> void: _refresh_purchase_state())
 	layout.add_child(payment_select)
 	voucher_notice_label = Label.new()
@@ -2358,7 +2366,7 @@ func _create_product_card(item: Dictionary) -> Button:
 
 	var title := Label.new()
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.text = _item_name(item)
+	title.text = _t("ui.credit_card.voucher_short", {"amount": _format_number(int(item.get("price", 0)))}) if item_id.begins_with("aether-credit-voucher-") else _item_name(item)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	title.add_theme_font_size_override("font_size", 13)
@@ -3132,7 +3140,7 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 			else _mount_box_price_text(price) if not _mount_box_mount_id(selected_item_id).is_empty()
 			else "◆ %s" % _format_number(price)
 		)
-		purchase_button.icon = preload("res://assets/ui/store_voucher.svg") if _payment_currency() == "gift_voucher" else null
+		purchase_button.icon = preload("res://assets/ui/store_credit_card.svg") if _payment_currency() == "gift_voucher" else null
 		purchase_button.expand_icon = true
 		purchase_button.add_theme_constant_override("icon_max_width", 16)
 		purchase_button.text = _t("ui.store.voucher.buy" if _payment_currency() == "gift_voucher" else "ui.store.purchase_with_price", {

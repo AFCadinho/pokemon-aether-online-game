@@ -27,6 +27,9 @@ func _run() -> void:
 	_check(overlay._bag_item_can_use_from_bag(item), "Voucher is usable from Bag")
 	_check(overlay._bag_item_can_assign_to_hotbar(item), "Voucher can be assigned to hotbar")
 	_check(overlay._bag_item_use_action_label(item) == "View balance", "Bag action names the balance dialog")
+	var topup := {"id": "aether-credit-voucher-100", "useAction": "redeem_credit_voucher", "quantity": 1}
+	_check(overlay._bag_item_can_use_from_bag(topup), "Credit Voucher can be claimed from Bag")
+	_check(overlay._bag_item_use_action_label(topup) == localization.text("ui.bag.action.redeem_voucher"), "Credit Voucher action describes redemption")
 	var dialog := DIALOG_SCENE.instantiate()
 	dialog.set_script(FakeDialog)
 	var host := Control.new()
@@ -76,7 +79,7 @@ func _run() -> void:
 		await dialog.open_balance()
 		await process_frame
 		await RenderingServer.frame_post_draw
-		root.get_texture().get_image().save_png("/home/adinho/Desktop/pokemonaetheronline/game/.worktrees/slot-b/voucher-balance-preview.png")
+		root.get_texture().get_image().save_png("user://credit-card-balance-preview.png")
 	var source := HotbarBagItemSlot.new()
 	source.hotbar_item = item
 	root.add_child(source)
