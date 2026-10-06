@@ -20,8 +20,16 @@ chance and shared pity rules. Descriptions show only the mount and base chance.
 
 Shiny artwork comes from the matching shiny follower sheets and shares the
 normal design, offsets and masks. Metagross is silver/gold; Salamence is green
-with red wings. The separately requested black/gold Metagross is an offline
-design concept, not this box's shiny reward.
+with red wings.
+
+Black & Gold Metagross is a separate grantable land mount:
+`metagross-black-gold-mount` unlocks `metagross_black_gold`. It is not a Gift
+Store product, has no box and cannot be obtained from the existing boxes.
+The permanent item uses the same ownership and regional-license requirements.
+Its approved charcoal/gold palette, source scale, rider positions and masks
+are preserved. The builder shares Metagross's design; `palette.json` records
+the exact source-color mapping. Render it with `--mounts=metagross_black_gold`
+without `--shiny`.
 
 Metagross's side seat is six source pixels higher and four pixels farther back
 than the initial concept. Its fixed body shifts keep the rider steady when the

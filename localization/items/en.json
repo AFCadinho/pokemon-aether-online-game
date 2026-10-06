@@ -554,5 +554,9 @@
   "salamence-mount-box": {
     "name": "Salamence Mount Box",
     "shortDesc": "Contains a Salamence mount. Base shiny chance: 50%."
+  },
+  "metagross-black-gold-mount": {
+    "name": "Black & Gold Metagross Mount",
+    "shortDesc": "Unlocks Black & Gold Metagross as a land mount. Requires a Mount License for the current region."
   }
 }

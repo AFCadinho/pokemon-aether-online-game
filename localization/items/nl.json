@@ -554,5 +554,9 @@
   "salamence-mount-box": {
     "name": "Salamence-mountbox",
     "shortDesc": "Bevat een Salamence-mount. Shiny-basiskans: 50%."
+  },
+  "metagross-black-gold-mount": {
+    "name": "Zwart-gouden Metagross-mount",
+    "shortDesc": "Ontgrendelt Zwart-gouden Metagross als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }
