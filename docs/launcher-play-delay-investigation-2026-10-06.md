@@ -60,6 +60,21 @@ userdata, configuration, caches and logs remain isolated by `slot-env`.
 
 ## Recommended follow-up
 
+Follow-up inspection confirms that production already downloads models on
+demand into `user://on-demand-3d-v1`. Battles and previews call `ensure_models()`;
+its installed-model path verifies only the requested identities against the
+pinned index and checks their size and SHA-256. It can reuse the launcher
+catalog, and missing or invalid requested models enter the downloader path.
+The startup sweep covers the separate launcher bundle collection, not the
+game's entire on-demand cache. Optional full-collection downloads still exist,
+so retaining access to those files remains useful; hashing every model at Play
+is redundant with the per-use checks in the normal on-demand flow.
+
+The preferred follow-up is therefore a lightweight, validated catalog handoff
+without a full model sweep, retaining per-use verification in the game. Verify
+metadata/path validation, corrupt and missing models, previous-generation
+fallback, and reuse of optional launcher downloads before changing that API.
+
 Move catalog verification to a worker, show a starting status and disable Play
 before beginning, then spawn the game on the main thread when verification
 completes. This preserves the checks while removing the frozen UI, although it
