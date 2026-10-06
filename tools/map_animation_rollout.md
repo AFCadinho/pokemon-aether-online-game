@@ -1,5 +1,22 @@
 # Native map animations
 
+## Town flower and grass reimport (2026-10-06)
+
+The current artist TMX files for Pallet Town, Viridian City, Cerulean City and
+Vermilion City were reimported through `import_pokeaether_tmx_cli.gd`. Their
+259 flower tiles retain their colours and use Lavender's 48-frame, 70 ms sway.
+Vermilion also has eight rooted grass tufts using the same cycle with a smaller
+1.8 px bend. Existing water, tree and tall-grass timelines were preserved for
+artwork still present in the current sources.
+
+`town_flower_grass_reimport_report.json` records source hashes, exact authored
+frames, cell counts, the original-visual backup and the cell comparison. Only
+Pallet's layout changed: its current source already contains 44 coastal tile
+corrections, including two animated Route 21 shore tiles. Gameplay scenes were
+unchanged. The historical animation catalog remains intact; the rollout report
+uses explicit animation overrides for these towns. Verify the new timelines
+with `tests/town_flower_grass_animation_check.gd`.
+
 ## Recovering water after reimports
 
 `restore_map_water_animations.gd` audits every current generated visual against
