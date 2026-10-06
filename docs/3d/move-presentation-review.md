@@ -10,6 +10,10 @@ Current follow-up: [completed move staging](completed-move-staging.md) covers th
 remaining 124 ordinary and 34 Z-moves after both battlefield batches. The register
 below is the earlier presentation review snapshot.
 
+Current approval: the user accepted all 194 current presentations on 2026-10-06.
+See the [approval register](current-move-approval.md); the technical review below
+remains a historical snapshot.
+
 ## Changes and findings
 
 Follow-up: [battlefield staging](battlefield-move-staging.md) replaces the

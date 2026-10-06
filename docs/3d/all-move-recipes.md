@@ -4,7 +4,8 @@ Implemented on 6 October 2026. All **193 moves registered in the 2D animation
 catalog** now have a native 3D route. Bubble Beam is also retained, giving
 **194 supported move keys**: 24 individually approved dedicated renderers and
 170 new, individually tunable family recipes. Draco Meteor was approved by the
-user before this batch; the new recipes still need individual visual review.
+user before this batch. The user has now accepted all current presentations; see
+the [current approval register](current-move-approval.md).
 
 This is parity with the existing 2D catalog, not a claim that all 919 gameplay
 move records have bespoke animations. Unsupported catalog additions remain

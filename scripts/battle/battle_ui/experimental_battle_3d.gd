@@ -76,6 +76,7 @@ var coop_target_highlight_index := -1
 var coop_target_highlight_actor: Node3D
 var coop_target_original_overlays: Dictionary = {}
 var coop_target_outline_material: ShaderMaterial
+const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
 
@@ -1566,7 +1567,7 @@ func _build_world() -> void:
 			world = forest_lease.main.world
 			camera = forest_lease.main.camera
 			arena_root = forest_lease.main.arena
-			camera.position = ArenaCatalog.camera_home(arena_id)
+			camera.position = _default_camera_home()
 			camera.look_at(ArenaCatalog.camera_target(arena_id))
 			_sync_render_size()
 			render_surface.texture = viewport.get_texture()
@@ -1609,7 +1610,7 @@ func _build_world() -> void:
 		world.add_child(arena_root)
 	elif not viewport.transparent_bg:
 		_build_classic_ground()
-	camera.position = ArenaCatalog.camera_home(arena_id)
+	camera.position = _default_camera_home()
 	camera.fov = ArenaCatalog.CAMERA_FOV
 	camera.look_at(ArenaCatalog.camera_target(arena_id))
 	camera.current = true
@@ -2189,6 +2190,14 @@ func _hybrid_size_limit() -> float:
 		limit = maxf(limit, maxf(rect.size.x / maxf(available.x, 1.0), rect.size.y / maxf(available.y, 1.0)))
 	return limit
 
+func _default_camera_home() -> Vector3:
+	var home := ArenaCatalog.camera_home(arena_id)
+	if double_mode or _is_hybrid_presentation(): return home
+	# A three-quarter single view, relative to each arena's own translated target.
+	# User orbit stays an offset from this home, so reset restores the same framing.
+	var target := ArenaCatalog.camera_target(arena_id)
+	return target + (home-target).rotated(Vector3.UP,SINGLE_CAMERA_YAW)
+
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	if settings.battle_presentation_mode == "2.5d":
@@ -2211,14 +2220,14 @@ func _update_camera(delta: float) -> void:
 		)
 	if not settings.battle_3d_camera_motion:
 		camera_phase = 0.0
-		camera.position = ArenaCatalog.camera_home(arena_id)
+		camera.position = _default_camera_home()
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
 		if all_resting:
 			camera_phase += delta * 0.22
 		var origin := ArenaCatalog.battle_origin(arena_id)
-		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
+		camera.position = origin + (_default_camera_home() - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
 	var focus_ready: bool = (

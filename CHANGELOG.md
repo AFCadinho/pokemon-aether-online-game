@@ -4,6 +4,8 @@
 
 - Add Gift Store filters for Gem affordability and Gift Voucher eligibility/affordability, plus name and price sorting alongside existing category filters and search.
 
+- Start single 3D battles from a three-quarter camera angle; camera reset restores this view while free orbit remains available.
+
 - Add shiny Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram mounts and Land Gift Store boxes: Giratina Origin/Yveltal cost 1,000 Aether Gems; Ho-Oh/Miraidon/Reshiram cost 750, with the existing shiny pity rules.
 
 - Give 3D Close Combat alternating red and blue fists, matching punch trails and a two-color finishing impact.

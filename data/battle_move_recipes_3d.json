@@ -29,7 +29,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "bodypress": {
       "name": "Body Press",
@@ -58,7 +58,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "extremespeed": {
       "name": "Extreme Speed",
@@ -96,7 +96,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "fakeout": {
       "name": "Fake Out",
@@ -134,7 +134,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "flipturn": {
       "name": "Flip Turn",
@@ -163,7 +163,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "frustration": {
       "name": "Frustration",
@@ -201,7 +201,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "gigaimpact": {
       "name": "Giga Impact",
@@ -239,7 +239,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "grassyglide": {
       "name": "Grassy Glide",
@@ -277,7 +277,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "headsmash": {
       "name": "Head Smash",
@@ -306,7 +306,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "headlongrush": {
       "name": "Headlong Rush",
@@ -335,7 +335,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "ironhead": {
       "name": "Iron Head",
@@ -364,7 +364,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "knockoff": {
       "name": "Knock Off",
@@ -393,7 +393,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "outrage": {
       "name": "Outrage",
@@ -431,7 +431,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "pursuit": {
       "name": "Pursuit",
@@ -469,7 +469,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "rapidspin": {
       "name": "Rapid Spin",
@@ -498,7 +498,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "return": {
       "name": "Return",
@@ -536,7 +536,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "rollout": {
       "name": "Rollout",
@@ -574,7 +574,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "spark": {
       "name": "Spark",
@@ -612,7 +612,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "uturn": {
       "name": "U-turn",
@@ -641,7 +641,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "woodhammer": {
       "name": "Wood Hammer",
@@ -670,7 +670,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "bulletpunch": {
       "name": "Bullet Punch",
@@ -699,7 +699,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "closecombat": {
       "name": "Close Combat",
@@ -938,7 +938,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "drainpunch": {
       "name": "Drain Punch",
@@ -976,7 +976,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "firepunch": {
       "name": "Fire Punch",
@@ -1014,7 +1014,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "highjumpkick": {
       "name": "High Jump Kick",
@@ -1052,7 +1052,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "icepunch": {
       "name": "Ice Punch",
@@ -1090,7 +1090,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "lowkick": {
       "name": "Low Kick",
@@ -1119,7 +1119,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "pound": {
       "name": "Pound",
@@ -1148,7 +1148,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "rocksmash": {
       "name": "Rock Smash",
@@ -1177,7 +1177,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "suckerpunch": {
       "name": "Sucker Punch",
@@ -1215,7 +1215,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "superpower": {
       "name": "Superpower",
@@ -1253,7 +1253,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "thunderpunch": {
       "name": "Thunder Punch",
@@ -1291,7 +1291,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "astonish": {
       "name": "Astonish",
@@ -1329,7 +1329,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "bugbite": {
       "name": "Bug Bite",
@@ -1358,7 +1358,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "ceaselessedge": {
       "name": "Ceaseless Edge",
@@ -1396,7 +1396,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "dragonclaw": {
       "name": "Dragon Claw",
@@ -1425,7 +1425,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "furyattack": {
       "name": "Fury Attack",
@@ -1454,7 +1454,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "kowtowcleave": {
       "name": "Kowtow Cleave",
@@ -1492,7 +1492,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "lick": {
       "name": "Lick",
@@ -1521,7 +1521,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "peck": {
       "name": "Peck",
@@ -1550,7 +1550,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "razorshell": {
       "name": "Razor Shell",
@@ -1579,7 +1579,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "vinewhip": {
       "name": "Vine Whip",
@@ -1608,7 +1608,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "wingattack": {
       "name": "Wing Attack",
@@ -1646,7 +1646,7 @@
           "end_fraction": 0.8
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "dragonbreath": {
       "name": "Dragon Breath",
@@ -1675,7 +1675,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "electroshot": {
       "name": "Electro Shot",
@@ -1713,7 +1713,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "hyperbeam": {
       "name": "Hyper Beam",
@@ -1742,7 +1742,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "scald": {
       "name": "Scald",
@@ -1780,7 +1780,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "solarbeam": {
       "name": "Solar Beam",
@@ -1809,7 +1809,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "voltswitch": {
       "name": "Volt Switch",
@@ -1847,7 +1847,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "fairywind": {
       "name": "Fairy Wind",
@@ -1876,7 +1876,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "hiddenpower": {
       "name": "Hidden Power",
@@ -1914,7 +1914,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "leafage": {
       "name": "Leafage",
@@ -1952,7 +1952,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "mudslap": {
       "name": "Mud-Slap",
@@ -1981,7 +1981,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "pyroball": {
       "name": "Pyro Ball",
@@ -2019,7 +2019,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "rockthrow": {
       "name": "Rock Throw",
@@ -2057,7 +2057,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "watershuriken": {
       "name": "Water Shuriken",
@@ -2086,7 +2086,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "weatherball": {
       "name": "Weather Ball",
@@ -2124,7 +2124,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "absorb": {
       "name": "Absorb",
@@ -2162,7 +2162,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "confusion": {
       "name": "Confusion",
@@ -2191,7 +2191,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "darkpulse": {
       "name": "Dark Pulse",
@@ -2229,7 +2229,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "disarmingvoice": {
       "name": "Disarming Voice",
@@ -2248,7 +2248,7 @@
       "source_id": 574,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "drainingkiss": {
       "name": "Draining Kiss",
@@ -2286,7 +2286,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "gust": {
       "name": "Gust",
@@ -2315,7 +2315,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "hex": {
       "name": "Hex",
@@ -2344,7 +2344,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "psychic": {
       "name": "Psychic",
@@ -2373,7 +2373,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "psychicnoise": {
       "name": "Psychic Noise",
@@ -2411,7 +2411,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "psyshock": {
       "name": "Psyshock",
@@ -2449,7 +2449,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "screech": {
       "name": "Screech",
@@ -2478,7 +2478,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "sparklingaria": {
       "name": "Sparkling Aria",
@@ -2516,7 +2516,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "supersonic": {
       "name": "Supersonic",
@@ -2545,7 +2545,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "bleakwindstorm": {
       "name": "Bleakwind Storm",
@@ -2574,7 +2574,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "twin-icy-spirals"
     },
     "blizzard": {
@@ -2634,7 +2634,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "branching-vents"
     },
     "earthquake": {
@@ -2712,7 +2712,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "caster-shockwave"
     },
     "freezedry": {
@@ -2751,7 +2751,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "crystal-front"
     },
     "heatwave": {
@@ -2811,7 +2811,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "wide-funnel"
     },
     "makeitrain": {
@@ -2850,7 +2850,7 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "coin-fountain-rain"
     },
     "powdersnow": {
@@ -2880,7 +2880,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "current-presentation-user-approved",
       "battlefield_staging": "low-powder-front"
     },
     "terastarstorm": {
@@ -2949,7 +2949,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "charm": {
       "name": "Charm",
@@ -2978,7 +2978,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "encore": {
       "name": "Encore",
@@ -3007,7 +3007,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "growl": {
       "name": "Growl",
@@ -3026,7 +3026,7 @@
       "source_id": 45,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "leechseed": {
       "name": "Leech Seed",
@@ -3055,7 +3055,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "leer": {
       "name": "Leer",
@@ -3084,7 +3084,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "poisonpowder": {
       "name": "Poison Powder",
@@ -3113,7 +3113,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "sandattack": {
       "name": "Sand Attack",
@@ -3142,7 +3142,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "sleeppowder": {
       "name": "Sleep Powder",
@@ -3171,7 +3171,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "smokescreen": {
       "name": "Smokescreen",
@@ -3200,7 +3200,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "spore": {
       "name": "Spore",
@@ -3229,7 +3229,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "stringshot": {
       "name": "String Shot",
@@ -3267,7 +3267,7 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "sweetscent": {
       "name": "Sweet Scent",
@@ -3296,7 +3296,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "tailwhip": {
       "name": "Tail Whip",
@@ -3325,7 +3325,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "taunt": {
       "name": "Taunt",
@@ -3363,7 +3363,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "thunderwave": {
       "name": "Thunder Wave",
@@ -3392,7 +3392,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "toxic": {
       "name": "Toxic",
@@ -3430,7 +3430,7 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "willowisp": {
       "name": "Will-O-Wisp",
@@ -3468,7 +3468,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "agility": {
       "name": "Agility",
@@ -3497,7 +3497,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "calmmind": {
       "name": "Calm Mind",
@@ -3526,7 +3526,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "charge": {
       "name": "Charge",
@@ -3555,7 +3555,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "defensecurl": {
       "name": "Defense Curl",
@@ -3584,7 +3584,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "doubleteam": {
       "name": "Double Team",
@@ -3613,7 +3613,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "dragondance": {
       "name": "Dragon Dance",
@@ -3642,7 +3642,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "focusenergy": {
       "name": "Focus Energy",
@@ -3671,7 +3671,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "growth": {
       "name": "Growth",
@@ -3700,7 +3700,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "harden": {
       "name": "Harden",
@@ -3729,7 +3729,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "howl": {
       "name": "Howl",
@@ -3748,7 +3748,7 @@
       "source_id": 336,
       "review": "first-pass",
       "audio": [],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "nastyplot": {
       "name": "Nasty Plot",
@@ -3777,7 +3777,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "recover": {
       "name": "Recover",
@@ -3806,7 +3806,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "roost": {
       "name": "Roost",
@@ -3835,7 +3835,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "swordsdance": {
       "name": "Swords Dance",
@@ -3873,7 +3873,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "withdraw": {
       "name": "Withdraw",
@@ -3902,7 +3902,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "auroraveil": {
       "name": "Aurora Veil",
@@ -3940,7 +3940,7 @@
           "end_fraction": 0.8677551020408163
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "chillyreception": {
       "name": "Chilly Reception",
@@ -3978,7 +3978,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "courtchange": {
       "name": "Court Change",
@@ -4007,7 +4007,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "defog": {
       "name": "Defog",
@@ -4036,7 +4036,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "electricterrain": {
       "name": "Electric Terrain",
@@ -4074,7 +4074,7 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "futuresight": {
       "name": "Future Sight",
@@ -4103,7 +4103,7 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "grassyterrain": {
       "name": "Grassy Terrain",
@@ -4132,7 +4132,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "haze": {
       "name": "Haze",
@@ -4161,7 +4161,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "lightscreen": {
       "name": "Light Screen",
@@ -4190,7 +4190,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "mistyterrain": {
       "name": "Misty Terrain",
@@ -4219,7 +4219,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "protect": {
       "name": "Protect",
@@ -4248,7 +4248,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "psychicterrain": {
       "name": "Psychic Terrain",
@@ -4286,7 +4286,7 @@
           "end_fraction": 0.9561904761904761
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "reflect": {
       "name": "Reflect",
@@ -4315,7 +4315,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "spikes": {
       "name": "Spikes",
@@ -4353,7 +4353,7 @@
           "end_fraction": 0.76
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "stealthrock": {
       "name": "Stealth Rock",
@@ -4382,7 +4382,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "stickyweb": {
       "name": "Sticky Web",
@@ -4411,7 +4411,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "substitute": {
       "name": "Substitute",
@@ -4449,7 +4449,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "teleport": {
       "name": "Teleport",
@@ -4478,7 +4478,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "toxicspikes": {
       "name": "Toxic Spikes",
@@ -4516,7 +4516,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "wish": {
       "name": "Wish",
@@ -4545,7 +4545,7 @@
           "end_fraction": 0.5599999999999999
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "current-presentation-user-approved"
     },
     "10000000voltthunderbolt": {
       "name": "10,000,000 Volt Thunderbolt",
@@ -4616,7 +4616,8 @@
         "impact_frame": 36,
         "observed_motifs": "Electric charge, repeated bolts, final overhead discharge",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "aciddownpour": {
       "name": "Acid Downpour",
@@ -4687,7 +4688,8 @@
         "impact_frame": 30,
         "observed_motifs": "Poison droplets gather into a tall spiral over the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "alloutpummeling": {
       "name": "All-Out Pummeling",
@@ -4748,7 +4750,8 @@
         "impact_frame": 26,
         "observed_motifs": "Rapid fists converge, then one heavy finishing blow",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "blackholeeclipse": {
       "name": "Black Hole Eclipse",
@@ -4809,7 +4812,8 @@
         "impact_frame": 59,
         "observed_motifs": "Dark orb grows inside red orbiting bands, then collapses",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "bloomdoom": {
       "name": "Bloom Doom",
@@ -4892,7 +4896,8 @@
         "impact_frame": 34,
         "observed_motifs": "Accelerating body rush with dust and a final collision",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "catastropika": {
       "name": "Catastropika",
@@ -4963,7 +4968,8 @@
         "impact_frame": 36,
         "observed_motifs": "Charged electric ball, lunge and overhead lightning",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "clangoroussoulblaze": {
       "name": "Clangorous Soulblaze",
@@ -5014,7 +5020,8 @@
         "impact_frame": 46,
         "observed_motifs": "Repeated widening purple sound rings toward the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "continentalcrush": {
       "name": "Continental Crush",
@@ -5075,7 +5082,8 @@
         "impact_frame": 48,
         "observed_motifs": "Rocks assemble overhead into a massive crushing formation",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "corkscrewcrash": {
       "name": "Corkscrew Crash",
@@ -5146,7 +5154,8 @@
         "impact_frame": 88,
         "observed_motifs": "Spinning metallic cone, forward drive and broken ground",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "devastatingdrake": {
       "name": "Devastating Drake",
@@ -5207,7 +5216,8 @@
         "impact_frame": 42,
         "observed_motifs": "Winged violet dragon energy with a winding flame trail",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "extremeevoboost": {
       "name": "Extreme Evoboost",
@@ -5268,7 +5278,8 @@
         "impact_frame": 73,
         "observed_motifs": "Eight evolution colors gather around the user and converge",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "genesissupernova": {
       "name": "Genesis Supernova",
@@ -5339,7 +5350,8 @@
         "impact_frame": 88,
         "observed_motifs": "Pink double helix, growing psychic orb and supernova",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "gigavolthavoc": {
       "name": "Gigavolt Havoc",
@@ -5400,7 +5412,8 @@
         "impact_frame": 33,
         "observed_motifs": "Electric charge followed by a thick column of lightning",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "guardianofalola": {
       "name": "Guardian of Alola",
@@ -5451,7 +5464,8 @@
         "impact_frame": 37,
         "observed_motifs": "Floating fragments assemble into a giant golden fist",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "hydrovortex": {
       "name": "Hydro Vortex",
@@ -5512,7 +5526,8 @@
         "impact_frame": 37,
         "observed_motifs": "Water funnels spiral inward, then merge into a tall vortex",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "infernooverdrive": {
       "name": "Inferno Overdrive",
@@ -5583,7 +5598,8 @@
         "impact_frame": 32,
         "observed_motifs": "Flame ring charges a projectile, then a large fire eruption",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "letssnuggleforever": {
       "name": "Let’s Snuggle Forever",
@@ -5654,7 +5670,8 @@
         "impact_frame": 94,
         "observed_motifs": "Shadow approaches, enveloping cloth shape and a flurry of blows",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "lightthatburnsthesky": {
       "name": "Light That Burns the Sky",
@@ -5715,7 +5732,8 @@
         "impact_frame": 87,
         "observed_motifs": "Small sun grows through rotating fire rings into a huge flare",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "maliciousmoonsault": {
       "name": "Malicious Moonsault",
@@ -5786,7 +5804,8 @@
         "impact_frame": 32,
         "observed_motifs": "Aerial approach and a fiery impact",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "menacingmoonrazemaelstrom": {
       "name": "Menacing Moonraze Maelstrom",
@@ -5857,7 +5876,8 @@
         "impact_frame": 27,
         "observed_motifs": "Lunar portal, descending light column and an energy burst",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "neverendingnightmare": {
       "name": "Never-Ending Nightmare",
@@ -5918,7 +5938,8 @@
         "impact_frame": 65,
         "observed_motifs": "Dark ground portal, surrounding chains and spectral constriction",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "oceanicoperetta": {
       "name": "Oceanic Operetta",
@@ -5969,7 +5990,8 @@
         "impact_frame": 48,
         "observed_motifs": "Musical notes accompany a growing water sphere, then a splash",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "pulverizingpancake": {
       "name": "Pulverizing Pancake",
@@ -6040,7 +6062,8 @@
         "impact_frame": 77,
         "observed_motifs": "Brief sleepy preparation, accelerating approach, leap and ground slam",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "savagespinout": {
       "name": "Savage Spin-Out",
@@ -6111,7 +6134,8 @@
         "impact_frame": 70,
         "observed_motifs": "Silk cocoon surrounds the target, tightens and bursts",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "searingsunrazesmash": {
       "name": "Searing Sunraze Smash",
@@ -6182,7 +6206,8 @@
         "impact_frame": 35,
         "observed_motifs": "Solar portal and a descending column wrapped in fire",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "shatteredpsyche": {
       "name": "Shattered Psyche",
@@ -6243,7 +6268,8 @@
         "impact_frame": 45,
         "observed_motifs": "Psychic ring, suspended glass-like cube, compression and shattering",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "sinisterarrowraid": {
       "name": "Sinister Arrow Raid",
@@ -6314,7 +6340,8 @@
         "impact_frame": 26,
         "observed_motifs": "Gathered arrows descend as a dark volley",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "soulstealing7starstrike": {
       "name": "Soul-Stealing 7-Star Strike",
@@ -6385,7 +6412,8 @@
         "impact_frame": 65,
         "observed_motifs": "Seven cyan points connect around the target before a dark finishing strike",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "splinteredstormshards": {
       "name": "Splintered Stormshards",
@@ -6436,7 +6464,8 @@
         "impact_frame": 40,
         "observed_motifs": "Rocks rise around the user and shower down onto the target",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "stokedsparksurfer": {
       "name": "Stoked Sparksurfer",
@@ -6507,7 +6536,8 @@
         "impact_frame": 83,
         "observed_motifs": "Electric motion streaks and a large downward lightning column",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "subzeroslammer": {
       "name": "Subzero Slammer",
@@ -6568,7 +6598,8 @@
         "impact_frame": 35,
         "observed_motifs": "Icy shards converge into an ice formation that breaks apart",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "supersonicskystrike": {
       "name": "Supersonic Skystrike",
@@ -6629,7 +6660,8 @@
         "impact_frame": 66,
         "observed_motifs": "Upward launch, fast descending aerial streaks and impact",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "tectonicrage": {
       "name": "Tectonic Rage",
@@ -6700,7 +6732,8 @@
         "impact_frame": 65,
         "observed_motifs": "Ground splits, dust rises and red energy erupts from the fissure",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     },
     "twinkletackle": {
       "name": "Twinkle Tackle",
@@ -6751,7 +6784,8 @@
         "impact_frame": 50,
         "observed_motifs": "Fairy-colored charge, sweeping approach and a sparkling climax",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "presentation_review": "current-presentation-user-approved"
     }
   }
 }
