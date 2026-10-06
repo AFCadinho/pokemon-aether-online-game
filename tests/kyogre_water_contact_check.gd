@@ -53,8 +53,8 @@ func _run() -> void:
 				var front_image := Mounts._get_texture_image(front.get_frame_texture("walk_left", 0))
 				var translucent := 0
 				var overlap := false
-				for y in range(224):
-					for x in range(192):
+				for y in range(front_image.get_height()):
+					for x in range(front_image.get_width()):
 						var a := front_image.get_pixel(x, y).a
 						if a > 0.0 and a < 1.0:
 							translucent += 1

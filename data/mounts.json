@@ -189,7 +189,7 @@
       "waterContactSheet": "res://assets/mounts/primal_kyogre/water_contact.png",
       "frameSize": [
         192,
-        224
+        320
       ],
       "movementAnimationSpeed": 7.5,
       "storePreviewScale": 1.0,
@@ -220,73 +220,73 @@
         "down": [
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ]
         ],
         "left": [
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ]
         ],
         "right": [
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ]
         ],
         "up": [
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ]
         ]
       }
@@ -302,7 +302,7 @@
       "waterContactSheet": "res://assets/mounts/primal_kyogre/water_contact.png",
       "frameSize": [
         192,
-        224
+        320
       ],
       "movementAnimationSpeed": 7.5,
       "storePreviewScale": 1.0,
@@ -333,73 +333,73 @@
         "down": [
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ],
           [
             0,
-            -51
+            0
           ]
         ],
         "left": [
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ]
         ],
         "right": [
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ],
           [
             0,
-            -31
+            0
           ]
         ],
         "up": [
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ],
           [
             0,
-            -56
+            0
           ]
         ]
       }

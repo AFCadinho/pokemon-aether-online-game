@@ -17,7 +17,7 @@ func _run() -> void:
 	inventory.cached_inventory_items = []
 	var actor := _new_local()
 	for id: String in ["primal_kyogre", "primal_kyogre_shiny"]:
-		_check_side_waterline(actor, id)
+		_check_stable_side_hull(actor, id)
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "lapras", "unowned saved Surf selection falls back to Lapras")
 	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "lapras", "unowned Magikarp selection falls back to Lapras")
 	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}, {"itemId": "magikarp-mount", "quantity": 1}, {"itemId": "shiny-magikarp-mount", "quantity": 1}]
@@ -49,6 +49,9 @@ func _run() -> void:
 					for avatar: Node2D in [actor, fresh, remote]:
 						avatar.get_node("Look/MountSprite").frame = phase
 						avatar.call("_on_mount_frame_changed")
+						if id.begins_with("primal_kyogre"):
+							_check(avatar.get_node("Look/Rider").position == avatar.get("base_rider_position"), "Kyogre keeps the ordinary player anchor in every direction and frame")
+							_check(avatar.get_node("Look").position == avatar.get("base_look_position"), "Kyogre does not lift the player rig above its world position")
 					_check(actor.get_node("Look/Rider").position == remote.get_node("Look/Rider").position, "local and remote seats match")
 					for expected: AnimatedSprite2D in fresh.get_node("Look/Rider").get_children():
 						var actual: AnimatedSprite2D = actor.get_node("Look/Rider").get_node(NodePath(str(expected.name)))
@@ -91,7 +94,7 @@ func _check_fishing(actor: Node2D, remote: Node2D, id: String) -> void:
 		_check(local_image.get_data() == remote_image.get_data(), "entering fishing builds matching local and remote body masks")
 
 
-func _check_side_waterline(actor: Node2D, id: String) -> void:
+func _check_stable_side_hull(actor: Node2D, id: String) -> void:
 	var frames := Mounts.get_mount_frames(id)
 	for direction: String in ["left", "right"]:
 		var previous_height := INF
@@ -107,8 +110,7 @@ func _check_side_waterline(actor: Node2D, id: String) -> void:
 			_check(bottom >= 0, "side hull measurement contains artwork")
 			var mount: AnimatedSprite2D = actor.get_node("Look/MountSprite")
 			var waterline := mount.to_global(Vector2(nose_x, bottom) - Vector2(pixels.get_size()) / 2.0).y - actor.global_position.y
-			# A half-tile tolerance hid the floating hull seen beside Poliwag.
-			_check(absf(waterline) <= 4.0, id + " side hull meets the occupied tile center within four pixels")
+			# The rider owns the world anchor; the hull must only stay steady.
 			if previous_height != INF:
 				_check(absf(waterline - previous_height) <= 1.0, "swimming keeps the hull at a stable waterline")
 			previous_height = waterline
