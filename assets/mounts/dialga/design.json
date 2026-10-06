@@ -8,11 +8,11 @@
       76
     ],
     [
-      70,
+      80,
       88
     ],
     [
-      58,
+      48,
       88
     ],
     [
@@ -22,7 +22,40 @@
   ],
   "head": [
     [],
-    [],
+    [
+      [
+        24,
+        44
+      ],
+      [
+        76,
+        44
+      ],
+      [
+        76,
+        64
+      ],
+      [
+        64,
+        76
+      ],
+      [
+        60,
+        88
+      ],
+      [
+        56,
+        98
+      ],
+      [
+        38,
+        96
+      ],
+      [
+        26,
+        82
+      ]
+    ],
     null,
     []
   ],
@@ -87,7 +120,7 @@
       ]
     ]
   ],
-  "note": "Front head retained; side head moved 12 pixels forward to clear the face while preserving the entire crest. Mount and rider lowered together to the walking ground line.",
+  "note": "Original side head/neck restored intact. Rider sits 10 source pixels farther back on the body to clear the crest. Front head pose and grounded alignment retained.",
   "frameShifts": {
     "down": [
       [
@@ -204,88 +237,8 @@
       ],
       "foreground": true
     },
-    {
-      "polygon": [
-        [
-          24,
-          44
-        ],
-        [
-          76,
-          44
-        ],
-        [
-          76,
-          64
-        ],
-        [
-          64,
-          76
-        ],
-        [
-          60,
-          88
-        ],
-        [
-          56,
-          98
-        ],
-        [
-          38,
-          96
-        ],
-        [
-          26,
-          82
-        ]
-      ],
-      "offset": [
-        -12,
-        0
-      ],
-      "foreground": true
-    },
-    {
-      "polygon": [
-        [
-          104,
-          44
-        ],
-        [
-          52,
-          44
-        ],
-        [
-          52,
-          64
-        ],
-        [
-          64,
-          76
-        ],
-        [
-          68,
-          88
-        ],
-        [
-          72,
-          98
-        ],
-        [
-          90,
-          96
-        ],
-        [
-          102,
-          82
-        ]
-      ],
-      "offset": [
-        12,
-        0
-      ],
-      "foreground": true
-    },
+    null,
+    null,
     null
   ],
   "groundOffsetY": 16

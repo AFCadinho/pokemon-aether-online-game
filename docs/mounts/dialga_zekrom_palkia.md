@@ -6,12 +6,14 @@
 | Zekrom | `zekrom-mount` |
 | Shiny Zekrom | `shiny-zekrom-mount` |
 | Palkia | `palkia-mount` |
+| Shiny Palkia | `shiny-palkia-mount` |
 
 These mounts can be granted through existing administration/reward
 tooling. Ownership unlocks the corresponding Land selector entry; the current
-region's Mount License remains required. Dialga and Palkia remain grant-only.
-Zekrom has a Land Gift Store box for 750 Aether Gems or eligible Gift Voucher
-credits. It grants a normal or shiny Zekrom using the shared 50/60/70/80 pity
+region's Mount License remains required. Dialga remains grant-only.
+Zekrom and Palkia each have a Land Gift Store box for 750 Aether Gems or
+eligible Gift Voucher credits. Each grants the corresponding normal or shiny
+mount using the shared 50/60/70/80 pity
 rules; the short description shows the mount and 50% base chance.
 Suicune is deferred.
 
@@ -22,10 +24,10 @@ Source sheets and reproducible design specifications are checked in.
 
 Dialga's front head is lowered 24 source pixels with its full crest/horns
 preserved. Its relocated head alpha is explicitly included in the foreground;
-the side head remains complete and now sits 12 source pixels farther forward
-to keep the long crest clear of the rider’s face. Palkia's side rider sits above
-the shoulder
-armor, with the rear tail in front only below the torso. Zekrom keeps the rider
+the side head and neck now retain their exact original pixels and connection.
+The side rider sits ten source pixels farther back on the saddle, keeping the
+face clear of the crest without moving or cutting the head. Palkia's side rider
+sits above the shoulder armor, with the rear tail in front only below the torso. Zekrom keeps the rider
 between the wings and uses six pixels of visual hover. Dialga and Palkia do not
 hover. Their complete mount/rider artwork is 16 pixels lower than the first
 integration, matching the normal walking/Cobalion/Glaceon ground line. The
@@ -44,3 +46,10 @@ Render the actual game rig with `tools/preview_land_mount_collection.gd` and
 Shiny Zekrom uses the matching shiny follower palette (green-tinted dark body
 and green highlights), with identical source alpha, rider offsets and masks.
 Render it with `--mounts=zekrom --shiny`.
+
+Shiny Palkia uses the matching pink shiny follower palette and shares the
+approved normal ground position, seats, silhouette and masks exactly. Render
+with `--mounts=palkia --shiny`.
+
+Use `--adinho` to additionally check the male Adinho hair, beard, glasses and
+outfit on the game rig; the female preview retains its default appearance.

@@ -2,7 +2,7 @@ extends SceneTree
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 var failed := false
 
@@ -16,7 +16,7 @@ func _run() -> void:
 	for base: String in IDS:
 		all_ids.append(base + "_shiny")
 	all_ids.append("metagross_black_gold")
-	all_ids.append_array(["dialga", "palkia"])
+	all_ids.append_array(["dialga"])
 	for id: String in all_ids:
 		var item := ("shiny-" if id.ends_with("_shiny") else "") + id.trim_suffix("_shiny").replace("_", "-") + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " item resolves")
@@ -67,6 +67,7 @@ func _run() -> void:
 						_check(art.get_data() == first.get_data(), id + " idle starts at the reviewed pose")
 	_check_repaired_anatomy()
 	_check_grounded_dragon_mounts()
+	_check_dialga_side_anatomy()
 	print("Land mount collection checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -89,6 +90,28 @@ func _check_grounded_dragon_mounts() -> void:
 				var art := Mounts._get_texture_image(frames.get_frame_texture("walk_" + direction, phase))
 				var foot_y := art.get_used_rect().end.y - art.get_height() / 2
 				_check(foot_y == ground_y + 2 * (phase % 2), id + " shares the grounded foot line and retains its animation bob")
+
+
+func _check_dialga_side_anatomy() -> void:
+	# Moving the head independently broke the connection to the neck.
+	# Preserve every source pixel in side views; clear the face using the seat.
+	var source := Image.load_from_file("res://assets/mounts/dialga/source.png")
+	var frames := Mounts.get_mount_frames("dialga")
+	for row in [1, 2]:
+		var first := source.get_region(Rect2i(0, row * 128, 128, 128))
+		var origin := Vector2i(32, 128 - first.get_used_rect().end.y)
+		for phase in range(4):
+			var expected := Image.create(192, 192, false, Image.FORMAT_RGBA8)
+			expected.blit_rect(source, Rect2i(phase * 128, row * 128, 128, 128), origin)
+			var actual := Mounts._get_texture_image(frames.get_frame_texture("walk_" + DIRECTIONS[row], phase))
+			var intact := true
+			for y in range(192):
+				for x in range(192):
+					var pixel := expected.get_pixel(x, y)
+					var found := actual.get_pixel(x, y)
+					if pixel.a != found.a or (pixel.a > 0 and pixel != found):
+						intact = false
+			_check(intact, "Dialga side head and neck retain the complete original anatomy in phase %d" % phase)
 
 
 func _check_repaired_anatomy() -> void:

@@ -1621,37 +1621,37 @@
         ],
         "left": [
           [
-            6,
+            16,
             -26
           ],
           [
-            6,
+            16,
             -24
           ],
           [
-            6,
+            16,
             -26
           ],
           [
-            6,
+            16,
             -24
           ]
         ],
         "right": [
           [
-            -6,
+            -16,
             -26
           ],
           [
-            -6,
+            -16,
             -24
           ],
           [
-            -6,
+            -16,
             -26
           ],
           [
-            -6,
+            -16,
             -24
           ]
         ],
@@ -1976,6 +1976,105 @@
       "idleRiderMaskSheet": "res://assets/mounts/zekrom_shiny/idle_rider_mask.png",
       "iconTexture": "res://assets/mounts/zekrom_shiny/icon.png",
       "unlockItemId": "shiny-zekrom-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "palkia_shiny": {
+      "displayName": "Shiny Palkia",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/palkia_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/palkia_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/palkia_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -42
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -42
+          ],
+          [
+            0,
+            -40
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -38
+          ],
+          [
+            16,
+            -36
+          ],
+          [
+            16,
+            -38
+          ],
+          [
+            16,
+            -36
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -38
+          ],
+          [
+            -16,
+            -36
+          ],
+          [
+            -16,
+            -38
+          ],
+          [
+            -16,
+            -36
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/palkia_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/palkia_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/palkia_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/palkia_shiny/icon.png",
+      "unlockItemId": "shiny-palkia-mount",
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,

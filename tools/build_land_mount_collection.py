@@ -9,9 +9,9 @@ import json
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence', 'zekrom')
+BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence', 'zekrom', 'palkia')
 SPECIAL_VARIANTS = {'metagross_black_gold': 'metagross'}
-GRANT_ONLY_IDS = ('dialga', 'palkia')
+GRANT_ONLY_IDS = ('dialga',)
 IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS) + GRANT_ONLY_IDS
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
