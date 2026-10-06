@@ -103,6 +103,9 @@ func _run() -> void:
 	await process_frame
 	report.complete = true
 	report["phase"] = phase
+	report["engine_os"] = OS.get_name()
+	report["engine_version"] = Engine.get_version_info()
+	report["engine_architecture"] = "x86_64" if OS.has_feature("x86_64") else ("arm64" if OS.has_feature("arm64") else "unknown")
 	save_report()
 	print("NATIVE_STREAMING_COLLECTION_OK ", phase)
 	quit()

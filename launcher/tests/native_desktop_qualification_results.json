@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "task": "lossless-desktop-qualification",
+  "workflow_prepared": true,
+  "workflow_executed_on_github": false,
+  "windows_qualified": false,
+  "macos_intel_qualified": false,
+  "macos_arm64_qualified": false,
+  "production_approved": false,
+  "fixture": {
+    "sha256": "0acc710748557f1818033ef2dab07ef7d7e0bb74c35bb24e021f6bd3caee754d",
+    "bytes": 606979690,
+    "bundles": 11,
+    "appearances": 22,
+    "decoded_equality": true,
+    "production_approved": false
+  },
+  "linux_portable_control": {
+    "report_sha256": "33a3d721414c7a81e4af10eb8992a731415b49a1893c924de2b39d4a3c94a51d",
+    "godot_version": "4.6.2.stable.official.71f334935",
+    "complete": true,
+    "verified_appearances_per_completed_phase": 22,
+    "restart_resume_bytes": 262144,
+    "same_process_resume_bytes": 1048576,
+    "rollback_downloads": 0
+  },
+  "checks": {
+    "transport_unit_tests": 11,
+    "actionlint": "1.7.12 passed",
+    "python_compilation": "passed",
+    "whitespace": "passed"
+  }
+}
