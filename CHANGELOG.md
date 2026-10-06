@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.
+
 - Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.
 
 - Restore Miraidon mount limb and torso details, clear the rider’s face in front view, and keep Miraidon and Yveltal rear tails visible in front of the rider’s lower body.

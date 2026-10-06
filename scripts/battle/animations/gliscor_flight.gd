@@ -6,7 +6,7 @@ const DATA = preload("res://resources/battle/model_animations/gliscor_flight.jso
 const LIBRARY_PATH := "res://resources/battle/model_animations/gliscor_flight.res"
 
 static func matches(identity: String, digest: String) -> bool:
-	return DATA.data.models.has(identity) and DATA.data.models[identity] == digest
+	return preload("res://scripts/battle/animations/lossless_model_revisions.gd").matches(identity, digest, DATA.data.models)
 
 static func profile_for(identity: String, digest: String, original: Dictionary) -> Dictionary:
 	if not matches(identity, digest):

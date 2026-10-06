@@ -23,6 +23,19 @@ of the new encoded hashes. See
 [launcher/battle evidence](../../docs/lossless-model-launcher-validation.md).
 
 
+### Complete-catalog preparation follow-up
+
+The six correction bindings now accept only explicitly verified 256 KiB / Zstd 9
+container hashes of their unchanged original rigs, while retaining the original
+hashes. Real Forward+ comparisons pass all 138 corrected pose/envelope samples,
+including normal/shiny and independent actors. The complete approved v10 source
+archive map has been found locally: 1,200 pairs / 2,400 appearances. An unpublished
+complete draft and original rollback references are prepared with raw-byte
+verification; measured results are recorded separately. Catalog admission and
+release pins remain unchanged. Strict image reference, full runtime/memory and
+platform/update qualification remain required before rollout. See
+[complete-catalog preparation](../../docs/lossless-model-catalog-preparation.md).
+
 ## Batch 04 — initial intake and composition probes (2026-09-27)
 
 The first review-only pipeline pass processed all 226 candidates. Source intake
