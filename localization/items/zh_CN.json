@@ -766,5 +766,21 @@
   "magikarp-mount": {
     "name": "鲤鱼王坐骑",
     "shortDesc": "解锁鲤鱼王冲浪坐骑。需要拥有冲浪权限。"
+  },
+  "shiny-caterpie-mount": {
+    "name": "异色绿毛虫坐骑",
+    "shortDesc": "解锁异色绿毛虫陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "caterpie-mount-box": {
+    "name": "绿毛虫坐骑箱",
+    "shortDesc": "包含一只绿毛虫坐骑。初始异色概率：50%。"
+  },
+  "shiny-magikarp-mount": {
+    "name": "异色鲤鱼王坐骑",
+    "shortDesc": "解锁异色鲤鱼王冲浪坐骑。需要拥有冲浪权限。"
+  },
+  "magikarp-mount-box": {
+    "name": "鲤鱼王坐骑箱",
+    "shortDesc": "包含一只鲤鱼王冲浪坐骑。初始异色概率：50%。"
   }
 }

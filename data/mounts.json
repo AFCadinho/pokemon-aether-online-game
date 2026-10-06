@@ -3372,6 +3372,209 @@
           10
         ]
       }
+    },
+    "caterpie_shiny": {
+      "displayName": "Shiny Caterpie",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/caterpie_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/caterpie_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/caterpie_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4,
+      "hoverHeight": 0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -16
+          ],
+          [
+            0,
+            -14
+          ]
+        ],
+        "left": [
+          [
+            10,
+            -2
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            2
+          ]
+        ],
+        "right": [
+          [
+            -10,
+            -2
+          ],
+          [
+            -10,
+            0
+          ],
+          [
+            -10,
+            0
+          ],
+          [
+            -10,
+            2
+          ]
+        ],
+        "up": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      },
+      "unlockItemId": "shiny-caterpie-mount",
+      "iconTexture": "res://assets/mounts/caterpie_shiny/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/caterpie_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/caterpie_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/caterpie_shiny/idle_rider_mask.png"
+    },
+    "magikarp_shiny": {
+      "displayName": "Shiny Magikarp",
+      "movementMode": "surf",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/magikarp_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/magikarp_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/magikarp_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4,
+      "hoverHeight": 0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -6
+          ],
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -6
+          ]
+        ]
+      },
+      "unlockItemId": "shiny-magikarp-mount",
+      "iconTexture": "res://assets/mounts/magikarp_shiny/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/magikarp_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/magikarp_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/magikarp_shiny/idle_rider_mask.png",
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
     }
   }
 }

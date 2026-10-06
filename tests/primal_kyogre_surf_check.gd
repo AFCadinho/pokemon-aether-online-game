@@ -19,8 +19,9 @@ func _run() -> void:
 	_check_side_waterline(actor)
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "lapras", "unowned saved Surf selection falls back to Lapras")
 	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "lapras", "unowned Magikarp selection falls back to Lapras")
-	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}, {"itemId": "magikarp-mount", "quantity": 1}]
+	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}, {"itemId": "magikarp-mount", "quantity": 1}, {"itemId": "shiny-magikarp-mount", "quantity": 1}]
 	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "magikarp", "Magikarp grant unlocks the selected Surf mount")
+	_check(actor.call("_resolve_owned_surf_mount", "magikarp_shiny") == "magikarp_shiny", "Shiny Magikarp grant unlocks Surf")
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "primal_kyogre", "grant unlocks the selected Surf mount")
 	_check(Mounts.get_mount_movement_mode("primal_kyogre") == "surf", "Kyogre belongs to Surf")
 	_check(Mounts.resolve_mount_id_for_mode("primal_kyogre", "land").is_empty(), "Kyogre cannot be used as a land mount")
@@ -31,7 +32,7 @@ func _run() -> void:
 	for gender: String in ["male", "female"]:
 		save.gender = gender
 		save.appearance_body_id = Appearance.DEFAULT_FEMALE_BODY_ID if gender == "female" else Appearance.DEFAULT_MALE_BODY_ID
-		for id: String in ["lapras", "magikarp", "primal_kyogre_shiny", "magikarp", "primal_kyogre", "primal_kyogre_shiny", "lapras", "magikarp", "primal_kyogre"]:
+		for id: String in ["lapras", "magikarp_shiny", "magikarp", "magikarp_shiny", "primal_kyogre_shiny", "magikarp", "primal_kyogre", "primal_kyogre_shiny", "lapras", "magikarp", "primal_kyogre"]:
 			actor.call("_on_mount_loadout_changed", "surf", id)
 			var fresh := _new_local()
 			fresh.set("active_mount_id", id)
@@ -56,7 +57,7 @@ func _run() -> void:
 							var b := Mounts._get_texture_image(expected.sprite_frames.get_frame_texture(expected.animation, expected.frame))
 							_check(a.get_data() == b.get_data(), "mount switch matches freshly composed rider pixels")
 			fresh.free()
-	for id: String in ["primal_kyogre", "magikarp"]:
+	for id: String in ["primal_kyogre", "magikarp", "magikarp_shiny"]:
 		_check_fishing(actor, remote, id)
 	actor.free()
 	remote.free()

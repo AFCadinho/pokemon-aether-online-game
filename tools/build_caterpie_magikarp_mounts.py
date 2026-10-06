@@ -39,10 +39,14 @@ def caterpie_source(original):
 
 def build(mount_id):
     folder = ROOT/'assets/mounts'/mount_id
-    config = json.loads((folder/'design.json').read_text())
+    base_id = mount_id.removesuffix('_shiny')
+    config = json.loads((ROOT/'assets/mounts'/base_id/'design.json').read_text())
     source = (caterpie_source(Image.open(folder/'follower_original.png').convert('RGBA'))
-              if mount_id == 'caterpie' else Image.open(folder/'source.png').convert('RGBA'))
+              if base_id == 'caterpie' else Image.open(folder/'source.png').convert('RGBA'))
     assert source.size == (256, 256)
+    if mount_id.endswith('_shiny'):
+        normal = Image.open(ROOT/'assets/mounts'/base_id/'source.png').convert('RGBA')
+        assert source.getchannel('A').tobytes() == normal.getchannel('A').tobytes(), 'Shiny geometry must match approved normal art'
     layers = {key: Image.new('RGBA', (768, 768)) for key in ('mount', 'foreground', 'rider_mask')}
     offsets = {}
     for row, direction in enumerate(DIRECTIONS):
@@ -88,7 +92,7 @@ def main():
     parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
     catalog = json.loads((ROOT/'data/mounts.json').read_text())['mounts']
-    for mount_id in ('caterpie', 'magikarp'):
+    for mount_id in ('caterpie', 'magikarp', 'caterpie_shiny', 'magikarp_shiny'):
         folder, layers, offsets = build(mount_id)
         assert catalog[mount_id]['riderOffsets'] == offsets, f'{mount_id}: review seat offsets'
         for name, art in layers.items():

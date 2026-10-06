@@ -11,9 +11,10 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for id: String in ["caterpie", "magikarp"]:
-		var mode := "land" if id == "caterpie" else "surf"
-		var item := id + "-mount"
+	for id: String in ["caterpie", "magikarp", "caterpie_shiny", "magikarp_shiny"]:
+		var base_id := id.trim_suffix("_shiny")
+		var mode := "land" if base_id == "caterpie" else "surf"
+		var item := ("shiny-" if id.ends_with("_shiny") else "") + base_id + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " inventory item resolves")
 		_check(Mounts.get_mount_movement_mode(id) == mode, id + " selects the correct movement mode")
 		_check(not Mounts.is_mount_unlocked(id, []), id + " needs its grant")
@@ -29,6 +30,9 @@ func _run() -> void:
 		var expected_bottom := reference.get_used_rect().end.y - reference.get_height() / 2
 		var frames := Mounts.get_mount_frames(id)
 		var foreground := Mounts.get_mount_foreground_frames(id)
+		if id.ends_with("_shiny"):
+			_check(Mounts._get_mask_image(id).get_data() == Mounts._get_mask_image(base_id).get_data(), id + " retains the approved rider mask")
+			_check(Mounts._get_mask_image(id, true).get_data() == Mounts._get_mask_image(base_id, true).get_data(), id + " retains the approved idle mask")
 		for row in range(4):
 			var direction: String = DIRS[row]
 			for moving: bool in [false, true]:
