@@ -16,6 +16,11 @@ restore the exact approved files. Original-only resource-retention diagnostics
 still expose sequence-dependent pixels, so the visual gate remains held.
 No production assets, admissions or distribution indexes changed. See
 [research evidence](../../docs/lossless-native-model-compression-research.md).
+The later actual launcher/download/update/rollback fixture and unchanged
+three-round battle frame gate pass for all eleven sampled pairs at both block
+sizes. Six hash-bound pose/animation appearances require explicit qualification
+of the new encoded hashes. See
+[launcher/battle evidence](../../docs/lossless-model-launcher-validation.md).
 
 
 ## Batch 04 — initial intake and composition probes (2026-09-27)

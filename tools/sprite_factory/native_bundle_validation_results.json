@@ -1,0 +1,310 @@
+{
+  "schema": 1,
+  "date": "2026-10-06",
+  "scope": "Local actual launcher and real-battle native container qualification of eleven pairs",
+  "production_approved": false,
+  "strict_visual_gate_passed": false,
+  "fixture_sha256": "7e9e06fb070fc7283a9a2209822f4c56293d3a30ab90e078f3524fabce536be2",
+  "archives": [
+    {
+      "label": "original",
+      "archive_bytes": 365356392,
+      "saving_percent": 0.0
+    },
+    {
+      "label": "native-256k",
+      "archive_bytes": 241229040,
+      "saving_percent": 33.97432061350113
+    },
+    {
+      "label": "native-1m",
+      "archive_bytes": 236976214,
+      "saving_percent": 35.1383418522482
+    }
+  ],
+  "launcher": {
+    "report_sha256": "3de3e7ba1f4afdc421dd303242c6a1595aef1120db1facaf315cd8e5b52c5bc8",
+    "pairs": 11,
+    "appearances": 22,
+    "phases": 5,
+    "initial_and_update_index_downloads": 3,
+    "published_pins_reject_fixture": true,
+    "future_release_metadata_generated_in_isolated_projects": true,
+    "restart_no_op": true,
+    "rollback_to_original_via_actual_downloader_and_installer": true,
+    "cancel_preserves_active": true,
+    "corrupt_download_preserves_active": true,
+    "bad_manifest_preserves_active": true,
+    "truncated_archive_preserves_active": true,
+    "immutable_version_preserves_active": true,
+    "installed_bundle_downloads": 44
+  },
+  "battle": [
+    {
+      "label": "original",
+      "report_sha256": "188e752274bd0cd338e074aa5f9ec4c1c86a8077b3c6863c57723dd690ad0314",
+      "receipt_sha256": "26de7eb41fd8b6589d2d5f64295d934dac1e63ad6d5cf5ca45eb8b78fb7de7da",
+      "rounds": [
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.281,
+          "frame_max_ms": 993.11,
+          "static_bytes": 338466110.0,
+          "retained_source_bytes": 33643761.0,
+          "frame_samples": 3740.0
+        },
+        {
+          "arena": "stadium",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.356,
+          "frame_max_ms": 369.542,
+          "static_bytes": 343894211.0,
+          "retained_source_bytes": 33643761.0,
+          "frame_samples": 3459.0
+        },
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.424,
+          "frame_max_ms": 166.58,
+          "static_bytes": 343959355.0,
+          "retained_source_bytes": 33643761.0,
+          "frame_samples": 3455.0
+        }
+      ],
+      "steady_frame_p95_ms": {
+        "classic": {
+          "p95_ms": 17.335,
+          "samples": 5280.0
+        },
+        "stadium": {
+          "p95_ms": 17.337,
+          "samples": 2640.0
+        }
+      },
+      "forced_test_frames": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "peak_child_rss_bytes": null,
+      "registry_restored": true,
+      "performance_gate_passed": true
+    },
+    {
+      "label": "native-256k",
+      "report_sha256": "8d98fb3c4d617d120002cebbdb45b743668b1bbf76ab12f19fa34413256619bd",
+      "receipt_sha256": "52934b379df7f5f0036d0cd38b14770fda79bef99de100b18560150b4031b2ed",
+      "rounds": [
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.838,
+          "frame_max_ms": 158.278,
+          "static_bytes": 341432877.0,
+          "retained_source_bytes": 22740102.0,
+          "frame_samples": 3388.0
+        },
+        {
+          "arena": "stadium",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 19.276,
+          "frame_max_ms": 288.338,
+          "static_bytes": 346914378.0,
+          "retained_source_bytes": 22740102.0,
+          "frame_samples": 3372.0
+        },
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.289,
+          "frame_max_ms": 97.188,
+          "static_bytes": 346980962.0,
+          "retained_source_bytes": 22740102.0,
+          "frame_samples": 3340.0
+        }
+      ],
+      "steady_frame_p95_ms": {
+        "classic": {
+          "p95_ms": 17.654,
+          "samples": 5280.0
+        },
+        "stadium": {
+          "p95_ms": 19.276,
+          "samples": 2640.0
+        }
+      },
+      "forced_test_frames": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "peak_child_rss_bytes": null,
+      "registry_restored": true,
+      "performance_gate_passed": true
+    },
+    {
+      "label": "native-1m",
+      "report_sha256": "5c1f95c8acd1ddef639f9ee77a5fc3499d52538514724dfaae5eeecd42255ff0",
+      "receipt_sha256": "d5be1f6b3e93efb717b94d33f4861e4e53fb21fc1630f4ec1a4c19aa2b7fe11d",
+      "rounds": [
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.232,
+          "frame_max_ms": 150.875,
+          "static_bytes": 340687425.0,
+          "retained_source_bytes": 22559455.0,
+          "frame_samples": 3346.0
+        },
+        {
+          "arena": "stadium",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.194,
+          "frame_max_ms": 269.795,
+          "static_bytes": 346210944.0,
+          "retained_source_bytes": 22559455.0,
+          "frame_samples": 3338.0
+        },
+        {
+          "arena": "classic",
+          "pairs": 11.0,
+          "faint_replacements": 11.0,
+          "frame_p95_ms": 17.194,
+          "frame_max_ms": 99.081,
+          "static_bytes": 346274244.0,
+          "retained_source_bytes": 22559455.0,
+          "frame_samples": 3324.0
+        }
+      ],
+      "steady_frame_p95_ms": {
+        "classic": {
+          "p95_ms": 17.206,
+          "samples": 5280.0
+        },
+        "stadium": {
+          "p95_ms": 17.183,
+          "samples": 2640.0
+        }
+      },
+      "forced_test_frames": 0,
+      "viewport": [
+        1280,
+        720
+      ],
+      "peak_child_rss_bytes": 2199150592,
+      "registry_restored": true,
+      "performance_gate_passed": true
+    }
+  ],
+  "registry_source_sha256_after_restoration": "c3371469a80010fb0accbe55fa44452e35f852906a5e97429ad78dc681eccf6a",
+  "pose_binding_audit": {
+    "report_sha256": "5fea4c5b017255b117652e739fc7633bbc0eb8e71e8fdceb204f7735b7aa4dbd",
+    "prototype_only": true,
+    "production_approved": false,
+    "entries": [
+      {
+        "identity": "gliscor",
+        "helper": "gliscor_flight",
+        "bound_original_sha256": "947713990135bb6fe476a672eb3aa1c35d7c24ae0c527766fd936124d4c218b0",
+        "source_sha256": "947713990135bb6fe476a672eb3aa1c35d7c24ae0c527766fd936124d4c218b0",
+        "raw_sha256": "6ede280c933ab38b07f9c077321799bbde4febb53c4cd8996337705d9d8676cd",
+        "new_sha256": {
+          "262144": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1",
+          "1048576": "dd3b036200e94f0fc7cd64259a32463bb1d673c9fc18150440d7f902cfc98b8c"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      },
+      {
+        "identity": "gliscor@shiny",
+        "helper": "gliscor_flight",
+        "bound_original_sha256": "317e6e5b20fdb92b4ed0afb648445b45329636c0549dcb9ae8a248ceb0da86fb",
+        "source_sha256": "317e6e5b20fdb92b4ed0afb648445b45329636c0549dcb9ae8a248ceb0da86fb",
+        "raw_sha256": "db44736aa1c1212ffe714234a2f915319daa6dac90f2fabc4ca22fc360b590fe",
+        "new_sha256": {
+          "262144": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8",
+          "1048576": "2f97ccda5592e16c1ce7d33f0a6a061d611a6234afd6fb00b6008900615e979a"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      },
+      {
+        "identity": "garchomp-mega",
+        "helper": "mega_garchomp_standing",
+        "bound_original_sha256": "2fd69c50b179de38ebf0353ea6d9d006ee749b79c4d58da16c779d778e09758b",
+        "source_sha256": "2fd69c50b179de38ebf0353ea6d9d006ee749b79c4d58da16c779d778e09758b",
+        "raw_sha256": "c3e68ee34736ffa8fb6b885d70ea9f4600f1726004634ed4e30cdf3f36038b7d",
+        "new_sha256": {
+          "262144": "b878a45366990747a272e28ad652ccfdeeb91433e077378edea5c009ef98c9ea",
+          "1048576": "32c86723f7cd7baf82e6c13fd9664b8e4b0bc955d7e4d4cd7b91b78137de33a5"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      },
+      {
+        "identity": "garchomp-mega@shiny",
+        "helper": "mega_garchomp_standing",
+        "bound_original_sha256": "304f0c095a7292bd3947d58eca1b36a404696fda5fe370750a5b51f6eb752fcf",
+        "source_sha256": "304f0c095a7292bd3947d58eca1b36a404696fda5fe370750a5b51f6eb752fcf",
+        "raw_sha256": "5fbdca433d939946f5c5a5b1f9421df24bddca198ff513463477e0acd436aeab",
+        "new_sha256": {
+          "262144": "b604129db08fddc3b083b00e783e2257da49254a8958d4fa525a3b1a5279939c",
+          "1048576": "cf6cf12051e905be9a68971bee298112df090235a450811be47318d6e34e179a"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      },
+      {
+        "identity": "charmander",
+        "helper": "charmander_breath",
+        "bound_original_sha256": "23805df764f17e7e8df8851d9c7caf8d40ddaa49efb15262d7534ad4b2084b45",
+        "source_sha256": "23805df764f17e7e8df8851d9c7caf8d40ddaa49efb15262d7534ad4b2084b45",
+        "raw_sha256": "058b58b7c1337168a191e266d56a1b8b0ad04f191b3102ace7467ef7c011aee5",
+        "new_sha256": {
+          "262144": "e38e1f1211f10f70b6f501a41f542ebfdb4af10ba68d09b9c5abd35368b13c03",
+          "1048576": "33ae53a1a2d8bcb0fa273f297f077f8b95b004c9e3abe598fe1f042187b1f370"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      },
+      {
+        "identity": "charmander@shiny",
+        "helper": "charmander_breath",
+        "bound_original_sha256": "8925306feb3eb7cad31cbc624b44174faf54a0b23feb22d3e44271513b1b4d41",
+        "source_sha256": "8925306feb3eb7cad31cbc624b44174faf54a0b23feb22d3e44271513b1b4d41",
+        "raw_sha256": "ba78f97acf60606414d5403a04ccbd553f3b4c508cedaab5f5c999f71982cc37",
+        "new_sha256": {
+          "262144": "c7af6457438225ef9e5e946e7bc8278b3eca0af68a78072765f3365c5213ac58",
+          "1048576": "0df5cd31570cbf8419b06928a0ec0512e800b52a80ae2d45c3dc84a1bdc79ac5"
+        },
+        "original_matches_binding": true,
+        "new_matches_binding": false
+      }
+    ],
+    "required_followup": "Qualify new lossless encoded hashes and retain original compatibility in pose-correction ledgers; do not inherit corrections for changed raw rigs."
+  },
+  "focused_tests": {
+    "python_tests": 9,
+    "py_compile_passed": true,
+    "uid_sidecars_complete": true,
+    "diff_check_passed": true
+  },
+  "holds": [
+    "Strict image reference still differs on unchanged original scenes",
+    "Full 1200-bundle conversion and platform qualification not performed",
+    "Six pose/animation bindings require explicit qualification for re-encoded hashes and old-file compatibility",
+    "Successive catalog revisions with equal ID sets need release pin handling",
+    "Complete peak RSS/VRAM and decoded-cache budget not certified"
+  ],
+  "recommendation": "Use 256 KiB / level 9 for the wider qualification first; measured ZIP savings 33.97%, smaller reader buffer, only 4.25 MB difference from 1 MiB in this sample."
+}

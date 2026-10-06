@@ -1,5 +1,10 @@
 # Lossless native-model compression research — 2026-10-06
 
+Follow-up: [actual launcher installation and real-battle qualification](lossless-model-launcher-validation.md)
+now passes for the eleven-pair sample at both native block sizes. This also
+identifies six hash-bound pose/animation appearances requiring explicit metadata
+qualification before a whole-catalog rollout. Production approval remains held.
+
 The current v10 collection contains 1,200 bundles / 2,400 appearances. Its
 pinned download total is 19,863,374,075 bytes and the installed model snapshot
 is 19,863,404,982 bytes. This renewed investigation was explicitly requested
