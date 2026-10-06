@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lengthen Thor’s walking cape and lift its rounded hem more visibly for both models, preserving the approved idle poses and matching electric sparks to the extended cloth.
+
 - Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
 
 - Refine Thor’s silhouette with a wider resting cape, a continuous trailing cloth shape while walking, a slimmer armor waist, and the hammer behind the cape when viewed from the back.

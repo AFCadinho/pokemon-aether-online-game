@@ -14,6 +14,7 @@ func _run() -> void:
 	var previous: Dictionary = save.to_appearance_state()
 	var old_gender: String = save.gender
 	for gender: String in ["male", "female"]:
+		_check_cape_origin(gender)
 		for category: String in PARTS:
 			_check(APPEARANCE.get_available_part_ids(category, gender).has(PARTS[category]), "%s %s registered" % [gender, category])
 			_check(not APPEARANCE.is_free_part_id(category, PARTS[category]), "%s requires ownership" % category)
@@ -108,3 +109,18 @@ func _check(ok: bool, label: String) -> void:
 	else:
 		failed = true
 		push_error("FAIL " + label)
+
+# Expanded effect sheets must settle at the exact wardrobe origin, without a
+# pop when switching to folded/static rendering. Compare every frame and plane.
+func _check_cape_origin(gender: String) -> void:
+	for category: String in ["cape", "cape_overlay"]:
+		var static_image := (load("res://assets/player/%s/%s/Thor_Hammer.png" % [gender, category]) as Texture2D).get_image()
+		var idle_image := (load("%s/%s/%s_0.png" % [EFFECT.ASSET_ROOT, gender, category]) as Texture2D).get_image()
+		var size := idle_image.get_width() / 4
+		var padding := (size - 64) / 2
+		for direction: int in range(4):
+			for frame: int in range(4):
+				var expected := Image.create(size, size, false, Image.FORMAT_RGBA8)
+				expected.blit_rect(static_image, Rect2i(frame * 64, direction * 64, 64, 64), Vector2i(padding, padding))
+				var actual := idle_image.get_region(Rect2i(frame * size, direction * size, size, size))
+				_check(expected.get_data() == actual.get_data(), "%s %s idle keeps body origin %d/%d" % [gender, category, direction, frame])

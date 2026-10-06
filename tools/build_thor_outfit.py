@@ -13,7 +13,18 @@ NEAREST=Image.Resampling.NEAREST
 def blank(n=32): return Image.new('RGBA',(n,n))
 def read(p): return Image.open(p).convert('RGBA')
 def native(p): return read(p).resize((128,128),NEAREST)
-def cell(im,d,c): return im.crop((c*32,d*32,c*32+32,d*32+32))
+def cell(im,d,c):
+    n=im.width//4
+    return im.crop((c*n,d*n,(c+1)*n,(d+1)*n))
+
+def resize_cells(im,n):
+    """Pad/crop around the body origin, without scaling any painted pixel."""
+    old=im.width//4; out=blank(n*4); offset=(n-old)//2
+    for d in range(4):
+        for c in range(4):
+            frame=blank(n);frame.alpha_composite(cell(im,d,c),(offset,offset))
+            out.paste(frame,(c*n,d*n))
+    return out
 def skin(p): return p[3]>0 and p[0]>p[1]>p[2] and p[0]-p[2]>35
 
 def anchor(reference, target):
@@ -38,7 +49,8 @@ def shade(im,palette):
     return out
 
 def cape(d,pose,phase,off,wide_idle=False):
-    im=blank(); draw=ImageDraw.Draw(im); dx,dy=off
+    im=blank(48 if wide_idle else 32); draw=ImageDraw.Draw(im); dx,dy=off
+    pad=(im.width-32)//2
     # Four-direction authored cloth silhouettes; the centre stays below the head.
     if d in [0,3]:
         if pose==0:
@@ -47,26 +59,25 @@ def cape(d,pose,phase,off,wide_idle=False):
             # the shoulders attached and the folded fish/ride poses intact.
             pts=([(11,20),(20,20),(23,22),(25,25),(26,28),(24,29),(20,28),(16,29),(11,28),(7,29),(5,28),(6,25),(8,22)]
                  if wide_idle else [(11,20),(20,20),(23,26),(23,28),(19,27),(16,28),(12,27),(8,28),(9,24)])
-        elif pose==1:pts=[(11,20),(20,20),(24,22),(27,25),(26,28),(22,27),(16,28),(9,27),(5,28),(4,25),(7,22)]
+        elif pose==1:pts=[(11,20),(20,20),(25,20),(28,22),(28,26),(24,28),(19,27),(16,28),(11,27),(7,28),(3,26),(3,22),(7,20)]
         else:
             flutter=1 if phase in [1,3] else 0
-            # Wind lifts the continuous hem a little; never raise separate
-            # tips beside the head, which reads as wings instead of cloth.
-            pts=[(11,20),(20,20),(24,21),(28,23),(27,26+flutter),(23,27),(20,26+flutter),(16,27),(12,26+flutter),(8,27),(4,26+flutter),(3,23),(7,21)]
+            # Broad, rounded cloth folds: lifted hem, no separate pointed tips.
+            pts=[(11,20),(20,20),(25,18),(29,18+flutter),(31,20+flutter),(30,24),(26,26),(21,25),(16,26),(11,25),(6,26),(1,24),(0,20+flutter),(2,18+flutter),(6,18)]
     else:
         if pose==0:
             pts=([(12,20),(18,20),(21,22),(24,26),(24,28),(21,29),(17,28),(14,27),(11,26)]
                  if wide_idle else [(12,20),(18,20),(21,27),(19,29),(14,27),(11,26)])
-        elif pose==1:pts=[(12,20),(18,20),(23,21),(27,23),(27,26),(23,28),(17,27),(12,25)]
-        else:pts=[(12,20),(18,20),(23,20),(29,21+(phase%2)),(30,23+(phase%2)),(27,26),(22,27),(17,27),(12,25)]
+        elif pose==1:pts=[(12,20),(18,20),(24,20),(30,21),(33,23),(32,26),(28,28),(23,29),(17,28),(12,25)]
+        else:pts=[(12,20),(18,20),(24,19),(31,17+(phase%2)),(36,17+(phase%2)),(38,19+(phase%2)),(37,23),(33,25),(28,26),(23,26),(17,27),(12,25)]
         if d==2:pts=[(31-x,y) for x,y in pts]
-    pts=[(x+dx,y+dy) for x,y in pts];draw.polygon(pts,fill=INK)
+    pts=[(x+dx+pad,y+dy+pad) for x,y in pts];draw.polygon(pts,fill=INK)
     mask=im.getchannel('A')
     # Crisp red folds, no smooth gradients or baked electric particles.
-    for y in range(32):
-        for x in range(32):
-            if mask.getpixel((x,y)) and all(0<=xx<32 and 0<=yy<32 and mask.getpixel((xx,yy)) for xx,yy in [(x-1,y),(x+1,y),(x,y-1),(x,y+1)]):
-                color=['#872137','#bb2d42','#ee4c56','#bb2d42','#541b2d'][(x-dx+phase//2)%5]
+    for y in range(im.height):
+        for x in range(im.width):
+            if mask.getpixel((x,y)) and all(0<=xx<im.width and 0<=yy<im.height and mask.getpixel((xx,yy)) for xx,yy in [(x-1,y),(x+1,y),(x,y-1),(x,y+1)]):
+                color=['#872137','#bb2d42','#ee4c56','#bb2d42','#541b2d'][(x-dx-pad+phase//2)%5]
                 im.putpixel((x,y),Image.new('RGBA',(1,1),color).getpixel((0,0)))
     return im
 
@@ -104,7 +115,8 @@ for gender in ['male','female']:
         body=native(partpath(gender,'body',bodyid,style))
         templates={k:native(partpath(gender,k,v,style)) for k,v in [('top','Shirt'),('bottom','Trousers'),('shoes','Shoes')]}
         layers={k:shade(v,[INK,DARK,MID,LIGHT] if k!='shoes' else [INK,DARK,LIGHT,STEEL]) for k,v in templates.items()}
-        capes=[blank(128) for _ in range(3)]; overlays=[blank(128) for _ in range(3)];heads=[]
+        cape_size=48 if not style else 32;pad=(cape_size-32)//2
+        capes=[blank(cape_size*4) for _ in range(3)]; overlays=[blank(cape_size*4) for _ in range(3)];heads=[]
         for d in range(4):
             for c in range(4):
                 b=cell(body,d,c);off=anchor(cell(walkbase,d,0),b);dx,dy=off
@@ -145,23 +157,23 @@ for gender in ['male','female']:
                 layers['top'].paste(art,(c*32,d*32))
                 weapon,head=hammer(b,d,off,style);heads.append(list(head))
                 for pose in range(3):
-                    cloth=cape(d,pose,c,off,wide_idle=not style);rear=blank();front=blank()
+                    cloth=cape(d,pose,c,off,wide_idle=not style);rear=blank(cape_size);front=blank(cape_size)
                     # Viewed from behind, cloth occludes the hand-held hammer.
                     # Keep exposed hammer pixels outside the cape silhouette.
                     if d==3:
-                        front.alpha_composite(weapon)
+                        front.alpha_composite(weapon,(pad,pad))
                         front.alpha_composite(cloth)
                     else:
                         rear.alpha_composite(cloth)
-                        front.alpha_composite(weapon)
+                        front.alpha_composite(weapon,(pad,pad))
                     if d < 3:
                         reference=cell(walkbase,d,0)
                         for fy in range(6,21):
                             for fx in range(8,24):
                                 if skin(reference.getpixel((fx,fy))):
-                                    assert not front.getpixel((fx+dx,fy+dy))[3], (gender,style,d,c,'accessory covers face')
+                                    assert not front.getpixel((fx+dx+pad,fy+dy+pad))[3], (gender,style,d,c,'accessory covers face')
                                     assert not art.getpixel((fx+dx,fy+dy))[3], (gender,style,d,c,'armor covers face')
-                    capes[pose].paste(rear,(c*32,d*32));overlays[pose].paste(front,(c*32,d*32))
+                    capes[pose].paste(rear,(c*cape_size,d*cape_size));overlays[pose].paste(front,(c*cape_size,d*cape_size))
         save(layers['top'],partpath(gender,'top','Thor_Shirt',style))
         for cat,id,starter in [('bottom','Thor_Trousers','Trousers'),('shoes','Thor_Shoes','Shoes')]:
             # Preserve exact source coverage, including half-grid pixels in the
@@ -170,17 +182,17 @@ for gender in ['male','female']:
             result=shade(full,[INK,DARK,MID,LIGHT] if cat=='bottom' else [INK,DARK,LIGHT,STEEL])
             target=partpath(gender,cat,id,style);target.parent.mkdir(parents=True,exist_ok=True);result.save(target)
         for cat,poses in [('cape',capes),('cape_overlay',overlays)]:
-            save(poses[0],partpath(gender,cat,'Thor_Hammer',style))
+            save(resize_cells(poses[0],32),partpath(gender,cat,'Thor_Hammer',style))
             if not style:
                 for p,im in enumerate(poses):save(im,ROOT/f'assets/player/effects/thor/{gender}/{cat}_{p}.png')
         if not style:metadata[gender]['hammer_heads']=heads
         for pose in range(3 if not style else 1):
-            comp=blank(128)
-            for im in [capes[pose],body,layers['bottom'],layers['shoes'],layers['top'],overlays[pose]]:comp.alpha_composite(im)
+            comp=blank(cape_size*4)
+            for im in [capes[pose],body,layers['bottom'],layers['shoes'],layers['top'],overlays[pose]]:comp.alpha_composite(resize_cells(im,cape_size))
             # Preview-only hair from the previously approved, registered collection.
             assets=CONCEPT.parents[1]/'overworld/skins/Outfit Designs'
             hair=assets/('Female Variants' if gender=='female' else '')/'Aether Voyager'/({'':'Walking','fish':'Fishing','ride':'Surfing'}[style])/'Hair.png'
-            comp.alpha_composite(native(hair))
+            comp.alpha_composite(resize_cells(native(hair),cape_size))
             previews[(gender,style,pose)]=comp
     for cat,id in [('top','Thor_Shirt'),('bottom','Thor_Trousers'),('shoes','Thor_Shoes'),('cape','Thor_Hammer')]:
         p=ROOT/f'assets/player/{gender}/{cat}/parts_manifest.json';vals=json.loads(p.read_text());
@@ -211,7 +223,7 @@ for tick in range(32):
         dr.text((8,gi*160+5),g+' / '+('lopen' if moving else 'stilstaan'),fill=INK)
         im=previews[(g,'',pose)]
         for d in range(4):
-            f=cell(im,d,col).resize((128,128),NEAREST);frame.paste(f,(d*256+64,gi*160+24),f)
+            f=cell(im,d,col).resize((192,192),NEAREST);frame.paste(f,(d*256+32,gi*160-8),f)
     frames.append(frame)
 frames[0].save(out/'Cape-beweging.gif',save_all=True,append_images=frames[1:],duration=100,loop=0,disposal=2)
 print('Thor: both genders, all garment/movement sheets, three directional cape poses and trainer layers built.')

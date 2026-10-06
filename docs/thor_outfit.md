@@ -4,6 +4,8 @@
 
 Walking/running raises the cape through three authored silhouettes in 0.16 seconds. Stopping lowers it over 0.30 seconds. The cloth and hammer follow the authoritative body frame, including the head bob and hand grip in each direction. Godot draws short cyan arcs and drifting square sparks along the accessory edges, with occasional sparks at rest. The effect does not alter movement, damage or collision. Rear/front cape planes inherit the actor's depth and visibility; switching cape, removing the hammer or leaving the actor frees both effects. No new multiplayer state is needed: remote avatars use the same appearance and animation hooks.
 
+Walking effect sheets use 96×96 cells (48 native pixels), with transparent padding around the unchanged body origin. This leaves room for the longer lifted cloth and its sparks. Static wardrobe/activity sheets retain 64×64 cells; the resting cloth is pixel-identical after removing the effect padding. The renderer derives cell dimensions from each sheet.
+
 Fishing and mounted activities use separate folded cape sheets, with no walking electricity. Fishing hides the hammer to keep the rod clear. Trainer and dialogue layers retain the approved armor and cape, plus a hammer layer controlled by the same Back item. Skin, hair and faces remain independent. Trousers and boots preserve each original Starter mask, including the original fine pixels in female fishing trousers.
 
 ## Rebuild and preview

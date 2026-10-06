@@ -80,21 +80,26 @@ func advance(delta: float) -> void:
 func cache_spark_points() -> void:
 	spark_points.clear()
 	var image := sheet_images[pose]
+	var cell_size := image.get_width() / 4
+	var half := cell_size / 2
 	# Select only visible cloth/hammer edge pixels, not skin or face positions.
-	for y: int in range(0, 64, 2):
-		for x: int in range(0, 64, 2):
-			var color := image.get_pixel(column * 64 + x, direction * 64 + y)
+	for y: int in range(0, cell_size, 2):
+		for x: int in range(0, cell_size, 2):
+			var color := image.get_pixel(column * cell_size + x, direction * cell_size + y)
 			if color.a == 0.0:
 				continue
-			if x > 0 and image.get_pixel(column * 64 + x - 2, direction * 64 + y).a > 0.0:
+			if x > 0 and image.get_pixel(column * cell_size + x - 2, direction * cell_size + y).a > 0.0:
 				continue
-			spark_points.append(Vector2(x - 32, y - 32))
+			spark_points.append(Vector2(x - half, y - half))
 
 
 func _draw() -> void:
 	if sheets.is_empty():
 		return
-	draw_texture_rect_region(sheets[pose], Rect2(-32, -32, 64, 64), Rect2(column * 64, direction * 64, 64, 64))
+	# Larger cloth cells keep the same body origin; extra space is transparent.
+	var cell_size := sheets[pose].get_width() / 4
+	var half := cell_size / 2
+	draw_texture_rect_region(sheets[pose], Rect2(-half, -half, cell_size, cell_size), Rect2(column * cell_size, direction * cell_size, cell_size, cell_size))
 	if spark_points.is_empty():
 		return
 	var tick := floori(elapsed * 12.0)

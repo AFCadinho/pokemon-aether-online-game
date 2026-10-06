@@ -11,14 +11,14 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
-	root.size = Vector2i(960, 560)
+	root.size = Vector2i(1120, 560)
 	canvas = SubViewport.new()
-	canvas.size = Vector2i(960, 560)
+	canvas.size = Vector2i(1120, 560)
 	canvas.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(canvas)
 	root.title = "PokeAether — Thor cape"
 	var background := ColorRect.new()
-	background.size = Vector2(960, 560)
+	background.size = Vector2(1120, 560)
 	background.color = Color("263746")
 	canvas.add_child(background)
 	caption = Label.new()
@@ -29,7 +29,7 @@ func _run() -> void:
 		var gender := "male" if g == 0 else "female"
 		for d: int in range(4):
 			var group := Node2D.new()
-			group.position = Vector2(120 + d * 240, 145 + g * 240)
+			group.position = Vector2(140 + d * 280, 145 + g * 240)
 			group.scale = Vector2(3, 3)
 			canvas.add_child(group)
 			var parts := {"cape": "Thor_Hammer", "body": "Gen4_Base_v1" if g == 0 else "Gen4_Base_F_v1", "bottom": "Thor_Trousers", "shoes": "Thor_Shoes", "top": "Thor_Shirt", "cape_overlay": "Thor_Hammer", "hair": "Hair"}
@@ -47,7 +47,7 @@ func _run() -> void:
 					effects.append(effect)
 			var label := Label.new()
 			label.text = gender.capitalize() + " · " + ["Voor", "Links", "Rechts", "Achter"][d]
-			label.position = Vector2(60 + d * 240, 254 + g * 240)
+			label.position = Vector2(80 + d * 280, 254 + g * 240)
 			canvas.add_child(label)
 	var args := OS.get_cmdline_user_args()
 	var output := args[0] if not args.is_empty() else "user://thor-preview"
