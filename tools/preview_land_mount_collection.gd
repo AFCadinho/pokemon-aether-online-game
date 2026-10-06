@@ -14,6 +14,8 @@ func _run() -> void:
 	var shiny := "--shiny" in OS.get_cmdline_user_args()
 	var adinho_outfit := "--adinho" in OS.get_cmdline_user_args()
 	var selected_ids: Array = IDS.duplicate()
+	if not shiny:
+		selected_ids.append_array(["toucannon", "arcanine", "aerodactyl"])
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")

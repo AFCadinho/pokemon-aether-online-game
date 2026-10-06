@@ -698,5 +698,17 @@
   "lugia-sky-captain-outfit": {
     "name": "Lugia Sky Captain 服装礼盒",
     "shortDesc": "打开此男性专用礼盒，获得Lugia Sky Captain的独立服装部件。"
+  },
+  "toucannon-mount": {
+    "name": "铳嘴大鸟坐骑",
+    "shortDesc": "解锁铳嘴大鸟作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "arcanine-mount": {
+    "name": "风速狗坐骑",
+    "shortDesc": "解锁风速狗作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "aerodactyl-mount": {
+    "name": "化石翼龙坐骑",
+    "shortDesc": "解锁化石翼龙作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

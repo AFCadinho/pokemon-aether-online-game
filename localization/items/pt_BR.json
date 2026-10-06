@@ -698,5 +698,17 @@
   "lugia-sky-captain-outfit": {
     "name": "Lugia Sky Captain Caixa de traje",
     "shortDesc": "Abra esta caixa masculina para receber as peças de Lugia Sky Captain."
+  },
+  "toucannon-mount": {
+    "name": "Montaria Toucannon",
+    "shortDesc": "Desbloqueia Toucannon como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "arcanine-mount": {
+    "name": "Montaria Arcanine",
+    "shortDesc": "Desbloqueia Arcanine como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "aerodactyl-mount": {
+    "name": "Montaria Aerodactyl",
+    "shortDesc": "Desbloqueia Aerodactyl como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

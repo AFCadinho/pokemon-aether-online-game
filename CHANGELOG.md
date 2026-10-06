@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
+
 - Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
 
 - Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.
