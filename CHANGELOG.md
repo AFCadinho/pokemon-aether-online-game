@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Animate both Aether Clash lobby fountains with water cascading down their plinths, small splashes and ripples.
+
 - Use Kyogre's mouth height for side interactions with NPCs and objects, without moving the rider, mount or collision position.
 
 - Align normal and shiny Kyogre's face with the occupied tile's interaction line, keeping its rider and water effects together.
