@@ -10,9 +10,34 @@ func _run() -> void:
 	var outfits: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/male_adventure_outfits.json"))
 	_check(outfits.size() == 6, "all six adaptive outfits are registered")
 	for outfit: Dictionary in outfits:
+		_check_male_fit(outfit)
 		for gender: String in ["male", "female"]:
 			_check_outfit(outfit, gender)
 	quit(1 if failed else 0)
+
+func _check_male_fit(outfit: Dictionary) -> void:
+	# Compare every animation pixel to the existing Starter garments. This catches
+	# high/wide hips and boots even when the sheet paths and dimensions are valid.
+	for category: String in ["bottom", "shoes"]:
+		var starter_id := "Trousers" if category == "bottom" else "Shoes"
+		for movement: String in ["walk", "fish", "ride"]:
+			var actual := APPEARANCE.get_part_frames(category, outfit["parts"][category], "male", movement)
+			var starter := APPEARANCE.get_part_frames(category, starter_id, "male", movement)
+			if actual == null or starter == null:
+				_check(false, "%s %s fit comparison has both sheets" % [outfit["name"], movement])
+				continue
+			for direction: String in ["down", "left", "right", "up"]:
+				var animation := StringName("walk_" + direction)
+				for index: int in range(4):
+					var garment := actual.get_frame_texture(animation, index).get_image()
+					var reference := starter.get_frame_texture(animation, index).get_image()
+					var same_mask := garment.get_size() == reference.get_size()
+					if same_mask:
+						for y: int in range(reference.get_height()):
+							for x: int in range(reference.get_width()):
+								if garment.get_pixel(x, y).a != reference.get_pixel(x, y).a:
+									same_mask = false
+					_check(same_mask, "%s %s %s %s frame %d matches Starter fit" % [outfit["name"], category, movement, direction, index])
 
 func _check_outfit(outfit: Dictionary, gender: String) -> void:
 	var parts: Dictionary = outfit["parts"]

@@ -23,6 +23,7 @@ The same box and part item IDs support both genders. Each unlock declares male a
 - The user's selected body, skin tone and hair remain independent. No preview Base or Hair layers are installed.
 - `data/male_adventure_outfit_sources.json` records the input layers and SHA-256 of every exported sheet. Layers are composited without scaling or creative edits, in Shirt → Scarf → Gloves order.
 - Item names and bag icons cover English, Dutch, Brazilian Portuguese and Simplified Chinese.
+- Male trousers and shoes use the existing Starter garment masks for each movement and every frame. Neck openings follow the head movement; front scarves sit lower on the chest. Original face pixels remain uncovered. Two black hip-outline pixels in the walking top keep both idle poses identical without widening the trousers. Female and trainer artwork retain their existing fit.
 
 ## Scope
 
@@ -32,7 +33,7 @@ This collection supplies overworld clothing and authored male/female trainer lay
 
 Run via `game/ops/worktrees/slot-env SLOT -- godot --headless --path PATH`:
 
-- `--script res://tests/male_adventure_outfits_check.gd`: male and female availability, fixed colours, all six movement aliases, exact texture selection/frame sizes, localized icons and 36 composited engine renders in slot-local userdata.
+- `--script res://tests/male_adventure_outfits_check.gd`: male and female availability, fixed colours, all six movement aliases, exact texture selection/frame sizes, Starter garment masks for every male bottom/shoe frame, localized icons and 36 composited engine renders in slot-local userdata.
 - `--script res://tests/appearance_animation_clock_check.gd`: local and remote body/clothing frame synchronization.
 
 Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, female box activation and four gender changes per outfit without returning, losing or duplicating items and the 350-Gem Gift Store offers, including bound voucher purchases.
