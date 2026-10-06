@@ -742,5 +742,21 @@
   "latias-mount": {
     "name": "Montaria Latias",
     "shortDesc": "Desbloqueia Latias como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-latios-mount": {
+    "name": "Montaria Latios Brilhante",
+    "shortDesc": "Desbloqueia Latios Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "latios-mount-box": {
+    "name": "Caixa de montaria Latios",
+    "shortDesc": "Contém uma montaria Latios. Chance shiny inicial: 50%."
+  },
+  "shiny-latias-mount": {
+    "name": "Montaria Latias Brilhante",
+    "shortDesc": "Desbloqueia Latias Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "latias-mount-box": {
+    "name": "Caixa de montaria Latias",
+    "shortDesc": "Contém uma montaria Latias. Chance shiny inicial: 50%."
   }
 }

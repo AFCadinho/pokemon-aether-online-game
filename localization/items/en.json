@@ -742,5 +742,21 @@
   "latias-mount": {
     "name": "Latias Mount",
     "shortDesc": "Unlocks Latias as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-latios-mount": {
+    "name": "Shiny Latios Mount",
+    "shortDesc": "Unlocks Shiny Latios as a land mount. Requires a Mount License for the current region."
+  },
+  "latios-mount-box": {
+    "name": "Latios Mount Box",
+    "shortDesc": "Contains a Latios mount. Base shiny chance: 50%."
+  },
+  "shiny-latias-mount": {
+    "name": "Shiny Latias Mount",
+    "shortDesc": "Unlocks Shiny Latias as a land mount. Requires a Mount License for the current region."
+  },
+  "latias-mount-box": {
+    "name": "Latias Mount Box",
+    "shortDesc": "Contains a Latias mount. Base shiny chance: 50%."
   }
 }
