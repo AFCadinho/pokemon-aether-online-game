@@ -4,6 +4,8 @@
 
 - Add the red shiny Gyarados Surf mount and its normal/shiny Gift Store box for 500 Aether Gems, preserving the approved V4 rider placement and water effects.
 
+- Raise the Thor cape behind the shoulders in both walking side views and frame the male armor neckline when facial hair is hidden.
+
 - Add the approved Gyarados V4 Surf mount for admin-granted in-game testing, preserving its native artwork, rider seats and synchronized water effects.
 
 - Replace eight duplicate or modest overworld rewards with three Repels, three Super Repels and two Max Repels, keeping pickup locations and collected-item history intact. Register the three existing Route 14 pickups so they can be claimed.
