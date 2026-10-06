@@ -37,6 +37,12 @@ func _init() -> void:
 		water_mask.get_used_cells().size() >= 800,
 		"Cerulean water tiles populate the complete weather mask"
 	)
+	_check_equal(water_mask.get_used_cells().size(), 826, "All approved open-water and shoreline cells are recognized")
+	_check_equal(water_mask.get_cell_source_id(Vector2i(19, 51)), -1, "The Bike Shop approach remains dry ground")
+	if water_mask.get_used_cells().is_empty():
+		visual.free()
+		quit(1)
+		return
 	_check_true(
 		CeruleanWeatherWaterMaskScript.build(visual) == water_mask,
 		"Cerulean water mask construction is idempotent"

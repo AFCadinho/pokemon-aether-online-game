@@ -11,6 +11,7 @@
 - Flowers sway gently across Kanto towns, routes and Viridian Forest, as well as the Aether Clash lobby.
 - Show the updated Pallet Town scenery, including its animated flowers.
 - Restore the entrance to Cerulean City's Bike Shop.
+- Restore rain ripples on Cerulean City's water.
 
 ### Items and controls
 
