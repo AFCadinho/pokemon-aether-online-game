@@ -128,6 +128,91 @@ func install_archives(index: Dictionary, archives: Dictionary) -> Dictionary:
 		"catalog_path": _generations_root().path_join(generation).path_join("runtime-catalog.json")}
 
 
+func begin_collection(index: Dictionary, requested_ids: Array[String]) -> Dictionary:
+	var error := Index.validate(index)
+	if not error.is_empty():
+		return {"error": error}
+	var generation := active_generation()
+	var baseline := _read_json(_generations_root().path_join(generation).path_join("installed-state.json"), MAX_STATE_JSON) if not generation.is_empty() else _empty_state("")
+	var plan := Index.plan(index, baseline, requested_ids)
+	if not plan.missing.is_empty():
+		return {"error": "Collection contains an unknown asset."}
+	var indexed := Index.by_id(index)
+	var installed: Dictionary = baseline.assets.duplicate(true)
+	var downloads: Array[String] = []
+	# Completed immutable objects survive a crash without exposing a partial
+	# generation. Reconstruct their identities only against this checked index.
+	for asset_id: String in plan.downloads:
+		var asset: Dictionary = indexed[asset_id]
+		var current: Dictionary = installed.get(asset_id, {})
+		if current.get("version") == asset.version and current.get("archive_sha256") != asset.sha256:
+			return {"error": "An installed asset version cannot change its immutable checksum."}
+		var manifest := _object_manifest(asset)
+		if manifest.is_empty():
+			downloads.append(asset_id)
+		else:
+			installed[asset_id] = _state_entry(asset, manifest)
+	return {"error": "", "index": index.duplicate(true), "generation": generation,
+		"installed": installed, "wanted": plan.downloads + plan.unchanged, "downloads": downloads}
+
+
+func stage_collection(session: Dictionary, asset_id: String, archive_path: String) -> Dictionary:
+	if not session.get("installed") is Dictionary or asset_id not in session.get("wanted", []):
+		return {"error": "Invalid collection member."}
+	var indexed := Index.by_id(session.get("index", {}))
+	if not indexed.has(asset_id):
+		return {"error": "Collection asset is absent from the index."}
+	var prepared := _prepare_archive(indexed[asset_id], archive_path, session.installed)
+	if not str(prepared.get("error", "")).is_empty():
+		return prepared
+	session.installed[asset_id] = _state_entry(indexed[asset_id], prepared.manifest)
+	session.downloads.erase(asset_id)
+	return {"error": ""}
+
+
+func finish_collection(session: Dictionary) -> Dictionary:
+	var indexed := Index.by_id(session.get("index", {}))
+	if indexed.is_empty() or not session.get("installed") is Dictionary or not session.get("wanted") is Array:
+		return {"error": "Invalid collection."}
+	if active_generation() != str(session.get("generation", "")):
+		return {"error": "Installed models changed. Prepare the collection again."}
+	for asset_id: String in session.wanted:
+		if not indexed.has(asset_id):
+			return {"error": "Invalid collection member."}
+		var manifest := _object_manifest(indexed[asset_id])
+		var entry: Dictionary = session.installed.get(asset_id, {})
+		if manifest.is_empty() or entry.get("version") != indexed[asset_id].version or entry.get("archive_sha256") != indexed[asset_id].sha256:
+			return {"error": "Collection is incomplete or a staged model failed verification: " + asset_id}
+		session.installed[asset_id] = _state_entry(indexed[asset_id], manifest)
+	var next := _empty_state(str(session.index.catalog_revision))
+	next.assets = session.installed.duplicate(true)
+	var error := _write_generation(next)
+	return {"error": error}
+
+
+func _object_manifest(asset: Dictionary) -> Dictionary:
+	var manifest := _read_json(_objects_root().path_join(str(asset.sha256)).path_join("bundle.json"))
+	var sizes := {"bundle.json": 1}
+	for appearance: Variant in manifest.get("appearances", []):
+		if not appearance is Dictionary:
+			return {}
+		sizes[str(appearance.get("runtime_path", ""))] = appearance.get("bytes", 0)
+	if not _validate_bundle_manifest(manifest, asset, sizes).is_empty() or not _validate_object(str(asset.sha256), manifest):
+		return {}
+	return manifest
+
+
+func _space_available(directory: String, required: int) -> bool:
+	var existing := ProjectSettings.globalize_path(directory)
+	while not DirAccess.dir_exists_absolute(existing):
+		var parent := existing.get_base_dir()
+		if parent == existing or parent.is_empty():
+			return false
+		existing = parent
+	var access := DirAccess.open(existing)
+	return access != null and access.get_space_left() >= required
+
+
 func _prepare_archive(asset: Dictionary, archive_path: String, installed: Dictionary) -> Dictionary:
 	var current: Dictionary = installed.get(str(asset.asset_id), {})
 	if not current.is_empty() and current.get("version") == asset.version and current.get("archive_sha256") != asset.sha256:
@@ -175,6 +260,12 @@ func _prepare_archive(asset: Dictionary, archive_path: String, installed: Dictio
 		if not _validate_object(str(asset.sha256), manifest):
 			return {"error": "Existing immutable bundle object is invalid."}
 	else:
+		var extracted_bytes := 32 * 1024 * 1024 # Metadata and active-state reserve.
+		for size: int in sizes.values():
+			extracted_bytes += size
+		if not _space_available(root, extracted_bytes):
+			reader.close()
+			return {"error": "Not enough free space to install 3D models."}
 		var staging := root.path_join("staging").path_join(".install-" + str(Time.get_ticks_usec()))
 		if DirAccess.make_dir_recursive_absolute(staging) != OK:
 			reader.close()

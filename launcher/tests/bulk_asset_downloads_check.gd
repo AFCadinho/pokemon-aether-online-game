@@ -89,6 +89,10 @@ func _run() -> void:
 	launcher._pause_bulk_download()
 	_check(launcher.bulk_paused and not probe.active and launcher.pending_downloads.size() == 2, "pause preserves current and pending jobs")
 	_check(not launcher.play_button.disabled, "optional paused download does not block play")
+	launcher.bulk_planning = true
+	launcher._resume_bulk_download()
+	_check(probe.started.size() == 1 and launcher.bulk_paused, "repeated resume clicks cannot launch a second planner")
+	launcher.bulk_planning = false
 	launcher._resume_bulk_download()
 	_check(not launcher.bulk_paused and probe.started.size() == 2 and probe.started[0].id == probe.started[1].id, "resume restarts same identity for partial reuse")
 	launcher._set_busy(false) # Simulate install failure while the current job is retained.
@@ -106,6 +110,7 @@ func _run() -> void:
 	var expected: Dictionary = Bulk.models_plan(adapter, descriptor, Bulk.game_catalog_path())
 	launcher._build_download_queue()
 	_check(launcher.pending_downloads.filter(func(job: Dictionary): return job.type == "asset_bundle").size() == expected.jobs.size(), "chosen complete 3D catalog is kept current, reusing game downloads")
+	_check(launcher.pending_downloads.back().type == "asset_collection_commit", "automatic model updates include one final collection activation")
 	await _check_full_metadata(adapter.cached_index(descriptor))
 	var capture := OS.get_environment("BULK_DOWNLOAD_CAPTURE")
 	if not capture.is_empty():

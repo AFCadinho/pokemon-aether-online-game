@@ -1,0 +1,83 @@
+{
+  "schema": 1,
+  "task": "lossless-launcher-collection",
+  "platform": "Linux",
+  "godot": "4.6.2",
+  "collection_ui_qualified_for_sample": true,
+  "full_catalog_ui_qualified": false,
+  "production_approved": false,
+  "windows_qualified": false,
+  "macos_qualified": false,
+  "report_sha256": "f0372646d22093b656c171d021974ff12ac612927a05b3fcd9bf9f1cb4a70fee",
+  "code_at_task_completion": {
+    "launcher/scripts/asset_bundle_store.gd": "d3d53bc9ac29bb19fdc34931653a85a3a357ea119bfcc925f272f678aa98b7ae",
+    "launcher/scripts/release_asset_bundles.gd": "3175d56fc9469f50289e7d2939749e1f3b9ca0289e2ba7c3113979f13b9dae80",
+    "launcher/scripts/bulk_asset_downloads.gd": "49d1e542a91d7b966682c72f9fd2a83c70523dbdac1e9715e8e5699d473fea32",
+    "launcher/scripts/launcher.gd": "76878a50249c9d87134a9ac26021d09bcc6f00c08aeb80610c5a3c5adfa9f053",
+    "launcher/tests/native_streaming_collection_check.gd": "aa6a836de1a90b771f4005d70eff168a4789e45dadf82d59eea82a8e2f47c571",
+    "launcher/tests/run_native_compression_install_check.py": "9f660a5f6c06960f59bc2ea52c290b74aea599c1661753535da2a675d38d16e4"
+  },
+  "phases": {
+    "native-256k": {
+      "report_sha256": "5ab480067a98b25d40197e76e86c613c8ab5090150c2cf15a244d231f7d18613",
+      "completed_downloads": 11,
+      "resumed_bytes": [
+        1048576
+      ],
+      "verified_appearances": 22,
+      "staged_bundles": 0,
+      "same_process_pause_resume": true,
+      "automatic_update_queue": false,
+      "restart_no_op": true
+    },
+    "original-pause": {
+      "report_sha256": "72a17bfe62746620578dd1751c6c7b6a57e57beb514a91f9f4564e60c0208da1",
+      "completed_downloads": 1,
+      "resumed_bytes": [],
+      "verified_appearances": 0,
+      "staged_bundles": 1,
+      "same_process_pause_resume": false,
+      "automatic_update_queue": false,
+      "restart_no_op": false
+    },
+    "original": {
+      "report_sha256": "9f944b4fd8b666d91be0016b76996324f882447e3a05350fec5634c741a3a29e",
+      "completed_downloads": 10,
+      "resumed_bytes": [
+        1048576
+      ],
+      "verified_appearances": 22,
+      "staged_bundles": 0,
+      "same_process_pause_resume": false,
+      "automatic_update_queue": false,
+      "restart_no_op": true
+    },
+    "policy": {
+      "report_sha256": "45cb0b88aa7c928d241fee1c871fc814522f01b453f04dbb07ed495822fc4f76",
+      "completed_downloads": 0,
+      "resumed_bytes": [],
+      "verified_appearances": 0,
+      "staged_bundles": 0,
+      "same_process_pause_resume": false,
+      "automatic_update_queue": false,
+      "restart_no_op": false
+    },
+    "rollback": {
+      "report_sha256": "85b4065ed2c0528545c8b29786b427b39223a3825cba8634dd970ef6c9f191f3",
+      "completed_downloads": 0,
+      "resumed_bytes": [],
+      "verified_appearances": 22,
+      "staged_bundles": 0,
+      "same_process_pause_resume": false,
+      "automatic_update_queue": true,
+      "restart_no_op": true
+    }
+  },
+  "focused_checks": [
+    "asset_bundle_store_check including streaming and simulated low disk",
+    "bulk_asset_downloads_check including resume guard and automatic commit",
+    "release_asset_bundles_v10_check (1200 published IDs)",
+    "Python compilation",
+    "whitespace"
+  ]
+}

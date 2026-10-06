@@ -1,5 +1,10 @@
 # Lossless model rollout validation
 
+Follow-up: [streamed launcher collection integration](lossless-launcher-collection-integration.md)
+connects staging/final activation to the actual Downloads UI and opted-in update
+queue, including HTTP pause/restart/resume and zero-download rollback. Supported
+desktop-platform runtime qualification remains open.
+
 Follow-up: [renderer lifetime/reference validation](lossless-material-reference-validation.md)
 corrects the Archen interpretation: immediate fixture teardown triggered the
 error; a full 2,400-scene lifecycle now passes without model changes. The

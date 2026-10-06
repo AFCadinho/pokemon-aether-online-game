@@ -5,6 +5,7 @@ Invoke through slot-env. The tiny project references tracked code/data in place
 and owns its import cache. No credentials, caches or player userdata are copied.
 """
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -17,7 +18,35 @@ from asset_bundle_http_server import Handler
 
 
 class NativeHandler(Handler):
+    paced = False
+
+    def log_message(self, _format, *_args):
+        pass
+
     def _serve(self, body):
+        if self.paced and self.path.split("?", 1)[0] != "/fault/slow-cancel.zip":
+            # Same Range response headers as Handler, but give the real UI
+            # time to pause a transfer before it completes on localhost.
+            original = self.wfile
+
+            class PacedWriter:
+                def write(self, payload):
+                    for offset in range(0, len(payload), 262144):
+                        original.write(payload[offset:offset + 262144])
+                        original.flush()
+                        time.sleep(0.01)
+                    return len(payload)
+
+                def __getattr__(self, name):
+                    return getattr(original, name)
+
+            self.wfile = PacedWriter()
+            try:
+                return super()._serve(body)
+            except (BrokenPipeError, ConnectionResetError):
+                return
+            finally:
+                self.wfile = original
         if self.path.split("?", 1)[0] != "/fault/slow-cancel.zip":
             try:
                 return super()._serve(body)
@@ -41,6 +70,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("fixture", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--streaming", action="store_true", help="Exercise the actual Downloads UI and restart recovery")
     args = parser.parse_args()
     launcher = Path(__file__).resolve().parents[1]
     frontend = launcher.parent
@@ -52,8 +82,16 @@ def main():
         "scripts/model_pack_manifest.gd", "tests/native_compression_install_check.gd"]
     files += [str(p.relative_to(launcher)) for p in (launcher / "data").glob("approved_3d_release_v*.json")]
     files += ["data/reviewed_model_catalog.json", "data/screened_model_catalog.json"]
+    if args.streaming:
+        tracked = subprocess.check_output(["git", "-C", str(frontend), "ls-files", "-z", "--",
+            "launcher/scripts", "launcher/scenes", "launcher/assets", "launcher/localization"])
+        files += [str(Path(p).relative_to("launcher")) for p in tracked.decode().split("\0")
+                  if p and Path(p).suffix not in [".uid", ".import"]]
+        files += ["tests/fixtures/offline_bulk_launcher.gd", "tests/native_streaming_collection_check.gd"]
+        files = sorted(set(files))
     fixture = json.loads(args.fixture.read_text())
     NativeHandler.files = {url: Path(path) for url, path in fixture["routes"].items()}
+    NativeHandler.paced = args.streaming
     native_index = json.loads(Path(fixture["stages"][-1]["index_path"]).read_text())
     cancelled_asset = next(a for a in native_index["assets"] if a["asset_id"] == fixture["failure_asset_id"])
     NativeHandler.files["/fault/slow-cancel.zip"] = NativeHandler.files["/" + cancelled_asset["object_key"]]
@@ -68,10 +106,11 @@ def main():
     godot = os.environ.get("GODOT_BIN", "godot")
     try:
         reports = []
-        for phase in ["policy", "original", "native-256k", "native-1m", "rollback"]:
+        phases = ["policy", "original-pause", "original", "native-256k", "rollback"] if args.streaming else ["policy", "original", "native-256k", "native-1m", "rollback"]
+        for phase in phases:
             project = output / (phase + "-project")
             project.mkdir()
-            selected = fixture["stages"][0] if phase in ["policy", "rollback"] else next(s for s in fixture["stages"] if s["label"] == phase)
+            selected = fixture["stages"][0] if phase in ["policy", "original-pause", "rollback"] else next(s for s in fixture["stages"] if s["label"] == phase)
             for relative in files:
                 source = launcher / relative
                 target = project / relative
@@ -93,16 +132,24 @@ def main():
                 uid = Path(str(source) + ".uid")
                 if uid.exists():
                     Path(str(target) + ".uid").symlink_to(uid)
-            (project / "project.godot").write_text('config_version=5\n[application]\nconfig/name="Native bundle launcher fixture"\n')
+            project_settings = (launcher / "project.godot").read_text() if args.streaming else 'config_version=5\n[application]\nconfig/name="Native bundle launcher fixture"\n'
+            if args.streaming:
+                user_dir = "lossless-collection-" + hashlib.sha256(str(output).encode()).hexdigest()[:16]
+                project_settings = project_settings.replace("[application]", '[application]\nconfig/use_custom_user_dir=true\nconfig/custom_user_dir="' + user_dir + '"')
+            (project / "project.godot").write_text(project_settings)
             env["POKEAETHER_NATIVE_PHASE"] = phase
             with (output / (phase + "-import.log")).open("w") as log:
-                subprocess.run([godot, "--headless", "--path", str(project), "--editor", "--import"],
+                subprocess.run([godot, "--headless", "--path", str(project), "--log-file", str(output / (phase + "-import-engine.log")), "--editor", "--import"],
                                env=env, stdout=log, stderr=subprocess.STDOUT, check=True, timeout=120)
             with (output / (phase + "-launcher.log")).open("w") as log:
-                subprocess.run([godot, "--headless", "--path", str(project), "--script",
-                    "res://tests/native_compression_install_check.gd"], env=env,
+                script = "native_streaming_collection_check.gd" if args.streaming else "native_compression_install_check.gd"
+                subprocess.run([godot, "--headless", "--path", str(project), "--log-file", str(output / (phase + "-engine.log")), "--script",
+                    "res://tests/" + script], env=env,
                     stdout=log, stderr=subprocess.STDOUT, check=True, timeout=360)
             result = json.loads((output / ("installed/" + phase + "-report.json")).read_text())
+            log_text = (output / (phase + "-launcher.log")).read_text()
+            if "\nERROR:" in log_text or "\nSCRIPT ERROR:" in log_text:
+                raise ValueError("Launcher emitted an engine/script error: " + phase)
             if not result["complete"] or result.get("failure"):
                 raise ValueError("Launcher qualification did not complete: " + phase)
             reports.append(result)

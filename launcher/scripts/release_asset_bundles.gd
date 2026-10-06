@@ -225,6 +225,21 @@ func accept_bundles(index: Dictionary, archives: Dictionary) -> Dictionary:
 	return store.install_archives(index, archives)
 
 
+func begin_collection(index: Dictionary, requested_ids: Array[String]) -> Dictionary:
+	var error := _release_index_error(index)
+	return {"error": error} if not error.is_empty() else store.begin_collection(index, requested_ids)
+
+
+func stage_collection(session: Dictionary, asset_id: String, archive_path: String) -> Dictionary:
+	var error := _release_index_error(session.get("index", {}))
+	return {"error": error} if not error.is_empty() else store.stage_collection(session, asset_id, archive_path)
+
+
+func finish_collection(session: Dictionary) -> Dictionary:
+	var error := _release_index_error(session.get("index", {}))
+	return {"error": error} if not error.is_empty() else store.finish_collection(session)
+
+
 func catalog_path() -> String:
 	return store.catalog_path()
 
