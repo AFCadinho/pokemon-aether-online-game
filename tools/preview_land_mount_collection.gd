@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Appearance := preload("res://scripts/services/character_appearance_service.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 
 
@@ -12,9 +12,10 @@ func _init() -> void:
 func _run() -> void:
 	var output := "user://land_mount_collection_preview"
 	var shiny := "--shiny" in OS.get_cmdline_user_args()
+	var adinho_outfit := "--adinho" in OS.get_cmdline_user_args()
 	var selected_ids: Array = IDS.duplicate()
 	if not shiny:
-		selected_ids.append_array(["dialga", "palkia"])
+		selected_ids.append_array(["dialga"])
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
@@ -55,6 +56,11 @@ func _run() -> void:
 			actor.set_process(false)
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
+			if adinho_outfit and gender == "male":
+				appearance.merge({"headgear": "", "hair": "Adinho_Hair",
+					"facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses",
+					"top": "Adinho_Shirt", "bottom": "Adinho_Trousers",
+					"shoes": "Adinho_Shoes"}, true)
 			previews.append({"actor":actor,"label":label,"appearance":appearance,"gender":gender,"direction":DIRECTIONS[row]})
 	for base_id: String in selected_ids:
 		var id := base_id + ("_shiny" if shiny else "")

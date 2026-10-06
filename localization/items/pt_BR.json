@@ -578,5 +578,13 @@
   "zekrom-mount-box": {
     "name": "Caixa de montaria Zekrom",
     "shortDesc": "Contém uma montaria Zekrom. Chance shiny inicial: 50%."
+  },
+  "shiny-palkia-mount": {
+    "name": "Montaria Palkia Brilhante",
+    "shortDesc": "Desbloqueia Palkia Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "palkia-mount-box": {
+    "name": "Caixa de montaria Palkia",
+    "shortDesc": "Contém uma montaria Palkia. Chance shiny inicial: 50%."
   }
 }

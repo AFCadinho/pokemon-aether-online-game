@@ -578,5 +578,13 @@
   "zekrom-mount-box": {
     "name": "捷克罗姆坐骑箱",
     "shortDesc": "包含一只捷克罗姆坐骑。初始异色概率：50%。"
+  },
+  "shiny-palkia-mount": {
+    "name": "异色帕路奇亚坐骑",
+    "shortDesc": "解锁异色帕路奇亚陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "palkia-mount-box": {
+    "name": "帕路奇亚坐骑箱",
+    "shortDesc": "包含一只帕路奇亚坐骑。初始异色概率：50%。"
   }
 }

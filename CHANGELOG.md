@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add Shiny Palkia and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
+- Restore Dialga’s original side head/neck connection and move the rider back on the saddle to keep the face clear.
+
 - Add Shiny Zekrom and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
 - Align Dialga and Palkia with the normal ground line and move Dialga’s side crest clear of the rider’s face.
 

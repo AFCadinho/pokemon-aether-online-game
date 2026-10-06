@@ -578,5 +578,13 @@
   "zekrom-mount-box": {
     "name": "Zekrom-mountbox",
     "shortDesc": "Bevat een Zekrom-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-palkia-mount": {
+    "name": "Shiny Palkia-mount",
+    "shortDesc": "Ontgrendelt Shiny Palkia als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "palkia-mount-box": {
+    "name": "Palkia-mountbox",
+    "shortDesc": "Bevat een Palkia-mount. Shiny-basiskans: 50%."
   }
 }
