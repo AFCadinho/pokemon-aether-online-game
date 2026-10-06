@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lengthen Thor’s walking cape and lift its rounded hem more visibly for both models, preserving the approved idle poses and matching electric sparks to the extended cloth.
+
 - Add a Repel refill amount selector with Max, keep hotbar use at one item per click, and recognize Repels in older inventory responses without a use action.
 
 - Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
