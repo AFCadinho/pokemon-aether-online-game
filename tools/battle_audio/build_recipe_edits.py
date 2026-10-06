@@ -17,8 +17,8 @@ def build_close_combat(recipe, config, source_data, entries):
     path='res://'+str(out.relative_to(ROOT))
     entries[out.name]={'source':'res://'+str(source.relative_to(ROOT)),'source_sha256':sha(source),'path':path,'sha256':sha(out),'filters':filters,'duration_seconds':length}
     frames=recipe['close_choreography']['source_frames']
-    # Five original repeats/pitches, then reuse the weightiest cue for the final palm.
-    timeline=[(e,e['frame']) for e in events]+[(events[-1],recipe['close_choreography']['impact_frame'])]
+    # Preserve five original repeats/pitches and carry the intensified flurry into its final palm.
+    timeline=[(e,e['frame']) for e in events]+[(events[2],21),(events[1],24),(events[-1],recipe['close_choreography']['impact_frame'])]
     recipe['audio']=[]
     for i,(e,frame) in enumerate(timeline):
         at=frame/frames

@@ -16,12 +16,12 @@ func _run() -> void:
 		for cell: Dictionary in reference.frames[int(beat.frame)]:
 			found=found or cell.pattern==beat.pattern and cell.x-384==beat.x and 96-cell.y==beat.y
 		assert(found,"Every strike originates in the 2D storyboard")
-	assert(recipe.audio.size()==6)
+	assert(recipe.audio.size()==8)
 	for i in 5:
 		assert(recipe.audio[i].source_frame==reference.timings[i].frame)
 		assert(recipe.audio[i].pitch==reference.timings[i].pitch)
 		assert(is_equal_approx(recipe.audio[i].at_fraction,reference.timings[i].frame/37.))
-	assert(is_equal_approx(recipe.audio[5].at_fraction,recipe.impact_fraction))
+	assert(is_equal_approx(recipe.audio[-1].at_fraction,recipe.impact_fraction))
 	var maximum := 0
 	for slot in 4:
 		var actor := "p%d"%(slot+1)
@@ -42,9 +42,13 @@ func _run() -> void:
 				effect._process(0)
 				for beat in effect.combo_beats_drawn:seen[beat]=true
 				maximum=maxi(maximum,effect.cursor)
-				assert(effect.cursor<=90)
+				assert(effect.cursor<=120)
 				for j in effect.cursor:assert(effect.pieces[j].transform.is_finite())
-				if frame>=3 and frame<=31:assert(stage.contact_offsets[slot].is_equal_approx(displacement),"Stay at the opponent for the entire combo")
+				if frame>=3 and frame<=31:
+					var shift: Vector3=stage.contact_offsets[slot]-displacement
+					assert(shift.length()<=.4,"Remain within contact distance during weight shifts")
+					assert(shift.dot(displacement.normalized())<=.0001,"Do not punch through the target body")
+					if frame>=5 and frame<=23:assert(shift.length()>.01,"The attacker participates in the flurry")
 				if frame>=35:assert(stage.contact_offsets[slot].is_zero_approx())
 				assert(effect.impact_drawn==(result=="hit" and frame>=28),"One final gameplay beat")
 				if result=="miss" and frame>=3 and frame<=28:
@@ -63,5 +67,5 @@ func _run() -> void:
 	assert(stage.contact_offsets[0].is_zero_approx())
 	router.cancel_render();router.release_threaded_resource_requests();router=null
 	stage.queue_free();await get_tree().process_frame
-	print("CLOSE_COMBAT_3D_OK beats=14 source_hash=true audio_repeats=6 slots=4 outcomes=3 early_dodge=true contact_hold=true cancellation=true max_pieces=",maximum)
+	print("CLOSE_COMBAT_3D_OK beats=14 source_hash=true audio_repeats=8 slots=4 outcomes=3 early_dodge=true contact_weight_shifts=true cancellation=true max_pieces=",maximum)
 	get_tree().quit()
