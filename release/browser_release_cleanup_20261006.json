@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "bucket": "pokeaether-web",
+  "deleted_objects": 41752,
+  "deleted_bytes": 2083928009,
+  "deleted_builds": [
+    "0227a0cc20b0b73c961e3137cbf8e275239de083-37229526598-1",
+    "17236acff75cfbc12b87c085111aa632e01c7a2b-37219519859-1",
+    "984a212767ae20d6ec380002e5040ab8aa2cc5a1-37207631305-1",
+    "d0af739676cffe5a33efb15a9d71fd4f8f922600-37215945982-1"
+  ],
+  "retained": {
+    "4e82134be390fec3fedffa00008bfef5495ccb8f-37449127897-1": {
+      "count": 10438,
+      "bytes": 554502190,
+      "marker": true
+    },
+    "c3934311251ef858c9ce9263974fae6de984405a-37272826487-1": {
+      "count": 10438,
+      "bytes": 539918322,
+      "marker": true
+    }
+  },
+  "retained_complete_counts_and_sizes_verified": true,
+  "jobs": [
+    {
+      "id": "073832d4-fe23-4e9c-b791-0f35af624cd1",
+      "startTime": "2026-10-06T14:38:38.177Z",
+      "status": "COMPLETED",
+      "jobType": "prefixDelete",
+      "prefixDelete": {
+        "prefix": "web/releases/0227a0cc20b0b73c961e3137cbf8e275239de083-37229526598-1/",
+        "deletedObjects": 10438,
+        "isBucketClear": false
+      },
+      "endTime": "2026-10-06T14:39:54.821Z"
+    },
+    {
+      "id": "fe88b7ba-cdd6-4d45-bae4-05f573b1031e",
+      "startTime": "2026-10-06T14:38:41.350Z",
+      "status": "COMPLETED",
+      "jobType": "prefixDelete",
+      "prefixDelete": {
+        "prefix": "web/releases/17236acff75cfbc12b87c085111aa632e01c7a2b-37219519859-1/",
+        "deletedObjects": 10438,
+        "isBucketClear": false
+      },
+      "endTime": "2026-10-06T14:39:54.821Z"
+    },
+    {
+      "id": "78b251ed-e77e-47ea-bf54-98f5b2db93c6",
+      "startTime": "2026-10-06T14:38:44.057Z",
+      "status": "COMPLETED",
+      "jobType": "prefixDelete",
+      "prefixDelete": {
+        "prefix": "web/releases/984a212767ae20d6ec380002e5040ab8aa2cc5a1-37207631305-1/",
+        "deletedObjects": 10438,
+        "isBucketClear": false
+      },
+      "endTime": "2026-10-06T14:39:54.821Z"
+    },
+    {
+      "id": "bef8d603-25ac-4e6a-9c51-adaa054aad07",
+      "startTime": "2026-10-06T14:38:46.887Z",
+      "status": "COMPLETED",
+      "jobType": "prefixDelete",
+      "prefixDelete": {
+        "prefix": "web/releases/d0af739676cffe5a33efb15a9d71fd4f8f922600-37215945982-1/",
+        "deletedObjects": 10438,
+        "isBucketClear": false
+      },
+      "endTime": "2026-10-06T14:39:54.821Z"
+    }
+  ],
+  "scope": "Only four reviewed obsolete web/releases/<immutable-build-id>/ prefixes. Active and previous complete releases retained. No model, sprite-catalog, update-manifest or Pages changes.",
+  "verified_at_utc": "2026-10-06T14:42:52.370Z"
+}
