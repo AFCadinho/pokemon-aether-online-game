@@ -1,4 +1,5 @@
 {
+  "ui.repel.recharge": "Recharge Repel",
   "ui.repel.tooltip": "Repel: {steps} / {max} steps. Use Repel items to recharge. Only steps where wild encounters are possible use charge.",
   "ui.repel.refilled": "Repel recharged: {steps} / {max} steps.",
   "ui.repel.full": "Repel charge is already full. The item was not used.",

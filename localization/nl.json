@@ -1,4 +1,5 @@
 {
+  "ui.repel.recharge": "Repel opladen",
   "ui.repel.tooltip": "Repel: {steps} / {max} stappen. Gebruik Repel-items om op te laden. Alleen stappen waarop wilde encounters mogelijk zijn verbruiken lading.",
   "ui.repel.refilled": "Repel opgeladen: {steps} / {max} stappen.",
   "ui.repel.full": "De Repel-voorraad is al vol. Het item is niet verbruikt.",

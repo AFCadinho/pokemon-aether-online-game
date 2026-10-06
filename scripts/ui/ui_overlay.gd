@@ -487,6 +487,7 @@ const EXP_ITEM_IDS := {
 	"exp-candy-xl": true,
 }
 const BAG_MOUNT_FILTER := preload("res://scripts/ui/bag_mount_filter.gd")
+const INVENTORY_ITEM_USE_POLICY := preload("res://scripts/ui/inventory_item_use_policy.gd")
 const BAG_ITEM_EFFECT_PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 const POKEMON_MAX_LEVEL := 100
 const EXP_CANDY_EXPERIENCE := {
@@ -24798,7 +24799,9 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["recharge_repel", "activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "redeem_credit_voucher", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if INVENTORY_ITEM_USE_POLICY.is_overworld_consumable(item):
+		return true
+	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "redeem_credit_voucher", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24808,6 +24811,8 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 	if item_id == "escape-rope-action":
 		return true
 	if str(item.get("useAction", "")).strip_edges() in ["open_shiny_tracker", "open_gift_voucher"]:
+		return true
+	if INVENTORY_ITEM_USE_POLICY.is_overworld_consumable(item):
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24819,6 +24824,8 @@ func _bag_item_use_action_label(item: Dictionary) -> String:
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	if FieldMoveService.is_direct_field_move(field_move_id):
 		return LocalizationManager.text("ui.bag.action.use_charm")
+	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
+		return LocalizationManager.text("ui.repel.recharge")
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action == "open_mount_box":
 		return LocalizationManager.text("ui.bag.action.open_box")
@@ -25000,7 +25007,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_on_escape_rope_pressed()
 		return
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "recharge_repel":
+	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
 		var refill_result: Dictionary = await RepelService.refill(item_id)
 		if not bool(refill_result.get("success", false)):
 			_add_chat_message(str(refill_result.get("error", LocalizationManager.text("ui.repel.failed"))))
@@ -34964,7 +34971,7 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	if entry_type == "item":
 		for item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
-				_show_bag_item_use_popup(item)
+				await _on_bag_item_selected(item)
 				return
 		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_missing"))
 		_load_bag_inventory.call_deferred()
@@ -35090,7 +35097,7 @@ func _assign_bag_item_to_hotbar_slot(item: Dictionary, target_slot: int) -> void
 	elif str(item.get("useAction", "")).strip_edges() in ["open_shiny_tracker", "open_gift_voucher"]:
 		entry_type = "key_item_action"
 		entry_id = item_id
-	elif not _is_pokemon_usable_item_id(item_id):
+	elif not INVENTORY_ITEM_USE_POLICY.is_overworld_consumable(item) and not _is_pokemon_usable_item_id(item_id):
 		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_not_assignable"))
 		return
 	var result: Dictionary = await PlayerHotbarService.assign(target_slot, entry_type, entry_id)

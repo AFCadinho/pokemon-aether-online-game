@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
+
 - Refine Thor’s silhouette with a wider resting cape, a continuous trailing cloth shape while walking, a slimmer armor waist, and the hammer behind the cape when viewed from the back.
 
 - Fix opening outfit boxes and activating cosmetics failing when the server returns an empty Repel-step value, while preserving numeric Repel charges.

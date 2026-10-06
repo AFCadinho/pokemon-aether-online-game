@@ -1,4 +1,5 @@
 {
+  "ui.repel.recharge": "Recarregar Repel",
   "ui.repel.tooltip": "Repel: {steps} / {max} passos. Use itens Repel para recarregar. Apenas passos onde encontros selvagens são possíveis consomem carga.",
   "ui.repel.refilled": "Repel recarregado: {steps} / {max} passos.",
   "ui.repel.full": "A carga de Repel já está cheia. O item não foi usado.",
