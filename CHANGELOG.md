@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.
+
 - Add Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram land mounts with animated artwork, synchronized rider masks and compact Bag icons.
 
 - Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.
