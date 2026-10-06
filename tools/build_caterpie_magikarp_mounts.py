@@ -7,7 +7,8 @@ Magikarp +8px to Lapras's waterline. Relative approved rider geometry is retaine
 from pathlib import Path
 import argparse
 import json
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageChops
+from build_surf_five_mounts import immerse, contact
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTIONS = ('down', 'left', 'right', 'up')
@@ -48,6 +49,7 @@ def build(mount_id):
         normal = Image.open(ROOT/'assets/mounts'/base_id/'source.png').convert('RGBA')
         assert source.getchannel('A').tobytes() == normal.getchannel('A').tobytes(), 'Shiny geometry must match approved normal art'
     layers = {key: Image.new('RGBA', (768, 768)) for key in ('mount', 'foreground', 'rider_mask')}
+    water = Image.new('RGBA', (FRAME*4, FRAME*8)) if base_id == 'magikarp' else None
     offsets = {}
     for row, direction in enumerate(DIRECTIONS):
         base = (64, 112-config['anchor'][row]+config['worldOffsetY'])
@@ -72,18 +74,38 @@ def build(mount_id):
             front.alpha_composite(selected, base)
             mask = Image.new('RGBA', mount.size)
             mask.putalpha(front.getchannel('A'))
+            if water is not None:
+                # Preserve the dry silhouette for rider masking. Only the visible
+                # fish is immersed; subtract the near fin before fading it so it
+                # cannot be drawn twice through the translucent foreground.
+                water_y = config['anchor'][row] - 8 + dy
+                wet = immerse(art, water_y, 12)
+                back = wet.copy()
+                back.putalpha(ImageChops.subtract(wet.getchannel('A'), selected.getchannel('A')))
+                near = Image.new('RGBA', art.size)
+                near.paste(wet, (0, 0), selection)
+                mount = Image.new('RGBA', (FRAME, FRAME))
+                mount.alpha_composite(back, base)
+                front = Image.new('RGBA', mount.size)
+                front.alpha_composite(near, base)
+                for moving in (False, True):
+                    foam = contact(art, base, row, col, water_y, moving)
+                    water.alpha_composite(foam, (col*FRAME, (row+4*int(moving))*FRAME))
             for name, tile in [('mount', mount), ('foreground', front), ('rider_mask', mask)]:
                 layers[name].alpha_composite(tile, (col*FRAME, row*FRAME))
             sx, sy = config['seats'][row]
             offsets[direction].append([base[0]+sx+dx-32-64, base[1]+sy+dy-52-64])
     for name in tuple(layers):
         layers['idle_'+name] = layers[name].crop((0, 0, FRAME, FRAME*4))
-    art = layers['mount'].crop((0, 0, FRAME, FRAME))
+    # Inventory icons retain the approved dry artwork, independent of water.
+    art = source.crop((0, 0, 64, 64))
     art = art.crop(art.getbbox())
     icon = Image.new('RGBA', (art.width+4, art.height+4))
     icon.alpha_composite(art, (2, 2))
     layers['icon'] = icon
     layers['source'] = source
+    if water is not None and mount_id == base_id:
+        layers['water_contact'] = water
     return folder, layers, offsets
 
 
@@ -95,6 +117,8 @@ def main():
     for mount_id in ('caterpie', 'magikarp', 'caterpie_shiny', 'magikarp_shiny'):
         folder, layers, offsets = build(mount_id)
         assert catalog[mount_id]['riderOffsets'] == offsets, f'{mount_id}: review seat offsets'
+        if mount_id.startswith('magikarp'):
+            assert catalog[mount_id]['waterContactSheet'] == 'res://assets/mounts/magikarp/water_contact.png'
         for name, art in layers.items():
             path = folder/(name+'.png')
             if args.check:
