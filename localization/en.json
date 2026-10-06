@@ -3146,6 +3146,7 @@
   "ui.store.preview.choose_color": "Choose a custom colour",
   "ui.store.preview.hex_tooltip": "Enter a hex colour code, for example #7a46c5",
   "ui.store.preview.chroma_included": "Selected Chroma colours are included with your purchase",
+  "ui.store.preview.hair_not_included": "Hairstyle is not included with this outfit.",
   "ui.store.preview.fixed_colours": "This outfit has fixed colours.",
   "ui.store.preview.direction.down": "Front",
   "ui.store.preview.direction.left": "Left",

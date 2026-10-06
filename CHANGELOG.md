@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add shared outfit preview hair rules: neutral Store card hairstyles, personal hair in detail previews, preserved included hair and explicit hood/headwear exceptions; clarify purchase contents and restore missing body/head layers in composed outfit icons.
+
 - Add Shiny Latios and Shiny Latias with their Land Gift Store boxes for 750 Aether Gems each, preserving the approved V2 rider poses and shared mount box rules.
 
 - Add Latios and Latias as grantable land mounts with the approved V2 rider poses, layered wings and existing regional Mount License requirements.

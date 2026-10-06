@@ -144,6 +144,7 @@ const COSMETIC_SUBCATEGORY_LABELS := {
 	"bottom": "Bottoms",
 	"shoes": "Shoes",
 }
+const STORE_PREVIEW_POLICY := preload("res://scripts/services/store_preview_appearance_policy.gd")
 const CATALOG: Array[Dictionary] = [
 	{
 		"id": "patreon-supporter-preview",
@@ -2324,7 +2325,7 @@ func _create_product_card(item: Dictionary) -> Button:
 	icon.custom_minimum_size = Vector2(40, 40)
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	var cosmetic_icon := CharacterAppearanceService.get_cosmetic_item_icon(
+	var cosmetic_icon := CharacterAppearanceService.get_store_cosmetic_item_icon(
 		item_id,
 		_preview_gender_for_item(item)
 	)
@@ -2432,13 +2433,11 @@ func _current_character_preview_appearance() -> Dictionary:
 			else CharacterAppearanceService.DEFAULT_MALE_BODY_ID
 		)
 	body_id = CharacterAppearanceService.resolve_body_model_id(body_id, preview_gender)
-	var preview_hair := ""
-	if not is_outfit:
-		preview_hair = (
-			CharacterAppearanceService.deserialize_part_id(str(trainer_appearance.get("hair", "")))
-			if preview_gender == trainer_gender
-			else CharacterAppearanceService.get_default_part_id("hair", preview_gender)
-		)
+	var preview_hair := (
+		CharacterAppearanceService.deserialize_part_id(str(trainer_appearance.get("hair", "")))
+		if preview_gender == trainer_gender and trainer_appearance.has("hair")
+		else CharacterAppearanceService.get_default_part_id("hair", preview_gender)
+	)
 	var appearance := {
 		"body": body_id,
 		"gender": preview_gender,
@@ -2473,7 +2472,26 @@ func _current_character_preview_appearance() -> Dictionary:
 				appearance[slot_color_key] = str(
 					character_preview_colors.get(tint_key, appearance.get(slot_color_key, "#ffffff"))
 				)
+	var includes_hair := _preview_includes_hair(item)
+	if not includes_hair and preview_gender == trainer_gender and trainer_appearance.has("hair"):
+		appearance["hair_color"] = CharacterAppearanceService.resolve_hair_color(
+			str(trainer_appearance.get("hair_color", "")), preview_gender
+		)
+	appearance.merge(STORE_PREVIEW_POLICY.resolve_hair(
+		str(item.get("id", "")), "detail", preview_gender,
+		str(appearance.get("headgear", "")), includes_hair,
+		str(appearance["hair"]), str(appearance["hair_color"]),
+		preview_gender == trainer_gender and trainer_appearance.has("hair")
+	), true)
 	return appearance
+
+
+func _preview_includes_hair(item: Dictionary) -> bool:
+	for part: Dictionary in _preview_parts_for_item(item):
+		if CharacterAppearanceService.normalize_part_category(str(part.get("slot", ""))) == "hair" \
+			and not str(part.get("appearance_id", "")).is_empty():
+			return true
+	return false
 
 
 func _refresh_character_preview() -> void:
@@ -2571,6 +2589,8 @@ func _refresh_character_preview() -> void:
 			if tint_key != ""
 			else _t("ui.store.preview.fixed_colours")
 		)
+		if _item_has_cosmetic_subcategory(item, "outfits") and not _preview_includes_hair(item):
+			character_preview_note_label.text += "\n" + _t("ui.store.preview.hair_not_included")
 	if character_preview_palette != null:
 		character_preview_palette.visible = tint_key != ""
 	if character_preview_color_label != null and tint_key != "":

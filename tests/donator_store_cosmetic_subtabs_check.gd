@@ -183,7 +183,7 @@ func _run() -> void:
 	_check(mysterious_item.get("price", 0) == 550, "Mysterious Outfit uses the complete four-item outfit price")
 	_check(mysterious_item.get("badge", "") == "4-ITEM BOX", "Mysterious Outfit communicates its four loose contents")
 	var mysterious_preview: Dictionary = store.call("_current_character_preview_appearance")
-	_check(mysterious_preview.get("hair", "") == "", "complete outfit previews remove the Trainer's current hairstyle")
+	_check(mysterious_preview.get("hair", "") == "", "the full Mysterious hood explicitly hides incompatible hair")
 	_check(mysterious_preview.get("facegear", "") == "Mysterious_Mask", "Mysterious preview includes the mask")
 	_check(mysterious_preview.get("top", "") == "Mysterious_Shirt", "Mysterious preview includes the shirt and gloves")
 	_check(mysterious_preview.get("bottom", "") == "Mysterious_Trousers", "Mysterious preview includes the trousers")
@@ -476,7 +476,7 @@ func _run() -> void:
 			for slot: String in outfit["parts"]:
 				_check(preview.get(slot) == outfit["parts"][slot], box_id + " previews " + slot)
 			_check(not store.character_preview_palette.visible, "fixed outfit has no Chroma selector")
-			_check(store.character_preview_note_label.text == localization_manager.text("ui.store.preview.fixed_colours"), "fixed outfit colours are explained")
+			_check(store.character_preview_note_label.text.contains(localization_manager.text("ui.store.preview.fixed_colours")), "fixed outfit colours are explained")
 	store.set_trainer_gender("male")
 
 	store.apply_store_state(

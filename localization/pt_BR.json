@@ -3111,6 +3111,7 @@
   "ui.store.preview.choose_color": "Escolha uma cor personalizada",
   "ui.store.preview.hex_tooltip": "Informe uma cor hexadecimal, por exemplo #7a46c5",
   "ui.store.preview.chroma_included": "As cores Chroma selecionadas estão incluídas na compra",
+  "ui.store.preview.hair_not_included": "O cabelo não está incluído neste traje.",
   "ui.store.preview.fixed_colours": "Esta roupa tem cores fixas.",
   "ui.store.preview.direction.down": "Frente",
   "ui.store.preview.direction.left": "Esquerda",
