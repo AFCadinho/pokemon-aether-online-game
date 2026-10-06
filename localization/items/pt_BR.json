@@ -490,5 +490,45 @@
   "reshiram-mount": {
     "name": "Montaria Reshiram",
     "shortDesc": "Desbloqueia Reshiram como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-giratina-origin-mount": {
+    "name": "Montaria Giratina Origin Brilhante",
+    "shortDesc": "Desbloqueia Giratina Origin Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "giratina-origin-mount-box": {
+    "name": "Caixa de montaria Giratina Origin",
+    "shortDesc": "Contém uma montaria Giratina Origin. Chance shiny inicial: 50%."
+  },
+  "shiny-ho-oh-mount": {
+    "name": "Montaria Ho-Oh Brilhante",
+    "shortDesc": "Desbloqueia Ho-Oh Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "ho-oh-mount-box": {
+    "name": "Caixa de montaria Ho-Oh",
+    "shortDesc": "Contém uma montaria Ho-Oh. Chance shiny inicial: 50%."
+  },
+  "shiny-yveltal-mount": {
+    "name": "Montaria Yveltal Brilhante",
+    "shortDesc": "Desbloqueia Yveltal Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "yveltal-mount-box": {
+    "name": "Caixa de montaria Yveltal",
+    "shortDesc": "Contém uma montaria Yveltal. Chance shiny inicial: 50%."
+  },
+  "shiny-miraidon-mount": {
+    "name": "Montaria Miraidon Brilhante",
+    "shortDesc": "Desbloqueia Miraidon Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "miraidon-mount-box": {
+    "name": "Caixa de montaria Miraidon",
+    "shortDesc": "Contém uma montaria Miraidon. Chance shiny inicial: 50%."
+  },
+  "shiny-reshiram-mount": {
+    "name": "Montaria Reshiram Brilhante",
+    "shortDesc": "Desbloqueia Reshiram Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "reshiram-mount-box": {
+    "name": "Caixa de montaria Reshiram",
+    "shortDesc": "Contém uma montaria Reshiram. Chance shiny inicial: 50%."
   }
 }

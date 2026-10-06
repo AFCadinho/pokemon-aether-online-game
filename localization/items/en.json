@@ -490,5 +490,45 @@
   "reshiram-mount": {
     "name": "Reshiram Mount",
     "shortDesc": "Unlocks Reshiram as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-giratina-origin-mount": {
+    "name": "Shiny Giratina Origin Mount",
+    "shortDesc": "Unlocks Shiny Giratina Origin as a land mount. Requires a Mount License for the current region."
+  },
+  "giratina-origin-mount-box": {
+    "name": "Giratina Origin Mount Box",
+    "shortDesc": "Contains a Giratina Origin mount. Base shiny chance: 50%."
+  },
+  "shiny-ho-oh-mount": {
+    "name": "Shiny Ho-Oh Mount",
+    "shortDesc": "Unlocks Shiny Ho-Oh as a land mount. Requires a Mount License for the current region."
+  },
+  "ho-oh-mount-box": {
+    "name": "Ho-Oh Mount Box",
+    "shortDesc": "Contains a Ho-Oh mount. Base shiny chance: 50%."
+  },
+  "shiny-yveltal-mount": {
+    "name": "Shiny Yveltal Mount",
+    "shortDesc": "Unlocks Shiny Yveltal as a land mount. Requires a Mount License for the current region."
+  },
+  "yveltal-mount-box": {
+    "name": "Yveltal Mount Box",
+    "shortDesc": "Contains a Yveltal mount. Base shiny chance: 50%."
+  },
+  "shiny-miraidon-mount": {
+    "name": "Shiny Miraidon Mount",
+    "shortDesc": "Unlocks Shiny Miraidon as a land mount. Requires a Mount License for the current region."
+  },
+  "miraidon-mount-box": {
+    "name": "Miraidon Mount Box",
+    "shortDesc": "Contains a Miraidon mount. Base shiny chance: 50%."
+  },
+  "shiny-reshiram-mount": {
+    "name": "Shiny Reshiram Mount",
+    "shortDesc": "Unlocks Shiny Reshiram as a land mount. Requires a Mount License for the current region."
+  },
+  "reshiram-mount-box": {
+    "name": "Reshiram Mount Box",
+    "shortDesc": "Contains a Reshiram mount. Base shiny chance: 50%."
   }
 }

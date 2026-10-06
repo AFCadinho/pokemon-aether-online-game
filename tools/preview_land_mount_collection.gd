@@ -11,6 +11,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var output := "user://land_mount_collection_preview"
+	var shiny := "--shiny" in OS.get_cmdline_user_args()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
@@ -50,7 +51,8 @@ func _run() -> void:
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
 			previews.append({"actor":actor,"label":label,"appearance":appearance,"gender":gender,"direction":DIRECTIONS[row]})
-	for id: String in IDS:
+	for base_id: String in IDS:
+		var id := base_id + ("_shiny" if shiny else "")
 		for item: Dictionary in previews:
 			item.actor.configure(id,item.appearance,item.direction,false)
 			item.actor._update_mount_hover(0.0)

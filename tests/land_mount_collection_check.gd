@@ -12,8 +12,11 @@ func _init() -> void:
 
 
 func _run() -> void:
-	for id: String in IDS:
-		var item := id.replace("_", "-") + "-mount"
+	var all_ids: Array = IDS.duplicate()
+	for base: String in IDS:
+		all_ids.append(base + "_shiny")
+	for id: String in all_ids:
+		var item := ("shiny-" if id.ends_with("_shiny") else "") + id.trim_suffix("_shiny").replace("_", "-") + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " item resolves")
 		_check(Mounts.get_unlocked_mount_ids_for_mode("land", [item]) == [id], id + " grant unlocks only this mount")
 		_check(Mounts.is_mount_unlocked(id, [item + "-bound"]), id + " bound grant works")
@@ -32,6 +35,11 @@ func _run() -> void:
 		_check(frames != null and foreground != null and mask != null and idle_mask != null, id + " layers load")
 		if frames == null or foreground == null or mask == null or idle_mask == null:
 			continue
+		if id.ends_with("_shiny"):
+			var base_id := id.trim_suffix("_shiny")
+			_check(mask.get_data() == Mounts._get_mask_image(base_id).get_data(), id + " preserves rider mask")
+			_check(idle_mask.get_data() == Mounts._get_mask_image(base_id, true).get_data(), id + " preserves idle rider mask")
+			_check(Mounts.get_mount_definition(id).riderOffsets == Mounts.get_mount_definition(base_id).riderOffsets, id + " preserves seats")
 		_check(mask.get_size() == Vector2i(768, 768) and idle_mask.get_size() == Vector2i(192, 768), id + " walking and standing mask dimensions")
 		for row in range(4):
 			for moving: bool in [false, true]:
