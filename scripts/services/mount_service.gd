@@ -51,6 +51,13 @@ static func get_mount_movement_mode(mount_id: String) -> String:
 	return str(get_mount_definition(mount_id).get("movementMode", "")).strip_edges().to_lower()
 
 
+static func get_interaction_height_offset(mount_id: String, direction: String) -> float:
+	var offsets: Variant = get_mount_definition(mount_id).get("interactionHeightOffsets", {})
+	if not offsets is Dictionary:
+		return 0.0
+	return float(offsets.get(direction, 0.0))
+
+
 static func get_mount_display_name(mount_id: String) -> String:
 	var definition := get_mount_definition(mount_id)
 	var fallback := normalize_mount_id(mount_id).replace("_", " ").replace("-", " ").capitalize()

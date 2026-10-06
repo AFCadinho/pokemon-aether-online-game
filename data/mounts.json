@@ -192,6 +192,7 @@
         320
       ],
       "movementAnimationSpeed": 7.5,
+      "interactionHeightOffsets": {"left": 16, "right": 16},
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,
@@ -305,6 +306,7 @@
         320
       ],
       "movementAnimationSpeed": 7.5,
+      "interactionHeightOffsets": {"left": 16, "right": 16},
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,
