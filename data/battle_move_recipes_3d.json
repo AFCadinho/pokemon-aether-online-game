@@ -799,7 +799,7 @@
           "source_frame": 16
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review",
+      "presentation_review": "close-combat-red-blue-user-approved",
       "close_choreography": {
         "reference_path": "res://assets/battles/animations/closecombat/closecombat.json",
         "reference_sha256": "1e2a840b2aaf7febae28382ba858d736019ed3032fa0dd967649f8646941008f",
@@ -5586,7 +5586,7 @@
       }
     },
     "letssnuggleforever": {
-      "name": "Let\u2019s Snuggle Forever",
+      "name": "Let’s Snuggle Forever",
       "family": "z",
       "variant": "hearts",
       "type": "fairy",
