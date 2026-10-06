@@ -558,5 +558,17 @@
   "metagross-black-gold-mount": {
     "name": "Montaria Metagross Preto e Dourado",
     "shortDesc": "Desbloqueia Metagross Preto e Dourado como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "dialga-mount": {
+    "name": "Montaria Dialga",
+    "shortDesc": "Desbloqueia Dialga como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "zekrom-mount": {
+    "name": "Montaria Zekrom",
+    "shortDesc": "Desbloqueia Zekrom como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "palkia-mount": {
+    "name": "Montaria Palkia",
+    "shortDesc": "Desbloqueia Palkia como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

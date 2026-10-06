@@ -11,7 +11,8 @@ from PIL import Image, ImageDraw
 ROOT = Path(__file__).resolve().parents[1]
 BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence')
 SPECIAL_VARIANTS = {'metagross_black_gold': 'metagross'}
-IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS)
+GRANT_ONLY_IDS = ('dialga', 'zekrom', 'palkia')
+IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS) + GRANT_ONLY_IDS
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
 
@@ -30,12 +31,14 @@ def build(mount_id):
     offsets = {}
     for row, direction in enumerate(DIRECTIONS):
         arts = []
+        front_heads = []
         for col in range(4):
             art = sheet.crop((col*width, row*height, (col+1)*width, (row+1)*height))
-            if 'headRepose' in design:
+            relocated = Image.new('RGBA', art.size)
+            spec = design.get('headRepose', [None]*4)[row]
+            if spec:
                 # Move only the anatomical head. A full-width strip also moves
                 # wing/arm tips and overwrites the original torso underneath.
-                spec = design['headRepose'][row]
                 dx, dy = design['frameShifts'][direction][col]
                 selection = Image.new('L', art.size)
                 ImageDraw.Draw(selection).polygon(
@@ -43,8 +46,10 @@ def build(mount_id):
                 head = Image.new('RGBA', art.size)
                 head.paste(art, (0,0), selection)
                 art.paste((0,0,0,0), (0,0,width,height), selection)
-                art.alpha_composite(head, tuple(spec['offset']))
+                relocated.alpha_composite(head, tuple(spec['offset']))
+                art.alpha_composite(relocated)
             arts.append(art)
+            front_heads.append(relocated if spec and spec.get('foreground', False) else None)
         base_x, base_y = 96-width//2, 112-arts[0].getbbox()[3]
         offsets[direction] = []
         for col, art in enumerate(arts):
@@ -61,6 +66,10 @@ def build(mount_id):
                 if polygon: draw.polygon([(x+dx,y+dy) for x,y in polygon],fill=255)
             selected = Image.new('RGBA',art.size)
             selected.paste(art,(0,0),selection)
+            if front_heads[col] is not None:
+                # Use only the relocated head's actual alpha, preserving gaps
+                # where the seated player must remain visible.
+                selected.alpha_composite(front_heads[col])
             mount = Image.new('RGBA',(FRAME,FRAME));mount.alpha_composite(art,(base_x,base_y))
             foreground = Image.new('RGBA',(FRAME,FRAME));foreground.alpha_composite(selected,(base_x,base_y))
             mask = Image.new('RGBA',(FRAME,FRAME));mask.putalpha(foreground.getchannel('A'))

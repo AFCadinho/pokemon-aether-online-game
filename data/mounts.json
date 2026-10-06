@@ -1585,6 +1585,303 @@
         0,
         8
       ]
+    },
+    "dialga": {
+      "displayName": "Dialga",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/dialga/mount.png",
+      "foregroundSheet": "res://assets/mounts/dialga/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/dialga/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -54
+          ],
+          [
+            0,
+            -52
+          ],
+          [
+            0,
+            -54
+          ],
+          [
+            0,
+            -52
+          ]
+        ],
+        "left": [
+          [
+            6,
+            -42
+          ],
+          [
+            6,
+            -40
+          ],
+          [
+            6,
+            -42
+          ],
+          [
+            6,
+            -40
+          ]
+        ],
+        "right": [
+          [
+            -6,
+            -42
+          ],
+          [
+            -6,
+            -40
+          ],
+          [
+            -6,
+            -42
+          ],
+          [
+            -6,
+            -40
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/dialga/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/dialga/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/dialga/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/dialga/icon.png",
+      "unlockItemId": "dialga-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "zekrom": {
+      "displayName": "Zekrom",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/zekrom/mount.png",
+      "foregroundSheet": "res://assets/mounts/zekrom/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/zekrom/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 6,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ],
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ]
+        ],
+        "left": [
+          [
+            2,
+            -48
+          ],
+          [
+            2,
+            -46
+          ],
+          [
+            2,
+            -48
+          ],
+          [
+            2,
+            -46
+          ]
+        ],
+        "right": [
+          [
+            -2,
+            -48
+          ],
+          [
+            -2,
+            -46
+          ],
+          [
+            -2,
+            -48
+          ],
+          [
+            -2,
+            -46
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -30
+          ],
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -30
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/zekrom/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/zekrom/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/zekrom/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/zekrom/icon.png",
+      "unlockItemId": "zekrom-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "palkia": {
+      "displayName": "Palkia",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/palkia/mount.png",
+      "foregroundSheet": "res://assets/mounts/palkia/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/palkia/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -58
+          ],
+          [
+            0,
+            -56
+          ],
+          [
+            0,
+            -58
+          ],
+          [
+            0,
+            -56
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -54
+          ],
+          [
+            16,
+            -52
+          ],
+          [
+            16,
+            -54
+          ],
+          [
+            16,
+            -52
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -54
+          ],
+          [
+            -16,
+            -52
+          ],
+          [
+            -16,
+            -54
+          ],
+          [
+            -16,
+            -52
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -38
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/palkia/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/palkia/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/palkia/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/palkia/icon.png",
+      "unlockItemId": "palkia-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }

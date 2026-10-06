@@ -558,5 +558,17 @@
   "metagross-black-gold-mount": {
     "name": "Black & Gold Metagross Mount",
     "shortDesc": "Unlocks Black & Gold Metagross as a land mount. Requires a Mount License for the current region."
+  },
+  "dialga-mount": {
+    "name": "Dialga Mount",
+    "shortDesc": "Unlocks Dialga as a land mount. Requires a Mount License for the current region."
+  },
+  "zekrom-mount": {
+    "name": "Zekrom Mount",
+    "shortDesc": "Unlocks Zekrom as a land mount. Requires a Mount License for the current region."
+  },
+  "palkia-mount": {
+    "name": "Palkia Mount",
+    "shortDesc": "Unlocks Palkia as a land mount. Requires a Mount License for the current region."
   }
 }
