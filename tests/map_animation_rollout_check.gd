@@ -14,6 +14,10 @@ func _init() -> void:
 	var frame_count := 0
 	var cell_count := 0
 	for id in report.maps:
+		# These maps now use their authored Lavender-style flower timelines.
+		# Keep the historical catalog intact for all other generated visuals.
+		var map_catalog := catalog.duplicate()
+		map_catalog.merge(report.maps[id].get("animation_overrides", {}), true)
 		var path := "res://generated/tiled_visuals/%s/%s.visual.tscn" % [id,id]
 		var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE_DEEP) as PackedScene
 		if scene == null:
@@ -39,11 +43,11 @@ func _init() -> void:
 				var coords := source.get_tile_id(j)
 				var hash := Fingerprint.new()._hash(pixels.get_region(source.get_tile_texture_region(coords,0)).get_data())
 				var frames := source.get_tile_animation_frames_count(coords)
-				if not catalog.has(hash):
+				if not map_catalog.has(hash):
 					if frames > 1 and not preload("res://addons/tiled_tmx_importer/importer/tmx_tall_grass_wind.gd").IMAGES.has(hash):
 						failures.append("Unknown animated artwork: " + id)
 					continue
-				var entry: Dictionary = catalog[hash]
+				var entry: Dictionary = map_catalog[hash]
 				if frames != entry.durations_ms.size():
 					failures.append("Missing frames: " + id)
 					continue
