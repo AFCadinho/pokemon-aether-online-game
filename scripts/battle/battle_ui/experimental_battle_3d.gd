@@ -19,6 +19,7 @@ const FireStreamMoveEffect = preload("res://scripts/battle/battle_ui/fire_stream
 const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_effect_3d.gd")
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
+const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
 const FamilyMoveEffect = preload("res://scripts/battle/battle_ui/family_move_effect_3d.gd")
 const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
@@ -989,6 +990,10 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 		"nodes":[actors[index], substitute_models[index]], "hud_transform":actors[index].global_transform}
 	if source != actors[index] and source.get("body") is Node3D:
 		motion.hud_sub_transform = source.body.global_transform
+	var z_recipe := MoveRecipes.get_recipe(str(timing.get("move_key", "")))
+	if z_recipe.has("z_choreography"):
+		motion["z_style"] = z_recipe.z_choreography.style
+		motion["launch"] = float(timing.launch_frame)/60.0
 	move_contacts[index] = motion
 	effect.finished.connect(func():
 		if move_contacts[index] == motion: _clear_move_contact(index), CONNECT_ONE_SHOT)
@@ -1023,11 +1028,21 @@ func _update_move_contacts() -> void:
 		var approach_start := minf(duration * 0.08, float(motion.impact) * 0.15)
 		if motion.get("quick",false): approach_start = float(motion.impact)*0.4
 		var contact_time := float(motion.impact) * 0.96
+		var z_style := str(motion.get("z_style",""))
+		if not z_style.is_empty():
+			approach_start = float(motion.launch)
+			if z_style in ["barrage","seven_stars"]: contact_time = lerpf(approach_start,contact_time,.42)
 		var outward := smoothstep(approach_start, contact_time, seconds)
 		var return_start := minf(float(motion.impact) + duration * 0.08, duration * 0.72)
+		if not z_style.is_empty():
+			return_start = lerpf(float(motion.impact),duration,.15)
 		var returning := smoothstep(return_start, duration * 0.94, seconds)
 		var weight := outward * (1.0 - returning)
-		_set_contact_pose(index, motion.displacement * weight, float(motion.yaw) * weight)
+		var offset: Vector3 = motion.displacement * weight
+		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:
+			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
+			offset.y += sin(leap*PI) * (2.0 if z_style=="sky_dive" else 1.3)
+		_set_contact_pose(index, offset, float(motion.yaw) * weight)
 
 func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float, ground: Variant = null) -> Dictionary:
 	var anchors := _move_anchors(actor, target, move)
@@ -1082,6 +1097,8 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		var forward := Vector3(direction.x,0,direction.z).normalized()
 		var extent := forward.abs().dot(a.get("half_extents",Vector3(a.radius,0,a.radius)))
 		var clearance := 0.3 * float(recipe.scale) if recipe.family in ["projectiles","z"] else 0.12
+		if recipe.has("z_choreography"):
+			clearance = 0.9 # Room for Z charge orbs before they leave the body.
 		source = a.position + Vector3.UP*a.height*source_height + forward*(extent+clearance)
 	var attachment := {}
 	var index := actor_index(actor)
@@ -1112,7 +1129,9 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	var timing := move_timing(move, actor)
 	if timing.is_empty(): return null
 	var effect: Node3D
-	if MoveRecipes.supports(move):
+	if recipe.has("z_choreography"):
+		effect = ZMoveEffect.new()
+	elif MoveRecipes.supports(move):
 		effect = FamilyMoveEffect.new()
 	elif MoveEffect.move_key(move)=="dracometeor":
 		effect = DracoMeteorEffect.new()

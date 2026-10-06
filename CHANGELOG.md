@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Rework all 35 3D Z-moves with distinct buildup, larger signature effects and climaxes inspired by their 2D animations, with synchronized sound cues and aerial contact movement.
+
 - Load and refresh both Pokémon battle sprites on each side of Android double battles, preventing uncached Pokémon from remaining HOME icons.
 
 - Restore the riding pose after Thieving so moving on a mount no longer plays the player's running or walking animation.

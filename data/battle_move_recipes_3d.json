@@ -3861,29 +3861,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.24,
+      "impact_fraction": 0.72,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 719,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Catastropika1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/10000000voltthunderbolt_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Catastropika4.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/10000000voltthunderbolt_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 130,
+          "at_fraction": 0.24,
+          "end_fraction": 0.52,
+          "source_frame": 12
+        },
+        {
+          "name": "PRSFX- Catastropika6.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/10000000voltthunderbolt_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 170,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9,
+          "source_frame": 31
         },
         {
           "name": "PRSFX- Catastropika3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/10000000voltthunderbolt_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/10000000voltthunderbolt_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.72,
+          "end_fraction": 0.97,
+          "source_frame": 35
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "rainbow_lightning",
+        "reference_path": "res://assets/battles/animations/catastropika/catastropika.json",
+        "reference_sha256": "daa01daf1c219e2d72a0f972c0b103eaea08caf35eccead607ca5c631aace8bd",
+        "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
+        "sheet_sha256": "06d5c56c0bf6101af4678080a411d28baf15b85ff727c8a06717995abc048339",
+        "source_frames": 50,
+        "release_frame": 12,
+        "impact_frame": 36,
+        "observed_motifs": "Electric charge, repeated bolts, final overhead discharge",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "aciddownpour": {
       "name": "Acid Downpour",
@@ -3894,29 +3932,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.3,
+      "launch_fraction": 0.25,
+      "impact_fraction": 0.5,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 628,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Acid Downpour3",
-          "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/aciddownpour_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 115
+          "pitch": 115,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Acid Downpour7",
-          "path": "res://assets/battles/moves_3d/audio_recipes/aciddownpour_impact.wav",
+          "name": "PRSFX- Acid Downpour2",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/aciddownpour_1.wav",
+          "role": "charge",
+          "volume": 100,
+          "pitch": 60,
+          "at_fraction": 0.23333333333333334,
+          "end_fraction": 0.5133333333333334,
+          "source_frame": 14
+        },
+        {
+          "name": "PRSFX- Acid Downpour5",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/aciddownpour_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 85,
+          "at_fraction": 0.4,
+          "end_fraction": 0.68,
+          "source_frame": 24
+        },
+        {
+          "name": "PRSFX- Acid Downpour4",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/aciddownpour_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.5,
+          "end_fraction": 0.75,
+          "source_frame": 28
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "acid_column",
+        "reference_path": "res://assets/battles/animations/aciddownpour/aciddownpour.json",
+        "reference_sha256": "f27013b3344af0561b76456520c46c75dfbfc6214454100bb0961382fde78854",
+        "sheet_path": "res://assets/battles/animations/aciddownpour/PRAS- Acid Downpour.png",
+        "sheet_sha256": "292ac2b9c7c4c868ca4b36bde81f37c08138b546652a0bdf8482ee7745bf1831",
+        "source_frames": 60,
+        "release_frame": 15,
+        "impact_frame": 30,
+        "observed_motifs": "Poison droplets gather into a tall spiral over the target",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "alloutpummeling": {
       "name": "All-Out Pummeling",
@@ -3927,29 +4003,57 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.0,
+      "launch_fraction": 0.209302,
+      "impact_fraction": 0.604651,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 624,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- All Out Pummeling1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/alloutpummeling_0.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.20930232558139536,
+          "end_fraction": 0.4893023255813954,
+          "source_frame": 9
+        },
+        {
+          "name": "PRSFX- All Out Pummeling2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/alloutpummeling_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 110,
+          "at_fraction": 0.32558139534883723,
+          "end_fraction": 0.6055813953488373,
+          "source_frame": 14
         },
         {
           "name": "PRSFX- All Out Pummeling3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/alloutpummeling_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/alloutpummeling_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.604651,
+          "end_fraction": 0.854651,
+          "source_frame": 26
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "barrage",
+        "reference_path": "res://assets/battles/animations/alloutpummeling/alloutpummeling.json",
+        "reference_sha256": "742bfa67871a6a5b8e590ab3045a9e3a92668cffbeef05353a1c1a27d54eece2",
+        "sheet_path": "res://assets/battles/animations/alloutpummeling/PRAS- All Out Pummeling.png",
+        "sheet_sha256": "c5d04c1384f245b64cf7ae0ea72ca09832ad05e5dbd73cb35dcfb491d8d9851e",
+        "source_frames": 43,
+        "release_frame": 9,
+        "impact_frame": 26,
+        "observed_motifs": "Rapid fists converge, then one heavy finishing blow",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "blackholeeclipse": {
       "name": "Black Hole Eclipse",
@@ -3960,29 +4064,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.2,
+      "launch_fraction": 0.211765,
+      "impact_fraction": 0.694118,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 654,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Black Hole Eclipse2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/blackholeeclipse_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Black Hole Eclipse1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/blackholeeclipse_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 85,
+          "at_fraction": 0.21176470588235294,
+          "end_fraction": 0.491764705882353,
+          "source_frame": 18
         },
         {
           "name": "PRSFX- Black Hole Eclipse3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/blackholeeclipse_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/blackholeeclipse_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 105
+          "pitch": 105,
+          "at_fraction": 0.694118,
+          "end_fraction": 0.944118,
+          "source_frame": 59
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "black_hole",
+        "reference_path": "res://assets/battles/animations/blackholeeclipse/blackholeeclipse.json",
+        "reference_sha256": "7aaa43c31f7a6c0b0e09aa8aa422e33d1d21c35c85c4d9794833ac1c4d582ccf",
+        "sheet_path": "res://assets/battles/animations/blackholeeclipse/PRAS- Black Hole Eclipse.png",
+        "sheet_sha256": "8c156e32a115a49fcb6e7568f8b9d045d94fc95161cc86a4812379302b6b786b",
+        "source_frames": 85,
+        "release_frame": 18,
+        "impact_frame": 59,
+        "observed_motifs": "Dark orb grows inside red orbiting bands, then collapses",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "bloomdoom": {
       "name": "Bloom Doom",
@@ -3993,29 +4125,47 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.2,
+      "launch_fraction": 0.282609,
+      "impact_fraction": 0.586957,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 644,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Bloom Doom2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/bloomdoom_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.06521739130434782,
+          "end_fraction": 0.34521739130434786,
+          "source_frame": 3
         },
         {
           "name": "PRSFX- Bloom Doom3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/bloomdoom_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/bloomdoom_1.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.586957,
+          "end_fraction": 0.836957,
+          "source_frame": 20
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "bloom_pillar",
+        "reference_path": "res://assets/battles/animations/bloomdoom/bloomdoom.json",
+        "reference_sha256": "89d340169ec0df072f8026221f3b7bc80800778c27610cc2da9dfeaca1e461e1",
+        "sheet_path": "res://assets/battles/animations/bloomdoom/PRAS- Bloom Doom.png",
+        "sheet_sha256": "f2b0bea73d480362113bef1756da186bc0f03f554ea1bba5e0c83df9c40f988e",
+        "source_frames": 46,
+        "release_frame": 13,
+        "impact_frame": 27,
+        "observed_motifs": "Rising light over greenery, target pillar and scattering leaves",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "breakneckblitz": {
       "name": "Breakneck Blitz",
@@ -4026,14 +4176,26 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.0,
+      "launch_fraction": 0.119048,
+      "impact_fraction": 0.809524,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 622,
-      "review": "first-pass",
-      "audio": []
+      "review": "2d-inspired-awaiting-review",
+      "audio": [],
+      "z_choreography": {
+        "style": "rush",
+        "reference_path": "res://assets/battles/animations/breakneckblitz/breakneckblitz.json",
+        "reference_sha256": "5a634fb2393093ed776c82957d20cec6480c9187ec8218723e549ac99aba9b13",
+        "sheet_path": "res://assets/battles/animations/breakneckblitz/PRAS- Breakneck Blitz.png",
+        "sheet_sha256": "eabaa4dc184de7402bfb5cdd557d898283f093bee5fa00149317a34c960a19fd",
+        "source_frames": 42,
+        "release_frame": 5,
+        "impact_frame": 34,
+        "observed_motifs": "Accelerating body rush with dust and a final collision",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "catastropika": {
       "name": "Catastropika",
@@ -4044,29 +4206,67 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.3,
+      "launch_fraction": 0.24,
+      "impact_fraction": 0.72,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 658,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Catastropika1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/catastropika_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Catastropika4.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/catastropika_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 130,
+          "at_fraction": 0.24,
+          "end_fraction": 0.52,
+          "source_frame": 12
+        },
+        {
+          "name": "PRSFX- Catastropika6.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/catastropika_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 170,
+          "at_fraction": 0.62,
+          "end_fraction": 0.9,
+          "source_frame": 31
         },
         {
           "name": "PRSFX- Catastropika3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/catastropika_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/catastropika_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.72,
+          "end_fraction": 0.97,
+          "source_frame": 35
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "electric_dive",
+        "reference_path": "res://assets/battles/animations/catastropika/catastropika.json",
+        "reference_sha256": "daa01daf1c219e2d72a0f972c0b103eaea08caf35eccead607ca5c631aace8bd",
+        "sheet_path": "res://assets/battles/animations/catastropika/PRAS- Catastropika.png",
+        "sheet_sha256": "06d5c56c0bf6101af4678080a411d28baf15b85ff727c8a06717995abc048339",
+        "source_frames": 50,
+        "release_frame": 12,
+        "impact_frame": 36,
+        "observed_motifs": "Charged electric ball, lunge and overhead lightning",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "clangoroussoulblaze": {
       "name": "Clangorous Soulblaze",
@@ -4077,29 +4277,47 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.5,
+      "launch_fraction": 0.144928,
+      "impact_fraction": 0.666667,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 728,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Clangorous Soulblaze2.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/clangoroussoulblaze_0.wav",
+          "role": "charge",
           "volume": 50,
-          "pitch": 125
+          "pitch": 125,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
           "name": "PRSFX- Clangorous Soulblaze1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/clangoroussoulblaze_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/clangoroussoulblaze_1.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 108
+          "pitch": 108,
+          "at_fraction": 0.666667,
+          "end_fraction": 0.916667,
+          "source_frame": 1
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "sound_rings",
+        "reference_path": "res://assets/battles/animations/clangoroussoulblaze/clangoroussoulblaze.json",
+        "reference_sha256": "10e8640e0afc7d8185b1b79ab98205c67afca1e2fdc655649807640c38710812",
+        "sheet_path": "res://assets/battles/animations/clangoroussoulblaze/PRAS- Clanging Scales.png",
+        "sheet_sha256": "68234bf32811da82f6b0673a857773745120606a39ebbb9bb562ecd1c41c25c5",
+        "source_frames": 69,
+        "release_frame": 10,
+        "impact_frame": 46,
+        "observed_motifs": "Repeated widening purple sound rings toward the target",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "continentalcrush": {
       "name": "Continental Crush",
@@ -4110,29 +4328,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.5,
+      "launch_fraction": 0.283333,
+      "impact_fraction": 0.8,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 632,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Continental Crush3.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/continentalcrush_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.08333333333333333,
+          "end_fraction": 0.36333333333333334,
+          "source_frame": 5
+        },
+        {
+          "name": "PRSFX- Continental Crush2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/continentalcrush_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 85,
+          "at_fraction": 0.2833333333333333,
+          "end_fraction": 0.5633333333333334,
+          "source_frame": 17
         },
         {
           "name": "PRSFX- Continental Crush5.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/continentalcrush_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/continentalcrush_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.8,
+          "end_fraction": 1.0,
+          "source_frame": 49
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "boulder",
+        "reference_path": "res://assets/battles/animations/continentalcrush/continentalcrush.json",
+        "reference_sha256": "3858bb27bdea2250cda98f0001397a7e2204e6e09d1b689c15e1b16e46a4b709",
+        "sheet_path": "res://assets/battles/animations/continentalcrush/PRAS- Rock.png",
+        "sheet_sha256": "3d4acab1e7ea383b2ea0a1afb3a85335d5707d7942b80064b14e9ee8a7beaf12",
+        "source_frames": 60,
+        "release_frame": 17,
+        "impact_frame": 48,
+        "observed_motifs": "Rocks assemble overhead into a massive crushing formation",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "corkscrewcrash": {
       "name": "Corkscrew Crash",
@@ -4143,29 +4389,67 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.2,
+      "launch_fraction": 0.125,
+      "impact_fraction": 0.733333,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 638,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Corkscrew Crash1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/corkscrewcrash_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Corkscrew Crash9.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/corkscrewcrash_impact.wav",
+          "name": "PRSFX- Corkscrew Crash3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/corkscrewcrash_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 130,
+          "at_fraction": 0.125,
+          "end_fraction": 0.405,
+          "source_frame": 15
+        },
+        {
+          "name": "PRSFX- Corkscrew Crash5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/corkscrewcrash_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.3333333333333333,
+          "end_fraction": 0.6133333333333333,
+          "source_frame": 40
+        },
+        {
+          "name": "PRSFX- Corkscrew Crash7.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/corkscrewcrash_3.wav",
           "role": "impact",
-          "volume": 70,
-          "pitch": 110
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.733333,
+          "end_fraction": 0.983333,
+          "source_frame": 89
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "drill",
+        "reference_path": "res://assets/battles/animations/corkscrewcrash/corkscrewcrash.json",
+        "reference_sha256": "ef0862b4517af279357c8c8ae3406af02a4f9d5e052bbfc6b8ff475d6b72ab9f",
+        "sheet_path": "res://assets/battles/animations/corkscrewcrash/PRAS- Corkscrew Crash.png",
+        "sheet_sha256": "fb84fcbde502186c6f8442d7a140d9afd431af7997c59e536ad4d52a846066d0",
+        "source_frames": 120,
+        "release_frame": 15,
+        "impact_frame": 88,
+        "observed_motifs": "Spinning metallic cone, forward drive and broken ground",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "devastatingdrake": {
       "name": "Devastating Drake",
@@ -4176,29 +4460,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.5,
+      "launch_fraction": 0.145161,
+      "impact_fraction": 0.677419,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 652,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Devastating Drake2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/devastatingdrake_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Devastating Drake3",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/devastatingdrake_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 100,
+          "at_fraction": 0.14516129032258066,
+          "end_fraction": 0.42516129032258065,
+          "source_frame": 9
         },
         {
           "name": "PRSFX- Devastating Drake1",
-          "path": "res://assets/battles/moves_3d/audio_recipes/devastatingdrake_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/devastatingdrake_2.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.677419,
+          "end_fraction": 0.927419,
+          "source_frame": 42
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "dragon",
+        "reference_path": "res://assets/battles/animations/devastatingdrake/devastatingdrake.json",
+        "reference_sha256": "db51167f12541e8c40281c6b9c9ceaab231a73993fa95b546fa424f02139c377",
+        "sheet_path": "res://assets/battles/animations/devastatingdrake/PRAS- Devastating Drake.png",
+        "sheet_sha256": "9e1c933745c6dcde1d5da3b487cbf9049de36736c2e01bcfd96616eb3ad0863e",
+        "source_frames": 62,
+        "release_frame": 9,
+        "impact_frame": 42,
+        "observed_motifs": "Winged violet dragon energy with a winding flame trail",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "extremeevoboost": {
       "name": "Extreme Evoboost",
@@ -4209,29 +4521,57 @@
       "contact": false,
       "target": "actor",
       "damaging": false,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.2,
+      "launch_fraction": 0.223529,
+      "impact_fraction": 0.858824,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 702,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Extreme Evoboost1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/extremeevoboost_cast.wav",
-          "role": "cast",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/extremeevoboost_0.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.2235294117647059,
+          "end_fraction": 0.5035294117647059,
+          "source_frame": 19
+        },
+        {
+          "name": "PRSFX- Extreme Evoboost2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/extremeevoboost_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.4588235294117647,
+          "end_fraction": 0.7388235294117647,
+          "source_frame": 39
         },
         {
           "name": "PRSFX- Extreme Evoboost3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/extremeevoboost_cast.wav",
-          "role": "cast",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/extremeevoboost_2.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.8588235294117647,
+          "end_fraction": 1.0,
+          "source_frame": 73
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "evolution",
+        "reference_path": "res://assets/battles/animations/extremeevoboost/extremeevoboost.json",
+        "reference_sha256": "05f2af54083e3354841656b0e21923345dc1d4155897921c2bae8a7ce36a99b2",
+        "sheet_path": "res://assets/battles/animations/extremeevoboost/PRAS- Extreme Evoboost.png",
+        "sheet_sha256": "0e61a6cb1ad5e7ec1a9f162faa6ba05a164343c703d58757f7bc98c2aacd4bbc",
+        "source_frames": 85,
+        "release_frame": 19,
+        "impact_frame": 73,
+        "observed_motifs": "Eight evolution colors gather around the user and converge",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "genesissupernova": {
       "name": "Genesis Supernova",
@@ -4242,29 +4582,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.5,
+      "launch_fraction": 0.252174,
+      "impact_fraction": 0.765217,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 703,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Genesis Supernova1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/genesissupernova_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Genesis Supernova11.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/genesissupernova_impact.wav",
+          "name": "PRSFX- Genesis Supernova4.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/genesissupernova_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 130,
+          "at_fraction": 0.25217391304347825,
+          "end_fraction": 0.5321739130434783,
+          "source_frame": 29
+        },
+        {
+          "name": "PRSFX- Genesis Supernova12.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/genesissupernova_2.wav",
+          "role": "action",
+          "volume": 40,
+          "pitch": 65,
+          "at_fraction": 0.46956521739130436,
+          "end_fraction": 0.7495652173913043,
+          "source_frame": 54
+        },
+        {
+          "name": "PRSFX- Genesis Supernova10.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/genesissupernova_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 75,
+          "at_fraction": 0.765217,
+          "end_fraction": 1.0,
+          "source_frame": 88
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "dna_nova",
+        "reference_path": "res://assets/battles/animations/genesissupernova/genesissupernova.json",
+        "reference_sha256": "9c5de6d374b8039ab76ba3ea8646fcec75279a0b47f9be868ce4c56ce22296e3",
+        "sheet_path": "res://assets/battles/animations/genesissupernova/PRAS- Genesis Supernova.png",
+        "sheet_sha256": "fa016c6aaf0a5edd0c4f04b928adf6f60024ab95c20da950b2916ae6ab7aadcf",
+        "source_frames": 115,
+        "release_frame": 29,
+        "impact_frame": 88,
+        "observed_motifs": "Pink double helix, growing psychic orb and supernova",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "gigavolthavoc": {
       "name": "Gigavolt Havoc",
@@ -4275,29 +4653,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.2,
+      "launch_fraction": 0.2,
+      "impact_fraction": 0.66,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 646,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Gigavolt Havoc3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/gigavolthavoc_0.wav",
+          "role": "charge",
           "volume": 70,
-          "pitch": 150
+          "pitch": 150,
+          "at_fraction": 0.06,
+          "end_fraction": 0.34,
+          "source_frame": 3
+        },
+        {
+          "name": "PRSFX- Gigavolt Havoc1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/gigavolthavoc_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 100,
+          "at_fraction": 0.2,
+          "end_fraction": 0.48000000000000004,
+          "source_frame": 10
         },
         {
           "name": "PRSFX- Gigavolt Havoc2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/gigavolthavoc_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/gigavolthavoc_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 75
+          "pitch": 75,
+          "at_fraction": 0.66,
+          "end_fraction": 0.91,
+          "source_frame": 33
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "lightning",
+        "reference_path": "res://assets/battles/animations/gigavolthavoc/gigavolthavoc.json",
+        "reference_sha256": "d49036e3ce1c74b297538927728bdfcfbd57bc8dd032b1cec864db87d3c34123",
+        "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
+        "sheet_sha256": "bcfaa5378c3b4c2572213ef0c80735383c391703244ca2e905344d271f349199",
+        "source_frames": 50,
+        "release_frame": 10,
+        "impact_frame": 33,
+        "observed_motifs": "Electric charge followed by a thick column of lightning",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "guardianofalola": {
       "name": "Guardian of Alola",
@@ -4308,29 +4714,47 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.5,
+      "launch_fraction": 0.19697,
+      "impact_fraction": 0.560606,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 698,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Gaurdian of Alola1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/guardianofalola_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
           "name": "PRSFX- Gaurdian of Alola2.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/guardianofalola_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/guardianofalola_1.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.560606,
+          "end_fraction": 0.810606,
+          "source_frame": 37
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "guardian_fist",
+        "reference_path": "res://assets/battles/animations/guardianofalola/guardianofalola.json",
+        "reference_sha256": "728579b468e323b4134a3b9c9d1a45109901a10f6702bfefa663805dbea14bef",
+        "sheet_path": "res://assets/battles/animations/guardianofalola/PRAS- GOA.png",
+        "sheet_sha256": "172bfa40c8d64aa75f057d269d663cffbab8df65c9c6c407d5cea0b21e1b7c7a",
+        "source_frames": 66,
+        "release_frame": 13,
+        "impact_frame": 37,
+        "observed_motifs": "Floating fragments assemble into a giant golden fist",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "hydrovortex": {
       "name": "Hydro Vortex",
@@ -4341,29 +4765,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.27451,
+      "impact_fraction": 0.72549,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 642,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Hydro Vortex2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/hydrovortex_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 120
+          "pitch": 120,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Hydro Vortex1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/hydrovortex_1.wav",
+          "role": "action",
+          "volume": 70,
+          "pitch": 150,
+          "at_fraction": 0.27450980392156865,
+          "end_fraction": 0.5545098039215687,
+          "source_frame": 14
         },
         {
           "name": "PRSFX- Hydro Vortex3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/hydrovortex_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/hydrovortex_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.72549,
+          "end_fraction": 0.97549,
+          "source_frame": 37
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "water_vortex",
+        "reference_path": "res://assets/battles/animations/hydrovortex/hydrovortex.json",
+        "reference_sha256": "4483b3b238f601e8a12d3752f9a8002fba46b374d8955032e302f3a0068dc021",
+        "sheet_path": "res://assets/battles/animations/bubble/PRAS- Water.png",
+        "sheet_sha256": "81bd4b246d34febed2c3cd905f32c3ae4fa6643eb20e2b8e3d52ebf51eebeb2c",
+        "source_frames": 51,
+        "release_frame": 14,
+        "impact_frame": 37,
+        "observed_motifs": "Water funnels spiral inward, then merge into a tall vortex",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "infernooverdrive": {
       "name": "Inferno Overdrive",
@@ -4374,29 +4826,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.230769,
+      "impact_fraction": 0.615385,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 640,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Inferno Overdrive4.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/infernooverdrive_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Inferno Overdrive5",
-          "path": "res://assets/battles/moves_3d/audio_recipes/infernooverdrive_impact.wav",
+          "name": "PRSFX- Inferno Overdrive2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/infernooverdrive_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 100,
+          "at_fraction": 0.23076923076923078,
+          "end_fraction": 0.5107692307692309,
+          "source_frame": 12
+        },
+        {
+          "name": "PRSFX- Inferno Overdrive3.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/infernooverdrive_2.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 100,
+          "at_fraction": 0.5576923076923077,
+          "end_fraction": 0.8376923076923077,
+          "source_frame": 29
+        },
+        {
+          "name": "PRSFX- Inferno Overdrive5.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/infernooverdrive_3.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.615385,
+          "end_fraction": 0.865385,
+          "source_frame": 32
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "fire_orb",
+        "reference_path": "res://assets/battles/animations/infernooverdrive/infernooverdrive.json",
+        "reference_sha256": "313cc262544e21fe7f8e99da17b6dcd38a98f576cd073c7d46f89a804fbe534c",
+        "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
+        "sheet_sha256": "1190a9ccfa4a007488a6712fd1f02ad41bbcc72a5d19fcf7624978a1efeec0b4",
+        "source_frames": 52,
+        "release_frame": 12,
+        "impact_frame": 32,
+        "observed_motifs": "Flame ring charges a projectile, then a large fire eruption",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "letssnuggleforever": {
       "name": "Let\u2019s Snuggle Forever",
@@ -4407,95 +4897,199 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.6,
+      "launch_fraction": 0.351562,
+      "impact_fraction": 0.734375,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 726,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Let's Snuggle Forever1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/letssnuggleforever_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Let's Snuggle Forever12.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/letssnuggleforever_impact.wav",
+          "name": "PRSFX- Let's Snuggle Forever4.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/letssnuggleforever_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.3515625,
+          "end_fraction": 0.6315625,
+          "source_frame": 45
+        },
+        {
+          "name": "PRSFX- Let's Snuggle Forever6.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/letssnuggleforever_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 85,
+          "at_fraction": 0.5390625,
+          "end_fraction": 0.8190625,
+          "source_frame": 69
+        },
+        {
+          "name": "PRSFX- Let's Snuggle Forever7.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/letssnuggleforever_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.734375,
+          "end_fraction": 0.984375,
+          "source_frame": 83
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "shadow_shroud",
+        "reference_path": "res://assets/battles/animations/letssnuggleforever/letssnuggleforever.json",
+        "reference_sha256": "5cb6874e7b8ded6f03bd83c97b3b416cbef82329c4a085bc28b9ed7cb2557855",
+        "sheet_path": "res://assets/battles/animations/letssnuggleforever/PRAS- Lets Snuggle Forever.png",
+        "sheet_sha256": "f212e296f08d20307ad4c91ea0c7cfd39e3513c989fc99f020b040776a3fefff",
+        "source_frames": 128,
+        "release_frame": 45,
+        "impact_frame": 94,
+        "observed_motifs": "Shadow approaches, enveloping cloth shape and a flurry of blows",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "lightthatburnsthesky": {
       "name": "Light That Burns the Sky",
       "family": "z",
       "variant": "burst",
       "type": "psychic",
-      "color": "ff85cf",
+      "color": "#ffd36a",
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.6,
+      "launch_fraction": 0.241667,
+      "impact_fraction": 0.725,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 723,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- LTBTS1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/lightthatburnsthesky_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.058333333333333334,
+          "end_fraction": 0.3383333333333334,
+          "source_frame": 7
         },
         {
-          "name": "PRSFX- LTBTS4.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/lightthatburnsthesky_impact.wav",
+          "name": "PRSFX- LTBTS2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/lightthatburnsthesky_1.wav",
+          "role": "action",
+          "volume": 90,
+          "pitch": 90,
+          "at_fraction": 0.24166666666666667,
+          "end_fraction": 0.5216666666666667,
+          "source_frame": 29
+        },
+        {
+          "name": "PRSFX- LTBTS3.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/lightthatburnsthesky_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.725,
+          "end_fraction": 0.975,
+          "source_frame": 87
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "sun_nova",
+        "reference_path": "res://assets/battles/animations/lightthatburnsthesky/lightthatburnsthesky.json",
+        "reference_sha256": "854bb7f5cae6babb4d720e0a75365202105fbf643ec1b9f3654f516a05bf9aee",
+        "sheet_path": "res://assets/battles/animations/lightthatburnsthesky/PRAS- Light that Burns the Sky.png",
+        "sheet_sha256": "b0cfdda9d2a30056aaddb6ea8600215362fa82e204c00b475ca0ec30ce397df2",
+        "source_frames": 120,
+        "release_frame": 29,
+        "impact_frame": 87,
+        "observed_motifs": "Small sun grows through rotating fire rings into a huge flare",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "maliciousmoonsault": {
       "name": "Malicious Moonsault",
       "family": "z",
       "variant": "kick",
       "type": "dark",
-      "color": "9a6fae",
+      "color": "#ff984b",
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.301887,
+      "impact_fraction": 0.603774,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 696,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Malicious Moonsault3.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/maliciousmoonsault_0.wav",
+          "role": "charge",
           "volume": 80,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.07547169811320754,
+          "end_fraction": 0.35547169811320756,
+          "source_frame": 4
         },
         {
-          "name": "PRSFX- Malicious Moonsault6.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/maliciousmoonsault_impact.wav",
+          "name": "PRSFX- Malicious Moonsault2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/maliciousmoonsault_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.3018867924528302,
+          "end_fraction": 0.5818867924528301,
+          "source_frame": 16
+        },
+        {
+          "name": "PRSFX- Malicious Moonsault1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/maliciousmoonsault_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 130,
+          "at_fraction": 0.33962264150943394,
+          "end_fraction": 0.6196226415094339,
+          "source_frame": 18
+        },
+        {
+          "name": "PRSFX- Malicious Moonsault5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/maliciousmoonsault_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 110
+          "pitch": 90,
+          "at_fraction": 0.603774,
+          "end_fraction": 0.853774,
+          "source_frame": 32
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "moonsault",
+        "reference_path": "res://assets/battles/animations/maliciousmoonsault/maliciousmoonsault.json",
+        "reference_sha256": "0ef0609f79389f56c0ea6e6e767831b11069e2be34f21fcb884cae854b24d0bd",
+        "sheet_path": "res://assets/battles/animations/ember/PRAS- Fire.png",
+        "sheet_sha256": "1190a9ccfa4a007488a6712fd1f02ad41bbcc72a5d19fcf7624978a1efeec0b4",
+        "source_frames": 53,
+        "release_frame": 16,
+        "impact_frame": 32,
+        "observed_motifs": "Aerial approach and a fiery impact",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "menacingmoonrazemaelstrom": {
       "name": "Menacing Moonraze Maelstrom",
@@ -4506,29 +5100,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.24,
+      "impact_fraction": 0.54,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 725,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- SSS1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/menacingmoonrazemaelstrom_0.wav",
+          "role": "charge",
           "volume": 60,
-          "pitch": 40
+          "pitch": 40,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- MMM1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/menacingmoonrazemaelstrom_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 70,
+          "at_fraction": 0.24,
+          "end_fraction": 0.52,
+          "source_frame": 12
+        },
+        {
+          "name": "PRSFX- MMM3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/menacingmoonrazemaelstrom_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 115,
+          "at_fraction": 0.48,
+          "end_fraction": 0.76,
+          "source_frame": 24
         },
         {
           "name": "PRSFX- MMM4.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/menacingmoonrazemaelstrom_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/menacingmoonrazemaelstrom_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 80
+          "pitch": 80,
+          "at_fraction": 0.54,
+          "end_fraction": 0.79,
+          "source_frame": 27
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "moon_column",
+        "reference_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/menacingmoonrazemaelstrom.json",
+        "reference_sha256": "18d88334df9fc39c91da7de266ce6ecb46aad40850724802a2c5819a7eb4124c",
+        "sheet_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- SunMoonZ.png",
+        "sheet_sha256": "ba065d754d6b830206420984cd9beab9301e18654204162afc033ca2bcf86eed",
+        "source_frames": 50,
+        "release_frame": 12,
+        "impact_frame": 27,
+        "observed_motifs": "Lunar portal, descending light column and an energy burst",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "neverendingnightmare": {
       "name": "Never-Ending Nightmare",
@@ -4539,29 +5171,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.2,
+      "launch_fraction": 0.305263,
+      "impact_fraction": 0.684211,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 636,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- NeverEndingNightmare5.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/neverendingnightmare_0.wav",
+          "role": "charge",
           "volume": 80,
-          "pitch": 105
+          "pitch": 105,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- NeverEndingNightmare4.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/neverendingnightmare_impact.wav",
+          "name": "PRSFX- NeverEndingNightmare1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/neverendingnightmare_1.wav",
+          "role": "action",
+          "volume": 80,
+          "pitch": 95,
+          "at_fraction": 0.30526315789473685,
+          "end_fraction": 0.5852631578947369,
+          "source_frame": 29
+        },
+        {
+          "name": "PRSFX- NeverEndingNightmare2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/neverendingnightmare_2.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 100
+          "pitch": 150,
+          "at_fraction": 0.684211,
+          "end_fraction": 0.934211,
+          "source_frame": 65
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "chains",
+        "reference_path": "res://assets/battles/animations/neverendingnightmare/neverendingnightmare.json",
+        "reference_sha256": "5b24cde8406e8b8df3e0daf57e51c5527725448f25d713f340b56fe9fd0bfe45",
+        "sheet_path": "res://assets/battles/animations/neverendingnightmare/PRAS- NeverEndingNightmare.png",
+        "sheet_sha256": "6f0d8452bf162c0b3a38cf96b0bf08ea35f1a6cff85ee3b1cb9d53503777c1e1",
+        "source_frames": 95,
+        "release_frame": 29,
+        "impact_frame": 65,
+        "observed_motifs": "Dark ground portal, surrounding chains and spectral constriction",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "oceanicoperetta": {
       "name": "Oceanic Operetta",
@@ -4572,29 +5232,47 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.8,
+      "launch_fraction": 0.123077,
+      "impact_fraction": 0.738462,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 697,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Oceanic Operetta1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/oceanicoperetta_0.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 25
+          "pitch": 25,
+          "at_fraction": 0.12307692307692308,
+          "end_fraction": 0.4030769230769231,
+          "source_frame": 8
         },
         {
-          "name": "PRSFX- Oceanic Operetta2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/oceanicoperetta_impact.wav",
+          "name": "PRSFX- Oceanic Operetta4.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/oceanicoperetta_1.wav",
           "role": "impact",
-          "volume": 90,
-          "pitch": 100
+          "volume": 60,
+          "pitch": 100,
+          "at_fraction": 0.738462,
+          "end_fraction": 0.988462,
+          "source_frame": 48
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "ocean_orb",
+        "reference_path": "res://assets/battles/animations/oceanicoperetta/oceanicoperetta.json",
+        "reference_sha256": "11872bbec2af5292cfc510fd97472a8d9cd86dacb3f48b39b9318259d0a3aa9e",
+        "sheet_path": "res://assets/battles/animations/oceanicoperetta/PRAS- Oceanic Operetta.png",
+        "sheet_sha256": "72a6a648473f11a167d8a5fc02d3686f21e457f19d8a513260dbac3b6ee5087e",
+        "source_frames": 65,
+        "release_frame": 8,
+        "impact_frame": 48,
+        "observed_motifs": "Musical notes accompany a growing water sphere, then a splash",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "pulverizingpancake": {
       "name": "Pulverizing Pancake",
@@ -4605,29 +5283,67 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.1,
+      "launch_fraction": 0.235955,
+      "impact_fraction": 0.865169,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 701,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Sleep.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/pulverizingpancake_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 120
+          "pitch": 120,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Pulverizing Pancake1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/pulverizingpancake_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.23595505617977527,
+          "end_fraction": 0.5159550561797753,
+          "source_frame": 21
+        },
+        {
+          "name": "PRSFX- Pulverizing Pancake4.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/pulverizingpancake_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.6629213483146067,
+          "end_fraction": 0.9429213483146067,
+          "source_frame": 59
         },
         {
           "name": "PRSFX- Pulverizing Pancake5.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/pulverizingpancake_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/pulverizingpancake_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.865169,
+          "end_fraction": 1.0,
+          "source_frame": 77
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "body_slam",
+        "reference_path": "res://assets/battles/animations/pulverizingpancake/pulverizingpancake.json",
+        "reference_sha256": "2ad3a64b1fc0deeba895d5af2e61a94c9113bdf3f7f9f9f6c2e57eea789d1cee",
+        "sheet_path": "res://assets/battles/animations/pulverizingpancake/PRAS- Pulverizing Pancake.png",
+        "sheet_sha256": "4b1933ccbbe851dc6db29a072ff78cd51f4bea458f93e58d9924e877628cfb69",
+        "source_frames": 89,
+        "release_frame": 21,
+        "impact_frame": 77,
+        "observed_motifs": "Brief sleepy preparation, accelerating approach, leap and ground slam",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "savagespinout": {
       "name": "Savage Spin-Out",
@@ -4638,62 +5354,138 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.1,
+      "launch_fraction": 0.142857,
+      "impact_fraction": 0.714286,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 634,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- SSO1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/savagespinout_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 105
+          "pitch": 105,
+          "at_fraction": 0.01020408163265306,
+          "end_fraction": 0.2902040816326531,
+          "source_frame": 1
         },
         {
-          "name": "PRSFX- SSO6.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/savagespinout_impact.wav",
+          "name": "PRSFX- SSO2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/savagespinout_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 95,
+          "at_fraction": 0.14285714285714285,
+          "end_fraction": 0.4228571428571429,
+          "source_frame": 14
+        },
+        {
+          "name": "PRSFX- SSO10.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/savagespinout_2.wav",
+          "role": "action",
+          "volume": 50,
+          "pitch": 100,
+          "at_fraction": 0.42857142857142855,
+          "end_fraction": 0.7085714285714286,
+          "source_frame": 42
+        },
+        {
+          "name": "PRSFX- SSO13.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/savagespinout_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 60
+          "pitch": 160,
+          "at_fraction": 0.714286,
+          "end_fraction": 0.964286,
+          "source_frame": 60
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "cocoon",
+        "reference_path": "res://assets/battles/animations/savagespinout/savagespinout.json",
+        "reference_sha256": "3b114288aac21dc7d039ca7b38204602143aa9e6f7b5368577fd883023b730a3",
+        "sheet_path": "res://assets/battles/animations/savagespinout/PRAS- Savage Spin Out.png",
+        "sheet_sha256": "bc197b01a26f133c8454412fc156ed88b77215866cbedf295c7023e7bf4a1e5c",
+        "source_frames": 98,
+        "release_frame": 14,
+        "impact_frame": 70,
+        "observed_motifs": "Silk cocoon surrounds the target, tightens and bursts",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "searingsunrazesmash": {
       "name": "Searing Sunraze Smash",
       "family": "z",
       "variant": "burst",
       "type": "steel",
-      "color": "bdedff",
+      "color": "#ffb553",
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.290909,
+      "impact_fraction": 0.636364,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 724,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- SSS1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/searingsunrazesmash_0.wav",
+          "role": "charge",
           "volume": 60,
-          "pitch": 40
+          "pitch": 40,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Searing Sunraze Smash1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/searingsunrazesmash_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 140,
+          "at_fraction": 0.2909090909090909,
+          "end_fraction": 0.5709090909090909,
+          "source_frame": 16
+        },
+        {
+          "name": "PRSFX- Searing Sunraze Smash3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/searingsunrazesmash_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 80,
+          "at_fraction": 0.6181818181818182,
+          "end_fraction": 0.8981818181818182,
+          "source_frame": 34
         },
         {
           "name": "PRSFX- Searing Sunraze Smash2.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/searingsunrazesmash_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/searingsunrazesmash_3.wav",
           "role": "impact",
           "volume": 60,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.636364,
+          "end_fraction": 0.886364,
+          "source_frame": 35
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "sun_column",
+        "reference_path": "res://assets/battles/animations/searingsunrazesmash/searingsunrazesmash.json",
+        "reference_sha256": "d47978f4c5ec2262cfeffa19c5859e430f8adb35d66f0837025e221693e347ab",
+        "sheet_path": "res://assets/battles/animations/menacingmoonrazemaelstrom/PRAS- SunMoonZ.png",
+        "sheet_sha256": "ba065d754d6b830206420984cd9beab9301e18654204162afc033ca2bcf86eed",
+        "source_frames": 55,
+        "release_frame": 16,
+        "impact_frame": 35,
+        "observed_motifs": "Solar portal and a descending column wrapped in fire",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "shatteredpsyche": {
       "name": "Shattered Psyche",
@@ -4704,29 +5496,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.5,
+      "launch_fraction": 0.166667,
+      "impact_fraction": 0.75,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 648,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Shattered Psyche2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/shatteredpsyche_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.06666666666666667,
+          "end_fraction": 0.3466666666666667,
+          "source_frame": 4
+        },
+        {
+          "name": "PRSFX- Shattered Psyche1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/shatteredpsyche_1.wav",
+          "role": "action",
+          "volume": 60,
+          "pitch": 90,
+          "at_fraction": 0.16666666666666666,
+          "end_fraction": 0.44666666666666666,
+          "source_frame": 10
         },
         {
           "name": "PRSFX- Shattered Psyche3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/shatteredpsyche_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/shatteredpsyche_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 90
+          "pitch": 90,
+          "at_fraction": 0.75,
+          "end_fraction": 1.0,
+          "source_frame": 45
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "prism",
+        "reference_path": "res://assets/battles/animations/shatteredpsyche/shatteredpsyche.json",
+        "reference_sha256": "10da5f890be5e955e16f59269e58fab0ef34f503cfd1097efd99ef4d17b15d2d",
+        "sheet_path": "res://assets/battles/animations/shatteredpsyche/PRAS- Shattered Psyche.png",
+        "sheet_sha256": "5fca93a3e54bdfc850ae02353b793316c89742ee514a21493bd7030f666b889d",
+        "source_frames": 60,
+        "release_frame": 10,
+        "impact_frame": 45,
+        "observed_motifs": "Psychic ring, suspended glass-like cube, compression and shattering",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "sinisterarrowraid": {
       "name": "Sinister Arrow Raid",
@@ -4737,62 +5557,138 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.1,
+      "launch_fraction": 0.35,
+      "impact_fraction": 0.65,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 695,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- SinisterArrowRaid5.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/sinisterarrowraid_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 150
+          "pitch": 150,
+          "at_fraction": 0.225,
+          "end_fraction": 0.505,
+          "source_frame": 9
+        },
+        {
+          "name": "PRSFX- SinisterArrowRaid4.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/sinisterarrowraid_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 150,
+          "at_fraction": 0.35,
+          "end_fraction": 0.63,
+          "source_frame": 14
+        },
+        {
+          "name": "PRSFX- SinisterArrowRaid2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/sinisterarrowraid_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.6,
+          "end_fraction": 0.88,
+          "source_frame": 24
         },
         {
           "name": "PRSFX- SinisterArrowRaid1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/sinisterarrowraid_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/sinisterarrowraid_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.65,
+          "end_fraction": 0.9,
+          "source_frame": 25
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "arrow_rain",
+        "reference_path": "res://assets/battles/animations/sinisterarrowraid/sinisterarrowraid.json",
+        "reference_sha256": "a0a7e6d40ed72a2f318c168aef0d386f1f029d40a0e1da205b3a828e417cc540",
+        "sheet_path": "res://assets/battles/animations/sinisterarrowraid/PRAS- Sinister Arrow Raid.png",
+        "sheet_sha256": "ec878af27a63d4aa1104901feed9f5a88bd1b2b217578e2fb1215f9df9319c71",
+        "source_frames": 40,
+        "release_frame": 14,
+        "impact_frame": 26,
+        "observed_motifs": "Gathered arrows descend as a dark volley",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "soulstealing7starstrike": {
       "name": "Soul-Stealing 7-Star Strike",
       "family": "z",
       "variant": "flurry",
       "type": "ghost",
-      "color": "ad6bed",
+      "color": "#8ee8ef",
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.1,
+      "launch_fraction": 0.076923,
+      "impact_fraction": 0.714286,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 699,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- S-S7-SS1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/soulstealing7starstrike_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- S-S7-SS2.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/soulstealing7starstrike_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 200,
+          "at_fraction": 0.07692307692307693,
+          "end_fraction": 0.35692307692307695,
+          "source_frame": 7
+        },
+        {
+          "name": "PRSFX- S-S7-SS5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/soulstealing7starstrike_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.46153846153846156,
+          "end_fraction": 0.7415384615384616,
+          "source_frame": 42
         },
         {
           "name": "PRSFX- S-S7-SS7.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/soulstealing7starstrike_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/soulstealing7starstrike_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.714286,
+          "end_fraction": 0.964286,
+          "source_frame": 58
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "seven_stars",
+        "reference_path": "res://assets/battles/animations/soulstealing7starstrike/soulstealing7starstrike.json",
+        "reference_sha256": "8072fc093755a48c431eca854e2519d85ac37e7fb5dce61012bd102c7129ba2f",
+        "sheet_path": "res://assets/battles/animations/soulstealing7starstrike/PRAS- Soul-Stealing 7-Star Strike.png",
+        "sheet_sha256": "9d5936d9eb8f6654c18593cef8223768beae30e63787cf198ff42a77a74186c0",
+        "source_frames": 91,
+        "release_frame": 7,
+        "impact_frame": 65,
+        "observed_motifs": "Seven cyan points connect around the target before a dark finishing strike",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "splinteredstormshards": {
       "name": "Splintered Stormshards",
@@ -4803,29 +5699,47 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.3,
+      "launch_fraction": 0.266667,
+      "impact_fraction": 0.666667,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 727,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Splintered Stormshards4.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/splinteredstormshards_0.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 110
+          "pitch": 110,
+          "at_fraction": 0.26666666666666666,
+          "end_fraction": 0.5466666666666666,
+          "source_frame": 16
         },
         {
-          "name": "PRSFX- Splintered Stormshards1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/splinteredstormshards_impact.wav",
+          "name": "PRSFX- Splintered Stormshards3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/splinteredstormshards_1.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 70
+          "pitch": 100,
+          "at_fraction": 0.666667,
+          "end_fraction": 0.916667,
+          "source_frame": 38
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "stone_rain",
+        "reference_path": "res://assets/battles/animations/splinteredstormshards/splinteredstormshards.json",
+        "reference_sha256": "dc8c4811db91baea65aa388851dac9eb2a488edaa4360895ff9f62074c7a9b87",
+        "sheet_path": "res://assets/battles/animations/splinteredstormshards/PRAS- Splintered Stormshards.png",
+        "sheet_sha256": "1d6088722b4b16fe10147415a96a8d99a8c02d105f988042712d6c9cd39dd2dc",
+        "source_frames": 60,
+        "release_frame": 16,
+        "impact_frame": 40,
+        "observed_motifs": "Rocks rise around the user and shower down onto the target",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "stokedsparksurfer": {
       "name": "Stoked Sparksurfer",
@@ -4836,29 +5750,67 @@
       "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.4,
+      "launch_fraction": 0.226891,
+      "impact_fraction": 0.697479,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 700,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Stoked Sparksurfer1.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/stokedsparksurfer_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 130
+          "pitch": 130,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Stoked Sparksurfer6.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/stokedsparksurfer_impact.wav",
+          "name": "PRSFX- Stoked Sparksurfer3.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/stokedsparksurfer_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 145,
+          "at_fraction": 0.226890756302521,
+          "end_fraction": 0.506890756302521,
+          "source_frame": 27
+        },
+        {
+          "name": "PRSFX- Stoked Sparksurfer7.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/stokedsparksurfer_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.6386554621848739,
+          "end_fraction": 0.9186554621848739,
+          "source_frame": 76
+        },
+        {
+          "name": "PRSFX- Stoked Sparksurfer5.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/stokedsparksurfer_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 75
+          "pitch": 100,
+          "at_fraction": 0.697479,
+          "end_fraction": 0.947479,
+          "source_frame": 83
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "electric_surf",
+        "reference_path": "res://assets/battles/animations/stokedsparksurfer/stokedsparksurfer.json",
+        "reference_sha256": "35bbbfeda29f18b6a1ae99ccab04904ad58fca9cf55e3419787528c012280456",
+        "sheet_path": "res://assets/battles/animations/electricterrain/PRAS- Electric.png",
+        "sheet_sha256": "bcfaa5378c3b4c2572213ef0c80735383c391703244ca2e905344d271f349199",
+        "source_frames": 119,
+        "release_frame": 27,
+        "impact_frame": 83,
+        "observed_motifs": "Electric motion streaks and a large downward lightning column",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "subzeroslammer": {
       "name": "Subzero Slammer",
@@ -4869,29 +5821,57 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.4,
+      "launch_fraction": 0.145455,
+      "impact_fraction": 0.636364,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 650,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Subzero Slammer1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/subzeroslammer_0.wav",
+          "role": "action",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.14545454545454545,
+          "end_fraction": 0.4254545454545455,
+          "source_frame": 8
         },
         {
-          "name": "PRSFX- Subzero Slammer4.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/subzeroslammer_impact.wav",
+          "name": "PRSFX- Subzero Slammer2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/subzeroslammer_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 180,
+          "at_fraction": 0.4,
+          "end_fraction": 0.68,
+          "source_frame": 22
+        },
+        {
+          "name": "PRSFX- Subzero Slammer3.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/subzeroslammer_2.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.636364,
+          "end_fraction": 0.886364,
+          "source_frame": 44
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "ice_prison",
+        "reference_path": "res://assets/battles/animations/subzeroslammer/subzeroslammer.json",
+        "reference_sha256": "2e967e00928e1079f52108832ffd5d3a722b5cbc75177046e41912dcc104a890",
+        "sheet_path": "res://assets/battles/animations/blizzard/PRAS- Ice.png",
+        "sheet_sha256": "35d5b23e65d89393a57ae5bdb36e236da05a7d654d3120ff9da4378ae474587c",
+        "source_frames": 55,
+        "release_frame": 8,
+        "impact_frame": 35,
+        "observed_motifs": "Icy shards converge into an ice formation that breaks apart",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "supersonicskystrike": {
       "name": "Supersonic Skystrike",
@@ -4899,32 +5879,60 @@
       "variant": "storm",
       "type": "flying",
       "color": "b9efff",
-      "contact": false,
+      "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.0,
+      "launch_fraction": 0.122642,
+      "impact_fraction": 0.622642,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 626,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Brave Bird1.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/supersonicskystrike_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "Explosion",
-          "path": "res://assets/battles/moves_3d/audio_recipes/supersonicskystrike_impact.wav",
+          "name": "PRSFX- Brave Bird2.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/supersonicskystrike_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 40,
+          "at_fraction": 0.12264150943396226,
+          "end_fraction": 0.40264150943396226,
+          "source_frame": 13
+        },
+        {
+          "name": "PRSFX- Brave Bird2",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/supersonicskystrike_2.wav",
           "role": "impact",
-          "volume": 80,
-          "pitch": 50
+          "volume": 100,
+          "pitch": 40,
+          "at_fraction": 0.622642,
+          "end_fraction": 0.872642,
+          "source_frame": 46
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "sky_dive",
+        "reference_path": "res://assets/battles/animations/supersonicskystrike/supersonicskystrike.json",
+        "reference_sha256": "b620625cf20604e5549e653ed5d3da288f77dc8bdbfe8e4eb110c58f5ad75621",
+        "sheet_path": "res://assets/battles/animations/supersonicskystrike/PRAS- Brave Bird.png",
+        "sheet_sha256": "fb6d00a8c3e319adfed7bd191296e566056482d644b2c98621afab934ebd08a0",
+        "source_frames": 106,
+        "release_frame": 13,
+        "impact_frame": 66,
+        "observed_motifs": "Upward launch, fast descending aerial streaks and impact",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "tectonicrage": {
       "name": "Tectonic Rage",
@@ -4935,29 +5943,67 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 4.1,
+      "launch_fraction": 0.175258,
+      "impact_fraction": 0.670103,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 630,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Tectonic Rage6.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/tectonicrage_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 115
+          "pitch": 115,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
+        },
+        {
+          "name": "PRSFX- Tectonic Rage1.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/tectonicrage_1.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.17525773195876287,
+          "end_fraction": 0.4552577319587629,
+          "source_frame": 17
+        },
+        {
+          "name": "PRSFX- Tectonic Rage4.ogg",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/tectonicrage_2.wav",
+          "role": "action",
+          "volume": 100,
+          "pitch": 100,
+          "at_fraction": 0.26804123711340205,
+          "end_fraction": 0.548041237113402,
+          "source_frame": 26
         },
         {
           "name": "PRSFX- Tectonic Rage5.ogg",
-          "path": "res://assets/battles/moves_3d/audio_recipes/tectonicrage_impact.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/tectonicrage_3.wav",
           "role": "impact",
           "volume": 100,
-          "pitch": 50
+          "pitch": 50,
+          "at_fraction": 0.670103,
+          "end_fraction": 0.920103,
+          "source_frame": 71
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "fissure",
+        "reference_path": "res://assets/battles/animations/tectonicrage/tectonicrage.json",
+        "reference_sha256": "4517e676367847aeec8006a1aca6961bfda8fe4d778836fabb1c52bba5a6b48f",
+        "sheet_path": "res://assets/battles/animations/tectonicrage/PRAS- Tectonic Rage.png",
+        "sheet_sha256": "aac37f42ed6f0038d62a4a1c63edd00d4c7230c8059f4d51bd6a42c81b7d04a1",
+        "source_frames": 97,
+        "release_frame": 17,
+        "impact_frame": 65,
+        "observed_motifs": "Ground splits, dust rises and red energy erupts from the fissure",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     },
     "twinkletackle": {
       "name": "Twinkle Tackle",
@@ -4965,32 +6011,50 @@
       "variant": "hearts",
       "type": "fairy",
       "color": "ffb8e8",
-      "contact": false,
+      "contact": true,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
-      "launch_fraction": 0.3,
-      "impact_fraction": 0.68,
-      "scale": 2.0,
+      "duration_seconds": 3.6,
+      "launch_fraction": 0.202899,
+      "impact_fraction": 0.724638,
+      "scale": 1.0,
       "attachment": "body",
       "source_id": 656,
-      "review": "first-pass",
+      "review": "2d-inspired-awaiting-review",
       "audio": [
         {
           "name": "PRSFX- Twinkle Tackle2.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_launch.wav",
-          "role": "launch",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/twinkletackle_0.wav",
+          "role": "charge",
           "volume": 100,
-          "pitch": 100
+          "pitch": 100,
+          "at_fraction": 0.0,
+          "end_fraction": 0.28,
+          "source_frame": 0
         },
         {
-          "name": "PRSFX- Twinkle Tackle3.wav",
-          "path": "res://assets/battles/moves_3d/audio_recipes/twinkletackle_impact.wav",
+          "name": "PRSFX- Twinkle Tackle1.wav",
+          "path": "res://assets/battles/moves_3d/audio_z_choreography/twinkletackle_1.wav",
           "role": "impact",
           "volume": 80,
-          "pitch": 110
+          "pitch": 100,
+          "at_fraction": 0.724638,
+          "end_fraction": 0.974638,
+          "source_frame": 50
         }
-      ]
+      ],
+      "z_choreography": {
+        "style": "fairy_comet",
+        "reference_path": "res://assets/battles/animations/twinkletackle/twinkletackle.json",
+        "reference_sha256": "a74c9550efce04072346f896fd9cfc68a1026a4eb236c53e31b5f0f44d3a251c",
+        "sheet_path": "res://assets/battles/animations/twinkletackle/PRAS- Twinkle Tackle.png",
+        "sheet_sha256": "d59aa1adec327dec2619c63f79500689287a477b3b8c66f8734403d960919b5e",
+        "source_frames": 69,
+        "release_frame": 14,
+        "impact_frame": 50,
+        "observed_motifs": "Fairy-colored charge, sweeping approach and a sparkling climax",
+        "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
+      }
     }
   }
 }

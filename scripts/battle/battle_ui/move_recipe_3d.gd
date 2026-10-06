@@ -26,6 +26,9 @@ static func audio_plan(timing: Dictionary) -> Dictionary:
 		var role := str(value.role)
 		var at := impact if role == "impact" else (duration * 0.08 if role == "cast" else launch)
 		var end := minf(duration, at + duration * (0.28 if role == "impact" else 0.48))
+		if value.has("at_fraction"):
+			at = duration * float(value.at_fraction)
+			end = duration * float(value.end_fraction)
 		var event := {"name":value.name,"volume":value.volume,"pitch":value.pitch,
 			"requires_hit":role == "impact","role":role,"end_seconds":end,"fade_seconds":duration*0.055}
 		cues.append({"at_seconds":at,"event":event})

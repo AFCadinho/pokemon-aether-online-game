@@ -29,7 +29,7 @@ func _run() -> void:
 				assert(cue.at_seconds>=0 and cue.event.end_seconds<=plan.duration_seconds)
 				assert(FileAccess.file_exists(plan.sound_paths[cue.event.name]))
 			var effect: Node = stage.create_move_effect(move,actor,target,{"show_impact":bool(recipe.damaging)})
-			assert(is_instance_valid(effect) and effect.get_script()==Family,move)
+			assert(is_instance_valid(effect) and effect.get_script()==(Stage.ZMoveEffect if recipe.has("z_choreography") else Family),move)
 			if recipe.contact: assert(not stage.move_contacts[slot].is_empty())
 			var points: Dictionary = effect.anchors.call()
 			if recipe.target=="actor":assert(points.actor_center.distance_to(points.target)<1.5)
@@ -40,7 +40,7 @@ func _run() -> void:
 			seconds = 0
 			var points := {"source":Vector3(-2,1,0),"target":Vector3(2,1,0),"radius":0.6,
 				"actor_center":Vector3(-2,1,0),"actor_ground":Vector3(-2,0.04,0),"target_ground":Vector3(2,0.04,0)}
-			var effect := Family.new()
+			var effect: Node = Stage.ZMoveEffect.new() if recipe.has("z_choreography") else Family.new()
 			stage.world.add_child(effect)
 			effect.start(move,{"frames":60,"launch_frame":float(recipe.launch_fraction)*60,"impact_frame":float(recipe.impact_fraction)*60},
 				{"show_impact":outcome=="hit" and bool(recipe.damaging),"result":outcome},func():return seconds,func():return points,func():return true)

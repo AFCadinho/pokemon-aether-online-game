@@ -46,8 +46,8 @@ explicit. These are original source textures with authored Godot motion;
 Nintendo's particle simulation, animation timeline and original audio have
 **not** been converted. Source IDs are retained from PokeAPI's move-ID table.
 
-239 short, faded, pitch-preserving WAV edits use the existing 2D audio and its
-configured volume/pitch. Cues follow cast, launch or impact; the native clock
+172 short, faded, pitch-preserving ordinary-move WAV edits use the existing 2D audio and its
+configured volume/pitch. Another 112 Z-move edits follow their 2D storyboard markers. Ordinary cues follow cast, launch or impact; the native clock
 bounds their tails and cancellation. The 24 approved sound edits stay intact.
 Disarming Voice, Growl, Howl and Breakneck Blitz have no playable sound in their
 current 2D catalog and remain without a move sound rather than inventing one.
@@ -78,11 +78,11 @@ Focused checks:
 - `move_attachments_3d_check.tscn`: bone/cannon/body/Substitute anchors.
 - `tools/battle_effects/test_move_recipe_sources.py`: coverage, source and PNG
   hashes, explicit shared-source exceptions, static export dependencies.
-- `tools/battle_audio/build_recipe_edits.py --check`: all 239 source/edit
+- `tools/battle_audio/build_recipe_edits.py --check`: all 172 ordinary source/edit
   hashes, PCM durations, non-silent samples, no clipping and faded edges.
 
 The shared recipes are a first pass. Individual silhouettes, species poses,
-multiple-hit timing, Z-move staging and sound character can be tuned afterward.
+multiple-hit timing and sound character can be tuned afterward.
 The source and audio builders require their explicit offline dependencies;
 normal battles have no dependency on the dump, decoder, ffmpeg or `.tmp`.
 
@@ -258,38 +258,7 @@ unchecked entries below are the new first-pass variants, not prior approvals.
 
 ### Z
 
-- [ ] 10,000,000 Volt Thunderbolt — electric; shared SV masks.
-- [ ] Acid Downpour — orb; shared SV masks.
-- [ ] All-Out Pummeling — flurry; shared SV masks.
-- [ ] Black Hole Eclipse — pulse; shared SV masks.
-- [ ] Bloom Doom — leaves; shared SV masks.
-- [ ] Breakneck Blitz — dash; shared SV masks.
-- [ ] Catastropika — dash; shared SV masks.
-- [ ] Clangorous Soulblaze — sound; shared SV masks.
-- [ ] Continental Crush — rain; shared SV masks.
-- [ ] Corkscrew Crash — spin; shared SV masks.
-- [ ] Devastating Drake — orb; shared SV masks.
-- [ ] Extreme Evoboost — portal; shared SV masks.
-- [ ] Genesis Supernova — pulse; shared SV masks.
-- [ ] Gigavolt Havoc — electric; shared SV masks.
-- [ ] Guardian of Alola — orb; shared SV masks.
-- [ ] Hydro Vortex — storm; shared SV masks.
-- [ ] Inferno Overdrive — flames; shared SV masks.
-- [ ] Let’s Snuggle Forever — hearts; shared SV masks.
-- [ ] Light That Burns the Sky — burst; shared SV masks.
-- [ ] Malicious Moonsault — kick; shared SV masks.
-- [ ] Menacing Moonraze Maelstrom — pulse; shared SV masks.
-- [ ] Never-Ending Nightmare — pulse; shared SV masks.
-- [ ] Oceanic Operetta — sound; shared SV masks.
-- [ ] Pulverizing Pancake — dash; shared SV masks.
-- [ ] Savage Spin-Out — web; shared SV masks.
-- [ ] Searing Sunraze Smash — burst; shared SV masks.
-- [ ] Shattered Psyche — pulse; shared SV masks.
-- [ ] Sinister Arrow Raid — orb; shared SV masks.
-- [ ] Soul-Stealing 7-Star Strike — flurry; shared SV masks.
-- [ ] Splintered Stormshards — rain; shared SV masks.
-- [ ] Stoked Sparksurfer — dash; shared SV masks.
-- [ ] Subzero Slammer — snow; shared SV masks.
-- [ ] Supersonic Skystrike — storm; shared SV masks.
-- [ ] Tectonic Rage — quakes; shared SV masks.
-- [ ] Twinkle Tackle — hearts; shared SV masks.
+All 35 Z-moves now have separate staging inspired by their existing 2D
+storyboards, replacing the generic first-pass routes. See
+[the Z-move review checklist](z-move-choreography.md) for their motifs, durations,
+provenance and focused preview. These revised versions await visual approval.
