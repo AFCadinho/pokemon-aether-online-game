@@ -6421,5 +6421,7 @@
   "ui.shiny_tracker.mounts.store_description_dialga": "包含一只帝牙卢卡坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_arcanine": "包含一只风速狗坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_aerodactyl": "包含一只化石翼龙坐骑。初始异色概率：50%。",
-  "ui.shiny_tracker.mounts.store_description_toucannon": "包含一只铳嘴大鸟坐骑。初始异色概率：50%。"
+  "ui.shiny_tracker.mounts.store_description_toucannon": "包含一只铳嘴大鸟坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_latios": "包含一只拉帝欧斯坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_latias": "包含一只拉帝亚斯坐骑。初始异色概率：50%。"
 }

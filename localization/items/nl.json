@@ -742,5 +742,21 @@
   "latias-mount": {
     "name": "Latias-mount",
     "shortDesc": "Ontgrendelt Latias als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-latios-mount": {
+    "name": "Shiny Latios-mount",
+    "shortDesc": "Ontgrendelt Shiny Latios als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "latios-mount-box": {
+    "name": "Latios-mountbox",
+    "shortDesc": "Bevat een Latios-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-latias-mount": {
+    "name": "Shiny Latias-mount",
+    "shortDesc": "Ontgrendelt Shiny Latias als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "latias-mount-box": {
+    "name": "Latias-mountbox",
+    "shortDesc": "Bevat een Latias-mount. Shiny-basiskans: 50%."
   }
 }

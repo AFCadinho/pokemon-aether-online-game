@@ -2971,6 +2971,204 @@
         0,
         8
       ]
+    },
+    "latios_shiny": {
+      "displayName": "Shiny Latios",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/latios_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/latios_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/latios_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ],
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ]
+        ],
+        "left": [
+          [
+            14,
+            -32
+          ],
+          [
+            14,
+            -30
+          ],
+          [
+            14,
+            -32
+          ],
+          [
+            14,
+            -30
+          ]
+        ],
+        "right": [
+          [
+            -14,
+            -32
+          ],
+          [
+            -14,
+            -30
+          ],
+          [
+            -14,
+            -32
+          ],
+          [
+            -14,
+            -30
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/latios_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/latios_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/latios_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/latios_shiny/icon.png",
+      "unlockItemId": "shiny-latios-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "latias_shiny": {
+      "displayName": "Shiny Latias",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/latias_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/latias_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/latias_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 8,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -44
+          ],
+          [
+            0,
+            -42
+          ],
+          [
+            0,
+            -44
+          ],
+          [
+            0,
+            -42
+          ]
+        ],
+        "left": [
+          [
+            14,
+            -32
+          ],
+          [
+            14,
+            -30
+          ],
+          [
+            14,
+            -32
+          ],
+          [
+            14,
+            -30
+          ]
+        ],
+        "right": [
+          [
+            -14,
+            -32
+          ],
+          [
+            -14,
+            -30
+          ],
+          [
+            -14,
+            -32
+          ],
+          [
+            -14,
+            -30
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/latias_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/latias_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/latias_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/latias_shiny/icon.png",
+      "unlockItemId": "shiny-latias-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
     }
   }
 }
