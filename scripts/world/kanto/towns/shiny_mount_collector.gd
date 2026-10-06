@@ -19,12 +19,16 @@ func interact_with_player(_player: Node2D) -> void:
 
 func _run_collector() -> void:
 	await show_dialogue([LocalizationManager.text("ui.mount_collector.intro")], display_name)
+	var position_result := await _sync_player_position()
+	if not bool(position_result.get("success", false)):
+		await _show_collector_error(position_result)
+		return
 	var page := 0
 	while is_inside_tree():
 		var service := get_node_or_null("/root/InventoryService")
 		var response: Dictionary = await service.call("load_mount_collector")
 		if not bool(response.get("success", false)):
-			await GameErrorDialogService.show_response(response)
+			await _show_collector_error(response)
 			return
 		var catalog: Dictionary = response.get("catalog", {})
 		var offers: Array = catalog.get("offers", [])
@@ -51,7 +55,7 @@ func _run_collector() -> void:
 			continue
 		var result: Dictionary = await service.call("exchange_shiny_mount", choice)
 		if not bool(result.get("success", false)):
-			await GameErrorDialogService.show_response(result)
+			await _show_collector_error(result)
 			return
 		var exchange: Dictionary = result.get("exchange", {})
 		var normal_name := _normal_name(offer)
@@ -63,6 +67,22 @@ func _run_collector() -> void:
 			"mount": normal_name, "credit": int(exchange.get("voucherCredit", credit))
 		}))
 		SfxManager.play("item_received")
+
+
+func _sync_player_position() -> Dictionary:
+	var world := get_tree().get_first_node_in_group("world")
+	if world == null or not world.has_method("sync_player_position_for_world_action"):
+		return {"success": false, "error": "The overworld is not ready."}
+	# Wait for an older autosave, then save the current map and NPC approach
+	# position before the server checks the collector's location.
+	var result: Variant = await world.call("sync_player_position_for_world_action")
+	return result as Dictionary if result is Dictionary else {
+		"success": false, "error": "The player position could not be synced."
+	}
+
+
+func _show_collector_error(response: Dictionary) -> void:
+	await GameErrorDialogService.show_response(response)
 
 
 func _offer_name(offer: Dictionary) -> String:

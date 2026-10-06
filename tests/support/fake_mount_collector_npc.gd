@@ -3,6 +3,7 @@ extends "res://scripts/world/kanto/towns/shiny_mount_collector.gd"
 var accept_trade := true
 var choice_count := 0
 var shown_dialogue: Array[String] = []
+var shown_errors: Array[Dictionary] = []
 
 func _ready() -> void:
 	pass
@@ -20,3 +21,6 @@ func _choose_offer(offers: Array, _page: int, _credit: int) -> String:
 
 func _confirm_exchange(_offer: Dictionary, _credit: int) -> bool:
 	return accept_trade
+
+func _show_collector_error(response: Dictionary) -> void:
+	shown_errors.append(response)

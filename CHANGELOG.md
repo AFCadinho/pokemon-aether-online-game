@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Sync the current map and position before opening the Shiny Mount Collector, so the first interaction after entering the Bike Shop does not use an older saved location.
+
 - Browse the Shiny Mount Collector in a grid of mount previews, with quantities and clear account-bound or tradeable labels.
 
 - Meet the Shiny Mount Collector in the Cerulean Bike Shop: exchange a shiny mount for its normal version and 100 Gift Voucher credit, as often as you like. Mount binding is preserved.
