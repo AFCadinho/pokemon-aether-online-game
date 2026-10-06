@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add shiny variants of the five new Surf mounts and their Gift Store Surf boxes at 350 Aether Gems each, preserving the approved height, rider poses and water effects.
+
 - Refine all six male adventure outfits with lower, narrower trousers and shoes, plus more room below the chin, across walking, fishing and riding poses.
 
 - Give all Aether Clash lobby flowers the continuous sway used by the Kanto towns and routes, preserving their pink colours and the fountain animations.

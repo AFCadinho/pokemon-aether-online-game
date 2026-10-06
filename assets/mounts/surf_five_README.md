@@ -1,4 +1,4 @@
-# Five admin-testable Surf mounts
+# Five Surf mount families
 
 Wailmer, Drednaw, Mantine, Basculegion and Wailord use the approved
 `surf-five-v1` follower designs at their original pixel scale. Their permanent
@@ -6,7 +6,11 @@ items are respectively `wailmer-mount`, `drednaw-mount`, `mantine-mount`,
 `basculegion-mount` and `wailord-mount`. Grant one through admin item rewards,
 then select it in the Surf slot. Normal Surf access is still required.
 
-These are normal variants only. There are no boxes or Gift Store products.
+Every mount has a shiny variant (`shiny-<name>-mount` item, `<name>_shiny` mount
+ID). Each `<name>-mount-box` appears in Gift Store → Mounts → Surf for 350 Aether
+Gems or 350 personal card credits. Boxes use the shared normal/shiny chance and
+pity rules. Gem purchases are tradeable; card purchases and their rewards remain
+account-bound through the existing binding system.
 
 ## Artwork and rebuilding
 
@@ -17,8 +21,9 @@ The other sources are unchanged follower sheets. `tools/surf_five_designs.json`
 records the approved seat anchors, phase shifts and foreground polygons.
 
 Run `python3 tools/build_surf_five_mounts.py` from the frontend with Pillow
-installed. It regenerates the six textures for each mount and checks the
-matching definitions in `data/mounts.json`. There is no source scaling:
+installed. It regenerates the normal and shiny artwork and checks the
+matching definitions in `data/mounts.json`; `--sync-catalog` updates just these
+ten definitions. There is no source scaling:
 64-pixel source cells (128 for Wailord) are placed on 192-pixel runtime cells.
 
 The lower body fades and takes a water tint. Broken foam touches its lower
@@ -31,6 +36,12 @@ The rider mask retains the approved **opaque** foreground silhouette so player
 pixels cannot show through translucent fins. Base and foreground do not draw
 the same pixels twice. Fishing uses each mount's anatomical foreground and
 seat correction, retaining idle foam without a moving wake.
+
+Shiny colours come from `assets/followers_shiny`. Drednaw applies the same
+approved rear reposing to that original shiny sheet. Basculegion's shiny follower
+differs by 24 silhouette pixels; its colours are applied to the approved normal
+silhouette so masks and poses cannot shift. All shiny variants share their normal
+rider mask and water-contact atlas. The builder verifies this equality.
 
 ## Position and verification
 
@@ -51,7 +62,8 @@ the assigned slot's `ops/worktrees/slot-env` wrapper.
 `tools/preview_surf_five_mounts.gd -- --output=/absolute/output/path` captures
 both player bodies in all four directions, riding, swimming and fishing with
 the actual runtime renderer. `--anchors` adds the occupied tile and its origin;
-`--adinho` uses the custom outfit for the male row. `--poliwag` adds the real
+`--shiny` captures shiny variants. `--adinho` uses the custom outfit for the male
+row. `--poliwag` adds the real
 follower sprite on the same physical tile row, one tile to the side, using the
 NPC's normal sprite offset. Captures use integer 2x
 magnification. They supplement a manual map test near NPCs, shore edges and

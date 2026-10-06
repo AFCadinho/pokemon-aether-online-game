@@ -1,6 +1,7 @@
 """Build five approved native follower rigs with synchronized water contact."""
 import argparse
 import json
+from collections import Counter, defaultdict
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageChops
 from import_player_layered_sprites import write_texture_import
@@ -74,12 +75,51 @@ def contact(art, base, row, phase, water_y, moving):
     return out
 
 
+def shiny_source(base_id):
+    normal = Image.open(ROOT/'assets/mounts'/base_id/'source.png').convert('RGBA')
+    original = Image.open(ROOT/'assets/followers'/(base_id.upper()+'.png')).convert('RGBA')
+    shiny = Image.open(ROOT/'assets/followers_shiny'/(base_id.upper()+'.png')).convert('RGBA')
+    assert original.size == shiny.size == normal.size
+    if base_id == 'drednaw':
+        # Apply the approved rear reposing to the original shiny as well. This
+        # preserves region-specific shell/horn colours in its shiny palette.
+        result = shiny.copy()
+        for col in range(4):
+            art = shiny.crop((col*64,192,(col+1)*64,256))
+            head = art.crop((0,0,64,44))
+            art.paste((0,0,0,0),(0,0,64,44))
+            bridge = shiny.crop((col*64+19,192+42,col*64+45,192+46))
+            for y in range(22,44,2):
+                art.alpha_composite(bridge,(19,y))
+            art.alpha_composite(head,(0,-20))
+            result.paste(art,(col*64,192))
+    elif base_id == 'basculegion':
+        # The shiny follower differs by 24 silhouette pixels. Keep the approved
+        # normal silhouette and use positional shiny colours where available.
+        assert original.tobytes() == normal.tobytes()
+        pairs = defaultdict(Counter)
+        for a,b in zip(original.getdata(),shiny.getdata()):
+            if a[3] and b[3]:
+                pairs[a][b[:3]] += 1
+        palette = {a: values.most_common(1)[0][0] for a,values in pairs.items()}
+        result = Image.new('RGBA', normal.size)
+        result.putdata([(b[:3] if b[3] else palette[a])+(a[3],) if a[3] else (0,0,0,0)
+                        for a,b in zip(normal.getdata(),shiny.getdata())])
+    else:
+        result = shiny
+    assert result.getchannel('A').tobytes() == normal.getchannel('A').tobytes(), base_id+' shiny geometry changed'
+    return result
+
+
 def definition(mid, cfg):
     folder = f'res://assets/mounts/{mid}'
-    return dict(displayName=cfg['name'], movementMode='surf',
-                unlockItemId=mid+'-mount', iconTexture=folder+'/icon.png',
+    base_id = mid.removesuffix('_shiny')
+    shared = f'res://assets/mounts/{base_id}'
+    shiny = mid.endswith('_shiny')
+    return dict(displayName=('Shiny ' if shiny else '')+cfg['name'], movementMode='surf',
+                unlockItemId=('shiny-' if shiny else '')+base_id+'-mount', iconTexture=folder+'/icon.png',
                 spriteSheet=folder+'/mount.png', foregroundSheet=folder+'/foreground.png',
-                riderMaskSheet=folder+'/rider_mask.png', waterContactSheet=folder+'/water_contact.png',
+                riderMaskSheet=shared+'/rider_mask.png', waterContactSheet=shared+'/water_contact.png',
                 frameSize=[FRAME, FRAME], movementAnimationSpeed=4.0,
                 riderOffsets={direction: [[x, y+WORLD_WATERLINE_Y] for x,y in offsets]
                               for direction,offsets in cfg['riderOffsets'].items()},
@@ -89,9 +129,14 @@ def definition(mid, cfg):
 
 def build(update_catalog=False):
     definitions = {}
-    for mid, cfg in CONFIG.items():
+    jobs = list(CONFIG.items()) + [(mid+'_shiny',cfg) for mid,cfg in CONFIG.items()]
+    for mid, cfg in jobs:
         folder = ROOT/'assets/mounts'/mid
-        source = Image.open(folder/'source.png').convert('RGBA')
+        folder.mkdir(exist_ok=True)
+        shiny = mid.endswith('_shiny')
+        source = shiny_source(mid.removesuffix('_shiny')) if shiny else Image.open(folder/'source.png').convert('RGBA')
+        if shiny:
+            source.save(folder/'source.png')
         size = source.width//4
         assert source.size == (size*4, size*4)
         sheets = {name: Image.new('RGBA', (FRAME*4, FRAME*4)) for name in ('mount','foreground','rider_mask')}
@@ -124,23 +169,40 @@ def build(update_catalog=False):
                     water.alpha_composite(contact(art,base,row,col,water_y,moving),
                                           (col*FRAME,(row+4*int(moving))*FRAME))
         for name, sheet in sheets.items():
-            sheet.save(folder/(name+'.png'))
-        water.save(folder/'water_contact.png')
+            if shiny and name == 'rider_mask':
+                normal_mask = Image.open(ROOT/'assets/mounts'/mid.removesuffix('_shiny')/'rider_mask.png').convert('RGBA')
+                assert sheet.tobytes() == normal_mask.tobytes()
+            else:
+                sheet.save(folder/(name+'.png'))
+        if shiny:
+            normal_water = Image.open(ROOT/'assets/mounts'/mid.removesuffix('_shiny')/'water_contact.png').convert('RGBA')
+            assert water.tobytes() == normal_water.tobytes()
+        else:
+            water.save(folder/'water_contact.png')
         icon = source.crop((0,0,size,size))
         icon.crop(icon.getbbox()).save(folder/'icon.png')
-        for name in ('source','mount','foreground','rider_mask','water_contact','icon'):
+        for name in (('source','mount','foreground','icon') if shiny else ('source','mount','foreground','rider_mask','water_contact','icon')):
             write_texture_import(ROOT, (folder/(name+'.png')).relative_to(ROOT))
         definitions[mid] = definition(mid, cfg)
         print(mid, 'native rig and water layers built')
     path = ROOT/'data/mounts.json'
     catalog = json.loads(path.read_text())
     if update_catalog:
-        # Keep all existing catalog formatting and records intact.
+        # Replace only these records, preserving all unrelated catalog formatting.
         text = path.read_text()
-        end = text.rfind('\n  }')
-        assert end >= 0 and not any(mid in catalog['mounts'] for mid in CONFIG)
-        entries = ',\n'+',\n'.join('    '+json.dumps(mid)+': '+json.dumps(value,indent=2).replace('\n','\n    ') for mid,value in definitions.items())
-        path.write_text(text[:end]+entries+text[end:])
+        for mid,value in definitions.items():
+            marker = '    '+json.dumps(mid)+': '
+            encoded = json.dumps(value,indent=2).replace('\n','\n    ')
+            start = text.find(marker)
+            if start >= 0:
+                start += len(marker)
+                _, length = json.JSONDecoder().raw_decode(text[start:])
+                text = text[:start]+encoded+text[start+length:]
+            else:
+                end = text.rfind('\n  }')
+                assert end >= 0
+                text = text[:end]+',\n'+marker+encoded+text[end:]
+        path.write_text(text)
         catalog = json.loads(path.read_text())
     for mid, expected in definitions.items():
         assert catalog['mounts'][mid] == expected, mid+' catalog differs from generator'
@@ -148,5 +210,5 @@ def build(update_catalog=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--add-catalog', action='store_true')
-    build(parser.parse_args().add_catalog)
+    parser.add_argument('--sync-catalog', action='store_true')
+    build(parser.parse_args().sync_catalog)

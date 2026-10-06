@@ -1,6 +1,7 @@
 extends "res://tests/primal_kyogre_surf_check.gd"
 
 const SURF_FIVE := ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]
+const SURF_VARIANTS := ["wailmer", "wailmer_shiny", "drednaw", "drednaw_shiny", "mantine", "mantine_shiny", "basculegion", "basculegion_shiny", "wailord", "wailord_shiny"]
 const InteractionChecks := preload("res://tests/kyogre_interaction_height_check.gd")
 
 
@@ -13,9 +14,9 @@ func _run() -> void:
 	var feet: Vector2 = actor.call("get_feet_position")
 	var look: Vector2 = actor.get_node("Look").position
 	var collision: Vector2 = actor.get_node("DetectionShape").position
-	for id: String in SURF_FIVE:
+	for id: String in SURF_VARIANTS:
 		_check(actor.call("_resolve_owned_surf_mount", id) == "lapras", "unowned " + id + " falls back to Lapras")
-		inventory.cached_inventory_items.append({"itemId": id + "-mount", "quantity": 1})
+		inventory.cached_inventory_items.append({"itemId": Mounts.get_mount_definition(id).unlockItemId, "quantity": 1})
 		_check(actor.call("_resolve_owned_surf_mount", id) == id, "admin grant unlocks " + id)
 		_check(Mounts.get_mount_movement_mode(id) == "surf", id + " belongs to Surf")
 		_check(Mounts.resolve_mount_id_for_mode(id, "land").is_empty(), id + " cannot enter the land slot")
@@ -27,7 +28,7 @@ func _run() -> void:
 	var npc: Node2D = load("res://scenes/npcs/overworld_pokemon.tscn").instantiate()
 	npc.set_script(InteractionChecks.ProbeNPC)
 	root.add_child(npc)
-	var sequence := ["primal_kyogre"] + SURF_FIVE + ["lapras", "wailmer"]
+	var sequence := ["primal_kyogre"] + SURF_VARIANTS + ["lapras", "wailmer"]
 	for gender: String in ["male", "female"]:
 		var save := root.get_node("PlayerSave")
 		save.gender = gender
@@ -52,7 +53,7 @@ func _run() -> void:
 						var water: AnimatedSprite2D = avatar.get("mount_water_contact")
 						_check((water != null and water.visible) == (id != "lapras"), "switch updates contact visibility")
 						_check(water not in avatar.get("appearance_sprites"), "water stays outside clothing masking")
-						if id in SURF_FIVE:
+						if id in SURF_VARIANTS:
 							_check(water.animation == mount.animation and water.frame == phase and not water.is_playing(), "contact and wake stay synchronized")
 							_check(water.get_parent() == avatar.get_node("Look/MountForegroundSprite") and water.z_index == 0, "contact uses the actor's map depth")
 					_check(actor.get_node("Look/Rider").position == remote.get_node("Look/Rider").position, "local and remote seats match")
@@ -63,7 +64,7 @@ func _run() -> void:
 							var a := Mounts._get_texture_image(actual.sprite_frames.get_frame_texture(actual.animation, actual.frame))
 							var b := Mounts._get_texture_image(expected.sprite_frames.get_frame_texture(expected.animation, expected.frame))
 							_check(a.get_data() == b.get_data(), "switch matches a freshly composed rider")
-				if id in SURF_FIVE:
+				if id in SURF_VARIANTS:
 					_check(actor.call("get_interaction_position") == feet, "new mounts do not inherit Kyogre interaction height")
 					npc.global_position = feet + direction * 32
 					for _frame in range(4):
@@ -78,7 +79,7 @@ func _run() -> void:
 			_check(actor.call("get_feet_position") == feet and actor.get_node("Look").position == look and actor.get_node("DetectionShape").position == collision, "mount switches preserve physical, visual and collision anchors")
 			fresh.free()
 	# The inherited fishing check compares actual local/remote player pixels.
-	for id: String in SURF_FIVE:
+	for id: String in SURF_VARIANTS:
 		_check_fishing(actor, remote, id)
 		for avatar: Node2D in [actor, remote]:
 			_check(str(avatar.get("mount_water_contact").animation) == "idle_up", "fishing keeps contact without a moving wake")
@@ -94,6 +95,11 @@ func _run() -> void:
 
 
 func _check_water_pixels(id: String) -> void:
+	if id.ends_with("_shiny"):
+		var normal_id := id.trim_suffix("_shiny")
+		var normal := Mounts.get_mount_definition(normal_id)
+		var shiny := Mounts.get_mount_definition(id)
+		_check(shiny.riderOffsets == normal.riderOffsets and shiny.riderMaskSheet == normal.riderMaskSheet and shiny.waterContactSheet == normal.waterContactSheet, "shiny preserves approved seats, masks and water contact")
 	var back := Mounts.get_mount_frames(id)
 	var front := Mounts.get_mount_foreground_frames(id)
 	var lapras := Mounts.get_mount_frames("lapras")

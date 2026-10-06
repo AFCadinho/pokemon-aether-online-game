@@ -53,7 +53,26 @@ func _run() -> void:
 					_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
 			store.mount_preview_animation_toggle.button_pressed = false
 	store.mount_mode_buttons.surf.pressed.emit()
-	_check(store.product_buttons.size() == 2 and store.product_buttons.has("primal-kyogre-mount-box") and store.product_buttons.has("magikarp-mount-box"), "Surf lists Kyogre and Magikarp boxes")
+	_check(store.product_buttons.size() == 7 and store.product_buttons.has("primal-kyogre-mount-box") and store.product_buttons.has("magikarp-mount-box"), "Surf lists all seven Surf boxes")
+	for id: String in ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]:
+		_check(store.product_buttons.has(id + "-mount-box"), id + " box is in Surf")
+		store.call("_select_product", id + "-mount-box")
+		_check(store.selection_price_label.text == store.call("_mount_box_price_text", 350), id + " costs 350 Gems")
+		_check(not store.purchase_button.disabled and store.selection_description_label.text.contains("50%"), id + " box is available with the shared shiny chance")
+		for shiny: bool in [false, true]:
+			store.mount_preview_shiny_toggle.button_pressed = shiny
+			var preview := store.character_preview_viewport.get_node("MountRiderPreview")
+			_check(preview.get("current_mount_id") == id + ("_shiny" if shiny else ""), id + " shiny preview selects the correct variant")
+			for direction: String in ["down", "left", "right", "up"]:
+				store.call("_select_character_preview_direction", direction)
+				store.mount_preview_animation_toggle.button_pressed = true
+				var mount: AnimatedSprite2D = preview.get("mount_sprite")
+				mount.pause()
+				for frame in range(4):
+					mount.frame = frame
+					preview.call("_on_mount_frame_changed")
+					_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
+			store.mount_preview_animation_toggle.button_pressed = false
 	store.call("_select_product", "primal-kyogre-mount-box")
 	_check(not store.purchase_button.disabled, "1,000 Gems can buy the Surf box")
 	_check(not store.selection_price_label.text.contains("€") and store.selection_price_label.text == store.call("_mount_box_price_text", 1000), "Price is currency only")
