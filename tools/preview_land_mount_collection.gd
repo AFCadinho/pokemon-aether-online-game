@@ -12,9 +12,12 @@ func _init() -> void:
 func _run() -> void:
 	var output := "user://land_mount_collection_preview"
 	var shiny := "--shiny" in OS.get_cmdline_user_args()
+	var selected_ids: Array = IDS.duplicate()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
+		elif arg.begins_with("--mounts="):
+			selected_ids = Array(arg.trim_prefix("--mounts=").split(",", false))
 	DirAccess.make_dir_recursive_absolute(output)
 	root.size = Vector2i(1280,720)
 	root.content_scale_size = root.size
@@ -51,7 +54,7 @@ func _run() -> void:
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
 			previews.append({"actor":actor,"label":label,"appearance":appearance,"gender":gender,"direction":DIRECTIONS[row]})
-	for base_id: String in IDS:
+	for base_id: String in selected_ids:
 		var id := base_id + ("_shiny" if shiny else "")
 		for item: Dictionary in previews:
 			item.actor.configure(id,item.appearance,item.direction,false)
