@@ -27,11 +27,11 @@ var star_mesh: ArrayMesh
 var wind_material: ShaderMaterial
 var blast_material: ShaderMaterial
 var shock_ring := TorusMesh.new()
-var fire_shader: Shader
 var star_halos: Array[ShaderMaterial] = []
+var heat_mesh: ArrayMesh
+var heat_materials: Array[ShaderMaterial] = []
 
 func _sprite_values(id: String) -> Array:
-	if id=="heat_flame":return SPRITES.ember_core
 	if id=="heat_spark":return SPRITES.ember_sparks
 	return super._sprite_values(id)
 
@@ -129,28 +129,7 @@ void fragment() {
 
 func _prepare_fire_and_starlight() -> void:
 	if key=="heatwave":
-		# Dense red/orange edges and a hot yellow core keep fire readable against
-		# the purple arena; low-opacity additive beige looked like drifting dust.
-		fire_shader=Shader.new()
-		fire_shader.code="""
-shader_type spatial;
-render_mode unshaded, cull_disabled, blend_mix, depth_draw_never;
-uniform sampler2D source_mask : filter_linear, repeat_disable;
-uniform float frames;
-uniform float frame_index;
-uniform float opacity;
-void fragment() {
-	vec2 texel=.5/vec2(textureSize(source_mask,0));
-	vec2 uv=clamp(UV,texel*vec2(frames,1.),vec2(1.)-texel*vec2(frames,1.));
-	float f=floor(frame_index);
-	float mask=mix(texture(source_mask,vec2((uv.x+f)/frames,uv.y)).r,texture(source_mask,vec2((uv.x+min(f+1.,frames-1.))/frames,uv.y)).r,fract(frame_index));
-	vec3 flame=mix(vec3(.9,.025,.002),vec3(1.,.25,.006),smoothstep(.08,.42,mask));
-	flame=mix(flame,vec3(1.,.86,.12),smoothstep(.45,.95,mask)*(1.-UV.y*.3));
-	ALBEDO=flame;
-	EMISSION=flame*.65;
-	ALPHA=smoothstep(.015,.32,mask)*opacity;
-}
-"""
+		_prepare_heat_wave()
 	if key=="terastarstorm":
 		var halo_shader := Shader.new()
 		halo_shader.code="""
@@ -171,10 +150,41 @@ void fragment() {
 			halo.set_shader_parameter("tint",mat.albedo_color)
 			star_halos.append(halo)
 
-func _fire_sprite(point: Vector3,size_value: float,phase: float,alpha: float,facing: Basis,aspect := Vector2.ONE) -> void:
-	var before := cursor
-	_source_sprite(point,size_value,"heat_flame",phase,alpha,facing,0,aspect)
-	if cursor>before:sprite_materials[before].shader=fire_shader
+func _prepare_heat_wave() -> void:
+	var mesh_builder := SurfaceTool.new()
+	mesh_builder.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for x in 32:
+		for y in 6:
+			for corner: Vector2 in [Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)]:
+				var uv := Vector2((x+corner.x)/32.,(y+corner.y)/6.)
+				var across := uv.x*2.-1.
+				mesh_builder.set_uv(uv)
+				mesh_builder.add_vertex(Vector3(across,uv.y,-(1.-across*across)*.6-sin(uv.y*PI)*.25))
+	heat_mesh=mesh_builder.commit()
+	for band in 3:
+		var shader := Shader.new()
+		# Only the leading sheet refracts opaque scene geometry. Trailing glow
+		# uses additive blending so it cannot replace other transparent effects.
+		shader.code="""
+shader_type spatial;
+render_mode unshaded, cull_disabled, depth_draw_never, BLEND_MODE;
+uniform sampler2D flow_mask : filter_linear, repeat_enable;
+SCREEN_UNIFORM
+uniform float seconds;
+uniform float opacity;
+void fragment() {
+	float edges=smoothstep(0.,.15,UV.x)*(1.-smoothstep(.85,1.,UV.x))*smoothstep(0.,.06,UV.y)*(1.-smoothstep(.65,1.,UV.y));
+	float noise=texture(flow_mask,UV*vec2(3.,1.5)+vec2(-seconds*.25,-seconds*.8)).r;
+	float roll=sin(UV.x*7.-seconds*4.)*.06;
+	float crest=exp(-pow((UV.y-.24-roll)/.055,2.))+.5*exp(-pow((UV.y-.48-roll*.6)/.09,2.));
+	vec3 warmth=mix(vec3(1.,.075,.004),vec3(1.,.57,.06),noise);
+	COLOR_OUTPUT
+}
+""".replace("BLEND_MODE","blend_mix" if band==0 else "blend_add").replace("SCREEN_UNIFORM","uniform sampler2D scene_color : hint_screen_texture, repeat_disable, filter_linear;" if band==0 else "").replace("COLOR_OUTPUT","vec2 bend=vec2(sin(UV.y*24.+seconds*6.),cos(UV.x*18.-seconds*5.))*(.002+noise*.003)*edges; ALBEDO=textureLod(scene_color,clamp(SCREEN_UV+bend,vec2(.001),vec2(.999)),0.).rgb+warmth*crest*.18; ALPHA=edges*opacity*(.32+crest*.15);" if band==0 else "ALBEDO=warmth; ALPHA=edges*opacity*(crest*.3+noise*.025);")
+		var material := ShaderMaterial.new()
+		material.shader=shader
+		material.set_shader_parameter("flow_mask",NOISE)
+		heat_materials.append(material)
 
 func _prepare_wide_meshes() -> void:
 	if key not in NEXT_KEYS:return
@@ -395,32 +405,27 @@ func _earth_power(travel: float,after: float,alpha: float,facing: Basis) -> void
 		_source_sprite(aim,2.6,"1",after,alpha*fade*.65,facing)
 
 func _heat_wave(travel: float,after: float,alpha: float,facing: Basis) -> void:
-	var upright_right := Vector3(facing.x.x,0,facing.x.z).normalized()
-	var upright := Basis(upright_right,Vector3.UP,upright_right.cross(Vector3.UP))
-	if elapsed<launch:
-		var charge := elapsed/maxf(launch,.01)
-		for i in 5:
-			var offset := lateral*(i-2)*.24
-			_fire_sprite(origin+offset+Vector3.UP*(.45+charge*.3),.8+charge*.5,fmod(charge+i*.12,1),alpha*.85,upright,Vector2(.8,1.5))
-		return
-	var fade := 1-smoothstep(0,.75,after)
-	# Two curling fronts, tall tongues of fire, then rising embers.
-	for row in 2:
-		var q := travel*1.15-row*.16
-		if q<0 or q>1.15:continue
-		for i in 15:
-			var across := (i-7)/7.0*field_radius*.88
-			var along := lerpf(-field_radius*.9,field_radius*.9,q)-absf(across)*.13+sin(i*.8+elapsed*2)*.12
-			if Vector2(along,across).length()>field_radius:continue
-			var height_value := 1.25+sin(i*1.7+elapsed*4)*.35
-			var point := _field_point(along,across,height_value*.6)
-			_fire_sprite(point,1.5-row*.2,fmod(elapsed*.8+i*.17,1),alpha*fade*(.9-row*.2),upright,Vector2(.9,height_value))
-	for i in 18:
-		var phase := fmod(elapsed*.7+i*.618,1.)
-		var across := sin(i*2.4)*field_radius*.8
+	var fade := 1-smoothstep(0,.85,after)
+	var charge := clampf(elapsed/maxf(launch,.01),0,1)
+	var local_basis := Basis(lateral,Vector3.UP,-forward)
+	# Broad rolling sheets of heated air lead; small embers only accent the heat.
+	for band in 3:
+		var q := travel*1.2-band*.19 if elapsed>=launch else -.05
+		if q<0 and elapsed>=launch or q>1.15:continue
+		var along := lerpf(-field_radius*.9,field_radius*.9,clampf(q,0,1))
+		var width := sqrt(maxf(.3,field_radius*field_radius-along*along))*.94
+		if elapsed<launch:width*=charge*.5
+		var strength := alpha*fade*(1.-band*.14)
+		heat_materials[band].set_shader_parameter("seconds",elapsed+band*.23)
+		heat_materials[band].set_shader_parameter("opacity",strength)
+		_piece(heat_mesh,heat_materials[band],_field_point(along,0,.06),Vector3(width,2.7,1),local_basis)
+	if elapsed<launch:return
+	for i in 9:
+		var phase := fmod(elapsed*.6+i*.618,1.)
+		var across := sin(i*2.4)*field_radius*.7
 		var along := maxf(-field_radius*.9,lerpf(-field_radius*.8,field_radius*.8,travel)-phase*3.8)
-		var point := _field_point(along,across,.3+phase*2.7)
-		_source_sprite(point,.18+(i%3)*.04,"heat_spark",phase,alpha*fade*sin(phase*PI),facing,i)
+		var point := _field_point(along,across,.25+phase*1.5)
+		_source_sprite(point,.10+(i%3)*.03,"heat_spark",phase,alpha*fade*sin(phase*PI)*.6,facing,i)
 
 func _wide_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
 	var icy := key=="bleakwindstorm"
