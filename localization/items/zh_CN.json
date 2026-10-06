@@ -742,5 +742,21 @@
   "latias-mount": {
     "name": "拉帝亚斯坐骑",
     "shortDesc": "解锁拉帝亚斯作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-latios-mount": {
+    "name": "异色拉帝欧斯坐骑",
+    "shortDesc": "解锁异色拉帝欧斯陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "latios-mount-box": {
+    "name": "拉帝欧斯坐骑箱",
+    "shortDesc": "包含一只拉帝欧斯坐骑。初始异色概率：50%。"
+  },
+  "shiny-latias-mount": {
+    "name": "异色拉帝亚斯坐骑",
+    "shortDesc": "解锁异色拉帝亚斯陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "latias-mount-box": {
+    "name": "拉帝亚斯坐骑箱",
+    "shortDesc": "包含一只拉帝亚斯坐骑。初始异色概率：50%。"
   }
 }
