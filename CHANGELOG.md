@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add all six gender-adaptive adventure outfit boxes to the Aether Gift Store for 350 Gems each and price the four existing outfit boxes at 550 Gems each.
+
 - Add Shiny Toucannon and its Land Gift Store box for 500 Aether Gems, preserving the approved rider alignment and existing shiny chance and pity rules.
 
 - Added matching male and female battle trainer and dialogue portraits for all six adventure outfits, preserving shared wardrobe items across gender changes.

@@ -3146,6 +3146,7 @@
   "ui.store.preview.choose_color": "Kies een aangepaste kleur",
   "ui.store.preview.hex_tooltip": "Vul een hexkleurcode in, bijvoorbeeld #7a46c5",
   "ui.store.preview.chroma_included": "Geselecteerde Chroma-kleuren zijn inbegrepen bij je aankoop",
+  "ui.store.preview.fixed_colours": "Deze outfit heeft vaste kleuren.",
   "ui.store.preview.direction.down": "Voorkant",
   "ui.store.preview.direction.left": "Links",
   "ui.store.preview.direction.right": "Rechts",

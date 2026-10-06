@@ -11,7 +11,7 @@ Six outfits for male and female trainers from the approved `pokeaether_assets/ou
 | Relic Explorer | `relic-explorer-outfit` | top, bottom, shoes |
 | Lugia Sky Captain | `lugia-sky-captain-outfit` | top, bottom, shoes, facegear |
 
-Boxes yield separate `-shirt`, `-trousers`, `-shoes` items; Rotom Engineer and Lugia Sky Captain also yield `-goggles`. Grant a box through the existing local admin item-grant flow and open it in the Bag, then activate its items in Character Customization. These are tradeable fixed-colour cosmetics using the same lifecycle as the Tuxedo outfit. No shop pricing or public reward source is assigned.
+Boxes yield separate `-shirt`, `-trousers`, `-shoes` items; Rotom Engineer and Lugia Sky Captain also yield `-goggles`. Grant a box through the existing local admin item-grant flow and open it in the Bag, then activate its items in Character Customization. These are tradeable fixed-colour cosmetics using the same lifecycle as the Tuxedo outfit. All six boxes are offered in the Aether Gift Store for 350 Aether Gems each (or 350 eligible Gift Voucher credits); loose components are not sold separately.
 
 The same box and part item IDs support both genders. Each unlock declares male and female render variants using the same logical appearance ID. The existing gender-change service retains both ownership and equipped clothing; no database migration, second purchase or duplicate female item is needed.
 
@@ -35,7 +35,7 @@ Run via `game/ops/worktrees/slot-env SLOT -- godot --headless --path PATH`:
 - `--script res://tests/male_adventure_outfits_check.gd`: male and female availability, fixed colours, all six movement aliases, exact texture selection/frame sizes, localized icons and 36 composited engine renders in slot-local userdata.
 - `--script res://tests/appearance_animation_clock_check.gd`: local and remote body/clothing frame synchronization.
 
-Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, female box activation and four gender changes per outfit without returning, losing or duplicating items and absence from the Gift Store.
+Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, female box activation and four gender changes per outfit without returning, losing or duplicating items and the 350-Gem Gift Store offers, including bound voucher purchases.
 
 Gender variants are generated from the backend catalog using `tools/generate_cosmetic_variants.py`. All twenty parts now meet the default authored battle-art requirement for both genders; the temporary `battle_rendering: fallback` overrides were removed.
 
