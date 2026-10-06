@@ -358,7 +358,7 @@ func _run() -> void:
 		"unisex cosmetic icons keep the current trainer model"
 	)
 	_check(
-		store_source.contains("get_cosmetic_item_icon(")
+		store_source.contains("get_store_cosmetic_item_icon(")
 			and store_source.contains("_preview_gender_for_item(item)"),
 		"Store cards use cosmetic thumbnails for the item's compatible model"
 	)

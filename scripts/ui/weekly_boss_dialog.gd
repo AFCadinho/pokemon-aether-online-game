@@ -41,9 +41,9 @@ func configure_boss(boss_name: String, status: Dictionary, unlock_message := "")
 	)
 
 
-func popup_centered(_requested_size: Vector2i = Vector2i.ZERO) -> void:
+func popup_centered(_requested_size: Vector2i = Vector2i.ZERO, _force: bool = false) -> void:
 	_adapt_buttons()
-	super.popup_centered(Vector2i(620, 0))
+	super.popup_centered(Vector2i(620, 0), _force)
 	if not difficulty_buttons.is_empty():
 		difficulty_buttons[0].grab_focus.call_deferred()
 	else:
