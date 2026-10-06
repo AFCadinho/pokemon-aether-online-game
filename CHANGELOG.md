@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
+
 - Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.
 
 - Keep Gift Store payment options compact with consistently sized currency icons, aligned text and clear spacing.

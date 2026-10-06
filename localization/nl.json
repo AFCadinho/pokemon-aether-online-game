@@ -6479,5 +6479,12 @@
   "ui.store.badge.tradeable": "VERHANDELBAAR",
   "ui.store.currency_info.tooltip": "Uitleg over shopvaluta",
   "ui.store.currency_info.title": "Hoe werken de shopvaluta?",
-  "ui.store.currency_info.body": "Aether Gems\nKoop Gems via {get_gems}. Met Gems kun je alle Gift Store-producten kopen, waaronder opwaardeervouchers en guildproducten. Gem-aankopen zijn verhandelbaar als het product dit toestaat.\n\nAether Credit Card\nJe persoonlijke kaarttegoed kan komen uit welkomstbeloningen, promoties, de Shiny Mount Collector of geclaimde Credit Vouchers. Vouchers van 100, 250, 500 en 1.000 kosten evenveel Gems en zijn verhandelbaar tot het claimen. Je kunt deze vouchers ook van andere spelers kopen. Na claimen staat het tegoed op je eigen kaart.\n\nBesteed kaarttegoed aan kleding, outfits, mounts, charms, Blessingvouchers en trainerdiensten. Alle kaartaankopen en boxinhoud zijn accountgebonden: niet verhandelbaar, verstuurbaar of uitleenbaar. Guildproducten en opwaardeervouchers vereisen Gems. Blessing begint pas wanneer je de voucher gebruikt.\n\nJe gebruikt één betaalmethode per aankoop. Kaarttegoed kan niet worden omgezet in Gems."
+  "ui.store.currency_info.body": "Aether Gems\nKoop Gems via {get_gems}. Met Gems kun je alle Gift Store-producten kopen, waaronder opwaardeervouchers en guildproducten. Gem-aankopen zijn verhandelbaar als het product dit toestaat.\n\nAether Credit Card\nJe persoonlijke kaarttegoed kan komen uit welkomstbeloningen, promoties, de Shiny Mount Collector of geclaimde Credit Vouchers. Vouchers van 100, 250, 500 en 1.000 kosten evenveel Gems en zijn verhandelbaar tot het claimen. Je kunt deze vouchers ook van andere spelers kopen. Na claimen staat het tegoed op je eigen kaart.\n\nBesteed kaarttegoed aan kleding, outfits, mounts, charms, Blessingvouchers en trainerdiensten. Alle kaartaankopen en boxinhoud zijn accountgebonden: niet verhandelbaar, verstuurbaar of uitleenbaar. Guildproducten en opwaardeervouchers vereisen Gems. Blessing begint pas wanneer je de voucher gebruikt.\n\nJe gebruikt één betaalmethode per aankoop. Kaarttegoed kan niet worden omgezet in Gems.",
+  "ui.bag.mounts.tab_all": "Alles",
+  "ui.bag.mounts.tab_land": "Land",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "Alle ruilstatussen",
+  "ui.bag.mounts.filter_tradeable": "Verhandelbaar",
+  "ui.bag.mounts.empty": "Geen mounts gevonden voor deze tab of filters."
 }

@@ -9,6 +9,8 @@ const PixelPerfectRendering := preload("res://scripts/services/pixel_perfect_ren
 const MountServiceScript := preload("res://scripts/services/mount_service.gd")
 const ContentPacks := preload("res://scripts/services/content_pack_runtime.gd")
 
+const BAG_MOUNT_FILTER := preload("res://scripts/ui/bag_mount_filter.gd")
+
 const SETTINGS_PATH := "user://settings.json"
 const BATTLE_VISUAL_CHOICE_VERSION := 1
 const SPRITE_STYLE_ANIMATED := "animated"
@@ -83,6 +85,7 @@ var fullscreen := false
 var window_resolution := DEFAULT_WINDOW_RESOLUTION
 var world_pixel_scale := DEFAULT_WORLD_PIXEL_SCALE
 var world_pixel_scale_mode := WORLD_PIXEL_SCALE_MODE_AUTO
+var bag_mount_tab := "all"
 var selected_land_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_LAND)
 var selected_surf_mount_id := MountServiceScript.get_default_mount_id(MOUNT_MODE_SURF)
 var ui_scale := DEFAULT_UI_SCALE
@@ -186,6 +189,7 @@ func load_settings() -> void:
 			WORLD_PIXEL_SCALE_MODE_FIXED if has_world_pixel_scale else WORLD_PIXEL_SCALE_MODE_AUTO
 		)
 	)
+	bag_mount_tab = BAG_MOUNT_FILTER.normalize_tab(str(data.get("bag_mount_tab", "all")))
 	selected_land_mount_id = MountServiceScript.resolve_mount_id_for_mode(
 		str(data.get("selected_land_mount_id", selected_land_mount_id)),
 		MOUNT_MODE_LAND,
@@ -277,6 +281,7 @@ func save_settings() -> bool:
 		},
 		"world_pixel_scale": world_pixel_scale,
 		"world_pixel_scale_mode": world_pixel_scale_mode,
+		"bag_mount_tab": bag_mount_tab,
 		"selected_land_mount_id": selected_land_mount_id,
 		"selected_surf_mount_id": selected_surf_mount_id,
 		"ui_scale": ui_scale,
@@ -749,6 +754,14 @@ func set_enabled_language_chats(channels: Array[String]) -> void:
 
 func reset_enabled_language_chats() -> void:
 	set_enabled_language_chats([])
+
+
+func set_bag_mount_tab(tab_id: String) -> void:
+	var normalized := BAG_MOUNT_FILTER.normalize_tab(tab_id)
+	if bag_mount_tab == normalized:
+		return
+	bag_mount_tab = normalized
+	save_settings()
 
 
 func _save_and_emit() -> void:

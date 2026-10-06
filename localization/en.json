@@ -6479,5 +6479,12 @@
   "ui.store.badge.tradeable": "TRADEABLE",
   "ui.store.currency_info.tooltip": "About Store currencies",
   "ui.store.currency_info.title": "How Store currencies work",
-  "ui.store.currency_info.body": "Aether Gems\nBuy Gems through {get_gems}. Gems can buy all Gift Store products, including credit vouchers and guild items. Gem purchases are tradeable when the product allows it.\n\nAether Credit Card\nYour personal balance can come from welcome rewards, promotions, the Shiny Mount Collector or claimed Credit Vouchers. Vouchers of 100, 250, 500 and 1,000 cost the same number of Gems and can be traded before claiming. You can also buy these vouchers from other players. Claiming adds credit to your own card.\n\nSpend card credit on clothing, outfits, mounts, charms, Blessing vouchers and trainer services. Every card purchase and all box contents are account-bound: they cannot be traded, mailed or lent. Guild products and credit vouchers require Gems. Blessing starts only when you use its voucher.\n\nUse one payment method per purchase. Card credit cannot be converted back into Gems."
+  "ui.store.currency_info.body": "Aether Gems\nBuy Gems through {get_gems}. Gems can buy all Gift Store products, including credit vouchers and guild items. Gem purchases are tradeable when the product allows it.\n\nAether Credit Card\nYour personal balance can come from welcome rewards, promotions, the Shiny Mount Collector or claimed Credit Vouchers. Vouchers of 100, 250, 500 and 1,000 cost the same number of Gems and can be traded before claiming. You can also buy these vouchers from other players. Claiming adds credit to your own card.\n\nSpend card credit on clothing, outfits, mounts, charms, Blessing vouchers and trainer services. Every card purchase and all box contents are account-bound: they cannot be traded, mailed or lent. Guild products and credit vouchers require Gems. Blessing starts only when you use its voucher.\n\nUse one payment method per purchase. Card credit cannot be converted back into Gems.",
+  "ui.bag.mounts.tab_all": "All",
+  "ui.bag.mounts.tab_land": "Land",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "All trade statuses",
+  "ui.bag.mounts.filter_tradeable": "Tradeable",
+  "ui.bag.mounts.empty": "No mounts match this tab or these filters."
 }
