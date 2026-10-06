@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "task": "lossless-model-release-binding",
+  "base_commit": "f2d1f37faa8da226a08b57d886e5fabbdd4243cd",
+  "revision": "approved-pokemon-3d-v11",
+  "index": {
+    "object_key": "optional-assets/pokemon_3d/index/approved-pokemon-3d-v11-83238eba707253369c630478de9acf53f127daff368409f7eaaa92553051c25e.json",
+    "sha256": "83238eba707253369c630478de9acf53f127daff368409f7eaaa92553051c25e",
+    "size_bytes": 809254
+  },
+  "binding_sha256": "827e9637a662c0c2b157df0ed4184d68de7559798bd77892600d8b2cf6450538",
+  "local_binding_complete": true,
+  "published_to_r2": false,
+  "active_manifest_activated": false,
+  "release_certified": false,
+  "complete_collection": {
+    "bundles": 1200,
+    "appearances": 2400,
+    "new_immutable_versions": 1198,
+    "source_download_bytes": 19863374075,
+    "download_bytes": 12857317549,
+    "saved_bytes": 7006056526,
+    "saving_percent": 35.2712308570869,
+    "archives_rehashed": 1200,
+    "candidate_scenes_rehashed_and_decoded": 2400,
+    "decoded_hashes_match_verified_source_receipts": true,
+    "reviewed_profiles_byte_preserved": true,
+    "old_new_resolved_profiles_equal": 2400,
+    "original_cache_costs_preserved": true
+  },
+  "checks": {
+    "v9_v10_original_artifacts_unchanged": true,
+    "package_integrity_checks": true,
+    "malformed_bindings_rejected": 4,
+    "corrupt_descriptor_rejected": true,
+    "publication_missing_receipt_rejected_before_network": true,
+    "publication_tampered_bundle_rejected": true,
+    "editor_publication_selection_synthetic_receipt_no_http": true,
+    "sample_installed_variants": 22,
+    "current_revision_rejects_cached_old_gliscor": true,
+    "historical_revision_accepts_cached_old_gliscor": true,
+    "on_demand_cached_no_http": true,
+    "separate_on_demand_extractor": true,
+    "restart_no_downloads": true,
+    "rollback_original_generation": true,
+    "chooser_v10_v11_functional_pass": true,
+    "chooser_legacy_cleanup_diagnostic_reproduced_with_original_sources": true,
+    "chooser_v11_no_engine_errors": true,
+    "actionlint": "1.7.12 passed",
+    "python_compilation": true,
+    "whitespace": true
+  },
+  "evidence": {
+    "preparation.log": "57bd8afd1e6572e4dd3f8528be2fae3d38a10bea6dd12ea596abf20cbd7aa2f5",
+    "native-check.log": "ff367d9be6ea41c0e7d473f4bd3de20a6598bb07669f81e790ed249b3ebf6ba9",
+    "native-upgrade-v3.log": "ff367d9be6ea41c0e7d473f4bd3de20a6598bb07669f81e790ed249b3ebf6ba9",
+    "metadata.log": "f944f8ab9a7e2c34945486b86d3b7ecd0aea516bf507e2afd832f361052b2562",
+    "publication-selection.log": "c75afb73fb81bfc0cedffaaca6ba7565044f9594696d42f9d6156ca882490898",
+    "choice-legacy.log": "773ed345c27a53246ee232fe51d9212520a7e74c1c7c806a3fe4ce88f7fafc91",
+    "choice-native.log": "765158b4746d577eefb308bef3de4f14da18e8b3b27670842c1ab8b522d9de5c",
+    "choice-baseline.log": "773ed345c27a53246ee232fe51d9212520a7e74c1c7c806a3fe4ce88f7fafc91"
+  },
+  "prior_native_platform_results_sha256": "3d15491e96d092e5647b698099fb53f3da313db458ee1f7b783e0707413418f1",
+  "limitations": [
+    "Native four-platform 11-pair file/installer qualification is the earlier CI run, not a new full GPU certification",
+    "Old generations are retained for rollback; active/download savings are not immediate total disk reclamation",
+    "Legacy chooser shutdown diagnostic also occurs with original source controls; isolated model and v11 chooser checks are clean"
+  ]
+}

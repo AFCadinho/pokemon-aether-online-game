@@ -24,8 +24,8 @@ PACKS = {
 }
 
 
-def pins():
-    index_path = ROOT / "release/approved_3d_bundles_v10_index.json"
+def pins(revision="v11"):
+    index_path = ROOT / f"release/approved_3d_bundles_{revision}_index.json"
     index = json.loads(index_path.read_text())
     workflow = (ROOT / ".github/workflows/deploy-desktop-r2.yml").read_text()
     packs = {}
@@ -60,8 +60,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--bundle-dir", type=Path, action="append", default=[])
+    parser.add_argument("--archives-report", type=Path)
+    parser.add_argument("--revision", choices=["v10", "v11"], default="v11")
     args = parser.parse_args()
-    index, packs, digest = pins()
+    index, packs, digest = pins(args.revision)
     model_download = sum(asset["size_bytes"] for asset in index["assets"])
     if args.check:
         data = json.loads(OUTPUT.read_text())
@@ -70,6 +72,11 @@ def main():
         assert data["3d"]["download_bytes"] == model_download
         assert data["3d"]["bundle_count"] == len(index["assets"])
         assert data["3d"]["installed_bytes"] > 0
+        if args.revision == "v11":
+            previous, _, previous_digest = pins("v10")
+            assert data["3d_v10"]["index_sha256"] == previous_digest
+            assert data["3d_v10"]["download_bytes"] == sum(a["size_bytes"] for a in previous["assets"])
+            assert data["3d_v10"]["installed_bytes"] > data["3d"]["installed_bytes"]
         assert data["2d"]["download_bytes"] == sum(pack["download_bytes"] for pack in packs.values())
         for directory, pin in packs.items():
             assert all(data["2d"]["packs"][directory][key] == value for key, value in pin.items()), "Regenerate chooser sizes for the new sprite packs."
@@ -78,6 +85,12 @@ def main():
         print("PASS battle visual download sizes match release pins")
         return
     paths = {path.name: path for directory in args.bundle_dir for path in directory.rglob("*.zip")}
+    if args.archives_report:
+        for row in json.loads(args.archives_report.read_bytes())["assets"]:
+            path = Path(row["candidate_archive"])
+            paths[path.name] = path
+            source = Path(row["source_archive"])
+            paths[source.name] = source
     with ThreadPoolExecutor(max_workers=6) as pool:
         model_installed = sum(pool.map(lambda asset: measure_archive(asset, paths), index["assets"]))
     for directory, pack in packs.items():
@@ -91,6 +104,12 @@ def main():
                    "installed_bytes": sum(p["installed_bytes"] for p in packs.values())},
             "3d": {"index_sha256": digest, "bundle_count": len(index["assets"]),
                    "download_bytes": model_download, "installed_bytes": model_installed}}
+    if args.revision == "v11":
+        previous, _, previous_digest = pins("v10")
+        with ThreadPoolExecutor(max_workers=6) as pool:
+            previous_installed = sum(pool.map(lambda asset: measure_archive(asset, paths), previous["assets"]))
+        data["3d_v10"] = {"index_sha256": previous_digest, "bundle_count": len(previous["assets"]),
+                         "download_bytes": sum(a["size_bytes"] for a in previous["assets"]), "installed_bytes": previous_installed}
     OUTPUT.parent.mkdir(exist_ok=True)
     OUTPUT.write_text(json.dumps(data, indent=2) + "\n")
     print(f"Measured {len(index['assets'])} approved model bundles and {len(packs)} sprite packs.")
