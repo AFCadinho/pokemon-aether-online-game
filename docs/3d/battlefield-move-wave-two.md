@@ -2,8 +2,9 @@
 
 Earthquake, Blizzard and Bloom Doom were approved by the user on 2026-10-06.
 Their existing choreography is retained and their recipe review flags now record
-that approval. Tera Starstorm was subsequently approved after its four-second revision. The
-other additions below, including the latest Heat Wave revision, await approval.
+that approval. Tera Starstorm was subsequently approved after its four-second
+revision, followed by Heat Wave after its rolling hot-air revision. The other
+seven additions below await explicit approval.
 
 | Move | Seconds | Field choreography |
 | --- | --- | --- |
@@ -67,7 +68,7 @@ and connecting light. The main star descends toward the captured aim while the
 smaller stars shower across the field. The final burst adds sixteen radiating
 fragments and three expanding floor ripples. Its normal duration is four
 seconds; it remains within the existing 90-piece budget and uses the same
-clock for effects, dodge and audio. Tera Starstorm is user-approved; Heat Wave still awaits approval.
+clock for effects, dodge and audio. Both Tera Starstorm and the rolling hot-air version of Heat Wave are user-approved.
 
 ## Checks and review
 
