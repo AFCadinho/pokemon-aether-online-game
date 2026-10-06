@@ -27,6 +27,10 @@ func _run() -> void:
 		appearance["hair_color"] = "#247aca"
 		store.set_trainer_appearance(appearance)
 		_check(store.trainer_gender == gender, "Preview uses the requested trainer model")
+		store._select_product("thor-outfit")
+		var thor := store._current_character_preview_appearance()
+		_check(thor.get("top") == "Thor_Shirt" and thor.get("bottom") == "Thor_Trousers" and thor.get("shoes") == "Thor_Shoes" and thor.get("cape") == "Thor_Hammer", "Thor Store preview includes all four parts for " + gender)
+		_check(store._selected_purchase_chroma_colors().is_empty(), "Thor box uses fixed colours")
 		for item: Dictionary in store.CATALOG:
 			if store._preview_parts_for_item(item).is_empty():
 				continue
