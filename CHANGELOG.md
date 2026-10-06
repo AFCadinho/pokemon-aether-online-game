@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.
+
 - Add Wailmer, Drednaw, Mantine, Basculegion and Wailord as Surf mounts for admin-granted testing, with submerged lower bodies, synchronized foam/wakes and fishing poses.
 
 - Animate both Aether Clash lobby fountains with water cascading down their plinths, small splashes and ripples.

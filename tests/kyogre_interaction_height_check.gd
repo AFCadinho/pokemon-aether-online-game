@@ -83,7 +83,22 @@ func _run() -> void:
 			_check(player.call("get_feet_position") == feet, "physical feet do not move")
 			_check(player.get_node("Look").position == original_look and player.get_node("DetectionShape").position == original_collision, "visual and collision anchors stay unchanged")
 			_check(player.get_node("Look/Rider").position == rider and player.get_node("Look/MountSprite").position == mount_position, "rider and mount stay exactly where they were")
-			for displacement: Vector2 in [direction * 32, direction * 64 + Vector2(0, 32), -direction * 32 + Vector2(0, 32)]:
+			# Mouth-height support must not remove the ordinary side neighbour.
+			npc.global_position = feet + direction * 32
+			object.global_position = npc.global_position
+			await _settle_physics()
+			Input.action_press("interact")
+			_check(npc.call("_can_start_manual_interaction"), "same-row side NPC remains interactable on " + mount_id)
+			_check(object.call("_can_start_manual_interaction"), "same-row side object remains interactable on " + mount_id)
+			Input.action_release("interact")
+			openings = npc.get("openings")
+			await npc.call("_start_manual_interaction", player)
+			await object.call("_start_manual_interaction", player)
+			_check(npc.get("openings") == openings + 1, "ordinary side interaction completes exactly once")
+			_check(player.get("last_direction") == direction and npc.get("facing_direction") == -direction, "same-row conversation keeps both actors facing sideways")
+			_check(not root.get_node("GameState").is_overworld_input_locked(), "ordinary side interaction releases the input lock")
+			_check(player.call("get_feet_position") == feet and player.get_node("Look/Rider").position == rider and player.get_node("Look/MountSprite").position == mount_position, "ordinary side interaction never moves the rig")
+			for displacement: Vector2 in [direction * 32 - Vector2(0, 32), direction * 32 + Vector2(0, 64), direction * 64, direction * 64 + Vector2(0, 32), -direction * 32, -direction * 32 + Vector2(0, 32)]:
 				npc.global_position = feet + displacement
 				object.global_position = npc.global_position
 				_check(not npc.call("_is_player_facing_npc", player), "wrong row, extra distance and rear NPCs stay out of reach")
@@ -93,6 +108,8 @@ func _run() -> void:
 			_check(player.call("get_interaction_position") == feet, "front/back interaction remains at the physical tile")
 			npc.global_position = feet + direction * 32
 			_check(npc.call("_is_player_facing_npc", player), "front/back adjacent NPC remains reachable")
+			object.global_position = npc.global_position
+			_check(object.call("_is_player_facing_interactable", player), "front/back adjacent object remains reachable")
 	# Leaving Kyogre or leaving Surf removes the correction immediately.
 	for mount_id: String in ["lapras", "magikarp", "rayquaza", ""]:
 		player.set("active_mount_id", mount_id)

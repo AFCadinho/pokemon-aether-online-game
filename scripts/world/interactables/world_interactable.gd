@@ -173,10 +173,15 @@ func _is_player_facing_interactable(player: Node2D) -> bool:
 	elif player.has_method("get_feet_position"):
 		player_feet_position = player.call("get_feet_position") as Vector2
 
-	var player_tile := _to_tile(player_feet_position)
+	var origins: Array[Vector2] = [player_feet_position]
+	if player.has_method("get_interaction_positions"):
+		origins = player.call("get_interaction_positions")
 	var cardinal_direction := Vector2i(roundi(player_direction.x), roundi(player_direction.y))
-	var facing_tile := player_tile + cardinal_direction
-	return _is_tile_in_blocked_footprint(facing_tile)
+	for origin: Vector2 in origins:
+		var facing_tile := _to_tile(origin) + cardinal_direction
+		if _is_tile_in_blocked_footprint(facing_tile):
+			return true
+	return false
 
 
 func _is_tile_in_blocked_footprint(tile: Vector2i) -> bool:

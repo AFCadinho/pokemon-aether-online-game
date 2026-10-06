@@ -339,6 +339,16 @@ func get_interaction_position() -> Vector2:
 	return origin + Vector2(0, MountService.get_interaction_height_offset(active_mount_id, direction))
 
 
+func get_interaction_positions() -> Array[Vector2]:
+	# A visual mouth offset can cross a tile boundary. It supplements the
+	# physical interaction origin instead of removing the ordinary neighbour.
+	var origins: Array[Vector2] = [get_interaction_position()]
+	var feet := get_feet_position()
+	if origins[0] != feet:
+		origins.append(feet)
+	return origins
+
+
 func face_interaction_position(world_position: Vector2) -> void:
 	# Use the same origin as target selection; otherwise a diagonally adjacent
 	# NPC can turn the rider down as soon as the side interaction starts.

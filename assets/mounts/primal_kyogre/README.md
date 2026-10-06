@@ -38,11 +38,13 @@ the visual reference. Fishing keeps its existing saddle-relative pose correction
 
 Manual interaction is separate from rendering and collision. While surfing,
 `interactionHeightOffsets` lowers the left/right interaction origin by 16px to
-the mouth. NPC and generic object facing checks select the adjacent tile from
-that origin and keep the player facing sideways when dialogue starts. Front/back,
+the mouth. NPC and generic object facing checks accept the adjacent tile from
+both that origin and the physical feet, so crossing the tile-row boundary does
+not remove the ordinary left/right neighbour. Dialogue keeps the player facing
+sideways from the mouth-height origin. Front/back,
 other mounts, walking, movement, fishing targets and world depth retain their
 physical origin. The existing NPC proximity area is sufficient for this lower
-row; interaction distance is not increased. No sprite assets change for this fix.
+row; forward tile reach is not increased. No sprite assets change for this fix.
 
 Runtime captures (both player models, idle/swimming/fishing, all directions):
 
