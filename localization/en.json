@@ -6436,6 +6436,7 @@
   "ui.mount_collector.empty": "You do not have any shiny mounts to trade. Bring me one when you prefer its normal colours!",
   "ui.mount_collector.choose": "Choose a shiny mount to trade for its normal version and {credit} Gift Voucher credit.",
   "ui.mount_collector.bound": "Account-bound",
+  "ui.mount_collector.tradeable": "Tradeable",
   "ui.mount_collector.previous": "Previous mounts",
   "ui.mount_collector.next": "More mounts",
   "ui.mount_collector.confirm": "Trade one {shiny} for one {normal} and {credit} Gift Voucher credit? Your shiny mount will be removed. This does not change your Mount Box odds or tracker counters.",

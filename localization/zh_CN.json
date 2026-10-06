@@ -6432,6 +6432,7 @@
   "ui.mount_collector.empty": "你没有可以兑换的闪光坐骑。想要普通颜色时，带一只闪光坐骑来吧！",
   "ui.mount_collector.choose": "选择一只闪光坐骑，换取普通版本和{credit}点礼品券额度。",
   "ui.mount_collector.bound": "账号绑定",
+  "ui.mount_collector.tradeable": "可交易",
   "ui.mount_collector.previous": "上一页",
   "ui.mount_collector.next": "更多坐骑",
   "ui.mount_collector.confirm": "用一只{shiny}换取一只{normal}和{credit}点礼品券额度？你的闪光坐骑将被交出。兑换不会改变坐骑箱概率或追踪器计数。",

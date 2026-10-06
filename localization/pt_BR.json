@@ -6435,6 +6435,7 @@
   "ui.mount_collector.empty": "Você não tem montarias shiny para trocar. Volte quando preferir as cores normais!",
   "ui.mount_collector.choose": "Escolha uma montaria shiny para receber a versão normal e {credit} créditos de Gift Voucher.",
   "ui.mount_collector.bound": "Vinculada à conta",
+  "ui.mount_collector.tradeable": "Negociável",
   "ui.mount_collector.previous": "Montarias anteriores",
   "ui.mount_collector.next": "Mais montarias",
   "ui.mount_collector.confirm": "Trocar uma {shiny} por uma {normal} e {credit} créditos de Gift Voucher? Sua montaria shiny será removida. Isso não altera as chances das caixas nem os contadores do rastreador.",
