@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
 - Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
 
 - Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.

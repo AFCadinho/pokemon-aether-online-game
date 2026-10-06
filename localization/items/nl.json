@@ -698,5 +698,17 @@
   "lugia-sky-captain-outfit": {
     "name": "Lugia Sky Captain Outfitbox",
     "shortDesc": "Open deze box voor de losse Lugia Sky Captain-kledingitems. Geschikt voor mannelijke en vrouwelijke trainers."
+  },
+  "toucannon-mount": {
+    "name": "Toucannon-mount",
+    "shortDesc": "Ontgrendelt Toucannon als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "arcanine-mount": {
+    "name": "Arcanine-mount",
+    "shortDesc": "Ontgrendelt Arcanine als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "aerodactyl-mount": {
+    "name": "Aerodactyl-mount",
+    "shortDesc": "Ontgrendelt Aerodactyl als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }

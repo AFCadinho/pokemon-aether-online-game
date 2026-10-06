@@ -698,5 +698,17 @@
   "lugia-sky-captain-outfit": {
     "name": "Lugia Sky Captain Outfit Box",
     "shortDesc": "Open this box to receive the separate Lugia Sky Captain clothing items. Fits male and female trainers."
+  },
+  "toucannon-mount": {
+    "name": "Toucannon Mount",
+    "shortDesc": "Unlocks Toucannon as a land mount. Requires a Mount License for the current region."
+  },
+  "arcanine-mount": {
+    "name": "Arcanine Mount",
+    "shortDesc": "Unlocks Arcanine as a land mount. Requires a Mount License for the current region."
+  },
+  "aerodactyl-mount": {
+    "name": "Aerodactyl Mount",
+    "shortDesc": "Unlocks Aerodactyl as a land mount. Requires a Mount License for the current region."
   }
 }
