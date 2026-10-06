@@ -3172,7 +3172,7 @@
   "ui.store.cosmetic.subcategory.shoes": "Schoenen",
   "ui.store.results": "{count} ITEMS",
   "ui.store.no_results": "GEEN ITEMS GEVONDEN",
-  "ui.store.featured.explanation": "Op basis van unieke Gem-kopers over de afgelopen 30 dagen. Dagelijks bijgewerkt. Uitgelichte items vullen categorieën zonder aankopen.",
+  "ui.store.featured.explanation": "Op basis van unieke kopers over de afgelopen 30 dagen. Alle Store-aankopen tellen mee, met Gems of Gift Vouchers. Dagelijks bijgewerkt. Uitgelichte items vullen categorieën zonder aankopen.",
   "ui.store.featured.popular": "Populair · 30 dagen",
   "ui.store.featured.curated": "Uitgelicht",
   "ui.store.category.featured.label": "Populair",
