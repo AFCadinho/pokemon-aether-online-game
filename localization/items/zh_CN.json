@@ -558,5 +558,17 @@
   "metagross-black-gold-mount": {
     "name": "黑金巨金怪坐骑",
     "shortDesc": "解锁黑金巨金怪作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "dialga-mount": {
+    "name": "帝牙卢卡坐骑",
+    "shortDesc": "解锁帝牙卢卡作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "zekrom-mount": {
+    "name": "捷克罗姆坐骑",
+    "shortDesc": "解锁捷克罗姆作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "palkia-mount": {
+    "name": "帕路奇亚坐骑",
+    "shortDesc": "解锁帕路奇亚作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

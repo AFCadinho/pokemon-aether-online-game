@@ -13,6 +13,8 @@ func _run() -> void:
 	var output := "user://land_mount_collection_preview"
 	var shiny := "--shiny" in OS.get_cmdline_user_args()
 	var selected_ids: Array = IDS.duplicate()
+	if not shiny:
+		selected_ids.append_array(["dialga", "zekrom", "palkia"])
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")

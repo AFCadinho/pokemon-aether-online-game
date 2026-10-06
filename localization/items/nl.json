@@ -558,5 +558,17 @@
   "metagross-black-gold-mount": {
     "name": "Zwart-gouden Metagross-mount",
     "shortDesc": "Ontgrendelt Zwart-gouden Metagross als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "dialga-mount": {
+    "name": "Dialga-mount",
+    "shortDesc": "Ontgrendelt Dialga als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "zekrom-mount": {
+    "name": "Zekrom-mount",
+    "shortDesc": "Ontgrendelt Zekrom als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "palkia-mount": {
+    "name": "Palkia-mount",
+    "shortDesc": "Ontgrendelt Palkia als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }
