@@ -6,6 +6,7 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	root.get_node("LocalizationManager").set_locale("en")
 	var panel = load("res://scenes/interface/skills_panel.tscn").instantiate()
 	root.add_child(panel)
 	await process_frame
@@ -14,13 +15,23 @@ func _run() -> void:
 	rewards.player_level = 25
 	rewards.catalog = {
 		"level": 50, "itemChancePercent": 30, "fossilChancePercent": 0.4,
-		"items": [{"itemId": "pearl", "quantity": 1, "chancePercent": 6.6}, {"itemId": "resonite-ore", "quantity": 1, "chancePercent": 1.8}],
+		"items": [
+			{"itemId": "pearl", "quantity": 1, "chancePercent": 5.1},
+			{"itemId": "resonite-ore", "quantity": 1, "chancePercent": 1.8},
+			{"itemId": "repel", "quantity": 1, "chancePercent": 0.6},
+			{"itemId": "super-repel", "quantity": 1, "chancePercent": 0.6},
+			{"itemId": "max-repel", "quantity": 1, "chancePercent": 0.3},
+		],
 		"fossils": [{"itemId": "old-amber", "quantity": 1, "chancePercent": 0.08}],
 		"rocks": [{"requiredLevel": 50, "money": 1225, "experience": 70}],
 		"experienceMultiplier": 2,
 	}
 	rewards._render()
-	_check(rewards.rows.get_child_count() == 2, "Items renders only its category")
+	_check(rewards.rows.get_child_count() == 5, "Items renders only its category")
+	for index in range(3):
+		var labels: Array = rewards.rows.get_child(index + 2).find_children("*", "Label", true, false)
+		_check(labels[0].text == ["Repel ×1", "Super Repel ×1", "Max Repel ×1"][index], "Rewards displays the Repel name and amount")
+		_check(labels[1].text == ["0.6%", "0.6%", "0.3%"][index], "Rewards displays the per-smash Repel chance")
 	_check(not rewards.preview_level.visible, "Level preview starts collapsed")
 	_check(rewards.summary.text.contains("50"), "Preview identifies the reward level")
 	rewards.category.select(1)
