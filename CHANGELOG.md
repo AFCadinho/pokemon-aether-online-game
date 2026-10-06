@@ -4,6 +4,26 @@
 
 - Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
 
+- Add Black & Gold Metagross as a separate grantable land mount, outside the Gift Store and mount boxes.
+
+- Add shiny Metagross and Salamence land mounts and their Gift Store boxes at 750 Aether Gems each, with the existing shiny chance and pity rules.
+
+- Keep PvP thinking time and bank displays frozen until both 2D/3D clients confirm animation completion, including slow animation batches and reconnect recovery.
+
+- Add Metagross and Salamence as grantable land mounts with the approved rider poses, layered wings, and existing regional Mount License requirements.
+
+- Add Gift Store filters for Gem affordability and Gift Voucher eligibility/affordability, plus name and price sorting alongside existing category filters and search.
+
+- Start single 3D battles from a three-quarter camera angle; camera reset restores this view while free orbit remains available.
+
+- Add shiny Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram mounts and Land Gift Store boxes: Giratina Origin/Yveltal cost 1,000 Aether Gems; Ho-Oh/Miraidon/Reshiram cost 750, with the existing shiny pity rules.
+
+- Give 3D Close Combat alternating red and blue fists, matching punch trails and a two-color finishing impact.
+
+- Intensify 3D Close Combat with a continuous left/right fist barrage, larger readable hands, curved punch trails, attacker weight shifts and a stronger finishing blow.
+
+- Rework 3D Close Combat around its 2D combo: a quick approach, alternating fists and strike flashes, repeated pitched hit sounds and a larger final blow, with early dodge and a full contact hold.
+
 - Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.
 
 - Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.

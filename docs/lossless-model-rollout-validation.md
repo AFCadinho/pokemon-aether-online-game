@@ -124,3 +124,8 @@ supported desktop qualification, and integrating the collection API into the
 streaming download UI. Re-encoding all models has already completed and need
 not be repeated unless a source changes. Publishing the prepared hashes or ZIPs
 requires an independently approved release step.
+
+The paired memory measurements were taken on task commit `4bbaa372d` before
+merging newer development camera/Close Combat work. Those unrelated changes
+merge without touching the cache admission paths. The combined development
+batch is not certified by these measurements; its release gate remains separate.

@@ -20,6 +20,8 @@ func _run() -> void:
 	var store := STORE_SCENE.instantiate() as DonatorStorePopup
 	host.add_child(store)
 	store.show()
+	for item: Dictionary in store.CATALOG:
+		_check(not str(item.get("id", "")).begins_with("metagross-black-gold"), "Black & Gold Metagross is not a Gift Store product")
 	var items: Array = []
 	for item: Dictionary in store.CATALOG:
 		if item.has("price"):
@@ -27,7 +29,29 @@ func _run() -> void:
 	store.apply_store_state({"gems": 1000, "gift_voucher_balance": 1000}, {"items": items})
 	store.call("_select_category", "mounts")
 	_check(store.mount_mode_bar.visible and store.active_mount_mode == "land", "Mounts opens with Land selected")
-	_check(store.product_buttons.size() == 5 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the five land boxes only")
+	_check(store.product_buttons.size() == 12 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twelve land boxes only")
+	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750}
+	for id: String in new_prices:
+		var box_id := id.replace("_", "-") + "-mount-box"
+		_check(store.product_buttons.has(box_id), id + " box is listed in Land")
+		store.call("_select_product", box_id)
+		_check(store.selection_price_label.text == store.call("_mount_box_price_text", new_prices[id]), id + " approved Gem price")
+		_check(store.selection_description_label.text.contains("50%"), id + " concise chance description")
+		_check(not store.purchase_button.disabled, id + " purchasable with 1,000 Gems")
+		for shiny: bool in [false, true]:
+			store.mount_preview_shiny_toggle.button_pressed = shiny
+			var preview := store.character_preview_viewport.get_node("MountRiderPreview")
+			_check(preview.get("current_mount_id") == id + ("_shiny" if shiny else ""), id + " preview shiny toggle")
+			for direction: String in ["down", "left", "right", "up"]:
+				store.call("_select_character_preview_direction", direction)
+				store.mount_preview_animation_toggle.button_pressed = true
+				var mount: AnimatedSprite2D = preview.get("mount_sprite")
+				mount.pause()
+				for frame in range(4):
+					mount.frame = frame
+					preview.call("_on_mount_frame_changed")
+					_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
+			store.mount_preview_animation_toggle.button_pressed = false
 	store.mount_mode_buttons.surf.pressed.emit()
 	_check(store.product_buttons.keys() == ["primal-kyogre-mount-box"], "Surf lists only the Kyogre box")
 	store.call("_select_product", "primal-kyogre-mount-box")
@@ -54,7 +78,7 @@ func _run() -> void:
 	store.mount_mode_buttons.land.pressed.emit()
 	_check(store.selected_item_id.is_empty() and store.catalog_search_text.is_empty(), "Switching modes clears stale selection and search")
 	_check(not store.mount_preview_controls.visible, "Switching modes clears the previous mount preview")
-	_check(store.product_buttons.size() == 5, "Returning to Land restores its products")
+	_check(store.product_buttons.size() == 12, "Returning to Land restores its products")
 	for locale: String in ["nl", "pt_BR", "zh_CN", "en"]:
 		root.get_node("LocalizationManager").set_locale(locale)
 		_check(not store.mount_mode_buttons.land.text.begins_with("ui."), "Tab labels are translated")

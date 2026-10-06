@@ -76,6 +76,7 @@ var coop_target_highlight_index := -1
 var coop_target_highlight_actor: Node3D
 var coop_target_original_overlays: Dictionary = {}
 var coop_target_outline_material: ShaderMaterial
+const SINGLE_CAMERA_YAW := -35.0 * PI / 180.0
 const USER_CAMERA_ZOOM_MIN := 0.72
 const USER_CAMERA_ZOOM_MAX := 1.45
 
@@ -926,6 +927,9 @@ func start_move_dodge(actor: String, target: String, move: String) -> void:
 	move_dodges[index] = {"source": source, "target": destination, "actor": actor, "target_ident": target,
 		"clock": clock, "duration": duration, "impact": impact, "displacement": side * distance,
 		"hop": minf(float(bounds.height) * 0.08, 0.16)}
+	var combo: Dictionary = MoveRecipes.get_recipe(move).get("close_choreography",{})
+	if not combo.is_empty():
+		move_dodges[index]["first_strike"] = duration*float(combo.first_strike_frame)/float(combo.source_frames)
 
 func _set_dodge_offset(index: int, offset: Vector3) -> void:
 	var change: Vector3 = offset - dodge_offsets[index]
@@ -952,8 +956,10 @@ func _update_move_dodges() -> void:
 			continue
 		# Snap aside before contact, hold until the beam/tail passes, then return.
 		# Native-clock sampling makes pause and playback speed match the move.
-		var out_start := maxf(0, float(dodge.impact) - duration * 0.2)
-		var out_phase := clampf((seconds - out_start) / (duration * 0.16), 0, 1)
+		var first_strike := float(dodge.get("first_strike",dodge.impact))
+		var out_length := minf(duration*.16,first_strike*.9) if dodge.has("first_strike") else duration*.16
+		var out_start := maxf(0,first_strike-out_length) if dodge.has("first_strike") else maxf(0,first_strike-duration*.2)
+		var out_phase := clampf((seconds-out_start)/maxf(out_length,.001),0,1)
 		var return_start := maxf(float(dodge.impact) + (duration-float(dodge.impact))*.30, duration*.72)
 		var return_phase := clampf((seconds - return_start) / maxf(duration-return_start,.001), 0, 1)
 		var weight := (1.0 - pow(1.0 - out_phase, 3)) * (1.0 - smoothstep(0, 1, return_phase))
@@ -992,6 +998,8 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	if source != actors[index] and source.get("body") is Node3D:
 		motion.hud_sub_transform = source.body.global_transform
 	var z_recipe := MoveRecipes.get_recipe(str(timing.get("move_key", "")))
+	if z_recipe.has("close_choreography"):
+		motion["combo"] = z_recipe.close_choreography
 	if z_recipe.has("z_choreography"):
 		motion["z_style"] = z_recipe.z_choreography.style
 		motion["launch"] = float(timing.launch_frame)/60.0
@@ -1033,17 +1041,38 @@ func _update_move_contacts() -> void:
 		if not z_style.is_empty():
 			approach_start = float(motion.launch)
 			if z_style in ["barrage","seven_stars"]: contact_time = lerpf(approach_start,contact_time,.42)
+		if motion.has("combo"):
+			approach_start=0.0
+			contact_time=duration*float(motion.combo.approach_end_frame)/float(motion.combo.source_frames)
 		var outward := smoothstep(approach_start, contact_time, seconds)
 		var return_start := minf(float(motion.impact) + duration * 0.08, duration * 0.72)
 		if not z_style.is_empty():
 			return_start = lerpf(float(motion.impact),duration,.15)
-		var returning := smoothstep(return_start, duration * 0.94, seconds)
+		var return_end := duration*.94
+		if motion.has("combo"):
+			return_start=duration*float(motion.combo.return_start_frame)/float(motion.combo.source_frames)
+			return_end=duration*float(motion.combo.return_end_frame)/float(motion.combo.source_frames)
+		var returning := smoothstep(return_start, return_end, seconds)
 		var weight := outward * (1.0 - returning)
 		var offset: Vector3 = motion.displacement * weight
 		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:
 			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
 			offset.y += sin(leap*PI) * (2.0 if z_style=="sky_dive" else 1.3)
-		_set_contact_pose(index, offset, float(motion.yaw) * weight)
+		var yaw := float(motion.yaw)*weight
+		if motion.has("combo"):
+			var frame := seconds/duration*float(motion.combo.source_frames)
+			var flurry := smoothstep(3,5,frame)*(1-smoothstep(23,26,frame))
+			var forward: Vector3=motion.displacement.normalized()
+			var side := forward.cross(Vector3.UP)
+			var pulse := sin((frame-3)*PI/1.7)
+			# Weight shifts retreat from the contact boundary, never into the target.
+			offset+=side*pulse*.16*flurry-forward*(.08+.08*cos(frame*PI/1.7))*flurry
+			offset.y-=absf(pulse)*.055*flurry
+			yaw+=pulse*.14*flurry
+			var windup := smoothstep(24,27,frame)*(1-smoothstep(27,28,frame))
+			offset-=forward*.38*windup
+			yaw-=.2*windup
+		_set_contact_pose(index, offset, yaw)
 
 func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float, ground: Variant = null) -> Dictionary:
 	var anchors := _move_anchors(actor, target, move)
@@ -1538,7 +1567,7 @@ func _build_world() -> void:
 			world = forest_lease.main.world
 			camera = forest_lease.main.camera
 			arena_root = forest_lease.main.arena
-			camera.position = ArenaCatalog.camera_home(arena_id)
+			camera.position = _default_camera_home()
 			camera.look_at(ArenaCatalog.camera_target(arena_id))
 			_sync_render_size()
 			render_surface.texture = viewport.get_texture()
@@ -1581,7 +1610,7 @@ func _build_world() -> void:
 		world.add_child(arena_root)
 	elif not viewport.transparent_bg:
 		_build_classic_ground()
-	camera.position = ArenaCatalog.camera_home(arena_id)
+	camera.position = _default_camera_home()
 	camera.fov = ArenaCatalog.CAMERA_FOV
 	camera.look_at(ArenaCatalog.camera_target(arena_id))
 	camera.current = true
@@ -2162,6 +2191,14 @@ func _hybrid_size_limit() -> float:
 		limit = maxf(limit, maxf(rect.size.x / maxf(available.x, 1.0), rect.size.y / maxf(available.y, 1.0)))
 	return limit
 
+func _default_camera_home() -> Vector3:
+	var home := ArenaCatalog.camera_home(arena_id)
+	if double_mode or _is_hybrid_presentation(): return home
+	# A three-quarter single view, relative to each arena's own translated target.
+	# User orbit stays an offset from this home, so reset restores the same framing.
+	var target := ArenaCatalog.camera_target(arena_id)
+	return target + (home-target).rotated(Vector3.UP,SINGLE_CAMERA_YAW)
+
 func _update_camera(delta: float) -> void:
 	var settings := get_tree().root.get_node("SettingsManager")
 	if settings.battle_presentation_mode == "2.5d":
@@ -2184,14 +2221,14 @@ func _update_camera(delta: float) -> void:
 		)
 	if not settings.battle_3d_camera_motion:
 		camera_phase = 0.0
-		camera.position = ArenaCatalog.camera_home(arena_id)
+		camera.position = _default_camera_home()
 	else:
 		# Small arc, never crosses the combat axis; both actors remain in frame.
 		# Hold framing during actions: existing 2D effects capture screen anchors.
 		if all_resting:
 			camera_phase += delta * 0.22
 		var origin := ArenaCatalog.battle_origin(arena_id)
-		camera.position = origin + (ArenaCatalog.camera_home(arena_id) - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
+		camera.position = origin + (_default_camera_home() - origin).rotated(Vector3.UP, sin(camera_phase) * 0.10)
 	var target := ArenaCatalog.camera_target(arena_id)
 	var offset := camera.position - target
 	var focus_ready: bool = (

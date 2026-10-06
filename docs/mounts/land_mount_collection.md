@@ -1,9 +1,17 @@
 # Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram
 
-These five normal land mounts use the approved V3 asset package. Administrators
+These five land mounts have normal and shiny variants. Administrators
 can grant the permanent items below through existing inventory reward tooling.
 Owning an item unlocks its entry in the Land mount selector; the regional Mount
-License remains required. No box, shiny variant or Gift Store listing is added.
+License remains required. The Gift Store lists their boxes under Mounts → Land.
+Giratina Origin and Yveltal cost 1,000 Aether Gems; Ho-Oh, Miraidon and Reshiram
+cost 750. Eligible Gift Voucher purchases use the same numeric costs.
+
+Each box gives one normal or shiny mount, using the shared 50% base chance and
+existing pity rules. Shiny items prefix the normal item ID with `shiny-`; their
+mount IDs append `_shiny`. Shiny source sheets use the project’s follower shiny
+colors, with exactly matching alpha. The builder shares each normal design to
+retain all seating, head corrections, animation and occlusion masks.
 
 | Mount ID | Grant item |
 | --- | --- |
@@ -42,3 +50,5 @@ Focused Godot checks, run through the assigned slot's `slot-env`:
 Render the actual game rig with `tools/preview_land_mount_collection.gd` and
 `-- --output=/absolute/output/folder` using the compatibility renderer. It
 captures each mount in all four directions with both default player models.
+
+Use `--shiny` with the preview script to render the five shiny variants.

@@ -1,4 +1,4 @@
-"""Rebuild the five land mounts from their checked-in native source sheets.
+"""Rebuild the land mount collection from checked-in native source sheets.
 
 Run with --check to compare the generated artwork and seat offsets without writes.
 Requires Pillow. Design JSON records seats, foreground masks and head cutouts.
@@ -9,15 +9,22 @@ import json
 from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
-IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram')
+BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence')
+SPECIAL_VARIANTS = {'metagross_black_gold': 'metagross'}
+IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS)
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
 
 
 def build(mount_id):
     folder = ROOT / 'assets/mounts' / mount_id
-    design = json.loads((folder / 'design.json').read_text())
+    base_id = SPECIAL_VARIANTS.get(mount_id, mount_id.removesuffix('_shiny'))
+    base_folder = ROOT / 'assets/mounts' / base_id
+    design = json.loads((base_folder / 'design.json').read_text())
     sheet = Image.open(folder / 'source.png').convert('RGBA')
+    if mount_id != base_id:
+        normal = Image.open(base_folder / 'source.png').convert('RGBA')
+        assert sheet.size == normal.size and sheet.getchannel('A').tobytes() == normal.getchannel('A').tobytes(), f'{mount_id}: variant silhouette changed'
     width, height = sheet.width // 4, sheet.height // 4
     layers = {name: Image.new('RGBA', (768, 768)) for name in ('mount', 'foreground', 'rider_mask')}
     offsets = {}
@@ -46,8 +53,10 @@ def build(mount_id):
             offsets[direction].append([base_x+sx+dx-32-64, base_y+sy+dy-52-64])
             selection = Image.new('L',art.size)
             draw = ImageDraw.Draw(selection)
-            for key in ('head','near'):
-                polygon = design[key][1 if row == 2 else row]
+            polygons = [design[key][1 if row == 2 else row] for key in ('head', 'near')]
+            if row in (1, 2) and 'side_wing' in design:
+                polygons.append(design['side_wing'])
+            for polygon in polygons:
                 if row == 2: polygon = [(width-x,y) for x,y in polygon]
                 if polygon: draw.polygon([(x+dx,y+dy) for x,y in polygon],fill=255)
             selected = Image.new('RGBA',art.size)

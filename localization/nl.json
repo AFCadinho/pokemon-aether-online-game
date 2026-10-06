@@ -3069,6 +3069,14 @@
   "ui.store.browse": "BLADEREN",
   "ui.store.catalog": "STORECATALOGUS",
   "ui.store.catalog_note": "Veilige Storecatalogus\nNiet-beschikbare items zijn duidelijk gemarkeerd",
+  "ui.store.filter.all": "Filter: Alle producten",
+  "ui.store.filter.gems_affordable": "Betaalbaar met Gems",
+  "ui.store.filter.voucher_eligible": "Geschikt voor Gift Voucher",
+  "ui.store.filter.voucher_affordable": "Betaalbaar met Gift Voucher",
+  "ui.store.sort.default": "Sorteren: Standaard",
+  "ui.store.sort.name": "Naam: A–Z",
+  "ui.store.sort.price_asc": "Prijs: Laag naar hoog",
+  "ui.store.sort.price_desc": "Prijs: Hoog naar laag",
   "ui.store.search": "Zoek in Store...",
   "ui.store.search_tooltip": "Zoek binnen de actieve Storecategorie",
   "ui.store.safety": "Je Aether Gem-saldo en aankopen worden veilig bewaard.",
@@ -6398,5 +6406,12 @@
   "ui.visual_choice.choose.3d": "Kies 3D",
   "ui.visual_choice.size": "Ruimte voor alle Pokémon: ongeveer {installed}",
   "ui.visual_choice.hint": "Pokémon-afbeeldingen en modellen worden automatisch gedownload terwijl je speelt. Daarna blijven ze op dit apparaat staan. De eerste download kan even duren.\nWil je alle Pokémon alvast klaar hebben? Download ze in één keer via Downloads in de launcher.",
-  "ui.visual_choice.save_error": "Je keuze kon niet worden opgeslagen. Controleer of er ruimte vrij is op je apparaat en probeer opnieuw."
+  "ui.visual_choice.save_error": "Je keuze kon niet worden opgeslagen. Controleer of er ruimte vrij is op je apparaat en probeer opnieuw.",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "Bevat een Giratina Origin-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "Bevat een Ho-Oh-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "Bevat een Yveltal-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "Bevat een Miraidon-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "Bevat een Reshiram-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_metagross": "Bevat een Metagross-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_salamence": "Bevat een Salamence-mount. Shiny-basiskans: 50%."
 }

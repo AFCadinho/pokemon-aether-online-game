@@ -3069,6 +3069,14 @@
   "ui.store.browse": "BROWSE",
   "ui.store.catalog": "STORE CATALOG",
   "ui.store.catalog_note": "Secure Store catalog\nUnavailable items are clearly marked",
+  "ui.store.filter.all": "Filter: All products",
+  "ui.store.filter.gems_affordable": "Affordable with Gems",
+  "ui.store.filter.voucher_eligible": "Gift Voucher eligible",
+  "ui.store.filter.voucher_affordable": "Affordable with Gift Voucher",
+  "ui.store.sort.default": "Sort: Default order",
+  "ui.store.sort.name": "Name: A–Z",
+  "ui.store.sort.price_asc": "Price: Low to high",
+  "ui.store.sort.price_desc": "Price: High to low",
   "ui.store.search": "Search Store...",
   "ui.store.search_tooltip": "Search the active Store category",
   "ui.store.safety": "Your Aether Gem balance and purchases are kept safe.",
@@ -6398,5 +6406,12 @@
   "ui.visual_choice.choose.3d": "Choose 3D",
   "ui.visual_choice.size": "Space for all Pokémon: about {installed}",
   "ui.visual_choice.hint": "Pokémon images and models download automatically as you play. They stay on this device after downloading. The first download may take a moment.\nWant all Pokémon ready beforehand? Download them all from Downloads in the launcher.",
-  "ui.visual_choice.save_error": "Could not save your choice. Check that your device has available space and try again."
+  "ui.visual_choice.save_error": "Could not save your choice. Check that your device has available space and try again.",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "Contains a Giratina Origin mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "Contains a Ho-Oh mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "Contains a Yveltal mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "Contains a Miraidon mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "Contains a Reshiram mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_metagross": "Contains a Metagross mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contains a Salamence mount. Base shiny chance: 50%."
 }

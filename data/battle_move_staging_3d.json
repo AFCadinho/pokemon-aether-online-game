@@ -6,949 +6,949 @@
       "motif": "water-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "bodypress": {
       "motif": "heavy-ram",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "extremespeed": {
       "motif": "speed-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "fakeout": {
       "motif": "speed-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "flipturn": {
       "motif": "water-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "frustration": {
       "motif": "speed-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "gigaimpact": {
       "motif": "energy-rush",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "grassyglide": {
       "motif": "leaf-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "headsmash": {
       "motif": "heavy-ram",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "headlongrush": {
       "motif": "heavy-ram",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "ironhead": {
       "motif": "heavy-ram",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "knockoff": {
       "motif": "dark-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "outrage": {
       "motif": "energy-rush",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "pursuit": {
       "motif": "speed-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "rapidspin": {
       "motif": "rolling-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "return": {
       "motif": "speed-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "rollout": {
       "motif": "rolling-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "spark": {
       "motif": "electric-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "uturn": {
       "motif": "return-rush",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "woodhammer": {
       "motif": "heavy-ram",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "bulletpunch": {
       "motif": "heavy-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "closecombat": {
-      "motif": "punch-barrage",
+      "motif": "2d-combo",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "doublekick": {
       "motif": "rising-kick",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "drainpunch": {
       "motif": "draining-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "firepunch": {
       "motif": "elemental-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "highjumpkick": {
       "motif": "rising-kick",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "icepunch": {
       "motif": "elemental-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "lowkick": {
       "motif": "rising-kick",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "pound": {
       "motif": "heavy-punch",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "rocksmash": {
       "motif": "heavy-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "suckerpunch": {
       "motif": "heavy-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "superpower": {
       "motif": "heavy-punch",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "thunderpunch": {
       "motif": "elemental-punch",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "astonish": {
       "motif": "ghost-strike",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "bugbite": {
       "motif": "biting-strike",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "ceaselessedge": {
       "motif": "cross-slash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "dragonclaw": {
       "motif": "cross-slash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "furyattack": {
       "motif": "piercing-strike",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "kowtowcleave": {
       "motif": "cross-slash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "lick": {
       "motif": "reaching-lash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "peck": {
       "motif": "piercing-strike",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "razorshell": {
       "motif": "cross-slash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "vinewhip": {
       "motif": "reaching-lash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "wingattack": {
       "motif": "cross-slash",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "dragonbreath": {
       "motif": "breath-stream",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "electroshot": {
       "motif": "electric-beam",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "hyperbeam": {
       "motif": "charged-beam",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "scald": {
       "motif": "breath-stream",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "solarbeam": {
       "motif": "charged-beam",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "voltswitch": {
       "motif": "electric-beam",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "fairywind": {
       "motif": "swirling-orb",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "hiddenpower": {
       "motif": "swirling-orb",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "leafage": {
       "motif": "leaf-fan",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "mudslap": {
       "motif": "arcing-bomb",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "pyroball": {
       "motif": "arcing-bomb",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "rockthrow": {
       "motif": "spinning-shards",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "watershuriken": {
       "motif": "spinning-shards",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "weatherball": {
       "motif": "swirling-orb",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "absorb": {
       "motif": "returning-drain",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "confusion": {
       "motif": "psychic-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "darkpulse": {
       "motif": "dark-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "disarmingvoice": {
       "motif": "sound-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "drainingkiss": {
       "motif": "heart-stream",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "gust": {
       "motif": "wind-spiral",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "hex": {
       "motif": "dark-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "psychic": {
       "motif": "psychic-tunnel",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "psychicnoise": {
       "motif": "sound-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "psyshock": {
       "motif": "psychic-tunnel",
       "space": "path",
       "weight": 1.35,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "screech": {
       "motif": "sound-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "sparklingaria": {
       "motif": "sound-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "supersonic": {
       "motif": "sound-tunnel",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "babydolleyes": {
       "motif": "heart-stream",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "charm": {
       "motif": "heart-stream",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "encore": {
       "motif": "taunt-glyph",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "growl": {
       "motif": "sound-call",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "leechseed": {
       "motif": "seed-arc",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "leer": {
       "motif": "taunt-glyph",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "poisonpowder": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "sandattack": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "sleeppowder": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "smokescreen": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "spore": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "stringshot": {
       "motif": "woven-threads",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "sweetscent": {
       "motif": "powder-cloud",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "tailwhip": {
       "motif": "taunt-glyph",
       "space": "path",
       "weight": 0.75,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "taunt": {
       "motif": "taunt-glyph",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "thunderwave": {
       "motif": "paralysis-arcs",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "toxic": {
       "motif": "toxic-arc",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "willowisp": {
       "motif": "ghost-flames",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "agility": {
       "motif": "orbit-dance",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "calmmind": {
       "motif": "inward-focus",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "charge": {
       "motif": "electric-charge",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "defensecurl": {
       "motif": "armor-shell",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "doubleteam": {
       "motif": "orbit-dance",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "dragondance": {
       "motif": "orbit-dance",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "focusenergy": {
       "motif": "inward-focus",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "growth": {
       "motif": "growing-aura",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "harden": {
       "motif": "armor-shell",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "howl": {
       "motif": "sound-call",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "nastyplot": {
       "motif": "thought-bubbles",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "recover": {
       "motif": "healing-rise",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "roost": {
       "motif": "healing-rise",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "swordsdance": {
       "motif": "sword-circle",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "withdraw": {
       "motif": "armor-shell",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "auroraveil": {
       "motif": "protective-screen",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "chillyreception": {
       "motif": "cold-front",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "courtchange": {
       "motif": "exchanging-sides",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "defog": {
       "motif": "clearing-mist",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "electricterrain": {
       "motif": "electric-field",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "futuresight": {
       "motif": "future-eye",
       "space": "opponent-side",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "grassyterrain": {
       "motif": "grass-field",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "haze": {
       "motif": "clearing-mist",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "lightscreen": {
       "motif": "protective-screen",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "mistyterrain": {
       "motif": "mist-field",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "protect": {
       "motif": "protective-screen",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "psychicterrain": {
       "motif": "psychic-field",
       "space": "arena",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "reflect": {
       "motif": "protective-screen",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "spikes": {
       "motif": "scattered-hazards",
       "space": "opponent-side",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "stealthrock": {
       "motif": "scattered-hazards",
       "space": "opponent-side",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "stickyweb": {
       "motif": "ground-web",
       "space": "opponent-side",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "substitute": {
       "motif": "phase-portal",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "teleport": {
       "motif": "phase-portal",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "toxicspikes": {
       "motif": "scattered-hazards",
       "space": "opponent-side",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "wish": {
       "motif": "wishing-star",
       "space": "actor",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "10000000voltthunderbolt": {
       "motif": "rainbow_lightning",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "aciddownpour": {
       "motif": "acid_column",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "alloutpummeling": {
       "motif": "barrage",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "blackholeeclipse": {
       "motif": "black_hole",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "breakneckblitz": {
       "motif": "rush",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "catastropika": {
       "motif": "electric_dive",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "clangoroussoulblaze": {
       "motif": "sound_rings",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "continentalcrush": {
       "motif": "boulder",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "corkscrewcrash": {
       "motif": "drill",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "devastatingdrake": {
       "motif": "dragon",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "extremeevoboost": {
       "motif": "evolution",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "genesissupernova": {
       "motif": "dna_nova",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "gigavolthavoc": {
       "motif": "lightning",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "guardianofalola": {
       "motif": "guardian_fist",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "hydrovortex": {
       "motif": "water_vortex",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "infernooverdrive": {
       "motif": "fire_orb",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "letssnuggleforever": {
       "motif": "shadow_shroud",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "lightthatburnsthesky": {
       "motif": "sun_nova",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "maliciousmoonsault": {
       "motif": "moonsault",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "menacingmoonrazemaelstrom": {
       "motif": "moon_column",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "neverendingnightmare": {
       "motif": "chains",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "oceanicoperetta": {
       "motif": "ocean_orb",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "pulverizingpancake": {
       "motif": "body_slam",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "savagespinout": {
       "motif": "cocoon",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "searingsunrazesmash": {
       "motif": "sun_column",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "shatteredpsyche": {
       "motif": "prism",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "sinisterarrowraid": {
       "motif": "arrow_rain",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "soulstealing7starstrike": {
       "motif": "seven_stars",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "splinteredstormshards": {
       "motif": "stone_rain",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "stokedsparksurfer": {
       "motif": "electric_surf",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "subzeroslammer": {
       "motif": "ice_prison",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "supersonicskystrike": {
       "motif": "sky_dive",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "tectonicrage": {
       "motif": "fissure",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "twinkletackle": {
       "motif": "fairy_comet",
       "space": "arena",
       "weight": 1.5,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     }
   }
 }

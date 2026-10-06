@@ -490,5 +490,73 @@
   "reshiram-mount": {
     "name": "莱希拉姆坐骑",
     "shortDesc": "解锁莱希拉姆作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-giratina-origin-mount": {
+    "name": "异色骑拉帝纳起源形态坐骑",
+    "shortDesc": "解锁异色骑拉帝纳起源形态陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "giratina-origin-mount-box": {
+    "name": "骑拉帝纳起源形态坐骑箱",
+    "shortDesc": "包含一只骑拉帝纳起源形态坐骑。初始异色概率：50%。"
+  },
+  "shiny-ho-oh-mount": {
+    "name": "异色凤王坐骑",
+    "shortDesc": "解锁异色凤王陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "ho-oh-mount-box": {
+    "name": "凤王坐骑箱",
+    "shortDesc": "包含一只凤王坐骑。初始异色概率：50%。"
+  },
+  "shiny-yveltal-mount": {
+    "name": "异色伊裴尔塔尔坐骑",
+    "shortDesc": "解锁异色伊裴尔塔尔陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "yveltal-mount-box": {
+    "name": "伊裴尔塔尔坐骑箱",
+    "shortDesc": "包含一只伊裴尔塔尔坐骑。初始异色概率：50%。"
+  },
+  "shiny-miraidon-mount": {
+    "name": "异色密勒顿坐骑",
+    "shortDesc": "解锁异色密勒顿陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "miraidon-mount-box": {
+    "name": "密勒顿坐骑箱",
+    "shortDesc": "包含一只密勒顿坐骑。初始异色概率：50%。"
+  },
+  "shiny-reshiram-mount": {
+    "name": "异色莱希拉姆坐骑",
+    "shortDesc": "解锁异色莱希拉姆陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "reshiram-mount-box": {
+    "name": "莱希拉姆坐骑箱",
+    "shortDesc": "包含一只莱希拉姆坐骑。初始异色概率：50%。"
+  },
+  "metagross-mount": {
+    "name": "巨金怪坐骑",
+    "shortDesc": "解锁巨金怪作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "salamence-mount": {
+    "name": "暴飞龙坐骑",
+    "shortDesc": "解锁暴飞龙作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-metagross-mount": {
+    "name": "异色巨金怪坐骑",
+    "shortDesc": "解锁异色巨金怪陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "metagross-mount-box": {
+    "name": "巨金怪坐骑箱",
+    "shortDesc": "包含一只巨金怪坐骑。初始异色概率：50%。"
+  },
+  "shiny-salamence-mount": {
+    "name": "异色暴飞龙坐骑",
+    "shortDesc": "解锁异色暴飞龙陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "salamence-mount-box": {
+    "name": "暴飞龙坐骑箱",
+    "shortDesc": "包含一只暴飞龙坐骑。初始异色概率：50%。"
+  },
+  "metagross-black-gold-mount": {
+    "name": "黑金巨金怪坐骑",
+    "shortDesc": "解锁黑金巨金怪作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

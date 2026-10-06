@@ -3034,6 +3034,14 @@
   "ui.store.browse": "EXPLORAR",
   "ui.store.catalog": "CATÁLOGO DA LOJA",
   "ui.store.catalog_note": "Catálogo seguro da Loja\nItens indisponíveis são marcados claramente",
+  "ui.store.filter.all": "Filtro: Todos os produtos",
+  "ui.store.filter.gems_affordable": "Acessíveis com Gems",
+  "ui.store.filter.voucher_eligible": "Aceitam Gift Voucher",
+  "ui.store.filter.voucher_affordable": "Acessíveis com Gift Voucher",
+  "ui.store.sort.default": "Ordenar: Padrão",
+  "ui.store.sort.name": "Nome: A–Z",
+  "ui.store.sort.price_asc": "Preço: Menor primeiro",
+  "ui.store.sort.price_desc": "Preço: Maior primeiro",
   "ui.store.search": "Buscar na Loja...",
   "ui.store.search_tooltip": "Buscar na categoria ativa da Loja",
   "ui.store.safety": "Seu saldo de Gemas Aether e suas compras são mantidos em segurança.",
@@ -6397,5 +6405,12 @@
   "ui.visual_choice.choose.3d": "Escolher 3D",
   "ui.visual_choice.size": "Espaço para todos os Pokémon: cerca de {installed}",
   "ui.visual_choice.hint": "As imagens e os modelos dos Pokémon são baixados automaticamente enquanto você joga. Depois ficam neste dispositivo. O primeiro download pode demorar um pouco.\nQuer todos os Pokémon prontos antes de jogar? Baixe tudo em Downloads no launcher.",
-  "ui.visual_choice.save_error": "Não foi possível salvar sua escolha. Verifique se há espaço disponível no dispositivo e tente novamente."
+  "ui.visual_choice.save_error": "Não foi possível salvar sua escolha. Verifique se há espaço disponível no dispositivo e tente novamente.",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "Contém uma montaria Giratina Origin. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "Contém uma montaria Ho-Oh. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "Contém uma montaria Yveltal. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "Contém uma montaria Miraidon. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "Contém uma montaria Reshiram. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_metagross": "Contém uma montaria Metagross. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contém uma montaria Salamence. Chance shiny inicial: 50%."
 }

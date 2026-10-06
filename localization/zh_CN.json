@@ -3031,6 +3031,14 @@
   "ui.store.browse": "浏览",
   "ui.store.catalog": "商店目录",
   "ui.store.catalog_note": "安全存储目录\n不可用的项目已明确标记",
+  "ui.store.filter.all": "筛选：所有商品",
+  "ui.store.filter.gems_affordable": "Gems 余额足够",
+  "ui.store.filter.voucher_eligible": "可用 Gift Voucher",
+  "ui.store.filter.voucher_affordable": "Gift Voucher 余额足够",
+  "ui.store.sort.default": "排序：默认",
+  "ui.store.sort.name": "名称：A–Z",
+  "ui.store.sort.price_asc": "价格：从低到高",
+  "ui.store.sort.price_desc": "价格：从高到低",
   "ui.store.search": "搜索商店...",
   "ui.store.search_tooltip": "搜索活动商店类别",
   "ui.store.safety": "您的以太宝石余额和购买的物品都会安全保存。",
@@ -6394,5 +6402,12 @@
   "ui.visual_choice.choose.3d": "选择3D",
   "ui.visual_choice.size": "全部宝可梦约需：{installed}",
   "ui.visual_choice.hint": "宝可梦图片和模型会在游戏中按需自动下载，之后保存在此设备上。首次下载可能需要稍等。\n想提前备好全部宝可梦？请在启动器的“下载”页面一次下载全部文件。",
-  "ui.visual_choice.save_error": "无法保存选择。请检查设备的可用空间并重试。"
+  "ui.visual_choice.save_error": "无法保存选择。请检查设备的可用空间并重试。",
+  "ui.shiny_tracker.mounts.store_description_giratina_origin": "包含一只骑拉帝纳起源形态坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_ho_oh": "包含一只凤王坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_yveltal": "包含一只伊裴尔塔尔坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_miraidon": "包含一只密勒顿坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_reshiram": "包含一只莱希拉姆坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_metagross": "包含一只巨金怪坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_salamence": "包含一只暴飞龙坐骑。初始异色概率：50%。"
 }
