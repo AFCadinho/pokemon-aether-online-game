@@ -1,0 +1,61 @@
+extends SceneTree
+const Response=preload("res://scripts/battle/battle_ui/material_response.gd")
+func _initialize() -> void:
+	run.call_deferred()
+func actor(count: int) -> Node3D:
+	var result:=Node3D.new()
+	for index in count:
+		var mesh:=MeshInstance3D.new()
+		mesh.name="Surface"+str(index)
+		mesh.mesh=BoxMesh.new()
+		mesh.material_override=StandardMaterial3D.new()
+		result.add_child(mesh)
+	return result
+func run() -> void:
+	var helper:=Response.new()
+	var a:=actor(4)
+	var b:=actor(4)
+	root.add_child(a)
+	root.add_child(b)
+	var order_a:=helper._surface_order(a)
+	var order_b:=helper._surface_order(b)
+	for index in 4:
+		var ma: MeshInstance3D=a.get_child(index)
+		var mb: MeshInstance3D=b.get_child(index)
+		assert(order_a[ma][0]==index and order_b[mb][0]==index)
+		assert(ma.material_override.render_priority==0 and mb.material_override.render_priority==0)
+		var light:=helper._material(ma.material_override,true,index)
+		assert(light.render_priority==index)
+	var Order=preload("res://scripts/battle/battle_ui/material_surface_order.gd")
+	Order.apply(a)
+	Order.apply(a)
+	for index in 4:
+		assert(a.get_child(index).material_override.render_priority==index)
+		assert(b.get_child(index).material_override.render_priority==0)
+		if index>0:assert(a.get_child(index).material_override.albedo_texture==b.get_child(index).material_override.albedo_texture)
+	var authored: MeshInstance3D=b.get_child(1)
+	authored.material_override.render_priority=7
+	order_a=helper._surface_order(b)
+	for index in 4:assert(order_a[b.get_child(index)][0]==(7 if index==1 else 0))
+	var large:=actor(257)
+	root.add_child(large)
+	for priorities in helper._surface_order(large).values():assert(priorities[0]==0)
+	var maximum:=actor(256)
+	root.add_child(maximum)
+	var maximum_order:=helper._surface_order(maximum)
+	assert(maximum_order[maximum.get_child(0)][0]==Material.RENDER_PRIORITY_MIN)
+	assert(maximum_order[maximum.get_child(255)][0]==Material.RENDER_PRIORITY_MAX)
+	var empty:=MeshInstance3D.new()
+	root.add_child(empty)
+	assert(helper._surface_order(empty).is_empty())
+	var standalone:=MeshInstance3D.new()
+	standalone.mesh=BoxMesh.new()
+	standalone.material_override=StandardMaterial3D.new()
+	root.add_child(standalone)
+	assert(helper._surface_order(standalone)[standalone][0]==0)
+	await process_frame
+	for node in [a,b,large,maximum,empty,standalone]:node.queue_free()
+	helper.free()
+	await process_frame
+	print("MATERIAL_RESPONSE_SURFACE_ORDER_OK independent actors, explicit priorities, bounds, root/empty meshes")
+	quit()

@@ -55,9 +55,10 @@ func _ready() -> void:
 	process_priority = 100 # After presenter pose/visibility, before render.
 	RenderingServer.frame_pre_draw.connect(_sync)
 
-func _material(original: StandardMaterial3D, light_pass: bool) -> ShaderMaterial:
+func _material(original: StandardMaterial3D, light_pass: bool, priority: int) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
 	material.shader = IRRADIANCE if light_pass else RESPONSE
+	material.render_priority = priority
 	material.set_shader_parameter("normal_tex", original.normal_texture)
 	material.set_shader_parameter("normal_strength", original.normal_scale if original.normal_enabled else 0.0)
 	if not light_pass:
@@ -74,7 +75,10 @@ func _material(original: StandardMaterial3D, light_pass: bool) -> ShaderMaterial
 		material.set_shader_parameter("endpoint_1", data.endpoint_1)
 	return material
 
-func _pair(source: Node, copy: Node, list: Array) -> void:
+func _surface_order(source: Node) -> Dictionary:
+	return preload("res://scripts/battle/battle_ui/material_surface_order.gd").priorities(source)
+
+func _pair(source: Node, copy: Node, list: Array, priorities: Dictionary) -> void:
 	list.append([source, copy])
 	if copy is AnimationPlayer:
 		copy.active = false
@@ -88,10 +92,11 @@ func _pair(source: Node, copy: Node, list: Array) -> void:
 				hidden.shader.code = "shader_type spatial; void fragment() { discard; }"
 				copy.set_surface_override_material(surface, hidden)
 				continue
-			copy.set_surface_override_material(surface, _material(original, true))
-			source.set_surface_override_material(surface, _material(original, false))
+			var priority: int=priorities.get(source,{}).get(surface,original.render_priority)
+			copy.set_surface_override_material(surface, _material(original, true, priority))
+			source.set_surface_override_material(surface, _material(original, false, priority))
 	for index in source.get_child_count():
-		_pair(source.get_child(index), copy.get_child(index), list)
+		_pair(source.get_child(index), copy.get_child(index), list, priorities)
 
 func _drop() -> void:
 	if is_instance_valid(viewport):
@@ -181,7 +186,7 @@ func _process(_delta: float) -> void:
 			_build()
 		copies[index] = stage.packed[stage.identities[index]].instantiate()
 		world.add_child(copies[index])
-		_pair(source, copies[index], pairs[index])
+		_pair(source, copies[index], pairs[index], _surface_order(source))
 	if viewport != null:
 		viewport.size = stage.viewport.size
 		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if stage.active else SubViewport.UPDATE_DISABLED

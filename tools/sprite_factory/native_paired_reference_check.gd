@@ -35,6 +35,8 @@ func _run() -> void:
 			var a_ref: WeakRef=weakref(a)
 			var b_ref: WeakRef=weakref(b)
 			var actors: Array=[a.instantiate(),b.instantiate()]
+			prepare_actor(actors[0],entry,false)
+			prepare_actor(actors[1],entry,not report.original_only_control)
 			var stage:=make_stage()
 			stage.identities=["source","candidate"]
 			stage.packed={"source":a,"candidate":b}
@@ -121,4 +123,7 @@ func difference(a: Dictionary,b: Dictionary) -> Dictionary:
 
 func failure_diagnostics(_stage: Stage,_actors: Array,_action: String,_fraction: float) -> void:
 	# Default strict comparator never changes rendering to make a failure pass.
+	pass
+
+func prepare_actor(_actor: Node3D,_entry: Dictionary,_candidate: bool) -> void:
 	pass
