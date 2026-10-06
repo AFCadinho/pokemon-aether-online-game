@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Open Gift Store mount boxes directly from the Bag and show the reward in chat, including your first box and boxes different from the last opened type.
+
 ## 0.3.99
 
 ### Adventure and exploration
