@@ -2,12 +2,13 @@
 
 Earthquake, Blizzard and Bloom Doom were approved by the user on 2026-10-06.
 Their existing choreography is retained and their recipe review flags now record
-that approval. The nine additions below still await user visual approval.
+that approval. Tera Starstorm was subsequently approved after its four-second revision. The
+other additions below, including the latest Heat Wave revision, await approval.
 
 | Move | Seconds | Field choreography |
 | --- | --- | --- |
 | Earth Power | 2.6 | Energy branches out from the caster into staggered ground vents |
-| Heat Wave | 2.6 | Two red-hot curling flame fronts and a wake of rising embers cross the circle |
+| Heat Wave | 2.6 | Three broad rolling sheets of hot air, subtle refraction and sparse embers cross the circle |
 | Hurricane | 3.0 | A broad wind funnel with soft rotating ribbons and drifting clouds |
 | Bleakwind Storm | 3.0 | Two opposed icy spirals with clouds circulating around the field |
 | Powder Snow | 2.2 | Low powder opens into a wide, drifting front |
@@ -48,18 +49,25 @@ sources were introduced.
 
 ## Heat Wave / Tera Starstorm follow-up
 
-The user found Heat Wave too earth-like and Tera Starstorm underwhelming. Heat
-Wave now also uses Ember's packaged SV flame and spark masks, shaded with dense
-red/orange edges and a hot yellow center. Upright flames curl over the field and
-leave rising embers behind. The mixed-alpha flame shader avoids the previous
-washed-out additive dust appearance; source atlases still interpolate frames.
+Heat Wave now emphasizes travelling heat rather than separate flames. Three
+curved meshes sweep across the circle, with soft red/orange wave crests animated
+using the packaged SV noise mask. The leading sheet subtly refracts the scene;
+the trailing sheets add glow. Nine small Ember-source sparks accent the wake.
+The larger upright flames from the earlier revision were removed.
+
+Only the leading sheet reads the screen texture. Godot captures opaque geometry
+before transparent effects, so the trailing glow uses additive shading and the
+refraction stays faint. Transparent geometry is not included in that distortion;
+see [Godot's screen-reading shader documentation](https://docs.godotengine.org/en/stable/tutorials/shaders/screen-reading_shaders.html).
+The effect respects depth, follows the captured world field and uses the move's
+clock so camera orbit, pause and dodge retain their existing behavior.
 
 Tera Starstorm builds a larger central star with a soft halo, surrounding stars
 and connecting light. The main star descends toward the captured aim while the
 smaller stars shower across the field. The final burst adds sixteen radiating
 fragments and three expanding floor ripples. Its normal duration is four
 seconds; it remains within the existing 90-piece budget and uses the same
-clock for effects, dodge and audio. Both revisions await visual approval.
+clock for effects, dodge and audio. Tera Starstorm is user-approved; Heat Wave still awaits approval.
 
 ## Checks and review
 
@@ -76,5 +84,7 @@ clock for effects, dodge and audio. Both revisions await visual approval.
 
 The follow-up was checked with both focused Godot checks above and twelve new
 captures (two moves, three phases, both sides including misses/orbit/pause).
-The interactive preview now focuses on Heat Wave and Tera Starstorm. Run it
-through the assigned slot with `-- --moves` to review both.
+The latest Heat Wave revision additionally passed six captures (both sides,
+three phases), pause/orbit/miss and the twelve-move field check. The interactive
+preview now focuses on Heat Wave. Run it through the assigned slot with
+`-- --moves` to review it.

@@ -2601,7 +2601,7 @@
         }
       ],
       "presentation_review": "battlefield-staging-awaiting-visual-review",
-      "battlefield_staging": "red-hot-curling-fire-front"
+      "battlefield_staging": "rolling-refractive-heat-front"
     },
     "hurricane": {
       "name": "Hurricane",
@@ -2738,7 +2738,7 @@
           "end_fraction": 1.0
         }
       ],
-      "presentation_review": "battlefield-staging-awaiting-visual-review",
+      "presentation_review": "battlefield-staging-user-approved",
       "battlefield_staging": "prismatic-constellation-and-burst"
     },
     "babydolleyes": {
