@@ -2,10 +2,6 @@
 
 ## Unreleased
 
-- Add Shiny Caterpie and Shiny Magikarp mounts and their 250 Aether Gem boxes in the Land and Surf Gift Store tabs, with shared mount-box rewards and voucher support.
-
-- Add the approved Caterpie V2 land mount and Magikarp V2 Surf mount as permanent administration grants, with aligned ground/water positions and existing access requirements.
-
 ### Adventure and exploration
 
 - Reopen the entrances to Gary’s house in Pallet Town and the Pokémon Center in Vermilion City.
@@ -13,6 +9,7 @@
 
 ### Outfits and mounts
 
+- Add Shiny Caterpie as a Land mount and Shiny Magikarp as a Surf mount, with Gift Store boxes for 250 Aether Gems each. Gift Vouchers can also be used.
 - Add six adventure outfit styles: Aether Voyager, Rotom Engineer, Celebi Forest Ranger, Lucario Aura Fighter, Relic Explorer and Lugia Sky Captain.
 - Make adventure and Team Rocket outfits adapt to your Trainer’s appearance, and keep owned outfits equipped when you change character gender.
 - Add six new gender-adaptive outfit boxes for 350 Aether Gems each; four existing outfit boxes cost 550 Gems each.
