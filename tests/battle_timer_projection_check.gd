@@ -69,6 +69,26 @@ func _init() -> void:
 	projection.reset()
 	_check(not projection.contract_enabled, "reset removes stale projection eligibility")
 	_check(not projection.should_present(true), "battle without a valid projection remains hidden")
+	_check(projection.apply_snapshot({"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_AUTHORITY",
+		"timerRevision": 1, "serverNowMs": 1000, "participants": {
+			"p1": {"status": "SCHEDULED", "mainBankRemainingMs": 90000, "mainBankMaximumMs": 90000,
+				"actionableAtMs": 31000, "bankChargeStartsAtMs": 31000, "decisionCapAtMs": 121000,
+				"hypotheticalDeadlineAtMs": 121000, "maxDecisionMs": 90000}
+		}}, 1000), "ACK-held timer snapshot applies")
+	var slow_client_display := projection.participant_display("p1", 37000)
+	_check_equal(slow_client_display.get("state"), "SCHEDULED", "a slow 3D client cannot release the timer by elapsed time")
+	_check_equal(slow_client_display.get("bankRemainingMs"), 90000, "waiting for the other client's animations never charges the bank")
+	_check_equal(slow_client_display.get("effectiveDecisionRemainingMs"), 90000, "the complete decision allowance stays visible beyond the old fallback")
+	_check_equal(projection.participant_display("p1", 200000).get("state"), "SCHEDULED", "a recovery deadline is never displayed as a player timeout")
+	projection.apply_snapshot({"timerContractVersion": 1, "authority": "BATTLE_BANK_V1_AUTHORITY",
+		"timerRevision": 2, "serverNowMs": 37000, "participants": {
+			"p1": {"status": "RUNNING", "mainBankRemainingMs": 90000, "mainBankMaximumMs": 90000,
+				"actionableAtMs": 37000, "bankChargeStartsAtMs": 37000, "decisionCapAtMs": 127000,
+				"hypotheticalDeadlineAtMs": 127000, "maxDecisionMs": 90000}
+		}}, 37000)
+	_check_equal(projection.participant_display("p1", 38000).get("state"), "DECIDING", "server ACK release opens the actual decision countdown")
+	_check_equal(projection.participant_display("p1", 38000).get("effectiveDecisionRemainingMs"), 89000, "the decision allowance starts counting at ACK release")
+	projection.reset()
 	_check(projection.apply_legacy_snapshot([
 		{
 			"activeSide": "p1",
