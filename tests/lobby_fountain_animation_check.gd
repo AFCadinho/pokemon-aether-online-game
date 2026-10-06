@@ -15,7 +15,7 @@ func _init() -> void:
 		_check(actual[key] == report.after[key], "Measured fountain visual/budget differs: " + key)
 	failures.append_array(Validator.new().validate(visual, PATH.trim_suffix(".tscn") + ".tileset.tres"))
 	var water := visual.get_node("FountainWater") as TileMapLayer
-	_check(water.z_index == 2 and water.get_used_cells().size() == 16, "Expected two fountains on the Objects plane")
+	_check(water.z_index == 2052 and water.get_used_cells().size() == 32, "Expected both mouth jets above the statue overlay")
 	var timelines := Recovery._animation_signatures(visual)
 	for hash: String in report.preserved_animations:
 		var expected: Array = report.preserved_animations[hash]
@@ -40,9 +40,10 @@ func _init() -> void:
 	# Follow one droplet downward on both fountains, instead of merely checking
 	# that the frame hashes change. The streams must move toward the basin.
 	for origin: Vector2i in [Vector2i(14, 29), Vector2i(42, 29)]:
-		var start := origin * 32 + Vector2i(65, 85)
-		var down := start + Vector2i(0, 1)
-		var highlight := Color8(176, 240, 248, 255)
+		var start := origin * 32 + Vector2i(80, 61)
+		var down := start + Vector2i(0, 2)
+		var highlight := Color8(208, 248, 248, 255)
+		_check(_pixel(water, origin * 32 + Vector2i(80, 49), 0).is_equal_approx(highlight), "Water does not originate in the statue mouth")
 		_check(_pixel(water, start, 0).is_equal_approx(highlight), "Missing falling-water highlight")
 		_check(_pixel(water, down, 1).is_equal_approx(highlight) and not _pixel(water, start, 1).is_equal_approx(highlight), "Water does not move downward")
 	water.owner = null
@@ -54,7 +55,7 @@ func _init() -> void:
 	visual.free()
 	for failure in failures:
 		push_error(failure)
-	print("LOBBY_FOUNTAIN_CHECK ", JSON.stringify({"fountains": 2, "cells": 16, "frame_samples": checked, "success": failures.is_empty()}))
+	print("LOBBY_FOUNTAIN_CHECK ", JSON.stringify({"fountains": 2, "cells": 32, "frame_samples": checked, "success": failures.is_empty()}))
 	quit(0 if failures.is_empty() else 1)
 
 

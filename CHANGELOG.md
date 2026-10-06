@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Animate both Aether Clash lobby fountains with water cascading down their plinths, small splashes and ripples.
+- Make the Aether Clash fountains pour from the statues' mouth outlets, with a broad waterfall, two arcing jets and fuller impact foam and spray.
 
 - Use Kyogre's mouth height for side interactions with NPCs and objects, without moving the rider, mount or collision position.
 

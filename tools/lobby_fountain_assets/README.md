@@ -1,10 +1,11 @@
 # Aether Clash lobby fountain water
 
-Both fountains use a transparent native Tiled water layer: two narrow streams
-descend along the stepped plinth, ending in small impact splashes and expanding
-pool ripples. The 24 frames last 80 ms each (1.92 s); the moving highlights travel
-downward and remain continuous across tile boundaries. Eight overlay tiles are
-placed twice, on the Objects render plane (`pao_z_index = 2`).
+Both fountains pour from the visible mouth outlet below the statue's head.
+A broad central waterfall and two parabolic side jets land in the basin, with
+dense foam, rising droplets and expanding ripples. The 24 frames last 80 ms each
+(1.92 s); highlights travel downward at two source pixels per frame. Sixteen
+overlay tiles are placed twice, immediately above the statue's ObjectsTop render
+plane (`pao_z_index = 2052`) so the water is visible at its actual outlet.
 
 The artist source is
 `/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/aether_clash/Lobby.tmx`.
@@ -27,8 +28,8 @@ Verification:
   the rendered water layer repeats after one complete cycle. Tiled's rasterizer
   retains the previous frame at the exact boundary, so the loop sample is 1921 ms.
 - Two source-generator reruns reproduce byte-identical TMX/TSX/PNG/GIF files.
-- `lobby_fountain_animation_check.gd` checks 384 native frame samples, timing,
-  placement, downward motion on both fountains and exact original artwork/
+- `lobby_fountain_animation_check.gd` checks 768 native frame samples, timing,
+  placement, mouth origin, downward motion on both fountains and exact original artwork/
   geometry/TileData after excluding only the new overlay.
 - `migrated_visuals_check.gd`, `map_animation_rollout_check.gd`,
   `generated_map_atlas_layout_check.gd`, `water_animation_recovery_check.gd`
@@ -36,6 +37,6 @@ Verification:
 - The OpenGL Godot viewer captures show motion on both fountains; successive
   paused captures are identical.
 
-The measured decoded lobby atlas budget increases from 4,773,888 to 5,953,536
+The measured decoded lobby atlas budget increases from 4,773,888 to 7,133,184
 bytes. Rendering uses the normal native TileSet animation, without extra runtime
 scripts, particles or processing nodes.
