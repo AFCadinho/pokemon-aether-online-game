@@ -78,7 +78,7 @@ remain candidates for individual tuning after the user's visual review.
 
 ## Visual review register
 
-All entries below are implemented and awaiting individual user approval.
+All entries below are implemented. Individual user approval is recorded per move.
 
 | Move | Motif | Space | Seconds | User approval |
 | --- | --- | --- | --- | --- |
@@ -103,7 +103,7 @@ All entries below are implemented and awaiting individual user approval.
 | U-turn | return-rush | path | 1.3 | Pending |
 | Wood Hammer | heavy-ram | path | 1.6 | Pending |
 | Bullet Punch | heavy-punch | path | 0.95 | Pending |
-| Close Combat | [2D-inspired combo](close-combat-choreography.md) | path | 2.6 | Pending |
+| Close Combat | [2D-inspired combo](close-combat-choreography.md) | path | 2.6 | Approved 2026-10-06 — red/blue barrage |
 | Double Kick | rising-kick | path | 1.6 | Pending |
 | Drain Punch | draining-punch | path | 1.45 | Pending |
 | Fire Punch | elemental-punch | path | 1.45 | Pending |

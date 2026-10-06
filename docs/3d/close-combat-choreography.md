@@ -44,5 +44,6 @@ Validation:
   both attacking sides, including miss, pause and camera orbit.
 
 Interactive preview: `tests/close_combat_preview.gd -- --moves` through the
-assigned slot. This revision awaits the user's visual approval. The symbolic
+assigned slot. The user approved the red/blue barrage on 2026-10-06
+(implementation `1c94c71e0`, development merge `d9e620079`). The symbolic
 hands are shared across species; native species attack poses are retained.

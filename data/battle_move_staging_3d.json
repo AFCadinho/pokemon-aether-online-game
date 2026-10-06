@@ -132,7 +132,7 @@
       "motif": "2d-combo",
       "space": "path",
       "weight": 1.0,
-      "review": "implemented-awaiting-user-review"
+      "review": "user-approved"
     },
     "doublekick": {
       "motif": "rising-kick",
