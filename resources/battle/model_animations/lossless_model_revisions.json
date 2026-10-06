@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "encoding": {
+    "mode": "RSCC/Zstd",
+    "block_size": 262144,
+    "level": 9,
+    "libzstd": "1.5.7"
+  },
+  "qualification": "Byte-identical decompressed native stream; corrected skeleton and animation checks. Catalog admission remains separate.",
+  "models": {
+    "gliscor": {
+      "source_sha256": "947713990135bb6fe476a672eb3aa1c35d7c24ae0c527766fd936124d4c218b0",
+      "raw_sha256": "6ede280c933ab38b07f9c077321799bbde4febb53c4cd8996337705d9d8676cd",
+      "sha256": "50f221440f650911bf9582dbc42ebd2ed76fcfd5db564d09fc877f47c8897ef1"
+    },
+    "gliscor@shiny": {
+      "source_sha256": "317e6e5b20fdb92b4ed0afb648445b45329636c0549dcb9ae8a248ceb0da86fb",
+      "raw_sha256": "db44736aa1c1212ffe714234a2f915319daa6dac90f2fabc4ca22fc360b590fe",
+      "sha256": "4dd6a61c0d36516dedc371d98f4dafddb3ca7b5a29c065868c3933f8396bc3c8"
+    },
+    "garchomp-mega": {
+      "source_sha256": "2fd69c50b179de38ebf0353ea6d9d006ee749b79c4d58da16c779d778e09758b",
+      "raw_sha256": "c3e68ee34736ffa8fb6b885d70ea9f4600f1726004634ed4e30cdf3f36038b7d",
+      "sha256": "b878a45366990747a272e28ad652ccfdeeb91433e077378edea5c009ef98c9ea"
+    },
+    "garchomp-mega@shiny": {
+      "source_sha256": "304f0c095a7292bd3947d58eca1b36a404696fda5fe370750a5b51f6eb752fcf",
+      "raw_sha256": "5fbdca433d939946f5c5a5b1f9421df24bddca198ff513463477e0acd436aeab",
+      "sha256": "b604129db08fddc3b083b00e783e2257da49254a8958d4fa525a3b1a5279939c"
+    },
+    "charmander": {
+      "source_sha256": "23805df764f17e7e8df8851d9c7caf8d40ddaa49efb15262d7534ad4b2084b45",
+      "raw_sha256": "058b58b7c1337168a191e266d56a1b8b0ad04f191b3102ace7467ef7c011aee5",
+      "sha256": "e38e1f1211f10f70b6f501a41f542ebfdb4af10ba68d09b9c5abd35368b13c03"
+    },
+    "charmander@shiny": {
+      "source_sha256": "8925306feb3eb7cad31cbc624b44174faf54a0b23feb22d3e44271513b1b4d41",
+      "raw_sha256": "ba78f97acf60606414d5403a04ccbd553f3b4c508cedaab5f5c999f71982cc37",
+      "sha256": "c7af6457438225ef9e5e946e7bc8278b3eca0af68a78072765f3365c5213ac58"
+    }
+  }
+}

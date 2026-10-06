@@ -4,7 +4,7 @@ const DATA = preload("res://resources/battle/model_animations/charmander_breath.
 const LIBRARY_PATH := "res://resources/battle/model_animations/charmander_breath.res"
 const ACTION := "special_attack_2"
 static func matches(identity: String, digest: String) -> bool:
-	return DATA.data.models.get(identity, "") == digest and not digest.is_empty()
+	return preload("res://scripts/battle/animations/lossless_model_revisions.gd").matches(identity, digest, DATA.data.models)
 
 static func profile_for(identity: String, digest: String, original: Dictionary) -> Dictionary:
 	if not matches(identity, digest): return original
