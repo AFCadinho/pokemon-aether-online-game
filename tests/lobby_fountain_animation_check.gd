@@ -5,6 +5,7 @@ const Fingerprint := preload("res://tests/support/visual_atlas_fingerprint.gd")
 const Validator := preload("res://addons/tiled_tmx_importer/importer/tmx_atlas_layout_validator.gd")
 const Recovery := preload("res://tools/vermilion_water_animation.gd")
 var failures: Array[String] = []
+var frame_images := {}
 
 
 func _init() -> void:
@@ -46,6 +47,17 @@ func _init() -> void:
 		_check(_pixel(water, origin * 32 + Vector2i(80, 49), 0).is_equal_approx(highlight), "Water does not originate in the statue mouth")
 		_check(_pixel(water, start, 0).is_equal_approx(highlight), "Missing falling-water highlight")
 		_check(_pixel(water, down, 1).is_equal_approx(highlight) and not _pixel(water, start, 1).is_equal_approx(highlight), "Water does not move downward")
+		# Sample a three-pixel core along the analytic curves in every native
+		# frame. This catches skipped raster rows and gaps at tile boundaries.
+		for frame in 24:
+			for y in range(49, 144):
+				for side in [-1, 1]:
+					var x := roundi(80 + side * 37 * sqrt((y - 49) / 94.0))
+					for dx in [-1, 0, 1]:
+						_check(_pixel(water, origin * 32 + Vector2i(x + dx, y), frame).a > 0.99, "Side jet interrupted at row %d / frame %d" % [y, frame])
+			for y in range(49, 156):
+				for dx in [-1, 0, 1]:
+					_check(_pixel(water, origin * 32 + Vector2i(80 + dx, y), frame).a > 0.99, "Central waterfall interrupted at row %d / frame %d" % [y, frame])
 	water.owner = null
 	visual.remove_child(water)
 	var original := Fingerprint.new().capture(visual)
@@ -63,7 +75,10 @@ func _pixel(layer: TileMapLayer, pixel: Vector2i, frame: int) -> Color:
 	var cell := Vector2i(floori(pixel.x / 32.0), floori(pixel.y / 32.0))
 	var source := layer.tile_set.get_source(layer.get_cell_source_id(cell)) as TileSetAtlasSource
 	var coords := layer.get_cell_atlas_coords(cell)
-	return source.texture.get_image().get_region(source.get_tile_texture_region(coords, frame)).get_pixel(pixel.x % 32, pixel.y % 32)
+	var key := "%d/%s/%d" % [source.get_instance_id(), coords, frame]
+	if not frame_images.has(key):
+		frame_images[key] = source.texture.get_image().get_region(source.get_tile_texture_region(coords, frame))
+	return (frame_images[key] as Image).get_pixel(pixel.x % 32, pixel.y % 32)
 
 
 func _check(condition: bool, message: String) -> void:
