@@ -572,7 +572,7 @@ func load_appearance_inventory() -> Dictionary:
 	}
 
 
-func use_inventory_item(item_id: String) -> Dictionary:
+func use_inventory_item(item_id: String, quantity: int = 1) -> Dictionary:
 	var normalized_item_id := item_id.strip_edges()
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
@@ -584,14 +584,18 @@ func use_inventory_item(item_id: String) -> Dictionary:
 	var is_replayable_use := normalized_item_id in RepelService.REPEL_ITEMS or normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
 	if is_replayable_use:
 		if not inventory_use_pending_requests.has(request_key):
-			inventory_use_pending_requests[request_key] = _new_request_id()
-		headers.append("Idempotency-Key: " + str(inventory_use_pending_requests[request_key]))
+			inventory_use_pending_requests[request_key] = {"id": _new_request_id(), "quantity": quantity}
+		var pending: Dictionary = inventory_use_pending_requests[request_key]
+		headers.append("Idempotency-Key: " + str(pending.id))
+		# After an ambiguous network failure, resolve the original batch first.
+		# Its idempotency key must never be retried with a different quantity.
+		quantity = int(pending.quantity)
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + INVENTORY_ITEM_USE_ENDPOINT % normalized_item_id.uri_encode(),
 		HTTPClient.METHOD_POST,
 		headers,
-		""
+		JSON.stringify({"quantity": quantity})
 	)
 	if not bool(response.get("success", false)):
 		if int(response.get("status", 0)) >= 400 and int(response.get("status", 0)) < 500:
@@ -620,6 +624,7 @@ func use_inventory_item(item_id: String) -> Dictionary:
 		"creditAmount": maxi(int(body.get("creditAmount", 0)), 0),
 		"repelSteps": 0 if repel_steps == null else int(repel_steps),
 		"addedRepelSteps": int(body.get("addedRepelSteps", 0)),
+		"usedRepelItems": int(body.get("usedRepelItems", 0)),
 		"wallet": wallet,
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
 		"mountBox": mount_box,

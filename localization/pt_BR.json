@@ -1,4 +1,6 @@
 {
+  "ui.repel.max": "Máx.",
+  "ui.repel.batch_preview": "Usar {quantity} × {item}. Carga de Repel: {before} → {after} / {max} passos. Os itens excedentes são mantidos.",
   "ui.repel.recharge": "Recarregar Repel",
   "ui.repel.tooltip": "Repel: {steps} / {max} passos. Use itens Repel para recarregar. Apenas passos onde encontros selvagens são possíveis consomem carga.",
   "ui.repel.refilled": "Repel recarregado: {steps} / {max} passos.",
