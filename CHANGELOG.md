@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Wailmer, Drednaw, Mantine, Basculegion and Wailord as Surf mounts for admin-granted testing, with submerged lower bodies, synchronized foam/wakes and fishing poses.
+
 - Animate both Aether Clash lobby fountains with water cascading down their plinths, small splashes and ripples.
 
 - Use Kyogre's mouth height for side interactions with NPCs and objects, without moving the rider, mount or collision position.
