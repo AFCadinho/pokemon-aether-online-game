@@ -9,8 +9,8 @@ func _init() -> void:
 	var visual := PALLET_VISUAL_SCENE.instantiate()
 	var expected_tile_counts := {
 		"Ground": 2000,
-		"GroundDetail": 1307,
-		"Objects": 832,
+		"GroundDetail": 1301,
+		"Objects": 825,
 		"ObjectsTop": 234,
 		"Doors": 3,
 	}

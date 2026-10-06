@@ -17,17 +17,19 @@ func _run() -> void:
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
+		elif arg.begins_with("--mount="):
+			mount_id = arg.trim_prefix("--mount=")
 	DirAccess.make_dir_recursive_absolute(output)
-	root.size = Vector2i(1536, 800)
+	root.size = Vector2i(1536, 864)
 	root.content_scale_size = root.size
 	viewport = SubViewport.new()
-	viewport.size = Vector2i(1536, 800)
+	viewport.size = Vector2i(1536, 864)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	root.add_child(viewport)
 	var background := ColorRect.new()
 	background.color = Color("193346")
-	background.size = Vector2(1536, 800)
+	background.size = Vector2(1536, 864)
 	viewport.add_child(background)
 	if "--water" in OS.get_cmdline_user_args():
 		var water := TextureRect.new()
@@ -36,7 +38,7 @@ func _run() -> void:
 		texture.region = Rect2(32, 32, 32, 32)
 		water.texture = texture
 		water.stretch_mode = TextureRect.STRETCH_TILE
-		water.size = Vector2(768, 400)
+		water.size = Vector2(768, 432)
 		water.scale = Vector2(2, 2)
 		viewport.add_child(water)
 	for gender_index in range(2):
@@ -44,23 +46,34 @@ func _run() -> void:
 		for row in range(4):
 			var label := Label.new()
 			label.text = gender + " / " + DIRS[row]
-			label.position = Vector2(20+384*row, 16+400*gender_index)
+			label.position = Vector2(20+384*row, 16+432*gender_index)
 			viewport.add_child(label)
 			var actor: Variant = preview_script.new()
-			actor.position = Vector2(192+384*row, 270+400*gender_index)
+			actor.position = Vector2(192+384*row, 270+432*gender_index)
 			var tile := ReferenceRect.new()
 			tile.position = actor.position - Vector2(32, 32)
 			tile.size = Vector2(64, 64)
 			tile.border_color = Color(0.4, 0.8, 0.9, 0.5)
 			tile.editor_only = false
 			viewport.add_child(tile)
+			if "--anchors" in OS.get_cmdline_user_args():
+				tile.z_index = 4095
+				tile.border_color = Color("ffcf55")
+				for axis: Vector2 in [Vector2.RIGHT, Vector2.DOWN]:
+					var cross := Line2D.new()
+					cross.position = actor.position
+					cross.points = PackedVector2Array([-axis * 8, axis * 8])
+					cross.width = 2
+					cross.default_color = Color("ffcf55")
+					cross.z_index = 4095
+					viewport.add_child(cross)
 			actor.scale = Vector2(2, 2)
 			viewport.add_child(actor)
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
 			actor.configure(mount_id, appearance, DIRS[row], false)
 			# Store fitting changes scale/origin; captures use exact world geometry.
-			actor.position = Vector2(192+384*row, 270+400*gender_index)
+			actor.position = Vector2(192+384*row, 270+432*gender_index)
 			actor.scale = Vector2(2, 2)
 			actor.base_look_position = Vector2(0, -16)
 			actor.set_process(false)

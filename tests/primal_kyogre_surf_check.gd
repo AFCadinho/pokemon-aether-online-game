@@ -16,7 +16,8 @@ func _run() -> void:
 	inventory.cached_inventory_user_id = 123
 	inventory.cached_inventory_items = []
 	var actor := _new_local()
-	_check_side_waterline(actor)
+	for id: String in ["primal_kyogre", "primal_kyogre_shiny"]:
+		_check_side_waterline(actor, id)
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "lapras", "unowned saved Surf selection falls back to Lapras")
 	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "lapras", "unowned Magikarp selection falls back to Lapras")
 	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}, {"itemId": "magikarp-mount", "quantity": 1}, {"itemId": "shiny-magikarp-mount", "quantity": 1}]
@@ -90,8 +91,8 @@ func _check_fishing(actor: Node2D, remote: Node2D, id: String) -> void:
 		_check(local_image.get_data() == remote_image.get_data(), "entering fishing builds matching local and remote body masks")
 
 
-func _check_side_waterline(actor: Node2D) -> void:
-	var frames := Mounts.get_mount_frames("primal_kyogre")
+func _check_side_waterline(actor: Node2D, id: String) -> void:
+	var frames := Mounts.get_mount_frames(id)
 	for direction: String in ["left", "right"]:
 		var previous_height := INF
 		for phase in range(4):
@@ -106,7 +107,8 @@ func _check_side_waterline(actor: Node2D) -> void:
 			_check(bottom >= 0, "side hull measurement contains artwork")
 			var mount: AnimatedSprite2D = actor.get_node("Look/MountSprite")
 			var waterline := mount.to_global(Vector2(nose_x, bottom) - Vector2(pixels.get_size()) / 2.0).y - actor.global_position.y
-			_check(waterline >= -16.0 and waterline <= 16.0, "side hull reaches the occupied water tile")
+			# A half-tile tolerance hid the floating hull seen beside Poliwag.
+			_check(absf(waterline) <= 4.0, id + " side hull meets the occupied tile center within four pixels")
 			if previous_height != INF:
 				_check(absf(waterline - previous_height) <= 1.0, "swimming keeps the hull at a stable waterline")
 			previous_height = waterline
