@@ -103,3 +103,12 @@ It is 2,912 changed pixels, distinct from Dragonite's earlier one-pixel response
 failure. Either wing alone matches exactly; restoring both restores the same
 failure. The strict warm hold remains open, and no model geometry or tolerance
 was changed.
+
+
+## Client correction follow-up
+
+The [source visibility and material-order correction](lossless-source-overlap-resolution.md)
+clears the measured warm reference under the shipped corrected client contract:
+1,512 repeated/control/load-order comparisons and 726 wider-cohort comparisons
+are exact. Earlier failures remain unchanged; platform and launcher rollout
+qualification is still outstanding.

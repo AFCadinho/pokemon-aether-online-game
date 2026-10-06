@@ -4,6 +4,10 @@
 
 - Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
 
+- Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
+
+- Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.
+
 - Added six male-only adventure outfit boxes and separate wardrobe items: Aether Voyager, Rotom Engineer, Celebi Forest Ranger, Lucario Aura Fighter, Relic Explorer and Lugia Sky Captain, with authored overworld walking, fishing and riding outfits.
 
 - Add Shiny Dialga and its Land Gift Store box for 750 Aether Gems, preserving the approved rider pose and existing shiny chance and pity rules.

@@ -1,0 +1,493 @@
+{
+  "schema": 1,
+  "models": {
+    "roaring-moon": {
+      "source_sha256": "e6abb71e192cf5715b8efa21ad55ac73f709c69ff46c79942e570fea1ff937be",
+      "container_sha256": "766dd3ea433615921fa85883b164a67764f5930c3b694f21c92d538cd271a0ae",
+      "glb_sha256": "b292c22d28580222167c7dd5f720d9ff4d368e535d28ecee3b09a71a4e94438f"
+    },
+    "roaring-moon@shiny": {
+      "source_sha256": "03c5955b0967a5dc5eda1bd189852d3f179930800cd8c48d36e19a8594d0f449",
+      "container_sha256": "baf86af8b7be71f44b539ab2a75927a85f9523a41f16d4a827d0e430c5c9e368",
+      "glb_sha256": "c6c2eaa41038d549b539f6c60a1a50194b3eb298cff58e6b2bbce88b9a85c357"
+    }
+  },
+  "clips": {
+    "idle": {
+      "source_filename": "pm1089_00_00_00001_battlewait01_loop.tracm",
+      "source_sha256": "f4d9280b6657a2116c98c0d574dca6fd608fd64059b8d45d8aa1b1575735baf1",
+      "duration": 1.6666666666666667,
+      "loop": true,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "physical_attack": {
+      "source_filename": "pm1089_00_00_00400_attack01.tracm",
+      "source_sha256": "e8cd196e9d9e25edd3c815b27370fe37562986070c1d2ae42be8c82b74af0ce1",
+      "duration": 2.1666666666666665,
+      "loop": false,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "special_attack": {
+      "source_filename": "pm1089_00_00_00450_rangeattack01.tracm",
+      "source_sha256": "6ee1fa0a67a39d0569469771cb1f9b71428aed79732a1503e89dbe3150eb02bb",
+      "duration": 2.7,
+      "loop": false,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "damage": {
+      "source_filename": "pm1089_00_00_00500_damage01.tracm",
+      "source_sha256": "23c73991cfdf54c6f24b0f3c3220a0d204da71bba315fa387e58abd644f437a7",
+      "duration": 0.6666666666666666,
+      "loop": false,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "sleep": {
+      "source_filename": "pm1089_00_00_00281_sleep01_loop.tracm",
+      "source_sha256": "124f42c508cea4486d5a8cd9f23429e40f0a4b52ef681bfc21960818b71d0d09",
+      "duration": 5.0,
+      "loop": true,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "faint_start": {
+      "source_filename": "pm1089_00_00_00520_down01_start.tracm",
+      "source_sha256": "7a706e9e340106508ecc17dcd44587d6fee5bd0ac5251574de0f5befaa71e2e7",
+      "duration": 2.3333333333333335,
+      "loop": false,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    },
+    "faint_loop": {
+      "source_filename": "pm1089_00_00_00521_down01_loop.tracm",
+      "source_sha256": "a87da87b238b68ca7f16686bca4a5ad005f69651b45db20464573b0a825c396a",
+      "duration": 2.0,
+      "loop": true,
+      "tracks": [
+        {
+          "mesh": "pm1089_00_00_body_mesh",
+          "source_target": "pm1089_00_00_body_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_eye_mesh",
+          "source_target": "pm1089_00_00_eye_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_lower_teeth_mesh",
+          "source_target": "pm1089_00_00_lower_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_upper_teeth_mesh",
+          "source_target": "pm1089_00_00_upper_teeth_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_a_mesh",
+          "source_target": "pm1089_00_00_wing_a_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              true
+            ]
+          ]
+        },
+        {
+          "mesh": "pm1089_00_00_wing_b_mesh",
+          "source_target": "pm1089_00_00_wing_b_mesh_shape",
+          "keys": [
+            [
+              0.0,
+              false
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

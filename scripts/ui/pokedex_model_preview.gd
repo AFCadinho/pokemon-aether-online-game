@@ -183,6 +183,8 @@ func _process(_delta: float) -> void:
 	if not profile.is_empty():
 		actor.scale = Vector3.ONE * float(profile.get("placement", {}).get("scale", 1.0))
 	player = _find_player(actor)
+	preload("res://scripts/battle/battle_ui/material_surface_order.gd").apply(actor)
+	preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actor, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
 	if player != null:
 		preload("res://scripts/battle/animations/gliscor_flight.gd").apply(player, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
 		preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(player, requested_key, str(profile.get("grounding", {}).get("sha256", "")))
