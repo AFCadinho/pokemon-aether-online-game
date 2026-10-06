@@ -20,15 +20,58 @@ func _run() -> void:
 	var offer := {"itemId": "shiny-glaceon-mount-bound", "quantity": 2, "shinyMountId": "glaceon_shiny", "normalMountId": "glaceon", "rewardItemId": "glaceon-mount-bound", "accountBound": true, "normalAlreadyOwned": true}
 	var text: String = collector.call("_confirmation_text", offer, 100)
 	_check(text.contains("100") and text.contains("removed") and text.contains("account-bound") and text.contains("already own"), "Confirmation discloses consumption, credit, binding and duplicate normal rewards")
-	var topics: Array = collector.call("_offer_topics", [offer], 0)
-	_check(topics[0]["id"] == offer["itemId"] and topics[0]["label"].contains("Account-bound"), "Selection preserves bound inventory ID and displays its binding")
+	var menu_script := load("res://scripts/ui/mount_collector_grid.gd") as GDScript
+	var menu = menu_script.new()
+	root.add_child(menu)
+	var tradeable: Dictionary = offer.duplicate()
+	tradeable["itemId"] = "shiny-glaceon-mount"
+	tradeable["accountBound"] = false
+	menu.call("_build_grid", [offer, tradeable], 0, 100)
+	await process_frame
+	var grid := menu.find_child("MountCards", true, false) as GridContainer
+	_check(grid.columns == 2 and grid.get_child_count() == 2, "Small collections fill a compact two-column grid")
+	var card := grid.get_child(0) as Button
+	_check(card.get_meta("item_id") == offer["itemId"] and card.tooltip_text.contains("×2") and card.tooltip_text.contains("Account-bound"), "Mount card preserves the exact inventory ID, quantity and binding")
+	var image := card.find_child("MountImage", true, false) as TextureRect
+	_check(image.texture != null and image.custom_minimum_size.y == 80, "Mount card displays a large actual shiny mount image")
+	_check((grid.get_child(1) as Button).tooltip_text.contains("Tradeable"), "Tradeable copies have an explicit separate label")
+	var selections: Array[String] = []
+	menu.topic_selected.connect(func(value: String) -> void: selections.append(value))
+	card.pressed.emit()
+	card.pressed.emit()
+	_check(selections == [str(offer["itemId"])], "Clicking a card selects exactly its inventory variant once")
+	menu.queue_free()
+	await process_frame
 	var many_offers: Array = []
-	for index: int in range(12):
+	for index: int in range(18):
 		var another: Dictionary = offer.duplicate()
 		another["itemId"] = "mount-%s" % index
 		many_offers.append(another)
-	var page: Array = collector.call("_offer_topics", many_offers, 1)
-	_check(page.size() == 7 and page[0]["id"] == "mount-5" and page[5]["id"] == "previous" and page[6]["id"] == "next", "Large collections paginate without hiding later mount types")
+	var page_menu = menu_script.new()
+	root.add_child(page_menu)
+	page_menu.call("_build_grid", many_offers, 1, 100)
+	await process_frame
+	var page_grid := page_menu.find_child("MountCards", true, false) as GridContainer
+	_check(page_grid.columns == 3 and page_grid.get_child_count() == 6 and page_grid.get_child(0).get_meta("item_id") == "mount-6", "Large collections paginate six mount cards in three columns")
+	var page_choices: Array[String] = []
+	page_menu.topic_selected.connect(func(value: String) -> void: page_choices.append(value))
+	page_menu.call("_finish", "next")
+	_check(page_choices == ["next"], "Page navigation is separate from mount selection")
+	page_menu.queue_free()
+	await process_frame
+	var narrow_viewport := SubViewport.new()
+	narrow_viewport.size = Vector2i(480, 540)
+	root.add_child(narrow_viewport)
+	var narrow_menu = menu_script.new()
+	narrow_viewport.add_child(narrow_menu)
+	narrow_menu.call("_build_grid", many_offers, 1, 100)
+	for _frame: int in range(3):
+		await process_frame
+	var narrow_grid := narrow_menu.find_child("MountCards", true, false) as GridContainer
+	var narrow_panel := narrow_menu.find_child("MountPanel", true, false) as PanelContainer
+	_check(narrow_grid.columns == 2 and narrow_panel.size.x <= 480 and narrow_panel.size.y <= 540, "Narrow viewports keep the two-column grid and navigation within the screen")
+	narrow_viewport.queue_free()
+	await process_frame
 	bike.free()
 
 	var inventory := root.get_node("InventoryService")

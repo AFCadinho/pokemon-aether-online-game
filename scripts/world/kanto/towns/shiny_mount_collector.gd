@@ -3,7 +3,8 @@ extends DialogueNPC
 
 const TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 const Mounts := preload("res://scripts/services/mount_service.gd")
-const OFFERS_PER_PAGE := 5
+const GRID_MENU := preload("res://scripts/ui/mount_collector_grid.gd")
+const OFFERS_PER_PAGE := GRID_MENU.OFFERS_PER_PAGE
 
 var exchange_in_progress := false
 
@@ -72,29 +73,10 @@ func _normal_name(offer: Dictionary) -> String:
 	return Mounts.get_mount_display_name(str(offer.get("normalMountId", "")))
 
 
-func _offer_topics(offers: Array, page: int) -> Array[Dictionary]:
-	var topics: Array[Dictionary] = []
-	for index: int in range(page * OFFERS_PER_PAGE, mini((page + 1) * OFFERS_PER_PAGE, offers.size())):
-		var offer: Dictionary = offers[index]
-		var label := "%s ×%s" % [_offer_name(offer), int(offer.get("quantity", 0))]
-		if bool(offer.get("accountBound", false)):
-			label += " · " + LocalizationManager.text("ui.mount_collector.bound")
-		topics.append({"id": str(offer.get("itemId", "")), "label": label})
-	if page > 0:
-		topics.append({"id": "previous", "label": LocalizationManager.text("ui.mount_collector.previous")})
-	if (page + 1) * OFFERS_PER_PAGE < offers.size():
-		topics.append({"id": "next", "label": LocalizationManager.text("ui.mount_collector.next")})
-	return topics
-
-
 func _choose_offer(offers: Array, page: int, credit: int) -> String:
-	var menu := TOPIC_MENU.new()
+	var menu := GRID_MENU.new()
 	add_child(menu)
-	var choice: String = await menu.choose_topic(
-		LocalizationManager.text("ui.mount_collector.title"),
-		LocalizationManager.text("ui.mount_collector.choose", {"credit": credit}),
-		_offer_topics(offers, page), "", LocalizationManager.text("common.close"), 1, true
-	)
+	var choice: String = await menu.choose_mount(offers, page, credit)
 	menu.queue_free()
 	return choice
 
