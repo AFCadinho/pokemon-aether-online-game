@@ -3528,10 +3528,6 @@ func _refresh_mount_rider_preview(item: Dictionary) -> void:
 	var preview := load("res://scripts/ui/mount_rider_preview.gd").new() as Node2D
 	preview.name = "MountRiderPreview"
 	character_preview_viewport.add_child(preview)
-	var definition := Mounts.get_mount_definition(_mount_preview_id())
-	var offset: Array = definition.get("storePreviewOffset", [0, 0])
-	preview.position = Vector2(129, 111) + Vector2(float(offset[0]), float(offset[1]))
-	preview.scale = Vector2.ONE * float(definition.get("storePreviewScale", 1.5))
 	_update_mount_rider_preview()
 	character_preview_eyebrow_label.text = _t("ui.store.preview.on_trainer")
 	character_preview_title_label.text = _item_name(item)
@@ -3546,7 +3542,7 @@ func _refresh_mount_rider_preview(item: Dictionary) -> void:
 func _update_mount_rider_preview() -> void:
 	var preview := character_preview_viewport.get_node_or_null("MountRiderPreview")
 	if preview != null:
-		preview.configure(_mount_preview_id(), _mount_preview_appearance(), character_preview_direction, mount_preview_animated)
+		preview.configure(_mount_preview_id(), _mount_preview_appearance(), character_preview_direction, mount_preview_animated, character_preview_viewport.size)
 
 
 func _on_mount_preview_shiny_toggled(enabled: bool) -> void:
