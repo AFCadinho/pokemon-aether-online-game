@@ -14,6 +14,7 @@ import zipfile
 MAX_PACKAGE = 2 * 1024**3
 MAX_MEMBER = 512 * 1024**2
 MAX_JSON = 1024**2
+DOWNLOAD_USER_AGENT = 'PokeAether-Qualification/1.0'
 
 
 def sha_file(path):
@@ -172,7 +173,10 @@ def fetch(url, destination, maximum=MAX_PACKAGE):
     if destination.exists():
         raise ValueError('A fresh download path is required')
     destination.parent.mkdir(parents=True, exist_ok=True)
-    with urllib.request.urlopen(url, timeout=60) as response, destination.open('xb') as output:
+    # The public asset edge rejects Python's generic urllib user agent (1010).
+    # Identify this test client; the subsequent checksum check remains mandatory.
+    request = urllib.request.Request(url, headers={'User-Agent': DOWNLOAD_USER_AGENT})
+    with urllib.request.urlopen(request, timeout=60) as response, destination.open('xb') as output:
         if not response.url.startswith('https://'):
             raise ValueError('HTTPS downgrade rejected')
         received = 0

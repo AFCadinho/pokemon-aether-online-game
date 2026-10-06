@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "scope": "immutable qualification input only",
+  "verified_at_utc": "2026-10-06T07:16:52.663369+00:00",
+  "object_key": "optional-assets/qualification/lossless-desktop-v1/0acc710748557f1818033ef2dab07ef7d7e0bb74c35bb24e021f6bd3caee754d/input.zip",
+  "url": "https://updates.pokeaether.com/optional-assets/qualification/lossless-desktop-v1/0acc710748557f1818033ef2dab07ef7d7e0bb74c35bb24e021f6bd3caee754d/input.zip",
+  "uploaded": true,
+  "size_bytes": 606979690,
+  "sha256": "0acc710748557f1818033ef2dab07ef7d7e0bb74c35bb24e021f6bd3caee754d",
+  "public_get_verified": true,
+  "active_manifest_snapshot": {
+    "manifest.json": {
+      "status": 200,
+      "bytes": 44101,
+      "sha256": "c95425803c12eb9cea36bca2fc8fabf78ecdf7fc471bd71bdeb284766daf9281"
+    },
+    "manifest-windows.json": {
+      "status": 200,
+      "bytes": 44101,
+      "sha256": "c95425803c12eb9cea36bca2fc8fabf78ecdf7fc471bd71bdeb284766daf9281"
+    },
+    "manifest-linux.json": {
+      "status": 200,
+      "bytes": 44103,
+      "sha256": "81bab485b1480dde8e7c4195ab4dca528e971660b99dcd1552a1f98461a4bfae"
+    },
+    "manifest-macos.json": {
+      "status": 200,
+      "bytes": 44041,
+      "sha256": "f8279dd7a9d556b3f9c00fa9f7582f937819267e26e430649ec47ca4a8516012"
+    },
+    "manifest-android.json": {
+      "status": 200,
+      "bytes": 459,
+      "sha256": "0689491aa01fab67eada4c891145ae9c30d7a701701f54554a8f248562c0b895"
+    }
+  },
+  "active_manifest_unchanged": true,
+  "production_approved": false
+}
