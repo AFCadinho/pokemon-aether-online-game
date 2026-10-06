@@ -23,7 +23,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -32,15 +32,24 @@ def main():
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
+    coop_sprites = args.suite == "coop-sprites"
     if mobile_collapse:
         if args.platform != "android":
             parser.error("Mobile collapse QA uses the native Android runtime")
         CHECKS = ["mobile_collapse_phone_check"]
         FIXTURES = []
+    if coop_sprites:
+        CHECKS = ["coop_sprite_platform_check"]
+        FIXTURES = []
     title = "Mobile Collapse QA" if mobile_collapse else "Battle Entry QA"
     app_name = "PokeAether Mobile Collapse QA" if mobile_collapse else "PokeAether Entry QA"
     package = "com.pokeaether.mobilecollapseqa" if mobile_collapse else "com.pokeaether.battleentryqa"
     report_name = "mobile-collapse-qa-results.json" if mobile_collapse else "battle-entry-qa-results.json"
+    if coop_sprites:
+        title = "Co-op Sprite QA"
+        app_name = "PokeAether Co-op Sprite QA"
+        package = "com.pokeaether.coopspriteqa"
+        report_name = "coop-sprite-qa-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -73,6 +82,10 @@ def main():
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
+        if coop_sprites:
+            runner = runner.replace('"front": origin + "/qa-sprites/front", "back": origin + "/qa-sprites/back"',
+                                    ', '.join(f'"{side}": origin + "/qa-sprites/{side}-0123456789ab"'
+                                              for side in ["front", "back", "shiny_front", "shiny_back"]))
         runner += "\tfor path: String in " + repr(paths).replace("'", '"') + ":\n"
         runner += "\t\tvar check: Node = load(path).new()\n\t\tadd_child(check)\n\t\tvar code: int = await check.completed\n\t\tresults[path.get_file()] = code\n"
         if not mobile_collapse:
@@ -82,17 +95,23 @@ def main():
         runner = runner.replace("battle-entry-qa-results.json", report_name)
         if mobile_collapse:
             runner = runner.replace("BATTLE_ENTRY_WEB_QA_COMPLETE", "MOBILE_COLLAPSE_QA_COMPLETE")
+        if coop_sprites:
+            runner = runner.replace("BATTLE_ENTRY_WEB_QA_COMPLETE", "COOP_SPRITE_QA_COMPLETE")
         (generated / "runner.gd").write_text(runner)
         (generated / "runner.tscn").write_text('[gd_scene load_steps=2 format=3]\n[ext_resource type="Script" path="res://scripts/battle_entry_qa_generated/runner.gd" id="1"]\n[node name="BattleEntryQA" type="Node"]\nscript = ExtResource("1")\n')
         config = originals[project].decode()
         config = re.sub(r'^run/main_scene=.*$', 'run/main_scene="res://scripts/battle_entry_qa_generated/runner.tscn"', config, flags=re.M)
         if args.platform == "android":
-            for service in ["android_music_pack_service", "android_apk_update_service"] + (["client_crash_report_service"] if mobile_collapse else []):
+            for service in ["android_music_pack_service", "android_apk_update_service"] + (["client_crash_report_service"] if mobile_collapse or coop_sprites else []):
                 wrapper = generated / (service + "_offline.gd")
                 wrapper.write_text('extends "res://scripts/services/' + service + '.gd"\nfunc _ready() -> void:\n\tpass\n')
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+            if coop_sprites:
+                wrapper = generated / "mobile_asset_service_offline.gd"
+                wrapper.write_text('extends "res://scripts/services/mobile_asset_service.gd"\nfunc release_prefix() -> String:\n\treturn "http://127.0.0.1:8091/"\n')
+                config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
         project.write_text(config)
         preset = originals[presets].decode()
         source_index = 3 if args.platform == 'web' else 7
@@ -123,7 +142,8 @@ def main():
         presets.write_text(preset + "\n" + selected)
         with (output / "export.log").open("w") as log:
             command = ["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT)]
-            command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")))]
+            android_file = "coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")
+            command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)
     finally:
