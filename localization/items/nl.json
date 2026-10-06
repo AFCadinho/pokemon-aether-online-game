@@ -1,4 +1,7 @@
 {
+  "repel": {"name": "Repel", "shortDesc": "Voegt 100 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
+  "super-repel": {"name": "Super Repel", "shortDesc": "Voegt 200 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
+  "max-repel": {"name": "Max Repel", "shortDesc": "Voegt 250 stappen toe aan je Repel-voorraad (maximaal 10.000)."},
   "escape-rope-action": {
     "name": "Escape Rope · Belangrijk item",
     "shortDesc": "Keer terug naar de laatste veilige binnenlocatie die je hebt bezocht."

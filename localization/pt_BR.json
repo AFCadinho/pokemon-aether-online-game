@@ -1,4 +1,11 @@
 {
+  "ui.repel.tooltip": "Repel: {steps} / {max} passos. Use itens Repel para recarregar. Apenas passos onde encontros selvagens são possíveis consomem carga.",
+  "ui.repel.refilled": "Repel recarregado: {steps} / {max} passos.",
+  "ui.repel.full": "A carga de Repel já está cheia. O item não foi usado.",
+  "ui.repel.empty": "Use um item Repel para recarregar antes de ativar o Repel.",
+  "ui.repel.depleted": "A carga de Repel acabou. O Repel foi desativado.",
+  "ui.repel.busy": "Uma recarga de Repel já está em andamento.",
+  "ui.repel.failed": "Não foi possível recarregar o Repel.",
   "ui.settings.storage.title": "Pokémon baixados",
   "ui.settings.storage.sprites": "Imagens 2D de Pokémon",
   "ui.settings.storage.models": "Modelos 3D de Pokémon",

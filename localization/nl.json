@@ -1,4 +1,11 @@
 {
+  "ui.repel.tooltip": "Repel: {steps} / {max} stappen. Gebruik Repel-items om op te laden. Alleen stappen waarop wilde encounters mogelijk zijn verbruiken lading.",
+  "ui.repel.refilled": "Repel opgeladen: {steps} / {max} stappen.",
+  "ui.repel.full": "De Repel-voorraad is al vol. Het item is niet verbruikt.",
+  "ui.repel.empty": "Gebruik een Repel-item om op te laden voordat je Repel aanzet.",
+  "ui.repel.depleted": "De Repel-voorraad is op. Repel is nu uitgeschakeld.",
+  "ui.repel.busy": "Repel wordt al opgeladen.",
+  "ui.repel.failed": "Repel opladen is mislukt.",
   "ui.settings.storage.title": "Gedownloade Pokémon",
   "ui.settings.storage.sprites": "2D Pokémon-afbeeldingen",
   "ui.settings.storage.models": "3D Pokémon-modellen",

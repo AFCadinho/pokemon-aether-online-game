@@ -2870,17 +2870,18 @@ func check_for_wild_encounter(encounter_type: String, check_position: Vector2 = 
 		})
 		return
 
-	if GameState.repel_enabled and _does_repel_block_encounter(encounter_type):
-		_debug_wild_encounter("blocked", {
-			"reason": "repel",
-			"encounter_type": encounter_type,
-		})
-		return
-
 	var resolved_position := global_position if check_position == Vector2.INF else check_position
 	var encounter := WildEncounterProvider.resolve_wild_encounter(current_map, resolved_position, encounter_type)
 	if not bool(encounter.get("available", false)):
 		_debug_wild_encounter("blocked", encounter)
+		return
+
+	if (
+		_does_repel_block_encounter(str(encounter.get("encounter_type", encounter_type)))
+		and float(encounter.get("chance", 0.0)) > 0.0
+		and RepelService.consume_step()
+	):
+		_debug_wild_encounter("blocked", {"reason": "repel", "encounter_type": encounter_type})
 		return
 
 	var resolved_type: String = str(encounter.get("encounter_type", encounter_type))

@@ -1,4 +1,11 @@
 {
+  "ui.repel.tooltip": "驱虫：{steps} / {max} 步。使用驱虫喷雾补充储量。只有可能触发野生宝可梦遭遇的步数才会消耗储量。",
+  "ui.repel.refilled": "驱虫储量已补充：{steps} / {max} 步。",
+  "ui.repel.full": "驱虫储量已满，未消耗道具。",
+  "ui.repel.empty": "请先使用驱虫喷雾补充储量，再启用驱虫。",
+  "ui.repel.depleted": "驱虫储量已耗尽，驱虫已关闭。",
+  "ui.repel.busy": "正在补充驱虫储量。",
+  "ui.repel.failed": "无法补充驱虫储量。",
   "ui.settings.storage.title": "已下载的宝可梦",
   "ui.settings.storage.sprites": "宝可梦2D图像",
   "ui.settings.storage.models": "宝可梦3D模型",

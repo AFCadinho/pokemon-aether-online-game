@@ -41,8 +41,7 @@ static func _resolve_region_encounter(current_map: Node, region: Node, requested
 			chance = 1.0
 		else:
 			use_map_trigger = current_map.has_method("should_trigger_wild_encounter")
-			if not use_map_trigger:
-				chance = _get_map_encounter_chance(current_map, resolved_type)
+			chance = _get_map_encounter_chance(current_map, resolved_type)
 
 	return {
 		"available": true,

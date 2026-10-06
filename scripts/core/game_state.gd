@@ -17,6 +17,7 @@ var ui_input_locked := false
 var ui_input_lock_owners: Dictionary = {}
 var world_debug_enabled := false
 var repel_enabled := false
+var repel_steps := 0
 var show_follower := true
 var running_shoes_enabled := false
 var global_heal_requests_enabled := true
@@ -81,6 +82,7 @@ func reset_gameplay_runtime_state() -> void:
 	prepared_world_state = {}
 	pending_coop_battle_result = {}
 	repel_enabled = false
+	RepelService.reset()
 	show_follower = true
 	running_shoes_enabled = false
 	global_heal_requests_enabled = true

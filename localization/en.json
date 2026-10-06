@@ -1,4 +1,11 @@
 {
+  "ui.repel.tooltip": "Repel: {steps} / {max} steps. Use Repel items to recharge. Only steps where wild encounters are possible use charge.",
+  "ui.repel.refilled": "Repel recharged: {steps} / {max} steps.",
+  "ui.repel.full": "Repel charge is already full. The item was not used.",
+  "ui.repel.empty": "Use a Repel item to recharge before enabling Repel.",
+  "ui.repel.depleted": "Repel charge ran out. Repel is now disabled.",
+  "ui.repel.busy": "A Repel recharge is already in progress.",
+  "ui.repel.failed": "Could not recharge Repel.",
   "ui.settings.storage.title": "Downloaded Pokémon",
   "ui.settings.storage.sprites": "2D Pokémon images",
   "ui.settings.storage.models": "3D Pokémon models",

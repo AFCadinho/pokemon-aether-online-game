@@ -658,6 +658,10 @@ func save_player_position(state: Dictionary) -> Dictionary:
 			"error": "Not authenticated.",
 		}
 
+	var repel_result: Dictionary = await RepelService.flush()
+	if not bool(repel_result.get("success", false)):
+		return repel_result
+
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
 		base_url + _player_position_endpoint(),
@@ -676,6 +680,21 @@ func save_player_position(state: Dictionary) -> Dictionary:
 		"happinessUpdated": bool(body.get("happinessUpdated", false)),
 		"party": _array_from_value(body.get("party", [])),
 	}
+
+
+func sync_repel_usage(usage_id: String, total_steps: int) -> Dictionary:
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/game/repel/steps", HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({"usageId": usage_id, "totalSteps": total_steps})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
+	if not body.has("repelSteps") or int(body.get("totalSteps", -1)) != total_steps:
+		return {"success": false, "error": "Invalid Repel response."}
+	return {"success": true, "repelSteps": int(body.get("repelSteps", 0))}
 
 
 func save_player_appearance(appearance: Dictionary) -> Dictionary:

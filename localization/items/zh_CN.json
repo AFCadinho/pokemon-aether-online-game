@@ -1,4 +1,7 @@
 {
+  "repel": {"name": "驱虫喷雾", "shortDesc": "补充 100 步驱虫储量（最多 10,000 步）。"},
+  "super-repel": {"name": "白银喷雾", "shortDesc": "补充 200 步驱虫储量（最多 10,000 步）。"},
+  "max-repel": {"name": "黄金喷雾", "shortDesc": "补充 250 步驱虫储量（最多 10,000 步）。"},
   "escape-rope-action": {
     "name": "逃生绳·关键物品",
     "shortDesc": "返回您上次访问过的安全室内位置。"
