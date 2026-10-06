@@ -538,5 +538,21 @@
   "salamence-mount": {
     "name": "暴飞龙坐骑",
     "shortDesc": "解锁暴飞龙作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "shiny-metagross-mount": {
+    "name": "异色巨金怪坐骑",
+    "shortDesc": "解锁异色巨金怪陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "metagross-mount-box": {
+    "name": "巨金怪坐骑箱",
+    "shortDesc": "包含一只巨金怪坐骑。初始异色概率：50%。"
+  },
+  "shiny-salamence-mount": {
+    "name": "异色暴飞龙坐骑",
+    "shortDesc": "解锁异色暴飞龙陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "salamence-mount-box": {
+    "name": "暴飞龙坐骑箱",
+    "shortDesc": "包含一只暴飞龙坐骑。初始异色概率：50%。"
   }
 }

@@ -2,7 +2,7 @@ extends SceneTree
 
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 var failed := false
 
@@ -15,7 +15,6 @@ func _run() -> void:
 	var all_ids: Array = IDS.duplicate()
 	for base: String in IDS:
 		all_ids.append(base + "_shiny")
-	all_ids.append_array(["metagross", "salamence"])
 	for id: String in all_ids:
 		var item := ("shiny-" if id.ends_with("_shiny") else "") + id.trim_suffix("_shiny").replace("_", "-") + "-mount"
 		_check(Mounts.get_mount_id_for_unlock_item(item) == id, id + " item resolves")

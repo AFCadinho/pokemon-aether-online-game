@@ -421,6 +421,8 @@ func _run() -> void:
 		"yveltal-mount-box": 1000,
 		"miraidon-mount-box": 750,
 		"reshiram-mount-box": 750,
+		"metagross-mount-box": 750,
+		"salamence-mount-box": 750,
 		"rayquaza-mount-box": 1000,
 		"shadow-lugia-mount-box": 750,
 		"mega-alakazam-mount-box": 750,

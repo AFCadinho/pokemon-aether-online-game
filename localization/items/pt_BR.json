@@ -538,5 +538,21 @@
   "salamence-mount": {
     "name": "Montaria Salamence",
     "shortDesc": "Desbloqueia Salamence como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-metagross-mount": {
+    "name": "Montaria Metagross Brilhante",
+    "shortDesc": "Desbloqueia Metagross Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "metagross-mount-box": {
+    "name": "Caixa de montaria Metagross",
+    "shortDesc": "Contém uma montaria Metagross. Chance shiny inicial: 50%."
+  },
+  "shiny-salamence-mount": {
+    "name": "Montaria Salamence Brilhante",
+    "shortDesc": "Desbloqueia Salamence Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "salamence-mount-box": {
+    "name": "Caixa de montaria Salamence",
+    "shortDesc": "Contém uma montaria Salamence. Chance shiny inicial: 50%."
   }
 }

@@ -558,6 +558,26 @@ const CATALOG: Array[Dictionary] = [
 		"categories": ["mounts"],
 		"badge": "MOUNT BOX",
 	},
+
+	{
+		"id": "metagross-mount-box",
+		"name": "Metagross Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_metagross",
+		"price": 750,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
+		"id": "salamence-mount-box",
+		"name": "Salamence Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_salamence",
+		"price": 750,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
 	{
 		"id": "rayquaza-mount-box",
 		"name": "Rayquaza Mount Box",

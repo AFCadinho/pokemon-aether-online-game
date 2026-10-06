@@ -538,5 +538,21 @@
   "salamence-mount": {
     "name": "Salamence Mount",
     "shortDesc": "Unlocks Salamence as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-metagross-mount": {
+    "name": "Shiny Metagross Mount",
+    "shortDesc": "Unlocks Shiny Metagross as a land mount. Requires a Mount License for the current region."
+  },
+  "metagross-mount-box": {
+    "name": "Metagross Mount Box",
+    "shortDesc": "Contains a Metagross mount. Base shiny chance: 50%."
+  },
+  "shiny-salamence-mount": {
+    "name": "Shiny Salamence Mount",
+    "shortDesc": "Unlocks Shiny Salamence as a land mount. Requires a Mount License for the current region."
+  },
+  "salamence-mount-box": {
+    "name": "Salamence Mount Box",
+    "shortDesc": "Contains a Salamence mount. Base shiny chance: 50%."
   }
 }
