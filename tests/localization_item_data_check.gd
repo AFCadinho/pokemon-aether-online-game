@@ -115,7 +115,6 @@ func _check_catalogs() -> void:
 		"roto-exp-points", "roto-friendship", "roto-hatch", "roto-hp-restore",
 		"roto-pp-restore", "roto-prize-money", "roto-stealth",
 		"god-stone", "loot-sack", "rule-book", "seal-bag", "left-poke-ball",
-		"repel", "super-repel", "max-repel",
 	]
 	for retired_item_id: String in retired_item_ids:
 		_check(not generated_english.has(retired_item_id), "%s is absent from generated item localization" % retired_item_id)

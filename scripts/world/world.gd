@@ -1971,6 +1971,7 @@ func _apply_web_demo_profile(profile_response: Dictionary) -> void:
 	var preferences := _dictionary_from_value(profile_response.get("preferences", {}))
 	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	RepelService.apply_initial_state(preferences)
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 	var wallet := _dictionary_from_value(profile_response.get("wallet", {}))
 	PlayerSave.money = maxi(int(wallet.get("money", PlayerSave.money)), 0)

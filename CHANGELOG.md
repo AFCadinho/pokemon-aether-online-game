@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Replace free Repel with a persistent charge of up to 10,000 encounter-area steps; use Repel, Super Repel and Max Repel items to refill, with no item consumed when full.
+
 - Add the Thor outfit for both models, with a hammer-linked red cape that lifts while walking, settles after stopping and emits electric sparks for local and remote players.
 
 - Give normal and shiny Magikarp Surf mounts submerged lower bodies, contact foam and a synchronized swimming wake while preserving their approved height and rider poses.

@@ -737,6 +737,8 @@ var quest_journal_view
 @onready var map_button: TextureButton = $Control/DexActionsPanel/MarginContainer/HBoxContainer/MapSlot/MapButton
 @onready var running_shoes_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot
 @onready var running_shoes_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot/RunningShoesButton
+var repel_charge_label: Label
+
 @onready var repel_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot
 @onready var repel_toggle_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot/RepelToggle
 @onready var escape_rope_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/EscapeRopeSlot
@@ -2025,8 +2027,7 @@ func _ready() -> void:
 	running_shoes_button.set_pressed_no_signal(GameState.running_shoes_enabled)
 	_set_icon_slot_active(running_shoes_slot, GameState.running_shoes_enabled)
 	running_shoes_button.toggled.connect(_on_running_shoes_toggled)
-	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
-	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
+	_setup_repel_toggle()
 	escape_rope_slot.visible = false
 	if not PlayerActionService.statuses_changed.is_connected(_on_player_action_statuses_changed):
 		PlayerActionService.statuses_changed.connect(_on_player_action_statuses_changed)
@@ -2166,6 +2167,7 @@ func _apply_native_mobile_chat_controls() -> void:
 
 func _on_locale_changed(_locale: String) -> void:
 	LocalizationManager.localize_tree(self)
+	_refresh_repel_charge()
 	_refresh_location_label()
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_location_weather(WorldPresenceService.current_weather_state)
@@ -24796,7 +24798,7 @@ func _bag_item_can_use_from_bag(item: Dictionary) -> bool:
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
 		return false
-	if use_action in ["activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "redeem_credit_voucher", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
+	if use_action in ["recharge_repel", "activate_shiny_charm", "open_shiny_tracker", "open_gift_voucher", "open_mount_license", "unlock_appearance", "open_item_bundle", "open_mount_box", "redeem_aether_blessing", "redeem_credit_voucher", "trainer_name_change", "trainer_gender_change", "apply_guild_emblem_template"]:
 		return true
 	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
@@ -24998,6 +25000,18 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_on_escape_rope_pressed()
 		return
 	var use_action := str(item.get("useAction", "")).strip_edges()
+	if use_action == "recharge_repel":
+		var refill_result: Dictionary = await RepelService.refill(item_id)
+		if not bool(refill_result.get("success", false)):
+			_add_chat_message(str(refill_result.get("error", LocalizationManager.text("ui.repel.failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(refill_result.get("inventory", []))
+		InventoryService.apply_inventory_items(refill_result.get("inventory", []))
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		var message_key := "ui.repel.full" if int(refill_result.get("addedRepelSteps", 0)) == 0 else "ui.repel.refilled"
+		_add_chat_message(LocalizationManager.text(message_key, {"steps": GameState.repel_steps, "max": RepelService.MAX_STEPS}))
+		return
 	if use_action == "trainer_name_change":
 		_show_trainer_name_change_popup()
 		return
@@ -34683,9 +34697,46 @@ func _on_dev_pokemon_button_pressed() -> void:
 
 	_show_dev_pokemon_popup(DevPokemonPopupMode.POKEMON)
 
+func _setup_repel_toggle() -> void:
+	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
+	repel_toggle_button.toggled.connect(_on_repel_toggle_toggled)
+	repel_charge_label = Label.new()
+	repel_charge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	repel_charge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	repel_charge_label.add_theme_font_size_override("font_size", 10)
+	repel_charge_label.add_theme_color_override("font_shadow_color", Color.BLACK)
+	repel_charge_label.add_theme_constant_override("shadow_offset_x", 1)
+	repel_charge_label.add_theme_constant_override("shadow_offset_y", 1)
+	repel_toggle_button.add_child(repel_charge_label)
+	repel_charge_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
+	repel_charge_label.offset_top = -14
+	RepelService.charge_changed.connect(_refresh_repel_charge)
+	RepelService.depleted.connect(_on_repel_depleted)
+	_refresh_repel_charge()
+
+
+func _refresh_repel_charge() -> void:
+	if repel_toggle_button == null:
+		return
+	repel_toggle_button.set_pressed_no_signal(GameState.repel_enabled)
+	_set_icon_slot_active(repel_slot, GameState.repel_enabled and GameState.repel_steps > 0)
+	repel_toggle_button.tooltip_text = LocalizationManager.text("ui.repel.tooltip", {"steps": GameState.repel_steps, "max": RepelService.MAX_STEPS})
+	if repel_charge_label != null:
+		repel_charge_label.text = str(GameState.repel_steps)
+
+
+func _on_repel_depleted() -> void:
+	_add_chat_message(LocalizationManager.text("ui.repel.depleted"))
+	_refresh_repel_charge()
+	_save_toggle_preferences()
+
+
 func _on_repel_toggle_toggled(toggled_on: bool) -> void:
-	GameState.repel_enabled = toggled_on
-	_set_icon_slot_active(repel_slot, GameState.repel_enabled)
+	GameState.repel_enabled = toggled_on and GameState.repel_steps > 0
+	_refresh_repel_charge()
+	if toggled_on and not GameState.repel_enabled:
+		_add_chat_message(LocalizationManager.text("ui.repel.empty"))
+		return
 	var state_text := "enabled" if GameState.repel_enabled else "disabled"
 	_add_chat_message("Repel %s." % state_text)
 	await _save_toggle_preferences()
@@ -35259,6 +35310,7 @@ func _load_toggle_preferences() -> void:
 	var preferences: Dictionary = preferences_value if preferences_value is Dictionary else {}
 	GameState.show_follower = bool(preferences.get("showFollower", true))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	RepelService.apply_initial_state(preferences)
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 	GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", true))
 	_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
@@ -35292,19 +35344,21 @@ func _save_toggle_preferences() -> Dictionary:
 	if not bool(result.get("success", false)):
 		_add_chat_message("Could not save toggle settings. Please contact staff.")
 		push_warning("UIOverlay: toggle preference save failed: %s" % str(result.get("error", "Unknown error")))
+		_refresh_repel_charge()
 		return result
 
 	var preferences_value: Variant = result.get("preferences", {})
 	if preferences_value is Dictionary:
 		var preferences: Dictionary = preferences_value as Dictionary
 		GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
-		GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+		GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled)) and GameState.repel_steps > 0
 		GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 		GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", GameState.global_heal_requests_enabled))
 		global_heal_requests_toggle.set_pressed_no_signal(GameState.global_heal_requests_enabled)
 		_apply_selected_role_badge_preference(str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)))
 		pvp_ai_sparring_favorite_team_id = str(preferences.get("favoriteAiSparringTeamId", pvp_ai_sparring_favorite_team_id)).strip_edges()
 		_refresh_ai_sparring_player_team_source_options()
+	_refresh_repel_charge()
 	return result
 
 func _refresh_world_follower_visibility() -> void:

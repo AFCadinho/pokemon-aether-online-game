@@ -581,7 +581,7 @@ func use_inventory_item(item_id: String) -> Dictionary:
 
 	var headers := GatewayApiConfig.get_json_headers()
 	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), normalized_item_id]
-	var is_replayable_use := normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
+	var is_replayable_use := normalized_item_id in RepelService.REPEL_ITEMS or normalized_item_id.trim_suffix("-bound").ends_with("-mount-box") or normalized_item_id.begins_with("aether-credit-voucher-")
 	if is_replayable_use:
 		if not inventory_use_pending_requests.has(request_key):
 			inventory_use_pending_requests[request_key] = _new_request_id()
@@ -615,6 +615,8 @@ func use_inventory_item(item_id: String) -> Dictionary:
 		"useAction": str(body.get("useAction", "")),
 		"durationDays": maxi(int(body.get("durationDays", 0)), 0),
 		"creditAmount": maxi(int(body.get("creditAmount", 0)), 0),
+		"repelSteps": int(body.get("repelSteps", 0)),
+		"addedRepelSteps": int(body.get("addedRepelSteps", 0)),
 		"wallet": wallet,
 		"grantedItems": _array_from_value(body.get("grantedItems", [])),
 		"mountBox": mount_box,

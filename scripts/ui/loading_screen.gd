@@ -296,6 +296,7 @@ func _apply_profile_response(profile_response: Dictionary) -> bool:
 	var preferences: Dictionary = _dictionary_from_value(profile_response.get("preferences", {}))
 	GameState.show_follower = bool(preferences.get("showFollower", GameState.show_follower))
 	GameState.repel_enabled = bool(preferences.get("showRepel", GameState.repel_enabled))
+	RepelService.apply_initial_state(preferences)
 	GameState.running_shoes_enabled = bool(preferences.get("runningShoes", GameState.running_shoes_enabled))
 	GameState.global_heal_requests_enabled = bool(preferences.get("globalHealRequestsEnabled", true))
 	GameState.selected_role_badge = str(preferences.get("selectedRoleBadge", GameState.selected_role_badge)).strip_edges().to_lower()

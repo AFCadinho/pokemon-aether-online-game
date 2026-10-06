@@ -1,4 +1,7 @@
 {
+  "repel": {"name": "Repel", "shortDesc": "Adiciona 100 passos à carga de Repel (máximo de 10.000)."},
+  "super-repel": {"name": "Super Repel", "shortDesc": "Adiciona 200 passos à carga de Repel (máximo de 10.000)."},
+  "max-repel": {"name": "Max Repel", "shortDesc": "Adiciona 250 passos à carga de Repel (máximo de 10.000)."},
   "escape-rope-action": {
     "name": "Escape Rope · Item-chave",
     "shortDesc": "Volte ao último local interno seguro que você visitou."
