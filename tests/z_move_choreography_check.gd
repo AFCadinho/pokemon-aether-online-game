@@ -31,7 +31,7 @@ func _run() -> void:
 					assert(cue.event.requires_hit and is_equal_approx(cue.at_seconds,timing.impact_frame/60))
 			var before: Vector3 = stage.actors[0].position
 			var effect: Node = stage.create_move_effect(key,"p1","p2",{"show_impact":true})
-			assert(effect.get_script()==Stage.ZMoveEffect)
+			assert(effect.get_script()==(Stage.BattlefieldMoveEffect if key in Stage.BattlefieldMoveEffect.FIELD_KEYS else Stage.ZMoveEffect))
 			if recipe.contact:
 				stage.players[0].seek(timing.launch_frame/60-.001,true)
 				stage._update_move_contacts()

@@ -2404,7 +2404,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
+      "duration_seconds": 3.0,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2422,7 +2422,8 @@
           "end_fraction": 0.73
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review",
+      "battlefield_staging": "arena-sweep"
     },
     "earthpower": {
       "name": "Earth Power",
@@ -2462,7 +2463,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 2.1,
+      "duration_seconds": 2.8,
       "launch_fraction": 0.25,
       "impact_fraction": 0.62,
       "scale": 1.45,
@@ -2489,7 +2490,8 @@
           "end_fraction": 0.9
         }
       ],
-      "presentation_review": "flow-and-aesthetics-awaiting-visual-review"
+      "presentation_review": "flow-and-aesthetics-awaiting-visual-review",
+      "battlefield_staging": "arena-sweep"
     },
     "explosion": {
       "name": "Explosion",
@@ -4628,7 +4630,7 @@
       "contact": false,
       "target": "target",
       "damaging": true,
-      "duration_seconds": 3.2,
+      "duration_seconds": 3.8,
       "launch_fraction": 0.282609,
       "impact_fraction": 0.586957,
       "scale": 1.0,
@@ -4668,7 +4670,8 @@
         "impact_frame": 27,
         "observed_motifs": "Rising light over greenery, target pillar and scattering leaves",
         "conversion": "Authored 3D interpretation of existing 2D staging; not original Nintendo 3D animation"
-      }
+      },
+      "battlefield_staging": "arena-bloom-and-converge"
     },
     "breakneckblitz": {
       "name": "Breakneck Blitz",
