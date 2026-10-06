@@ -27,6 +27,15 @@ func _run() -> void:
 			store.call("_select_category", category)
 			await _settle()
 			_check(store.get_rect() == baseline, "Stable size and position: " + locale + " / " + category)
+		for select: OptionButton in [store.catalog_filter_select, store.catalog_sort_select]:
+			for index in range(select.item_count):
+				select.select(index)
+				select.item_selected.emit(index)
+				await _settle()
+				_check(store.get_rect() == baseline, "Catalog controls preserve size: " + locale + " / " + str(select.get_item_metadata(index)))
+				_check(store.get_global_rect().encloses(select.get_global_rect()), "Catalog control fits the window")
+			select.select(0)
+			select.item_selected.emit(0)
 	for item: Dictionary in store.CATALOG:
 		store.call("_select_product", str(item.id))
 		await _settle()

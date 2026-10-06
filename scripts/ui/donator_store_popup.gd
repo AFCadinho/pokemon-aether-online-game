@@ -744,6 +744,12 @@ var cosmetic_outfit_gender_control: OptionButton
 var product_buttons: Dictionary = {}
 var catalog_search_input: LineEdit
 var catalog_search_text := ""
+var catalog_filter_select: OptionButton
+var catalog_sort_select: OptionButton
+var active_catalog_filter := "all"
+var active_catalog_sort := "default"
+const CATALOG_FILTERS := ["all", "gems_affordable", "voucher_eligible", "voucher_affordable"]
+const CATALOG_SORTS := ["default", "name", "price_asc", "price_desc"]
 var balance_label: Label
 var add_gems_button: Button
 var add_gems_feedback_label: Label
@@ -828,6 +834,8 @@ func set_gem_balance(amount: int) -> void:
 	if balance_label != null:
 		balance_label.text = _t("ui.store.balance", {"amount": _format_number(gem_balance)})
 	_refresh_purchase_state()
+	if active_catalog_filter == "gems_affordable":
+		_render_products()
 
 
 func set_voucher_balance(amount: int) -> void:
@@ -835,6 +843,8 @@ func set_voucher_balance(amount: int) -> void:
 	if voucher_balance_label != null:
 		voucher_balance_label.text = _t("ui.store.voucher.balance", {"amount": _format_number(voucher_balance)})
 	_refresh_purchase_state()
+	if active_catalog_filter == "voucher_affordable":
+		_render_products()
 
 
 func _payment_currency() -> String:
@@ -1294,6 +1304,16 @@ func _create_catalog_area() -> Control:
 	_apply_line_edit_style(catalog_search_input)
 	catalog_header.add_child(catalog_search_input)
 
+	var tools_row := HBoxContainer.new()
+	tools_row.add_theme_constant_override("separation", 8)
+	layout.add_child(tools_row)
+	catalog_filter_select = _create_catalog_option("CatalogFilter", CATALOG_FILTERS, "filter")
+	catalog_filter_select.item_selected.connect(_on_catalog_filter_selected)
+	tools_row.add_child(catalog_filter_select)
+	catalog_sort_select = _create_catalog_option("CatalogSort", CATALOG_SORTS, "sort")
+	catalog_sort_select.item_selected.connect(_on_catalog_sort_selected)
+	tools_row.add_child(catalog_sort_select)
+
 	var scroll := ScrollContainer.new()
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
@@ -1306,6 +1326,64 @@ func _create_catalog_area() -> Control:
 	product_grid.add_theme_constant_override("v_separation", 9)
 	scroll.add_child(product_grid)
 	return layout
+
+
+func _create_catalog_option(control_name: String, options: Array, kind: String) -> OptionButton:
+	var select := OptionButton.new()
+	select.name = control_name
+	select.custom_minimum_size = Vector2(0, 30)
+	select.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	select.fit_to_longest_item = false
+	for option: String in options:
+		select.add_item(_t("ui.store." + kind + "." + option))
+		select.set_item_metadata(select.item_count - 1, option)
+	_apply_cosmetic_item_category_style(select)
+	return select
+
+
+func _on_catalog_filter_selected(index: int) -> void:
+	active_catalog_filter = str(catalog_filter_select.get_item_metadata(index))
+	_render_products()
+
+
+func _on_catalog_sort_selected(index: int) -> void:
+	active_catalog_sort = str(catalog_sort_select.get_item_metadata(index))
+	_render_products()
+
+
+func _matches_catalog_filter(item: Dictionary) -> bool:
+	if active_catalog_filter == "all":
+		return true
+	var item_id := str(item.get("id", ""))
+	var price := _gem_price(item_id)
+	if not store_catalog_loaded or price < 0 or bool(item.get("informational", false)):
+		return false
+	match active_catalog_filter:
+		"gems_affordable":
+			return price <= gem_balance
+		"voucher_eligible":
+			return bool(voucher_eligible_items.get(item_id, false))
+		"voucher_affordable":
+			return bool(voucher_eligible_items.get(item_id, false)) and price <= voucher_balance
+	return true
+
+
+func _catalog_sort_price(item: Dictionary) -> int:
+	if bool(item.get("informational", false)):
+		return -1
+	return _gem_price(str(item.get("id", ""))) if store_catalog_loaded else int(item.get("price", 0))
+
+
+func _catalog_item_before(left: Dictionary, right: Dictionary) -> bool:
+	if active_catalog_sort in ["price_asc", "price_desc"]:
+		var left_price := _catalog_sort_price(left)
+		var right_price := _catalog_sort_price(right)
+		if (left_price < 0) != (right_price < 0):
+			return right_price < 0
+		if left_price != right_price:
+			return left_price < right_price if active_catalog_sort == "price_asc" else left_price > right_price
+	var comparison := _item_name(left).naturalnocasecmp_to(_item_name(right))
+	return comparison < 0 if comparison != 0 else str(left.get("id", "")) < str(right.get("id", ""))
 
 
 func _create_mount_mode_bar() -> HBoxContainer:
@@ -1835,6 +1913,8 @@ func _render_products() -> void:
 	else:
 		catalog_items.assign(CATALOG)
 
+	if active_catalog_sort != "default":
+		catalog_items.sort_custom(_catalog_item_before)
 	for item: Dictionary in catalog_items:
 		var categories: Array = item.get("categories", [])
 		if not categories.has(active_category):
@@ -1845,9 +1925,16 @@ func _render_products() -> void:
 			continue
 		if not _item_matches_catalog_search(item):
 			continue
+		if not _matches_catalog_filter(item):
+			continue
 		var card := _create_product_card(item)
 		product_grid.add_child(card)
 		product_buttons[str(item.get("id", ""))] = card
+		_apply_product_card_style(card, str(item.get("id", "")) == selected_item_id)
+	if selected_item_id != "" and not product_buttons.has(selected_item_id):
+		selected_item_id = ""
+		_reset_selection_footer()
+		_refresh_character_preview()
 	if catalog_results_label != null:
 		catalog_results_label.text = (
 			_t("ui.store.no_results")
@@ -3115,6 +3202,12 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 
 func _on_locale_changed(_locale: String) -> void:
+	for select: OptionButton in [catalog_filter_select, catalog_sort_select]:
+		if select == null:
+			continue
+		var kind := "filter" if select == catalog_filter_select else "sort"
+		for index: int in range(select.item_count):
+			select.set_item_text(index, _t("ui.store." + kind + "." + str(select.get_item_metadata(index))))
 	if payment_select != null:
 		payment_select.set_item_text(0, _t("ui.store.voucher.pay_gems"))
 		payment_select.set_item_text(1, _t("ui.store.voucher.pay_voucher"))
@@ -3142,7 +3235,7 @@ func _on_locale_changed(_locale: String) -> void:
 	set_gem_balance(gem_balance)
 	var previous_selection := selected_item_id
 	_select_category(active_category)
-	if not previous_selection.is_empty():
+	if product_buttons.has(previous_selection):
 		_select_product(previous_selection)
 	else:
 		_reset_selection_footer()
