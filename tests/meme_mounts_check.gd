@@ -42,7 +42,7 @@ func _run() -> void:
 				for phase in range(4 if moving else 1):
 					var art := Mounts._get_texture_image(frames.get_frame_texture(animation, phase))
 					var front := Mounts._get_texture_image(foreground.get_frame_texture(animation, phase))
-					var actual_bottom := art.get_used_rect().end.y - art.get_height() / 2
+					var actual_bottom := maxi(art.get_used_rect().end.y, front.get_used_rect().end.y) - art.get_height() / 2
 					# Limb/tail motion is not identical to the rider bob. Idle must match
 					# the reference exactly; native movement stays within two pixels.
 					_check(actual_bottom == expected_bottom if phase == 0 else absf(actual_bottom - expected_bottom) <= 2, "%s %s %d reaches the established ground/waterline" % [id, animation, phase])
@@ -50,7 +50,10 @@ func _run() -> void:
 					for y in range(art.get_height()):
 						for x in range(art.get_width()):
 							var pixel := front.get_pixel(x, y)
-							if (pixel.a > 0) != (mask.get_pixel(phase*192+x, row*192+y).a > 0) or (pixel.a > 0 and pixel != art.get_pixel(x, y)):
+							var mask_alpha := mask.get_pixel(phase*192+x, row*192+y).a
+							var expected_back := Color.TRANSPARENT if base_id == "magikarp" else pixel
+							var back_matches := art.get_pixel(x, y).a == 0.0 if base_id == "magikarp" else art.get_pixel(x, y) == expected_back
+							if (pixel.a > 0) != (mask_alpha > 0) or (mask_alpha != 0.0 and mask_alpha != 1.0) or (pixel.a > 0 and not back_matches):
 								matching = false
 					_check(matching, id + " foreground and mask follow the same pixels")
 	print("Caterpie/Magikarp mount checks: ", "FAILED" if failed else "PASS")

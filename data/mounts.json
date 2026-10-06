@@ -3274,6 +3274,7 @@
         192
       ],
       "spriteSheet": "res://assets/mounts/magikarp/mount.png",
+      "waterContactSheet": "res://assets/mounts/magikarp/water_contact.png",
       "foregroundSheet": "res://assets/mounts/magikarp/foreground.png",
       "riderMaskSheet": "res://assets/mounts/magikarp/rider_mask.png",
       "movementAnimationSpeed": 4,
@@ -3477,6 +3478,7 @@
         192
       ],
       "spriteSheet": "res://assets/mounts/magikarp_shiny/mount.png",
+      "waterContactSheet": "res://assets/mounts/magikarp/water_contact.png",
       "foregroundSheet": "res://assets/mounts/magikarp_shiny/foreground.png",
       "riderMaskSheet": "res://assets/mounts/magikarp_shiny/rider_mask.png",
       "movementAnimationSpeed": 4,

@@ -4,6 +4,8 @@
 
 - Add the Thor outfit for both models, with a hammer-linked red cape that lifts while walking, settles after stopping and emits electric sparks for local and remote players.
 
+- Give normal and shiny Magikarp Surf mounts submerged lower bodies, contact foam and a synchronized swimming wake while preserving their approved height and rider poses.
+
 - Add shiny variants of the five new Surf mounts and their Gift Store Surf boxes at 350 Aether Gems each, preserving the approved height, rider poses and water effects.
 
 - Refine all six male adventure outfits with lower, narrower trousers and shoes, plus more room below the chin, across walking, fishing and riding poses.
