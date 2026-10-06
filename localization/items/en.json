@@ -734,5 +734,13 @@
   "toucannon-mount-box": {
     "name": "Toucannon Mount Box",
     "shortDesc": "Contains a Toucannon mount. Base shiny chance: 50%."
+  },
+  "latios-mount": {
+    "name": "Latios Mount",
+    "shortDesc": "Unlocks Latios as a land mount. Requires a Mount License for the current region."
+  },
+  "latias-mount": {
+    "name": "Latias Mount",
+    "shortDesc": "Unlocks Latias as a land mount. Requires a Mount License for the current region."
   }
 }

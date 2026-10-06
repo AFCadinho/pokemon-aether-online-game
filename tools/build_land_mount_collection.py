@@ -10,8 +10,9 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_IDS = ('giratina_origin', 'ho_oh', 'yveltal', 'miraidon', 'reshiram', 'metagross', 'salamence', 'zekrom', 'palkia', 'dialga', 'arcanine', 'aerodactyl', 'toucannon')
+GRANT_ONLY_IDS = ('latios', 'latias')
 SPECIAL_VARIANTS = {'metagross_black_gold': 'metagross'}
-IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS)
+IDS = BASE_IDS + tuple(mid + '_shiny' for mid in BASE_IDS) + tuple(SPECIAL_VARIANTS) + GRANT_ONLY_IDS
 DIRECTIONS = ('down', 'left', 'right', 'up')
 FRAME = 192
 

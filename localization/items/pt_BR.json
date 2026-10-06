@@ -734,5 +734,13 @@
   "toucannon-mount-box": {
     "name": "Caixa de montaria Toucannon",
     "shortDesc": "Contém uma montaria Toucannon. Chance shiny inicial: 50%."
+  },
+  "latios-mount": {
+    "name": "Montaria Latios",
+    "shortDesc": "Desbloqueia Latios como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "latias-mount": {
+    "name": "Montaria Latias",
+    "shortDesc": "Desbloqueia Latias como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

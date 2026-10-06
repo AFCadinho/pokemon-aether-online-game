@@ -734,5 +734,13 @@
   "toucannon-mount-box": {
     "name": "Toucannon-mountbox",
     "shortDesc": "Bevat een Toucannon-mount. Shiny-basiskans: 50%."
+  },
+  "latios-mount": {
+    "name": "Latios-mount",
+    "shortDesc": "Ontgrendelt Latios als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "latias-mount": {
+    "name": "Latias-mount",
+    "shortDesc": "Ontgrendelt Latias als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }
