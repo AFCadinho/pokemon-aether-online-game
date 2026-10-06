@@ -1329,6 +1329,7 @@ var bag_item_use_selected_slot := -1
 var bag_item_use_in_progress := false
 var bag_item_context_menu: PopupMenu
 var bag_discard_busy := false
+var bag_mount_box_busy := false
 var bag_item_context_item: Dictionary = {}
 var trainer_name_change_popup: PanelContainer
 var trainer_name_change_username_input: LineEdit
@@ -24985,7 +24986,28 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		_add_chat_message(_bag_item_detail_description(item))
 		return
 	if use_action == "open_mount_box":
-		_show_shiny_tracker("mounts")
+		if bag_mount_box_busy:
+			return
+		bag_mount_box_busy = true
+		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)
+		bag_mount_box_busy = false
+		if not bool(open_result.get("success", false)):
+			_add_chat_message(str(open_result.get("error", LocalizationManager.text("ui.bag.message.open_box_failed"))))
+			return
+		bag_inventory_items = _normalize_bag_inventory_items(open_result.get("inventory", []))
+		bag_selected_item = {}
+		_refresh_bag_items()
+		_refresh_bag_detail()
+		var mount_box := open_result.get("mountBox", {}) as Dictionary
+		var opening := mount_box.get("opening", {}) as Dictionary
+		var message := LocalizationManager.text("ui.shiny_tracker.mounts.result", {
+			"mount": ItemLocalization.display_name(_canonical_display_item_id(str(opening.get("rewardItemId", ""))), str(opening.get("mountId", ""))),
+			"chance": int(opening.get("shinyChancePercent", 50)),
+		})
+		if bool(opening.get("alreadyOwned", false)):
+			message += " · " + LocalizationManager.text("ui.shiny_tracker.mounts.duplicate")
+		_add_chat_message(message)
+		SfxManager.play("item_found")
 		return
 	if use_action == "open_item_bundle":
 		var open_result: Dictionary = await InventoryService.use_inventory_item(item_id)

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const CHECK_SCRIPTS: Array[String] = [
+	"res://tests/mount_box_bag_opening_check.gd",
 	"res://tests/gift_store_popular_check.gd",
 	"res://tests/gift_store_catalog_controls_check.gd",
 	"res://tests/mount_nameplate_check.gd",

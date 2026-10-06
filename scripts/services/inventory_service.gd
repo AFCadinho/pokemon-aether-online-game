@@ -548,7 +548,7 @@ func use_inventory_item(item_id: String) -> Dictionary:
 
 	var headers := GatewayApiConfig.get_json_headers()
 	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), normalized_item_id]
-	var is_mount_box := normalized_item_id.ends_with("-mount-box")
+	var is_mount_box := normalized_item_id.trim_suffix("-bound").ends_with("-mount-box")
 	if is_mount_box:
 		if not mount_box_pending_requests.has(request_key):
 			mount_box_pending_requests[request_key] = _new_request_id()
