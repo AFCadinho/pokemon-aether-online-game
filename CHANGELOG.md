@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Put recently popular cosmetics and mounts at the top of their default Gift Store lists.
+
 - Use a consistent Use action for all usable Bag items and improve the Repel step counter with larger, outlined text on a contrasting background.
 
 - Lengthen Thor’s walking cape and lift its rounded hem more visibly for both models, preserving the approved idle poses and matching electric sparks to the extended cloth.
