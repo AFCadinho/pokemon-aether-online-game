@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a Repel refill amount selector with Max, keep hotbar use at one item per click, and recognize Repels in older inventory responses without a use action.
+
 - Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
 
 - Refine Thor’s silhouette with a wider resting cape, a continuous trailing cloth shape while walking, a slimmer armor waist, and the hammer behind the cape when viewed from the back.

@@ -96,7 +96,7 @@ func _sync_usage() -> Dictionary:
 	return result
 
 
-func refill(item_id: String) -> Dictionary:
+func refill(item_id: String, quantity: int = 1) -> Dictionary:
 	if refilling:
 		return {"success": false, "error": LocalizationManager.text("ui.repel.busy")}
 	refilling = true
@@ -108,7 +108,7 @@ func refill(item_id: String) -> Dictionary:
 		refill_finished.emit()
 		return {"success": false, "error": "Session changed."}
 	if bool(result.get("success", false)):
-		result = await InventoryService.use_inventory_item(item_id)
+		result = await InventoryService.use_inventory_item(item_id, quantity)
 		if refill_session != AuthService.session_token or refill_usage_id != usage_id:
 			result = {"success": false, "error": "Session changed."}
 		if bool(result.get("success", false)):

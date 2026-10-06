@@ -738,6 +738,7 @@ var quest_journal_view
 @onready var map_button: TextureButton = $Control/DexActionsPanel/MarginContainer/HBoxContainer/MapSlot/MapButton
 @onready var running_shoes_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot
 @onready var running_shoes_button: TextureButton = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RunningShoesSlot/RunningShoesButton
+var repel_refill_dialog: AetherConfirmationDialog
 var repel_charge_label: Label
 
 @onready var repel_slot: PanelContainer = $Control/ToggleActionsPanel/MarginContainer/HBoxContainer/RepelSlot
@@ -24984,6 +24985,85 @@ func _discard_bag_item(item: Dictionary, quantity: int, request_id: String = "")
 	_refresh_bag_detail()
 	_add_chat_message(LocalizationManager.text("ui.bag.discard.done", {"quantity": quantity, "item": str(item.get("name", ""))}))
 
+func _repel_refill_maximum(item: Dictionary) -> int:
+	var item_id := _normalize_item_id(str(item.get("id", "")))
+	var per_item := int(INVENTORY_ITEM_USE_POLICY.REPEL_ITEM_STEPS.get(item_id, 0))
+	if per_item <= 0:
+		return 0
+	var remaining := maxi(RepelService.MAX_STEPS - GameState.repel_steps, 0)
+	return mini(maxi(int(item.get("quantity", 0)), 0), ceili(float(remaining) / per_item))
+
+
+func _show_repel_refill_dialog(item: Dictionary) -> void:
+	if is_instance_valid(repel_refill_dialog) or RepelService.refilling:
+		return
+	var maximum := _repel_refill_maximum(item)
+	if maximum <= 0:
+		_add_chat_message(LocalizationManager.text("ui.repel.full" if GameState.repel_steps >= RepelService.MAX_STEPS else "ui.hotbar.message.item_missing"))
+		return
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	repel_refill_dialog = dialog
+	root_control.add_child(dialog)
+	dialog.configure(LocalizationManager.text("ui.repel.recharge"), " ", LocalizationManager.text("ui.repel.recharge"), LocalizationManager.text("common.cancel"))
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 12)
+	dialog.add_custom_control(row)
+	var label := Label.new()
+	label.text = LocalizationManager.text("ui.bag.use.amount")
+	row.add_child(label)
+	var quantity := SpinBox.new()
+	quantity.name = "RepelQuantity"
+	quantity.min_value = 1
+	quantity.max_value = maximum
+	quantity.step = 1
+	quantity.value = 1
+	quantity.update_on_text_changed = true
+	quantity.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(quantity)
+	dialog.style_spin_box(quantity)
+	var max_button := Button.new()
+	max_button.name = "RepelMax"
+	max_button.text = LocalizationManager.text("ui.repel.max")
+	_apply_button_style(max_button)
+	row.add_child(max_button)
+	max_button.pressed.connect(func() -> void: quantity.value = maximum)
+	var update_preview := func(_value: float = 0.0) -> void:
+		var per_item := int(INVENTORY_ITEM_USE_POLICY.REPEL_ITEM_STEPS.get(str(item.get("id", "")), 0))
+		var after := mini(GameState.repel_steps + int(quantity.value) * per_item, RepelService.MAX_STEPS)
+		dialog.message_label.text = LocalizationManager.text("ui.repel.batch_preview", {
+			"quantity": int(quantity.value), "item": str(item.get("name", "")),
+			"before": GameState.repel_steps, "after": after, "max": RepelService.MAX_STEPS,
+		})
+	quantity.value_changed.connect(update_preview)
+	update_preview.call()
+	dialog.canceled.connect(func() -> void:
+		repel_refill_dialog = null
+		dialog.queue_free()
+	, CONNECT_ONE_SHOT)
+	dialog.confirmed.connect(func() -> void:
+		quantity.apply()
+		var count := int(quantity.value)
+		repel_refill_dialog = null
+		dialog.queue_free()
+		await _recharge_repel_item(item, count)
+	, CONNECT_ONE_SHOT)
+	dialog.popup_centered(Vector2i(520, 280))
+	dialog.focus_spin_box(quantity)
+
+
+func _recharge_repel_item(item: Dictionary, quantity: int = 1) -> void:
+	var refill_result: Dictionary = await RepelService.refill(str(item.get("id", "")), quantity)
+	if not bool(refill_result.get("success", false)):
+		_add_chat_message(str(refill_result.get("error", LocalizationManager.text("ui.repel.failed"))))
+		return
+	bag_inventory_items = _normalize_bag_inventory_items(refill_result.get("inventory", []))
+	InventoryService.apply_inventory_items(refill_result.get("inventory", []))
+	_refresh_bag_items()
+	_refresh_bag_detail()
+	var message_key := "ui.repel.full" if int(refill_result.get("addedRepelSteps", 0)) == 0 else "ui.repel.refilled"
+	_add_chat_message(LocalizationManager.text(message_key, {"steps": GameState.repel_steps, "max": RepelService.MAX_STEPS}))
+
+
 func _bag_discard_failure_may_be_ambiguous(result: Dictionary) -> bool:
 	var status := int(result.get("status", 0))
 	return status <= 0 or status >= 500
@@ -25008,16 +25088,7 @@ func _on_bag_item_selected(item: Dictionary) -> void:
 		return
 	var use_action := str(item.get("useAction", "")).strip_edges()
 	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
-		var refill_result: Dictionary = await RepelService.refill(item_id)
-		if not bool(refill_result.get("success", false)):
-			_add_chat_message(str(refill_result.get("error", LocalizationManager.text("ui.repel.failed"))))
-			return
-		bag_inventory_items = _normalize_bag_inventory_items(refill_result.get("inventory", []))
-		InventoryService.apply_inventory_items(refill_result.get("inventory", []))
-		_refresh_bag_items()
-		_refresh_bag_detail()
-		var message_key := "ui.repel.full" if int(refill_result.get("addedRepelSteps", 0)) == 0 else "ui.repel.refilled"
-		_add_chat_message(LocalizationManager.text(message_key, {"steps": GameState.repel_steps, "max": RepelService.MAX_STEPS}))
+		_show_repel_refill_dialog(item)
 		return
 	if use_action == "trainer_name_change":
 		_show_trainer_name_change_popup()
@@ -34971,7 +35042,10 @@ func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	if entry_type == "item":
 		for item: Dictionary in bag_inventory_items:
 			if _normalize_item_id(str(item.get("id", ""))) == _normalize_item_id(entry_id):
-				await _on_bag_item_selected(item)
+				if INVENTORY_ITEM_USE_POLICY.is_overworld_consumable(item):
+					await _recharge_repel_item(item)
+				else:
+					await _on_bag_item_selected(item)
 				return
 		_add_chat_message(LocalizationManager.text("ui.hotbar.message.item_missing"))
 		_load_bag_inventory.call_deferred()

@@ -61,6 +61,20 @@ func _run() -> void:
 		result = await inventory.use_inventory_item("repel")
 		_check(result.get("repelSteps") == steps and result.get("addedRepelSteps") == 100, "numeric Repel response preserved: %d" % steps)
 	_check(inventory.request_count == 10, "each use sends exactly one request")
+	inventory.response_body["usedRepelItems"] = 11
+	inventory.response_body["addedRepelSteps"] = 2750
+	inventory.response_body["repelSteps"] = 2750
+	inventory.fail_next = true
+	result = await inventory.use_inventory_item("max-repel", 11)
+	_check(not result.get("success", false), "ambiguous batch request stays pending")
+	result = await inventory.use_inventory_item("max-repel", 1)
+	_check(result.get("usedRepelItems") == 11 and result.get("addedRepelSteps") == 2750, "batch response preserves consumed item count and full added charge")
+	var initial: Dictionary = inventory.requests[10]
+	var retry: Dictionary = inventory.requests[11]
+	_check(JSON.parse_string(initial.body).quantity == 11 and initial.body == retry.body and initial.headers == retry.headers, "retry preserves original quantity and idempotency key even when the selected amount changes")
+	await inventory.use_inventory_item("max-repel", 2)
+	var next: Dictionary = inventory.requests[12]
+	_check(JSON.parse_string(next.body).quantity == 2 and next.headers != retry.headers, "confirmed batch frees the next request to use a new amount")
 	auth.current_user = previous_user
 	auth.session_token = previous_token
 	gateway.cached_url = previous_url
