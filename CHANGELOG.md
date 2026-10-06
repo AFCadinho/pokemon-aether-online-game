@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add shiny variants of the five new Surf mounts and their Gift Store Surf boxes at 350 Aether Gems each, preserving the approved height, rider poses and water effects.
+
 - Lower the complete Wailmer, Drednaw, Mantine, Basculegion and Wailord Surf rigs by 12 pixels to match Lapras and nearby water Pokémon, preserving rider poses and interaction tiles.
 
 - Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.

@@ -4119,6 +4119,546 @@
           10
         ]
       }
+    },
+    "wailmer_shiny": {
+      "displayName": "Shiny Wailmer",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-wailmer-mount",
+      "iconTexture": "res://assets/mounts/wailmer_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/wailmer_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/wailmer_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/wailmer/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/wailmer/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -16
+          ]
+        ],
+        "left": [
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -17
+          ],
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -17
+          ]
+        ],
+        "right": [
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -17
+          ],
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -17
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -5
+          ],
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -5
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "drednaw_shiny": {
+      "displayName": "Shiny Drednaw",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-drednaw-mount",
+      "iconTexture": "res://assets/mounts/drednaw_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/drednaw_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/drednaw_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/drednaw/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/drednaw/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -16
+          ],
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -16
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -12
+          ],
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -12
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -12
+          ],
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -12
+          ]
+        ],
+        "up": [
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            4
+          ],
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            4
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "mantine_shiny": {
+      "displayName": "Shiny Mantine",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-mantine-mount",
+      "iconTexture": "res://assets/mounts/mantine_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/mantine_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/mantine_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/mantine/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/mantine/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ]
+        ],
+        "left": [
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -12
+          ],
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -12
+          ]
+        ],
+        "right": [
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -12
+          ],
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -12
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "basculegion_shiny": {
+      "displayName": "Shiny Basculegion",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-basculegion-mount",
+      "iconTexture": "res://assets/mounts/basculegion_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/basculegion_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/basculegion_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/basculegion/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/basculegion/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ]
+        ],
+        "left": [
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -14
+          ],
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -16
+          ]
+        ],
+        "right": [
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -16
+          ]
+        ],
+        "up": [
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            0
+          ],
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            0
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
+    },
+    "wailord_shiny": {
+      "displayName": "Shiny Wailord",
+      "movementMode": "surf",
+      "unlockItemId": "shiny-wailord-mount",
+      "iconTexture": "res://assets/mounts/wailord_shiny/icon.png",
+      "spriteSheet": "res://assets/mounts/wailord_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/wailord_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/wailord/rider_mask.png",
+      "waterContactSheet": "res://assets/mounts/wailord/water_contact.png",
+      "frameSize": [
+        192,
+        192
+      ],
+      "movementAnimationSpeed": 4.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -26
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -20
+          ]
+        ]
+      },
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
     }
   }
 }

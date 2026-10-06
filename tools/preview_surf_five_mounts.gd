@@ -83,7 +83,7 @@ func _run() -> void:
 				appearance.merge({"headgear": "", "hair": "Adinho_Hair", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}, true)
 			previews.append({"actor": actor, "label": label, "appearance": appearance, "gender": gender, "direction": DIRS[row], "position": position})
 	for base_id: String in ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]:
-		var id := base_id
+		var id := base_id + ("_shiny" if "--shiny" in OS.get_cmdline_user_args() else "")
 		for activity: String in ["ride", "surf-fish"]:
 			for item: Dictionary in previews:
 				var actor: Variant = item.actor

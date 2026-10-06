@@ -781,6 +781,56 @@ const CATALOG: Array[Dictionary] = [
 		"categories": ["mounts"],
 		"badge": "MOUNT BOX",
 	},
+
+	{
+		"id": "wailmer-mount-box",
+		"name": "Wailmer Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_wailmer",
+		"price": 350,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
+		"id": "drednaw-mount-box",
+		"name": "Drednaw Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_drednaw",
+		"price": 350,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
+		"id": "mantine-mount-box",
+		"name": "Mantine Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_mantine",
+		"price": 350,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
+		"id": "basculegion-mount-box",
+		"name": "Basculegion Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_basculegion",
+		"price": 350,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+
+	{
+		"id": "wailord-mount-box",
+		"name": "Wailord Surf Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_wailord",
+		"price": 350,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
 	{
 		"id": "rayquaza-mount-box",
 		"name": "Rayquaza Mount Box",
