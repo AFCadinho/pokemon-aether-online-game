@@ -9,6 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / 'assets/mounts/primal_kyogre'
 FRAME = (192, 224)
 DIRECTIONS = ('down', 'left', 'right', 'up')
+# The world Look node sits 16px above the actor's occupied tile. Compensate
+# side views as a complete rig, after the approved underwater treatment.
+WATERLINE_Y = (0, 16, 16, 0)
 SEATS = (((88,8),)*4, ((96,-20),(96,-20),(96,-2),(96,-2)),
          ((96,-20),(96,-20),(96,-2),(96,-2)), ((88,3),)*4)
 # Front/rear positioning remains as approved. Side views anchor the hull,
@@ -23,7 +26,7 @@ SHIFTS = (((-24,21),)*4,
 
 def definition(shiny=False):
     offsets = {d: [[x+SHIFTS[r][c][0]-(FRAME[0]-64)//2,
-                   y+SHIFTS[r][c][1]-(FRAME[1]-64)//2] for c,(x,y) in enumerate(SEATS[r])]
+                   y+SHIFTS[r][c][1]+WATERLINE_Y[r]-(FRAME[1]-64)//2] for c,(x,y) in enumerate(SEATS[r])]
                for r,d in enumerate(DIRECTIONS)}
     folder = 'primal_kyogre_shiny' if shiny else 'primal_kyogre'
     return {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
@@ -93,6 +96,13 @@ def shiny_source(source):
     return result
 
 
+def align_waterline(tile, row):
+    result = Image.new('RGBA', FRAME)
+    result.alpha_composite(tile, (0, WATERLINE_Y[row]))
+    assert sum(result.getchannel('A').histogram()[1:]) == sum(tile.getchannel('A').histogram()[1:]), 'Waterline alignment must not clip artwork'
+    return result
+
+
 def build_variant(source, folder):
     folder.mkdir(parents=True, exist_ok=True)
     assert source.size == (1024,512)
@@ -113,7 +123,7 @@ def build_variant(source, folder):
             wet.putalpha(ImageChops.subtract(wet.getchannel('A'),fg.getchannel('A')))
             base, fg = wet, immerse(fg,row,col)
             for key,tile in [('mount',base),('foreground',fg),('rider_mask',mask)]:
-                sheets[key].alpha_composite(tile,(col*FRAME[0],row*FRAME[1]))
+                sheets[key].alpha_composite(align_waterline(tile,row),(col*FRAME[0],row*FRAME[1]))
     for key,sheet in sheets.items():
         sheet.save(folder/f'{key}.png')
     # Inventory controls fit this tight icon themselves; no oversized padding.
@@ -121,7 +131,7 @@ def build_variant(source, folder):
     icon.crop(icon.getbbox()).save(folder/'icon.png')
     for name in ['source','mount','foreground','rider_mask','icon']:
         write_texture_import(ROOT,(folder/f'{name}.png').relative_to(ROOT))
-    print(f'{folder.name}: water contact, unchanged seats and opaque rider mask.')
+    print(f'{folder.name}: aligned water contact, preserved riding pose and opaque rider mask.')
 
 
 def build():
@@ -134,7 +144,7 @@ def build():
     for moving in (False,True):
         for row in range(4):
             for col in range(4):
-                contact.alpha_composite(foam(row,col/4,moving),(col*FRAME[0],(row+4*int(moving))*FRAME[1]))
+                contact.alpha_composite(align_waterline(foam(row,col/4,moving),row),(col*FRAME[0],(row+4*int(moving))*FRAME[1]))
     contact.save(FOLDER/'water_contact.png')
     write_texture_import(ROOT,(FOLDER/'water_contact.png').relative_to(ROOT))
     catalog = json.loads((ROOT/'data/mounts.json').read_text())['mounts']
