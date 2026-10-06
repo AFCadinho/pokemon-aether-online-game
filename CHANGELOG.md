@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Anchor normal and shiny Kyogre to the player's ordinary position in every direction, moving the complete mount and water effect with the rider.
+- Align normal and shiny Kyogre's face with the occupied tile's interaction line, keeping its rider and water effects together.
 
 - Refresh Viridian City’s imported visual from the current artist TMX while retaining its flower, water and canopy animations.
 

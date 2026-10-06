@@ -3,9 +3,10 @@
 Normal and shiny Kyogre use the approved water-contact treatment: the underside,
 flippers and tail fade into the map water, with contact foam and a directional
 wake while swimming. Native source scale and the riding pose are retained from
-the approved V4 rig. The rider uses the ordinary player origin in all four
-directions, with zero mount-specific rider offsets. The builder positions every
-mount layer around that fixed player anchor using the authored seat coordinates.
+the approved V4 rig. The complete rig sits 18 native pixels above the ordinary
+player anchor, putting the center of Kyogre's side-view face on the occupied
+tile's horizontal interaction line (within 0.5px in both side views/all phases).
+The same correction in every direction keeps the rider steady when turning.
 
 `source.png` remains the unmodified supplied art. Rebuild both color variants
 with `python3 tools/build_primal_kyogre_mount.py`. The water depth/palette and
@@ -29,11 +30,11 @@ player appearance parts. Dismounting or selecting another mount clears it.
 Kyogre uses this contact/wake instead of generic circular Surf-step ripples;
 Lapras's ripples and all fishing splashes keep their existing behavior.
 
-The player's ordinary position is the alignment reference, not the nose, fin or
-foam edge. Compared with the earlier hull-aligned version, the complete rig moves
-51px down in front, 31px at either side and 56px behind. The source animation's
-18px torso shift is still compensated, keeping the rider stable while swimming.
-Fishing retains its existing pose correction relative to the same saddle.
+The authored seat defines the riding geometry. `FACE_ANCHOR_Y` then translates
+the mount, foreground, rider mask, contact foam, wake and rider together, without
+changing the actual movement/collision/interaction position. The earlier player-
+aligned rig placed the side face 18.5px below the interaction line; the face is now
+the visual reference. Fishing keeps its existing saddle-relative pose correction.
 
 Runtime captures (both player models, idle/swimming/fishing, all directions):
 
