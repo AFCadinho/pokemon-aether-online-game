@@ -59,6 +59,14 @@ func _run() -> void:
 	_check(popup.mount_stat_labels["totalBoxesOpened"].text == "4", "Mount counters render independently")
 	_check(popup.mount_open_buttons.size() == 1 and not popup.mount_open_buttons[0].disabled, "Only the last opened box is shown and can be opened from tracker")
 	_check(popup.mount_history_list.get_child(0).text.contains("70%") and popup.mount_history_list.get_child(0).text.contains("duplicate"), "History discloses used chance and duplicate outcomes")
+	popup.tracker_state["mounts"]["boxes"][0]["itemId"] = "rayquaza-mount-box-bound"
+	popup.call("_render_tracker")
+	_check(popup.mount_open_buttons.size() == 1 and not popup.mount_open_buttons[0].disabled, "Last opened type also displays owned voucher boxes")
+	popup.mount_open_buttons[0].pressed.emit()
+	_check(popup.pending_mount_box_id == "rayquaza-mount-box-bound", "Tracker opening preserves voucher box identity")
+	popup.mount_confirmation.hide()
+	popup.tracker_state["mounts"]["boxes"][0]["itemId"] = "rayquaza-mount-box"
+	popup.call("_render_tracker")
 	popup.request_busy = true
 	popup.call("_refresh_actions")
 	_check(popup.mount_open_buttons[0].disabled, "Pending opening blocks repeated clicks")
