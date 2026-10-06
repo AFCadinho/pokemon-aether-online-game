@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Download complete 3D model collections with one verified activation, reuse completed files after interruption, and check free space before downloading and unpacking.
+
 - Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
 
 - Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.

@@ -39,8 +39,18 @@ static func models_plan(service: RefCounted, descriptor: Dictionary, game_catalo
 	for job: Dictionary in plan.get("jobs", []):
 		if not _available(by_id.get(job.id, {}), installed):
 			jobs.append(job)
+	var requested: Array[String] = []
+	for job: Dictionary in jobs:
+		requested.append(str(job.id))
+	var session := {}
+	if not requested.is_empty():
+		session = service.begin_collection(index, requested)
+		if not str(session.get("error", "")).is_empty():
+			return {"error": session.error, "jobs": []}
+		jobs.assign(plan.jobs.filter(func(job: Dictionary): return str(job.id) in session.downloads))
 	return {"error": "", "jobs": jobs, "total_bytes": bytes_in(jobs),
-		"available": index.assets.size() - jobs.size(), "count": index.assets.size()}
+		"available": index.assets.size() - requested.size(), "count": index.assets.size(),
+		"collection": session}
 
 static func _available(asset: Dictionary, entries: Dictionary) -> bool:
 	if asset.get("appearances", []).is_empty():

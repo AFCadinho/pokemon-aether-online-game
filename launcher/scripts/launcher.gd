@@ -181,6 +181,7 @@ var bulk_completed_bytes := 0
 var bulk_total_files := 0
 var bulk_completed_files := 0
 var bulk_planning := false
+var model_collection := {}
 var content_busy := false
 var installing_bundle := false
 var bundle_worker: Thread
@@ -1839,12 +1840,16 @@ func _handle_download_response() -> void:
 			result = release_asset_bundles.accept_index(descriptor, file_path, false)
 			if str(result.get("error", "")).is_empty() and download_all_3d:
 				result = BulkAssets.models_plan(release_asset_bundles, descriptor, BulkAssets.game_catalog_path())
+				model_collection = result.get("collection", {})
 		else:
 			var index: Dictionary = release_asset_bundles.cached_index(descriptor)
 			# File verification and installation must not freeze the download UI.
 			installing_bundle = true
 			bundle_worker = Thread.new()
-			var start_error := bundle_worker.start(release_asset_bundles.accept_bundle.bind(index, str(current_download.get("id", "")), file_path))
+			var install: Callable = release_asset_bundles.accept_bundle.bind(index, str(current_download.get("id", "")), file_path)
+			if not model_collection.is_empty():
+				install = release_asset_bundles.stage_collection.bind(model_collection, str(current_download.get("id", "")), file_path)
+			var start_error := bundle_worker.start(install)
 			if start_error == OK:
 				while bundle_worker.is_alive():
 					await get_tree().process_frame
@@ -1917,6 +1922,9 @@ func _handle_download_response() -> void:
 
 func _start_next_download() -> void:
 	if pending_downloads.is_empty():
+		if not model_collection.is_empty():
+			if not await _finish_model_collection():
+				return
 		progress_is_indeterminate = false
 		download_progress_snapshot.clear()
 		_reset_download_progress_counters()
@@ -1937,6 +1945,10 @@ func _start_next_download() -> void:
 		return
 
 	current_download = pending_downloads.pop_front()
+	if current_download.get("type") == "asset_collection_commit":
+		current_download.clear()
+		_start_next_download.call_deferred()
+		return
 	_prepare_current_download_progress()
 	current_download["checksum_retry_count"] = 0
 	_start_current_download()
@@ -1962,6 +1974,12 @@ func _start_current_download() -> void:
 		]
 	)
 	current_download["download_dir"] = TEMP_DIR
+	if str(current_download.get("type", "")) == "asset_bundle":
+		if not release_asset_bundles.store._space_available(TEMP_DIR, int(current_download.get("size_bytes", 0)) + 32 * 1024 * 1024):
+			_set_busy(false)
+			_set_status("Not enough free space to install 3D models.", "error")
+			current_download.clear()
+			return
 	active_resumable_download_kind = "content"
 	var error_code: Error = download_service.start_download(current_download)
 	if error_code != OK:
@@ -2073,6 +2091,7 @@ func _request_headers(force_revalidate: bool = false) -> PackedStringArray:
 
 func _build_download_queue() -> void:
 	pending_downloads.clear()
+	model_collection.clear()
 	if manifest.is_empty():
 		return
 
@@ -2138,15 +2157,18 @@ func _build_download_queue() -> void:
 		var bundle_plan: Dictionary = release_asset_bundles.jobs(bundle_descriptor, false)
 		if download_all_3d and not release_asset_bundles.cached_index(bundle_descriptor).is_empty():
 			bundle_plan = BulkAssets.models_plan(release_asset_bundles, bundle_descriptor, BulkAssets.game_catalog_path())
+			model_collection = bundle_plan.get("collection", {})
 		if not str(bundle_plan.get("error", "")).is_empty():
 			_log_error("Approved 3D bundle planning failed: %s" % bundle_plan.error)
 		else:
 			for job: Dictionary in bundle_plan.get("jobs", []):
 				pending_downloads.append(job)
+			if not model_collection.is_empty():
+				pending_downloads.append({"type": "asset_collection_commit"})
 
 	var filtered_downloads: Array[Dictionary] = []
 	for download: Dictionary in pending_downloads:
-		if not str(download.get("url", "")).is_empty():
+		if not str(download.get("url", "")).is_empty() or download.get("type") == "asset_collection_commit":
 			filtered_downloads.append(download)
 
 	pending_downloads = filtered_downloads
@@ -3022,7 +3044,7 @@ func _set_busy(is_busy: bool) -> void:
 	if downloads_panel != null:
 		for kind: String in ["3d", "2d"]:
 			var plan: Dictionary = bulk_plans.get(kind, {})
-			downloads_panel.buttons[kind].disabled = locked or update_required or not _has_installed_game() or not str(plan.get("error", "")).is_empty() or plan.get("jobs", []).is_empty()
+			downloads_panel.buttons[kind].disabled = locked or update_required or not _has_installed_game() or not str(plan.get("error", "")).is_empty() or (plan.get("jobs", []).is_empty() and plan.get("collection", {}).is_empty())
 			downloads_panel.automatic[kind].disabled = locked
 	_sync_button_cursors()
 
@@ -3188,11 +3210,12 @@ func _start_bulk_download(kind: String) -> void:
 	if content_busy or bulk_paused or bulk_planning or update_required or not _has_installed_game():
 		return
 	var plan: Dictionary = bulk_plans.get(kind, {})
-	if not str(plan.get("error", "")).is_empty() or plan.get("jobs", []).is_empty():
+	if not str(plan.get("error", "")).is_empty() or (plan.get("jobs", []).is_empty() and plan.get("collection", {}).is_empty()):
 		return
 	bulk_kind = kind
 	bulk_paused = false
 	pending_downloads.assign(plan.jobs)
+	model_collection = plan.get("collection", {}) if kind == "3d" else {}
 	bulk_total_bytes = BulkAssets.bytes_in(pending_downloads)
 	bulk_total_files = pending_downloads.size()
 	bulk_completed_bytes = 0
@@ -3211,6 +3234,27 @@ func _bulk_file_installed(job: Dictionary) -> void:
 	bulk_completed_files += 1
 
 
+func _finish_model_collection() -> bool:
+	# The only active-state switch for a streamed complete-model download.
+	installing_bundle = true
+	bundle_worker = Thread.new()
+	var result := {"error": "Could not start model installation."}
+	if bundle_worker.start(release_asset_bundles.finish_collection.bind(model_collection)) == OK:
+		while bundle_worker.is_alive():
+			await get_tree().process_frame
+		result = bundle_worker.wait_to_finish()
+	bundle_worker = null
+	installing_bundle = false
+	if not str(result.get("error", "")).is_empty():
+		bulk_paused = not bulk_kind.is_empty()
+		_set_busy(false)
+		_set_status("Could not install approved 3D models.", "error")
+		_log_error("Model collection activation failed: " + str(result.error))
+		return false
+	model_collection.clear()
+	return true
+
+
 func _pause_bulk_download() -> void:
 	if bulk_kind.is_empty() or installing_bundle or not download_service.is_active():
 		return
@@ -3225,8 +3269,32 @@ func _pause_bulk_download() -> void:
 
 
 func _resume_bulk_download() -> void:
-	if not bulk_paused or bulk_kind.is_empty():
+	if not bulk_paused or bulk_kind.is_empty() or bulk_planning or installing_bundle:
 		return
+	if bulk_kind == "3d":
+		# Rebuild from the current pin and verified objects, including after a
+		# final activation failure. This also detects changed/corrupt staging.
+		bulk_planning = true
+		_set_busy(false)
+		planning_worker = Thread.new()
+		var descriptor := _get_dictionary(manifest, "assetBundleIndex")
+		var result := {"error": "Could not prepare download catalog."}
+		if planning_worker.start(BulkAssets.models_plan.bind(release_asset_bundles, descriptor, BulkAssets.game_catalog_path())) == OK:
+			while planning_worker.is_alive():
+				await get_tree().process_frame
+			result = planning_worker.wait_to_finish()
+		planning_worker = null
+		bulk_planning = false
+		if not str(result.get("error", "")).is_empty():
+			_set_status(str(result.error), "error")
+			_set_busy(false)
+			return
+		model_collection = result.get("collection", {})
+		pending_downloads.assign(result.jobs)
+		bulk_total_bytes = BulkAssets.bytes_in(pending_downloads)
+		bulk_total_files = pending_downloads.size()
+		bulk_completed_bytes = 0
+		bulk_completed_files = 0
 	bulk_paused = false
 	_set_busy(true)
 	_start_next_download()
@@ -3236,7 +3304,7 @@ func _update_bulk_progress() -> void:
 	if downloads_panel == null:
 		return
 	downloads_panel.pause.disabled = bulk_kind.is_empty() or bulk_paused or installing_bundle or not download_service.is_active()
-	downloads_panel.resume.disabled = not bulk_paused
+	downloads_panel.resume.disabled = not bulk_paused or bulk_planning or installing_bundle
 	if bulk_kind.is_empty() or bulk_paused:
 		return
 	var received := int(download_progress_snapshot.get("downloaded_bytes", 0))
