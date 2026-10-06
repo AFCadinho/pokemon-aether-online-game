@@ -6479,5 +6479,12 @@
   "ui.store.badge.tradeable": "NEGOCIÁVEL",
   "ui.store.currency_info.tooltip": "Sobre as moedas da Store",
   "ui.store.currency_info.title": "Como funcionam as moedas da Store",
-  "ui.store.currency_info.body": "Aether Gems\nCompre Gems pelo botão {get_gems}. Gems compram todos os produtos da Gift Store, incluindo vouchers de crédito e itens de Guilda. Compras com Gems são negociáveis quando o produto permite.\n\nAether Credit Card\nSeu saldo pessoal pode vir de recompensas de boas-vindas, promoções, do Shiny Mount Collector ou de Credit Vouchers resgatados. Vouchers de 100, 250, 500 e 1.000 custam a mesma quantidade de Gems e podem ser negociados antes do resgate. Você também pode comprar esses vouchers de outros jogadores. Resgatá-los adiciona crédito ao seu próprio cartão.\n\nUse crédito em roupas, conjuntos, montarias, amuletos, vouchers Blessing e serviços de Treinador. Todas as compras com o cartão e conteúdos de caixas são vinculados à conta: não podem ser negociados, enviados ou emprestados. Produtos de Guilda e vouchers de crédito exigem Gems. Blessing começa apenas quando você usa o voucher.\n\nUse uma forma de pagamento por compra. Crédito do cartão não pode ser convertido em Gems."
+  "ui.store.currency_info.body": "Aether Gems\nCompre Gems pelo botão {get_gems}. Gems compram todos os produtos da Gift Store, incluindo vouchers de crédito e itens de Guilda. Compras com Gems são negociáveis quando o produto permite.\n\nAether Credit Card\nSeu saldo pessoal pode vir de recompensas de boas-vindas, promoções, do Shiny Mount Collector ou de Credit Vouchers resgatados. Vouchers de 100, 250, 500 e 1.000 custam a mesma quantidade de Gems e podem ser negociados antes do resgate. Você também pode comprar esses vouchers de outros jogadores. Resgatá-los adiciona crédito ao seu próprio cartão.\n\nUse crédito em roupas, conjuntos, montarias, amuletos, vouchers Blessing e serviços de Treinador. Todas as compras com o cartão e conteúdos de caixas são vinculados à conta: não podem ser negociados, enviados ou emprestados. Produtos de Guilda e vouchers de crédito exigem Gems. Blessing começa apenas quando você usa o voucher.\n\nUse uma forma de pagamento por compra. Crédito do cartão não pode ser convertido em Gems.",
+  "ui.bag.mounts.tab_all": "Todas",
+  "ui.bag.mounts.tab_land": "Terrestres",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "Todos os vínculos",
+  "ui.bag.mounts.filter_tradeable": "Negociáveis",
+  "ui.bag.mounts.empty": "Nenhuma montaria corresponde a esta aba ou aos filtros."
 }
