@@ -8,6 +8,8 @@
 
 - Open Gift Store mount boxes directly from the Bag and show the reward in chat, including your first box and boxes different from the last opened type.
 
+- Publish the smaller optional 3D Pokémon collection: about 13 GB instead of 20 GB, with the same model detail and animations.
+
 ## 0.3.99
 
 ### Adventure and exploration

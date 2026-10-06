@@ -16,6 +16,19 @@ from upload_launcher_release import _load_config
 RECEIPT = ROOT / 'release/approved_3d_bundles_v11_r2_receipt.json'
 
 
+def publish_bundles(config, archive_paths, bundles):
+    """Bound upload concurrency; every object must pass GET and HEAD verification."""
+    rows = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+        pending = [pool.submit(publish, config, archive_paths[a['asset_id']], a)
+                   for a in bundles]
+        for future in concurrent.futures.as_completed(pending):
+            rows.append(future.result())
+            if len(rows) % 25 == 0:
+                print('V11_PUBLIC_BUNDLES_VERIFIED', len(rows), '/', len(bundles), flush=True)
+    return sorted(rows, key=lambda row: row['asset_id'])
+
+
 def validate_receipt(metadata):
     receipt = json.loads(RECEIPT.read_bytes())
     assert receipt['revision'] == metadata['revision']
@@ -67,10 +80,7 @@ def main():
     assert config.bucket=='pokemon-aether-updates'
     before=active_manifest_hash()
     if archive_paths:
-        rows=[]
-        for i,asset in enumerate(metadata['bundles'],1):
-            rows.append(publish(config,archive_paths[asset['asset_id']],asset))
-            if i%25==0: print('V11_PUBLIC_BUNDLES_VERIFIED',i,'/ 1200',flush=True)
+        rows=publish_bundles(config,archive_paths,metadata['bundles'])
     else:
         # CI has no archive/cache copies. It requires the explicit immutable
         # publication receipt produced by the local upload before this build.

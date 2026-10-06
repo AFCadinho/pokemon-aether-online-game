@@ -456,6 +456,11 @@ const CHECK_SCRIPTS: Array[String] = [
 ]
 
 const DEFAULT_LOG_DIR := "/tmp/pokeaether_project_checks"
+const CHECK_TIMEOUT_SECONDS := {
+	# Exhaustive matrix: 4,232 mount transitions, two avatars and 20 poses each.
+	# This is a pixel-correctness regression, not a runtime performance benchmark.
+	"res://tests/mount_switch_rider_check.gd": 300,
+}
 
 var failed := false
 var passed_count := 0
@@ -485,7 +490,7 @@ func _init() -> void:
 
 	print("Running %d project checks..." % CHECK_SCRIPTS.size())
 	for script_path in CHECK_SCRIPTS:
-		_run_check(executable, project_path, script_path)
+		_run_check(executable, project_path, script_path, int(CHECK_TIMEOUT_SECONDS.get(script_path, 180)))
 
 	print("Project checks: %d passed, %d failed. Logs: %s" % [passed_count, failed_count, log_dir])
 	quit(1 if failed else 0)
