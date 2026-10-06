@@ -570,5 +570,13 @@
   "palkia-mount": {
     "name": "Palkia-mount",
     "shortDesc": "Ontgrendelt Palkia als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-zekrom-mount": {
+    "name": "Shiny Zekrom-mount",
+    "shortDesc": "Ontgrendelt Shiny Zekrom als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "zekrom-mount-box": {
+    "name": "Zekrom-mountbox",
+    "shortDesc": "Bevat een Zekrom-mount. Shiny-basiskans: 50%."
   }
 }

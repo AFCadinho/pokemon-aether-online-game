@@ -6418,5 +6418,6 @@
   "ui.shiny_tracker.mounts.store_description_miraidon": "Contains a Miraidon mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_reshiram": "Contains a Reshiram mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_metagross": "Contains a Metagross mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_salamence": "Contains a Salamence mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contains a Salamence mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_zekrom": "Contains a Zekrom mount. Base shiny chance: 50%."
 }

@@ -149,7 +149,7 @@
       ]
     ]
   ],
-  "note": "Zijkanten: 6 pixels hoger en verder naar achteren, zodat het lichaam boven het schouderpantser zichtbaar blijft. Achteraan begint de voorgrondstaart lager en blijft het spelerslichaam vrij.",
+  "note": "Zijkanten: 6 pixels hoger en verder naar achteren, zodat het lichaam boven het schouderpantser zichtbaar blijft. Achteraan begint de voorgrondstaart lager en blijft het spelerslichaam vrij. Mount and rider lowered together 16 pixels to the walking ground line.",
   "frameShifts": {
     "down": [
       [
@@ -223,5 +223,6 @@
         2
       ]
     ]
-  }
+  },
+  "groundOffsetY": 16
 }
