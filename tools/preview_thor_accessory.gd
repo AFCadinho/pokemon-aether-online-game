@@ -54,7 +54,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(output)
 	for tick: int in range(48):
 		var walking := tick >= 8 and tick < 32
-		caption.text = "Thor · " + ("Lopen — cape omhoog" if walking else ("Cape zakt terug" if tick >= 32 and tick < 36 else "Stilstaan — af en toe een vonk"))
+		caption.text = "Thor · " + ("Lopen — cape waait naar achteren" if walking else ("Cape zakt terug" if tick >= 32 and tick < 36 else "Stilstaan — af en toe een vonk"))
 		for sprite: AnimatedSprite2D in sprites:
 			var suffix := str(sprite.animation).get_slice("_", 1)
 			sprite.animation = StringName(("walk_" if walking else "idle_") + suffix)
@@ -62,7 +62,7 @@ func _run() -> void:
 		for effect: Node in effects:
 			effect.advance(0.1)
 		await process_frame
-		await RenderingServer.frame_post_draw
+		RenderingServer.force_draw(false)
 		var image := canvas.get_texture().get_image()
 		if image == null or image.is_empty():
 			push_error("Thor preview requires a rendering display.")
