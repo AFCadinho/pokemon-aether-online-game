@@ -4,6 +4,12 @@
 
 - Give normal and shiny Primal Kyogre submerged fins/tail, hull foam and a swimming wake while preserving rider poses, fishing and map depth.
 
+- Style the Bag mount tradeability dropdown with a dark rounded menu, gold accents, custom selection icons and clearer hover states.
+
+- Keep the Gift Store payment method and its compact Tradable/Untradable label visible beside checkout, and shorten currency information.
+
+- Drag the Aether Gift Store by its header while keeping the window inside the screen and its header buttons clickable.
+
 - Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
 
 - Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.
