@@ -1,7 +1,7 @@
 @tool
 extends DialogueNPC
 
-const TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
+const CONFIRM_MENU := preload("res://scripts/ui/mount_collector_confirmation.gd")
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const GRID_MENU := preload("res://scripts/ui/mount_collector_grid.gd")
 var collector_view_state: Dictionary = {}
@@ -80,10 +80,6 @@ func _show_collector_error(response: Dictionary) -> void:
 	await GameErrorDialogService.show_response(response)
 
 
-func _offer_name(offer: Dictionary) -> String:
-	return Mounts.get_mount_display_name(str(offer.get("shinyMountId", "")))
-
-
 func _normal_name(offer: Dictionary) -> String:
 	return Mounts.get_mount_display_name(str(offer.get("normalMountId", "")))
 
@@ -96,27 +92,9 @@ func _choose_offer(offers: Array, page: int, credit: int) -> String:
 	return choice
 
 
-func _confirmation_text(offer: Dictionary, credit: int) -> String:
-	var text: String = LocalizationManager.text("ui.mount_collector.confirm", {
-		"shiny": _offer_name(offer), "normal": _normal_name(offer), "credit": credit
-	})
-	text += "\n\n" + LocalizationManager.text("ui.mount_collector.binding_bound" if bool(offer.get("accountBound", false)) else "ui.mount_collector.binding_tradeable")
-	if bool(collector_view_state.get("duplicates", false)):
-		text += "\n\n" + LocalizationManager.text("ui.mount_collector.keep_one")
-	elif int(offer.get("shinyOwnedQuantity", offer.get("quantity", 0))) == 1:
-		text += "\n\n" + LocalizationManager.text("ui.mount_collector.last_copy")
-	if bool(offer.get("normalAlreadyOwned", false)):
-		text += "\n\n" + LocalizationManager.text("ui.mount_collector.duplicate")
-	return text
-
-
 func _confirm_exchange(offer: Dictionary, credit: int) -> bool:
-	var menu := TOPIC_MENU.new()
+	var menu := CONFIRM_MENU.new()
 	add_child(menu)
-	var choice: String = await menu.choose_topic(
-		LocalizationManager.text("ui.mount_collector.title"), _confirmation_text(offer, credit),
-		[{"id": "confirm", "label": LocalizationManager.text("ui.mount_collector.trade")}],
-		"", LocalizationManager.text("ui.mount_collector.back"), 1, true
-	)
+	var choice: String = await menu.confirm_mount(offer, credit, bool(collector_view_state.get("duplicates", false)))
 	menu.queue_free()
 	return choice == "confirm"

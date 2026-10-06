@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make mount exchange confirmation clearer with shiny/normal previews, a separate voucher reward, binding labels and a highlighted last-shiny warning.
+
 - Browse shiny mounts with search, Land/Surf tabs, binding filters and compact cards. Duplicates-only exchanges preserve one shiny of each type, counting bound and tradeable copies together.
 
 - Sync the current map and position before opening the Shiny Mount Collector, so the first interaction after entering the Bike Shop does not use an older saved location.
