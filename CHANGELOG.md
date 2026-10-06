@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Show varied Gift Store popular picks from distinct Gem buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
+- Count all successful Gift Store purchases for popular picks, including Gift Vouchers, generated Gems and staff purchases; combine bound cosmetics with the original product and count each buyer once across payment methods.
+
+- Show varied Gift Store popular picks from distinct buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
 
 - Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.
 
