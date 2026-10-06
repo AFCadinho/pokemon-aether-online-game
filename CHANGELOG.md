@@ -20,6 +20,8 @@
 
 ### Battles
 
+- Restore the weekly boss challenge dialog so boss encounters open correctly.
+
 - See a growing range of 3D move and Z-Move animations, including attacks such as Close Combat, Draco Meteor, Moonblast, Earthquake and Blizzard, with more distinct effects and matching sounds.
 - See Pokémon visibly dodge missed attacks when a Trainer calls “Dodge!”.
 - Start single 3D battles from a clear three-quarter view, with the option to orbit the camera as before.
