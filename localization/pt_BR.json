@@ -3137,7 +3137,7 @@
   "ui.store.cosmetic.subcategory.shoes": "Calçados",
   "ui.store.results": "{count} ITENS",
   "ui.store.no_results": "NENHUM ITEM ENCONTRADO",
-  "ui.store.featured.explanation": "Com base em compradores únicos com Gems nos últimos 30 dias. Atualizado diariamente. Itens em destaque completam categorias sem compras.",
+  "ui.store.featured.explanation": "Com base em compradores únicos nos últimos 30 dias. Todas as compras na Store contam, com Gems ou Gift Vouchers. Atualizado diariamente. Itens em destaque completam categorias sem compras.",
   "ui.store.featured.popular": "Popular · 30 dias",
   "ui.store.featured.curated": "Em destaque",
   "ui.store.category.featured.label": "Populares",
@@ -6417,5 +6417,8 @@
   "ui.shiny_tracker.mounts.store_description_miraidon": "Contém uma montaria Miraidon. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_reshiram": "Contém uma montaria Reshiram. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_metagross": "Contém uma montaria Metagross. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_salamence": "Contém uma montaria Salamence. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contém uma montaria Salamence. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_zekrom": "Contém uma montaria Zekrom. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_palkia": "Contém uma montaria Palkia. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_dialga": "Contém uma montaria Dialga. Chance shiny inicial: 50%."
 }

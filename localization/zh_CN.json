@@ -3131,7 +3131,7 @@
   "ui.store.cosmetic.subcategory.shoes": "鞋子",
   "ui.store.results": "{count} 件商品",
   "ui.store.no_results": "未找到商品",
-  "ui.store.featured.explanation": "根据过去30天使用Gems购买的不同玩家人数，每日更新。没有购买记录的类别由精选物品补充。",
+  "ui.store.featured.explanation": "根据过去30天不同购买玩家的人数。所有商店购买均计入，包括使用Gems或Gift Vouchers的购买。每日更新，没有购买记录的类别由精选物品补充。",
   "ui.store.featured.popular": "热门 · 30天",
   "ui.store.featured.curated": "精选",
   "ui.store.category.featured.label": "热门",
@@ -6414,5 +6414,8 @@
   "ui.shiny_tracker.mounts.store_description_miraidon": "包含一只密勒顿坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_reshiram": "包含一只莱希拉姆坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_metagross": "包含一只巨金怪坐骑。初始异色概率：50%。",
-  "ui.shiny_tracker.mounts.store_description_salamence": "包含一只暴飞龙坐骑。初始异色概率：50%。"
+  "ui.shiny_tracker.mounts.store_description_salamence": "包含一只暴飞龙坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_zekrom": "包含一只捷克罗姆坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_palkia": "包含一只帕路奇亚坐骑。初始异色概率：50%。",
+  "ui.shiny_tracker.mounts.store_description_dialga": "包含一只帝牙卢卡坐骑。初始异色概率：50%。"
 }

@@ -570,5 +570,133 @@
   "palkia-mount": {
     "name": "Palkia Mount",
     "shortDesc": "Unlocks Palkia as a land mount. Requires a Mount License for the current region."
+  },
+  "shiny-zekrom-mount": {
+    "name": "Shiny Zekrom Mount",
+    "shortDesc": "Unlocks Shiny Zekrom as a land mount. Requires a Mount License for the current region."
+  },
+  "zekrom-mount-box": {
+    "name": "Zekrom Mount Box",
+    "shortDesc": "Contains a Zekrom mount. Base shiny chance: 50%."
+  },
+  "shiny-palkia-mount": {
+    "name": "Shiny Palkia Mount",
+    "shortDesc": "Unlocks Shiny Palkia as a land mount. Requires a Mount License for the current region."
+  },
+  "palkia-mount-box": {
+    "name": "Palkia Mount Box",
+    "shortDesc": "Contains a Palkia mount. Base shiny chance: 50%."
+  },
+  "shiny-dialga-mount": {
+    "name": "Shiny Dialga Mount",
+    "shortDesc": "Unlocks Shiny Dialga as a land mount. Requires a Mount License for the current region."
+  },
+  "dialga-mount-box": {
+    "name": "Dialga Mount Box",
+    "shortDesc": "Contains a Dialga mount. Base shiny chance: 50%."
+  },
+  "aether-voyager-shirt": {
+    "name": "Aether Voyager Top",
+    "shortDesc": "Move this male-only Aether Voyager item into Character Customization."
+  },
+  "aether-voyager-trousers": {
+    "name": "Aether Voyager Trousers",
+    "shortDesc": "Move this male-only Aether Voyager item into Character Customization."
+  },
+  "aether-voyager-shoes": {
+    "name": "Aether Voyager Shoes",
+    "shortDesc": "Move this male-only Aether Voyager item into Character Customization."
+  },
+  "aether-voyager-outfit": {
+    "name": "Aether Voyager Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Aether Voyager clothing items."
+  },
+  "rotom-engineer-shirt": {
+    "name": "Rotom Engineer Top",
+    "shortDesc": "Move this male-only Rotom Engineer item into Character Customization."
+  },
+  "rotom-engineer-trousers": {
+    "name": "Rotom Engineer Trousers",
+    "shortDesc": "Move this male-only Rotom Engineer item into Character Customization."
+  },
+  "rotom-engineer-shoes": {
+    "name": "Rotom Engineer Shoes",
+    "shortDesc": "Move this male-only Rotom Engineer item into Character Customization."
+  },
+  "rotom-engineer-goggles": {
+    "name": "Rotom Engineer Goggles",
+    "shortDesc": "Move this male-only Rotom Engineer item into Character Customization."
+  },
+  "rotom-engineer-outfit": {
+    "name": "Rotom Engineer Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Rotom Engineer clothing items."
+  },
+  "celebi-forest-ranger-shirt": {
+    "name": "Celebi Forest Ranger Top",
+    "shortDesc": "Move this male-only Celebi Forest Ranger item into Character Customization."
+  },
+  "celebi-forest-ranger-trousers": {
+    "name": "Celebi Forest Ranger Trousers",
+    "shortDesc": "Move this male-only Celebi Forest Ranger item into Character Customization."
+  },
+  "celebi-forest-ranger-shoes": {
+    "name": "Celebi Forest Ranger Shoes",
+    "shortDesc": "Move this male-only Celebi Forest Ranger item into Character Customization."
+  },
+  "celebi-forest-ranger-outfit": {
+    "name": "Celebi Forest Ranger Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Celebi Forest Ranger clothing items."
+  },
+  "lucario-aura-fighter-shirt": {
+    "name": "Lucario Aura Fighter Top",
+    "shortDesc": "Move this male-only Lucario Aura Fighter item into Character Customization."
+  },
+  "lucario-aura-fighter-trousers": {
+    "name": "Lucario Aura Fighter Trousers",
+    "shortDesc": "Move this male-only Lucario Aura Fighter item into Character Customization."
+  },
+  "lucario-aura-fighter-shoes": {
+    "name": "Lucario Aura Fighter Shoes",
+    "shortDesc": "Move this male-only Lucario Aura Fighter item into Character Customization."
+  },
+  "lucario-aura-fighter-outfit": {
+    "name": "Lucario Aura Fighter Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Lucario Aura Fighter clothing items."
+  },
+  "relic-explorer-shirt": {
+    "name": "Relic Explorer Top",
+    "shortDesc": "Move this male-only Relic Explorer item into Character Customization."
+  },
+  "relic-explorer-trousers": {
+    "name": "Relic Explorer Trousers",
+    "shortDesc": "Move this male-only Relic Explorer item into Character Customization."
+  },
+  "relic-explorer-shoes": {
+    "name": "Relic Explorer Shoes",
+    "shortDesc": "Move this male-only Relic Explorer item into Character Customization."
+  },
+  "relic-explorer-outfit": {
+    "name": "Relic Explorer Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Relic Explorer clothing items."
+  },
+  "lugia-sky-captain-shirt": {
+    "name": "Lugia Sky Captain Top",
+    "shortDesc": "Move this male-only Lugia Sky Captain item into Character Customization."
+  },
+  "lugia-sky-captain-trousers": {
+    "name": "Lugia Sky Captain Trousers",
+    "shortDesc": "Move this male-only Lugia Sky Captain item into Character Customization."
+  },
+  "lugia-sky-captain-shoes": {
+    "name": "Lugia Sky Captain Shoes",
+    "shortDesc": "Move this male-only Lugia Sky Captain item into Character Customization."
+  },
+  "lugia-sky-captain-goggles": {
+    "name": "Lugia Sky Captain Goggles",
+    "shortDesc": "Move this male-only Lugia Sky Captain item into Character Customization."
+  },
+  "lugia-sky-captain-outfit": {
+    "name": "Lugia Sky Captain Outfit Box",
+    "shortDesc": "Open this male-only box to receive the Lugia Sky Captain clothing items."
   }
 }

@@ -3172,7 +3172,7 @@
   "ui.store.cosmetic.subcategory.shoes": "Shoes",
   "ui.store.results": "{count} ITEMS",
   "ui.store.no_results": "NO ITEMS FOUND",
-  "ui.store.featured.explanation": "Based on unique Gem buyers over the past 30 days. Updated daily. Featured picks fill categories without purchases.",
+  "ui.store.featured.explanation": "Based on unique buyers over the past 30 days. All Store purchases count, with Gems or Gift Vouchers. Updated daily. Featured picks fill categories without purchases.",
   "ui.store.featured.popular": "Popular · 30 days",
   "ui.store.featured.curated": "Featured",
   "ui.store.category.featured.label": "Popular",
@@ -6418,5 +6418,8 @@
   "ui.shiny_tracker.mounts.store_description_miraidon": "Contains a Miraidon mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_reshiram": "Contains a Reshiram mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_metagross": "Contains a Metagross mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_salamence": "Contains a Salamence mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contains a Salamence mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_zekrom": "Contains a Zekrom mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_palkia": "Contains a Palkia mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_dialga": "Contains a Dialga mount. Base shiny chance: 50%."
 }

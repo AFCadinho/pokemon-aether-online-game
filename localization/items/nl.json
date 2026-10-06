@@ -570,5 +570,133 @@
   "palkia-mount": {
     "name": "Palkia-mount",
     "shortDesc": "Ontgrendelt Palkia als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-zekrom-mount": {
+    "name": "Shiny Zekrom-mount",
+    "shortDesc": "Ontgrendelt Shiny Zekrom als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "zekrom-mount-box": {
+    "name": "Zekrom-mountbox",
+    "shortDesc": "Bevat een Zekrom-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-palkia-mount": {
+    "name": "Shiny Palkia-mount",
+    "shortDesc": "Ontgrendelt Shiny Palkia als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "palkia-mount-box": {
+    "name": "Palkia-mountbox",
+    "shortDesc": "Bevat een Palkia-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-dialga-mount": {
+    "name": "Shiny Dialga-mount",
+    "shortDesc": "Ontgrendelt Shiny Dialga als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "dialga-mount-box": {
+    "name": "Dialga-mountbox",
+    "shortDesc": "Bevat een Dialga-mount. Shiny-basiskans: 50%."
+  },
+  "aether-voyager-shirt": {
+    "name": "Aether Voyager Bovenstuk",
+    "shortDesc": "Voeg dit Aether Voyager-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "aether-voyager-trousers": {
+    "name": "Aether Voyager Broek",
+    "shortDesc": "Voeg dit Aether Voyager-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "aether-voyager-shoes": {
+    "name": "Aether Voyager Schoenen",
+    "shortDesc": "Voeg dit Aether Voyager-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "aether-voyager-outfit": {
+    "name": "Aether Voyager Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Aether Voyager-kledingitems."
+  },
+  "rotom-engineer-shirt": {
+    "name": "Rotom Engineer Bovenstuk",
+    "shortDesc": "Voeg dit Rotom Engineer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "rotom-engineer-trousers": {
+    "name": "Rotom Engineer Broek",
+    "shortDesc": "Voeg dit Rotom Engineer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "rotom-engineer-shoes": {
+    "name": "Rotom Engineer Schoenen",
+    "shortDesc": "Voeg dit Rotom Engineer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "rotom-engineer-goggles": {
+    "name": "Rotom Engineer Bril",
+    "shortDesc": "Voeg dit Rotom Engineer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "rotom-engineer-outfit": {
+    "name": "Rotom Engineer Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Rotom Engineer-kledingitems."
+  },
+  "celebi-forest-ranger-shirt": {
+    "name": "Celebi Forest Ranger Bovenstuk",
+    "shortDesc": "Voeg dit Celebi Forest Ranger-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "celebi-forest-ranger-trousers": {
+    "name": "Celebi Forest Ranger Broek",
+    "shortDesc": "Voeg dit Celebi Forest Ranger-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "celebi-forest-ranger-shoes": {
+    "name": "Celebi Forest Ranger Schoenen",
+    "shortDesc": "Voeg dit Celebi Forest Ranger-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "celebi-forest-ranger-outfit": {
+    "name": "Celebi Forest Ranger Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Celebi Forest Ranger-kledingitems."
+  },
+  "lucario-aura-fighter-shirt": {
+    "name": "Lucario Aura Fighter Bovenstuk",
+    "shortDesc": "Voeg dit Lucario Aura Fighter-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lucario-aura-fighter-trousers": {
+    "name": "Lucario Aura Fighter Broek",
+    "shortDesc": "Voeg dit Lucario Aura Fighter-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lucario-aura-fighter-shoes": {
+    "name": "Lucario Aura Fighter Schoenen",
+    "shortDesc": "Voeg dit Lucario Aura Fighter-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lucario-aura-fighter-outfit": {
+    "name": "Lucario Aura Fighter Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Lucario Aura Fighter-kledingitems."
+  },
+  "relic-explorer-shirt": {
+    "name": "Relic Explorer Bovenstuk",
+    "shortDesc": "Voeg dit Relic Explorer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "relic-explorer-trousers": {
+    "name": "Relic Explorer Broek",
+    "shortDesc": "Voeg dit Relic Explorer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "relic-explorer-shoes": {
+    "name": "Relic Explorer Schoenen",
+    "shortDesc": "Voeg dit Relic Explorer-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "relic-explorer-outfit": {
+    "name": "Relic Explorer Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Relic Explorer-kledingitems."
+  },
+  "lugia-sky-captain-shirt": {
+    "name": "Lugia Sky Captain Bovenstuk",
+    "shortDesc": "Voeg dit Lugia Sky Captain-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lugia-sky-captain-trousers": {
+    "name": "Lugia Sky Captain Broek",
+    "shortDesc": "Voeg dit Lugia Sky Captain-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lugia-sky-captain-shoes": {
+    "name": "Lugia Sky Captain Schoenen",
+    "shortDesc": "Voeg dit Lugia Sky Captain-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lugia-sky-captain-goggles": {
+    "name": "Lugia Sky Captain Bril",
+    "shortDesc": "Voeg dit Lugia Sky Captain-kledingitem voor mannelijke trainers toe aan je kledingkast."
+  },
+  "lugia-sky-captain-outfit": {
+    "name": "Lugia Sky Captain Outfitbox",
+    "shortDesc": "Open deze male-only outfitbox voor de losse Lugia Sky Captain-kledingitems."
   }
 }

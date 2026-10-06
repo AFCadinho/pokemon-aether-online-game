@@ -8,11 +8,11 @@
       76
     ],
     [
-      70,
+      80,
       88
     ],
     [
-      58,
+      48,
       88
     ],
     [
@@ -120,7 +120,7 @@
       ]
     ]
   ],
-  "note": "V4: volledige kop en horens voor de speler. Alleen vooraan een lagere kopstand; lage ruiterpositie en andere aanzichten behouden.",
+  "note": "Original side head/neck restored intact. Rider sits 10 source pixels farther back on the body to clear the crest. Front head pose and grounded alignment retained.",
   "frameShifts": {
     "down": [
       [
@@ -240,5 +240,6 @@
     null,
     null,
     null
-  ]
+  ],
+  "groundOffsetY": 16
 }

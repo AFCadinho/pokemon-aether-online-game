@@ -1,0 +1,437 @@
+[
+  {
+    "path": "assets/player/male/top/AetherVoyager_Shirt.png",
+    "sha256": "ab60a942498e431187e204e487408da87af388ccb238f9b6871aee6b3cd3499a",
+    "sources": [
+      "Aether Voyager/Walking/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/AetherVoyager_Shirt_fish.png",
+    "sha256": "b3c4eac09cf53f8712144f206366351a7056be085974a355294f0a3a98cabd4c",
+    "sources": [
+      "Aether Voyager/Fishing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/AetherVoyager_Shirt_ride.png",
+    "sha256": "fe84b1ec186b5b7252dcce3ee90cab4ed147ab28ede78d34dda325c75a1fc49f",
+    "sources": [
+      "Aether Voyager/Surfing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/AetherVoyager_Trousers.png",
+    "sha256": "5d4806c622261b7372ba60897cd2da620180d26429df9385ac5260ec0ca07d2c",
+    "sources": [
+      "Aether Voyager/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/AetherVoyager_Trousers_fish.png",
+    "sha256": "3162cf0671664825a32edbe5af8f67b290ed191a401b476236a52e6d0a12d246",
+    "sources": [
+      "Aether Voyager/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/AetherVoyager_Trousers_ride.png",
+    "sha256": "b68288e0597cfcd4d16c617b414f4b39247ee7b2d66fab16dba537ea1a6c50d3",
+    "sources": [
+      "Aether Voyager/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/AetherVoyager_Shoes.png",
+    "sha256": "4e7399994f2237aa4cf1d35a8d1b6ccf0f8098c9c942296db204d45e15583b42",
+    "sources": [
+      "Aether Voyager/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/AetherVoyager_Shoes_fish.png",
+    "sha256": "dec08f9b5d6de80d777fdf0c0d9243bc435a059f938670dfcce58b6e5bf02579",
+    "sources": [
+      "Aether Voyager/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/AetherVoyager_Shoes_ride.png",
+    "sha256": "ea0b61a45b89876d9ae5229d8ac39e9ada99ef5af503a0008985f52eb8159917",
+    "sources": [
+      "Aether Voyager/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/RotomEngineer_Shirt.png",
+    "sha256": "a35630a89f7ca296123a331d0860a5fd77bd8125957b1edb9424c32475158158",
+    "sources": [
+      "Rotom Engineer/Walking/Shirt.png",
+      "Rotom Engineer/Walking/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/RotomEngineer_Shirt_fish.png",
+    "sha256": "285fe90af59436f23b5007a68ab0918cc21787e1e072f735f30109e93d0ba4a7",
+    "sources": [
+      "Rotom Engineer/Fishing/Shirt.png",
+      "Rotom Engineer/Fishing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/RotomEngineer_Shirt_ride.png",
+    "sha256": "49f21050ab1d423dcd88a17c92fc1e6c69c95aa3d14f270250e2a432b00c70a3",
+    "sources": [
+      "Rotom Engineer/Surfing/Shirt.png",
+      "Rotom Engineer/Surfing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/RotomEngineer_Trousers.png",
+    "sha256": "fb2a150758acfa7f24196c567a6791b80e8d45e9973d541543482d9c40fdc4d7",
+    "sources": [
+      "Rotom Engineer/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/RotomEngineer_Trousers_fish.png",
+    "sha256": "556bfcafc4fdafb88ec01a557a704cde5e24f738ec4410c2534385bea35fb208",
+    "sources": [
+      "Rotom Engineer/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/RotomEngineer_Trousers_ride.png",
+    "sha256": "d75ce4846c05e6967a3b798b91b72121dc2da3188b5a987ce266d46b18b8bcd7",
+    "sources": [
+      "Rotom Engineer/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/RotomEngineer_Shoes.png",
+    "sha256": "27f339f43ef3ac86153eebeef1b042134c5902a6a0ede8258a8811efe6169f2a",
+    "sources": [
+      "Rotom Engineer/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/RotomEngineer_Shoes_fish.png",
+    "sha256": "209aaf442cb8b2820d91f3244863341017c4b2ce50d6d700161a531f147a8a2a",
+    "sources": [
+      "Rotom Engineer/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/RotomEngineer_Shoes_ride.png",
+    "sha256": "fb887d4a32a235cd9708fc8e624377bde159313987740358af302a184f033ff3",
+    "sources": [
+      "Rotom Engineer/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/RotomEngineer_Goggles.png",
+    "sha256": "d6033a04607141c1a47e950d505d81b5b742c882f29e36b3dc6ebf531e98b07b",
+    "sources": [
+      "Rotom Engineer/Walking/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/fish/RotomEngineer_Goggles_fish.png",
+    "sha256": "ea7b0cc79accc587e12ebbe6c1d852b628970ed9f271c8575946a150699857d2",
+    "sources": [
+      "Rotom Engineer/Fishing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/ride/RotomEngineer_Goggles_ride.png",
+    "sha256": "e86ca1768a44ce05e8f5e7e7546b8a02edb228ac764aede11f3bf5f4550b5915",
+    "sources": [
+      "Rotom Engineer/Surfing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/CelebiForestRanger_Shirt.png",
+    "sha256": "dffbf281a4f95484675b6ead8d44d44d3eeb58959de6fe2e420b13edb45af6ca",
+    "sources": [
+      "Celebi Forest Ranger/Walking/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/CelebiForestRanger_Shirt_fish.png",
+    "sha256": "d5dfa0294391cc4ea131c32dc0cd58f6b9c5eff20c81a584e6d9fe4e61927eeb",
+    "sources": [
+      "Celebi Forest Ranger/Fishing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/CelebiForestRanger_Shirt_ride.png",
+    "sha256": "afd16948a1905d5c6ab8bf03252ab76e7ba534be897bb15b59cb1878e9b92478",
+    "sources": [
+      "Celebi Forest Ranger/Surfing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/CelebiForestRanger_Trousers.png",
+    "sha256": "0edcdfebfa49f6cb58a8c2bde4eea8c3257af94831ecde4bd76860c47bb408e4",
+    "sources": [
+      "Celebi Forest Ranger/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/CelebiForestRanger_Trousers_fish.png",
+    "sha256": "67b9cbe1583415ea1f84070a5175745bc14668f0e4a0d90af1d24f237c46ebaa",
+    "sources": [
+      "Celebi Forest Ranger/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/CelebiForestRanger_Trousers_ride.png",
+    "sha256": "f1d7bc9d60c9200bd29c09fab7ab01e4b943904ca455083fa03ce61b772a85e4",
+    "sources": [
+      "Celebi Forest Ranger/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/CelebiForestRanger_Shoes.png",
+    "sha256": "c8b3b13c9393ec0389eae0f66e4ba4aa3bec49e66931c9640a7c818c3383c3c9",
+    "sources": [
+      "Celebi Forest Ranger/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/CelebiForestRanger_Shoes_fish.png",
+    "sha256": "4962bae706cb3504f38b63be0fad5cd8eab4e2ca0660ae305e1c38314d1d0104",
+    "sources": [
+      "Celebi Forest Ranger/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/CelebiForestRanger_Shoes_ride.png",
+    "sha256": "ebd1c3e35ae9ec91c381c0ce3bf730023832c3bec90d8ac725bd892db4772704",
+    "sources": [
+      "Celebi Forest Ranger/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/LucarioAuraFighter_Shirt.png",
+    "sha256": "69719892f4cc6f61e88b899205accaa6aa4469b1c7f3050b958eb35ca3e93f08",
+    "sources": [
+      "Lucario Aura Fighter/Walking/Shirt.png",
+      "Lucario Aura Fighter/Walking/Scarf.png",
+      "Lucario Aura Fighter/Walking/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/LucarioAuraFighter_Shirt_fish.png",
+    "sha256": "62aa2aae1b319055d0bd3962ac0bfad78421210fb5b89d651ca4ab0b0bbf9280",
+    "sources": [
+      "Lucario Aura Fighter/Fishing/Shirt.png",
+      "Lucario Aura Fighter/Fishing/Scarf.png",
+      "Lucario Aura Fighter/Fishing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/LucarioAuraFighter_Shirt_ride.png",
+    "sha256": "6ef8b42297f015e5edc0e31b67d28a2b14617d97ba73a3e51f807ebe350c6e43",
+    "sources": [
+      "Lucario Aura Fighter/Surfing/Shirt.png",
+      "Lucario Aura Fighter/Surfing/Scarf.png",
+      "Lucario Aura Fighter/Surfing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/LucarioAuraFighter_Trousers.png",
+    "sha256": "17340afe4fbfdb496b10dc71257aa0608e1fb9b838e60ec41876910dace0527e",
+    "sources": [
+      "Lucario Aura Fighter/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/LucarioAuraFighter_Trousers_fish.png",
+    "sha256": "63fcdd0ca670a55d7b44fc7584f78f3675c21b45e8d5fe82993c94d0107c8752",
+    "sources": [
+      "Lucario Aura Fighter/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/LucarioAuraFighter_Trousers_ride.png",
+    "sha256": "fddced23beda4097587c0a92be519bf3529dc91c53079cb6cd381187e2f2ed00",
+    "sources": [
+      "Lucario Aura Fighter/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/LucarioAuraFighter_Shoes.png",
+    "sha256": "aa948fca91509a967581d7405e15e1333e5bc75e26e780eb53f52f5b2292ba50",
+    "sources": [
+      "Lucario Aura Fighter/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/LucarioAuraFighter_Shoes_fish.png",
+    "sha256": "119736791e46f933c339c84ac9ff11de8728be885ce081c657fd40d9079a2585",
+    "sources": [
+      "Lucario Aura Fighter/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/LucarioAuraFighter_Shoes_ride.png",
+    "sha256": "afe471c73b4e0babe5b07dbf46ae0fef0eb439e4424616b840c8dfa555c6c54c",
+    "sources": [
+      "Lucario Aura Fighter/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/RelicExplorer_Shirt.png",
+    "sha256": "c011100c7b5625acbef9b5d5ffd9eb8e5f8c81b817237df6e81dd1107191a2b4",
+    "sources": [
+      "Relic Explorer/Walking/Shirt.png",
+      "Relic Explorer/Walking/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/RelicExplorer_Shirt_fish.png",
+    "sha256": "9274866c7fe884d73ae301fb7b3c89dd410ce1d0c92f5677bf87b072482d783c",
+    "sources": [
+      "Relic Explorer/Fishing/Shirt.png",
+      "Relic Explorer/Fishing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/RelicExplorer_Shirt_ride.png",
+    "sha256": "cd2d76045c695e058ff02fa843e803b73389dd94dfd0dcf80e6523a781f45167",
+    "sources": [
+      "Relic Explorer/Surfing/Shirt.png",
+      "Relic Explorer/Surfing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/RelicExplorer_Trousers.png",
+    "sha256": "b55ab527daa722e433ae5e3c1d64f96552bfa90b2812758be456ea3074750f0c",
+    "sources": [
+      "Relic Explorer/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/RelicExplorer_Trousers_fish.png",
+    "sha256": "1b2ceca8150ba461c27f046478f9735277cc36c817ec7dadc55916a81681ed45",
+    "sources": [
+      "Relic Explorer/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/RelicExplorer_Trousers_ride.png",
+    "sha256": "e3d8d0c17ee7795cfa909ee7a6377a38fc636981df3aedc35c8e3fa12f11f6b6",
+    "sources": [
+      "Relic Explorer/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/RelicExplorer_Shoes.png",
+    "sha256": "d9b99b607f32ffac58c098c6016796ed59e1110f55fbbb5d63a1d743892d6425",
+    "sources": [
+      "Relic Explorer/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/RelicExplorer_Shoes_fish.png",
+    "sha256": "994a2ee528d71ef969343579949ba58f795d40b2e7293ff57d23e73ad7a0b33e",
+    "sources": [
+      "Relic Explorer/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/RelicExplorer_Shoes_ride.png",
+    "sha256": "fc00947000f964a8b59d6acd544f145a4280f6a9dd801735966e27f1a3a58dc8",
+    "sources": [
+      "Relic Explorer/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/LugiaSkyCaptain_Shirt.png",
+    "sha256": "711e03fa4618c45d12d1944f7868b968470373148e1f454238817ef0af1cdeb6",
+    "sources": [
+      "Lugia Sky Captain/Walking/Shirt.png",
+      "Lugia Sky Captain/Walking/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/fish/LugiaSkyCaptain_Shirt_fish.png",
+    "sha256": "4edf126007308e641d953441f6a08bb29ca3666c96c98d9857d7000cfa2db0fb",
+    "sources": [
+      "Lugia Sky Captain/Fishing/Shirt.png",
+      "Lugia Sky Captain/Fishing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/top/ride/LugiaSkyCaptain_Shirt_ride.png",
+    "sha256": "39aeb546892d65464a33c82f016af6aa10409db2335c0c064134075a7e3ed61b",
+    "sources": [
+      "Lugia Sky Captain/Surfing/Shirt.png",
+      "Lugia Sky Captain/Surfing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/LugiaSkyCaptain_Trousers.png",
+    "sha256": "f9db3786cacf285f3a8ca0e143532b46c5fcee71fb3b6c9aa4bad2362bd8e927",
+    "sources": [
+      "Lugia Sky Captain/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/fish/LugiaSkyCaptain_Trousers_fish.png",
+    "sha256": "954a37f704c137270bba0d9f89fc9131738931062b26ebbf0384243ca6c32058",
+    "sources": [
+      "Lugia Sky Captain/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/bottom/ride/LugiaSkyCaptain_Trousers_ride.png",
+    "sha256": "3418bfb93770f941fa7415ac55f69f9c4c5f0e2edfd275824a88dd9879233d4f",
+    "sources": [
+      "Lugia Sky Captain/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/LugiaSkyCaptain_Shoes.png",
+    "sha256": "caafa30e1f37e4c8dbc456d2288cc05c5d986f10d1d33b684d5d5a83d1904baa",
+    "sources": [
+      "Lugia Sky Captain/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/fish/LugiaSkyCaptain_Shoes_fish.png",
+    "sha256": "26f72e0c96a2d8aa2c5a43d142c721fa214d02d39113de1b5f6672adbf8f736c",
+    "sources": [
+      "Lugia Sky Captain/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/shoes/ride/LugiaSkyCaptain_Shoes_ride.png",
+    "sha256": "e366029559ebfb46ce669ba236dfee20e83ace6f6c50f8291346243f92c6339b",
+    "sources": [
+      "Lugia Sky Captain/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/LugiaSkyCaptain_Goggles.png",
+    "sha256": "716c44b76ef55602e8db9fefd2f9ed321f44dba09e9b3e4df36cde56adf63e87",
+    "sources": [
+      "Lugia Sky Captain/Walking/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/fish/LugiaSkyCaptain_Goggles_fish.png",
+    "sha256": "5d62f51ad99deeb2c6c75d0bfed1a9d27ff267197c9da287cfbdc23ac1d1f3cb",
+    "sources": [
+      "Lugia Sky Captain/Fishing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/male/facegear/ride/LugiaSkyCaptain_Goggles_ride.png",
+    "sha256": "c965d5d91326ecea2e281e5a47b75d04a2ee5b381c5cbddae9988c410bb18a29",
+    "sources": [
+      "Lugia Sky Captain/Surfing/Goggles.png"
+    ]
+  }
+]

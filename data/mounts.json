@@ -1604,73 +1604,73 @@
         "down": [
           [
             0,
-            -54
+            -38
           ],
           [
             0,
-            -52
+            -36
           ],
           [
             0,
-            -54
+            -38
           ],
           [
             0,
-            -52
+            -36
           ]
         ],
         "left": [
           [
-            6,
-            -42
+            16,
+            -26
           ],
           [
-            6,
-            -40
+            16,
+            -24
           ],
           [
-            6,
-            -42
+            16,
+            -26
           ],
           [
-            6,
-            -40
+            16,
+            -24
           ]
         ],
         "right": [
           [
-            -6,
-            -42
+            -16,
+            -26
           ],
           [
-            -6,
-            -40
+            -16,
+            -24
           ],
           [
-            -6,
-            -42
+            -16,
+            -26
           ],
           [
-            -6,
-            -40
+            -16,
+            -24
           ]
         ],
         "up": [
           [
             0,
-            -28
+            -12
           ],
           [
             0,
-            -26
+            -10
           ],
           [
             0,
-            -28
+            -12
           ],
           [
             0,
-            -26
+            -10
           ]
         ]
       },
@@ -1802,73 +1802,73 @@
         "down": [
           [
             0,
-            -58
+            -42
           ],
           [
             0,
-            -56
+            -40
           ],
           [
             0,
-            -58
+            -42
           ],
           [
             0,
-            -56
+            -40
           ]
         ],
         "left": [
           [
             16,
-            -54
+            -38
           ],
           [
             16,
-            -52
+            -36
           ],
           [
             16,
-            -54
+            -38
           ],
           [
             16,
-            -52
+            -36
           ]
         ],
         "right": [
           [
             -16,
-            -54
+            -38
           ],
           [
             -16,
-            -52
+            -36
           ],
           [
             -16,
-            -54
+            -38
           ],
           [
             -16,
-            -52
+            -36
           ]
         ],
         "up": [
           [
             0,
-            -40
+            -24
           ],
           [
             0,
-            -38
+            -22
           ],
           [
             0,
-            -40
+            -24
           ],
           [
             0,
-            -38
+            -22
           ]
         ]
       },
@@ -1877,6 +1877,303 @@
       "idleRiderMaskSheet": "res://assets/mounts/palkia/idle_rider_mask.png",
       "iconTexture": "res://assets/mounts/palkia/icon.png",
       "unlockItemId": "palkia-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "zekrom_shiny": {
+      "displayName": "Shiny Zekrom",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/zekrom_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/zekrom_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/zekrom_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 6,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ],
+          [
+            0,
+            -46
+          ],
+          [
+            0,
+            -44
+          ]
+        ],
+        "left": [
+          [
+            2,
+            -48
+          ],
+          [
+            2,
+            -46
+          ],
+          [
+            2,
+            -48
+          ],
+          [
+            2,
+            -46
+          ]
+        ],
+        "right": [
+          [
+            -2,
+            -48
+          ],
+          [
+            -2,
+            -46
+          ],
+          [
+            -2,
+            -48
+          ],
+          [
+            -2,
+            -46
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -30
+          ],
+          [
+            0,
+            -32
+          ],
+          [
+            0,
+            -30
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/zekrom_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/zekrom_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/zekrom_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/zekrom_shiny/icon.png",
+      "unlockItemId": "shiny-zekrom-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "palkia_shiny": {
+      "displayName": "Shiny Palkia",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/palkia_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/palkia_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/palkia_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -42
+          ],
+          [
+            0,
+            -40
+          ],
+          [
+            0,
+            -42
+          ],
+          [
+            0,
+            -40
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -38
+          ],
+          [
+            16,
+            -36
+          ],
+          [
+            16,
+            -38
+          ],
+          [
+            16,
+            -36
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -38
+          ],
+          [
+            -16,
+            -36
+          ],
+          [
+            -16,
+            -38
+          ],
+          [
+            -16,
+            -36
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/palkia_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/palkia_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/palkia_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/palkia_shiny/icon.png",
+      "unlockItemId": "shiny-palkia-mount",
+      "storePreviewScale": 1.0,
+      "storePreviewOffset": [
+        0,
+        8
+      ]
+    },
+    "dialga_shiny": {
+      "displayName": "Shiny Dialga",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/dialga_shiny/mount.png",
+      "foregroundSheet": "res://assets/mounts/dialga_shiny/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/dialga_shiny/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 0,
+      "hoverAmplitude": 0,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ],
+          [
+            0,
+            -38
+          ],
+          [
+            0,
+            -36
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -26
+          ],
+          [
+            16,
+            -24
+          ],
+          [
+            16,
+            -26
+          ],
+          [
+            16,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -26
+          ],
+          [
+            -16,
+            -24
+          ],
+          [
+            -16,
+            -26
+          ],
+          [
+            -16,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -10
+          ]
+        ]
+      },
+      "idleSpriteSheet": "res://assets/mounts/dialga_shiny/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/dialga_shiny/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/dialga_shiny/idle_rider_mask.png",
+      "iconTexture": "res://assets/mounts/dialga_shiny/icon.png",
+      "unlockItemId": "shiny-dialga-mount",
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,
