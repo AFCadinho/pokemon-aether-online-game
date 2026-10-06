@@ -20,7 +20,7 @@ const BubbleMoveEffect = preload("res://scripts/battle/battle_ui/bubble_move_eff
 const IceBeamMoveEffect = preload("res://scripts/battle/battle_ui/ice_beam_move_effect_3d.gd")
 const MoveRecipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 const ZMoveEffect = preload("res://scripts/battle/battle_ui/z_move_effect_3d.gd")
-const FamilyMoveEffect = preload("res://scripts/battle/battle_ui/family_move_effect_3d.gd")
+const StagedMoveEffect = preload("res://scripts/battle/battle_ui/staged_move_effect_3d.gd")
 const BattlefieldMoveEffect = preload("res://scripts/battle/battle_ui/battlefield_move_effect_3d.gd")
 const DracoMeteorEffect = preload("res://scripts/battle/battle_ui/draco_meteor_effect_3d.gd")
 const BatchFourMoveEffect = preload("res://scripts/battle/battle_ui/batch_four_move_effect_3d.gd")
@@ -1102,7 +1102,8 @@ func _move_anchors(actor: String, target: String, move: String) -> Dictionary:
 		return {"source":source,"sources":[source],"target":end,"radius":b.radius,
 			"moon_source":moon_source,"target_ground":Vector3(end.x,_position(actor_index(target)).y+0.04,end.z),
 			"attachment_part":"bounds","attachment_bones":[]}
-	if not recipe.is_empty() and not bool(recipe.contact):
+	if not recipe.is_empty() and not bool(recipe.contact) and recipe.family!="beams":
+		# Continuous beams use the near-body fallback above, without an orb gap.
 		# Unprofiled body emitters reserve room for the projectile, including its
 		# full visual radius; the orb must not grow through the attacker.
 		var forward := Vector3(direction.x,0,direction.z).normalized()
@@ -1146,7 +1147,7 @@ func create_move_effect(move: String, actor: String, target: String, options: Di
 	elif recipe.has("z_choreography"):
 		effect = ZMoveEffect.new()
 	elif MoveRecipes.supports(move):
-		effect = FamilyMoveEffect.new()
+		effect = StagedMoveEffect.new()
 	elif MoveEffect.move_key(move)=="dracometeor":
 		effect = DracoMeteorEffect.new()
 	elif MoveEffect.move_key(move) in ContactMoveEffect.CONTACT_KEYS:

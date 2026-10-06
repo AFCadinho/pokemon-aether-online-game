@@ -44,4 +44,5 @@ func _review_all() -> void:
 	host=null
 	await process_frame
 	await process_frame
-	quit()
+	# Let the awaiting preview coroutine return before shutting down the tree.
+	quit.call_deferred()
