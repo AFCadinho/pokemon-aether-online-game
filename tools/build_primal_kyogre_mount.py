@@ -12,6 +12,10 @@ ART_FRAME = (192, 224)
 # The artwork stays at native scale.
 FRAME = (192, 320)
 DIRECTIONS = ('down', 'left', 'right', 'up')
+# Side-view face center was 18.5px below the occupied/interacting tile line.
+# Lift the complete rig by an integer amount, identical in every direction,
+# so the player does not jump vertically when turning.
+FACE_ANCHOR_Y = -18
 SEATS = (((88,8),)*4, ((96,-20),(96,-20),(96,-2),(96,-2)),
          ((96,-20),(96,-20),(96,-2),(96,-2)), ((88,3),)*4)
 # Original composition coordinates for the approved anatomical water treatment.
@@ -23,9 +27,8 @@ SHIFTS = (((-24,21),)*4,
 
 
 def definition(shiny=False):
-    # Keep the rider at the ordinary player origin in every direction/phase.
-    # Derive the mount placement from its authored seat, never the hull edge.
-    offsets = {d: [[0, 0] for _ in range(4)] for d in DIRECTIONS}
+    # The rider follows the same face-alignment shift as every mount layer.
+    offsets = {d: [[0, FACE_ANCHOR_Y] for _ in range(4)] for d in DIRECTIONS}
     folder = 'primal_kyogre_shiny' if shiny else 'primal_kyogre'
     return {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
             'unlockItemId':'shiny-primal-kyogre-mount' if shiny else 'primal-kyogre-mount',
@@ -98,9 +101,9 @@ def anchor_to_player(tile, row, col):
     seat = SEATS[row][col]
     shift = SHIFTS[row][col]
     # SEATS stores the top-left of a 64px rider cell. Its center must coincide
-    # with the mount cell center, so the runtime rider offset stays zero.
+    # with the mount cell center plus the shared face-alignment correction.
     translation = (FRAME[0]//2 - (seat[0]+shift[0]+32),
-                   FRAME[1]//2 - (seat[1]+shift[1]+32))
+                   FRAME[1]//2 - (seat[1]+shift[1]+32) + FACE_ANCHOR_Y)
     result = Image.new('RGBA', FRAME)
     result.alpha_composite(tile, translation)
     assert sum(result.getchannel('A').histogram()[1:]) == sum(tile.getchannel('A').histogram()[1:]), 'Player anchoring must not clip artwork'
@@ -135,7 +138,7 @@ def build_variant(source, folder):
     icon.crop(icon.getbbox()).save(folder/'icon.png')
     for name in ['source','mount','foreground','rider_mask','icon']:
         write_texture_import(ROOT,(folder/f'{name}.png').relative_to(ROOT))
-    print(f'{folder.name}: player-anchored rig, preserved riding pose and opaque rider mask.')
+    print(f'{folder.name}: face aligned with interaction line, preserved riding pose and opaque rider mask.')
 
 
 def build():
