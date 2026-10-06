@@ -7,17 +7,15 @@ from import_player_layered_sprites import write_texture_import
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / 'assets/mounts/primal_kyogre'
-FRAME = (192, 224)
+ART_FRAME = (192, 224)
+# Extra transparent canvas preserves all fins/wake below the player anchor.
+# The artwork stays at native scale.
+FRAME = (192, 320)
 DIRECTIONS = ('down', 'left', 'right', 'up')
-# The world Look node sits 16px above the actor's occupied tile. Compensate
-# side views as a complete rig, after the approved underwater treatment.
-WATERLINE_Y = (0, 16, 16, 0)
 SEATS = (((88,8),)*4, ((96,-20),(96,-20),(96,-2),(96,-2)),
          ((96,-20),(96,-20),(96,-2),(96,-2)), ((88,3),)*4)
-# Front/rear positioning remains as approved. Side views anchor the hull,
-# not the lower fin tip, on the water tile: move the whole rig down one tile.
-# The second source pose drops the hull 18px; compensate before packing so
-# the fins swim around a stable hull and the rider does not bounce in midair.
+# Original composition coordinates for the approved anatomical water treatment.
+# The second source pose drops the hull 18px; compensate before anchoring.
 SHIFTS = (((-24,21),)*4,
           ((-32,53),(-32,53),(-32,35),(-32,35)),
           ((-32,53),(-32,53),(-32,35),(-32,35)),
@@ -25,9 +23,9 @@ SHIFTS = (((-24,21),)*4,
 
 
 def definition(shiny=False):
-    offsets = {d: [[x+SHIFTS[r][c][0]-(FRAME[0]-64)//2,
-                   y+SHIFTS[r][c][1]+WATERLINE_Y[r]-(FRAME[1]-64)//2] for c,(x,y) in enumerate(SEATS[r])]
-               for r,d in enumerate(DIRECTIONS)}
+    # Keep the rider at the ordinary player origin in every direction/phase.
+    # Derive the mount placement from its authored seat, never the hull edge.
+    offsets = {d: [[0, 0] for _ in range(4)] for d in DIRECTIONS}
     folder = 'primal_kyogre_shiny' if shiny else 'primal_kyogre'
     return {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
             'unlockItemId':'shiny-primal-kyogre-mount' if shiny else 'primal-kyogre-mount',
@@ -96,10 +94,16 @@ def shiny_source(source):
     return result
 
 
-def align_waterline(tile, row):
+def anchor_to_player(tile, row, col):
+    seat = SEATS[row][col]
+    shift = SHIFTS[row][col]
+    # SEATS stores the top-left of a 64px rider cell. Its center must coincide
+    # with the mount cell center, so the runtime rider offset stays zero.
+    translation = (FRAME[0]//2 - (seat[0]+shift[0]+32),
+                   FRAME[1]//2 - (seat[1]+shift[1]+32))
     result = Image.new('RGBA', FRAME)
-    result.alpha_composite(tile, (0, WATERLINE_Y[row]))
-    assert sum(result.getchannel('A').histogram()[1:]) == sum(tile.getchannel('A').histogram()[1:]), 'Waterline alignment must not clip artwork'
+    result.alpha_composite(tile, translation)
+    assert sum(result.getchannel('A').histogram()[1:]) == sum(tile.getchannel('A').histogram()[1:]), 'Player anchoring must not clip artwork'
     return result
 
 
@@ -110,12 +114,12 @@ def build_variant(source, folder):
     for row in range(4):
         for col in range(4):
             art = source.crop((col*256,row*128,(col+1)*256,(row+1)*128))
-            base = Image.new('RGBA',FRAME)
+            base = Image.new('RGBA',ART_FRAME)
             base.alpha_composite(art,SHIFTS[row][col])
             assert sum(base.getchannel('A').histogram()[1:]) == sum(art.getchannel('A').histogram()[1:])
-            fg = Image.new('RGBA',FRAME)
+            fg = Image.new('RGBA',ART_FRAME)
             fg.alpha_composite(foreground(art,row,col),SHIFTS[row][col])
-            mask = Image.new('RGBA',FRAME)
+            mask = Image.new('RGBA',ART_FRAME)
             mask.putalpha(fg.getchannel('A'))
             # Keep the opaque anatomical mask: submerged fins must not reveal
             # previously hidden player pixels. Draw translucent foreground once.
@@ -123,7 +127,7 @@ def build_variant(source, folder):
             wet.putalpha(ImageChops.subtract(wet.getchannel('A'),fg.getchannel('A')))
             base, fg = wet, immerse(fg,row,col)
             for key,tile in [('mount',base),('foreground',fg),('rider_mask',mask)]:
-                sheets[key].alpha_composite(align_waterline(tile,row),(col*FRAME[0],row*FRAME[1]))
+                sheets[key].alpha_composite(anchor_to_player(tile,row,col),(col*FRAME[0],row*FRAME[1]))
     for key,sheet in sheets.items():
         sheet.save(folder/f'{key}.png')
     # Inventory controls fit this tight icon themselves; no oversized padding.
@@ -131,7 +135,7 @@ def build_variant(source, folder):
     icon.crop(icon.getbbox()).save(folder/'icon.png')
     for name in ['source','mount','foreground','rider_mask','icon']:
         write_texture_import(ROOT,(folder/f'{name}.png').relative_to(ROOT))
-    print(f'{folder.name}: aligned water contact, preserved riding pose and opaque rider mask.')
+    print(f'{folder.name}: player-anchored rig, preserved riding pose and opaque rider mask.')
 
 
 def build():
@@ -144,7 +148,7 @@ def build():
     for moving in (False,True):
         for row in range(4):
             for col in range(4):
-                contact.alpha_composite(align_waterline(foam(row,col/4,moving),row),(col*FRAME[0],(row+4*int(moving))*FRAME[1]))
+                contact.alpha_composite(anchor_to_player(foam(row,col/4,moving),row,col),(col*FRAME[0],(row+4*int(moving))*FRAME[1]))
     contact.save(FOLDER/'water_contact.png')
     write_texture_import(ROOT,(FOLDER/'water_contact.png').relative_to(ROOT))
     catalog = json.loads((ROOT/'data/mounts.json').read_text())['mounts']

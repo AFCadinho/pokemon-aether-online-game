@@ -49,7 +49,7 @@ func _run() -> void:
 			label.position = Vector2(20+384*row, 16+432*gender_index)
 			viewport.add_child(label)
 			var actor: Variant = preview_script.new()
-			actor.position = Vector2(192+384*row, 270+432*gender_index)
+			actor.position = Vector2(192+384*row, 200+432*gender_index)
 			var tile := ReferenceRect.new()
 			tile.position = actor.position - Vector2(32, 32)
 			tile.size = Vector2(64, 64)
@@ -73,11 +73,31 @@ func _run() -> void:
 			appearance["gender"] = gender
 			actor.configure(mount_id, appearance, DIRS[row], false)
 			# Store fitting changes scale/origin; captures use exact world geometry.
-			actor.position = Vector2(192+384*row, 270+432*gender_index)
+			actor.position = Vector2(192+384*row, 200+432*gender_index)
 			actor.scale = Vector2(2, 2)
 			actor.base_look_position = Vector2(0, -16)
 			actor.set_process(false)
 			actor.look_node.position = Vector2(0, -16)
+			if "--anchors" in OS.get_cmdline_user_args():
+				var reference: Node2D = load("res://scripts/world/remote_player_avatar.gd").new()
+				viewport.add_child(reference)
+				var reference_position: Vector2 = actor.position - Vector2(128, 0)
+				reference.call("apply_state", {
+					"userId": 100 + row + 4 * gender_index, "gender": gender,
+					"appearance": appearance,
+					"position": {"x": reference_position.x, "y": reference_position.y},
+					"movement": {"isMoving": false, "activityStyle": "walk", "mountId": ""}
+				})
+				reference.set("last_direction", actor.last_direction)
+				reference.call("_update_animation", false)
+				reference.scale = Vector2(2, 2)
+				reference.set_process(false)
+				var baseline := Line2D.new()
+				baseline.points = PackedVector2Array([reference_position, actor.position])
+				baseline.width = 1
+				baseline.default_color = Color("ffcf55")
+				baseline.z_index = 4095
+				viewport.add_child(baseline)
 			actors.append({"actor": actor, "appearance": appearance, "direction": DIRS[row]})
 	print("Configured eight mount previews")
 	for activity: String in ["idle", "ride", "surf-fish"]:
