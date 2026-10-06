@@ -1016,6 +1016,8 @@ var mount_preview_shiny_toggle: Button
 var mount_preview_animation_toggle: Button
 var mount_preview_shiny := false
 var mount_preview_animated := true
+var store_dragging := false
+var store_drag_pointer_offset := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -1046,6 +1048,7 @@ func _ready() -> void:
 
 
 func _fit_store_window() -> void:
+	store_dragging = false
 	# Use logical UI coordinates so the overlay's own scaling is respected.
 	var host := get_parent() as Control
 	var available := host.size if host != null else get_viewport_rect().size
@@ -1055,6 +1058,58 @@ func _fit_store_window() -> void:
 	size = STORE_WINDOW_SIZE
 	scale = Vector2.ONE * fit_scale
 	position = (available - STORE_WINDOW_SIZE * fit_scale) * 0.5
+
+
+func _on_store_header_gui_input(event: InputEvent) -> void:
+	if not event is InputEventMouseButton or event.button_index != MOUSE_BUTTON_LEFT:
+		return
+	store_dragging = event.pressed
+	if store_dragging:
+		store_drag_pointer_offset = _store_pointer_in_parent(event.global_position) - position
+		move_to_front()
+	accept_event()
+
+
+func _input(event: InputEvent) -> void:
+	if not store_dragging:
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		store_dragging = false
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseMotion:
+		if (event.button_mask & MOUSE_BUTTON_MASK_LEFT) == 0:
+			store_dragging = false
+			return
+		position = _store_pointer_in_parent(event.position) - store_drag_pointer_offset
+		_clamp_store_to_parent()
+		get_viewport().set_input_as_handled()
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_WINDOW_FOCUS_OUT or (what == NOTIFICATION_VISIBILITY_CHANGED and not is_visible_in_tree()):
+		store_dragging = false
+
+
+func _store_pointer_in_parent(viewport_position: Vector2) -> Vector2:
+	var host := get_parent_control()
+	return host.get_global_transform_with_canvas().affine_inverse() * viewport_position if host != null else viewport_position
+
+
+func _clamp_store_to_parent() -> void:
+	var host := get_parent_control()
+	var available := host.size if host != null else get_viewport_rect().size
+	var minimum := Vector2.ONE * STORE_SCREEN_MARGIN
+	var maximum := (available - size * scale - minimum).max(minimum)
+	position = Vector2(clampf(position.x, minimum.x, maximum.x), clampf(position.y, minimum.y, maximum.y))
+
+
+func _configure_header_drag_surface(control: Control) -> void:
+	if control is BaseButton:
+		return
+	control.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for child in control.get_children():
+		if child is Control:
+			_configure_header_drag_surface(child)
 
 
 func set_gem_balance(amount: int) -> void:
@@ -1206,6 +1261,7 @@ func open_store() -> void:
 
 
 func close_store() -> void:
+	store_dragging = false
 	if currency_info_dialog != null:
 		currency_info_dialog.hide_dialog()
 	if voucher_confirm_dialog != null:
@@ -1254,6 +1310,9 @@ func _build_interface() -> void:
 
 func _create_header() -> Control:
 	var panel := PanelContainer.new()
+	panel.name = "StoreDragHeader"
+	panel.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	panel.gui_input.connect(_on_store_header_gui_input)
 	panel.custom_minimum_size = Vector2(0, 58)
 	panel.add_theme_stylebox_override("panel", _panel_style(UI_SURFACE_RAISED, UI_BORDER_SOFT, 10, 1))
 
@@ -1336,6 +1395,9 @@ func _create_header() -> Control:
 	add_gems_feedback_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	add_gems_feedback_label.add_theme_font_size_override("font_size", 11)
 	header_content.add_child(add_gems_feedback_label)
+	for child in panel.get_children():
+		if child is Control:
+			_configure_header_drag_surface(child)
 	return panel
 
 
