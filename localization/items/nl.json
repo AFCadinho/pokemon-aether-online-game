@@ -726,5 +726,13 @@
   "aerodactyl-mount-box": {
     "name": "Aerodactyl-mountbox",
     "shortDesc": "Bevat een Aerodactyl-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-toucannon-mount": {
+    "name": "Shiny Toucannon-mount",
+    "shortDesc": "Ontgrendelt Shiny Toucannon als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "toucannon-mount-box": {
+    "name": "Toucannon-mountbox",
+    "shortDesc": "Bevat een Toucannon-mount. Shiny-basiskans: 50%."
   }
 }

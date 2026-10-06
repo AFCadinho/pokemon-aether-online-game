@@ -1,0 +1,26 @@
+{
+  "original": "follower_shiny_original.png",
+  "frameSize": [
+    64,
+    64
+  ],
+  "frameOffsets": [
+    [
+      0,
+      4
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ],
+  "note": "Each row: translate the first two native shiny follower frames down 4 pixels to match the approved normal animation. No pixels scaled, cropped or repainted."
+}

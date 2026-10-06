@@ -624,6 +624,15 @@ const CATALOG: Array[Dictionary] = [
 		"badge": "MOUNT BOX",
 	},
 	{
+		"id": "toucannon-mount-box",
+		"name": "Toucannon Mount Box",
+		"description_key": "ui.shiny_tracker.mounts.store_description_toucannon",
+		"price": 500,
+		"icon": MOUNT_ICON,
+		"categories": ["mounts"],
+		"badge": "MOUNT BOX",
+	},
+	{
 		"id": "rayquaza-mount-box",
 		"name": "Rayquaza Mount Box",
 		"description_key": "ui.shiny_tracker.mounts.store_description",

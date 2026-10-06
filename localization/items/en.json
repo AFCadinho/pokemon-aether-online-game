@@ -726,5 +726,13 @@
   "aerodactyl-mount-box": {
     "name": "Aerodactyl Mount Box",
     "shortDesc": "Contains an Aerodactyl mount. Base shiny chance: 50%."
+  },
+  "shiny-toucannon-mount": {
+    "name": "Shiny Toucannon Mount",
+    "shortDesc": "Unlocks Shiny Toucannon as a land mount. Requires a Mount License for the current region."
+  },
+  "toucannon-mount-box": {
+    "name": "Toucannon Mount Box",
+    "shortDesc": "Contains a Toucannon mount. Base shiny chance: 50%."
   }
 }

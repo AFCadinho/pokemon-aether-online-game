@@ -726,5 +726,13 @@
   "aerodactyl-mount-box": {
     "name": "Caixa de montaria Aerodactyl",
     "shortDesc": "Contém uma montaria Aerodactyl. Chance shiny inicial: 50%."
+  },
+  "shiny-toucannon-mount": {
+    "name": "Montaria Toucannon Brilhante",
+    "shortDesc": "Desbloqueia Toucannon Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "toucannon-mount-box": {
+    "name": "Caixa de montaria Toucannon",
+    "shortDesc": "Contém uma montaria Toucannon. Chance shiny inicial: 50%."
   }
 }

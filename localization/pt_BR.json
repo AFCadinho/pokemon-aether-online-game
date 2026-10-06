@@ -6422,5 +6422,6 @@
   "ui.shiny_tracker.mounts.store_description_palkia": "Contém uma montaria Palkia. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_dialga": "Contém uma montaria Dialga. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_arcanine": "Contém uma montaria Arcanine. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_aerodactyl": "Contém uma montaria Aerodactyl. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_aerodactyl": "Contém uma montaria Aerodactyl. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_toucannon": "Contém uma montaria Toucannon. Chance shiny inicial: 50%."
 }

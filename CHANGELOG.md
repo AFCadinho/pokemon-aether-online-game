@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Toucannon and its Land Gift Store box for 500 Aether Gems, preserving the approved rider alignment and existing shiny chance and pity rules.
+
 - Added matching male and female battle trainer and dialogue portraits for all six adventure outfits, preserving shared wardrobe items across gender changes.
 
 - Download complete 3D model collections with one verified activation, reuse completed files after interruption, and check free space before downloading and unpacking.

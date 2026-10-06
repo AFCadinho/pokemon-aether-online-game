@@ -726,5 +726,13 @@
   "aerodactyl-mount-box": {
     "name": "化石翼龙坐骑箱",
     "shortDesc": "包含一只化石翼龙坐骑。初始异色概率：50%。"
+  },
+  "shiny-toucannon-mount": {
+    "name": "异色铳嘴大鸟坐骑",
+    "shortDesc": "解锁异色铳嘴大鸟陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "toucannon-mount-box": {
+    "name": "铳嘴大鸟坐骑箱",
+    "shortDesc": "包含一只铳嘴大鸟坐骑。初始异色概率：50%。"
   }
 }
