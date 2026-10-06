@@ -26,10 +26,10 @@ func _run() -> void:
 	var item := {"id": "aether-gift-voucher", "useAction": "open_gift_voucher", "quantity": 1}
 	_check(overlay._bag_item_can_use_from_bag(item), "Voucher is usable from Bag")
 	_check(overlay._bag_item_can_assign_to_hotbar(item), "Voucher can be assigned to hotbar")
-	_check(overlay._bag_item_use_action_label(item) == "View balance", "Bag action names the balance dialog")
+	_check(overlay._bag_item_use_action_label(item) == "Use", "Voucher uses the shared Bag action label")
 	var topup := {"id": "aether-credit-voucher-100", "useAction": "redeem_credit_voucher", "quantity": 1}
 	_check(overlay._bag_item_can_use_from_bag(topup), "Credit Voucher can be claimed from Bag")
-	_check(overlay._bag_item_use_action_label(topup) == localization.text("ui.bag.action.redeem_voucher"), "Credit Voucher action describes redemption")
+	_check(overlay._bag_item_use_action_label(topup) == localization.text("ui.bag.action.use"), "Credit Voucher uses the shared Bag action label")
 	var dialog := DIALOG_SCENE.instantiate()
 	dialog.set_script(FakeDialog)
 	var host := Control.new()
