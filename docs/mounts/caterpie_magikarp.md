@@ -9,7 +9,10 @@ layers. Cropped icons avoid shrinking the full padded atlas into inventory.
 requires the current region's Mount License. `magikarp-mount` unlocks `magikarp`
 in the Surf selector; normal Surf access remains required. Unowned saved Surf
 selections fall back to Lapras. Both inventory items are permanent,
-non-consumable and nontradeable. These normal variants have no Store listings.
+non-consumable and nontradeable. Normal and shiny variants share the approved geometry. Caterpie Mount Box
+(Land) and Magikarp Surf Mount Box (Surf) each cost 250 Aether Gems or eligible
+voucher credits. Each grants one normal or shiny variant under the shared
+50/60/70/80% mount-box rules.
 
 ## Approved pose and world alignment
 
@@ -32,9 +35,11 @@ matching local/remote rider rendering. The nearby fin/head can overlap legs;
 the entire fish is not forced in front of the rider.
 
 Rebuild or verify: `python3 tools/build_caterpie_magikarp_mounts.py [--check]`.
+Both shiny variants use native shiny follower artwork with the same build
+configuration and rear adjustment. Alpha geometry must match normal artwork.
 This checks the reviewed catalog offsets instead of silently changing them.
 Render actual runtime layers using `tools/preview_meme_mounts.gd` with
-`-- --output=/absolute/path` (optionally `--adinho`). The preview restores a
+`-- --output=/absolute/path` (optionally `--adinho` and `--shiny`). The preview restores a
 fixed 3× display zoom after Store auto-fit and shows the normal world tile.
 
 Focused checks cover asset/mask parity, grounded/waterline placement, item

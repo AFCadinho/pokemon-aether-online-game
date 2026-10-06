@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Shiny Caterpie and Shiny Magikarp mounts and their 250 Aether Gem boxes in the Land and Surf Gift Store tabs, with shared mount-box rewards and voucher support.
+
 - Add the approved Caterpie V2 land mount and Magikarp V2 Surf mount as permanent administration grants, with aligned ground/water positions and existing access requirements.
 
 ### Adventure and exploration

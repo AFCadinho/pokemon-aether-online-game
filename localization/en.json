@@ -6428,5 +6428,7 @@
   "ui.shiny_tracker.mounts.store_description_aerodactyl": "Contains an Aerodactyl mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_toucannon": "Contains a Toucannon mount. Base shiny chance: 50%.",
   "ui.shiny_tracker.mounts.store_description_latios": "Contains a Latios mount. Base shiny chance: 50%.",
-  "ui.shiny_tracker.mounts.store_description_latias": "Contains a Latias mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_latias": "Contains a Latias mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_caterpie": "Contains a Caterpie mount. Base shiny chance: 50%.",
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Contains a Magikarp Surf mount. Base shiny chance: 50%."
 }

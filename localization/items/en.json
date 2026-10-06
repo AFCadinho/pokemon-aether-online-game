@@ -766,5 +766,21 @@
   "magikarp-mount": {
     "name": "Magikarp Mount",
     "shortDesc": "Unlocks Magikarp as a Surf mount. Requires access to Surf."
+  },
+  "shiny-caterpie-mount": {
+    "name": "Shiny Caterpie Mount",
+    "shortDesc": "Unlocks Shiny Caterpie as a land mount. Requires a Mount License for the current region."
+  },
+  "caterpie-mount-box": {
+    "name": "Caterpie Mount Box",
+    "shortDesc": "Contains a Caterpie mount. Base shiny chance: 50%."
+  },
+  "shiny-magikarp-mount": {
+    "name": "Shiny Magikarp Mount",
+    "shortDesc": "Unlocks Shiny Magikarp as a Surf mount. Requires access to Surf."
+  },
+  "magikarp-mount-box": {
+    "name": "Magikarp Mount Box",
+    "shortDesc": "Contains a Magikarp Surf mount. Base shiny chance: 50%."
   }
 }

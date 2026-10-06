@@ -6427,5 +6427,7 @@
   "ui.shiny_tracker.mounts.store_description_aerodactyl": "Contém uma montaria Aerodactyl. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_toucannon": "Contém uma montaria Toucannon. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_latios": "Contém uma montaria Latios. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_latias": "Contém uma montaria Latias. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_latias": "Contém uma montaria Latias. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_caterpie": "Contém uma montaria Caterpie. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Contém uma montaria de Surf Magikarp. Chance shiny inicial: 50%."
 }

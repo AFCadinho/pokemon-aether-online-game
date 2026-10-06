@@ -6428,5 +6428,7 @@
   "ui.shiny_tracker.mounts.store_description_aerodactyl": "Bevat een Aerodactyl-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_toucannon": "Bevat een Toucannon-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_latios": "Bevat een Latios-mount. Shiny-basiskans: 50%.",
-  "ui.shiny_tracker.mounts.store_description_latias": "Bevat een Latias-mount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_latias": "Bevat een Latias-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_caterpie": "Bevat een Caterpie-mount. Shiny-basiskans: 50%.",
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Bevat een Magikarp-surfmount. Shiny-basiskans: 50%."
 }

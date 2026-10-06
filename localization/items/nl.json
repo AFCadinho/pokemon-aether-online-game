@@ -766,5 +766,21 @@
   "magikarp-mount": {
     "name": "Magikarp-mount",
     "shortDesc": "Ontgrendelt Magikarp als surfmount. Vereist toegang tot Surf."
+  },
+  "shiny-caterpie-mount": {
+    "name": "Shiny Caterpie-mount",
+    "shortDesc": "Ontgrendelt Shiny Caterpie als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "caterpie-mount-box": {
+    "name": "Caterpie-mountbox",
+    "shortDesc": "Bevat een Caterpie-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-magikarp-mount": {
+    "name": "Shiny Magikarp-mount",
+    "shortDesc": "Ontgrendelt Shiny Magikarp als surfmount. Vereist toegang tot Surf."
+  },
+  "magikarp-mount-box": {
+    "name": "Magikarp Mount Box",
+    "shortDesc": "Bevat een Magikarp-surfmount. Shiny-basiskans: 50%."
   }
 }

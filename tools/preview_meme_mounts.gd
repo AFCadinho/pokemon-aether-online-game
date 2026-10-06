@@ -51,8 +51,9 @@ func _run() -> void:
 			if adinho_outfit and gender == "male":
 				appearance.merge({"headgear": "", "hair": "Adinho_Hair", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}, true)
 			previews.append({"actor": actor, "label": label, "appearance": appearance, "gender": gender, "direction": DIRS[row], "position": position})
-	for id: String in ["caterpie", "magikarp"]:
-		for activity: String in (["ride", "surf-fish"] if id == "magikarp" else ["ride"]):
+	for base_id: String in ["caterpie", "magikarp"]:
+		var id := base_id + ("_shiny" if "--shiny" in OS.get_cmdline_user_args() else "")
+		for activity: String in (["ride", "surf-fish"] if base_id == "magikarp" else ["ride"]):
 			for item: Dictionary in previews:
 				var actor: Variant = item.actor
 				actor.configure(id, item.appearance, item.direction, false)

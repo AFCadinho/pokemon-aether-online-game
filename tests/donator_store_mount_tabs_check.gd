@@ -29,8 +29,8 @@ func _run() -> void:
 	store.apply_store_state({"gems": 1000, "gift_voucher_balance": 1000}, {"items": items})
 	store.call("_select_category", "mounts")
 	_check(store.mount_mode_bar.visible and store.active_mount_mode == "land", "Mounts opens with Land selected")
-	_check(store.product_buttons.size() == 20 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twenty land boxes only")
-	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 750, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750}
+	_check(store.product_buttons.size() == 21 and not store.product_buttons.has("primal-kyogre-mount-box"), "Land lists the twenty-one land boxes only")
+	var new_prices := {"giratina_origin": 1000, "ho_oh": 750, "yveltal": 1000, "miraidon": 750, "reshiram": 750, "metagross": 750, "salamence": 750, "zekrom": 750, "palkia": 750, "dialga": 750, "arcanine": 500, "aerodactyl": 500, "toucannon": 500, "latios": 750, "latias": 750, "caterpie": 250}
 	for id: String in new_prices:
 		var box_id := id.replace("_", "-") + "-mount-box"
 		_check(store.product_buttons.has(box_id), id + " box is listed in Land")
@@ -53,7 +53,7 @@ func _run() -> void:
 					_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
 			store.mount_preview_animation_toggle.button_pressed = false
 	store.mount_mode_buttons.surf.pressed.emit()
-	_check(store.product_buttons.keys() == ["primal-kyogre-mount-box"], "Surf lists only the Kyogre box")
+	_check(store.product_buttons.size() == 2 and store.product_buttons.has("primal-kyogre-mount-box") and store.product_buttons.has("magikarp-mount-box"), "Surf lists Kyogre and Magikarp boxes")
 	store.call("_select_product", "primal-kyogre-mount-box")
 	_check(not store.purchase_button.disabled, "1,000 Gems can buy the Surf box")
 	_check(not store.selection_price_label.text.contains("€") and store.selection_price_label.text == store.call("_mount_box_price_text", 1000), "Price is currency only")
@@ -73,12 +73,31 @@ func _run() -> void:
 				_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
 		store.mount_preview_animation_toggle.button_pressed = false
 		_check(not preview.get("animation_enabled"), "Animation can be stopped")
+	store.call("_select_product", "magikarp-mount-box")
+	_check(not store.purchase_button.disabled, "250 Gems can buy the Surf box")
+	_check(not store.selection_price_label.text.contains("€") and store.selection_price_label.text == store.call("_mount_box_price_text", 250), "Price is currency only")
+	_check(store.selection_description_label.text.contains("50%"), "Short description displays the base chance")
+	for shiny in [false, true]:
+		store.mount_preview_shiny_toggle.button_pressed = shiny
+		var preview: Node2D = store.character_preview_viewport.get_node("MountRiderPreview")
+		_check(preview.get("current_mount_id") == ("magikarp_shiny" if shiny else "magikarp"), "Shiny toggle selects the matching mount")
+		for direction: String in ["down", "left", "right", "up"]:
+			store.call("_select_character_preview_direction", direction)
+			store.mount_preview_animation_toggle.button_pressed = true
+			var mount: AnimatedSprite2D = preview.get("mount_sprite")
+			mount.pause()
+			for frame in range(4):
+				mount.frame = frame
+				preview.call("_on_mount_frame_changed")
+				_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
+		store.mount_preview_animation_toggle.button_pressed = false
+		_check(not preview.get("animation_enabled"), "Animation can be stopped")
 	store.call("_on_catalog_search_changed", "rayquaza")
 	_check(store.product_buttons.is_empty(), "Search stays within the Surf tab")
 	store.mount_mode_buttons.land.pressed.emit()
 	_check(store.selected_item_id.is_empty() and store.catalog_search_text.is_empty(), "Switching modes clears stale selection and search")
 	_check(not store.mount_preview_controls.visible, "Switching modes clears the previous mount preview")
-	_check(store.product_buttons.size() == 20, "Returning to Land restores its products")
+	_check(store.product_buttons.size() == 21, "Returning to Land restores its products")
 	for locale: String in ["nl", "pt_BR", "zh_CN", "en"]:
 		root.get_node("LocalizationManager").set_locale(locale)
 		_check(not store.mount_mode_buttons.land.text.begins_with("ui."), "Tab labels are translated")

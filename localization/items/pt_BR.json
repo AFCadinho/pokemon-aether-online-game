@@ -766,5 +766,21 @@
   "magikarp-mount": {
     "name": "Montaria Magikarp",
     "shortDesc": "Desbloqueia Magikarp como montaria de Surf. Requer acesso ao Surf."
+  },
+  "shiny-caterpie-mount": {
+    "name": "Montaria Caterpie Brilhante",
+    "shortDesc": "Desbloqueia Caterpie Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "caterpie-mount-box": {
+    "name": "Caixa de montaria Caterpie",
+    "shortDesc": "Contém uma montaria Caterpie. Chance shiny inicial: 50%."
+  },
+  "shiny-magikarp-mount": {
+    "name": "Montaria Shiny Magikarp",
+    "shortDesc": "Desbloqueia Shiny Magikarp como montaria de Surf. Requer acesso ao Surf."
+  },
+  "magikarp-mount-box": {
+    "name": "Caixa de Montaria Magikarp",
+    "shortDesc": "Contém uma montaria de Surf Magikarp. Chance shiny inicial: 50%."
   }
 }
