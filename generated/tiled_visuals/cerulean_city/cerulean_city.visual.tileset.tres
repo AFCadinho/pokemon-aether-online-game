@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://yl5dvf7op6d6"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_city/assets/cerulean_city.visual.tileset.compact_source_0_0.texture.res" id="1_buc1t"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/cerulean_city/assets/cerulean_city.visual.tileset.compact_source_1_0.texture.res" id="1_c8cgg"]

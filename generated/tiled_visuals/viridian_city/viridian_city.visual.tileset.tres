@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" format=3]
+[gd_resource type="TileSet" format=3 uid="uid://tko2ptv6ig6n"]
 
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/viridian_city/assets/viridian_city.visual.tileset.compact_source_0_0.texture.res" id="1_buhhl"]
 [ext_resource type="Texture2D" path="res://generated/tiled_visuals/viridian_city/assets/viridian_city.visual.tileset.compact_source_1_0.texture.res" id="1_coc7y"]

@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Appearance := preload("res://scripts/services/character_appearance_service.gd")
+const Followers := preload("res://scripts/services/follower_sprite_service.gd")
 const DIRS := ["down", "left", "right", "up"]
 
 
@@ -63,6 +64,15 @@ func _run() -> void:
 				viewport.add_child(line)
 			else:
 				tile.free()
+			if "--poliwag" in OS.get_cmdline_user_args():
+				# Same physical tile row and 32 world pixels away, as in the map.
+				var neighbour := AnimatedSprite2D.new()
+				neighbour.sprite_frames = Followers.get_sprite_frames("poliwag", false)
+				neighbour.animation = &"idle_right" if DIRS[row] != "right" else &"idle_left"
+				var side := 1 if DIRS[row] == "right" else -1
+				neighbour.position = position + Vector2(side * 64, -32)
+				neighbour.scale = Vector2(2, 2)
+				viewport.add_child(neighbour)
 			var actor: Variant = script.new()
 			viewport.add_child(actor)
 			actor.base_look_position = Vector2(0, -16)

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Lower the complete Wailmer, Drednaw, Mantine, Basculegion and Wailord Surf rigs by 12 pixels to match Lapras and nearby water Pokémon, preserving rider poses and interaction tiles.
+
 - Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.
 
 - Make the Aether Clash fountains pour from the statues' mouth outlets, with a broad waterfall, two continuous arcing jets and fuller impact foam and spray.

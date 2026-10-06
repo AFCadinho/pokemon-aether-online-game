@@ -96,7 +96,10 @@ func _run() -> void:
 func _check_water_pixels(id: String) -> void:
 	var back := Mounts.get_mount_frames(id)
 	var front := Mounts.get_mount_foreground_frames(id)
+	var lapras := Mounts.get_mount_frames("lapras")
 	for direction: String in ["down", "left", "right", "up"]:
+		var reference := Mounts._get_texture_image(lapras.get_frame_texture("idle_" + direction, 0))
+		var reference_bottom := reference.get_used_rect().end.y - 1 - reference.get_height() / 2
 		for phase in range(4):
 			var a := Mounts._get_texture_image(back.get_frame_texture("walk_" + direction, phase))
 			var b := Mounts._get_texture_image(front.get_frame_texture("walk_" + direction, phase))
@@ -116,4 +119,4 @@ func _check_water_pixels(id: String) -> void:
 			_check(translucent > 0 and not overlap, id + " has submerged pixels without doubled translucent foreground")
 			# The native swimming cycle moves fins/tails; check the resting silhouette.
 			if phase == 0:
-				_check(absi(bottom - 112) <= 3, id + " rests at the occupied tile instead of floating above it")
+				_check(bottom - a.get_height() / 2 == reference_bottom, id + " shares Lapras's resting waterline instead of sitting above nearby NPCs")
