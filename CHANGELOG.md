@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.
+
 - Keep Gift Store payment options compact with consistently sized currency icons, aligned text and clear spacing.
 
 - Introduce the Aether Credit Card and tradeable Gem-only top-up vouchers for 100, 250, 500 and 1,000 credit. Personal Store items, including Blessing vouchers, charms and trainer services, accept card credit and remain account-bound; guild products and credit vouchers require Gems. Blessing activates only when its voucher is used.
