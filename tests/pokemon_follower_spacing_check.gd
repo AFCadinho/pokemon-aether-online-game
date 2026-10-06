@@ -35,6 +35,7 @@ func _init() -> void:
 
 
 func _run() -> void:
+	_check_surf_hides_local_follower()
 	_check_pokemon_assignment_before_ready()
 	_check_remote_player_accepts_follower_before_ready()
 	_check_reset_spacing_in_every_direction()
@@ -43,6 +44,44 @@ func _run() -> void:
 	_check_trail_keeps_one_open_tile()
 	_check_remote_player_exposes_active_step_target()
 	quit(1 if failed else 0)
+
+
+func _check_surf_hides_local_follower() -> void:
+	var player_save: Node = get_root().get_node("PlayerSave")
+	var game_state: Node = get_root().get_node("GameState")
+	var previous_party: Array[Pokemon] = player_save.party.duplicate()
+	var previous_show_follower: bool = game_state.show_follower
+	var test_party: Array[Pokemon] = [Pokemon.new("Pikachu", 5)]
+	player_save.party = test_party
+	game_state.show_follower = true
+	var player: Variant = load("res://scripts/world/player.gd").new()
+	var feet_marker := Marker2D.new()
+	player.add_child(feet_marker)
+	player.feet_marker = feet_marker
+	var follower: Variant = load(FOLLOWER_SCRIPT_PATH).new()
+	player.add_child(follower)
+	player.pokemon_follower = follower
+	follower.setup(player)
+	player.refresh_pokemon_follower()
+	_check(follower.visible, "local follower is visible on foot")
+	player.surf_activity_active = true
+	player.refresh_pokemon_follower()
+	_check(not follower.visible, "Surf hides the local follower")
+	player.set_show_follower(true)
+	_check(not follower.visible, "enabling followers while surfing keeps them hidden")
+	player.surf_activity_active = false
+	player.refresh_pokemon_follower()
+	player.reset_pokemon_follower_position()
+	_check(follower.visible, "leaving Surf restores the local follower")
+	player.set_show_follower(false)
+	player.surf_activity_active = true
+	player.refresh_pokemon_follower()
+	player.surf_activity_active = false
+	player.refresh_pokemon_follower()
+	_check(not follower.visible, "leaving Surf respects the disabled follower preference")
+	player.free()
+	player_save.party = previous_party
+	game_state.show_follower = previous_show_follower
 
 
 func _check_pokemon_assignment_before_ready() -> void:
