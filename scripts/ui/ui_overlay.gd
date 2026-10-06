@@ -19176,6 +19176,46 @@ func _format_appearance_option_name(category_id: String, part_id: String) -> Str
 				return LocalizationManager.text("ui.appearance.option.wayfarer_trousers")
 			"AetherWayfarer_Female_Shoes":
 				return LocalizationManager.text("ui.appearance.option.wayfarer_shoes")
+			"AetherVoyager_Shirt":
+				return ItemLocalization.display_name("aether-voyager-shirt", "Aether Voyager Top")
+			"AetherVoyager_Trousers":
+				return ItemLocalization.display_name("aether-voyager-trousers", "Aether Voyager Trousers")
+			"AetherVoyager_Shoes":
+				return ItemLocalization.display_name("aether-voyager-shoes", "Aether Voyager Shoes")
+			"RotomEngineer_Shirt":
+				return ItemLocalization.display_name("rotom-engineer-shirt", "Rotom Engineer Top")
+			"RotomEngineer_Trousers":
+				return ItemLocalization.display_name("rotom-engineer-trousers", "Rotom Engineer Trousers")
+			"RotomEngineer_Shoes":
+				return ItemLocalization.display_name("rotom-engineer-shoes", "Rotom Engineer Shoes")
+			"RotomEngineer_Goggles":
+				return ItemLocalization.display_name("rotom-engineer-goggles", "Rotom Engineer Goggles")
+			"CelebiForestRanger_Shirt":
+				return ItemLocalization.display_name("celebi-forest-ranger-shirt", "Celebi Forest Ranger Top")
+			"CelebiForestRanger_Trousers":
+				return ItemLocalization.display_name("celebi-forest-ranger-trousers", "Celebi Forest Ranger Trousers")
+			"CelebiForestRanger_Shoes":
+				return ItemLocalization.display_name("celebi-forest-ranger-shoes", "Celebi Forest Ranger Shoes")
+			"LucarioAuraFighter_Shirt":
+				return ItemLocalization.display_name("lucario-aura-fighter-shirt", "Lucario Aura Fighter Top")
+			"LucarioAuraFighter_Trousers":
+				return ItemLocalization.display_name("lucario-aura-fighter-trousers", "Lucario Aura Fighter Trousers")
+			"LucarioAuraFighter_Shoes":
+				return ItemLocalization.display_name("lucario-aura-fighter-shoes", "Lucario Aura Fighter Shoes")
+			"RelicExplorer_Shirt":
+				return ItemLocalization.display_name("relic-explorer-shirt", "Relic Explorer Top")
+			"RelicExplorer_Trousers":
+				return ItemLocalization.display_name("relic-explorer-trousers", "Relic Explorer Trousers")
+			"RelicExplorer_Shoes":
+				return ItemLocalization.display_name("relic-explorer-shoes", "Relic Explorer Shoes")
+			"LugiaSkyCaptain_Shirt":
+				return ItemLocalization.display_name("lugia-sky-captain-shirt", "Lugia Sky Captain Top")
+			"LugiaSkyCaptain_Trousers":
+				return ItemLocalization.display_name("lugia-sky-captain-trousers", "Lugia Sky Captain Trousers")
+			"LugiaSkyCaptain_Shoes":
+				return ItemLocalization.display_name("lugia-sky-captain-shoes", "Lugia Sky Captain Shoes")
+			"LugiaSkyCaptain_Goggles":
+				return ItemLocalization.display_name("lugia-sky-captain-goggles", "Lugia Sky Captain Goggles")
 			"Smoking_Shirt":
 				return LocalizationManager.text("ui.appearance.option.smoking_shirt")
 			"Smoking_Trousers":

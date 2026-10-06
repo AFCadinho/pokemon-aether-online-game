@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added six male-only adventure outfit boxes and separate wardrobe items: Aether Voyager, Rotom Engineer, Celebi Forest Ranger, Lucario Aura Fighter, Relic Explorer and Lugia Sky Captain, with authored overworld walking, fishing and riding outfits.
+
 - Add Shiny Dialga and its Land Gift Store box for 750 Aether Gems, preserving the approved rider pose and existing shiny chance and pity rules.
 
 - Add Shiny Palkia and its Land Gift Store box for 750 Aether Gems with the existing shiny chance and pity rules.
