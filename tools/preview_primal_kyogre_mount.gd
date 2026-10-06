@@ -18,26 +18,36 @@ func _run() -> void:
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
 	DirAccess.make_dir_recursive_absolute(output)
-	root.size = Vector2i(1280, 720)
+	root.size = Vector2i(1536, 800)
 	root.content_scale_size = root.size
 	viewport = SubViewport.new()
-	viewport.size = Vector2i(1280, 720)
+	viewport.size = Vector2i(1536, 800)
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	root.add_child(viewport)
 	var background := ColorRect.new()
 	background.color = Color("193346")
-	background.size = Vector2(1280, 720)
+	background.size = Vector2(1536, 800)
 	viewport.add_child(background)
+	if "--water" in OS.get_cmdline_user_args():
+		var water := TextureRect.new()
+		var texture := AtlasTexture.new()
+		texture.atlas = load("res://assets/tilesets/fiver/tiles_env2_water32.png")
+		texture.region = Rect2(32, 32, 32, 32)
+		water.texture = texture
+		water.stretch_mode = TextureRect.STRETCH_TILE
+		water.size = Vector2(768, 400)
+		water.scale = Vector2(2, 2)
+		viewport.add_child(water)
 	for gender_index in range(2):
 		var gender: String = ["male", "female"][gender_index]
 		for row in range(4):
 			var label := Label.new()
 			label.text = gender + " / " + DIRS[row]
-			label.position = Vector2(20+320*row, 16+360*gender_index)
+			label.position = Vector2(20+384*row, 16+400*gender_index)
 			viewport.add_child(label)
 			var actor: Variant = preview_script.new()
-			actor.position = Vector2(160+320*row, 220+360*gender_index)
+			actor.position = Vector2(192+384*row, 270+400*gender_index)
 			var tile := ReferenceRect.new()
 			tile.position = actor.position - Vector2(32, 32)
 			tile.size = Vector2(64, 64)
@@ -49,13 +59,18 @@ func _run() -> void:
 			var appearance := Appearance.get_default_appearance(gender)
 			appearance["gender"] = gender
 			actor.configure(mount_id, appearance, DIRS[row], false)
+			# Store fitting changes scale/origin; captures use exact world geometry.
+			actor.position = Vector2(192+384*row, 270+400*gender_index)
+			actor.scale = Vector2(2, 2)
+			actor.base_look_position = Vector2(0, -16)
+			actor.set_process(false)
 			actor.look_node.position = Vector2(0, -16)
 			actors.append({"actor": actor, "appearance": appearance, "direction": DIRS[row]})
 	print("Configured eight mount previews")
-	for activity: String in ["ride", "surf-fish"]:
+	for activity: String in ["idle", "ride", "surf-fish"]:
 		for item: Dictionary in actors:
 			var actor: Variant = item.actor
-			actor.current_activity_style = activity
+			actor.current_activity_style = "ride" if activity == "idle" else activity
 			actor.current_body_movement_style = ""
 			actor.current_appearance_signature = ""
 			actor._apply_appearance_state(item.appearance)

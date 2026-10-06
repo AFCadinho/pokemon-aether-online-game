@@ -57,7 +57,7 @@ func _run() -> void:
 							var b := Mounts._get_texture_image(expected.sprite_frames.get_frame_texture(expected.animation, expected.frame))
 							_check(a.get_data() == b.get_data(), "mount switch matches freshly composed rider pixels")
 			fresh.free()
-	for id: String in ["primal_kyogre", "magikarp", "magikarp_shiny"]:
+	for id: String in ["primal_kyogre", "primal_kyogre_shiny", "magikarp", "magikarp_shiny"]:
 		_check_fishing(actor, remote, id)
 	actor.free()
 	remote.free()

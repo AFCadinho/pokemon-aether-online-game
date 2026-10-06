@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give normal and shiny Primal Kyogre submerged fins/tail, hull foam and a swimming wake while preserving rider poses, fishing and map depth.
+
 - Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
 
 - Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.

@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
+const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
 
 const ArenaCameraPolicy := preload("res://scripts/services/aether_clash_camera_policy.gd")
 
@@ -230,6 +231,7 @@ const FISHING_RIPPLE_DISTANCE := TILE_SIZE * 1.45
 @onready var look_node: Node2D = $Look
 @onready var mount_sprite: AnimatedSprite2D = $Look/MountSprite
 @onready var mount_foreground_sprite: AnimatedSprite2D = $Look/MountForegroundSprite
+var mount_water_contact: MountWaterContact
 @onready var rider_node: Node2D = $Look/Rider
 @onready var world_camera: Camera2D = $Camera2D
 @onready var feet_marker: Marker2D = $FeetMarker
@@ -366,6 +368,7 @@ func get_active_land_mount_id() -> String:
 	return active_mount_id if land_mount_activity_active else ""
 
 func _sync_mount_visual() -> void:
+	_sync_mount_water_contact()
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
@@ -475,6 +478,18 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 	_sync_mount_rider_delta()
 	_sync_mount_foreground_frame()
 
+func _sync_mount_water_contact() -> void:
+	if mount_foreground_sprite == null:
+		return
+	var definition := MountService.get_mount_definition(active_mount_id)
+	if mount_water_contact == null and not str(definition.get("waterContactSheet", "")).is_empty():
+		mount_water_contact = MountWaterContact.new()
+		mount_water_contact.name = "MountWaterContact"
+		mount_foreground_sprite.add_child(mount_water_contact)
+	if mount_water_contact != null:
+		mount_water_contact.configure(definition)
+
+
 func _sync_mount_foreground_frame() -> void:
 	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
 		return
@@ -483,6 +498,8 @@ func _sync_mount_foreground_frame() -> void:
 	mount_foreground_sprite.animation = mount_sprite.animation
 	mount_foreground_sprite.frame = mount_sprite.frame
 	mount_foreground_sprite.pause()
+	if mount_water_contact != null:
+		mount_water_contact.sync_frame(mount_sprite)
 
 func _sync_mount_rider_delta() -> void:
 	if rider_node == null:
@@ -2749,6 +2766,9 @@ func _spawn_tall_grass_rustle_effect() -> void:
 	effect.play(effect_tilemap, tile_position)
 
 func _spawn_water_ripple_effect(world_position: Vector2, kind: String, require_water_tile := true) -> void:
+	# A mount-specific hull contact/wake replaces the detached step rings.
+	if kind.begins_with("surf_") and not str(MountService.get_mount_definition(active_mount_id).get("waterContactSheet", "")).is_empty():
+		return
 	if require_water_tile and not _is_water_tile_at(world_position):
 		return
 
@@ -3006,7 +3026,8 @@ func _collect_appearance_sprites(parent: Node) -> void:
 		var sprite: AnimatedSprite2D = child as AnimatedSprite2D
 		if sprite != null \
 			and sprite.name != MOUNT_SPRITE_NAME \
-			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME \
+			and not (sprite is MountWaterContact):
 			sprite.texture_filter = PLAYER_SPRITE_TEXTURE_FILTER
 			appearance_sprites.append(sprite)
 

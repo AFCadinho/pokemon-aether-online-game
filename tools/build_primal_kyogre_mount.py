@@ -1,7 +1,8 @@
 """Pack the approved v3 Primal Kyogre surf art without resampling its pixels."""
 from pathlib import Path
 import json
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageChops
+from primal_kyogre_water_contact import immerse, foam
 from import_player_layered_sprites import write_texture_import
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,7 @@ def definition(shiny=False):
             'spriteSheet':f'res://assets/mounts/{folder}/mount.png',
             'riderMaskSheet':f'res://assets/mounts/{folder}/rider_mask.png',
             'foregroundSheet':f'res://assets/mounts/{folder}/foreground.png',
+            'waterContactSheet':'res://assets/mounts/primal_kyogre/water_contact.png',
             'frameSize':list(FRAME), 'movementAnimationSpeed':7.5,
             'storePreviewScale':1.0, 'storePreviewOffset':[0,-16],
             'surfFishingFullForeground':False,
@@ -105,6 +107,11 @@ def build_variant(source, folder):
             fg.alpha_composite(foreground(art,row,col),SHIFTS[row][col])
             mask = Image.new('RGBA',FRAME)
             mask.putalpha(fg.getchannel('A'))
+            # Keep the opaque anatomical mask: submerged fins must not reveal
+            # previously hidden player pixels. Draw translucent foreground once.
+            wet = immerse(base,row,col)
+            wet.putalpha(ImageChops.subtract(wet.getchannel('A'),fg.getchannel('A')))
+            base, fg = wet, immerse(fg,row,col)
             for key,tile in [('mount',base),('foreground',fg),('rider_mask',mask)]:
                 sheets[key].alpha_composite(tile,(col*FRAME[0],row*FRAME[1]))
     for key,sheet in sheets.items():
@@ -114,7 +121,7 @@ def build_variant(source, folder):
     icon.crop(icon.getbbox()).save(folder/'icon.png')
     for name in ['source','mount','foreground','rider_mask','icon']:
         write_texture_import(ROOT,(folder/f'{name}.png').relative_to(ROOT))
-    print(f'{folder.name}: preserved source art, approved seats, aligned waterline.')
+    print(f'{folder.name}: water contact, unchanged seats and opaque rider mask.')
 
 
 def build():
@@ -123,6 +130,13 @@ def build():
     shiny_folder = FOLDER.with_name('primal_kyogre_shiny')
     shiny_folder.mkdir(parents=True, exist_ok=True)
     shiny.save(shiny_folder/'source.png')
+    contact = Image.new('RGBA',(FRAME[0]*4,FRAME[1]*8))
+    for moving in (False,True):
+        for row in range(4):
+            for col in range(4):
+                contact.alpha_composite(foam(row,col/4,moving),(col*FRAME[0],(row+4*int(moving))*FRAME[1]))
+    contact.save(FOLDER/'water_contact.png')
+    write_texture_import(ROOT,(FOLDER/'water_contact.png').relative_to(ROOT))
     catalog = json.loads((ROOT/'data/mounts.json').read_text())['mounts']
     for is_shiny, art, folder in [(False,source,FOLDER),(True,shiny,shiny_folder)]:
         build_variant(art,folder)
