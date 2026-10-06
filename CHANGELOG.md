@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram land mounts with animated artwork, synchronized rider masks and compact Bag icons.
+
 - Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.
 
 - Stage 3D Earthquake, Blizzard and Bloom Doom across the battle circle, with travelling ground fractures, sweeping snow and a flowering field that gathers into the final impact.

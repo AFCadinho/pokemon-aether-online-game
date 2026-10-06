@@ -470,5 +470,25 @@
   "primal-kyogre-mount-box": {
     "name": "Caixa de Montaria Primal Kyogre",
     "shortDesc": "Contém uma montaria de Surf Primal Kyogre. Chance shiny inicial: 50%."
+  },
+  "giratina-origin-mount": {
+    "name": "Montaria Giratina Origin",
+    "shortDesc": "Desbloqueia Giratina Origin como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "ho-oh-mount": {
+    "name": "Montaria Ho-Oh",
+    "shortDesc": "Desbloqueia Ho-Oh como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "yveltal-mount": {
+    "name": "Montaria Yveltal",
+    "shortDesc": "Desbloqueia Yveltal como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "miraidon-mount": {
+    "name": "Montaria Miraidon",
+    "shortDesc": "Desbloqueia Miraidon como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "reshiram-mount": {
+    "name": "Montaria Reshiram",
+    "shortDesc": "Desbloqueia Reshiram como montaria terrestre. Requer uma Licença de Montaria para a região atual."
   }
 }

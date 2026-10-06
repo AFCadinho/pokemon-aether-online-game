@@ -288,6 +288,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/mount_unimported_assets_check.gd",
 	"res://tests/mount_world_depth_check.gd",
 	"res://tests/mount_switch_rider_check.gd",
+	"res://tests/land_mount_collection_check.gd",
 	"res://tests/skills_ui_check.gd",
 	"res://tests/ev_training_check.gd",
 	"res://tests/fishing_inventory_check.gd",

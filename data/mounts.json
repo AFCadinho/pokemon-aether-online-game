@@ -485,6 +485,121 @@
         "right": [[-14, -10], [-14, -8], [-14, -10], [-14, -8]],
         "up": [[0, -4], [0, -4], [0, -4], [0, -4]]
       }
+    },
+    "giratina_origin": {
+      "displayName": "Giratina Origin",
+      "movementMode": "land",
+      "frameSize": [192, 192],
+      "spriteSheet": "res://assets/mounts/giratina_origin/mount.png",
+      "foregroundSheet": "res://assets/mounts/giratina_origin/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/giratina_origin/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 10,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [[0, -54], [0, -52], [0, -54], [0, -52]],
+        "left": [[14, -34], [14, -32], [14, -34], [14, -32]],
+        "right": [[-14, -34], [-14, -32], [-14, -34], [-14, -32]],
+        "up": [[0, -34], [0, -32], [0, -34], [0, -32]]
+      },
+      "unlockItemId": "giratina-origin-mount",
+      "iconTexture": "res://assets/mounts/giratina_origin/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/giratina_origin/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/giratina_origin/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/giratina_origin/idle_rider_mask.png"
+    },
+    "ho_oh": {
+      "displayName": "Ho-Oh",
+      "movementMode": "land",
+      "frameSize": [192, 192],
+      "spriteSheet": "res://assets/mounts/ho_oh/mount.png",
+      "foregroundSheet": "res://assets/mounts/ho_oh/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/ho_oh/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 10,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [[0, -64], [0, -62], [0, -66], [0, -64]],
+        "left": [[8, -38], [8, -36], [8, -42], [8, -40]],
+        "right": [[-8, -38], [-8, -36], [-8, -42], [-8, -40]],
+        "up": [[0, -24], [0, -22], [0, -26], [0, -24]]
+      },
+      "unlockItemId": "ho-oh-mount",
+      "iconTexture": "res://assets/mounts/ho_oh/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/ho_oh/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/ho_oh/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/ho_oh/idle_rider_mask.png"
+    },
+    "yveltal": {
+      "displayName": "Yveltal",
+      "movementMode": "land",
+      "frameSize": [192, 192],
+      "spriteSheet": "res://assets/mounts/yveltal/mount.png",
+      "foregroundSheet": "res://assets/mounts/yveltal/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/yveltal/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 10,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [[0, -52], [0, -50], [0, -60], [0, -58]],
+        "left": [[8, -24], [8, -22], [8, -28], [8, -26]],
+        "right": [[-8, -24], [-8, -22], [-8, -28], [-8, -26]],
+        "up": [[0, -18], [0, -16], [0, -22], [0, -20]]
+      },
+      "unlockItemId": "yveltal-mount",
+      "iconTexture": "res://assets/mounts/yveltal/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/yveltal/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/yveltal/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/yveltal/idle_rider_mask.png"
+    },
+    "miraidon": {
+      "displayName": "Miraidon",
+      "movementMode": "land",
+      "frameSize": [192, 192],
+      "spriteSheet": "res://assets/mounts/miraidon/mount.png",
+      "foregroundSheet": "res://assets/mounts/miraidon/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/miraidon/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 10,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [[0, -58], [0, -60], [0, -58], [0, -60]],
+        "left": [[22, -26], [22, -28], [22, -26], [22, -28]],
+        "right": [[-22, -26], [-22, -28], [-22, -26], [-22, -28]],
+        "up": [[0, -12], [0, -14], [0, -14], [0, -16]]
+      },
+      "unlockItemId": "miraidon-mount",
+      "iconTexture": "res://assets/mounts/miraidon/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/miraidon/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/miraidon/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/miraidon/idle_rider_mask.png"
+    },
+    "reshiram": {
+      "displayName": "Reshiram",
+      "movementMode": "land",
+      "frameSize": [192, 192],
+      "spriteSheet": "res://assets/mounts/reshiram/mount.png",
+      "foregroundSheet": "res://assets/mounts/reshiram/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/reshiram/rider_mask.png",
+      "movementAnimationSpeed": 4.0,
+      "hoverHeight": 10,
+      "hoverAmplitude": 2,
+      "hoverPeriod": 2.0,
+      "riderOffsets": {
+        "down": [[0, -58], [0, -56], [0, -58], [0, -56]],
+        "left": [[16, -36], [16, -34], [16, -36], [16, -34]],
+        "right": [[-16, -36], [-16, -34], [-16, -36], [-16, -34]],
+        "up": [[0, -32], [0, -30], [0, -32], [0, -30]]
+      },
+      "unlockItemId": "reshiram-mount",
+      "iconTexture": "res://assets/mounts/reshiram/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/reshiram/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/reshiram/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/reshiram/idle_rider_mask.png"
     }
   }
 }
