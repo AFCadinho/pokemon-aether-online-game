@@ -4,6 +4,8 @@
 
 - Give Pallet Town, Viridian City, Cerulean City and Vermilion City the flowing flower sway from Lavender Town, and gently animate Vermilion's small grass tufts.
 
+- Align normal and shiny Kyogre's side-view hull, rider and water contact with the occupied Surf tile beside NPCs.
+
 - Give normal and shiny Primal Kyogre submerged fins/tail, hull foam and a swimming wake while preserving rider poses, fishing and map depth.
 
 - Style the Bag mount tradeability dropdown with a dark rounded menu, gold accents, custom selection icons and clearer hover states.
