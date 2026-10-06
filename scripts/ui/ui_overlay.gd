@@ -24819,46 +24819,12 @@ func _bag_item_can_assign_to_hotbar(item: Dictionary) -> bool:
 	return FieldMoveService.is_direct_field_move(field_move_id) or _is_pokemon_usable_item_id(item_id)
 
 func _bag_item_use_action_label(item: Dictionary) -> String:
-	var item_id := _normalize_item_id(str(item.get("id", "")))
-	if item_id == "escape-rope-action":
-		return LocalizationManager.text("ui.bag.action.use_escape_rope")
-	var field_move_id := str(item.get("fieldMove", "")).strip_edges()
-	if FieldMoveService.is_direct_field_move(field_move_id):
-		return LocalizationManager.text("ui.bag.action.use_charm")
-	if INVENTORY_ITEM_USE_POLICY.overworld_consumable_action(item) == "recharge_repel":
-		return LocalizationManager.text("ui.repel.recharge")
+	if _bag_item_can_use_from_bag(item):
+		return LocalizationManager.text("ui.bag.action.use")
 	var use_action := str(item.get("useAction", "")).strip_edges()
-	if use_action == "open_mount_box":
-		return LocalizationManager.text("ui.bag.action.open_box")
-	if use_action == "trainer_name_change":
-		return LocalizationManager.text("ui.bag.action.change_name")
-	if use_action == "trainer_gender_change":
-		return LocalizationManager.text("ui.bag.action.change_gender")
-	if use_action in ["unlock_appearance", "open_item_bundle"]:
-		if not _bag_item_matches_player_gender(item):
-			var allowed_models := _bag_item_allowed_genders(item)
-			return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
-		return (
-			LocalizationManager.text("ui.bag.action.open_box")
-			if use_action == "open_item_bundle"
-			else LocalizationManager.text("ui.bag.action.move_to_customization")
-		)
-	if use_action in ["redeem_aether_blessing", "redeem_credit_voucher"]:
-		return LocalizationManager.text("ui.bag.action.redeem_voucher")
-	if use_action == "activate_shiny_charm":
-		return LocalizationManager.text("ui.bag.action.activate")
-	if use_action == "open_gift_voucher":
-		return LocalizationManager.text("ui.voucher.view_balance")
-	if use_action == "open_shiny_tracker":
-		return LocalizationManager.text("ui.bag.action.open_tracker")
-	if use_action == "open_mount_license":
-		return LocalizationManager.text("ui.bag.action.view_license")
-	if use_action == "apply_guild_emblem_template":
-		return LocalizationManager.text("ui.bag.action.unlock_for_guild")
-	if _bag_machine_move_id(item_id) != "":
-		return LocalizationManager.text("ui.bag.action.teach_move")
-	if _is_pokemon_usable_item_id(item_id):
-		return LocalizationManager.text("ui.bag.action.use_item")
+	if use_action in ["unlock_appearance", "open_item_bundle"] and not _bag_item_matches_player_gender(item):
+		var allowed_models := _bag_item_allowed_genders(item)
+		return LocalizationManager.text("ui.bag.action.model_only", {"models": " or ".join(allowed_models).capitalize()})
 	match str(item.get("category", "general")):
 		"pokeball":
 			return LocalizationManager.text("ui.bag.action.battle_item")
@@ -25004,7 +24970,7 @@ func _show_repel_refill_dialog(item: Dictionary) -> void:
 	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
 	repel_refill_dialog = dialog
 	root_control.add_child(dialog)
-	dialog.configure(LocalizationManager.text("ui.repel.recharge"), " ", LocalizationManager.text("ui.repel.recharge"), LocalizationManager.text("common.cancel"))
+	dialog.configure(LocalizationManager.text("ui.repel.recharge"), " ", LocalizationManager.text("ui.bag.action.use"), LocalizationManager.text("common.cancel"))
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
 	dialog.add_custom_control(row)
@@ -34781,13 +34747,24 @@ func _setup_repel_toggle() -> void:
 	repel_charge_label = Label.new()
 	repel_charge_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	repel_charge_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	repel_charge_label.add_theme_font_size_override("font_size", 10)
+	repel_charge_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	repel_charge_label.add_theme_font_size_override("font_size", 13)
+	repel_charge_label.add_theme_color_override("font_color", Color("#fff3c4"))
+	repel_charge_label.add_theme_color_override("font_outline_color", Color("#02070b"))
+	repel_charge_label.add_theme_constant_override("outline_size", 2)
+	var counter_style := _make_panel_style(Color("#07101cf5"), Color("#cdb66b99"), 4, 1)
+	counter_style.content_margin_left = 2
+	counter_style.content_margin_right = 2
+	repel_charge_label.add_theme_stylebox_override("normal", counter_style)
 	repel_charge_label.add_theme_color_override("font_shadow_color", Color.BLACK)
 	repel_charge_label.add_theme_constant_override("shadow_offset_x", 1)
 	repel_charge_label.add_theme_constant_override("shadow_offset_y", 1)
 	repel_toggle_button.add_child(repel_charge_label)
 	repel_charge_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE)
-	repel_charge_label.offset_top = -14
+	repel_charge_label.offset_left = 2
+	repel_charge_label.offset_right = -2
+	repel_charge_label.offset_top = -21
+	repel_charge_label.offset_bottom = -1
 	RepelService.charge_changed.connect(_refresh_repel_charge)
 	RepelService.depleted.connect(_on_repel_depleted)
 	_refresh_repel_charge()
