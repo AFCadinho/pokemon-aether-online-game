@@ -7,6 +7,7 @@ var failed := false
 
 
 func _init() -> void:
+	_check_surf_follower_lifecycle_and_presence()
 	_check_surf_moves_at_running_speed()
 	_check_surf_ripples_render_below_mount()
 	_check_water_position_restores_surf_without_rechecking_entitlement()
@@ -16,6 +17,27 @@ func _init() -> void:
 	_check_remote_surf_render_matches_local_pose_rules()
 	_check_mount_animation_continues_across_tiles()
 	quit(1 if failed else 0)
+
+
+func _check_surf_follower_lifecycle_and_presence() -> void:
+	var local_source := FileAccess.get_file_as_string("res://scripts/world/player.gd")
+	_expect(
+		_function_source(local_source, "_start_surf_activity").contains("refresh_pokemon_follower()"),
+		"starting or resuming Surf updates follower visibility"
+	)
+	var finish_source := _function_source(local_source, "_finish_surf_activity")
+	_expect(
+		finish_source.contains("refresh_pokemon_follower()")
+		and finish_source.contains("reset_pokemon_follower_position()"),
+		"leaving Surf restores the follower at the player's current position"
+	)
+	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
+	_expect(
+		_function_source(world_source, "_get_current_follower_presence_state").contains(
+			'and bool(player.call("is_surfing_activity_active"))'
+		),
+		"Surf also hides the follower in presence sent to other players"
+	)
 
 
 func _check_surf_moves_at_running_speed() -> void:
