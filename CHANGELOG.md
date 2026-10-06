@@ -4,6 +4,8 @@
 
 - Add shiny Metagross and Salamence land mounts and their Gift Store boxes at 750 Aether Gems each, with the existing shiny chance and pity rules.
 
+- Keep PvP thinking time and bank displays frozen until both 2D/3D clients confirm animation completion, including slow animation batches and reconnect recovery.
+
 - Add Metagross and Salamence as grantable land mounts with the approved rider poses, layered wings, and existing regional Mount License requirements.
 
 - Add Gift Store filters for Gem affordability and Gift Voucher eligibility/affordability, plus name and price sorting alongside existing category filters and search.

@@ -274,12 +274,15 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 	var deadline := _timestamp_ms(timer, "hypotheticalDeadlineAtMs", "deadlineAt")
 	var legacy_deadline_ticks := int(timer.get("legacyDeadlineTicksMs", 0))
 	var raw_status := str(timer.get("status", "IDLE")).to_upper()
+	var awaiting_animation_ack := raw_status == "SCHEDULED"
 	var bank_anchor := int(timer.get("mainBankRemainingMs", timer.get("bankAtAnchorMs", 0)))
 	var bank := bank_anchor
 	if not mechanically_suspended and charge_start > 0 and now > charge_start and str(timer.get("status", "")) in ["RUNNING", "ACTIVE", "DECIDING"]:
 		bank = max(bank_anchor - (now - charge_start), 0)
 	var scheduled_remaining: int = max(actionable - now, 0) if actionable > 0 else 0
 	var cap_remaining: int = max(cap_at - now, 0) if cap_at > 0 else 0
+	if awaiting_animation_ack:
+		cap_remaining = maxi(cap_at - actionable, 0)
 	var has_frozen_remaining := (
 		timer.has("decisionRemainingMs")
 		and raw_status in ["LOCKED", "WAITING", "CHOICE_ACCEPTED", "CHOICE_ACCEPTED_AFTER_SHADOW_EXPIRY"]
@@ -294,6 +297,10 @@ func participant_display(player_id: String, local_monotonic_ms: int = Time.get_t
 		)
 	)
 	var decision_maximum := int(timer.get("maxDecisionMs", 0))
+	if awaiting_animation_ack:
+		# The provisional deadline bounds server recovery, not thinking time.
+		# Keep the entire decision allowance visible until the ACK timer sync.
+		effective_remaining = maxi(deadline - actionable, 0)
 	# The cap and actionable anchors are already public opponent timing data.
 	# Deriving the scale keeps the countdown usable across mixed-version
 	# projections without exposing a decision identity or action.
@@ -341,6 +348,8 @@ func _display_state(timer: Dictionary, now: int, actionable: int, deadline: int)
 		return "PAUSED"
 	if raw in ["LOCKED", "WAITING", "CHOICE_ACCEPTED", "CHOICE_ACCEPTED_AFTER_SHADOW_EXPIRY", "IDLE"]:
 		return "WAITING"
+	if raw == "SCHEDULED":
+		return "SCHEDULED"
 	if raw in ["EXPIRED", "WOULD_EXPIRE"] or (deadline > 0 and now >= deadline):
 		return "EXPIRED"
 	if actionable > now:
