@@ -1808,23 +1808,33 @@ func _catalog_item_before(left: Dictionary, right: Dictionary) -> bool:
 	return comparison < 0 if comparison != 0 else str(left.get("id", "")) < str(right.get("id", ""))
 
 
-func _prioritize_popular_catalog_items(items: Array[Dictionary]) -> Array[Dictionary]:
-	if popular_item_ids.is_empty():
-		return items
-	var ordered: Array[Dictionary] = []
-	var included_ids: Dictionary = {}
+func _catalog_item_before_by_price_desc(left: Dictionary, right: Dictionary) -> bool:
+	var left_price := _catalog_sort_price(left)
+	var right_price := _catalog_sort_price(right)
+	if left_price != right_price:
+		return left_price > right_price
+	var comparison := _item_name(left).naturalnocasecmp_to(_item_name(right))
+	return comparison < 0 if comparison != 0 else str(left.get("id", "")) < str(right.get("id", ""))
+
+
+func _order_catalog_by_popularity_then_price(items: Array[Dictionary]) -> Array[Dictionary]:
+	var popular_items: Array[Dictionary] = []
+	var other_items: Array[Dictionary] = []
+	var items_by_id: Dictionary = {}
+	for item: Dictionary in items:
+		items_by_id[str(item.get("id", ""))] = item
 	for popular_item_id: String in popular_item_ids:
-		for item: Dictionary in items:
-			var item_id := str(item.get("id", ""))
-			if item_id == popular_item_id:
-				ordered.append(item)
-				included_ids[item_id] = true
-				break
+		var popular_item: Variant = items_by_id.get(popular_item_id)
+		if popular_item is Dictionary:
+			popular_items.append(popular_item)
+			items_by_id.erase(popular_item_id)
 	for item: Dictionary in items:
 		var item_id := str(item.get("id", ""))
-		if not included_ids.has(item_id):
-			ordered.append(item)
-	return ordered
+		if items_by_id.has(item_id):
+			other_items.append(item)
+	other_items.sort_custom(_catalog_item_before_by_price_desc)
+	popular_items.append_array(other_items)
+	return popular_items
 
 
 func _create_mount_mode_bar() -> HBoxContainer:
@@ -2393,7 +2403,7 @@ func _render_products() -> void:
 	if active_catalog_sort != "default":
 		catalog_items.sort_custom(_catalog_item_before)
 	elif active_category in ["cosmetics", "mounts"]:
-		catalog_items = _prioritize_popular_catalog_items(catalog_items)
+		catalog_items = _order_catalog_by_popularity_then_price(catalog_items)
 	for item: Dictionary in catalog_items:
 		var categories: Array = item.get("categories", [])
 		if active_category != "featured" and not categories.has(active_category):
