@@ -16,6 +16,10 @@ var feather: ArrayMesh
 var pearl: StandardMaterial3D
 var soft: ShaderMaterial
 var soft_quad := QuadMesh.new()
+var combo_hand: StandardMaterial3D
+var combo_knuckles: StandardMaterial3D
+var combo_spotlight: ShaderMaterial
+var combo_beats_drawn: Array[int] = []
 
 func _geometry_scale() -> float:return presentation_scale
 
@@ -54,6 +58,15 @@ void fragment() {
 """
 	soft=ShaderMaterial.new();soft.shader=shader
 	soft.set_shader_parameter("tint",Color(str(recipe.color)))
+	if key=="closecombat":
+		combo_hand=_material(Color("536965"),.95)
+		combo_hand.shading_mode=BaseMaterial3D.SHADING_MODE_PER_PIXEL
+		combo_hand.roughness=.65
+		combo_hand.emission_energy_multiplier=.15
+		combo_knuckles=combo_hand.duplicate()
+		combo_knuckles.albedo_color=Color("8ea29c")
+		combo_spotlight=soft.duplicate()
+		combo_spotlight.set_shader_parameter("tint",Color("36b9fa"))
 	var tool := SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in 32:
 		for corner: Vector2 in [Vector2(0,0),Vector2(1,0),Vector2(1,1),Vector2(0,0),Vector2(1,1),Vector2(0,1)]:
@@ -97,7 +110,9 @@ func _draw_source_move(from: Vector3,to: Vector3,right: Vector3,up: Vector3) -> 
 	edge.albedo_color.a=envelope*.7;core.albedo_color.a=envelope*.9;glow.albedo_color.a=envelope*.08;pearl.albedo_color.a=envelope*.8
 	surface.set_shader_parameter("seconds",elapsed);surface.set_shader_parameter("opacity",envelope*.65)
 	soft.set_shader_parameter("opacity",envelope*.5)
-	if recipe.contact:
+	if key=="closecombat":
+		_close_combat(t,envelope,facing)
+	elif recipe.contact:
 		_contact_stage(from,center,flight,after,envelope,facing,side,axis)
 	elif recipe.family=="beams":_beam_stage(from,flight,after,envelope,facing,axis)
 	elif recipe.family=="projectiles":_projectile_stage(flight,after,envelope,facing,side,axis)
@@ -422,3 +437,73 @@ func _field_stage(center: Vector3,t: float,flight: float,after: float,alpha: flo
 						if motif=="cold-front":height_value+=fmod(t+i*.618,1.)*1.5
 						var motion := Vector3(cos(i+elapsed),0,sin(i+elapsed))*.35
 						_source_sprite(base+motion+Vector3.UP*height_value,1.1 if motif=="clearing-mist" else .8,"mist",t,rise*.4,facing,i)
+
+# Preserve the 2D beat positions/order in a world-space combat plane. These
+# symbolic hands are authored geometry; no imported 2D strike sprites are used.
+func _close_combat(t: float,alpha: float,facing: Basis) -> void:
+	var combo: Dictionary=recipe.close_choreography
+	var frame := t*float(combo.source_frames)
+	var forward := aim-initial_center
+	forward.y=0
+	forward=forward.normalized()
+	if forward.length()<.01:forward=Vector3.FORWARD
+	var side := forward.cross(Vector3.UP).normalized()
+	var hand_basis := Basis(side,Vector3.UP,-forward)
+	var target_size := clampf(float(anchors.call().radius),.65,1.15)
+	combo_hand.albedo_color.a=alpha*.9
+	combo_knuckles.albedo_color.a=alpha*.95
+	combo_spotlight.set_shader_parameter("opacity",alpha*.3)
+	# A translucent blue spotlight echoes the source background without hiding
+	# the arena or taking control of its lighting/camera.
+	var middle := caster_ground.lerp(target_ground,.68)
+	_piece(soft_quad,combo_spotlight,middle+Vector3.UP*.04,Vector3(5,5,1),Basis(Vector3.RIGHT,-PI/2))
+	for i in 8:
+		var lane := caster_ground.lerp(target_ground,clampf(t*5-i*.06,0,1))
+		var offset := side*(i%2*2-1)*(.7+i*.09)
+		_line(lane+offset-forward*.4,lane+offset,.012*alpha*(1-smoothstep(.18,.4,t)),pearl)
+	combo_beats_drawn.clear()
+	for index in combo.beats.size():
+		var beat: Dictionary=combo.beats[index]
+		var age := frame-float(beat.frame)
+		var finishing := bool(beat.finisher)
+		var lifetime := 7.0 if finishing else 3.4
+		if age<0 or age>lifetime:continue
+		combo_beats_drawn.append(index)
+		var fade := 1-smoothstep(1.1,lifetime,age)
+		var offset := (side*float(beat.x)+Vector3.UP*float(beat.y))*target_size/56.
+		var contact := aim+offset
+		var punch := int(beat.pattern) in [1,2]
+		var palm := int(beat.pattern)==11
+		var size_value := (1.0 if finishing else .65)*target_size
+		if punch or palm:
+			var advance := smoothstep(0,1,age)
+			var hand := contact-forward*(1-advance)*(1.6 if finishing else .85)
+			var scale_value := size_value*fade
+			# Rounded palm and separate knuckles retain a fist silhouette from orbit.
+			_piece(sphere,combo_hand,hand,Vector3(.55,.43,.38)*scale_value,hand_basis)
+			for finger in 4:
+				var finger_tip := hand+side*(finger-1.5)*.24*scale_value
+				if palm:
+					finger_tip+=Vector3.UP*(.30+sin((finger+1)*PI/5)*.13)*scale_value
+					_piece(sphere,combo_hand,finger_tip,Vector3(.10,.30,.12)*scale_value,hand_basis)
+				else:
+					finger_tip+=forward*.26*scale_value+Vector3.UP*.23*scale_value
+					_piece(sphere,combo_knuckles,finger_tip,Vector3.ONE*.125*scale_value)
+			_piece(sphere,combo_hand,hand-side*.48*scale_value-Vector3.UP*.08*scale_value,Vector3(.18,.24,.2)*scale_value,hand_basis)
+			for streak in 2:
+				var point := hand+side*(streak*2-1)*size_value*.5
+				_line(point-forward*(.5+size_value),point,.018*fade,edge)
+		# The barrage is visual feedback, not fourteen gameplay damage events.
+		# Missing/blocked attacks keep the gestures but suppress contact flashes.
+		var flash_age := age-(1. if punch or palm else 0.)
+		if hit and flash_age>=0:
+			var flare := 1-clampf(flash_age/(4. if finishing else 2.),0,1)
+			var extent := (1.4 if finishing else .4)*target_size
+			var flare_point := aim if punch else contact
+			_source_sprite(flare_point,extent*2,"1",clampf(flash_age/3,0,1),flare*.8,facing)
+			for ray in (8 if finishing else 4):
+				var a: float = ray*TAU/(8 if finishing else 4)+index*.7
+				var direction := side*cos(a)+Vector3.UP*sin(a)
+				_line(flare_point+direction*extent*.25,flare_point+direction*extent*(1+flash_age*.3),.028*flare,pearl)
+			if finishing:
+				_piece(ring,edge,target_ground+Vector3.UP*.05,Vector3.ONE*(.5+flash_age*.45)*flare)
