@@ -27,6 +27,16 @@ func _run() -> void:
 	background.size = Vector2(viewport.size)
 	background.z_index = -10
 	viewport.add_child(background)
+	var water := TextureRect.new()
+	var texture := AtlasTexture.new()
+	texture.atlas = load("res://assets/tilesets/fiver/tiles_env2_water32.png")
+	texture.region = Rect2(32, 32, 32, 32)
+	water.texture = texture
+	water.stretch_mode = TextureRect.STRETCH_TILE
+	water.size = Vector2(viewport.size) / 3
+	water.scale = Vector2(3, 3)
+	water.z_index = -9
+	viewport.add_child(water)
 	var script: Script = load("res://scripts/ui/mount_rider_preview.gd")
 	var previews: Array = []
 	for gi in range(2):
@@ -52,6 +62,7 @@ func _run() -> void:
 				appearance.merge({"headgear": "", "hair": "Adinho_Hair", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}, true)
 			previews.append({"actor": actor, "label": label, "appearance": appearance, "gender": gender, "direction": DIRS[row], "position": position})
 	for base_id: String in ["caterpie", "magikarp"]:
+		water.visible = base_id == "magikarp"
 		var id := base_id + ("_shiny" if "--shiny" in OS.get_cmdline_user_args() else "")
 		for activity: String in (["ride", "surf-fish"] if base_id == "magikarp" else ["ride"]):
 			for item: Dictionary in previews:
