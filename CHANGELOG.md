@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added matching male and female battle trainer and dialogue portraits for all six adventure outfits, preserving shared wardrobe items across gender changes.
+
 - Download complete 3D model collections with one verified activation, reuse completed files after interruption, and check free space before downloading and unpacking.
 
 - Add Shiny Arcanine and Shiny Aerodactyl and their Land Gift Store boxes for 500 Aether Gems each. Center Toucannon’s front rider and balance the hand/wing overlap.

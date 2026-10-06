@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 spec = importlib.util.spec_from_file_location("cosmetic_generator", Path(__file__).resolve().parents[1] / "tools/generate_cosmetic_variants.py")
 generator = importlib.util.module_from_spec(spec)
@@ -55,14 +56,24 @@ class CosmeticVariantCatalogTests(unittest.TestCase):
 
     def test_overworld_only_collection_requires_explicit_battle_fallback(self):
         unlock = self.items["future-uniform"]["data"]["appearance_unlocks"][0]
-        unlock["render_variants"] = {"male": "AetherVoyager_Shirt", "female": "AetherVoyager_Shirt"}
-        with self.assertRaisesRegex(ValueError, "missing male battle art"):
-            self.generate()
-        unlock["battle_rendering"] = "fallback"
-        self.assertIn("Future_Uniform", self.generate()["parts"]["top"])
-        unlock["render_variants"]["female"] = "Missing_Uniform"
-        with self.assertRaisesRegex(ValueError, "missing female overworld art"):
-            self.generate()
+        unlock["render_variants"] = {"male": "Future_Shirt", "female": "Future_Shirt"}
+        # Isolated authoring fixture: adding real battle art must not invalidate this test.
+        root = self.items_dir / "art"
+        for gender in ["male", "female"]:
+            target = root / f"assets/player/{gender}/top/Future_Shirt.png"
+            target.parent.mkdir(parents=True)
+            target.touch()
+        manifest = root / "assets/battles/trainers/player/manifest.json"
+        manifest.parent.mkdir(parents=True)
+        manifest.write_text(json.dumps({"genders": {gender: {"categories": {}} for gender in ["male", "female"]}}))
+        with patch.object(generator, "ROOT", root):
+            with self.assertRaisesRegex(ValueError, "missing male battle art"):
+                self.generate()
+            unlock["battle_rendering"] = "fallback"
+            self.assertIn("Future_Uniform", self.generate()["parts"]["top"])
+            unlock["render_variants"]["female"] = "Missing_Uniform"
+            with self.assertRaisesRegex(ValueError, "missing female overworld art"):
+                self.generate()
 
     def test_invalid_battle_policy_is_rejected(self):
         self.items["future-uniform"]["data"]["appearance_unlocks"][0]["battle_rendering"] = "ignore"
