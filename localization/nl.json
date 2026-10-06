@@ -6448,5 +6448,19 @@
   "ui.mount_collector.received": "Je ontving {mount} en {credit} Gift Voucher-tegoed!",
   "ui.mount_collector.error.context": "Spreek de Shiny Mount Collector in de fietswinkel van Cerulean aan wanneer je niet bezig bent.",
   "ui.mount_collector.error.shiny": "Kies een shiny mount met een bijbehorende normale versie.",
-  "ui.mount_collector.error.wallet_full": "Geef eerst wat Gift Voucher-tegoed uit voordat je deze mount ruilt."
+  "ui.mount_collector.error.wallet_full": "Geef eerst wat Gift Voucher-tegoed uit voordat je deze mount ruilt.",
+  "ui.mount_collector.search": "Zoek mounts…",
+  "ui.mount_collector.tab_all": "Alles",
+  "ui.mount_collector.tab_land": "Land",
+  "ui.mount_collector.tab_surf": "Surf",
+  "ui.mount_collector.duplicates_only": "Alleen dubbele",
+  "ui.mount_collector.duplicates_hint": "Gebonden en verhandelbare exemplaren van dezelfde shiny tellen samen. Bewaar één shiny per soort.",
+  "ui.mount_collector.binding_all": "Alle bindingen",
+  "ui.mount_collector.results": "{count} van {total} mountvarianten",
+  "ui.mount_collector.keep_one": "Bewaar één shiny per soort",
+  "ui.mount_collector.copies": "{count} shiny in bezit · {spare} extra",
+  "ui.mount_collector.spares": "{count} extra totaal",
+  "ui.mount_collector.no_results": "Geen mounts gevonden. Wis je zoekopdracht of pas de filters aan.",
+  "ui.mount_collector.last_copy": "Dit is je laatste shiny mount van deze soort. Door hem in te ruilen verdwijnt hij uit je shinycollectie.",
+  "ui.mount_collector.error.last_shiny": "Alleen dubbele: je hebt nu nog maar één shiny van deze soort. Bewaar hem of zet het filter uit."
 }

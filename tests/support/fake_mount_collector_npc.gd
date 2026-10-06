@@ -4,6 +4,7 @@ var accept_trade := true
 var choice_count := 0
 var shown_dialogue: Array[String] = []
 var shown_errors: Array[Dictionary] = []
+var duplicates_mode := false
 
 func _ready() -> void:
 	pass
@@ -16,6 +17,7 @@ func show_dialogue(lines: Array[String] = [], _speaker_name_override := "") -> b
 	return true
 
 func _choose_offer(offers: Array, _page: int, _credit: int) -> String:
+	collector_view_state["duplicates"] = duplicates_mode
 	choice_count += 1
 	return str(offers[0]["itemId"]) if choice_count == 1 else ""
 
