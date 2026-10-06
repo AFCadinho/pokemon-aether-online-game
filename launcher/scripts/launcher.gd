@@ -932,7 +932,7 @@ func _open_content_packs() -> void:
 
 func _selected_model_catalog() -> String:
 	if release_asset_bundles != null:
-		var release_catalog: String = release_asset_bundles.catalog_path()
+		var release_catalog: String = release_asset_bundles.catalog_path_for_launch()
 		if not release_catalog.is_empty():
 			return release_catalog
 	return preload("res://scripts/model_pack_store.gd").new().selected_catalog()
