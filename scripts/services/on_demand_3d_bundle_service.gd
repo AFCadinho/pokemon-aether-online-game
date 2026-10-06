@@ -5,6 +5,7 @@ const RELEASE = preload("res://data/approved_3d_release_v7.json")
 const RELEASE_V8 = preload("res://data/approved_3d_release_v8.json")
 const RELEASE_V9 = preload("res://data/approved_3d_release_v9.json")
 const RELEASE_V10 = preload("res://data/approved_3d_release_v10.json")
+const RELEASE_V11 = preload("res://data/approved_3d_release_v11.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
@@ -276,12 +277,15 @@ func _asset_id(identity: String) -> String:
 func _selected_release() -> Dictionary:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path():
-		for release: Dictionary in [RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
+		for release: Dictionary in [RELEASE_V11.data, RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
 			var pin: Dictionary = release.index
 			if _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 				return release
 	# Editor runs use the latest published, hash-pinned project index.
-	for release: Dictionary in [RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:
+	var published: Array[Dictionary] = [RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]
+	if OS.has_feature("editor") and _v11_publication_verified():
+		published.push_front(RELEASE_V11.data)
+	for release: Dictionary in published:
 		var editor_path := _editor_local_index_path(release)
 		var pin: Dictionary = release.index
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
@@ -289,9 +293,39 @@ func _selected_release() -> Dictionary:
 	return RELEASE.data
 
 
+static func _v11_publication_verified() -> bool:
+	# Preparation alone must not request unpublished URLs in editor encounters.
+	# The normal release publication step supplies this hash-bound receipt.
+	var file := FileAccess.open("res://release/approved_3d_bundles_v11_r2_receipt.json", FileAccess.READ)
+	if file == null or file.get_length() > MAX_CATALOG_BYTES:
+		return false
+	var receipt: Variant = JSON.parse_string(file.get_as_text())
+	if not receipt is Dictionary or receipt.get("revision") != RELEASE_V11.data.revision or receipt.get("content_index") != RELEASE_V11.data.index:
+		return false
+	if receipt.get("lossless_binding_sha256") != ReviewedModels.DATA.data.get("native_lossless_binding_sha256"):
+		return false
+	var verification: Variant = receipt.get("index_verification")
+	if not verification is Dictionary or not verification.get("public_get_sha256_verified", false) or not verification.get("public_head_size_verified", false):
+		return false
+	for field: String in ["object_key", "sha256", "size_bytes"]:
+		if verification.get(field) != RELEASE_V11.data.index[field]:
+			return false
+	var bundles: Variant = receipt.get("bundles")
+	if not bundles is Array or bundles.size() != RELEASE_V11.data.requiredAssetIds.size():
+		return false
+	var seen := {}
+	for row: Variant in bundles:
+		if not row is Dictionary or row.get("asset_id") not in RELEASE_V11.data.requiredAssetIds or seen.has(row.get("asset_id")) or not row.get("public_get_sha256_verified", false) or not row.get("public_head_size_verified", false):
+			return false
+		seen[row.asset_id] = true
+	return true
+
+
 static func _editor_local_index_path(release: Dictionary) -> String:
 	if not OS.has_feature("editor"):
 		return ""
+	if release.revision == RELEASE_V11.data.revision:
+		return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v11_index.json")
 	if release.revision == RELEASE_V10.data.revision:
 		return ProjectSettings.globalize_path("res://release/approved_3d_bundles_v10_index.json")
 	if release.revision == RELEASE_V9.data.revision:
@@ -365,7 +399,7 @@ func _local_index_path(release: Dictionary) -> String:
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
 		return launcher_path
-	elif release.revision in [RELEASE_V10.data.revision, RELEASE_V9.data.revision, RELEASE_V8.data.revision]:
+	elif release.revision in [RELEASE_V11.data.revision, RELEASE_V10.data.revision, RELEASE_V9.data.revision, RELEASE_V8.data.revision]:
 		var editor_path := _editor_local_index_path(release)
 		if not editor_path.is_empty() and _valid_file(editor_path, int(pin.size_bytes), str(pin.sha256)):
 			return editor_path

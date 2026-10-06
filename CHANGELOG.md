@@ -28,6 +28,7 @@
 
 ### Downloads and controls
 
+- Reduce the optional full 3D Pokémon download by about 35%, with the same model detail and animations.
 - Resume an interrupted full 3D collection download without starting over, and check available storage before installing.
 - Use easier-to-find reopen controls for the action bar, Pokédex and quest tracker on mobile.
 - Choose from Intermediate, Hard and Nightmare in AI Sparring; Grandmaster Elite is being retired. Past Elite results keep their original labels.

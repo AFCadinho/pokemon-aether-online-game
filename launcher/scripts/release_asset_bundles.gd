@@ -9,6 +9,7 @@ const V7 = preload("res://data/approved_3d_release_v7.json")
 const V8 = preload("res://data/approved_3d_release_v8.json")
 const V9 = preload("res://data/approved_3d_release_v9.json")
 const V10 = preload("res://data/approved_3d_release_v10.json")
+const V11 = preload("res://data/approved_3d_release_v11.json")
 
 const DESCRIPTOR_SCHEMA := 1
 const DESCRIPTOR_KIND := "pokeaether-release-asset-index"
@@ -88,7 +89,7 @@ static func descriptor_error(descriptor: Dictionary) -> String:
 
 
 static func _pinned_releases() -> Array[Dictionary]:
-	return [V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
+	return [V11.data, V10.data, V9.data, V8.data, V7.data, V6.data, V5.data]
 
 
 static func _release_ids(release: Dictionary) -> Array[String]:

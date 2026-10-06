@@ -55,7 +55,8 @@ def build():
         for appearance in asset['appearances']:
             identity = appearance['runtime_identity']
             assert identity not in covered
-            assert registry['models'][identity]['sha256'] == appearance['runtime_sha256']
+            model = registry['models'][identity]
+            assert appearance['runtime_sha256'] in [model['sha256'], *model.get('previous_sha256', [])]
             covered[identity] = True
     assert set(covered) == set(registry['models']) and len(covered) == 2400
     index = {**old, 'catalog_revision': REVISION, 'assets': assets}
