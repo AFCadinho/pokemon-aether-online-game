@@ -470,5 +470,25 @@
   "primal-kyogre-mount-box": {
     "name": "Primal Kyogre Mount Box",
     "shortDesc": "Bevat een Primal Kyogre-surfmount. Shiny-basiskans: 50%."
+  },
+  "giratina-origin-mount": {
+    "name": "Giratina Origin-mount",
+    "shortDesc": "Ontgrendelt Giratina Origin als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "ho-oh-mount": {
+    "name": "Ho-Oh-mount",
+    "shortDesc": "Ontgrendelt Ho-Oh als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "yveltal-mount": {
+    "name": "Yveltal-mount",
+    "shortDesc": "Ontgrendelt Yveltal als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "miraidon-mount": {
+    "name": "Miraidon-mount",
+    "shortDesc": "Ontgrendelt Miraidon als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "reshiram-mount": {
+    "name": "Reshiram-mount",
+    "shortDesc": "Ontgrendelt Reshiram als land-mount. Vereist een Mount License voor de huidige regio."
   }
 }
