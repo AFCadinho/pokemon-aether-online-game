@@ -223,11 +223,47 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 		"Escape Rope confirmation updates to Portuguese"
 	)
 
+	_check_tradeability_details(overlay)
+
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:
 			loader.free()
 	overlay.free()
+
+
+func _check_tradeability_details(overlay: Node) -> void:
+	var badge := overlay.get("bag_detail_tradeability_badge") as PanelContainer
+	var label := overlay.get("bag_detail_tradeability_label") as Label
+	var description := overlay.get("bag_detail_description_label") as Label
+	_check(badge != null and label != null, "Bag creates a separate tradeability label")
+	if badge == null or label == null:
+		return
+	_check(label.get_theme_color("font_color") == Color("#ffd45a"), "tradeability label uses readable gold text")
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		localization_manager.call("set_locale", locale)
+		var rocket: Dictionary = item_localization.call("localize_item", {
+			"id": "team-rocket-outfit", "category": "cosmetics", "quantity": 1,
+			"tradable": false, "useAction": "open_item_bundle",
+		})
+		overlay.call("_select_bag_item", rocket)
+		_check(badge.visible and label.text == localization_manager.call("text", "ui.bag.untradeable"), "untradeable Rocket box has the localized label in %s" % locale)
+		_check(not description.text.begins_with(label.text), "description omits the redundant status in %s" % locale)
+		_check(not description.text.is_empty(), "gameplay instructions remain visible in %s" % locale)
+	localization_manager.call("set_locale", "en")
+	overlay.call("_select_bag_item", {"id": "potion", "category": "medicine", "quantity": 2, "tradable": true, "shortDesc": "Restores 20 HP."})
+	_check(not badge.visible and description.text == "Restores 20 HP.", "tradeable item clears the label without changing its description")
+	overlay.call("_select_bag_item", {
+		"id": "charizardite-x-bound", "category": "power_stones", "quantity": 4,
+		"ownershipVariant": "grouped", "boundQuantity": 1, "tradeableQuantity": 3, "tradable": false,
+	})
+	_check(badge.visible and label.text == "Untradeable · ×1", "mixed Mega Stone stack labels only its untradeable quantity")
+	overlay.call("_select_bag_item", {"id": "charizardite-x", "ownershipVariant": "grouped", "boundQuantity": 0, "tradeableQuantity": 2, "tradable": true})
+	_check(not badge.visible, "fully tradeable Mega Stone stack has no restriction label")
+	overlay.call("_select_bag_item", {"id": "leftovers", "borrowed": true, "quantity": 1})
+	_check(badge.visible, "borrowed items show their trading restriction")
+	overlay.call("_select_bag_item", {})
+	_check(not badge.visible, "empty selection clears the label")
 
 
 func _check_item_effect_preview_translation() -> void:

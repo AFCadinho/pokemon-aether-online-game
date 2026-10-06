@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.
+
 - Add Dialga, Zekrom and Palkia as grantable land mounts with the approved rider poses and regional Mount License requirements.
 
 - Unify Team Rocket clothing into gender-adaptive items and one reward box; keep adaptive cosmetics equipped through gender changes and preserve existing ownership.
