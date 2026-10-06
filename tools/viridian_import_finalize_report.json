@@ -1,0 +1,182 @@
+{
+	"after": {
+		"baseRGBABytes": 6948864,
+		"cells": 9917,
+		"fingerprint": "059dcfdcb34e023780b7ad072856cb7c468328eb34c8e889162bc370e0ff9281",
+		"layers": 7,
+		"usedTiles": 496
+	},
+	"all_prior_animation_timelines_preserved": true,
+	"backup": "/home/adinho/Documents/tiled_pokeaether_backups/viridian_import_finalize_20261006_212236",
+	"before": {
+		"baseRGBABytes": 6948864.0,
+		"cells": 9917.0,
+		"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+		"layers": 7.0,
+		"usedTiles": 496.0
+	},
+	"checks": [
+		"viridian_visual_jail_check",
+		"town_flower_grass_animation_check",
+		"map_animation_rollout_check",
+		"generated_map_atlas_layout_check",
+		"generated_map_texture_storage_check",
+		"migrated_visuals_check",
+		"water_animation_recovery_check"
+	],
+	"imported": {
+		"baseRGBABytes": 4386816,
+		"cells": 9917,
+		"fingerprint": "059dcfdcb34e023780b7ad072856cb7c468328eb34c8e889162bc370e0ff9281",
+		"layers": 7,
+		"usedTiles": 496
+	},
+	"restored_animation_cells": {
+		"canopy": 2494,
+		"water": 66
+	},
+	"restored_types": 16,
+	"source": "/home/adinho/Documents/tiled_pokeaether/kanto/artist/exterior/towns/Viridian City.tmx",
+	"source_cell_changes": [
+		{
+			"after": {},
+			"before": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "94b47a6c375a9374b0ed8a88af2c1c4fe2d4870fcde2f3938b29020cbd99a7f5",
+				"padding": true
+			},
+			"cell": "(22, 34)",
+			"layer": "StructureBottom"
+		},
+		{
+			"after": {},
+			"before": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "2b2dc2d2a202de946e907a12896032ecf674df2b7808239871bbe9f69ddfe72c",
+				"padding": true
+			},
+			"cell": "(23, 34)",
+			"layer": "StructureBottom"
+		},
+		{
+			"after": {},
+			"before": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "e726abb1032e1d83dd028ad1ad0b40cee3b3bd62447ce34999ebef3ae7621917",
+				"padding": true
+			},
+			"cell": "(24, 34)",
+			"layer": "StructureBottom"
+		},
+		{
+			"after": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "94b47a6c375a9374b0ed8a88af2c1c4fe2d4870fcde2f3938b29020cbd99a7f5",
+				"padding": true
+			},
+			"before": {},
+			"cell": "(22, 34)",
+			"layer": "StructureTop"
+		},
+		{
+			"after": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "2b2dc2d2a202de946e907a12896032ecf674df2b7808239871bbe9f69ddfe72c",
+				"padding": true
+			},
+			"before": {},
+			"cell": "(23, 34)",
+			"layer": "StructureTop"
+		},
+		{
+			"after": {
+				"data": {
+					"flip_h": "false",
+					"flip_v": "false",
+					"material": "null",
+					"modulate": "Color(1, 1, 1, 1)",
+					"probability": "1.0",
+					"terrain": "-1",
+					"terrain_set": "-1",
+					"texture_origin": "Vector2i(0, 0)",
+					"transpose": "false",
+					"y_sort_origin": "0",
+					"z_index": "0"
+				},
+				"flags": 0,
+				"hash": "e726abb1032e1d83dd028ad1ad0b40cee3b3bd62447ce34999ebef3ae7621917",
+				"padding": true
+			},
+			"before": {},
+			"cell": "(24, 34)",
+			"layer": "StructureTop"
+		}
+	],
+	"source_sha256": "8e65617349dae09e22b66b97e983f0d98b0b6743a5e56be6cbb5bf70872376af",
+	"version": 1
+}
