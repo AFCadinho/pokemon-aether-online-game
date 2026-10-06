@@ -186,6 +186,7 @@
       "spriteSheet": "res://assets/mounts/primal_kyogre/mount.png",
       "riderMaskSheet": "res://assets/mounts/primal_kyogre/rider_mask.png",
       "foregroundSheet": "res://assets/mounts/primal_kyogre/foreground.png",
+      "waterContactSheet": "res://assets/mounts/primal_kyogre/water_contact.png",
       "frameSize": [
         192,
         224
@@ -298,6 +299,7 @@
       "spriteSheet": "res://assets/mounts/primal_kyogre_shiny/mount.png",
       "riderMaskSheet": "res://assets/mounts/primal_kyogre_shiny/rider_mask.png",
       "foregroundSheet": "res://assets/mounts/primal_kyogre_shiny/foreground.png",
+      "waterContactSheet": "res://assets/mounts/primal_kyogre/water_contact.png",
       "frameSize": [
         192,
         224

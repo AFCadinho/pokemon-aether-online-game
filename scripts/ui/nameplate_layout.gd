@@ -73,6 +73,12 @@ static func sync_mount_position(
 	if mount_id != "" and look != null and mount != null and mount.visible:
 		var envelope := _mount_envelope(mount_id)
 		var top := _sprite_top(mount)
+		# Reserve the complete water-contact envelope, including the rear wake.
+		# Its cached frame bounds keep the nameplate steady during swimming.
+		var water := look.get_node_or_null("MountForegroundSprite/MountWaterContact") as AnimatedSprite2D
+		if water != null and water.visible and water.sprite_frames != null:
+			var parent_offset := look.to_local(water.get_parent().global_position).y
+			top = minf(top, parent_offset + _sprite_top(water))
 		if rider != null:
 			var direction := str(mount.animation).get_slice("_", 1)
 			var current_offset := Mounts.get_rider_frame_offset(mount_id, direction, mount.frame)

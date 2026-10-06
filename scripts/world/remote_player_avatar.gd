@@ -4,6 +4,7 @@ class_name RemotePlayerAvatar
 
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
+const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 signal battle_spectate_requested(target_user_id: int)
@@ -184,6 +185,7 @@ var last_direction := Vector2.DOWN
 var look_node: Node2D
 var mount_sprite: AnimatedSprite2D
 var mount_foreground_sprite: AnimatedSprite2D
+var mount_water_contact: MountWaterContact
 var rider_node: Node2D
 var mount_hover_visual: MountHoverVisual
 var mount_hover_id := ""
@@ -817,6 +819,7 @@ func _create_visual() -> void:
 
 
 func _sync_mount_visual() -> void:
+	_sync_mount_water_contact()
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
@@ -929,6 +932,18 @@ func _sync_mounted_rider_frame() -> void:
 		sprite.pause()
 
 
+func _sync_mount_water_contact() -> void:
+	if mount_foreground_sprite == null:
+		return
+	var definition := MountService.get_mount_definition(current_mount_id)
+	if mount_water_contact == null and not str(definition.get("waterContactSheet", "")).is_empty():
+		mount_water_contact = MountWaterContact.new()
+		mount_water_contact.name = "MountWaterContact"
+		mount_foreground_sprite.add_child(mount_water_contact)
+	if mount_water_contact != null:
+		mount_water_contact.configure(definition)
+
+
 func _sync_mount_foreground_frame() -> void:
 	if mount_foreground_sprite == null or not mount_foreground_sprite.visible:
 		return
@@ -938,6 +953,8 @@ func _sync_mount_foreground_frame() -> void:
 	mount_foreground_sprite.frame = mount_sprite.frame
 	mount_foreground_sprite.frame_progress = mount_sprite.frame_progress
 	mount_foreground_sprite.pause()
+	if mount_water_contact != null:
+		mount_water_contact.sync_frame(mount_sprite)
 
 
 func _sync_mount_rider_delta() -> void:
@@ -1409,7 +1426,8 @@ func _collect_appearance_sprites(node: Node) -> void:
 	if node is AnimatedSprite2D:
 		var sprite := node as AnimatedSprite2D
 		if sprite.name != MOUNT_SPRITE_NAME \
-			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME:
+			and sprite.name != MOUNT_FOREGROUND_SPRITE_NAME \
+			and not (sprite is MountWaterContact):
 			sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 			appearance_sprites.append(sprite)
 
