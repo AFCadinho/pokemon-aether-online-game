@@ -3345,7 +3345,7 @@
 			"after": {
 				"baseRGBABytes": 6948864,
 				"cells": 9917,
-				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"fingerprint": "059dcfdcb34e023780b7ad072856cb7c468328eb34c8e889162bc370e0ff9281",
 				"layers": 7,
 				"usedTiles": 496
 			},
@@ -3676,7 +3676,7 @@
 			"current_static_reference": {
 				"baseRGBABytes": 6948864,
 				"cells": 9917,
-				"fingerprint": "c0f76eb8bd70652567192f32f6fa1e902e131f572e8f1c40b4d1158f973c38bb",
+				"fingerprint": "059dcfdcb34e023780b7ad072856cb7c468328eb34c8e889162bc370e0ff9281",
 				"layers": 7,
 				"usedTiles": 496
 			},
@@ -3689,7 +3689,7 @@
 					"layers": 7.0,
 					"usedTiles": 496.0
 				},
-				"reason": "Reimport current artist TMX with Lavender-style native flower sway; preserve existing water/canopy timelines. Pallet also imports its existing Route 21 coastal corrections."
+				"reason": "Finish the authorized current Viridian TMX import: move three existing StructureBottom tiles at (22..24,34) into StructureTop and preserve all prior flower/water/canopy/tall-grass timelines."
 			}
 		},
 		"viridian_forest": {
