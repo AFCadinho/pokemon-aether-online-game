@@ -78,16 +78,16 @@ const CATEGORY_ORDER: Array[String] = [
 	"charms",
 	"services",
 ]
-const FEATURED_ITEM_ORDER: Array[String] = [
-	"aether-blessing-voucher-30-days",
+const FEATURED_FALLBACK_ITEM_ORDER: Array[String] = [
 	"mysterious-outfit",
 	"aether-blossom-outfit",
+	"rayquaza-mount-box",
+	"primal-kyogre-mount-box",
+	"aether-blessing-voucher-30-days",
 	"surf-charm",
-	"squirtle-guild-emblem-template",
-	"name-change-ticket",
 ]
 const CATEGORY_LABELS := {
-	"featured": "Featured",
+	"featured": "Popular",
 	"membership": "Blessings",
 	"cosmetics": "Cosmetics",
 	"guilds": "Guilds",
@@ -96,7 +96,7 @@ const CATEGORY_LABELS := {
 	"services": "Trainer Services",
 }
 const CATEGORY_DESCRIPTIONS := {
-	"featured": "A curated mix of supporter items, style and permanent conveniences.",
+	"featured": "Popular picks across categories, with featured selections to fill the gaps.",
 	"membership": "Tradeable Aether Blessing vouchers and Patreon membership information.",
 	"cosmetics": "Outfits and profile details that personalize your trainer without affecting gameplay.",
 	"guilds": "Consumable templates that permanently unlock for your Guild without affecting gameplay.",
@@ -744,6 +744,9 @@ var gem_balance := 0
 var authoritative_gem_prices: Dictionary = {}
 var authoritative_item_genders: Dictionary = {}
 var store_catalog_loaded := false
+var featured_item_ids: Array[String] = []
+var popular_item_ids: Array[String] = []
+var featured_selection_loaded := false
 var store_catalog_loading := false
 var purchase_in_progress := false
 var trainer_gender := "male"
@@ -912,6 +915,26 @@ func apply_store_state(wallet: Dictionary, store: Dictionary) -> void:
 				if str(cost.get("currency", "")).strip_edges().to_lower() == "gems":
 					authoritative_gem_prices[item_id] = maxi(int(cost.get("amount", 0)), 0)
 					break
+	featured_item_ids.clear()
+	popular_item_ids.clear()
+	var featured_value: Variant = store.get("featured")
+	featured_selection_loaded = featured_value is Dictionary
+	if featured_selection_loaded:
+		var featured := featured_value as Dictionary
+		var featured_ids_value: Variant = featured.get("itemIds", [])
+		if featured_ids_value is Array:
+			for item_id_value: Variant in featured_ids_value:
+				var item_id := str(item_id_value)
+				if featured_item_ids.size() >= 6:
+					break
+				if authoritative_gem_prices.has(item_id) and not _catalog_item(item_id).is_empty() and not featured_item_ids.has(item_id):
+					featured_item_ids.append(item_id)
+		var popular_ids_value: Variant = featured.get("popularItemIds", [])
+		if popular_ids_value is Array:
+			for item_id_value: Variant in popular_ids_value:
+				var item_id := str(item_id_value)
+				if featured_item_ids.has(item_id) and not popular_item_ids.has(item_id):
+					popular_item_ids.append(item_id)
 	store_catalog_loaded = true
 	store_catalog_loading = false
 	_refresh_category_visibility()
@@ -1824,6 +1847,7 @@ func _select_category(category_id: String) -> void:
 		hero_title_label.text = _category_text(active_category, "label")
 	if hero_description_label != null:
 		hero_description_label.text = _category_text(active_category, "description")
+		hero_description_label.tooltip_text = _t("ui.store.featured.explanation") if active_category == "featured" else ""
 	_refresh_cosmetic_subcategory_bar()
 	_refresh_mount_mode_bar()
 	_reset_selection_footer()
@@ -1926,7 +1950,7 @@ func _render_products() -> void:
 
 	var catalog_items: Array[Dictionary] = []
 	if active_category == "featured":
-		for item_id: String in FEATURED_ITEM_ORDER:
+		for item_id: String in _featured_items():
 			var featured_item := _catalog_item(item_id)
 			if not featured_item.is_empty():
 				catalog_items.append(featured_item)
@@ -1937,7 +1961,7 @@ func _render_products() -> void:
 		catalog_items.sort_custom(_catalog_item_before)
 	for item: Dictionary in catalog_items:
 		var categories: Array = item.get("categories", [])
-		if not categories.has(active_category):
+		if active_category != "featured" and not categories.has(active_category):
 			continue
 		if active_category == "cosmetics" and not _matches_cosmetic_subcategory(item):
 			continue
@@ -1978,7 +2002,7 @@ func _refresh_category_visibility() -> void:
 func _category_has_available_items(category_id: String) -> bool:
 	var item_ids: Array[String] = []
 	if category_id == "featured":
-		item_ids.assign(FEATURED_ITEM_ORDER)
+		item_ids.assign(_featured_items())
 	else:
 		for item: Dictionary in CATALOG:
 			var categories: Array = item.get("categories", [])
@@ -1990,6 +2014,16 @@ func _category_has_available_items(category_id: String) -> bool:
 		if _gem_price(item_id) >= 0:
 			return true
 	return false
+
+
+func _featured_items() -> Array[String]:
+	if featured_selection_loaded:
+		return featured_item_ids
+	var fallback: Array[String] = []
+	for item_id: String in FEATURED_FALLBACK_ITEM_ORDER:
+		if not store_catalog_loaded or _gem_price(item_id) >= 0:
+			fallback.append(item_id)
+	return fallback
 
 
 func _on_catalog_search_changed(search_text: String) -> void:
@@ -2084,6 +2118,15 @@ func _create_product_card(item: Dictionary) -> Button:
 	badge.add_theme_font_size_override("font_size", 10)
 	badge.add_theme_color_override("font_color", UI_PURPLE)
 	layout.add_child(badge)
+	if active_category == "featured":
+		var selection_badge := Label.new()
+		selection_badge.name = "FeaturedSelectionBadge"
+		selection_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		selection_badge.text = _t("ui.store.featured.popular" if popular_item_ids.has(item_id) else "ui.store.featured.curated")
+		selection_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		selection_badge.add_theme_font_size_override("font_size", 10)
+		selection_badge.add_theme_color_override("font_color", UI_CYAN)
+		layout.add_child(selection_badge)
 
 	var icon_center := CenterContainer.new()
 	icon_center.mouse_filter = Control.MOUSE_FILTER_IGNORE

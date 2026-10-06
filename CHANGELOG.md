@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show varied Gift Store popular picks from distinct Gem buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
+
 - Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.
 
 - Add Dialga, Zekrom and Palkia as grantable land mounts with the approved rider poses and regional Mount License requirements.
