@@ -13,7 +13,7 @@
 - Make adventure and Team Rocket outfits adapt to your Trainer’s appearance, and keep owned outfits equipped when you change character gender.
 - Add six new gender-adaptive outfit boxes for 350 Aether Gems each; four existing outfit boxes cost 550 Gems each.
 - Add new shiny mount boxes: Toucannon, Arcanine and Aerodactyl for 500 Gems each; Latias, Latios, Dialga, Palkia, Zekrom, Metagross and Salamence for 750 Gems each; and Giratina Origin and Yveltal for 1,000 Gems each. Shiny Ho-Oh, Miraidon and Reshiram boxes cost 750 Gems each.
-- Browse Gift Store mounts with clearer previews, and filter or sort items by price, name, Gem affordability and Gift Voucher eligibility.
+- Preview the full mount and rider across different directions and animations. Filter and sort Gift Store items, including cosmetics and mounts, by gender, price, name, Gem affordability and Gift Voucher eligibility; your gender filter stays selected as you browse.
 - See popular Gift Store picks based on recent purchases.
 - Find a clear Untradeable label on items in your Bag.
 

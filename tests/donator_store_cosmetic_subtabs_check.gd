@@ -121,8 +121,8 @@ func _run() -> void:
 	store.call("_select_category", "cosmetics")
 	_check(store.cosmetic_subcategory_bar.visible, "cosmetic filters appear inside Cosmetics")
 	_check(store.cosmetic_filter_group_buttons.size() == 3, "three compact cosmetic primary filters are built")
-	_check(store.cosmetic_outfit_gender_control != null, "outfits include an audience filter")
-	_check(store.active_cosmetic_filter_group == "outfits" and store.active_outfit_gender_filter == "mine",
+	_check(store.cosmetic_gender_control != null, "outfits include an audience filter")
+	_check(store.active_cosmetic_filter_group == "outfits" and store.active_cosmetic_gender_filter == "mine",
 		"Cosmetics opens on outfits for the current character gender")
 	_check(store.cosmetic_item_category_select != null, "loose items use a category dropdown")
 	_check(store.cosmetic_item_category_select.item_count == 9, "dropdown includes all eight item types")
@@ -158,6 +158,7 @@ func _run() -> void:
 		_check(store.product_buttons.has(item_id), "%s is listed for male models" % item_id)
 	store.call("_select_cosmetic_filter_group", "all")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "All includes complete outfit boxes")
+	await _check_shared_cosmetic_gender_filter(store)
 	_check(store.catalog_search_input != null, "Gift Store includes a catalog search bar")
 	store.call("_on_catalog_search_changed", "adinho chroma beard")
 	_check(
@@ -199,10 +200,10 @@ func _run() -> void:
 	_check(ironfanton_preview.get("facial_hair", "") == "IronFanton_Beard", "IronFanton preview includes the beard")
 	_check(ironfanton_preview.get("top", "") == "IronFanton_Shirt", "IronFanton preview includes the shirt")
 	_check(not store.product_buttons.has("aether-blossom-outfit"), "male Trainers initially see their own-gender outfits")
-	store.active_outfit_gender_filter = "other"
+	store.active_cosmetic_gender_filter = "other"
 	store.call("_render_products")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "male Trainers can switch to browse female-only outfits")
-	store.active_outfit_gender_filter = "mine"
+	store.active_cosmetic_gender_filter = "mine"
 	store.call("_render_products")
 	store.call("_select_product", "aether-blossom-outfit")
 	var male_blossom_preview: Dictionary = store.call("_current_character_preview_appearance")
@@ -234,11 +235,11 @@ func _run() -> void:
 	store.set_trainer_gender("female")
 	_check(store.product_buttons.has("mysterious-outfit"), "unisex Mysterious Outfit stays available for female models")
 	_check(not store.product_buttons.has("adinho-classic-outfit"), "female Trainers initially see their own-gender outfits")
-	store.active_outfit_gender_filter = "other"
+	store.active_cosmetic_gender_filter = "other"
 	store.call("_render_products")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "female Trainers can switch to browse male-only outfits")
 	_check(store.product_buttons.has("ironfanton-outfit"), "other-gender filter includes male outfit boxes")
-	store.active_outfit_gender_filter = "mine"
+	store.active_cosmetic_gender_filter = "mine"
 	store.call("_render_products")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "Aether Blossom is listed for compatible female models")
 	store.call("_select_product", "aether-blossom-outfit")
@@ -310,10 +311,10 @@ func _run() -> void:
 	store.set_trainer_gender("male")
 	_check(store.product_buttons.has("adinho-classic-outfit"), "Adinho Classic is listed for compatible male models")
 	_check(not store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom is filtered from the default male outfit view")
-	store.active_outfit_gender_filter = "other"
+	store.active_cosmetic_gender_filter = "other"
 	store.call("_render_products")
 	_check(store.product_buttons.has("aether-blossom-outfit"), "female-only Aether Blossom remains accessible from the other-gender filter")
-	store.active_outfit_gender_filter = "mine"
+	store.active_cosmetic_gender_filter = "mine"
 	store.call("_render_products")
 	_check(store.call("_item_gender_badge", classic_item) == "MALE ONLY", "Adinho cards visibly identify male-only compatibility")
 	_check(
@@ -835,6 +836,80 @@ func _run() -> void:
 
 	store.queue_free()
 	quit(1 if failed else 0)
+
+
+func _choose_cosmetic_gender(store: DonatorStorePopup, filter_id: String) -> void:
+	for index in range(store.cosmetic_gender_control.item_count):
+		if str(store.cosmetic_gender_control.get_item_metadata(index)) == filter_id:
+			store.cosmetic_gender_control.select(index)
+			store.cosmetic_gender_control.item_selected.emit(index)
+			return
+	_check(false, "cosmetic gender option exists: " + filter_id)
+
+
+func _check_shared_cosmetic_gender_filter(store: DonatorStorePopup) -> void:
+	for gender: String in ["male", "female"]:
+		store.set_trainer_gender(gender)
+		var own_hair := "aether-" + gender + "-chroma-hair-1"
+		var other_gender := "female" if gender == "male" else "male"
+		var other_hair := "aether-" + other_gender + "-chroma-hair-1"
+		for filter_id: String in ["mine", "other", "all"]:
+			store.call("_select_cosmetic_subcategory", "hair")
+			_choose_cosmetic_gender(store, filter_id)
+			_check(store.cosmetic_gender_control.visible, "Hair keeps the gender filter visible")
+			_check(store.product_buttons.has(own_hair) == (filter_id != "other"), "%s Hair applies %s to own-gender products" % [gender, filter_id])
+			_check(store.product_buttons.has(other_hair) == (filter_id != "mine"), "%s Hair applies %s to other-gender products" % [gender, filter_id])
+			store.call("_select_cosmetic_filter_group", "outfits")
+			_check(store.active_cosmetic_gender_filter == filter_id, "switching to outfits preserves the gender choice")
+			_check(store.product_buttons.has("mysterious-outfit") == (filter_id != "other"), "shared outfits follow the audience filter")
+			store.call("_select_cosmetic_filter_group", "items")
+			_check(store.active_cosmetic_gender_filter == filter_id and store.cosmetic_gender_control.visible, "switching to loose items preserves the visible gender choice")
+			store.call("_select_cosmetic_subcategory", "facegear")
+			_check(store.product_buttons.has("adinho-chroma-glasses") == (filter_id != "other"), "unisex loose items stay in My character and All genders")
+			_check(not store.product_buttons.has("mysterious-outfit"), "gender filtering keeps outfit boxes out of loose items")
+			store.call("_select_cosmetic_filter_group", "all")
+			_check(store.active_cosmetic_gender_filter == filter_id and store.cosmetic_gender_control.visible, "All cosmetics preserves the visible gender choice")
+			_check(store.product_buttons.has(own_hair) == (filter_id != "other") and store.product_buttons.has(other_hair) == (filter_id != "mine"), "All combines the same audience filter with both product types")
+		store.call("_select_cosmetic_subcategory", "hair")
+		_choose_cosmetic_gender(store, "mine")
+		store.call("_select_product", own_hair)
+		_choose_cosmetic_gender(store, "other")
+		_check(store.selected_item_id == "" and store.purchase_button.disabled, "changing gender clears stale selection and checkout")
+		store.call("_select_product", other_hair)
+		_check(store.call("_current_character_preview_appearance").get("gender") == other_gender, "other-gender loose items use a compatible preview model")
+		store.call("_on_catalog_search_changed", other_hair)
+		_check(store.product_buttons.keys() == [other_hair], "search combines with loose item category and gender")
+		store.call("_on_catalog_search_changed", "")
+
+	store.set_trainer_gender("male")
+	store.call("_select_cosmetic_subcategory", "hair")
+	_choose_cosmetic_gender(store, "mine")
+	var previous_loaded := store.store_catalog_loaded
+	var previous_genders := store.authoritative_item_genders.duplicate(true)
+	store.store_catalog_loaded = true
+	store.authoritative_item_genders["aether-male-chroma-hair-1"] = ["female"]
+	store.call("_render_products")
+	_check(not store.product_buttons.has("aether-male-chroma-hair-1"), "loose item filter respects server gender metadata")
+	_choose_cosmetic_gender(store, "other")
+	_check(store.product_buttons.has("aether-male-chroma-hair-1"), "server compatibility overrides local audience metadata")
+	store.store_catalog_loaded = previous_loaded
+	store.authoritative_item_genders = previous_genders
+
+	store.show()
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		root.get_node("LocalizationManager").set_locale(locale)
+		for group_id: String in ["outfits", "items", "all"]:
+			store.call("_select_cosmetic_filter_group", group_id)
+			await process_frame
+			await process_frame
+			_check(store.cosmetic_gender_control.get_item_text(2) == root.get_node("LocalizationManager").text("ui.store.cosmetic.gender.all"), "All genders option is localized: " + locale)
+			var bar := store.cosmetic_subcategory_bar
+			_check(bar.get_combined_minimum_size().x <= bar.get_parent().size.x, "cosmetic controls fit the catalog width: " + locale + " / " + group_id)
+			_check(store.cosmetic_item_category_control.visible == (group_id == "items"), "item category visibility stays independent of gender")
+	root.get_node("LocalizationManager").set_locale("en")
+	store.hide()
+	_choose_cosmetic_gender(store, "mine")
+	store.call("_select_cosmetic_filter_group", "all")
 
 
 func _check(condition: bool, message: String) -> void:
