@@ -1107,6 +1107,10 @@
 		}
 	],
 	"existing_visual_and_gameplay_preserved": true,
+	"flower_sway_update": {
+		"report": "res://tools/lobby_flower_rollout_report.json",
+		"source_sha256": "0729efa6e8440f42158f168164aeb12a3a478dd797be686f60cf2e7795a082a9"
+	},
 	"preserved_animations": {
 		"08b923787bd75fa45694a08e208f4988a7b93cc02f37879592977a2286986844": [
 			{
@@ -1352,243 +1356,243 @@
 		],
 		"1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee": [
 			{
-				"duration": 0.810000002384186,
+				"duration": 0.07,
 				"hash": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "39f38de8d19f8d621b36e9d5e3d117466cc0e1940b459cdfa4e8513fa4e91f81",
+				"duration": 0.07,
+				"hash": "000ba66afe38b0a4cdc19d46b811ff1c02c49f9ad92be18056599c327675ede6",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "240a0964c86dd83bec9597cf931ab03427ef30c478122c6ff33f01403c7c890b",
+				"duration": 0.07,
+				"hash": "823035d3e3ad36d07cfd8a543d8407ee4ef51c0c6a4362b7ac0f1048bf9f6dbd",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b2cc01196be4a8af560c32254db918b4bb045807b5161ce8dde3cdfeabaa5f1c",
+				"duration": 0.07,
+				"hash": "6937d36cbca254ad8a4f49f1b745619493c3d39ca3d60b69f44f8ada95e7d626",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "04a2d72c200ef44bf1d99312e9696a6c45fe5e790385ccce439bb765fabbc340",
+				"duration": 0.07,
+				"hash": "dedf91ee57ab79f35ecf9d873b3bab8546011d5a6796ab839d91173856473530",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "c0f1e382ff2b2e77c602adee80572a80817b4b41eb2e9c307f99e0956156a976",
+				"duration": 0.07,
+				"hash": "62a4df983f27d51bfcb8940546d142f7f8f4faf4dc537b28776cfdaf771ff154",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "32ab03755d2d0cc3f8cf14ec12c0eacdba74b29b31cf3acf6e9329869779133e",
+				"duration": 0.07,
+				"hash": "4e0f605c07df92760e4357a4a5f2f33311baa9e7358c5c62a0f594fd8cfa5496",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "7d6e225dc70811c46367b49d821b08fcb4b4a29f1c3fa9223a4c3200a7b69f2b",
+				"duration": 0.07,
+				"hash": "da97173d6f6b91610a5c906f2ab842e58852183e464563d68cda4dc4c7274ddd",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "03f8c7e71b0305882a5787d918bb529fc48116b17355a6e891116ceb0761b380",
+				"duration": 0.07,
+				"hash": "c8daae15511ac5876d730f394c0d84ca569b0d604ee9464936495813a26f1cf3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "0ce7663e6f813ea6973d82e43b1701199c17827a0e0d38acbc8f5bf06c747f59",
+				"duration": 0.07,
+				"hash": "00346c17ab3ef615149c05f84469f73ad6e256e14c9e50d3f7282e2f98df921e",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "a79c4a1aca186830ca0b7abaab0ded18a7b3e3c1299e4d9b5515dbca224db9ac",
+				"duration": 0.07,
+				"hash": "c0aad05d721eb472e2f3607da9fd09ef59ecf87b32d7c9ff604e3043e638b0c2",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "c079b34ab25879c3882f1893f32f116cdeaf6e647060aefcfd9bb1557ba5204c",
+				"duration": 0.07,
+				"hash": "20153e1c60159a6f564f76adf29783af1f1d77df857cefa07e7d9de23e475246",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "22136ea636400b5d02cf4cbbdb9a292d007ac0e04d41ffc790d1d9a9bd89a1f1",
+				"duration": 0.07,
+				"hash": "4f43a8b29abdef0d0d5d23f7e631138d0de5fbd9045cc2cae9d57b11f2e736e5",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "97cb09b1df236dd7f323d3a58382b5f6c924526c7fae5f418818c9a8b50d28fa",
+				"duration": 0.07,
+				"hash": "20153e1c60159a6f564f76adf29783af1f1d77df857cefa07e7d9de23e475246",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "335bf402ddd7f3ee20f697fb529c5111ddb3917c54d56a72b187e7126bc38658",
+				"duration": 0.07,
+				"hash": "c0aad05d721eb472e2f3607da9fd09ef59ecf87b32d7c9ff604e3043e638b0c2",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "635f51a75b92fba258b7b8366444140b88eae09476501fda8e46362486a8dabc",
+				"duration": 0.07,
+				"hash": "00346c17ab3ef615149c05f84469f73ad6e256e14c9e50d3f7282e2f98df921e",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "159debc28050871403110e7ffb76f4f7b7837c36c78623b879b72a8adbecc132",
+				"duration": 0.07,
+				"hash": "c8daae15511ac5876d730f394c0d84ca569b0d604ee9464936495813a26f1cf3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4cec23e4d14aa0f7ae123f3934c85fa964442df4308f049ec8ddea819b3bfc16",
+				"duration": 0.07,
+				"hash": "da97173d6f6b91610a5c906f2ab842e58852183e464563d68cda4dc4c7274ddd",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "9bb6078b4cf688087ff584e06957aa9f02db5d8aad324f89e4eceed9d7f6639a",
+				"duration": 0.07,
+				"hash": "4e0f605c07df92760e4357a4a5f2f33311baa9e7358c5c62a0f594fd8cfa5496",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4f61170e1049df16ebd5c1a43ff55d58b3bed0a08860b6a6cec70e07ee8d210f",
+				"duration": 0.07,
+				"hash": "62a4df983f27d51bfcb8940546d142f7f8f4faf4dc537b28776cfdaf771ff154",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "e3eeda0f145135b913a7b434b62a8dfda4dd68a4d02aa47cafddd082492901ab",
+				"duration": 0.07,
+				"hash": "dedf91ee57ab79f35ecf9d873b3bab8546011d5a6796ab839d91173856473530",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "38bfa6a43a74883639007645b11a98933b8cd5083f295c983ad44e389b683cff",
+				"duration": 0.07,
+				"hash": "6937d36cbca254ad8a4f49f1b745619493c3d39ca3d60b69f44f8ada95e7d626",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "147d5b30230090472405e1ba5df2c31e953a502238f1a00d58337a3b44326946",
+				"duration": 0.07,
+				"hash": "823035d3e3ad36d07cfd8a543d8407ee4ef51c0c6a4362b7ac0f1048bf9f6dbd",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "d0e10c016da2b7d71036f344d9f8533761786ea6c0360b82252e006914504098",
+				"duration": 0.07,
+				"hash": "000ba66afe38b0a4cdc19d46b811ff1c02c49f9ad92be18056599c327675ede6",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "343d90459e3ffc4bfc61c5f06f344aa92ee18b63e9a9abca3d6423c46831de1b",
+				"duration": 0.07,
+				"hash": "1b2a68fae9d0c23a3fe1e34c71c46252d64959cf21bb961e1975297128f92eee",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "d0e10c016da2b7d71036f344d9f8533761786ea6c0360b82252e006914504098",
+				"duration": 0.07,
+				"hash": "d7cff57be106913df4f392bd29d3f32c0f2151726e3ddfe4df952da9d2171413",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "147d5b30230090472405e1ba5df2c31e953a502238f1a00d58337a3b44326946",
+				"duration": 0.07,
+				"hash": "dc65695da7dc261761d754d60115b4d4036af415901b74f45675098fccb17600",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "38bfa6a43a74883639007645b11a98933b8cd5083f295c983ad44e389b683cff",
+				"duration": 0.07,
+				"hash": "23b15a8083aff3fa25d3f62e239802007ff1f5657449b70c46860fc4b1213cc1",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "e3eeda0f145135b913a7b434b62a8dfda4dd68a4d02aa47cafddd082492901ab",
+				"duration": 0.07,
+				"hash": "330fed182e97e37c69676c75c34d99dcba5292e244e222819ce169ba7f9591e3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4f61170e1049df16ebd5c1a43ff55d58b3bed0a08860b6a6cec70e07ee8d210f",
+				"duration": 0.07,
+				"hash": "d30efd2ad76bbcf8312e939caaffff0d66d88b22218ecf642c2d850f9293a3fa",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "9bb6078b4cf688087ff584e06957aa9f02db5d8aad324f89e4eceed9d7f6639a",
+				"duration": 0.07,
+				"hash": "4c9353c8ec4815cfed62e11cb93976acad840e5c6dd6fad2404690f0dc014c6c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4cec23e4d14aa0f7ae123f3934c85fa964442df4308f049ec8ddea819b3bfc16",
+				"duration": 0.07,
+				"hash": "3f11bef78a8ea8034193168f25514dcc16290aea5310f1ede652c94b8e84ba37",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "159debc28050871403110e7ffb76f4f7b7837c36c78623b879b72a8adbecc132",
+				"duration": 0.07,
+				"hash": "41db5f594f6d1c83ec0c737ce3935db60e2337a2989d0d141d490b4e4a660ff5",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "635f51a75b92fba258b7b8366444140b88eae09476501fda8e46362486a8dabc",
+				"duration": 0.07,
+				"hash": "a90a670aa2dea511ecc809c75182b8c833d5f434035070ceedff601dc1eb211c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "335bf402ddd7f3ee20f697fb529c5111ddb3917c54d56a72b187e7126bc38658",
+				"duration": 0.07,
+				"hash": "9eb34c830533591cb588ef80296b58b107e86b6c7f49829035580a611412ef38",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "97cb09b1df236dd7f323d3a58382b5f6c924526c7fae5f418818c9a8b50d28fa",
+				"duration": 0.07,
+				"hash": "7d24cb7073281aae053d32993fb3f72abf99a8f3edf7a8f281240ceeb5c540a0",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "22136ea636400b5d02cf4cbbdb9a292d007ac0e04d41ffc790d1d9a9bd89a1f1",
+				"duration": 0.07,
+				"hash": "633f4fd10620931721d67b6aaf938f69a5566d84295a7c69890aad312092eb20",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "c079b34ab25879c3882f1893f32f116cdeaf6e647060aefcfd9bb1557ba5204c",
+				"duration": 0.07,
+				"hash": "7d24cb7073281aae053d32993fb3f72abf99a8f3edf7a8f281240ceeb5c540a0",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "a79c4a1aca186830ca0b7abaab0ded18a7b3e3c1299e4d9b5515dbca224db9ac",
+				"duration": 0.07,
+				"hash": "9eb34c830533591cb588ef80296b58b107e86b6c7f49829035580a611412ef38",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "0ce7663e6f813ea6973d82e43b1701199c17827a0e0d38acbc8f5bf06c747f59",
+				"duration": 0.07,
+				"hash": "a90a670aa2dea511ecc809c75182b8c833d5f434035070ceedff601dc1eb211c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "03f8c7e71b0305882a5787d918bb529fc48116b17355a6e891116ceb0761b380",
+				"duration": 0.07,
+				"hash": "41db5f594f6d1c83ec0c737ce3935db60e2337a2989d0d141d490b4e4a660ff5",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "7d6e225dc70811c46367b49d821b08fcb4b4a29f1c3fa9223a4c3200a7b69f2b",
+				"duration": 0.07,
+				"hash": "3f11bef78a8ea8034193168f25514dcc16290aea5310f1ede652c94b8e84ba37",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "32ab03755d2d0cc3f8cf14ec12c0eacdba74b29b31cf3acf6e9329869779133e",
+				"duration": 0.07,
+				"hash": "4c9353c8ec4815cfed62e11cb93976acad840e5c6dd6fad2404690f0dc014c6c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "c0f1e382ff2b2e77c602adee80572a80817b4b41eb2e9c307f99e0956156a976",
+				"duration": 0.07,
+				"hash": "d30efd2ad76bbcf8312e939caaffff0d66d88b22218ecf642c2d850f9293a3fa",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "04a2d72c200ef44bf1d99312e9696a6c45fe5e790385ccce439bb765fabbc340",
+				"duration": 0.07,
+				"hash": "330fed182e97e37c69676c75c34d99dcba5292e244e222819ce169ba7f9591e3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b2cc01196be4a8af560c32254db918b4bb045807b5161ce8dde3cdfeabaa5f1c",
+				"duration": 0.07,
+				"hash": "23b15a8083aff3fa25d3f62e239802007ff1f5657449b70c46860fc4b1213cc1",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "240a0964c86dd83bec9597cf931ab03427ef30c478122c6ff33f01403c7c890b",
+				"duration": 0.07,
+				"hash": "dc65695da7dc261761d754d60115b4d4036af415901b74f45675098fccb17600",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "39f38de8d19f8d621b36e9d5e3d117466cc0e1940b459cdfa4e8513fa4e91f81",
+				"duration": 0.07,
+				"hash": "d7cff57be106913df4f392bd29d3f32c0f2151726e3ddfe4df952da9d2171413",
 				"speed": 1.0
 			}
 		],
@@ -3378,243 +3382,243 @@
 		],
 		"c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a": [
 			{
-				"duration": 0.810000002384186,
+				"duration": 0.07,
 				"hash": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "a2433ed7d7c13e5395f8889e0f50e2decd5b35d25332c8229a2f12f559de0c41",
+				"duration": 0.07,
+				"hash": "76745749ac03e2a0c5dfb972313277e441f1ccdf01cc4bacbc7cc312aff3056d",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b5c51945a50e4fd384f22cf172a1d83767e9332fb9c9bdabcdde6d5bdd23fe41",
+				"duration": 0.07,
+				"hash": "a536c45b3cc8298eb79a32a4fcc6099c1927e0b0ccf67f3db7ef704aad911d9d",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "aa9b11258642ea5a9386bac1eace0ec582c0257f7f2de8018bafe8d33606e67b",
+				"duration": 0.07,
+				"hash": "f9521f49ef94c47e6b2c197ef8f923d92295637d8ad567b1eb2bb21cda8daf99",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b8e98963fbd165f94bac7b21394995628a3a5efd4f0ceb378f9e6e49eb10ff9e",
+				"duration": 0.07,
+				"hash": "35af7755cfb0db28586e8a2dae8dbfa9fdecfdf5099594038e345f434242d10c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "ac3da4879ccaa6f0ff4ac5424929d46531c2f8afa4204a1345b20368967c1762",
+				"duration": 0.07,
+				"hash": "90bbd47afe9475cb5a5f5ce44c6add1c485222ca78b190b23c4adb7175971998",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "5f88ca32ebde8c12f4c51d5cdb354cd755692b19cc3e8f543e2f53d0555c7c2e",
+				"duration": 0.07,
+				"hash": "b20d49a47929f48210153a885715586b8583c0a9c972b926e9da1bb918bda2c2",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "d6795428e3902a0ecd17c2919f47d72b88ea0a18d02fc23302cf8e141e124b54",
+				"duration": 0.07,
+				"hash": "96096e0a0e096a77bc54cf8c9a9298ce02d88d4f3272d3e934b1abe918981c4c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "de8885bfcb44494c5185156c1bfc3eccac0b9cce1d835ea4d57da7d9561adaa2",
+				"duration": 0.07,
+				"hash": "1241879177d5aa9554ccb42b23092904ea0af977052b4e8309b387d4dc3e7d01",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "eaf775467a23d4c33e45101130ac1e6b9b7e2252e19d3a4b43aae6c5a15c87ca",
+				"duration": 0.07,
+				"hash": "f476a148f18c4a32ec3d77a5b2e5e8d51feb40d20edc244f35ac53da8e1740c9",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "6d53158670d68989ba76fe4ed20c82ca457d58b4675818b6fb3534893eee6ec5",
+				"duration": 0.07,
+				"hash": "4fd100cbea04a2d66e639bead18eab2e3551a87155a296a33df402e33faa1e74",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "67ec7acd0d712a06a8be8b15c2159715d213829715abd9afb0cfaca6fc2fe885",
+				"duration": 0.07,
+				"hash": "2f73ced72b619ee0475c8752e6a6ca8c3aafd2e18552af2ec586f48cfd3ba4ab",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "529527efd8cae61c07cef8e35a492cf9a0c44dfa4f2a7d2409b821247dc66847",
+				"duration": 0.07,
+				"hash": "ac9d488dd0489502e91a945de01551fccb6ca2e493a4398bc88f96c7972c47e8",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "2bfe489ce82be53e121d71b8e2eaeff69491f2ed0d524d2a751a5275419b9169",
+				"duration": 0.07,
+				"hash": "2f73ced72b619ee0475c8752e6a6ca8c3aafd2e18552af2ec586f48cfd3ba4ab",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "0f41da589e1f1bc97c18590794330a61b4ecae529077314357dbd1bb6134a31f",
+				"duration": 0.07,
+				"hash": "4fd100cbea04a2d66e639bead18eab2e3551a87155a296a33df402e33faa1e74",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "968766d4c3bb58277ab38f17e6c8b95d69e1dffdbc079138b1093eb2db85d467",
+				"duration": 0.07,
+				"hash": "f476a148f18c4a32ec3d77a5b2e5e8d51feb40d20edc244f35ac53da8e1740c9",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "75564b7146666b8eb2c91fd41f288bab4127bfec424dcd3524001ac74489adeb",
+				"duration": 0.07,
+				"hash": "1241879177d5aa9554ccb42b23092904ea0af977052b4e8309b387d4dc3e7d01",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "6d221a4c026ae23b2949e925a51350121ed62b72321fef3de434acf498d6f8fb",
+				"duration": 0.07,
+				"hash": "96096e0a0e096a77bc54cf8c9a9298ce02d88d4f3272d3e934b1abe918981c4c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "46c9e112830a13e110f98caee69cdaae6ac425c7450a6671a8fa30f723c280d3",
+				"duration": 0.07,
+				"hash": "b20d49a47929f48210153a885715586b8583c0a9c972b926e9da1bb918bda2c2",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "66a29e24152682f7d426926461f55acb21d52beb9a478fc51a46ee45231f18dd",
+				"duration": 0.07,
+				"hash": "90bbd47afe9475cb5a5f5ce44c6add1c485222ca78b190b23c4adb7175971998",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b4d7233c63245fbb54f94453d301dd95410d1d3299f63c0e6e50b6f1321eb6ff",
+				"duration": 0.07,
+				"hash": "35af7755cfb0db28586e8a2dae8dbfa9fdecfdf5099594038e345f434242d10c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4079386b2f3f2e9d094bf66d894535b1ca61eb1ea34fd6bfd50bde0c4e069746",
+				"duration": 0.07,
+				"hash": "f9521f49ef94c47e6b2c197ef8f923d92295637d8ad567b1eb2bb21cda8daf99",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "403e97941b1f47e47311ab04f2f2ec3181352d51a1b8909026d660dcb0950387",
+				"duration": 0.07,
+				"hash": "a536c45b3cc8298eb79a32a4fcc6099c1927e0b0ccf67f3db7ef704aad911d9d",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "968f8e953bad8c6b1e10be36f39c8ecd1102a231df6a145eb6a390132ebef75f",
+				"duration": 0.07,
+				"hash": "76745749ac03e2a0c5dfb972313277e441f1ccdf01cc4bacbc7cc312aff3056d",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "0e4888fe50060c6c7edd2dba4c487f40a80c2bc838695439ad5df5ad2b529130",
+				"duration": 0.07,
+				"hash": "c87955c31b85bd91399b5dfd2b2ffc9abc40bad0442e4401b365cf429ea5ef4a",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "968f8e953bad8c6b1e10be36f39c8ecd1102a231df6a145eb6a390132ebef75f",
+				"duration": 0.07,
+				"hash": "c0f07312a0a4d3f521ac626be1039c4eda48b33758408bc36b92d832e6b58e40",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "403e97941b1f47e47311ab04f2f2ec3181352d51a1b8909026d660dcb0950387",
+				"duration": 0.07,
+				"hash": "158e4e5b6e6b240086184afe18792bb19d58aa05be61775927f9a8a737419118",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "4079386b2f3f2e9d094bf66d894535b1ca61eb1ea34fd6bfd50bde0c4e069746",
+				"duration": 0.07,
+				"hash": "1e67f0f5653578c33b25f80c94a24fe313c96ff563e0b21f44d533c17116a60c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b4d7233c63245fbb54f94453d301dd95410d1d3299f63c0e6e50b6f1321eb6ff",
+				"duration": 0.07,
+				"hash": "1d6dbde79fc1cf381c3914889186996f3ae3e9ada60691afbefeae40ca4f68e3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "66a29e24152682f7d426926461f55acb21d52beb9a478fc51a46ee45231f18dd",
+				"duration": 0.07,
+				"hash": "000d3c924d7c1b8272983d7f37c491968facd07aeaa2e3c36e7d3f842631fac8",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "46c9e112830a13e110f98caee69cdaae6ac425c7450a6671a8fa30f723c280d3",
+				"duration": 0.07,
+				"hash": "b2f1b663a1df89b8f926e52a868e66f31bbdd7d4486caab971ea9b072857583f",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "6d221a4c026ae23b2949e925a51350121ed62b72321fef3de434acf498d6f8fb",
+				"duration": 0.07,
+				"hash": "4c306b39386dd00c904e54b711392101d2e3fa1658f8c6916458ecec764068db",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "75564b7146666b8eb2c91fd41f288bab4127bfec424dcd3524001ac74489adeb",
+				"duration": 0.07,
+				"hash": "11c9f6de5eaf2e4bb4949b1d250eec69ea589d5fe1e6927d22b314e6c5c8759b",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "968766d4c3bb58277ab38f17e6c8b95d69e1dffdbc079138b1093eb2db85d467",
+				"duration": 0.07,
+				"hash": "83c0f43643ac81ab6aed87473a1fbecc0d578853a51bcdd6d689da4008c85961",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "0f41da589e1f1bc97c18590794330a61b4ecae529077314357dbd1bb6134a31f",
+				"duration": 0.07,
+				"hash": "1f238e0f9508a2d007b18f4c95007b750a808ed6b10b7f614edb201fbc6c5962",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "2bfe489ce82be53e121d71b8e2eaeff69491f2ed0d524d2a751a5275419b9169",
+				"duration": 0.07,
+				"hash": "f77ba8f3cec19ed7a73a872e16f6c9645796143fd4c0fb2818d66ed85acd2a01",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "529527efd8cae61c07cef8e35a492cf9a0c44dfa4f2a7d2409b821247dc66847",
+				"duration": 0.07,
+				"hash": "bea0df8b89b48c45a63a69a1c5982cbf9c1a5cda88804746c430f5deb9d91a8a",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "67ec7acd0d712a06a8be8b15c2159715d213829715abd9afb0cfaca6fc2fe885",
+				"duration": 0.07,
+				"hash": "f77ba8f3cec19ed7a73a872e16f6c9645796143fd4c0fb2818d66ed85acd2a01",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "6d53158670d68989ba76fe4ed20c82ca457d58b4675818b6fb3534893eee6ec5",
+				"duration": 0.07,
+				"hash": "1f238e0f9508a2d007b18f4c95007b750a808ed6b10b7f614edb201fbc6c5962",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "eaf775467a23d4c33e45101130ac1e6b9b7e2252e19d3a4b43aae6c5a15c87ca",
+				"duration": 0.07,
+				"hash": "83c0f43643ac81ab6aed87473a1fbecc0d578853a51bcdd6d689da4008c85961",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "de8885bfcb44494c5185156c1bfc3eccac0b9cce1d835ea4d57da7d9561adaa2",
+				"duration": 0.07,
+				"hash": "11c9f6de5eaf2e4bb4949b1d250eec69ea589d5fe1e6927d22b314e6c5c8759b",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "d6795428e3902a0ecd17c2919f47d72b88ea0a18d02fc23302cf8e141e124b54",
+				"duration": 0.07,
+				"hash": "4c306b39386dd00c904e54b711392101d2e3fa1658f8c6916458ecec764068db",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "5f88ca32ebde8c12f4c51d5cdb354cd755692b19cc3e8f543e2f53d0555c7c2e",
+				"duration": 0.07,
+				"hash": "b2f1b663a1df89b8f926e52a868e66f31bbdd7d4486caab971ea9b072857583f",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "ac3da4879ccaa6f0ff4ac5424929d46531c2f8afa4204a1345b20368967c1762",
+				"duration": 0.07,
+				"hash": "000d3c924d7c1b8272983d7f37c491968facd07aeaa2e3c36e7d3f842631fac8",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b8e98963fbd165f94bac7b21394995628a3a5efd4f0ceb378f9e6e49eb10ff9e",
+				"duration": 0.07,
+				"hash": "1d6dbde79fc1cf381c3914889186996f3ae3e9ada60691afbefeae40ca4f68e3",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "aa9b11258642ea5a9386bac1eace0ec582c0257f7f2de8018bafe8d33606e67b",
+				"duration": 0.07,
+				"hash": "1e67f0f5653578c33b25f80c94a24fe313c96ff563e0b21f44d533c17116a60c",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "b5c51945a50e4fd384f22cf172a1d83767e9332fb9c9bdabcdde6d5bdd23fe41",
+				"duration": 0.07,
+				"hash": "158e4e5b6e6b240086184afe18792bb19d58aa05be61775927f9a8a737419118",
 				"speed": 1.0
 			},
 			{
-				"duration": 0.0900000035762787,
-				"hash": "a2433ed7d7c13e5395f8889e0f50e2decd5b35d25332c8229a2f12f559de0c41",
+				"duration": 0.07,
+				"hash": "c0f07312a0a4d3f521ac626be1039c4eda48b33758408bc36b92d832e6b58e40",
 				"speed": 1.0
 			}
 		],
