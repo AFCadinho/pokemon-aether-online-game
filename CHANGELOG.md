@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Intensify 3D Close Combat with a continuous left/right fist barrage, larger readable hands, curved punch trails, attacker weight shifts and a stronger finishing blow.
+
 - Rework 3D Close Combat around its 2D combo: a quick approach, alternating fists and strike flashes, repeated pitched hit sounds and a larger final blow, with early dodge and a full contact hold.
 
 - Preserve Gliscor's flight pose, Mega Garchomp's standing pose and Charmander's breath animation for explicitly verified lossless copies of their models.

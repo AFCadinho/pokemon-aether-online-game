@@ -4,7 +4,7 @@ func _start() -> void:
 	await super._start()
 	move_picker.clear();move_picker.add_item("Close Combat")
 	root.title="PokeAether — Close Combat — 2D-combinatie in 3D"
-	status.text="Close Combat: snelle aanloop, afwisselende slagen en een grote slotklap. Test ook ontwijken en de andere kant."
+	status.text="Close Combat: snelle aanloop, 27 overlappende vuisten/handen en een zware slotklap. Test ook ontwijken en de andere kant."
 	print("CLOSE_COMBAT_PREVIEW_READY")
 	if "--smoke-combo" in OS.get_cmdline_user_args():await _capture_combo()
 func _capture_combo() -> void:

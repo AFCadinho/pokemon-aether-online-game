@@ -1057,7 +1057,21 @@ func _update_move_contacts() -> void:
 		if z_style in ["sky_dive","moonsault","body_slam","electric_dive"]:
 			var leap := clampf((seconds-approach_start)/maxf(contact_time-approach_start,.01),0,1)
 			offset.y += sin(leap*PI) * (2.0 if z_style=="sky_dive" else 1.3)
-		_set_contact_pose(index, offset, float(motion.yaw) * weight)
+		var yaw := float(motion.yaw)*weight
+		if motion.has("combo"):
+			var frame := seconds/duration*float(motion.combo.source_frames)
+			var flurry := smoothstep(3,5,frame)*(1-smoothstep(23,26,frame))
+			var forward: Vector3=motion.displacement.normalized()
+			var side := forward.cross(Vector3.UP)
+			var pulse := sin((frame-3)*PI/1.7)
+			# Weight shifts retreat from the contact boundary, never into the target.
+			offset+=side*pulse*.16*flurry-forward*(.08+.08*cos(frame*PI/1.7))*flurry
+			offset.y-=absf(pulse)*.055*flurry
+			yaw+=pulse*.14*flurry
+			var windup := smoothstep(24,27,frame)*(1-smoothstep(27,28,frame))
+			offset-=forward*.38*windup
+			yaw-=.2*windup
+		_set_contact_pose(index, offset, yaw)
 
 func _fixed_target_move_anchors(actor: String, target: String, move: String, point: Vector3, radius: float, ground: Variant = null) -> Dictionary:
 	var anchors := _move_anchors(actor, target, move)
