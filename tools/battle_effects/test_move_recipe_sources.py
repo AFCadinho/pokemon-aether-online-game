@@ -62,11 +62,13 @@ class RecipeSources(unittest.TestCase):
   manifest=json.loads((ROOT/'assets/battles/moves_3d/audio_recipes/manifest.json').read_text())['entries']
   manifest.update(json.loads((ROOT/'assets/battles/moves_3d/audio_z_choreography/manifest.json').read_text())['entries'])
   seen=set()
+  catalog=json.loads((ROOT/'data/battle_move_animations.json').read_text())['moves']
   for k,recipe in r.items():
    for cue in recipe['audio']:
     name=Path(cue['path']).name;seen.add(name)
     self.assertIn(name,manifest,k)
     self.assertEqual(cue['path'],manifest[name]['path'])
+    self.assertEqual(manifest[name]['source'],catalog[k]['sound_paths'][cue['name']],k)
     self.assertTrue(0<cue['pitch']<=400)
   self.assertEqual(seen,set(manifest))
 if __name__=='__main__':unittest.main()

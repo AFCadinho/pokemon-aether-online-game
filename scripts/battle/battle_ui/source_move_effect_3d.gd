@@ -34,8 +34,14 @@ uniform float frame_index = 0.0;
 uniform float opacity = 1.0;
 uniform bool source_alpha = false;
 void fragment() {
-	vec2 uv = vec2((UV.x + floor(frame_index)) / frames, UV.y);
-	vec4 sample_color = texture(source_mask, uv);
+	// Blend adjacent source frames and keep filtering inside the atlas cell.
+	vec2 texel = 0.5 / vec2(textureSize(source_mask, 0));
+	vec2 local_uv = clamp(UV, texel * vec2(frames, 1.0), vec2(1.0) - texel * vec2(frames, 1.0));
+	float first = floor(frame_index);
+	float next = min(first + 1.0, frames - 1.0);
+	vec4 a = texture(source_mask, vec2((local_uv.x + first) / frames, local_uv.y));
+	vec4 b = texture(source_mask, vec2((local_uv.x + next) / frames, local_uv.y));
+	vec4 sample_color = mix(a, b, fract(frame_index));
 	ALBEDO = tint * (source_alpha ? sample_color.r : 1.0);
 	ALPHA = (source_alpha ? sample_color.a : sample_color.r) * opacity;
 }
@@ -63,7 +69,7 @@ func _source_sprite(point: Vector3, size: float, id: String, phase: float, alpha
 		sprite_keys[cursor] = id
 	var mat := sprite_materials[cursor]
 	var frames: float = _sprite_values(id)[2]
-	mat.set_shader_parameter("frame_index", minf(floor(clampf(phase, 0, 0.999) * frames), frames - 1.0))
+	mat.set_shader_parameter("frame_index", clampf(phase, 0, 1) * (frames - 1.0))
 	mat.set_shader_parameter("opacity", alpha)
 	_piece(quad, mat, point, Vector3(aspect.x, aspect.y, 1.0) * size, facing * Basis(Vector3.FORWARD, rotation_value))
 

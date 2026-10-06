@@ -29,6 +29,7 @@ func _sprite_values(id: String) -> Array:
 
 func _prepare() -> void:
 	super._prepare()
+	tooth.radial_segments = 24
 	style = str(recipe.z_choreography.style)
 	ring.inner_radius = 0.965
 	dark = _material(Color("150e29"),0.9)
