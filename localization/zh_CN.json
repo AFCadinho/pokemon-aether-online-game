@@ -1419,6 +1419,8 @@
   "ui.bag.categories": "类别",
   "ui.bag.items": "道具",
   "ui.bag.inventory_hint": "单击以检查·拖动或右键单击以执行操作",
+  "ui.bag.untradeable": "不可交易",
+  "ui.bag.untradeable_quantity": "不可交易 · ×{quantity}",
   "ui.bag.selected_item": "所选项目",
   "ui.bag.select_item": "选择一个项目",
   "ui.bag.select_item_action": "选择一个项目",

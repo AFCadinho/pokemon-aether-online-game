@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.
+
 - Unify Team Rocket clothing into gender-adaptive items and one reward box; keep adaptive cosmetics equipped through gender changes and preserve existing ownership.
 
 - Keep the original prepared-model cache budget for verified lossless model files and support verified whole-collection installation before activation.
