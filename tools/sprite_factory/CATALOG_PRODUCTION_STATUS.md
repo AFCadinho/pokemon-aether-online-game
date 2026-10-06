@@ -1,5 +1,18 @@
 # Catalog production direction — 2026-09-22
 
+## Lossless native-container investigation — 2026-10-06
+
+The user explicitly reopened storage research after the approved collection
+reached a measured 19.86 GB and authorized a temporary fourth task slot. The
+new investigation preserves whole native resource streams and varies only
+Zstandard block framing; it does not reactivate component assembly in a game
+loader. The 22-scene sample saves 35.22% with exact decompressed bytes and
+passing native load/semantic checks. Strict rendered comparisons are held: an
+unchanged-original control reproduces the same Dragonite pixel mismatch.
+No production assets, admissions or distribution indexes changed. See
+[research evidence](../../docs/lossless-native-model-compression-research.md).
+
+
 ## Batch 04 — initial intake and composition probes (2026-09-27)
 
 The first review-only pipeline pass processed all 226 candidates. Source intake
