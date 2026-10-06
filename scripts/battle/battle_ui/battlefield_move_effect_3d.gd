@@ -27,6 +27,13 @@ var star_mesh: ArrayMesh
 var wind_material: ShaderMaterial
 var blast_material: ShaderMaterial
 var shock_ring := TorusMesh.new()
+var fire_shader: Shader
+var star_halos: Array[ShaderMaterial] = []
+
+func _sprite_values(id: String) -> Array:
+	if id=="heat_flame":return SPRITES.ember_core
+	if id=="heat_spark":return SPRITES.ember_sparks
+	return super._sprite_values(id)
 
 func _geometry_scale() -> float:
 	# The arena dimensions are world meters, independent of projectile magnification.
@@ -118,6 +125,56 @@ void fragment() {
 			tool.add_vertex(Vector3(cos(c),.13,sin(c))*(.55+.45*sin((segment+1)*PI/5)))
 	flower_mesh=tool.commit()
 	_prepare_wide_meshes()
+	_prepare_fire_and_starlight()
+
+func _prepare_fire_and_starlight() -> void:
+	if key=="heatwave":
+		# Dense red/orange edges and a hot yellow core keep fire readable against
+		# the purple arena; low-opacity additive beige looked like drifting dust.
+		fire_shader=Shader.new()
+		fire_shader.code="""
+shader_type spatial;
+render_mode unshaded, cull_disabled, blend_mix, depth_draw_never;
+uniform sampler2D source_mask : filter_linear, repeat_disable;
+uniform float frames;
+uniform float frame_index;
+uniform float opacity;
+void fragment() {
+	vec2 texel=.5/vec2(textureSize(source_mask,0));
+	vec2 uv=clamp(UV,texel*vec2(frames,1.),vec2(1.)-texel*vec2(frames,1.));
+	float f=floor(frame_index);
+	float mask=mix(texture(source_mask,vec2((uv.x+f)/frames,uv.y)).r,texture(source_mask,vec2((uv.x+min(f+1.,frames-1.))/frames,uv.y)).r,fract(frame_index));
+	vec3 flame=mix(vec3(.9,.025,.002),vec3(1.,.25,.006),smoothstep(.08,.42,mask));
+	flame=mix(flame,vec3(1.,.86,.12),smoothstep(.45,.95,mask)*(1.-UV.y*.3));
+	ALBEDO=flame;
+	EMISSION=flame*.65;
+	ALPHA=smoothstep(.015,.32,mask)*opacity;
+}
+"""
+	if key=="terastarstorm":
+		var halo_shader := Shader.new()
+		halo_shader.code="""
+shader_type spatial;
+render_mode unshaded, cull_disabled, blend_add, depth_draw_never;
+uniform vec4 tint : source_color;
+uniform float opacity;
+void fragment() {
+	float radius=length((UV-.5)*2.);
+	float mask=exp(-radius*radius*4.)*(1.-smoothstep(.65,1.,radius));
+	ALBEDO=tint.rgb;
+	ALPHA=mask*opacity;
+}
+"""
+		for mat in spectrum:
+			var halo := ShaderMaterial.new()
+			halo.shader=halo_shader
+			halo.set_shader_parameter("tint",mat.albedo_color)
+			star_halos.append(halo)
+
+func _fire_sprite(point: Vector3,size_value: float,phase: float,alpha: float,facing: Basis,aspect := Vector2.ONE) -> void:
+	var before := cursor
+	_source_sprite(point,size_value,"heat_flame",phase,alpha,facing,0,aspect)
+	if cursor>before:sprite_materials[before].shader=fire_shader
 
 func _prepare_wide_meshes() -> void:
 	if key not in NEXT_KEYS:return
@@ -338,23 +395,32 @@ func _earth_power(travel: float,after: float,alpha: float,facing: Basis) -> void
 		_source_sprite(aim,2.6,"1",after,alpha*fade*.65,facing)
 
 func _heat_wave(travel: float,after: float,alpha: float,facing: Basis) -> void:
-	# A curved, full-width front advances from the caster's side of the circle.
+	var upright_right := Vector3(facing.x.x,0,facing.x.z).normalized()
+	var upright := Basis(upright_right,Vector3.UP,upright_right.cross(Vector3.UP))
 	if elapsed<launch:
-		_source_sprite(origin+Vector3.UP*.5,1.4,"0",0,alpha*.4,facing)
+		var charge := elapsed/maxf(launch,.01)
+		for i in 5:
+			var offset := lateral*(i-2)*.24
+			_fire_sprite(origin+offset+Vector3.UP*(.45+charge*.3),.8+charge*.5,fmod(charge+i*.12,1),alpha*.85,upright,Vector2(.8,1.5))
 		return
 	var fade := 1-smoothstep(0,.75,after)
-	for row in 3:
-		var q := travel*1.22-row*.12
-		if q<0 or q>1.18:continue
-		for i in 13:
-			var across := (i-6)/6.0*field_radius*.85
-			var along := lerpf(-field_radius*.9,field_radius*.9,q)-absf(across)*.18
+	# Two curling fronts, tall tongues of fire, then rising embers.
+	for row in 2:
+		var q := travel*1.15-row*.16
+		if q<0 or q>1.15:continue
+		for i in 15:
+			var across := (i-7)/7.0*field_radius*.88
+			var along := lerpf(-field_radius*.9,field_radius*.9,q)-absf(across)*.13+sin(i*.8+elapsed*2)*.12
 			if Vector2(along,across).length()>field_radius:continue
-			var rise := .4+sin(i*2.4+elapsed*3)*.2+row*.45
-			var point := _field_point(along,across,rise)
-			_source_sprite(point,1.25-row*.15,"1",fmod(elapsed*.6+i*.1,1),alpha*fade*(.65-row*.15),facing,i*.17)
-			if row==0 and i%2==0:
-				_line(point-forward*.7,point,.018*alpha*fade,core)
+			var height_value := 1.25+sin(i*1.7+elapsed*4)*.35
+			var point := _field_point(along,across,height_value*.6)
+			_fire_sprite(point,1.5-row*.2,fmod(elapsed*.8+i*.17,1),alpha*fade*(.9-row*.2),upright,Vector2(.9,height_value))
+	for i in 18:
+		var phase := fmod(elapsed*.7+i*.618,1.)
+		var across := sin(i*2.4)*field_radius*.8
+		var along := maxf(-field_radius*.9,lerpf(-field_radius*.8,field_radius*.8,travel)-phase*3.8)
+		var point := _field_point(along,across,.3+phase*2.7)
+		_source_sprite(point,.18+(i%3)*.04,"heat_spark",phase,alpha*fade*sin(phase*PI),facing,i)
 
 func _wide_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
 	var icy := key=="bleakwindstorm"
@@ -440,20 +506,43 @@ func _coin_rain(travel: float,after: float,alpha: float,facing: Basis) -> void:
 			_line(point+Vector3.UP*.45,point,.016*alpha,core)
 
 func _star_storm(travel: float,after: float,alpha: float,facing: Basis) -> void:
-	for mat in spectrum:mat.albedo_color.a=alpha*.8
+	for mat in spectrum:mat.albedo_color.a=alpha*.9
+	for mat in star_halos:mat.set_shader_parameter("opacity",alpha*.65)
 	var charge := clampf(elapsed/maxf(launch,.01),0,1)
-	var sky_center := field_center+Vector3.UP*4.0
-	# A constellation forms over the circle, then sends diagonal colored salvos.
+	var sky_center := field_center+Vector3.UP*4.2
+	var finale := 1-smoothstep(0,.6,after)
+	# A large prismatic star gathers above a constellation spanning the arena.
+	var main_point := origin.lerp(sky_center,smoothstep(0,1,charge)) if elapsed<launch else sky_center.lerp(aim,pow(travel,2.4))
+	var main_size := (.25+charge*.85)*finale
+	_piece(star_mesh,spectrum[1],main_point,Vector3(main_size,main_size*1.25,main_size*.45),facing*Basis(Vector3.FORWARD,elapsed*.35))
+	_piece(star_mesh,core,main_point+facing.z*.02,Vector3.ONE*main_size*.46,facing*Basis(Vector3.FORWARD,elapsed*.35))
+	_piece(quad,star_halos[1],main_point,Vector3.ONE*main_size*4.2,facing)
 	for i in 12:
-		var a := i*2.399963
-		var radius := field_radius*(.3+(i%3)*.25)
+		var a := i*TAU/12+elapsed*.12
+		var radius := field_radius*(.5+(i%2)*.28)
 		var sky := sky_center+Vector3(cos(a)*radius,(i%2)*.35,sin(a)*radius)
 		var destination := _seed_point(i,12)+Vector3.UP*.3
-		var p := smoothstep(0,1,clampf(travel*1.35-i*.015,0,1))
-		var point := origin.lerp(sky,charge) if elapsed<launch else sky.lerp(destination,p)
-		var mat := spectrum[i%4]
-		var size_value := .17+sin(charge*PI)*.12
-		_piece(star_mesh,mat,point,Vector3(size_value*1.5,size_value*2.2,size_value),facing*Basis(Vector3.FORWARD,elapsed*.4+i))
-		_source_sprite(point,.8,"0",p,alpha*.55,facing,a)
+		var p := smoothstep(0,1,clampf(travel*1.18-i*.012,0,1))
+		var point := origin.lerp(sky,smoothstep(0,1,charge)) if elapsed<launch else sky.lerp(destination,p)
+		var visibility := (1-smoothstep(.86,1.,p))*alpha
+		var size_value := (.32+charge*.17)*visibility
+		_piece(star_mesh,spectrum[i%4],point,Vector3(size_value,size_value*1.4,size_value*.4),facing*Basis(Vector3.FORWARD,elapsed*.4+i))
+		_piece(quad,star_halos[i%4],point,Vector3.ONE*size_value*3.8,facing)
 		if elapsed>=launch:
-			_line(sky.lerp(destination,maxf(0,p-.18)),point,.028*alpha,mat)
+			_line(sky.lerp(destination,maxf(0,p-.22)),point,.05*visibility,spectrum[i%4])
+		elif i%2==0:
+			_line(main_point,point,.014*alpha*charge,spectrum[i%4])
+	# At impact the central star opens into a field-wide prismatic burst.
+	if after>=0:
+		var spread := sin(clampf(after*1.4,0,1)*PI*.5)
+		var fade := 1-clampf(after,0,1)
+		for i in 16:
+			var a := i*TAU/16
+			var offset := Vector3(cos(a),.35+sin(i*2.4)*.4,sin(a))*field_radius*spread
+			var point := aim+offset
+			_piece(star_mesh,spectrum[i%4],point,Vector3.ONE*(.3+spread*.15)*fade,facing*Basis(Vector3.FORWARD,elapsed+i))
+			_line(aim+offset*.62,point,.035*alpha*fade,spectrum[i%4])
+		for i in 3:
+			var radius := maxf(0,spread-i*.08)*field_radius
+			_piece(shock_ring,spectrum[i],field_center+Vector3.UP*(.08+i*.07),Vector3.ONE*radius)
+		_piece(quad,star_halos[0],aim,Vector3.ONE*(2.5+spread*3)*fade,facing)

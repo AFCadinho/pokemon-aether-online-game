@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Give 3D Heat Wave red-hot flames and rising embers, and expand Tera Starstorm into a four-second constellation, central star strike and prismatic field burst with retimed audio.
+
 - Expand nine more 3D moves across the battlefield, including sweeping heat and snow, wind funnels, ground eruptions, a caster-centered explosion, falling coins and prismatic stars.
 
 - Add Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram land mounts with animated artwork, synchronized rider masks and compact Bag icons.
