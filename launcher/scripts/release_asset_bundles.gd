@@ -245,6 +245,10 @@ func catalog_path() -> String:
 	return store.catalog_path()
 
 
+func catalog_path_for_launch() -> String:
+	return store.catalog_path_for_launch()
+
+
 func _index_path(digest: String) -> String:
 	return index_root.path_join(digest + ".json")
 

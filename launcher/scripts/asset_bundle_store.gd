@@ -83,6 +83,17 @@ func catalog_path() -> String:
 	return _generations_root().path_join(generation).path_join("runtime-catalog.json")
 
 
+func catalog_path_for_launch() -> String:
+	# The game verifies requested models against its pinned index before use.
+	# Hand off a consistent catalog without reading every model on the Play thread.
+	for previous in [false, true]:
+		var pointer := _read_json(_pointer_path(previous))
+		var generation := str(pointer.get("generation", ""))
+		if _hex(generation) and _validate_generation_metadata(generation):
+			return _generations_root().path_join(generation).path_join("runtime-catalog.json")
+	return ""
+
+
 func state_sha256() -> String:
 	var generation := active_generation()
 	return FileAccess.get_sha256(_generations_root().path_join(generation).path_join("installed-state.json")) if not generation.is_empty() else ""
@@ -487,6 +498,16 @@ func _runtime_catalog(value: Dictionary) -> Array:
 
 
 func _validate_generation(generation: String) -> bool:
+	if not _validate_generation_metadata(generation):
+		return false
+	var state_data := _read_json(_generations_root().path_join(generation).path_join("installed-state.json"), MAX_STATE_JSON)
+	for asset: Dictionary in state_data.assets.values():
+		if not _validate_object(str(asset.get("archive_sha256", ""))):
+			return false
+	return true
+
+
+func _validate_generation_metadata(generation: String) -> bool:
 	var directory := _generations_root().path_join(generation)
 	var state_path := directory.path_join("installed-state.json")
 	var state_data := _read_json(state_path, MAX_STATE_JSON)
@@ -496,15 +517,18 @@ func _validate_generation(generation: String) -> bool:
 		return false
 	for asset_id: String in state_data.assets:
 		var asset: Dictionary = state_data.assets[asset_id]
+		if not _hex(str(asset.get("archive_sha256", ""))):
+			return false
 		var object_manifest := _read_json(_objects_root().path_join(str(asset.get("archive_sha256", ""))).path_join("bundle.json"))
 		if object_manifest.get("asset_id") != asset_id or object_manifest.get("asset_type") != asset.get("asset_type") or object_manifest.get("species_id") != asset.get("species_id") or object_manifest.get("form_id") != asset.get("form_id") or object_manifest.get("version") != asset.get("version"):
 			return false
 		if object_manifest.get("dependencies", []) != asset.get("dependencies", []) or object_manifest.get("appearances", []) != asset.get("appearances", []):
 			return false
-		if not _validate_object(str(asset.get("archive_sha256", "")), object_manifest):
-			return false
 	var catalog_path := directory.path_join("runtime-catalog.json")
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(catalog_path))
+	var catalog_json := JSON.new()
+	if catalog_json.parse(FileAccess.get_file_as_string(catalog_path)) != OK:
+		return false
+	var parsed: Variant = catalog_json.data
 	if not parsed is Array:
 		return false
 	var expected := _runtime_catalog(state_data)

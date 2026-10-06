@@ -2,7 +2,7 @@
 
 ## Confirmed cause
 
-Play performs a synchronous full integrity check of the installed 3D bundle
+Before the cleanup, Play performed a synchronous full integrity check of the installed 3D bundle
 collection before creating the game process. On this machine that lookup takes
 6.7–8.6 seconds. During that time the launcher cannot redraw and provides no
 visible starting status.
@@ -14,8 +14,8 @@ Call chain:
 `active_generation()` → `_validate_generation()` → `_validate_object()` →
 `FileAccess.get_sha256()` for every installed appearance.
 
-`_create_game_process_with_mods()` is called only after this completes.
-The launcher logs `Starting game.` before the expensive catalog lookup, which
+`_create_game_process_with_mods()` was called only after this completed.
+The launcher logged `Starting game.` before the expensive catalog lookup, which
 can misleadingly suggest that game startup has already begun. The current
 launch path neither downloads files nor waits for a server request.
 
@@ -55,10 +55,12 @@ ops/worktrees/slot-env slot-a -- godot --headless \
 ```
 
 The diagnostic requires an explicit absolute directory. It reads the existing
-collection in place, performs three full lookups, and does not change it. Godot
+collection in place, performs three launch lookups, and does not change it. Godot
 userdata, configuration, caches and logs remain isolated by `slot-env`.
+The script in investigation commit `bd9413e72` measures the original full lookup;
+the current script measures the cleaned-up launch lookup.
 
-## Recommended follow-up
+## On-demand architecture
 
 Follow-up inspection confirms that production already downloads models on
 demand into `user://on-demand-3d-v1`. Battles and previews call `ensure_models()`;
@@ -70,19 +72,39 @@ game's entire on-demand cache. Optional full-collection downloads still exist,
 so retaining access to those files remains useful; hashing every model at Play
 is redundant with the per-use checks in the normal on-demand flow.
 
-The preferred follow-up is therefore a lightweight, validated catalog handoff
-without a full model sweep, retaining per-use verification in the game. Verify
-metadata/path validation, corrupt and missing models, previous-generation
-fallback, and reuse of optional launcher downloads before changing that API.
+## Implemented cleanup
 
-Move catalog verification to a worker, show a starting status and disable Play
-before beginning, then spawn the game on the main thread when verification
-completes. This preserves the checks while removing the frozen UI, although it
-does not remove the verification wait. Reducing the wait requires a separate
-decision about when to verify the collection (for example preparation before
-Play); any reuse of a verified result must handle files changed since the check
-and preserve the current corrupt-generation fallback. Do not simply bypass the
-checks or substitute an unchecked active pointer.
+The Play path now calls `catalog_path_for_launch()`. It validates the generation
+metadata hash, bundle manifest metadata and catalog consistency, and falls back
+to the previous generation if the current metadata is invalid. It never reads
+or hashes model contents. Full model verification remains in `catalog_path()`,
+state planning and install/activation flows. The game still receives the model
+catalog and release-pinned index and verifies requested models before reuse.
+Missing or corrupt individual models do not prevent the catalog handoff.
 
-Only this report and the read-only timing script were added. Launcher/game
-behavior, installed data, and production were not changed.
+The final code's lookup on the same installed 83-bundle collection took
+19.847 ms, 9.282 ms and 9.326 ms, versus the original 8,606.037 ms,
+6,714.915 ms and 6,701.428 ms. These measurements cover the catalog handoff,
+not game or graphics-driver startup.
+
+Validation completed through `ops/worktrees/slot-env slot-a`:
+
+- `launcher/tests/asset_bundle_store_check.gd`: Play invokes no model scan,
+  passes the correct catalog/index and restores the parent environment; missing
+  and same-size-corrupt model files do not block handoff; metadata tampering,
+  malformed catalogs and damaged active pointers recover the previous generation.
+  Full store, atomic batch, streaming, corruption, rollback and disk-full checks
+  also pass.
+- `launcher/tests/forest_launch_environment_check.gd`: forest path forwarding
+  and parent environment restoration still pass.
+- `tests/on_demand_launcher_catalog_check.gd`: the actual game cache-check path
+  reuses a valid model from a launcher catalog even if an unrelated file is
+  missing. Corrupt, missing or obsolete requested models reach the replacement
+  planner. This fixture substitutes the download step; it performs no network
+  downloads.
+- `launcher/tests/profile_play_catalog.gd`: three read-only timings of the
+  existing local collection, with a valid catalog returned in every sample.
+
+Only the frontend repository changed. The implementation remains on the assigned
+slot-a task branch for integration; production and installed player data were
+not modified. A launcher release is required for players to receive the fix.

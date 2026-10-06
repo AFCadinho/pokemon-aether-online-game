@@ -34,6 +34,12 @@ and the planned official catalog. The Discover tab is not connected to a feed ye
 8. Extracts into a staging folder and only replaces the installed game or asset pack after extraction succeeds.
 9. Starts the configured game executable.
 
+Play checks the installed 3D catalog metadata and passes its path and the pinned
+content index to the game. It does not scan or hash the entire model collection.
+The game verifies the models it needs against that index and downloads missing,
+damaged or obsolete files on demand. Full bundle verification remains part of
+the launcher download/install flow, including optional complete collections.
+
 The launcher records periodic speed samples, stalls, reconnects, resume offsets,
 HTTP range responses, and the Cloudflare edge code in its local diagnostics log.
 It never uploads diagnostics automatically. URL query values and local userdata

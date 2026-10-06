@@ -14,7 +14,7 @@ func _init() -> void:
 	var store := BundleStore.new(arguments[0])
 	for attempt in range(3):
 		var started := Time.get_ticks_usec()
-		var catalog: String = store.catalog_path()
+		var catalog: String = store.catalog_path_for_launch()
 		var elapsed_ms := (Time.get_ticks_usec() - started) / 1000.0
 		print("PLAY_CATALOG_PROFILE attempt=%d elapsed_ms=%.3f catalog_found=%s" % [attempt + 1, elapsed_ms, not catalog.is_empty()])
 	quit()

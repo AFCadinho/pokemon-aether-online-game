@@ -1,10 +1,18 @@
 extends SceneTree
 const Index = preload("res://scripts/asset_bundle_index.gd")
 const Store = preload("res://scripts/asset_bundle_store.gd")
+const ReleaseBundles = preload("res://scripts/release_asset_bundles.gd")
 
 class NoSpaceStore extends "res://scripts/asset_bundle_store.gd":
 	func _space_available(_directory: String, _required: int) -> bool:
 		return false
+
+class NoModelScanStore extends "res://scripts/asset_bundle_store.gd":
+	var model_checks := 0
+	func _validate_object(_digest: String, _manifest := {}) -> bool:
+		model_checks += 1
+		return false
+
 var output: String
 
 
@@ -193,6 +201,7 @@ func _run() -> void:
 		"arcanine", "arcanine@shiny", "dragonite", "dragonite@shiny",
 		"roaring-moon", "roaring-moon@shiny",
 	])
+	_check_launch_catalog(store)
 	var settled_plan := store.plan(index, ids)
 	assert(settled_plan.downloads.is_empty() and settled_plan.unchanged.size() == 3)
 	var unchanged_generation := store.active_generation()
@@ -214,6 +223,7 @@ func _run() -> void:
 	broken_pointer.store_string("{\"generation\":\"invalid\"}")
 	broken_pointer.close()
 	assert(not Store.new(store.root).active_generation().is_empty(), "Previous generation recovers a damaged active pointer")
+	assert(not Store.new(store.root).catalog_path_for_launch().is_empty(), "Play also recovers a damaged pointer")
 	var restore_pointer := FileAccess.open(active_path, FileAccess.WRITE)
 	restore_pointer.store_buffer(active_bytes)
 	restore_pointer.close()
@@ -352,3 +362,74 @@ func _run() -> void:
 	print("ASSET_BUNDLE_BATCH_OK atomic_failure=true restart=true checksums=true")
 	print("ASSET_BUNDLE_STORE_OK initial=3 no_op=0 update=dragonite corrupt_rollback=true restart=true removed=arcanine")
 	quit()
+
+
+func _restore_bytes(path: String, bytes: PackedByteArray) -> void:
+	var file := FileAccess.open(path, FileAccess.WRITE)
+	assert(file != null)
+	file.store_buffer(bytes)
+	file.close()
+
+
+func _check_launch_catalog(store: RefCounted) -> void:
+	var catalog: String = store.catalog_path()
+	var probe := NoModelScanStore.new(store.root)
+	assert(probe.catalog_path_for_launch() == catalog and probe.model_checks == 0,
+		"Play must preserve the installed catalog without scanning model contents")
+	var launcher: Variant = load("res://tests/play_catalog_launch_probe.gd").new()
+	launcher.release_asset_bundles = ReleaseBundles.new()
+	launcher.release_asset_bundles.store = probe
+	var index_digest := "a".repeat(64)
+	launcher.manifest = {"assetBundleIndex": {"sha256": index_digest}}
+	var had_catalog := OS.has_environment("POKEAETHER_MODEL_CATALOG")
+	var previous_catalog_env := OS.get_environment("POKEAETHER_MODEL_CATALOG")
+	var had_index := OS.has_environment("POKEAETHER_MODEL_INDEX")
+	var previous_index_env := OS.get_environment("POKEAETHER_MODEL_INDEX")
+	OS.set_environment("POKEAETHER_MODEL_CATALOG", "parent-catalog")
+	OS.set_environment("POKEAETHER_MODEL_INDEX", "parent-index")
+	assert(launcher._create_game_process("not-started") == 42)
+	assert(launcher.received_catalog == catalog and probe.model_checks == 0,
+		"The actual Play route must use the metadata handoff, not full verification")
+	assert(launcher.received_index == ProjectSettings.globalize_path("user://asset-bundle-indexes-v1/" + index_digest + ".json"))
+	assert(OS.get_environment("POKEAETHER_MODEL_CATALOG") == "parent-catalog")
+	assert(OS.get_environment("POKEAETHER_MODEL_INDEX") == "parent-index")
+	if had_catalog:
+		OS.set_environment("POKEAETHER_MODEL_CATALOG", previous_catalog_env)
+	else:
+		OS.unset_environment("POKEAETHER_MODEL_CATALOG")
+	if had_index:
+		OS.set_environment("POKEAETHER_MODEL_INDEX", previous_index_env)
+	else:
+		OS.unset_environment("POKEAETHER_MODEL_INDEX")
+	launcher.free()
+	assert(probe.catalog_path().is_empty() and probe.model_checks > 0,
+		"Download/install callers still require full model verification")
+	var entries: Array = JSON.parse_string(FileAccess.get_file_as_string(catalog))
+	var model_path: String = entries.filter(func(entry: Dictionary): return entry.species == "dragonite")[0].runtime_path
+	var model_bytes := FileAccess.get_file_as_bytes(model_path)
+	var changed_bytes := model_bytes.duplicate()
+	changed_bytes[0] ^= 0xff # Same-size corruption must still fail the full check.
+	_restore_bytes(model_path, changed_bytes)
+	assert(store.catalog_path_for_launch() == catalog, "A corrupt model is handled by the game on demand")
+	assert(store.catalog_path().is_empty(), "Full validation still rejects model corruption")
+	assert(DirAccess.remove_absolute(model_path) == OK)
+	assert(store.catalog_path_for_launch() == catalog, "A missing model must not block Play")
+	_restore_bytes(model_path, model_bytes)
+	assert(store.catalog_path() == catalog)
+	var previous: Dictionary = Store._read_json(store.root.path_join("active.previous.json"))
+	var previous_catalog: String = store.root.path_join("generations").path_join(previous.generation).path_join("runtime-catalog.json")
+	var catalog_bytes := FileAccess.get_file_as_bytes(catalog)
+	entries[0].runtime_path = "/unexpected/model.scn"
+	_restore_bytes(catalog, JSON.stringify(entries).to_utf8_buffer())
+	assert(store.catalog_path_for_launch() == previous_catalog, "Catalog tampering must recover the previous generation")
+	_restore_bytes(catalog, "invalid json".to_utf8_buffer())
+	assert(store.catalog_path_for_launch() == previous_catalog)
+	_restore_bytes(catalog, catalog_bytes)
+	var state_path := catalog.get_base_dir().path_join("installed-state.json")
+	var state_bytes := FileAccess.get_file_as_bytes(state_path)
+	_restore_bytes(state_path, state_bytes + " ".to_utf8_buffer())
+	assert(store.catalog_path_for_launch() == previous_catalog, "Play must check the generation's metadata hash")
+	_restore_bytes(state_path, state_bytes)
+	assert(store.catalog_path_for_launch() == catalog)
+	assert(Store.new(store.root.path_join("absent")).catalog_path_for_launch().is_empty())
+	print("PLAY_CATALOG_HANDOFF_OK no_model_scan=true corrupt_or_missing_model_allowed=true metadata_fallback=true")
