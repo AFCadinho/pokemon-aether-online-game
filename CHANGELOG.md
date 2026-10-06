@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Keep the game responsive while new 3D models are verified and installed by moving local model storage work off the main thread.
+
 ## 0.3.99
 
 ### Adventure and exploration

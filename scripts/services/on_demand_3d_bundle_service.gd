@@ -62,23 +62,28 @@ var _battle_waiters := 0
 var _prefetch_generation := 0
 var _local_checks := 0
 
-class InstalledCheck extends RefCounted:
-	var result := {}
-	func run(check: Callable) -> void:
-		result = check.call()
+class StorageWork extends RefCounted:
+	var result: Variant
+	func run(action: Callable) -> void:
+		result = action.call()
 
 
 func _check_installed_models(identities: Array[String], source_catalog: String) -> Dictionary:
 	# Full index/file SHA checks still run on every entry. Disk I/O must not
 	# stop the arena fade or the world frames while cached files are verified.
-	var check := InstalledCheck.new()
+	return await _run_storage_work(_installed_models.bind(identities.duplicate(), source_catalog))
+
+
+func _run_storage_work(action: Callable) -> Variant:
+	# Workers only access file data; HTTPRequest and downloader state stay here.
+	var work := StorageWork.new()
 	_local_checks += 1
-	var task := WorkerThreadPool.add_task(check.run.bind(_installed_models.bind(identities.duplicate(), source_catalog)))
+	var task := WorkerThreadPool.add_task(work.run.bind(action))
 	while not WorkerThreadPool.is_task_completed(task):
 		await get_tree().process_frame
 	WorkerThreadPool.wait_for_task_completion(task) # Completed only; never joins pending I/O.
 	_local_checks -= 1
-	return check.result
+	return work.result
 
 
 func can_clear_cache() -> bool:
@@ -222,23 +227,45 @@ func _installed_models(identities: Array[String], source_catalog: String) -> Dic
 
 
 func _ensure_models(identities: Array[String], source_catalog: String) -> Dictionary:
-	var existing := _catalog(source_catalog)
-	var own := _catalog(ROOT.path_join("runtime-catalog.json"))
-	var entries := _merge_entries(existing, own)
-	var missing: Array[String] = []
-	var requested: Array[String] = []
-	for identity in identities:
-		var asset_id := _asset_id(identity)
-		if asset_id.is_empty():
-			continue # This Pokémon has no approved 3D bundle.
-		if asset_id not in requested:
-			requested.append(asset_id)
+	var existing: Array = await _run_storage_work(_catalog.bind(source_catalog))
+	var own: Array = await _run_storage_work(_catalog.bind(ROOT.path_join("runtime-catalog.json")))
+	var entries: Array = await _run_storage_work(_merge_entries.bind(existing, own))
+	var requested: Array[String] = await _run_storage_work(_requested_assets.bind(identities.duplicate()))
 	if requested.is_empty():
-		return {"error": "", "path": source_catalog if own.is_empty() else _publish_catalog(entries)}
+		var fallback: String = source_catalog if own.is_empty() else await _run_storage_work(_publish_catalog.bind(entries))
+		return {"error": "", "path": fallback}
 	var index_result := await _approved_index()
 	if not str(index_result.get("error", "")).is_empty():
 		return index_result
 	var index: Dictionary = index_result.index
+	var plan: Dictionary = await _run_storage_work(_missing_assets.bind(index, identities.duplicate(), entries))
+	if not str(plan.get("error", "")).is_empty():
+		return plan
+	var missing: Array[String] = plan.asset_ids
+	for asset_id in missing:
+		var asset: Dictionary = _indexed_asset(index, asset_id)
+		if asset.is_empty():
+			return {"error": "Approved 3D model is missing from the content index."}
+		var installed := await _install_asset(asset)
+		if not str(installed.get("error", "")).is_empty():
+			return installed
+		entries = await _run_storage_work(_merge_entries.bind(entries, installed.entries))
+	var path: String = await _run_storage_work(_publish_catalog.bind(entries))
+	return {"error": "Could not publish the 3D model catalog." if path.is_empty() else "", "path": path,
+		"catalog_changed": not missing.is_empty()}
+
+
+func _requested_assets(identities: Array[String]) -> Array[String]:
+	var requested: Array[String] = []
+	for identity in identities:
+		var asset_id := _asset_id(identity)
+		if not asset_id.is_empty() and asset_id not in requested:
+			requested.append(asset_id)
+	return requested
+
+
+func _missing_assets(index: Dictionary, identities: Array[String], entries: Array) -> Dictionary:
+	var missing: Array[String] = []
 	for identity in identities:
 		var asset_id := _asset_id(identity)
 		if asset_id.is_empty():
@@ -255,17 +282,7 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 			return {"error": "Approved 3D appearance is missing from the content index."}
 		if not _entry_available(entries, runtime_identity, expected_digest) and asset_id not in missing:
 			missing.append(asset_id)
-	for asset_id in missing:
-		var asset: Dictionary = _indexed_asset(index, asset_id)
-		if asset.is_empty():
-			return {"error": "Approved 3D model is missing from the content index."}
-		var installed := await _install_asset(asset)
-		if not str(installed.get("error", "")).is_empty():
-			return installed
-		entries = _merge_entries(entries, installed.entries)
-	var path := _publish_catalog(entries)
-	return {"error": "Could not publish the 3D model catalog." if path.is_empty() else "", "path": path,
-		"catalog_changed": not missing.is_empty()}
+	return {"error": "", "asset_ids": missing}
 
 
 func _asset_id(identity: String) -> String:
@@ -417,14 +434,15 @@ func _read_local_index(path: String, release: Dictionary) -> Dictionary:
 
 
 func _approved_index() -> Dictionary:
-	var release := _selected_release()
+	var release: Dictionary = await _run_storage_work(_selected_release)
 	var pin: Dictionary = release.index
-	var path := _local_index_path(release)
-	if not _valid_file(path, int(pin.size_bytes), str(pin.sha256)):
+	var path: String = await _run_storage_work(_local_index_path.bind(release))
+	var valid: bool = await _run_storage_work(_valid_file.bind(path, int(pin.size_bytes), str(pin.sha256)))
+	if not valid:
 		var result := await _fetch(BASE_URL + str(pin.object_key), path, int(pin.size_bytes), str(pin.sha256), MAX_INDEX_BYTES, "3D content index")
 		if not result.is_empty():
 			return {"error": result}
-	var parsed := _read_local_index(path, release)
+	var parsed: Dictionary = await _run_storage_work(_read_local_index.bind(path, release))
 	if parsed.is_empty():
 		return {"error": "Approved 3D content index is invalid."}
 	return {"error": "", "index": parsed}
@@ -446,10 +464,16 @@ func _install_asset(asset: Dictionary) -> Dictionary:
 	if parts.size() != 3 or not key.begins_with("optional-assets/pokemon_3d/%s/%s/" % [parts[1], parts[2]]) or not key.ends_with(".zip") or key.contains("..") or size < 1 or size > MAX_ARCHIVE_BYTES:
 		return {"error": "Approved 3D bundle metadata is invalid."}
 	var zip_path := ROOT.path_join("downloads").path_join(sha + ".zip")
-	if not _valid_file(zip_path, size, sha):
+	var valid: bool = await _run_storage_work(_valid_file.bind(zip_path, size, sha))
+	if not valid:
 		var error := await _fetch(BASE_URL + key, zip_path, size, sha, MAX_ARCHIVE_BYTES, parts[1])
 		if not error.is_empty():
 			return {"error": error}
+	active_label = "Installing %s…" % parts[1]
+	return await _run_storage_work(_install_verified_archive.bind(asset.duplicate(true), zip_path))
+
+
+func _install_verified_archive(asset: Dictionary, zip_path: String) -> Dictionary:
 	var installed := _unpack_asset(asset, zip_path)
 	if str(installed.get("error", "")).is_empty():
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(zip_path))
@@ -527,6 +551,7 @@ func _fetch(url: String, path: String, expected: int, digest: String, limit: int
 	if DirAccess.make_dir_recursive_absolute(absolute.get_base_dir()) != OK:
 		return "Could not prepare 3D download storage."
 	active_request = HTTPRequest.new()
+	active_request.use_threads = true
 	active_request.timeout = 180.0
 	active_request.body_size_limit = limit
 	active_request.download_file = absolute + ".partial"
@@ -546,6 +571,10 @@ func _fetch(url: String, path: String, expected: int, digest: String, limit: int
 	if int(response[0]) != HTTPRequest.RESULT_SUCCESS or int(response[1]) != 200:
 		DirAccess.remove_absolute(absolute + ".partial")
 		return "3D model download failed."
+	return await _run_storage_work(_publish_verified_download.bind(absolute, expected, digest))
+
+
+func _publish_verified_download(absolute: String, expected: int, digest: String) -> String:
 	if not _valid_file(absolute + ".partial", expected, digest):
 		return "3D model download failed verification."
 	if DirAccess.rename_absolute(absolute + ".partial", absolute) != OK:
