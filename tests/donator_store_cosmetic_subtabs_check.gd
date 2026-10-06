@@ -180,7 +180,7 @@ func _run() -> void:
 	_check(store.product_buttons.has("mysterious-outfit"), "Outfits lists the unisex Mysterious Outfit Box")
 	store.call("_select_product", "mysterious-outfit")
 	var mysterious_item: Dictionary = store.call("_catalog_item", "mysterious-outfit")
-	_check(mysterious_item.get("price", 0) == 400, "Mysterious Outfit uses the complete four-item outfit price")
+	_check(mysterious_item.get("price", 0) == 550, "Mysterious Outfit uses the complete four-item outfit price")
 	_check(mysterious_item.get("badge", "") == "4-ITEM BOX", "Mysterious Outfit communicates its four loose contents")
 	var mysterious_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(mysterious_preview.get("hair", "") == "", "complete outfit previews remove the Trainer's current hairstyle")
@@ -192,7 +192,7 @@ func _run() -> void:
 	_check(store.product_buttons.has("ironfanton-outfit"), "Outfits lists IronFanton as one three-item box")
 	store.call("_select_product", "ironfanton-outfit")
 	var ironfanton_item: Dictionary = store.call("_catalog_item", "ironfanton-outfit")
-	_check(ironfanton_item.get("price", 0) == 300, "IronFanton Outfit uses the three-component set price")
+	_check(ironfanton_item.get("price", 0) == 550, "IronFanton Outfit uses the three-component set price")
 	_check(ironfanton_item.get("badge", "") == "3-ITEM BOX", "IronFanton Outfit communicates its three loose contents")
 	var ironfanton_preview: Dictionary = store.call("_current_character_preview_appearance")
 	_check(ironfanton_preview.get("hair", "") == "IronFanton_Hair", "IronFanton preview includes the hairstyle")
@@ -398,10 +398,16 @@ func _run() -> void:
 		"aether-blessing-voucher-7-days": 150,
 		"aether-blessing-voucher-14-days": 275,
 		"aether-blessing-voucher-30-days": 500,
-		"mysterious-outfit": 400,
-		"adinho-classic-outfit": 500,
-		"aether-blossom-outfit": 400,
-		"ironfanton-outfit": 300,
+		"aether-voyager-outfit": 350,
+		"rotom-engineer-outfit": 350,
+		"celebi-forest-ranger-outfit": 350,
+		"lucario-aura-fighter-outfit": 350,
+		"relic-explorer-outfit": 350,
+		"lugia-sky-captain-outfit": 350,
+		"mysterious-outfit": 550,
+		"adinho-classic-outfit": 550,
+		"aether-blossom-outfit": 550,
+		"ironfanton-outfit": 550,
 		"aether-blossom-chroma-hair": 100,
 		"aether-blossom-chroma-earrings": 100,
 		"aether-blossom-chroma-shoes": 75,
@@ -454,6 +460,24 @@ func _run() -> void:
 			int(priced_item.get("price", -1)) == int(client_target_prices[item_id]),
 			"%s uses its canonical client preview price" % item_id
 		)
+
+
+	var adventure_outfits: Array = JSON.parse_string(FileAccess.get_file_as_string("res://data/male_adventure_outfits.json"))
+	store.call("_select_category", "cosmetics")
+	store.call("_select_cosmetic_filter_group", "outfits")
+	for gender: String in ["male", "female"]:
+		store.set_trainer_gender(gender)
+		for outfit: Dictionary in adventure_outfits:
+			var box_id := str(outfit["slug"]) + "-outfit"
+			_check(store.product_buttons.has(box_id), box_id + " appears for " + gender)
+			store.call("_select_product", box_id)
+			var preview: Dictionary = store.call("_current_character_preview_appearance")
+			_check(preview.get("gender") == gender, box_id + " uses the current model")
+			for slot: String in outfit["parts"]:
+				_check(preview.get(slot) == outfit["parts"][slot], box_id + " previews " + slot)
+			_check(not store.character_preview_palette.visible, "fixed outfit has no Chroma selector")
+			_check(store.character_preview_note_label.text == localization_manager.text("ui.store.preview.fixed_colours"), "fixed outfit colours are explained")
+	store.set_trainer_gender("male")
 
 	store.apply_store_state(
 		{"gems": 500},
