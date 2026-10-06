@@ -1,5 +1,559 @@
 {
   "items": {
+    "aether-voyager-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Shoes"
+        }
+      ]
+    },
+    "aether-voyager-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Shirt"
+        }
+      ]
+    },
+    "aether-voyager-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Shoes"
+        }
+      ]
+    },
+    "aether-voyager-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "AetherVoyager_Trousers"
+        }
+      ]
+    },
+    "celebi-forest-ranger-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Shoes"
+        }
+      ]
+    },
+    "celebi-forest-ranger-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Shirt"
+        }
+      ]
+    },
+    "celebi-forest-ranger-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Shoes"
+        }
+      ]
+    },
+    "celebi-forest-ranger-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "CelebiForestRanger_Trousers"
+        }
+      ]
+    },
+    "lucario-aura-fighter-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Shoes"
+        }
+      ]
+    },
+    "lucario-aura-fighter-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Shirt"
+        }
+      ]
+    },
+    "lucario-aura-fighter-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Shoes"
+        }
+      ]
+    },
+    "lucario-aura-fighter-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LucarioAuraFighter_Trousers"
+        }
+      ]
+    },
+    "lugia-sky-captain-goggles": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Goggles"
+        }
+      ]
+    },
+    "lugia-sky-captain-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Shoes"
+        },
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Goggles"
+        }
+      ]
+    },
+    "lugia-sky-captain-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Shirt"
+        }
+      ]
+    },
+    "lugia-sky-captain-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Shoes"
+        }
+      ]
+    },
+    "lugia-sky-captain-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "LugiaSkyCaptain_Trousers"
+        }
+      ]
+    },
+    "relic-explorer-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Shoes"
+        }
+      ]
+    },
+    "relic-explorer-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Shirt"
+        }
+      ]
+    },
+    "relic-explorer-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Shoes"
+        }
+      ]
+    },
+    "relic-explorer-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RelicExplorer_Trousers"
+        }
+      ]
+    },
+    "rotom-engineer-goggles": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Goggles"
+        }
+      ]
+    },
+    "rotom-engineer-outfit": {
+      "bundle": true,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Shirt"
+        },
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Trousers"
+        },
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Shoes"
+        },
+        {
+          "category": "facegear",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Goggles"
+        }
+      ]
+    },
+    "rotom-engineer-shirt": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "top",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Shirt"
+        }
+      ]
+    },
+    "rotom-engineer-shoes": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "shoes",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Shoes"
+        }
+      ]
+    },
+    "rotom-engineer-trousers": {
+      "bundle": false,
+      "genders": [
+        "male",
+        "female"
+      ],
+      "layers": [
+        {
+          "category": "bottom",
+          "genders": [
+            "male",
+            "female"
+          ],
+          "id": "RotomEngineer_Trousers"
+        }
+      ]
+    },
     "team-rocket-cap": {
       "bundle": false,
       "genders": [
@@ -250,11 +804,69 @@
   },
   "parts": {
     "bottom": {
+      "AetherVoyager_Trousers": {
+        "item_id": "aether-voyager-trousers",
+        "render_variants": {
+          "female": "AetherVoyager_Trousers",
+          "male": "AetherVoyager_Trousers"
+        }
+      },
+      "CelebiForestRanger_Trousers": {
+        "item_id": "celebi-forest-ranger-trousers",
+        "render_variants": {
+          "female": "CelebiForestRanger_Trousers",
+          "male": "CelebiForestRanger_Trousers"
+        }
+      },
+      "LucarioAuraFighter_Trousers": {
+        "item_id": "lucario-aura-fighter-trousers",
+        "render_variants": {
+          "female": "LucarioAuraFighter_Trousers",
+          "male": "LucarioAuraFighter_Trousers"
+        }
+      },
+      "LugiaSkyCaptain_Trousers": {
+        "item_id": "lugia-sky-captain-trousers",
+        "render_variants": {
+          "female": "LugiaSkyCaptain_Trousers",
+          "male": "LugiaSkyCaptain_Trousers"
+        }
+      },
+      "RelicExplorer_Trousers": {
+        "item_id": "relic-explorer-trousers",
+        "render_variants": {
+          "female": "RelicExplorer_Trousers",
+          "male": "RelicExplorer_Trousers"
+        }
+      },
+      "RotomEngineer_Trousers": {
+        "item_id": "rotom-engineer-trousers",
+        "render_variants": {
+          "female": "RotomEngineer_Trousers",
+          "male": "RotomEngineer_Trousers"
+        }
+      },
       "TeamRocket_Trousers": {
         "item_id": "team-rocket-trousers",
         "render_variants": {
           "female": "TeamRocketFemale_Skirt",
           "male": "TeamRocket_Trousers"
+        }
+      }
+    },
+    "facegear": {
+      "LugiaSkyCaptain_Goggles": {
+        "item_id": "lugia-sky-captain-goggles",
+        "render_variants": {
+          "female": "LugiaSkyCaptain_Goggles",
+          "male": "LugiaSkyCaptain_Goggles"
+        }
+      },
+      "RotomEngineer_Goggles": {
+        "item_id": "rotom-engineer-goggles",
+        "render_variants": {
+          "female": "RotomEngineer_Goggles",
+          "male": "RotomEngineer_Goggles"
         }
       }
     },
@@ -268,6 +880,48 @@
       }
     },
     "shoes": {
+      "AetherVoyager_Shoes": {
+        "item_id": "aether-voyager-shoes",
+        "render_variants": {
+          "female": "AetherVoyager_Shoes",
+          "male": "AetherVoyager_Shoes"
+        }
+      },
+      "CelebiForestRanger_Shoes": {
+        "item_id": "celebi-forest-ranger-shoes",
+        "render_variants": {
+          "female": "CelebiForestRanger_Shoes",
+          "male": "CelebiForestRanger_Shoes"
+        }
+      },
+      "LucarioAuraFighter_Shoes": {
+        "item_id": "lucario-aura-fighter-shoes",
+        "render_variants": {
+          "female": "LucarioAuraFighter_Shoes",
+          "male": "LucarioAuraFighter_Shoes"
+        }
+      },
+      "LugiaSkyCaptain_Shoes": {
+        "item_id": "lugia-sky-captain-shoes",
+        "render_variants": {
+          "female": "LugiaSkyCaptain_Shoes",
+          "male": "LugiaSkyCaptain_Shoes"
+        }
+      },
+      "RelicExplorer_Shoes": {
+        "item_id": "relic-explorer-shoes",
+        "render_variants": {
+          "female": "RelicExplorer_Shoes",
+          "male": "RelicExplorer_Shoes"
+        }
+      },
+      "RotomEngineer_Shoes": {
+        "item_id": "rotom-engineer-shoes",
+        "render_variants": {
+          "female": "RotomEngineer_Shoes",
+          "male": "RotomEngineer_Shoes"
+        }
+      },
       "TeamRocket_Shoes": {
         "item_id": "team-rocket-shoes",
         "render_variants": {
@@ -277,6 +931,48 @@
       }
     },
     "top": {
+      "AetherVoyager_Shirt": {
+        "item_id": "aether-voyager-shirt",
+        "render_variants": {
+          "female": "AetherVoyager_Shirt",
+          "male": "AetherVoyager_Shirt"
+        }
+      },
+      "CelebiForestRanger_Shirt": {
+        "item_id": "celebi-forest-ranger-shirt",
+        "render_variants": {
+          "female": "CelebiForestRanger_Shirt",
+          "male": "CelebiForestRanger_Shirt"
+        }
+      },
+      "LucarioAuraFighter_Shirt": {
+        "item_id": "lucario-aura-fighter-shirt",
+        "render_variants": {
+          "female": "LucarioAuraFighter_Shirt",
+          "male": "LucarioAuraFighter_Shirt"
+        }
+      },
+      "LugiaSkyCaptain_Shirt": {
+        "item_id": "lugia-sky-captain-shirt",
+        "render_variants": {
+          "female": "LugiaSkyCaptain_Shirt",
+          "male": "LugiaSkyCaptain_Shirt"
+        }
+      },
+      "RelicExplorer_Shirt": {
+        "item_id": "relic-explorer-shirt",
+        "render_variants": {
+          "female": "RelicExplorer_Shirt",
+          "male": "RelicExplorer_Shirt"
+        }
+      },
+      "RotomEngineer_Shirt": {
+        "item_id": "rotom-engineer-shirt",
+        "render_variants": {
+          "female": "RotomEngineer_Shirt",
+          "male": "RotomEngineer_Shirt"
+        }
+      },
       "TeamRocket_Shirt": {
         "item_id": "team-rocket-shirt",
         "render_variants": {
