@@ -938,6 +938,8 @@ const CATALOG: Array[Dictionary] = [
 
 var voucher_balance := 0
 var voucher_balance_label: Label
+var currency_info_button: Button
+var currency_info_dialog: AetherConfirmationDialog
 var voucher_eligible_items: Dictionary = {}
 var payment_select: OptionButton
 var voucher_notice_label: Label
@@ -1204,6 +1206,8 @@ func open_store() -> void:
 
 
 func close_store() -> void:
+	if currency_info_dialog != null:
+		currency_info_dialog.hide_dialog()
 	if voucher_confirm_dialog != null:
 		voucher_confirm_dialog.hide_dialog()
 	if not pending_voucher_purchase.is_empty():
@@ -1454,11 +1458,14 @@ func _create_balance_pill() -> Control:
 	margin.add_theme_constant_override("margin_bottom", 6)
 	panel.add_child(margin)
 
+	var balance_row := HBoxContainer.new()
+	balance_row.add_theme_constant_override("separation", 10)
+	margin.add_child(balance_row)
 	var balances := GridContainer.new()
 	balances.columns = 2
 	balances.add_theme_constant_override("h_separation", 8)
 	balances.add_theme_constant_override("v_separation", 4)
-	margin.add_child(balances)
+	balance_row.add_child(balances)
 
 	for texture: Texture2D in [GEM_ICON, preload("res://assets/ui/store_credit_card.svg")]:
 		var icon := TextureRect.new()
@@ -1480,7 +1487,43 @@ func _create_balance_pill() -> Control:
 			voucher_balance_label = label
 			label.name = "VoucherBalance"
 			label.add_theme_color_override("font_color", UI_GOLD)
+	currency_info_button = Button.new()
+	currency_info_button.name = "CurrencyInfoButton"
+	currency_info_button.text = "i"
+	currency_info_button.custom_minimum_size = Vector2(26, 26)
+	currency_info_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	currency_info_button.focus_mode = Control.FOCUS_ALL
+	currency_info_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_set_localized_property(currency_info_button, "tooltip_text", "ui.store.currency_info.tooltip")
+	_apply_text_button_style(currency_info_button, UI_BORDER)
+	currency_info_button.add_theme_font_size_override("font_size", 15)
+	currency_info_button.pressed.connect(_show_currency_info)
+	balance_row.add_child(currency_info_button)
 	return panel
+
+
+func _show_currency_info() -> void:
+	if currency_info_dialog == null:
+		currency_info_dialog = AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+		currency_info_dialog.name = "StoreCurrencyInfo"
+		add_child(currency_info_dialog)
+		currency_info_dialog.confirmed.connect(_hide_currency_info)
+		currency_info_dialog.canceled.connect(_hide_currency_info)
+	_refresh_currency_info()
+	currency_info_dialog.cancel_button.hide()
+	currency_info_dialog.accent_icon.texture = GEM_ICON
+	currency_info_dialog.popup_centered(Vector2i(640, 440))
+	currency_info_dialog.confirm_button.grab_focus()
+
+
+func _refresh_currency_info() -> void:
+	if currency_info_dialog != null:
+		currency_info_dialog.configure(_t("ui.store.currency_info.title"), _t("ui.store.currency_info.body", {"get_gems": _t("ui.store.add_gems")}), _t("common.close"), _t("common.close"))
+
+
+func _hide_currency_info() -> void:
+	currency_info_dialog.hide_dialog()
+	currency_info_button.grab_focus()
 
 
 func _create_category_rail() -> Control:
@@ -1976,6 +2019,12 @@ func _create_character_preview_panel() -> Control:
 	payment_select.add_item(_t("ui.store.voucher.pay_voucher"))
 	payment_select.set_item_icon(0, GEM_ICON)
 	payment_select.set_item_icon(1, preload("res://assets/ui/store_credit_card.svg"))
+	var payment_popup := payment_select.get_popup()
+	payment_popup.add_theme_constant_override("icon_max_width", 16)
+	payment_popup.add_theme_constant_override("h_separation", 8)
+	payment_popup.add_theme_constant_override("v_separation", 8)
+	payment_popup.add_theme_font_size_override("font_size", 10)
+	payment_popup.add_theme_color_override("font_color", UI_TEXT)
 	payment_select.item_selected.connect(func(_index: int) -> void: _refresh_purchase_state())
 	layout.add_child(payment_select)
 	voucher_notice_label = Label.new()
@@ -3492,6 +3541,7 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 
 func _on_locale_changed(_locale: String) -> void:
+	_refresh_currency_info()
 	for select: OptionButton in [catalog_filter_select, catalog_sort_select]:
 		if select == null:
 			continue
