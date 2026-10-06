@@ -489,6 +489,7 @@ func _sync_mount_rider_delta() -> void:
 		return
 	if mount_sprite == null or not mount_sprite.visible or active_mount_id == "":
 		rider_node.position = base_rider_position
+		_sync_nameplate_position()
 		return
 	var direction := _get_activity_offset_direction()
 	var rider_offset := MountService.get_rider_frame_offset(
@@ -498,6 +499,7 @@ func _sync_mount_rider_delta() -> void:
 	)
 	rider_node.position = base_rider_position + Vector2(rider_offset) \
 		+ _get_surf_fish_rider_offset(direction)
+	_sync_nameplate_position()
 
 
 func _get_surf_fish_rider_offset(direction: String) -> Vector2:
@@ -1163,6 +1165,16 @@ func _setup_map_chat_bubble() -> void:
 	map_chat_bubble.name = "MapChatBubble"
 	add_child(map_chat_bubble)
 
+
+func _sync_nameplate_position() -> void:
+	var shift := NameplateLayout.sync_mount_position(
+		nameplate, look_node, mount_sprite, rider_node, appearance_sprites,
+		active_mount_id, _get_mount_hover_offset()
+	)
+	if map_chat_bubble != null:
+		map_chat_bubble.call("set_overhead_offset", shift)
+
+
 func _sync_nameplate_layout() -> void:
 	if nameplate_label == null:
 		return
@@ -1221,6 +1233,7 @@ func _sync_nameplate_layout() -> void:
 			role_badge_label.offset_right = badge_width - 1.0
 			role_badge_label.offset_top = 0.0
 			role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
+	_sync_nameplate_position()
 
 
 func _current_guild_emblem() -> Dictionary:
@@ -3277,11 +3290,13 @@ func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
 	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset + _get_mount_hover_offset()
+	_sync_nameplate_position()
 
 func _restore_activity_visual_offset() -> void:
 	if look_node == null:
 		return
 	look_node.position = base_look_position + stair_visual_offset + _get_mount_hover_offset()
+	_sync_nameplate_position()
 
 
 func _update_stair_visual_offset(progress: float) -> void:

@@ -945,6 +945,7 @@ func _sync_mount_rider_delta() -> void:
 		return
 	if mount_sprite == null or not mount_sprite.visible or current_mount_id == "":
 		rider_node.position = base_rider_position
+		_sync_nameplate_position()
 		return
 	var direction := _get_activity_offset_direction()
 	var rider_offset := MountService.get_rider_frame_offset(
@@ -954,6 +955,7 @@ func _sync_mount_rider_delta() -> void:
 	)
 	rider_node.position = base_rider_position + Vector2(rider_offset) \
 		+ _get_surf_fish_rider_offset(direction)
+	_sync_nameplate_position()
 
 
 func _get_surf_fish_rider_offset(direction: String) -> Vector2:
@@ -1166,6 +1168,18 @@ func _update_role_badge() -> void:
 	role_badge_label.add_theme_font_size_override("font_size", 8)
 
 
+
+func _sync_nameplate_position() -> void:
+	var shift := NameplateLayout.sync_mount_position(
+		nameplate, look_node, mount_sprite, rider_node, appearance_sprites,
+		current_mount_id, _get_mount_hover_offset()
+	)
+	if map_chat_bubble != null:
+		map_chat_bubble.call("set_overhead_offset", shift)
+	if nearby_battle_indicator != null and is_instance_valid(nearby_battle_indicator):
+		nearby_battle_indicator.configure(user_id, nearby_battle_indicator.battle_kind, _get_nearby_battle_indicator_anchor())
+
+
 func _sync_nameplate_layout() -> void:
 	if nameplate_label == null:
 		return
@@ -1224,6 +1238,7 @@ func _sync_nameplate_layout() -> void:
 			role_badge_label.offset_right = badge_width - 1.0
 			role_badge_label.offset_top = 0.0
 			role_badge_label.offset_bottom = ROLE_BADGE_TEXT_HEIGHT
+	_sync_nameplate_position()
 
 
 func _get_label_text_size(label: Label) -> Vector2:
@@ -1694,6 +1709,7 @@ func _apply_activity_visual_offset() -> void:
 	if look_node == null:
 		return
 	look_node.position = base_look_position + _get_activity_visual_offset() + stair_visual_offset + _get_mount_hover_offset()
+	_sync_nameplate_position()
 
 
 func _get_activity_visual_offset() -> Vector2:

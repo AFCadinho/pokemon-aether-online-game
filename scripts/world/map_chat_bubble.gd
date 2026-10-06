@@ -14,6 +14,7 @@ var message_label: Label
 var hide_timer: Timer
 var fade_tween: Tween
 var show_revision := 0
+var overhead_offset := 0.0
 
 
 func _ready() -> void:
@@ -125,7 +126,7 @@ func _message_bubble_width(text: String) -> float:
 
 
 func _reposition() -> void:
-	position = Vector2(-size.x * 0.5, BUBBLE_BOTTOM_Y - size.y)
+	position = Vector2(-size.x * 0.5, BUBBLE_BOTTOM_Y + overhead_offset - size.y)
 
 
 func _begin_fade() -> void:
@@ -142,3 +143,10 @@ func _on_fade_finished(completed_tween: Tween) -> void:
 		return
 	visible = false
 	fade_tween = null
+
+
+func set_overhead_offset(offset: float) -> void:
+	if is_equal_approx(overhead_offset, offset):
+		return
+	overhead_offset = offset
+	_reposition()
