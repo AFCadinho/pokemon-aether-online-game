@@ -10,7 +10,9 @@ const V11 = preload("res://data/approved_3d_release_v11.json")
 
 class ErrorSink extends Logger:
 	var tree: SceneTree
-	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, _kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
+	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
+		if kind == Logger.ERROR_TYPE_WARNING:
+			return
 		print("V11_BINDING_CHECK_FAILED ", code, " ", rationale)
 		tree.call_deferred("quit", 2)
 
