@@ -120,7 +120,7 @@ func _run() -> void:
 		overlay.bag_inventory_items = normalized
 		overlay.bag_selected_item = refill_item
 		overlay._refresh_bag_detail()
-		_check(overlay.bag_detail_use_button.text == "Recharge Repel" and not overlay.bag_detail_use_button.disabled, item_id + " shows an enabled Recharge Repel button")
+		_check(overlay.bag_detail_use_button.text == "Use" and not overlay.bag_detail_use_button.disabled, item_id + " shows an enabled Use button")
 		_check(not overlay.bag_detail_hotbar_button.disabled, item_id + " can be assigned from Bag details")
 		var expected: int = {"repel": 100, "super-repel": 200, "max-repel": 250}[item_id]
 		game.charge = 0
