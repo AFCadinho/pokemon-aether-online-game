@@ -1,0 +1,322 @@
+[
+  {
+    "gender": "male",
+    "part_id": "AetherVoyager_Shirt",
+    "category": "top",
+    "source": "male/Aether Voyager/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/aether-voyager/top.png",
+    "sha256": "ede592980f23871c796d20047e1086b4eb0132a3a32eb0f403db2e1adb401710"
+  },
+  {
+    "gender": "male",
+    "part_id": "AetherVoyager_Trousers",
+    "category": "bottom",
+    "source": "male/Aether Voyager/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/aether-voyager/bottom.png",
+    "sha256": "84c4918c6e62ab727c06a573560b045914e3e2efa409c0780471d0b63d9cdb48"
+  },
+  {
+    "gender": "male",
+    "part_id": "AetherVoyager_Shoes",
+    "category": "shoes",
+    "source": "male/Aether Voyager/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/aether-voyager/shoes.png",
+    "sha256": "5395b35ac819de5fcad55c134fcc9ec1f0605ff518ab2ed1a559740a0fb9d081"
+  },
+  {
+    "gender": "female",
+    "part_id": "AetherVoyager_Shirt",
+    "category": "top",
+    "source": "female/Aether Voyager/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/aether-voyager/top.png",
+    "sha256": "e19aa72749888d8417da4594f3278cbef57e2b6fb7076861e4ea665b8814f549"
+  },
+  {
+    "gender": "female",
+    "part_id": "AetherVoyager_Trousers",
+    "category": "bottom",
+    "source": "female/Aether Voyager/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/aether-voyager/bottom.png",
+    "sha256": "aaf9c7f0ad56a21edabde103997f4f807424529dd0cde2f6d50a5a15d00bb652"
+  },
+  {
+    "gender": "female",
+    "part_id": "AetherVoyager_Shoes",
+    "category": "shoes",
+    "source": "female/Aether Voyager/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/aether-voyager/shoes.png",
+    "sha256": "de41de03c91935d6b3874f7628c42ee384478fa1f4fadcd3155d2bd9b41a51c5"
+  },
+  {
+    "gender": "male",
+    "part_id": "RotomEngineer_Shirt",
+    "category": "top",
+    "source": "male/Rotom Engineer/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/top.png",
+    "sha256": "5cf2631350b3a66b405f4233162e2a5f9dce7b9d2351a0951047820fd587d67a"
+  },
+  {
+    "gender": "male",
+    "part_id": "RotomEngineer_Trousers",
+    "category": "bottom",
+    "source": "male/Rotom Engineer/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/bottom.png",
+    "sha256": "887035c475ce714f76d39ba83fa30bab118a67779518b79197bb13b3bb396a59"
+  },
+  {
+    "gender": "male",
+    "part_id": "RotomEngineer_Shoes",
+    "category": "shoes",
+    "source": "male/Rotom Engineer/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/shoes.png",
+    "sha256": "7abb8577d2ae6751f767e0010e4efe1e24dec6853a09dd88c1dd8bed70d993c2"
+  },
+  {
+    "gender": "male",
+    "part_id": "RotomEngineer_Goggles",
+    "category": "facegear",
+    "source": "male/Rotom Engineer/Goggles.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/facegear.png",
+    "sha256": "394b3c56117244841ccf9d849a181164152fd1d62d7ee84ae74af7622058f04f"
+  },
+  {
+    "gender": "female",
+    "part_id": "RotomEngineer_Shirt",
+    "category": "top",
+    "source": "female/Rotom Engineer/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/top.png",
+    "sha256": "37fe5485008121bb70d8fd443ed361cdc0a17746da5de7ad2c93511308ae38b9"
+  },
+  {
+    "gender": "female",
+    "part_id": "RotomEngineer_Trousers",
+    "category": "bottom",
+    "source": "female/Rotom Engineer/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/bottom.png",
+    "sha256": "329db7f03628bce597d0a35b81928691c28b875ed09435f2512838d065146993"
+  },
+  {
+    "gender": "female",
+    "part_id": "RotomEngineer_Shoes",
+    "category": "shoes",
+    "source": "female/Rotom Engineer/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/shoes.png",
+    "sha256": "f4fef9469cf8bd7dd612fae83939f1fc0b062aeac9319ddef3d96526adf78692"
+  },
+  {
+    "gender": "female",
+    "part_id": "RotomEngineer_Goggles",
+    "category": "facegear",
+    "source": "female/Rotom Engineer/Goggles.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/facegear.png",
+    "sha256": "379b123e265b263855c90813922b2e53f6f813cb13b91e164deecc600dc7e5ae"
+  },
+  {
+    "gender": "male",
+    "part_id": "CelebiForestRanger_Shirt",
+    "category": "top",
+    "source": "male/Celebi Forest Ranger/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/top.png",
+    "sha256": "b41c22d86b9f32ce8a63a4d399596b588cc35fb8e3bec3c0ac95e818e6548126"
+  },
+  {
+    "gender": "male",
+    "part_id": "CelebiForestRanger_Trousers",
+    "category": "bottom",
+    "source": "male/Celebi Forest Ranger/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/bottom.png",
+    "sha256": "1cc0b304bd8009d0789f6218f3c09dfdb70555f55401d16b310738cdf961fd0f"
+  },
+  {
+    "gender": "male",
+    "part_id": "CelebiForestRanger_Shoes",
+    "category": "shoes",
+    "source": "male/Celebi Forest Ranger/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/shoes.png",
+    "sha256": "71eff31b9c810cb475baa1b9fc67fae16d7205cfd398397b42d6672f92e3b350"
+  },
+  {
+    "gender": "female",
+    "part_id": "CelebiForestRanger_Shirt",
+    "category": "top",
+    "source": "female/Celebi Forest Ranger/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/top.png",
+    "sha256": "cdb3f00cb0abc4e745141557c2917b296113977684558a5043258b3949c1d1b2"
+  },
+  {
+    "gender": "female",
+    "part_id": "CelebiForestRanger_Trousers",
+    "category": "bottom",
+    "source": "female/Celebi Forest Ranger/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/bottom.png",
+    "sha256": "cd4ff8ae2c052f7e4a308a1bda17f38a168206682b4b33a460ec29a8c0423c21"
+  },
+  {
+    "gender": "female",
+    "part_id": "CelebiForestRanger_Shoes",
+    "category": "shoes",
+    "source": "female/Celebi Forest Ranger/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/shoes.png",
+    "sha256": "3ac3f7007b36def7970ce9b9cef816ab24425fde6a6b4fc7e698ddbbb80468cb"
+  },
+  {
+    "gender": "male",
+    "part_id": "LucarioAuraFighter_Shirt",
+    "category": "top",
+    "source": "male/Lucario Aura Fighter/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/top.png",
+    "sha256": "975649defd8fa2b5da73b5a826f12d56b4785e2d9fbe7a83c0f28ac2d8c0cda4"
+  },
+  {
+    "gender": "male",
+    "part_id": "LucarioAuraFighter_Trousers",
+    "category": "bottom",
+    "source": "male/Lucario Aura Fighter/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/bottom.png",
+    "sha256": "2070a625c878dde8e1d24f941c02a4beb500f6f35e93e0505e911dceef374858"
+  },
+  {
+    "gender": "male",
+    "part_id": "LucarioAuraFighter_Shoes",
+    "category": "shoes",
+    "source": "male/Lucario Aura Fighter/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/shoes.png",
+    "sha256": "6c03118fb131ea6bd2441db1a980bfce111ed9769b230ce066ce9c22994613c7"
+  },
+  {
+    "gender": "female",
+    "part_id": "LucarioAuraFighter_Shirt",
+    "category": "top",
+    "source": "female/Lucario Aura Fighter/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/top.png",
+    "sha256": "704a20ff934b264c0cca059015f8131f9229bd642037343a2c025e851007a424"
+  },
+  {
+    "gender": "female",
+    "part_id": "LucarioAuraFighter_Trousers",
+    "category": "bottom",
+    "source": "female/Lucario Aura Fighter/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/bottom.png",
+    "sha256": "6211446d9f548db5b0940cf4bed22f0327dea2b18b5a556dd0ae8eb11d7f91a8"
+  },
+  {
+    "gender": "female",
+    "part_id": "LucarioAuraFighter_Shoes",
+    "category": "shoes",
+    "source": "female/Lucario Aura Fighter/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/shoes.png",
+    "sha256": "7f61a3cce34ee35b71ef648653c2311c01a9581b92850e9aa9553ef4aa88efa0"
+  },
+  {
+    "gender": "male",
+    "part_id": "RelicExplorer_Shirt",
+    "category": "top",
+    "source": "male/Relic Explorer/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/relic-explorer/top.png",
+    "sha256": "5ce407a63f12163ff36b4f689eea01d50ddc5e9cfe6b61f2f00f204f301b2b80"
+  },
+  {
+    "gender": "male",
+    "part_id": "RelicExplorer_Trousers",
+    "category": "bottom",
+    "source": "male/Relic Explorer/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/relic-explorer/bottom.png",
+    "sha256": "d926d2c19efbc81e50a57127310ef3d985194c9f16e35e56410a4f8d03f2b618"
+  },
+  {
+    "gender": "male",
+    "part_id": "RelicExplorer_Shoes",
+    "category": "shoes",
+    "source": "male/Relic Explorer/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/relic-explorer/shoes.png",
+    "sha256": "188415b295406df78e6a4473a00d6a9aa21071096ba804d9f3590d2668203edc"
+  },
+  {
+    "gender": "female",
+    "part_id": "RelicExplorer_Shirt",
+    "category": "top",
+    "source": "female/Relic Explorer/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/relic-explorer/top.png",
+    "sha256": "16467ee6f3b278856263222327f06c818c756ec17c3a825149f19aae0e10f660"
+  },
+  {
+    "gender": "female",
+    "part_id": "RelicExplorer_Trousers",
+    "category": "bottom",
+    "source": "female/Relic Explorer/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/relic-explorer/bottom.png",
+    "sha256": "fa16024a02b731dc7c6b0b4b6322713074f1380bd69d3829134a403e26d477e4"
+  },
+  {
+    "gender": "female",
+    "part_id": "RelicExplorer_Shoes",
+    "category": "shoes",
+    "source": "female/Relic Explorer/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/relic-explorer/shoes.png",
+    "sha256": "a9905117cf944a6f0f1e66d0ca2d94342b9c0a8cbcfe725734788a48828bc6f0"
+  },
+  {
+    "gender": "male",
+    "part_id": "LugiaSkyCaptain_Shirt",
+    "category": "top",
+    "source": "male/Lugia Sky Captain/Top.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/top.png",
+    "sha256": "4ab1e2cc36c69742aeca937fd2b62212df0b52595bf974e6eb68eae1ebaa17ce"
+  },
+  {
+    "gender": "male",
+    "part_id": "LugiaSkyCaptain_Trousers",
+    "category": "bottom",
+    "source": "male/Lugia Sky Captain/Trousers.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/bottom.png",
+    "sha256": "75399fa32845fecbd155836ce818f57894416e3837d82e6f469144d8a2f54f57"
+  },
+  {
+    "gender": "male",
+    "part_id": "LugiaSkyCaptain_Shoes",
+    "category": "shoes",
+    "source": "male/Lugia Sky Captain/Shoes.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/shoes.png",
+    "sha256": "73205991c67511b3b5e4a666230b3aa63f5108aec3d1bf52ba7ff0d25184ea33"
+  },
+  {
+    "gender": "male",
+    "part_id": "LugiaSkyCaptain_Goggles",
+    "category": "facegear",
+    "source": "male/Lugia Sky Captain/Goggles.png",
+    "path": "assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/facegear.png",
+    "sha256": "7dd15608e571982db38222367fefbb439a1f2f7a58da85ba4edf6b0f7a9a4336"
+  },
+  {
+    "gender": "female",
+    "part_id": "LugiaSkyCaptain_Shirt",
+    "category": "top",
+    "source": "female/Lugia Sky Captain/Top.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/top.png",
+    "sha256": "c71b8ff8655a158cc4fd0628b781e2fceb5b954a80bbab964565e786cdab0347"
+  },
+  {
+    "gender": "female",
+    "part_id": "LugiaSkyCaptain_Trousers",
+    "category": "bottom",
+    "source": "female/Lugia Sky Captain/Trousers.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/bottom.png",
+    "sha256": "07ddcd8625aaa267f65c06697b1c8379b04a3355db5bd2ad7fe25f592627b0e4"
+  },
+  {
+    "gender": "female",
+    "part_id": "LugiaSkyCaptain_Shoes",
+    "category": "shoes",
+    "source": "female/Lugia Sky Captain/Shoes.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/shoes.png",
+    "sha256": "49b656866518c0e2ae8549f4008f9cad46876f9596c9967968f3ddcb51825cf3"
+  },
+  {
+    "gender": "female",
+    "part_id": "LugiaSkyCaptain_Goggles",
+    "category": "facegear",
+    "source": "female/Lugia Sky Captain/Goggles.png",
+    "path": "assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/facegear.png",
+    "sha256": "6c1f4d9c15872b763ff699cf7ed21c6471c1e98e59c5030e7aa44e78d36fac28"
+  }
+]

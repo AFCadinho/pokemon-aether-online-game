@@ -56,6 +56,30 @@
             "AetherRoyal_Trousers": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherVoyager_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/aether-voyager/bottom.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/bottom.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/bottom.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/bottom.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/relic-explorer/bottom.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Trousers": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/bottom.png",
+              "scale": 1.0
             }
           }
         },
@@ -98,6 +122,30 @@
             "AetherRoyal_Shoes": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherVoyager_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/aether-voyager/shoes.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/shoes.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/shoes.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/shoes.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/relic-explorer/shoes.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Shoes": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -139,6 +187,30 @@
             },
             "AetherRoyal_Shirt": {
               "path": "res://assets/battles/trainers/player/male/aether_royal_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherVoyager_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/aether-voyager/top.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/top.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/celebi-forest-ranger/top.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lucario-aura-fighter/top.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/relic-explorer/top.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Shirt": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/top.png",
               "scale": 1.0
             }
           }
@@ -228,6 +300,14 @@
               "path": "res://assets/battles/trainers/player/male/adinho_outfit/blank_white/glasses.png",
               "scale": 1.0,
               "tint": "facegear_color"
+            },
+            "RotomEngineer_Goggles": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/rotom-engineer/facegear.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Goggles": {
+              "path": "res://assets/battles/trainers/player/male/adventure_outfits/lugia-sky-captain/facegear.png",
+              "scale": 1.0
             }
           }
         },
@@ -278,6 +358,30 @@
             "AetherRoyal_Trousers": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/trousers.png",
               "scale": 1.0
+            },
+            "AetherVoyager_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/aether-voyager/bottom.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/bottom.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/bottom.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/bottom.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/relic-explorer/bottom.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Trousers": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/bottom.png",
+              "scale": 1.0
             }
           }
         },
@@ -320,6 +424,30 @@
             "AetherRoyal_Shoes": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/shoes.png",
               "scale": 1.0
+            },
+            "AetherVoyager_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/aether-voyager/shoes.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/shoes.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/shoes.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/shoes.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/relic-explorer/shoes.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Shoes": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/shoes.png",
+              "scale": 1.0
             }
           }
         },
@@ -356,6 +484,30 @@
             },
             "AetherRoyal_Shirt": {
               "path": "res://assets/battles/trainers/player/female/aether_royal_outfit/shirt.png",
+              "scale": 1.0
+            },
+            "AetherVoyager_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/aether-voyager/top.png",
+              "scale": 1.0
+            },
+            "RotomEngineer_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/top.png",
+              "scale": 1.0
+            },
+            "CelebiForestRanger_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/celebi-forest-ranger/top.png",
+              "scale": 1.0
+            },
+            "LucarioAuraFighter_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lucario-aura-fighter/top.png",
+              "scale": 1.0
+            },
+            "RelicExplorer_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/relic-explorer/top.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Shirt": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/top.png",
               "scale": 1.0
             }
           }
@@ -437,6 +589,14 @@
               "path": "res://assets/battles/trainers/player/female/wishmaker_outfit/earrings.png",
               "scale": 2.0,
               "tint": "facegear_color"
+            },
+            "RotomEngineer_Goggles": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/rotom-engineer/facegear.png",
+              "scale": 1.0
+            },
+            "LugiaSkyCaptain_Goggles": {
+              "path": "res://assets/battles/trainers/player/female/adventure_outfits/lugia-sky-captain/facegear.png",
+              "scale": 1.0
             }
           }
         },

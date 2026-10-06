@@ -26,7 +26,7 @@ The same box and part item IDs support both genders. Each unlock declares male a
 
 ## Scope
 
-This collection supplies overworld clothing. Authored battle trainer layers have not been supplied; battle and dialogue portraits continue to use the existing catalog fallback for these parts. The collection is registered locally, not published or deployed.
+This collection supplies overworld clothing and authored male/female trainer layers. Battle trainers and dialogue portraits resolve their own 160×160 outfit artwork, with scale 1.0. The collection is registered locally, not published or deployed.
 
 ## Checks
 
@@ -37,6 +37,13 @@ Run via `game/ops/worktrees/slot-env SLOT -- godot --headless --path PATH`:
 
 Backend: `python -m unittest tests.test_male_adventure_outfits` in the isolated Python 3.13 account-service test environment. Covers all six box/wardrobe/return lifecycles, female box activation and four gender changes per outfit without returning, losing or duplicating items and absence from the Gift Store.
 
-Gender variants are generated from the backend catalog using `tools/generate_cosmetic_variants.py`. These overworld-only items explicitly declare `battle_rendering: fallback`; all other adaptive cosmetics still require authored battle art by default. This preserves the prior portrait behavior without presenting borrowed starter art as a new outfit design.
+Gender variants are generated from the backend catalog using `tools/generate_cosmetic_variants.py`. All twenty parts now meet the default authored battle-art requirement for both genders; the temporary `battle_rendering: fallback` overrides were removed.
 
 `tests/adventure_outfit_gender_ui_check.gd` applies the actual trainer-service UI response for all six outfits and both genders, checking retained selection, ownership, source items and localized wardrobe names.
+
+
+## Trainer artwork
+
+Source designs and interactive previews: `pokeaether_assets/outfit/trainer_sprites/Outfit Designs`. Twelve sets use the original male/female trainer bases and 80×80 logical grid, exported at 160×160. Body, face, ball and chosen hair remain independent. Tops include their scarves/gloves; goggles remain separate facegear. The production pipeline registers imagegen clothing onto the existing garment masks and records every runtime layer hash in `data/adventure_trainer_sources.json`.
+
+`tests/adventure_trainer_sprites_check.gd` verifies exact authored paths for all 40 gender/part combinations, full-size scale, twelve engine composites and correctly mirrored dialogue portraits. Existing overworld/gender-change tests remain applicable.

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added matching male and female battle trainer and dialogue portraits for all six adventure outfits, preserving shared wardrobe items across gender changes.
+
 - Add Toucannon, Arcanine and Aerodactyl as grantable land mounts with the approved V2 rider poses, repaired head/tail layering and existing regional Mount License requirements.
 - Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
 
