@@ -3129,6 +3129,8 @@
   "ui.store.error.preview_unavailable": "This preview item is not available yet",
   "ui.store.error.gems_needed": "You need {amount} more Aether Gems",
   "ui.store.error.not_enough_gems": "Not enough Aether Gems · need {amount} more",
+  "ui.store.preview.mode.overworld": "Overworld",
+  "ui.store.preview.mode.trainer": "Trainer",
   "ui.store.preview.on_trainer": "ON YOUR TRAINER",
   "ui.store.preview.details": "ITEM DETAILS",
   "ui.store.preview.choose_item": "Select an item to see its details",

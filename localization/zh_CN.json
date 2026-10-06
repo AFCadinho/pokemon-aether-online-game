@@ -3095,6 +3095,8 @@
   "ui.store.error.preview_unavailable": "该预览项目尚不可用",
   "ui.store.error.gems_needed": "你需要 {amount} 更多以太宝石",
   "ui.store.error.not_enough_gems": "以太宝石不足·需要 {amount} 更多",
+  "ui.store.preview.mode.overworld": "地图形象",
+  "ui.store.preview.mode.trainer": "训练家",
   "ui.store.preview.on_trainer": "在您的训练器上",
   "ui.store.preview.details": "商品详情",
   "ui.store.preview.choose_item": "选择商品以查看详情",

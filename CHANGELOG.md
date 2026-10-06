@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Switch Gift Store cosmetic previews between Overworld and Trainer sprites, with matching outfit parts and Chroma colours.
+
 - Give Pallet Town, Viridian City, Cerulean City and Vermilion City the flowing flower sway from Lavender Town, and gently animate Vermilion's small grass tufts.
 
 - Align normal and shiny Kyogre's side-view hull, rider and water contact with the occupied Surf tile beside NPCs.

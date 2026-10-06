@@ -997,6 +997,9 @@ var selection_price_label: Label
 var purchase_button: Button
 var status_label: Label
 var character_preview_viewport: SubViewport
+var character_preview_mode_row: HBoxContainer
+var character_preview_mode_buttons: Dictionary = {}
+var character_preview_mode := "overworld"
 var character_preview_eyebrow_label: Label
 var character_preview_direction_row: HBoxContainer
 var character_preview_title_label: Label
@@ -1940,6 +1943,24 @@ func _create_character_preview_panel() -> Control:
 	layout.add_child(character_preview_title_label)
 	selection_title_label = character_preview_title_label
 
+	character_preview_mode_row = HBoxContainer.new()
+	character_preview_mode_row.name = "CosmeticPreviewModes"
+	character_preview_mode_row.alignment = BoxContainer.ALIGNMENT_CENTER
+	character_preview_mode_row.add_theme_constant_override("separation", 4)
+	character_preview_mode_row.visible = false
+	layout.add_child(character_preview_mode_row)
+	for mode: String in ["overworld", "trainer"]:
+		var mode_button := Button.new()
+		mode_button.name = mode.to_pascal_case() + "PreviewTab"
+		mode_button.text = _t("ui.store.preview.mode." + mode)
+		mode_button.custom_minimum_size = Vector2(100, 26)
+		mode_button.toggle_mode = true
+		mode_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		mode_button.pressed.connect(_select_character_preview_mode.bind(mode))
+		character_preview_mode_row.add_child(mode_button)
+		character_preview_mode_buttons[mode] = mode_button
+	_refresh_character_preview_mode_buttons()
+
 	var viewport_frame := PanelContainer.new()
 	viewport_frame.custom_minimum_size = Vector2(PREVIEW_VIEWPORT_SIZE)
 	viewport_frame.add_theme_stylebox_override(
@@ -2654,6 +2675,7 @@ func _refresh_character_preview() -> void:
 		child.queue_free()
 
 	mount_preview_controls.visible = false
+	character_preview_mode_row.visible = false
 	var item := _catalog_item(selected_item_id)
 	if not _mount_box_mount_id(selected_item_id).is_empty():
 		_refresh_mount_rider_preview(item)
@@ -2714,15 +2736,19 @@ func _refresh_character_preview() -> void:
 		if not _item_matches_trainer_gender(item)
 		else _t("ui.store.preview.on_trainer")
 	)
-	character_preview_direction_row.visible = true
+	character_preview_mode_row.visible = true
+	character_preview_direction_row.visible = character_preview_mode == "overworld"
 	var appearance := _current_character_preview_appearance()
-	var preview_visual := _create_character_preview_visual(appearance)
-	if preview_visual != null:
-		character_preview_viewport.add_child(preview_visual)
-		preview_visual.position = PREVIEW_AVATAR_POSITION
-		preview_visual.scale = PREVIEW_AVATAR_SCALE
-		_disable_character_preview_processing(preview_visual)
-		_set_character_preview_direction(preview_visual)
+	if character_preview_mode == "trainer":
+		_create_trainer_preview_visual(appearance)
+	else:
+		var preview_visual := _create_character_preview_visual(appearance)
+		if preview_visual != null:
+			character_preview_viewport.add_child(preview_visual)
+			preview_visual.position = PREVIEW_AVATAR_POSITION
+			preview_visual.scale = PREVIEW_AVATAR_SCALE
+			_disable_character_preview_processing(preview_visual)
+			_set_character_preview_direction(preview_visual)
 
 	var tint_key := ""
 	for preview_part: Dictionary in preview_parts:
@@ -2753,6 +2779,44 @@ func _refresh_character_preview() -> void:
 		)
 	_rebuild_character_preview_color_buttons(tint_key)
 	_refresh_character_preview_color_buttons(tint_key)
+
+
+func _select_character_preview_mode(mode: String) -> void:
+	if mode not in ["overworld", "trainer"]:
+		return
+	character_preview_mode = mode
+	_refresh_character_preview_mode_buttons()
+	_refresh_character_preview()
+
+
+func _refresh_character_preview_mode_buttons() -> void:
+	for mode: String in character_preview_mode_buttons:
+		var button := character_preview_mode_buttons[mode] as Button
+		button.text = _t("ui.store.preview.mode." + mode)
+		button.set_pressed_no_signal(mode == character_preview_mode)
+		_apply_cosmetic_subcategory_style(button, mode == character_preview_mode)
+
+
+func _create_trainer_preview_visual(appearance: Dictionary) -> void:
+	var portrait := BattlePlayerTrainerCatalog.build_dialogue_portrait(appearance)
+	if portrait == null:
+		return
+	var visible_rect := portrait.get_image().get_used_rect()
+	if not visible_rect.has_area():
+		return
+	var cropped := AtlasTexture.new()
+	cropped.atlas = portrait
+	cropped.region = visible_rect
+	var sprite := Sprite2D.new()
+	sprite.name = "StoreTrainerPreview"
+	sprite.texture = cropped
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	var available := Vector2(PREVIEW_VIEWPORT_SIZE) - Vector2(24, 16)
+	var fit := minf(available.x / visible_rect.size.x, available.y / visible_rect.size.y)
+	# Quarter steps keep the pixel art crisp while fitting hats and full outfits.
+	sprite.scale = Vector2.ONE * (floorf(fit * 4.0) / 4.0)
+	sprite.position = Vector2(PREVIEW_VIEWPORT_SIZE) * 0.5
+	character_preview_viewport.add_child(sprite)
 
 
 func _create_character_preview_visual(appearance: Dictionary) -> Node2D:
@@ -3615,6 +3679,7 @@ func _t(key: String, values: Dictionary = {}) -> String:
 
 func _on_locale_changed(_locale: String) -> void:
 	_refresh_currency_info()
+	_refresh_character_preview_mode_buttons()
 	for select: OptionButton in [catalog_filter_select, catalog_sort_select]:
 		if select == null:
 			continue
