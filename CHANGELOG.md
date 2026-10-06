@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.100
+
 ### Adventure and exploration
 
 - Claim three previously unavailable pickups on Route 14, and find Repel items among updated overworld rewards.
