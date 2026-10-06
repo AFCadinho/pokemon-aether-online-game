@@ -1,4 +1,6 @@
 {
+  "ui.repel.max": "最大",
+  "ui.repel.batch_preview": "使用 {quantity} × {item}。驱虫储量：{before} → {after} / {max} 步。保留多余道具。",
   "ui.repel.recharge": "补充驱虫储量",
   "ui.repel.tooltip": "驱虫：{steps} / {max} 步。使用驱虫喷雾补充储量。只有可能触发野生宝可梦遭遇的步数才会消耗储量。",
   "ui.repel.refilled": "驱虫储量已补充：{steps} / {max} 步。",

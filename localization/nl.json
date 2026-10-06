@@ -1,4 +1,6 @@
 {
+  "ui.repel.max": "Max",
+  "ui.repel.batch_preview": "Gebruik {quantity} × {item}. Repel-lading: {before} → {after} / {max} stappen. Overtollige items blijven behouden.",
   "ui.repel.recharge": "Repel opladen",
   "ui.repel.tooltip": "Repel: {steps} / {max} stappen. Gebruik Repel-items om op te laden. Alleen stappen waarop wilde encounters mogelijk zijn verbruiken lading.",
   "ui.repel.refilled": "Repel opgeladen: {steps} / {max} stappen.",

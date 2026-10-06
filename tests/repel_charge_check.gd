@@ -88,6 +88,9 @@ func _run() -> void:
 	await repel.flush()
 	_check(game.charge == 0, "depletion persists")
 	var overlay = load("res://tests/support/repel_inventory_test_overlay.gd").new()
+	var dialog_root := Control.new()
+	root.add_child(dialog_root)
+	overlay.root_control = dialog_root
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(52, 52)
 	panel.position = Vector2(30, 30)
@@ -111,7 +114,7 @@ func _run() -> void:
 	for item_id: String in ["repel", "super-repel", "max-repel"]:
 		# Use the actual inventory projection shape, including empty Pokémon gameplay.
 		var normalized: Array = overlay._normalize_bag_inventory_items([
-			{"itemId": item_id, "quantity": 1, "category": "general", "useAction": "recharge_repel", "gameplay": {}}
+			{"itemId": item_id, "quantity": 1, "category": "general", "gameplay": {}}
 		])
 		var refill_item: Dictionary = normalized[0]
 		overlay.bag_inventory_items = normalized
@@ -123,11 +126,13 @@ func _run() -> void:
 		game.charge = 0
 		state.repel_steps = 0
 		await overlay._on_bag_detail_use_pressed()
+		await _confirm_refill(overlay)
 		_check(state.repel_steps == expected, item_id + " recharges from the Bag detail button")
 		game.charge = 0
 		state.repel_steps = 0
 		overlay.bag_item_context_item = refill_item
 		await overlay._on_bag_item_context_menu_id_pressed(overlay.BAG_CONTEXT_ACTION_USE)
+		await _confirm_refill(overlay)
 		_check(state.repel_steps == expected, item_id + " recharges from the Bag context menu")
 		overlay.bag_inventory_items = normalized
 		var slot := HotbarBagItemSlot.new()
@@ -151,19 +156,60 @@ func _run() -> void:
 	overlay.hotbar_slots = [{"slot": 0, "entryType": "item", "entryId": "potion"}]
 	await overlay._on_hotbar_slot_pressed(0)
 	_check(overlay.pokemon_target_requests == 1, "medicine hotbar use still selects a Pokémon")
-	var item := {"id": "max-repel", "useAction": "recharge_repel"}
+	_check(not overlay._bag_item_can_use_from_bag({"id": "repel", "useAction": "unsupported"}), "explicit unsupported action is not overridden by the Repel fallback")
+	var item := {"id": "max-repel", "quantity": 11, "name": "Max Repel", "useAction": "recharge_repel"}
 	_check(overlay._bag_item_can_use_from_bag(item), "Bag exposes Repel recharge as a usable item")
 	game.charge = 9900
 	state.repel_steps = 9900
 	await overlay._on_bag_item_selected(item)
+	_check(overlay.repel_refill_dialog.find_child("RepelQuantity", true, false).max_value == 1, "near-cap selector limits use to one partially effective item")
+	await _confirm_refill(overlay)
 	_check(overlay.repel_charge_label.text == "10000" and button.tooltip_text.contains("10000"), "toggle displays authoritative charge and cap")
 	_check(not state.repel_enabled, "recharge keeps the player's toggle choice")
+	var calls_before: int = inventory.use_calls
+	await overlay._on_bag_item_selected(item)
+	_check(overlay.repel_refill_dialog == null and inventory.use_calls == calls_before, "full charge opens no selector and spends no item")
+	game.charge = 0
+	state.repel_steps = 0
+	await overlay._on_bag_item_selected(item)
+	var selector: SpinBox = overlay.repel_refill_dialog.find_child("RepelQuantity", true, false)
+	_check(selector.max_value == 11, "Max is limited by owned stock")
+	selector.value = 3
+	_check(overlay.repel_refill_dialog.message_label.text.contains("750"), "batch preview updates for the chosen amount")
+	if "--repel-preview" in OS.get_cmdline_user_args():
+		await process_frame
+		await process_frame
+		await RenderingServer.frame_post_draw
+		root.get_texture().get_image().save_png("/tmp/repel-bulk-preview.png")
+	await _confirm_refill(overlay)
+	_check(state.repel_steps == 750 and inventory.last_quantity == 3, "selected amount reaches the refill service in one batch")
+	game.charge = 0
+	state.repel_steps = 0
+	await overlay._on_bag_item_selected(item)
+	overlay.repel_refill_dialog.find_child("RepelMax", true, false).pressed.emit()
+	await _confirm_refill(overlay)
+	_check(state.repel_steps == 2750 and inventory.last_quantity == 11, "Max uses all 11 owned Max Repels when there is room")
+	item.quantity = 100
+	game.charge = 9500
+	state.repel_steps = 9500
+	await overlay._on_bag_item_selected(item)
+	_check(overlay.repel_refill_dialog.find_child("RepelQuantity", true, false).max_value == 2, "Max preserves stock beyond remaining capacity")
+	overlay.repel_refill_dialog.find_child("RepelMax", true, false).pressed.emit()
+	await _confirm_refill(overlay)
+	_check(state.repel_steps == 10000 and inventory.last_quantity == 2, "Max fills to exactly the cap")
+	state.repel_steps = 0
+	calls_before = inventory.use_calls
+	await overlay._on_bag_item_selected(item)
+	overlay.repel_refill_dialog._cancel()
+	await process_frame
+	_check(overlay.repel_refill_dialog == null and inventory.use_calls == calls_before, "canceling never consumes items")
 	root.get_node("LocalizationManager").set_locale("nl")
 	overlay._on_locale_changed("nl")
 	_check(button.tooltip_text.contains("stappen"), "charge tooltip follows language changes")
 	overlay.pokemon_summary_sprite_loader.free()
 	overlay.pokedex_sprite_loader.free()
 	overlay.free()
+	dialog_root.queue_free()
 	detail_panel.queue_free()
 	panel.queue_free()
 	await process_frame
@@ -206,3 +252,12 @@ class _EncounterMap:
 		return chance
 	func should_trigger_wild_encounter(_type: String) -> bool:
 		return false
+
+func _confirm_refill(overlay: Node) -> void:
+	_check(is_instance_valid(overlay.repel_refill_dialog), "Bag use opens the amount selector")
+	if not is_instance_valid(overlay.repel_refill_dialog):
+		return
+	await process_frame
+	overlay.repel_refill_dialog._confirm()
+	await root.get_node("RepelService").refill_finished
+	await process_frame
