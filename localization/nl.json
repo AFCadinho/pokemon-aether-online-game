@@ -6430,5 +6430,22 @@
   "ui.shiny_tracker.mounts.store_description_latios": "Bevat een Latios-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_latias": "Bevat een Latias-mount. Shiny-basiskans: 50%.",
   "ui.shiny_tracker.mounts.store_description_caterpie": "Bevat een Caterpie-mount. Shiny-basiskans: 50%.",
-  "ui.shiny_tracker.mounts.store_description_magikarp": "Bevat een Magikarp-surfmount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_magikarp": "Bevat een Magikarp-surfmount. Shiny-basiskans: 50%.",
+  "ui.mount_collector.title": "Shiny Mount Collector",
+  "ui.mount_collector.intro": "Ik verzamel shiny mounts! Liever de originele kleuren? Ruil een shiny mount voor de normale versie en 100 Gift Voucher-tegoed. Je mag zo vaak ruilen als je wilt.",
+  "ui.mount_collector.empty": "Je hebt geen shiny mounts om te ruilen. Kom terug als je liever de normale kleuren wilt!",
+  "ui.mount_collector.choose": "Kies een shiny mount om te ruilen voor de normale versie en {credit} Gift Voucher-tegoed.",
+  "ui.mount_collector.bound": "Accountgebonden",
+  "ui.mount_collector.previous": "Vorige mounts",
+  "ui.mount_collector.next": "Meer mounts",
+  "ui.mount_collector.confirm": "Eén {shiny} ruilen voor één {normal} en {credit} Gift Voucher-tegoed? Je shiny mount wordt ingeleverd. Dit verandert je mountboxkansen en trackertellers niet.",
+  "ui.mount_collector.binding_bound": "De normale mount blijft accountgebonden. Aankopen met het tegoed zijn ook accountgebonden.",
+  "ui.mount_collector.binding_tradeable": "De normale mount blijft verhandelbaar. Aankopen met het tegoed zijn accountgebonden.",
+  "ui.mount_collector.duplicate": "Je bezit deze normale mount al. Je ontvangt nog een exemplaar.",
+  "ui.mount_collector.trade": "Mount ruilen",
+  "ui.mount_collector.back": "Terug",
+  "ui.mount_collector.received": "Je ontving {mount} en {credit} Gift Voucher-tegoed!",
+  "ui.mount_collector.error.context": "Spreek de Shiny Mount Collector in de fietswinkel van Cerulean aan wanneer je niet bezig bent.",
+  "ui.mount_collector.error.shiny": "Kies een shiny mount met een bijbehorende normale versie.",
+  "ui.mount_collector.error.wallet_full": "Geef eerst wat Gift Voucher-tegoed uit voordat je deze mount ruilt."
 }

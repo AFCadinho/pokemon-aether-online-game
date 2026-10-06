@@ -6426,5 +6426,22 @@
   "ui.shiny_tracker.mounts.store_description_latios": "包含一只拉帝欧斯坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_latias": "包含一只拉帝亚斯坐骑。初始异色概率：50%。",
   "ui.shiny_tracker.mounts.store_description_caterpie": "包含一只绿毛虫坐骑。初始异色概率：50%。",
-  "ui.shiny_tracker.mounts.store_description_magikarp": "包含一只鲤鱼王冲浪坐骑。初始异色概率：50%。"
+  "ui.shiny_tracker.mounts.store_description_magikarp": "包含一只鲤鱼王冲浪坐骑。初始异色概率：50%。",
+  "ui.mount_collector.title": "闪光坐骑收藏家",
+  "ui.mount_collector.intro": "我收集闪光坐骑！更喜欢原来的颜色？用闪光坐骑换取普通版本和100点礼品券额度。可以不限次数兑换。",
+  "ui.mount_collector.empty": "你没有可以兑换的闪光坐骑。想要普通颜色时，带一只闪光坐骑来吧！",
+  "ui.mount_collector.choose": "选择一只闪光坐骑，换取普通版本和{credit}点礼品券额度。",
+  "ui.mount_collector.bound": "账号绑定",
+  "ui.mount_collector.previous": "上一页",
+  "ui.mount_collector.next": "更多坐骑",
+  "ui.mount_collector.confirm": "用一只{shiny}换取一只{normal}和{credit}点礼品券额度？你的闪光坐骑将被交出。兑换不会改变坐骑箱概率或追踪器计数。",
+  "ui.mount_collector.binding_bound": "普通坐骑仍然绑定账号。使用礼品券额度购买的物品也绑定账号。",
+  "ui.mount_collector.binding_tradeable": "普通坐骑仍可交易。使用礼品券额度购买的物品绑定账号。",
+  "ui.mount_collector.duplicate": "你已拥有这只普通坐骑，将获得另一只。",
+  "ui.mount_collector.trade": "兑换坐骑",
+  "ui.mount_collector.back": "返回",
+  "ui.mount_collector.received": "你获得了{mount}和{credit}点礼品券额度！",
+  "ui.mount_collector.error.context": "请在空闲时与华蓝市自行车店的闪光坐骑收藏家交谈。",
+  "ui.mount_collector.error.shiny": "选择一只拥有对应普通版本的闪光坐骑。",
+  "ui.mount_collector.error.wallet_full": "兑换此坐骑前，请先消费一些礼品券额度。"
 }

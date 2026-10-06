@@ -10,6 +10,10 @@
 [ext_resource type="SpriteFrames" uid="uid://cdhq6bete0vs8" path="res://assets/npcs/classes/mart_m_frames.tres" id="7_mart_m"]
 [ext_resource type="Script" path="res://scripts/world/kanto/towns/cerulean_bike_shop_owner.gd" id="8_owner"]
 
+[ext_resource type="Script" path="res://scripts/world/kanto/towns/shiny_mount_collector.gd" id="collector"]
+[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/collector_frames.tres" id="collector_frames"]
+[ext_resource type="Texture2D" path="res://assets/sprites/trainer_cards/showdown/collector-gen6.png" id="collector_mugshot"]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_7h5j0"]
 texture = ExtResource("3_7h5j0")
 texture_region_size = Vector2i(32, 32)
@@ -143,6 +147,17 @@ position = Vector2(-32, 0)
 
 [node name="CollisionShape2D" parent="Entities/NPCs/BikeShopOwner/InteractionArea" index="0"]
 shape = SubResource("RectangleShape2D_owner_interaction")
+
+[node name="ShinyMountCollector" parent="Entities/NPCs" instance=ExtResource("6_dialogue")]
+position = Vector2(368, 464)
+script = ExtResource("collector")
+npc_id = "kanto_cerulean_city_shiny_mount_collector"
+display_name = "Shiny Mount Collector"
+npc_sprite_frames = ExtResource("collector_frames")
+portrait_id = "showdown_collector_gen6"
+mugshot = ExtResource("collector_mugshot")
+facing_direction = Vector2(0, 1)
+manual_interaction_reach_tiles = 2
 
 [node name="Players" type="Node2D" parent="Entities" unique_id=5355531]
 
