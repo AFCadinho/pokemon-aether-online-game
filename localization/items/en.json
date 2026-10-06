@@ -758,5 +758,13 @@
   "latias-mount-box": {
     "name": "Latias Mount Box",
     "shortDesc": "Contains a Latias mount. Base shiny chance: 50%."
+  },
+  "caterpie-mount": {
+    "name": "Caterpie Mount",
+    "shortDesc": "Unlocks Caterpie as a land mount. Requires a Mount License for the current region."
+  },
+  "magikarp-mount": {
+    "name": "Magikarp Mount",
+    "shortDesc": "Unlocks Magikarp as a Surf mount. Requires access to Surf."
   }
 }

@@ -24,8 +24,8 @@ func _run() -> void:
 		quit(1)
 		return
 	_check(
-		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras", "primal_kyogre", "primal_kyogre_shiny"],
-		"Surf catalog includes Lapras and both Primal Kyogre variants"
+		MountServiceScript.get_mount_ids_for_mode("surf") == ["lapras", "magikarp", "primal_kyogre", "primal_kyogre_shiny"],
+		"Surf catalog includes Lapras, Magikarp and both Primal Kyogre variants"
 	)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("surf", []) == ["lapras"]
@@ -33,8 +33,9 @@ func _run() -> void:
 		"Primal Kyogre only appears in the selector after its mount item is owned"
 	)
 	_check(MountServiceScript.get_unlocked_mount_ids_for_mode("surf", ["shiny-primal-kyogre-mount"]) == ["lapras", "primal_kyogre_shiny"], "shiny ownership unlocks only its own Surf variant")
+	_check(MountServiceScript.get_unlocked_mount_ids_for_mode("surf", ["magikarp-mount"]) == ["lapras", "magikarp"], "Magikarp appears only after its grant is owned")
 	var land_mounts := MountServiceScript.get_mount_ids_for_mode("land")
-	for mount_id: String in ["cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "giratina_origin", "giratina_origin_shiny", "ho_oh", "ho_oh_shiny", "yveltal", "yveltal_shiny", "miraidon", "miraidon_shiny", "reshiram", "reshiram_shiny", "glaceon", "glaceon_shiny", "cobalion", "cobalion_shiny"]:
+	for mount_id: String in ["caterpie", "cyclizar", "rayquaza", "rayquaza_shiny", "shadow_lugia", "shadow_lugia_shiny", "mega_alakazam", "mega_alakazam_shiny", "mega_absol", "mega_absol_z", "giratina_origin", "giratina_origin_shiny", "ho_oh", "ho_oh_shiny", "yveltal", "yveltal_shiny", "miraidon", "miraidon_shiny", "reshiram", "reshiram_shiny", "glaceon", "glaceon_shiny", "cobalion", "cobalion_shiny"]:
 		_check(land_mounts.has(mount_id), "land catalog exposes " + mount_id)
 	_check(
 		MountServiceScript.get_unlocked_mount_ids_for_mode("land", []).is_empty()

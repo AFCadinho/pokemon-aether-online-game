@@ -758,5 +758,13 @@
   "latias-mount-box": {
     "name": "Caixa de montaria Latias",
     "shortDesc": "Contém uma montaria Latias. Chance shiny inicial: 50%."
+  },
+  "caterpie-mount": {
+    "name": "Montaria Caterpie",
+    "shortDesc": "Desbloqueia Caterpie como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "magikarp-mount": {
+    "name": "Montaria Magikarp",
+    "shortDesc": "Desbloqueia Magikarp como montaria de Surf. Requer acesso ao Surf."
   }
 }

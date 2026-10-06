@@ -758,5 +758,13 @@
   "latias-mount-box": {
     "name": "Latias-mountbox",
     "shortDesc": "Bevat een Latias-mount. Shiny-basiskans: 50%."
+  },
+  "caterpie-mount": {
+    "name": "Caterpie-mount",
+    "shortDesc": "Ontgrendelt Caterpie als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "magikarp-mount": {
+    "name": "Magikarp-mount",
+    "shortDesc": "Ontgrendelt Magikarp als surfmount. Vereist toegang tot Surf."
   }
 }
