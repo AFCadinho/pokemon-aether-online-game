@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Expand nine more 3D moves across the battlefield, including sweeping heat and snow, wind funnels, ground eruptions, a caster-centered explosion, falling coins and prismatic stars.
+
 - Add Giratina Origin, Ho-Oh, Yveltal, Miraidon and Reshiram land mounts with animated artwork, synchronized rider masks and compact Bag icons.
 
 - Keep large mounts behind complete evergreen trees, including their lower foliage and trunks, while preserving grass and existing tree depth boundaries.

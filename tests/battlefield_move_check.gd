@@ -2,7 +2,7 @@ extends "res://tests/battle_move_effects_3d_check.gd"
 const Recipes = preload("res://scripts/battle/battle_ui/move_recipe_3d.gd")
 var seconds := 0.0
 func _run() -> void:
-	get_tree().create_timer(60).timeout.connect(func():get_tree().quit(1))
+	get_tree().create_timer(120).timeout.connect(func():get_tree().quit(1))
 	_setup()
 	for arena in ["stadium","route_1_water","route_24_water"]:
 		stage.arena_id=arena
@@ -55,5 +55,5 @@ func _run() -> void:
 	router=null
 	stage.queue_free()
 	await get_tree().process_frame
-	print("BATTLEFIELD_MOVES_OK moves=3 arenas=3 singles_doubles=true outcomes=3 spans_field=true captured_aim=true budget=90")
+	print("BATTLEFIELD_MOVES_OK moves=12 arenas=3 singles_doubles=true outcomes=3 spans_field=true captured_aim=true budget=90")
 	get_tree().quit()
