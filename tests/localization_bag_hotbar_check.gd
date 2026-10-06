@@ -225,6 +225,7 @@ func _check_bag_and_hotbar_runtime_translation() -> void:
 
 	_check_tradeability_details(overlay)
 
+	bag_item_slot.free()
 	for loader_property: String in ["pokemon_summary_sprite_loader", "pokedex_sprite_loader"]:
 		var loader := overlay.get(loader_property) as Node
 		if loader != null:

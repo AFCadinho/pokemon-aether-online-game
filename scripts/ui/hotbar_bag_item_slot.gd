@@ -2,6 +2,7 @@ extends PanelContainer
 
 class_name HotbarBagItemSlot
 
+const InventoryItemUsePolicy := preload("res://scripts/ui/inventory_item_use_policy.gd")
 const HeldItemDropTarget := preload("res://scripts/ui/held_item_drop_target_button.gd")
 
 var hotbar_item: Dictionary = {}
@@ -17,6 +18,7 @@ func _get_drag_data(_position: Vector2) -> Variant:
 	var hotbar_eligible := (
 		item_id == "escape-rope-action"
 		or str(hotbar_item.get("useAction", "")) in ["open_shiny_tracker", "open_gift_voucher"]
+		or InventoryItemUsePolicy.is_overworld_consumable(hotbar_item)
 		or field_move_id != ""
 		or (gameplay is Dictionary and not (gameplay as Dictionary).is_empty())
 	)

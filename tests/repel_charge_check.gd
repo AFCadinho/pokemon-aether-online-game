@@ -87,7 +87,7 @@ func _run() -> void:
 	_check(not repel.consume_step(), "empty charge cannot block another encounter")
 	await repel.flush()
 	_check(game.charge == 0, "depletion persists")
-	var overlay = load("res://tests/support/mount_box_test_overlay.gd").new()
+	var overlay = load("res://tests/support/repel_inventory_test_overlay.gd").new()
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(52, 52)
 	panel.position = Vector2(30, 30)
@@ -101,6 +101,56 @@ func _run() -> void:
 	overlay.repel_slot = panel
 	overlay.repel_toggle_button = button
 	overlay._setup_repel_toggle()
+	root.get_node("LocalizationManager").set_locale("en")
+	var hotbar: Node = root.get_node("PlayerHotbarService")
+	hotbar.set_script(load("res://tests/support/fake_repel_hotbar_service.gd"))
+	hotbar.hotbar_changed.connect(overlay._on_hotbar_changed)
+	var detail_panel := PanelContainer.new()
+	root.add_child(detail_panel)
+	overlay._setup_bag_detail_panel(detail_panel)
+	for item_id: String in ["repel", "super-repel", "max-repel"]:
+		# Use the actual inventory projection shape, including empty Pokémon gameplay.
+		var normalized: Array = overlay._normalize_bag_inventory_items([
+			{"itemId": item_id, "quantity": 1, "category": "general", "useAction": "recharge_repel", "gameplay": {}}
+		])
+		var refill_item: Dictionary = normalized[0]
+		overlay.bag_inventory_items = normalized
+		overlay.bag_selected_item = refill_item
+		overlay._refresh_bag_detail()
+		_check(overlay.bag_detail_use_button.text == "Recharge Repel" and not overlay.bag_detail_use_button.disabled, item_id + " shows an enabled Recharge Repel button")
+		_check(not overlay.bag_detail_hotbar_button.disabled, item_id + " can be assigned from Bag details")
+		var expected: int = {"repel": 100, "super-repel": 200, "max-repel": 250}[item_id]
+		game.charge = 0
+		state.repel_steps = 0
+		await overlay._on_bag_detail_use_pressed()
+		_check(state.repel_steps == expected, item_id + " recharges from the Bag detail button")
+		game.charge = 0
+		state.repel_steps = 0
+		overlay.bag_item_context_item = refill_item
+		await overlay._on_bag_item_context_menu_id_pressed(overlay.BAG_CONTEXT_ACTION_USE)
+		_check(state.repel_steps == expected, item_id + " recharges from the Bag context menu")
+		overlay.bag_inventory_items = normalized
+		var slot := HotbarBagItemSlot.new()
+		slot.hotbar_item = refill_item
+		root.add_child(slot)
+		var drag: Variant = slot._get_drag_data(Vector2.ZERO)
+		_check(drag is Dictionary and drag.get("kind", "") == "bag_hotbar_item", item_id + " supports native hotbar drag-and-drop")
+		await overlay._assign_bag_item_to_hotbar_slot(refill_item, 5)
+		_check(hotbar.cached_slots[0] == {"slot": 5, "entryType": "item", "entryId": item_id}, item_id + " saves as an inventory hotbar binding")
+		game.charge = 0
+		state.repel_steps = 0
+		await overlay._on_hotbar_slot_pressed(5)
+		_check(state.repel_steps == expected and overlay.pokemon_target_requests == 0, item_id + " recharges directly from the hotbar without Pokémon selection")
+		var calls: int = inventory.use_calls
+		await overlay._on_hotbar_slot_pressed(5)
+		_check(inventory.use_calls == calls, "empty " + item_id + " hotbar stack cannot spend another item")
+		slot.queue_free()
+		await process_frame
+	_check(not overlay._bag_item_can_assign_to_hotbar({"id": "unsupported", "useAction": "unsupported"}), "unsupported inventory actions remain unavailable")
+	overlay.bag_inventory_items = overlay._normalize_bag_inventory_items([{ "itemId": "potion", "quantity": 1, "gameplay": {"target": "pokemon", "contexts": ["field"], "effects": [{"type": "heal_hp", "amount": 20}]}}])
+	overlay.hotbar_slots = [{"slot": 0, "entryType": "item", "entryId": "potion"}]
+	await overlay._on_hotbar_slot_pressed(0)
+	_check(overlay.pokemon_target_requests == 1, "medicine hotbar use still selects a Pokémon")
 	var item := {"id": "max-repel", "useAction": "recharge_repel"}
 	_check(overlay._bag_item_can_use_from_bag(item), "Bag exposes Repel recharge as a usable item")
 	game.charge = 9900
@@ -114,6 +164,7 @@ func _run() -> void:
 	overlay.pokemon_summary_sprite_loader.free()
 	overlay.pokedex_sprite_loader.free()
 	overlay.free()
+	detail_panel.queue_free()
 	panel.queue_free()
 	await process_frame
 	state.repel_steps = 0
