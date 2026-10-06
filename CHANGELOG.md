@@ -4,7 +4,7 @@
 
 ### Documentation
 
-- Prepare English screenshots and captions for the official Item Dex guide, covering navigation, search and item sources.
+- Illustrate the official Item Dex guide with English screenshots and captions covering navigation, search and item sources.
 
 ### Adventure and exploration
 

@@ -1,7 +1,10 @@
 # Item Dex guide screenshots
 
 Prepared for [Item Dex: Where to Find Items](https://forums.pokeaether.com/t/item-dex-where-to-find-items/95).
-These files are a local review pack; the forum post has not been edited.
+The four guide crops and their English captions are published in the existing
+forum post under `adinho`, in the public **Official Guides** category. The
+original guide text was preserved. `publication.json` records the public image
+URLs and the verification results.
 
 ## Suggested placement and captions
 
@@ -44,5 +47,9 @@ the selected Heart Scale name, and all three fishing source cards. All four
 crops were visually inspected for readable text, correct icon placement,
 scrolling and unobstructed content. Original full frames were retained.
 
-Before publishing, confirm that these screenshots still match the deployed
-client. No gameplay code or production data was changed for this pack.
+The public guide and all four image URLs were checked after publication; the
+downloaded images have the same pixels as the reviewed local crops. The Item
+Dex scene and backend item/source authorities were also checked against local
+`main` and have no differences from the capture sources. No gameplay code or
+player data was changed for this pack. Before a future replacement, recheck
+that the screenshots match the current client.
