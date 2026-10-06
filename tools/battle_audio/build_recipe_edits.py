@@ -10,6 +10,7 @@ def build():
     doc=json.loads(RECIPE.read_text());catalog=json.loads((ROOT/'data/battle_move_animations.json').read_text())['moves'];entries={}
     OUT.mkdir(parents=True,exist_ok=True)
     for key,r in doc['moves'].items():
+        if "z_choreography" in r: continue
         config=catalog[key];data=json.loads((ROOT/config['data_path'].removeprefix('res://')).read_text())
         start=config.get('animation_start_frame',0);end=config.get('animation_end_frame',len(data['frames'])-1)
         if end<0:end=len(data['frames'])-1
