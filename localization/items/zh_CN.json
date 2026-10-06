@@ -1,4 +1,5 @@
 {
+  "gyarados-mount": {"name": "暴鲤龙坐骑", "shortDesc": "解锁暴鲤龙作为冲浪坐骑。"},
   "repel": {"name": "驱虫喷雾", "shortDesc": "补充 100 步驱虫储量（最多 10,000 步）。"},
   "super-repel": {"name": "白银喷雾", "shortDesc": "补充 200 步驱虫储量（最多 10,000 步）。"},
   "max-repel": {"name": "黄金喷雾", "shortDesc": "补充 250 步驱虫储量（最多 10,000 步）。"},

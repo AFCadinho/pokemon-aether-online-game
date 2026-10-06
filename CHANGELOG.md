@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the approved Gyarados V4 Surf mount for admin-granted in-game testing, preserving its native artwork, rider seats and synchronized water effects.
+
 - Put recently popular cosmetics and mounts at the top of their default Gift Store lists.
 
 - Add the Thor Outfit Box to the Aether Gift Store for 550 Gems for both models, including armor, trousers, boots, and the hammer with its moving cape and electric effects.
