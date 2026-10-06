@@ -389,6 +389,12 @@ func _get_body_feet_position(body: Node2D) -> Vector2:
 	return body.global_position
 
 
+func _get_body_interaction_position(body: Node2D) -> Vector2:
+	if body.has_method("get_interaction_position"):
+		return body.call("get_interaction_position") as Vector2
+	return _get_body_feet_position(body)
+
+
 func _get_body_target_feet_position(body: Node2D) -> Vector2:
 	if body.has_method("get_target_feet_position"):
 		return body.get_target_feet_position()
@@ -1373,7 +1379,7 @@ func _is_player_facing_npc(body: Node2D) -> bool:
 	var direction := direction_value as Vector2
 	if direction == Vector2.ZERO:
 		return false
-	var player_tile := _to_tile(_get_body_feet_position(body))
+	var player_tile := _to_tile(_get_body_interaction_position(body))
 	var cardinal_direction := Vector2i(roundi(direction.x), roundi(direction.y))
 	var npc_tile := _to_tile(get_feet_position())
 	for distance: int in range(1, manual_interaction_reach_tiles + 1):
@@ -1385,8 +1391,10 @@ func _is_player_facing_npc(body: Node2D) -> bool:
 func _start_manual_interaction(body: Node2D) -> void:
 	is_interacting = true
 	GameState.lock_overworld_input()
-	_face_body(body)
-	if body.has_method("face_world_position"):
+	face_world_position(_get_body_interaction_position(body))
+	if body.has_method("face_interaction_position"):
+		body.call("face_interaction_position", get_feet_position())
+	elif body.has_method("face_world_position"):
 		body.face_world_position(get_feet_position())
 	# Let both characters visibly face each other before opening the UI without
 	# imposing a fixed network-independent pause on every interaction.

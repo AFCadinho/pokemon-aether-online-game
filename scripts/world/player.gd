@@ -323,6 +323,28 @@ var fishing_bite_prompt_rendered_state := ""
 func get_feet_position() -> Vector2:
 	return feet_marker.global_position
 
+func get_interaction_position() -> Vector2:
+	# Dialogue/objects may use a mount's mouth height. Keep movement, water
+	# checks, collision, sorting and replicated position on the real feet.
+	var origin := get_feet_position()
+	if not surf_activity_active:
+		return origin
+	var direction := "down"
+	if last_direction == Vector2.LEFT:
+		direction = "left"
+	elif last_direction == Vector2.RIGHT:
+		direction = "right"
+	elif last_direction == Vector2.UP:
+		direction = "up"
+	return origin + Vector2(0, MountService.get_interaction_height_offset(active_mount_id, direction))
+
+
+func face_interaction_position(world_position: Vector2) -> void:
+	# Use the same origin as target selection; otherwise a diagonally adjacent
+	# NPC can turn the rider down as soon as the side interaction starts.
+	face_world_position(world_position - (get_interaction_position() - get_feet_position()))
+
+
 func get_target_feet_position() -> Vector2:
 	return target_position + (feet_marker.global_position - global_position)
 
