@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep the gender filter available across all Gift Store cosmetics, including loose items, and preserve its choice when switching cosmetic tabs or item categories.
+
 - Fit Gift Store mount previews to a shared padded frame using the visible mount, rider and animation bounds, with stable zoom across directions and animation controls.
 
 - Add shared outfit preview hair rules: neutral Store card hairstyles, personal hair in detail previews, preserved included hair and explicit hood/headwear exceptions; clarify purchase contents and restore missing body/head layers in composed outfit icons.
