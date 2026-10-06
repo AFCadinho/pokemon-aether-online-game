@@ -3172,7 +3172,7 @@
   "ui.store.cosmetic.subcategory.shoes": "Shoes",
   "ui.store.results": "{count} ITEMS",
   "ui.store.no_results": "NO ITEMS FOUND",
-  "ui.store.featured.explanation": "Based on unique Gem buyers over the past 30 days. Updated daily. Featured picks fill categories without purchases.",
+  "ui.store.featured.explanation": "Based on unique buyers over the past 30 days. All Store purchases count, with Gems or Gift Vouchers. Updated daily. Featured picks fill categories without purchases.",
   "ui.store.featured.popular": "Popular · 30 days",
   "ui.store.featured.curated": "Featured",
   "ui.store.category.featured.label": "Popular",
