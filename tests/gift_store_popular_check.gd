@@ -42,6 +42,12 @@ func _run() -> void:
 	var curated_badge := store.product_buttons[selected[1]].find_child("FeaturedSelectionBadge", true, false) as Label
 	_check(popular_badge != null and popular_badge.text == "Popular · 30 days", "Ranked products have a popularity badge")
 	_check(curated_badge != null and curated_badge.text == "Featured", "Fallback products are labelled Featured")
+	store.call("_select_category", "cosmetics")
+	store.call("_select_cosmetic_filter_group", "all")
+	_check(store.product_buttons.keys().front() == selected[0], "Default Cosmetics order puts the recent bestseller first")
+	store.call("_select_category", "mounts")
+	_check(store.product_buttons.keys().front() == selected[2], "Default Mounts order puts the recent bestseller first")
+	store.call("_select_category", "featured")
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--capture="):
 			root.size = Vector2i(1280, 800)

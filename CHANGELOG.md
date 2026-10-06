@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Put recently popular cosmetics and mounts at the top of their default Gift Store lists.
+
 - Add the Thor Outfit Box to the Aether Gift Store for 550 Gems for both models, including armor, trousers, boots, and the hammer with its moving cape and electric effects.
 
 - Use a consistent Use action for all usable Bag items and improve the Repel step counter with larger, outlined text on a contrasting background.

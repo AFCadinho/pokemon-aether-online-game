@@ -1808,6 +1808,25 @@ func _catalog_item_before(left: Dictionary, right: Dictionary) -> bool:
 	return comparison < 0 if comparison != 0 else str(left.get("id", "")) < str(right.get("id", ""))
 
 
+func _prioritize_popular_catalog_items(items: Array[Dictionary]) -> Array[Dictionary]:
+	if popular_item_ids.is_empty():
+		return items
+	var ordered: Array[Dictionary] = []
+	var included_ids: Dictionary = {}
+	for popular_item_id: String in popular_item_ids:
+		for item: Dictionary in items:
+			var item_id := str(item.get("id", ""))
+			if item_id == popular_item_id:
+				ordered.append(item)
+				included_ids[item_id] = true
+				break
+	for item: Dictionary in items:
+		var item_id := str(item.get("id", ""))
+		if not included_ids.has(item_id):
+			ordered.append(item)
+	return ordered
+
+
 func _create_mount_mode_bar() -> HBoxContainer:
 	mount_mode_bar = HBoxContainer.new()
 	mount_mode_bar.name = "MountModeTabs"
@@ -2373,6 +2392,8 @@ func _render_products() -> void:
 
 	if active_catalog_sort != "default":
 		catalog_items.sort_custom(_catalog_item_before)
+	elif active_category in ["cosmetics", "mounts"]:
+		catalog_items = _prioritize_popular_catalog_items(catalog_items)
 	for item: Dictionary in catalog_items:
 		var categories: Array = item.get("categories", [])
 		if active_category != "featured" and not categories.has(active_category):
