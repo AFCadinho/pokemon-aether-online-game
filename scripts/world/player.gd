@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+const ThorAccessoryEffect := preload("res://scripts/world/thor_accessory_effect.gd")
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
@@ -3271,6 +3272,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	sprite.visible = true
 	sprite.set_meta(HIDDEN_FOR_MISSING_ANIMATION_META, false)
 	_sync_part_sprite_to_animation(sprite)
+	ThorAccessoryEffect.configure(sprite, normalized_category, normalized_part_id, PlayerSave.gender, normalized_movement_style)
 
 func _sync_part_sprite_to_animation(sprite: AnimatedSprite2D) -> void:
 	if sprite == null or master_appearance_sprite == null:
@@ -3304,6 +3306,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 	var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[normalized_category]))
 	if sprite == null:
 		return
+	ThorAccessoryEffect.configure(sprite, normalized_category, "", PlayerSave.gender, "walk")
 	sprite.stop()
 	sprite.sprite_frames = null
 	sprite.visible = false

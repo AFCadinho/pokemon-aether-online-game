@@ -2,6 +2,7 @@ extends Node2D
 
 class_name RemotePlayerAvatar
 
+const ThorAccessoryEffect := preload("res://scripts/world/thor_accessory_effect.gd")
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
@@ -1631,6 +1632,7 @@ func _apply_appearance_part(category: String, part_id: String, movement_style: S
 	_apply_appearance_part_visuals(sprite, normalized_category)
 	sprite.visible = true
 	_sync_sprite_to_body(sprite)
+	ThorAccessoryEffect.configure(sprite, normalized_category, normalized_part_id, current_body_gender, movement_style)
 
 
 func _get_appearance_sprite(sprite_name: String) -> AnimatedSprite2D:
@@ -1687,6 +1689,7 @@ func _clear_appearance_part_sprite(category: String) -> void:
 	var sprite := _get_appearance_sprite(str(APPEARANCE_PART_SPRITES[normalized_category]))
 	if sprite == null:
 		return
+	ThorAccessoryEffect.configure(sprite, normalized_category, "", current_body_gender, "walk")
 	sprite.stop()
 	sprite.sprite_frames = null
 	sprite.visible = false

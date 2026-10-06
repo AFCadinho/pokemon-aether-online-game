@@ -6,6 +6,9 @@ func _init() -> void:
 	_run.call_deferred()
 
 func _run() -> void:
+	# Keep unrelated login pollers offline while this check uses a fake session.
+	root.get_node("ThievingService").set_process(false)
+	root.get_node("RockSmashService").set_process(false)
 	var auth: Node = root.get_node("AuthService")
 	var state: Node = root.get_node("GameState")
 	var repel: Node = root.get_node("RepelService")

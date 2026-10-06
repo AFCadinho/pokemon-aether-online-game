@@ -801,5 +801,25 @@
   "aether-credit-voucher-1000": {
     "name": "Aether Credit Voucher · 1,000",
     "shortDesc": "Resgate para adicionar 1000 créditos ao seu Aether Credit Card. Negociável até o resgate. Compras com o cartão são vinculadas à conta."
+  },
+  "thor-shirt": {
+    "name": "Armadura de Thor",
+    "shortDesc": "Para ambos os gêneros. O martelo inclui uma capa que sobe ao caminhar e baixa ao parar, com faíscas elétricas. Equipe-o no espaço Costas."
+  },
+  "thor-trousers": {
+    "name": "Calças de Thor",
+    "shortDesc": "Para ambos os gêneros. O martelo inclui uma capa que sobe ao caminhar e baixa ao parar, com faíscas elétricas. Equipe-o no espaço Costas."
+  },
+  "thor-shoes": {
+    "name": "Botas de Thor",
+    "shortDesc": "Para ambos os gêneros. O martelo inclui uma capa que sobe ao caminhar e baixa ao parar, com faíscas elétricas. Equipe-o no espaço Costas."
+  },
+  "thor-hammer": {
+    "name": "Martelo e Capa de Thor",
+    "shortDesc": "Para ambos os gêneros. O martelo inclui uma capa que sobe ao caminhar e baixa ao parar, com faíscas elétricas. Equipe-o no espaço Costas."
+  },
+  "thor-outfit": {
+    "name": "Caixa de Traje de Thor",
+    "shortDesc": "Para ambos os gêneros. O martelo inclui uma capa que sobe ao caminhar e baixa ao parar, com faíscas elétricas. Equipe-o no espaço Costas."
   }
 }
