@@ -486,6 +486,7 @@ const EXP_ITEM_IDS := {
 	"exp-candy-l": true,
 	"exp-candy-xl": true,
 }
+const BAG_MOUNT_FILTER := preload("res://scripts/ui/bag_mount_filter.gd")
 const BAG_ITEM_EFFECT_PREVIEW := preload("res://scripts/ui/bag_item_effect_preview.gd")
 const POKEMON_MAX_LEVEL := 100
 const EXP_CANDY_EXPERIENCE := {
@@ -1312,6 +1313,11 @@ var bag_detail_use_button: Button
 var bag_detail_hotbar_button: Button
 var bag_selected_item: Dictionary = {}
 var active_bag_category := "all"
+var bag_mount_filter_bar: HFlowContainer
+var bag_mount_tab_buttons: Dictionary = {}
+var bag_mount_tradeability_select: OptionButton
+var bag_mount_tab := "all"
+var bag_mount_tradeability := 0
 var bag_dragging := false
 var bag_drag_offset := Vector2.ZERO
 var bag_inventory_items: Array[Dictionary] = []
@@ -22525,6 +22531,8 @@ func _setup_bag_popup() -> void:
 	inventory_hint.add_theme_color_override("font_color", Color(UI_MUTED_TEXT.r, UI_MUTED_TEXT.g, UI_MUTED_TEXT.b, 0.72))
 	inventory_header.add_child(inventory_hint)
 
+	_setup_bag_mount_filters(inventory_layout)
+
 	var item_scroll := ScrollContainer.new()
 	item_scroll.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -24381,6 +24389,7 @@ func _refresh_bag_items() -> void:
 	if bag_item_grid == null:
 		return
 	for child: Node in bag_item_grid.get_children():
+		bag_item_grid.remove_child(child)
 		child.queue_free()
 	bag_item_slots.clear()
 	_refresh_bag_category_buttons()
@@ -24388,6 +24397,8 @@ func _refresh_bag_items() -> void:
 	var search_text := ""
 	if bag_search_input != null:
 		search_text = bag_search_input.text.strip_edges().to_lower()
+
+	_refresh_bag_mount_filters(search_text)
 
 	if bag_inventory_loading:
 		bag_selected_item = {}
@@ -24415,9 +24426,16 @@ func _refresh_bag_items() -> void:
 			continue
 		if search_text != "" and not item_name.to_lower().contains(search_text) and not item_id.to_lower().contains(search_text):
 			continue
+		if active_bag_category == "mounts" and not BAG_MOUNT_FILTER.matches(item, bag_mount_tab, bag_mount_tradeability):
+			continue
 		visible_items.append(item)
 
+	if active_bag_category == "mounts":
+		BAG_MOUNT_FILTER.sort_items(visible_items)
+
 	var category_label := _bag_category_label(active_bag_category)
+	if active_bag_category == "mounts":
+		category_label += " / " + LocalizationManager.text("ui.bag.mounts.tab_" + bag_mount_tab)
 	if visible_items.is_empty():
 		bag_selected_item = {}
 		_refresh_bag_detail()
@@ -24425,6 +24443,8 @@ func _refresh_bag_items() -> void:
 		bag_item_grid.add_child(_create_bag_empty_state(
 			LocalizationManager.text("ui.bag.no_search_matches")
 			if search_text != ""
+			else LocalizationManager.text("ui.bag.mounts.empty")
+			if active_bag_category == "mounts"
 			else LocalizationManager.text("ui.bag.no_items_in_category", {"category": category_label})
 		))
 		_refresh_hotbar_ui()
@@ -24575,6 +24595,17 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	name_label.add_theme_font_size_override("font_size", 11)
 	name_label.add_theme_color_override("font_color", UI_TEXT)
 	stack.add_child(name_label)
+	if str(item.get("category", "")) == "mounts" and BAG_MOUNT_FILTER.is_box(item):
+		var mode := BAG_MOUNT_FILTER.movement_mode(item)
+		if mode in ["land", "surf"]:
+			var badge := Label.new()
+			badge.name = "MountBoxMode"
+			badge.text = LocalizationManager.text("ui.bag.mounts.tab_" + mode)
+			badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			badge.add_theme_font_size_override("font_size", 10)
+			badge.add_theme_color_override("font_color", Color("#83d8b0") if mode == "surf" else UI_MONEY)
+			stack.add_child(badge)
 	return slot
 
 func _on_bag_item_slot_hover_changed(slot: HotbarBagItemSlot, hovered: bool) -> void:
@@ -26415,6 +26446,58 @@ func _hide_bag_popup() -> void:
 		bag_item_use_pending_item = {}
 	if bag_button.has_focus():
 		bag_button.release_focus()
+
+func _setup_bag_mount_filters(inventory_layout: VBoxContainer) -> void:
+	bag_mount_tab = BAG_MOUNT_FILTER.normalize_tab(SettingsManager.bag_mount_tab)
+	bag_mount_filter_bar = HFlowContainer.new()
+	bag_mount_filter_bar.name = "BagMountFilters"
+	bag_mount_filter_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	bag_mount_filter_bar.add_theme_constant_override("h_separation", 6)
+	bag_mount_filter_bar.add_theme_constant_override("v_separation", 6)
+	inventory_layout.add_child(bag_mount_filter_bar)
+	for tab_id: String in BAG_MOUNT_FILTER.TAB_IDS:
+		var button := Button.new()
+		button.name = "BagMountTab_" + tab_id
+		button.custom_minimum_size.y = 32
+		button.add_theme_font_size_override("font_size", 12)
+		button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		button.pressed.connect(_on_bag_mount_tab_selected.bind(tab_id))
+		bag_mount_filter_bar.add_child(button)
+		bag_mount_tab_buttons[tab_id] = button
+	bag_mount_tradeability_select = OptionButton.new()
+	bag_mount_tradeability_select.name = "BagMountTradeability"
+	bag_mount_tradeability_select.custom_minimum_size.y = 32
+	bag_mount_tradeability_select.add_theme_font_size_override("font_size", 12)
+	_apply_button_style(bag_mount_tradeability_select)
+	bag_mount_tradeability_select.item_selected.connect(_on_bag_mount_tradeability_selected)
+	bag_mount_filter_bar.add_child(bag_mount_tradeability_select)
+
+func _refresh_bag_mount_filters(search_text: String) -> void:
+	if bag_mount_filter_bar == null:
+		return
+	bag_mount_filter_bar.visible = active_bag_category == "mounts"
+	for tab_id: String in bag_mount_tab_buttons:
+		var count := 0
+		for item: Dictionary in bag_inventory_items:
+			if BAG_MOUNT_FILTER.matches(item, tab_id, bag_mount_tradeability) and BAG_MOUNT_FILTER.matches_search(item, search_text):
+				count += 1
+		var button := bag_mount_tab_buttons[tab_id] as Button
+		button.text = "%s (%s)" % [LocalizationManager.text("ui.bag.mounts.tab_" + tab_id), count]
+		_apply_bag_category_button_style(button, tab_id == bag_mount_tab)
+	bag_mount_tradeability_select.clear()
+	bag_mount_tradeability_select.add_item(LocalizationManager.text("ui.bag.mounts.filter_all"))
+	bag_mount_tradeability_select.add_item(LocalizationManager.text("ui.bag.mounts.filter_tradeable"))
+	bag_mount_tradeability_select.add_item(LocalizationManager.text("ui.bag.untradeable"))
+	bag_mount_tradeability_select.select(bag_mount_tradeability)
+
+func _on_bag_mount_tab_selected(tab_id: String) -> void:
+	bag_mount_tab = BAG_MOUNT_FILTER.normalize_tab(tab_id)
+	SettingsManager.set_bag_mount_tab(bag_mount_tab)
+	_refresh_bag_items()
+
+func _on_bag_mount_tradeability_selected(index: int) -> void:
+	bag_mount_tradeability = clampi(index, 0, 2)
+	_refresh_bag_items()
 
 func _on_bag_category_selected(category_id: String) -> void:
 	active_bag_category = category_id

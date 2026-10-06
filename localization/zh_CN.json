@@ -6476,5 +6476,12 @@
   "ui.credit_card.claimed": "已为 Aether Credit Card 添加 {amount} 额度。",
   "ui.credit_card.blessing_bound": "账号绑定的 Blessing 券。可保留并在需要时从背包激活。不可交易、邮寄或借出。",
   "ui.store.category.credits.description": "用 Gems 购买，可与玩家交易，也可兑换为个人卡内额度。",
-  "ui.store.badge.tradeable": "可交易"
+  "ui.store.badge.tradeable": "可交易",
+  "ui.bag.mounts.tab_all": "全部",
+  "ui.bag.mounts.tab_land": "陆地",
+  "ui.bag.mounts.tab_surf": "冲浪",
+  "ui.bag.mounts.tab_boxes": "坐骑箱",
+  "ui.bag.mounts.filter_all": "全部交易类型",
+  "ui.bag.mounts.filter_tradeable": "可交易",
+  "ui.bag.mounts.empty": "没有符合此标签页或筛选条件的坐骑。"
 }

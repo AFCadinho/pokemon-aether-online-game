@@ -6476,5 +6476,12 @@
   "ui.credit_card.claimed": "{amount} tegoed toegevoegd aan je Aether Credit Card.",
   "ui.credit_card.blessing_bound": "Accountgebonden Blessingvoucher. Bewaar hem en activeer hem vanuit je Tas wanneer je wilt. Niet verhandelbaar, verstuurbaar of uitleenbaar.",
   "ui.store.category.credits.description": "Koop met Gems, verhandel met spelers of claim om je kaarttegoed aan te vullen.",
-  "ui.store.badge.tradeable": "VERHANDELBAAR"
+  "ui.store.badge.tradeable": "VERHANDELBAAR",
+  "ui.bag.mounts.tab_all": "Alles",
+  "ui.bag.mounts.tab_land": "Land",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "Alle ruilstatussen",
+  "ui.bag.mounts.filter_tradeable": "Verhandelbaar",
+  "ui.bag.mounts.empty": "Geen mounts gevonden voor deze tab of filters."
 }

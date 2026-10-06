@@ -6476,5 +6476,12 @@
   "ui.credit_card.claimed": "Added {amount} credit to your Aether Credit Card.",
   "ui.credit_card.blessing_bound": "Account-bound Blessing voucher. Keep it and activate it from your Bag when you are ready. Cannot be traded, mailed or lent.",
   "ui.store.category.credits.description": "Buy with Gems, trade with players or claim to add personal card credit.",
-  "ui.store.badge.tradeable": "TRADEABLE"
+  "ui.store.badge.tradeable": "TRADEABLE",
+  "ui.bag.mounts.tab_all": "All",
+  "ui.bag.mounts.tab_land": "Land",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "All trade statuses",
+  "ui.bag.mounts.filter_tradeable": "Tradeable",
+  "ui.bag.mounts.empty": "No mounts match this tab or these filters."
 }

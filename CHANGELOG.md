@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
+
 - Introduce the Aether Credit Card and tradeable Gem-only top-up vouchers for 100, 250, 500 and 1,000 credit. Personal Store items, including Blessing vouchers, charms and trainer services, accept card credit and remain account-bound; guild products and credit vouchers require Gems. Blessing activates only when its voucher is used.
 
 - Make mount exchange confirmation clearer with shiny/normal previews, a separate voucher reward, binding labels and a highlighted last-shiny warning.

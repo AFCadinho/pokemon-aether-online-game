@@ -6476,5 +6476,12 @@
   "ui.credit_card.claimed": "{amount} créditos adicionados ao seu Aether Credit Card.",
   "ui.credit_card.blessing_bound": "Voucher Blessing vinculado à conta. Guarde e ative pela Bolsa quando quiser. Não pode ser negociado, enviado ou emprestado.",
   "ui.store.category.credits.description": "Compre com Gems, negocie com jogadores ou resgate para adicionar crédito pessoal.",
-  "ui.store.badge.tradeable": "NEGOCIÁVEL"
+  "ui.store.badge.tradeable": "NEGOCIÁVEL",
+  "ui.bag.mounts.tab_all": "Todas",
+  "ui.bag.mounts.tab_land": "Terrestres",
+  "ui.bag.mounts.tab_surf": "Surf",
+  "ui.bag.mounts.tab_boxes": "Mount Boxes",
+  "ui.bag.mounts.filter_all": "Todos os vínculos",
+  "ui.bag.mounts.filter_tradeable": "Negociáveis",
+  "ui.bag.mounts.empty": "Nenhuma montaria corresponde a esta aba ou aos filtros."
 }
