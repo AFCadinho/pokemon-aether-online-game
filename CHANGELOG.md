@@ -2,99 +2,37 @@
 
 ## Unreleased
 
-- Add the red shiny Gyarados Surf mount and its normal/shiny Gift Store box for 500 Aether Gems, preserving the approved V4 rider placement and water effects.
+### Adventure and exploration
 
-- Raise the Thor cape behind the shoulders in both walking side views and frame the male armor neckline when facial hair is hidden.
+- Claim three previously unavailable pickups on Route 14, and find Repel items among updated overworld rewards.
+- Your follower Pokémon hides while you surf and returns when you reach land.
+- Flowers sway gently across Kanto towns, routes and Viridian Forest, as well as the Aether Clash lobby.
 
-- Add the approved Gyarados V4 Surf mount for admin-granted in-game testing, preserving its native artwork, rider seats and synchronized water effects.
+### Items and controls
 
-- Replace eight duplicate or modest overworld rewards with three Repels, three Super Repels and two Max Repels, keeping pickup locations and collected-item history intact. Register the three existing Route 14 pickups so they can be claimed.
+- Use Repel, Super Repel and Max Repel to refill your Repel charge, up to 10,000 steps. Items are not used when your charge is full.
+- Refill Repel from your Bag or hotbar, choose an amount or refill to the maximum, and use it without selecting a Pokémon.
+- See your remaining Repel steps more clearly. Usable items in your Bag now share the same Use action.
 
-- Rank Gift Store Cosmetics and Mounts by recent popularity, then by price from highest to lowest.
+### Outfits and mounts
 
-- Add the Thor Outfit Box to the Aether Gift Store for 550 Gems for both models, including armor, trousers, boots, and the hammer with its moving cape and electric effects.
+- Get the Gyarados Surf Mount Box for 500 Aether Gems, with normal and red shiny variants using the approved riding pose and water effects.
+- Get the Thor outfit for 550 Gems, with a cape that moves as you walk and electric effects.
+- Find shiny versions of five new Surf mounts and their Gift Store boxes for 350 Gems each.
+- At the Shiny Mount Collector in the Cerulean Bike Shop, exchange a shiny mount for its regular version and 100 Gift Voucher credit. Its tradeable or bound status is preserved.
+- Exchange duplicate shiny mounts while keeping at least one of each type. Bound and tradeable copies both count.
+- Open mount boxes from your Bag and see the reward in chat. Browse mounts in separate Land, Surf and Mount Boxes tabs, with tradeability filters; your selected tab is remembered.
 
-- Use a consistent Use action for all usable Bag items and improve the Repel step counter with larger, outlined text on a contrasting background.
+### Gift Store
 
-- Lengthen Thor’s walking cape and lift its rounded hem more visibly for both models, preserving the approved idle poses and matching electric sparks to the extended cloth.
+- Find popular cosmetics and mounts, and sort them by price. Preview outfits on your character or Trainer sprite, with matching parts and colours.
+- Use Aether Credit for personal Gift Store items. Guild products and credit vouchers require Gems; credit vouchers are tradeable. Personal items remain account-bound, and Blessing activates when you use its voucher.
+- Mount boxes and their rewards are tradeable when bought with Gems. Voucher purchases and their rewards remain account-bound.
+- See an item's payment method and tradeability more clearly at checkout. An information button explains Gems, card credit, vouchers and account binding.
 
-- Add a Repel refill amount selector with Max, keep hotbar use at one item per click, and recognize Repels in older inventory responses without a use action.
+### Downloads
 
-- Integrate Repel refills throughout the Bag and hotbar, with a Recharge Repel button and direct use without Pokémon selection.
-
-- Refine Thor’s silhouette with a wider resting cape, a continuous trailing cloth shape while walking, a slimmer armor waist, and the hammer behind the cape when viewed from the back.
-
-- Fix opening outfit boxes and activating cosmetics failing when the server returns an empty Repel-step value, while preserving numeric Repel charges.
-
-- Replace free Repel with a persistent charge of up to 10,000 encounter-area steps; use Repel, Super Repel and Max Repel items to refill, with no item consumed when full.
-
-- Add the Thor outfit for both models, with a hammer-linked red cape that lifts while walking, settles after stopping and emits electric sparks for local and remote players.
-
-- Give normal and shiny Magikarp Surf mounts submerged lower bodies, contact foam and a synchronized swimming wake while preserving their approved height and rider poses.
-
-- Add shiny variants of the five new Surf mounts and their Gift Store Surf boxes at 350 Aether Gems each, preserving the approved height, rider poses and water effects.
-
-- Refine all six male adventure outfits with lower, narrower trousers and shoes, plus more room below the chin, across walking, fishing and riding poses.
-
-- Give all Aether Clash lobby flowers the continuous sway used by the Kanto towns and routes, preserving their pink colours and the fountain animations.
-
-- Lower the complete Wailmer, Drednaw, Mantine, Basculegion and Wailord Surf rigs by 12 pixels to match Lapras and nearby water Pokémon, preserving rider poses and interaction tiles.
-
-- Restore ordinary left/right NPC and object interaction on normal and shiny Kyogre while retaining its mouth-height interaction reach.
-
-- Make the Aether Clash fountains pour from the statues' mouth outlets, with a broad waterfall, two continuous arcing jets and fuller impact foam and spray.
-
-- Add Wailmer, Drednaw, Mantine, Basculegion and Wailord as Surf mounts for admin-granted testing, with submerged lower bodies, synchronized foam/wakes and fishing poses.
-
-- Use Kyogre's mouth height for side interactions with NPCs and objects, without moving the rider, mount or collision position.
-
-- Align normal and shiny Kyogre's face with the occupied tile's interaction line, keeping its rider and water effects together.
-
-- Refresh Viridian City’s imported visual from the current artist TMX while retaining its flower, water and canopy animations.
-
-- Give the flowers on all active Kanto routes and in Viridian Forest the same continuous sway as the towns, while preserving their colours and existing map animations.
-
-- Hide follower Pokémon while surfing and restore them when returning to land.
-
-- Switch Gift Store cosmetic previews between Overworld and Trainer sprites, with matching outfit parts and Chroma colours.
-
-- Give Pallet Town, Viridian City, Cerulean City and Vermilion City the flowing flower sway from Lavender Town, and gently animate Vermilion's small grass tufts.
-
-- Align normal and shiny Kyogre's side-view hull, rider and water contact with the occupied Surf tile beside NPCs.
-
-- Give normal and shiny Primal Kyogre submerged fins/tail, hull foam and a swimming wake while preserving rider poses, fishing and map depth.
-
-- Style the Bag mount tradeability dropdown with a dark rounded menu, gold accents, custom selection icons and clearer hover states.
-
-- Keep the Gift Store payment method and its compact Tradable/Untradable label visible beside checkout, and shorten currency information.
-
-- Drag the Aether Gift Store by its header while keeping the window inside the screen and its header buttons clickable.
-
-- Organize Bag mounts into All, Land, Surf and Mount Boxes tabs, with tradeability filters, alphabetic ordering and Land/Surf box labels. Your chosen mount tab is remembered.
-
-- Add an information button beside Gift Store balances explaining Gems, personal card credit, top-up vouchers and account binding.
-
-- Keep Gift Store payment options compact with consistently sized currency icons, aligned text and clear spacing.
-
-- Introduce the Aether Credit Card and tradeable Gem-only top-up vouchers for 100, 250, 500 and 1,000 credit. Personal Store items, including Blessing vouchers, charms and trainer services, accept card credit and remain account-bound; guild products and credit vouchers require Gems. Blessing activates only when its voucher is used.
-
-- Make mount exchange confirmation clearer with shiny/normal previews, a separate voucher reward, binding labels and a highlighted last-shiny warning.
-
-- Browse shiny mounts with search, Land/Surf tabs, binding filters and compact cards. Duplicates-only exchanges preserve one shiny of each type, counting bound and tradeable copies together.
-
-- Sync the current map and position before opening the Shiny Mount Collector, so the first interaction after entering the Bike Shop does not use an older saved location.
-
-- Browse the Shiny Mount Collector in a grid of mount previews, with quantities and clear account-bound or tradeable labels.
-
-- Meet the Shiny Mount Collector in the Cerulean Bike Shop: exchange a shiny mount for its normal version and 100 Gift Voucher credit, as often as you like. Mount binding is preserved.
-
-- Keep the game responsive while new 3D models are verified and installed by moving local model storage work off the main thread.
-
-- Make Gift Store mount boxes and their normal/shiny rewards tradeable when purchased with Gems. Voucher purchases and rewards remain account-bound; existing inventory with ambiguous Gem/voucher provenance stays bound.
-
-- Open Gift Store mount boxes directly from the Bag and show the reward in chat, including your first box and boxes different from the last opened type.
-
-- Publish the smaller optional 3D Pokémon collection: about 13 GB instead of 20 GB, with the same model detail and animations.
+- Download the optional 3D Pokémon collection in a smaller package of about 13 GB, with the same detail and animations.
 
 ## 0.3.99
 
