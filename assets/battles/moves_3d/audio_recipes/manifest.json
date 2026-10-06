@@ -953,22 +953,6 @@
       "filters": "atrim=end=1.251200000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.736000000,atrim=duration=0.736000000,afade=t=in:d=0.005,afade=t=out:st=0.686000000:d=0.05",
       "duration_seconds": 0.7360000000000001
     },
-    "terastarstorm_launch.wav": {
-      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
-      "source_sha256": "7687e8d2ef7bc9635d73adbb67a9a2b5e2b298dd12ed9eaaa94057ab1576123e",
-      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_launch.wav",
-      "sha256": "6c80de6b0e953315d0f6c6c535ddf8dbbabc0c51001df8499d764caa853055f8",
-      "filters": "atrim=end=1.276000000,asetpts=PTS-STARTPTS,atempo=1.109565217,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.150000000,atrim=duration=1.150000000,afade=t=in:d=0.005,afade=t=out:st=1.100000000:d=0.05",
-      "duration_seconds": 1.1500000000000001
-    },
-    "terastarstorm_impact.wav": {
-      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav",
-      "source_sha256": "041f7a94bed145331bed9697df0592f2b2d4867bd52e32c4cf51ef2eab35d84a",
-      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_impact.wav",
-      "sha256": "a570007d1b6e232556786dd4c18808c209822105117ff82d406dd6970d5e932e",
-      "filters": "atrim=end=1.009375000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.593750000,atrim=duration=0.593750000,afade=t=in:d=0.005,afade=t=out:st=0.543750000:d=0.05",
-      "duration_seconds": 0.59375
-    },
     "babydolleyes_cast.wav": {
       "source": "res://assets/battles/animations/babydolleyes/PRSFX- Baby Doll Eyes.wav",
       "source_sha256": "6db85e6c811b8268a83959fb225a72ad7d3e57107abfae0a818e8226aaee03c9",
@@ -1472,6 +1456,22 @@
       "sha256": "2dc3abacf24e7251cd94dc2447b04a5b824ba58ae22d60665b1886e324706616",
       "filters": "atrim=end=1.032240000,asetpts=PTS-STARTPTS,atempo=1.700000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.607200000,atrim=duration=0.607200000,afade=t=in:d=0.005,afade=t=out:st=0.557200000:d=0.05",
       "duration_seconds": 0.6072000000000001
+    },
+    "terastarstorm_launch.wav": {
+      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Barrier.wav",
+      "source_sha256": "7687e8d2ef7bc9635d73adbb67a9a2b5e2b298dd12ed9eaaa94057ab1576123e",
+      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_launch.wav",
+      "sha256": "be236b8dd50307d47c942a11d60eaf7c89b9c4a8d734e501b912da33034db440",
+      "filters": "atrim=end=1.276000000,asetpts=PTS-STARTPTS,atempo=1.000000000,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=1.276000000,atrim=duration=1.276000000,afade=t=in:d=0.005,afade=t=out:st=1.226000000:d=0.05",
+      "duration_seconds": 1.276
+    },
+    "terastarstorm_impact.wav": {
+      "source": "res://assets/battles/animations/terastarstorm/PRSFX- Recover.wav",
+      "source_sha256": "041f7a94bed145331bed9697df0592f2b2d4867bd52e32c4cf51ef2eab35d84a",
+      "path": "res://assets/battles/moves_3d/audio_recipes/terastarstorm_impact.wav",
+      "sha256": "efedcd262af4d61e68b82b597b0dc8b7e9e594ca08926f079cebb3160d5f67e8",
+      "filters": "atrim=end=1.084000000,asetpts=PTS-STARTPTS,atempo=1.141052632,aresample=44100,alimiter=limit=0.97:level=false:latency=true,apad=whole_dur=0.950000000,atrim=duration=0.950000000,afade=t=in:d=0.005,afade=t=out:st=0.900000000:d=0.05",
+      "duration_seconds": 0.95
     }
   }
 }

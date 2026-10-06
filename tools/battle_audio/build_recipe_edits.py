@@ -6,12 +6,17 @@ ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'assets/battles/moves_3d/audio_recipes'
 RECIPE=ROOT/'data/battle_move_recipes_3d.json'
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
-def build():
+def build(move_keys=None):
     doc=json.loads(RECIPE.read_text());catalog=json.loads((ROOT/'data/battle_move_animations.json').read_text())['moves'];entries={}
     OUT.mkdir(parents=True,exist_ok=True)
     previous=json.loads((OUT/"manifest.json").read_text())["entries"] if (OUT/"manifest.json").exists() else {}
+    if move_keys:
+        allowed={k for k,r in doc['moves'].items() if 'z_choreography' not in r}
+        if set(move_keys)-allowed:raise ValueError('Unknown ordinary recipe moves: '+', '.join(sorted(set(move_keys)-allowed)))
+        entries={name:e for name,e in previous.items() if not any(name.startswith(k+'_') for k in move_keys)}
     for key,r in doc['moves'].items():
         if "z_choreography" in r: continue
+        if move_keys and key not in move_keys:continue
         config=catalog[key];data=json.loads((ROOT/config['data_path'].removeprefix('res://')).read_text())
         start=config.get('animation_start_frame',0);end=config.get('animation_end_frame',len(data['frames'])-1)
         if end<0:end=len(data['frames'])-1
@@ -62,4 +67,4 @@ def audit():
             assert abs(wav.getnframes()/wav.getframerate()-e['duration_seconds'])<.002,name
     print(f'RECIPE_AUDIO_OK edits={len(entries)} hashes=true faded_edges=true non_silent=true clipping=false')
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');a=p.parse_args();audit() if a.check else build()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--check',action='store_true');p.add_argument('--moves',nargs='+',help='Rebuild only these ordinary recipe keys, preserving other edits');a=p.parse_args();audit() if a.check else build(a.moves)

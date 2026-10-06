@@ -2,7 +2,8 @@
 
 These three pilots use the battle circle to build a move from the attacker's
 side, across the arena, into the target climax. They replace their previous
-target-local renderers. Visual approval of this revision is still pending.
+target-local renderers. The user approved all three on 2026-10-06. The next nine moves are tracked in
+[battlefield wave two](battlefield-move-wave-two.md).
 
 | Move | Normal duration | Presentation |
 | --- | --- | --- |
@@ -43,13 +44,14 @@ are retained; cue onsets follow each move's updated launch/impact timing.
 - `tests/z_move_choreography_check.tscn`: 35 Z-moves including Bloom Doom's new
   dispatch, source hashes, timing, contact restoration and audio markers.
 - `tools/battle_effects/test_move_recipe_sources.py`: packaged source provenance.
-- `tests/battlefield_move_preview.gd -- --moves --smoke-field`: 18 captures across
+- Initial `tests/battlefield_move_preview.gd -- --moves --smoke-field`: 18 captures across
   three phases, three moves, forward hits and reverse misses; camera orbit while
   paused, followed by completion and cleanup.
 
-For interactive review, run the same preview with `-- --moves` through the
+The selector now follows the next nine-move batch. For interactive review, run
+the same preview with `-- --moves` through the
 assigned slot environment. Choose the move/outcome/attacking side, play or pause,
 and orbit the camera. Rendered visual inspection covers the stadium; field
 placement on translated and elevated arenas is checked programmatically.
-Other move families remain on their existing presentations pending this pilot's
-visual review.
+Other move families remain on their existing presentations; this approved pilot
+is the basis for the next batch.
