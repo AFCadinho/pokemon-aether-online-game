@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Refresh Viridian City’s imported visual from the current artist TMX while retaining its flower, water and canopy animations.
+
+- Give the flowers on all active Kanto routes and in Viridian Forest the same continuous sway as the towns, while preserving their colours and existing map animations.
+
 - Hide follower Pokémon while surfing and restore them when returning to land.
 
 - Switch Gift Store cosmetic previews between Overworld and Trainer sprites, with matching outfit parts and Chroma colours.
