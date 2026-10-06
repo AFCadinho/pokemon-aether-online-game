@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
+
+- Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.
+
 - Show varied Gift Store popular picks from distinct Gem buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
 
 - Show a gold Untradeable label in Bag item details and omit redundant tradeability prefixes from the description; mixed Mega Stone stacks show their untradeable count.

@@ -1,0 +1,130 @@
+{
+  "task": "lossless-source-overlap-resolution",
+  "compression_rollout_qualified": false,
+  "warm_reference_for_measured_client_contract": true,
+  "phases": {
+    "final-control": {
+      "godot": "4.6.2-stable (official)",
+      "renderer": "forward_plus",
+      "original_only_control": true,
+      "candidate_first": false,
+      "source_fixture_sha256": "da0d3edf404c5786ee09ccc464a570dfd5a742a6ace29104fdf83cbbec14c529",
+      "runtime_visibility_contract_sha256": "e1fa4c34f61a2cc3d4861c469ee341f83284f3c073acef96577e3d54d3397d51",
+      "material_surface_order_contract_sha256": "bbb017cee5dcf2e422131d2ab4fd41f91777e4b13e41aad50e0dc5b9f2a36615",
+      "material_response_contract_sha256": "ba2890530d9bb7858e71d79553e7ec81447c6570a0cc9addc5b34ae425c2b58f",
+      "response_skipped": null,
+      "comparisons": 504,
+      "report_sha256": "b2b88d2653ee255a1a0608d47d5334bfdaad689b252dc988b134b21254cb9b50"
+    },
+    "final-candidate": {
+      "godot": "4.6.2-stable (official)",
+      "renderer": "forward_plus",
+      "original_only_control": false,
+      "candidate_first": false,
+      "source_fixture_sha256": "da0d3edf404c5786ee09ccc464a570dfd5a742a6ace29104fdf83cbbec14c529",
+      "runtime_visibility_contract_sha256": "e1fa4c34f61a2cc3d4861c469ee341f83284f3c073acef96577e3d54d3397d51",
+      "material_surface_order_contract_sha256": "bbb017cee5dcf2e422131d2ab4fd41f91777e4b13e41aad50e0dc5b9f2a36615",
+      "material_response_contract_sha256": "ba2890530d9bb7858e71d79553e7ec81447c6570a0cc9addc5b34ae425c2b58f",
+      "response_skipped": null,
+      "comparisons": 504,
+      "report_sha256": "96a29b9098a8fd7c90cddb77dab470bad5718c7fb879315078aaf9939c1d439d"
+    },
+    "final-reverse": {
+      "godot": "4.6.2-stable (official)",
+      "renderer": "forward_plus",
+      "original_only_control": false,
+      "candidate_first": true,
+      "source_fixture_sha256": "da0d3edf404c5786ee09ccc464a570dfd5a742a6ace29104fdf83cbbec14c529",
+      "runtime_visibility_contract_sha256": "e1fa4c34f61a2cc3d4861c469ee341f83284f3c073acef96577e3d54d3397d51",
+      "material_surface_order_contract_sha256": "bbb017cee5dcf2e422131d2ab4fd41f91777e4b13e41aad50e0dc5b9f2a36615",
+      "material_response_contract_sha256": "ba2890530d9bb7858e71d79553e7ec81447c6570a0cc9addc5b34ae425c2b58f",
+      "response_skipped": null,
+      "comparisons": 504,
+      "report_sha256": "7d205ac860681ece19721ee4168e74363c522b119c857e52f11da561616c150d"
+    },
+    "final-cohort": {
+      "godot": "4.6.2-stable (official)",
+      "renderer": "forward_plus",
+      "original_only_control": false,
+      "candidate_first": false,
+      "source_fixture_sha256": "3bad521465678cef8302666a9216aba717d679fc894ee9007a23dce69351cc7c",
+      "runtime_visibility_contract_sha256": "e1fa4c34f61a2cc3d4861c469ee341f83284f3c073acef96577e3d54d3397d51",
+      "material_surface_order_contract_sha256": "bbb017cee5dcf2e422131d2ab4fd41f91777e4b13e41aad50e0dc5b9f2a36615",
+      "material_response_contract_sha256": "ba2890530d9bb7858e71d79553e7ec81447c6570a0cc9addc5b34ae425c2b58f",
+      "response_skipped": [
+        "arcanine-hisui",
+        "arcanine-hisui@shiny",
+        "samurott-hisui",
+        "samurott-hisui@shiny",
+        "darmanitan-galar-zen",
+        "darmanitan-galar-zen@shiny",
+        "goodra-hisui",
+        "goodra-hisui@shiny",
+        "zorua-hisui",
+        "zorua-hisui@shiny",
+        "steelix-mega",
+        "steelix-mega@shiny"
+      ],
+      "comparisons": 726,
+      "report_sha256": "a5273d3f755deab787052eb444092bb5d74b63778551e872fa27c327e15a3b68"
+    }
+  },
+  "sources": {
+    "idle": {
+      "source_sha256": "f4d9280b6657a2116c98c0d574dca6fd608fd64059b8d45d8aa1b1575735baf1",
+      "source_filename": "pm1089_00_00_00001_battlewait01_loop.tracm",
+      "bank2_sha256": "f4d9280b6657a2116c98c0d574dca6fd608fd64059b8d45d8aa1b1575735baf1",
+      "visibility_and_clock_equal": true
+    },
+    "physical_attack": {
+      "source_sha256": "e8cd196e9d9e25edd3c815b27370fe37562986070c1d2ae42be8c82b74af0ce1",
+      "source_filename": "pm1089_00_00_00400_attack01.tracm",
+      "bank2_sha256": "114944e22df0d5c7ca361fb21edf10235c737f7e08c87782ac61939650d2e2df",
+      "visibility_and_clock_equal": true
+    },
+    "special_attack": {
+      "source_sha256": "6ee1fa0a67a39d0569469771cb1f9b71428aed79732a1503e89dbe3150eb02bb",
+      "source_filename": "pm1089_00_00_00450_rangeattack01.tracm",
+      "bank2_sha256": "31baa01b1e44ddfd30c701ffdc7a161f5db034f43b487cc6ca7a39046d6ffdfc",
+      "visibility_and_clock_equal": true
+    },
+    "damage": {
+      "source_sha256": "23c73991cfdf54c6f24b0f3c3220a0d204da71bba315fa387e58abd644f437a7",
+      "source_filename": "pm1089_00_00_00500_damage01.tracm",
+      "bank2_sha256": "6a2a8047508cf363e43b74832adbabdf34e0168c2f356e9fda027e591ab817fa",
+      "visibility_and_clock_equal": true
+    },
+    "sleep": {
+      "source_sha256": "124f42c508cea4486d5a8cd9f23429e40f0a4b52ef681bfc21960818b71d0d09",
+      "source_filename": "pm1089_00_00_00281_sleep01_loop.tracm",
+      "bank2_counterpart_present": false
+    },
+    "faint_start": {
+      "source_sha256": "7a706e9e340106508ecc17dcd44587d6fee5bd0ac5251574de0f5befaa71e2e7",
+      "source_filename": "pm1089_00_00_00520_down01_start.tracm",
+      "bank2_sha256": "a6d794656e8b09552b8ae5219a8940c954986727ae42470fcdbad53b48207baf",
+      "visibility_and_clock_equal": true
+    },
+    "faint_loop": {
+      "source_sha256": "a87da87b238b68ca7f16686bca4a5ad005f69651b45db20464573b0a825c396a",
+      "source_filename": "pm1089_00_00_00521_down01_loop.tracm",
+      "bank2_sha256": "a728ac5555c6c78175b3ab7ab12348912ed06b3eb0390f3c189de398bb038fb3",
+      "visibility_and_clock_equal": true
+    }
+  },
+  "files": {
+    "ordered-control/check.json": "b2b88d2653ee255a1a0608d47d5334bfdaad689b252dc988b134b21254cb9b50",
+    "repeated-control/check.json": "51219d43e65f6fe62fe1147de772b1c4e9cd0b54027c6b2ae0283f545e344711",
+    "warm-control/check.json": "e7ad1e7e9b4e998b8558ffd67c9e5f91fee595dea9e7f7988c55876cff33ac4f",
+    "repeated-candidate/priority-diagnostic.json": "e0f1b5f06b2b234c73d97f124bdb98bd869486c378e61cf4a0d21bf47b396a7c",
+    "visual-review/captures.json": "0a9782b126613320d38ae8fc4900b57bddec1172702ab40b08a69b355e20dbb9"
+  },
+  "focused_checks": [
+    "reviewed_source_visibility_check: four real variants",
+    "material_response_surface_order_check",
+    "battle_visibility_tracks_check",
+    "battle_material_response_check",
+    "battle_material_response_order_check",
+    "battle_3d_presentation_check"
+  ]
+}

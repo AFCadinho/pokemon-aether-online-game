@@ -86,3 +86,12 @@ model, or authorize publication. The existing 35.27% storage saving and exact
 decoded model streams stand. Next work is a source-verified solution for the
 coincident wing layers and the separate Dragonite response reference, followed
 by the outstanding Windows/macOS and launcher collection qualification.
+
+
+## Client correction follow-up
+
+The [source visibility and material-order correction](lossless-source-overlap-resolution.md)
+clears the measured warm reference under the shipped corrected client contract:
+1,512 repeated/control/load-order comparisons and 726 wider-cohort comparisons
+are exact. Earlier failures remain unchanged; platform and launcher rollout
+qualification is still outstanding.
