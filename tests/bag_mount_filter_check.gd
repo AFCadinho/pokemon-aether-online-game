@@ -34,6 +34,14 @@ func _run() -> void:
 	var overlay := scene.instantiate()
 	overlay.set("root_control", overlay.get_node("Control"))
 	overlay.call("_setup_bag_popup")
+	var filter_popup: PopupMenu = overlay.bag_mount_tradeability_select.get_popup()
+	var popup_panel := filter_popup.get_theme_stylebox("panel") as StyleBoxFlat
+	var popup_hover := filter_popup.get_theme_stylebox("hover") as StyleBoxFlat
+	_check(filter_popup.transparent_bg and filter_popup.borderless, "Mount filter popup supports rounded transparent edges")
+	_check(popup_panel != null and popup_panel.bg_color == Color("#050e18fc") and popup_panel.corner_radius_top_left == 8, "Mount filter popup uses the dark rounded Bag menu style")
+	_check(popup_hover != null and popup_hover.bg_color == Color("#17283bf8") and popup_hover.border_width_left == 1, "Mount filter rows have a clear highlighted hover state")
+	_check(filter_popup.get_theme_font_size("font_size") == overlay.bag_mount_tradeability_select.get_theme_font_size("font_size") and filter_popup.get_theme_constant("v_separation") == 6, "Mount filter popup matches the button typography with spaced rows")
+	_check(filter_popup.get_theme_icon("radio_checked") == overlay.RANKED_DROPDOWN_RADIO_CHECKED and filter_popup.get_theme_icon("radio_unchecked") == overlay.RANKED_DROPDOWN_RADIO_UNCHECKED, "Mount filter popup replaces default Godot radio icons")
 	overlay.bag_inventory_loaded = true
 	overlay.bag_inventory_items.assign([bound_box, surf, box, land])
 	overlay.call("_on_bag_category_selected", "mounts")

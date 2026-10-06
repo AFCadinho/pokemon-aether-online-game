@@ -26469,8 +26469,29 @@ func _setup_bag_mount_filters(inventory_layout: VBoxContainer) -> void:
 	bag_mount_tradeability_select.custom_minimum_size.y = 32
 	bag_mount_tradeability_select.add_theme_font_size_override("font_size", 12)
 	_apply_button_style(bag_mount_tradeability_select)
+	_style_bag_mount_filter_popup(bag_mount_tradeability_select.get_popup())
 	bag_mount_tradeability_select.item_selected.connect(_on_bag_mount_tradeability_selected)
 	bag_mount_filter_bar.add_child(bag_mount_tradeability_select)
+
+func _style_bag_mount_filter_popup(popup: PopupMenu) -> void:
+	popup.transparent_bg = true
+	popup.borderless = true
+	popup.add_theme_font_size_override("font_size", 14)
+	popup.add_theme_color_override("font_color", UI_TEXT)
+	popup.add_theme_color_override("font_hover_color", Color("#fff5cc"))
+	popup.add_theme_color_override("font_disabled_color", UI_MUTED_TEXT)
+	popup.add_theme_constant_override("item_start_padding", 10)
+	popup.add_theme_constant_override("item_end_padding", 12)
+	popup.add_theme_constant_override("v_separation", 6)
+	popup.add_theme_stylebox_override("panel", _make_trainer_card_badge_popup_style())
+	popup.add_theme_stylebox_override(
+		"hover",
+		_make_trainer_card_badge_popup_item_style(Color("#17283bf8"), TRAINER_CARD_ACCENT)
+	)
+	popup.add_theme_icon_override("radio_checked", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked", RANKED_DROPDOWN_RADIO_UNCHECKED)
+	popup.add_theme_icon_override("radio_checked_disabled", RANKED_DROPDOWN_RADIO_CHECKED)
+	popup.add_theme_icon_override("radio_unchecked_disabled", RANKED_DROPDOWN_RADIO_UNCHECKED)
 
 func _refresh_bag_mount_filters(search_text: String) -> void:
 	if bag_mount_filter_bar == null:
