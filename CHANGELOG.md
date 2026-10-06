@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.100
+## Unreleased
 
 - Publish the smaller optional 3D Pokémon collection: about 13 GB instead of 20 GB, with the same model detail and animations.
 

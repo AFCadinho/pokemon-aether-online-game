@@ -1,6 +1,6 @@
 # Smaller 3D collection publication
 
-The desktop/launcher v0.3.100 publication selects `approved-pokemon-3d-v11`.
+The prepared desktop/launcher release selects `approved-pokemon-3d-v11`.
 Its 1,200 bundles contain the same 2,400 approved normal/shiny appearances as
 v10. Full collection transfer is 12,857,317,549 bytes instead of
 19,863,374,075 bytes: 7,006,056,526 bytes less (35.27%). Decoded scene bytes,
@@ -16,8 +16,9 @@ concurrent workers keep the upload bounded; any failed object prevents a
 successful collection result and index activation. Existing matching immutable
 objects can be reused after an interruption.
 
-The receipt is committed before release certification. The desktop workflow is
-then dispatched with `release_version=0.3.100`, `approved_3d_release=v11`,
+The receipt is committed before release certification. On the user's next
+publication instruction, dispatch the desktop workflow with the chosen release
+version, `approved_3d_release=v11`,
 `build_launcher=true` and `build_macos=true`. It rechecks the publication evidence
 and public objects before producing and activating the manifests. macOS follows
 the existing unsigned distribution policy.
@@ -61,4 +62,17 @@ unchanged appearance is prepared once per gender. Immutable frame pixels are
 read once per transition; all visibility, dimensions, pixels and resource-reuse
 assertions remain. Coverage still includes 46 mounts, 4,232 origin/target
 transitions across both genders, local and remote avatars, and all 20 direction,
-idle and moving-frame samples per avatar. The watchdog remains 180 seconds.
+idle and moving-frame samples per avatar. The check passes all assertions in
+standalone runs, but the complete suite exposed variable duration around the
+old 180-second budget. Only this exhaustive pixel regression gets 300 seconds;
+the other checks retain their 180-second watchdog. Script errors and hung checks
+still fail, and no model runtime performance threshold or assertion is changed.
+
+## Publication deferred
+
+On 2026-10-06 the user instructed that immutable uploads, cleanup and local
+preparation be completed before publishing a new game build. The model bundles
+and index are publicly verified; active desktop manifests still select v10.
+No client build, launcher release, backend deployment, remote source push or
+promotion to main is part of this preparation. The next client publication
+requires the normal complete paired certification and explicit authorization.
