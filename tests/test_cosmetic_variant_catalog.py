@@ -53,6 +53,22 @@ class CosmeticVariantCatalogTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "missing female overworld art"):
             self.generate()
 
+    def test_overworld_only_collection_requires_explicit_battle_fallback(self):
+        unlock = self.items["future-uniform"]["data"]["appearance_unlocks"][0]
+        unlock["render_variants"] = {"male": "AetherVoyager_Shirt", "female": "AetherVoyager_Shirt"}
+        with self.assertRaisesRegex(ValueError, "missing male battle art"):
+            self.generate()
+        unlock["battle_rendering"] = "fallback"
+        self.assertIn("Future_Uniform", self.generate()["parts"]["top"])
+        unlock["render_variants"]["female"] = "Missing_Uniform"
+        with self.assertRaisesRegex(ValueError, "missing female overworld art"):
+            self.generate()
+
+    def test_invalid_battle_policy_is_rejected(self):
+        self.items["future-uniform"]["data"]["appearance_unlocks"][0]["battle_rendering"] = "ignore"
+        with self.assertRaisesRegex(ValueError, "invalid battle_rendering"):
+            self.generate()
+
     def test_ambiguous_sprite_cannot_represent_two_different_owned_items(self):
         self.items["duplicate-uniform"] = json.loads(json.dumps(self.items["future-uniform"]))
         self.items["duplicate-uniform"]["data"]["appearance_unlocks"][0]["appearance_id"] = "Other_Uniform"

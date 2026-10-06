@@ -433,5 +433,440 @@
     "sources": [
       "Lugia Sky Captain/Surfing/Goggles.png"
     ]
+  },
+  {
+    "path": "assets/player/female/top/AetherVoyager_Shirt.png",
+    "sha256": "294374e234d14da8e1bec8578069227c269eb47e34f0d8bfd31c624f76c4cca5",
+    "sources": [
+      "Female Variants/Aether Voyager/Walking/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/AetherVoyager_Shirt_fish.png",
+    "sha256": "b7b15246d028a6449e8de60b38404eff18b125d0d5ded06fff80266c8c164560",
+    "sources": [
+      "Female Variants/Aether Voyager/Fishing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/AetherVoyager_Shirt_ride.png",
+    "sha256": "185d97bdc1f9d54c073352eb61b3ee23e5f682712e8e3c6a353f509665b5944a",
+    "sources": [
+      "Female Variants/Aether Voyager/Surfing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/AetherVoyager_Trousers.png",
+    "sha256": "66cb3f78960f3a466fec15cd5b83f8b35c72e033ab88e820fb9bb5b44fa21ac4",
+    "sources": [
+      "Female Variants/Aether Voyager/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/AetherVoyager_Trousers_fish.png",
+    "sha256": "2f62c316ac42a31d76b3fa53e6dc2c73e719dac13023c5a0c7067991a388bafe",
+    "sources": [
+      "Female Variants/Aether Voyager/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/AetherVoyager_Trousers_ride.png",
+    "sha256": "22627969ae91b69e283f5600531c62bcba437dd358471541f835e8fdff915933",
+    "sources": [
+      "Female Variants/Aether Voyager/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/AetherVoyager_Shoes.png",
+    "sha256": "038f10892d7a21ffa58343fde89b2c0a8cdeb95607be598ef8af929ee5c95da9",
+    "sources": [
+      "Female Variants/Aether Voyager/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/AetherVoyager_Shoes_fish.png",
+    "sha256": "7bda808862c4872dcd3b53f1e46490d6705cff7577235c4ec927b2cf375f95be",
+    "sources": [
+      "Female Variants/Aether Voyager/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/AetherVoyager_Shoes_ride.png",
+    "sha256": "5dc9e6c8488a4683ee3207441f61d4e7c77440ef033b5d67afecc3f18cf9038e",
+    "sources": [
+      "Female Variants/Aether Voyager/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/RotomEngineer_Shirt.png",
+    "sha256": "d639d7e6322823f5a88c7a81443f145179fb44305eda20fb5d14d01ae52c3a91",
+    "sources": [
+      "Female Variants/Rotom Engineer/Walking/Shirt.png",
+      "Female Variants/Rotom Engineer/Walking/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/RotomEngineer_Shirt_fish.png",
+    "sha256": "6271416867c09f911bf776189cda54f1165f57cd21dd3f1292dfd4f87a55b988",
+    "sources": [
+      "Female Variants/Rotom Engineer/Fishing/Shirt.png",
+      "Female Variants/Rotom Engineer/Fishing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/RotomEngineer_Shirt_ride.png",
+    "sha256": "5545c38eed75777c3ab2879fb3cc4c3ecd00da0356d922edb89e81101fb634ae",
+    "sources": [
+      "Female Variants/Rotom Engineer/Surfing/Shirt.png",
+      "Female Variants/Rotom Engineer/Surfing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/RotomEngineer_Trousers.png",
+    "sha256": "b9e628f0b6622ff5dfb441d465a549a5d869c6a3652346f81c588184ca5cd499",
+    "sources": [
+      "Female Variants/Rotom Engineer/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/RotomEngineer_Trousers_fish.png",
+    "sha256": "ecda8c2dd9fc6c93cc1af9c1102ef7026f65a41cab2b28a2e1db08a499bb84e9",
+    "sources": [
+      "Female Variants/Rotom Engineer/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/RotomEngineer_Trousers_ride.png",
+    "sha256": "49a7ab6eca71e557fe847b132e97deee3b3fea63928f2a9c462c66d2391fcdac",
+    "sources": [
+      "Female Variants/Rotom Engineer/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/RotomEngineer_Shoes.png",
+    "sha256": "7d6a0694e838621aa3480d453cdc6fb276074167ae348aab786588475138efb7",
+    "sources": [
+      "Female Variants/Rotom Engineer/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/RotomEngineer_Shoes_fish.png",
+    "sha256": "fa353f9cd98f693fdc952e7079a86f2fc45fdeba33e21664bd3b0d6433b87a2c",
+    "sources": [
+      "Female Variants/Rotom Engineer/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/RotomEngineer_Shoes_ride.png",
+    "sha256": "f0b13b64aca7230721876fbb34c736cecea4c1592f582564f67674b777e743f7",
+    "sources": [
+      "Female Variants/Rotom Engineer/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/RotomEngineer_Goggles.png",
+    "sha256": "6129fdc835b311f27277eb2e20511196be7133e37cc65113b3388a866a26b09d",
+    "sources": [
+      "Female Variants/Rotom Engineer/Walking/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/fish/RotomEngineer_Goggles_fish.png",
+    "sha256": "ff40dcabfc370db2380aa2dfa1200be1e92a1153d0b08093d7255f7068f99fe0",
+    "sources": [
+      "Female Variants/Rotom Engineer/Fishing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/ride/RotomEngineer_Goggles_ride.png",
+    "sha256": "3e0b3d89b690c4a0c24104d330b20af115474ca60d12c802bd948cda9f7d45b6",
+    "sources": [
+      "Female Variants/Rotom Engineer/Surfing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/CelebiForestRanger_Shirt.png",
+    "sha256": "8a8c6e5bf35d51227906167ab23e234616052a02150c0621ed4b552e49b61e4c",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Walking/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/CelebiForestRanger_Shirt_fish.png",
+    "sha256": "440098d134a4dc4b937262b8cf788a11ec438528a23312f14792eac64b600cf7",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Fishing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/CelebiForestRanger_Shirt_ride.png",
+    "sha256": "cc18d8761efb9d3d95ed725a0fb5c628bc75cb57bc501295d348625b1ae57730",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Surfing/Shirt.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/CelebiForestRanger_Trousers.png",
+    "sha256": "bd0532d38bc25ac93a068f156d8f49ae2246cf10c104eccc338a0941b0a23bbe",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/CelebiForestRanger_Trousers_fish.png",
+    "sha256": "5abce716c11e1acf8b3c9340e274859aae33d045b217fb71a5d6e058529619ae",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/CelebiForestRanger_Trousers_ride.png",
+    "sha256": "bebf95da78f41a9751e1b1389b40d034684e53bb092468683dbf2daaa082375d",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/CelebiForestRanger_Shoes.png",
+    "sha256": "ea635be5382216ed6fc0a465c021c2b41c62c316f5fcb86884bae331ad59e4c0",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/CelebiForestRanger_Shoes_fish.png",
+    "sha256": "5fcbd80b37a902c75d8a0eaabc54806fc26ba334c57d209e2b8b8f36240875d2",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/CelebiForestRanger_Shoes_ride.png",
+    "sha256": "4d870749fa7f368bdbaf0a0e5ce80086a18bbeb6ac56fe7d0604e51308b33276",
+    "sources": [
+      "Female Variants/Celebi Forest Ranger/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/LucarioAuraFighter_Shirt.png",
+    "sha256": "18ddc405f8440ec9cac21a6a2a980c6883a5a39b173b3e716faece5762ce3b93",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Walking/Shirt.png",
+      "Female Variants/Lucario Aura Fighter/Walking/Scarf.png",
+      "Female Variants/Lucario Aura Fighter/Walking/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/LucarioAuraFighter_Shirt_fish.png",
+    "sha256": "afd54eaef778a64ea0b74affcb614c13c47f817d00a225f5668afde5465d7a77",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Fishing/Shirt.png",
+      "Female Variants/Lucario Aura Fighter/Fishing/Scarf.png",
+      "Female Variants/Lucario Aura Fighter/Fishing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/LucarioAuraFighter_Shirt_ride.png",
+    "sha256": "483568f053206070d610ff588232673ab5eb5e6181f6e0fbfe1e5788424d9692",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Surfing/Shirt.png",
+      "Female Variants/Lucario Aura Fighter/Surfing/Scarf.png",
+      "Female Variants/Lucario Aura Fighter/Surfing/Gloves.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/LucarioAuraFighter_Trousers.png",
+    "sha256": "fdec0cef74c90e49fc7b3e125f62a7b1b8970c04adf9dea19491024c6d77bb1c",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/LucarioAuraFighter_Trousers_fish.png",
+    "sha256": "8d25f14d7d19b843cfe0e0b82ffe45add9091268d287747d4a6bc8d50ce3fcb6",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/LucarioAuraFighter_Trousers_ride.png",
+    "sha256": "6e1d8f88fae426ecaad61cf81bb436b5c2a6e92cb5a8b3d490464041a63edb08",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/LucarioAuraFighter_Shoes.png",
+    "sha256": "c53aa3a15f1639a3d2e78d0410e998a0f83bf69d9cd5b84f5a28d60be0ed7aee",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/LucarioAuraFighter_Shoes_fish.png",
+    "sha256": "b9706c7b5e0a2e1e9f17b0fbb1eac3724a75b75a4451284153e9f81331b815d0",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/LucarioAuraFighter_Shoes_ride.png",
+    "sha256": "029e26c12a68200c39e72673f5c22f831d69dffc96ca60204d68b6d8376f8a33",
+    "sources": [
+      "Female Variants/Lucario Aura Fighter/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/RelicExplorer_Shirt.png",
+    "sha256": "881e6fe9198a3b6ea6fd83d66df9676488ece0149a538d812f169a766f9ad828",
+    "sources": [
+      "Female Variants/Relic Explorer/Walking/Shirt.png",
+      "Female Variants/Relic Explorer/Walking/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/RelicExplorer_Shirt_fish.png",
+    "sha256": "fa83d1b131e707c276eaf9f9616e3888b801b752bdbd0cdf171f59a6db9eef54",
+    "sources": [
+      "Female Variants/Relic Explorer/Fishing/Shirt.png",
+      "Female Variants/Relic Explorer/Fishing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/RelicExplorer_Shirt_ride.png",
+    "sha256": "9e3cfb92f5db79b21ac440d4c6f8d2760b6a57a532ddbc1116aa6b3c69be71a7",
+    "sources": [
+      "Female Variants/Relic Explorer/Surfing/Shirt.png",
+      "Female Variants/Relic Explorer/Surfing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/RelicExplorer_Trousers.png",
+    "sha256": "2e21bf0746b15f854bc57d718eaf3efe20e8adf53218a9a903d0f7160134e9c7",
+    "sources": [
+      "Female Variants/Relic Explorer/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/RelicExplorer_Trousers_fish.png",
+    "sha256": "3fb656eea9440750d678fe9d503bc8b2da7f01d38e139b034a74c4ddd300a283",
+    "sources": [
+      "Female Variants/Relic Explorer/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/RelicExplorer_Trousers_ride.png",
+    "sha256": "a31dcb177b77e0522d4532239fd2faaff5fd42dff70160c2e946dc02420867a1",
+    "sources": [
+      "Female Variants/Relic Explorer/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/RelicExplorer_Shoes.png",
+    "sha256": "a2b281170be13701700549fd4c892e9cfda642309f64ea800160c56779fc5c1a",
+    "sources": [
+      "Female Variants/Relic Explorer/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/RelicExplorer_Shoes_fish.png",
+    "sha256": "043fad4ea8e6f9cb1b23294e3223ca3483844a957e52cdf40bc8f464bd3651c1",
+    "sources": [
+      "Female Variants/Relic Explorer/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/RelicExplorer_Shoes_ride.png",
+    "sha256": "1453fb7478dee949f73ace1e6f6141f10eb16bea9ba9c0cc6d50677485519094",
+    "sources": [
+      "Female Variants/Relic Explorer/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/LugiaSkyCaptain_Shirt.png",
+    "sha256": "2b0390b3dd70f2aac50ca11ed854119f050bf5ee21697c9bbff9306b16d82e0c",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Walking/Shirt.png",
+      "Female Variants/Lugia Sky Captain/Walking/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/fish/LugiaSkyCaptain_Shirt_fish.png",
+    "sha256": "ef1c3193ab878b7547b6489873523747c01e0eade9dafe8a58776be467523df4",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Fishing/Shirt.png",
+      "Female Variants/Lugia Sky Captain/Fishing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/top/ride/LugiaSkyCaptain_Shirt_ride.png",
+    "sha256": "f01ff79d8a6d6cc40d08872ac306b39c8006e591f13ea4664325bb2b984d75f4",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Surfing/Shirt.png",
+      "Female Variants/Lugia Sky Captain/Surfing/Scarf.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/LugiaSkyCaptain_Trousers.png",
+    "sha256": "023d616f28b3384ef602bd09ced0628e771a5425aac4a719db738941c532691b",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Walking/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/fish/LugiaSkyCaptain_Trousers_fish.png",
+    "sha256": "101f72f987cbcc91e47cef380d7ada66ff254cb118c4008df13e37cd33a6159a",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Fishing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/bottom/ride/LugiaSkyCaptain_Trousers_ride.png",
+    "sha256": "f0e6215f5596425869702635173d354d3fecd188ee61fbc3d743d8b5213abfa1",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Surfing/Trousers.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/LugiaSkyCaptain_Shoes.png",
+    "sha256": "9e885c8d842970e110e39908e257a00ae04d8ff74c4d03656d93f5adfc34275b",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Walking/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/fish/LugiaSkyCaptain_Shoes_fish.png",
+    "sha256": "bc90059c3ae43e23e49bba57e1a599e899d76536e1316ca86b64ca34b3f3e028",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Fishing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/shoes/ride/LugiaSkyCaptain_Shoes_ride.png",
+    "sha256": "397709cde0abdbfd3671b7efd75028ee06260a1489b4d4244760550c7a8a57f8",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Surfing/Shoes.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/LugiaSkyCaptain_Goggles.png",
+    "sha256": "85ac4b75255cefe31aef86b5e1a2100eba3e9a96729775e8215eb1a99b6bd82f",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Walking/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/fish/LugiaSkyCaptain_Goggles_fish.png",
+    "sha256": "3487043df1120e184eb08dce1143c0cf453151b446cd7172edd11943e3ac9c1e",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Fishing/Goggles.png"
+    ]
+  },
+  {
+    "path": "assets/player/female/facegear/ride/LugiaSkyCaptain_Goggles_ride.png",
+    "sha256": "dd867f5a7c6b1ca370f330cfb0a98bba2154a9d50c84d0d0d7032b0ca119b9c3",
+    "sources": [
+      "Female Variants/Lugia Sky Captain/Surfing/Goggles.png"
+    ]
   }
 ]

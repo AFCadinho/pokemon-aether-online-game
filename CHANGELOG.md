@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added female variants for all six adventure outfits. The same owned items now adapt to the trainer model and remain equipped through gender changes.
+
 - Keep generated 3D material passes in a consistent draw order for closely touching model surfaces, preserving authored material priorities.
 
 - Restore Roaring Moon’s source-authored wing visibility in 3D battles and Pokémon previews, including shiny, without redownloading its models.

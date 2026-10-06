@@ -206,35 +206,6 @@ static func get_cosmetic_item_allowed_genders(item_id: String) -> Array[String]:
 		"adinho-classic-sunglasses", "adinho-chroma-glasses",
 	]:
 		return ["male", "female"]
-	if normalized_item_id in [
-		"aether-voyager-shirt",
-		"aether-voyager-trousers",
-		"aether-voyager-shoes",
-		"aether-voyager-outfit",
-		"rotom-engineer-shirt",
-		"rotom-engineer-trousers",
-		"rotom-engineer-shoes",
-		"rotom-engineer-goggles",
-		"rotom-engineer-outfit",
-		"celebi-forest-ranger-shirt",
-		"celebi-forest-ranger-trousers",
-		"celebi-forest-ranger-shoes",
-		"celebi-forest-ranger-outfit",
-		"lucario-aura-fighter-shirt",
-		"lucario-aura-fighter-trousers",
-		"lucario-aura-fighter-shoes",
-		"lucario-aura-fighter-outfit",
-		"relic-explorer-shirt",
-		"relic-explorer-trousers",
-		"relic-explorer-shoes",
-		"relic-explorer-outfit",
-		"lugia-sky-captain-shirt",
-		"lugia-sky-captain-trousers",
-		"lugia-sky-captain-shoes",
-		"lugia-sky-captain-goggles",
-		"lugia-sky-captain-outfit",
-	]:
-		return ["male"]
 	if normalized_item_id.begins_with("aether-wayfarer-male-"):
 		return ["male"]
 	if normalized_item_id.begins_with("aether-ronin-") or normalized_item_id.begins_with("aether-royal-"):
@@ -305,90 +276,6 @@ static func get_cosmetic_item_icon(item_id: String, gender: String = "male") -> 
 	# Authored variant data takes precedence over the legacy icon cases.
 	var fallback_item_id := normalized_item_id if layers.is_empty() else ""
 	match fallback_item_id:
-		"aether-voyager-shirt":
-			layers = [{"category": "top", "id": "AetherVoyager_Shirt"}]
-		"aether-voyager-trousers":
-			layers = [{"category": "bottom", "id": "AetherVoyager_Trousers"}]
-		"aether-voyager-shoes":
-			layers = [{"category": "shoes", "id": "AetherVoyager_Shoes"}]
-		"aether-voyager-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "AetherVoyager_Trousers"},
-				{"category": "shoes", "id": "AetherVoyager_Shoes"},
-				{"category": "top", "id": "AetherVoyager_Shirt"},
-			]
-		"rotom-engineer-shirt":
-			layers = [{"category": "top", "id": "RotomEngineer_Shirt"}]
-		"rotom-engineer-trousers":
-			layers = [{"category": "bottom", "id": "RotomEngineer_Trousers"}]
-		"rotom-engineer-shoes":
-			layers = [{"category": "shoes", "id": "RotomEngineer_Shoes"}]
-		"rotom-engineer-goggles":
-			layers = [{"category": "facegear", "id": "RotomEngineer_Goggles"}]
-		"rotom-engineer-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "RotomEngineer_Trousers"},
-				{"category": "shoes", "id": "RotomEngineer_Shoes"},
-				{"category": "top", "id": "RotomEngineer_Shirt"},
-				{"category": "facegear", "id": "RotomEngineer_Goggles"},
-			]
-		"celebi-forest-ranger-shirt":
-			layers = [{"category": "top", "id": "CelebiForestRanger_Shirt"}]
-		"celebi-forest-ranger-trousers":
-			layers = [{"category": "bottom", "id": "CelebiForestRanger_Trousers"}]
-		"celebi-forest-ranger-shoes":
-			layers = [{"category": "shoes", "id": "CelebiForestRanger_Shoes"}]
-		"celebi-forest-ranger-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "CelebiForestRanger_Trousers"},
-				{"category": "shoes", "id": "CelebiForestRanger_Shoes"},
-				{"category": "top", "id": "CelebiForestRanger_Shirt"},
-			]
-		"lucario-aura-fighter-shirt":
-			layers = [{"category": "top", "id": "LucarioAuraFighter_Shirt"}]
-		"lucario-aura-fighter-trousers":
-			layers = [{"category": "bottom", "id": "LucarioAuraFighter_Trousers"}]
-		"lucario-aura-fighter-shoes":
-			layers = [{"category": "shoes", "id": "LucarioAuraFighter_Shoes"}]
-		"lucario-aura-fighter-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "LucarioAuraFighter_Trousers"},
-				{"category": "shoes", "id": "LucarioAuraFighter_Shoes"},
-				{"category": "top", "id": "LucarioAuraFighter_Shirt"},
-			]
-		"relic-explorer-shirt":
-			layers = [{"category": "top", "id": "RelicExplorer_Shirt"}]
-		"relic-explorer-trousers":
-			layers = [{"category": "bottom", "id": "RelicExplorer_Trousers"}]
-		"relic-explorer-shoes":
-			layers = [{"category": "shoes", "id": "RelicExplorer_Shoes"}]
-		"relic-explorer-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "RelicExplorer_Trousers"},
-				{"category": "shoes", "id": "RelicExplorer_Shoes"},
-				{"category": "top", "id": "RelicExplorer_Shirt"},
-			]
-		"lugia-sky-captain-shirt":
-			layers = [{"category": "top", "id": "LugiaSkyCaptain_Shirt"}]
-		"lugia-sky-captain-trousers":
-			layers = [{"category": "bottom", "id": "LugiaSkyCaptain_Trousers"}]
-		"lugia-sky-captain-shoes":
-			layers = [{"category": "shoes", "id": "LugiaSkyCaptain_Shoes"}]
-		"lugia-sky-captain-goggles":
-			layers = [{"category": "facegear", "id": "LugiaSkyCaptain_Goggles"}]
-		"lugia-sky-captain-outfit":
-			layers = [
-				{"kind": "body"},
-				{"category": "bottom", "id": "LugiaSkyCaptain_Trousers"},
-				{"category": "shoes", "id": "LugiaSkyCaptain_Shoes"},
-				{"category": "top", "id": "LugiaSkyCaptain_Shirt"},
-				{"category": "facegear", "id": "LugiaSkyCaptain_Goggles"},
-			]
 		"aether-royal-outfit":
 			layers = [
 				{"category": CAPE_CATEGORY, "id": "AetherRoyal_Cape"},
