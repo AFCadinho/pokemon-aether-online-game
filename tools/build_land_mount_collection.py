@@ -1,7 +1,7 @@
-"""Rebuild the five approved V3 mounts from their checked-in native source sheets.
+"""Rebuild the five land mounts from their checked-in native source sheets.
 
 Run with --check to compare the generated artwork and seat offsets without writes.
-Requires Pillow. Design JSON freezes the reviewed per-frame head translations.
+Requires Pillow. Design JSON records seats, foreground masks and head cutouts.
 """
 from pathlib import Path
 import argparse
@@ -25,11 +25,18 @@ def build(mount_id):
         arts = []
         for col in range(4):
             art = sheet.crop((col*width, row*height, (col+1)*width, (row+1)*height))
-            if 'repose' in design:
-                amount = design['repose'] if row == 0 else design['repose']-4 if row in (1,2) else 12
-                head = art.crop((0,0,width,80))
-                ImageDraw.Draw(art).rectangle((0,0,width-1,79),fill=(0,0,0,0))
-                art.alpha_composite(head,(0,amount))
+            if 'headRepose' in design:
+                # Move only the anatomical head. A full-width strip also moves
+                # wing/arm tips and overwrites the original torso underneath.
+                spec = design['headRepose'][row]
+                dx, dy = design['frameShifts'][direction][col]
+                selection = Image.new('L', art.size)
+                ImageDraw.Draw(selection).polygon(
+                    [(x+dx, y+dy) for x,y in spec['polygon']], fill=255)
+                head = Image.new('RGBA', art.size)
+                head.paste(art, (0,0), selection)
+                art.paste((0,0,0,0), (0,0,width,height), selection)
+                art.alpha_composite(head, tuple(spec['offset']))
             arts.append(art)
         base_x, base_y = 96-width//2, 112-arts[0].getbbox()[3]
         offsets[direction] = []

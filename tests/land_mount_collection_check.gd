@@ -55,6 +55,7 @@ func _run() -> void:
 					if not moving:
 						var first := Mounts._get_texture_image(frames.get_frame_texture(StringName("walk_"+DIRECTIONS[row]),0))
 						_check(art.get_data() == first.get_data(), id + " idle starts at the reviewed pose")
+	_check_repaired_anatomy()
 	print("Land mount collection checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
 
@@ -63,3 +64,51 @@ func _check(ok: bool, message: String) -> void:
 	if not ok:
 		failed = true
 		push_error(message)
+
+
+func _check_repaired_anatomy() -> void:
+	var source := Image.load_from_file("res://assets/mounts/miraidon/source.png")
+	var frames := Mounts.get_mount_frames("miraidon")
+	# Original arm tips and tail pixels must stay in place while only the
+	# anatomical head/neck is lowered. These caught the old full-width cut.
+	var protected := [
+		[Rect2i(28, 78, 16, 22), Rect2i(84, 78, 18, 22)],
+		[Rect2i(90, 94, 36, 32)],
+		[Rect2i(2, 94, 36, 32)],
+		[Rect2i(28, 80, 16, 24), Rect2i(84, 80, 18, 24)]
+	]
+	for row in range(4):
+		var origin := Vector2i(32, 112 - source.get_region(Rect2i(0, row*128, 128, 128)).get_used_rect().end.y)
+		for phase in range(4):
+			var art := Mounts._get_texture_image(frames.get_frame_texture("walk_" + DIRECTIONS[row], phase))
+			var intact := true
+			var colored := 0
+			for region: Rect2i in protected[row]:
+				for y in range(region.position.y, region.end.y):
+					for x in range(region.position.x, region.end.x):
+						var pixel := source.get_pixel(phase*128 + x, row*128 + y)
+						if pixel.a > 0:
+							colored += 1
+							if pixel != art.get_pixel(origin.x + x, origin.y + y):
+								intact = false
+			_check(colored > 20 and intact, "Miraidon retains source limbs/tail %s phase %d" % [DIRECTIONS[row], phase])
+	for id: String in ["miraidon", "yveltal"]:
+		var art_frames := Mounts.get_mount_frames(id)
+		var front_frames := Mounts.get_mount_foreground_frames(id)
+		var tail_source := Image.load_from_file("res://assets/mounts/%s/source.png" % id)
+		var base_y := 112 - tail_source.get_region(Rect2i(0, 384, 128, 128)).get_used_rect().end.y
+		var shifts := [0, -2, -2, -4] if id == "miraidon" else [0, 2, -4, -2]
+		for phase in range(4):
+			var art := Mounts._get_texture_image(art_frames.get_frame_texture("walk_up", phase))
+			var front := Mounts._get_texture_image(front_frames.get_frame_texture("walk_up", phase))
+			var covered := 0
+			var intact := true
+			for y in range(104 + shifts[phase], 114 + shifts[phase]):
+				for x in range(59, 70):
+					var point := Vector2i(x + 32, y + base_y)
+					var pixel := art.get_pixelv(point)
+					if pixel.a > 0:
+						covered += 1
+						if front.get_pixelv(point) != pixel:
+							intact = false
+			_check(covered > 20 and intact, "%s rear tail stays in front of rider phase %d" % [id, phase])

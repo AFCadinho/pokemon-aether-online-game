@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Restore Miraidon mount limb and torso details, clear the rider’s face in front view, and keep Miraidon and Yveltal rear tails visible in front of the rider’s lower body.
+
 - Keep mounted player nameplates, badges, chat bubbles and battle indicators above the rider and mount, with stable animation clearance and normal placement after dismounting.
 
 - Keep mounted players behind the lower shafts and feet of complete lantern posts, including Viridian City's jail sides, without raising nearby steps or paving.

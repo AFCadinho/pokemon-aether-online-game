@@ -22,7 +22,10 @@ existing tile. The dedicated icons remove the large transparent atlas padding.
 The source sheets come from the project's local Gen 9 follower asset pack;
 `assets/mounts/<id>/source.png` preserves those originals. `design.json` records
 the reviewed seat positions, anatomical foreground polygons and frame shifts.
-Miraidon's compact V2 posture is preserved; the other source poses are unchanged.
+Miraidon's compact posture uses anatomical head/neck cutouts rather than moving
+a full-width strip, preserving the original limb pixels. Its front seat clears
+the crest. Miraidon and Yveltal rear tails render ahead of the rider's lower
+body; their head and wings retain their existing depth.
 
 Rebuild with `python tools/build_land_mount_collection.py`, or use `--check`
 to compare pixels and catalog offsets without writes (Pillow required).
