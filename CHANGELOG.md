@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Style the Bag mount tradeability dropdown with a dark rounded menu, gold accents, custom selection icons and clearer hover states.
+
 - Keep the Gift Store payment method and its compact Tradable/Untradable label visible beside checkout, and shorten currency information.
 
 - Drag the Aether Gift Store by its header while keeping the window inside the screen and its header buttons clickable.
