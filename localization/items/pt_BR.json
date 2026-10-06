@@ -710,5 +710,21 @@
   "aerodactyl-mount": {
     "name": "Montaria Aerodactyl",
     "shortDesc": "Desbloqueia Aerodactyl como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "shiny-arcanine-mount": {
+    "name": "Montaria Arcanine Brilhante",
+    "shortDesc": "Desbloqueia Arcanine Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "arcanine-mount-box": {
+    "name": "Caixa de montaria Arcanine",
+    "shortDesc": "Contém uma montaria Arcanine. Chance shiny inicial: 50%."
+  },
+  "shiny-aerodactyl-mount": {
+    "name": "Montaria Aerodactyl Brilhante",
+    "shortDesc": "Desbloqueia Aerodactyl Brilhante como montaria terrestre. Requer uma Licença de Montaria para a região atual."
+  },
+  "aerodactyl-mount-box": {
+    "name": "Caixa de montaria Aerodactyl",
+    "shortDesc": "Contém uma montaria Aerodactyl. Chance shiny inicial: 50%."
   }
 }

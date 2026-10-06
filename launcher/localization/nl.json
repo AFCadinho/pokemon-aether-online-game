@@ -246,5 +246,6 @@
 	"Estimating time remaining…": "Resterende tijd berekenen…",
 	"About {minutes} min remaining": "Nog ongeveer {minutes} min",
 	"{done} / {count} files · {downloaded} / {total} · {speed}\n{eta}": "{done} / {count} bestanden · {downloaded} / {total} · {speed}\n{eta}",
-	"Verifying and installing model…": "Model controleren en installeren…"
+	"Verifying and installing model…": "Model controleren en installeren…",
+	"Not enough free space to install 3D models.": "Er is niet genoeg ruimte om de 3D-modellen te installeren."
 }

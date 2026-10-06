@@ -246,5 +246,6 @@
   "Estimating time remaining…": "正在估算剩余时间…",
   "About {minutes} min remaining": "大约剩余 {minutes} 分钟",
   "{done} / {count} files · {downloaded} / {total} · {speed}\n{eta}": "{done} / {count} 个文件 · {downloaded} / {total} · {speed}\n{eta}",
-  "Verifying and installing model…": "正在验证并安装模型…"
+  "Verifying and installing model…": "正在验证并安装模型…",
+	"Not enough free space to install 3D models.": "可用空间不足，无法安装3D模型。"
 }

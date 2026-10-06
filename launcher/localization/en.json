@@ -246,5 +246,6 @@
 	"Estimating time remaining…": "Estimating time remaining…",
 	"About {minutes} min remaining": "About {minutes} min remaining",
 	"{done} / {count} files · {downloaded} / {total} · {speed}\n{eta}": "{done} / {count} files · {downloaded} / {total} · {speed}\n{eta}",
-	"Verifying and installing model…": "Verifying and installing model…"
+	"Verifying and installing model…": "Verifying and installing model…",
+	"Not enough free space to install 3D models.": "Not enough free space to install 3D models."
 }
