@@ -1,0 +1,61 @@
+{
+  "verifiedAt": "2026-10-06T23:43:38.535892+00:00",
+  "topicId": 95,
+  "postId": 102,
+  "postVersion": 2,
+  "category": "Official Guides",
+  "author": "adinho",
+  "publicUrl": "https://forums.pokeaether.com/t/item-dex-where-to-find-items/95",
+  "publishedImageCount": 4,
+  "publicPageChecked": true,
+  "images": [
+    {
+      "filename": "01-open-item-dex.png",
+      "publicUrl": "https://forums.pokeaether.com/uploads/default/original/1X/b560dedefe1d2037586dff8b62e82356cce31d6f.png",
+      "size": [
+        360,
+        260
+      ],
+      "pixelsMatchLocal": true,
+      "sha256": "0bb956bc2289a1578a86e54d3a6cb4b3bdd6b7038a2f3a9c3b7b6296142a0ab2"
+    },
+    {
+      "filename": "02-search-heart-scale.png",
+      "publicUrl": "https://forums.pokeaether.com/uploads/default/original/1X/f4c57607a05721ed23b3411912806cd01f9b3e1a.png",
+      "size": [
+        962,
+        652
+      ],
+      "pixelsMatchLocal": true,
+      "sha256": "adb7785d27b9195e5101363296697594fb2aa4dea6cbb5f348e2f90e8998b6d1"
+    },
+    {
+      "filename": "03-where-to-get.png",
+      "publicUrl": "https://forums.pokeaether.com/uploads/default/original/1X/10a88b7e306a7d22cd991f841830b5ef33110263.png",
+      "size": [
+        962,
+        652
+      ],
+      "pixelsMatchLocal": true,
+      "sha256": "6a0f641e2b8675a99a4616f29e7a72a838e168905f49adbb673528680df4374b"
+    },
+    {
+      "filename": "04-compare-fishing-sources.png",
+      "publicUrl": "https://forums.pokeaether.com/uploads/default/original/1X/2ecc1013fbdb2ae3ae86362078139c68d03e685a.png",
+      "size": [
+        962,
+        652
+      ],
+      "pixelsMatchLocal": true,
+      "sha256": "628d27479758305447404e725f38c447514e752bfbf9ad6fd38a8d2ee0b2f6cb"
+    }
+  ],
+  "originalGuideTextPreserved": true,
+  "editReason": "Add Item Dex navigation, search and source screenshots with captions",
+  "uploadIds": [
+    155,
+    156,
+    157,
+    158
+  ]
+}
