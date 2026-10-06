@@ -55,7 +55,7 @@ func load_mount_collector() -> Dictionary:
 	return {"success": true, "catalog": _dictionary_from_value(response.get("body", {}))}
 
 
-func exchange_shiny_mount(item_id: String) -> Dictionary:
+func exchange_shiny_mount(item_id: String, keep_one_shiny: bool = false) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
 	var request_key := "%s:%s" % [int(AuthService.current_user.get("id", 0)), item_id]
@@ -64,7 +64,7 @@ func exchange_shiny_mount(item_id: String) -> Dictionary:
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response := await _request_json(
 		base_url + "/game/mount-collector/exchange", HTTPClient.METHOD_POST, GatewayApiConfig.get_json_headers(),
-		JSON.stringify({"itemId": item_id, "requestId": mount_collector_pending_requests[request_key]})
+		JSON.stringify({"itemId": item_id, "requestId": mount_collector_pending_requests[request_key], "keepOneShiny": keep_one_shiny})
 	)
 	if not bool(response.get("success", false)):
 		if int(response.get("status", 0)) >= 400 and int(response.get("status", 0)) < 500:

@@ -6448,5 +6448,19 @@
   "ui.mount_collector.received": "You received {mount} and {credit} Gift Voucher credit!",
   "ui.mount_collector.error.context": "Speak to the Shiny Mount Collector in the Cerulean Bike Shop when you are not busy.",
   "ui.mount_collector.error.shiny": "Choose a shiny mount with a matching normal version.",
-  "ui.mount_collector.error.wallet_full": "Spend some Gift Voucher credit before exchanging this mount."
+  "ui.mount_collector.error.wallet_full": "Spend some Gift Voucher credit before exchanging this mount.",
+  "ui.mount_collector.search": "Search mounts…",
+  "ui.mount_collector.tab_all": "All",
+  "ui.mount_collector.tab_land": "Land",
+  "ui.mount_collector.tab_surf": "Surf",
+  "ui.mount_collector.duplicates_only": "Duplicates only",
+  "ui.mount_collector.duplicates_hint": "Count bound and tradeable copies of the same shiny together. Keep one shiny of each type.",
+  "ui.mount_collector.binding_all": "All bindings",
+  "ui.mount_collector.results": "{count} of {total} mount variants",
+  "ui.mount_collector.keep_one": "Keep one shiny of each type",
+  "ui.mount_collector.copies": "{count} shiny owned · {spare} spare",
+  "ui.mount_collector.spares": "{count} spare in total",
+  "ui.mount_collector.no_results": "No mounts match these filters. Clear your search or adjust the filters.",
+  "ui.mount_collector.last_copy": "This is your last shiny mount of this type. Trading it will remove it from your shiny collection.",
+  "ui.mount_collector.error.last_shiny": "Duplicates only: you now have only one shiny of this type. Keep it or turn off the duplicates filter."
 }

@@ -15,6 +15,7 @@ const CODE_TO_KEY: Dictionary = {
 	"mount_collector_out_of_reach": "ui.mount_collector.error.context",
 	"mount_collector_not_shiny": "ui.mount_collector.error.shiny",
 	"mount_collector_wallet_full": "ui.mount_collector.error.wallet_full",
+	"mount_collector_last_shiny": "ui.mount_collector.error.last_shiny",
 	"mount_collector_request_conflict": "backend.error.request_conflict",
 	"static_encounter_poke_flute_required": "static_encounter.snorlax_sleeping",
 	"static_encounter_completed": "backend.error.unavailable",

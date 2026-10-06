@@ -6447,5 +6447,19 @@
   "ui.mount_collector.received": "Você recebeu {mount} e {credit} créditos de Gift Voucher!",
   "ui.mount_collector.error.context": "Fale com o Colecionador de Montarias Shiny na loja de bicicletas de Cerulean quando não estiver ocupado.",
   "ui.mount_collector.error.shiny": "Escolha uma montaria shiny com uma versão normal correspondente.",
-  "ui.mount_collector.error.wallet_full": "Gaste alguns créditos de Gift Voucher antes de trocar esta montaria."
+  "ui.mount_collector.error.wallet_full": "Gaste alguns créditos de Gift Voucher antes de trocar esta montaria.",
+  "ui.mount_collector.search": "Buscar montarias…",
+  "ui.mount_collector.tab_all": "Todas",
+  "ui.mount_collector.tab_land": "Terrestres",
+  "ui.mount_collector.tab_surf": "Surf",
+  "ui.mount_collector.duplicates_only": "Só duplicadas",
+  "ui.mount_collector.duplicates_hint": "Conte cópias vinculadas e negociáveis da mesma shiny juntas. Guarde uma shiny de cada tipo.",
+  "ui.mount_collector.binding_all": "Todos os vínculos",
+  "ui.mount_collector.results": "{count} de {total} variantes de montaria",
+  "ui.mount_collector.keep_one": "Guardar uma shiny de cada tipo",
+  "ui.mount_collector.copies": "{count} shiny possuídas · {spare} extras",
+  "ui.mount_collector.spares": "{count} extras no total",
+  "ui.mount_collector.no_results": "Nenhuma montaria corresponde. Limpe a busca ou ajuste os filtros.",
+  "ui.mount_collector.last_copy": "Esta é sua última montaria shiny deste tipo. A troca irá removê-la da sua coleção shiny.",
+  "ui.mount_collector.error.last_shiny": "Só duplicadas: agora você tem apenas uma shiny deste tipo. Guarde-a ou desative o filtro."
 }

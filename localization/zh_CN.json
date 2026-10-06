@@ -6444,5 +6444,19 @@
   "ui.mount_collector.received": "你获得了{mount}和{credit}点礼品券额度！",
   "ui.mount_collector.error.context": "请在空闲时与华蓝市自行车店的闪光坐骑收藏家交谈。",
   "ui.mount_collector.error.shiny": "选择一只拥有对应普通版本的闪光坐骑。",
-  "ui.mount_collector.error.wallet_full": "兑换此坐骑前，请先消费一些礼品券额度。"
+  "ui.mount_collector.error.wallet_full": "兑换此坐骑前，请先消费一些礼品券额度。",
+  "ui.mount_collector.search": "搜索坐骑…",
+  "ui.mount_collector.tab_all": "全部",
+  "ui.mount_collector.tab_land": "陆地",
+  "ui.mount_collector.tab_surf": "冲浪",
+  "ui.mount_collector.duplicates_only": "仅重复",
+  "ui.mount_collector.duplicates_hint": "同种闪光坐骑的绑定和可交易副本合并计数。每种保留一只闪光坐骑。",
+  "ui.mount_collector.binding_all": "所有绑定类型",
+  "ui.mount_collector.results": "{count} / {total} 个坐骑版本",
+  "ui.mount_collector.keep_one": "每种保留一只闪光坐骑",
+  "ui.mount_collector.copies": "拥有 {count} 只闪光 · 多余 {spare} 只",
+  "ui.mount_collector.spares": "合计多余 {count} 只",
+  "ui.mount_collector.no_results": "没有符合筛选条件的坐骑。请清除搜索或调整筛选。",
+  "ui.mount_collector.last_copy": "这是你最后一只该种闪光坐骑。兑换后将从闪光收藏中移除。",
+  "ui.mount_collector.error.last_shiny": "仅重复：你现在仅剩一只该种闪光坐骑。请保留它或关闭重复筛选。"
 }

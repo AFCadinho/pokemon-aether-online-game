@@ -4,7 +4,7 @@ extends DialogueNPC
 const TOPIC_MENU := preload("res://scripts/ui/mentor_topic_menu.gd")
 const Mounts := preload("res://scripts/services/mount_service.gd")
 const GRID_MENU := preload("res://scripts/ui/mount_collector_grid.gd")
-const OFFERS_PER_PAGE := GRID_MENU.OFFERS_PER_PAGE
+var collector_view_state: Dictionary = {}
 
 var exchange_in_progress := false
 
@@ -18,12 +18,12 @@ func interact_with_player(_player: Node2D) -> void:
 
 
 func _run_collector() -> void:
+	collector_view_state.clear()
 	await show_dialogue([LocalizationManager.text("ui.mount_collector.intro")], display_name)
 	var position_result := await _sync_player_position()
 	if not bool(position_result.get("success", false)):
 		await _show_collector_error(position_result)
 		return
-	var page := 0
 	while is_inside_tree():
 		var service := get_node_or_null("/root/InventoryService")
 		var response: Dictionary = await service.call("load_mount_collector")
@@ -36,16 +36,9 @@ func _run_collector() -> void:
 		if offers.is_empty():
 			await show_dialogue([LocalizationManager.text("ui.mount_collector.empty")], display_name)
 			return
-		page = mini(page, (offers.size() - 1) / OFFERS_PER_PAGE)
-		var choice := await _choose_offer(offers, page, credit)
+		var choice := await _choose_offer(offers, 0, credit)
 		if choice.is_empty():
 			return
-		if choice == "next":
-			page += 1
-			continue
-		if choice == "previous":
-			page -= 1
-			continue
 		var offer: Dictionary = {}
 		for value: Dictionary in offers:
 			if str(value.get("itemId", "")) == choice:
@@ -53,9 +46,11 @@ func _run_collector() -> void:
 				break
 		if offer.is_empty() or not await _confirm_exchange(offer, credit):
 			continue
-		var result: Dictionary = await service.call("exchange_shiny_mount", choice)
+		var result: Dictionary = await service.call("exchange_shiny_mount", choice, bool(collector_view_state.get("duplicates", false)))
 		if not bool(result.get("success", false)):
 			await _show_collector_error(result)
+			if BackendErrorLocalizationService.error_code(result) == "mount_collector_last_shiny":
+				continue
 			return
 		var exchange: Dictionary = result.get("exchange", {})
 		var normal_name := _normal_name(offer)
@@ -96,7 +91,7 @@ func _normal_name(offer: Dictionary) -> String:
 func _choose_offer(offers: Array, page: int, credit: int) -> String:
 	var menu := GRID_MENU.new()
 	add_child(menu)
-	var choice: String = await menu.choose_mount(offers, page, credit)
+	var choice: String = await menu.choose_mount(offers, page, credit, collector_view_state)
 	menu.queue_free()
 	return choice
 
@@ -106,6 +101,10 @@ func _confirmation_text(offer: Dictionary, credit: int) -> String:
 		"shiny": _offer_name(offer), "normal": _normal_name(offer), "credit": credit
 	})
 	text += "\n\n" + LocalizationManager.text("ui.mount_collector.binding_bound" if bool(offer.get("accountBound", false)) else "ui.mount_collector.binding_tradeable")
+	if bool(collector_view_state.get("duplicates", false)):
+		text += "\n\n" + LocalizationManager.text("ui.mount_collector.keep_one")
+	elif int(offer.get("shinyOwnedQuantity", offer.get("quantity", 0))) == 1:
+		text += "\n\n" + LocalizationManager.text("ui.mount_collector.last_copy")
 	if bool(offer.get("normalAlreadyOwned", false)):
 		text += "\n\n" + LocalizationManager.text("ui.mount_collector.duplicate")
 	return text
