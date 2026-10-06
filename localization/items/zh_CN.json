@@ -470,5 +470,25 @@
   "primal-kyogre-mount-box": {
     "name": "原始盖欧卡坐骑箱",
     "shortDesc": "包含一只原始盖欧卡冲浪坐骑。初始异色概率：50%。"
+  },
+  "giratina-origin-mount": {
+    "name": "骑拉帝纳起源形态坐骑",
+    "shortDesc": "解锁骑拉帝纳起源形态作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "ho-oh-mount": {
+    "name": "凤王坐骑",
+    "shortDesc": "解锁凤王作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "yveltal-mount": {
+    "name": "伊裴尔塔尔坐骑",
+    "shortDesc": "解锁伊裴尔塔尔作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "miraidon-mount": {
+    "name": "密勒顿坐骑",
+    "shortDesc": "解锁密勒顿作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "reshiram-mount": {
+    "name": "莱希拉姆坐骑",
+    "shortDesc": "解锁莱希拉姆作为陆地坐骑。需要当前地区的坐骑许可证。"
   }
 }

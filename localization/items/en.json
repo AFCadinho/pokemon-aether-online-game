@@ -470,5 +470,25 @@
   "primal-kyogre-mount-box": {
     "name": "Primal Kyogre Mount Box",
     "shortDesc": "Contains a Primal Kyogre Surf mount. Base shiny chance: 50%."
+  },
+  "giratina-origin-mount": {
+    "name": "Giratina Origin Mount",
+    "shortDesc": "Unlocks Giratina Origin as a land mount. Requires a Mount License for the current region."
+  },
+  "ho-oh-mount": {
+    "name": "Ho-Oh Mount",
+    "shortDesc": "Unlocks Ho-Oh as a land mount. Requires a Mount License for the current region."
+  },
+  "yveltal-mount": {
+    "name": "Yveltal Mount",
+    "shortDesc": "Unlocks Yveltal as a land mount. Requires a Mount License for the current region."
+  },
+  "miraidon-mount": {
+    "name": "Miraidon Mount",
+    "shortDesc": "Unlocks Miraidon as a land mount. Requires a Mount License for the current region."
+  },
+  "reshiram-mount": {
+    "name": "Reshiram Mount",
+    "shortDesc": "Unlocks Reshiram as a land mount. Requires a Mount License for the current region."
   }
 }
