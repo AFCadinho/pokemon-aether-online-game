@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Complete the remaining 124 ordinary and 34 Z-move 3D presentations with travelling attack effects, elemental strikes, distinct cast motifs and matching battlefield choreography; bring unprofiled continuous beams closer to their caster.
+
 - Restore Miraidon mount limb and torso details, clear the rider’s face in front view, and keep Miraidon and Yveltal rear tails visible in front of the rider’s lower body.
 
 - Keep mounted player nameplates, badges, chat bubbles and battle indicators above the rider and mount, with stable animation clearance and normal placement after dismounting.
