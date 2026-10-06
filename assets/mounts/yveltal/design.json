@@ -116,24 +116,24 @@
     null,
     [
       [
-        54,
-        116
+        58,
+        96
       ],
       [
-        76,
-        116
+        70,
+        96
       ],
       [
-        82,
+        78,
         126
       ],
       [
-        46,
+        48,
         126
       ]
     ]
   ],
-  "note": "Ruiter achter de kleine kop; vleugels en klauwstaart blijven achter de speler.",
+  "note": "Ruiter achter de kop; achteraan ligt de klauwstaart voor het onderlichaam van de speler.",
   "frameShifts": {
     "down": [
       [
