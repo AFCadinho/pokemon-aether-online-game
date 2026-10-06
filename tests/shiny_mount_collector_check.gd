@@ -2,6 +2,18 @@ extends SceneTree
 
 var failures := 0
 
+class CollectorSyncWorld extends Node:
+	signal continue_sync
+	var hold_sync := true
+	var sync_calls := 0
+	var result := {"success": true}
+
+	func sync_player_position_for_world_action() -> Dictionary:
+		sync_calls += 1
+		if hold_sync:
+			await continue_sync
+		return result
+
 func _init() -> void:
 	_run.call_deferred()
 
@@ -78,12 +90,23 @@ func _run() -> void:
 	var original_script: Script = inventory.get_script()
 	inventory.set_script(load("res://tests/support/fake_mount_collector_inventory.gd"))
 	inventory.collector_offer = offer
+	var world := CollectorSyncWorld.new()
+	root.add_child(world)
+	world.add_to_group("world")
 	var fake_script := load("res://tests/support/fake_mount_collector_npc.gd") as GDScript
 	var npc = load("res://scenes/npcs/dialogue_npc.tscn").instantiate()
 	npc.set_script(fake_script)
 	root.add_child(npc)
 	npc.accept_trade = false
-	await npc.interact_with_player(null)
+	npc.interact_with_player(null)
+	for _frame: int in range(2):
+		await process_frame
+	_check(world.sync_calls == 1 and inventory.catalog_requests == 0 and npc.exchange_in_progress, "First interaction waits for the current map save before requesting collector offers")
+	world.hold_sync = false
+	world.continue_sync.emit()
+	for _frame: int in range(3):
+		await process_frame
+	_check(inventory.catalog_requests > 0 and npc.shown_errors.is_empty() and not npc.exchange_in_progress, "The initial interaction continues successfully as soon as position synchronization finishes")
 	_check(inventory.traded_items.is_empty(), "Canceling confirmation exchanges no mount")
 	npc.accept_trade = true
 	npc.choice_count = 0
@@ -94,7 +117,16 @@ func _run() -> void:
 	_check(inventory.traded_items == ["shiny-glaceon-mount-bound"], "Confirm exchanges exactly one selected shiny and blocks overlapping interactions")
 	_check(not npc.exchange_in_progress, "Collector releases its interaction lock after completing the exchange")
 	_check(npc.shown_dialogue.any(func(line: String) -> bool: return line.contains("received") and line.contains("100")), "Success dialogue reports normal mount and voucher credit")
+	var requests_before_failure: int = inventory.catalog_requests
+	world.result = {"success": false, "error": "fixture position save failure"}
+	await npc.interact_with_player(null)
+	_check(inventory.catalog_requests == requests_before_failure and inventory.traded_items.size() == 1, "Failed position synchronization loads no offers and consumes no mount")
+	_check(npc.shown_errors.size() == 1 and not npc.exchange_in_progress, "Synchronization errors are shown and release the interaction lock")
+	world.result = {"success": true}
+	await npc.interact_with_player(null)
+	_check(inventory.catalog_requests == requests_before_failure + 1 and not npc.exchange_in_progress, "The collector can be used again after a failed position save")
 	npc.queue_free()
+	world.queue_free()
 	await process_frame
 	inventory.set_script(original_script)
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
