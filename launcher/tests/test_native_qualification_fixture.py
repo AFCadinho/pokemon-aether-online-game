@@ -1,12 +1,15 @@
 import hashlib
+import io
 import json
 from pathlib import Path
 import stat
 import tempfile
 import unittest
+from unittest.mock import patch
+import urllib.error
 import zipfile
 
-from native_qualification_fixture import safe_member, unpack, MAX_JSON
+from native_qualification_fixture import safe_member, unpack, fetch, MAX_JSON, DOWNLOAD_USER_AGENT
 
 
 class FixtureTransportChecks(unittest.TestCase):
@@ -109,6 +112,23 @@ class FixtureTransportChecks(unittest.TestCase):
         with self.assertRaises(ValueError):
             unpack(path, digest, destination)
         self.assertEqual((destination / 'keep').read_text(), 'unchanged')
+
+    def test_download_identifies_client_and_preserves_payload(self):
+        response = io.BytesIO(b'exact test bytes')
+        response.url = 'https://assets.example.test/input.zip'
+        destination = self.root / 'download.zip'
+        with patch('native_qualification_fixture.urllib.request.urlopen', return_value=response) as opener:
+            fetch(response.url, destination)
+        request = opener.call_args.args[0]
+        self.assertEqual(request.get_header('User-agent'), DOWNLOAD_USER_AGENT)
+        self.assertEqual(destination.read_bytes(), b'exact test bytes')
+
+    def test_download_http_failure_is_not_hidden(self):
+        destination = self.root / 'download.zip'
+        error = urllib.error.HTTPError('https://assets.example.test/input.zip', 403, 'Forbidden', {}, None)
+        with patch('native_qualification_fixture.urllib.request.urlopen', side_effect=error), self.assertRaises(urllib.error.HTTPError):
+            fetch(error.url, destination)
+        self.assertFalse(destination.exists())
 
 
 if __name__ == '__main__':

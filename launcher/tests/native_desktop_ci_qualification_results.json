@@ -1,0 +1,314 @@
+{
+  "schema": 1,
+  "task": "lossless-native-ci-run",
+  "scope": "11 model pairs / 22 appearances; headless file format and launcher installer",
+  "workflow_executed_on_github": true,
+  "run_id": 37430114921,
+  "run_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37430114921",
+  "branch": "ci/lossless-models-20261006",
+  "tested_commit": "ac998792ba4956dd34c737c5f027f357fed36910",
+  "complete": true,
+  "production_approved": false,
+  "gpu_or_exported_player_build_qualified": false,
+  "full_2400_appearance_platform_run": false,
+  "fixture": {
+    "sha256": "0acc710748557f1818033ef2dab07ef7d7e0bb74c35bb24e021f6bd3caee754d",
+    "bytes": 606979690,
+    "bundles": 11,
+    "appearances": 22,
+    "decoded_equality": true
+  },
+  "targets": [
+    {
+      "target": "linux-x64",
+      "qualified_scope": "native headless model file loading and launcher installation",
+      "job_id": 112159832506,
+      "job_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37430114921/job/112159832506",
+      "complete": true,
+      "host_os": "Linux",
+      "host_architecture": "x86_64",
+      "godot_version": "4.6.2.stable.official.71f334935",
+      "report_sha256": "1e002055798116d57d279516fd870756543fde0fbf89ac4c1c7475689e5a7705",
+      "input_receipt_sha256": "014a8aeffe7c54f14899d23442f15b8bf56df6628768fbe3177d87f14faaf8eb",
+      "artifact_id": 11396941834,
+      "artifact_digest": "sha256:2e34db520d6aff627f54f723110f4c72cb239b122f71cfdc6bbd69556925ab6f",
+      "artifact_expires_at": "2026-10-07T07:30:44Z",
+      "checked_log_files": 30,
+      "phases": [
+        {
+          "published_pins_reject_fixture": true,
+          "phase": "policy",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        },
+        {
+          "active_generation_unchanged": true,
+          "staged_bundles": 1,
+          "paused_partial_bytes": 524288,
+          "phase": "original-pause",
+          "complete": true,
+          "downloads": 1,
+          "resumed_bytes": 0
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "phase": "original",
+          "complete": true,
+          "downloads": 10,
+          "resumed_bytes": 524288
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "same_process_pause_resume": true,
+          "phase": "native-256k",
+          "complete": true,
+          "downloads": 11,
+          "resumed_bytes": 524288
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "automatic_update_queue": true,
+          "phase": "rollback",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        }
+      ]
+    },
+    {
+      "target": "windows-x64",
+      "qualified_scope": "native headless model file loading and launcher installation",
+      "job_id": 112159832521,
+      "job_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37430114921/job/112159832521",
+      "complete": true,
+      "host_os": "Windows",
+      "host_architecture": "x86_64",
+      "godot_version": "4.6.2.stable.official.71f334935",
+      "report_sha256": "a7807464dfe0007d042ce15510502863f398533b4b9c31e83c0002e7bc6b3d9f",
+      "input_receipt_sha256": "94c8279a5fafa84a3f52a10db9683149fa490a3bc7d05cd8930582c193ce18e5",
+      "artifact_id": 11396951851,
+      "artifact_digest": "sha256:3370c3763036dcad71feaffe7dd1ce28a1f8bf3b4cfd6a94c19240539a70ab2a",
+      "artifact_expires_at": "2026-10-07T07:30:44Z",
+      "checked_log_files": 30,
+      "phases": [
+        {
+          "published_pins_reject_fixture": true,
+          "phase": "policy",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        },
+        {
+          "active_generation_unchanged": true,
+          "staged_bundles": 1,
+          "paused_partial_bytes": 1048576,
+          "phase": "original-pause",
+          "complete": true,
+          "downloads": 1,
+          "resumed_bytes": 0
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "phase": "original",
+          "complete": true,
+          "downloads": 10,
+          "resumed_bytes": 1048576
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "same_process_pause_resume": true,
+          "phase": "native-256k",
+          "complete": true,
+          "downloads": 11,
+          "resumed_bytes": 786432
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "automatic_update_queue": true,
+          "phase": "rollback",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        }
+      ]
+    },
+    {
+      "target": "macos-intel",
+      "qualified_scope": "native headless model file loading and launcher installation",
+      "job_id": 112159832582,
+      "job_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37430114921/job/112159832582",
+      "complete": true,
+      "host_os": "Darwin",
+      "host_architecture": "x86_64",
+      "godot_version": "4.6.2.stable.official.71f334935",
+      "report_sha256": "f542742c9e160a4f964d25be7d5514468f1d55f403272a60e5e24cf27703b7ba",
+      "input_receipt_sha256": "014a8aeffe7c54f14899d23442f15b8bf56df6628768fbe3177d87f14faaf8eb",
+      "artifact_id": 11396244721,
+      "artifact_digest": "sha256:be75359005a502f1e94381235a8a163c877bd374288683562e8591e8c883f919",
+      "artifact_expires_at": "2026-10-07T07:30:44Z",
+      "checked_log_files": 30,
+      "phases": [
+        {
+          "published_pins_reject_fixture": true,
+          "phase": "policy",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        },
+        {
+          "active_generation_unchanged": true,
+          "staged_bundles": 1,
+          "paused_partial_bytes": 262144,
+          "phase": "original-pause",
+          "complete": true,
+          "downloads": 1,
+          "resumed_bytes": 0
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "phase": "original",
+          "complete": true,
+          "downloads": 10,
+          "resumed_bytes": 262144
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "same_process_pause_resume": true,
+          "phase": "native-256k",
+          "complete": true,
+          "downloads": 11,
+          "resumed_bytes": 262144
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "automatic_update_queue": true,
+          "phase": "rollback",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        }
+      ]
+    },
+    {
+      "target": "macos-arm64",
+      "qualified_scope": "native headless model file loading and launcher installation",
+      "job_id": 112159832416,
+      "job_url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37430114921/job/112159832416",
+      "complete": true,
+      "host_os": "Darwin",
+      "host_architecture": "arm64",
+      "godot_version": "4.6.2.stable.official.71f334935",
+      "report_sha256": "c66e28766fe205aa6739a2f9dca29833f9b05010d863e98d6c48f2ec72971914",
+      "input_receipt_sha256": "014a8aeffe7c54f14899d23442f15b8bf56df6628768fbe3177d87f14faaf8eb",
+      "artifact_id": 11396912244,
+      "artifact_digest": "sha256:ec8082595ac0857d995569c749a65478cc0290db2c675a3f7d287180d7508d0a",
+      "artifact_expires_at": "2026-10-07T07:30:44Z",
+      "checked_log_files": 30,
+      "phases": [
+        {
+          "published_pins_reject_fixture": true,
+          "phase": "policy",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        },
+        {
+          "active_generation_unchanged": true,
+          "staged_bundles": 1,
+          "paused_partial_bytes": 786432,
+          "phase": "original-pause",
+          "complete": true,
+          "downloads": 1,
+          "resumed_bytes": 0
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "phase": "original",
+          "complete": true,
+          "downloads": 10,
+          "resumed_bytes": 786432
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "same_process_pause_resume": true,
+          "phase": "native-256k",
+          "complete": true,
+          "downloads": 11,
+          "resumed_bytes": 786432
+        },
+        {
+          "verified_appearances": 22,
+          "restart_no_op": true,
+          "automatic_update_queue": true,
+          "phase": "rollback",
+          "complete": true,
+          "downloads": 0,
+          "resumed_bytes": 0
+        }
+      ]
+    }
+  ],
+  "previous_runs": [
+    {
+      "run_id": 37428810235,
+      "commit": "7328c7cda7e167a2926ca5872286606b5ea1f4f7",
+      "url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37428810235",
+      "conclusion": "failure",
+      "cause": "Public edge rejected generic Python user agent before model checks",
+      "targets": {
+        "inputs": "success",
+        "Native files \u2014 linux-x64": "failure",
+        "Native files \u2014 macos-intel": "failure",
+        "Native files \u2014 windows-x64": "failure",
+        "Native files \u2014 macos-arm64": "failure"
+      }
+    },
+    {
+      "run_id": 37429269704,
+      "commit": "06d4b5201ed619d70fba8306577fb40ac8c4500f",
+      "url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37429269704",
+      "conclusion": "failure",
+      "cause": "Windows source paths failed generated fixture override comparison",
+      "targets": {
+        "inputs": "success",
+        "Native files \u2014 linux-x64": "success",
+        "Native files \u2014 windows-x64": "failure",
+        "Native files \u2014 macos-intel": "success",
+        "Native files \u2014 macos-arm64": "success"
+      }
+    },
+    {
+      "run_id": 37429820463,
+      "commit": "acafede91089016fd103867859159d5d300e5c5a",
+      "url": "https://github.com/AFCadinho/pokemon-aether-online-game/actions/runs/37429820463",
+      "conclusion": "cancelled",
+      "cause": "Second Windows release-JSON path list failed the same override; obsolete run canceled",
+      "targets": {
+        "inputs": "success",
+        "Native files \u2014 windows-x64": "failure",
+        "Native files \u2014 linux-x64": "success",
+        "Native files \u2014 macos-intel": "cancelled",
+        "Native files \u2014 macos-arm64": "success"
+      }
+    }
+  ],
+  "local_import_and_installer_control_report_sha256": "379d58d5be069bbb42f3feaa8593301d5e0c45a7e188b4622f23af9da4163a90",
+  "local_checks": {
+    "python_transport_and_path_tests": 15,
+    "python_compilation": "passed",
+    "actionlint": "1.7.12 passed",
+    "whitespace": "passed"
+  }
+}
