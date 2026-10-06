@@ -325,47 +325,47 @@
   },
   "team-rocket-outfit": {
     "name": "Team Rocket-outfitbox",
-    "shortDesc": "Niet verhandelbaar. Open deze box voor een Team Rocket-pet, uniform met handschoenen, broek en laarzen voor het mannelijke model."
+    "shortDesc": "Niet verhandelbaar. Open voor een Team Rocket-uniform, broek / rok, laarzen, pet en optioneel vrouwelijk bobkapsel. De kleding past zich aan je personagemodel aan."
   },
   "team-rocket-shirt": {
     "name": "Team Rocket-uniform",
-    "shortDesc": "Niet verhandelbaar. Verplaats het Team Rocket-uniform met handschoenen voor het mannelijke model naar Character Customization."
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-trousers": {
-    "name": "Team Rocket-broek",
-    "shortDesc": "Niet verhandelbaar. Verplaats de Team Rocket-broek voor het mannelijke model naar Character Customization."
+    "name": "Team Rocket-broek / rok",
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-shoes": {
     "name": "Team Rocket-laarzen",
-    "shortDesc": "Niet verhandelbaar. Verplaats de Team Rocket-laarzen voor het mannelijke model naar Character Customization."
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-cap": {
     "name": "Team Rocket-pet",
-    "shortDesc": "Niet verhandelbaar. Verplaats de Team Rocket-pet voor het mannelijke model naar Character Customization."
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-female-outfit": {
-    "name": "Team Rocket-outfitbox (vrouw)",
-    "shortDesc": "Niet verhandelbaar. Open deze box voor een uniform met handschoenen, rok, laarzen, paars bobkapsel en pet voor het vrouwelijke model."
+    "name": "Team Rocket-outfitbox",
+    "shortDesc": "Niet verhandelbaar. Open voor een Team Rocket-uniform, broek / rok, laarzen, pet en optioneel vrouwelijk bobkapsel. De kleding past zich aan je personagemodel aan."
   },
   "team-rocket-female-shirt": {
-    "name": "Team Rocket-uniform (vrouw)",
-    "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+    "name": "Team Rocket-uniform",
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-female-skirt": {
-    "name": "Team Rocket-rok",
-    "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+    "name": "Team Rocket-broek / rok",
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-female-boots": {
-    "name": "Team Rocket-laarzen (vrouw)",
-    "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+    "name": "Team Rocket-laarzen",
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "team-rocket-female-hair": {
     "name": "Team Rocket-bobkapsel",
     "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
   },
   "team-rocket-female-cap": {
-    "name": "Team Rocket-pet (vrouw)",
-    "shortDesc": "Niet verhandelbaar. Verplaats dit onderdeel voor het vrouwelijke model naar Character Customization."
+    "name": "Team Rocket-pet",
+    "shortDesc": "Niet verhandelbaar. Verplaats dit Team Rocket-onderdeel naar Character Customization. Het uiterlijk past zich aan je personagemodel aan."
   },
   "aether-ronin-outfit": {
     "name": "Aether Ronin-outfitbox",

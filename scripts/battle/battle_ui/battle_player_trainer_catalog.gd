@@ -119,7 +119,9 @@ static func _resolve_part_layer(
 	if not (parts_value is Dictionary):
 		return {}
 	var parts := parts_value as Dictionary
-	var resolved_id := selected_id
+	var resolved_id := CharacterAppearanceService.VARIANTS.render_part_id(
+		str(APPEARANCE_CATEGORY_ALIASES.get(category, category)), selected_id, gender
+	)
 	var used_fallback := false
 	if not parts.has(resolved_id) and is_required:
 		resolved_id = str(category_data.get("fallback", ""))
