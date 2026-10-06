@@ -6505,5 +6505,6 @@
   "ui.bag.mounts.tab_boxes": "Mount Boxes",
   "ui.bag.mounts.filter_all": "Alle ruilstatussen",
   "ui.bag.mounts.filter_tradeable": "Verhandelbaar",
-  "ui.bag.mounts.empty": "Geen mounts gevonden voor deze tab of filters."
+  "ui.bag.mounts.empty": "Geen mounts gevonden voor deze tab of filters.",
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Bevat een Gyarados-surfmount. Shiny-basiskans: 50%."
 }

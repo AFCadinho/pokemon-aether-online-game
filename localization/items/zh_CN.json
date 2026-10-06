@@ -822,5 +822,13 @@
   "thor-outfit": {
     "name": "雷神套装礼盒",
     "shortDesc": "适用于两种性别的四件固定配色物品：盔甲、裤子、靴子，以及附带动态披风和电火花的锤子。请在背包中打开礼盒。"
+  },
+  "shiny-gyarados-mount": {
+    "name": "异色暴鲤龙坐骑",
+    "shortDesc": "解锁异色暴鲤龙作为冲浪坐骑。"
+  },
+  "gyarados-mount-box": {
+    "name": "暴鲤龙冲浪坐骑箱",
+    "shortDesc": "包含一只暴鲤龙冲浪坐骑。初始异色概率：50%。"
   }
 }

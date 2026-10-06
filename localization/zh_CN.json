@@ -6505,5 +6505,6 @@
   "ui.bag.mounts.tab_boxes": "坐骑箱",
   "ui.bag.mounts.filter_all": "全部交易类型",
   "ui.bag.mounts.filter_tradeable": "可交易",
-  "ui.bag.mounts.empty": "没有符合此标签页或筛选条件的坐骑。"
+  "ui.bag.mounts.empty": "没有符合此标签页或筛选条件的坐骑。",
+  "ui.shiny_tracker.mounts.store_description_gyarados": "包含一只暴鲤龙冲浪坐骑。初始异色概率：50%。"
 }

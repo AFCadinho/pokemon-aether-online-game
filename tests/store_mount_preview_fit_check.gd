@@ -34,7 +34,7 @@ func _run() -> void:
 			if not box_id.ends_with("-mount-box"):
 				continue
 			store.call("_select_category", "mounts")
-			store.call("_select_mount_mode", "surf" if box_id in ["primal-kyogre-mount-box", "magikarp-mount-box"] else "land")
+			store.call("_select_mount_mode", Mounts.get_mount_movement_mode(str(store.call("_mount_box_mount_id", box_id))))
 			store.call("_select_product", box_id)
 			for shiny: bool in [false, true]:
 				store.mount_preview_shiny_toggle.button_pressed = shiny

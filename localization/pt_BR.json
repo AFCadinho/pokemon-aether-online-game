@@ -6505,5 +6505,6 @@
   "ui.bag.mounts.tab_boxes": "Mount Boxes",
   "ui.bag.mounts.filter_all": "Todos os vínculos",
   "ui.bag.mounts.filter_tradeable": "Negociáveis",
-  "ui.bag.mounts.empty": "Nenhuma montaria corresponde a esta aba ou aos filtros."
+  "ui.bag.mounts.empty": "Nenhuma montaria corresponde a esta aba ou aos filtros.",
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Contém uma montaria de Surf Gyarados. Chance shiny inicial: 50%."
 }

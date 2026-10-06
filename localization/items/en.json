@@ -822,5 +822,13 @@
   "thor-outfit": {
     "name": "Thor Outfit Box",
     "shortDesc": "Four fixed-colour items for both genders: armor, trousers, boots and a hammer with its moving cape and electric sparks. Open the box in your Bag."
+  },
+  "shiny-gyarados-mount": {
+    "name": "Shiny Gyarados Mount",
+    "shortDesc": "Unlocks Shiny Gyarados as a Surf mount."
+  },
+  "gyarados-mount-box": {
+    "name": "Gyarados Surf Mount Box",
+    "shortDesc": "Contains a Gyarados Surf mount. Base shiny chance: 50%."
   }
 }

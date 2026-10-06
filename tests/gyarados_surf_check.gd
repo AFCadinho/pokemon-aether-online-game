@@ -1,6 +1,6 @@
 extends "res://tests/primal_kyogre_surf_check.gd"
 
-const SURF_VARIANTS := ["gyarados"]
+const SURF_VARIANTS := ["gyarados", "gyarados_shiny"]
 const InteractionChecks := preload("res://tests/kyogre_interaction_height_check.gd")
 
 
@@ -20,10 +20,10 @@ func _run() -> void:
 		_check(Mounts.get_mount_movement_mode(id) == "surf", id + " belongs to Surf")
 		_check(Mounts.resolve_mount_id_for_mode(id, "land").is_empty(), id + " cannot enter the land slot")
 		_check_water_pixels(id)
-		_check(Mounts.is_mount_unlocked(id, ["gyarados-mount-bound"]), "bound admin grant also unlocks Gyarados")
+		_check(Mounts.is_mount_unlocked(id, [str(Mounts.get_mount_definition(id).unlockItemId) + "-bound"]), "bound grant unlocks " + id)
 		_check(Mounts.get_mount_icon_texture(id) != null, "native cropped inventory icon loads")
 		for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
-			_check(root.get_node("ItemLocalization").get_catalog(locale).has("gyarados-mount"), "localized Gyarados entitlement")
+			_check(root.get_node("ItemLocalization").get_catalog(locale).has(Mounts.get_mount_definition(id).unlockItemId), "localized Gyarados entitlement")
 	inventory.cached_inventory_items.append({"itemId": "primal-kyogre-mount", "quantity": 1})
 	var remote := load("res://scripts/world/remote_player_avatar.gd").new() as Node2D
 	root.add_child(remote)

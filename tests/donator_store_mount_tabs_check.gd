@@ -53,11 +53,12 @@ func _run() -> void:
 					_check_visible_bounds(preview.get_node("Look"), store.character_preview_viewport.size)
 			store.mount_preview_animation_toggle.button_pressed = false
 	store.mount_mode_buttons.surf.pressed.emit()
-	_check(store.product_buttons.size() == 7 and store.product_buttons.has("primal-kyogre-mount-box") and store.product_buttons.has("magikarp-mount-box"), "Surf lists all seven Surf boxes")
-	for id: String in ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]:
+	_check(store.product_buttons.size() == 8 and store.product_buttons.has("primal-kyogre-mount-box") and store.product_buttons.has("magikarp-mount-box"), "Surf lists all eight Surf boxes")
+	var surf_prices := {"wailmer": 350, "drednaw": 350, "mantine": 350, "basculegion": 350, "wailord": 350, "gyarados": 500}
+	for id: String in surf_prices:
 		_check(store.product_buttons.has(id + "-mount-box"), id + " box is in Surf")
 		store.call("_select_product", id + "-mount-box")
-		_check(store.selection_price_label.text == store.call("_mount_box_price_text", 350), id + " costs 350 Gems")
+		_check(store.selection_price_label.text == store.call("_mount_box_price_text", surf_prices[id]), id + " approved Gem price")
 		_check(not store.purchase_button.disabled and store.selection_description_label.text.contains("50%"), id + " box is available with the shared shiny chance")
 		for shiny: bool in [false, true]:
 			store.mount_preview_shiny_toggle.button_pressed = shiny
@@ -124,7 +125,7 @@ func _run() -> void:
 	_check(not store.mount_mode_bar.visible, "Mount tabs stay hidden outside Mounts")
 	store.call("_select_category", "mounts")
 	store.call("_select_mount_mode", "surf")
-	store.call("_select_product", "primal-kyogre-mount-box")
+	store.call("_select_product", "gyarados-mount-box")
 	store.call("_select_character_preview_direction", "left")
 	store.mount_preview_shiny_toggle.button_pressed = true
 	for i in range(5):

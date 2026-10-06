@@ -822,5 +822,13 @@
   "thor-outfit": {
     "name": "Caixa de Traje de Thor",
     "shortDesc": "Quatro itens de cores fixas para ambos os gêneros: armadura, calças, botas e um martelo com capa animada e faíscas elétricas. Abra a caixa na Bolsa."
+  },
+  "shiny-gyarados-mount": {
+    "name": "Montaria Gyarados Shiny",
+    "shortDesc": "Desbloqueia Gyarados Shiny como montaria de Surf."
+  },
+  "gyarados-mount-box": {
+    "name": "Caixa de Montaria de Surf Gyarados",
+    "shortDesc": "Contém uma montaria de Surf Gyarados. Chance shiny inicial: 50%."
   }
 }
