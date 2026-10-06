@@ -78,165 +78,167 @@ remain candidates for individual tuning after the user's visual review.
 
 ## Visual review register
 
-All entries below are implemented. Individual user approval is recorded per move.
+All 158 entries below were accepted by the user on 2026-10-06 as part of the
+[current 194-move approval](current-move-approval.md). Future tuning follows actual
+gameplay feedback; no individual visual review remains required for this batch.
 
 | Move | Motif | Space | Seconds | User approval |
 | --- | --- | --- | --- | --- |
-| Aqua Jet | water-rush | path | 1.1 | Pending |
-| Body Press | heavy-ram | path | 1.45 | Pending |
-| Extreme Speed | speed-rush | path | 1.1 | Pending |
-| Fake Out | speed-rush | path | 0.95 | Pending |
-| Flip Turn | water-rush | path | 1.3 | Pending |
-| Frustration | speed-rush | path | 1.3 | Pending |
-| Giga Impact | energy-rush | path | 1.8 | Pending |
-| Grassy Glide | leaf-rush | path | 1.3 | Pending |
-| Head Smash | heavy-ram | path | 1.6 | Pending |
-| Headlong Rush | heavy-ram | path | 1.8 | Pending |
-| Iron Head | heavy-ram | path | 1.3 | Pending |
-| Knock Off | dark-rush | path | 1.3 | Pending |
-| Outrage | energy-rush | path | 2.1 | Pending |
-| Pursuit | speed-rush | path | 1.2 | Pending |
-| Rapid Spin | rolling-rush | path | 1.8 | Pending |
-| Return | speed-rush | path | 1.3 | Pending |
-| Rollout | rolling-rush | path | 2.1 | Pending |
-| Spark | electric-rush | path | 1.45 | Pending |
-| U-turn | return-rush | path | 1.3 | Pending |
-| Wood Hammer | heavy-ram | path | 1.6 | Pending |
-| Bullet Punch | heavy-punch | path | 0.95 | Pending |
+| Aqua Jet | water-rush | path | 1.1 | Approved 2026-10-06 |
+| Body Press | heavy-ram | path | 1.45 | Approved 2026-10-06 |
+| Extreme Speed | speed-rush | path | 1.1 | Approved 2026-10-06 |
+| Fake Out | speed-rush | path | 0.95 | Approved 2026-10-06 |
+| Flip Turn | water-rush | path | 1.3 | Approved 2026-10-06 |
+| Frustration | speed-rush | path | 1.3 | Approved 2026-10-06 |
+| Giga Impact | energy-rush | path | 1.8 | Approved 2026-10-06 |
+| Grassy Glide | leaf-rush | path | 1.3 | Approved 2026-10-06 |
+| Head Smash | heavy-ram | path | 1.6 | Approved 2026-10-06 |
+| Headlong Rush | heavy-ram | path | 1.8 | Approved 2026-10-06 |
+| Iron Head | heavy-ram | path | 1.3 | Approved 2026-10-06 |
+| Knock Off | dark-rush | path | 1.3 | Approved 2026-10-06 |
+| Outrage | energy-rush | path | 2.1 | Approved 2026-10-06 |
+| Pursuit | speed-rush | path | 1.2 | Approved 2026-10-06 |
+| Rapid Spin | rolling-rush | path | 1.8 | Approved 2026-10-06 |
+| Return | speed-rush | path | 1.3 | Approved 2026-10-06 |
+| Rollout | rolling-rush | path | 2.1 | Approved 2026-10-06 |
+| Spark | electric-rush | path | 1.45 | Approved 2026-10-06 |
+| U-turn | return-rush | path | 1.3 | Approved 2026-10-06 |
+| Wood Hammer | heavy-ram | path | 1.6 | Approved 2026-10-06 |
+| Bullet Punch | heavy-punch | path | 0.95 | Approved 2026-10-06 |
 | Close Combat | [2D-inspired combo](close-combat-choreography.md) | path | 2.6 | Approved 2026-10-06 — red/blue barrage |
-| Double Kick | rising-kick | path | 1.6 | Pending |
-| Drain Punch | draining-punch | path | 1.45 | Pending |
-| Fire Punch | elemental-punch | path | 1.45 | Pending |
-| High Jump Kick | rising-kick | path | 1.6 | Pending |
-| Ice Punch | elemental-punch | path | 1.45 | Pending |
-| Low Kick | rising-kick | path | 1.2 | Pending |
-| Pound | heavy-punch | path | 1.1 | Pending |
-| Rock Smash | heavy-punch | path | 1.3 | Pending |
-| Sucker Punch | heavy-punch | path | 0.95 | Pending |
-| Superpower | heavy-punch | path | 1.8 | Pending |
-| Thunder Punch | elemental-punch | path | 1.45 | Pending |
-| Astonish | ghost-strike | path | 1.2 | Pending |
-| Bug Bite | biting-strike | path | 1.2 | Pending |
-| Ceaseless Edge | cross-slash | path | 1.6 | Pending |
-| Dragon Claw | cross-slash | path | 1.45 | Pending |
-| Fury Attack | piercing-strike | path | 1.8 | Pending |
-| Kowtow Cleave | cross-slash | path | 1.6 | Pending |
-| Lick | reaching-lash | path | 1.3 | Pending |
-| Peck | piercing-strike | path | 1.1 | Pending |
-| Razor Shell | cross-slash | path | 1.45 | Pending |
-| Vine Whip | reaching-lash | path | 1.45 | Pending |
-| Wing Attack | cross-slash | path | 1.45 | Pending |
-| Dragon Breath | breath-stream | path | 1.6 | Pending |
-| Electro Shot | electric-beam | path | 1.8 | Pending |
-| Hyper Beam | charged-beam | path | 2.5 | Pending |
-| Scald | breath-stream | path | 1.6 | Pending |
-| Solar Beam | charged-beam | path | 2.5 | Pending |
-| Volt Switch | electric-beam | path | 1.6 | Pending |
-| Fairy Wind | swirling-orb | path | 1.3 | Pending |
-| Hidden Power | swirling-orb | path | 1.45 | Pending |
-| Leafage | leaf-fan | path | 1.2 | Pending |
-| Mud-Slap | arcing-bomb | path | 1.2 | Pending |
-| Pyro Ball | arcing-bomb | path | 2.1 | Pending |
-| Rock Throw | spinning-shards | path | 1.45 | Pending |
-| Water Shuriken | spinning-shards | path | 1.3 | Pending |
-| Weather Ball | swirling-orb | path | 1.45 | Pending |
-| Absorb | returning-drain | path | 1.6 | Pending |
-| Confusion | psychic-tunnel | path | 1.6 | Pending |
-| Dark Pulse | dark-tunnel | path | 1.8 | Pending |
-| Disarming Voice | sound-tunnel | path | 1.6 | Pending |
-| Draining Kiss | heart-stream | path | 1.6 | Pending |
-| Gust | wind-spiral | path | 1.6 | Pending |
-| Hex | dark-tunnel | path | 1.6 | Pending |
-| Psychic | psychic-tunnel | path | 1.8 | Pending |
-| Psychic Noise | sound-tunnel | path | 1.8 | Pending |
-| Psyshock | psychic-tunnel | path | 1.8 | Pending |
-| Screech | sound-tunnel | path | 1.6 | Pending |
-| Sparkling Aria | sound-tunnel | path | 1.8 | Pending |
-| Supersonic | sound-tunnel | path | 1.6 | Pending |
-| Baby-Doll Eyes | heart-stream | path | 1.15 | Pending |
-| Charm | heart-stream | path | 1.15 | Pending |
-| Encore | taunt-glyph | path | 1.15 | Pending |
-| Growl | sound-call | path | 1.15 | Pending |
-| Leech Seed | seed-arc | path | 1.35 | Pending |
-| Leer | taunt-glyph | path | 1.15 | Pending |
-| Poison Powder | powder-cloud | path | 1.35 | Pending |
-| Sand Attack | powder-cloud | path | 1.15 | Pending |
-| Sleep Powder | powder-cloud | path | 1.35 | Pending |
-| Smokescreen | powder-cloud | path | 1.35 | Pending |
-| Spore | powder-cloud | path | 1.35 | Pending |
-| String Shot | woven-threads | path | 1.35 | Pending |
-| Sweet Scent | powder-cloud | path | 1.35 | Pending |
-| Tail Whip | taunt-glyph | path | 1.15 | Pending |
-| Taunt | taunt-glyph | path | 1.15 | Pending |
-| Thunder Wave | paralysis-arcs | path | 1.35 | Pending |
-| Toxic | toxic-arc | path | 1.35 | Pending |
-| Will-O-Wisp | ghost-flames | path | 1.35 | Pending |
-| Agility | orbit-dance | actor | 1.35 | Pending |
-| Calm Mind | inward-focus | actor | 1.65 | Pending |
-| Charge | electric-charge | actor | 1.35 | Pending |
-| Defense Curl | armor-shell | actor | 1.15 | Pending |
-| Double Team | orbit-dance | actor | 1.35 | Pending |
-| Dragon Dance | orbit-dance | actor | 1.65 | Pending |
-| Focus Energy | inward-focus | actor | 1.15 | Pending |
-| Growth | growing-aura | actor | 1.35 | Pending |
-| Harden | armor-shell | actor | 1.15 | Pending |
-| Howl | sound-call | actor | 1.35 | Pending |
-| Nasty Plot | thought-bubbles | actor | 1.35 | Pending |
-| Recover | healing-rise | actor | 1.35 | Pending |
-| Roost | healing-rise | actor | 1.35 | Pending |
-| Swords Dance | sword-circle | actor | 1.65 | Pending |
-| Withdraw | armor-shell | actor | 1.15 | Pending |
-| Aurora Veil | protective-screen | actor | 1.65 | Pending |
-| Chilly Reception | cold-front | arena | 1.65 | Pending |
-| Court Change | exchanging-sides | arena | 1.65 | Pending |
-| Defog | clearing-mist | arena | 1.65 | Pending |
-| Electric Terrain | electric-field | arena | 1.65 | Pending |
-| Future Sight | future-eye | opponent-side | 1.35 | Pending |
-| Grassy Terrain | grass-field | arena | 1.65 | Pending |
-| Haze | clearing-mist | arena | 1.65 | Pending |
-| Light Screen | protective-screen | actor | 1.65 | Pending |
-| Misty Terrain | mist-field | arena | 1.65 | Pending |
-| Protect | protective-screen | actor | 1.65 | Pending |
-| Psychic Terrain | psychic-field | arena | 1.65 | Pending |
-| Reflect | protective-screen | actor | 1.65 | Pending |
-| Spikes | scattered-hazards | opponent-side | 1.65 | Pending |
-| Stealth Rock | scattered-hazards | opponent-side | 1.65 | Pending |
-| Sticky Web | ground-web | opponent-side | 1.65 | Pending |
-| Substitute | phase-portal | actor | 1.35 | Pending |
-| Teleport | phase-portal | actor | 1.35 | Pending |
-| Toxic Spikes | scattered-hazards | opponent-side | 1.65 | Pending |
-| Wish | wishing-star | actor | 1.65 | Pending |
-| 10,000,000 Volt Thunderbolt | rainbow_lightning | arena | 3.4 | Pending |
-| Acid Downpour | acid_column | arena | 3.3 | Pending |
-| All-Out Pummeling | barrage | arena | 3 | Pending |
-| Black Hole Eclipse | black_hole | arena | 4.2 | Pending |
-| Breakneck Blitz | rush | arena | 3 | Pending |
-| Catastropika | electric_dive | arena | 3.3 | Pending |
-| Clangorous Soulblaze | sound_rings | arena | 3.5 | Pending |
-| Continental Crush | boulder | arena | 3.5 | Pending |
-| Corkscrew Crash | drill | arena | 4.2 | Pending |
-| Devastating Drake | dragon | arena | 3.5 | Pending |
-| Extreme Evoboost | evolution | arena | 4.2 | Pending |
-| Genesis Supernova | dna_nova | arena | 4.5 | Pending |
-| Gigavolt Havoc | lightning | arena | 3.2 | Pending |
-| Guardian of Alola | guardian_fist | arena | 3.5 | Pending |
-| Hydro Vortex | water_vortex | arena | 3.4 | Pending |
-| Inferno Overdrive | fire_orb | arena | 3.4 | Pending |
-| Let’s Snuggle Forever | shadow_shroud | arena | 4.6 | Pending |
-| Light That Burns the Sky | sun_nova | arena | 4.6 | Pending |
-| Malicious Moonsault | moonsault | arena | 3.4 | Pending |
-| Menacing Moonraze Maelstrom | moon_column | arena | 3.4 | Pending |
-| Never-Ending Nightmare | chains | arena | 4.2 | Pending |
-| Oceanic Operetta | ocean_orb | arena | 3.8 | Pending |
-| Pulverizing Pancake | body_slam | arena | 4.1 | Pending |
-| Savage Spin-Out | cocoon | arena | 4.1 | Pending |
-| Searing Sunraze Smash | sun_column | arena | 3.4 | Pending |
-| Shattered Psyche | prism | arena | 3.5 | Pending |
-| Sinister Arrow Raid | arrow_rain | arena | 3.1 | Pending |
-| Soul-Stealing 7-Star Strike | seven_stars | arena | 4.1 | Pending |
-| Splintered Stormshards | stone_rain | arena | 3.3 | Pending |
-| Stoked Sparksurfer | electric_surf | arena | 4.4 | Pending |
-| Subzero Slammer | ice_prison | arena | 3.4 | Pending |
-| Supersonic Skystrike | sky_dive | arena | 4 | Pending |
-| Tectonic Rage | fissure | arena | 4.1 | Pending |
-| Twinkle Tackle | fairy_comet | arena | 3.6 | Pending |
+| Double Kick | rising-kick | path | 1.6 | Approved 2026-10-06 |
+| Drain Punch | draining-punch | path | 1.45 | Approved 2026-10-06 |
+| Fire Punch | elemental-punch | path | 1.45 | Approved 2026-10-06 |
+| High Jump Kick | rising-kick | path | 1.6 | Approved 2026-10-06 |
+| Ice Punch | elemental-punch | path | 1.45 | Approved 2026-10-06 |
+| Low Kick | rising-kick | path | 1.2 | Approved 2026-10-06 |
+| Pound | heavy-punch | path | 1.1 | Approved 2026-10-06 |
+| Rock Smash | heavy-punch | path | 1.3 | Approved 2026-10-06 |
+| Sucker Punch | heavy-punch | path | 0.95 | Approved 2026-10-06 |
+| Superpower | heavy-punch | path | 1.8 | Approved 2026-10-06 |
+| Thunder Punch | elemental-punch | path | 1.45 | Approved 2026-10-06 |
+| Astonish | ghost-strike | path | 1.2 | Approved 2026-10-06 |
+| Bug Bite | biting-strike | path | 1.2 | Approved 2026-10-06 |
+| Ceaseless Edge | cross-slash | path | 1.6 | Approved 2026-10-06 |
+| Dragon Claw | cross-slash | path | 1.45 | Approved 2026-10-06 |
+| Fury Attack | piercing-strike | path | 1.8 | Approved 2026-10-06 |
+| Kowtow Cleave | cross-slash | path | 1.6 | Approved 2026-10-06 |
+| Lick | reaching-lash | path | 1.3 | Approved 2026-10-06 |
+| Peck | piercing-strike | path | 1.1 | Approved 2026-10-06 |
+| Razor Shell | cross-slash | path | 1.45 | Approved 2026-10-06 |
+| Vine Whip | reaching-lash | path | 1.45 | Approved 2026-10-06 |
+| Wing Attack | cross-slash | path | 1.45 | Approved 2026-10-06 |
+| Dragon Breath | breath-stream | path | 1.6 | Approved 2026-10-06 |
+| Electro Shot | electric-beam | path | 1.8 | Approved 2026-10-06 |
+| Hyper Beam | charged-beam | path | 2.5 | Approved 2026-10-06 |
+| Scald | breath-stream | path | 1.6 | Approved 2026-10-06 |
+| Solar Beam | charged-beam | path | 2.5 | Approved 2026-10-06 |
+| Volt Switch | electric-beam | path | 1.6 | Approved 2026-10-06 |
+| Fairy Wind | swirling-orb | path | 1.3 | Approved 2026-10-06 |
+| Hidden Power | swirling-orb | path | 1.45 | Approved 2026-10-06 |
+| Leafage | leaf-fan | path | 1.2 | Approved 2026-10-06 |
+| Mud-Slap | arcing-bomb | path | 1.2 | Approved 2026-10-06 |
+| Pyro Ball | arcing-bomb | path | 2.1 | Approved 2026-10-06 |
+| Rock Throw | spinning-shards | path | 1.45 | Approved 2026-10-06 |
+| Water Shuriken | spinning-shards | path | 1.3 | Approved 2026-10-06 |
+| Weather Ball | swirling-orb | path | 1.45 | Approved 2026-10-06 |
+| Absorb | returning-drain | path | 1.6 | Approved 2026-10-06 |
+| Confusion | psychic-tunnel | path | 1.6 | Approved 2026-10-06 |
+| Dark Pulse | dark-tunnel | path | 1.8 | Approved 2026-10-06 |
+| Disarming Voice | sound-tunnel | path | 1.6 | Approved 2026-10-06 |
+| Draining Kiss | heart-stream | path | 1.6 | Approved 2026-10-06 |
+| Gust | wind-spiral | path | 1.6 | Approved 2026-10-06 |
+| Hex | dark-tunnel | path | 1.6 | Approved 2026-10-06 |
+| Psychic | psychic-tunnel | path | 1.8 | Approved 2026-10-06 |
+| Psychic Noise | sound-tunnel | path | 1.8 | Approved 2026-10-06 |
+| Psyshock | psychic-tunnel | path | 1.8 | Approved 2026-10-06 |
+| Screech | sound-tunnel | path | 1.6 | Approved 2026-10-06 |
+| Sparkling Aria | sound-tunnel | path | 1.8 | Approved 2026-10-06 |
+| Supersonic | sound-tunnel | path | 1.6 | Approved 2026-10-06 |
+| Baby-Doll Eyes | heart-stream | path | 1.15 | Approved 2026-10-06 |
+| Charm | heart-stream | path | 1.15 | Approved 2026-10-06 |
+| Encore | taunt-glyph | path | 1.15 | Approved 2026-10-06 |
+| Growl | sound-call | path | 1.15 | Approved 2026-10-06 |
+| Leech Seed | seed-arc | path | 1.35 | Approved 2026-10-06 |
+| Leer | taunt-glyph | path | 1.15 | Approved 2026-10-06 |
+| Poison Powder | powder-cloud | path | 1.35 | Approved 2026-10-06 |
+| Sand Attack | powder-cloud | path | 1.15 | Approved 2026-10-06 |
+| Sleep Powder | powder-cloud | path | 1.35 | Approved 2026-10-06 |
+| Smokescreen | powder-cloud | path | 1.35 | Approved 2026-10-06 |
+| Spore | powder-cloud | path | 1.35 | Approved 2026-10-06 |
+| String Shot | woven-threads | path | 1.35 | Approved 2026-10-06 |
+| Sweet Scent | powder-cloud | path | 1.35 | Approved 2026-10-06 |
+| Tail Whip | taunt-glyph | path | 1.15 | Approved 2026-10-06 |
+| Taunt | taunt-glyph | path | 1.15 | Approved 2026-10-06 |
+| Thunder Wave | paralysis-arcs | path | 1.35 | Approved 2026-10-06 |
+| Toxic | toxic-arc | path | 1.35 | Approved 2026-10-06 |
+| Will-O-Wisp | ghost-flames | path | 1.35 | Approved 2026-10-06 |
+| Agility | orbit-dance | actor | 1.35 | Approved 2026-10-06 |
+| Calm Mind | inward-focus | actor | 1.65 | Approved 2026-10-06 |
+| Charge | electric-charge | actor | 1.35 | Approved 2026-10-06 |
+| Defense Curl | armor-shell | actor | 1.15 | Approved 2026-10-06 |
+| Double Team | orbit-dance | actor | 1.35 | Approved 2026-10-06 |
+| Dragon Dance | orbit-dance | actor | 1.65 | Approved 2026-10-06 |
+| Focus Energy | inward-focus | actor | 1.15 | Approved 2026-10-06 |
+| Growth | growing-aura | actor | 1.35 | Approved 2026-10-06 |
+| Harden | armor-shell | actor | 1.15 | Approved 2026-10-06 |
+| Howl | sound-call | actor | 1.35 | Approved 2026-10-06 |
+| Nasty Plot | thought-bubbles | actor | 1.35 | Approved 2026-10-06 |
+| Recover | healing-rise | actor | 1.35 | Approved 2026-10-06 |
+| Roost | healing-rise | actor | 1.35 | Approved 2026-10-06 |
+| Swords Dance | sword-circle | actor | 1.65 | Approved 2026-10-06 |
+| Withdraw | armor-shell | actor | 1.15 | Approved 2026-10-06 |
+| Aurora Veil | protective-screen | actor | 1.65 | Approved 2026-10-06 |
+| Chilly Reception | cold-front | arena | 1.65 | Approved 2026-10-06 |
+| Court Change | exchanging-sides | arena | 1.65 | Approved 2026-10-06 |
+| Defog | clearing-mist | arena | 1.65 | Approved 2026-10-06 |
+| Electric Terrain | electric-field | arena | 1.65 | Approved 2026-10-06 |
+| Future Sight | future-eye | opponent-side | 1.35 | Approved 2026-10-06 |
+| Grassy Terrain | grass-field | arena | 1.65 | Approved 2026-10-06 |
+| Haze | clearing-mist | arena | 1.65 | Approved 2026-10-06 |
+| Light Screen | protective-screen | actor | 1.65 | Approved 2026-10-06 |
+| Misty Terrain | mist-field | arena | 1.65 | Approved 2026-10-06 |
+| Protect | protective-screen | actor | 1.65 | Approved 2026-10-06 |
+| Psychic Terrain | psychic-field | arena | 1.65 | Approved 2026-10-06 |
+| Reflect | protective-screen | actor | 1.65 | Approved 2026-10-06 |
+| Spikes | scattered-hazards | opponent-side | 1.65 | Approved 2026-10-06 |
+| Stealth Rock | scattered-hazards | opponent-side | 1.65 | Approved 2026-10-06 |
+| Sticky Web | ground-web | opponent-side | 1.65 | Approved 2026-10-06 |
+| Substitute | phase-portal | actor | 1.35 | Approved 2026-10-06 |
+| Teleport | phase-portal | actor | 1.35 | Approved 2026-10-06 |
+| Toxic Spikes | scattered-hazards | opponent-side | 1.65 | Approved 2026-10-06 |
+| Wish | wishing-star | actor | 1.65 | Approved 2026-10-06 |
+| 10,000,000 Volt Thunderbolt | rainbow_lightning | arena | 3.4 | Approved 2026-10-06 |
+| Acid Downpour | acid_column | arena | 3.3 | Approved 2026-10-06 |
+| All-Out Pummeling | barrage | arena | 3 | Approved 2026-10-06 |
+| Black Hole Eclipse | black_hole | arena | 4.2 | Approved 2026-10-06 |
+| Breakneck Blitz | rush | arena | 3 | Approved 2026-10-06 |
+| Catastropika | electric_dive | arena | 3.3 | Approved 2026-10-06 |
+| Clangorous Soulblaze | sound_rings | arena | 3.5 | Approved 2026-10-06 |
+| Continental Crush | boulder | arena | 3.5 | Approved 2026-10-06 |
+| Corkscrew Crash | drill | arena | 4.2 | Approved 2026-10-06 |
+| Devastating Drake | dragon | arena | 3.5 | Approved 2026-10-06 |
+| Extreme Evoboost | evolution | arena | 4.2 | Approved 2026-10-06 |
+| Genesis Supernova | dna_nova | arena | 4.5 | Approved 2026-10-06 |
+| Gigavolt Havoc | lightning | arena | 3.2 | Approved 2026-10-06 |
+| Guardian of Alola | guardian_fist | arena | 3.5 | Approved 2026-10-06 |
+| Hydro Vortex | water_vortex | arena | 3.4 | Approved 2026-10-06 |
+| Inferno Overdrive | fire_orb | arena | 3.4 | Approved 2026-10-06 |
+| Let’s Snuggle Forever | shadow_shroud | arena | 4.6 | Approved 2026-10-06 |
+| Light That Burns the Sky | sun_nova | arena | 4.6 | Approved 2026-10-06 |
+| Malicious Moonsault | moonsault | arena | 3.4 | Approved 2026-10-06 |
+| Menacing Moonraze Maelstrom | moon_column | arena | 3.4 | Approved 2026-10-06 |
+| Never-Ending Nightmare | chains | arena | 4.2 | Approved 2026-10-06 |
+| Oceanic Operetta | ocean_orb | arena | 3.8 | Approved 2026-10-06 |
+| Pulverizing Pancake | body_slam | arena | 4.1 | Approved 2026-10-06 |
+| Savage Spin-Out | cocoon | arena | 4.1 | Approved 2026-10-06 |
+| Searing Sunraze Smash | sun_column | arena | 3.4 | Approved 2026-10-06 |
+| Shattered Psyche | prism | arena | 3.5 | Approved 2026-10-06 |
+| Sinister Arrow Raid | arrow_rain | arena | 3.1 | Approved 2026-10-06 |
+| Soul-Stealing 7-Star Strike | seven_stars | arena | 4.1 | Approved 2026-10-06 |
+| Splintered Stormshards | stone_rain | arena | 3.3 | Approved 2026-10-06 |
+| Stoked Sparksurfer | electric_surf | arena | 4.4 | Approved 2026-10-06 |
+| Subzero Slammer | ice_prison | arena | 3.4 | Approved 2026-10-06 |
+| Supersonic Skystrike | sky_dive | arena | 4 | Approved 2026-10-06 |
+| Tectonic Rage | fissure | arena | 4.1 | Approved 2026-10-06 |
+| Twinkle Tackle | fairy_comet | arena | 3.6 | Approved 2026-10-06 |
