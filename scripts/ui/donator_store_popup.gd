@@ -1574,13 +1574,13 @@ func _show_currency_info() -> void:
 	_refresh_currency_info()
 	currency_info_dialog.cancel_button.hide()
 	currency_info_dialog.accent_icon.texture = GEM_ICON
-	currency_info_dialog.popup_centered(Vector2i(640, 440))
+	currency_info_dialog.popup_centered(Vector2i(520, 280), true)
 	currency_info_dialog.confirm_button.grab_focus()
 
 
 func _refresh_currency_info() -> void:
 	if currency_info_dialog != null:
-		currency_info_dialog.configure(_t("ui.store.currency_info.title"), _t("ui.store.currency_info.body", {"get_gems": _t("ui.store.add_gems")}), _t("common.close"), _t("common.close"))
+		currency_info_dialog.configure(_t("ui.store.currency_info.title"), _t("ui.store.currency_info.body"), _t("common.close"), _t("common.close"))
 
 
 func _hide_currency_info() -> void:
@@ -2072,6 +2072,15 @@ func _create_character_preview_panel() -> Control:
 	selection_description_label.add_theme_color_override("font_color", UI_MUTED_TEXT)
 	layout.add_child(selection_description_label)
 
+	var payment_margin := MarginContainer.new()
+	payment_margin.add_theme_constant_override("margin_left", 11)
+	payment_margin.add_theme_constant_override("margin_right", 11)
+	payment_margin.add_theme_constant_override("margin_top", 6)
+	panel_layout.add_child(payment_margin)
+	var payment_layout := VBoxContainer.new()
+	payment_layout.add_theme_constant_override("separation", 4)
+	payment_margin.add_child(payment_layout)
+
 	payment_select = OptionButton.new()
 	payment_select.name = "StorePaymentMethod"
 	payment_select.custom_minimum_size = Vector2(0, 32)
@@ -2088,13 +2097,14 @@ func _create_character_preview_panel() -> Control:
 	payment_popup.add_theme_font_size_override("font_size", 10)
 	payment_popup.add_theme_color_override("font_color", UI_TEXT)
 	payment_select.item_selected.connect(func(_index: int) -> void: _refresh_purchase_state())
-	layout.add_child(payment_select)
+	payment_layout.add_child(payment_select)
 	voucher_notice_label = Label.new()
 	voucher_notice_label.name = "VoucherBindingNotice"
+	voucher_notice_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	voucher_notice_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	voucher_notice_label.add_theme_font_size_override("font_size", 10)
 	voucher_notice_label.add_theme_color_override("font_color", UI_GOLD)
-	layout.add_child(voucher_notice_label)
+	payment_layout.add_child(voucher_notice_label)
 
 	var checkout_margin := MarginContainer.new()
 	checkout_margin.add_theme_constant_override("margin_left", 11)
@@ -3198,10 +3208,11 @@ func _refresh_purchase_state(update_status: bool = true) -> void:
 		payment_select.visible = not selected_item_id.is_empty() and selected_item_id != "patreon-supporter-preview"
 	if voucher_notice_label != null:
 		voucher_notice_label.visible = payment_select.visible
+		var using_card := _payment_currency() == "gift_voucher"
 		voucher_notice_label.text = _t(
-			"ui.store.voucher.binding" if _payment_currency() == "gift_voucher"
-			else "ui.store.voucher.available" if eligible else "ui.store.voucher.unavailable"
+			"ui.store.payment.untradable" if using_card else "ui.store.payment.tradable"
 		)
+		voucher_notice_label.add_theme_color_override("font_color", UI_GOLD if using_card else UI_MUTED_TEXT)
 	if purchase_in_progress:
 		purchase_button.disabled = true
 		purchase_button.text = _t("ui.store.status.purchasing_short")
