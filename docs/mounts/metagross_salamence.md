@@ -1,6 +1,6 @@
 # Metagross and Salamence
 
-These normal land mounts use the approved V2 artwork at native scale, with the
+These normal and shiny land mounts use the approved V2 artwork at native scale, with the
 existing riding pose, four walking phases and one idle phase in each direction.
 The inventory icons crop away atlas padding.
 
@@ -8,10 +8,20 @@ The inventory icons crop away atlas padding.
 | --- | --- |
 | Metagross | `metagross-mount` |
 | Salamence | `salamence-mount` |
+| Shiny Metagross | `shiny-metagross-mount` |
+| Shiny Salamence | `shiny-salamence-mount` |
 
 Owning an item unlocks the Land selector entry. Regional Mount License rules
 still apply. These items can be granted through existing administration/reward
-tooling. No Gift Store boxes or shiny variants are included in this addition.
+tooling. The Gift Store lists `metagross-mount-box` and `salamence-mount-box`
+under Mounts → Land for 750 Aether Gems each, or 750 eligible Gift Voucher
+credits. Each grants one normal or shiny mount using the existing 50% base
+chance and shared pity rules. Descriptions show only the mount and base chance.
+
+Shiny artwork comes from the matching shiny follower sheets and shares the
+normal design, offsets and masks. Metagross is silver/gold; Salamence is green
+with red wings. The separately requested black/gold Metagross is an offline
+design concept, not this box's shiny reward.
 
 Metagross's side seat is six source pixels higher and four pixels farther back
 than the initial concept. Its fixed body shifts keep the rider steady when the
@@ -32,3 +42,4 @@ Rebuild with `python tools/build_land_mount_collection.py`, or validate with
 Render both models and all poses with `tools/preview_land_mount_collection.gd`
 using the compatibility renderer and arguments
 `-- --mounts=metagross,salamence --output=/absolute/output/folder`.
+Add `--shiny` to capture the shiny variants.

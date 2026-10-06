@@ -538,5 +538,21 @@
   "salamence-mount": {
     "name": "Salamence-mount",
     "shortDesc": "Ontgrendelt Salamence als land-mount. Vereist een Mount License voor de huidige regio."
+  },
+  "shiny-metagross-mount": {
+    "name": "Shiny Metagross-mount",
+    "shortDesc": "Ontgrendelt Shiny Metagross als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "metagross-mount-box": {
+    "name": "Metagross-mountbox",
+    "shortDesc": "Bevat een Metagross-mount. Shiny-basiskans: 50%."
+  },
+  "shiny-salamence-mount": {
+    "name": "Shiny Salamence-mount",
+    "shortDesc": "Ontgrendelt Shiny Salamence als landmount. Vereist een Mount License voor de huidige regio."
+  },
+  "salamence-mount-box": {
+    "name": "Salamence-mountbox",
+    "shortDesc": "Bevat een Salamence-mount. Shiny-basiskans: 50%."
   }
 }

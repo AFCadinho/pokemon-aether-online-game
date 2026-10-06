@@ -6410,5 +6410,7 @@
   "ui.shiny_tracker.mounts.store_description_ho_oh": "Contém uma montaria Ho-Oh. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_yveltal": "Contém uma montaria Yveltal. Chance shiny inicial: 50%.",
   "ui.shiny_tracker.mounts.store_description_miraidon": "Contém uma montaria Miraidon. Chance shiny inicial: 50%.",
-  "ui.shiny_tracker.mounts.store_description_reshiram": "Contém uma montaria Reshiram. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_reshiram": "Contém uma montaria Reshiram. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_metagross": "Contém uma montaria Metagross. Chance shiny inicial: 50%.",
+  "ui.shiny_tracker.mounts.store_description_salamence": "Contém uma montaria Salamence. Chance shiny inicial: 50%."
 }

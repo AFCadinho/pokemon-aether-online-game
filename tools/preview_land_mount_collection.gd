@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Appearance := preload("res://scripts/services/character_appearance_service.gd")
-const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram"]
+const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence"]
 const DIRECTIONS := ["down", "left", "right", "up"]
 
 
