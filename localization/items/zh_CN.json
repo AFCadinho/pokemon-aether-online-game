@@ -758,5 +758,13 @@
   "latias-mount-box": {
     "name": "拉帝亚斯坐骑箱",
     "shortDesc": "包含一只拉帝亚斯坐骑。初始异色概率：50%。"
+  },
+  "caterpie-mount": {
+    "name": "绿毛虫坐骑",
+    "shortDesc": "解锁绿毛虫作为陆地坐骑。需要当前地区的坐骑许可证。"
+  },
+  "magikarp-mount": {
+    "name": "鲤鱼王坐骑",
+    "shortDesc": "解锁鲤鱼王冲浪坐骑。需要拥有冲浪权限。"
   }
 }

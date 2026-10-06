@@ -3169,6 +3169,209 @@
         0,
         8
       ]
+    },
+    "caterpie": {
+      "displayName": "Caterpie",
+      "movementMode": "land",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/caterpie/mount.png",
+      "foregroundSheet": "res://assets/mounts/caterpie/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/caterpie/rider_mask.png",
+      "movementAnimationSpeed": 4,
+      "hoverHeight": 0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -12
+          ],
+          [
+            0,
+            -16
+          ],
+          [
+            0,
+            -14
+          ]
+        ],
+        "left": [
+          [
+            10,
+            -2
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            0
+          ],
+          [
+            10,
+            2
+          ]
+        ],
+        "right": [
+          [
+            -10,
+            -2
+          ],
+          [
+            -10,
+            0
+          ],
+          [
+            -10,
+            0
+          ],
+          [
+            -10,
+            2
+          ]
+        ],
+        "up": [
+          [
+            0,
+            6
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            8
+          ],
+          [
+            0,
+            10
+          ]
+        ]
+      },
+      "unlockItemId": "caterpie-mount",
+      "iconTexture": "res://assets/mounts/caterpie/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/caterpie/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/caterpie/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/caterpie/idle_rider_mask.png"
+    },
+    "magikarp": {
+      "displayName": "Magikarp",
+      "movementMode": "surf",
+      "frameSize": [
+        192,
+        192
+      ],
+      "spriteSheet": "res://assets/mounts/magikarp/mount.png",
+      "foregroundSheet": "res://assets/mounts/magikarp/foreground.png",
+      "riderMaskSheet": "res://assets/mounts/magikarp/rider_mask.png",
+      "movementAnimationSpeed": 4,
+      "hoverHeight": 0,
+      "riderOffsets": {
+        "down": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -22
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -24
+          ]
+        ],
+        "up": [
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -6
+          ],
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -6
+          ]
+        ]
+      },
+      "unlockItemId": "magikarp-mount",
+      "iconTexture": "res://assets/mounts/magikarp/icon.png",
+      "idleSpriteSheet": "res://assets/mounts/magikarp/idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/magikarp/idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/magikarp/idle_rider_mask.png",
+      "surfFishingFullForeground": false,
+      "surfFishingRiderOffsets": {
+        "down": [
+          0,
+          18
+        ],
+        "left": [
+          0,
+          4
+        ],
+        "right": [
+          0,
+          4
+        ],
+        "up": [
+          0,
+          10
+        ]
+      }
     }
   }
 }

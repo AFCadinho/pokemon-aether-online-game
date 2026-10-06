@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add the approved Caterpie V2 land mount and Magikarp V2 Surf mount as permanent administration grants, with aligned ground/water positions and existing access requirements.
+
 ### Adventure and exploration
 
 - Reopen the entrances to Gary’s house in Pallet Town and the Pokémon Center in Vermilion City.

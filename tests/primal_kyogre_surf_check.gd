@@ -18,7 +18,9 @@ func _run() -> void:
 	var actor := _new_local()
 	_check_side_waterline(actor)
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "lapras", "unowned saved Surf selection falls back to Lapras")
-	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}]
+	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "lapras", "unowned Magikarp selection falls back to Lapras")
+	inventory.cached_inventory_items = [{"itemId": "primal-kyogre-mount", "quantity": 1}, {"itemId": "shiny-primal-kyogre-mount", "quantity": 1}, {"itemId": "magikarp-mount", "quantity": 1}]
+	_check(actor.call("_resolve_owned_surf_mount", "magikarp") == "magikarp", "Magikarp grant unlocks the selected Surf mount")
 	_check(actor.call("_resolve_owned_surf_mount", "primal_kyogre") == "primal_kyogre", "grant unlocks the selected Surf mount")
 	_check(Mounts.get_mount_movement_mode("primal_kyogre") == "surf", "Kyogre belongs to Surf")
 	_check(Mounts.resolve_mount_id_for_mode("primal_kyogre", "land").is_empty(), "Kyogre cannot be used as a land mount")
@@ -29,7 +31,7 @@ func _run() -> void:
 	for gender: String in ["male", "female"]:
 		save.gender = gender
 		save.appearance_body_id = Appearance.DEFAULT_FEMALE_BODY_ID if gender == "female" else Appearance.DEFAULT_MALE_BODY_ID
-		for id: String in ["lapras", "primal_kyogre_shiny", "primal_kyogre", "primal_kyogre_shiny", "lapras", "primal_kyogre"]:
+		for id: String in ["lapras", "magikarp", "primal_kyogre_shiny", "magikarp", "primal_kyogre", "primal_kyogre_shiny", "lapras", "magikarp", "primal_kyogre"]:
 			actor.call("_on_mount_loadout_changed", "surf", id)
 			var fresh := _new_local()
 			fresh.set("active_mount_id", id)
@@ -54,15 +56,26 @@ func _run() -> void:
 							var b := Mounts._get_texture_image(expected.sprite_frames.get_frame_texture(expected.animation, expected.frame))
 							_check(a.get_data() == b.get_data(), "mount switch matches freshly composed rider pixels")
 			fresh.free()
+	for id: String in ["primal_kyogre", "magikarp"]:
+		_check_fishing(actor, remote, id)
+	actor.free()
+	remote.free()
+	await process_frame
+	print("Grantable Surf mount checks: ", "FAILED" if failed else "PASS")
+	quit(1 if failed else 0)
+
+
+func _check_fishing(actor: Node2D, remote: Node2D, id: String) -> void:
+	actor.set("active_mount_id", id)
 	actor.set("activity_style", "surf-fish")
 	actor.call("refresh_appearance")
 	actor.call("_sync_mount_visual")
-	remote.call("apply_state", {"userId": 1, "gender": "female", "appearance": Appearance.get_default_appearance("female"), "position": {"x": 0, "y": 0}, "movement": {"isMoving": false, "activityStyle": "surf-fish", "mountId": "primal_kyogre"}})
+	remote.call("apply_state", {"userId": 1, "gender": "female", "appearance": Appearance.get_default_appearance("female"), "position": {"x": 0, "y": 0}, "movement": {"isMoving": false, "activityStyle": "surf-fish", "mountId": id}})
 	for direction: String in ["down", "left", "right", "up"]:
 		_check(actor.call("_get_surf_fish_rider_offset", direction) == remote.call("_get_surf_fish_rider_offset", direction), "fishing seat matches remotely")
-	_check(actor.call("_get_surf_fish_rider_offset", "left") == Vector2(0,4), "Kyogre fishing stays on its own seat")
+	_check(actor.call("_get_surf_fish_rider_offset", "left") == Vector2(0,4), id + " fishing stays on its own seat")
 	for avatar: Node2D in [actor, remote]:
-		_check(avatar.get_node("Look/MountForegroundSprite").sprite_frames == Mounts.get_mount_foreground_frames("primal_kyogre"), "fishing keeps Kyogre's tail behind the rider")
+		_check(avatar.get_node("Look/MountForegroundSprite").sprite_frames == Mounts.get_mount_foreground_frames(id), id + " fishing uses its anatomical foreground")
 	for direction: Vector2 in [Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT, Vector2.UP]:
 		for avatar: Node2D in [actor, remote]:
 			avatar.set("last_direction", direction)
@@ -74,11 +87,6 @@ func _run() -> void:
 		var local_image := Mounts._get_texture_image(local_body.sprite_frames.get_frame_texture(local_body.animation, 0))
 		var remote_image := Mounts._get_texture_image(remote_body.sprite_frames.get_frame_texture(remote_body.animation, 0))
 		_check(local_image.get_data() == remote_image.get_data(), "entering fishing builds matching local and remote body masks")
-	actor.free()
-	remote.free()
-	await process_frame
-	print("Primal Kyogre Surf checks: ", "FAILED" if failed else "PASS")
-	quit(1 if failed else 0)
 
 
 func _check_side_waterline(actor: Node2D) -> void:
