@@ -51,3 +51,14 @@ catalogs, desktop model objects and Pages deployments were not modified.
 The normal workflow's 20,000-object guard remains in place. With the accumulated
 backlog cleared, a normal one-release cleanup contains approximately 10,438
 objects and fits that limit.
+
+## Release test fixture
+
+Certification encountered the mount-switch check's existing 180-second watchdog.
+The fixture now captures each fresh target reference once and sets the origin
+through the same live loadout callback used for the target. The character's
+unchanged appearance is prepared once per gender. Immutable frame pixels are
+read once per transition; all visibility, dimensions, pixels and resource-reuse
+assertions remain. Coverage still includes 46 mounts, 4,232 origin/target
+transitions across both genders, local and remote avatars, and all 20 direction,
+idle and moving-frame samples per avatar. The watchdog remains 180 seconds.
