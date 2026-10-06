@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show varied Gift Store popular picks from distinct Gem buyers over the last 30 completed days: two cosmetic lines, two mounts, one Blessing and one charm, guild emblem or trainer service, with clearly labelled featured fallbacks.
+
 - Add Dialga, Zekrom and Palkia as grantable land mounts with the approved rider poses and regional Mount License requirements.
 
 - Unify Team Rocket clothing into gender-adaptive items and one reward box; keep adaptive cosmetics equipped through gender changes and preserve existing ownership.

@@ -512,7 +512,7 @@ func _run() -> void:
 	var mounts_button := store.category_buttons.get("mounts") as Button
 	_check(mounts_button != null and not mounts_button.visible, "categories without purchasable items stay hidden")
 	store.call("_select_category", "featured")
-	_check(store.product_buttons.size() <= 6, "Featured stays curated to at most six varied products")
+	_check(store.product_buttons.size() <= 6, "Popular stays limited to six varied products")
 	store.call("_select_category", "guilds")
 	_check(store.product_buttons.has("squirtle-guild-emblem-template"), "Guilds lists the Squirtle emblem template")
 	store.call("_select_product", "squirtle-guild-emblem-template")
@@ -799,7 +799,7 @@ func _run() -> void:
 		await process_frame
 		var featured_button := store.category_buttons.get("featured") as Button
 		_check(
-			featured_button != null and featured_button.text == "Uitgelicht",
+			featured_button != null and featured_button.text == "Populair",
 			"Store categories refresh live in Dutch"
 		)
 		_check(
