@@ -117,6 +117,9 @@ func _run() -> void:
 		{"name": "adinho", "local": true, "state": "ready"}, {"name": "m1bhompson", "state": "choosing"}],
 		[{"name": "Trainer Three", "state": "choosing"}, {"name": "Trainer Four", "state": "ready"}])
 	assert(strip.trainer_rows[1][1].name.text == "Trainer Four" and strip.trainer_rows[1][1].status.text == "Ready ✓", "both sides accept two public Trainer statuses")
+	# Nested status chips need the container layout pass before measuring bounds.
+	for _frame in 3:
+		await process_frame
 	await _capture("four-trainers")
 	assert(strip.trainer_rows[0][0].status.text == "Ready ✓" and strip.trainer_rows[0][1].status.text == "Choosing…")
 	_assert_header_bounds(battle)
@@ -149,6 +152,7 @@ func _capture(name: String) -> void:
 	await create_timer(0.1).timeout
 	await RenderingServer.frame_post_draw
 	assert(root.get_texture().get_image().save_png(directory.path_join(name + ".png")) == OK)
+	await process_frame
 
 func _submit(fixture: Node, action: Dictionary) -> void:
 	await fixture.submit_action(action)

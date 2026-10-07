@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Refine Adventure Party team panels with cyan and pink accents, Trainer initial badges, readable status chips and a compact VS emblem in immersive 2D and 3D.
 - Show the current public action and its Pokémon during Adventure Party turn playback, highlight its HP panel, and distinguish a confirmed choice while waiting for the partner.
 - Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
 
