@@ -4,6 +4,10 @@
 
 - Add private Guild Base interiors in Vermilion City: a fixed main hall, two empty side rooms and a lift waiting room, with room doors, Guild-only player visibility and safe recovery when base access is lost.
 
+- Simplify Adventure Party team headers by removing the circular Trainer initial badges.
+
+- Refine Adventure Party team panels with cyan and pink accents, readable status chips and a compact VS emblem in immersive 2D and 3D.
+
 - Prepare an optional experimental 3D choice for Android test builds, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. Standard Android builds remain in 2D.
 
 - Preserve remembered Android and desktop logins through temporary connection failures and server maintenance, and keep unchecked logins unsaved after profile changes.

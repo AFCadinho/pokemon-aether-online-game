@@ -117,6 +117,9 @@ func _run() -> void:
 		{"name": "adinho", "local": true, "state": "ready"}, {"name": "m1bhompson", "state": "choosing"}],
 		[{"name": "Trainer Three", "state": "choosing"}, {"name": "Trainer Four", "state": "ready"}])
 	assert(strip.trainer_rows[1][1].name.text == "Trainer Four" and strip.trainer_rows[1][1].status.text == "Ready ✓", "both sides accept two public Trainer statuses")
+	# Nested status chips need the container layout pass before measuring bounds.
+	for _frame in 3:
+		await process_frame
 	await _capture("four-trainers")
 	assert(strip.trainer_rows[0][0].status.text == "Ready ✓" and strip.trainer_rows[0][1].status.text == "Choosing…")
 	_assert_header_bounds(battle)
@@ -139,6 +142,9 @@ func _assert_header_bounds(battle: Control) -> void:
 		var side: Array = header.team_status_strip.trainer_rows[side_index]
 		var side_bounds: Rect2 = header.team_status_strip.sides[side_index].get_global_rect()
 		for row: Dictionary in side:
+			# NPCs and empty rows have hidden chips; their old bounds are not drawn.
+			if not row.status.is_visible_in_tree():
+				continue
 			assert(not row.name.get_global_rect().intersects(row.status.get_global_rect()), "names and statuses have distinct space")
 			assert(row.status.get_global_rect().end.x <= side_bounds.end.x + 1.0, "each status stays inside its own side panel")
 
@@ -149,6 +155,7 @@ func _capture(name: String) -> void:
 	await create_timer(0.1).timeout
 	await RenderingServer.frame_post_draw
 	assert(root.get_texture().get_image().save_png(directory.path_join(name + ".png")) == OK)
+	await process_frame
 
 func _submit(fixture: Node, action: Dictionary) -> void:
 	await fixture.submit_action(action)

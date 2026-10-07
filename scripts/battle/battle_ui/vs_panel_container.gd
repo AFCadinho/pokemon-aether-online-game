@@ -56,11 +56,12 @@ func _ready() -> void:
 	_refresh_names_panel_width()
 
 
-## Co-op uses the same framed presentation as PvP, grouped by battle side.
+## Co-op groups public Trainer statuses into two styled battle sides.
 ## The ordinary PvP timer path stays separate and retains its existing clocks.
 func show_team_status(left: Array, right: Array) -> void:
 	if team_status_strip == null:
 		team_status_strip = preload("res://scripts/battle/battle_ui/team_status_strip.gd").new()
+		team_status_strip.name = "TeamStatusStrip"
 		add_child(team_status_strip)
 		team_status_strip.configure(player_1_timer_panel.get_theme_stylebox("panel"))
 	names_panel.hide()

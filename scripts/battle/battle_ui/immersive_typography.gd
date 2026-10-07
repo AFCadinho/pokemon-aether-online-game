@@ -32,6 +32,10 @@ func _base_target(control: Control) -> int:
 	var path := str(battle.get_path_to(control))
 	if control.name == "PartySwitchLabel":
 		return 16
+	if "TeamStatusStrip" in path:
+		if control.name == "TrainerName":
+			return 14
+		return 12
 	if "StatStage" in path:
 		# Keep the four-card doubles HUD compact in both immersive modes.
 		var settings := get_node("/root/SettingsManager")
