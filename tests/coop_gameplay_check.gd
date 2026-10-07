@@ -333,7 +333,8 @@ func _run() -> void:
 		and mounted_battle.get_node("%OpponentPartyGrid").current_party_data.size() == 2
 		and not mounted_battle.get_node("%PlayerTrainerSprite").visible
 		and not presenter.get("_second_trainer").visible
-		and mounted_battle.get_node("%VSPanelContainer").player_1_label.text.contains("admin")
+		and mounted_battle.get_node("%VSPanelContainer").team_status_strip.trainer_rows[0][0].name.text.contains("admin")
+		and mounted_battle.get_node("%VSPanelContainer").team_status_strip.trainer_rows[0][1].name.text.contains("afc_adinho")
 		and presenter._role("p1") == "admin" and presenter._role("p3") == "afc_adinho",
 		"field rails combine both teams while the switch bar and log names stay player-specific")
 	var wild_party_rail: PartyGrid = mounted_battle.get_node("%OpponentPartyGrid")

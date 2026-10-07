@@ -35,6 +35,9 @@ var activity: Dictionary = {}
 var view: Dictionary = {}
 var pending_command: Dictionary = {}
 var pending_start: Dictionary = {}
+var command_in_flight := false
+var _command_sequence := 0
+var confirmed_decision_id := ""
 var _polling := false
 var _poll_after := 0.0
 var _session_identity := ""
@@ -80,6 +83,9 @@ func reset() -> void:
 	view = {}
 	pending_command = {}
 	pending_start = {}
+	command_in_flight = false
+	_command_sequence += 1
+	confirmed_decision_id = ""
 	_session_identity = ""
 	_sequence += 1
 	_applied_sequence = _sequence
@@ -137,6 +143,9 @@ func apply_state(body: Dictionary) -> void:
 	if incoming.get("reservationId", "") != activity.get("reservationId", ""):
 		view = {}
 		pending_command = {}
+		command_in_flight = false
+		_command_sequence += 1
+		confirmed_decision_id = ""
 	elif activity.get("status") in ["finished", "cancelled"] and incoming.get("status") in ["starting", "active"]:
 		return
 	activity = incoming.duplicate(true)
@@ -178,11 +187,15 @@ func apply_view(incoming: Dictionary) -> void:
 		return
 	if not view.is_empty() and int(incoming.get("revision", -1)) < int(view.get("revision", -1)):
 		return
+	if view.get("decisionId", "") != incoming.get("decisionId", ""):
+		confirmed_decision_id = ""
 	view = incoming.duplicate(true)
 	if bool(view.get("ended", false)) or (view.get("exitRequest") is Dictionary and not (view["exitRequest"] as Dictionary).is_empty()):
 		_poll_after = 0.0
 	if not pending_command.is_empty() and (view.get("decisionId") != pending_command.get("decisionId") or view.get("locked", true)
 		or (view.get("exitRequest") is Dictionary and not view.get("legalActions", []).has(pending_command.get("action")))):
+		if view.get("decisionId") == pending_command.get("decisionId") and view.get("locked", true):
+			confirmed_decision_id = str(view.get("decisionId", ""))
 		pending_command = {}
 	var recovered: Dictionary = view.get("pendingCapture", {}) if view.get("pendingCapture") is Dictionary else {}
 	if pending_command.is_empty() and not recovered.is_empty() and recovered.get("decisionId") == view.get("decisionId") and not view.get("locked", true) and not view.get("exitRequest"):
@@ -363,46 +376,61 @@ func party_exp_bonus_available() -> bool:
 
 
 func submit_action(action: Dictionary) -> Dictionary:
-	if view.is_empty() or view.get("locked", true) or not pending_command.is_empty():
+	if view.is_empty() or view.get("locked", true) or not pending_command.is_empty() or command_in_flight:
 		return {"success": false}
 	if not (view.get("legalActions", []) as Array).has(action):
 		return {"success": false}
 	pending_command = {"reservationId": activity["reservationId"], "decisionId": view["decisionId"],
 		"idempotencyKey": new_id(), "action": action.duplicate(true)}
-	state_changed.emit()
 	return await retry_command()
 
 
 func retry_command() -> Dictionary:
-	if pending_command.is_empty():
+	if pending_command.is_empty() or command_in_flight:
 		return {"success": false}
+	command_in_flight = true
+	_command_sequence += 1
+	var command_sequence := _command_sequence
+	state_changed.emit()
 	var payload := pending_command.duplicate(true)
 	var capturing: bool = payload.get("action", {}).get("type") == "capture"
 	if capturing:
 		payload["itemId"] = payload["action"]["itemId"]
 		payload.erase("action")
 	var result := await _request("capture" if capturing else "decision", payload)
+	if command_sequence != _command_sequence:
+		return result
+	# A reset or a different activity must not receive a late choice response.
+	if activity.get("reservationId") != payload.get("reservationId") or result.get("code") == "coop_session_changed":
+		command_in_flight = false
+		state_changed.emit()
+		return result
 	if result.get("success", false):
 		pending_command = {}
 		apply_view(result.get("body", {}).get("view", {}))
+		if view.get("decisionId") == payload.get("decisionId"):
+			confirmed_decision_id = str(payload.get("decisionId", ""))
 	else:
 		await refresh()
+		if command_sequence != _command_sequence or activity.get("reservationId") != payload.get("reservationId"):
+			return result
 		if int(result.get("status", 0)) == 409:
 			pending_command = {}
-		request_failed.emit("Connection interrupted. Your choice will be checked before retrying.")
+		if not pending_command.is_empty():
+			request_failed.emit("Connection interrupted. Your choice will be checked before retrying.")
+	command_in_flight = false
 	state_changed.emit()
 	return result
 
 
 func submit_capture(item_id: String) -> Dictionary:
 	var options: Dictionary = view.get("captureOptions", {}) if view.get("captureOptions") is Dictionary else {}
-	if view.get("locked", true) or not pending_command.is_empty() or not options.get("storageAvailable", false):
+	if view.get("locked", true) or not pending_command.is_empty() or command_in_flight or not options.get("storageAvailable", false):
 		return {"success": false}
 	if not options.get("balls", []).any(func(ball: Dictionary) -> bool: return ball.get("itemId") == item_id and int(ball.get("quantity", 0)) > 0):
 		return {"success": false}
 	pending_command = {"reservationId": activity["reservationId"], "decisionId": view["decisionId"],
 		"idempotencyKey": new_id(), "action": {"type": "capture", "itemId": item_id}}
-	state_changed.emit()
 	return await retry_command()
 
 
@@ -434,6 +462,9 @@ func party_action(action: String, payload: Dictionary = {}) -> Dictionary:
 			activity = {}
 			view = {}
 			pending_command = {}
+			command_in_flight = false
+			_command_sequence += 1
+			confirmed_decision_id = ""
 			_poll_after = 0.0
 			state_changed.emit()
 			return result

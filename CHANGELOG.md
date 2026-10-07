@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show Adventure Party battle status per Trainer in two team panels, distinguish sending, choosing, ready and disconnected states without PvE timers, and clarify turn playback and world return.
+
 - Keep Vermilion's guild-garden entrance closed independently of the Guild Registrar's placement beside it.
 
 - Fix invalid Zekrom turbo-flame polygons while starting and stopping movement, preventing repeated rendering errors.
