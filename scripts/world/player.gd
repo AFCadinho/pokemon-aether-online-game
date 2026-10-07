@@ -1053,7 +1053,7 @@ func _ready() -> void:
 	_setup_fishing_prompt()
 	_setup_surf_prompt()
 	if not OS.has_feature("web"):
-		FieldMoveService.refresh_owned_charms.call_deferred()
+		FieldMoveService.refresh_owned_charms.call_deferred(true)
 
 	# Haal de TileMapLayer nodes uit de huidige map op als die al geldig is.
 	# Bij scene switches kan de vorige map al freed zijn terwijl de autoload nog

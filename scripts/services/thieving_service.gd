@@ -14,6 +14,16 @@ const JAIL_BAIL_ENDPOINT := "/game/thieving/jail/bail"
 const REQUEST_TIMEOUT_SECONDS := 8.0
 const ThievingArrestPresenterScript := preload("res://scripts/world/thieving_arrest_presenter.gd")
 
+class StateLoad extends RefCounted:
+	signal completed
+	var session := ""
+	var user_id := ""
+	var generation := 0
+	var result: Dictionary = {}
+
+var pending_state_load: StateLoad
+var state_session := ""
+var state_user_id := ""
 var state: Dictionary = {}
 var state_loaded := false
 var jail_release_generation := 0
@@ -31,7 +41,7 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	var authenticated := AuthService.is_authenticated()
 	if authenticated and not was_authenticated:
-		load_state.call_deferred()
+		ensure_state_loaded.call_deferred()
 	elif not authenticated and was_authenticated:
 		clear_state()
 	was_authenticated = authenticated
@@ -40,14 +50,46 @@ func _process(_delta: float) -> void:
 func load_state() -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {"success": false, "error": "Not authenticated."}
-	var request_generation := state_generation
+	var request_session := AuthService.session_token
+	var request_user_id := AuthService.get_user_id_text()
+	if (
+		pending_state_load != null and pending_state_load.generation == state_generation
+		and pending_state_load.session == request_session and pending_state_load.user_id == request_user_id
+	):
+		var existing_load := pending_state_load
+		await existing_load.completed
+		return existing_load.result.duplicate(true)
+	var ticket := StateLoad.new()
+	ticket.session = request_session
+	ticket.user_id = request_user_id
+	ticket.generation = state_generation
+	pending_state_load = ticket
 	var response := await _request_json(THIEVING_ENDPOINT, HTTPClient.METHOD_GET, "")
-	if request_generation != state_generation:
-		return {"success": false, "error": "Thieving state request was superseded."}
-	if not bool(response.get("success", false)):
-		return response
-	_apply_state(_dictionary_from_value(response.get("body", {})))
-	return {"success": true, "state": state.duplicate(true)}
+	if (
+		ticket.generation != state_generation or request_session != AuthService.session_token
+		or request_user_id != AuthService.get_user_id_text() or not AuthService.is_authenticated()
+	):
+		ticket.result = {"success": false, "error": "Thieving state request was superseded."}
+	elif not bool(response.get("success", false)):
+		ticket.result = response
+	else:
+		_apply_state(_dictionary_from_value(response.get("body", {})))
+		ticket.result = {"success": true, "state": state.duplicate(true)}
+	if pending_state_load == ticket:
+		pending_state_load = null
+	ticket.completed.emit()
+	return ticket.result.duplicate(true)
+
+
+## The auth transition already starts this load. World preparation joins it or
+## reuses its result; explicit load_state() calls still refresh from the server.
+func ensure_state_loaded() -> Dictionary:
+	if (
+		AuthService.is_authenticated() and state_loaded
+		and state_session == AuthService.session_token and state_user_id == AuthService.get_user_id_text()
+	):
+		return {"success": true, "state": state.duplicate(true)}
+	return await load_state()
 
 
 func clear_state() -> void:
@@ -57,6 +99,9 @@ func clear_state() -> void:
 	state_generation += 1
 	state.clear()
 	state_loaded = false
+	state_session = ""
+	state_user_id = ""
+	pending_state_load = null
 	arrest_transfer_pending = false
 	jail_release_generation += 1
 	state_changed.emit({})
@@ -189,6 +234,8 @@ func pay_bail(target_player_id: int) -> Dictionary:
 func _apply_state(next_state: Dictionary) -> void:
 	state = next_state.duplicate(true)
 	state_loaded = true
+	state_session = AuthService.session_token
+	state_user_id = AuthService.get_user_id_text()
 	state_changed.emit(state.duplicate(true))
 	if bool(state.get("jailed", false)) and not bool(state.get("jailPermanent", false)):
 		_schedule_jail_release(max(int(state.get("jailRemainingSeconds", 0)), 0))

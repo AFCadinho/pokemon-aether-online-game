@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Connection and loading
+
+- Reduce login loading work by reusing the authenticated appearance and profile inventory, sharing the initial thieving-state load, and loading saved map resources in the background. Hidden menus and the unused battle interface are now built when needed instead of during world startup.
+
 ### Battles
 
 - Show the actual Pokémon levels while spectating NPC battles, including snapshots with levels stored only in Showdown details and perspective changes.

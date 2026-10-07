@@ -6,6 +6,7 @@ const CharacterAppearanceService := preload("res://scripts/services/character_ap
 const SavedMapScenePathResolver := preload("res://scripts/world/saved_map_scene_path_resolver.gd")
 const LOGO_TEXTURE := preload("res://assets/ui/pokeaether_text_logo.png")
 const BACKGROUND_TEXTURE := preload("res://assets/background/battle/pokemon_x_and_y_battle_background_11_by_phoenixoflight92_d843okx-414w-2x.jpg")
+const StartupTiming := preload("res://scripts/debug/startup_timing.gd")
 const UI_TEXT := Color("#eef4ff")
 const UI_MUTED_TEXT := Color("#8fa3bf")
 const UI_CYAN := Color("#63d7ff")
@@ -131,10 +132,16 @@ func _prepare_world() -> void:
 	if not AuthService.is_authenticated():
 		_return_to_login("Your session expired. Please sign in again.")
 		return
+	var loading_session := AuthService.session_token
+	var loading_user_id := AuthService.get_user_id_text()
 
 	StoryService.reset_story()
 	_set_loading_status("ui.loading.loading_profile", 0)
+	var stage_started := Time.get_ticks_usec()
 	var story_bootstrap_response: Dictionary = await PlayerGameStateService.bootstrap_story()
+	StartupTiming.record("story_bootstrap", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
 	if not bool(story_bootstrap_response.get("success", false)):
 		push_warning(
 			"LoadingScreen: story bootstrap failed: %s"
@@ -142,13 +149,20 @@ func _prepare_world() -> void:
 		)
 		_return_to_login("Could not prepare your story progress. Please try again.")
 		return
+	stage_started = Time.get_ticks_usec()
 	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+	StartupTiming.record("player_profile", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
 	var saved_state: Dictionary = {}
+	var profile_inventory_loaded := false
+	stage_started = Time.get_ticks_usec()
 	if bool(profile_response.get("success", false)):
 		if not _apply_profile_response(profile_response):
 			await AuthService.logout()
 			_return_to_login("The authenticated account did not match its profile.")
 			return
+		profile_inventory_loaded = _apply_profile_inventory(profile_response)
 		var position_response: Dictionary = _dictionary_from_value(profile_response.get("position", {}))
 		if bool(position_response.get("hasState", false)):
 			saved_state = _dictionary_from_value(position_response.get("state", {}))
@@ -174,6 +188,9 @@ func _prepare_world() -> void:
 		elif not bool(position_response.get("success", false)):
 			push_warning("LoadingScreen: player position load failed: %s" % str(position_response.get("error", "Unknown error")))
 
+	StartupTiming.record("profile_hydrate", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
 	# Story bootstrap can already have created the new spawn state with empty
 	# appearance fields. A reset must win over those fields and carry a complete,
 	# gender-correct default outfit into the rebuilt world.
@@ -184,12 +201,21 @@ func _prepare_world() -> void:
 
 	# Mount restoration validates the saved mount against the account inventory.
 	# Hydrate that entitlement cache before the World consumes savedState.
-	var inventory_response: Dictionary = await InventoryService.load_inventory()
-	if not bool(inventory_response.get("success", false)):
-		push_warning("LoadingScreen: inventory load failed: %s" % str(
-			inventory_response.get("error", "Unknown error")
-		))
-	var thieving_response: Dictionary = await ThievingService.load_state()
+	stage_started = Time.get_ticks_usec()
+	if not profile_inventory_loaded:
+		var inventory_response: Dictionary = await InventoryService.load_inventory()
+		if not bool(inventory_response.get("success", false)):
+			push_warning("LoadingScreen: inventory load failed: %s" % str(
+				inventory_response.get("error", "Unknown error")
+			))
+	StartupTiming.record("inventory_bootstrap", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
+	stage_started = Time.get_ticks_usec()
+	var thieving_response: Dictionary = await ThievingService.ensure_state_loaded()
+	StartupTiming.record("thieving_bootstrap", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
 	if not bool(thieving_response.get("success", false)):
 		push_warning("LoadingScreen: thieving state load failed: %s" % str(
 			thieving_response.get("error", "Unknown error")
@@ -209,23 +235,72 @@ func _prepare_world() -> void:
 			_return_to_login("Your saved location is unavailable in the browser version. Download the game client to continue from that location.")
 			return
 
-	GameState.set_prepared_world_state({
-		"savedState": saved_state,
-		"hasSavedState": not saved_state.is_empty(),
-		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
-	})
-
+	stage_started = Time.get_ticks_usec()
 	var world_scene: PackedScene = await _load_world_scene_threaded()
+	StartupTiming.record("world_resources", stage_started)
 	if world_scene == null:
 		_return_to_login("Could not load the world. Please contact staff.")
 		return
 
+	# Keep the saved map alive across the handoff. Its resources load while the
+	# loading screen still draws, instead of a synchronous load in World's ready.
+	var prepared_map: PackedScene
+	if not OS.has_feature("web"):
+		var scene_path := SavedMapScenePathResolver.resolve(str(saved_state.get("mapScenePath", "")))
+		if not scene_path.is_empty() and ResourceLoader.exists(scene_path):
+			stage_started = Time.get_ticks_usec()
+			prepared_map = await _load_saved_map_scene_threaded(scene_path)
+			StartupTiming.record("saved_map_resources", stage_started)
+	if not _continue_preparing_session(loading_session, loading_user_id):
+		return
+	GameState.set_prepared_world_state({
+		"savedState": saved_state,
+		"hasSavedState": not saved_state.is_empty(),
+		"mapScene": prepared_map,
+		"blackoutLoss": int(_dictionary_from_value(profile_response.get("position", {})).get("blackoutLoss", 0)),
+	})
+	stage_started = Time.get_ticks_usec()
 	var error: Error = get_tree().change_scene_to_packed(world_scene)
+	StartupTiming.record("world_instantiate", stage_started)
 	if error != OK:
 		push_error("LoadingScreen: failed to load world scene: %s" % error_string(error))
 		_return_to_login("Could not enter the world. Please contact staff.")
 	else:
 		AuthService.finish_account_switch()
+
+
+func _continue_preparing_session(session: String, user_id: String) -> bool:
+	if AuthService.is_authenticated() and AuthService.session_token == session and AuthService.get_user_id_text() == user_id:
+		return true
+	_return_to_login("Your session changed while loading. Please continue from the login screen.")
+	return false
+
+
+func _apply_profile_inventory(profile_response: Dictionary) -> bool:
+	var profile_user := _dictionary_from_value(profile_response.get("user", {}))
+	if AuthService.get_user_id_text_from(profile_user) != AuthService.get_user_id_text() or not AuthService.is_authenticated():
+		return false
+	var inventory := _dictionary_from_value(profile_response.get("inventory", {}))
+	# Incomplete older profile schemas use the full inventory endpoint fallback.
+	for key: String in ["items", "borrowedItems", "mountLicenseRegions"]:
+		if inventory.get(key) is not Array:
+			return false
+	return InventoryService.apply_inventory_state(inventory)
+
+
+func _load_saved_map_scene_threaded(scene_path: String) -> PackedScene:
+	var error := ResourceLoader.load_threaded_request(scene_path, "PackedScene")
+	if error != OK and error != ERR_BUSY:
+		return null
+	while true:
+		match ResourceLoader.load_threaded_get_status(scene_path):
+			ResourceLoader.THREAD_LOAD_LOADED:
+				return ResourceLoader.load_threaded_get(scene_path) as PackedScene
+			ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+				await get_tree().process_frame
+			_:
+				return null
+	return null
 
 
 func _load_world_scene_threaded() -> PackedScene:

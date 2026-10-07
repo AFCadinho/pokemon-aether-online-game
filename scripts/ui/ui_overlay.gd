@@ -1,5 +1,6 @@
 extends CanvasLayer
 
+const StartupTiming := preload("res://scripts/debug/startup_timing.gd")
 const MobileKeyboardAvoidance := preload("res://scripts/ui/mobile_keyboard_avoidance.gd")
 const TouchTargetSize := preload("res://scripts/ui/touch_target_size.gd")
 
@@ -1801,6 +1802,7 @@ func _notification(what: int) -> void:
 
 
 func _ready() -> void:
+	var startup_started := Time.get_ticks_usec()
 	add_to_group("ui_overlay")
 	layer = UI_OVERLAY_BASE_LAYER
 	root_control.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1813,24 +1815,17 @@ func _ready() -> void:
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not InventoryService.mount_box_opened.is_connected(_on_mount_box_inventory_updated):
+		InventoryService.mount_box_opened.connect(_on_mount_box_inventory_updated)
 	if not InventoryService.item_received.is_connected(_on_inventory_item_received):
 		InventoryService.item_received.connect(_on_inventory_item_received)
 	LocalizationManager.localize_tree(self)
 	_setup_player_status_card()
 	_setup_quest_journal_ui()
 	_setup_status_docks()
-	_setup_trainer_card_popup()
-	_setup_donator_store_popup()
 	_setup_bag_popup()
 	_setup_bag_item_context_menu()
 	_setup_party_slot_context_menu()
-	_setup_market_popup()
-	_setup_aether_exchange_popup()
-	_setup_aether_atelier_popup()
-	_setup_bank_popup()
-	_setup_move_mentor_popup()
-	_setup_move_deleter_popup()
-	_setup_shiny_tracker_popup()
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
@@ -2082,6 +2077,8 @@ func _ready() -> void:
 	if settings_menu.has_signal("closed"):
 		settings_menu.closed.connect(_on_settings_menu_closed)
 	settings_menu.gui_input.connect(_on_focusable_overlay_panel_gui_input.bind(settings_menu))
+
+	StartupTiming.record("ui_overlay_ready", startup_started)
 
 
 func _apply_mobile_right_quick_buttons() -> void:
@@ -11605,7 +11602,10 @@ func _refresh_key_item_inventory() -> void:
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	if inventory_service == null or not inventory_service.has_method("load_inventory"):
 		return
-	await inventory_service.call("load_inventory")
+	if inventory_service.has_method("ensure_inventory_loaded"):
+		await inventory_service.call("ensure_inventory_loaded")
+	else:
+		await inventory_service.call("load_inventory")
 	_refresh_key_item_unlock_state()
 
 
@@ -15279,6 +15279,7 @@ func _setup_donator_store_popup() -> void:
 	root_control.add_child(donator_store_popup)
 
 func _on_donator_store_button_pressed() -> void:
+	_setup_donator_store_popup()
 	if donator_store_popup == null:
 		return
 	if donator_store_popup.visible:
@@ -16093,6 +16094,8 @@ func _refresh_trainer_card_localized_ui() -> void:
 		_show_public_trainer_card(public_trainer_card_data)
 
 func _setup_trainer_card_popup() -> void:
+	if trainer_card_popup != null:
+		return
 	trainer_card_popup = PanelContainer.new()
 	trainer_card_popup.name = "TrainerCardPopup"
 	trainer_card_popup.visible = false
@@ -19630,6 +19633,7 @@ func _move_trainer_card_to_global_position(global_top_left: Vector2, popup: Pane
 	popup.offset_bottom = local_offset.y + card_size.y
 
 func _show_trainer_card() -> void:
+	_setup_trainer_card_popup()
 	if trainer_card_popup == null:
 		return
 
@@ -22729,6 +22733,8 @@ func _setup_bag_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(bag_detail_hotbar_button)
 
 func _setup_market_popup() -> void:
+	if market_popup != null:
+		return
 	market_popup = PanelContainer.new()
 	market_popup.name = "MarketPopup"
 	market_popup.visible = false
@@ -23147,6 +23153,7 @@ func _setup_market_detail_panel(panel: PanelContainer) -> void:
 	layout.add_child(market_delivery_hint_label)
 
 func open_market(market: Dictionary, requested_mode: String = "player_buys", inventory_items: Array = []) -> void:
+	_setup_market_popup()
 	if market_popup == null:
 		return
 	market_mode = requested_mode if requested_mode in ["player_buys", "player_sells"] else "player_buys"
@@ -23198,6 +23205,8 @@ func _hide_market_popup() -> void:
 	market_purchase_in_progress = false
 
 func _setup_aether_atelier_popup() -> void:
+	if aether_atelier_popup != null:
+		return
 	aether_atelier_popup = AETHER_ATELIER_POPUP_SCENE.instantiate() as AetherAtelierPopup
 	if aether_atelier_popup == null:
 		return
@@ -23207,28 +23216,39 @@ func _setup_aether_atelier_popup() -> void:
 	aether_atelier_popup.chroma_dyed.connect(_on_aether_atelier_chroma_dyed)
 
 func _setup_bank_popup() -> void:
+	if bank_popup != null:
+		return
 	bank_popup = BANK_POPUP_SCENE.instantiate() as BankPopup
 	if bank_popup == null:
 		return
 	root_control.add_child(bank_popup)
+	_set_ui_panel_base_z(bank_popup)
 	bank_popup.closed.connect(_hide_bank)
 	bank_popup.wallet_changed.connect(refresh_money_display)
 
 func _setup_move_mentor_popup() -> void:
+	if move_mentor_popup != null:
+		return
 	move_mentor_popup = MOVE_MENTOR_POPUP_SCENE.instantiate()
 	if move_mentor_popup == null:
 		return
 	root_control.add_child(move_mentor_popup)
+	_set_ui_panel_base_z(move_mentor_popup)
 	move_mentor_popup.closed.connect(_hide_move_mentor)
 
 func _setup_move_deleter_popup() -> void:
+	if move_deleter_popup != null:
+		return
 	move_deleter_popup = MOVE_DELETER_POPUP_SCENE.instantiate()
 	if move_deleter_popup == null:
 		return
 	root_control.add_child(move_deleter_popup)
+	_set_ui_panel_base_z(move_deleter_popup)
 	move_deleter_popup.closed.connect(_hide_move_deleter)
 
 func _setup_aether_exchange_popup() -> void:
+	if aether_exchange_popup != null:
+		return
 	aether_exchange_popup = AETHER_EXCHANGE_POPUP_SCENE.instantiate() as AetherExchangePopup
 	if aether_exchange_popup == null:
 		return
@@ -23308,13 +23328,14 @@ func _hide_gift_voucher_balance() -> void:
 
 
 func _setup_shiny_tracker_popup() -> void:
+	if shiny_tracker_popup != null:
+		return
 	shiny_tracker_popup = SHINY_TRACKER_POPUP_SCENE.instantiate() as ShinyTrackerPopup
 	if shiny_tracker_popup == null:
 		return
 	root_control.add_child(shiny_tracker_popup)
 	shiny_tracker_popup.closed.connect(_hide_shiny_tracker)
 	shiny_tracker_popup.share_requested.connect(_on_shiny_tracker_share_requested)
-	InventoryService.mount_box_opened.connect(_on_mount_box_inventory_updated)
 
 func _on_mount_box_inventory_updated(_result: Dictionary) -> void:
 	bag_inventory_items = _normalize_bag_inventory_items(InventoryService.cached_inventory_items)
@@ -23322,6 +23343,7 @@ func _on_mount_box_inventory_updated(_result: Dictionary) -> void:
 	_refresh_bag_items()
 
 func _show_shiny_tracker(tab: String = "pokemon") -> void:
+	_setup_shiny_tracker_popup()
 	if shiny_tracker_popup == null:
 		return
 	shiny_tracker_popup.visible = true
@@ -23349,6 +23371,7 @@ func _on_shiny_tracker_share_requested(hunt: Dictionary) -> void:
 		_add_chat_message(LocalizationManager.text("ui.chat.error.reconnecting"))
 
 func open_aether_atelier() -> void:
+	_setup_aether_atelier_popup()
 	if aether_atelier_popup == null:
 		return
 	aether_atelier_popup.visible = true
@@ -23356,6 +23379,7 @@ func open_aether_atelier() -> void:
 	aether_atelier_popup.open_atelier()
 
 func open_bank() -> void:
+	_setup_bank_popup()
 	if bank_popup == null:
 		return
 	bank_popup.visible = true
@@ -23369,6 +23393,7 @@ func _hide_bank() -> void:
 	_deactivate_ui_panel(bank_popup)
 
 func open_move_mentor() -> void:
+	_setup_move_mentor_popup()
 	if move_mentor_popup == null:
 		return
 	move_mentor_popup.visible = true
@@ -23382,6 +23407,7 @@ func _hide_move_mentor() -> void:
 	_deactivate_ui_panel(move_mentor_popup)
 
 func open_move_deleter() -> void:
+	_setup_move_deleter_popup()
 	if move_deleter_popup == null:
 		return
 	move_deleter_popup.visible = true
@@ -45432,6 +45458,7 @@ func _cancel_authorized_teleport_effect(world: Node) -> void:
 		world.call("cancel_authorized_teleport")
 
 func _on_aether_exchange_button_pressed() -> void:
+	_setup_aether_exchange_popup()
 	if aether_exchange_popup == null:
 		return
 	aether_exchange_popup.visible = true
@@ -53182,6 +53209,7 @@ func _on_chat_shiny_hunt_pressed(share_id: String) -> void:
 	if not bool(result.get("success", false)):
 		_add_chat_message(str(result.get("error", LocalizationManager.text("ui.shiny_tracker.error.shared_load"))))
 		return
+	_setup_shiny_tracker_popup()
 	if shiny_tracker_popup == null:
 		return
 	shiny_tracker_popup.visible = true
