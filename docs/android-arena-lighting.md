@@ -132,3 +132,7 @@ baseline/HDR/sun probes, host Forward+/Compatibility/Mobile isolation probes,
 `outdoor_lighting_check.gd`, and the native Vulkan/Mobile run with the emulator
 workaround passed. Failed Vulkan runs with default frame pacing are retained
 and not counted as successes. No release certification or deployment.
+
+The subsequent [full battle presentation budget](android-battle-budget.md)
+records both arena passes, approved Pokémon, Mega preparation and arena reuse,
+and explains the emulator's inflated texture accounting.

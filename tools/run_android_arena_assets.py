@@ -24,6 +24,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--battle-budget', action='store_true', help='Full battle suite in the existing dedicated 3D debug app; never clear its cache')
     parser.add_argument('--assets', type=Path, required=True)
     parser.add_argument('--apk', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
@@ -33,6 +34,12 @@ def main():
     parser.add_argument('--variant', choices=['desktop-art', 'android-etc2-art'])
     parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
+    global PACKAGE
+    prefix = 'android-battle-budget' if args.battle_budget else 'android-arena'
+    if args.battle_budget:
+        if args.variant != 'android-etc2-art' or args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline':
+            parser.error('Battle budget requires ETC2, Mobile and baseline lighting')
+        PACKAGE = 'com.pokeaether.android3dpilot'
     if not 60 <= args.timeout <= 1800:
         parser.error('Timeout must be 60..1800 seconds')
     assets, apk, output = [p.resolve() for p in [args.assets, args.apk, args.output]]
@@ -66,13 +73,19 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
     summaries = []
     try:
+        if args.battle_budget:
+            capabilities = device('shell', 'cmd', 'gpu', 'vkjson', check=False)
+            if capabilities.returncode == 0:
+                (output / 'vulkan-capabilities.json').write_text(capabilities.stdout)
         device('reverse', 'tcp:8799', 'tcp:8799')
         device('install', '--no-incremental', '-r', str(apk))
         for variant in ([args.variant] if args.variant else ['desktop-art', 'android-etc2-art']):
             folder = output / variant
             folder.mkdir(exist_ok=True)
             device('shell', 'am', 'force-stop', PACKAGE)
-            device('shell', 'run-as', PACKAGE, 'rm', '-f', 'files/android-arena-details.json', 'files/android-arena-results.json', 'files/android-arena-capture.png')
+            captures = ['normal', 'shiny', 'sleep', 'effect', 'large', 'reused'] if args.battle_budget else ['capture']
+            stale = [f'files/{prefix}-{name}' for name in ['details.json','results.json','phase']] + [f'files/{prefix}-{name}.png' for name in captures]
+            device('shell', 'run-as', PACKAGE, 'rm', '-f', *stale)
             # Literal controlled names only; no user text in a remote shell.
             device('shell', 'run-as', PACKAGE, 'mkdir', '-p', 'files')
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {variant} > files/android-arena-variant'")
@@ -81,7 +94,7 @@ def main():
             deadline = time.monotonic() + args.timeout
             memory = []
             while time.monotonic() < deadline:
-                done = device('shell', 'run-as', PACKAGE, 'cat', 'files/android-arena-results.json', check=False)
+                done = device('shell', 'run-as', PACKAGE, 'cat', f'files/{prefix}-results.json', check=False)
                 if done.returncode == 0:
                     break
                 pid = device('shell', 'pidof', PACKAGE, check=False).stdout.strip()
@@ -91,24 +104,36 @@ def main():
                 status = device('shell', 'dumpsys', 'meminfo', PACKAGE, check=False).stdout
                 pss = re.search(r'TOTAL PSS:\s*(\d+)', status)
                 rss = re.search(r'TOTAL RSS:\s*(\d+)', status)
-                memory.append({'time': time.time(), 'pss_kib': int(pss[1]) if pss else 0, 'rss_kib': int(rss[1]) if rss else 0})
+                phase = device('shell', 'run-as', PACKAGE, 'cat', f'files/{prefix}-phase', check=False).stdout.strip() if args.battle_budget else ''
+                memory.append({'phase': phase, 'time': time.time(), 'pss_kib': int(pss[1]) if pss else 0, 'rss_kib': int(rss[1]) if rss else 0})
                 (folder / 'memory.json').write_text(json.dumps(memory, indent=2))
                 time.sleep(2)
             else:
                 raise TimeoutError('Arena test timed out: ' + variant)
-            details = json.loads(device('shell', 'run-as', PACKAGE, 'cat', 'files/android-arena-details.json').stdout)
+            details = json.loads(device('shell', 'run-as', PACKAGE, 'cat', f'files/{prefix}-details.json').stdout)
             (folder / 'details.json').write_text(json.dumps(details, indent=2))
             (folder / 'result.json').write_text(done.stdout)
             pid = device('shell', 'pidof', PACKAGE).stdout.strip()
             log = device('logcat', '--pid=' + pid, '-d', '-v', 'brief', 'godot:V', '*:S').stdout
             (folder / 'native.log').write_text(log)
-            (folder / 'capture.png').write_bytes(device('exec-out', 'run-as', PACKAGE, 'cat', 'files/android-arena-capture.png', binary=True).stdout)
+            missing_captures = []
+            for name in captures:
+                capture = device('exec-out', 'run-as', PACKAGE, 'cat', f'files/{prefix}-{name}.png', binary=True, check=False)
+                if capture.returncode == 0 and capture.stdout.startswith(b'\x89PNG'):
+                    (folder / (name + '.png')).write_bytes(capture.stdout)
+                else:
+                    missing_captures.append(name)
             native_errors = [line for line in log.splitlines() if 'SCRIPT ERROR:' in line or '): ERROR:' in line]
             codes = json.loads(done.stdout)
-            success = (not native_errors and details.get('success', False) and bool(codes) and all(v == 0 for v in codes.values())
+            success = (not missing_captures and not native_errors and details.get('success', False) and bool(codes) and all(v == 0 for v in codes.values())
                        and (not args.expect_renderer or details.get('renderer') == args.expect_renderer))
+            if args.battle_budget:
+                expected = ['autoloads','forest-resources','arena-main','arena-response','arena-suspended',
+                            'battle-normal','battle-shiny','battle-sleep','battle-mega','battle-after-effect',
+                            'battle-large','battle-released','battle-reused']
+                success = success and details.get('suite') == 'android-battle-budget' and [p['label'] for p in details.get('phases', [])] == expected
             summary = {'variant': variant, 'success': success, 'peak_pss_kib': max((m['pss_kib'] for m in memory), default=0),
-                       'peak_rss_kib': max((m['rss_kib'] for m in memory), default=0), 'expected_renderer': args.expect_renderer, 'native_errors': native_errors, 'details': details}
+                       'peak_rss_kib': max((m['rss_kib'] for m in memory), default=0), 'expected_renderer': args.expect_renderer, 'native_errors': native_errors, 'missing_captures': missing_captures, 'details': details}
             summaries.append(summary)
             (output / 'summary.json').write_text(json.dumps(summaries, indent=2))
             print(json.dumps(summary), flush=True)
@@ -116,8 +141,11 @@ def main():
                 raise RuntimeError('Diagnostic failed: ' + variant)
     finally:
         try:
-            device('shell', 'am', 'force-stop', PACKAGE, check=False)
-            device('reverse', '--remove', 'tcp:8799', check=False)
+            for command in [('shell', 'am', 'force-stop', PACKAGE), ('reverse', '--remove', 'tcp:8799')]:
+                try:
+                    device(*command, check=False)
+                except subprocess.TimeoutExpired:
+                    print('Emulator unavailable during cleanup:', command[0], flush=True)
         finally:
             server.shutdown()
             server.server_close()
