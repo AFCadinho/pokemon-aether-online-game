@@ -26,7 +26,8 @@ func create_triggered_wild_battle(
 	origin: Dictionary = {},
 	debug_time_of_day: String = "",
 	forced_species_id: String = "",
-	static_encounter_id: String = ""
+	static_encounter_id: String = "",
+	position: Dictionary = {}
 ) -> Dictionary:
 	var payload := {
 		"player": player,
@@ -42,11 +43,9 @@ func create_triggered_wild_battle(
 		payload["debugTimeOfDay"] = debug_time_of_day
 	if forced_species_id.strip_edges() != "":
 		payload["forcedSpeciesId"] = forced_species_id.strip_edges()
-	return await send_post_request(
-		request_node,
-		"/battle/wild-encounter",
-		payload
-	)
+	if not position.is_empty():
+		return await _send_position_start(request_node, "/battle/wild-encounter", payload, position)
+	return await send_post_request(request_node, "/battle/wild-encounter", payload)
 
 func create_dev_wild_battle(
 	request_node: HTTPRequest,
@@ -85,18 +84,86 @@ func create_trainer_battle(
 	request_node: HTTPRequest,
 	player: Dictionary,
 	trainer_id: String,
-	is_rematch := false
+	is_rematch := false,
+	position: Dictionary = {}
 ) -> Dictionary:
-	return await send_post_request(
-		request_node,
-		"/battle/trainer",
-		{
-			"player": player,
-			"trainerId": trainer_id,
-			"formatId": FORMAT_ID,
-			"isRematch": is_rematch,
-		}
-	)
+	var payload := {"player": player, "trainerId": trainer_id, "formatId": FORMAT_ID, "isRematch": is_rematch}
+	if not position.is_empty():
+		return await _send_position_start(request_node, "/battle/trainer", payload, position)
+	return await send_post_request(request_node, "/battle/trainer", payload)
+
+
+func _is_missing_batch_route(response: Dictionary) -> bool:
+	# Only an unimplemented route is safe to retry through the old boundary.
+	# A timeout, missing trainer, or a partially completed start must not replay.
+	if int(response.get("status", 0)) == 404 and str(response.get("detail", "")) == "Not Found":
+		return true
+	# An older browser bridge rejects unknown routes before forwarding them.
+	var detail: Variant = response.get("detail")
+	return int(response.get("status", 0)) == 403 and detail is Dictionary and str(detail.get("code", "")) == "web_route_not_allowed"
+
+
+func _send_position_start(request_node: HTTPRequest, path: String, battle: Dictionary, position: Dictionary) -> Dictionary:
+	var session: String = str(AuthService.session_token)
+	var repel_result: Dictionary = await RepelService.flush()
+	if not bool(repel_result.get("success", false)):
+		return repel_result
+	if session.is_empty() or session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
+	var response := await send_post_request(request_node, path + "/start", {
+		"battle": battle, "position": position, "webClient": OS.has_feature("web"),
+	}, session)
+	if session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
+	if not response.has("positionResponse") and _is_missing_batch_route(response):
+		var saved: Dictionary = await PlayerGameStateService.save_player_position(position)
+		if not bool(saved.get("success", false)):
+			return saved
+		if session != str(AuthService.session_token):
+			return {"success": false, "error": "The account session changed."}
+		_apply_saved_walking_happiness(battle, saved)
+		response = await send_post_request(request_node, path, battle, session)
+		response["positionResponse"] = saved
+	if session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
+	if bool(response.get("success", false)):
+		var saved_value: Variant = response.get("positionResponse", {})
+		if not (saved_value is Dictionary) or not bool(saved_value.get("success", false)) or not (saved_value.get("state") is Dictionary):
+			return {"success": false, "error": "The server did not confirm the battle position."}
+	return response
+
+
+func _apply_saved_walking_happiness(battle: Dictionary, saved: Dictionary) -> void:
+	if not bool(saved.get("happinessUpdated", false)):
+		return
+	var happiness_by_id: Dictionary = {}
+	for pokemon: Variant in saved.get("party", []):
+		if pokemon is Dictionary:
+			happiness_by_id[int(pokemon.get("ownedPokemonId", 0))] = int(pokemon.get("happiness", 255))
+	for pokemon: Variant in battle.get("player", {}).get("team", []):
+		if pokemon is Dictionary:
+			var owned_id := int(pokemon.get("ownedPokemonId", 0))
+			if owned_id > 0 and happiness_by_id.has(owned_id):
+				pokemon["happiness"] = happiness_by_id[owned_id]
+
+
+func choose_default_leads(request_node: HTTPRequest, battle_id: String, slot: int, since_event_seq := -1) -> Dictionary:
+	var session: String = str(AuthService.session_token)
+	var response := await send_post_request(request_node, "/battle/%s/lead-and-resolve" % battle_id.uri_encode(), {"playerId": "p1", "slot": slot}, session)
+	if session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
+	if not response.has("playerLeadResponse") and _is_missing_batch_route(response):
+		var player := await send_post_request(request_node, _append_since_event_seq_query("/battle/%s/lead" % battle_id.uri_encode(), since_event_seq), {"playerId": "p1", "slot": slot}, session)
+		if not bool(player.get("success", false)):
+			return player
+		if session != str(AuthService.session_token):
+			return {"success": false, "error": "The account session changed."}
+		response = await send_post_request(request_node, _append_since_event_seq_query("/battle/%s/npc/lead" % battle_id.uri_encode(), since_event_seq), {"playerId": "p2", "strategy": "basic"}, session)
+		response["playerLeadResponse"] = player
+	if session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
+	return response
+
 
 func create_pvp_room(
 	request_node: HTTPRequest,
@@ -744,11 +811,13 @@ func send_get_request(request_node: HTTPRequest, path: String) -> Dictionary:
 
 	return await _read_json_response(request_node)
 
-func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary) -> Dictionary:
+func send_post_request(request_node: HTTPRequest, path: String, body: Dictionary, expected_session: String = "") -> Dictionary:
 	if request_node.has_meta("replay_read_only"):
 		return {"success": false, "error": "Replay is read-only"}
 	_configure_request_timeout(request_node)
 	var api_base_url: String = await GatewayApiConfig.get_base_url()
+	if not expected_session.is_empty() and expected_session != str(AuthService.session_token):
+		return {"success": false, "error": "The account session changed."}
 	
 	var error: int = request_node.request(
 		api_base_url + path,

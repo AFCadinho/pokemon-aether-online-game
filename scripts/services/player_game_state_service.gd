@@ -658,17 +658,22 @@ func save_player_position(state: Dictionary) -> Dictionary:
 			"error": "Not authenticated.",
 		}
 
+	var position_session: String = AuthService.session_token
 	var repel_result: Dictionary = await RepelService.flush()
 	if not bool(repel_result.get("success", false)):
 		return repel_result
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	if position_session != AuthService.session_token:
+		return {"success": false, "error": "The account session changed."}
 	var response: Dictionary = await _request_json(
 		base_url + _player_position_endpoint(),
 		HTTPClient.METHOD_PUT,
 		GatewayApiConfig.get_json_headers(),
 		JSON.stringify(state)
 	)
+	if position_session != AuthService.session_token:
+		return {"success": false, "error": "The account session changed."}
 	if not bool(response.get("success", false)):
 		return response
 
