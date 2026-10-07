@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Outfits and mounts
+
+- Add gentle floating idle animations to all remaining Surf mounts and their shiny variants, with synchronized riders and water contact.
+
 ### Connection and loading
 
 - Reduce login loading work by reusing the authenticated appearance and profile inventory, sharing the initial thieving-state load, and loading saved map resources in the background. Hidden menus and the unused battle interface are now built when needed instead of during world startup.

@@ -4,6 +4,7 @@ import json
 from PIL import Image, ImageDraw, ImageChops
 from primal_kyogre_water_contact import immerse, foam
 from import_player_layered_sprites import write_texture_import
+from build_surf_mount_idles import with_surf_idle
 
 ROOT = Path(__file__).resolve().parents[1]
 FOLDER = ROOT / 'assets/mounts/primal_kyogre'
@@ -30,7 +31,7 @@ def definition(shiny=False):
     # The rider follows the same face-alignment shift as every mount layer.
     offsets = {d: [[0, FACE_ANCHOR_Y] for _ in range(4)] for d in DIRECTIONS}
     folder = 'primal_kyogre_shiny' if shiny else 'primal_kyogre'
-    return {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
+    return with_surf_idle(folder, {'displayName':'Shiny Primal Kyogre' if shiny else 'Primal Kyogre', 'movementMode':'surf',
             'unlockItemId':'shiny-primal-kyogre-mount' if shiny else 'primal-kyogre-mount',
             'iconTexture':f'res://assets/mounts/{folder}/icon.png',
             'spriteSheet':f'res://assets/mounts/{folder}/mount.png',
@@ -42,7 +43,7 @@ def definition(shiny=False):
             'storePreviewScale':1.0, 'storePreviewOffset':[0,-16],
             'surfFishingFullForeground':False,
             'surfFishingRiderOffsets':{'down':[0,18],'left':[0,4],'right':[0,4],'up':[0,10]},
-            'riderOffsets':offsets}
+            'riderOffsets':offsets})
 
 
 def foreground(art, row, col):
