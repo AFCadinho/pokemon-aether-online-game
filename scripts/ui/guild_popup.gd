@@ -5300,6 +5300,8 @@ func _guild_log_icon(texture: Texture2D) -> TextureRect:
 func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 	var action := str(entry.get("action", "deposit"))
 	if category == "guild":
+		if action == "admin_updated":
+			return _t("ui.guild.log.guild.admin_updated")
 		if action == "base_purchased":
 			var details := _dictionary(entry.get("details", {}))
 			return _t("ui.guild.log.guild.base_purchased", {

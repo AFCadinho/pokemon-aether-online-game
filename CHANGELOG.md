@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Show the current public action and its Pokémon during Adventure Party turn playback, highlight its HP panel, and distinguish a confirmed choice while waiting for the partner.
+- Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
 
 - Keep stat-change and ability-effect labels compact below Adventure Party doubles HP panels in immersive 3D, using the same typography as immersive 2D.
 

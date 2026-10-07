@@ -51815,6 +51815,12 @@ func _refresh_after_guild_membership_notification() -> void:
 		await guild_popup._refresh_from_server()
 
 
+func _refresh_after_guild_admin_update() -> void:
+	await GuildService.load_home()
+	if guild_popup != null and guild_popup.visible:
+		await guild_popup._refresh_from_server()
+
+
 func _refresh_after_aether_clash_notification() -> void:
 	if guild_popup != null and guild_popup.visible:
 		await guild_popup._refresh_aether_clash_from_server()
@@ -51991,6 +51997,9 @@ func _scroll_chat_to_bottom() -> void:
 
 func _on_chat_realtime_message_received(message: Dictionary) -> void:
 	var message_type := str(message.get("type", "")).strip_edges().to_lower()
+	if message_type == "guild.admin.updated":
+		_refresh_after_guild_admin_update.call_deferred()
+		return
 	if message_type in ["guild.application.updated", "guild.notification.received"]:
 		var notification := _dictionary_from_value(message.get("notification", {}))
 		if not notification.is_empty():
