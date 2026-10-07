@@ -114,6 +114,10 @@ asset namespaces across updates, and avoid eagerly mounting the entire catalog.
 
 ## Status and adoption work
 
+The [16-pair cohort follow-up](model-pair-cohort.md) broadens this result and
+separates codec savings from sharing. The [installation design](model-pair-installation-design.md)
+lists the launcher, on-demand, cache and update changes required for adoption.
+
 This is locally integrated **research tooling and a debug loader**, not a new
 production model contract. No reviewed registry, v11 index, optional asset
 service, launcher installer, production scene cache or platform presentation

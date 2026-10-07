@@ -4,6 +4,9 @@ const Audit = preload("res://tools/sprite_factory/model_texture_audit.gd")
 var failures: Array[String] = []
 var report := {"schema": 1, "prototype_only": true, "cases": []}
 var output := ""
+var expected_cases := 0
+var baseline_signatures := {}
+var trace_identities: Array = []
 const ORIGIN := "http://127.0.0.1:8799/"
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -66,13 +69,28 @@ func _case(directory: String, manifest: Dictionary) -> Dictionary:
 		var elapsed := (Time.get_ticks_usec() - started) / 1000.0
 		if not _check(scene != null, "Loaded PackedScene"):
 			return {}
-		_check(Audit.signature(scene) == model.semantic_sha256, "Exact semantic values: " + str(model.identity))
+		var semantic := Audit.signature(scene)
+		# ShaderMaterial can expose declared defaults only with a real renderer
+		# (dummy returns null). Keep the headless golden check, and compare the
+		# complete native graph against the hash-pinned ORIGINAL on that runtime.
+		# No property is omitted, and no tolerance/normalization is introduced.
+		if DisplayServer.get_name() == "headless":
+			_check(semantic == model.semantic_sha256, "Exact headless semantic values: " + str(model.identity))
+		if manifest.variant == "baseline":
+			baseline_signatures[model.identity] = semantic
+		else:
+			_check(baseline_signatures.has(model.identity) and semantic == baseline_signatures.get(model.identity), "Exact runtime original semantic values: " + str(model.identity))
+		var fingerprints := {}
+		if model.identity in trace_identities:
+			Contract.fingerprints(scene, "scene", fingerprints, {})
 		var objects := Contract.textures(scene, {}, {})
 		for texture: Texture2D in objects.values():
 			references.append(weakref(texture))
 		sets.append(objects)
 		scenes.append(scene)
-		row.models.append({"identity": model.identity, "load_ms": elapsed, "textures": objects.size()})
+		row.models.append({"identity": model.identity, "load_ms": elapsed, "textures": objects.size(),
+			"semantic_sha256": semantic, "matches_headless_reference": semantic == model.semantic_sha256,
+			"original_runtime_semantic_sha256": baseline_signatures.get(model.identity, ""), "fingerprints": fingerprints})
 		objects = {}
 		scene = null
 	for id: int in sets[0]:
@@ -116,6 +134,11 @@ func _run() -> void:
 		base = args[0].get_base_dir()
 		output = args[1].path_join("details.json")
 		DirAccess.make_dir_recursive_absolute(args[1])
+	if not _check(fixture.get("prototype_only", false) and fixture.get("pairs", []) is Array and not fixture.get("pairs", []).is_empty(), "Nonempty prototype cohort"):
+		_finish()
+		return
+	expected_cases = fixture.pairs.size() * 2
+	trace_identities = fixture.get("trace_identities", [])
 	for pair: Dictionary in fixture.pairs:
 		for variant in ["baseline", "shared"]:
 			var pin: Dictionary = pair[variant]
@@ -137,14 +160,15 @@ func _run() -> void:
 				row["remaining_texture_refs"] = alive
 				_check(alive == 0, "No textures retained after load scope leaves")
 			report.cases.append(row)
-			print("MODEL_PAIR_CASE ", pair.species, " ", variant, " ", row)
+			print("MODEL_PAIR_CASE ", pair.species, " ", variant, " shared=", row.get("shared_objects", -1), " remaining=", row.get("remaining_texture_refs", -1))
 	_finish()
 
 func _finish() -> void:
 	report["failures"] = failures
 	report["engine_errors"] = sink.errors
 	report["renderer"] = RenderingServer.get_current_rendering_method()
-	report["success"] = failures.is_empty() and sink.errors.is_empty() and report.cases.size() == 6
+	report["expected_cases"] = expected_cases
+	report["success"] = failures.is_empty() and sink.errors.is_empty() and expected_cases > 0 and report.cases.size() == expected_cases
 	if not output.is_empty():
 		var file := FileAccess.open(output, FileAccess.WRITE)
 		file.store_string(JSON.stringify(report, "\t"))

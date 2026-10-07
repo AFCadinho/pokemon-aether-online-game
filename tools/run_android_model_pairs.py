@@ -33,7 +33,8 @@ def main():
         path.relative_to(ROOT / ".tmp")
     output.mkdir(parents=True, exist_ok=False)
     fixture = json.loads((assets / "fixture.json").read_bytes())
-    assert fixture["prototype_only"] and len(fixture["pairs"]) == 3
+    assert fixture["prototype_only"] and fixture["pairs"]
+    expected_cases = len(fixture["pairs"]) * 2
     fixture["run_id"] = uuid.uuid4().hex
     fixture_bytes = json.dumps(fixture).encode()
     aapt = sorted((args.sdk / "build-tools").glob("*/aapt2"))[-1]
@@ -100,10 +101,12 @@ def main():
                 if details.get("run_id") == fixture["run_id"]:
                     (output / "details.json").write_text(raw.stdout)
                     (output / "results.json").write_text(codes.stdout)
-                    assert details["success"] and details["renderer"] == "mobile" and len(details["cases"]) == 6
+                    assert details["success"] and details["renderer"] == "mobile" and len(details["cases"]) == expected_cases
+                    assert {(row["species"], row["variant"]) for row in details["cases"]} == {
+                        (pair["species"], kind) for pair in fixture["pairs"] for kind in ("baseline", "shared")}
                     assert results and all(value == 0 for value in results.values())
                     assert all(row["remaining_texture_refs"] == 0 and (row["shared_objects"] > 0) == (row["variant"] == "shared") for row in details["cases"])
-                    print("ANDROID_MODEL_PAIRS_OK cases=6 peak_pss_kib=" + str(max(m["pss_kib"] for m in memory)), flush=True)
+                    print("ANDROID_MODEL_PAIRS_OK cases=" + str(expected_cases) + " peak_pss_kib=" + str(max(m["pss_kib"] for m in memory)), flush=True)
                     break
             time.sleep(2)
         else:
