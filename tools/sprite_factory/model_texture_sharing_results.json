@@ -1,0 +1,324 @@
+{
+  "schema": 1,
+  "prototype_only": true,
+  "production_approved": false,
+  "models": 54,
+  "pairs": 27,
+  "v11_decoded_bindings_exact": true,
+  "image_bytes": 909222952,
+  "within_file_duplicate_bytes": 7864296,
+  "independent_pair_duplicate_bytes": 261779692,
+  "source_v11_bytes": 30266003,
+  "control_v11_bytes": 30266309,
+  "candidate_v11_bytes": 29076419,
+  "rendered_frames": 40,
+  "all_comparison_pixels_exact": true,
+  "native_android_tested": false,
+  "host_gpu": "NVIDIA RTX 3070 Laptop, Godot 4.6.2 Mobile Vulkan",
+  "records": [
+    {
+      "identity": "zapdos-galar",
+      "texture_counter_saving_bytes": 2799616,
+      "response_schema": 0,
+      "repeat_source_pixels_exact": false
+    },
+    {
+      "identity": "zapdos-galar@shiny",
+      "texture_counter_saving_bytes": 2799616,
+      "response_schema": 0,
+      "repeat_source_pixels_exact": false
+    },
+    {
+      "identity": "moltres-galar",
+      "texture_counter_saving_bytes": 1147904,
+      "response_schema": 0,
+      "repeat_source_pixels_exact": true
+    },
+    {
+      "identity": "moltres-galar@shiny",
+      "texture_counter_saving_bytes": 1147904,
+      "response_schema": 0,
+      "repeat_source_pixels_exact": true
+    }
+  ],
+  "evidence": {
+    ".tmp/model-texture-sharing/input.json": "14225c1a8be4e00d581047e13b6bee565f7e50dd240edd1d4e27f0562676ffd4",
+    ".tmp/model-texture-sharing/probe-v7/report.json": "09a2e9940a8ac84c17e8ff9ed3cffc125b09c7aff88e538b04cb09faf883d344",
+    ".tmp/model-texture-sharing/four-v1/report.json": "5ef6c8601d7c7ace576391ddeac0839e9d3aa823f66f4c21b7d7f7271edb6343",
+    ".tmp/model-texture-sharing/v11-proof/summary.json": "4fa1babb2e2fb366861f5459c15e325b8a00036bdd619702071e5d6842eab2b9",
+    ".tmp/model-texture-sharing/render-v5/report.json": "bcc94db3875b2c4d637a82b3c474da7abc86eb71f42ca118b13e57fd459aabfb",
+    ".tmp/model-texture-sharing/render-v5/pixel-comparison.json": "71a616b711566e933fbd1f2752faf6f93817827e5727ab38bad278ad7f838987"
+  },
+  "sources": [
+    {
+      "identity": "zapdos-galar",
+      "sha256": "195fa01ac5df7e258805dd878e2e95191c84aaa49e4944d7de992677cf7a1f6b",
+      "semantic_sha256": "fe3f0337ef1b634fb8579c349b945e7099192abee1bf788a43fa75782e529960"
+    },
+    {
+      "identity": "zapdos-galar@shiny",
+      "sha256": "89f859336f60f8cb6082da994e8e508352a816386c70db7392ddcdca7d6d8b54",
+      "semantic_sha256": "1585155f2e5705f8b255eaf18a07b4c6baa104b3ee1caf1ac29def3e9f2b378c"
+    },
+    {
+      "identity": "moltres-galar",
+      "sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+      "semantic_sha256": "413589c31cb31189df26e0444e3a682b6deab6617f55de15e441e74232644cb8"
+    },
+    {
+      "identity": "moltres-galar@shiny",
+      "sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+      "semantic_sha256": "32e672a4cd1d33a792c8070efa4a33f883504d0f1494c26cd38a738dbfd8d4b4"
+    },
+    {
+      "identity": "articuno-galar",
+      "sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+      "semantic_sha256": "c16c6b6fc47ff58d949130e7992d50a31b1b4bf070b2d0d468cf57445cfceadc"
+    },
+    {
+      "identity": "articuno-galar@shiny",
+      "sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+      "semantic_sha256": "cd2457de574a95e4a6c35653cf7b2236aa0ae786c6e8e3bc98699889ba930788"
+    },
+    {
+      "identity": "zygarde-mega",
+      "sha256": "d48541e0db89f02bc395329b043e3a4db19847b0ded6a44c4eacceeb05f272ac",
+      "semantic_sha256": "29e24381ec3bd273b6e43576216178218db349f3b210ea87fa29862f0cddc22f"
+    },
+    {
+      "identity": "zygarde-mega@shiny",
+      "sha256": "bb16e72d6cd56f5b5b86db46511aecd02748536da166e54db9744231df36a557",
+      "semantic_sha256": "59bf38bfd39a06850a1c871dd9255ad7320b05dcc832e3d4550379fe0e7557da"
+    },
+    {
+      "identity": "zeraora-mega",
+      "sha256": "987c1b087f8b36ccc8850c09ba596c009b42aacee15d0b807023a15f2c3abd63",
+      "semantic_sha256": "083a431e330164861de5faeff753709eb9046177b166af92fcfc999f478e13e1"
+    },
+    {
+      "identity": "zeraora-mega@shiny",
+      "sha256": "2a21d294ca72c2b791a4eb3f5d941fc4de25b276823f9bfd6a26777a06f73bc5",
+      "semantic_sha256": "eeed146dcd9a6c43815ce144250de67a5e7db6b31687b2d3603124c47e82b045"
+    },
+    {
+      "identity": "tatsugiri-stretchy-mega",
+      "sha256": "93c4da6f2dfdd2d88994fe3769a7275c5501a23114fb5e848237bef7fa943529",
+      "semantic_sha256": "2cb4c455f0104dc4d62d4dbe5f760fb8e80ae3d565142c93462c6a699487bd63"
+    },
+    {
+      "identity": "tatsugiri-stretchy-mega@shiny",
+      "sha256": "2567e0c8273d6c3046961f35c910aad7a29c0e031142a9b5178d84be36e748d4",
+      "semantic_sha256": "2360e2ea78a1d4b4d913ca1139b6c1b136edceb65e2ee8dd9eed8467053c38cc"
+    },
+    {
+      "identity": "tatsugiri-droopy-mega",
+      "sha256": "047d1969168c107528986940ed0b3bd262483b16c11a084d72ebd548b178fe5a",
+      "semantic_sha256": "2cb4c455f0104dc4d62d4dbe5f760fb8e80ae3d565142c93462c6a699487bd63"
+    },
+    {
+      "identity": "tatsugiri-droopy-mega@shiny",
+      "sha256": "6eeed03f01334e846d20e91f97f86a3bf08c265db58632137b01a6bb85f75ed8",
+      "semantic_sha256": "2360e2ea78a1d4b4d913ca1139b6c1b136edceb65e2ee8dd9eed8467053c38cc"
+    },
+    {
+      "identity": "tatsugiri-curly-mega",
+      "sha256": "c475980ac1fa7ffc29d738bd982ac046ce7ee430c9fbe26a6084a3a596595039",
+      "semantic_sha256": "2cb4c455f0104dc4d62d4dbe5f760fb8e80ae3d565142c93462c6a699487bd63"
+    },
+    {
+      "identity": "tatsugiri-curly-mega@shiny",
+      "sha256": "55030edcf0018c5ca5b1f65aba2247534bfacb53a992ae35ee78d420be86e9f5",
+      "semantic_sha256": "2360e2ea78a1d4b4d913ca1139b6c1b136edceb65e2ee8dd9eed8467053c38cc"
+    },
+    {
+      "identity": "scovillain-mega",
+      "sha256": "3c0c93f6c639518657514ab7e2f09093b7b94816223b11e2afaae26017dbf4f5",
+      "semantic_sha256": "ebcf261d5da98d1d73e80424d6c6c4b0352519db42b035176d280884b6826377"
+    },
+    {
+      "identity": "scovillain-mega@shiny",
+      "sha256": "352a1156f4207a77683ef8bd350a1f3885c6e9f99bd4a3c9429967f1587ad8c4",
+      "semantic_sha256": "daced18631374688abfda0b44b609063839c6360fcf7bc7895f38bb5fee48532"
+    },
+    {
+      "identity": "pyroar-mega",
+      "sha256": "0db5e44c226f347b4005095684544395574eb308e3ae400355f49bfef8ecde0d",
+      "semantic_sha256": "c8a7aac30faf62b63d1d56834e71d9f2023dd4a9ea35057ee781715661b8eccb"
+    },
+    {
+      "identity": "pyroar-mega@shiny",
+      "sha256": "c5256bca335c03da50748ef20fb0764eddfd6e5312a6f85a38f9a453f82bc92b",
+      "semantic_sha256": "8f6cc8b5f6349fa6c427d7fdb2cdcc65f632835bc5998eb2dcb0a77184ad3fb6"
+    },
+    {
+      "identity": "meowstic-m-mega",
+      "sha256": "f4f027b533389eb806e9244f7a208f949e10824e1be0149c1bdbf1db94dd4e19",
+      "semantic_sha256": "ec5ea9ea976970f5f14cf793640de7c7be6af8aab97cc40e6f20ff04ad1f0ff6"
+    },
+    {
+      "identity": "meowstic-m-mega@shiny",
+      "sha256": "cb37f417093ad6bbd60b9d3bac02e26a7c8c05f525ac9a4c0ff902ee500a5285",
+      "semantic_sha256": "4ff50e40f4be00a1475477f95446d449d0e50b0404fa592b69cbe0b002b17285"
+    },
+    {
+      "identity": "malamar-mega",
+      "sha256": "6a5af46440490e16ad2d72672ff39d74c898bd07191ec3c59fa9e1726c07da23",
+      "semantic_sha256": "7b20efe2981d945e79a0e021e40a1e52ef7a2bc17d067953e5343f2c408ae0d2"
+    },
+    {
+      "identity": "malamar-mega@shiny",
+      "sha256": "725435a9ca1c413e74e2e9567c54cefc01720be994a798872ca220a0ebae076b",
+      "semantic_sha256": "0834ec1d8028022f306dfaba4ca802c5d4e505c10df91dac992f4a509d07eedc"
+    },
+    {
+      "identity": "magearna-original-mega",
+      "sha256": "35720b25a7cf498d8790021dcb2f902716af963d3366e3e46b1b28e48b491ae4",
+      "semantic_sha256": "fd6f3ea82898b3f2a67950a48c4c3d65df81ea05e36a9d1cbef0014c6077682e"
+    },
+    {
+      "identity": "magearna-original-mega@shiny",
+      "sha256": "5da6a542a52cdb0700c5862462839e98889f05c6109f65d51d46c65a28c2fdea",
+      "semantic_sha256": "f731b064a0e2dfcc3a3adee29847f833efc6aa97e6de0dd3674a2c02755ea67f"
+    },
+    {
+      "identity": "magearna-mega",
+      "sha256": "bde30414e72a34edd7abe8c72bc972cfa2064a85bad9d3ee163331a083362551",
+      "semantic_sha256": "2366ae0fbe13f3eb6006dd4649895bacebd3beecfdd355a37e39f7033dbaa7a8"
+    },
+    {
+      "identity": "magearna-mega@shiny",
+      "sha256": "818e7826a3b3989453c4e477b7444e7206579b1cc9314776b589fec289cf9c7d",
+      "semantic_sha256": "c56c0070ab6dc2aa49594cf9b2d2241f99eb46d609ce752da26efb7f75193539"
+    },
+    {
+      "identity": "greninja-mega",
+      "sha256": "1149cf54c0dd799f4ecdd4585ea44e79158947ed83bf429e77177fb25293260d",
+      "semantic_sha256": "be5bc7f00ea768beb67421265bc31353de4d60c3fb6cd29ad03914e4b93530ba"
+    },
+    {
+      "identity": "greninja-mega@shiny",
+      "sha256": "1cb822ea1affd2be296225e1baa891665db7a4092c6669dd1dc3c382277dd363",
+      "semantic_sha256": "6d5ea235cdc0386094f08a3f3bac72c32a60d0e6e00da4f8c2d3bdb7a56409ce"
+    },
+    {
+      "identity": "golisopod-mega",
+      "sha256": "9ac5e95f94a6d8045bdd8ec41aa787c1495ca09ea9d69402fb965ccb0206f01a",
+      "semantic_sha256": "c258ec65fd3f9c17bfe4d9194da1805d94892ac2b1a8c138a5b0b245ff5e17b2"
+    },
+    {
+      "identity": "golisopod-mega@shiny",
+      "sha256": "56f5af6e51323c2c28067b0b9cb20b1be6a3e18bfe9c574430cd7aee7c59a908",
+      "semantic_sha256": "da4ad3b611fbf6d3a71dcd1de083e2d520eb56e784686e31a48c5683d8041ab4"
+    },
+    {
+      "identity": "glimmora-mega",
+      "sha256": "c63f99e17422ecf8d70148af76ae27f589884228799e699443d4243fadaf9e7f",
+      "semantic_sha256": "5ba936ce194a022c4a8b0d5a670c70e1ee326be3bc8068631b2dab201dd5e5ae"
+    },
+    {
+      "identity": "glimmora-mega@shiny",
+      "sha256": "cee9f6534371df6c9678e09b68e42b4de14a8bceeac4dd24644df40adb52710d",
+      "semantic_sha256": "4d4c29fdb750c30ff44795c8a5342e7017cf42016362c3818b72b46ffcc8a98b"
+    },
+    {
+      "identity": "floette-mega",
+      "sha256": "8007b79a00c3c9314be4e5087f0398dfc6d19cea37bb8a90697a2c60be7e1633",
+      "semantic_sha256": "65cce090f604daf4de25fd07d340efb201f8ae9e1c5f2de76f60e3948cdcb575"
+    },
+    {
+      "identity": "floette-mega@shiny",
+      "sha256": "9cfd80f01ebaed451d7bc39cf01e171ece6cfbabe19cc77a15a789bdfbd4033c",
+      "semantic_sha256": "a9bb6b7acb175254f542f522f413c4fc92e2db66ddd005d24fb10aaf1f5a06e2"
+    },
+    {
+      "identity": "falinks-mega",
+      "sha256": "a8d28e840c6dff21b080af54b5d670007941b63dcce6e68780d609ed1f92c1e0",
+      "semantic_sha256": "f7ca07f2acedd7eb9df203775abab8facf316c8a863a6a01bf268f7392c3e45d"
+    },
+    {
+      "identity": "falinks-mega@shiny",
+      "sha256": "7bb56c20d42f236ce3a297f5464e6380c7757161723ed03f89a04e55ac8e8205",
+      "semantic_sha256": "f5d9afc38a5956081b432b1ae0e62bdfa2961d15f709275b1b97a67cc2162fae"
+    },
+    {
+      "identity": "drampa-mega",
+      "sha256": "c33d251dc567b5e7e8d01bf5c194910d9b5f39f7823679672a9250080b971c18",
+      "semantic_sha256": "3bd27b4bf056c739de1db7bf74e2bed2d7b133325a045692bade7b8d3608d14c"
+    },
+    {
+      "identity": "drampa-mega@shiny",
+      "sha256": "4a3338f05e111b186afdfdd8725148b0c52314750fb98e4038122ff4cb63b1fa",
+      "semantic_sha256": "fdc723b2210f086b0f15459f22348a1a946d5ac4f5e7201c30984700ae1f2b5c"
+    },
+    {
+      "identity": "dragalge-mega",
+      "sha256": "2655cc0d553d230a625c8a825f641dd89b04bdc81369f3b11f9f9a85b6812ae4",
+      "semantic_sha256": "a04f241973ac9934f495480bef47fc3252e4ce6b324386270a388d993dbbb22e"
+    },
+    {
+      "identity": "dragalge-mega@shiny",
+      "sha256": "9f6aa142a9a9cfd25ec440248650b46d878c74379f93d6cb18824440db27eb9b",
+      "semantic_sha256": "f19c02f33cdb372013bb707f53bb9730b5eee6ab9d0d611ac627d92438dd298d"
+    },
+    {
+      "identity": "diancie-mega",
+      "sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8",
+      "semantic_sha256": "0faa13b7c10326a9dcaaba00496f675e138c23a9d9d0d530bc0c96666b57cf64"
+    },
+    {
+      "identity": "diancie-mega@shiny",
+      "sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990",
+      "semantic_sha256": "38c84e0dc13412ca29ac04304743b0358eddd41f758eb9e22bcee43883383824"
+    },
+    {
+      "identity": "delphox-mega",
+      "sha256": "934c869ea812ce38a81c5d3be0e9666e64df131da52a69305161def2de3633e3",
+      "semantic_sha256": "152f4ee4460de2ddde247a5631e2fcd1e6f9b3b83873d3c24dfb39ef31e56e59"
+    },
+    {
+      "identity": "delphox-mega@shiny",
+      "sha256": "d0442e7aa7d25dc3b3e8c39c8b3dfd2cf537fdddd1bc0a0ee7a133cfee3c9d2d",
+      "semantic_sha256": "9ccd87a8d45a2ec3cc1f8438503851a33622b9928b5e2377abcb20e00dec9df8"
+    },
+    {
+      "identity": "crabominable-mega",
+      "sha256": "ae55c76683c5ec339aabea76f2392f0bd307961b5abc6a4525e276a3314a957d",
+      "semantic_sha256": "8ef0d1d44352785baed784bedada0658a44312e4d3b7a56fedafd482f4f3efd6"
+    },
+    {
+      "identity": "crabominable-mega@shiny",
+      "sha256": "6d6e6e989c4539141ab209632e74a2518e5f1dc4f03321fdeda96e83f631d28c",
+      "semantic_sha256": "ebdd951bff78ddd44b6717bc487d04febdc1b5582469c820cb9523bb8a2ebded"
+    },
+    {
+      "identity": "chesnaught-mega",
+      "sha256": "74aa1b3c0ed13e411bc34dd1ad20c97ebc92539aa74b093100bebe2e9382b951",
+      "semantic_sha256": "d3375dc529eca7e88b08371c9b7d74dc6c3915613ad8ac42a5f1f3eed7b06696"
+    },
+    {
+      "identity": "chesnaught-mega@shiny",
+      "sha256": "1878b2f8968497b3169ce12260689f318b36a24d6850d3974c3d86d17593cb3b",
+      "semantic_sha256": "cf2efcd7d441542ed12d65ecd6552fe00afc5a6ba721b18f3240403c90c848d4"
+    },
+    {
+      "identity": "baxcalibur-mega",
+      "sha256": "be43036a1dba3a7856a6b8dbd4fb9a80d63623f8f5de02c696edfdd14a90f65d",
+      "semantic_sha256": "c4cc7b4891f88665dbce6b2d2dce046073899fe6dc19b1209a51e07eea1981c6"
+    },
+    {
+      "identity": "baxcalibur-mega@shiny",
+      "sha256": "8462572366a2df40272550bc9afae53ee2793007723cc8bbc548f7307ad14530",
+      "semantic_sha256": "eab6c2d7f134f8997e3f71eeccf319dae0de8fe79d26385b64322f579d1ca628"
+    },
+    {
+      "identity": "barbaracle-mega",
+      "sha256": "8b26d45e06b9b0d8baacd412dd51004388f6c37a4a93b4679751761fdd1c1ea2",
+      "semantic_sha256": "f13383d9bf0925208ecc7c2f9f9f6fa580eadc65da7be21b9c453dfb1cb6c113"
+    },
+    {
+      "identity": "barbaracle-mega@shiny",
+      "sha256": "60281ef2a6368164ae64212b839180af63145b44bf966f85c742ed291177a3c1",
+      "semantic_sha256": "0973927cb1ca272bd551a78082107d2a7f3f59bdb5bffbcffb7ee74c10d814a5"
+    }
+  ]
+}

@@ -63,10 +63,11 @@ emulator texture delta. Hardware-compressed texture residency remains a viable
 Android strategy; actual phone memory and frame pacing still need measurement.
 See [Android texture guidance](https://developer.android.com/games/optimize/textures).
 
-The next locally available optimization investigation is identifying duplicate
-model textures and unused dependencies, with exact content checks. Any sharing
-or removal should preserve normal/shiny materials, the two-pass shader response
-and resource lifecycle. It is not yet a demonstrated saving.
+The following [model texture sharing proof](model-texture-sharing.md) identifies
+strict duplicates in 54 appearances and measures four offline candidates.
+It preserves normal/shiny image bytes and resource values; its measured saving
+is not a whole-collection or physical Android result. Unused dependency removal
+and a shared normal/shiny bundle contract remain separate investigations.
 
 ## Probe and safeguards
 
