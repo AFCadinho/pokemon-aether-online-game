@@ -20,7 +20,7 @@ func _render(path: String, directory: String) -> Dictionary:
 	stage.viewport.size = Vector2i(512, 512)
 	stage.viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	stage.viewport.msaa_3d = Viewport.MSAA_4X
-	var scene := ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+	var scene := ResourceLoader.load(ProjectSettings.localize_path(path), "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
 	assert(scene != null)
 	var actor := scene.instantiate() as Node3D
 	stage.world.add_child(actor)
@@ -36,11 +36,12 @@ func _render(path: String, directory: String) -> Dictionary:
 	stage.identities[0] = "probe"
 	stage.actors[0] = actor
 	var helper: Node = stage.material_response
+	var authored_supported: bool = helper.supported_actor(actor)
 	helper._process(0)
 	helper._sync()
 	var response_schema := int(actor.get_meta(helper.META, 0))
 	if response_schema == 1:
-		assert(helper.supported_actor(actor) and helper.copies[0] != null)
+		assert(authored_supported and helper.copies[0] != null)
 	else:
 		assert(helper.copies[0] == null)
 	var frames := {}
@@ -80,6 +81,9 @@ func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	assert(args.size() == 2)
 	var report: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(args[0]))
+	for pin: Dictionary in report.get("packs", []):
+		assert(FileAccess.get_sha256(pin.path) == pin.sha256)
+		assert(ProjectSettings.load_resource_pack(pin.path, false))
 	var directory: String = args[1]
 	assert(not DirAccess.dir_exists_absolute(directory))
 	assert(DirAccess.make_dir_recursive_absolute(directory) == OK)
@@ -103,5 +107,5 @@ func _run() -> void:
 	var file := FileAccess.open(directory.path_join("report.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify({"schema": 1, "records": records}, "\t"))
 	file.close()
-	assert(records.size() == 4)
+	assert(not records.is_empty() and records.size() == report.models.size())
 	quit()

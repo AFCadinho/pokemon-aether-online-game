@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "prototype_only": true,
+  "production_approved": false,
+  "appearances": 6,
+  "pairs": [
+    {
+      "species": "dragonite",
+      "baseline_pack_bytes": 14805612,
+      "shared_pack_bytes": 11536360,
+      "saving_percent": 22.081167600501757,
+      "native_texture_counter_saving_bytes": 20452864,
+      "shared_objects": 12,
+      "baseline_sha256": "5dc4138765caaa5c6257adaa40d983a8a97251748243b3937b771d373633370d",
+      "shared_sha256": "50906cf33d1e52dd6241523a6dd151d240efc342ff2d717c2d1b39eb0120f77c"
+    },
+    {
+      "species": "zapdos-galar",
+      "baseline_pack_bytes": 13767020,
+      "shared_pack_bytes": 11158548,
+      "saving_percent": 18.947252201275223,
+      "native_texture_counter_saving_bytes": 19928576,
+      "shared_objects": 7,
+      "baseline_sha256": "1adeaadb627672f39ce62d0147f8e84e4475f5d0d425c65e4a7f387fe48a34a1",
+      "shared_sha256": "a75f66f83b355d762dc8c53b0ee626656d38b5b541a23621c661672bfbd428d6"
+    },
+    {
+      "species": "moltres-galar",
+      "baseline_pack_bytes": 16501804,
+      "shared_pack_bytes": 13893652,
+      "saving_percent": 15.805253777102187,
+      "native_texture_counter_saving_bytes": 13618432,
+      "shared_objects": 15,
+      "baseline_sha256": "34ddd32a5bc39ea80312641870148bb50810e19d48a1ec2534defe0fe2010164",
+      "shared_sha256": "0e87c87cf561ac2b9576fe15227fa5ce0cc2dbd827660aa3c65f36fa98e2cb6d"
+    }
+  ],
+  "native_cases": 6,
+  "all_semantic_signatures_exact": true,
+  "all_remaining_texture_refs_zero": true,
+  "frames": 60,
+  "byte_exact_source_frames": 59,
+  "all_frames_equal_source_or_repeat": true,
+  "physical_android_tested": false,
+  "native_device": "Android 13 x86_64 llvmpipe, Mobile Vulkan",
+  "source_archive_sha256": "a777fdf3715c4d67cf85dfed8daec3aee327cb7ee68e8c14bcfd63c1cca23e5f",
+  "evidence": {
+    ".tmp/model-pair-textures/input.json": "ec3349479a2ba019a1aa20344003b990c9b7f78895352db858055b47360f177a",
+    ".tmp/model-pair-textures/generate-v5/report.json": "5408b67a1ba7b4669caaf02b8e60288f991cfbe54fd7b3c99032666636af1e33",
+    ".tmp/model-pair-textures/packages-v2/fixture.json": "201a774b4bd0427b731b0ccd2f253b886a8ff4bd4e25b33ae7a1ecf4929e9c87",
+    ".tmp/model-pair-textures/load-headless-v4/details.json": "f875cce2c78460552bfef539f53a95fb0240861997e544dd4dbe36b81f891b95",
+    ".tmp/model-pair-textures/render-v2/report.json": "14eaac7962b2eecc6b4a73286acb0bb6df6dfba36bcfd320eff2ffd0d363a35c",
+    ".tmp/model-pair-textures/render-v2/pixel-comparison.json": "84236a44c024899f856931aea2f08379750e760e57a0276b142782f82ff25a51",
+    ".tmp/model-pair-textures/native-v1/details.json": "dbcb9052df71da0229348ede0d3e8f682935175ae91926694abed237fb958048",
+    ".tmp/model-pair-textures/native-v1/native.log": "5a4470f89bcf9a70186ea36fb5ec92b5c97492f7686202efe63bebff4537d13f"
+  }
+}
