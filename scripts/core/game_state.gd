@@ -82,7 +82,13 @@ func reset_gameplay_runtime_state() -> void:
 	prepared_world_state = {}
 	pending_coop_battle_result = {}
 	repel_enabled = false
-	RepelService.reset()
+	repel_steps = 0
+	# GameState loads before RepelService, which itself uses GameState. Resolve
+	# the optional live service at runtime instead of creating a compile cycle.
+	if is_inside_tree():
+		var repel_service := get_tree().root.get_node_or_null("RepelService")
+		if repel_service != null:
+			repel_service.reset()
 	show_follower = true
 	running_shoes_enabled = false
 	global_heal_requests_enabled = true

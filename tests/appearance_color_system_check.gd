@@ -393,12 +393,16 @@ func _run() -> void:
 			and inventory_service_source.contains('"appearanceSlotCounts"'),
 		"inventory service preserves authoritative per-slot wardrobe capacity"
 	)
+	var bag_probe: Node = load(UI_SCRIPT_PATH).new()
+	var classic_box := {"id": "adinho-classic-outfit", "useAction": "open_item_bundle"}
 	_check(
 			inventory_service_source.contains('"grantedItems"')
 				and ui_source.contains('use_action == "open_item_bundle"')
-				and ui_source.contains('LocalizationManager.text("ui.bag.action.open_box")'),
+				and bag_probe.call("_bag_item_can_use_from_bag", classic_box)
+				and bag_probe.call("_bag_item_use_action_label", classic_box) == root.get_node("LocalizationManager").call("text", "ui.bag.action.use"),
 		"Bag can open the Classic box and refresh its granted component items"
 	)
+	bag_probe.free()
 	_check(
 		ui_source.contains("CharacterAppearanceService.get_appearance_part_icon(")
 			and ui_source.contains('part_button.add_theme_constant_override("icon_max_width", 42)'),

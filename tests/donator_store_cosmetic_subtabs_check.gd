@@ -560,11 +560,15 @@ func _run() -> void:
 		inventory_service_source.contains('"guild": _dictionary_from_value(body.get("guild", {}))'),
 		"inventory service returns the Guild updated by a template"
 	)
+	var bag_probe: Node = load(OVERLAY_SCRIPT_PATH).new()
+	var guild_emblem := {"id": "squirtle-guild-emblem-template", "useAction": "apply_guild_emblem_template"}
 	_check(
 		overlay_source.contains('"apply_guild_emblem_template"')
-		and overlay_source.contains('LocalizationManager.text("ui.bag.action.unlock_for_guild")'),
+		and bag_probe.call("_bag_item_can_use_from_bag", guild_emblem)
+		and bag_probe.call("_bag_item_use_action_label", guild_emblem) == localization_manager.call("text", "ui.bag.action.use"),
 		"Bag exposes the consumable Guild emblem unlock action"
 	)
+	bag_probe.free()
 	for starter_id: String in [
 		"charmander-guild-emblem-template",
 		"bulbasaur-guild-emblem-template",
