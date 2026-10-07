@@ -4,6 +4,8 @@
 
 ### Documentation
 
+- Complete screenshot coverage for all 47 official forum guides, with 49 current interface images and English captions; replace the outdated Aethernet fare example.
+
 - Illustrate the official Item Dex guide with English screenshots and captions covering navigation, search and item sources.
 
 ### Adventure and exploration

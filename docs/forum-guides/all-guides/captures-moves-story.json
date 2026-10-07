@@ -1,0 +1,86 @@
+[
+	{
+		"caption": "Example Move Maniac: select Bulbasaur, inspect the available moves and check the Heart Scale cost for Leech Seed.",
+		"control": "MoveMentorPopup",
+		"exampleData": true,
+		"filename": "01-relearn-a-move.png",
+		"heading": "## Teaching a move with the Move Maniac",
+		"size": [
+			984,
+			634
+		],
+		"topic": 87
+	},
+	{
+		"caption": "Example Move Deleter: select the move to remove and confirm only after checking it. Deletion is free, and the final move cannot be removed.",
+		"control": "MoveDeleterPopup",
+		"exampleData": true,
+		"filename": "02-free-move-deletion.png",
+		"heading": "## Removing a move with the Move Deleter",
+		"size": [
+			844,
+			564
+		],
+		"topic": 87
+	},
+	{
+		"caption": "Example Quest Log: the active objective identifies your next task. Completed and later steps remain separate.",
+		"control": "QuestJournalPanel",
+		"exampleData": true,
+		"filename": "02-follow-current-quest.png",
+		"heading": "## 2. Keep following the story",
+		"size": [
+			924,
+			594
+		],
+		"topic": 84
+	},
+	{
+		"caption": "Example Oak's Parcel quest: collect the parcel in Viridian City, then finish the return conversation with Oak.",
+		"control": "QuestJournalPanel",
+		"exampleData": true,
+		"filename": "01-oaks-parcel-quest.png",
+		"heading": "### Oak's Parcel",
+		"size": [
+			924,
+			594
+		],
+		"topic": 102
+	},
+	{
+		"caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+		"control": "QuestJournalPanel",
+		"exampleData": true,
+		"filename": "02-brock-quest.png",
+		"heading": "### Reaching Pewter City",
+		"size": [
+			924,
+			594
+		],
+		"topic": 102
+	},
+	{
+		"caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+		"control": "QuestJournalPanel",
+		"exampleData": true,
+		"filename": "03-misty-quest.png",
+		"heading": "### Your second badge",
+		"size": [
+			924,
+			594
+		],
+		"topic": 102
+	},
+	{
+		"caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+		"control": "QuestJournalPanel",
+		"exampleData": true,
+		"filename": "04-surge-quest.png",
+		"heading": "### The third Gym battle",
+		"size": [
+			924,
+			594
+		],
+		"topic": 102
+	}
+]

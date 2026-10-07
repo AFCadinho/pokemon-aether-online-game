@@ -1,0 +1,1421 @@
+{
+  "verifiedAt": "2026-10-07T00:21:41Z",
+  "guide_count": 47,
+  "total_image_count": 92,
+  "new_image_count": 49,
+  "guides": [
+    {
+      "topic_id": 27,
+      "url": "https://forums.pokeaether.com/t/thieving-guide/27",
+      "version": 5,
+      "image_count": 5,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 28,
+      "url": "https://forums.pokeaether.com/t/ev-training-guide/28",
+      "version": 9,
+      "image_count": 7,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 29,
+      "url": "https://forums.pokeaether.com/t/trainer-rematch-guide/29",
+      "version": 4,
+      "image_count": 7,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 30,
+      "url": "https://forums.pokeaether.com/t/aethernet-travel-guide/30",
+      "version": 7,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 31,
+      "url": "https://forums.pokeaether.com/t/battle-damage-calculator-guide/31",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 32,
+      "url": "https://forums.pokeaether.com/t/chat-and-messaging-guide/32",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 33,
+      "url": "https://forums.pokeaether.com/t/shiny-tracker-guide/33",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 34,
+      "url": "https://forums.pokeaether.com/t/pokemon-storage-and-party-guide/34",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 35,
+      "url": "https://forums.pokeaether.com/t/friends-blocking-and-private-messages-guide/35",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 36,
+      "url": "https://forums.pokeaether.com/t/guilds-and-membership/36",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 37,
+      "url": "https://forums.pokeaether.com/t/player-trading-guide/37",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 38,
+      "url": "https://forums.pokeaether.com/t/global-boosts-guide/38",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 39,
+      "url": "https://forums.pokeaether.com/t/fishing-guide/39",
+      "version": 5,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 40,
+      "url": "https://forums.pokeaether.com/t/field-moves-and-charms-guide/40",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 41,
+      "url": "https://forums.pokeaether.com/t/quest-log-guide/41",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 42,
+      "url": "https://forums.pokeaether.com/t/mail-and-attachments/42",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 43,
+      "url": "https://forums.pokeaether.com/t/pokedex-guide/43",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 44,
+      "url": "https://forums.pokeaether.com/t/bag-and-hotbar-guide/44",
+      "version": 4,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 45,
+      "url": "https://forums.pokeaether.com/t/aether-exchange-guide/45",
+      "version": 5,
+      "image_count": 1,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 52,
+      "url": "https://forums.pokeaether.com/t/trade-evolution-guide/52",
+      "version": 2,
+      "image_count": 4,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 55,
+      "url": "https://forums.pokeaether.com/t/shiny-odds-multipliers-guide/55",
+      "version": 8,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 56,
+      "url": "https://forums.pokeaether.com/t/aether-blessing-membership-guide/56",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 58,
+      "url": "https://forums.pokeaether.com/t/battle-timer-guide/58",
+      "version": 6,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 59,
+      "url": "https://forums.pokeaether.com/t/official-rock-smash-guide/59",
+      "version": 4,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 60,
+      "url": "https://forums.pokeaether.com/t/skills-guide/60",
+      "version": 3,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 70,
+      "url": "https://forums.pokeaether.com/t/aether-clash-guild-duel-guide/70",
+      "version": 4,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 71,
+      "url": "https://forums.pokeaether.com/t/ranked-battles-and-rating-guide/71",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 84,
+      "url": "https://forums.pokeaether.com/t/getting-started-in-pokeaether/84",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 85,
+      "url": "https://forums.pokeaether.com/t/level-caps-exp-traded-pokemon/85",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 86,
+      "url": "https://forums.pokeaether.com/t/pokemon-rentals-rental-teams/86",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 87,
+      "url": "https://forums.pokeaether.com/t/move-maniac-move-deleter/87",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 88,
+      "url": "https://forums.pokeaether.com/t/weekly-bosses-zapdos/88",
+      "version": 2,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 89,
+      "url": "https://forums.pokeaether.com/t/mounts-licenses-mount-boxes/89",
+      "version": 5,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 90,
+      "url": "https://forums.pokeaether.com/t/ai-sparring-guide/90",
+      "version": 2,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 91,
+      "url": "https://forums.pokeaether.com/t/currencies-aether-credit-card-account-binding/91",
+      "version": 3,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 92,
+      "url": "https://forums.pokeaether.com/t/player-loans-borrowing-lending/92",
+      "version": 2,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 93,
+      "url": "https://forums.pokeaether.com/t/clothing-colours-aether-atelier/93",
+      "version": 2,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 94,
+      "url": "https://forums.pokeaether.com/t/battle-replays-save-watch-share/94",
+      "version": 2,
+      "image_count": 1,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 95,
+      "url": "https://forums.pokeaether.com/t/item-dex-where-to-find-items/95",
+      "version": 2,
+      "image_count": 4,
+      "public_html_checked": false
+    },
+    {
+      "topic_id": 96,
+      "url": "https://forums.pokeaether.com/t/guild-bank-donate-borrow-withdraw/96",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 97,
+      "url": "https://forums.pokeaether.com/t/guild-training-against-bots/97",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 98,
+      "url": "https://forums.pokeaether.com/t/catching-pokemon-choosing-poke-balls/98",
+      "version": 2,
+      "image_count": 4,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 99,
+      "url": "https://forums.pokeaether.com/t/pokemon-evolution-happiness/99",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 100,
+      "url": "https://forums.pokeaether.com/t/understanding-pokemon-stats-natures-abilities/100",
+      "version": 2,
+      "image_count": 4,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 101,
+      "url": "https://forums.pokeaether.com/t/held-items-choosing-using-them/101",
+      "version": 2,
+      "image_count": 2,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 102,
+      "url": "https://forums.pokeaether.com/t/kanto-story-walkthrough-your-first-three-badges/102",
+      "version": 2,
+      "image_count": 4,
+      "public_html_checked": true
+    },
+    {
+      "topic_id": 105,
+      "url": "https://forums.pokeaether.com/t/wild-encounter-guide-finding-pokemon/105",
+      "version": 3,
+      "image_count": 1,
+      "public_html_checked": false
+    }
+  ],
+  "public_images": [
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/007fd2e3ba951a7d75512ceb5b67e6d705b8e0c8_2_447x500.png",
+      "size": [
+        447,
+        500
+      ],
+      "sha256": "fef5f8a9675d315455ecf3ac5835c6ecd48c64a5ece41f91b58fe1599ad896d3"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/042812fedb3942af8fe97884ef9d1a08808cea42_2_690x442.png",
+      "size": [
+        690,
+        442
+      ],
+      "sha256": "52f138d735c23cd92087df2d0b96b50e91f4a3431649eba0e16e09e566fabf73"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/08aae09ac6e0842cf9cbe026706a27540cc585b5_2_690x416.png",
+      "size": [
+        690,
+        416
+      ],
+      "sha256": "5c17461ae4fa870124920bf42178665e16fd865ba07d108b184ff4b6c9c9d3b3"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/0a42daea38859f50eeed979353c300b15403a16f_2_596x500.png",
+      "size": [
+        596,
+        500
+      ],
+      "sha256": "38661d831762edd6d11fed5e35570704ea4fa00b51b3e3b4335e6eeafa4a392c"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/0bee12a5c93506f5ca85063be1861d3975631138_2_377x500.png",
+      "size": [
+        377,
+        500
+      ],
+      "sha256": "0e91a4323611a5e328e8a883612520601df40ecaad1398cd47fbfa85b4cad3ca"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/0f91704bd5f407bc1e6e33e52e7d8bf29c25713f_2_690x423.png",
+      "size": [
+        690,
+        423
+      ],
+      "sha256": "0768db37a87c24e453347d8d3220a2dd5f9215bff68bc138955ef1bc1355b9df"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/10a88b7e306a7d22cd991f841830b5ef33110263_2_690x467.png",
+      "size": [
+        690,
+        467
+      ],
+      "sha256": "ca6a2fa86f82422028c65d0a61e8ad26ab989706d68486a9dcf1cedaf0418e08"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/11826861490cbc727df39785be9409e67c54265c_2_690x473.jpeg",
+      "size": [
+        690,
+        473
+      ],
+      "sha256": "d420cc5326d36b81e6b3b3fca6d0b68abf2812dc05808d8c362f0f0bcb7ea906"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/22d38a5579a09c555dfe5c162d0a944b5ecb5599_2_690x476.jpeg",
+      "size": [
+        690,
+        476
+      ],
+      "sha256": "98ab89465a3592a34130f6eeede6f3a8f0ead778ffd6c4b054b6a4dd8e209b4b"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/264c258569feb995eb0ea3a14525784207f1667c_2_690x473.png",
+      "size": [
+        690,
+        473
+      ],
+      "sha256": "3c440c5117534188b9faff99f258a19504ad909531ee69687068fd32d6dc0add"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/2b41ef847c291b6de848c2bd26072464fd99553e_2_690x442.png",
+      "size": [
+        690,
+        442
+      ],
+      "sha256": "c7fe42136ec79c3524f50daafc48fedda0765ec93fa66763d08c095a94fff66c"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/2ecc1013fbdb2ae3ae86362078139c68d03e685a_2_690x467.png",
+      "size": [
+        690,
+        467
+      ],
+      "sha256": "3ad9b028d01882a550551a2a2eafc9d06c8a46976f7025ca61759d1da783c96d"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/35eea4aa60fc642ff69732545e389ba2f30727b2_2_690x465.png",
+      "size": [
+        690,
+        465
+      ],
+      "sha256": "95de289b57263faf24b2d7abe779eb291f82dc55710feac55f71bdd7ffe7064e"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/35fe45938315aba31521a77481d797681692427e_2_487x499.png",
+      "size": [
+        487,
+        499
+      ],
+      "sha256": "d17f48f9c52b2a4fe2c4eb3c48e0f54e64eb22b3132f70edf256bb7a52944bf6"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/3a2e97d2b92c09739acd2b216386b60eee405f0f_2_690x443.png",
+      "size": [
+        690,
+        443
+      ],
+      "sha256": "72d660c7d911322b9a2eb80f6ab67a556fbcd1d71d6957e3e6e57328cb1b42d2"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/3b300f8fe1687c5f97545ba721c2d64fe9f437ae_2_487x499.png",
+      "size": [
+        487,
+        499
+      ],
+      "sha256": "51547d6a456f995686058d5955e7cb8b21994a77cd56cacb712f26cbd24f7f61"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/3fe79f431200fcd3ce9df447b11f7873ee512f7e_2_557x500.png",
+      "size": [
+        557,
+        500
+      ],
+      "sha256": "8f39dc2a20de220528eef82aeb5bcfafe8682c76f353baf9be2d94b6a276e7c0"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/4e15b3054b0d84d55f3501367a29d39b7d6e1e29_2_690x466.png",
+      "size": [
+        690,
+        466
+      ],
+      "sha256": "643579d351b49cd8d7e1cd61e3b4f1a0e1963a5880478eb357ae655c9e6e7555"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/50ac4a31796526cc965410052adc4d6b42edab66_2_690x444.png",
+      "size": [
+        690,
+        444
+      ],
+      "sha256": "05baad959d144163ead055524ebb765f4028355764612cc765eeb99eec341fab"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/51db7cc7522e1294947ae134f7ff386e6e65045b_2_690x465.png",
+      "size": [
+        690,
+        465
+      ],
+      "sha256": "f25c943ab2c2555330cc4a0b3a8e32e0f3273fe12c920a13674c0cf70bc13813"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/53984b75a7f483f1661a3f4d14c583a94fadcd94_2_690x330.png",
+      "size": [
+        690,
+        330
+      ],
+      "sha256": "15c5c842b33ae039779434622636a217cd255cf292754099973c321293c348b3"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/541fdc4c4d269e9dd7e17443659dbed3d232e297_2_690x496.png",
+      "size": [
+        690,
+        496
+      ],
+      "sha256": "bfa7e84e84068cfb2b06e5214555443b6b761329ba247e971d242f218e13eaeb"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/54cc911de5ba139d5d906a3756569a97de295970_2_690x364.png",
+      "size": [
+        690,
+        364
+      ],
+      "sha256": "275ff03831b5d07b7d29712ba3a7b76e5b5120e066edc70f96f3d13ea1d7d9ae"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/569f6577ff80629300acc03a64050671951771a6_2_690x480.png",
+      "size": [
+        690,
+        480
+      ],
+      "sha256": "3acb39f682b1912b56e09f2324b61377072f62494aa83f1079842b2440052654"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/6c1c1a284d2a0b5c821c625e33c349e6822cee1a_2_690x432.png",
+      "size": [
+        690,
+        432
+      ],
+      "sha256": "95134602eebb9df1c7ba3a59a69f97f77bc5ab41410ab7cdaa5708d5379b229b"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/6ef07b84dd19afcdf348a059efae6d5edb643e74_2_678x500.png",
+      "size": [
+        678,
+        500
+      ],
+      "sha256": "f297f9c02201ec0a444e1afc6d31e6335236da42b1a8e1782e355db0925af7f6"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/7b0c27000433b19a51260ae3a174e04023d01df6_2_557x500.png",
+      "size": [
+        557,
+        500
+      ],
+      "sha256": "6bbd635f322067fbaecc3edceb96fd8cc5ad4574b1b908175ee2347d2b1e2e37"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/82df20a3d0628adc47eb921dedb42b4251eaa670_2_690x425.png",
+      "size": [
+        690,
+        425
+      ],
+      "sha256": "c3789c988d07b6d06e6355f6a5917bf282c67b9a78ad903e94bbc139ded9f2f2"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/88adf75f74472080037f489fde23ad9f60d7c57b_2_690x465.png",
+      "size": [
+        690,
+        465
+      ],
+      "sha256": "6bc0b6c5cfae670a20a7110454b947329179184997cf68d25b961f7429f968d3"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/918689f7b024d30925fe963090aada7153480b41_2_538x500.png",
+      "size": [
+        538,
+        500
+      ],
+      "sha256": "642525ce61de67efe42772e76d63688dd63ba7c2c886be8dea56fb1a34ee5218"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/98cc253c7420b235b35128d15e44f48ecfa6d3ea_2_690x443.png",
+      "size": [
+        690,
+        443
+      ],
+      "sha256": "e5b669a3169d78fbb3c8f34135978e58d6ef15b26a5ab7248c8dd88167f84e94"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/98e2cb022988e91ec7efd1b516df7276638362e1_2_690x424.png",
+      "size": [
+        690,
+        424
+      ],
+      "sha256": "908bb0941918ef13175b9a5146b80328ae8e7c2e437d0af752b6d387fcbc77a2"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/9a8f88b1f89f894c64565cdca64a07708906f702_2_690x441.png",
+      "size": [
+        690,
+        441
+      ],
+      "sha256": "797e8b6a5fb70c0519621fa350e10f2b464598a1dd3c051b88c6fe4ed0433323"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/a282c246a6ede901096debd63b7dc64a28c544fb_2_690x424.png",
+      "size": [
+        690,
+        424
+      ],
+      "sha256": "29dd9433df5a0d1e5785014ca724d6efe7b3ec6fe0041a47f4d339b795452eae"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/a8eb628cc92c793a6fad71a33567ad634a036573_2_487x499.png",
+      "size": [
+        487,
+        499
+      ],
+      "sha256": "16c80d68ffad8a4af57793224fac0ab83bef324b99507b1c11db70f30e835c58"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/aacf0ed680a960161164c48991870967fb874582_2_690x371.jpeg",
+      "size": [
+        690,
+        371
+      ],
+      "sha256": "e9a55240e3538b830217bacf694c682be3e000629585add2b7c1c25043fcf191"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ab78a378a1569e8e83e33d7510d8667a094027a7_2_690x461.png",
+      "size": [
+        690,
+        461
+      ],
+      "sha256": "14b83912fe99d59dc97edd2368a6f80ec7524a79bdc405adde1e7a8ab6635c36"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ada353521a35c7d11ddb465a7b66c84b3e8038f5_2_643x500.png",
+      "size": [
+        643,
+        500
+      ],
+      "sha256": "de45233d524281953d0ccccd90a42fe8a8ab380ed10e19b4708b2dd4d888a25d"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/b034e923904511403ddec452e1fd190e0edb04ff_2_690x495.png",
+      "size": [
+        690,
+        495
+      ],
+      "sha256": "e478b4aa567ef2af2e693dc56b6df2f441ae1a4aa8deb3bba0e5f996ac23792f"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/b6560836bf7f0d5d239b13e186a9b63eca540c46_2_690x464.png",
+      "size": [
+        690,
+        464
+      ],
+      "sha256": "61f709ba2b97f6c715781f4dd2cbc5536209ade2f57cd6203cb7939e20984627"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/b9f482e35383f55c061fee927482f7ad3d0f14d6_2_690x469.png",
+      "size": [
+        690,
+        469
+      ],
+      "sha256": "7ec63d2675fbc0b59e3d6d24e4ac9a654e4b004ff371bb04cc69e71fbd2759fe"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/bb3376ac861654d9fb233ccf4f9c2627da3ded8a_2_690x410.png",
+      "size": [
+        690,
+        410
+      ],
+      "sha256": "6142e6bd37ac1ace24cb7c45e884c7683704afc960bac9869d5c0e463a2ef4d1"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/c0de77145452e72558b6ad7c967c172e89b6f2a7_2_690x368.jpeg",
+      "size": [
+        690,
+        368
+      ],
+      "sha256": "6e3957706f1b07c1c4d34a4063c0e97b630555fa966a6fab55d509d6fe069868"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/cbcceee20ccbba97de72c842d916c6c56b57902c_2_690x426.png",
+      "size": [
+        690,
+        426
+      ],
+      "sha256": "e03c0dbe927ccc3fee9a2d15d75473bc4ab1147ad36fef434417dda81ff3943c"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/cbd774332017c4c1616f3ae50cf2ba0e5accfaac_2_690x443.png",
+      "size": [
+        690,
+        443
+      ],
+      "sha256": "f9ec88d216eec6177ef91ec2619fc4892416ebb41f6a5bfdbf15b167aada4604"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ccb06ac88275f6fca4cf2a85c640e570666760c1_2_690x492.png",
+      "size": [
+        690,
+        492
+      ],
+      "sha256": "7e1237123d4e43461a3ed25d512fb11d9ad18a0ee3aa777bc5ae5ac54a61e919"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ce459a3c72a3e17505d511e9c5c7d5d43704d434_2_690x469.png",
+      "size": [
+        690,
+        469
+      ],
+      "sha256": "f7047585c892160d60985cad03ae112148f3ee41d9abb546a174f1337dc0eb71"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/cf77ad727f2be86d5f4885c09c5bec9fe8dac334_2_511x499.png",
+      "size": [
+        511,
+        499
+      ],
+      "sha256": "0dab7f9f648e33cd90118c44fc80f5957a4767779ad573539e2eed1e8829f5ee"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/d1161ce56ada9f70fd9f3bbfb602de8f5c720142_2_690x471.png",
+      "size": [
+        690,
+        471
+      ],
+      "sha256": "1b3ea09914b49dfe406bb46e046cf6f7b2a782da5af19e91b917c21dcf7fb6b5"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/d55c873e143590786d0c557e3962302f3d60f2ce_2_487x499.png",
+      "size": [
+        487,
+        499
+      ],
+      "sha256": "1885f83cb2e50333d5710119cdd58fad9780608b73f816b14f50ace569dcb574"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/dd647b00594d8b1732e6a7c805eec172cdb06913_2_690x443.png",
+      "size": [
+        690,
+        443
+      ],
+      "sha256": "a9e85d47cb96f8e02f0aa0c0d73b50680e882c1bc84299d6730e60b252a905a7"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/e49a560f176991b472c5c8e2c8724b52f756db38_2_690x469.png",
+      "size": [
+        690,
+        469
+      ],
+      "sha256": "1f0b1169b1aece193c93e92e923e3794b1bce6106d0ff47fad5fec46b173bc40"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/e842472b56faab18d9d18c177e01ebd4a6013e65_2_521x499.png",
+      "size": [
+        521,
+        499
+      ],
+      "sha256": "21aed5d45b7e93cab7d0fa407c86ee4113ecc48b987fa485e92aa44591db7d20"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ecc64b738772bfd8315d361a2c4c93cb2b58fa59_2_690x424.png",
+      "size": [
+        690,
+        424
+      ],
+      "sha256": "fdbd63e8e8d580c3e31be944e4b104a63cca07fdb8d989933b4206a30b25d473"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/ef187a09db986fddae448ffab7af07756596269d_2_690x446.png",
+      "size": [
+        690,
+        446
+      ],
+      "sha256": "a5c0be9d6b51738c31f5e9924d91bd6fe3074e10717d3ef7b231031c09f4e1ca"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/f2ff79168950f0ad2f286d6346e4be658c2b8328_2_568x500.png",
+      "size": [
+        568,
+        500
+      ],
+      "sha256": "09e56e9b84f8a8a27589209ee50a6b7a36b536298984162e859f853e306c3bb7"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/f4aae5458b3053f07c1b0f6312adb31a53ef0706_2_690x496.png",
+      "size": [
+        690,
+        496
+      ],
+      "sha256": "12a8e5950e4321b8bdc778095471048a8768dbb0f7c0a15c3b5887bd680306ca"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/f4c57607a05721ed23b3411912806cd01f9b3e1a_2_690x467.png",
+      "size": [
+        690,
+        467
+      ],
+      "sha256": "a7f1f689451f4f99d7f886ba714b652ac935b5ad67cf7c0c10bab35ca3086ca4"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/optimized/1X/fa003ae65d0aade71be76420a52a53830cd0f361_2_690x443.png",
+      "size": [
+        690,
+        443
+      ],
+      "sha256": "9788976a49d7419458f73108e72a311eeb6d1b4bff1e059b6bab1706f5ca468a"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/162bd36e3bc9e82a78dd53b609e913f27611308e.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "ec5d83049dcb70d982215a39db04060fe31f12bc5515a44cbf70a8a11ea211b1"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/22eceda08660c47e300f596ebd485756d02f47e3.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "fa96c907d12735f8596e4c68d33e453a1d3c335b441008cd133dcfc6288128ee"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/2ba723ef010c95f2feedc28861632fb0e2cc9d68.png",
+      "size": [
+        658,
+        556
+      ],
+      "sha256": "15e664146cffc7dcc602f8be51b2229734976b5e3f799625a01e15817b8a4e3c"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/2bc17e21212ccb2e25de589a73be72d92ef11f0f.png",
+      "size": [
+        360,
+        300
+      ],
+      "sha256": "bb945e9bdd14d5cf02433bf6b8776ffee643d2b9335fa6246774621ac485774f"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/2e2c66089301d1fc85bfe21a35b25f8460452fd9.png",
+      "size": [
+        475,
+        353
+      ],
+      "sha256": "457d2b24d519fe244c02596ffa34676919fe401f9c97177df393163b2b1bc2b8"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/388de063a717c08dcb6c99633f8fc26c808155aa.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "b18180955500a1ded53adeb154b746cdd7ec837ede8a89a4b1897db09227c14b"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/4b38ebf63d4c801c5b978f4fd4ff861ce5a9caa2.png",
+      "size": [
+        414,
+        380
+      ],
+      "sha256": "95635c9dde766b6edaf694bab8d4c2143827d3b99245ef8080828ec44357bf72"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/63ffab212e4bbd399d6d24dab719d1260d2ca38b.png",
+      "size": [
+        644,
+        264
+      ],
+      "sha256": "d5f825c92def4c8aa036c520b06de37efe1eb5704ae04422dd0c044d2acc5ec0"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/6473f3c1c9f094aece1b59aa1ea9cd03fb68550d.png",
+      "size": [
+        373,
+        459
+      ],
+      "sha256": "37eff84beadcf7e3bc62cabf1723688f55c9a0a3cc6d6ed0d085aea8036349cf"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/6499ac044cd60af23391d930b0a4dc7542fed2bb.png",
+      "size": [
+        496,
+        642
+      ],
+      "sha256": "3f5f07935aabf552234197a1e9828df0c9c95a84896b3c664f6d0ff3d1be68b9"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/65910fe69fd531a4f88d21f12542914b6eb50cca.png",
+      "size": [
+        950,
+        650
+      ],
+      "sha256": "edddf181ca95f41fc461c9fd96d245c712e6612096ecbed14596da60135f2269"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/70d76dc658182df485ba7c20dda30e218a399ca0.png",
+      "size": [
+        414,
+        380
+      ],
+      "sha256": "349ca0a0e402bba329fdb55f562e908ee6d286b8d14d1c113cf0709bd5233fac"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/78a790bd3f1322a45588fed3fa3b53ff49c31828.png",
+      "size": [
+        275,
+        247
+      ],
+      "sha256": "362a41f4ab1aac0e3f6d52da158c4cae83afff2015ffebded06c417ea03ca5cb"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/860bde37bf32d7bb4ab2fd3432ceba45b5a0fb24.png",
+      "size": [
+        514,
+        408
+      ],
+      "sha256": "7aaba5c26e2415a6a1bd456fcf1fc5bde36f45e0eb5861c2e8647c7c81010537"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/8caec5cd2aac110b66c6c0154093b348fa4af7f3.png",
+      "size": [
+        544,
+        372
+      ],
+      "sha256": "e34b9075f9091e3728394e7e06ad19c67677669a97bf5126491288f7e430d644"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/9aab10acc5ed029b7368b293b5cc18c9f227918a.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "d1c0d32b66812e109854f18bb5af38cfc075e22159c8ec74431792cff270e1ce"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/9d59dfad74bce115d45d412f86c0c79ef35f9028.png",
+      "size": [
+        671,
+        406
+      ],
+      "sha256": "606e62f96f2e3781fcb41ccc5b44ab84128732898008f695de9a8e0ea7b7a3a3"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/9eb4f093b009ca3ce5e968809b88819fc5603d08.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "ecdb2ed33ceccae2475661494768fdb362751d0dc95eddd6dc16fa1de7385346"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/a242c91d5f028c957611f2be99028697fe65ef5d.png",
+      "size": [
+        831,
+        530
+      ],
+      "sha256": "86b4d9d7189ed8ab29d5ccc03134909111cb11d8e036b6d62e99974735903202"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/a49eea9eda0ece485d49d3fbfad6b6766e3df853.png",
+      "size": [
+        544,
+        144
+      ],
+      "sha256": "8a7f36cecdc0db2b7ce36a046bc0caa61ac83e619cc20b7120ee0065a82e8564"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/a7d35b119be52d51ef3293ccdc4ecec39d189943.png",
+      "size": [
+        296,
+        494
+      ],
+      "sha256": "f2d5b2ad5081ace8b162d0dac3f0a44622d86f6927ded01fe1fdfcbffb476701"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/afa15d38b90b1a486788707a30819b90c8d44b59.png",
+      "size": [
+        412,
+        342
+      ],
+      "sha256": "47693ec178fe79f2e6026e4a1f5b6604a7739e86f307c387a9fa0ba37da9a50d"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/b3fda48e094d9402f98851e412f2ba5d56fc9be1.png",
+      "size": [
+        974,
+        134
+      ],
+      "sha256": "3807e28122ecd3ef9a312e76cdb5f169aa9ad416ae6e6c99851b334dd4b30bbd"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/b560dedefe1d2037586dff8b62e82356cce31d6f.png",
+      "size": [
+        360,
+        260
+      ],
+      "sha256": "0bb956bc2289a1578a86e54d3a6cb4b3bdd6b7038a2f3a9c3b7b6296142a0ab2"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/d2b71e4b57b6d5d573b1eb4e44f53559e658a13c.png",
+      "size": [
+        581,
+        371
+      ],
+      "sha256": "4069eca2c51cc5226b47de775b998e8d712169631ac4da5889fabc7aaca536e1"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/deceb86265dd01470da40b7d8396b636728ad007.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "ae1808fe2a89ec5f86333167dffbbe0b2612867640a909736171861521c076cd"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/e17dce4aae0ac30d129e43de79d3fad8bccb7545.png",
+      "size": [
+        266,
+        306
+      ],
+      "sha256": "33a0f3a68ca6e8f41730328ab182a2db73bfc1a30d3243de92ff7a58981108e8"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/e6e785fa9d620ca81047cd7dc2aeabeaaeef41b6.png",
+      "size": [
+        704,
+        384
+      ],
+      "sha256": "637cab58f80f25f343e78682b6b701acebc793d48b23c9068cc2c7e7a53aaa6b"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/eace2cecd40a390a4c176672707d99027b1048f5.png",
+      "size": [
+        819,
+        535
+      ],
+      "sha256": "ca81dfb73af63c52547d277adbc054ce8e11dc8e015b79d5a8a7b337913f64de"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/ee7f5395d9d1a0a2842284623a36fc28b91ca5cf.png",
+      "size": [
+        620,
+        340
+      ],
+      "sha256": "b6f1cad73d15350b095d446e64c5c6c4668e1b8920425419b21417869b57a0ae"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/f0f204dc2c78785cd476d837c88a83c650e70567.png",
+      "size": [
+        646,
+        425
+      ],
+      "sha256": "5f29c501cc9fa05bb166a303ebae8a3795071a12127a2e79e7de7707be54408d"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/f519bb988dd0e2c71fe7bf097aef2a061ab52615.png",
+      "size": [
+        325,
+        329
+      ],
+      "sha256": "1393bbbcb9b1fa53fa57eb455a950c18920352e9f72bdc7fa74143b471693f4d"
+    },
+    {
+      "url": "https://forums.pokeaether.com/uploads/default/original/1X/f5cda82303189496868f288f46ca56642300b946.png",
+      "size": [
+        507,
+        412
+      ],
+      "sha256": "8cbca561baa7da2e909fc352523054154446de24705c333bf077a3ef2aee92e3"
+    }
+  ],
+  "new_originals": [
+    {
+      "topic_id": 60,
+      "filename": "01-skills-overview.png",
+      "upload_id": 159,
+      "pixel_equal": true,
+      "original_sha256": "b1e306b4a85966dbd526a5d578ca7c3c0f43eca22d06fe2863d2f049e5b4f4bf"
+    },
+    {
+      "topic_id": 60,
+      "filename": "02-level-roadmap.png",
+      "upload_id": 160,
+      "pixel_equal": true,
+      "original_sha256": "c7ea7e60feb1f048ef302be4852e5ebe4ec906e8ea02b0d210251e57d17ceab4"
+    },
+    {
+      "topic_id": 59,
+      "filename": "01-daily-rocks.png",
+      "upload_id": 161,
+      "pixel_equal": true,
+      "original_sha256": "3fa83481a4d20ad732d02339e500fb1abf05ce752baba274b8c52ed10f05f7b5"
+    },
+    {
+      "topic_id": 59,
+      "filename": "02-rock-smash-rewards.png",
+      "upload_id": 162,
+      "pixel_equal": true,
+      "original_sha256": "0204d764bfe7d875e589709b40ac6372378fa9e4c9a20e713efc4199e578e014"
+    },
+    {
+      "topic_id": 30,
+      "filename": "01-aethernet-destinations.png",
+      "upload_id": 163,
+      "pixel_equal": true,
+      "original_sha256": "326667ff7869cd3a8325c696c63c35da507409894013c7a83c394ac688677f53"
+    },
+    {
+      "topic_id": 84,
+      "filename": "01-choose-starter.png",
+      "upload_id": 164,
+      "pixel_equal": true,
+      "original_sha256": "3c036f8405d9c991fa6e9a6dd1c6da50eacb0627f91263bd0ccf3864dacc3f39"
+    },
+    {
+      "topic_id": 85,
+      "filename": "01-level-and-trade-caps.png",
+      "upload_id": 165,
+      "pixel_equal": true,
+      "original_sha256": "8a7f36cecdc0db2b7ce36a046bc0caa61ac83e619cc20b7120ee0065a82e8564"
+    },
+    {
+      "topic_id": 88,
+      "filename": "01-zapdos-difficulty.png",
+      "upload_id": 166,
+      "pixel_equal": true,
+      "original_sha256": "d5f825c92def4c8aa036c520b06de37efe1eb5704ae04422dd0c044d2acc5ec0"
+    },
+    {
+      "topic_id": 55,
+      "filename": "01-global-shiny-boost.png",
+      "upload_id": 167,
+      "pixel_equal": true,
+      "original_sha256": "37eff84beadcf7e3bc62cabf1723688f55c9a0a3cc6d6ed0d085aea8036349cf"
+    },
+    {
+      "topic_id": 71,
+      "filename": "01-ranked-team-validation.png",
+      "upload_id": 168,
+      "pixel_equal": true,
+      "original_sha256": "1ecafe106f1ad1f03f5f19b3c66e3d7805a4992b93e16c56aabf768609ce2ec5"
+    },
+    {
+      "topic_id": 58,
+      "filename": "02-room-timer-option.png",
+      "upload_id": 169,
+      "pixel_equal": true,
+      "original_sha256": "aefcf46037275d7d01ec5ca2323371e9f136c0ddc958fa9f60dc1d70f4afc92f"
+    },
+    {
+      "topic_id": 90,
+      "filename": "01-sparring-setup.png",
+      "upload_id": 170,
+      "pixel_equal": true,
+      "original_sha256": "64369002707f6a23b08ece697e717252a93a9c529e65ce2a629fdac665c08299"
+    },
+    {
+      "topic_id": 58,
+      "filename": "01-choice-and-waiting-timers.png",
+      "upload_id": 171,
+      "pixel_equal": true,
+      "original_sha256": "3807e28122ecd3ef9a312e76cdb5f169aa9ad416ae6e6c99851b334dd4b30bbd"
+    },
+    {
+      "topic_id": 56,
+      "filename": "01-blessing-voucher.png",
+      "upload_id": 172,
+      "pixel_equal": true,
+      "original_sha256": "0a36e360d6b853ac1de954be910ba47767fac922101795ccf436a781da6d7cdb"
+    },
+    {
+      "topic_id": 91,
+      "filename": "01-card-payment-and-binding.png",
+      "upload_id": 173,
+      "pixel_equal": true,
+      "original_sha256": "9d228dd658b531d63806f3f364c59e848eb9aeb876e3e08c5506ad69e26a4f55"
+    },
+    {
+      "topic_id": 91,
+      "filename": "02-currency-help.png",
+      "upload_id": 174,
+      "pixel_equal": true,
+      "original_sha256": "e34b9075f9091e3728394e7e06ad19c67677669a97bf5126491288f7e430d644"
+    },
+    {
+      "topic_id": 89,
+      "filename": "02-mount-box-preview.png",
+      "upload_id": 175,
+      "pixel_equal": true,
+      "original_sha256": "fd4c148f98c90ac7b354429de7ca49c1d7127c6d6914b914d599c81485f9bee7"
+    },
+    {
+      "topic_id": 89,
+      "filename": "01-mount-loadout.png",
+      "upload_id": 176,
+      "pixel_equal": true,
+      "original_sha256": "f2d5b2ad5081ace8b162d0dac3f0a44622d86f6927ded01fe1fdfcbffb476701"
+    },
+    {
+      "topic_id": 93,
+      "filename": "01-chroma-dye-preview.png",
+      "upload_id": 177,
+      "pixel_equal": true,
+      "original_sha256": "fa1d62648039bebe3788d728bccdacc88a41ad707a8d4672b674e67425d82910"
+    },
+    {
+      "topic_id": 86,
+      "filename": "02-fixed-rental-team.png",
+      "upload_id": 178,
+      "pixel_equal": true,
+      "original_sha256": "83c3fa2ee6bc5214743ec71b6ff158eaa1b5d257297a0bc75a025dc2bb2bb0de"
+    },
+    {
+      "topic_id": 98,
+      "filename": "01-battle-bag-balls.png",
+      "upload_id": 179,
+      "pixel_equal": true,
+      "original_sha256": "637cab58f80f25f343e78682b6b701acebc793d48b23c9068cc2c7e7a53aaa6b"
+    },
+    {
+      "topic_id": 96,
+      "filename": "01-bank-categories.png",
+      "upload_id": 180,
+      "pixel_equal": true,
+      "original_sha256": "cf6c0abe6a6497911d9fc6ff1624afc8698a5311bc9adfebefa2f3d0412c9ac0"
+    },
+    {
+      "topic_id": 96,
+      "filename": "02-bank-rank-rights.png",
+      "upload_id": 181,
+      "pixel_equal": true,
+      "original_sha256": "5989691f64d3a623da4342321282ad6a89bb56549205cfbb7d2d8f4881b201bc"
+    },
+    {
+      "topic_id": 70,
+      "filename": "01-duel-lobby.png",
+      "upload_id": 182,
+      "pixel_equal": true,
+      "original_sha256": "4f0a0acde54b46b70f23ddd0ebfc91cc50b554526b901c115b97b8068c4cfc2a"
+    },
+    {
+      "topic_id": 70,
+      "filename": "02-challenge-settings.png",
+      "upload_id": 183,
+      "pixel_equal": true,
+      "original_sha256": "c60480e1394e92a30a5f95cd15b6dabc31bf9c8918da43e88a1db1525c7098a4"
+    },
+    {
+      "topic_id": 97,
+      "filename": "01-training-setup.png",
+      "upload_id": 184,
+      "pixel_equal": true,
+      "original_sha256": "fe66ff790669f0991fea6ba3f777f9a3e9c6dce12cf6cc4413887846e1dad71c"
+    },
+    {
+      "topic_id": 97,
+      "filename": "02-reward-attempt.png",
+      "upload_id": 185,
+      "pixel_equal": true,
+      "original_sha256": "32ef4ef08aa339f2bbb3894ddb305246833d86e43bfee7f4a84e35fd6d74df2c"
+    },
+    {
+      "topic_id": 87,
+      "filename": "01-relearn-a-move.png",
+      "upload_id": 186,
+      "pixel_equal": true,
+      "original_sha256": "8cbf9b1b005c18e888c9eea57422266fa6fe272bbd24c849aab63f6a361b0b4e"
+    },
+    {
+      "topic_id": 87,
+      "filename": "02-free-move-deletion.png",
+      "upload_id": 187,
+      "pixel_equal": true,
+      "original_sha256": "0ada584562451d6e06cf87274d27a00bae2d2652ba26a482679395257ae92149"
+    },
+    {
+      "topic_id": 84,
+      "filename": "02-follow-current-quest.png",
+      "upload_id": 188,
+      "pixel_equal": true,
+      "original_sha256": "fba1f17be9e3a6d196d48052c56a70cd0695b1ffaf4aecfe99a23fd155dcc577"
+    },
+    {
+      "topic_id": 102,
+      "filename": "01-oaks-parcel-quest.png",
+      "upload_id": 189,
+      "pixel_equal": true,
+      "original_sha256": "6f72833a5aa64b65c71b372a9c1524f20d307e6aa113090a8b6dcdeec3e8b3bf"
+    },
+    {
+      "topic_id": 102,
+      "filename": "02-brock-quest.png",
+      "upload_id": 190,
+      "pixel_equal": true,
+      "original_sha256": "ea36a4d244c10869f5d93677b939985ded5e48554618d33e137343828961381a"
+    },
+    {
+      "topic_id": 102,
+      "filename": "03-misty-quest.png",
+      "upload_id": 191,
+      "pixel_equal": true,
+      "original_sha256": "5cf866bfa9677b29faecee0450e0d70f3dff02e1dbdbf4667bf8269c415a1165"
+    },
+    {
+      "topic_id": 102,
+      "filename": "04-surge-quest.png",
+      "upload_id": 192,
+      "pixel_equal": true,
+      "original_sha256": "9fc4688b9b778a42bcad7e0e4a0286c4ecc075f116480c3f838b48c4ebf92a04"
+    },
+    {
+      "topic_id": 86,
+      "filename": "01-rental-set-builder.png",
+      "upload_id": 193,
+      "pixel_equal": true,
+      "original_sha256": "6c34898c0d5f3bd3765be2b4fdf5ffcae137a0866385c76a59b44b92c643e2c3"
+    },
+    {
+      "topic_id": 92,
+      "filename": "01-compose-player-loan.png",
+      "upload_id": 194,
+      "pixel_equal": true,
+      "original_sha256": "cf780ea6e8842ec0e12ed333a2771e5907328ed7bcf701deb94a375733ba6db9"
+    },
+    {
+      "topic_id": 94,
+      "filename": "01-replay-library.png",
+      "upload_id": 195,
+      "pixel_equal": true,
+      "original_sha256": "14636ffd7af6fc4170d6a2b867f40965ef169d4ec445122963c8dbdcf82d92f9"
+    },
+    {
+      "topic_id": 99,
+      "filename": "01-happiness.png",
+      "upload_id": 196,
+      "pixel_equal": true,
+      "original_sha256": "fa96c907d12735f8596e4c68d33e453a1d3c335b441008cd133dcfc6288128ee"
+    },
+    {
+      "topic_id": 85,
+      "filename": "02-experience.png",
+      "upload_id": 197,
+      "pixel_equal": true,
+      "original_sha256": "ec5d83049dcb70d982215a39db04060fe31f12bc5515a44cbf70a8a11ea211b1"
+    },
+    {
+      "topic_id": 100,
+      "filename": "03-nature.png",
+      "upload_id": 198,
+      "pixel_equal": true,
+      "original_sha256": "d1c0d32b66812e109854f18bb5af38cfc075e22159c8ec74431792cff270e1ce"
+    },
+    {
+      "topic_id": 100,
+      "filename": "04-ability.png",
+      "upload_id": 199,
+      "pixel_equal": true,
+      "original_sha256": "ae1808fe2a89ec5f86333167dffbbe0b2612867640a909736171861521c076cd"
+    },
+    {
+      "topic_id": 100,
+      "filename": "01-ivs-and-stats.png",
+      "upload_id": 200,
+      "pixel_equal": true,
+      "original_sha256": "5f29c501cc9fa05bb166a303ebae8a3795071a12127a2e79e7de7707be54408d"
+    },
+    {
+      "topic_id": 100,
+      "filename": "02-stored-and-allocated-evs.png",
+      "upload_id": 201,
+      "pixel_equal": true,
+      "original_sha256": "ecdb2ed33ceccae2475661494768fdb362751d0dc95eddd6dc16fa1de7385346"
+    },
+    {
+      "topic_id": 101,
+      "filename": "01-choose-held-item.png",
+      "upload_id": 202,
+      "pixel_equal": true,
+      "original_sha256": "1f99c12a4b350c1eb1d754ba0585397be6f88679c400aab79b35871e2b7d2574"
+    },
+    {
+      "topic_id": 101,
+      "filename": "02-equipped-exp-share.png",
+      "upload_id": 203,
+      "pixel_equal": true,
+      "original_sha256": "b18180955500a1ded53adeb154b746cdd7ec837ede8a89a4b1897db09227c14b"
+    },
+    {
+      "topic_id": 98,
+      "filename": "poke-ball.png",
+      "upload_id": 204,
+      "pixel_equal": true,
+      "original_sha256": "8e765df95bcbd3880a54a602fc312405b2000d3b3464cd80cf9fbe5f4d8b7ddb"
+    },
+    {
+      "topic_id": 98,
+      "filename": "great-ball.png",
+      "upload_id": 205,
+      "pixel_equal": true,
+      "original_sha256": "f7edd676dc4b4dbca7e8d0ca46d93b04b875c44b0f0737815c2aa34d63f8defa"
+    },
+    {
+      "topic_id": 98,
+      "filename": "ultra-ball.png",
+      "upload_id": 206,
+      "pixel_equal": true,
+      "original_sha256": "445d9bc8a8ef9ed24887ce14b3f0ce8569a7fca349deecd9f3e957a26111d270"
+    },
+    {
+      "topic_id": 99,
+      "filename": "02-pokedex-evolutions.png",
+      "upload_id": 207,
+      "pixel_equal": true,
+      "original_sha256": "f350aef58f13a59651f2142a0b17a58c6609b90df58a9586aaf17bcf1544e68e"
+    }
+  ],
+  "pixel_comparison": "Exact RGBA byte comparison after decoding both PNGs; PNG container metadata may differ."
+}

@@ -1,0 +1,688 @@
+[
+  {
+    "caption": "Example Skills overview: select Fishing, Thieving or Rock Smash to inspect its level, XP and unlocks.",
+    "control": "SkillsPanel",
+    "exampleData": true,
+    "filename": "01-skills-overview.png",
+    "heading": "## Opening Skills",
+    "size": [
+      784,
+      804
+    ],
+    "topic": 60,
+    "sha256": "8908bedeb39a56e21d8e0d5c31960c9e7d049ace86d3b904390b28a396e4655a",
+    "stage_name": "60-01-skills-overview.png"
+  },
+  {
+    "caption": "Example skill page: the roadmap distinguishes unlocked rewards from later milestones.",
+    "control": "SkillsPanel",
+    "exampleData": true,
+    "filename": "02-level-roadmap.png",
+    "heading": "## Unlocking and progressing",
+    "size": [
+      784,
+      804
+    ],
+    "topic": 60,
+    "sha256": "2008da5de2c44507a16e88ecd89eda71c74710386ec820b461cfb03ef6526706",
+    "stage_name": "60-02-level-roadmap.png"
+  },
+  {
+    "caption": "Example: Skills \u2192 Rock Smash \u2192 Rocks lists exact locations, required levels and today's availability.",
+    "control": "SkillsPanel",
+    "exampleData": true,
+    "filename": "01-daily-rocks.png",
+    "heading": "## Daily rocks and locations",
+    "size": [
+      784,
+      804
+    ],
+    "topic": 59,
+    "sha256": "88389bd795d76d9d8a99a75ace5cdc3b5fa5e9b886d16d32544688e8ab2f7fec",
+    "stage_name": "59-01-daily-rocks.png"
+  },
+  {
+    "caption": "Check Rock Smash's Rewards tab for money, treasure and fossil information as your level increases.",
+    "control": "SkillsPanel",
+    "exampleData": true,
+    "filename": "02-rock-smash-rewards.png",
+    "heading": "## Items you can find",
+    "size": [
+      784,
+      804
+    ],
+    "topic": 59,
+    "sha256": "47b1e3410c190fb7403ff4768c26a145c9df43b7265da58c1c40572bf7701040",
+    "stage_name": "59-02-rock-smash-rewards.png"
+  },
+  {
+    "caption": "Example Aethernet menu: select an attuned destination, then check its fare. Normal regional travel costs \u20bd200; your Anchor is free.",
+    "control": "TransitPanel",
+    "exampleData": true,
+    "filename": "01-aethernet-destinations.png",
+    "heading": "## Travelling",
+    "size": [
+      804,
+      674
+    ],
+    "topic": 30,
+    "sha256": "a94dc320f59825014fade00cd3dded5af7867fd23ea07d8a4a023c985120dcc9",
+    "stage_name": "30-01-aethernet-destinations.png"
+  },
+  {
+    "caption": "Browse the starter choices, inspect the selected Pok\u00e9mon and confirm the partner you want.",
+    "control": "StarterChoicePanel",
+    "exampleData": true,
+    "filename": "01-choose-starter.png",
+    "heading": "## 1. Choose your first Pok\u00e9mon",
+    "size": [
+      1104,
+      714
+    ],
+    "topic": 84,
+    "sha256": "b3c21935b86e92724e7a2c37d454117d05835a1c593c6a4e2d74daea89b8ad43",
+    "stage_name": "84-01-choose-starter.png"
+  },
+  {
+    "caption": "Example with no badges: the Trainer Card shows a normal level cap of 20 and a separate trade cap of 5.",
+    "control": "@PanelContainer@4598",
+    "exampleData": true,
+    "filename": "01-level-and-trade-caps.png",
+    "heading": "## The two limits",
+    "size": [
+      544,
+      144
+    ],
+    "topic": 85,
+    "sha256": "f80170b882126a8afa722460215c0dd456f7f16d764299b3d9cf6a0ee27ffcf9",
+    "stage_name": "85-01-level-and-trade-caps.png"
+  },
+  {
+    "caption": "Choose the Weekly Boss difficulty before starting. The boss challenge is separate from a catchable wild encounter.",
+    "control": "Panel",
+    "exampleData": true,
+    "filename": "01-zapdos-difficulty.png",
+    "heading": "## Starting a challenge",
+    "size": [
+      644,
+      264
+    ],
+    "topic": 88,
+    "sha256": "b6a1d44d6fb8f699f23ff3ea162a7a3fbed7402d7e8a2ad9e8d02f8fe3ace5cb",
+    "stage_name": "88-01-zapdos-difficulty.png"
+  },
+  {
+    "caption": "Example funding panel: the Global Shiny Boost activates only after its community goal is filled.",
+    "control": "GlobalBuffDetailsPanel",
+    "exampleData": true,
+    "filename": "01-global-shiny-boost.png",
+    "heading": "## Global Shiny Boost",
+    "size": [
+      373,
+      459
+    ],
+    "topic": 55,
+    "sha256": "ed461c99b2a265fd63157254d6ead4c3022c13f0bfa3b009dee7b5ba71482f19",
+    "stage_name": "55-01-global-shiny-boost.png"
+  },
+  {
+    "caption": "Example validation issue: Species Clause prevents duplicate species. Select a format and fix the listed Party issues before finding a match.",
+    "control": "PvpRoomPopup",
+    "exampleData": true,
+    "filename": "01-ranked-team-validation.png",
+    "heading": "## Joining Ranked",
+    "size": [
+      1004,
+      644
+    ],
+    "topic": 71,
+    "sha256": "2d217514215037d85fa19f07c8e2866f4bcc29b3599e1c9b185d9ae738c987ce",
+    "stage_name": "71-01-ranked-team-validation.png"
+  },
+  {
+    "caption": "Example Custom Room: enable Battle Timer and select a speed before creating the room. Room timers differ from Ranked's time bank.",
+    "control": "PvpRoomPopup",
+    "exampleData": true,
+    "filename": "02-room-timer-option.png",
+    "heading": "## Custom and Training Rooms",
+    "size": [
+      1004,
+      676
+    ],
+    "topic": 58,
+    "sha256": "6f90267a2d91b35919319e98111c2528e9a0b4624b0f2ad87c8dbc4dcd112677",
+    "stage_name": "58-02-room-timer-option.png"
+  },
+  {
+    "caption": "Example AI Sparring setup: choose the opponent and difficulty, provide a team, and decide whether to allow spectators before starting practice.",
+    "control": "@VBoxContainer@4042",
+    "exampleData": true,
+    "filename": "01-sparring-setup.png",
+    "heading": "## Start your first battle",
+    "size": [
+      904,
+      629
+    ],
+    "topic": 90,
+    "sha256": "ed4a095a80ba03755119dcd497f5a7a9b00003873a8ff84393fd49c2e49310b3",
+    "stage_name": "90-01-sparring-setup.png"
+  },
+  {
+    "caption": "Example Ranked timer: your visible choice allowance is capped at 01:30. An accepted opponent choice shows Waiting with its remaining time frozen.",
+    "control": "VSPanelContainer",
+    "exampleData": true,
+    "filename": "01-choice-and-waiting-timers.png",
+    "heading": "## Ranked Battles",
+    "size": [
+      974,
+      134
+    ],
+    "topic": 58,
+    "sha256": "c426617e0c2e1c2de01efb68260343bd52fde5d1164ecbf3c8b1ffdbd78d0d90",
+    "stage_name": "58-01-choice-and-waiting-timers.png"
+  },
+  {
+    "caption": "Example Gift Store: select a Blessing voucher, check its duration and price, then use the purchased voucher from your Bag.",
+    "control": "DonatorStorePopup",
+    "exampleData": true,
+    "filename": "01-blessing-voucher.png",
+    "heading": "## Activating Aether Blessing",
+    "size": [
+      1144,
+      704
+    ],
+    "topic": 56,
+    "sha256": "829c374118ce4d20c8904a2d12bb2925bc91f907adf773932e55ad77ebb02987",
+    "stage_name": "56-01-blessing-voucher.png"
+  },
+  {
+    "caption": "Example: Aether Credit Card payment is available for eligible personal products. Review the binding notice before purchasing.",
+    "control": "DonatorStorePopup",
+    "exampleData": true,
+    "filename": "01-card-payment-and-binding.png",
+    "heading": "## Buying with the Credit Card",
+    "size": [
+      1144,
+      704
+    ],
+    "topic": 91,
+    "sha256": "dd4bbe7f890f5c32bd24656eb7e47f7eec390227911a19d0cae21961c2acd5aa",
+    "stage_name": "91-01-card-payment-and-binding.png"
+  },
+  {
+    "caption": "The Gift Store's information button explains Gems, credit vouchers and the personal Aether Credit Card.",
+    "control": "Panel",
+    "exampleData": true,
+    "filename": "02-currency-help.png",
+    "heading": "## Checking your card balance",
+    "size": [
+      544,
+      372
+    ],
+    "topic": 91,
+    "sha256": "b15fac4f3373a2f8b223abc9984a87efdf8f9e06fb4e5c103fbc91ebd1060f54",
+    "stage_name": "91-02-currency-help.png"
+  },
+  {
+    "caption": "Example mount preview: inspect the mount box and its price before purchasing. Owning a box and equipping a mount are separate steps.",
+    "control": "DonatorStorePopup",
+    "exampleData": true,
+    "filename": "02-mount-box-preview.png",
+    "heading": "## Mount Boxes",
+    "size": [
+      1144,
+      704
+    ],
+    "topic": 89,
+    "sha256": "85096353e468817eb128e627b9fb5018b8bf9da47f954ee6131dc7c8cddebeeb",
+    "stage_name": "89-02-mount-box-preview.png"
+  },
+  {
+    "caption": "Example Mounts manager: choose a mount for each movement type. The list shows mounts unlocked by your items and progression.",
+    "control": "MountLoadoutPanel",
+    "exampleData": true,
+    "filename": "01-mount-loadout.png",
+    "heading": "## Choosing and using a mount",
+    "size": [
+      296,
+      494
+    ],
+    "topic": 89,
+    "sha256": "4754b6df9cfe2e4df52393e2e537786b996399cc6e51f7268fbad1e6c7ca026a",
+    "stage_name": "89-01-mount-loadout.png"
+  },
+  {
+    "caption": "Example Atelier: select a Chroma item and preview a colour. Review the \u20bd2,500 fee for each changed item before applying it.",
+    "control": "AetherAtelierPopup",
+    "exampleData": true,
+    "filename": "01-chroma-dye-preview.png",
+    "heading": "## Changing a Chroma colour",
+    "size": [
+      964,
+      659
+    ],
+    "topic": 93,
+    "sha256": "e2a78b2f7eca8b2d846387b533425270cc2accdfeeed1c071465642048a97722",
+    "stage_name": "93-01-chroma-dye-preview.png"
+  },
+  {
+    "caption": "Example Team Rental catalog: inspect the six fixed sets and their held items. A full team costs 200 Aetherite for 24 hours.",
+    "control": "@Window@3672",
+    "exampleData": true,
+    "filename": "02-fixed-rental-team.png",
+    "heading": "## Renting a full team",
+    "size": [
+      964,
+      694
+    ],
+    "topic": 86,
+    "sha256": "586c96be9f1b21b6675efebc56d427d6a7beb912d200aa631815560de7b7ddb2",
+    "stage_name": "86-02-fixed-rental-team.png"
+  },
+  {
+    "caption": "Example wild-battle Bag: choose an available Pok\u00e9 Ball after weakening the target. Throwing it uses your battle action.",
+    "control": "BagDrawer",
+    "exampleData": true,
+    "filename": "01-battle-bag-balls.png",
+    "heading": "## How to throw a ball",
+    "size": [
+      704,
+      384
+    ],
+    "topic": 98,
+    "sha256": "122b04caca4d24e830362f25e3ceba10301a11202d8b1a3435f6e51712b9af05",
+    "stage_name": "98-01-battle-bag-balls.png"
+  },
+  {
+    "caption": "Example Guild Bank: choose Funds, Pok\u00e9mon, Items or Resources. Access depends on your guild rank and assigned rights.",
+    "control": "GuildPopup",
+    "exampleData": true,
+    "filename": "01-bank-categories.png",
+    "heading": "## Opening the bank",
+    "size": [
+      1064,
+      724
+    ],
+    "topic": 96,
+    "sha256": "158c01080f5b6cfdc18c4f81a1f377a68d73e33d9c8aadf3905cc98ef8fc475e",
+    "stage_name": "96-01-bank-categories.png"
+  },
+  {
+    "caption": "Example leader view: review bank permissions for each rank before allowing withdrawals or loans.",
+    "control": "GuildPopup",
+    "exampleData": true,
+    "filename": "02-bank-rank-rights.png",
+    "heading": "## Default rank rights",
+    "size": [
+      1064,
+      724
+    ],
+    "topic": 96,
+    "sha256": "566f6a2ad271d45478b194aa290459362db21f056d4d43213d2a5ccfb171dca0",
+    "stage_name": "96-02-bank-rank-rights.png"
+  },
+  {
+    "caption": "Example Aether Clash lobby: check the opposing guild and remaining entry time before joining a duel.",
+    "control": "GuildPopup",
+    "exampleData": true,
+    "filename": "01-duel-lobby.png",
+    "heading": "## Entering the Clash",
+    "size": [
+      1064,
+      724
+    ],
+    "topic": 70,
+    "sha256": "5fa4bbb9fa0c6800ad86e144fed946f3d9c2301602c023ddd6280fe40dc0c43b",
+    "stage_name": "70-01-duel-lobby.png"
+  },
+  {
+    "caption": "Example challenge: choose the format, optional stake and spectator access before sending it.",
+    "control": "Panel",
+    "exampleData": true,
+    "filename": "02-challenge-settings.png",
+    "heading": "## Sending a challenge",
+    "size": [
+      584,
+      514
+    ],
+    "topic": 70,
+    "sha256": "022825d05500ec7a1b1cb88d3bdcba4808ea92df96eab42261996523fb6b4c24",
+    "stage_name": "70-02-challenge-settings.png"
+  },
+  {
+    "caption": "Example guild practice setup: choose the bot count, battle format, AI policy and spectator access.",
+    "control": "Panel",
+    "exampleData": true,
+    "filename": "01-training-setup.png",
+    "heading": "## Starting a session",
+    "size": [
+      584,
+      524
+    ],
+    "topic": 97,
+    "sha256": "d3c630d769ac59cdcd0297338635521fde3ffb3faa64f5861af00e4a775d6419",
+    "stage_name": "97-01-training-setup.png"
+  },
+  {
+    "caption": "Example: reward attempts use AI5 and up to 20 bots. Tick the reward option only when you intend to use that day's attempt.",
+    "control": "Panel",
+    "exampleData": true,
+    "filename": "02-reward-attempt.png",
+    "heading": "## Daily reward conditions",
+    "size": [
+      584,
+      524
+    ],
+    "topic": 97,
+    "sha256": "7621ad2affbe7b5aed813180aab97c59b8c9088a3e4a20912fbbcf6a6b5d50a1",
+    "stage_name": "97-02-reward-attempt.png"
+  },
+  {
+    "caption": "Example Move Maniac: select Bulbasaur, inspect the available moves and check the Heart Scale cost for Leech Seed.",
+    "control": "MoveMentorPopup",
+    "exampleData": true,
+    "filename": "01-relearn-a-move.png",
+    "heading": "## Teaching a move with the Move Maniac",
+    "size": [
+      984,
+      634
+    ],
+    "topic": 87,
+    "sha256": "a52910a9f973f88418fdd0bb69b8f779733e81da3b1f962a514ecc2eb5bca1a0",
+    "stage_name": "87-01-relearn-a-move.png"
+  },
+  {
+    "caption": "Example Move Deleter: select the move to remove and confirm only after checking it. Deletion is free, and the final move cannot be removed.",
+    "control": "MoveDeleterPopup",
+    "exampleData": true,
+    "filename": "02-free-move-deletion.png",
+    "heading": "## Removing a move with the Move Deleter",
+    "size": [
+      844,
+      564
+    ],
+    "topic": 87,
+    "sha256": "9e92b47e975dcd66762c328e90f55ad49edc65215d36c8c213c176e95bb9e694",
+    "stage_name": "87-02-free-move-deletion.png"
+  },
+  {
+    "caption": "Example Quest Log: the active objective identifies your next task. Completed and later steps remain separate.",
+    "control": "QuestJournalPanel",
+    "exampleData": true,
+    "filename": "02-follow-current-quest.png",
+    "heading": "## 2. Keep following the story",
+    "size": [
+      924,
+      594
+    ],
+    "topic": 84,
+    "sha256": "d0874878b68bbb5206b7ffe8592f1cf3f779892e9d3eb7c27854f167c77c416e",
+    "stage_name": "84-02-follow-current-quest.png"
+  },
+  {
+    "caption": "Example Oak's Parcel quest: collect the parcel in Viridian City, then finish the return conversation with Oak.",
+    "control": "QuestJournalPanel",
+    "exampleData": true,
+    "filename": "01-oaks-parcel-quest.png",
+    "heading": "### Oak's Parcel",
+    "size": [
+      924,
+      594
+    ],
+    "topic": 102,
+    "sha256": "a7eea075ee5ecb0d8d8c6505dce4f9ac3d635e70761ef3ce7f17e415c3a08d66",
+    "stage_name": "102-01-oaks-parcel-quest.png"
+  },
+  {
+    "caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+    "control": "QuestJournalPanel",
+    "exampleData": true,
+    "filename": "02-brock-quest.png",
+    "heading": "### Reaching Pewter City",
+    "size": [
+      924,
+      594
+    ],
+    "topic": 102,
+    "sha256": "5429f19916026c2c3eb68cc43b83501d223c0c168de772fcbd243208f5cb2510",
+    "stage_name": "102-02-brock-quest.png"
+  },
+  {
+    "caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+    "control": "QuestJournalPanel",
+    "exampleData": true,
+    "filename": "03-misty-quest.png",
+    "heading": "### Your second badge",
+    "size": [
+      924,
+      594
+    ],
+    "topic": 102,
+    "sha256": "7bc0b4f70efbd59ead44f7f8b3a4399976537f83ec6eba0b94d6be1581e903d4",
+    "stage_name": "102-03-misty-quest.png"
+  },
+  {
+    "caption": "Example Gym quest: read the current objective before challenging this Gym. Progression can require an earlier story step.",
+    "control": "QuestJournalPanel",
+    "exampleData": true,
+    "filename": "04-surge-quest.png",
+    "heading": "### The third Gym battle",
+    "size": [
+      924,
+      594
+    ],
+    "topic": 102,
+    "sha256": "6a4eafd88af23e1ebcda7bd86879059863efe18278adbf922144cbff0c820e08",
+    "stage_name": "102-04-surge-quest.png"
+  },
+  {
+    "caption": "Example individual rental: paste a Pok\u00e9mon set, inspect its preview, then request the authoritative quote before renting.",
+    "control": "@Window@3672",
+    "exampleData": true,
+    "filename": "01-rental-set-builder.png",
+    "heading": "## Renting individual Pok\u00e9mon",
+    "size": [
+      964,
+      694
+    ],
+    "topic": 86,
+    "sha256": "651d7ab1295e7de438ceb7ae4dec877affba0ae92809ab7536c2c527d4a8762a",
+    "stage_name": "86-01-rental-set-builder.png"
+  },
+  {
+    "caption": "Example loan offer: choose a Party Pok\u00e9mon, duration and optional fee. The recipient must accept before the loan begins.",
+    "control": "@Window@3860",
+    "exampleData": true,
+    "filename": "01-compose-player-loan.png",
+    "heading": "## Making a loan offer",
+    "size": [
+      924,
+      664
+    ],
+    "topic": 92,
+    "sha256": "f3a72fb7fb8af1eb90f8a27bf1726303ad7261d89a4198174e8c2e31374d0886",
+    "stage_name": "92-01-compose-player-loan.png"
+  },
+  {
+    "caption": "Example replay library: use Play to watch a recording, the star to keep it as a favorite, or the sharing control to manage a replay code.",
+    "control": "@PanelContainer@3984",
+    "exampleData": true,
+    "filename": "01-replay-library.png",
+    "heading": "## Finding and watching a replay",
+    "size": [
+      1064,
+      784
+    ],
+    "topic": 94,
+    "sha256": "e899c036264862567bb384a592572b8c5de3bf4df619024dc79d180ec3868094",
+    "stage_name": "94-01-replay-library.png"
+  },
+  {
+    "caption": "Example Summary: check Happiness in the Info tab. Raising it does not currently activate friendship evolutions.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "01-happiness.png",
+    "heading": "## How Happiness works",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 99,
+    "sha256": "8abe8ce77964db704dcf0414e3395bf680e9a87c5d1a1c7636e9aaa768a4f578",
+    "stage_name": "99-01-happiness.png"
+  },
+  {
+    "caption": "Example Summary: the EXP indicator shows progress towards the next level. Your current level cap still applies.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "02-experience.png",
+    "heading": "## What happens to EXP at the cap?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 85,
+    "sha256": "b9c4a412f27d7ff168316616f02cba831bc5df8e0be4f00c0458619494e25268",
+    "stage_name": "85-02-experience.png"
+  },
+  {
+    "caption": "Example: hover over Modest to see which stat it raises and which it lowers.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "03-nature.png",
+    "heading": "## What does Nature do?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 100,
+    "sha256": "5a443a45191289e2076013449a06970c1b8e300d1134c7228dc6a8778c29d3e7",
+    "stage_name": "100-03-nature.png"
+  },
+  {
+    "caption": "Example: hover over the current Ability to read its battle effect.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "04-ability.png",
+    "heading": "## What is an Ability?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 100,
+    "sha256": "b3ddec83be0a61cce061683bcc60d24991d726fa6abc30a659926572801c189c",
+    "stage_name": "100-04-ability.png"
+  },
+  {
+    "caption": "Example Summary: compare each stat and its IV. Individual values remain separate from level and training.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "01-ivs-and-stats.png",
+    "heading": "## What are IVs?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 100,
+    "sha256": "e972051f205d20289144a99323db12166c3ff2ac73779cb7f1b9e76d0aa9c5ae",
+    "stage_name": "100-01-ivs-and-stats.png"
+  },
+  {
+    "caption": "Example Summary: Stored EVs are available training points; Allocated EVs are already assigned to stats.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "02-stored-and-allocated-evs.png",
+    "heading": "## What are EVs?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 100,
+    "sha256": "faa2738d0814ff98345bdc6638fbcd6866cb213acc6a49b4f4eedde976c0bf7b",
+    "stage_name": "100-02-stored-and-allocated-evs.png"
+  },
+  {
+    "caption": "Example: select the held-item slot, then choose an eligible item from your Bag.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "01-choose-held-item.png",
+    "heading": "## Giving or taking an item",
+    "size": [
+      646,
+      619
+    ],
+    "topic": 101,
+    "sha256": "4880ee1c3cbced2d7e0ffc167ff06e8912a2897e0592e9338e262105b0d29385",
+    "stage_name": "101-01-choose-held-item.png"
+  },
+  {
+    "caption": "Example: Exp. Share is equipped on this Pok\u00e9mon. Owning it in the Bag alone does not activate its held-item effect.",
+    "control": "PokemonSummaryPopup",
+    "exampleData": true,
+    "filename": "02-equipped-exp-share.png",
+    "heading": "## Exp. Share: who gets the EXP?",
+    "size": [
+      646,
+      425
+    ],
+    "topic": 101,
+    "sha256": "c6e3704c6e95dff51e91318b94ad0aa27b2d786128265ac2adbb5072a370892b",
+    "stage_name": "101-02-equipped-exp-share.png"
+  },
+  {
+    "caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+    "control": "ItemDexPopup",
+    "exampleData": true,
+    "filename": "poke-ball.png",
+    "heading": "## Choosing a ball",
+    "size": [
+      954,
+      644
+    ],
+    "topic": 98,
+    "sha256": "1b4fbd49615f67de4619b8cf158083088f28535a0d89c572a76076672cc08917",
+    "stage_name": "98-poke-ball.png"
+  },
+  {
+    "caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+    "control": "ItemDexPopup",
+    "exampleData": true,
+    "filename": "great-ball.png",
+    "heading": "## Choosing a ball",
+    "size": [
+      954,
+      644
+    ],
+    "topic": 98,
+    "sha256": "6c060a1750b0f94ad2cf5148e5bbcd81b96c241b7ec62f3d37500116d0e64498",
+    "stage_name": "98-great-ball.png"
+  },
+  {
+    "caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+    "control": "ItemDexPopup",
+    "exampleData": true,
+    "filename": "ultra-ball.png",
+    "heading": "## Choosing a ball",
+    "size": [
+      954,
+      644
+    ],
+    "topic": 98,
+    "sha256": "af2d2babdd4b1ffa9ddd3db301d704c4199ca46f419cd0c0483e14791fa66536",
+    "stage_name": "98-ultra-ball.png"
+  },
+  {
+    "caption": "Check the Pok\u00e9dex Evolutions tab for the next form and its listed requirements. Some special methods are not active yet.",
+    "control": "PokedexPopup",
+    "exampleData": true,
+    "filename": "02-pokedex-evolutions.png",
+    "heading": "## Check the Pok\u00e9dex first",
+    "size": [
+      1204,
+      744
+    ],
+    "topic": 99,
+    "sha256": "63890dcd7d9365f34b613267796b4aaa368f0ba985714ff7efd5629eb3564f50",
+    "stage_name": "99-02-pokedex-evolutions.png"
+  }
+]

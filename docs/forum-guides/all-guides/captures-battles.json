@@ -1,0 +1,50 @@
+[
+	{
+		"caption": "Example validation issue: Species Clause prevents duplicate species. Select a format and fix the listed Party issues before finding a match.",
+		"control": "PvpRoomPopup",
+		"exampleData": true,
+		"filename": "01-ranked-team-validation.png",
+		"heading": "## Joining Ranked",
+		"size": [
+			1004,
+			644
+		],
+		"topic": 71
+	},
+	{
+		"caption": "Example Custom Room: enable Battle Timer and select a speed before creating the room. Room timers differ from Ranked's time bank.",
+		"control": "PvpRoomPopup",
+		"exampleData": true,
+		"filename": "02-room-timer-option.png",
+		"heading": "## Custom and Training Rooms",
+		"size": [
+			1004,
+			676
+		],
+		"topic": 58
+	},
+	{
+		"caption": "Example AI Sparring setup: choose the opponent and difficulty, provide a team, and decide whether to allow spectators before starting practice.",
+		"control": "@VBoxContainer@4042",
+		"exampleData": true,
+		"filename": "01-sparring-setup.png",
+		"heading": "## Start your first battle",
+		"size": [
+			904,
+			629
+		],
+		"topic": 90
+	},
+	{
+		"caption": "Example Ranked timer: your visible choice allowance is capped at 01:30. An accepted opponent choice shows Waiting with its remaining time frozen.",
+		"control": "VSPanelContainer",
+		"exampleData": true,
+		"filename": "01-choice-and-waiting-timers.png",
+		"heading": "## Ranked Battles",
+		"size": [
+			974,
+			134
+		],
+		"topic": 58
+	}
+]

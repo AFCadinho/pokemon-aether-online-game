@@ -1,0 +1,341 @@
+{
+  "author": "adinho",
+  "guides": [
+    {
+      "topic_id": 30,
+      "post_id": 34,
+      "version": 7,
+      "category_id": 20,
+      "raw_sha256": "6586dd13bd7077c1aa4f794f1a211e8dba8a2ff5474e559d821eca3b51cef2cf",
+      "image_count": 1,
+      "upload_ids": [
+        163
+      ],
+      "url": "https://forums.pokeaether.com/t/aethernet-travel-guide/30"
+    },
+    {
+      "topic_id": 55,
+      "post_id": 62,
+      "version": 8,
+      "category_id": 20,
+      "raw_sha256": "23923de3a7f8a361e02ac8316b5dd5b3def9543fb57bede0d84aa479d602f6d0",
+      "image_count": 1,
+      "upload_ids": [
+        167
+      ],
+      "url": "https://forums.pokeaether.com/t/shiny-odds-multipliers-guide/55"
+    },
+    {
+      "topic_id": 56,
+      "post_id": 63,
+      "version": 3,
+      "category_id": 13,
+      "raw_sha256": "dc8b2ab990bd59f9c5cc6d40868a942d38c6c6cbbfb9401da59655dbb86d2c5c",
+      "image_count": 1,
+      "upload_ids": [
+        172
+      ],
+      "url": "https://forums.pokeaether.com/t/aether-blessing-membership-guide/56"
+    },
+    {
+      "topic_id": 58,
+      "post_id": 65,
+      "version": 6,
+      "category_id": 21,
+      "raw_sha256": "c9bf2d7e77f31b6a0e8ae0f36763bc945264abe4c5e13e7964928182da9ac525",
+      "image_count": 2,
+      "upload_ids": [
+        171,
+        169
+      ],
+      "url": "https://forums.pokeaether.com/t/battle-timer-guide/58"
+    },
+    {
+      "topic_id": 59,
+      "post_id": 66,
+      "version": 4,
+      "category_id": 20,
+      "raw_sha256": "d60acfbb835552e04c3b4eb8caba7c08d812aa7f0731baded7e96f76856a2eea",
+      "image_count": 2,
+      "upload_ids": [
+        161,
+        162
+      ],
+      "url": "https://forums.pokeaether.com/t/official-rock-smash-guide/59"
+    },
+    {
+      "topic_id": 60,
+      "post_id": 67,
+      "version": 3,
+      "category_id": 20,
+      "raw_sha256": "5a65fad55d02ca698b5a68e0e50b540cbfb0111d983f0beea2aeb85dd0d71d2e",
+      "image_count": 2,
+      "upload_ids": [
+        159,
+        160
+      ],
+      "url": "https://forums.pokeaether.com/t/skills-guide/60"
+    },
+    {
+      "topic_id": 70,
+      "post_id": 77,
+      "version": 4,
+      "category_id": 13,
+      "raw_sha256": "102d630b3afd2f5bd76e5424a8fd6d23c0c82c9123e79bf24314887da774d0ea",
+      "image_count": 2,
+      "upload_ids": [
+        182,
+        183
+      ],
+      "url": "https://forums.pokeaether.com/t/aether-clash-guild-duel-guide/70"
+    },
+    {
+      "topic_id": 71,
+      "post_id": 78,
+      "version": 3,
+      "category_id": 13,
+      "raw_sha256": "fcf8dc142ed5feaa876ada585fb01a093369599d30d4389ff45a3ec0824d3b1b",
+      "image_count": 1,
+      "upload_ids": [
+        168
+      ],
+      "url": "https://forums.pokeaether.com/t/ranked-battles-and-rating-guide/71"
+    },
+    {
+      "topic_id": 84,
+      "post_id": 91,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "f29f2079eb4b25227913a67dd7cc162c59159ef7b1e186d17608042189f285ee",
+      "image_count": 2,
+      "upload_ids": [
+        164,
+        188
+      ],
+      "url": "https://forums.pokeaether.com/t/getting-started-in-pokeaether/84"
+    },
+    {
+      "topic_id": 85,
+      "post_id": 92,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "2ef28bc051eede9b21696dca9153c11a12199ded2baabb8334d3259b34c25178",
+      "image_count": 2,
+      "upload_ids": [
+        165,
+        197
+      ],
+      "url": "https://forums.pokeaether.com/t/level-caps-exp-traded-pokemon/85"
+    },
+    {
+      "topic_id": 86,
+      "post_id": 93,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "0a0d453efdcc343cb69c184cd2d063c7d96b37fedd18f7789f8869c55eb6aa5c",
+      "image_count": 2,
+      "upload_ids": [
+        193,
+        178
+      ],
+      "url": "https://forums.pokeaether.com/t/pokemon-rentals-rental-teams/86"
+    },
+    {
+      "topic_id": 87,
+      "post_id": 94,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "5ca0e38742ac01e5e45cdadc03fb0f09ecdd664ae281fa428fbad085cef77334",
+      "image_count": 2,
+      "upload_ids": [
+        186,
+        187
+      ],
+      "url": "https://forums.pokeaether.com/t/move-maniac-move-deleter/87"
+    },
+    {
+      "topic_id": 88,
+      "post_id": 95,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "714d234393472b8e27b792e1c169e2dc4e1cb60afd08f85ac6718a075bbb366d",
+      "image_count": 1,
+      "upload_ids": [
+        166
+      ],
+      "url": "https://forums.pokeaether.com/t/weekly-bosses-zapdos/88"
+    },
+    {
+      "topic_id": 89,
+      "post_id": 96,
+      "version": 5,
+      "category_id": 13,
+      "raw_sha256": "1c7e318759b690cd94e979ee289e7dd06e63bcbb33a7662f468a7e9b6366a6cb",
+      "image_count": 2,
+      "upload_ids": [
+        176,
+        175
+      ],
+      "url": "https://forums.pokeaether.com/t/mounts-licenses-mount-boxes/89"
+    },
+    {
+      "topic_id": 90,
+      "post_id": 97,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "fda2216ca3e6f3099e493d138d125ce003e3de09df6d7ebe010ca7883511be2e",
+      "image_count": 1,
+      "upload_ids": [
+        170
+      ],
+      "url": "https://forums.pokeaether.com/t/ai-sparring-guide/90"
+    },
+    {
+      "topic_id": 91,
+      "post_id": 98,
+      "version": 3,
+      "category_id": 13,
+      "raw_sha256": "aec56189de587a7df8cbf7e7f194a5fc209f13ceb18e968cff1109977eb81dfa",
+      "image_count": 2,
+      "upload_ids": [
+        173,
+        174
+      ],
+      "url": "https://forums.pokeaether.com/t/currencies-aether-credit-card-account-binding/91"
+    },
+    {
+      "topic_id": 92,
+      "post_id": 99,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "fa1c50558aa321d988a14c32dc1a932aeee4f66d803fee47bf892076f3cef68f",
+      "image_count": 1,
+      "upload_ids": [
+        194
+      ],
+      "url": "https://forums.pokeaether.com/t/player-loans-borrowing-lending/92"
+    },
+    {
+      "topic_id": 93,
+      "post_id": 100,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "35e78b43f0f8181ac47a49217ecd73f2c17c8fb84705c4130aff978824953e7e",
+      "image_count": 1,
+      "upload_ids": [
+        177
+      ],
+      "url": "https://forums.pokeaether.com/t/clothing-colours-aether-atelier/93"
+    },
+    {
+      "topic_id": 94,
+      "post_id": 101,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "101c0fb3991881d569bfef25a8b368db507bafa1edf43382863dbfc1380a0d86",
+      "image_count": 1,
+      "upload_ids": [
+        195
+      ],
+      "url": "https://forums.pokeaether.com/t/battle-replays-save-watch-share/94"
+    },
+    {
+      "topic_id": 96,
+      "post_id": 103,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "c22a0801035869c17cae9c2e360f4c2ce6e7ce8609004c63dd6ac222bf8011cd",
+      "image_count": 2,
+      "upload_ids": [
+        180,
+        181
+      ],
+      "url": "https://forums.pokeaether.com/t/guild-bank-donate-borrow-withdraw/96"
+    },
+    {
+      "topic_id": 97,
+      "post_id": 104,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "e2a1b1a97ade4ef0b461cb8973f80453401860f956f4f78907913fe243f25b03",
+      "image_count": 2,
+      "upload_ids": [
+        184,
+        185
+      ],
+      "url": "https://forums.pokeaether.com/t/guild-training-against-bots/97"
+    },
+    {
+      "topic_id": 98,
+      "post_id": 105,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "c45d65f48c38688871e6f59d2471c613dca7d109b00c4139d69a39deb482819c",
+      "image_count": 4,
+      "upload_ids": [
+        179,
+        205,
+        204,
+        206
+      ],
+      "url": "https://forums.pokeaether.com/t/catching-pokemon-choosing-poke-balls/98"
+    },
+    {
+      "topic_id": 99,
+      "post_id": 106,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "9d3230e6485f60af06b8613c0a68e560b3b5a7e300b04ec4f3740f165b44d19d",
+      "image_count": 2,
+      "upload_ids": [
+        196,
+        207
+      ],
+      "url": "https://forums.pokeaether.com/t/pokemon-evolution-happiness/99"
+    },
+    {
+      "topic_id": 100,
+      "post_id": 107,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "840f504a9fbdfe49458710160f4d0b491f86626e813afe290fd3b909cbd70f22",
+      "image_count": 4,
+      "upload_ids": [
+        200,
+        201,
+        198,
+        199
+      ],
+      "url": "https://forums.pokeaether.com/t/understanding-pokemon-stats-natures-abilities/100"
+    },
+    {
+      "topic_id": 101,
+      "post_id": 108,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "f1e55c359a2ac91fea4ea21aa51efdecc3dc0f84090955db022a5f46ec9bee84",
+      "image_count": 2,
+      "upload_ids": [
+        202,
+        203
+      ],
+      "url": "https://forums.pokeaether.com/t/held-items-choosing-using-them/101"
+    },
+    {
+      "topic_id": 102,
+      "post_id": 109,
+      "version": 2,
+      "category_id": 13,
+      "raw_sha256": "1b3b9e4431ed33295b98864472a9fce39c4ad066848e4007578574df5577fb95",
+      "image_count": 4,
+      "upload_ids": [
+        189,
+        190,
+        191,
+        192
+      ],
+      "url": "https://forums.pokeaether.com/t/kanto-story-walkthrough-your-first-three-badges/102"
+    }
+  ],
+  "new_image_count": 49
+}

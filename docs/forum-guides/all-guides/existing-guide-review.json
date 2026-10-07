@@ -1,0 +1,156 @@
+{
+  "reviewedAt": "2026-10-07",
+  "retained": [
+    {
+      "topic_id": 27,
+      "title": "Thieving Guide",
+      "version": 5,
+      "image_count": 5,
+      "url": "https://forums.pokeaether.com/t/thieving-guide/27"
+    },
+    {
+      "topic_id": 28,
+      "title": "EV Training Guide",
+      "version": 9,
+      "image_count": 7,
+      "url": "https://forums.pokeaether.com/t/ev-training-guide/28"
+    },
+    {
+      "topic_id": 29,
+      "title": "Trainer Rematch Guide",
+      "version": 4,
+      "image_count": 7,
+      "url": "https://forums.pokeaether.com/t/trainer-rematch-guide/29"
+    },
+    {
+      "topic_id": 31,
+      "title": "Battle Damage Calculator Guide",
+      "version": 3,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/battle-damage-calculator-guide/31"
+    },
+    {
+      "topic_id": 32,
+      "title": "Chat and Messaging Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/chat-and-messaging-guide/32"
+    },
+    {
+      "topic_id": 33,
+      "title": "Shiny Tracker Guide",
+      "version": 3,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/shiny-tracker-guide/33"
+    },
+    {
+      "topic_id": 34,
+      "title": "Pok\u00e9mon Storage and Party Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/pokemon-storage-and-party-guide/34"
+    },
+    {
+      "topic_id": 35,
+      "title": "Friends, Blocking and Private Messages Guide",
+      "version": 3,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/friends-blocking-and-private-messages-guide/35"
+    },
+    {
+      "topic_id": 36,
+      "title": "Guilds and Membership",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/guilds-and-membership/36"
+    },
+    {
+      "topic_id": 37,
+      "title": "Player Trading Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/player-trading-guide/37"
+    },
+    {
+      "topic_id": 38,
+      "title": "Global Boosts Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/global-boosts-guide/38"
+    },
+    {
+      "topic_id": 39,
+      "title": "Fishing Guide",
+      "version": 5,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/fishing-guide/39"
+    },
+    {
+      "topic_id": 40,
+      "title": "Field Moves and Charms Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/field-moves-and-charms-guide/40"
+    },
+    {
+      "topic_id": 41,
+      "title": "Quest Log Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/quest-log-guide/41"
+    },
+    {
+      "topic_id": 42,
+      "title": "Mail and Attachments",
+      "version": 3,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/mail-and-attachments/42"
+    },
+    {
+      "topic_id": 43,
+      "title": "Pok\u00e9dex Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/pokedex-guide/43"
+    },
+    {
+      "topic_id": 44,
+      "title": "Bag and Hotbar Guide",
+      "version": 4,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/bag-and-hotbar-guide/44"
+    },
+    {
+      "topic_id": 45,
+      "title": "Aether Exchange Guide",
+      "version": 5,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/aether-exchange-guide/45"
+    },
+    {
+      "topic_id": 52,
+      "title": "Trade Evolution Guide",
+      "version": 2,
+      "image_count": 4,
+      "url": "https://forums.pokeaether.com/t/trade-evolution-guide/52"
+    },
+    {
+      "topic_id": 95,
+      "title": "Item Dex: Where to Find Items",
+      "version": 2,
+      "image_count": 4,
+      "url": "https://forums.pokeaether.com/t/item-dex-where-to-find-items/95"
+    },
+    {
+      "topic_id": 105,
+      "title": "Wild Encounter Guide: Finding Pok\u00e9mon",
+      "version": 3,
+      "image_count": 1,
+      "url": "https://forums.pokeaether.com/t/wild-encounter-guide-finding-pokemon/105"
+    }
+  ],
+  "replacement": {
+    "topic_id": 30,
+    "reason": "Old screenshot displayed \u20bd500; current regional fare is \u20bd200."
+  }
+}

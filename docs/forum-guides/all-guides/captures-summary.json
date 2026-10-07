@@ -1,0 +1,146 @@
+[
+	{
+		"caption": "Example Summary: check Happiness in the Info tab. Raising it does not currently activate friendship evolutions.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "01-happiness.png",
+		"heading": "## How Happiness works",
+		"size": [
+			646,
+			425
+		],
+		"topic": 99
+	},
+	{
+		"caption": "Example Summary: the EXP indicator shows progress towards the next level. Your current level cap still applies.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "02-experience.png",
+		"heading": "## What happens to EXP at the cap?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 85
+	},
+	{
+		"caption": "Example: hover over Modest to see which stat it raises and which it lowers.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "03-nature.png",
+		"heading": "## What does Nature do?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 100
+	},
+	{
+		"caption": "Example: hover over the current Ability to read its battle effect.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "04-ability.png",
+		"heading": "## What is an Ability?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 100
+	},
+	{
+		"caption": "Example Summary: compare each stat and its IV. Individual values remain separate from level and training.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "01-ivs-and-stats.png",
+		"heading": "## What are IVs?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 100
+	},
+	{
+		"caption": "Example Summary: Stored EVs are available training points; Allocated EVs are already assigned to stats.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "02-stored-and-allocated-evs.png",
+		"heading": "## What are EVs?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 100
+	},
+	{
+		"caption": "Example: select the held-item slot, then choose an eligible item from your Bag.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "01-choose-held-item.png",
+		"heading": "## Giving or taking an item",
+		"size": [
+			646,
+			619
+		],
+		"topic": 101
+	},
+	{
+		"caption": "Example: Exp. Share is equipped on this Pokémon. Owning it in the Bag alone does not activate its held-item effect.",
+		"control": "PokemonSummaryPopup",
+		"exampleData": true,
+		"filename": "02-equipped-exp-share.png",
+		"heading": "## Exp. Share: who gets the EXP?",
+		"size": [
+			646,
+			425
+		],
+		"topic": 101
+	},
+	{
+		"caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+		"control": "ItemDexPopup",
+		"exampleData": true,
+		"filename": "poke-ball.png",
+		"heading": "## Choosing a ball",
+		"size": [
+			954,
+			644
+		],
+		"topic": 98
+	},
+	{
+		"caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+		"control": "ItemDexPopup",
+		"exampleData": true,
+		"filename": "great-ball.png",
+		"heading": "## Choosing a ball",
+		"size": [
+			954,
+			644
+		],
+		"topic": 98
+	},
+	{
+		"caption": "Check each ball's Item Dex entry for its capture rules before choosing what to throw.",
+		"control": "ItemDexPopup",
+		"exampleData": true,
+		"filename": "ultra-ball.png",
+		"heading": "## Choosing a ball",
+		"size": [
+			954,
+			644
+		],
+		"topic": 98
+	},
+	{
+		"caption": "Check the Pokédex Evolutions tab for the next form and its listed requirements. Some special methods are not active yet.",
+		"control": "PokedexPopup",
+		"exampleData": true,
+		"filename": "02-pokedex-evolutions.png",
+		"heading": "## Check the Pokédex first",
+		"size": [
+			1204,
+			744
+		],
+		"topic": 99
+	}
+]

@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-10-07",
+  "frontendRevision": "300d3f05a4cf2bf47862047180658cd75d1fbed0",
+  "backendRevision": "7ebd72cf78c3024312deb6435b5f8a0abfe0edb4",
+  "locale": "en",
+  "viewport": [
+    1920,
+    1080
+  ],
+  "engine": "Godot 4.6.2 compatibility renderer",
+  "authenticatedSession": false,
+  "data": "Illustrative local balances, party, skill progression, guild preview and quest progress; current public catalog metadata and native interface controls. No live player account or game backend was used.",
+  "sources": [
+    "backend/game-content/data/storylines/catalog.json",
+    "backend/battle-orchestrator/data/training_ai_teams/manifest.json",
+    "backend/pokemon-data/data/shops/donator/aether_store.json",
+    "backend/account-service/rock_smash_services.py",
+    "backend/account-service/starter_catalog.py",
+    "backend/account-service/aether_atelier_services.py",
+    "backend/pokemon-data public species/items/source catalog"
+  ],
+  "rejectedCapture": "The Shiny Charm Item Dex description says 10% while current encounter authority and guide use 5%. That optional image was excluded; the Shiny Odds guide uses the accurate Global Shiny Boost panel.",
+  "captureFiles": {
+    "base.gd": "63485ce1bcbf540d8b5bd6c2fd3749ae68524332fb2d1873ef8e0b7624c6989b",
+    "summary.gd": "d0f4a1785b3d9ad985467a7b915dd2e6f4f39887f1d76f323e1b7befb4efb327",
+    "activities.gd": "b66b9af6034cb6eb8520aa8f6a71fed30d5880bdefb3ff24bc5f8dc6180b98c4",
+    "economy.gd": "1825fd794c9f80292bc98c4791660ef0ef4f9deedf1a24fc5b65171bfdcd5068",
+    "guilds.gd": "e6b88e265eb6c98a5b2f14dadcea4401611ca6f80d51460213836541b6d34ead",
+    "rentals-loans.gd": "933749727ec607d465354d61fd467beaf7020bdc9459e6291fab9fbfb3da4976",
+    "battles.gd": "c9b8b7bfec09b8288e4a3a99abe2b2e08be6afb611d4b10c27e6d72d206f9356",
+    "moves-story.gd": "d5c9d81d1e2e27c56f3a3f0569ad2c13c358385b1cf12b1f257a6b250a06d884",
+    "extras.gd": "2cf4c8ff2c9dfc0c60d70a5324d612ef8c1bbe74bd774894d683df97a437b82f",
+    "bulbasaur.json": "fb2537c7adb6b8f0e11361ba0c368261f8254c490118a26d1bccbb8d78cd3375",
+    "items.json": "cd3277491dfce8ff65456a0be154c9c2b351b213a9759c5674ee44aec8b1fa24",
+    "held-items.json": "f8d6d26e597af23de51b3e3e8d969e19e3154c76f2f4b4694fd155b5e0961d2f",
+    "skills.json": "560086ebea459b351f671a5fe03bdb7cfbb0c2ede9c0b0bb022658cd04ba5f36",
+    "rock-rewards.json": "b9a10184ad050449286ea4175dad1b50f7f44b7c198ef0fd789cbd1463fad91b",
+    "starters.json": "9432e6a4248bb80a00d0264a4dd3fb191bb2fdbf1ffcdeea839708a59a9daf01",
+    "store.json": "1623164be56c28e7204c7aec0a325432ff655e3acba47c7711bf7c8ef9045907",
+    "quest.json": "063570a07a9db6c522a82f6aa945dafd87203f226b8d2a89f9062842b769ce00",
+    "story-quests.json": "e0ac8da74c260a5c569a67ae9750b970bea871ffb5ffe3060089b2ba47926a4a",
+    "rental-team.json": "c84fff6ed9c4df4ad90b44f3b5cb8178c0edb9e3aeac02983ce4701eaab51015"
+  }
+}

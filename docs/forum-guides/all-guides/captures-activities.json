@@ -1,0 +1,110 @@
+[
+	{
+		"caption": "Example Skills overview: select Fishing, Thieving or Rock Smash to inspect its level, XP and unlocks.",
+		"control": "SkillsPanel",
+		"exampleData": true,
+		"filename": "01-skills-overview.png",
+		"heading": "## Opening Skills",
+		"size": [
+			784,
+			804
+		],
+		"topic": 60
+	},
+	{
+		"caption": "Example skill page: the roadmap distinguishes unlocked rewards from later milestones.",
+		"control": "SkillsPanel",
+		"exampleData": true,
+		"filename": "02-level-roadmap.png",
+		"heading": "## Unlocking and progressing",
+		"size": [
+			784,
+			804
+		],
+		"topic": 60
+	},
+	{
+		"caption": "Example: Skills → Rock Smash → Rocks lists exact locations, required levels and today's availability.",
+		"control": "SkillsPanel",
+		"exampleData": true,
+		"filename": "01-daily-rocks.png",
+		"heading": "## Daily rocks and locations",
+		"size": [
+			784,
+			804
+		],
+		"topic": 59
+	},
+	{
+		"caption": "Check Rock Smash's Rewards tab for money, treasure and fossil information as your level increases.",
+		"control": "SkillsPanel",
+		"exampleData": true,
+		"filename": "02-rock-smash-rewards.png",
+		"heading": "## Items you can find",
+		"size": [
+			784,
+			804
+		],
+		"topic": 59
+	},
+	{
+		"caption": "Example Aethernet menu: select an attuned destination, then check its fare. Normal regional travel costs ₽200; your Anchor is free.",
+		"control": "TransitPanel",
+		"exampleData": true,
+		"filename": "01-aethernet-destinations.png",
+		"heading": "## Travelling",
+		"size": [
+			804,
+			674
+		],
+		"topic": 30
+	},
+	{
+		"caption": "Browse the starter choices, inspect the selected Pokémon and confirm the partner you want.",
+		"control": "StarterChoicePanel",
+		"exampleData": true,
+		"filename": "01-choose-starter.png",
+		"heading": "## 1. Choose your first Pokémon",
+		"size": [
+			1104,
+			714
+		],
+		"topic": 84
+	},
+	{
+		"caption": "Example with no badges: the Trainer Card shows a normal level cap of 20 and a separate trade cap of 5.",
+		"control": "@PanelContainer@4598",
+		"exampleData": true,
+		"filename": "01-level-and-trade-caps.png",
+		"heading": "## The two limits",
+		"size": [
+			544,
+			144
+		],
+		"topic": 85
+	},
+	{
+		"caption": "Choose the Weekly Boss difficulty before starting. The boss challenge is separate from a catchable wild encounter.",
+		"control": "Panel",
+		"exampleData": true,
+		"filename": "01-zapdos-difficulty.png",
+		"heading": "## Starting a challenge",
+		"size": [
+			644,
+			264
+		],
+		"topic": 88
+	},
+	{
+		"caption": "Example funding panel: the Global Shiny Boost activates only after its community goal is filled.",
+		"control": "GlobalBuffDetailsPanel",
+		"exampleData": true,
+		"filename": "01-global-shiny-boost.png",
+		"heading": "## Global Shiny Boost",
+		"size": [
+			373,
+			459
+		],
+		"topic": 55
+	}
+]

@@ -1,0 +1,38 @@
+[
+	{
+		"caption": "Example individual rental: paste a Pokémon set, inspect its preview, then request the authoritative quote before renting.",
+		"control": "@Window@3672",
+		"exampleData": true,
+		"filename": "01-rental-set-builder.png",
+		"heading": "## Renting individual Pokémon",
+		"size": [
+			964,
+			694
+		],
+		"topic": 86
+	},
+	{
+		"caption": "Example loan offer: choose a Party Pokémon, duration and optional fee. The recipient must accept before the loan begins.",
+		"control": "@Window@3860",
+		"exampleData": true,
+		"filename": "01-compose-player-loan.png",
+		"heading": "## Making a loan offer",
+		"size": [
+			924,
+			664
+		],
+		"topic": 92
+	},
+	{
+		"caption": "Example replay library: use Play to watch a recording, the star to keep it as a favorite, or the sharing control to manage a replay code.",
+		"control": "@PanelContainer@3984",
+		"exampleData": true,
+		"filename": "01-replay-library.png",
+		"heading": "## Finding and watching a replay",
+		"size": [
+			1064,
+			784
+		],
+		"topic": 94
+	}
+]
