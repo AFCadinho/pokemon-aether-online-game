@@ -20,7 +20,7 @@ func _init() -> void:
 
 	var account_builder := _function_body(settings_menu, "_build_account_tab", "_build_about_tab")
 	_check(account_builder.contains('"ui.settings.account.portal"'), "account settings expose one browser portal control")
-	_check(account_builder.contains('"ui.settings.account.portal_note"'), "account settings explain the secure browser handoff")
+	_check(account_builder.contains('"ui.settings.account.portal_note"'), "account settings explain what players can manage")
 	_check(not account_builder.contains("_setup_account_details_dialog"), "the in-game profile and password dialog is no longer constructed")
 	_check(not account_builder.contains("_setup_privacy_dialog"), "the in-game privacy dialog is no longer constructed")
 	_check(not account_builder.contains('"ui.settings.privacy.manage"'), "privacy actions are no longer directly exposed in the game")
@@ -28,6 +28,7 @@ func _init() -> void:
 	_check(not settings_menu.contains("print(launch_url)"), "the one-time portal address is not logged")
 	_check(settings_menu.contains('"ui.settings.account.portal_error_impersonation"'), "the game explains why impersonation is blocked")
 
+	var portal_labels := {"en": "Manage Account", "nl": "Account beheren", "pt_BR": "Gerenciar conta", "zh_CN": "管理帐户"}
 	for locale_path: String in [
 		"res://localization/en.json",
 		"res://localization/nl.json",
@@ -36,8 +37,15 @@ func _init() -> void:
 	]:
 		var catalog := FileAccess.get_file_as_string(locale_path)
 		_check(catalog.contains('"ui.settings.account.portal"'), "%s has portal button copy" % locale_path)
-		_check(catalog.contains('"ui.settings.account.portal_note"'), "%s has portal security guidance" % locale_path)
+		_check(catalog.contains('"ui.settings.account.portal_note"'), "%s has account management guidance" % locale_path)
 		_check(catalog.contains('"ui.settings.account.portal_error_open"'), "%s has browser failure guidance" % locale_path)
+		var parsed: Variant = JSON.parse_string(catalog)
+		_check(parsed is Dictionary, "%s contains valid translations" % locale_path)
+		if parsed is Dictionary:
+			var translations: Dictionary = parsed
+			var locale := locale_path.get_file().get_basename()
+			_check(translations.get("ui.settings.account.portal") == portal_labels[locale], "%s uses a clear account management action" % locale_path)
+			_check(str(translations.get("ui.settings.account.portal_note", "")).length() < 100, "%s keeps account management guidance concise" % locale_path)
 
 	quit(1 if failed else 0)
 
