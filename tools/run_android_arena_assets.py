@@ -28,6 +28,9 @@ def main():
     parser.add_argument('--apk', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--sdk', type=Path, default=Path.home() / 'Android/Sdk')
+    parser.add_argument('--lighting-mode', choices=['baseline', 'hdr', 'sun-only'], default='baseline')
+    parser.add_argument('--expect-renderer', choices=['gl_compatibility', 'mobile'])
+    parser.add_argument('--variant', choices=['desktop-art', 'android-etc2-art'])
     parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
     if not 60 <= args.timeout <= 1800:
@@ -40,7 +43,7 @@ def main():
     report = json.loads((assets / 'report.json').read_text())
     pins = {k: {key: v[key] for key in ['bytes', 'sha256']} for k, v in report['candidates'].items()}
     (assets / 'fixture.json').write_text(json.dumps(pins))
-    aapt = sorted((args.sdk / 'build-tools').glob('*/aapt'))[-1]
+    aapt = sorted((args.sdk / 'build-tools').glob('*/aapt2'))[-1]
     metadata = subprocess.check_output([str(aapt), 'dump', 'badging', str(apk)], text=True)
     if "package: name='" + PACKAGE + "'" not in metadata or 'application-debuggable' not in metadata:
         raise ValueError('Only the separate arena debug APK is allowed')
@@ -65,7 +68,7 @@ def main():
     try:
         device('reverse', 'tcp:8799', 'tcp:8799')
         device('install', '--no-incremental', '-r', str(apk))
-        for variant in ['desktop-art', 'android-etc2-art']:
+        for variant in ([args.variant] if args.variant else ['desktop-art', 'android-etc2-art']):
             folder = output / variant
             folder.mkdir(exist_ok=True)
             device('shell', 'am', 'force-stop', PACKAGE)
@@ -73,6 +76,7 @@ def main():
             # Literal controlled names only; no user text in a remote shell.
             device('shell', 'run-as', PACKAGE, 'mkdir', '-p', 'files')
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {variant} > files/android-arena-variant'")
+            device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {args.lighting_mode} > files/android-arena-lighting'")
             device('shell', 'am', 'start', '-n', PACKAGE + '/com.godot.game.GodotAppLauncher')
             deadline = time.monotonic() + args.timeout
             memory = []
@@ -80,6 +84,10 @@ def main():
                 done = device('shell', 'run-as', PACKAGE, 'cat', 'files/android-arena-results.json', check=False)
                 if done.returncode == 0:
                     break
+                pid = device('shell', 'pidof', PACKAGE, check=False).stdout.strip()
+                if pid:
+                    log = device('logcat', '--pid=' + pid, '-d', '-v', 'brief', 'godot:V', '*:S').stdout
+                    (folder / 'native.log').write_text(log)
                 status = device('shell', 'dumpsys', 'meminfo', PACKAGE, check=False).stdout
                 pss = re.search(r'TOTAL PSS:\s*(\d+)', status)
                 rss = re.search(r'TOTAL RSS:\s*(\d+)', status)
@@ -95,10 +103,12 @@ def main():
             log = device('logcat', '--pid=' + pid, '-d', '-v', 'brief', 'godot:V', '*:S').stdout
             (folder / 'native.log').write_text(log)
             (folder / 'capture.png').write_bytes(device('exec-out', 'run-as', PACKAGE, 'cat', 'files/android-arena-capture.png', binary=True).stdout)
+            native_errors = [line for line in log.splitlines() if 'SCRIPT ERROR:' in line or '): ERROR:' in line]
             codes = json.loads(done.stdout)
-            success = details.get('success', False) and bool(codes) and all(v == 0 for v in codes.values())
+            success = (not native_errors and details.get('success', False) and bool(codes) and all(v == 0 for v in codes.values())
+                       and (not args.expect_renderer or details.get('renderer') == args.expect_renderer))
             summary = {'variant': variant, 'success': success, 'peak_pss_kib': max((m['pss_kib'] for m in memory), default=0),
-                       'peak_rss_kib': max((m['rss_kib'] for m in memory), default=0), 'details': details}
+                       'peak_rss_kib': max((m['rss_kib'] for m in memory), default=0), 'expected_renderer': args.expect_renderer, 'native_errors': native_errors, 'details': details}
             summaries.append(summary)
             (output / 'summary.json').write_text(json.dumps(summaries, indent=2))
             print(json.dumps(summary), flush=True)

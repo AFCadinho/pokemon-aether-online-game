@@ -29,11 +29,17 @@ def main():
     parser.add_argument("--sdk", type=Path)
     parser.add_argument("--templates", type=Path, default=Path.home() / ".local/share/godot/export_templates/4.6.2.stable")
     parser.add_argument("--java", type=Path, default=Path("/usr/lib/jvm/java-26-openjdk"))
+    parser.add_argument("--emulator-frame-pacing-off", action="store_true", help="Arena-only x86_64 workaround for Godot emulator issue 121035")
+    parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"], default="gl_compatibility")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     coop_sprites = args.suite == "coop-sprites"
     android_arenas = args.suite == "android-arenas"
+    if args.android_renderer != "gl_compatibility" and not android_arenas:
+        parser.error("--android-renderer is limited to the separate Android arena diagnostic")
+    if args.emulator_frame_pacing_off and (not android_arenas or args.architecture != "x86_64"):
+        parser.error("Frame-pacing workaround is limited to the x86_64 arena emulator diagnostic")
     android_3d = args.suite in {"android-3d", "android-arenas"}
     if android_3d:
         if args.platform != "android":
@@ -138,6 +144,13 @@ def main():
                 config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
         if android_arenas:
             config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
+            config = re.sub(r'^renderer/rendering_method.mobile=.*$', 'renderer/rendering_method.mobile="' + args.android_renderer + '"', config, flags=re.M)
+        if args.emulator_frame_pacing_off:
+            setting = "window/frame_pacing/android/enable_frame_pacing"
+            if re.search(r"^" + re.escape(setting) + r"=.*$", config, re.M):
+                config = re.sub(r"^" + re.escape(setting) + r"=.*$", setting + "=false", config, flags=re.M)
+            else:
+                config = config.replace("[display]", "[display]\n" + setting + "=false")
         project.write_text(config)
         preset = originals[presets].decode()
         source_index = 3 if args.platform == 'web' else 7
