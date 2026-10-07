@@ -1,8 +1,8 @@
 """Author four native-pixel idle cels for Arcanine and Lapras.
 
 Frame zero is the approved resting pose. Walking atlases are never modified.
-Arcanine's upper body lifts one pixel while the paws stay planted; the one-pixel
-join is filled from its existing fur. Lapras rises/falls one pixel above its
+Arcanine holds its body and rider still and moves only the tail tuft (ear tips from behind).
+Lapras rises/falls one pixel above its
 unchanged bottom water-contact rows. No scaling, rotation or interpolation.
 """
 import argparse
@@ -30,6 +30,36 @@ def move_upper(image, split, dy):
     return out
 
 
+def move_tail_tip(image, row, phase):
+    # Tail-only regions in the original 64px follower cell (origin 64,64).
+    # From behind the tail lies across the rump, so use the exposed ear tips
+    # instead: never cut a moving patch out of the body underneath the tail.
+    if not phase:
+        return image.copy()
+    if row == 3:
+        parts = [((16,22,20,30), 0, -phase), ((44,22,48,30), 0, phase)]
+    else:
+        regions = ((22,8,46,22), (42,22,64,36), (0,22,22,36))
+        parts = [(regions[row], phase if row != 2 else -phase, 0)]
+    out = image.copy()
+    protected = image.copy()
+    for region,dx,dy in parts:
+        x0,y0,x1,y1 = region
+        box = (64+x0,64+y0,64+x1,64+y1)
+        out.paste((0,0,0,0), box)
+        out.alpha_composite(image.crop(box), (box[0]+dx,box[1]+dy))
+        travel = (box[0]+min(0,dx),box[1]+min(0,dy),
+                  box[2]+max(0,dx),box[3]+max(0,dy))
+        protected.paste((0,0,0,0), travel)
+    actual = out.copy()
+    for region,dx,dy in parts:
+        x0,y0,x1,y1 = region
+        actual.paste((0,0,0,0), (64+x0+min(0,dx),64+y0+min(0,dy),
+                                  64+x1+max(0,dx),64+y1+max(0,dy)))
+    assert protected.tobytes() == actual.tobytes(), 'Arcanine body changed'
+    return out
+
+
 def build(check=False):
     path = ROOT/'data/mounts.json'
     text = path.read_text()
@@ -47,7 +77,7 @@ def build(check=False):
             filename = layer+'.png' if surf else 'idle_'+layer+'.png'
             sources[layer] = Image.open(folder/filename).convert('RGBA')
         sheets = {k: Image.new('RGBA', (size*4, size*4)) for k in ('mount','foreground','rider_mask')}
-        phases = (0, -1, 0, 1) if surf else (0, -1, -1, 0)
+        phases = (0, -1, 0, 1) if surf else (0, 2, 0, -2)
         seats = {}
         for row, direction in enumerate(DIRECTIONS):
             tiles = {key: im.crop((0,row*size,size,(row+1)*size)) for key,im in sources.items()}
@@ -59,13 +89,13 @@ def build(check=False):
             seats[direction] = []
             for col,dy in enumerate(phases):
                 for key,tile in tiles.items():
-                    cel = move_upper(tile, split, dy)
+                    cel = move_upper(tile, split, dy) if surf else move_tail_tip(tile, row, dy)
                     assert cel.crop((0,split,size,size)).tobytes() == tile.crop((0,split,size,size)).tobytes()
                     if col == 0:
                         assert cel.tobytes() == tile.tobytes()
                     sheets[key].paste(cel, (col*size,row*size))
                 x,y = cfg['riderOffsets'][direction][0]
-                seats[direction].append([x,y+dy])
+                seats[direction].append([x,y+dy if surf else y])
         for layer,im in sheets.items():
             target = folder/('animated_idle_'+layer+'.png')
             if check:
@@ -75,7 +105,7 @@ def build(check=False):
                 im.save(target)
         expected = dict(cfg)
         expected.update(idleFrameCount=4, idleAnimationSpeed=1.0,
-                        idleFrameDurations=[0.9,0.65,0.9,0.65] if surf else [1.35,0.35,0.75,0.55],
+                        idleFrameDurations=[0.9,0.65,0.9,0.65] if surf else [1.6,0.28,0.28,0.28],
                         idleRiderOffsets=seats)
         for field,layer in [('idleSpriteSheet','mount'),('idleForegroundSheet','foreground'),('idleRiderMaskSheet','rider_mask')]:
             expected[field] = f'res://assets/mounts/{mid}/animated_idle_{layer}.png'
