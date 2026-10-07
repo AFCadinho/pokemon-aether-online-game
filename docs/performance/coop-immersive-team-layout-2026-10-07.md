@@ -22,7 +22,10 @@ source panels. Stat overlays follow the visible cards, including after a
 state update. Switching modes reuses the cards; absent source rows hide them
 instead of showing stale HP. Sprite/model positions and animation anchors
 stay with their existing presenters. The shared cards use the same 14-pixel
-base typography as existing HP panels. Single battles retain their layout.
+base typography as existing HP panels. Stat-change and ability-effect labels
+use a compact 12-pixel base in doubles, including 3D, and still follow the
+player's text-size setting. The screenshot fixture includes both a boost and
+a drop. Single battles retain their layout and typography.
 
 ## Validation
 

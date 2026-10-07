@@ -42,7 +42,7 @@ func _run() -> void:
 		"participant": "p1", "locked": true, "partnerReady": false, "ended": false, "eventCursor": 0,
 		"events": [], "opponentPartySize": 2, "field": {"weather": "sandstorm", "terrain": "electricterrain"},
 		"legalActions": [], "moves": [], "positions": [
-			{"controller": "p1", "details": "Dragonite, L100", "hpPercent": 65, "boosts": {"atk": 1}},
+			{"controller": "p1", "details": "Dragonite, L100", "hpPercent": 65, "boosts": {"atk": 1, "def": -1}},
 			{"controller": "p3", "details": "Garchomp, L100", "hpPercent": 80},
 			{"controller": "p2", "details": "Roaring Moon, L100", "hpPercent": 100},
 			{"controller": "p4", "details": "Roaring Moon, L100", "hpPercent": 45}],
