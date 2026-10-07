@@ -1,4 +1,5 @@
 extends Control
+const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
 ## Desktop presentation: explicit combatants/actions/transitions from battle host.
 ## Missing reviewed models fall back as a whole battle; Substitute has a bundled 3D model.
 
@@ -395,7 +396,7 @@ func await_prepared(render_under_cover := false, timeout_ms := 10000) -> void:
 			warming_render = false
 			return
 		var settings := get_tree().root.get_node("SettingsManager")
-		if settings.battle_presentation_mode not in ["2.5d", "3d"] or OS.has_feature("web") or OS.has_feature("mobile"):
+		if settings.battle_presentation_mode not in ["2.5d", "3d"] or not ModelPlatform.supported():
 			warming_render = false
 			return
 		var requested: String = settings.get_battle_3d_catalog_path()
@@ -472,7 +473,7 @@ func _render_reuse_key() -> String:
 
 func _ensure_downloaded_models(preserve_actors := false) -> void:
 	download_verified_files.clear()
-	if OS.has_feature("web") or OS.has_feature("mobile") or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
+	if not ModelPlatform.supported() or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
 	if settings.battle_presentation_mode not in ["2.5d", "3d"] or settings.has_manual_battle_3d_catalog_selection():
@@ -2273,10 +2274,10 @@ func _process(delta: float) -> void:
 			mode_label.text = "2D · " + reason
 			mode_label.tooltip_text = reason
 		return
-	mode_label.visible = not entry_arena_requested and settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile")
+	mode_label.visible = not entry_arena_requested and settings.battle_presentation_mode in ["2.5d", "3d"] and ModelPlatform.supported()
 	mode_label.text = (("2.5D" if settings.battle_presentation_mode == "2.5d" else "3D") + " · " + arena_id + (" · " + arena_problem if not arena_problem.is_empty() else "")) if active else ("Preparing local 3D models…" if _models_pending() else "2D · " + reason)
 	mode_label.tooltip_text = reason + (" · " + arena_problem if not arena_problem.is_empty() else "")
-	if settings.battle_presentation_mode not in ["2.5d", "3d"] or OS.has_feature("web") or OS.has_feature("mobile"):
+	if settings.battle_presentation_mode not in ["2.5d", "3d"] or not ModelPlatform.supported():
 		entry_arena_requested = false
 		entry_arena_visible = false
 		ModelCache.clear() # Explicitly leaving 3D releases retained resources.
