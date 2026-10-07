@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add private Guild Base interiors in Vermilion City: a fixed main hall, two empty side rooms and a lift waiting room, with room doors, Guild-only player visibility and safe recovery when base access is lost.
+
 - Simplify Adventure Party team headers by removing the circular Trainer initial badges.
 
 - Refine Adventure Party team panels with cyan and pink accents, readable status chips and a compact VS emblem in immersive 2D and 3D.

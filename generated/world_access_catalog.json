@@ -224,6 +224,124 @@
 				}
 			}
 		},
+		"guild_base_elevator": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Elevator",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/elevator.tscn",
+			"spawnPoints": {
+				"from_main_hall": {
+					"facingDirection": "down",
+					"label": "Main Hall",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromMainHall",
+					"tile": {
+						"x": 14,
+						"y": 24
+					}
+				}
+			}
+		},
+		"guild_base_left_room": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Left Room",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/left_room.tscn",
+			"spawnPoints": {
+				"from_main_hall": {
+					"facingDirection": "down",
+					"label": "Main Hall",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromMainHall",
+					"tile": {
+						"x": 18,
+						"y": 8
+					}
+				}
+			}
+		},
+		"guild_base_main_hall": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Main Hall",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/main_hall.tscn",
+			"spawnPoints": {
+				"from_elevator": {
+					"facingDirection": "down",
+					"label": "Elevator",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromElevator",
+					"tile": {
+						"x": 15,
+						"y": 7
+					}
+				},
+				"from_left_room": {
+					"facingDirection": "down",
+					"label": "Left Room",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromLeftRoom",
+					"tile": {
+						"x": 8,
+						"y": 25
+					}
+				},
+				"from_right_room": {
+					"facingDirection": "down",
+					"label": "Right Room",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromRightRoom",
+					"tile": {
+						"x": 22,
+						"y": 25
+					}
+				},
+				"from_town": {
+					"facingDirection": "down",
+					"label": "Town",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromTown",
+					"tile": {
+						"x": 15,
+						"y": 36
+					}
+				}
+			}
+		},
+		"guild_base_right_room": {
+			"areaType": "interior",
+			"defaultMode": "open",
+			"label": "Guild Base — Right Room",
+			"locationGroupId": "guild_bases",
+			"locationGroupLabel": "Guild Bases",
+			"regionName": "Kanto",
+			"sceneAliases": [],
+			"scenePath": "res://scenes/overworld/kanto/guild_base/right_room.tscn",
+			"spawnPoints": {
+				"from_main_hall": {
+					"facingDirection": "down",
+					"label": "Main Hall",
+					"safeForStaffTeleport": false,
+					"spawnMarker": "FromMainHall",
+					"tile": {
+						"x": 4,
+						"y": 8
+					}
+				}
+			}
+		},
 		"kanto_cerulean_cave": {
 			"areaType": "wilderness",
 			"defaultMode": "open",
@@ -4450,6 +4568,26 @@
 						"y": 28
 					}
 				},
+				"from_guild_base": {
+					"facingDirection": "down",
+					"label": "Guild Base",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGuildBase",
+					"tile": {
+						"x": 52,
+						"y": 11
+					}
+				},
+				"from_guild_garden": {
+					"facingDirection": "down",
+					"label": "Guild Garden",
+					"safeForStaffTeleport": true,
+					"spawnMarker": "FromGuildGarden",
+					"tile": {
+						"x": 36,
+						"y": 19
+					}
+				},
 				"from_gym": {
 					"facingDirection": "down",
 					"label": "Gym",
@@ -5055,6 +5193,106 @@
 	},
 	"schemaVersion": 3,
 	"transitions": {
+		"guild_base_elevator__to_main_hall": {
+			"destination": {
+				"mapId": "guild_base_main_hall",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/main_hall.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 240.0
+				},
+				"spawnMarker": "FromElevator"
+			},
+			"destinationAreaId": "guild_base_main_hall",
+			"sourceMapId": "guild_base_elevator"
+		},
+		"guild_base_left_room__to_main_hall": {
+			"destination": {
+				"mapId": "guild_base_main_hall",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/main_hall.tscn",
+				"position": {
+					"x": 272.0,
+					"y": 816.0
+				},
+				"spawnMarker": "FromLeftRoom"
+			},
+			"destinationAreaId": "guild_base_main_hall",
+			"sourceMapId": "guild_base_left_room"
+		},
+		"guild_base_main_hall__to_elevator": {
+			"destination": {
+				"mapId": "guild_base_elevator",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/elevator.tscn",
+				"position": {
+					"x": 464.0,
+					"y": 784.0
+				},
+				"spawnMarker": "FromMainHall"
+			},
+			"destinationAreaId": "guild_base_elevator",
+			"sourceMapId": "guild_base_main_hall"
+		},
+		"guild_base_main_hall__to_left_room": {
+			"destination": {
+				"mapId": "guild_base_left_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/left_room.tscn",
+				"position": {
+					"x": 592.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromMainHall"
+			},
+			"destinationAreaId": "guild_base_left_room",
+			"sourceMapId": "guild_base_main_hall"
+		},
+		"guild_base_main_hall__to_right_room": {
+			"destination": {
+				"mapId": "guild_base_right_room",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/right_room.tscn",
+				"position": {
+					"x": 144.0,
+					"y": 272.0
+				},
+				"spawnMarker": "FromMainHall"
+			},
+			"destinationAreaId": "guild_base_right_room",
+			"sourceMapId": "guild_base_main_hall"
+		},
+		"guild_base_main_hall__to_town": {
+			"destination": {
+				"mapId": "kanto_vermilion_city",
+				"mapSceneAliases": [
+					"uid://da65wnwy4dmid"
+				],
+				"mapScenePath": "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn",
+				"position": {
+					"x": 1680.0,
+					"y": 368.0
+				},
+				"spawnMarker": "FromGuildBase"
+			},
+			"destinationAreaId": "kanto_vermilion_city",
+			"sourceMapId": "guild_base_main_hall"
+		},
+		"guild_base_right_room__to_main_hall": {
+			"destination": {
+				"mapId": "guild_base_main_hall",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/main_hall.tscn",
+				"position": {
+					"x": 720.0,
+					"y": 816.0
+				},
+				"spawnMarker": "FromRightRoom"
+			},
+			"destinationAreaId": "guild_base_main_hall",
+			"sourceMapId": "guild_base_right_room"
+		},
 		"kanto_cerulean_cave_2f__to_1f_a": {
 			"destination": {
 				"mapId": "kanto_cerulean_cave",
@@ -9189,6 +9427,20 @@
 				"spawnMarker": "FromVermilionCity"
 			},
 			"destinationAreaId": "kanto_vermilion_docks",
+			"sourceMapId": "kanto_vermilion_city"
+		},
+		"kanto_vermilion_city__to_guild_base": {
+			"destination": {
+				"mapId": "guild_base_main_hall",
+				"mapSceneAliases": [],
+				"mapScenePath": "res://scenes/overworld/kanto/guild_base/main_hall.tscn",
+				"position": {
+					"x": 496.0,
+					"y": 1168.0
+				},
+				"spawnMarker": "FromTown"
+			},
+			"destinationAreaId": "guild_base_main_hall",
 			"sourceMapId": "kanto_vermilion_city"
 		},
 		"kanto_vermilion_city__to_gym": {

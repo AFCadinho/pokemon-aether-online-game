@@ -330,6 +330,43 @@
           "safe": true
         }
       }
+    },
+    "guild_base_main_hall": {
+      "points": {
+        "from_town": {
+          "safe": false
+        },
+        "from_left_room": {
+          "safe": false
+        },
+        "from_right_room": {
+          "safe": false
+        },
+        "from_elevator": {
+          "safe": false
+        }
+      }
+    },
+    "guild_base_left_room": {
+      "points": {
+        "from_main_hall": {
+          "safe": false
+        }
+      }
+    },
+    "guild_base_right_room": {
+      "points": {
+        "from_main_hall": {
+          "safe": false
+        }
+      }
+    },
+    "guild_base_elevator": {
+      "points": {
+        "from_main_hall": {
+          "safe": false
+        }
+      }
     }
   }
 }

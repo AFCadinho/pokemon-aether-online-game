@@ -130,8 +130,15 @@ func _init() -> void:
 			"aether_clash_duel_preview:guild_2_jail",
 			"aether_clash_duel_preview:preview",
 			"aether_clash_waiting_area_preview:preview",
+			"guild_base_elevator:from_main_hall",
+			"guild_base_left_room:from_main_hall",
+			"guild_base_main_hall:from_elevator",
+			"guild_base_main_hall:from_left_room",
+			"guild_base_main_hall:from_right_room",
+			"guild_base_main_hall:from_town",
+			"guild_base_right_room:from_main_hall",
 		],
-		"Only isolated Aether Clash previews are excluded from safe player teleports"
+		"Aether Clash previews and ownerless Guild Base templates are excluded from safe player teleports"
 	)
 	_expect(areas.has("kanto_route_2_gate"), "Inherited transition building is registered")
 	_expect(

@@ -1094,9 +1094,12 @@ func _restore_remote_players_from_cached_presence() -> void:
 
 
 func _configure_authorized_map_instance(map: Node, state: Dictionary) -> void:
-	if map == null or not map.has_method("configure_aether_clash_instance"):
+	if map == null:
 		return
-	map.call("configure_aether_clash_instance", str(state.get("mapId", "")))
+	if map.has_method("configure_guild_base_instance"):
+		map.call("configure_guild_base_instance", str(state.get("mapId", "")))
+	elif map.has_method("configure_aether_clash_instance"):
+		map.call("configure_aether_clash_instance", str(state.get("mapId", "")))
 
 
 func apply_remote_authorized_teleport_state(state: Dictionary) -> Dictionary:
@@ -1376,7 +1379,11 @@ func load_map(target_scene_path: String, target_spawn_name: String) -> void:
 	for child in $CurrentMap.get_children():
 		child.queue_free()
 
+	var source_instance_id := _get_map_id(GameState.current_map)
+	var source_scene_path := _get_map_scene_path(GameState.current_map)
 	var new_map: Node = target_scene.instantiate()
+	if source_scene_path == target_scene_path and new_map.has_method("configure_guild_base_instance"):
+		new_map.call("configure_guild_base_instance", source_instance_id)
 	$CurrentMap.add_child(new_map)
 
 	GameState.current_map = new_map
