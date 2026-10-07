@@ -1129,6 +1129,8 @@ func _run() -> void:
 	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
 	_check(log_action_filter != null and log_action_filter.item_count == 7, "Guild history exposes its relevant action filters")
+	_check(not popup._guild_log_entry_text("guild", {"action": "admin_updated"}).contains("ui.guild.log"), "Guild history explains staff corrections with localized text")
+	_check(popup._guild_log_entry_text("funds", {"action": "admin_credit", "actor": "Staff", "amount": 1000000}).contains("Staff"), "Guild bank logs name the staff actor for a correction")
 	var base_history_text := popup._guild_log_entry_text("guild", {
 		"action": "base_purchased", "details": {"townName": "Vermilion City", "price": 1000000},
 	})

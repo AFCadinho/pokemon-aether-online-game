@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
+
 - Show Adventure Party battle status per Trainer in two team panels, distinguish sending, choosing, ready and disconnected states without PvE timers, and clarify turn playback and world return.
 - Guild Leaders can establish their guild in Vermilion City at guild level 10 for 1,000,000 from the Guild Bank, granting the guild's members access to the shared garden.
 
