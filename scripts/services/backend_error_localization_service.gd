@@ -11,6 +11,11 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"guild_base_level_required": "ui.guild_base.error.level",
+	"guild_base_funds_required": "ui.guild_base.error.funds",
+	"guild_base_already_owned": "ui.guild_base.error.owned",
+	"guild_base_registrar_required": "ui.guild_base.error.registrar",
+	"guild_base_registrar_not_found": "ui.guild_base.error.unavailable",
 	"mount_collector_context_mismatch": "ui.mount_collector.error.context",
 	"mount_collector_out_of_reach": "ui.mount_collector.error.context",
 	"mount_collector_not_shiny": "ui.mount_collector.error.shiny",

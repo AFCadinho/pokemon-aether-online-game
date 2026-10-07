@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guild Leaders can establish their guild in Vermilion City at guild level 10 for 1,000,000 from the Guild Bank, granting the guild's members access to the shared garden.
+
 - Keep Vermilion's guild-garden entrance closed independently of the Guild Registrar's placement beside it.
 
 - Fix invalid Zekrom turbo-flame polygons while starting and stopping movement, preventing repeated rendering errors.

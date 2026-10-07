@@ -1,8 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="1_gate"]
+[ext_resource type="Script" path="res://scripts/world/npcs/guild_registrar_npc.gd" id="2_registrar"]
 
 [node name="GuildRegistrarNPC" instance=ExtResource("1_gate")]
+script = ExtResource("2_registrar")
 display_name = ""
 guard_role = "transition_guard"
 passage_closed = true
