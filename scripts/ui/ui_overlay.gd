@@ -52545,7 +52545,7 @@ func _create_chat_sender_message_line(
 				message_id
 			))
 
-	if role_name != "":
+	if role_name != "" and message_context.get("origin", "game") != "discord":
 		var role_badge := _create_chat_role_badge(role_name, role_color)
 		role_badge.size_flags_vertical = (
 			Control.SIZE_SHRINK_CENTER

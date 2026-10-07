@@ -4,6 +4,7 @@
 
 ### Chat
 
+- Show only the Discord badge on messages sent through Discord, hiding the player's role badge.
 - Mark messages relayed from linked Discord accounts with a Discord badge while preserving their PokeAether identity and moderation actions.
 
 ### Battles
