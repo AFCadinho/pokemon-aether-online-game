@@ -1,0 +1,26 @@
+[
+	{
+		"caption": "Example Team Rental catalog: inspect the six fixed sets and their held items. A full team costs 200 Aetherite for 24 hours.",
+		"control": "@Window@3672",
+		"exampleData": true,
+		"filename": "02-fixed-rental-team.png",
+		"heading": "## Renting a full team",
+		"size": [
+			964,
+			694
+		],
+		"topic": 86
+	},
+	{
+		"caption": "Example wild-battle Bag: choose an available Poké Ball after weakening the target. Throwing it uses your battle action.",
+		"control": "BagDrawer",
+		"exampleData": true,
+		"filename": "01-battle-bag-balls.png",
+		"heading": "## How to throw a ball",
+		"size": [
+			704,
+			384
+		],
+		"topic": 98
+	}
+]

@@ -1,0 +1,210 @@
+{
+  "id": "bulbasaur",
+  "showdownId": "bulbasaur",
+  "name": "Bulbasaur",
+  "nationalDexNumber": 1,
+  "types": [
+    "grass",
+    "poison"
+  ],
+  "rarity": "ultra_rare",
+  "baseStats": {
+    "hp": 45,
+    "atk": 49,
+    "def": 49,
+    "spa": 65,
+    "spd": 65,
+    "spe": 45
+  },
+  "abilities": [
+    {
+      "slot": "primary",
+      "id": "overgrow",
+      "name": "Overgrow"
+    },
+    {
+      "slot": "hidden",
+      "id": "chlorophyll",
+      "name": "Chlorophyll"
+    }
+  ],
+  "growthRate": "medium-slow",
+  "baseExperience": 64,
+  "evYield": {
+    "hp": 0,
+    "atk": 0,
+    "def": 0,
+    "spa": 1,
+    "spd": 0,
+    "spe": 0
+  },
+  "evolutions": [
+    {
+      "speciesId": "ivysaur",
+      "method": "level",
+      "trigger": "level-up",
+      "condition": "Level 16",
+      "level": 16
+    }
+  ],
+  "moves": {
+    "levelUp": [
+      {
+        "moveId": "growl",
+        "level": 1
+      },
+      {
+        "moveId": "tackle",
+        "level": 1
+      },
+      {
+        "moveId": "vine-whip",
+        "level": 3
+      },
+      {
+        "moveId": "growth",
+        "level": 6
+      },
+      {
+        "moveId": "leech-seed",
+        "level": 9
+      },
+      {
+        "moveId": "razor-leaf",
+        "level": 12
+      },
+      {
+        "moveId": "poison-powder",
+        "level": 15
+      },
+      {
+        "moveId": "sleep-powder",
+        "level": 15
+      },
+      {
+        "moveId": "seed-bomb",
+        "level": 18
+      },
+      {
+        "moveId": "take-down",
+        "level": 21
+      },
+      {
+        "moveId": "sweet-scent",
+        "level": 24
+      },
+      {
+        "moveId": "synthesis",
+        "level": 27
+      },
+      {
+        "moveId": "worry-seed",
+        "level": 30
+      },
+      {
+        "moveId": "power-whip",
+        "level": 33
+      },
+      {
+        "moveId": "solar-beam",
+        "level": 36
+      }
+    ],
+    "evolution": [],
+    "egg": [
+      "curse",
+      "ingrain",
+      "petal-dance",
+      "toxic"
+    ],
+    "tutor": [
+      "grass-pledge",
+      "grassy-glide"
+    ],
+    "tm": [
+      "acid-spray",
+      "body-slam",
+      "bullet-seed",
+      "charm",
+      "curse",
+      "double-edge",
+      "endure",
+      "energy-ball",
+      "facade",
+      "false-swipe",
+      "giga-drain",
+      "grass-knot",
+      "grass-pledge",
+      "grassy-glide",
+      "grassy-terrain",
+      "helping-hand",
+      "knock-off",
+      "leaf-storm",
+      "magical-leaf",
+      "protect",
+      "rest",
+      "seed-bomb",
+      "sleep-talk",
+      "sludge-bomb",
+      "solar-beam",
+      "substitute",
+      "sunny-day",
+      "swords-dance",
+      "take-down",
+      "tera-blast",
+      "toxic",
+      "trailblaze",
+      "venoshock",
+      "weather-ball"
+    ],
+    "special": [],
+    "event": [],
+    "legacy": [
+      "amnesia",
+      "attract",
+      "bide",
+      "bind",
+      "captivate",
+      "confide",
+      "cut",
+      "defense-curl",
+      "double-team",
+      "echoed-voice",
+      "flash",
+      "frustration",
+      "fury-cutter",
+      "grass-whistle",
+      "headbutt",
+      "hidden-power",
+      "light-screen",
+      "mega-drain",
+      "mimic",
+      "mud-slap",
+      "natural-gift",
+      "nature-power",
+      "outrage",
+      "rage",
+      "razor-wind",
+      "reflect",
+      "return",
+      "rock-smash",
+      "round",
+      "safeguard",
+      "secret-power",
+      "skull-bash",
+      "sludge",
+      "snore",
+      "strength",
+      "string-shot",
+      "swagger",
+      "work-up"
+    ],
+    "legacyEvent": [
+      "block",
+      "celebrate",
+      "frenzy-plant"
+    ],
+    "preEvolution": []
+  },
+  "preEvolutions": []
+}

@@ -1,0 +1,670 @@
+[
+  {
+    "id": "fishing",
+    "unlocked": true,
+    "unlockHintKey": "ui.skills.fishing.unlock_hint",
+    "nameKey": "ui.skills.fishing.name",
+    "descriptionKey": "ui.skills.fishing.description",
+    "level": 10,
+    "maxLevel": 100,
+    "totalExperience": 405,
+    "experienceIntoLevel": 0,
+    "experienceForNextLevel": 70,
+    "progressPercent": 0.0,
+    "stats": {
+      "activeTier": 2,
+      "badgeCount": 3
+    },
+    "unlocks": [
+      {
+        "id": "old_rod",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.old_rod"
+      },
+      {
+        "id": "old_rod_tentacool",
+        "requiredLevel": 5,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.old_rod_tentacool"
+      },
+      {
+        "id": "good_rod",
+        "requiredLevel": 10,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.good_rod"
+      },
+      {
+        "id": "super_rod",
+        "requiredLevel": 25,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.super_rod"
+      }
+    ]
+  },
+  {
+    "id": "thieving",
+    "unlocked": true,
+    "unlockHintKey": "ui.skills.thieving.unlock_hint",
+    "nameKey": "ui.skills.thieving.name",
+    "descriptionKey": "ui.skills.thieving.description",
+    "level": 20,
+    "maxLevel": 100,
+    "totalExperience": 5300,
+    "experienceIntoLevel": 0,
+    "experienceForNextLevel": 400,
+    "progressPercent": 0.0,
+    "stats": {
+      "wanted": 65,
+      "rewardBonusPercent": 19,
+      "wantedReductionPercent": 9.5,
+      "maximumCatchReductionPercent": 3.8
+    },
+    "unlocks": [
+      {
+        "id": "child",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.child"
+      },
+      {
+        "id": "elderly",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.elderly"
+      },
+      {
+        "id": "civilian",
+        "requiredLevel": 5,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.civilian"
+      },
+      {
+        "id": "bug_catcher",
+        "requiredLevel": 10,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.bug_catcher"
+      },
+      {
+        "id": "worker",
+        "requiredLevel": 15,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.worker"
+      },
+      {
+        "id": "hiker",
+        "requiredLevel": 20,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.hiker"
+      },
+      {
+        "id": "trainer",
+        "requiredLevel": 25,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.trainer"
+      },
+      {
+        "id": "scientist",
+        "requiredLevel": 30,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.scientist"
+      },
+      {
+        "id": "ace_trainer",
+        "requiredLevel": 40,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.ace_trainer"
+      },
+      {
+        "id": "veteran_trainer",
+        "requiredLevel": 60,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.veteran_trainer"
+      }
+    ],
+    "targets": [
+      {
+        "npcId": "kanto_viridian_city_league_fan_dorian",
+        "npcType": "elderly",
+        "nameKey": "ui.skills.thieving.target.dorian",
+        "townKey": "ui.skills.thieving.location.viridian_city",
+        "locationKey": "ui.skills.thieving.location.viridian_city",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "attemptedToday": true,
+        "availableToday": false
+      },
+      {
+        "npcId": "kanto_viridian_city_school_kid_june",
+        "npcType": "child",
+        "nameKey": "ui.skills.thieving.target.june",
+        "townKey": "ui.skills.thieving.location.viridian_city",
+        "locationKey": "ui.skills.thieving.location.viridian_city",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "attemptedToday": false,
+        "availableToday": true
+      },
+      {
+        "npcId": "kanto_viridian_city_forest_scout_nico",
+        "npcType": "bug_catcher",
+        "nameKey": "ui.skills.thieving.target.nico",
+        "townKey": "ui.skills.thieving.location.viridian_city",
+        "locationKey": "ui.skills.thieving.location.viridian_city",
+        "requiredLevel": 10,
+        "unlocked": true,
+        "attemptedToday": false,
+        "availableToday": true
+      },
+      {
+        "npcId": "kanto_pewter_city_gym_fan_max",
+        "npcType": "child",
+        "nameKey": "ui.skills.thieving.target.max",
+        "townKey": "ui.skills.thieving.location.pewter_city",
+        "locationKey": "ui.skills.thieving.location.pewter_city",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "attemptedToday": false,
+        "availableToday": true
+      }
+    ]
+  },
+  {
+    "id": "rock_smash",
+    "unlocked": true,
+    "unlockHintKey": "ui.skills.rock_smash.unlock_hint",
+    "nameKey": "ui.skills.rock_smash.name",
+    "descriptionKey": "ui.skills.rock_smash.description",
+    "level": 20,
+    "maxLevel": 100,
+    "totalExperience": 5300,
+    "experienceIntoLevel": 0,
+    "experienceForNextLevel": 400,
+    "progressPercent": 0.0,
+    "stats": {
+      "fossilChancePercent": 0.25,
+      "availableRocks": 22
+    },
+    "unlocks": [
+      {
+        "id": "rock_smash_training",
+        "requiredLevel": 1,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.rock_smash_training"
+      },
+      {
+        "id": "rock_smash_nuggets",
+        "requiredLevel": 5,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.rock_smash_nuggets"
+      },
+      {
+        "id": "rock_smash_rare_treasures",
+        "requiredLevel": 10,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.rock_smash_rare_treasures"
+      },
+      {
+        "id": "rock_smash_fossils",
+        "requiredLevel": 20,
+        "unlocked": true,
+        "labelKey": "ui.skills.unlock.rock_smash_fossils"
+      },
+      {
+        "id": "rock_smash_big_nugget",
+        "requiredLevel": 25,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.rock_smash_big_nugget"
+      },
+      {
+        "id": "rock_smash_old_amber",
+        "requiredLevel": 50,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.rock_smash_old_amber"
+      },
+      {
+        "id": "rock_smash_master_treasures",
+        "requiredLevel": 75,
+        "unlocked": false,
+        "labelKey": "ui.skills.unlock.rock_smash_master_treasures"
+      }
+    ],
+    "rocks": [
+      {
+        "rockType": "training",
+        "nameKey": "ui.skills.rock_smash.rock.training_north",
+        "mapId": "kanto_pewter_city",
+        "townKey": "ui.skills.rock_smash.location.pewter_city",
+        "locationKey": "ui.skills.rock_smash.location.karate_yard",
+        "requiredLevel": 1,
+        "experience": 35,
+        "positionX": 528.0,
+        "positionY": 144.0,
+        "rockId": "kanto_pewter_city_training_rock_north",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "training",
+        "nameKey": "ui.skills.rock_smash.rock.training_east",
+        "mapId": "kanto_pewter_city",
+        "townKey": "ui.skills.rock_smash.location.pewter_city",
+        "locationKey": "ui.skills.rock_smash.location.karate_yard",
+        "requiredLevel": 1,
+        "experience": 35,
+        "positionX": 656.0,
+        "positionY": 144.0,
+        "rockId": "kanto_pewter_city_training_rock_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "training",
+        "nameKey": "ui.skills.rock_smash.rock.training_south",
+        "mapId": "kanto_pewter_city",
+        "townKey": "ui.skills.rock_smash.location.pewter_city",
+        "locationKey": "ui.skills.rock_smash.location.karate_yard",
+        "requiredLevel": 1,
+        "experience": 35,
+        "positionX": 656.0,
+        "positionY": 208.0,
+        "rockId": "kanto_pewter_city_training_rock_south",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "training",
+        "nameKey": "ui.skills.rock_smash.rock.training_west",
+        "mapId": "kanto_pewter_city",
+        "townKey": "ui.skills.rock_smash.location.pewter_city",
+        "locationKey": "ui.skills.rock_smash.location.karate_yard",
+        "requiredLevel": 1,
+        "experience": 35,
+        "positionX": 528.0,
+        "positionY": 208.0,
+        "rockId": "kanto_pewter_city_training_rock_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_west",
+        "mapId": "kanto_route_3",
+        "townKey": "ui.skills.rock_smash.location.route_3",
+        "locationKey": "ui.skills.rock_smash.location.route_3",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 400.0,
+        "positionY": 1008.0,
+        "rockId": "kanto_route_3_rock_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_central_west",
+        "mapId": "kanto_route_3",
+        "townKey": "ui.skills.rock_smash.location.route_3",
+        "locationKey": "ui.skills.rock_smash.location.route_3",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 720.0,
+        "positionY": 1040.0,
+        "rockId": "kanto_route_3_rock_central_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_central_east",
+        "mapId": "kanto_route_3",
+        "townKey": "ui.skills.rock_smash.location.route_3",
+        "locationKey": "ui.skills.rock_smash.location.route_3",
+        "requiredLevel": 10,
+        "experience": 35,
+        "positionX": 464.0,
+        "positionY": 1168.0,
+        "rockId": "kanto_route_3_rock_central_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_east",
+        "mapId": "kanto_route_3",
+        "townKey": "ui.skills.rock_smash.location.route_3",
+        "locationKey": "ui.skills.rock_smash.location.route_3",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 2704.0,
+        "positionY": 752.0,
+        "rockId": "kanto_route_3_rock_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_west",
+        "mapId": "kanto_mt_moon_1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_1f",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 400.0,
+        "positionY": 720.0,
+        "rockId": "kanto_mt_moon_1f_rock_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_central",
+        "mapId": "kanto_mt_moon_1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_1f",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 720.0,
+        "positionY": 688.0,
+        "rockId": "kanto_mt_moon_1f_rock_central",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_east",
+        "mapId": "kanto_mt_moon_1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_1f",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 2416.0,
+        "positionY": 1104.0,
+        "rockId": "kanto_mt_moon_1f_rock_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_west",
+        "mapId": "kanto_mt_moon_b1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b1f",
+        "requiredLevel": 10,
+        "experience": 35,
+        "positionX": 208.0,
+        "positionY": 560.0,
+        "rockId": "kanto_mt_moon_b1f_rock_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_east",
+        "mapId": "kanto_mt_moon_b1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b1f",
+        "requiredLevel": 10,
+        "experience": 35,
+        "positionX": 2288.0,
+        "positionY": 336.0,
+        "rockId": "kanto_mt_moon_b1f_rock_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_south",
+        "mapId": "kanto_mt_moon_b1f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b1f",
+        "requiredLevel": 10,
+        "experience": 35,
+        "positionX": 1872.0,
+        "positionY": 2128.0,
+        "rockId": "kanto_mt_moon_b1f_rock_south",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_north",
+        "mapId": "kanto_mt_moon_b2f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b2f",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 784.0,
+        "positionY": 336.0,
+        "rockId": "kanto_mt_moon_b2f_rock_north",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_central",
+        "mapId": "kanto_mt_moon_b2f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b2f",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 1456.0,
+        "positionY": 1296.0,
+        "rockId": "kanto_mt_moon_b2f_rock_central",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "cave",
+        "nameKey": "ui.skills.rock_smash.rock.cave_south",
+        "mapId": "kanto_mt_moon_b2f",
+        "townKey": "ui.skills.rock_smash.location.mt_moon",
+        "locationKey": "ui.skills.rock_smash.location.mt_moon_b2f",
+        "requiredLevel": 75,
+        "experience": 35,
+        "positionX": 816.0,
+        "positionY": 2192.0,
+        "rockId": "kanto_mt_moon_b2f_rock_south",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_west",
+        "mapId": "kanto_route_4",
+        "townKey": "ui.skills.rock_smash.location.route_4",
+        "locationKey": "ui.skills.rock_smash.location.route_4",
+        "requiredLevel": 5,
+        "experience": 35,
+        "positionX": 176.0,
+        "positionY": 1040.0,
+        "rockId": "kanto_route_4_rock_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_central_west",
+        "mapId": "kanto_route_4",
+        "townKey": "ui.skills.rock_smash.location.route_4",
+        "locationKey": "ui.skills.rock_smash.location.route_4",
+        "requiredLevel": 10,
+        "experience": 35,
+        "positionX": 944.0,
+        "positionY": 592.0,
+        "rockId": "kanto_route_4_rock_central_west",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_central_east",
+        "mapId": "kanto_route_4",
+        "townKey": "ui.skills.rock_smash.location.route_4",
+        "locationKey": "ui.skills.rock_smash.location.route_4",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 2256.0,
+        "positionY": 560.0,
+        "rockId": "kanto_route_4_rock_central_east",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.route_east",
+        "mapId": "kanto_route_4",
+        "townKey": "ui.skills.rock_smash.location.route_4",
+        "locationKey": "ui.skills.rock_smash.location.route_4",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 2608.0,
+        "positionY": 784.0,
+        "rockId": "kanto_route_4_rock_east",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_north",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 2192.0,
+        "positionY": 1712.0,
+        "rockId": "kanto_cerulean_city_west_site_rock_north",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_upper",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 2192.0,
+        "positionY": 2096.0,
+        "rockId": "kanto_cerulean_city_west_site_rock_upper",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_lower",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 1456.0,
+        "positionY": 2192.0,
+        "rockId": "kanto_cerulean_city_west_site_rock_lower",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_south",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 20,
+        "experience": 35,
+        "positionX": 1200.0,
+        "positionY": 2096.0,
+        "rockId": "kanto_cerulean_city_west_site_rock_south",
+        "unlocked": true,
+        "smashedToday": false,
+        "availableToday": true
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_northwest",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 2128.0,
+        "positionY": 1712.0,
+        "rockId": "kanto_cerulean_city_east_site_rock_northwest",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_northeast",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 2128.0,
+        "positionY": 2096.0,
+        "rockId": "kanto_cerulean_city_east_site_rock_northeast",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_southwest",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 1392.0,
+        "positionY": 2192.0,
+        "rockId": "kanto_cerulean_city_east_site_rock_southwest",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      },
+      {
+        "rockType": "route",
+        "nameKey": "ui.skills.rock_smash.rock.cerulean_east_southeast",
+        "mapId": "kanto_cerulean_city",
+        "townKey": "ui.skills.rock_smash.location.cerulean_city",
+        "locationKey": "ui.skills.rock_smash.location.cerulean_mountains_east",
+        "requiredLevel": 50,
+        "experience": 35,
+        "positionX": 1136.0,
+        "positionY": 2096.0,
+        "rockId": "kanto_cerulean_city_east_site_rock_southeast",
+        "unlocked": false,
+        "smashedToday": false,
+        "availableToday": false
+      }
+    ]
+  }
+]

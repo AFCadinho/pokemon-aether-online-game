@@ -1,0 +1,74 @@
+[
+	{
+		"caption": "Example Guild Bank: choose Funds, Pokémon, Items or Resources. Access depends on your guild rank and assigned rights.",
+		"control": "GuildPopup",
+		"exampleData": true,
+		"filename": "01-bank-categories.png",
+		"heading": "## Opening the Guild Bank",
+		"size": [
+			1064,
+			724
+		],
+		"topic": 96
+	},
+	{
+		"caption": "Example leader view: review bank permissions for each rank before allowing withdrawals or loans.",
+		"control": "GuildPopup",
+		"exampleData": true,
+		"filename": "02-bank-rank-rights.png",
+		"heading": "## Ranks and permissions",
+		"size": [
+			1064,
+			724
+		],
+		"topic": 96
+	},
+	{
+		"caption": "Example Aether Clash lobby: check the opposing guild and remaining entry time before joining a duel.",
+		"control": "GuildPopup",
+		"exampleData": true,
+		"filename": "01-duel-lobby.png",
+		"heading": "## Joining a duel",
+		"size": [
+			1064,
+			724
+		],
+		"topic": 70
+	},
+	{
+		"caption": "Example challenge: choose the format, optional stake and spectator access before sending it.",
+		"control": "Panel",
+		"exampleData": true,
+		"filename": "02-challenge-settings.png",
+		"heading": "## Challenging another guild",
+		"size": [
+			584,
+			514
+		],
+		"topic": 70
+	},
+	{
+		"caption": "Example guild practice setup: choose the bot count, battle format, AI policy and spectator access.",
+		"control": "Panel",
+		"exampleData": true,
+		"filename": "01-training-setup.png",
+		"heading": "## Starting training",
+		"size": [
+			584,
+			524
+		],
+		"topic": 97
+	},
+	{
+		"caption": "Example: reward attempts use AI5 and up to 20 bots. Tick the reward option only when you intend to use that day's attempt.",
+		"control": "Panel",
+		"exampleData": true,
+		"filename": "02-reward-attempt.png",
+		"heading": "## Daily reward attempts",
+		"size": [
+			584,
+			524
+		],
+		"topic": 97
+	}
+]

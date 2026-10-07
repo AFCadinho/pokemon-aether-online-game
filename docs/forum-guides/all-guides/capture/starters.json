@@ -1,0 +1,5638 @@
+[
+  {
+    "speciesId": "bulbasaur",
+    "name": "Bulbasaur",
+    "nationalDexNumber": 1,
+    "generation": 1,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "rarity": "ultra_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "bulbasaur",
+          "name": "Bulbasaur",
+          "nationalDexNumber": 1,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "ivysaur",
+          "name": "Ivysaur",
+          "nationalDexNumber": 2,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "venusaur",
+          "name": "Venusaur",
+          "nationalDexNumber": 3,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "ultra_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "charmander",
+    "name": "Charmander",
+    "nationalDexNumber": 4,
+    "generation": 1,
+    "types": [
+      "fire"
+    ],
+    "rarity": "ultra_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "charmander",
+          "name": "Charmander",
+          "nationalDexNumber": 4,
+          "generation": 1,
+          "types": [
+            "fire"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "charmeleon",
+          "name": "Charmeleon",
+          "nationalDexNumber": 5,
+          "generation": 1,
+          "types": [
+            "fire"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "charizard",
+          "name": "Charizard",
+          "nationalDexNumber": 6,
+          "generation": 1,
+          "types": [
+            "fire",
+            "flying"
+          ],
+          "rarity": "ultra_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "squirtle",
+    "name": "Squirtle",
+    "nationalDexNumber": 7,
+    "generation": 1,
+    "types": [
+      "water"
+    ],
+    "rarity": "ultra_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "squirtle",
+          "name": "Squirtle",
+          "nationalDexNumber": 7,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "wartortle",
+          "name": "Wartortle",
+          "nationalDexNumber": 8,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "blastoise",
+          "name": "Blastoise",
+          "nationalDexNumber": 9,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "ultra_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "caterpie",
+    "name": "Caterpie",
+    "nationalDexNumber": 10,
+    "generation": 1,
+    "types": [
+      "bug"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "caterpie",
+          "name": "Caterpie",
+          "nationalDexNumber": 10,
+          "generation": 1,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "metapod",
+          "name": "Metapod",
+          "nationalDexNumber": 11,
+          "generation": 1,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "butterfree",
+          "name": "Butterfree",
+          "nationalDexNumber": 12,
+          "generation": 1,
+          "types": [
+            "bug",
+            "flying"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "weedle",
+    "name": "Weedle",
+    "nationalDexNumber": 13,
+    "generation": 1,
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "weedle",
+          "name": "Weedle",
+          "nationalDexNumber": 13,
+          "generation": 1,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "kakuna",
+          "name": "Kakuna",
+          "nationalDexNumber": 14,
+          "generation": 1,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "beedrill",
+          "name": "Beedrill",
+          "nationalDexNumber": 15,
+          "generation": 1,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pidgey",
+    "name": "Pidgey",
+    "nationalDexNumber": 16,
+    "generation": 1,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pidgey",
+          "name": "Pidgey",
+          "nationalDexNumber": 16,
+          "generation": 1,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pidgeotto",
+          "name": "Pidgeotto",
+          "nationalDexNumber": 17,
+          "generation": 1,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pidgeot",
+          "name": "Pidgeot",
+          "nationalDexNumber": 18,
+          "generation": 1,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "nidoran-f",
+    "name": "Nidoran-F",
+    "nationalDexNumber": 29,
+    "generation": 1,
+    "types": [
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "nidoran-f",
+          "name": "Nidoran-F",
+          "nationalDexNumber": 29,
+          "generation": 1,
+          "types": [
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "nidorina",
+          "name": "Nidorina",
+          "nationalDexNumber": 30,
+          "generation": 1,
+          "types": [
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "nidoqueen",
+          "name": "Nidoqueen",
+          "nationalDexNumber": 31,
+          "generation": 1,
+          "types": [
+            "poison",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "nidoran-m",
+    "name": "Nidoran-M",
+    "nationalDexNumber": 32,
+    "generation": 1,
+    "types": [
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "nidoran-m",
+          "name": "Nidoran-M",
+          "nationalDexNumber": 32,
+          "generation": 1,
+          "types": [
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "nidorino",
+          "name": "Nidorino",
+          "nationalDexNumber": 33,
+          "generation": 1,
+          "types": [
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "nidoking",
+          "name": "Nidoking",
+          "nationalDexNumber": 34,
+          "generation": 1,
+          "types": [
+            "poison",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "zubat",
+    "name": "Zubat",
+    "nationalDexNumber": 41,
+    "generation": 1,
+    "types": [
+      "poison",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "zubat",
+          "name": "Zubat",
+          "nationalDexNumber": 41,
+          "generation": 1,
+          "types": [
+            "poison",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "golbat",
+          "name": "Golbat",
+          "nationalDexNumber": 42,
+          "generation": 1,
+          "types": [
+            "poison",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "crobat",
+          "name": "Crobat",
+          "nationalDexNumber": 169,
+          "generation": 2,
+          "types": [
+            "poison",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "oddish",
+    "name": "Oddish",
+    "nationalDexNumber": 43,
+    "generation": 1,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "oddish",
+          "name": "Oddish",
+          "nationalDexNumber": 43,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gloom",
+          "name": "Gloom",
+          "nationalDexNumber": 44,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "vileplume",
+          "name": "Vileplume",
+          "nationalDexNumber": 45,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        }
+      ],
+      [
+        {
+          "speciesId": "oddish",
+          "name": "Oddish",
+          "nationalDexNumber": 43,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gloom",
+          "name": "Gloom",
+          "nationalDexNumber": 44,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "bellossom",
+          "name": "Bellossom",
+          "nationalDexNumber": 182,
+          "generation": 2,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "mankey",
+    "name": "Mankey",
+    "nationalDexNumber": 56,
+    "generation": 1,
+    "types": [
+      "fighting"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "mankey",
+          "name": "Mankey",
+          "nationalDexNumber": 56,
+          "generation": 1,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "primeape",
+          "name": "Primeape",
+          "nationalDexNumber": 57,
+          "generation": 1,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "annihilape",
+          "name": "Annihilape",
+          "nationalDexNumber": 979,
+          "generation": 9,
+          "types": [
+            "fighting",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "poliwag",
+    "name": "Poliwag",
+    "nationalDexNumber": 60,
+    "generation": 1,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "poliwag",
+          "name": "Poliwag",
+          "nationalDexNumber": 60,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "poliwhirl",
+          "name": "Poliwhirl",
+          "nationalDexNumber": 61,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "poliwrath",
+          "name": "Poliwrath",
+          "nationalDexNumber": 62,
+          "generation": 1,
+          "types": [
+            "water",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ],
+      [
+        {
+          "speciesId": "poliwag",
+          "name": "Poliwag",
+          "nationalDexNumber": 60,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "poliwhirl",
+          "name": "Poliwhirl",
+          "nationalDexNumber": 61,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "politoed",
+          "name": "Politoed",
+          "nationalDexNumber": 186,
+          "generation": 2,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "abra",
+    "name": "Abra",
+    "nationalDexNumber": 63,
+    "generation": 1,
+    "types": [
+      "psychic"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "abra",
+          "name": "Abra",
+          "nationalDexNumber": 63,
+          "generation": 1,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "kadabra",
+          "name": "Kadabra",
+          "nationalDexNumber": 64,
+          "generation": 1,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "alakazam",
+          "name": "Alakazam",
+          "nationalDexNumber": 65,
+          "generation": 1,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "machop",
+    "name": "Machop",
+    "nationalDexNumber": 66,
+    "generation": 1,
+    "types": [
+      "fighting"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "machop",
+          "name": "Machop",
+          "nationalDexNumber": 66,
+          "generation": 1,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "machoke",
+          "name": "Machoke",
+          "nationalDexNumber": 67,
+          "generation": 1,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "machamp",
+          "name": "Machamp",
+          "nationalDexNumber": 68,
+          "generation": 1,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "bellsprout",
+    "name": "Bellsprout",
+    "nationalDexNumber": 69,
+    "generation": 1,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "bellsprout",
+          "name": "Bellsprout",
+          "nationalDexNumber": 69,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "weepinbell",
+          "name": "Weepinbell",
+          "nationalDexNumber": 70,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "victreebel",
+          "name": "Victreebel",
+          "nationalDexNumber": 71,
+          "generation": 1,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "geodude",
+    "name": "Geodude",
+    "nationalDexNumber": 74,
+    "generation": 1,
+    "types": [
+      "rock",
+      "ground"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "geodude",
+          "name": "Geodude",
+          "nationalDexNumber": 74,
+          "generation": 1,
+          "types": [
+            "rock",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "graveler",
+          "name": "Graveler",
+          "nationalDexNumber": 75,
+          "generation": 1,
+          "types": [
+            "rock",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "golem",
+          "name": "Golem",
+          "nationalDexNumber": 76,
+          "generation": 1,
+          "types": [
+            "rock",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "geodude-alola",
+    "name": "Geodude Alola",
+    "nationalDexNumber": 74,
+    "generation": 1,
+    "types": [
+      "rock",
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "geodude-alola",
+          "name": "Geodude Alola",
+          "nationalDexNumber": 74,
+          "generation": 1,
+          "types": [
+            "rock",
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "graveler-alola",
+          "name": "Graveler Alola",
+          "nationalDexNumber": 75,
+          "generation": 1,
+          "types": [
+            "rock",
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "golem-alola",
+          "name": "Golem Alola",
+          "nationalDexNumber": 76,
+          "generation": 1,
+          "types": [
+            "rock",
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "magnemite",
+    "name": "Magnemite",
+    "nationalDexNumber": 81,
+    "generation": 1,
+    "types": [
+      "electric",
+      "steel"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "magnemite",
+          "name": "Magnemite",
+          "nationalDexNumber": 81,
+          "generation": 1,
+          "types": [
+            "electric",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "magneton",
+          "name": "Magneton",
+          "nationalDexNumber": 82,
+          "generation": 1,
+          "types": [
+            "electric",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "magnezone",
+          "name": "Magnezone",
+          "nationalDexNumber": 462,
+          "generation": 4,
+          "types": [
+            "electric",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "gastly",
+    "name": "Gastly",
+    "nationalDexNumber": 92,
+    "generation": 1,
+    "types": [
+      "ghost",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "gastly",
+          "name": "Gastly",
+          "nationalDexNumber": 92,
+          "generation": 1,
+          "types": [
+            "ghost",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "haunter",
+          "name": "Haunter",
+          "nationalDexNumber": 93,
+          "generation": 1,
+          "types": [
+            "ghost",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gengar",
+          "name": "Gengar",
+          "nationalDexNumber": 94,
+          "generation": 1,
+          "types": [
+            "ghost",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "rhyhorn",
+    "name": "Rhyhorn",
+    "nationalDexNumber": 111,
+    "generation": 1,
+    "types": [
+      "ground",
+      "rock"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "rhyhorn",
+          "name": "Rhyhorn",
+          "nationalDexNumber": 111,
+          "generation": 1,
+          "types": [
+            "ground",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "rhydon",
+          "name": "Rhydon",
+          "nationalDexNumber": 112,
+          "generation": 1,
+          "types": [
+            "ground",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "rhyperior",
+          "name": "Rhyperior",
+          "nationalDexNumber": 464,
+          "generation": 4,
+          "types": [
+            "ground",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "horsea",
+    "name": "Horsea",
+    "nationalDexNumber": 116,
+    "generation": 1,
+    "types": [
+      "water"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "horsea",
+          "name": "Horsea",
+          "nationalDexNumber": 116,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "seadra",
+          "name": "Seadra",
+          "nationalDexNumber": 117,
+          "generation": 1,
+          "types": [
+            "water"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "kingdra",
+          "name": "Kingdra",
+          "nationalDexNumber": 230,
+          "generation": 2,
+          "types": [
+            "water",
+            "dragon"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "porygon",
+    "name": "Porygon",
+    "nationalDexNumber": 137,
+    "generation": 1,
+    "types": [
+      "normal"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "porygon",
+          "name": "Porygon",
+          "nationalDexNumber": 137,
+          "generation": 1,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "porygon2",
+          "name": "Porygon2",
+          "nationalDexNumber": 233,
+          "generation": 2,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "porygon-z",
+          "name": "Porygon-Z",
+          "nationalDexNumber": 474,
+          "generation": 4,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "dratini",
+    "name": "Dratini",
+    "nationalDexNumber": 147,
+    "generation": 1,
+    "types": [
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "dratini",
+          "name": "Dratini",
+          "nationalDexNumber": 147,
+          "generation": 1,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "dragonair",
+          "name": "Dragonair",
+          "nationalDexNumber": 148,
+          "generation": 1,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "dragonite",
+          "name": "Dragonite",
+          "nationalDexNumber": 149,
+          "generation": 1,
+          "types": [
+            "dragon",
+            "flying"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "chikorita",
+    "name": "Chikorita",
+    "nationalDexNumber": 152,
+    "generation": 2,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "chikorita",
+          "name": "Chikorita",
+          "nationalDexNumber": 152,
+          "generation": 2,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "bayleef",
+          "name": "Bayleef",
+          "nationalDexNumber": 153,
+          "generation": 2,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "meganium",
+          "name": "Meganium",
+          "nationalDexNumber": 154,
+          "generation": 2,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "cyndaquil",
+    "name": "Cyndaquil",
+    "nationalDexNumber": 155,
+    "generation": 2,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "cyndaquil",
+          "name": "Cyndaquil",
+          "nationalDexNumber": 155,
+          "generation": 2,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "quilava",
+          "name": "Quilava",
+          "nationalDexNumber": 156,
+          "generation": 2,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "typhlosion",
+          "name": "Typhlosion",
+          "nationalDexNumber": 157,
+          "generation": 2,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "totodile",
+    "name": "Totodile",
+    "nationalDexNumber": 158,
+    "generation": 2,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "totodile",
+          "name": "Totodile",
+          "nationalDexNumber": 158,
+          "generation": 2,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "croconaw",
+          "name": "Croconaw",
+          "nationalDexNumber": 159,
+          "generation": 2,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "feraligatr",
+          "name": "Feraligatr",
+          "nationalDexNumber": 160,
+          "generation": 2,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pichu",
+    "name": "Pichu",
+    "nationalDexNumber": 172,
+    "generation": 2,
+    "types": [
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pichu",
+          "name": "Pichu",
+          "nationalDexNumber": 172,
+          "generation": 2,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pikachu",
+          "name": "Pikachu",
+          "nationalDexNumber": 25,
+          "generation": 1,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "raichu",
+          "name": "Raichu",
+          "nationalDexNumber": 26,
+          "generation": 1,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "cleffa",
+    "name": "Cleffa",
+    "nationalDexNumber": 173,
+    "generation": 2,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "cleffa",
+          "name": "Cleffa",
+          "nationalDexNumber": 173,
+          "generation": 2,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "clefairy",
+          "name": "Clefairy",
+          "nationalDexNumber": 35,
+          "generation": 1,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "clefable",
+          "name": "Clefable",
+          "nationalDexNumber": 36,
+          "generation": 1,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "igglybuff",
+    "name": "Igglybuff",
+    "nationalDexNumber": 174,
+    "generation": 2,
+    "types": [
+      "normal",
+      "fairy"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "igglybuff",
+          "name": "Igglybuff",
+          "nationalDexNumber": 174,
+          "generation": 2,
+          "types": [
+            "normal",
+            "fairy"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "jigglypuff",
+          "name": "Jigglypuff",
+          "nationalDexNumber": 39,
+          "generation": 1,
+          "types": [
+            "normal",
+            "fairy"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "wigglytuff",
+          "name": "Wigglytuff",
+          "nationalDexNumber": 40,
+          "generation": 1,
+          "types": [
+            "normal",
+            "fairy"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "togepi",
+    "name": "Togepi",
+    "nationalDexNumber": 175,
+    "generation": 2,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "togepi",
+          "name": "Togepi",
+          "nationalDexNumber": 175,
+          "generation": 2,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "togetic",
+          "name": "Togetic",
+          "nationalDexNumber": 176,
+          "generation": 2,
+          "types": [
+            "fairy",
+            "flying"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "togekiss",
+          "name": "Togekiss",
+          "nationalDexNumber": 468,
+          "generation": 4,
+          "types": [
+            "fairy",
+            "flying"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "mareep",
+    "name": "Mareep",
+    "nationalDexNumber": 179,
+    "generation": 2,
+    "types": [
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "mareep",
+          "name": "Mareep",
+          "nationalDexNumber": 179,
+          "generation": 2,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "flaaffy",
+          "name": "Flaaffy",
+          "nationalDexNumber": 180,
+          "generation": 2,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "ampharos",
+          "name": "Ampharos",
+          "nationalDexNumber": 181,
+          "generation": 2,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "hoppip",
+    "name": "Hoppip",
+    "nationalDexNumber": 187,
+    "generation": 2,
+    "types": [
+      "grass",
+      "flying"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "hoppip",
+          "name": "Hoppip",
+          "nationalDexNumber": 187,
+          "generation": 2,
+          "types": [
+            "grass",
+            "flying"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "skiploom",
+          "name": "Skiploom",
+          "nationalDexNumber": 188,
+          "generation": 2,
+          "types": [
+            "grass",
+            "flying"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "jumpluff",
+          "name": "Jumpluff",
+          "nationalDexNumber": 189,
+          "generation": 2,
+          "types": [
+            "grass",
+            "flying"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "teddiursa",
+    "name": "Teddiursa",
+    "nationalDexNumber": 216,
+    "generation": 2,
+    "types": [
+      "normal"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "teddiursa",
+          "name": "Teddiursa",
+          "nationalDexNumber": 216,
+          "generation": 2,
+          "types": [
+            "normal"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "ursaring",
+          "name": "Ursaring",
+          "nationalDexNumber": 217,
+          "generation": 2,
+          "types": [
+            "normal"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "ursaluna",
+          "name": "Ursaluna",
+          "nationalDexNumber": 901,
+          "generation": 8,
+          "types": [
+            "ground",
+            "normal"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "swinub",
+    "name": "Swinub",
+    "nationalDexNumber": 220,
+    "generation": 2,
+    "types": [
+      "ice",
+      "ground"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "swinub",
+          "name": "Swinub",
+          "nationalDexNumber": 220,
+          "generation": 2,
+          "types": [
+            "ice",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "piloswine",
+          "name": "Piloswine",
+          "nationalDexNumber": 221,
+          "generation": 2,
+          "types": [
+            "ice",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "mamoswine",
+          "name": "Mamoswine",
+          "nationalDexNumber": 473,
+          "generation": 4,
+          "types": [
+            "ice",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "elekid",
+    "name": "Elekid",
+    "nationalDexNumber": 239,
+    "generation": 2,
+    "types": [
+      "electric"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "elekid",
+          "name": "Elekid",
+          "nationalDexNumber": 239,
+          "generation": 2,
+          "types": [
+            "electric"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "electabuzz",
+          "name": "Electabuzz",
+          "nationalDexNumber": 125,
+          "generation": 1,
+          "types": [
+            "electric"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "electivire",
+          "name": "Electivire",
+          "nationalDexNumber": 466,
+          "generation": 4,
+          "types": [
+            "electric"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "magby",
+    "name": "Magby",
+    "nationalDexNumber": 240,
+    "generation": 2,
+    "types": [
+      "fire"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "magby",
+          "name": "Magby",
+          "nationalDexNumber": 240,
+          "generation": 2,
+          "types": [
+            "fire"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "magmar",
+          "name": "Magmar",
+          "nationalDexNumber": 126,
+          "generation": 1,
+          "types": [
+            "fire"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "magmortar",
+          "name": "Magmortar",
+          "nationalDexNumber": 467,
+          "generation": 4,
+          "types": [
+            "fire"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "larvitar",
+    "name": "Larvitar",
+    "nationalDexNumber": 246,
+    "generation": 2,
+    "types": [
+      "rock",
+      "ground"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "larvitar",
+          "name": "Larvitar",
+          "nationalDexNumber": 246,
+          "generation": 2,
+          "types": [
+            "rock",
+            "ground"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "pupitar",
+          "name": "Pupitar",
+          "nationalDexNumber": 247,
+          "generation": 2,
+          "types": [
+            "rock",
+            "ground"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "tyranitar",
+          "name": "Tyranitar",
+          "nationalDexNumber": 248,
+          "generation": 2,
+          "types": [
+            "rock",
+            "dark"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "treecko",
+    "name": "Treecko",
+    "nationalDexNumber": 252,
+    "generation": 3,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "treecko",
+          "name": "Treecko",
+          "nationalDexNumber": 252,
+          "generation": 3,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "grovyle",
+          "name": "Grovyle",
+          "nationalDexNumber": 253,
+          "generation": 3,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "sceptile",
+          "name": "Sceptile",
+          "nationalDexNumber": 254,
+          "generation": 3,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "torchic",
+    "name": "Torchic",
+    "nationalDexNumber": 255,
+    "generation": 3,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "torchic",
+          "name": "Torchic",
+          "nationalDexNumber": 255,
+          "generation": 3,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "combusken",
+          "name": "Combusken",
+          "nationalDexNumber": 256,
+          "generation": 3,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "blaziken",
+          "name": "Blaziken",
+          "nationalDexNumber": 257,
+          "generation": 3,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "mudkip",
+    "name": "Mudkip",
+    "nationalDexNumber": 258,
+    "generation": 3,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "mudkip",
+          "name": "Mudkip",
+          "nationalDexNumber": 258,
+          "generation": 3,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "marshtomp",
+          "name": "Marshtomp",
+          "nationalDexNumber": 259,
+          "generation": 3,
+          "types": [
+            "water",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "swampert",
+          "name": "Swampert",
+          "nationalDexNumber": 260,
+          "generation": 3,
+          "types": [
+            "water",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "zigzagoon-galar",
+    "name": "Zigzagoon Galar",
+    "nationalDexNumber": 263,
+    "generation": 3,
+    "types": [
+      "dark",
+      "normal"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "zigzagoon-galar",
+          "name": "Zigzagoon Galar",
+          "nationalDexNumber": 263,
+          "generation": 3,
+          "types": [
+            "dark",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "linoone-galar",
+          "name": "Linoone Galar",
+          "nationalDexNumber": 264,
+          "generation": 3,
+          "types": [
+            "dark",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "obstagoon",
+          "name": "Obstagoon",
+          "nationalDexNumber": 862,
+          "generation": 8,
+          "types": [
+            "dark",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "wurmple",
+    "name": "Wurmple",
+    "nationalDexNumber": 265,
+    "generation": 3,
+    "types": [
+      "bug"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "wurmple",
+          "name": "Wurmple",
+          "nationalDexNumber": 265,
+          "generation": 3,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "silcoon",
+          "name": "Silcoon",
+          "nationalDexNumber": 266,
+          "generation": 3,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "beautifly",
+          "name": "Beautifly",
+          "nationalDexNumber": 267,
+          "generation": 3,
+          "types": [
+            "bug",
+            "flying"
+          ],
+          "rarity": "common"
+        }
+      ],
+      [
+        {
+          "speciesId": "wurmple",
+          "name": "Wurmple",
+          "nationalDexNumber": 265,
+          "generation": 3,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "cascoon",
+          "name": "Cascoon",
+          "nationalDexNumber": 268,
+          "generation": 3,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "dustox",
+          "name": "Dustox",
+          "nationalDexNumber": 269,
+          "generation": 3,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "lotad",
+    "name": "Lotad",
+    "nationalDexNumber": 270,
+    "generation": 3,
+    "types": [
+      "water",
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "lotad",
+          "name": "Lotad",
+          "nationalDexNumber": 270,
+          "generation": 3,
+          "types": [
+            "water",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "lombre",
+          "name": "Lombre",
+          "nationalDexNumber": 271,
+          "generation": 3,
+          "types": [
+            "water",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "ludicolo",
+          "name": "Ludicolo",
+          "nationalDexNumber": 272,
+          "generation": 3,
+          "types": [
+            "water",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "seedot",
+    "name": "Seedot",
+    "nationalDexNumber": 273,
+    "generation": 3,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "seedot",
+          "name": "Seedot",
+          "nationalDexNumber": 273,
+          "generation": 3,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "nuzleaf",
+          "name": "Nuzleaf",
+          "nationalDexNumber": 274,
+          "generation": 3,
+          "types": [
+            "grass",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "shiftry",
+          "name": "Shiftry",
+          "nationalDexNumber": 275,
+          "generation": 3,
+          "types": [
+            "grass",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "ralts",
+    "name": "Ralts",
+    "nationalDexNumber": 280,
+    "generation": 3,
+    "types": [
+      "psychic",
+      "fairy"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "ralts",
+          "name": "Ralts",
+          "nationalDexNumber": 280,
+          "generation": 3,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "kirlia",
+          "name": "Kirlia",
+          "nationalDexNumber": 281,
+          "generation": 3,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gardevoir",
+          "name": "Gardevoir",
+          "nationalDexNumber": 282,
+          "generation": 3,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        }
+      ],
+      [
+        {
+          "speciesId": "ralts",
+          "name": "Ralts",
+          "nationalDexNumber": 280,
+          "generation": 3,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "kirlia",
+          "name": "Kirlia",
+          "nationalDexNumber": 281,
+          "generation": 3,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gallade",
+          "name": "Gallade",
+          "nationalDexNumber": 475,
+          "generation": 4,
+          "types": [
+            "psychic",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "slakoth",
+    "name": "Slakoth",
+    "nationalDexNumber": 287,
+    "generation": 3,
+    "types": [
+      "normal"
+    ],
+    "rarity": "ultra_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "slakoth",
+          "name": "Slakoth",
+          "nationalDexNumber": 287,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "vigoroth",
+          "name": "Vigoroth",
+          "nationalDexNumber": 288,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "ultra_rare"
+        },
+        {
+          "speciesId": "slaking",
+          "name": "Slaking",
+          "nationalDexNumber": 289,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "ultra_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "whismur",
+    "name": "Whismur",
+    "nationalDexNumber": 293,
+    "generation": 3,
+    "types": [
+      "normal"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "whismur",
+          "name": "Whismur",
+          "nationalDexNumber": 293,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "loudred",
+          "name": "Loudred",
+          "nationalDexNumber": 294,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "exploud",
+          "name": "Exploud",
+          "nationalDexNumber": 295,
+          "generation": 3,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "azurill",
+    "name": "Azurill",
+    "nationalDexNumber": 298,
+    "generation": 3,
+    "types": [
+      "normal",
+      "fairy"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "azurill",
+          "name": "Azurill",
+          "nationalDexNumber": 298,
+          "generation": 3,
+          "types": [
+            "normal",
+            "fairy"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "marill",
+          "name": "Marill",
+          "nationalDexNumber": 183,
+          "generation": 2,
+          "types": [
+            "water",
+            "fairy"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "azumarill",
+          "name": "Azumarill",
+          "nationalDexNumber": 184,
+          "generation": 2,
+          "types": [
+            "water",
+            "fairy"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "aron",
+    "name": "Aron",
+    "nationalDexNumber": 304,
+    "generation": 3,
+    "types": [
+      "steel",
+      "rock"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "aron",
+          "name": "Aron",
+          "nationalDexNumber": 304,
+          "generation": 3,
+          "types": [
+            "steel",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "lairon",
+          "name": "Lairon",
+          "nationalDexNumber": 305,
+          "generation": 3,
+          "types": [
+            "steel",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "aggron",
+          "name": "Aggron",
+          "nationalDexNumber": 306,
+          "generation": 3,
+          "types": [
+            "steel",
+            "rock"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "trapinch",
+    "name": "Trapinch",
+    "nationalDexNumber": 328,
+    "generation": 3,
+    "types": [
+      "ground"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "trapinch",
+          "name": "Trapinch",
+          "nationalDexNumber": 328,
+          "generation": 3,
+          "types": [
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "vibrava",
+          "name": "Vibrava",
+          "nationalDexNumber": 329,
+          "generation": 3,
+          "types": [
+            "ground",
+            "dragon"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "flygon",
+          "name": "Flygon",
+          "nationalDexNumber": 330,
+          "generation": 3,
+          "types": [
+            "ground",
+            "dragon"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "duskull",
+    "name": "Duskull",
+    "nationalDexNumber": 355,
+    "generation": 3,
+    "types": [
+      "ghost"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "duskull",
+          "name": "Duskull",
+          "nationalDexNumber": 355,
+          "generation": 3,
+          "types": [
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dusclops",
+          "name": "Dusclops",
+          "nationalDexNumber": 356,
+          "generation": 3,
+          "types": [
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dusknoir",
+          "name": "Dusknoir",
+          "nationalDexNumber": 477,
+          "generation": 4,
+          "types": [
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "spheal",
+    "name": "Spheal",
+    "nationalDexNumber": 363,
+    "generation": 3,
+    "types": [
+      "ice",
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "spheal",
+          "name": "Spheal",
+          "nationalDexNumber": 363,
+          "generation": 3,
+          "types": [
+            "ice",
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "sealeo",
+          "name": "Sealeo",
+          "nationalDexNumber": 364,
+          "generation": 3,
+          "types": [
+            "ice",
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "walrein",
+          "name": "Walrein",
+          "nationalDexNumber": 365,
+          "generation": 3,
+          "types": [
+            "ice",
+            "water"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "bagon",
+    "name": "Bagon",
+    "nationalDexNumber": 371,
+    "generation": 3,
+    "types": [
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "bagon",
+          "name": "Bagon",
+          "nationalDexNumber": 371,
+          "generation": 3,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "shelgon",
+          "name": "Shelgon",
+          "nationalDexNumber": 372,
+          "generation": 3,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "salamence",
+          "name": "Salamence",
+          "nationalDexNumber": 373,
+          "generation": 3,
+          "types": [
+            "dragon",
+            "flying"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "beldum",
+    "name": "Beldum",
+    "nationalDexNumber": 374,
+    "generation": 3,
+    "types": [
+      "steel",
+      "psychic"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "beldum",
+          "name": "Beldum",
+          "nationalDexNumber": 374,
+          "generation": 3,
+          "types": [
+            "steel",
+            "psychic"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "metang",
+          "name": "Metang",
+          "nationalDexNumber": 375,
+          "generation": 3,
+          "types": [
+            "steel",
+            "psychic"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "metagross",
+          "name": "Metagross",
+          "nationalDexNumber": 376,
+          "generation": 3,
+          "types": [
+            "steel",
+            "psychic"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "turtwig",
+    "name": "Turtwig",
+    "nationalDexNumber": 387,
+    "generation": 4,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "turtwig",
+          "name": "Turtwig",
+          "nationalDexNumber": 387,
+          "generation": 4,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "grotle",
+          "name": "Grotle",
+          "nationalDexNumber": 388,
+          "generation": 4,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "torterra",
+          "name": "Torterra",
+          "nationalDexNumber": 389,
+          "generation": 4,
+          "types": [
+            "grass",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "chimchar",
+    "name": "Chimchar",
+    "nationalDexNumber": 390,
+    "generation": 4,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "chimchar",
+          "name": "Chimchar",
+          "nationalDexNumber": 390,
+          "generation": 4,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "monferno",
+          "name": "Monferno",
+          "nationalDexNumber": 391,
+          "generation": 4,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "infernape",
+          "name": "Infernape",
+          "nationalDexNumber": 392,
+          "generation": 4,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "piplup",
+    "name": "Piplup",
+    "nationalDexNumber": 393,
+    "generation": 4,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "piplup",
+          "name": "Piplup",
+          "nationalDexNumber": 393,
+          "generation": 4,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "prinplup",
+          "name": "Prinplup",
+          "nationalDexNumber": 394,
+          "generation": 4,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "empoleon",
+          "name": "Empoleon",
+          "nationalDexNumber": 395,
+          "generation": 4,
+          "types": [
+            "water",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "starly",
+    "name": "Starly",
+    "nationalDexNumber": 396,
+    "generation": 4,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "starly",
+          "name": "Starly",
+          "nationalDexNumber": 396,
+          "generation": 4,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "staravia",
+          "name": "Staravia",
+          "nationalDexNumber": 397,
+          "generation": 4,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "staraptor",
+          "name": "Staraptor",
+          "nationalDexNumber": 398,
+          "generation": 4,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "shinx",
+    "name": "Shinx",
+    "nationalDexNumber": 403,
+    "generation": 4,
+    "types": [
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "shinx",
+          "name": "Shinx",
+          "nationalDexNumber": 403,
+          "generation": 4,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "luxio",
+          "name": "Luxio",
+          "nationalDexNumber": 404,
+          "generation": 4,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "luxray",
+          "name": "Luxray",
+          "nationalDexNumber": 405,
+          "generation": 4,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "budew",
+    "name": "Budew",
+    "nationalDexNumber": 406,
+    "generation": 4,
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "budew",
+          "name": "Budew",
+          "nationalDexNumber": 406,
+          "generation": 4,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "roselia",
+          "name": "Roselia",
+          "nationalDexNumber": 315,
+          "generation": 3,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "roserade",
+          "name": "Roserade",
+          "nationalDexNumber": 407,
+          "generation": 4,
+          "types": [
+            "grass",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "mime-jr",
+    "name": "Mime Jr.",
+    "nationalDexNumber": 439,
+    "generation": 4,
+    "types": [
+      "psychic",
+      "fairy"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "mime-jr",
+          "name": "Mime Jr.",
+          "nationalDexNumber": 439,
+          "generation": 4,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "mr-mime",
+          "name": "Mr. Mime",
+          "nationalDexNumber": 122,
+          "generation": 1,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "mr-rime",
+          "name": "Mr. Rime",
+          "nationalDexNumber": 866,
+          "generation": 8,
+          "types": [
+            "ice",
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "happiny",
+    "name": "Happiny",
+    "nationalDexNumber": 440,
+    "generation": 4,
+    "types": [
+      "normal"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "happiny",
+          "name": "Happiny",
+          "nationalDexNumber": 440,
+          "generation": 4,
+          "types": [
+            "normal"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "chansey",
+          "name": "Chansey",
+          "nationalDexNumber": 113,
+          "generation": 1,
+          "types": [
+            "normal"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "blissey",
+          "name": "Blissey",
+          "nationalDexNumber": 242,
+          "generation": 2,
+          "types": [
+            "normal"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "gible",
+    "name": "Gible",
+    "nationalDexNumber": 443,
+    "generation": 4,
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "gible",
+          "name": "Gible",
+          "nationalDexNumber": 443,
+          "generation": 4,
+          "types": [
+            "dragon",
+            "ground"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "gabite",
+          "name": "Gabite",
+          "nationalDexNumber": 444,
+          "generation": 4,
+          "types": [
+            "dragon",
+            "ground"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "garchomp",
+          "name": "Garchomp",
+          "nationalDexNumber": 445,
+          "generation": 4,
+          "types": [
+            "dragon",
+            "ground"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "snivy",
+    "name": "Snivy",
+    "nationalDexNumber": 495,
+    "generation": 5,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "snivy",
+          "name": "Snivy",
+          "nationalDexNumber": 495,
+          "generation": 5,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "servine",
+          "name": "Servine",
+          "nationalDexNumber": 496,
+          "generation": 5,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "serperior",
+          "name": "Serperior",
+          "nationalDexNumber": 497,
+          "generation": 5,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "tepig",
+    "name": "Tepig",
+    "nationalDexNumber": 498,
+    "generation": 5,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "tepig",
+          "name": "Tepig",
+          "nationalDexNumber": 498,
+          "generation": 5,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pignite",
+          "name": "Pignite",
+          "nationalDexNumber": 499,
+          "generation": 5,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "emboar",
+          "name": "Emboar",
+          "nationalDexNumber": 500,
+          "generation": 5,
+          "types": [
+            "fire",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "oshawott",
+    "name": "Oshawott",
+    "nationalDexNumber": 501,
+    "generation": 5,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "oshawott",
+          "name": "Oshawott",
+          "nationalDexNumber": 501,
+          "generation": 5,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dewott",
+          "name": "Dewott",
+          "nationalDexNumber": 502,
+          "generation": 5,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "samurott",
+          "name": "Samurott",
+          "nationalDexNumber": 503,
+          "generation": 5,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "lillipup",
+    "name": "Lillipup",
+    "nationalDexNumber": 506,
+    "generation": 5,
+    "types": [
+      "normal"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "lillipup",
+          "name": "Lillipup",
+          "nationalDexNumber": 506,
+          "generation": 5,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "herdier",
+          "name": "Herdier",
+          "nationalDexNumber": 507,
+          "generation": 5,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "stoutland",
+          "name": "Stoutland",
+          "nationalDexNumber": 508,
+          "generation": 5,
+          "types": [
+            "normal"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pidove",
+    "name": "Pidove",
+    "nationalDexNumber": 519,
+    "generation": 5,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pidove",
+          "name": "Pidove",
+          "nationalDexNumber": 519,
+          "generation": 5,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "tranquill",
+          "name": "Tranquill",
+          "nationalDexNumber": 520,
+          "generation": 5,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "unfezant",
+          "name": "Unfezant",
+          "nationalDexNumber": 521,
+          "generation": 5,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "roggenrola",
+    "name": "Roggenrola",
+    "nationalDexNumber": 524,
+    "generation": 5,
+    "types": [
+      "rock"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "roggenrola",
+          "name": "Roggenrola",
+          "nationalDexNumber": 524,
+          "generation": 5,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "boldore",
+          "name": "Boldore",
+          "nationalDexNumber": 525,
+          "generation": 5,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gigalith",
+          "name": "Gigalith",
+          "nationalDexNumber": 526,
+          "generation": 5,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "timburr",
+    "name": "Timburr",
+    "nationalDexNumber": 532,
+    "generation": 5,
+    "types": [
+      "fighting"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "timburr",
+          "name": "Timburr",
+          "nationalDexNumber": 532,
+          "generation": 5,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gurdurr",
+          "name": "Gurdurr",
+          "nationalDexNumber": 533,
+          "generation": 5,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "conkeldurr",
+          "name": "Conkeldurr",
+          "nationalDexNumber": 534,
+          "generation": 5,
+          "types": [
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "tympole",
+    "name": "Tympole",
+    "nationalDexNumber": 535,
+    "generation": 5,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "tympole",
+          "name": "Tympole",
+          "nationalDexNumber": 535,
+          "generation": 5,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "palpitoad",
+          "name": "Palpitoad",
+          "nationalDexNumber": 536,
+          "generation": 5,
+          "types": [
+            "water",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "seismitoad",
+          "name": "Seismitoad",
+          "nationalDexNumber": 537,
+          "generation": 5,
+          "types": [
+            "water",
+            "ground"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "sewaddle",
+    "name": "Sewaddle",
+    "nationalDexNumber": 540,
+    "generation": 5,
+    "types": [
+      "bug",
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "sewaddle",
+          "name": "Sewaddle",
+          "nationalDexNumber": 540,
+          "generation": 5,
+          "types": [
+            "bug",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "swadloon",
+          "name": "Swadloon",
+          "nationalDexNumber": 541,
+          "generation": 5,
+          "types": [
+            "bug",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "leavanny",
+          "name": "Leavanny",
+          "nationalDexNumber": 542,
+          "generation": 5,
+          "types": [
+            "bug",
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "venipede",
+    "name": "Venipede",
+    "nationalDexNumber": 543,
+    "generation": 5,
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "venipede",
+          "name": "Venipede",
+          "nationalDexNumber": 543,
+          "generation": 5,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "whirlipede",
+          "name": "Whirlipede",
+          "nationalDexNumber": 544,
+          "generation": 5,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "scolipede",
+          "name": "Scolipede",
+          "nationalDexNumber": 545,
+          "generation": 5,
+          "types": [
+            "bug",
+            "poison"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "sandile",
+    "name": "Sandile",
+    "nationalDexNumber": 551,
+    "generation": 5,
+    "types": [
+      "ground",
+      "dark"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "sandile",
+          "name": "Sandile",
+          "nationalDexNumber": 551,
+          "generation": 5,
+          "types": [
+            "ground",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "krokorok",
+          "name": "Krokorok",
+          "nationalDexNumber": 552,
+          "generation": 5,
+          "types": [
+            "ground",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "krookodile",
+          "name": "Krookodile",
+          "nationalDexNumber": 553,
+          "generation": 5,
+          "types": [
+            "ground",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "gothita",
+    "name": "Gothita",
+    "nationalDexNumber": 574,
+    "generation": 5,
+    "types": [
+      "psychic"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "gothita",
+          "name": "Gothita",
+          "nationalDexNumber": 574,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gothorita",
+          "name": "Gothorita",
+          "nationalDexNumber": 575,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "gothitelle",
+          "name": "Gothitelle",
+          "nationalDexNumber": 576,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "solosis",
+    "name": "Solosis",
+    "nationalDexNumber": 577,
+    "generation": 5,
+    "types": [
+      "psychic"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "solosis",
+          "name": "Solosis",
+          "nationalDexNumber": 577,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "duosion",
+          "name": "Duosion",
+          "nationalDexNumber": 578,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "reuniclus",
+          "name": "Reuniclus",
+          "nationalDexNumber": 579,
+          "generation": 5,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "vanillite",
+    "name": "Vanillite",
+    "nationalDexNumber": 582,
+    "generation": 5,
+    "types": [
+      "ice"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "vanillite",
+          "name": "Vanillite",
+          "nationalDexNumber": 582,
+          "generation": 5,
+          "types": [
+            "ice"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "vanillish",
+          "name": "Vanillish",
+          "nationalDexNumber": 583,
+          "generation": 5,
+          "types": [
+            "ice"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "vanilluxe",
+          "name": "Vanilluxe",
+          "nationalDexNumber": 584,
+          "generation": 5,
+          "types": [
+            "ice"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "klink",
+    "name": "Klink",
+    "nationalDexNumber": 599,
+    "generation": 5,
+    "types": [
+      "steel"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "klink",
+          "name": "Klink",
+          "nationalDexNumber": 599,
+          "generation": 5,
+          "types": [
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "klang",
+          "name": "Klang",
+          "nationalDexNumber": 600,
+          "generation": 5,
+          "types": [
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "klinklang",
+          "name": "Klinklang",
+          "nationalDexNumber": 601,
+          "generation": 5,
+          "types": [
+            "steel"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "tynamo",
+    "name": "Tynamo",
+    "nationalDexNumber": 602,
+    "generation": 5,
+    "types": [
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "tynamo",
+          "name": "Tynamo",
+          "nationalDexNumber": 602,
+          "generation": 5,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "eelektrik",
+          "name": "Eelektrik",
+          "nationalDexNumber": 603,
+          "generation": 5,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "eelektross",
+          "name": "Eelektross",
+          "nationalDexNumber": 604,
+          "generation": 5,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "litwick",
+    "name": "Litwick",
+    "nationalDexNumber": 607,
+    "generation": 5,
+    "types": [
+      "ghost",
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "litwick",
+          "name": "Litwick",
+          "nationalDexNumber": 607,
+          "generation": 5,
+          "types": [
+            "ghost",
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "lampent",
+          "name": "Lampent",
+          "nationalDexNumber": 608,
+          "generation": 5,
+          "types": [
+            "ghost",
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "chandelure",
+          "name": "Chandelure",
+          "nationalDexNumber": 609,
+          "generation": 5,
+          "types": [
+            "ghost",
+            "fire"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "axew",
+    "name": "Axew",
+    "nationalDexNumber": 610,
+    "generation": 5,
+    "types": [
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "axew",
+          "name": "Axew",
+          "nationalDexNumber": 610,
+          "generation": 5,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "fraxure",
+          "name": "Fraxure",
+          "nationalDexNumber": 611,
+          "generation": 5,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "haxorus",
+          "name": "Haxorus",
+          "nationalDexNumber": 612,
+          "generation": 5,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pawniard",
+    "name": "Pawniard",
+    "nationalDexNumber": 624,
+    "generation": 5,
+    "types": [
+      "dark",
+      "steel"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pawniard",
+          "name": "Pawniard",
+          "nationalDexNumber": 624,
+          "generation": 5,
+          "types": [
+            "dark",
+            "steel"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "bisharp",
+          "name": "Bisharp",
+          "nationalDexNumber": 625,
+          "generation": 5,
+          "types": [
+            "dark",
+            "steel"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "kingambit",
+          "name": "Kingambit",
+          "nationalDexNumber": 983,
+          "generation": 9,
+          "types": [
+            "dark",
+            "steel"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "deino",
+    "name": "Deino",
+    "nationalDexNumber": 633,
+    "generation": 5,
+    "types": [
+      "dark",
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "deino",
+          "name": "Deino",
+          "nationalDexNumber": 633,
+          "generation": 5,
+          "types": [
+            "dark",
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "zweilous",
+          "name": "Zweilous",
+          "nationalDexNumber": 634,
+          "generation": 5,
+          "types": [
+            "dark",
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "hydreigon",
+          "name": "Hydreigon",
+          "nationalDexNumber": 635,
+          "generation": 5,
+          "types": [
+            "dark",
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "chespin",
+    "name": "Chespin",
+    "nationalDexNumber": 650,
+    "generation": 6,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "chespin",
+          "name": "Chespin",
+          "nationalDexNumber": 650,
+          "generation": 6,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "quilladin",
+          "name": "Quilladin",
+          "nationalDexNumber": 651,
+          "generation": 6,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "chesnaught",
+          "name": "Chesnaught",
+          "nationalDexNumber": 652,
+          "generation": 6,
+          "types": [
+            "grass",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "fennekin",
+    "name": "Fennekin",
+    "nationalDexNumber": 653,
+    "generation": 6,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "fennekin",
+          "name": "Fennekin",
+          "nationalDexNumber": 653,
+          "generation": 6,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "braixen",
+          "name": "Braixen",
+          "nationalDexNumber": 654,
+          "generation": 6,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "delphox",
+          "name": "Delphox",
+          "nationalDexNumber": 655,
+          "generation": 6,
+          "types": [
+            "fire",
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "froakie",
+    "name": "Froakie",
+    "nationalDexNumber": 656,
+    "generation": 6,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "froakie",
+          "name": "Froakie",
+          "nationalDexNumber": 656,
+          "generation": 6,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "frogadier",
+          "name": "Frogadier",
+          "nationalDexNumber": 657,
+          "generation": 6,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "greninja",
+          "name": "Greninja",
+          "nationalDexNumber": 658,
+          "generation": 6,
+          "types": [
+            "water",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "fletchling",
+    "name": "Fletchling",
+    "nationalDexNumber": 661,
+    "generation": 6,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "fletchling",
+          "name": "Fletchling",
+          "nationalDexNumber": 661,
+          "generation": 6,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "fletchinder",
+          "name": "Fletchinder",
+          "nationalDexNumber": 662,
+          "generation": 6,
+          "types": [
+            "fire",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "talonflame",
+          "name": "Talonflame",
+          "nationalDexNumber": 663,
+          "generation": 6,
+          "types": [
+            "fire",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "scatterbug",
+    "name": "Scatterbug",
+    "nationalDexNumber": 664,
+    "generation": 6,
+    "types": [
+      "bug"
+    ],
+    "rarity": "common",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "scatterbug",
+          "name": "Scatterbug",
+          "nationalDexNumber": 664,
+          "generation": 6,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "spewpa",
+          "name": "Spewpa",
+          "nationalDexNumber": 665,
+          "generation": 6,
+          "types": [
+            "bug"
+          ],
+          "rarity": "common"
+        },
+        {
+          "speciesId": "vivillon",
+          "name": "Vivillon",
+          "nationalDexNumber": 666,
+          "generation": 6,
+          "types": [
+            "bug",
+            "flying"
+          ],
+          "rarity": "common"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "flabebe",
+    "name": "Flab\u00e9b\u00e9",
+    "nationalDexNumber": 669,
+    "generation": 6,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "flabebe",
+          "name": "Flab\u00e9b\u00e9",
+          "nationalDexNumber": 669,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "floette",
+          "name": "Floette",
+          "nationalDexNumber": 670,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "florges",
+          "name": "Florges",
+          "nationalDexNumber": 671,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "flabebe-blue",
+    "name": "Flabebe Blue",
+    "nationalDexNumber": 669,
+    "generation": 6,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "flabebe-blue",
+          "name": "Flabebe Blue",
+          "nationalDexNumber": 669,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "floette",
+          "name": "Floette",
+          "nationalDexNumber": 670,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "florges",
+          "name": "Florges",
+          "nationalDexNumber": 671,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "flabebe-orange",
+    "name": "Flabebe Orange",
+    "nationalDexNumber": 669,
+    "generation": 6,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "flabebe-orange",
+          "name": "Flabebe Orange",
+          "nationalDexNumber": 669,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "floette",
+          "name": "Floette",
+          "nationalDexNumber": 670,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "florges",
+          "name": "Florges",
+          "nationalDexNumber": 671,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "flabebe-white",
+    "name": "Flabebe White",
+    "nationalDexNumber": 669,
+    "generation": 6,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "flabebe-white",
+          "name": "Flabebe White",
+          "nationalDexNumber": 669,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "floette",
+          "name": "Floette",
+          "nationalDexNumber": 670,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "florges",
+          "name": "Florges",
+          "nationalDexNumber": 671,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "flabebe-yellow",
+    "name": "Flabebe Yellow",
+    "nationalDexNumber": 669,
+    "generation": 6,
+    "types": [
+      "fairy"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "flabebe-yellow",
+          "name": "Flabebe Yellow",
+          "nationalDexNumber": 669,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "floette",
+          "name": "Floette",
+          "nationalDexNumber": 670,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "florges",
+          "name": "Florges",
+          "nationalDexNumber": 671,
+          "generation": 6,
+          "types": [
+            "fairy"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "honedge",
+    "name": "Honedge",
+    "nationalDexNumber": 679,
+    "generation": 6,
+    "types": [
+      "steel",
+      "ghost"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "honedge",
+          "name": "Honedge",
+          "nationalDexNumber": 679,
+          "generation": 6,
+          "types": [
+            "steel",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "doublade",
+          "name": "Doublade",
+          "nationalDexNumber": 680,
+          "generation": 6,
+          "types": [
+            "steel",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "aegislash-shield",
+          "name": "Aegislash",
+          "nationalDexNumber": 681,
+          "generation": 6,
+          "types": [
+            "steel",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "goomy",
+    "name": "Goomy",
+    "nationalDexNumber": 704,
+    "generation": 6,
+    "types": [
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "goomy",
+          "name": "Goomy",
+          "nationalDexNumber": 704,
+          "generation": 6,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "sliggoo",
+          "name": "Sliggoo",
+          "nationalDexNumber": 705,
+          "generation": 6,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "goodra",
+          "name": "Goodra",
+          "nationalDexNumber": 706,
+          "generation": 6,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "rowlet",
+    "name": "Rowlet",
+    "nationalDexNumber": 722,
+    "generation": 7,
+    "types": [
+      "grass",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "rowlet",
+          "name": "Rowlet",
+          "nationalDexNumber": 722,
+          "generation": 7,
+          "types": [
+            "grass",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dartrix",
+          "name": "Dartrix",
+          "nationalDexNumber": 723,
+          "generation": 7,
+          "types": [
+            "grass",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "decidueye",
+          "name": "Decidueye",
+          "nationalDexNumber": 724,
+          "generation": 7,
+          "types": [
+            "grass",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "litten",
+    "name": "Litten",
+    "nationalDexNumber": 725,
+    "generation": 7,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "litten",
+          "name": "Litten",
+          "nationalDexNumber": 725,
+          "generation": 7,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "torracat",
+          "name": "Torracat",
+          "nationalDexNumber": 726,
+          "generation": 7,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "incineroar",
+          "name": "Incineroar",
+          "nationalDexNumber": 727,
+          "generation": 7,
+          "types": [
+            "fire",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "popplio",
+    "name": "Popplio",
+    "nationalDexNumber": 728,
+    "generation": 7,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "popplio",
+          "name": "Popplio",
+          "nationalDexNumber": 728,
+          "generation": 7,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "brionne",
+          "name": "Brionne",
+          "nationalDexNumber": 729,
+          "generation": 7,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "primarina",
+          "name": "Primarina",
+          "nationalDexNumber": 730,
+          "generation": 7,
+          "types": [
+            "water",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pikipek",
+    "name": "Pikipek",
+    "nationalDexNumber": 731,
+    "generation": 7,
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pikipek",
+          "name": "Pikipek",
+          "nationalDexNumber": 731,
+          "generation": 7,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "trumbeak",
+          "name": "Trumbeak",
+          "nationalDexNumber": 732,
+          "generation": 7,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "toucannon",
+          "name": "Toucannon",
+          "nationalDexNumber": 733,
+          "generation": 7,
+          "types": [
+            "normal",
+            "flying"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "grubbin",
+    "name": "Grubbin",
+    "nationalDexNumber": 736,
+    "generation": 7,
+    "types": [
+      "bug"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "grubbin",
+          "name": "Grubbin",
+          "nationalDexNumber": 736,
+          "generation": 7,
+          "types": [
+            "bug"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "charjabug",
+          "name": "Charjabug",
+          "nationalDexNumber": 737,
+          "generation": 7,
+          "types": [
+            "bug",
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "vikavolt",
+          "name": "Vikavolt",
+          "nationalDexNumber": 738,
+          "generation": 7,
+          "types": [
+            "bug",
+            "electric"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "bounsweet",
+    "name": "Bounsweet",
+    "nationalDexNumber": 761,
+    "generation": 7,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "bounsweet",
+          "name": "Bounsweet",
+          "nationalDexNumber": 761,
+          "generation": 7,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "steenee",
+          "name": "Steenee",
+          "nationalDexNumber": 762,
+          "generation": 7,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "tsareena",
+          "name": "Tsareena",
+          "nationalDexNumber": 763,
+          "generation": 7,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "jangmo-o",
+    "name": "Jangmo O",
+    "nationalDexNumber": 782,
+    "generation": 7,
+    "types": [
+      "dragon"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "jangmo-o",
+          "name": "Jangmo O",
+          "nationalDexNumber": 782,
+          "generation": 7,
+          "types": [
+            "dragon"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "hakamo-o",
+          "name": "Hakamo O",
+          "nationalDexNumber": 783,
+          "generation": 7,
+          "types": [
+            "dragon",
+            "fighting"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "kommo-o",
+          "name": "Kommo O",
+          "nationalDexNumber": 784,
+          "generation": 7,
+          "types": [
+            "dragon",
+            "fighting"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "grookey",
+    "name": "Grookey",
+    "nationalDexNumber": 810,
+    "generation": 8,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "grookey",
+          "name": "Grookey",
+          "nationalDexNumber": 810,
+          "generation": 8,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "thwackey",
+          "name": "Thwackey",
+          "nationalDexNumber": 811,
+          "generation": 8,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "rillaboom",
+          "name": "Rillaboom",
+          "nationalDexNumber": 812,
+          "generation": 8,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "scorbunny",
+    "name": "Scorbunny",
+    "nationalDexNumber": 813,
+    "generation": 8,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "scorbunny",
+          "name": "Scorbunny",
+          "nationalDexNumber": 813,
+          "generation": 8,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "raboot",
+          "name": "Raboot",
+          "nationalDexNumber": 814,
+          "generation": 8,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "cinderace",
+          "name": "Cinderace",
+          "nationalDexNumber": 815,
+          "generation": 8,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "sobble",
+    "name": "Sobble",
+    "nationalDexNumber": 816,
+    "generation": 8,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "sobble",
+          "name": "Sobble",
+          "nationalDexNumber": 816,
+          "generation": 8,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "drizzile",
+          "name": "Drizzile",
+          "nationalDexNumber": 817,
+          "generation": 8,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "inteleon",
+          "name": "Inteleon",
+          "nationalDexNumber": 818,
+          "generation": 8,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "rookidee",
+    "name": "Rookidee",
+    "nationalDexNumber": 821,
+    "generation": 8,
+    "types": [
+      "flying"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "rookidee",
+          "name": "Rookidee",
+          "nationalDexNumber": 821,
+          "generation": 8,
+          "types": [
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "corvisquire",
+          "name": "Corvisquire",
+          "nationalDexNumber": 822,
+          "generation": 8,
+          "types": [
+            "flying"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "corviknight",
+          "name": "Corviknight",
+          "nationalDexNumber": 823,
+          "generation": 8,
+          "types": [
+            "flying",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "blipbug",
+    "name": "Blipbug",
+    "nationalDexNumber": 824,
+    "generation": 8,
+    "types": [
+      "bug"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "blipbug",
+          "name": "Blipbug",
+          "nationalDexNumber": 824,
+          "generation": 8,
+          "types": [
+            "bug"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dottler",
+          "name": "Dottler",
+          "nationalDexNumber": 825,
+          "generation": 8,
+          "types": [
+            "bug",
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "orbeetle",
+          "name": "Orbeetle",
+          "nationalDexNumber": 826,
+          "generation": 8,
+          "types": [
+            "bug",
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "rolycoly",
+    "name": "Rolycoly",
+    "nationalDexNumber": 837,
+    "generation": 8,
+    "types": [
+      "rock"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "rolycoly",
+          "name": "Rolycoly",
+          "nationalDexNumber": 837,
+          "generation": 8,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "carkol",
+          "name": "Carkol",
+          "nationalDexNumber": 838,
+          "generation": 8,
+          "types": [
+            "rock",
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "coalossal",
+          "name": "Coalossal",
+          "nationalDexNumber": 839,
+          "generation": 8,
+          "types": [
+            "rock",
+            "fire"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "applin",
+    "name": "Applin",
+    "nationalDexNumber": 840,
+    "generation": 8,
+    "types": [
+      "grass",
+      "dragon"
+    ],
+    "rarity": "rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "applin",
+          "name": "Applin",
+          "nationalDexNumber": 840,
+          "generation": 8,
+          "types": [
+            "grass",
+            "dragon"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "dipplin",
+          "name": "Dipplin",
+          "nationalDexNumber": 1011,
+          "generation": 9,
+          "types": [
+            "grass",
+            "dragon"
+          ],
+          "rarity": "rare"
+        },
+        {
+          "speciesId": "hydrapple",
+          "name": "Hydrapple",
+          "nationalDexNumber": 1019,
+          "generation": 9,
+          "types": [
+            "grass",
+            "dragon"
+          ],
+          "rarity": "rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "hatenna",
+    "name": "Hatenna",
+    "nationalDexNumber": 856,
+    "generation": 8,
+    "types": [
+      "psychic"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "hatenna",
+          "name": "Hatenna",
+          "nationalDexNumber": 856,
+          "generation": 8,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "hattrem",
+          "name": "Hattrem",
+          "nationalDexNumber": 857,
+          "generation": 8,
+          "types": [
+            "psychic"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "hatterene",
+          "name": "Hatterene",
+          "nationalDexNumber": 858,
+          "generation": 8,
+          "types": [
+            "psychic",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "impidimp",
+    "name": "Impidimp",
+    "nationalDexNumber": 859,
+    "generation": 8,
+    "types": [
+      "dark",
+      "fairy"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "impidimp",
+          "name": "Impidimp",
+          "nationalDexNumber": 859,
+          "generation": 8,
+          "types": [
+            "dark",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "morgrem",
+          "name": "Morgrem",
+          "nationalDexNumber": 860,
+          "generation": 8,
+          "types": [
+            "dark",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "grimmsnarl",
+          "name": "Grimmsnarl",
+          "nationalDexNumber": 861,
+          "generation": 8,
+          "types": [
+            "dark",
+            "fairy"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "dreepy",
+    "name": "Dreepy",
+    "nationalDexNumber": 885,
+    "generation": 8,
+    "types": [
+      "dragon",
+      "ghost"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "dreepy",
+          "name": "Dreepy",
+          "nationalDexNumber": 885,
+          "generation": 8,
+          "types": [
+            "dragon",
+            "ghost"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "drakloak",
+          "name": "Drakloak",
+          "nationalDexNumber": 886,
+          "generation": 8,
+          "types": [
+            "dragon",
+            "ghost"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "dragapult",
+          "name": "Dragapult",
+          "nationalDexNumber": 887,
+          "generation": 8,
+          "types": [
+            "dragon",
+            "ghost"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "sprigatito",
+    "name": "Sprigatito",
+    "nationalDexNumber": 906,
+    "generation": 9,
+    "types": [
+      "grass"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "sprigatito",
+          "name": "Sprigatito",
+          "nationalDexNumber": 906,
+          "generation": 9,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "floragato",
+          "name": "Floragato",
+          "nationalDexNumber": 907,
+          "generation": 9,
+          "types": [
+            "grass"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "meowscarada",
+          "name": "Meowscarada",
+          "nationalDexNumber": 908,
+          "generation": 9,
+          "types": [
+            "grass",
+            "dark"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "fuecoco",
+    "name": "Fuecoco",
+    "nationalDexNumber": 909,
+    "generation": 9,
+    "types": [
+      "fire"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "fuecoco",
+          "name": "Fuecoco",
+          "nationalDexNumber": 909,
+          "generation": 9,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "crocalor",
+          "name": "Crocalor",
+          "nationalDexNumber": 910,
+          "generation": 9,
+          "types": [
+            "fire"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "skeledirge",
+          "name": "Skeledirge",
+          "nationalDexNumber": 911,
+          "generation": 9,
+          "types": [
+            "fire",
+            "ghost"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "quaxly",
+    "name": "Quaxly",
+    "nationalDexNumber": 912,
+    "generation": 9,
+    "types": [
+      "water"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "quaxly",
+          "name": "Quaxly",
+          "nationalDexNumber": 912,
+          "generation": 9,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "quaxwell",
+          "name": "Quaxwell",
+          "nationalDexNumber": 913,
+          "generation": 9,
+          "types": [
+            "water"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "quaquaval",
+          "name": "Quaquaval",
+          "nationalDexNumber": 914,
+          "generation": 9,
+          "types": [
+            "water",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "pawmi",
+    "name": "Pawmi",
+    "nationalDexNumber": 921,
+    "generation": 9,
+    "types": [
+      "electric"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "pawmi",
+          "name": "Pawmi",
+          "nationalDexNumber": 921,
+          "generation": 9,
+          "types": [
+            "electric"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pawmo",
+          "name": "Pawmo",
+          "nationalDexNumber": 922,
+          "generation": 9,
+          "types": [
+            "electric",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "pawmot",
+          "name": "Pawmot",
+          "nationalDexNumber": 923,
+          "generation": 9,
+          "types": [
+            "electric",
+            "fighting"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "smoliv",
+    "name": "Smoliv",
+    "nationalDexNumber": 928,
+    "generation": 9,
+    "types": [
+      "grass",
+      "normal"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "smoliv",
+          "name": "Smoliv",
+          "nationalDexNumber": 928,
+          "generation": 9,
+          "types": [
+            "grass",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "dolliv",
+          "name": "Dolliv",
+          "nationalDexNumber": 929,
+          "generation": 9,
+          "types": [
+            "grass",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "arboliva",
+          "name": "Arboliva",
+          "nationalDexNumber": 930,
+          "generation": 9,
+          "types": [
+            "grass",
+            "normal"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "nacli",
+    "name": "Nacli",
+    "nationalDexNumber": 932,
+    "generation": 9,
+    "types": [
+      "rock"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "nacli",
+          "name": "Nacli",
+          "nationalDexNumber": 932,
+          "generation": 9,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "naclstack",
+          "name": "Naclstack",
+          "nationalDexNumber": 933,
+          "generation": 9,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "garganacl",
+          "name": "Garganacl",
+          "nationalDexNumber": 934,
+          "generation": 9,
+          "types": [
+            "rock"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "tinkatink",
+    "name": "Tinkatink",
+    "nationalDexNumber": 957,
+    "generation": 9,
+    "types": [
+      "fairy",
+      "steel"
+    ],
+    "rarity": "uncommon",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "tinkatink",
+          "name": "Tinkatink",
+          "nationalDexNumber": 957,
+          "generation": 9,
+          "types": [
+            "fairy",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "tinkatuff",
+          "name": "Tinkatuff",
+          "nationalDexNumber": 958,
+          "generation": 9,
+          "types": [
+            "fairy",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        },
+        {
+          "speciesId": "tinkaton",
+          "name": "Tinkaton",
+          "nationalDexNumber": 959,
+          "generation": 9,
+          "types": [
+            "fairy",
+            "steel"
+          ],
+          "rarity": "uncommon"
+        }
+      ]
+    ]
+  },
+  {
+    "speciesId": "frigibax",
+    "name": "Frigibax",
+    "nationalDexNumber": 996,
+    "generation": 9,
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "rarity": "very_rare",
+    "evolutionPaths": [
+      [
+        {
+          "speciesId": "frigibax",
+          "name": "Frigibax",
+          "nationalDexNumber": 996,
+          "generation": 9,
+          "types": [
+            "dragon",
+            "ice"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "arctibax",
+          "name": "Arctibax",
+          "nationalDexNumber": 997,
+          "generation": 9,
+          "types": [
+            "dragon",
+            "ice"
+          ],
+          "rarity": "very_rare"
+        },
+        {
+          "speciesId": "baxcalibur",
+          "name": "Baxcalibur",
+          "nationalDexNumber": 998,
+          "generation": 9,
+          "types": [
+            "dragon",
+            "ice"
+          ],
+          "rarity": "very_rare"
+        }
+      ]
+    ]
+  }
+]

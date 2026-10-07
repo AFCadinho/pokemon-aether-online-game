@@ -1,0 +1,522 @@
+{
+  "great-ball": {
+    "id": "great-ball",
+    "name": "Great Ball",
+    "category": "balls",
+    "shortDesc": "A better ball with a higher catch rate than a Poke Ball.",
+    "desc": "A good, high-performance Poke Ball that provides a higher catch rate than a standard Poke Ball.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_mt_moon_1f",
+        "location_name": "Mt. Moon 1F",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_22",
+        "location_name": "Route 22",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_25",
+        "location_name": "Route 25",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_4",
+        "location_name": "Route 4",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_6",
+        "location_name": "Route 6",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_10",
+        "location_name": "Route 10",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_11",
+        "location_name": "Route 11",
+        "quantity": 1,
+        "source_count": 2,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_rock_tunnel_1f",
+        "location_name": "Rock Tunnel 1F",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Catch Route 22 Mankey",
+        "quest_id": "catch_route_22_mankey",
+        "step_id": "return_to_gideon",
+        "location_id": "kanto_viridian_city",
+        "location_name": "Viridian City",
+        "quantity": 10,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Bug Catcher",
+        "target_type": "bug_catcher",
+        "location_names": [
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.08125,
+          "maximum": 0.08125
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 10
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Worker",
+        "target_type": "worker",
+        "location_names": [
+          "Cerulean City",
+          "Pewter City",
+          "Vermilion City"
+        ],
+        "chance": {
+          "minimum": 0.08125,
+          "maximum": 0.08125
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 15
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Hiker",
+        "target_type": "hiker",
+        "location_names": [
+          "Pewter City"
+        ],
+        "chance": {
+          "minimum": 0.08125,
+          "maximum": 0.08125
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 20
+          }
+        ]
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": false
+  },
+  "poke-ball": {
+    "id": "poke-ball",
+    "name": "Poke Ball",
+    "category": "balls",
+    "shortDesc": "A basic ball used to catch wild Pokemon.",
+    "desc": "A basic Poke Ball used to catch wild Pokemon.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_viridian_forest",
+        "location_name": "Viridian Forest",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Oaks Parcel",
+        "quest_id": "oaks_parcel",
+        "step_id": "return_to_oak",
+        "location_id": "",
+        "location_name": "",
+        "quantity": 10,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Child",
+        "target_type": "child",
+        "location_names": [
+          "Cerulean City",
+          "Pewter City",
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.07,
+          "maximum": 0.07
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 1
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Elderly",
+        "target_type": "elderly",
+        "location_names": [
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.07,
+          "maximum": 0.07
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 1
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Civilian",
+        "target_type": "civilian",
+        "location_names": [
+          "Cerulean City",
+          "Pewter City",
+          "Vermilion City"
+        ],
+        "chance": {
+          "minimum": 0.07,
+          "maximum": 0.07
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 5
+          }
+        ]
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": false
+  },
+  "ultra-ball": {
+    "id": "ultra-ball",
+    "name": "Ultra Ball",
+    "category": "balls",
+    "shortDesc": "Tries to catch a wild Pokemon. Success rate is 2.",
+    "desc": "Used in battle : Attempts to catch a wild Pokemon, using a catch rate of 2. If used in a trainer battle, nothing happens and the ball is lost.",
+    "cost": 800,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_cerulean_cave_2f",
+        "location_name": "Cerulean Cave 2F",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_cerulean_cave_b1f",
+        "location_name": "Cerulean Cave B1F",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_cerulean_cave",
+        "location_name": "Cerulean Cave 1F",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_4",
+        "location_name": "Route 4",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Trainer",
+        "target_type": "trainer",
+        "location_names": [
+          "Cerulean City",
+          "Vermilion City"
+        ],
+        "chance": {
+          "minimum": 0.04772727,
+          "maximum": 0.04772727
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 25
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Scientist",
+        "target_type": "scientist",
+        "location_names": [
+          "Cerulean City",
+          "Pewter City"
+        ],
+        "chance": {
+          "minimum": 0.04772727,
+          "maximum": 0.04772727
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 30
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Ace Trainer",
+        "target_type": "ace_trainer",
+        "location_names": [
+          "Cerulean City",
+          "Vermilion City",
+          "Viridian City"
+        ],
+        "chance": {
+          "minimum": 0.0525,
+          "maximum": 0.0525
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 40
+          }
+        ]
+      },
+      {
+        "visibility": "public",
+        "type": "thieving",
+        "name": "Pickpocket Veteran Trainer",
+        "target_type": "veteran_trainer",
+        "location_names": [
+          "Cerulean City"
+        ],
+        "chance": {
+          "minimum": 0.0525,
+          "maximum": 0.0525
+        },
+        "chance_context": "successful_thieving",
+        "repeatable": true,
+        "requirements": [
+          {
+            "type": "thieving_level",
+            "minimum": 60
+          }
+        ]
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  "thunder-stone": {
+    "id": "thunder-stone",
+    "name": "Thunder Stone",
+    "category": "evolution-items",
+    "shortDesc": "Evolves an Eelektrik into Eelektross, an Eevee into Jolteon, or a Pikachu into Raichu.",
+    "desc": "Used on a party Pokemon : Evolves an Eelektrik into Eelektross, an Eevee into Jolteon, or a Pikachu into Raichu.",
+    "cost": 3000,
+    "sources": [],
+    "availabilityStatus": "unavailable",
+    "quantity": 1,
+    "isHoldable": false
+  },
+  "exp-share": {
+    "id": "exp-share",
+    "name": "Exp. Share",
+    "category": "held-items",
+    "shortDesc": "Held: Half the experience from a battle is split between Pokemon holding this item.",
+    "desc": "Held : Experience is split across two groups: Pokemon who participated in battle, and Pokemon holding this item. Each Pokemon earns experience as though it had battled alone, divided by the number of Pokemon in its group, then divided by the number of groups. Pokemon holding this item who also participated in battle effectively earn experience twice. Fainted Pokemon never earn experience, and empty groups are ignored; thus, if a single Pokemon is holding this item and the only Pokemon who battled faints from Explosion, the holder will gain full experience.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Train Starter To Level 10",
+        "quest_id": "train_starter_to_level_10",
+        "step_id": "return_to_dadinho",
+        "location_id": "kanto_route_1",
+        "location_name": "Route 1",
+        "quantity": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  "leftovers": {
+    "id": "leftovers",
+    "name": "Leftovers",
+    "category": "held-items",
+    "shortDesc": "Restores a little HP every turn.",
+    "desc": "At the end of every turn, the holder restores a little HP.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_12",
+        "location_name": "Route 12",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  "lucky-egg": {
+    "id": "lucky-egg",
+    "name": "Lucky Egg",
+    "category": "held-items",
+    "shortDesc": "Held: Increases EXP earned in battle by 50%.",
+    "desc": "Held: Increases any Exp the holder gains by 50%.",
+    "cost": 10000,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Catch Route 22 Mankey",
+        "quest_id": "catch_route_22_mankey",
+        "step_id": "return_to_gideon",
+        "location_id": "kanto_viridian_city",
+        "location_name": "Viridian City",
+        "quantity": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  "soothe-bell": {
+    "id": "soothe-bell",
+    "name": "Soothe Bell",
+    "category": "held-items",
+    "shortDesc": "Held: Doubles the happiness earned by the holder.",
+    "desc": "Held : When the holder would earn happiness for any reason, it earns twice that amount instead.",
+    "cost": 4000,
+    "sources": [],
+    "availabilityStatus": "unavailable",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  "shiny-charm": {
+    "id": "shiny-charm",
+    "name": "Shiny Charm",
+    "category": "key-items",
+    "shortDesc": "Use to raise Shiny encounter odds by 10% for 7 days.",
+    "desc": "Activate to raise the chance of finding Shiny Pokemon by 10% for 7 days.",
+    "cost": null,
+    "sources": [],
+    "availabilityStatus": "unavailable",
+    "quantity": 1,
+    "isHoldable": false
+  }
+}

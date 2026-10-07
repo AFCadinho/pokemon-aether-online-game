@@ -1,0 +1,74 @@
+[
+	{
+		"caption": "Example Gift Store: select a Blessing voucher, check its duration and price, then use the purchased voucher from your Bag.",
+		"control": "DonatorStorePopup",
+		"exampleData": true,
+		"filename": "01-blessing-voucher.png",
+		"heading": "## Getting Aether Blessing",
+		"size": [
+			1144,
+			704
+		],
+		"topic": 56
+	},
+	{
+		"caption": "Example: Aether Credit Card payment is available for eligible personal products. Review the binding notice before purchasing.",
+		"control": "DonatorStorePopup",
+		"exampleData": true,
+		"filename": "01-card-payment-and-binding.png",
+		"heading": "## Aether Credit Card and binding",
+		"size": [
+			1144,
+			704
+		],
+		"topic": 91
+	},
+	{
+		"caption": "The Gift Store's information button explains Gems, credit vouchers and the personal Aether Credit Card.",
+		"control": "Panel",
+		"exampleData": true,
+		"filename": "02-currency-help.png",
+		"heading": "## Gems and credit",
+		"size": [
+			544,
+			372
+		],
+		"topic": 91
+	},
+	{
+		"caption": "Example mount preview: inspect the mount box and its price before purchasing. Owning a box and equipping a mount are separate steps.",
+		"control": "DonatorStorePopup",
+		"exampleData": true,
+		"filename": "02-mount-box-preview.png",
+		"heading": "## Mount boxes",
+		"size": [
+			1144,
+			704
+		],
+		"topic": 89
+	},
+	{
+		"caption": "Example Mounts manager: choose a mount for each movement type. The list shows mounts unlocked by your items and progression.",
+		"control": "MountLoadoutPanel",
+		"exampleData": true,
+		"filename": "01-mount-loadout.png",
+		"heading": "## Selecting your mounts",
+		"size": [
+			296,
+			494
+		],
+		"topic": 89
+	},
+	{
+		"caption": "Example Atelier: select a Chroma item and preview a colour. Review the ₽2,500 fee for each changed item before applying it.",
+		"control": "AetherAtelierPopup",
+		"exampleData": true,
+		"filename": "01-chroma-dye-preview.png",
+		"heading": "## Dyeing Chroma clothing",
+		"size": [
+			964,
+			659
+		],
+		"topic": 93
+	}
+]

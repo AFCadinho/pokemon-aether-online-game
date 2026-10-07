@@ -1,0 +1,85 @@
+[
+  {
+    "id": "exp-share",
+    "name": "Exp. Share",
+    "category": "held-items",
+    "shortDesc": "Held: Half the experience from a battle is split between Pokemon holding this item.",
+    "desc": "Held : Experience is split across two groups: Pokemon who participated in battle, and Pokemon holding this item. Each Pokemon earns experience as though it had battled alone, divided by the number of Pokemon in its group, then divided by the number of groups. Pokemon holding this item who also participated in battle effectively earn experience twice. Fainted Pokemon never earn experience, and empty groups are ignored; thus, if a single Pokemon is holding this item and the only Pokemon who battled faints from Explosion, the holder will gain full experience.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Train Starter To Level 10",
+        "quest_id": "train_starter_to_level_10",
+        "step_id": "return_to_dadinho",
+        "location_id": "kanto_route_1",
+        "location_name": "Route 1",
+        "quantity": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  {
+    "id": "leftovers",
+    "name": "Leftovers",
+    "category": "held-items",
+    "shortDesc": "Restores a little HP every turn.",
+    "desc": "At the end of every turn, the holder restores a little HP.",
+    "cost": null,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "pickup",
+        "name": "World pickup",
+        "location_id": "kanto_route_12",
+        "location_name": "Route 12",
+        "quantity": 1,
+        "source_count": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  {
+    "id": "lucky-egg",
+    "name": "Lucky Egg",
+    "category": "held-items",
+    "shortDesc": "Held: Increases EXP earned in battle by 50%.",
+    "desc": "Held: Increases any Exp the holder gains by 50%.",
+    "cost": 10000,
+    "sources": [
+      {
+        "visibility": "public",
+        "type": "quest_reward",
+        "name": "Catch Route 22 Mankey",
+        "quest_id": "catch_route_22_mankey",
+        "step_id": "return_to_gideon",
+        "location_id": "kanto_viridian_city",
+        "location_name": "Viridian City",
+        "quantity": 1,
+        "repeatable": false
+      }
+    ],
+    "availabilityStatus": "available",
+    "quantity": 1,
+    "isHoldable": true
+  },
+  {
+    "id": "soothe-bell",
+    "name": "Soothe Bell",
+    "category": "held-items",
+    "shortDesc": "Held: Doubles the happiness earned by the holder.",
+    "desc": "Held : When the holder would earn happiness for any reason, it earns twice that amount instead.",
+    "cost": 4000,
+    "sources": [],
+    "availabilityStatus": "unavailable",
+    "quantity": 1,
+    "isHoldable": true
+  }
+]
