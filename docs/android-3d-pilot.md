@@ -168,3 +168,8 @@ parse/export checks, Python compilation, the full native cold run and the native
 cache-only restart run. Ordinary Android/browser policy is unchanged. The
 cached-ready fixture overrides startup cleanup because its catalog and lock
 are test-owned; no assertions or performance limits were weakened.
+
+The subsequent [Android arena asset prototype](android-arena-assets.md) measures
+art-only pruning and DEFLATE delivery, verifies an ETC2/EAC export and compares
+both candidates in the native emulator. It does not yet establish phone memory
+savings or qualify the unusually bright forest lighting.

@@ -44,6 +44,14 @@ static func prepare(manifest_path: String) -> String:
 			RenderingServer.global_shader_parameter_add(spec[0], spec[1], spec[2])
 	mounted_path = path
 	started_ms = Time.get_ticks_msec()
+	for resource_path: String in resource_paths():
+		pending.append(resource_path)
+	requested_count = pending.size()
+	_request_next()
+	return error
+
+static func resource_paths() -> PackedStringArray:
+	# Runtime and platform-specific art exports share the same dependency roots.
 	var paths: Dictionary = {}
 	for group in Layout.data().props + Layout.data().foliage:
 		paths["res://entities/nature/" + group.scene + ".tscn"] = true
@@ -52,11 +60,7 @@ static func prepare(manifest_path: String) -> String:
 		paths["res://entities/nature/" + scene + ".tscn"] = true
 	for texture in ["groundA_albedo", "groundA_normal"]:
 		paths["res://entities/nature/ground/" + texture + ".png"] = true
-	for resource_path: String in paths:
-		pending.append(resource_path)
-	requested_count = pending.size()
-	_request_next()
-	return error
+	return PackedStringArray(paths.keys())
 
 static func _request_next() -> void:
 	# Art scenes share meshes/materials. Keep one threaded request in flight to

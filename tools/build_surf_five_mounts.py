@@ -5,6 +5,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageChops
 from import_player_layered_sprites import write_texture_import
+from build_surf_mount_idles import with_surf_idle
 
 ROOT = Path(__file__).resolve().parents[1]
 FRAME = 192
@@ -116,7 +117,7 @@ def definition(mid, cfg):
     base_id = mid.removesuffix('_shiny')
     shared = f'res://assets/mounts/{base_id}'
     shiny = mid.endswith('_shiny')
-    return dict(displayName=('Shiny ' if shiny else '')+cfg['name'], movementMode='surf',
+    return with_surf_idle(mid, dict(displayName=('Shiny ' if shiny else '')+cfg['name'], movementMode='surf',
                 unlockItemId=('shiny-' if shiny else '')+base_id+'-mount', iconTexture=folder+'/icon.png',
                 spriteSheet=folder+'/mount.png', foregroundSheet=folder+'/foreground.png',
                 riderMaskSheet=shared+'/rider_mask.png', waterContactSheet=shared+'/water_contact.png',
@@ -124,7 +125,7 @@ def definition(mid, cfg):
                 riderOffsets={direction: [[x, y+WORLD_WATERLINE_Y] for x,y in offsets]
                               for direction,offsets in cfg['riderOffsets'].items()},
                 surfFishingFullForeground=False,
-                surfFishingRiderOffsets={'down':[0,18], 'left':[0,4], 'right':[0,4], 'up':[0,10]})
+                surfFishingRiderOffsets={'down':[0,18], 'left':[0,4], 'right':[0,4], 'up':[0,10]}))
 
 
 def build(update_catalog=False):

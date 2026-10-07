@@ -23,7 +23,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -33,11 +33,12 @@ def main():
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     coop_sprites = args.suite == "coop-sprites"
-    android_3d = args.suite == "android-3d"
+    android_arenas = args.suite == "android-arenas"
+    android_3d = args.suite in {"android-3d", "android-arenas"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
-        CHECKS = ["android_3d_pilot_check"]
+        CHECKS = ["android_arena_asset_check" if android_arenas else "android_3d_pilot_check"]
         FIXTURES = []
     if mobile_collapse:
         if args.platform != "android":
@@ -61,6 +62,11 @@ def main():
         app_name = "PokeAether Android 3D Pilot"
         package = "com.pokeaether.android3dpilot"
         report_name = "android-3d-pilot-results.json"
+    if android_arenas:
+        title = "Android Arena Pilot"
+        app_name = "PokeAether Android Arena Pilot"
+        package = "com.pokeaether.androidarenapilot"
+        report_name = "android-arena-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -121,7 +127,7 @@ def main():
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-            if android_3d:
+            if android_3d and not android_arenas:
                 wrapper = generated / "pilot_model_service.gd"
                 wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\nvar completed_downloads: Array[Dictionary] = []\nfunc _selected_release() -> Dictionary:\n\treturn RELEASE_V11.data\nfunc _publish_verified_download(absolute: String, expected: int, digest: String) -> String:\n\tvar error := super._publish_verified_download(absolute, expected, digest)\n\tif error.is_empty():\n\t\tcompleted_downloads.append({"file": absolute.get_file(), "bytes": expected, "sha256": digest})\n\treturn error\n')
                 config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
@@ -130,6 +136,8 @@ def main():
                 wrapper = generated / "mobile_asset_service_offline.gd"
                 wrapper.write_text('extends "res://scripts/services/mobile_asset_service.gd"\nfunc release_prefix() -> String:\n\treturn "http://127.0.0.1:8091/"\n')
                 config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
+        if android_arenas:
+            config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
         project.write_text(config)
         preset = originals[presets].decode()
         source_index = 3 if args.platform == 'web' else 7
@@ -151,7 +159,7 @@ def main():
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
-                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot"', selected, flags=re.M)
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if mobile_collapse:
@@ -170,7 +178,7 @@ def main():
             command = ["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT)]
             android_file = "coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")
             if android_3d:
-                android_file = "android-3d-pilot.apk"
+                android_file = "android-arena-pilot.apk" if android_arenas else "android-3d-pilot.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)

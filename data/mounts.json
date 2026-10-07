@@ -192,7 +192,10 @@
         320
       ],
       "movementAnimationSpeed": 7.5,
-      "interactionHeightOffsets": {"left": 16, "right": 16},
+      "interactionHeightOffsets": {
+        "left": 16,
+        "right": 16
+      },
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,
@@ -288,6 +291,92 @@
           [
             0,
             -18
+          ]
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/primal_kyogre/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/primal_kyogre/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/primal_kyogre/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/primal_kyogre/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
           ]
         ]
       }
@@ -306,7 +395,10 @@
         320
       ],
       "movementAnimationSpeed": 7.5,
-      "interactionHeightOffsets": {"left": 16, "right": 16},
+      "interactionHeightOffsets": {
+        "left": 16,
+        "right": 16
+      },
       "storePreviewScale": 1.0,
       "storePreviewOffset": [
         0,
@@ -402,6 +494,92 @@
           [
             0,
             -18
+          ]
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/primal_kyogre_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/primal_kyogre_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/primal_kyogre/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/primal_kyogre/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
           ]
         ]
       }
@@ -1947,7 +2125,8 @@
       "storePreviewOffset": [
         0,
         8
-      ]
+      ],
+      "movementEffect": "zekrom_turbo"
     },
     "palkia": {
       "displayName": "Palkia",
@@ -2145,7 +2324,8 @@
       "storePreviewOffset": [
         0,
         8
-      ]
+      ],
+      "movementEffect": "zekrom_turbo"
     },
     "palkia_shiny": {
       "displayName": "Shiny Palkia",
@@ -3680,9 +3860,9 @@
       },
       "unlockItemId": "magikarp-mount",
       "iconTexture": "res://assets/mounts/magikarp/icon.png",
-      "idleSpriteSheet": "res://assets/mounts/magikarp/idle_mount.png",
-      "idleForegroundSheet": "res://assets/mounts/magikarp/idle_foreground.png",
-      "idleRiderMaskSheet": "res://assets/mounts/magikarp/idle_rider_mask.png",
+      "idleSpriteSheet": "res://assets/mounts/magikarp/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/magikarp/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/magikarp/animated_idle_rider_mask.png",
       "surfFishingFullForeground": false,
       "surfFishingRiderOffsets": {
         "down": [
@@ -3700,6 +3880,89 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleWaterContactSheet": "res://assets/mounts/magikarp/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -25
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -23
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "up": [
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -9
+          ],
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -7
+          ]
         ]
       }
     },
@@ -3884,9 +4147,9 @@
       },
       "unlockItemId": "shiny-magikarp-mount",
       "iconTexture": "res://assets/mounts/magikarp_shiny/icon.png",
-      "idleSpriteSheet": "res://assets/mounts/magikarp_shiny/idle_mount.png",
-      "idleForegroundSheet": "res://assets/mounts/magikarp_shiny/idle_foreground.png",
-      "idleRiderMaskSheet": "res://assets/mounts/magikarp_shiny/idle_rider_mask.png",
+      "idleSpriteSheet": "res://assets/mounts/magikarp_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/magikarp_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/magikarp/animated_idle_rider_mask.png",
       "surfFishingFullForeground": false,
       "surfFishingRiderOffsets": {
         "down": [
@@ -3904,6 +4167,89 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleWaterContactSheet": "res://assets/mounts/magikarp/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -25
+          ],
+          [
+            0,
+            -24
+          ],
+          [
+            0,
+            -23
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "up": [
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -9
+          ],
+          [
+            -6,
+            -8
+          ],
+          [
+            -6,
+            -7
+          ]
         ]
       }
     },
@@ -4013,6 +4359,92 @@
           0,
           10
         ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/wailmer/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/wailmer/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/wailmer/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/wailmer/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -20
+          ],
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -18
+          ]
+        ],
+        "right": [
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -20
+          ],
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -18
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -8
+          ],
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -6
+          ]
+        ]
       }
     },
     "drednaw": {
@@ -4120,6 +4552,92 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/drednaw/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/drednaw/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/drednaw/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/drednaw/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -19
+          ],
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -15
+          ],
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -13
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -15
+          ],
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -13
+          ]
+        ],
+        "up": [
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            3
+          ]
         ]
       }
     },
@@ -4229,6 +4747,92 @@
           0,
           10
         ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/mantine/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/mantine/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/mantine/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/mantine/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -15
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -13
+          ]
+        ],
+        "left": [
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -15
+          ],
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -13
+          ]
+        ],
+        "right": [
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -15
+          ],
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -13
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -15
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -13
+          ]
+        ]
       }
     },
     "basculegion": {
@@ -4336,6 +4940,92 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/basculegion/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/basculegion/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/basculegion/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/basculegion/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -23
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -21
+          ]
+        ],
+        "left": [
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -17
+          ],
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -15
+          ]
+        ],
+        "right": [
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -19
+          ],
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -17
+          ]
+        ],
+        "up": [
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            -3
+          ],
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            -1
+          ]
         ]
       }
     },
@@ -4445,6 +5135,92 @@
           0,
           10
         ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/wailord/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/wailord/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/wailord/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/wailord/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -29
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -27
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -29
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -27
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -23
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -21
+          ]
+        ]
       }
     },
     "wailmer_shiny": {
@@ -4552,6 +5328,92 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/wailmer_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/wailmer_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/wailmer/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/wailmer/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -19
+          ],
+          [
+            0,
+            -18
+          ],
+          [
+            0,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -20
+          ],
+          [
+            3,
+            -19
+          ],
+          [
+            3,
+            -18
+          ]
+        ],
+        "right": [
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -20
+          ],
+          [
+            -3,
+            -19
+          ],
+          [
+            -3,
+            -18
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -8
+          ],
+          [
+            0,
+            -7
+          ],
+          [
+            0,
+            -6
+          ]
         ]
       }
     },
@@ -4661,6 +5523,92 @@
           0,
           10
         ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/drednaw_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/drednaw_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/drednaw/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/drednaw/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -19
+          ],
+          [
+            -1,
+            -18
+          ],
+          [
+            -1,
+            -17
+          ]
+        ],
+        "left": [
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -15
+          ],
+          [
+            4,
+            -14
+          ],
+          [
+            4,
+            -13
+          ]
+        ],
+        "right": [
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -15
+          ],
+          [
+            -4,
+            -14
+          ],
+          [
+            -4,
+            -13
+          ]
+        ],
+        "up": [
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            1
+          ],
+          [
+            -1,
+            2
+          ],
+          [
+            -1,
+            3
+          ]
+        ]
       }
     },
     "mantine_shiny": {
@@ -4768,6 +5716,92 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/mantine_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/mantine_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/mantine/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/mantine/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -15
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -13
+          ]
+        ],
+        "left": [
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -15
+          ],
+          [
+            -1,
+            -14
+          ],
+          [
+            -1,
+            -13
+          ]
+        ],
+        "right": [
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -15
+          ],
+          [
+            1,
+            -14
+          ],
+          [
+            1,
+            -13
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -15
+          ],
+          [
+            0,
+            -14
+          ],
+          [
+            0,
+            -13
+          ]
         ]
       }
     },
@@ -4877,6 +5911,92 @@
           0,
           10
         ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/basculegion_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/basculegion_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/basculegion/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/basculegion/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -23
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -21
+          ]
+        ],
+        "left": [
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -17
+          ],
+          [
+            5,
+            -16
+          ],
+          [
+            5,
+            -15
+          ]
+        ],
+        "right": [
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -19
+          ],
+          [
+            -5,
+            -18
+          ],
+          [
+            -5,
+            -17
+          ]
+        ],
+        "up": [
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            -3
+          ],
+          [
+            -2,
+            -2
+          ],
+          [
+            -2,
+            -1
+          ]
+        ]
       }
     },
     "wailord_shiny": {
@@ -4984,6 +6104,92 @@
         "up": [
           0,
           10
+        ]
+      },
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleSpriteSheet": "res://assets/mounts/wailord_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/wailord_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/wailord/animated_idle_rider_mask.png",
+      "idleWaterContactSheet": "res://assets/mounts/wailord/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -27
+          ],
+          [
+            0,
+            -26
+          ],
+          [
+            0,
+            -25
+          ]
+        ],
+        "left": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -29
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -27
+          ]
+        ],
+        "right": [
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -29
+          ],
+          [
+            0,
+            -28
+          ],
+          [
+            0,
+            -27
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -23
+          ],
+          [
+            0,
+            -22
+          ],
+          [
+            0,
+            -21
+          ]
         ]
       }
     },
@@ -5094,9 +6300,92 @@
           10
         ]
       },
-      "idleSpriteSheet": "res://assets/mounts/gyarados/idle_mount.png",
-      "idleForegroundSheet": "res://assets/mounts/gyarados/idle_foreground.png",
-      "idleRiderMaskSheet": "res://assets/mounts/gyarados/idle_rider_mask.png"
+      "idleSpriteSheet": "res://assets/mounts/gyarados/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/gyarados/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/gyarados/animated_idle_rider_mask.png",
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleWaterContactSheet": "res://assets/mounts/gyarados/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            6,
+            -25
+          ],
+          [
+            6,
+            -26
+          ],
+          [
+            6,
+            -25
+          ],
+          [
+            6,
+            -24
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -19
+          ],
+          [
+            16,
+            -20
+          ],
+          [
+            16,
+            -19
+          ],
+          [
+            16,
+            -18
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -19
+          ],
+          [
+            -16,
+            -20
+          ],
+          [
+            -16,
+            -19
+          ],
+          [
+            -16,
+            -18
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -8
+          ]
+        ]
+      }
     },
     "gyarados_shiny": {
       "displayName": "Shiny Gyarados",
@@ -5205,9 +6494,92 @@
           10
         ]
       },
-      "idleSpriteSheet": "res://assets/mounts/gyarados_shiny/idle_mount.png",
-      "idleForegroundSheet": "res://assets/mounts/gyarados_shiny/idle_foreground.png",
-      "idleRiderMaskSheet": "res://assets/mounts/gyarados/idle_rider_mask.png"
+      "idleSpriteSheet": "res://assets/mounts/gyarados_shiny/animated_idle_mount.png",
+      "idleForegroundSheet": "res://assets/mounts/gyarados_shiny/animated_idle_foreground.png",
+      "idleRiderMaskSheet": "res://assets/mounts/gyarados/animated_idle_rider_mask.png",
+      "idleFrameCount": 4,
+      "idleAnimationSpeed": 1.0,
+      "idleFrameDurations": [
+        0.9,
+        0.65,
+        0.9,
+        0.65
+      ],
+      "idleWaterContactSheet": "res://assets/mounts/gyarados/animated_idle_water_contact.png",
+      "idleRiderOffsets": {
+        "down": [
+          [
+            6,
+            -25
+          ],
+          [
+            6,
+            -26
+          ],
+          [
+            6,
+            -25
+          ],
+          [
+            6,
+            -24
+          ]
+        ],
+        "left": [
+          [
+            16,
+            -19
+          ],
+          [
+            16,
+            -20
+          ],
+          [
+            16,
+            -19
+          ],
+          [
+            16,
+            -18
+          ]
+        ],
+        "right": [
+          [
+            -16,
+            -19
+          ],
+          [
+            -16,
+            -20
+          ],
+          [
+            -16,
+            -19
+          ],
+          [
+            -16,
+            -18
+          ]
+        ],
+        "up": [
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -10
+          ],
+          [
+            0,
+            -9
+          ],
+          [
+            0,
+            -8
+          ]
+        ]
+      }
     }
   }
 }
