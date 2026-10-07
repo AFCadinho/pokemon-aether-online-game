@@ -21,6 +21,10 @@ func _init() -> void:
 func _run() -> void:
 	root.size = Vector2i(1280, 900)
 	root.content_scale_size = Vector2i(1280, 900)
+	var settings: Node = root.get_node("SettingsManager")
+	# Fixture construction is independent of saved 2.5D preferences/downloads.
+	settings.battle_presentation_mode = "2d"
+	settings._manual_model_catalog_this_session = true
 	var host: Control = load("res://scenes/battle/battle_screen_host.tscn").instantiate()
 	var battle: Control = load("res://scenes/battle/battle.tscn").instantiate()
 	root.add_child(host)
@@ -99,7 +103,7 @@ func _run() -> void:
 		"Trainer doubles need one opponent Trainer portrait")
 	coop_service.activity = previous_activity
 	coop_service.view = previous_view
-	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	hud._update_coop_huds(stage, presenter, stage.size, true, true)
 	assert(not battle.player_hud_panel.visible and not battle.enemy_hud_panel.visible)
 	assert(battle.field_timers_panel.visible and battle.field_timers_panel.current_effects.size() == 2,
 		"Co-op weather and terrain indicators must follow the server snapshot")
@@ -121,7 +125,7 @@ func _run() -> void:
 		if position.controller == "p4":
 			position.hpPercent = 20
 	battle.coop_presenter._apply_positions(damaged_snapshot)
-	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	hud._update_coop_huds(stage, presenter, stage.size, true, true)
 	assert(hud.coop_huds.p4.active_info_rows[0].get_meta("battle_hud_data").current_hp == 20)
 	assert(hud.coop_huds.p1.active_info_rows[0].get_meta("battle_hud_data").current_hp == 130)
 	var model: Node = stage.get_node("ExperimentalBattle3D")
@@ -143,6 +147,7 @@ func _run() -> void:
 	assert(not model.coop_camera_focus_enabled, "The decision camera returns to the shared view after choosing")
 	battle.coop_presenter._latest = saved_latest
 	coop_service.activity = previous_activity
+	settings.battle_presentation_mode = "3d"
 	var saved_camera: Camera3D = model.camera
 	var saved_viewport: SubViewport = model.viewport
 	var saved_active: bool = model.active
@@ -205,6 +210,7 @@ func _run() -> void:
 	model.camera = saved_camera
 	model.viewport = saved_viewport
 	focus_test_actor.free()
+	settings.battle_presentation_mode = "2d"
 	focus_test_camera.queue_free()
 	focus_test_viewport.queue_free()
 	var pair: Vector3 = model._position(2) - model._position(0)
@@ -224,7 +230,7 @@ func _run() -> void:
 	var horde_size := Vector2(460, 100)
 	var horde_allies: Array[Vector2] = [horde_size]
 	var horde_opponents: Array[Vector2] = [horde_size, horde_size, horde_size, horde_size, horde_size]
-	var horde_layout: Dictionary = ImmersiveHud.plan_3d_hud_layout(Vector2(1280, 900),
+	var horde_layout: Dictionary = ImmersiveHud.plan_coop_hud_layout(Vector2(1280, 900),
 		horde_allies, horde_opponents)
 	var player_rect := Rect2(horde_layout["allies"][0], horde_size * float(horde_layout["ally_scale"]))
 	assert(player_rect.end.y < 225.0, "Horde player HP card covers the upper battlefield")
@@ -250,7 +256,7 @@ func _run() -> void:
 	var normal_bounds: Dictionary = presenter.bounds.duplicate(true)
 	for controller: String in presenter.bounds:
 		presenter.bounds[controller] = Rect2(Vector2(560, 300), Vector2(140, 160))
-	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	hud._update_coop_huds(stage, presenter, stage.size, true, true)
 	var crowded: Array[Rect2] = []
 	for controller: String in ["p1", "p3", "p2", "p4"]:
 		var card: Control = hud.coop_huds[controller]
@@ -259,7 +265,7 @@ func _run() -> void:
 			assert(not rect.intersects(previous), "3D health cards overlap after camera alignment")
 		crowded.append(rect)
 	presenter.bounds = normal_bounds
-	hud._update_coop_3d_huds(stage, presenter, stage.size, true)
+	hud._update_coop_huds(stage, presenter, stage.size, true, true)
 	var capture_path := OS.get_environment("COOP_3D_HUD_CAPTURE_PATH")
 	if not capture_path.is_empty():
 		host.set_process(false)
@@ -271,16 +277,16 @@ func _run() -> void:
 			await process_frame
 		await RenderingServer.frame_post_draw
 		assert(root.get_texture().get_image().save_png(capture_path) == OK)
-	hud._update_coop_3d_huds(stage, presenter, stage.size, false)
-	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "2D HUD was not restored")
-	assert(boost_panel.scale == Vector2.ONE, "2D stat indicators must keep their original scale")
+	hud._update_coop_huds(stage, presenter, stage.size, false, true)
+	assert(battle.player_hud_panel.visible and battle.enemy_hud_panel.visible, "Disabling floating cards restores the native source panels")
+	assert(boost_panel.scale == Vector2.ONE, "Disabling floating cards restores the native stat scale")
 	var clear_snapshot: Dictionary = snapshot.duplicate(true)
 	clear_snapshot.field = {"weather": "", "terrain": ""}
 	battle.coop_presenter._apply_native_field(clear_snapshot)
 	assert(not battle.field_timers_panel.visible, "Expired co-op weather must clear from the HUD")
 	for card: Control in hud.coop_huds.values():
 		assert(not card.visible, "3D health card survived the 2D fallback")
-	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, 3+2 horde layout, 2D fallback")
+	print("COOP_3D_DOUBLES_HUD_OK: four independent cards, 3+2 horde layout, source restoration")
 	host.release()
 	host.free()
 	quit()

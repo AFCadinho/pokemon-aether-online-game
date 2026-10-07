@@ -2,6 +2,8 @@ extends Node
 ## Screen-space presentation only; the existing battle owns every control/signal.
 # Stage-space clearance includes room for the stat/effect rows below each HP card.
 const MODEL_HUD_CLEARANCE := 52.0
+# The 3D viewport renders at z=1; its HP cards render at z=40.
+const TOP_BAR_Z_INDEX := 60
 const MODEL_LABEL_BODY_GAP := 20.0
 const HUD_LABEL_GAP := 3.0
 const COOP_SLOTS := ["p1", "p3", "p2", "p4"]
@@ -110,13 +112,16 @@ func layout_now(delta := 0.0, snap := false) -> void:
 	var dock_factor := minf(0.8, center_width / 1000.0) * stage.scale.x
 	_place(dock, to_battle * Vector2(center_left,area.y - 95), Vector2(center_width * stage.scale.x / dock_factor,106),dock_factor)
 	var header: Control = battle.get_node("%VSPanelContainer")
+	header.z_index = TOP_BAR_Z_INDEX
 	_place(header, Vector2((area.x - header.size.x * 0.65) * 0.5, 12), header.size, 0.65)
 	var turn: Control = battle.get_node("%BattleStatusPanel")
+	turn.z_index = TOP_BAR_Z_INDEX
 	var turn_scale := 0.6
 	var opponent_portrait_left := opponent_portrait.position.x if opponent_portrait != null and opponent_portrait.visible else area.x - (62 if battle.coop_mode else 82)
 	var turn_x := opponent_portrait_left - turn.size.x * turn_scale - 12
 	_place(turn, Vector2(maxf(16, turn_x), 14), turn.size, turn_scale)
 	var reset_camera: Control = stage.get_node("ResetCameraButton")
+	reset_camera.z_index = TOP_BAR_Z_INDEX
 	var turn_extent := turn.size * turn_scale
 	_place(reset_camera, Vector2(
 		turn.position.x + (turn_extent.x - 32.0) * 0.5,
@@ -125,6 +130,8 @@ func layout_now(delta := 0.0, snap := false) -> void:
 	var presenter = battle.animation_router.model_presenter
 	var realtime_3d: bool = is_instance_valid(presenter) and presenter.active and settings.battle_presentation_mode == "3d"
 	reset_camera.visible = realtime_3d
+	if battle.coop_mode:
+		_layout_coop_team_header(stage, header, turn, reset_camera, field_indicators)
 	if not realtime_3d:
 		_compose_sprite_battle(stage)
 		_compose_2d_team_preview()
@@ -200,9 +207,36 @@ func layout_now(delta := 0.0, snap := false) -> void:
 		effects_x = clampf(effects_x, 16, area.x - effects_extent.x - 16)
 		_place(effects, Vector2(effects_x, side_rail.position.y), effects.size, 0.5)
 	if not battle.has_meta("battle_entry_pending"):
-		_update_coop_3d_huds(stage, presenter, area, battle.coop_mode and realtime_3d and presenter.double_mode)
+		_update_coop_huds(stage, presenter, area, battle.coop_mode, realtime_3d and presenter.double_mode)
 
-func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enabled: bool) -> void:
+
+func _layout_coop_team_header(stage: Control, header: Control, turn: Control, reset_camera: Control, field: Control) -> void:
+	var strip: Control = header.get("team_status_strip") as Control
+	if strip == null or not strip.visible:
+		return
+	var minimum := header.get_combined_minimum_size()
+	header.size = Vector2(maxf(800.0, minimum.x), minimum.y)
+	header.position.x = (stage.size.x - header.size.x * header.scale.x) * 0.5
+	# Pixel-sized typography grows in logical coordinates on a small window.
+	# Keep the centered team strip below corner information when they collide.
+	var team_rect := Rect2(header.position, header.size * header.scale)
+	var reserved: Array[Control] = [turn, reset_camera, field]
+	for portrait_name: String in ["TrainerPortrait0", "TrainerPortrait1", "TrainerPortrait2"]:
+		var portrait: Control = stage.get_node_or_null(portrait_name)
+		if portrait != null:
+			reserved.append(portrait)
+	var bottom := 12.0
+	var overlaps := false
+	for control: Control in reserved:
+		if not control.visible:
+			continue
+		var rectangle := Rect2(control.position, control.size * control.scale)
+		bottom = maxf(bottom, rectangle.end.y)
+		overlaps = overlaps or team_rect.grow(8.0).intersects(rectangle)
+	if overlaps:
+		header.position.y = bottom + 12.0
+
+func _update_coop_huds(stage: Control, presenter: Node, area: Vector2, enabled: bool, use_models: bool) -> void:
 	if not enabled:
 		if coop_huds_active:
 			battle.player_hud_panel.show()
@@ -218,7 +252,7 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 	if coop_huds.is_empty():
 		for controller: String in COOP_SLOTS:
 			var card: Control = COOP_HUD_SCENE.instantiate()
-			card.name = "Coop3DHud" + controller
+			card.name = "CoopHudPanel" + controller
 			stage.add_child(card)
 			card.set_double_layout(false)
 			card.set_experience_bar_enabled(false)
@@ -233,12 +267,14 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 			row.add_child(owner)
 			row.move_child(owner, 0)
 			coop_huds[controller] = card
+	var available: Dictionary = {}
 	for controller: String in COOP_SLOTS:
 		var card: Control = coop_huds[controller]
 		var source: Control = battle.player_hud_panel if controller in ["p1", "p3"] else battle.enemy_hud_panel
 		var source_row: Control = source.active_info_rows[1 if controller in ["p3", "p4"] else 0]
 		var data_value: Variant = source_row.get_meta("battle_hud_data", {})
-		if not presenter.handles(controller) or not source_row.visible or not data_value is Dictionary or (data_value as Dictionary).is_empty():
+		available[controller] = (not use_models or presenter.handles(controller)) and source_row.visible and data_value is Dictionary and not (data_value as Dictionary).is_empty()
+		if not available[controller]:
 			card.hide()
 			continue
 		var data := data_value as Dictionary
@@ -257,7 +293,12 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		card.reset_size()
 	var allied_sizes: Array[Vector2] = [coop_huds["p1"].size, coop_huds["p3"].size]
 	var opponent_sizes: Array[Vector2] = [coop_huds["p2"].size, coop_huds["p4"].size]
-	var layout := plan_3d_hud_layout(area, allied_sizes, opponent_sizes)
+	var minimum_top := 84.0
+	var header: Control = battle.vs_panel_container
+	var strip: Control = header.get("team_status_strip") as Control
+	if strip != null and strip.visible:
+		minimum_top = maxf(minimum_top, header.position.y + header.size.y * header.scale.y + 12.0)
+	var layout := plan_coop_hud_layout(area, allied_sizes, opponent_sizes, minimum_top)
 	for index in COOP_SLOTS.size():
 		var controller: String = COOP_SLOTS[index]
 		var card: Control = coop_huds[controller]
@@ -266,7 +307,7 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 		var positions: Array[Vector2] = layout["allies"] if allied else layout["opponents"]
 		card.scale = Vector2.ONE * float(layout["ally_scale"] if allied else layout["opponent_scale"])
 		card.position = positions[group_index]
-		if presenter.handles(controller) and not card.get_meta("coop_source_data", {}).is_empty():
+		if available[controller]:
 			card.show()
 		else:
 			card.hide()
@@ -279,7 +320,7 @@ func _update_coop_3d_huds(stage: Control, presenter: Node, area: Vector2, enable
 	battle.enemy_hud_panel.hide()
 	coop_huds_active = true
 
-static func plan_3d_hud_layout(area: Vector2, allied_sizes: Array[Vector2], opponent_sizes: Array[Vector2]) -> Dictionary:
+static func plan_coop_hud_layout(area: Vector2, allied_sizes: Array[Vector2], opponent_sizes: Array[Vector2], minimum_top := 84.0) -> Dictionary:
 	var ally_positions: Array[Vector2] = []
 	var opponent_positions: Array[Vector2] = []
 	var ally_width := 0.0
@@ -289,7 +330,7 @@ static func plan_3d_hud_layout(area: Vector2, allied_sizes: Array[Vector2], oppo
 	for dimensions: Vector2 in opponent_sizes:
 		opponent_width += dimensions.x
 	var gap := 8.0
-	var top := 84.0
+	var top := maxf(84.0, minimum_top)
 	if opponent_sizes.size() >= 3:
 		# A horde keeps the player's HP on the left and puts wild Pokémon in
 		# a right-hand grid: three above, with the remaining two centered below.
