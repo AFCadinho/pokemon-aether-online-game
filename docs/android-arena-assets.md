@@ -148,3 +148,9 @@ and dual-render-pass cost; a smaller download alone is insufficient. Extending
 this prototype to Pokémon packs should use their approved runtime resources,
 with independent material, alpha and animation checks; it was not part of this
 arena-only experiment.
+
+The subsequent [lighting investigation](android-arena-lighting.md) reproduced
+the neon forest on desktop Compatibility and obtained matching desktop/native
+Android colours with Mobile/Vulkan while retaining shadows. The emulator needed
+an isolated frame-pacing workaround. Phone memory/performance qualification is
+still outstanding.

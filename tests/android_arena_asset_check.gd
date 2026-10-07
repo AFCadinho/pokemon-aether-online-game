@@ -7,6 +7,7 @@ var report := {}
 var failures: Array[String] = []
 var output := "user://android-arena-details.json"
 var viewport: SubViewport
+var lighting_mode := "baseline"
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
 	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
@@ -37,6 +38,8 @@ func _run() -> void:
 	OS.add_logger(sink)
 	var args := OS.get_cmdline_user_args()
 	var manifest := ""
+	if OS.has_feature("android") and FileAccess.file_exists("user://android-arena-lighting"):
+		lighting_mode = FileAccess.get_file_as_string("user://android-arena-lighting").strip_edges()
 	if OS.has_feature("android"):
 		if not _check(OS.has_feature("android_arena_pilot") and OS.is_debug_build(), "Requires the separate tagged debug APK"):
 			_finish()
@@ -63,12 +66,22 @@ func _run() -> void:
 		manifest = "user://android-arena-forest.json"
 		report.variant = variant
 	else:
-		if not _check(args.size() == 2, "Desktop diagnostic needs manifest and output"):
+		if not _check(args.size() in [2, 3], "Desktop diagnostic needs manifest and output"):
 			_finish()
 			return
 		manifest = args[0]
 		output = args[1]
 		report.variant = manifest.get_base_dir().get_file()
+		if args.size() == 3:
+			lighting_mode = args[2]
+	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows"], "Recognized lighting probe"):
+		_finish()
+		return
+	report.lighting_mode = lighting_mode
+	print("ANDROID_ARENA_PHASE load ", lighting_mode)
+	report.renderer = RenderingServer.get_current_rendering_method()
+	report.adapter = RenderingServer.get_video_adapter_name()
+	report.frame_pacing = ProjectSettings.get_setting("display/window/frame_pacing/android/enable_frame_pacing", true)
 	report.static_before = Performance.get_monitor(Performance.MEMORY_STATIC)
 	report.render_before = Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)
 	if not _check(Catalog.prepare_forest(manifest).is_empty(), "Production art loader mounts candidate"):
@@ -80,12 +93,14 @@ func _run() -> void:
 			_finish()
 			return
 		await process_frame
+	print("ANDROID_ARENA_PHASE build")
 	RenderingServer.global_shader_parameter_set("wind_strength", 0.0)
 	RenderingServer.global_shader_parameter_set("wind_speed", 0.0)
 	viewport = SubViewport.new()
 	viewport.own_world_3d = true
 	viewport.size = Vector2i(960, 540)
 	viewport.msaa_3d = Viewport.MSAA_4X
+	viewport.use_hdr_2d = lighting_mode == "hdr"
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(viewport)
 	var surface := TextureRect.new()
@@ -114,6 +129,24 @@ func _run() -> void:
 	var light := arena.get_node("OutdoorLighting")
 	light.set_process(false)
 	light.apply_seconds(43200.0)
+	if lighting_mode == "no-shadows":
+		for lamp in light._lights:
+			lamp.shadow_enabled = false
+	if lighting_mode in ["sun-only", "ambient-only"]:
+		for index in light._lights.size():
+			light._lights[index].light_energy = light._lights[index].light_energy if index == 0 and lighting_mode == "sun-only" else 0.0
+	if lighting_mode in ["unshaded-grass", "diffuse-grass"]:
+		var grass: PackedScene = Catalog.Art.resources["res://entities/nature/grass/grass_3_faces.tscn"]
+		var source := grass.instantiate()
+		var material: ShaderMaterial = source.get_node("Card").get_active_material(0)
+		var shader := Shader.new()
+		shader.code = material.shader.code.replace("render_mode ", "render_mode unshaded, ") if lighting_mode == "unshaded-grass" else material.shader.code.replace("specular_toon", "specular_disabled")
+		material.shader = shader
+		source.free()
+	report.lights = []
+	for lamp in light._lights:
+		report.lights.append({"energy":lamp.light_energy,"visible":lamp.visible})
+	print("ANDROID_ARENA_PHASE draw")
 	var start := Time.get_ticks_msec()
 	for frame in 4:
 		await process_frame
