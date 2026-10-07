@@ -23,28 +23,32 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
     parser.add_argument("--templates", type=Path, default=Path.home() / ".local/share/godot/export_templates/4.6.2.stable")
     parser.add_argument("--java", type=Path, default=Path("/usr/lib/jvm/java-26-openjdk"))
-    parser.add_argument("--emulator-frame-pacing-off", action="store_true", help="Arena-only x86_64 workaround for Godot emulator issue 121035")
+    parser.add_argument("--emulator-frame-pacing-off", action="store_true", help="3D diagnostic-only x86_64 workaround for Godot emulator issue 121035")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"], default="gl_compatibility")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     coop_sprites = args.suite == "coop-sprites"
     android_arenas = args.suite == "android-arenas"
-    if args.android_renderer != "gl_compatibility" and not android_arenas:
-        parser.error("--android-renderer is limited to the separate Android arena diagnostic")
-    if args.emulator_frame_pacing_off and (not android_arenas or args.architecture != "x86_64"):
-        parser.error("Frame-pacing workaround is limited to the x86_64 arena emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-arenas"}
+    android_budget = args.suite == "android-battle-budget"
+    if android_budget and args.android_renderer != "mobile":
+        parser.error("Full Android battle budget requires --android-renderer mobile")
+    renderer_diagnostic = android_arenas or android_budget
+    if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
+        parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
+    if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
+        parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
+    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
-        CHECKS = ["android_arena_asset_check" if android_arenas else "android_3d_pilot_check"]
+        CHECKS = ["android_battle_budget_check" if android_budget else ("android_arena_asset_check" if android_arenas else "android_3d_pilot_check")]
         FIXTURES = []
     if mobile_collapse:
         if args.platform != "android":
@@ -73,6 +77,9 @@ def main():
         app_name = "PokeAether Android Arena Pilot"
         package = "com.pokeaether.androidarenapilot"
         report_name = "android-arena-results.json"
+    if android_budget:
+        title = "Android Battle Budget"
+        report_name = "android-battle-budget-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -142,9 +149,13 @@ def main():
                 wrapper = generated / "mobile_asset_service_offline.gd"
                 wrapper.write_text('extends "res://scripts/services/mobile_asset_service.gd"\nfunc release_prefix() -> String:\n\treturn "http://127.0.0.1:8091/"\n')
                 config = config.replace('res://scripts/services/mobile_asset_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-        if android_arenas:
+        if renderer_diagnostic:
             config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
             config = re.sub(r'^renderer/rendering_method.mobile=.*$', 'renderer/rendering_method.mobile="' + args.android_renderer + '"', config, flags=re.M)
+        if android_budget and args.emulator_frame_pacing_off:
+            # The AVD switches GPU backends between probes. Ignore its stale
+            # driver shader binaries, without removing or transferring caches.
+            config = config.replace("[rendering]", "[rendering]\nshader_compiler/shader_cache/enabled=false")
         if args.emulator_frame_pacing_off:
             setting = "window/frame_pacing/android/enable_frame_pacing"
             if re.search(r"^" + re.escape(setting) + r"=.*$", config, re.M):
@@ -172,7 +183,7 @@ def main():
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
-                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + '"', selected, flags=re.M)
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if mobile_collapse:
