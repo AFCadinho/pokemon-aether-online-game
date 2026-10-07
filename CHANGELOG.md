@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep Vermilion's guild-garden entrance closed independently of the Guild Registrar's placement beside it.
+
 - Fix invalid Zekrom turbo-flame polygons while starting and stopping movement, preventing repeated rendering errors.
 
 - Add a Guild Registrar at Vermilion City's garden entrance and close the full passage while guild-base registration is being prepared.

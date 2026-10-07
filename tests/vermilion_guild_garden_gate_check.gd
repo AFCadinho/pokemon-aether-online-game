@@ -43,6 +43,12 @@ func _run() -> void:
 	_check(city.get_closed_route_gate_npc(Vector2(1200, 560)) == null, "passage does not extend north of the entrance")
 	_check(city.get_closed_route_gate_npc(Vector2(1200, 688)) == null, "passage does not extend south of the entrance")
 	_check(not _garden_reachable(collision, guard), "map fences and the full passage prevent walking around the registrar")
+	var registrar_position: Vector2 = guard.position
+	guard.position += Vector2(-64, 32)
+	for y in range(18, 21):
+		_check(city.get_closed_route_gate_npc(Vector2(1200, y * 32 + 16)) == guard, "moving the registrar keeps entrance row %d closed" % y)
+	_check(not _garden_reachable(collision, guard), "moving the registrar cannot open a route into the garden")
+	guard.position = registrar_position
 	var response: Dictionary = await guard._load_gate_metadata()
 	_check(bool(response.get("success", false)), "registrar metadata loads")
 	_check(guard.display_name == "Guild Registrar" and guard.blocked_dialogue_id == DIALOGUE_ID, "registrar adopts its metadata name and dialogue")
@@ -71,7 +77,7 @@ func _garden_reachable(collision: TileMapLayer, guard: Node2D) -> bool:
 	var visited := {start: true}
 	var pending: Array[Vector2i] = [start]
 	var cursor := 0
-	var npc_cell := Vector2i(36, 19)
+	var npc_cell := collision.local_to_map(collision.to_local(guard.global_position))
 	while cursor < pending.size():
 		var cell := pending[cursor]
 		cursor += 1

@@ -565,7 +565,7 @@ z_index = 5
 [node name="GuildRegistrarNPC" parent="Entities/NPCs" unique_id=1589898142 instance=ExtResource("guild_registrar")]
 position = Vector2(1136, 560)
 gate_id = "kanto_vermilion_city_guild_garden"
-guard_blocking_offset = Vector2(32, 0)
+guard_blocking_anchor_path = NodePath("../../Interactables/GuildGardenEntrance")
 guard_blocking_size = Vector2(32, 96)
 blocked_dialogue_id = "kanto_vermilion_city_guild_registrar_closed"
 npc_id = "kanto_vermilion_city_guild_registrar"
@@ -795,6 +795,9 @@ ambient_movement_ignores_map_collision = true
 [node name="Players" type="Node2D" parent="Entities" unique_id=934936651]
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=1577339436]
+
+[node name="GuildGardenEntrance" type="Marker2D" parent="Entities/Interactables"]
+position = Vector2(1200, 624)
 
 [node name="GymCutTree" parent="Entities/Interactables" unique_id=683514050 instance=ExtResource("ss_anne_gym_tree")]
 position = Vector2(688, 1264)
