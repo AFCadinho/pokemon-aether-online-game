@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -39,7 +39,10 @@ def main():
     android_arenas = args.suite == "android-arenas"
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
-    android_pairs = args.suite == "android-model-pairs"
+    android_tab = args.suite == "android-tab-benchmark"
+    android_pairs = args.suite in {"android-model-pairs", "android-tab-benchmark"}
+    if android_tab and (args.architecture != "arm64-v8a" or args.emulator_frame_pacing_off):
+        parser.error("Physical tablet benchmark requires ARM64 and ordinary frame pacing")
     if (android_budget or android_textures or android_pairs) and args.android_renderer != "mobile":
         parser.error("Android texture/battle diagnostics require --android-renderer mobile")
     renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs
@@ -47,11 +50,13 @@ def main():
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
     if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
         parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs"}
+    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
         CHECKS = ["model_pair_bundle_check"] if android_pairs else ["android_texture_residency_check" if android_textures else ("android_battle_budget_check" if android_budget else ("android_arena_asset_check" if android_arenas else "android_3d_pilot_check"))]
+        if android_tab:
+            CHECKS.append("android_tab_benchmark_check")
         FIXTURES = []
     if mobile_collapse:
         if args.platform != "android":
@@ -91,6 +96,11 @@ def main():
         app_name = "PokeAether Android Model Pairs"
         package = "com.pokeaether.androidmodelpairs"
         report_name = "android-model-pairs-results.json"
+    if android_tab:
+        title = "Android Tablet Benchmark"
+        app_name = "PokeAether 3D Tablet Test"
+        package = "com.pokeaether.androidtabbenchmark"
+        report_name = "android-tab-benchmark-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -151,6 +161,8 @@ def main():
                                               for side in ["front", "back", "shiny_front", "shiny_back"]))
         runner += "\tfor path: String in " + repr(paths).replace("'", '"') + ":\n"
         runner += "\t\tvar check: Node = load(path).new()\n\t\tadd_child(check)\n\t\tvar code: int = await check.completed\n\t\tresults[path.get_file()] = code\n"
+        if android_tab:
+            runner += "\t\tif code != 0:\n\t\t\tbreak\n"
         if not mobile_collapse and not android_3d:
             runner += "\t\tcheck.queue_free()\n"
         runner += "\t\tawait get_tree().process_frame\n"
@@ -216,7 +228,7 @@ def main():
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
-                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + '"', selected, flags=re.M)
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if mobile_collapse:
@@ -229,7 +241,7 @@ def main():
         presets.write_text(preset + "\n" + selected)
         with (output / "export.log").open("w") as log:
             if android_3d:
-                scripts = [paths[0]]
+                scripts = paths.copy() if android_pairs else [paths[0]]
                 if android_pairs:
                     scripts.append("res://scripts/battle_entry_qa_generated/runner.gd")
                 for script in scripts:
@@ -242,6 +254,8 @@ def main():
                 android_file = "android-arena-pilot.apk" if (android_arenas or android_textures) else "android-3d-pilot.apk"
             if android_pairs:
                 android_file = "android-model-pairs.apk"
+            if android_tab:
+                android_file = "android-tab-benchmark.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)

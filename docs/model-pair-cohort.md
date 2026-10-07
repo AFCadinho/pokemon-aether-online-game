@@ -110,6 +110,11 @@ No complete release gate, physical phone test, upload or release was performed.
 
 ## Installation work
 
+The subsequent [physical Tab A7 diagnostic](android-tab-a7-benchmark.md)
+qualifies all 32 model cases on ARM64/Adreno 610. Its complete forest arena
+workload remains unqualified because the Vulkan device is lost before timed
+observation. Model loading and sustained arena rendering are separate findings.
+
 See [the proposed installation contract](model-pair-installation-design.md).
 Both launcher ZIP installation and game on-demand installation need a new
 explicit format, full PCK table/closure validation, virtual/physical catalog

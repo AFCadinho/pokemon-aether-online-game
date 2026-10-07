@@ -866,6 +866,7 @@ func _position_coop_stat_overlays() -> void:
 	if not _native_mode or _stat_overlays.is_empty():
 		return
 	var stage: Control = embedded_hosts["stage"]
+	var immersive: Node = get_parent().get_node_or_null("ImmersiveHud")
 	var inverse := stage.get_global_transform().affine_inverse()
 	for controller: String in _stat_overlays:
 		var panel := _stat_overlays[controller] as StatStagePanel
@@ -875,6 +876,11 @@ func _position_coop_stat_overlays() -> void:
 		var row_index := 1 if controller in ["p3", "p4"] else 0
 		var row: Control = hud.active_info_rows[row_index]
 		panel.reset_size()
+		if immersive != null and immersive.coop_huds_active and immersive.coop_huds.has(controller):
+			var card: Control = immersive.coop_huds[controller]
+			panel.scale = card.scale
+			panel.position = card.position + Vector2((card.size.x - panel.size.x) * card.scale.x * 0.5, card.size.y * card.scale.y + 4.0)
+			continue
 		var row_rect := row.get_global_rect()
 		var hud_rect := hud.get_global_rect()
 		var center := inverse * Vector2(row_rect.get_center().x, hud_rect.end.y + 5.0)
