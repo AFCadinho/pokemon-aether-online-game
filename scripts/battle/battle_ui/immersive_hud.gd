@@ -105,7 +105,11 @@ func layout_now(delta := 0.0, snap := false) -> void:
 				area.x - transport_size.x - 24.0,
 				area.y - transport_size.y - 105.0
 			)
-	_place(prompt, Vector2(center_left, prompt_y), Vector2(prompt_width / 0.7, 44), 0.7)
+	var prompt_height := 44.0
+	if battle.coop_mode:
+		prompt_height = maxf(prompt_height, prompt.get_node("MarginContainer").get_combined_minimum_size().y)
+		prompt_y -= (prompt_height - 44.0) * 0.7
+	_place(prompt, Vector2(center_left, prompt_y), Vector2(prompt_width / 0.7, prompt_height), 0.7)
 	# Stage and root HUD have distinct logical coordinate systems.
 	var to_battle := battle.get_global_transform().affine_inverse() * stage.get_global_transform()
 	var dock: Control = battle.get_node("%ActionsDock")
@@ -258,6 +262,12 @@ func _update_coop_huds(stage: Control, presenter: Node, area: Vector2, enabled: 
 			card.set_experience_bar_enabled(false)
 			card.z_index = 40
 			card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			var normal := card.get_theme_stylebox("panel")
+			var playing := normal.duplicate() as StyleBoxFlat
+			playing.border_color = Color("67e8bf") if controller in ["p1", "p3"] else Color("f9a8d4")
+			playing.set_border_width_all(4)
+			card.set_meta("coop_normal_style", normal)
+			card.set_meta("coop_playback_style", playing)
 			card.scale = Vector2.ONE * 0.5
 			var row: Control = card.active_info_rows[0]
 			var owner := Label.new()
@@ -267,9 +277,13 @@ func _update_coop_huds(stage: Control, presenter: Node, area: Vector2, enabled: 
 			row.add_child(owner)
 			row.move_child(owner, 0)
 			coop_huds[controller] = card
+	var playback_actor: String = battle.coop_presenter.playback_focus_controller() if is_instance_valid(battle.coop_presenter) else ""
 	var available: Dictionary = {}
 	for controller: String in COOP_SLOTS:
 		var card: Control = coop_huds[controller]
+		var style: StyleBox = card.get_meta("coop_playback_style" if playback_actor == controller else "coop_normal_style")
+		if card.get_theme_stylebox("panel") != style:
+			card.add_theme_stylebox_override("panel", style)
 		var source: Control = battle.player_hud_panel if controller in ["p1", "p3"] else battle.enemy_hud_panel
 		var source_row: Control = source.active_info_rows[1 if controller in ["p3", "p4"] else 0]
 		var data_value: Variant = source_row.get_meta("battle_hud_data", {})

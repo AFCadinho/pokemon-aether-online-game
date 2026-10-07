@@ -10,7 +10,8 @@ or new deadline. Animation duration, turn authority and settlement remain intact
 `BattleVsPanelContainer.show_team_status(left, right)` accepts arrays of public
 Trainer records: `name`, optional `local`, and optional `state`. Supported states
 are choosing, switching, sending, checking, ready, waiting, confirming, playing,
-connecting, disconnected and finished. No selected attack or target is exposed
+connecting, disconnected and finished, plus pending/ready next-choice states
+when the local client is still showing an earlier turn. No selected attack or target is exposed
 through this contract. Empty rows preserve the panel height; long names truncate
 with a full-name tooltip. Text is translated in English, Dutch, Brazilian
 Portuguese and Simplified Chinese.
