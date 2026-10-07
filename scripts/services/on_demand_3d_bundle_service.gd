@@ -8,6 +8,7 @@ const RELEASE_V10 = preload("res://data/approved_3d_release_v10.json")
 const RELEASE_V11 = preload("res://data/approved_3d_release_v11.json")
 const ReviewedModels = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
 const DesktopAssetStorage = preload("res://scripts/services/desktop_asset_storage.gd")
+const ModelPlatform = preload("res://scripts/battle/battle_ui/model_platform.gd")
 const BASE_URL := "https://updates.pokeaether.com/"
 const ROOT := "user://on-demand-3d-v1"
 const MAX_INDEX_BYTES := 1024 * 1024
@@ -77,7 +78,7 @@ func _exit_tree() -> void:
 		_history_work = null
 
 func _ready() -> void:
-	if OS.has_feature("web") or OS.has_feature("mobile"):
+	if not ModelPlatform.supported():
 		return
 	var launcher_root := DesktopAssetStorage._launcher_root("POKEAETHER_LAUNCHER_MODEL_DIR")
 	if not launcher_root.is_empty():
@@ -104,6 +105,8 @@ func _process(_delta: float) -> void:
 
 func _prune_cached_model_history() -> Dictionary:
 	var release := _selected_release()
+	if not release.get("index") is Dictionary:
+		return {"error": "", "removed_objects": 0}
 	var index := _read_local_index(_local_index_path(release), release)
 	return _prune_unused_models(_catalog(ROOT.path_join("runtime-catalog.json")), index)
 
@@ -154,7 +157,7 @@ func clear_cache() -> bool:
 
 
 func prefetch_models(identities: Array[String]) -> void:
-	if OS.has_feature("web") or OS.has_feature("mobile"):
+	if not ModelPlatform.supported():
 		return
 	_prefetch_generation += 1
 	_run_prefetch.call_deferred(preload("res://scripts/battle/battle_ui/model_form_dependencies.gd").with_forms(identities), _prefetch_generation)

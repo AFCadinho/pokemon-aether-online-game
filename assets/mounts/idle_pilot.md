@@ -1,7 +1,8 @@
 # Native idle pilot
 
 Arcanine, Shiny Arcanine and Lapras have four authored idle cels. Arcanine's
-upper body rises one pixel with its rider while its paws stay planted. Lapras
+body, paws and rider stay still; the tail tuft moves from the front/sides and
+the exposed ear tips flick from behind. Lapras
 bobs one pixel either side of its original resting pose; its lowest two water
 contact rows stay fixed. There is no scaling, rotation or interpolation.
 

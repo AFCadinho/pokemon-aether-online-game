@@ -103,7 +103,7 @@ into an end-to-end client trace.
 
 ## Focused validation
 
-25 functional checks passed (24 script checks plus the trainer-resume scene).
+25 task-related functional checks passed (24 scripts plus the trainer-resume scene).
 Coverage includes profile inventory/licenses, request reuse and account exchange,
 actual first-open/close/reopen actions for all nine windows, localization,
 initial spawn/browser ordering, mounts/field moves, thieving/jail state,
@@ -121,3 +121,10 @@ is not counted as passed or as complete 3D rendering certification. The relevant
 new cold-entry controller checks pass, while that separate fixture remains a
 validation limitation. Existing resource UID fallback warnings also occur in
 the slot. No full release/development certification was requested or run.
+
+After incorporating newer development commits, request reuse, lazy windows and
+cold battle entry passed again. Discord bridge, account/privacy controls and
+Android platform policy compatibility checks also passed (28 distinct passing
+checks in total). The separate Android pilot scenario requires a tagged Android
+debug APK; its desktop invocation correctly rejected the platform and is not
+counted as passed or as device validation.

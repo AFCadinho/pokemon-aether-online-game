@@ -52123,7 +52123,8 @@ func _on_chat_realtime_message_received(message: Dictionary) -> void:
 		str(message.get("sentAt", "")),
 		machine_translated,
 		original_text,
-		str(message.get("id", "")).strip_edges()
+		str(message.get("id", "")).strip_edges(),
+		str(message.get("origin", "game"))
 	)
 	if channel == CHAT_TAB_GUILD and active_chat_tab != CHAT_TAB_GUILD:
 		guild_chat_has_unread = true
@@ -52415,7 +52416,8 @@ func _add_user_chat_message(
 	sent_at: String = "",
 	machine_translated: bool = false,
 	original_text: String = "",
-	message_id: String = ""
+	message_id: String = "",
+	origin: String = "game"
 ) -> void:
 	var role: Dictionary = _get_primary_visible_chat_role(user)
 	var role_color: String = str(role.get("color", "#d8b767"))
@@ -52445,6 +52447,7 @@ func _add_user_chat_message(
 	if not role.is_empty():
 		role_name = str(role.get("badge", "")).strip_edges()
 	var message_context := _chat_message_context(user, display_name, text, sent_at)
+	message_context["origin"] = "discord" if origin == "discord" else "game"
 	var inline_pokemon_share := (
 		text.strip_edges() == ""
 		and not pokemon_attachments.is_empty()
@@ -52545,6 +52548,11 @@ func _create_chat_sender_message_line(
 		else Control.SIZE_SHRINK_BEGIN
 	)
 	header.add_child(channel_prefix)
+	if message_context.get("origin", "game") == "discord":
+		var origin_badge := _create_chat_role_badge("Discord", "#5865f2")
+		origin_badge.name = "DiscordOriginBadge"
+		origin_badge.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+		header.add_child(origin_badge)
 
 	if machine_translated and original_text != "" and original_text != text:
 		var translation_badge := _create_chat_translation_badge(
@@ -52564,7 +52572,7 @@ func _create_chat_sender_message_line(
 				message_id
 			))
 
-	if role_name != "":
+	if role_name != "" and message_context.get("origin", "game") != "discord":
 		var role_badge := _create_chat_role_badge(role_name, role_color)
 		role_badge.size_flags_vertical = (
 			Control.SIZE_SHRINK_CENTER
@@ -53013,9 +53021,12 @@ func _send_chat_friend_request(username: String) -> void:
 
 
 func _format_full_chat_message(context: Dictionary) -> String:
+	var sender_name := str(context.get("display_name", "Trainer"))
+	if context.get("origin", "game") == "discord":
+		sender_name = "[Discord] " + sender_name
 	return "[%s] %s: %s" % [
 		_format_chat_copy_timestamp(str(context.get("sent_at", ""))),
-		str(context.get("display_name", "Trainer")),
+		sender_name,
 		str(context.get("text", "")),
 	]
 

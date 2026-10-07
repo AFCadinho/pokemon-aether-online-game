@@ -6,6 +6,15 @@
 
 - Reduce login loading work by reusing the authenticated appearance and profile inventory, sharing the initial thieving-state load, and loading saved map resources in the background. Hidden menus and the unused battle interface are now built when needed instead of during world startup.
 
+### Account
+
+- Simplify account management labels and guidance in all four languages to focus on player details, linked accounts and privacy.
+
+### Chat
+
+- Show only the Discord badge on messages sent through Discord, hiding the player's role badge.
+- Mark messages relayed from linked Discord accounts with a Discord badge while preserving their PokeAether identity and moderation actions.
+
 ### Battles
 
 - Show the actual Pokémon levels while spectating NPC battles, including snapshots with levels stored only in Showdown details and perspective changes.
@@ -39,6 +48,7 @@
 
 ### Outfits and mounts
 
+- Give normal and shiny Arcanine small idle tail and ear movements while its body and rider remain steady.
 - Arcanine and Shiny Arcanine breathe gently while standing still, and Lapras gently bobs on the water, with the rider following the motion.
 - Get the Gyarados Surf Mount Box for 500 Aether Gems, with normal and red shiny variants using the approved riding pose and water effects.
 - Get the Thor outfit for 550 Gems, with a cape that moves as you walk and electric effects.

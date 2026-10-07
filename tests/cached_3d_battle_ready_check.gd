@@ -12,6 +12,9 @@ class Probe extends Service:
 	var own_entries: Array = []
 	var slow_calls := 0
 	var pause_check: Semaphore
+	func _ready() -> void:
+		# This fixture owns its fake catalog/lock, never the app's startup history.
+		pass
 	func _selected_release() -> Dictionary:
 		return fixture_release
 	func _local_index_path(_release: Dictionary) -> String:
