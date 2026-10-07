@@ -30,6 +30,8 @@ var displayed_battle := ""
 var _decision := ""
 var _revision := -1
 var _playing := false
+# Only the public event currently being played locally, never a future choice.
+var _playback_event: Dictionary = {}
 var _latest: Dictionary = {}
 var _presented_pokemon_names: Dictionary = {}
 var _voice_director := BATTLE_VOICE_DIRECTOR.new()
@@ -539,6 +541,7 @@ func _sync() -> void:
 			_native_pokemon_hover.hide_card()
 			_native_move_hover.hide_card()
 			_hovered_controller = ""
+		_playback_event = {}
 		_finished_return_started = false
 		_returning_to_world = false
 		_finished_return_retry_available = false
@@ -632,6 +635,7 @@ func _sync_coop_camera_focus(model: Node) -> void:
 func _present() -> void:
 	if _playing or _capture_animation_pending:
 		return
+	_playback_event = {}
 	_playing = true
 	_update_actions()
 	var epoch := _epoch
@@ -658,14 +662,18 @@ func _present() -> void:
 				_remember_pokemon_name(str(event.get("actor", "")), str(event.get("details", "")))
 			_append_event(event)
 			if animate:
+				_playback_event = event.duplicate(true)
+				_prompt.text = _playback_message()
 				await _animate_event(event, fresh)
 				if epoch != _epoch:
 					_playing = false
 					_present.call_deferred()
 					return
 		_apply_positions(snapshot)
+		_update_team_status()
 		displayed_cursor = cursor
 		_revision = revision
+	_playback_event = {}
 	_playing = false
 	_update_actions()
 
@@ -919,11 +927,68 @@ func _target_prompt() -> String:
 	return "Choose a target."
 
 
+func playback_focus_controller() -> String:
+	if not _playing:
+		return ""
+	var controller := str(_playback_event.get("target" if _playback_event.get("kind") == "-miss" else "actor", ""))
+	return controller if controller in SLOTS else ""
+
+
+func _playback_actor_label(controller: String) -> String:
+	var species := _pokemon_name_for_command(controller)
+	var pokemon := BattleEventTextFormatter.new().format_pokemon_identity("", species)
+	if controller in ["p1", "p3"]:
+		return _coop_text("actor_owned", {"name": _trainer_name(controller), "pokemon": pokemon})
+	if controller in ["p2", "p4"]:
+		return _coop_text("actor_wild" if str(CoopService.activity.get("activityId", "")).begins_with("wild_") else "actor_opponent",
+			{"slot": 1 if controller == "p2" else 2, "pokemon": pokemon})
+	return pokemon
+
+
+func _playback_message() -> String:
+	if _playback_event.is_empty():
+		return _coop_text("playing")
+	var event := _playback_event
+	var controller := str(event.get("actor", ""))
+	var actor := _playback_actor_label(controller)
+	var formatter := BattleEventTextFormatter.new()
+	var text := ""
+	match str(event.get("kind", "")):
+		"move": text = formatter.format_move_event(actor, str(event.get("move", "")))
+		"faint": text = formatter.format_faint_event(actor)
+		"cant": text = formatter.format_cant_event({"actor": actor})
+		"-miss": text = formatter.format_miss_event({"actor": actor, "target": _playback_actor_label(str(event.target)) if event.has("target") else ""})
+		"-damage":
+			text = formatter.format_direct_damage_message(actor, float(event.get("damagePercent", 0)), float(event.get("damagePercent", 0)) > 0, false)
+			if text.is_empty():
+				text = _coop_text("hp_state", {"actor": actor, "percent": event.get("hpPercent", 0)})
+		"-heal": text = LocalizationManager.text("battle.event.heal.generic", {"target": actor})
+		"-status", "-curestatus":
+			text = formatter.format_status_event({"target": actor, "status": event.get("status", ""), "state": "end" if event.kind == "-curestatus" else "start"})
+		"-boost", "-unboost":
+			text = formatter.format_stat_change_event({"target": actor, "stat": event.get("stat", ""),
+				"amount": -abs(int(event.get("amount", 1))) if event.kind == "-unboost" else abs(int(event.get("amount", 1)))})
+		"-mega": text = formatter.format_mega_event(actor, str(event.get("species", "")))
+		"-primal": text = formatter.format_primal_event(actor, str(event.get("species", "")))
+		"switch", "drag", "replace":
+			var pokemon := formatter.format_pokemon_identity("", str(event.get("details", "")).split(",")[0].strip_edges())
+			if controller in ["p2", "p4"] and str(CoopService.activity.get("activityId", "")).begins_with("wild_"):
+				text = LocalizationManager.text("battle.event.wild_appeared", {"pokemon": pokemon})
+			else:
+				text = formatter.format_opponent_switch_battle_message(_trainer_name(controller) if controller in ["p1", "p3"] else _opponent_title(), pokemon)
+		"coopcapture": text = _coop_text("capture_playing", {"name": _trainer_name(controller)})
+		"-weather", "-fieldstart", "-fieldend":
+			text = formatter.format_field_effect_event({"effect": event.get("effect", ""),
+				"state": "end" if event.kind == "-fieldend" or event.get("effect") == "none" else "start", "effectType": "weather" if event.kind == "-weather" else "field"})
+		"-start", "-end": text = formatter.format_pokemon_effect_event({"target": actor, "effect": event.get("condition", ""), "state": "end" if event.kind == "-end" else "start"})
+	return text if not text.is_empty() else _coop_text("playing")
+
+
 func _trainer_choice_state(controller: String) -> String:
 	var view: Dictionary = CoopService.view
 	var local: bool = controller == view.get("participant", "p1")
 	var phase := str(CoopService.activity.get("status", "starting"))
-	if local and (_playing or _capture_animation_pending):
+	if local and _playing:
 		return "playing"
 	if phase == "cancelled" or phase == "finished" or view.get("ended", false):
 		return "finished"
@@ -935,6 +1000,8 @@ func _trainer_choice_state(controller: String) -> String:
 	if not exit_request.is_empty():
 		return "waiting" if exit_request.get("requestedBy") == controller else "confirming"
 	if not local:
+		if _playing and _native_turn.current_turn > 0 and int(view.get("turn", 0)) > _native_turn.current_turn:
+			return "ready_next" if view.get("partnerReady", false) else "choosing_next"
 		return "ready" if view.get("partnerReady", false) else "choosing"
 	if not CoopService.pending_command.is_empty() or CoopService.command_in_flight:
 		return "sending" if CoopService.command_in_flight else "checking"
@@ -1002,8 +1069,8 @@ func _update_actions() -> void:
 			_prompt.text = "Both Trainers fled from the wild battle."
 		elif phase == "finished" and CoopService.activity.get("forfeited", false):
 			_prompt.text = "Both Trainers forfeited the battle."
-		if _playing or _capture_animation_pending:
-			_prompt.text = _coop_text("playing")
+		if _playing:
+			_prompt.text = _playback_message()
 		elif _returning_to_world:
 			_prompt.text = _coop_text("returning")
 		elif phase == "finished" and _final_event_playback_pending():
@@ -1023,14 +1090,17 @@ func _update_actions() -> void:
 		if CoopService.activity.get("canCancel", false) and not _native_mode:
 			_button(_actions, "Cancel start", func() -> void: await CoopService.party_action("cancel", {"reservationId": CoopService.activity.reservationId}))
 		return
-	if _playing or _capture_animation_pending:
-		_prompt.text = _coop_text("playing")
+	if _playing:
+		_prompt.text = _playback_message()
 		_show_capture_feedback_in_prompt()
 		return
 	if not CoopService.pending_command.is_empty() or CoopService.command_in_flight:
 		_prompt.text = _coop_text("sending") if CoopService.command_in_flight else _coop_text("checking")
 		if not CoopService.command_in_flight:
 			_button(_actions, _coop_text("retry"), func() -> void: await CoopService.retry_command())
+		return
+	if _capture_animation_pending:
+		_prompt.text = _coop_text("preparing")
 		return
 	var exit_request: Dictionary = CoopService.view.get("exitRequest", {}) if CoopService.view.get("exitRequest") is Dictionary else {}
 	if not exit_request.is_empty() and not CoopService.view.get("ended", false):
@@ -1050,14 +1120,15 @@ func _update_actions() -> void:
 				_decision_button(label, "secondary" if staying else "primary", func() -> void: await CoopService.submit_action(action))
 		return
 	if _playing or CoopService.view.get("ended", false) or CoopService.view.get("locked", true):
-		if _playing or _capture_animation_pending:
-			_prompt.text = _coop_text("playing")
+		if _playing:
+			_prompt.text = _playback_message()
 		elif CoopService.view.get("ended", false):
 			_prompt.text = _coop_text("saving")
 		elif not CoopService.activity.get("partnerConnected", true):
 			_prompt.text = _coop_text("disconnected", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
 		elif not CoopService.view.get("partnerReady", false):
-			_prompt.text = _coop_text("waiting_partner", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
+			var confirmed: bool = not CoopService.confirmed_decision_id.is_empty() and CoopService.confirmed_decision_id == CoopService.view.get("decisionId")
+			_prompt.text = _coop_text("waiting_partner_confirmed" if confirmed else "waiting_partner", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
 		else:
 			_prompt.text = _coop_text("preparing")
 		_show_capture_feedback_in_prompt()
@@ -1193,7 +1264,11 @@ func _update_actions() -> void:
 
 
 func _show_capture_feedback_in_prompt() -> void:
-	if _native_mode and not _capture_feedback_text.is_empty():
+	if (
+		_native_mode and not _playing and not _capture_animation_pending
+		and not CoopService.view.get("locked", true) and not CoopService.view.get("ended", false)
+		and not _capture_feedback_text.is_empty()
+	):
 		_prompt.text = _capture_feedback_text
 
 
@@ -2021,10 +2096,10 @@ func _show_trainer_for_event(event: Dictionary) -> void:
 		"-zpower": message = "Use Z-Power!"
 	if message.is_empty():
 		return
+	_hide_native_trainers()
 	var trainer := _trainer_for_controller(str(event.get("actor", "")))
 	if trainer == null or not trainer.has_trainer_art():
 		return
-	_hide_native_trainers()
 	_position_native_trainers()
 	var sprite_id := trainer.get_instance_id()
 	var token := int(_trainer_callout_tokens.get(sprite_id, 0)) + 1

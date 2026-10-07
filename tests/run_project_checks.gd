@@ -25,6 +25,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/cerulean_region_arena_check.gd",
 	"res://tests/coop_gameplay_check.gd",
 	"res://tests/coop_team_status_check.gd",
+	"res://tests/coop_turn_feedback_check.gd",
 	"res://tests/coop_immersive_team_layout_check.gd",
 	"res://tests/coop_battle_presentation_check.gd",
 	"res://tests/coop_sprite_download_check.gd",

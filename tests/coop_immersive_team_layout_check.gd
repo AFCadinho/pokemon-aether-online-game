@@ -109,6 +109,11 @@ func _run() -> void:
 			await _settle(model, hud, portraits)
 			_check_clearance(battle, hud)
 	# Also exercise the largest supported text size on a small window.
+	service.view.turn = 2
+	panel._playing = true
+	panel._playback_event = {"kind": "move", "actor": "p1", "move": "Tackle"}
+	panel._action_signature = ""
+	panel._update_actions()
 	settings.ui_scale = 150.0
 	host.size = Vector2(960, 540)
 	host._fit_battle()
@@ -119,6 +124,11 @@ func _run() -> void:
 			localization.set_locale(locale)
 			await _settle(model, hud, portraits)
 			_check_clearance(battle, hud)
+	service.view.turn = 1
+	panel._playing = false
+	panel._playback_event = {}
+	panel._action_signature = ""
+	panel._update_actions()
 	settings.battle_presentation_mode = "3d"
 	model._set_active(true)
 	settings.ui_scale = 100.0
@@ -130,6 +140,21 @@ func _run() -> void:
 	service.state_changed.emit()
 	await _settle(model, hud, portraits)
 	await _capture("3d-preview")
+	service.view.turn = 2
+	panel._playing = true
+	panel._playback_event = {"kind": "move", "actor": "p1", "move": "Tackle"}
+	panel._action_signature = ""
+	panel._update_actions()
+	await _settle(model, hud, portraits)
+	_check_clearance(battle, hud)
+	_check(hud.coop_huds.p1.get_theme_stylebox("panel") == hud.coop_huds.p1.get_meta("coop_playback_style"), "3D playback highlights the current actor's HP card")
+	await _capture("3d-playing")
+	service.view.turn = 1
+	panel._playing = false
+	panel._playback_event = {}
+	panel._action_signature = ""
+	panel._update_actions()
+	await _settle(model, hud, portraits)
 	var card_ids: Dictionary = {}
 	var card_positions: Dictionary = {}
 	for controller: String in hud.coop_huds:
@@ -169,6 +194,11 @@ func _run() -> void:
 func _check_clearance(battle: Control, hud: Node) -> void:
 	var stage: Control = battle.battle_stage
 	var header: Control = battle.vs_panel_container
+	var prompt: Control = battle.get_node("%CurrentActionPanel")
+	var message: Label = prompt.message_label
+	var prompt_bounds := prompt.get_global_rect()
+	var message_bounds := message.get_global_rect()
+	_check(message_bounds.position.y >= prompt_bounds.position.y - 0.1 and message_bounds.end.y <= prompt_bounds.end.y + 0.1, "wrapped waiting/playback text fits inside its prompt panel")
 	var team_rect := Rect2(header.position, header.size * header.scale)
 	_check(team_rect.position.x >= 0 and team_rect.end.x <= stage.size.x, "Team header fits the viewport")
 	_check(header.is_visible_in_tree() and header.z_index > battle.animation_router.model_presenter.z_index, "Team status must draw above the 3D render layer")
@@ -205,6 +235,7 @@ func _capture(name: String) -> void:
 	var region := Rect2i(rectangle).intersection(Rect2i(Vector2i.ZERO, image.get_size()))
 	_check(region.has_area(), "3D preview viewport is visible")
 	_check(image.get_region(region).save_png(directory.path_join(name + ".png")) == OK, "3D preview capture saved")
+	await process_frame
 
 
 func _check(condition: bool, message: String) -> void:

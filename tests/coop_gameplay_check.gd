@@ -8,6 +8,10 @@ func _init() -> void:
 
 
 func _run() -> void:
+	# These sprite/ball assertions must not inherit another check's 2.5D mode.
+	var fixture_settings: Node = root.get_node("SettingsManager")
+	fixture_settings.battle_presentation_mode = "2d"
+	fixture_settings._manual_model_catalog_this_session = true
 	var service := root.get_node("CoopService")
 	service.set_process(false)
 	service.reset()
