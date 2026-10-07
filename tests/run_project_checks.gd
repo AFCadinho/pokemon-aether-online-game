@@ -286,6 +286,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/pvp_observability_check.gd",
 	"res://tests/pvp_spectator_terminal_check.gd",
 	"res://tests/spectator_party_isolation_check.gd",
+	"res://tests/spectator_side_identity_check.gd",
 	"res://tests/pvp_ranked_live_spectating_check.gd",
 	"res://tests/pvp_battle_history_reference_check.gd",
 	"res://tests/map_encounter_provider_check.gd",
