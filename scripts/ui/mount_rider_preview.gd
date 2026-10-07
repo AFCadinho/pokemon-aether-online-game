@@ -58,6 +58,10 @@ func _configure_visual(mount_id: String, appearance: Dictionary, direction: Stri
 	_update_animation(animate)
 	_sync_activity_layer_offsets()
 	_sync_mount_animation(animate, last_direction)
+	if not animate and mount_sprite != null:
+		mount_sprite.pause()
+		mount_sprite.frame = 0
+		_on_mount_frame_changed()
 
 
 func _measure_preview_bounds(mount_id: String, appearance: Dictionary) -> Rect2:

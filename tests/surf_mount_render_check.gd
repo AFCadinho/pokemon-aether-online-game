@@ -35,7 +35,7 @@ func _check_catalog_and_assets() -> void:
 	_expect(mount_frames != null, "Lapras mount frames load")
 	if mount_frames != null:
 		_expect(mount_frames.get_frame_count(&"walk_left") == 4, "Lapras has four movement frames")
-		_expect(mount_frames.get_frame_count(&"idle_down") == 1, "Lapras has a stable idle frame")
+		_expect(mount_frames.get_frame_count(&"idle_down") == 4, "Lapras has four gentle idle frames")
 	var foreground_frames := MountServiceScript.get_mount_foreground_frames("lapras")
 	_expect(foreground_frames != null, "Lapras has a foreground head layer")
 	if foreground_frames != null:
