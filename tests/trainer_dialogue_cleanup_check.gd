@@ -99,7 +99,11 @@ func _check_rematch_state_contract() -> void:
 	_check_true(world_text.contains("and not trainer_is_rematch"), "rematches do not replay unique outro dialogue")
 	_check_true(progress_service_text.contains('TRAINER_REMATCH_ENDPOINT := "/game/trainers/%s/rematch"'), "rematches use the account-service rematch route")
 	_check_true(battle_api_text.contains('"isRematch": is_rematch'), "trainer battle requests identify rematches for server scaling")
-	_check_true(world_text.contains("active_trainer_is_rematch\n\t)"), "world forwards rematch identity to the battle API")
+	_check_true(
+		world_text.contains("_create_trainer_with_position.bind(trainer_id, active_trainer_is_rematch)")
+		and world_text.contains("create_trainer_battle_response(trainer_id, is_rematch, position)"),
+		"world forwards rematch identity through the position batch to the battle API"
+	)
 
 
 func _read_text(path: String) -> String:
