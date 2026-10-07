@@ -345,6 +345,8 @@ func _asset_id(identity: String) -> String:
 
 
 func _selected_release() -> Dictionary:
+	if OS.has_feature("android") and OS.has_feature("android_3d_experimental"):
+		return RELEASE_V11.data # The experimental candidate gate verifies publication.
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path():
 		for release: Dictionary in [RELEASE_V11.data, RELEASE_V10.data, RELEASE_V9.data, RELEASE_V8.data]:

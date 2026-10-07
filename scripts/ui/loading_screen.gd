@@ -134,6 +134,14 @@ func _prepare_world() -> void:
 		return
 	var loading_session := AuthService.session_token
 	var loading_user_id := AuthService.get_user_id_text()
+	if SettingsManager.is_android_3d_experimental() and SettingsManager.battle_presentation_mode == "3d":
+		_set_loading_status("ui.loading.android_3d", 0)
+		var environment_error: String = await Android3DEnvironmentService.ensure_ready()
+		if not _continue_preparing_session(loading_session, loading_user_id):
+			return
+		if not environment_error.is_empty():
+			_return_to_login(environment_error)
+			return
 
 	StoryService.reset_story()
 	_set_loading_status("ui.loading.loading_profile", 0)

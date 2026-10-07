@@ -13,6 +13,7 @@ const BAG_MOUNT_FILTER := preload("res://scripts/ui/bag_mount_filter.gd")
 
 const SETTINGS_PATH := "user://settings.json"
 const BATTLE_VISUAL_CHOICE_VERSION := 1
+const ANDROID_VISUAL_CHOICE_VERSION := 1
 const SPRITE_STYLE_ANIMATED := "animated"
 const SPRITE_STYLE_PIXEL := "pixel"
 const BATTLE_MUSIC_DEFAULT := "lysandre_remix_pokemon_legends_z_a_zame"
@@ -67,6 +68,7 @@ var battle_animations := true
 var battle_presentation_mode := "2d"
 var battle_visual_choice_completed := false
 var battle_visual_choice_version := 0
+var android_visual_choice_version := 0
 var battle_3d_catalog_path := ""
 var _manual_model_catalog_this_session := false
 var battle_3d_arena := "auto"
@@ -127,6 +129,7 @@ func _process(_delta: float) -> void:
 func load_settings() -> void:
 	battle_visual_choice_completed = false
 	battle_visual_choice_version = 0
+	android_visual_choice_version = 0
 	if not supports_3d_presentation():
 		battle_presentation_mode = "2d"
 	if not FileAccess.file_exists(SETTINGS_PATH):
@@ -150,10 +153,25 @@ func load_settings() -> void:
 	battle_visual_choice_version = int(data.get("battle_visual_choice_version", 0))
 	battle_visual_choice_completed = bool(data.get("battle_visual_choice_completed", false)) \
 		and battle_visual_choice_version >= BATTLE_VISUAL_CHOICE_VERSION
+	android_visual_choice_version = int(data.get("android_visual_choice_version", 0))
+	if is_android_3d_experimental() and android_visual_choice_version < ANDROID_VISUAL_CHOICE_VERSION:
+		battle_visual_choice_completed = false
 	battle_animations = bool(data.get("battle_animations", battle_animations))
 	# Older clients called the sprite renderer 2.5D. Preserve that player choice.
 	var saved_presentation := str(data.get("battle_presentation_mode", "3d"))
 	battle_presentation_mode = saved_presentation if saved_presentation in ["2d", "3d"] or (saved_presentation == "2.5d" and int(data.get("battle_presentation_schema", 1)) >= 2) else ("2d" if saved_presentation == "2.5d" else "3d")
+	if is_android_3d_experimental() and (not battle_visual_choice_completed or battle_presentation_mode == "2.5d"):
+		battle_presentation_mode = "2d"
+	var crash_reporter := get_node_or_null("/root/ClientCrashReportService")
+	if is_android_3d_experimental() and crash_reporter != null and crash_reporter.android_3d_recovery_required:
+		battle_presentation_mode = "2d"
+		crash_reporter.android_3d_recovered_this_session = true
+		data["battle_presentation_mode"] = "2d"
+		var recovery_file := FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
+		if recovery_file != null:
+			recovery_file.store_string(JSON.stringify(data))
+			recovery_file.close()
+			crash_reporter.android_3d_recovery_required = false
 	battle_3d_catalog_path = str(data.get("battle_3d_catalog_path", ""))
 	battle_ui_layout = "classic" if data.get("battle_ui_layout", "immersive") == "classic" else "immersive"
 	if not supports_3d_presentation():
@@ -262,6 +280,7 @@ func save_settings() -> bool:
 		"battle_presentation_schema": 2,
 		"battle_visual_choice_completed": battle_visual_choice_completed,
 		"battle_visual_choice_version": battle_visual_choice_version,
+		"android_visual_choice_version": android_visual_choice_version,
 		"battle_3d_catalog_path": battle_3d_catalog_path,
 		"battle_ui_layout": battle_ui_layout,
 		"immersive_battle_log_open": immersive_battle_log_open,
@@ -315,11 +334,14 @@ func needs_battle_visual_choice() -> bool:
 
 
 func supports_3d_presentation() -> bool:
-	return supports_battle_visual_choice(OS.has_feature("web"), OS.has_feature("mobile"))
+	return supports_battle_visual_choice(OS.has_feature("web"), OS.has_feature("mobile"), is_android_3d_experimental())
+
+func is_android_3d_experimental() -> bool:
+	return OS.has_feature("android") and not OS.has_feature("web") and OS.has_feature("android_3d_experimental")
 
 
-static func supports_battle_visual_choice(is_web: bool, is_mobile: bool) -> bool:
-	return not is_web and not is_mobile
+static func supports_battle_visual_choice(is_web: bool, is_mobile: bool, android_experimental := false) -> bool:
+	return not is_web and (not is_mobile or android_experimental)
 
 
 func confirm_battle_visual_choice(mode: String) -> bool:
@@ -328,13 +350,17 @@ func confirm_battle_visual_choice(mode: String) -> bool:
 	var previous_mode := battle_presentation_mode
 	var previous_completed := battle_visual_choice_completed
 	var previous_version := battle_visual_choice_version
+	var previous_android_version := android_visual_choice_version
 	battle_presentation_mode = mode
 	battle_visual_choice_completed = true
 	battle_visual_choice_version = BATTLE_VISUAL_CHOICE_VERSION
+	if is_android_3d_experimental():
+		android_visual_choice_version = ANDROID_VISUAL_CHOICE_VERSION
 	if not save_settings():
 		battle_presentation_mode = previous_mode
 		battle_visual_choice_completed = previous_completed
 		battle_visual_choice_version = previous_version
+		android_visual_choice_version = previous_android_version
 		return false
 	settings_changed.emit()
 	return true
@@ -348,6 +374,8 @@ func set_battle_animations(enabled: bool) -> void:
 	_save_and_emit()
 
 func set_battle_presentation_mode(mode: String) -> void:
+	if is_android_3d_experimental() and mode == "2.5d":
+		return
 	var validated := mode if mode in ["2d", "2.5d", "3d"] and supports_3d_presentation() else "2d"
 	var completing_choice := needs_battle_visual_choice() and mode in ["2d", "2.5d", "3d"]
 	if battle_presentation_mode == validated and not completing_choice:
@@ -356,6 +384,8 @@ func set_battle_presentation_mode(mode: String) -> void:
 	if completing_choice:
 		battle_visual_choice_completed = true
 		battle_visual_choice_version = BATTLE_VISUAL_CHOICE_VERSION
+		if is_android_3d_experimental():
+			android_visual_choice_version = ANDROID_VISUAL_CHOICE_VERSION
 	_save_and_emit()
 
 func set_battle_3d_catalog_path(path: String) -> void:
@@ -397,6 +427,9 @@ func set_battle_3d_forest_manifest(path: String) -> void:
 	_save_and_emit()
 
 func get_battle_3d_forest_manifest() -> String:
+	if is_android_3d_experimental():
+		var service := get_node_or_null("/root/Android3DEnvironmentService")
+		return service.manifest_path() if service != null else ""
 	var configured_manifest := battle_3d_forest_manifest.strip_edges()
 	if not configured_manifest.is_empty() and FileAccess.file_exists(configured_manifest):
 		return configured_manifest

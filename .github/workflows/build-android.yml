@@ -13,6 +13,11 @@ on:
         default: 5
         required: true
         type: number
+      experimental_3d:
+        description: Offer experimental 3D after the optional Android assets are published
+        default: false
+        required: true
+        type: boolean
 
 concurrency:
   group: build-android-release
@@ -107,6 +112,7 @@ jobs:
         env:
           VERSION_NAME: ${{ inputs.version_name }}
           VERSION_CODE: ${{ inputs.version_code }}
+          EXPERIMENTAL_3D: ${{ inputs.experimental_3d }}
         run: |
           echo "ANDROID_BUILD_ID=${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
           python3 - <<'PY'
@@ -126,10 +132,15 @@ jobs:
               output.write(f'ANDROID_TEST_COMPATIBLE_BUILD_ID={compatible}\n')
           PY
           compatible_build="$(cat /tmp/android-compatible-build.txt)"
+          extra_args=()
+          if [[ "${EXPERIMENTAL_3D}" == "true" ]]; then
+            python3 tools/verify_android_3d_assets.py --public
+            extra_args+=(--experimental-3d)
+          fi
           python3 tools/android_release.py prepare \
             --version "${VERSION_NAME}" --code "${VERSION_CODE}" \
             --build-id "${GITHUB_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
-            --compatible-build-id "${compatible_build}"
+            --compatible-build-id "${compatible_build}" "${extra_args[@]}"
 
       - name: Import Godot assets and run Android checks
         run: |
@@ -137,6 +148,8 @@ jobs:
           ./godot --headless --import --quit >/tmp/godot-import-first.log 2>&1 || true
           ./godot --headless --import --quit 2>&1 | tee /tmp/godot-import.log
           ./godot --headless --path . --script res://tests/android_apk_update_check.gd
+          ./godot --headless --path . --script res://tests/android_3d_platform_check.gd
+          ./godot --headless --path . --script res://tests/android_visual_choice_check.gd
           ./godot --headless --path . --script res://tests/android_home_sprite_pack_check.gd
           ./godot --headless --path . --script res://tests/android_music_pack_check.gd
           ./godot --headless --path . --script res://tests/mobile_asset_cache_check.gd

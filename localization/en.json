@@ -6574,5 +6574,12 @@
   "ui.bag.mounts.filter_all": "All trade statuses",
   "ui.bag.mounts.filter_tradeable": "Tradeable",
   "ui.bag.mounts.empty": "No mounts match this tab or these filters.",
-  "ui.shiny_tracker.mounts.store_description_gyarados": "Contains a Gyarados Surf mount. Base shiny chance: 50%."
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Contains a Gyarados Surf mount. Base shiny chance: 50%.",
+  "ui.visual_choice.android.description.2d": "2D · Recommended\nAnimated Pokémon. A lighter choice for your phone or tablet.",
+  "ui.visual_choice.android.description.3d": "3D · Experimental\nPokémon and battlefields in 3D. May run slowly or crash on your device.",
+  "ui.visual_choice.android.choose.3d": "Try 3D (experimental)",
+  "ui.visual_choice.android.hint": "Pokémon images, models and battlefields download as you need them and stay on this device. The first download may take a moment. You can switch between 2D and 3D at any time in Settings.",
+  "ui.visual_choice.android.settings_hint": "3D is experimental on Android. If it runs slowly or crashes, choose 2D. You can change this at any time.",
+  "ui.loading.android_3d": "Preparing your 3D battlefields…",
+  "ui.visual_choice.android.recovery": "We switched back to 2D so you can keep playing. You can try experimental 3D again in Settings."
 }

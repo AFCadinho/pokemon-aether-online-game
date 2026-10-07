@@ -49,7 +49,9 @@ func _run() -> void:
 	background.prefetch_models(["charizard","garchomp@shiny"])
 	await process_frame
 	assert(background.queued==Forms.with_forms(["charizard","garchomp@shiny"]))
-	background.free()
+	# Its deferred prefetch callback can still be emitting this frame.
+	background.queue_free()
+	await process_frame
 	assert(await _runtime_check())
 	print("MEGA_MODEL_PREFETCH_OK variants=true multi_megas=true background=true before_battle=true no_download_at_transformation=true cached_battle=true")
 	quit()

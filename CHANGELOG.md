@@ -3,7 +3,13 @@
 ## Unreleased
 
 - Refine Adventure Party team panels with cyan and pink accents, Trainer initial badges, readable status chips and a compact VS emblem in immersive 2D and 3D.
+
+- Prepare an optional experimental 3D choice for Android test builds, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. Standard Android builds remain in 2D.
+
+- Preserve remembered Android and desktop logins through temporary connection failures and server maintenance, and keep unchecked logins unsaved after profile changes.
+
 - Show the current public action and its Pokémon during Adventure Party turn playback, highlight its HP panel, and distinguish a confirmed choice while waiting for the partner.
+
 - Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
 
 - Keep stat-change and ability-effect labels compact below Adventure Party doubles HP panels in immersive 3D, using the same typography as immersive 2D.

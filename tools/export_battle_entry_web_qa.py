@@ -24,7 +24,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs", "android-tab-benchmark", "android-visual-choice"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -36,6 +36,12 @@ def main():
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     coop_sprites = args.suite == "coop-sprites"
+    android_choice = args.suite == "android-visual-choice"
+    if android_choice:
+        if args.platform != "android":
+            parser.error("Android visual choice QA requires the native Android runtime")
+        CHECKS = ["android_3d_platform_check", "android_visual_choice_check"]
+        FIXTURES = ["visual_choice_platform_settings", "android_visual_choice_dialog"]
     android_arenas = args.suite == "android-arenas"
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
@@ -101,6 +107,11 @@ def main():
         app_name = "PokeAether 3D Tablet Test"
         package = "com.pokeaether.androidtabbenchmark"
         report_name = "android-tab-benchmark-results.json"
+    if android_choice:
+        title = "Android Visual Choice QA"
+        app_name = "PokeAether Android Visual Choice Test"
+        package = "com.pokeaether.androidvisualchoiceqa"
+        report_name = "android-visual-choice-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -151,10 +162,12 @@ def main():
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
-        if android_pairs:
+        if android_pairs or android_choice:
             # The resource-only suite does not render/download sprites. Avoid
             # coupling its runner to unrelated presentation autoload globals.
             runner = "extends Node\nfunc _ready() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
+        if android_choice:
+            runner = runner.replace("\tvar results := {}", '\tOS.set_environment("ANDROID_VISUAL_CHOICE_CAPTURE", "user://android-visual-choice.png")\n\tvar device := FileAccess.open("user://android-visual-choice-device.json", FileAccess.WRITE)\n\tdevice.store_string(JSON.stringify({"device": OS.get_model_name(), "renderer": RenderingServer.get_current_rendering_method(), "experimental_feature": OS.has_feature("android_3d_experimental"), "supports_models": get_node("/root/SettingsManager").supports_3d_presentation()}))\n\tdevice.close()\n\tvar results := {}')
         if coop_sprites:
             runner = runner.replace('"front": origin + "/qa-sprites/front", "back": origin + "/qa-sprites/back"',
                                     ', '.join(f'"{side}": origin + "/qa-sprites/{side}-0123456789ab"'
@@ -179,7 +192,7 @@ def main():
         config = originals[project].decode()
         config = re.sub(r'^run/main_scene=.*$', 'run/main_scene="res://scripts/battle_entry_qa_generated/runner.tscn"', config, flags=re.M)
         if args.platform == "android":
-            for service in ["android_music_pack_service", "android_apk_update_service"] + (["client_crash_report_service"] if mobile_collapse or coop_sprites or android_3d else []):
+            for service in ["android_music_pack_service", "android_apk_update_service"] + (["client_crash_report_service"] if mobile_collapse or coop_sprites or android_3d or android_choice else []):
                 wrapper = generated / (service + "_offline.gd")
                 wrapper.write_text('extends "res://scripts/services/' + service + '.gd"\nfunc _ready() -> void:\n\tpass\n')
                 if service == 'client_crash_report_service':
@@ -197,6 +210,8 @@ def main():
         if renderer_diagnostic:
             config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
             config = re.sub(r'^renderer/rendering_method.mobile=.*$', 'renderer/rendering_method.mobile="' + args.android_renderer + '"', config, flags=re.M)
+        if android_choice:
+            config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
         if (android_budget or android_textures or android_pairs) and args.emulator_frame_pacing_off:
             # The AVD switches GPU backends between probes. Ignore its stale
             # driver shader binaries, without removing or transferring caches.
@@ -231,6 +246,8 @@ def main():
                 selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
+            if android_choice:
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental"', selected, flags=re.M)
             if mobile_collapse:
                 selected = selected.replace('permissions/internet=true', 'permissions/internet=false')
                 selected = selected.replace('permissions/access_network_state=true', 'permissions/access_network_state=false')
@@ -256,6 +273,8 @@ def main():
                 android_file = "android-model-pairs.apk"
             if android_tab:
                 android_file = "android-tab-benchmark.apk"
+            if android_choice:
+                android_file = "android-visual-choice.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)
