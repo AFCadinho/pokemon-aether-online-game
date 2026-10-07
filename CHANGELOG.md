@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix invalid Zekrom turbo-flame polygons while starting and stopping movement, preventing repeated rendering errors.
+
 - Add a Guild Registrar at Vermilion City's garden entrance and close the full passage while guild-base registration is being prepared.
 
 - Reduced wild and ordinary trainer battle startup round trips for high-ping connections while preserving position saves, walk happiness, teleport fences and legacy backend compatibility.

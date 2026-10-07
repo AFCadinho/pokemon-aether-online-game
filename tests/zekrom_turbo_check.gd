@@ -2,6 +2,7 @@ extends "res://tests/primal_kyogre_surf_check.gd"
 
 
 func _run() -> void:
+	_check_jet_polygon_geometry()
 	var actor := _new_local()
 	actor.set("surf_activity_active", false)
 	var remote: Node2D = load("res://scripts/world/remote_player_avatar.gd").new()
@@ -61,3 +62,42 @@ func _run() -> void:
 	await process_frame
 	print("Zekrom turbo checks: ", "FAILED" if failed else "PASS")
 	quit(1 if failed else 0)
+
+
+func _check_jet_polygon_geometry() -> void:
+	var effect_script := load("res://scripts/world/mount_turbo_effect.gd")
+	var jet: Node2D = effect_script.Jet.new()
+	for energy: float in [0.0, 0.00000001]:
+		jet.set("energy", energy)
+		_check((jet.call("_jet_shape") as PackedVector2Array).is_empty(), "zero-energy jet submits no degenerate polygon")
+	var energies: Array[float] = [0.00001, 0.0001, 0.001]
+	for step in range(1, 101):
+		energies.append(step / 100.0)
+	var count := 0
+	for direction: Vector2 in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
+		jet.set("axis", direction)
+		for tick in range(32):
+			jet.set("clock", tick / 16.0)
+			for energy: float in energies:
+				jet.set("energy", energy)
+				var shape := jet.call("_jet_shape") as PackedVector2Array
+				for width: float in [1.45, 1.0, 0.63, 0.24]:
+					var polygon := jet.call("_polygon_points", shape, width) as PackedVector2Array
+					var triangles := Geometry2D.triangulate_polygon(polygon)
+					if triangles.is_empty():
+						_check(false, "jet triangulates direction=%s tick=%d energy=%f width=%f" % [direction, tick, energy, width])
+						jet.free()
+						return
+					var area := 0.0
+					for i in range(0, triangles.size(), 3):
+						var a := polygon[triangles[i]]
+						var b := polygon[triangles[i + 1]]
+						var c := polygon[triangles[i + 2]]
+						area += absf((b - a).cross(c - a)) * 0.5
+					if area <= 0.0:
+						_check(false, "jet has a drawable area throughout its energy ramp")
+						jet.free()
+						return
+					count += 1
+	_check(count == 52736, "all four jet layers triangulate across directions, pulse phases and ignition/fade energies")
+	jet.free()

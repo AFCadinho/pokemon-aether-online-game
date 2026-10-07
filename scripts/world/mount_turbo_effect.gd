@@ -12,15 +12,10 @@ class Jet extends Node2D:
 	var axis := Vector2.RIGHT
 
 	func _draw() -> void:
-		if energy <= 0.0:
+		var shape := _jet_shape()
+		if shape.is_empty():
 			return
-		var pulse := sin(floor(clock * 16.0) * 2.1)
-		var length := (31.0 + pulse * 3.0) * energy
-		var shape := PackedVector2Array([
-			Vector2(0, -3), Vector2(5, -5), Vector2(13, -3),
-			Vector2(length - 5, -2), Vector2(length, 0),
-			Vector2(length - 8, 2), Vector2(12, 4), Vector2(4, 5), Vector2(0, 3),
-		])
+		var length := shape[4].x
 		_polygon(shape, Color(0.12, 0.23, 1.0, 0.20 * energy), 1.45)
 		_polygon(shape, Color(0.12, 0.43, 1.0, 0.78 * energy), 1.0)
 		_polygon(shape, Color(0.13, 0.86, 1.0, 0.90 * energy), 0.63)
@@ -31,11 +26,31 @@ class Jet extends Node2D:
 			points.append((axis * (3.0 + i * length / 5.0) + axis.orthogonal() * sin(i * 3.0 + floor(clock * 18.0)) * 2.0).round())
 		draw_polyline(points, Color(0.68, 0.95, 1.0, energy), 1.0, false)
 
+	func _jet_shape() -> PackedVector2Array:
+		if energy <= 0.0 or is_zero_approx(energy):
+			return PackedVector2Array()
+		var pulse := sin(floor(clock * 16.0) * 2.1)
+		var length := 31.0 + pulse * 3.0
+		var shape := PackedVector2Array([
+			Vector2(0, -3), Vector2(5, -5), Vector2(13, -3),
+			Vector2(length - 5, -2), Vector2(length, 0),
+			Vector2(length - 8, 2), Vector2(12, 4), Vector2(4, 5), Vector2(0, 3),
+		])
+		# Scale every longitudinal point, so the tip cannot fold back through
+		# the full-size nozzle vertices during ignition or fade-out.
+		for i in shape.size():
+			shape[i].x *= energy
+		return shape
+
 	func _polygon(shape: PackedVector2Array, tint: Color, width_factor: float) -> void:
+		draw_colored_polygon(_polygon_points(shape, width_factor), tint)
+
+	func _polygon_points(shape: PackedVector2Array, width_factor: float) -> PackedVector2Array:
 		var points := PackedVector2Array()
 		for point: Vector2 in shape:
-			points.append((axis * point.x + axis.orthogonal() * point.y * width_factor).round())
-		draw_colored_polygon(points, tint)
+			# Keep subpixel vertices distinct, especially in the narrow core.
+			points.append(axis * point.x + axis.orthogonal() * point.y * width_factor)
+		return points
 
 
 var jet: Jet
