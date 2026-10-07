@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--mode", choices=["audit", "render"], required=True)
+    parser.add_argument("--mode", choices=["audit", "render", "pair"], required=True)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
@@ -39,11 +39,11 @@ def main():
     try:
         project.write_text(config)
         command = ["godot", "--path", str(ROOT)]
-        if args.mode == "audit":
+        if args.mode in {"audit", "pair"}:
             command.append("--headless")
         else:
             command += ["--rendering-method", "mobile", "--resolution", "512x512"]
-        script = "model_texture_sharing_probe" if args.mode == "audit" else "model_texture_render_probe"
+        script = {"audit": "model_texture_sharing_probe", "render": "model_texture_render_probe", "pair": "model_pair_texture_probe"}[args.mode]
         command += ["--script", f"res://tools/sprite_factory/{script}.gd", "--", str(source), str(output)]
         with log_path.open("w") as log:
             child = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)

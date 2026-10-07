@@ -23,7 +23,7 @@ def rewrite_fixture_paths(source):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     global CHECKS, FIXTURES
-    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures"], default="battle-entry")
+    parser.add_argument("--suite", choices=["battle-entry", "mobile-collapse", "coop-sprites", "android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs"], default="battle-entry")
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--platform", choices=["web", "android"], default="web")
     parser.add_argument("--sdk", type=Path)
@@ -38,18 +38,19 @@ def main():
     android_arenas = args.suite == "android-arenas"
     android_budget = args.suite == "android-battle-budget"
     android_textures = args.suite == "android-textures"
-    if (android_budget or android_textures) and args.android_renderer != "mobile":
+    android_pairs = args.suite == "android-model-pairs"
+    if (android_budget or android_textures or android_pairs) and args.android_renderer != "mobile":
         parser.error("Android texture/battle diagnostics require --android-renderer mobile")
-    renderer_diagnostic = android_arenas or android_budget or android_textures
+    renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs
     if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
     if args.emulator_frame_pacing_off and (not renderer_diagnostic or args.architecture != "x86_64"):
         parser.error("Frame-pacing workaround is limited to the x86_64 arena/battle emulator diagnostic")
-    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget", "android-textures"}
+    android_3d = args.suite in {"android-3d", "android-arenas", "android-battle-budget", "android-textures", "android-model-pairs"}
     if android_3d:
         if args.platform != "android":
             parser.error("3D pilot requires the native Android debug runtime")
-        CHECKS = ["android_texture_residency_check" if android_textures else ("android_battle_budget_check" if android_budget else ("android_arena_asset_check" if android_arenas else "android_3d_pilot_check"))]
+        CHECKS = ["model_pair_bundle_check"] if android_pairs else ["android_texture_residency_check" if android_textures else ("android_battle_budget_check" if android_budget else ("android_arena_asset_check" if android_arenas else "android_3d_pilot_check"))]
         FIXTURES = []
     if mobile_collapse:
         if args.platform != "android":
@@ -84,6 +85,11 @@ def main():
     if android_textures:
         title = "Android Texture Residency"
         report_name = "android-texture-residency-results.json"
+    if android_pairs:
+        title = "Android Model Pairs"
+        app_name = "PokeAether Android Model Pairs"
+        package = "com.pokeaether.androidmodelpairs"
+        report_name = "android-model-pairs-results.json"
     if ROOT.parent.name.startswith("slot-") and os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
@@ -108,6 +114,9 @@ def main():
             (generated / f"{name}.gd").write_text(rewrite_fixture_paths(source))
         if android_textures:
             (generated / "texture_ctex_reader.gd").write_text((ROOT / "tools/sprite_factory/texture_ctex_reader.gd").read_text())
+        if android_pairs:
+            for helper in ["model_texture_audit", "model_pair_bundle_contract"]:
+                (generated / (helper + ".gd")).write_text((ROOT / ("tools/sprite_factory/" + helper + ".gd")).read_text())
         for name in CHECKS:
             source = (ROOT / f"tests/{name}.gd").read_text()
             source = source.replace("extends SceneTree", "extends Node\nsignal completed(code: int)\n@onready var root: Window = get_tree().root\nfunc quit(code := 0) -> void:\n\tcompleted.emit.call_deferred(code)")
@@ -117,6 +126,9 @@ def main():
             source = rewrite_fixture_paths(source)
             if android_textures:
                 source = source.replace("res://tools/sprite_factory/texture_ctex_reader.gd", "res://scripts/battle_entry_qa_generated/texture_ctex_reader.gd")
+            if android_pairs:
+                for helper in ["model_texture_audit", "model_pair_bundle_contract"]:
+                    source = source.replace("res://tools/sprite_factory/" + helper + ".gd", "res://scripts/battle_entry_qa_generated/" + helper + ".gd")
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
@@ -148,7 +160,7 @@ def main():
                 if service == 'client_crash_report_service':
                     wrapper.write_text(wrapper.read_text() + 'func _enter_tree() -> void:\n\tpass\n')
                 config = config.replace('res://scripts/services/' + service + '.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
-            if android_3d and not (android_arenas or android_textures):
+            if android_3d and not (android_arenas or android_textures or android_pairs):
                 wrapper = generated / "pilot_model_service.gd"
                 wrapper.write_text('extends "res://scripts/services/on_demand_3d_bundle_service.gd"\nvar completed_downloads: Array[Dictionary] = []\nfunc _selected_release() -> Dictionary:\n\treturn RELEASE_V11.data\nfunc _publish_verified_download(absolute: String, expected: int, digest: String) -> String:\n\tvar error := super._publish_verified_download(absolute, expected, digest)\n\tif error.is_empty():\n\t\tcompleted_downloads.append({"file": absolute.get_file(), "bytes": expected, "sha256": digest})\n\treturn error\n')
                 config = config.replace('res://scripts/services/on_demand_3d_bundle_service.gd', 'res://scripts/battle_entry_qa_generated/' + wrapper.name)
@@ -160,7 +172,7 @@ def main():
         if renderer_diagnostic:
             config = re.sub(r'^config/name=.*$', 'config/name="' + app_name + '"', config, flags=re.M)
             config = re.sub(r'^renderer/rendering_method.mobile=.*$', 'renderer/rendering_method.mobile="' + args.android_renderer + '"', config, flags=re.M)
-        if (android_budget or android_textures) and args.emulator_frame_pacing_off:
+        if (android_budget or android_textures or android_pairs) and args.emulator_frame_pacing_off:
             # The AVD switches GPU backends between probes. Ignore its stale
             # driver shader binaries, without removing or transferring caches.
             config = config.replace("[rendering]", "[rendering]\nshader_compiler/shader_cache/enabled=false")
@@ -191,7 +203,7 @@ def main():
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
-                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + '"', selected, flags=re.M)
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if mobile_collapse:
@@ -211,6 +223,8 @@ def main():
             android_file = "coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")
             if android_3d:
                 android_file = "android-arena-pilot.apk" if (android_arenas or android_textures) else "android-3d-pilot.apk"
+            if android_pairs:
+                android_file = "android-model-pairs.apk"
             command += ["--export-debug", title, str(output / ("index.html" if args.platform == "web" else android_file))]
             subprocess.run(command, stdout=log, stderr=subprocess.STDOUT, check=True)
         print(f"{title} {args.platform} diagnostic exported:", output)

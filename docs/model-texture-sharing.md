@@ -81,7 +81,9 @@ GPU texture across separate loads. `CACHE_MODE_IGNORE` deliberately isolates
 their subresources; changing it to reuse does not perform content deduplication
 between different paths. See [Godot ResourceLoader](https://docs.godotengine.org/en/4.6/classes/class_resourceloader.html).
 
-Recommended next proof: a small bundle with shared texture resources for both
+The subsequent [shared pair-bundle proof](model-pair-textures.md) now covers
+three portable pairs, actual schema-1 rendering and the native Android loader.
+The original recommendation was a small bundle with shared texture resources for both
 appearances, including a common base species and a schema-1 response actor.
 Measure the actual compressed/install size and loading time, preserve the
 approved geometry/poses and every image byte, verify fixed-pose rendering and
