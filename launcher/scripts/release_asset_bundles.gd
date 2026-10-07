@@ -43,6 +43,7 @@ var index_root: String
 
 func _init(store_directory := "user://asset-bundles-v1", index_directory := "user://asset-bundle-indexes-v1") -> void:
 	store = BundleStore.new(store_directory)
+	store.prune_previous_models = true
 	index_root = ProjectSettings.globalize_path(index_directory)
 
 

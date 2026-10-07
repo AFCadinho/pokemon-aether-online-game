@@ -61,6 +61,51 @@ var _busy := false
 var _battle_waiters := 0
 var _prefetch_generation := 0
 var _local_checks := 0
+var _storage_tasks: Array[int] = []
+var _history_task := -1
+var _history_work: StorageWork
+
+
+func _exit_tree() -> void:
+	# Storage callbacks use this Node; keep it alive until pending work exits.
+	for task in _storage_tasks:
+		WorkerThreadPool.wait_for_task_completion(task)
+	_storage_tasks.clear()
+	if _history_task >= 0:
+		WorkerThreadPool.wait_for_task_completion(_history_task)
+		_history_task = -1
+		_history_work = null
+
+func _ready() -> void:
+	if OS.has_feature("web") or OS.has_feature("mobile"):
+		return
+	var launcher_root := DesktopAssetStorage._launcher_root("POKEAETHER_LAUNCHER_MODEL_DIR")
+	if not launcher_root.is_empty():
+		var error := DesktopAssetStorage.register_model_usage(launcher_root, OS.get_process_id())
+		if error != OK:
+			push_warning("Could not record model store usage: " + error_string(error))
+	if FileAccess.file_exists(ROOT.path_join("runtime-catalog.json")):
+		_busy = true
+		_history_work = StorageWork.new()
+		_history_task = WorkerThreadPool.add_task(_history_work.run.bind(_prune_cached_model_history))
+	else:
+		set_process(false)
+
+
+func _process(_delta: float) -> void:
+	if _history_task >= 0 and WorkerThreadPool.is_task_completed(_history_task):
+		WorkerThreadPool.wait_for_task_completion(_history_task)
+		_report_cleanup(_history_work.result)
+		_history_task = -1
+		_history_work = null
+		_busy = false
+		set_process(false)
+
+
+func _prune_cached_model_history() -> Dictionary:
+	var release := _selected_release()
+	var index := _read_local_index(_local_index_path(release), release)
+	return _prune_unused_models(_catalog(ROOT.path_join("runtime-catalog.json")), index)
 
 class StorageWork extends RefCounted:
 	var result: Variant
@@ -79,9 +124,12 @@ func _run_storage_work(action: Callable) -> Variant:
 	var work := StorageWork.new()
 	_local_checks += 1
 	var task := WorkerThreadPool.add_task(work.run.bind(action))
+	_storage_tasks.append(task)
 	while not WorkerThreadPool.is_task_completed(task):
 		await get_tree().process_frame
-	WorkerThreadPool.wait_for_task_completion(task) # Completed only; never joins pending I/O.
+	if _storage_tasks.has(task):
+		WorkerThreadPool.wait_for_task_completion(task) # Already completed during normal gameplay.
+		_storage_tasks.erase(task)
 	_local_checks -= 1
 	return work.result
 
@@ -251,6 +299,8 @@ func _ensure_models(identities: Array[String], source_catalog: String) -> Dictio
 			return installed
 		entries = await _run_storage_work(_merge_entries.bind(entries, installed.entries))
 	var path: String = await _run_storage_work(_publish_catalog.bind(entries))
+	if not path.is_empty():
+		_report_cleanup(await _run_storage_work(_prune_unused_models.bind(entries, index)))
 	return {"error": "Could not publish the 3D model catalog." if path.is_empty() else "", "path": path,
 		"catalog_changed": not missing.is_empty()}
 
@@ -542,6 +592,66 @@ func _publish_catalog(entries: Array) -> String:
 	file.store_string(JSON.stringify(entries, "\t") + "\n")
 	file.close()
 	return path if DirAccess.rename_absolute(temporary, path) == OK else ""
+
+
+func _report_cleanup(result: Dictionary) -> void:
+	if not str(result.get("error", "")).is_empty():
+		push_warning(str(result.error))
+
+
+func _prune_unused_models(entries: Array, index: Dictionary, storage_root: String = ROOT) -> Dictionary:
+	var result := {"error": "", "removed_objects": 0}
+	# A missing index/catalog or interrupted publication must never remove files.
+	if entries.is_empty() or index.is_empty() or not index.get("assets") is Array:
+		return result
+	var catalog_path := storage_root.path_join("runtime-catalog.json")
+	if _catalog(catalog_path) != JSON.parse_string(JSON.stringify(entries)):
+		return result
+	var objects_root := ProjectSettings.globalize_path(storage_root.path_join("objects")).simplify_path()
+	var parent := DirAccess.open(objects_root.get_base_dir())
+	if parent == null or parent.is_link("objects"):
+		return result
+	var directory := DirAccess.open(objects_root)
+	if directory == null:
+		return result
+	var referenced := {}
+	for entry: Variant in entries:
+		if not entry is Dictionary:
+			return result
+		var path := ProjectSettings.globalize_path(str(entry.get("runtime_path", ""))).simplify_path()
+		if path.begins_with(objects_root + "/"):
+			referenced[path.get_base_dir().get_file()] = true
+	# Preserve completed and partial members of an interrupted current download.
+	for asset: Variant in index.assets:
+		if asset is Dictionary:
+			referenced[str(asset.get("sha256", ""))] = true
+	var candidates: Array[String] = []
+	for digest in directory.get_directories():
+		if digest.length() != 64 or not digest.is_valid_hex_number() or referenced.has(digest) or directory.is_link(digest):
+			continue
+		var child := DirAccess.open(objects_root.path_join(digest))
+		if child == null or not child.get_directories().is_empty():
+			continue
+		var owned := true
+		for name in child.get_files():
+			if child.is_link(name) or name not in ["normal.scn", "shiny.scn", "normal.scn.partial", "shiny.scn.partial"]:
+				owned = false
+		if owned:
+			candidates.append(objects_root.path_join(digest))
+	if candidates.is_empty():
+		return result
+	# Independently verify the surviving local models before removing history.
+	for entry: Dictionary in entries:
+		var path := ProjectSettings.globalize_path(str(entry.get("runtime_path", ""))).simplify_path()
+		if path.begins_with(objects_root + "/") and not _valid_file(path, int(entry.get("bytes", 0)), str(entry.get("runtime_sha256", ""))):
+			result.error = "Current downloaded model failed verification; previous files kept."
+			return result
+	for path in candidates:
+		if DesktopAssetStorage.remove_directory(path):
+			result.removed_objects += 1
+		else:
+			result.error = "Could not remove a previous downloaded model version."
+	return result
 
 
 func _fetch(url: String, path: String, expected: int, digest: String, limit: int, label: String) -> String:

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Downloads
+
+- Automatically remove replaced 3D model versions after the new files are verified, freeing device storage while preserving interrupted downloads and models used by a running game.
+
 ### Documentation
 
 - Complete screenshot coverage for all 47 official forum guides, with 49 current interface images and English captions; replace the outdated Aethernet fare example.

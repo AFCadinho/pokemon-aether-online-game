@@ -12,11 +12,33 @@ class NoModelScanStore extends "res://scripts/asset_bundle_store.gd":
 	func _validate_object(_digest: String, _manifest := {}) -> bool:
 		model_checks += 1
 		return false
+	func _models_in_use() -> bool:
+		return Usage.has_running_game(root, false)
+
+class CleanupProbe extends "res://scripts/asset_bundle_store.gd":
+	func _models_in_use() -> bool:
+		# Other games on the host cannot use this generated fixture directory.
+		return Usage.has_running_game(root, false)
+
+class GameStartsDuringCleanup extends "res://scripts/asset_bundle_store.gd":
+	var usage_checks := 0
+	func _models_in_use() -> bool:
+		usage_checks += 1
+		return usage_checks > 1
 
 var output: String
+class ErrorSink extends Logger:
+	var tree: SceneTree
+	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
+		if kind != Logger.ERROR_TYPE_WARNING:
+			print("ASSET_BUNDLE_CHECK_FAILED ", code, " ", rationale)
+			tree.call_deferred("quit", 2)
+var sink := ErrorSink.new()
 
 
 func _init() -> void:
+	sink.tree = self
+	OS.add_logger(sink)
 	_run.call_deferred()
 
 
@@ -358,10 +380,70 @@ func _run() -> void:
 	assert(no_space.stage_collection(no_space_session, original_bundle.asset.asset_id, original_bundle.archive_path).error == "Not enough free space to install 3D models.")
 	assert(no_space.active_generation().is_empty())
 	assert(not DirAccess.dir_exists_absolute(no_space._objects_root().path_join(bundles[0].asset.sha256)))
+	_check_model_version_cleanup(bundles, ids, index, updated_index, dragonite_v2, failed_index, dragonite_v3)
 	print("ASSET_BUNDLE_STREAMING_OK atomic=true restart=true tamper=true rollback=true stale_state=true disk_full=true")
 	print("ASSET_BUNDLE_BATCH_OK atomic_failure=true restart=true checksums=true")
 	print("ASSET_BUNDLE_STORE_OK initial=3 no_op=0 update=dragonite corrupt_rollback=true restart=true removed=arcanine")
 	quit()
+
+
+func _check_model_version_cleanup(bundles: Array, ids: Array[String], index: Dictionary, updated: Dictionary, v2: Dictionary, future: Dictionary, v3: Dictionary) -> void:
+	# Earlier immutable-identity probes deliberately overwrite the v1 ZIP path.
+	bundles = bundles.duplicate(true)
+	bundles[0] = _write_bundle("dragonite", 1, 1)
+	index = _index(bundles, "automatic-cleanup-1")
+	var automatic := CleanupProbe.new(output.path_join("automatic-model-cleanup"))
+	automatic.prune_previous_models = true
+	assert(ReleaseBundles.new().store.prune_previous_models, "The production adapter enables model cleanup")
+	var paths := {}
+	for bundle: Dictionary in bundles:
+		paths[bundle.asset.asset_id] = bundle.archive_path
+	var initial := automatic.install_archives(index, paths)
+	assert(initial.error.is_empty(), str(initial.error))
+	if Store.Usage._has_exported_game():
+		assert(Store.new(automatic.root).prune_model_versions().deferred, "Real exported games also defer production cleanup during upgrade")
+	var old_path := automatic._objects_root().path_join(str(bundles[0].asset.sha256))
+	var failed := output.path_join("automatic-corrupt-v2.zip")
+	_copy_corrupt(v2.archive_path, failed)
+	assert(not automatic.install_archive(updated, v2.asset.asset_id, failed).error.is_empty())
+	assert(DirAccess.dir_exists_absolute(old_path), "Failed replacement keeps both old appearances")
+	# An interrupted newer collection must remain resumable through another update.
+	var pending := automatic.begin_collection(future, ids)
+	assert(automatic.stage_collection(pending, v3.asset.asset_id, v3.archive_path).error.is_empty())
+	var future_path := automatic._objects_root().path_join(str(v3.asset.sha256))
+	assert(Store.Usage.register_process(automatic.root, OS.get_process_id()) == OK)
+	assert(Store.Usage._is_game_name("PokeAether.x86_64") and Store.Usage._is_game_name("PokeAether"))
+	assert(not Store.Usage._is_game_name("PokeAether Launcher.x86_64"))
+	assert(Store.Usage._pid_in_tasklist(['"PokeAether.exe","1234","Console","1","5,000 K"'], 1234))
+	assert(not Store.Usage._pid_in_tasklist(['INFO: No tasks are running which match the specified criteria.'], 1234))
+	assert(not Store.Usage._pid_in_tasklist(['"PokeAether.exe","12345","Console","1","5,000 K"'], 1234))
+	assert(automatic.install_archive(updated, v2.asset.asset_id, v2.archive_path).error.is_empty())
+	assert(automatic.prune_model_versions().deferred)
+	assert(DirAccess.dir_exists_absolute(old_path), "A live game may still use the old catalog")
+	assert(DirAccess.remove_absolute(automatic.root.path_join("game-leases").path_join(str(OS.get_process_id()) + ".json")) == OK)
+	var active_path := automatic._objects_root().path_join(str(v2.asset.sha256)).path_join("models/normal.scn")
+	var valid := FileAccess.get_file_as_bytes(active_path)
+	_restore_bytes(active_path, "corrupt".to_utf8_buffer())
+	assert(not automatic.prune_model_versions().error.is_empty())
+	assert(DirAccess.dir_exists_absolute(old_path), "A damaged current model cannot cause history deletion")
+	_restore_bytes(active_path, valid)
+	assert(GameStartsDuringCleanup.new(automatic.root).prune_model_versions().deferred)
+	assert(DirAccess.dir_exists_absolute(old_path), "A game starting during replacement verification keeps history")
+	var cleanup := automatic.prune_model_versions()
+	assert(cleanup.error.is_empty() and cleanup.removed_objects == 1)
+	assert(not DirAccess.dir_exists_absolute(old_path))
+	assert(DirAccess.dir_exists_absolute(future_path), "Completed future downloads remain resumable")
+	var warm := NoModelScanStore.new(automatic.root)
+	assert(warm.prune_model_versions().removed_objects == 0 and warm.model_checks == 0, "Warm cleanup must not rehash the whole collection")
+	assert(_catalog_identities(automatic.catalog_path()).size() == 6)
+	assert(not FileAccess.file_exists(automatic._pointer_path(true)))
+	var resumed := automatic.begin_collection(future, ids)
+	assert(resumed.downloads.is_empty())
+	assert(automatic.finish_collection(resumed).error.is_empty())
+	assert(not DirAccess.dir_exists_absolute(automatic._objects_root().path_join(str(v2.asset.sha256))))
+	assert(Store.new(automatic.root).plan(future, ids).downloads.is_empty())
+	assert(_catalog_identities(automatic.catalog_path()).size() == 6)
+	print("MODEL_VERSION_CLEANUP_OK failed_update=true live_game=true corrupt_current=true resumed_collection=true active_hashes=true")
 
 
 func _restore_bytes(path: String, bytes: PackedByteArray) -> void:

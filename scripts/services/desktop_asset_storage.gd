@@ -43,6 +43,26 @@ static func clear_legacy_models() -> bool:
 	return root.is_empty() or remove_directory(root)
 
 
+static func register_model_usage(root: String, pid: int) -> Error:
+	# Same lease format as the independently exported launcher's model_store_usage.
+	if pid <= 0:
+		return ERR_INVALID_PARAMETER
+	var directory := root.path_join("game-leases")
+	var parent := DirAccess.open(root)
+	if parent == null or parent.is_link("game-leases"):
+		return ERR_INVALID_DATA
+	var error := DirAccess.make_dir_recursive_absolute(directory)
+	if error != OK:
+		return error
+	var file := FileAccess.open(directory.path_join(str(pid) + ".json"), FileAccess.WRITE)
+	if file == null:
+		return FileAccess.get_open_error()
+	file.store_string(JSON.stringify({"pid": pid}) + "\n")
+	error = file.get_error()
+	file.close()
+	return error
+
+
 static func _launcher_root(key: String) -> String:
 	var path := OS.get_environment(key).strip_edges()
 	if not path.is_absolute_path() or not DirAccess.dir_exists_absolute(path):
