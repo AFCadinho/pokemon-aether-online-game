@@ -22,6 +22,8 @@ const UI_SUCCESS := Color("#75d69c")
 
 var latest_report := ""
 var new_interrupted_session_detected := false
+var android_3d_recovery_required := false
+var android_3d_recovered_this_session := false
 var _current_session_state: Dictionary = {}
 var _localization_manager: Node
 var _dialog_layer: CanvasLayer
@@ -49,6 +51,7 @@ func _enter_tree() -> void:
 
 	var previous_state := _read_json_dictionary(SESSION_STATE_PATH)
 	if _session_looks_interrupted(previous_state):
+		android_3d_recovery_required = bool(previous_state.get("experimentalAndroid3D", false))
 		latest_report = _build_crash_report(previous_state)
 		_write_text_file(LATEST_REPORT_PATH, latest_report)
 		new_interrupted_session_detected = true
@@ -65,6 +68,7 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_track_android_visual_choice.call_deferred()
 	_localization_manager = get_node_or_null("/root/LocalizationManager")
 	if (
 		_localization_manager != null
@@ -74,6 +78,21 @@ func _ready() -> void:
 		_localization_manager.locale_changed.connect(_on_locale_changed)
 	if new_interrupted_session_detected:
 		_show_interrupted_session_prompt.call_deferred()
+
+func _track_android_visual_choice() -> void:
+	var settings := get_node_or_null("/root/SettingsManager")
+	if settings == null or not settings.is_android_3d_experimental() or _current_session_state.is_empty():
+		return
+	if not settings.settings_changed.is_connected(_record_android_visual_choice):
+		settings.settings_changed.connect(_record_android_visual_choice)
+	_record_android_visual_choice()
+
+func _record_android_visual_choice() -> void:
+	if _current_session_state.is_empty():
+		return
+	var settings := get_node_or_null("/root/SettingsManager")
+	_current_session_state["experimentalAndroid3D"] = settings != null and settings.is_android_3d_experimental() and settings.battle_presentation_mode == "3d"
+	_write_json_file(SESSION_STATE_PATH, _current_session_state)
 
 
 func _exit_tree() -> void:
@@ -192,6 +211,8 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		"Godot version: %s" % engine_label,
 		"Rendering method: %s" % RenderingServer.get_current_rendering_method(),
 		"Graphics adapter: %s" % _single_line(RenderingServer.get_video_adapter_name()),
+		"Device model: %s" % _single_line(OS.get_model_name()),
+		"Experimental Android 3D: %s" % bool(previous_state.get("experimentalAndroid3D", false)),
 		"Source log: %s" % source_name,
 		"",
 		"SAFE ERROR DETAILS",
@@ -485,6 +506,8 @@ func _refresh_dialog_text() -> void:
 	_dialog_message.text = _text(
 		"ui.crash_report.detected_message" if _dialog_uses_crash_intro else "ui.crash_report.message"
 	)
+	if _dialog_uses_crash_intro and android_3d_recovered_this_session:
+		_dialog_message.text += "\n\n" + _text("ui.visual_choice.android.recovery")
 	_dialog_privacy_note.text = _text("ui.crash_report.privacy_note")
 	_dialog_close_button.text = _text("ui.crash_report.close")
 	_dialog_copy_button.text = _text("ui.crash_report.copy")

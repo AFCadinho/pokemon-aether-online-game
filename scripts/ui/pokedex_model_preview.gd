@@ -79,7 +79,7 @@ func show_species(species: String, shiny: bool) -> bool:
 	requested_key = ReviewedModels.key(species, shiny)
 	_clear_actor()
 	var settings := get_node_or_null("/root/SettingsManager")
-	if OS.has_feature("web") or OS.has_feature("mobile") or settings == null or settings.battle_presentation_mode not in ["2.5d", "3d"]:
+	if not preload("res://scripts/battle/battle_ui/model_platform.gd").supported() or settings == null or settings.battle_presentation_mode not in ["2.5d", "3d"]:
 		return false
 	var candidate_review := LocalReview.resolve(requested_key) if not ReviewedModels.supports(requested_key) else {}
 	if not candidate_review.is_empty():

@@ -476,6 +476,15 @@ func _ensure_downloaded_models(preserve_actors := false) -> void:
 	if not ModelPlatform.supported() or OS.has_environment("POKEAETHER_3D_STAGE_REPORT"):
 		return
 	var settings := get_tree().root.get_node("SettingsManager")
+	if settings.is_android_3d_experimental() and settings.battle_presentation_mode == "3d":
+		preparation_phase = "Downloading the 3D battlefield…"
+		var environment_error: String = await get_tree().root.get_node("Android3DEnvironmentService").ensure_ready()
+		if preparation_cancelled or not is_inside_tree():
+			return
+		if not environment_error.is_empty():
+			preparation_failed = true
+			reason = environment_error
+			return
 	if settings.battle_presentation_mode not in ["2.5d", "3d"] or settings.has_manual_battle_3d_catalog_selection():
 		return
 	if not settings.battle_3d_catalog_path.is_empty() and not OS.has_environment("POKEAETHER_MODEL_CATALOG"):
@@ -1525,9 +1534,15 @@ func set_battle_context(next_environment_id: StringName, next_kind: String) -> v
 	entry_arena_visible = false
 
 
+func _android_environment_pending() -> bool:
+	var settings := get_tree().root.get_node("SettingsManager")
+	return not preparation_failed and settings.is_android_3d_experimental() and settings.battle_presentation_mode == "3d" and not get_tree().root.get_node("Android3DEnvironmentService").verified
+
 func _prepare_arena() -> bool:
 	if viewport != null:
 		return true
+	if _android_environment_pending():
+		return false
 	arena_preparing = false
 	if ArenaCatalog.uses_forest_assets(_requested_arena()):
 		arena_problem = ArenaCatalog.prepare_forest(get_tree().root.get_node("SettingsManager").get_battle_3d_forest_manifest())
@@ -2077,6 +2092,7 @@ func _sync_render_size() -> void:
 	# rather than the 1080p UI design canvas (and HiDPI output stays sharp).
 	var screen := get_viewport().get_final_transform() * get_global_transform_with_canvas()
 	var target := Vector2i(maxi(2, ceili(size.x * screen.x.length())), maxi(2, ceili(size.y * screen.y.length())))
+	target = ModelPlatform.render_dimensions(target, get_tree().root.get_node("SettingsManager").is_android_3d_experimental())
 	if viewport.size != target:
 		viewport.size = target
 
@@ -2256,6 +2272,9 @@ func _update_camera(delta: float) -> void:
 func _process(delta: float) -> void:
 	_sync_render_size()
 	var settings := get_tree().root.get_node("SettingsManager")
+	if _android_environment_pending():
+		_set_active(false)
+		return
 	if entry_arena_requested and settings.battle_presentation_mode == "3d" and not preparation_failed and not preparation_cancelled:
 		# Terrain preparation is independent of catalog/model I/O. A pooled arena
 		# can already be drawing while the actual Pokémon are still downloading.

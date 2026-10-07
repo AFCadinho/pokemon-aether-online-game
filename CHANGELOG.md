@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prepare an optional experimental 3D choice for Android test builds, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. Standard Android builds remain in 2D.
+
 - Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
 
 - Keep stat-change and ability-effect labels compact below Adventure Party doubles HP panels in immersive 3D, using the same typography as immersive 2D.

@@ -6566,5 +6566,12 @@
   "ui.bag.mounts.filter_all": "Todos os vínculos",
   "ui.bag.mounts.filter_tradeable": "Negociáveis",
   "ui.bag.mounts.empty": "Nenhuma montaria corresponde a esta aba ou aos filtros.",
-  "ui.shiny_tracker.mounts.store_description_gyarados": "Contém uma montaria de Surf Gyarados. Chance shiny inicial: 50%."
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Contém uma montaria de Surf Gyarados. Chance shiny inicial: 50%.",
+  "ui.visual_choice.android.description.2d": "2D · Recomendado\nPokémon animados. Uma opção mais leve para seu celular ou tablet.",
+  "ui.visual_choice.android.description.3d": "3D · Experimental\nPokémon e campos de batalha em 3D. Pode ficar lento ou fechar inesperadamente no seu dispositivo.",
+  "ui.visual_choice.android.choose.3d": "Experimentar 3D (experimental)",
+  "ui.visual_choice.android.hint": "Imagens, modelos e campos de batalha são baixados conforme necessário e ficam neste dispositivo. O primeiro download pode demorar um pouco. Você pode trocar entre 2D e 3D a qualquer momento nas Configurações.",
+  "ui.visual_choice.android.settings_hint": "O 3D é experimental no Android. Se ficar lento ou fechar inesperadamente, escolha 2D. Você pode alterar isso a qualquer momento.",
+  "ui.loading.android_3d": "Preparando seus campos de batalha 3D…",
+  "ui.visual_choice.android.recovery": "Voltamos para 2D para você continuar jogando. Você pode tentar o 3D experimental novamente nas Configurações."
 }

@@ -6566,5 +6566,12 @@
   "ui.bag.mounts.filter_all": "全部交易类型",
   "ui.bag.mounts.filter_tradeable": "可交易",
   "ui.bag.mounts.empty": "没有符合此标签页或筛选条件的坐骑。",
-  "ui.shiny_tracker.mounts.store_description_gyarados": "包含一只暴鲤龙冲浪坐骑。初始异色概率：50%。"
+  "ui.shiny_tracker.mounts.store_description_gyarados": "包含一只暴鲤龙冲浪坐骑。初始异色概率：50%。",
+  "ui.visual_choice.android.description.2d": "2D · 推荐\n动态宝可梦图像，适合手机或平板电脑的轻量选择。",
+  "ui.visual_choice.android.description.3d": "3D · 实验功能\n以3D显示宝可梦和战斗场景。在你的设备上可能运行缓慢或崩溃。",
+  "ui.visual_choice.android.choose.3d": "尝试3D（实验功能）",
+  "ui.visual_choice.android.hint": "宝可梦图像、模型和战斗场景会在需要时自动下载并保存在此设备上。首次下载可能需要一些时间。你可以随时在设置中切换2D和3D。",
+  "ui.visual_choice.android.settings_hint": "Android上的3D仍是实验功能。如果运行缓慢或崩溃，请选择2D。你可以随时更改。",
+  "ui.loading.android_3d": "正在准备3D战斗场景……",
+  "ui.visual_choice.android.recovery": "已切换回2D，让你可以继续游玩。你可以在设置中再次尝试实验性3D。"
 }

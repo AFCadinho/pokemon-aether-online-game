@@ -16,14 +16,24 @@ var quiet_frames := 0
 var last_pipelines: Array = []
 var memory_before := 0.0
 var retained_render_bytes := 0.0
+var discard_requested := false
+
+func discard_when_unused() -> void:
+	# An Android player can return to 2D while the current battle still owns us.
+	# Release the viewports after that borrower has finished, never underneath it.
+	discard_requested = true
+	if borrower == null or borrower.get_ref() == null:
+		queue_free()
 
 static func get_current() -> Node:
-	return current.get_ref() if current != null else null
+	var pool: Node = current.get_ref() if current != null else null
+	return pool if pool != null and not pool.is_queued_for_deletion() else null
 
 static func prepare(owner_node: Node, manifest: String, dimensions: Vector2i, requested_arena := "forest") -> Node:
 	var existing := get_current()
 	if existing != null and existing.get_parent() == owner_node:
 		if existing.arena_id == requested_arena:
+			existing.discard_requested = false
 			return existing
 		if existing.borrower != null and existing.borrower.get_ref() != null:
 			return null
@@ -120,6 +130,8 @@ func release(client: Node) -> void:
 				child.free()
 	borrower = null
 	_suspend()
+	if discard_requested:
+		queue_free()
 
 func _suspend() -> void:
 	for pass_data in passes:

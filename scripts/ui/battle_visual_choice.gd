@@ -1,5 +1,5 @@
 extends "res://scripts/ui/aether_confirmation_dialog.gd"
-## First-run desktop choice. Static examples need no model download or 3D scene.
+## One-time device choice. Static examples need no model download or 3D scene.
 const DOWNLOAD_INFO = preload("res://data/battle_visual_download_info.json")
 const EXAMPLE_PATHS := {
 	"2d": "res://assets/ui/presentation/2d-battle.png",
@@ -106,13 +106,18 @@ func _label() -> Label:
 	label.add_theme_color_override("font_color", COLOR_TEXT)
 	return label
 
+func _is_android_experimental() -> bool:
+	return SettingsManager.is_android_3d_experimental()
+
 func refresh_locale() -> void:
+	var experimental: bool = _is_android_experimental()
 	configure(LocalizationManager.text("ui.visual_choice.title"),
 		LocalizationManager.text("ui.visual_choice.intro"),
 		LocalizationManager.text("ui.visual_choice.confirm"), "")
 	for mode: String in ["2d", "3d"]:
-		descriptions[mode].text = LocalizationManager.text("ui.visual_choice.description." + mode)
-		choices[mode].text = LocalizationManager.text("ui.visual_choice.choose." + mode)
+		var description_key := "ui.visual_choice.android.description." if experimental else "ui.visual_choice.description."
+		descriptions[mode].text = LocalizationManager.text(description_key + mode)
+		choices[mode].text = LocalizationManager.text("ui.visual_choice.android.choose.3d" if experimental and mode == "3d" else "ui.visual_choice.choose." + mode)
 		var info: Dictionary = DOWNLOAD_INFO.data[mode]
 		# A pre-publication editor run or older launcher still selects v10. Show
 		# the size of that actual collection, rather than the future v11 total.
@@ -122,7 +127,7 @@ func refresh_locale() -> void:
 				info = DOWNLOAD_INFO.data["3d_v10"]
 		sizes[mode].text = LocalizationManager.text("ui.visual_choice.size", {
 			"installed": _space(int(info.installed_bytes))})
-	hint.text = LocalizationManager.text("ui.visual_choice.hint")
+	hint.text = LocalizationManager.text("ui.visual_choice.android.hint" if experimental else "ui.visual_choice.hint")
 	error_label.text = LocalizationManager.text("ui.visual_choice.save_error")
 
 static func _space(bytes: int) -> String:

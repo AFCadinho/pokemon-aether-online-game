@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "revision": "android-3d-experimental-v1",
+  "model_release": "approved-pokemon-3d-v11",
+  "arena": {
+    "object_key": "optional-assets/battle-environments/android/battle-environment-android-etc2-art-0cd0051c1bf0/11a6e8b0eddd2df656adcd9ba74c658761bf80f0551eb9a5b9dc1665ac137403.zip",
+    "archive_bytes": 13519273,
+    "archive_sha256": "11a6e8b0eddd2df656adcd9ba74c658761bf80f0551eb9a5b9dc1665ac137403",
+    "pack_bytes": 50153852,
+    "pack_sha256": "0cd0051c1bf0491aaad75a0dfd8962ae9e7d60036b3920e47b4aff6ed766da1c"
+  }
+}

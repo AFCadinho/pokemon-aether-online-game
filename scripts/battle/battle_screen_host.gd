@@ -237,7 +237,7 @@ func _reveal_when_prepared(token: int) -> void:
 		return
 	var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 	var settings := get_node("/root/SettingsManager")
-	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_environment("POKEAETHER_3D_STAGE_REPORT") and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if presenter != null and settings.battle_presentation_mode in ["2.5d", "3d"] and not settings.has_manual_battle_3d_catalog_selection() and not OS.has_environment("POKEAETHER_3D_STAGE_REPORT") and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		# A fresh install has no models yet. Keep the first encounter covered
 		# until its combatants are known; Team Preview deliberately opens empty.
 		var model_deadline := Time.get_ticks_msec() + 30000
@@ -272,14 +272,14 @@ func _reveal_when_prepared(token: int) -> void:
 
 func reveal_pending_entry() -> void:
 	var settings := get_node("/root/SettingsManager")
-	if settings.battle_presentation_mode == "3d" and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if settings.battle_presentation_mode == "3d" and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		var presenter := battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
 		if presenter != null:
 			early_arena_requested = true
 			reveal_requested = true
 			presenter.begin_entry_arena()
 			return
-	if settings.battle_presentation_mode in ["2.5d", "3d"] and not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if settings.battle_presentation_mode in ["2.5d", "3d"] and preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		# Keep the outgoing world visible until both models and the arena are
 		# prepared. Early arena reveal would flash 2D sprites before the download.
 		# Cached encounters should fade straight in without flashing a loading

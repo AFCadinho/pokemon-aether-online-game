@@ -6566,5 +6566,12 @@
   "ui.bag.mounts.filter_all": "Alle ruilstatussen",
   "ui.bag.mounts.filter_tradeable": "Verhandelbaar",
   "ui.bag.mounts.empty": "Geen mounts gevonden voor deze tab of filters.",
-  "ui.shiny_tracker.mounts.store_description_gyarados": "Bevat een Gyarados-surfmount. Shiny-basiskans: 50%."
+  "ui.shiny_tracker.mounts.store_description_gyarados": "Bevat een Gyarados-surfmount. Shiny-basiskans: 50%.",
+  "ui.visual_choice.android.description.2d": "2D · Aanbevolen\nGeanimeerde Pokémon. Een lichtere keuze voor je telefoon of tablet.",
+  "ui.visual_choice.android.description.3d": "3D · Experimenteel\nPokémon en gevechtsvelden in 3D. Kan op jouw apparaat traag zijn of vastlopen.",
+  "ui.visual_choice.android.choose.3d": "Probeer 3D (experimenteel)",
+  "ui.visual_choice.android.hint": "Pokémon-afbeeldingen, modellen en gevechtsvelden downloaden wanneer je ze nodig hebt en blijven op dit apparaat. De eerste download kan even duren. Je kunt op elk moment wisselen tussen 2D en 3D in Instellingen.",
+  "ui.visual_choice.android.settings_hint": "3D is experimenteel op Android. Kies 2D als het traag is of vastloopt. Je kunt dit op elk moment aanpassen.",
+  "ui.loading.android_3d": "Je 3D-gevechtsvelden voorbereiden…",
+  "ui.visual_choice.android.recovery": "We zijn teruggeschakeld naar 2D zodat je kunt blijven spelen. Je kunt experimentele 3D opnieuw proberen in Instellingen."
 }

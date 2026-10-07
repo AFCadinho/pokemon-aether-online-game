@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "date": "2026-10-07",
+  "task": "android-3d-experimental-choice",
+  "scope": "onboarding, persisted settings and mobile screen-host gate; not full 3D performance",
+  "production_changed": false,
+  "native": {
+    "device": "SM-T500",
+    "experimental_feature": true,
+    "renderer": "gl_compatibility",
+    "supports_models": true
+  },
+  "checks": {
+    "android_3d_platform_check.gd": 0,
+    "android_visual_choice_check.gd": 0
+  },
+  "script_errors": [],
+  "app_force_stopped": true,
+  "arena_local_archive_verified": true,
+  "arena_publication_pending": true,
+  "artifacts": [
+    {
+      "path": ".tmp/android-3d-experimental-choice/apk-v2/android-visual-choice.apk",
+      "bytes": 232736949,
+      "sha256": "87a925a7d048e01193eb4acbfdcbff73802c2883bfa7e856ff49a30a84b7e9bb"
+    },
+    {
+      "path": ".tmp/android-3d-experimental-choice/tablet-v2/results.json",
+      "bytes": 79,
+      "sha256": "110b684c5c3988a134cd7eb46ba0c0bd2d805255085053af7bfce415d81da4c3"
+    },
+    {
+      "path": ".tmp/android-3d-experimental-choice/tablet-v2/device.json",
+      "bytes": 101,
+      "sha256": "492c35a91193b5298d49d98dec93ccc9906118e96d03649896f33c200f1bb743"
+    },
+    {
+      "path": ".tmp/android-3d-experimental-choice/tablet-v2/choice.png",
+      "bytes": 498306,
+      "sha256": "aa7f1fc09735701ab9e231060c460b247cfbf329c952c7f5e6b9167cb64aac38"
+    },
+    {
+      "path": ".tmp/android-3d-experimental-choice/tablet-v2/logcat.txt",
+      "bytes": 27870,
+      "sha256": "3597700c2e5658dbec91ea6686457d6e74f4a485240034154efa5e1662243153"
+    }
+  ],
+  "focused_checks": [
+    "android_3d_platform_check",
+    "android_visual_choice_check (cached arena and changed-pin rejection)",
+    "login_visual_choice_check",
+    "client_crash_reporting_check",
+    "settings_interface_revamp_check",
+    "mega_model_prefetch_check",
+    "battle_arena_contract_check",
+    "fullscreen_battle_fade_check",
+    "early_3d_arena_check",
+    "world runtime compilation",
+    "tests.test_android_release (8 tests)",
+    "local Android arena archive verification",
+    "workflow YAML parsing"
+  ]
+}
