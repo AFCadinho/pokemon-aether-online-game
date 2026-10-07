@@ -18,7 +18,7 @@ var session_type := "player"
 var impersonated_by_user_id := 0
 var account_switch_pending := false
 var pending_login_notice := ""
-var web_remember_me := false
+var remember_me_enabled := false
 
 
 func _auth_path(action: String) -> String:
@@ -79,7 +79,7 @@ func login(username: String, password: String, remember_me: bool) -> Dictionary:
 	_apply_auth_response(body)
 	_refresh_trade_session.call_deferred()
 
-	web_remember_me = remember_me
+	remember_me_enabled = remember_me
 	if remember_me or OS.has_feature("web"):
 		_save_session()
 	else:
@@ -152,7 +152,7 @@ func stop_impersonating() -> Dictionary:
 
 	var body: Dictionary = _dictionary_from_value(response.get("body", {}))
 	var remember_me := bool(body.get("rememberMe", false))
-	web_remember_me = remember_me
+	remember_me_enabled = remember_me
 	_reset_account_runtime_state()
 	_apply_auth_response(body)
 	account_switch_pending = true
@@ -181,7 +181,8 @@ func restore_saved_session() -> Dictionary:
 	expires_at = str(saved_session.get("expiresAt", ""))
 	current_user = _dictionary_from_value(saved_session.get("user", {}))
 	session_type = "web" if OS.has_feature("web") else "player"
-	web_remember_me = bool(saved_session.get("rememberMe", false))
+	# Older native session files predate the rememberMe field.
+	remember_me_enabled = bool(saved_session.get("rememberMe", not OS.has_feature("web")))
 	impersonated_by_user_id = 0
 	account_switch_pending = false
 
@@ -191,11 +192,13 @@ func restore_saved_session() -> Dictionary:
 		_refresh_trade_session.call_deferred()
 		return me_response
 
-	# A temporary network failure must not erase a valid remembered browser login.
-	if not OS.has_feature("web") or int(me_response.get("status", 0)) in [401, 403]:
+	# Only an authentication rejection invalidates a saved login. Network errors
+	# and maintenance must leave it available for a later restore attempt.
+	if int(me_response.get("status", 0)) in [401, 403]:
 		clear_session()
 	else:
 		session_token = ""
+		expires_at = ""
 		current_user.clear()
 	return me_response
 
@@ -462,6 +465,7 @@ func clear_session() -> void:
 
 	session_token = ""
 	expires_at = ""
+	remember_me_enabled = false
 	current_user.clear()
 	session_type = "player"
 	impersonated_by_user_id = 0
@@ -630,19 +634,25 @@ func _save_session() -> void:
 	if session_token == "" or is_impersonating():
 		return
 	if OS.has_feature("web"):
-		WebRuntime.save_session({"token": session_token, "expiresAt": expires_at, "rememberMe": web_remember_me}, web_remember_me)
+		WebRuntime.save_session({"token": session_token, "expiresAt": expires_at, "rememberMe": remember_me_enabled}, remember_me_enabled)
 		return
 
+	if not remember_me_enabled:
+		return
+	_write_session_file({
+		"token": session_token,
+		"expiresAt": expires_at,
+		"user": current_user,
+		"rememberMe": remember_me_enabled,
+	})
+
+
+func _write_session_file(value: Dictionary) -> void:
 	var file := FileAccess.open(SESSION_FILE_PATH, FileAccess.WRITE)
 	if file == null:
 		push_warning("AuthService: could not save session.")
 		return
-
-	file.store_string(JSON.stringify({
-		"token": session_token,
-		"expiresAt": expires_at,
-		"user": current_user,
-	}))
+	file.store_string(JSON.stringify(value))
 
 
 func _load_session_file() -> Dictionary:

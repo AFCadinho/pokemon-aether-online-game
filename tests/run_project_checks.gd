@@ -126,6 +126,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/aether_clash_global_announcement_check.gd",
 	"res://tests/account_email_login_check.gd",
 	"res://tests/login_return_notice_check.gd",
+	"res://tests/remember_me_session_check.gd",
 	"res://tests/login_visual_choice_check.gd",
 	"res://tests/mobile_keyboard_avoidance_check.gd",
 	"res://tests/mobile_browser_ui_check.gd",

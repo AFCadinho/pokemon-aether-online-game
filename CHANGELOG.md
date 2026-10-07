@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve remembered Android and desktop logins through temporary connection failures and server maintenance, and keep unchecked logins unsaved after profile changes.
+
 - Show the current public action and its Pokémon during Adventure Party turn playback, highlight its HP panel, and distinguish a confirmed choice while waiting for the partner.
 - Refresh guild membership, profile and base access after staff corrections, and explain admin corrections in guild history.
 
