@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Chat
+
+- Mark messages relayed from linked Discord accounts with a Discord badge while preserving their PokeAether identity and moderation actions.
+
 ### Battles
 
 - Show the actual Pokémon levels while spectating NPC battles, including snapshots with levels stored only in Showdown details and perspective changes.
