@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Keep stat-change and ability-effect labels compact below Adventure Party doubles HP panels in immersive 3D, using the same typography as immersive 2D.
+
 - Use the same team-status and four-HP-panel arrangement for Adventure Party doubles in immersive 2D and 3D, keep top controls visible above the 3D battlefield, and reserve space for larger text on smaller screens.
 
 - Show Adventure Party battle status per Trainer in two team panels, distinguish sending, choosing, ready and disconnected states without PvE timers, and clarify turn playback and world return.
