@@ -14,6 +14,8 @@ const GUARD_ROLE_TRANSITION := "transition_guard"
 ## A zero size keeps the guarded MapExit as the fallback zone.
 @export var guard_blocking_offset := Vector2.ZERO
 @export var guard_blocking_size := Vector2.ZERO
+## Keep a passage closed until its access feature is available.
+@export var passage_closed := false
 @export var requires_party_pokemon := true
 @export var requires_staff_role := false
 @export var blocked_dialogue_lines: Array[String] = [
@@ -51,6 +53,8 @@ func _ready() -> void:
 
 
 func is_gate_open() -> bool:
+	if passage_closed:
+		return false
 	if OS.has_feature("web") and not guarded_transition_id.strip_edges().is_empty():
 		return (
 			transition_access_resolved
@@ -283,7 +287,8 @@ func _sync_guard_presence() -> void:
 	if guard_role != GUARD_ROLE_TRANSITION:
 		return
 	var should_be_present := (
-		not transition_access_resolved
+		passage_closed
+		or not transition_access_resolved
 		or not _are_local_gate_requirements_met()
 		or not bool(transition_access.get("allowed", false))
 	)

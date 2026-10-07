@@ -1,0 +1,11 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="1_gate"]
+
+[node name="GuildRegistrarNPC" instance=ExtResource("1_gate")]
+display_name = ""
+guard_role = "transition_guard"
+passage_closed = true
+requires_party_pokemon = false
+blocked_dialogue_lines = Array[String]([])
+pickpocket_enabled = false
