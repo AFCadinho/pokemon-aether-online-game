@@ -113,6 +113,11 @@ This task introduced no additional compression, mesh reduction or downscaling.
 
 ## Next work
 
+Physical follow-up: [the Galaxy Tab A7 diagnostic](android-tab-a7-benchmark.md)
+passes the 16-pair model cohort on ARM64 but encounters Vulkan device loss when
+building the complete forest arena. The original emulator result above remains
+an accounting result, not a physical rendering approval.
+
 1. Use the same fixed-resolution presentation workload on a physical Vulkan
    ARM64 phone with default frame pacing and shader caching. Measure native
    memory, sustained frame times, UI/input and visible effect timing. No phone

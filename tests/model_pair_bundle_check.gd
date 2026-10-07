@@ -7,6 +7,7 @@ var output := ""
 var expected_cases := 0
 var baseline_signatures := {}
 var trace_identities: Array = []
+var status_label: Label
 const ORIGIN := "http://127.0.0.1:8799/"
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
@@ -34,17 +35,61 @@ func _fetch(name: String) -> PackedByteArray:
 		return PackedByteArray()
 	var response: Array = await request.request_completed
 	request.queue_free()
-	return response[3] if _check(response[0] == HTTPRequest.RESULT_SUCCESS and response[1] == 200, "HTTP fixture") else PackedByteArray()
+	return response[3] if _check(response[0] == HTTPRequest.RESULT_SUCCESS and response[1] == 200, "HTTP fixture " + name + " result=" + str(response[0]) + " status=" + str(response[1])) else PackedByteArray()
+
+func _stream_tablet_pack(pin: Dictionary, pack_path: String) -> bool:
+	DirAccess.make_dir_recursive_absolute(pack_path.get_base_dir())
+	var response: Array = []
+	for attempt in 3:
+		var request := HTTPRequest.new()
+		request.use_threads = true
+		request.timeout = 120
+		request.body_size_limit = 134217728
+		request.download_file = pack_path + ".partial"
+		root.add_child(request)
+		if not _check(request.request(ORIGIN + str(pin.pack)) == OK, "Tablet stream starts"):
+			request.queue_free()
+			return false
+		response = await request.request_completed
+		request.queue_free()
+		if response[0] == HTTPRequest.RESULT_SUCCESS or response[1] != 0:
+			break # Content/hash/HTTP errors are never repaired by accepting a retry.
+		print("TABLET_TRANSPORT_RETRY ", pin.pack, " attempt=", attempt + 1, " result=", response[0])
+		await create_timer(0.5 * (attempt + 1)).timeout
+	if not _check(response[0] == HTTPRequest.RESULT_SUCCESS and response[1] == 200, "Tablet stream " + str(pin.pack) + " result=" + str(response[0]) + " status=" + str(response[1])):
+		return false
+	var file := FileAccess.open(pack_path + ".partial", FileAccess.READ)
+	if not _check(file != null and file.get_length() == int(pin.pack_bytes) and FileAccess.get_sha256(pack_path + ".partial") == pin.pack_sha256, "Streamed exact PCK bytes/hash"):
+		return false
+	file.close()
+	return _check(DirAccess.rename_absolute(pack_path + ".partial", pack_path) == OK, "Publish streamed PCK")
 
 func _install(pin: Dictionary, directory: String) -> bool:
+	var pack_path := directory.path_join(pin.pack)
+	if OS.has_feature("android_tab_benchmark"):
+		pack_path = directory.path_join(pin.pack_sha256 + ".pck")
+		var cached := FileAccess.open(pack_path, FileAccess.READ)
+		if cached != null and cached.get_length() == int(pin.pack_bytes) and FileAccess.get_sha256(pack_path) == pin.pack_sha256:
+			cached.close()
+			report["cache_hits"] = int(report.get("cache_hits", 0)) + 1
+			return _check(ProjectSettings.load_resource_pack(pack_path, false), "Mount cached pinned namespace")
+		cached = null
+		if not await _stream_tablet_pack(pin, pack_path):
+			return false
+		var downloads: Array = report.get("downloads", [])
+		downloads.append({"pack": pin.pack, "bytes": pin.pack_bytes, "sha256": pin.pack_sha256, "streamed": true})
+		report["downloads"] = downloads
+		return _check(ProjectSettings.load_resource_pack(pack_path, false), "Mount streamed namespace")
 	var bytes := await _fetch(pin.pack)
 	if not _check(bytes.size() == int(pin.pack_bytes) and Audit.digest(bytes) == pin.pack_sha256, "Pinned experiment PCK"):
 		return false
 	DirAccess.make_dir_recursive_absolute(directory)
-	var pack_path := directory.path_join(pin.pack)
 	var file := FileAccess.open(pack_path, FileAccess.WRITE)
 	file.store_buffer(bytes)
 	file.close()
+	var downloads: Array = report.get("downloads", [])
+	downloads.append({"pack": pin.pack, "bytes": bytes.size(), "sha256": pin.pack_sha256})
+	report["downloads"] = downloads
 	return _check(ProjectSettings.load_resource_pack(pack_path, false), "Mount pinned namespace")
 
 func _case(directory: String, manifest: Dictionary) -> Dictionary:
@@ -124,6 +169,14 @@ func _run() -> void:
 		fixture = JSON.parse_string((await _fetch("fixture.json")).get_string_from_utf8())
 		report["run_id"] = fixture.get("run_id", "")
 		base = "user://model-pair-textures-" + str(Time.get_unix_time_from_system()).replace(".", "-")
+		if OS.has_feature("android_tab_benchmark"):
+			DisplayServer.screen_set_keep_on(true)
+			base = "user://tab-model-pair-cache"
+			status_label = Label.new()
+			status_label.position = Vector2(24, 24)
+			status_label.add_theme_font_size_override("font_size", 24)
+			status_label.text = "Preparing the 3D tablet test…"
+			root.add_child(status_label)
 		output = "user://android-model-pairs-details.json"
 	else:
 		var args := OS.get_cmdline_user_args()
@@ -137,10 +190,16 @@ func _run() -> void:
 	if not _check(fixture.get("prototype_only", false) and fixture.get("pairs", []) is Array and not fixture.get("pairs", []).is_empty(), "Nonempty prototype cohort"):
 		_finish()
 		return
+	if OS.has_feature("android_tab_benchmark"):
+		var fixture_file := FileAccess.open("user://android-tab-benchmark-fixture.json", FileAccess.WRITE)
+		fixture_file.store_string(JSON.stringify(fixture))
+		fixture_file.close()
 	expected_cases = fixture.pairs.size() * 2
 	trace_identities = fixture.get("trace_identities", [])
 	for pair: Dictionary in fixture.pairs:
 		for variant in ["baseline", "shared"]:
+			if status_label != null:
+				status_label.text = "Checking 3D models: %s (%s)\n%d / %d checks" % [pair.species, variant, report.cases.size() + 1, expected_cases]
 			var pin: Dictionary = pair[variant]
 			var directory := base.path_join(pair.species + "/" + variant)
 			if OS.has_feature("android") and not await _install(pin, directory):
@@ -174,4 +233,6 @@ func _finish() -> void:
 		file.store_string(JSON.stringify(report, "\t"))
 		file.close()
 	print("MODEL_PAIR_BUNDLE_COMPLETE ", report.success)
+	if status_label != null:
+		status_label.queue_free()
 	quit(0 if report.success else 1)
