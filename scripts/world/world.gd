@@ -157,6 +157,7 @@ var last_presence_position_signature := ""
 var confirmed_appearance_state: Dictionary = {}
 var remote_players_container: Node2D
 var remote_player_avatars: Dictionary = {}
+var remote_player_visual_queue := preload("res://scripts/world/remote_player_visual_queue.gd").new()
 var remote_player_order_dirty := false
 var creator_remote_players_visibility_override_active := false
 var creator_remote_players_visible := true
@@ -187,6 +188,13 @@ var map_transition_snapshot: TextureRect
 var map_transition_rect: ColorRect
 var map_transition_content: Control
 var web_player_process_mode_before_load := Node.PROCESS_MODE_INHERIT
+
+func _init() -> void:
+	remote_player_visual_queue.player_state_ready.connect(_apply_remote_player_visual_state)
+	remote_player_visual_queue.player_removal_ready.connect(_remove_remote_player)
+	remote_player_visual_queue.batch_processed.connect(_sort_remote_player_avatar_nodes)
+	add_child(remote_player_visual_queue)
+
 
 func _enter_tree() -> void:
 	if OS.has_feature("web"):
@@ -2981,6 +2989,19 @@ func _flush_playtime_if_needed(force: bool = false) -> void:
 
 
 func _apply_remote_player_states(player_states: Array, prune_missing := true) -> void:
+	if prune_missing:
+		remote_player_visual_queue.replace_snapshot(player_states, remote_player_avatars.keys())
+	else:
+		for state: Variant in player_states:
+			if state is Dictionary:
+				remote_player_visual_queue.queue_update(state)
+
+
+func _apply_remote_player_visual_state(player_state: Dictionary) -> void:
+	_apply_remote_player_visual_states([player_state], false)
+
+
+func _apply_remote_player_visual_states(player_states: Array, prune_missing := true) -> void:
 	_ensure_remote_players_container()
 
 	var seen_user_ids := {}
@@ -3034,8 +3055,6 @@ func _apply_remote_player_states(player_states: Array, prune_missing := true) ->
 		if pending_map_chat_messages.has(user_key) and avatar.has_method("show_map_chat_message"):
 			avatar.call("show_map_chat_message", str(pending_map_chat_messages.get(user_key, "")))
 			pending_map_chat_messages.erase(user_key)
-
-	_sort_remote_player_avatar_nodes()
 
 	if not prune_missing:
 		return
@@ -3103,6 +3122,7 @@ func show_map_chat_message(user_id: int, text: String, force_local: bool = false
 
 
 func _clear_remote_players() -> void:
+	remote_player_visual_queue.clear()
 	get_tree().call_group("player_interaction_coordinator", "close_for_map_transition")
 	pending_map_chat_messages.clear()
 	pending_remote_player_interaction.clear()
@@ -3130,7 +3150,7 @@ func _remove_remote_player(user_id: int) -> void:
 
 
 func _on_world_presence_roster_changed(_players: Array, _roster_revision: int) -> void:
-	_apply_remote_player_states(WorldPresenceService.get_current_map_players(), true)
+	_apply_remote_player_states(_players, true)
 
 
 func _on_world_presence_roster_player_changed(player_state: Dictionary, _roster_revision: int) -> void:
@@ -3138,7 +3158,7 @@ func _on_world_presence_roster_player_changed(player_state: Dictionary, _roster_
 
 
 func _on_world_presence_roster_player_removed(user_id: int, _roster_revision: int) -> void:
-	_remove_remote_player(user_id)
+	remote_player_visual_queue.queue_removal(user_id)
 
 func _on_remote_player_interaction_requested(player_state: Dictionary, world_position: Vector2) -> void:
 	var candidate := {

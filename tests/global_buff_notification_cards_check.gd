@@ -18,6 +18,14 @@ func _run() -> void:
 		quit(1)
 		return
 	var overlay: Node = overlay_script.new()
+	# Activation also writes a system chat entry. Supply its real controls in
+	# this otherwise detached HUD fixture instead of leaving the template null.
+	var message_template := RichTextLabel.new()
+	var messages := VBoxContainer.new()
+	overlay.add_child(message_template)
+	overlay.add_child(messages)
+	overlay.set("message_entry_template", message_template)
+	overlay.set("message_list", messages)
 	var stack := stack_script.new() as VBoxContainer
 	overlay.set("global_buffs_panel", PanelContainer.new())
 	overlay.set("global_buff_slots", HBoxContainer.new())
@@ -63,6 +71,7 @@ func _run() -> void:
 	}
 	overlay.call("_apply_global_boost_state", active_boost, "global_exp", true)
 	_check(stack.get_child_count() == 1, "a newly activated global boost shows one card")
+	_check(messages.get_child_count() == 1, "a newly activated global boost also writes one system chat entry")
 	var boost_card := stack.get_child(0) as PanelContainer
 	_check(_label_text(boost_card, "RewardSubtitle") != "", "global boost cards show their activation status")
 	_check(_detail_text(boost_card) == "1h", "global boost cards show a compact duration")
@@ -72,6 +81,7 @@ func _run() -> void:
 	)
 	overlay.call("_apply_global_boost_state", active_boost, "global_exp", true)
 	_check(stack.get_child_count() == 1, "the same global boost activation is deduplicated")
+	_check(messages.get_child_count() == 1, "duplicate boost activations do not repeat their system chat entry")
 
 	var game_state := root.get_node_or_null("GameState")
 	_check(game_state != null, "global buff notification checks can access GameState")

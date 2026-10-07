@@ -66,11 +66,15 @@ func _run() -> void:
 		{"userId": 20, "username": "native-player", "mapId": "kanto_route_1", "position": {"x": 64, "y": 96}, "gender": "male", "appearance": {"body": "Gen4_Base_v1", "hair": "Adinho_Hair", "facial_hair": "Adinho_Beard", "facegear": "Adinho_Glasses", "top": "Adinho_Shirt", "bottom": "Adinho_Trousers", "shoes": "Adinho_Shoes"}},
 		{"userId": 30, "username": "browser-player", "mapId": "kanto_route_1", "position": {"x": 128, "y": 96}, "gender": "female"},
 	]})
-	_check(world.remote_player_avatars.size() == 2, "native and browser roster entries become physical avatars")
+	_check(world.remote_player_avatars.is_empty(), "roster updates do not construct avatars inside network callbacks")
+	while not world.remote_player_visual_queue.pending.is_empty():
+		world.remote_player_visual_queue.drain()
+	_check(world.remote_player_avatars.size() == 2, "native and browser roster entries become physical avatars after visual processing")
 	var native_avatar: Node = world.remote_player_avatars.get("20")
 	_check(native_avatar != null and native_avatar.current_appearance_state.get("top") == "Adinho_Shirt", "native custom outfit survives the browser presence renderer")
 	_check(world.remote_players_container.visible, "avatars are visible with normal settings")
 	presence._apply_player_left_message({"type": "player_left", "rosterRevision": 2, "userId": 20})
+	world.remote_player_visual_queue.drain()
 	_check(not world.remote_player_avatars.has("20") and world.remote_player_avatars.has("30"), "disconnect removes only the departed player")
 	world.free()
 	game_state.current_map = null

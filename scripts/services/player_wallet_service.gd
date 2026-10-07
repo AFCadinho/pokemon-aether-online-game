@@ -20,6 +20,14 @@ const GLOBAL_EV_BOOST_ENDPOINT := "/game/global-boosts/ev"
 const GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT := "/game/global-boosts/rare-encounter"
 const GLOBAL_SHINY_BOOST_ENDPOINT := "/game/global-boosts/shiny"
 const GLOBAL_HEAL_ENDPOINT := "/game/global-heal"
+const GLOBAL_BUFFS_ENDPOINT := "/game/global-buffs"
+const GLOBAL_BOOST_ENDPOINTS := {
+	"global_exp": GLOBAL_EXP_BOOST_ENDPOINT,
+	"global_skill_exp": GLOBAL_SKILL_EXP_BOOST_ENDPOINT,
+	"global_ev": GLOBAL_EV_BOOST_ENDPOINT,
+	"global_shiny": GLOBAL_SHINY_BOOST_ENDPOINT,
+	"global_rare_encounter": GLOBAL_RARE_ENCOUNTER_BOOST_ENDPOINT,
+}
 const REQUEST_TIMEOUT_SECONDS := 8.0
 var _gem_notification_poll_in_flight := false
 var _delivered_gem_notifications: Dictionary = {}
@@ -112,6 +120,64 @@ func transfer_bank_money(direction: String, amount: int) -> Dictionary:
 		})
 	)
 	return _wallet_result_from_response(response)
+
+
+func load_global_buffs() -> Dictionary:
+	var session := AuthService.session_token
+	var user_id := str(AuthService.current_user.get("id", ""))
+	if not _global_buffs_context_matches(session, user_id):
+		return {"success": false, "error": "Not authenticated."}
+	var base_url := await _global_buffs_base_url()
+	if not _global_buffs_context_matches(session, user_id):
+		return {"success": false, "error": "Session changed."}
+	var response := await _request_json(base_url + GLOBAL_BUFFS_ENDPOINT, HTTPClient.METHOD_GET, GatewayApiConfig.get_accept_headers(), "")
+	if not _global_buffs_context_matches(session, user_id):
+		return {"success": false, "error": "Session changed."}
+	if bool(response.get("success", false)):
+		if not _valid_global_buffs_body(_dictionary_from_value(response.get("body", {}))):
+			return {"success": false, "error": "Incomplete global buffs response."}
+		return response
+	# Older backends retain their existing APIs. Only a missing route triggers
+	# fallback; auth failures/timeouts/server errors must not fan out into six GETs.
+	if int(response.get("status", 0)) != 404:
+		return response
+	var boosts: Array = []
+	for boost_id: String in GLOBAL_BOOST_ENDPOINTS:
+		response = await _request_json(base_url + str(GLOBAL_BOOST_ENDPOINTS[boost_id]), HTTPClient.METHOD_GET, GatewayApiConfig.get_accept_headers(), "")
+		if not _global_buffs_context_matches(session, user_id):
+			return {"success": false, "error": "Session changed."}
+		var state := _dictionary_from_value(response.get("body", {}))
+		if bool(response.get("success", false)) and str(state.get("id", "")) == boost_id:
+			boosts.append(state)
+	response = await _request_json(base_url + GLOBAL_HEAL_ENDPOINT, HTTPClient.METHOD_GET, GatewayApiConfig.get_accept_headers(), "")
+	if not _global_buffs_context_matches(session, user_id):
+		return {"success": false, "error": "Session changed."}
+	var heal: Dictionary = _dictionary_from_value(response.get("body", {})) if bool(response.get("success", false)) else {}
+	return {"success": true, "body": {"boosts": boosts, "heal": heal}}
+
+
+func _global_buffs_base_url() -> String:
+	return await GatewayApiConfig.get_base_url()
+
+
+func _global_buffs_context_matches(session: String, user_id: String) -> bool:
+	return AuthService.is_authenticated() and AuthService.session_token == session and str(AuthService.current_user.get("id", "")) == user_id
+
+
+func _valid_global_buffs_body(body: Dictionary) -> bool:
+	var boosts: Variant = body.get("boosts")
+	var heal: Variant = body.get("heal")
+	if not boosts is Array or not heal is Dictionary or str(heal.get("id", "")) != "global_heal":
+		return false
+	var seen: Dictionary = {}
+	for value: Variant in boosts:
+		if not value is Dictionary:
+			return false
+		var boost_id := str(value.get("id", ""))
+		if not GLOBAL_BOOST_ENDPOINTS.has(boost_id) or seen.has(boost_id):
+			return false
+		seen[boost_id] = true
+	return seen.size() == GLOBAL_BOOST_ENDPOINTS.size()
 
 
 func load_global_exp_boost() -> Dictionary:

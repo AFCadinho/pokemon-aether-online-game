@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Spread remote-avatar visual updates across frames so they no longer run inside pong processing, and fetch startup global buffs in one request with compatibility for older backends.
+
 ### Outfits and mounts
 
 - Zekrom’s tail lights up with a short blue energy jet and sparks while moving, including its shiny variant.
