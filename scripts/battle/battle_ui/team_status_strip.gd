@@ -59,20 +59,9 @@ func configure(_panel_style: StyleBox) -> void:
 		var rows: Array = []
 		for index in range(2):
 			var row := HBoxContainer.new()
+			row.custom_minimum_size.y = 24
 			row.add_theme_constant_override("separation", 6)
 			column.add_child(row)
-			var badge := PanelContainer.new()
-			badge.custom_minimum_size = Vector2(24, 24)
-			badge.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-			badge.add_theme_stylebox_override("panel", _frame(Color(accent, 0.12), Color(accent, 0.28), 12, 2, 0))
-			row.add_child(badge)
-			var initial := Label.new()
-			initial.name = "TrainerBadgeLetter"
-			initial.add_theme_font_size_override("font_size", 13)
-			initial.add_theme_color_override("font_color", accent)
-			initial.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-			initial.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-			badge.add_child(initial)
 			var trainer := Label.new()
 			trainer.name = "TrainerName"
 			trainer.custom_minimum_size.x = 70
@@ -90,7 +79,7 @@ func configure(_panel_style: StyleBox) -> void:
 			status.add_theme_font_size_override("font_size", 14)
 			status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			chip.add_child(status)
-			rows.append({"name": trainer, "status": status, "badge": badge, "initial": initial, "chip": chip, "tone": ""})
+			rows.append({"name": trainer, "status": status, "chip": chip, "tone": ""})
 		trainer_rows.append(rows)
 	_ignore_mouse(self)
 	var localization := get_node_or_null("/root/LocalizationManager")
@@ -112,9 +101,6 @@ func _render() -> void:
 			var trainer: Dictionary = _teams[side][index] if index < _teams[side].size() else {}
 			row.name.text = str(trainer.get("name", ""))
 			row.name.tooltip_text = row.name.text
-			row.initial.text = row.name.text.left(1).to_upper()
-			# Reserve the second row's height without showing an empty badge.
-			row.badge.modulate.a = 0.0 if row.name.text.is_empty() else 1.0
 			if trainer.get("local", false):
 				row.name.text += " · " + _text("ui.chat.you")
 			var state := str(trainer.get("state", ""))

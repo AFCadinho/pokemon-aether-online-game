@@ -2,7 +2,9 @@
 
 ## Unreleased
 
-- Refine Adventure Party team panels with cyan and pink accents, Trainer initial badges, readable status chips and a compact VS emblem in immersive 2D and 3D.
+- Simplify Adventure Party team headers by removing the circular Trainer initial badges.
+
+- Refine Adventure Party team panels with cyan and pink accents, readable status chips and a compact VS emblem in immersive 2D and 3D.
 
 - Prepare an optional experimental 3D choice for Android test builds, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. Standard Android builds remain in 2D.
 

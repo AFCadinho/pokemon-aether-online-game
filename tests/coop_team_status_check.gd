@@ -142,6 +142,9 @@ func _assert_header_bounds(battle: Control) -> void:
 		var side: Array = header.team_status_strip.trainer_rows[side_index]
 		var side_bounds: Rect2 = header.team_status_strip.sides[side_index].get_global_rect()
 		for row: Dictionary in side:
+			# NPCs and empty rows have hidden chips; their old bounds are not drawn.
+			if not row.status.is_visible_in_tree():
+				continue
 			assert(not row.name.get_global_rect().intersects(row.status.get_global_rect()), "names and statuses have distinct space")
 			assert(row.status.get_global_rect().end.x <= side_bounds.end.x + 1.0, "each status stays inside its own side panel")
 
