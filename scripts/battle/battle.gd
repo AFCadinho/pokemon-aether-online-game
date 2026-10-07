@@ -9192,25 +9192,28 @@ func _run_default_trainer_lead_selection() -> Dictionary:
 		_set_battle_input_locked(false)
 		return {}
 
-	var player_lead_response := await _submit_lead("p1", player_lead_slot)
-	if not bool(player_lead_response.get("success", false)):
-		var error_message := str(player_lead_response.get("error", _t("battle.error.choose_player_lead")))
-		current_action_panel.set_message(error_message)
-		_add_battle_log_message(error_message)
-		_set_battle_input_locked(false)
-		return {}
-
-	var npc_lead_response := await _submit_npc_lead()
-	if not bool(npc_lead_response.get("success", false)):
-		var error_message := str(npc_lead_response.get("error", _t("battle.error.choose_trainer_lead")))
-		current_action_panel.set_message(error_message)
-		_add_battle_log_message(error_message)
-		_set_battle_input_locked(false)
-		return {}
-
+	var response: Dictionary
+	if training_ai_battle:
+		response = await _submit_lead("p1", player_lead_slot)
+		if bool(response.get("success", false)):
+			response = await _submit_npc_lead()
+	else:
+		response = await _submit_default_trainer_leads(player_lead_slot)
+	if not bool(response.get("success", false)):
+		current_action_panel.set_message(str(response.get("error", _t("battle.error.choose_trainer_lead"))))
+		_add_battle_log_message(str(response.get("error", _t("battle.error.choose_trainer_lead"))))
 	_set_battle_input_locked(false)
-	return npc_lead_response
+	return response if bool(response.get("success", false)) else {}
 
+
+func _submit_default_trainer_leads(slot: int) -> Dictionary:
+	var response: Dictionary = await BattleApiClient.choose_default_leads(battle_request, battle_state.battle_id, slot, last_rendered_event_seq)
+	var player_response: Variant = response.get("playerLeadResponse", {})
+	if player_response is Dictionary and bool(player_response.get("success", false)):
+		_apply_api_response(player_response, false)
+	if bool(response.get("success", false)) and _apply_api_response(response, false):
+		opponent_party_reveal_policy.reveal_active(_get_display_team_data("p2"))
+	return response
 
 func _first_usable_training_ai_team_slot() -> int:
 	for pokemon_value: Variant in _get_display_team_data("p1"):

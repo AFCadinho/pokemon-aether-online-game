@@ -49,6 +49,7 @@ HTTP_ROUTES = {
     ("GET", "/battle/pvp/training/ai/live"),
     ("POST", "/battle/pvp/training/ai/battles"),
     ("POST", "/pokemon/create-from-text"), ("POST", "/team/create-from-text"),
+    ("POST", "/battle/wild-encounter/start"), ("POST", "/battle/trainer/start"),
     ("POST", "/battle/wild-encounter"), ("POST", "/battle/dev/wild"),
     ("GET", "/battle/wild/resume"),
     ("POST", "/battle/trainer"), ("POST", "/battle/weekly-boss"), ("GET", "/battle/trainer/resume"),
@@ -77,6 +78,7 @@ HTTP_ROUTES = {
     ("POST", "/world/weather/developer"),
 }
 GAMEPLAY_ROUTES = tuple((method, re.compile(pattern)) for method, pattern in (
+    ("POST", r"/battle/[A-Za-z0-9-]{1,128}/lead-and-resolve"),
     ("POST", r"/auth/web/world-pickups/[a-z0-9_]+/claim"),
     ("GET", r"/auth/web/npc-pokemon-sales/kanto_route_3_magikarp"),
     ("POST", r"/auth/web/npc-pokemon-sales/kanto_route_3_magikarp/purchase"),

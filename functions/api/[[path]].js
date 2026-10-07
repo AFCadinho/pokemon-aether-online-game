@@ -13,6 +13,7 @@ const HTTP_ROUTES = new Set([
   'GET /auth/web/ai-sparring/statistics', 'GET /auth/web/ai-sparring/history',
   'DELETE /auth/web/ai-sparring/history', 'GET /battle/pvp/training/ai/teams',
   'GET /battle/pvp/training/ai/live', 'POST /battle/pvp/training/ai/battles',
+  'POST /battle/wild-encounter/start', 'POST /battle/trainer/start',
   'POST /battle/wild-encounter', 'POST /battle/dev/wild', 'GET /battle/wild/resume',
   'POST /battle/trainer', 'POST /battle/weekly-boss', 'GET /battle/trainer/resume',
   'POST /battle/pvp/rooms', 'GET /pokemon/stats',
@@ -81,6 +82,7 @@ const PVP_MATCH_START_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/sta
 const PVP_MATCH_SPECTATE_ROUTE = /^\/battle\/pvp\/matches\/[A-Za-z0-9-]{1,128}\/spectate$/;
 const WEBSOCKETS = new Set(['/ws/chat', '/ws/world-presence', '/ws/pvp-battle', '/ws/pve-live', '/ws/training-live', '/ws/trade']);
 const GAMEPLAY_ROUTES = [
+  ['POST', /^\/battle\/[A-Za-z0-9-]{1,128}\/lead-and-resolve$/],
   ['POST', /^\/auth\/web\/world-pickups\/[a-z0-9_]+\/claim$/],
   ['GET', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp$/],
   ['POST', /^\/auth\/web\/npc-pokemon-sales\/kanto_route_3_magikarp\/purchase$/],

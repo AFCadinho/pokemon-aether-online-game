@@ -617,6 +617,27 @@ func sync_player_position_for_world_action() -> Dictionary:
 	var signature := _get_current_player_position_signature(true)
 	return await _save_current_player_position(signature, "", true)
 
+
+func _start_battle_with_position(start: Callable) -> Dictionary:
+	if not AuthService.is_authenticated() or player == null:
+		return {"success": false, "error": "The player position is not ready."}
+	if _is_player_position_save_blocked_by_teleport():
+		return {"success": false, "error": _get_player_position_save_block_reason(false)}
+	var deadline_msec := Time.get_ticks_msec() + 3000
+	while is_saving_player_position:
+		if Time.get_ticks_msec() >= deadline_msec:
+			return {"success": false, "error": "The player position is still syncing."}
+		await get_tree().process_frame
+	return await _save_current_player_position(_get_current_player_position_signature(true), "", true, false, false, start)
+
+
+func _create_wild_with_position(position: Dictionary, area_id: String, encounter_type: String, forced_species_id: String, static_encounter_id: String) -> Dictionary:
+	return await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id, static_encounter_id, position)
+
+
+func _create_trainer_with_position(position: Dictionary, trainer_id: String, is_rematch: bool) -> Dictionary:
+	return await create_trainer_battle_response(trainer_id, is_rematch, position)
+
 func prepare_for_gameplay_reset() -> Dictionary:
 	if is_in_battle:
 		return {"success": false, "error": "Finish the active battle before resetting gameplay."}
@@ -3231,7 +3252,8 @@ func _save_current_player_position(
 	spawn_marker: String,
 	use_confirmed_appearance: bool = false,
 	mark_current_appearance_confirmed: bool = false,
-	allow_gameplay_reset: bool = false
+	allow_gameplay_reset: bool = false,
+	battle_start: Callable = Callable()
 ) -> Dictionary:
 	if _is_player_position_save_blocked_by_teleport(allow_gameplay_reset):
 		return {
@@ -3263,7 +3285,19 @@ func _save_current_player_position(
 			"success": false,
 			"error": _get_player_position_save_block_reason(allow_gameplay_reset),
 		}
-	var result: Dictionary = await PlayerGameStateService.save_player_position(state)
+	var session: String = str(AuthService.session_token)
+	var battle_result: Dictionary = {}
+	var result: Dictionary
+	if battle_start.is_valid():
+		battle_result = await battle_start.call(state)
+		var position_value: Variant = battle_result.get("positionResponse", {})
+		result = position_value if position_value is Dictionary and not position_value.is_empty() else battle_result
+	else:
+		result = await PlayerGameStateService.save_player_position(state)
+	if session != str(AuthService.session_token):
+		is_saving_player_position = false
+		has_pending_player_position_save = false
+		return {"success": false, "error": "The account session changed."}
 	if bool(result.get("success", false)):
 		pending_happiness_walk_steps = maxi(pending_happiness_walk_steps - happiness_walk_steps_sent, 0)
 		var response_state: Dictionary = _dictionary_from_value(result.get("state", {}))
@@ -3326,7 +3360,7 @@ func _save_current_player_position(
 	if has_pending_player_position_save:
 		has_pending_player_position_save = false
 		_save_current_player_position_if_changed.call_deferred(true)
-	return result
+	return battle_result if battle_start.is_valid() else result
 
 
 func _persist_initial_player_position_during_reset(spawn_marker: String) -> Dictionary:
@@ -3708,7 +3742,8 @@ func create_triggered_wild_battle_response(
 	area_id: String,
 	encounter_type: String = "grass",
 	forced_species_id: String = "",
-	static_encounter_id: String = ""
+	static_encounter_id: String = "",
+	position: Dictionary = {}
 ) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
@@ -3725,7 +3760,8 @@ func create_triggered_wild_battle_response(
 		_get_current_wild_battle_origin(),
 		debug_time_of_day,
 		forced_species_id,
-		static_encounter_id
+		static_encounter_id,
+		position
 	)
 
 	battle_request.queue_free()
@@ -3765,7 +3801,7 @@ func _set_origin_text_value(origin: Dictionary, key: String, value: String) -> v
 	if cleaned != "":
 		origin[key] = cleaned
 
-func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> Dictionary:
+func create_trainer_battle_response(trainer_id: String, is_rematch := false, position: Dictionary = {}) -> Dictionary:
 	var battle_request := HTTPRequest.new()
 	add_child(battle_request)
 	var player_payload: Dictionary = BattleApiPayloads.from_player_save(PlayerSave)
@@ -3774,7 +3810,7 @@ func create_trainer_battle_response(trainer_id: String, is_rematch := false) -> 
 	if not active_weekly_boss_id.is_empty():
 		response = await BattleApiClient.create_weekly_boss_battle(battle_request, player_payload, active_weekly_boss_id, active_weekly_boss_difficulty)
 	else:
-		response = await BattleApiClient.create_trainer_battle(battle_request, player_payload, trainer_id, is_rematch)
+		response = await BattleApiClient.create_trainer_battle(battle_request, player_payload, trainer_id, is_rematch, position)
 
 	battle_request.queue_free()
 	return response
@@ -4087,7 +4123,7 @@ func start_triggered_wild_battle_for_area(
 	active_wild_encounter_type = ""
 	_lock_overworld_for_battle()
 	var transition_started_at_msec := _begin_wild_encounter_transition()
-	# Open the real battle arena before the two authoritative network requests.
+	# Open the real battle arena before the authoritative start request.
 	# Unknown combatants/actions remain hidden until the response is prepared.
 	if not _begin_pending_wild_entry(encounter_type, transition_started_at_msec):
 		await _cancel_wild_encounter_transition()
@@ -4095,16 +4131,11 @@ func start_triggered_wild_battle_for_area(
 		await GameErrorDialogService.show_report_to_staff_message()
 		return
 
-	# Persist the encounter tile before the server creates the resumable battle.
-	# Closing the client cannot reliably finish an asynchronous position save.
-	var position_result := await sync_player_position_for_world_action()
-	if not bool(position_result.get("success", false)):
-		await _cancel_wild_encounter_transition()
-		_abort_battle_start()
-		await GameErrorDialogService.show_response(position_result)
-		return
-	_trace_mobile_wild_transition("position_saved", transition_started_at_msec)
-	var response: Dictionary = await create_triggered_wild_battle_response(area_id, encounter_type, forced_species_id, static_encounter_id)
+	# The server persists the encounter tile before creating a resumable battle,
+	# within one client request. Position reconciliation stays in the save path.
+	var response: Dictionary = await _start_battle_with_position(
+		_create_wild_with_position.bind(area_id, encounter_type, forced_species_id, static_encounter_id)
+	)
 	if (
 		not response.get("success", false)
 		and WildEncounterErrorRules.error_code(response) == "pokemon_party_changed_refresh_required"
@@ -4303,15 +4334,18 @@ func start_trainer_battle(trainer_data: Dictionary) -> Dictionary:
 		_abort_battle_start()
 		return {"success": false, "code": "battle_ui_unavailable"}
 
-	var position_result := await sync_player_position_for_world_action()
-	if not bool(position_result.get("success", false)):
-		await _cancel_wild_encounter_transition()
-		_abort_battle_start()
-		return position_result
-	var response: Dictionary = await create_trainer_battle_response(
-		trainer_id,
-		active_trainer_is_rematch
-	)
+	var response: Dictionary
+	if not active_weekly_boss_id.is_empty():
+		var position_result := await sync_player_position_for_world_action()
+		if not bool(position_result.get("success", false)):
+			await _cancel_wild_encounter_transition()
+			_abort_battle_start()
+			return position_result
+		response = await create_trainer_battle_response(trainer_id, active_trainer_is_rematch)
+	else:
+		response = await _start_battle_with_position(
+			_create_trainer_with_position.bind(trainer_id, active_trainer_is_rematch)
+		)
 	if (
 		not response.get("success", false)
 		and BackendErrorLocalizationService.error_code(response) == "pokemon_party_changed_refresh_required"

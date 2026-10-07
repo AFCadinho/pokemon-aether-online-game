@@ -218,6 +218,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/presence_packet_budget_check.gd",
 	"res://tests/remote_player_visual_queue_check.gd",
 	"res://tests/global_buffs_startup_check.gd",
+	"res://tests/high_ping_battle_start_check.gd",
 	"res://tests/tall_grass_scene_convention_check.gd",
 	"res://tests/players_house_visual_depth_check.gd",
 	"res://tests/players_house_location_label_check.gd",

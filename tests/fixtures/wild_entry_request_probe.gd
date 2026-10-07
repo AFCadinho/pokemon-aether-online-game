@@ -25,8 +25,12 @@ func sync_player_position_for_world_action() -> Dictionary:
 	await continue_position
 	position_waiting = false
 	return {"success": true}
-func create_triggered_wild_battle_response(_area: String, _encounter_type := "grass", _forced_species := "", _static_encounter_id := "") -> Dictionary:
+func create_triggered_wild_battle_response(_area: String, _encounter_type := "grass", _forced_species := "", _static_encounter_id := "", _position: Dictionary = {}) -> Dictionary:
 	response_waiting = true
 	await continue_response
 	response_waiting = false
 	return {"success": false, "code": "offline_fixture_rejection", "error": "fixture rejection"}
+
+func _start_battle_with_position(start: Callable) -> Dictionary:
+	await sync_player_position_for_world_action()
+	return await start.call({})

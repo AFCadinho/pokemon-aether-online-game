@@ -37,3 +37,7 @@ func _run_trainer_team_preview_lead_selection() -> Dictionary:
 	await continue_preview
 	preview_waiting = false
 	return {}
+
+func _submit_default_trainer_leads(slot: int) -> Dictionary:
+	await _submit_lead("p1", slot)
+	return await _submit_npc_lead()
