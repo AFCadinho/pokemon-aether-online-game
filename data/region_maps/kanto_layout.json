@@ -239,6 +239,12 @@
       "locationGroupIds": [
         "kanto_vermilion_city",
         "kanto_ss_anne"
+      ],
+      "mapIds": [
+        "guild_base_main_hall",
+        "guild_base_left_room",
+        "guild_base_right_room",
+        "guild_base_elevator"
       ]
     },
     "kanto_map_point_11": {

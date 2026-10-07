@@ -4,6 +4,8 @@
 
 ## 0.3.101
 
+- Show your current location in Vermilion City on the Town Map while inside its Guild Base rooms.
+
 - Save the current door position before entering or changing Guild Base rooms, preventing entrance refusals caused by an older autosave; clarify door and membership errors.
 
 - Add private Guild Base interiors in Vermilion City: a fixed main hall, two empty side rooms and a lift waiting room, with room doors, Guild-only player visibility and safe recovery when base access is lost.
