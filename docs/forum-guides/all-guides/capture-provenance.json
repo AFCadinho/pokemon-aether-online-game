@@ -39,6 +39,15 @@
     "store.json": "1623164be56c28e7204c7aec0a325432ff655e3acba47c7711bf7c8ef9045907",
     "quest.json": "063570a07a9db6c522a82f6aa945dafd87203f226b8d2a89f9062842b769ce00",
     "story-quests.json": "e0ac8da74c260a5c569a67ae9750b970bea871ffb5ffe3060089b2ba47926a4a",
-    "rental-team.json": "c84fff6ed9c4df4ad90b44f3b5cb8178c0edb9e3aeac02983ce4701eaab51015"
+    "rental-team.json": "c84fff6ed9c4df4ad90b44f3b5cb8178c0edb9e3aeac02983ce4701eaab51015",
+    "activities.gd.uid": "430603132132844109367db5337a7c4de8b5908cb4c3a12112a215bf6a580396",
+    "base.gd.uid": "c10a6d7f0a0561957a20b2c402b3b33346126080fb844155cb6cde72bed8084d",
+    "battles.gd.uid": "22f52d73950f7585cde65d3930c8d8946dc3ad2d89118018254ee928dba78d48",
+    "economy.gd.uid": "a0fb67def90e5e948c9a93b414896fa63cc1567b6fd8ced0c20972d5c2d1f796",
+    "extras.gd.uid": "6843be20a538d5c8ce08fc94ccb5802b99ea78eaa3151f1eb7d323057cd04122",
+    "guilds.gd.uid": "64562c8cf6afddb8d45d89dc97cbdc3b8c22678dd32caca37fc2505db89cc5e0",
+    "moves-story.gd.uid": "62e42b0891491134b16725dfbebb2b0f72260c9959221ac1d21efa62e159a26e",
+    "rentals-loans.gd.uid": "27a3d9676c00fab2ce55a05eec6cc421e9d3eb1d50803c6de228deb07b36ad76",
+    "summary.gd.uid": "880b583e8d5827c22926367ee2a92815a39d3404058dc25cc991dfd187371312"
   }
 }
