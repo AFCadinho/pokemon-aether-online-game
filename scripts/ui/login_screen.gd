@@ -818,7 +818,7 @@ func _restore_saved_session() -> void:
 	await _apply_saved_session_preview_state()
 
 	password_input.clear()
-	remember_me_checkbox.button_pressed = AuthService.web_remember_me if OS.has_feature("web") else true
+	remember_me_checkbox.button_pressed = AuthService.remember_me_enabled
 	login_button.text = _get_idle_login_button_text()
 	_show_saved_session_card()
 

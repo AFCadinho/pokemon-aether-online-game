@@ -7,7 +7,7 @@ func _init() -> void:
 
 func _run() -> void:
 	var source := FileAccess.get_file_as_string("res://scripts/ui/login_screen.gd")
-	_check(source.contains('remember_me_checkbox.button_pressed = AuthService.web_remember_me if OS.has_feature("web") else true'), "Restoration retains the browser preference and desktop behavior")
+	_check(source.contains('remember_me_checkbox.button_pressed = AuthService.remember_me_enabled'), "Restoration retains the remember-me preference on every platform")
 	var login: Control = load("res://scripts/ui/login_screen.gd").new()
 	for field in ["status_label", "saved_status_label", "saved_display_name_label", "saved_username_label"]:
 		var label := Label.new()
