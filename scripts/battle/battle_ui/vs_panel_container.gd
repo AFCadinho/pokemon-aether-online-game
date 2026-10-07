@@ -29,6 +29,8 @@ const TIMER_URGENT_COLOR := Color(1.0, 0.35, 0.25)
 @onready var player_1_timer_bar: ProgressBar = $Player1TimerPanel/MarginContainer/VBoxContainer/Player1TimerBar
 @onready var player_2_timer_bar: ProgressBar = $Player2TimerPanel/MarginContainer/VBoxContainer/Player2TimerBar
 
+var team_status_strip: HBoxContainer
+
 var _player_1_timer: Dictionary = {}
 var _player_2_timer: Dictionary = {}
 var _decision_kind_override := ""
@@ -52,6 +54,19 @@ func _ready() -> void:
 	):
 		_localization_manager.locale_changed.connect(_on_locale_changed)
 	_refresh_names_panel_width()
+
+
+## Co-op uses the same framed presentation as PvP, grouped by battle side.
+## The ordinary PvP timer path stays separate and retains its existing clocks.
+func show_team_status(left: Array, right: Array) -> void:
+	if team_status_strip == null:
+		team_status_strip = preload("res://scripts/battle/battle_ui/team_status_strip.gd").new()
+		add_child(team_status_strip)
+		team_status_strip.configure(player_1_timer_panel.get_theme_stylebox("panel"))
+	names_panel.hide()
+	hide_decision_timers(true)
+	team_status_strip.show()
+	team_status_strip.set_teams(left, right, "battle.coop.your_team", "battle.coop.opponents")
 
 
 func set_names(player_1_name: String, player_2_name: String) -> void:

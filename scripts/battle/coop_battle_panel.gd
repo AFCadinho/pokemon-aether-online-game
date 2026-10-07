@@ -47,6 +47,7 @@ var _log: RichTextLabel
 var _epoch := 0
 var _action_signature := ""
 var _finished_return_started := false
+var _returning_to_world := false
 var _finished_return_retry_available := false
 var _loading_overlay: ColorRect
 var _loading_label: Label
@@ -353,7 +354,17 @@ func _ready() -> void:
 	CoopService.request_failed.connect(_show_error)
 	if _native_mode:
 		_setup_loading_overlay()
+	LocalizationManager.locale_changed.connect(_on_coop_locale_changed)
 	_sync()
+
+
+func _on_coop_locale_changed(_locale: String) -> void:
+	_action_signature = ""
+	_update_actions()
+
+
+func _coop_text(key: String, values: Dictionary = {}) -> String:
+	return LocalizationManager.text("battle.coop." + key, values)
 
 
 func _setup_loading_overlay() -> void:
@@ -520,7 +531,6 @@ func _sync() -> void:
 		_update_loading_overlay()
 	if _native_mode:
 		_sync_native_trainers()
-		_native_vs.set_names("%s + %s" % [_trainer_name("p1"), _trainer_name("p3")], _opponent_title())
 	var battle_id := str(_latest.get("battleId", ""))
 	if battle_id != displayed_battle:
 		if _native_mode:
@@ -530,6 +540,7 @@ func _sync() -> void:
 			_native_move_hover.hide_card()
 			_hovered_controller = ""
 		_finished_return_started = false
+		_returning_to_world = false
 		_finished_return_retry_available = false
 		_epoch += 1
 		_effects.cancel()
@@ -555,9 +566,10 @@ func _sync() -> void:
 	_decision = str(_latest.get("decisionId", ""))
 	if _native_mode and not _hovered_controller.is_empty():
 		_show_coop_active_hover(_hovered_controller)
-	_update_actions()
+	# Establish playback before exposing the next decision controls.
 	if not _playing and _revision != int(_latest.get("revision", -1)):
-		_present.call_deferred()
+		_present()
+	_update_actions()
 
 
 func _update_loading_overlay() -> void:
@@ -591,7 +603,7 @@ func _process(_delta: float) -> void:
 		_update_coop_sprite_hover()
 		return
 	_connection.text = "%s  ·  %s" % [
-		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — temporary AI after 30s",
+		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — waiting for temporary AI",
 		"Partner ready" if CoopService.view.get("partnerReady", false) else "Partner choosing"]
 	if CoopService.activity.get("status") != "active":
 		_connection.text = "Both Trainers share this battle. Progress and rewards are saved by the server."
@@ -901,9 +913,48 @@ func _target_prompt() -> String:
 	return "Choose a target."
 
 
+func _trainer_choice_state(controller: String) -> String:
+	var view: Dictionary = CoopService.view
+	var local: bool = controller == view.get("participant", "p1")
+	var phase := str(CoopService.activity.get("status", "starting"))
+	if local and (_playing or _capture_animation_pending):
+		return "playing"
+	if phase == "cancelled" or phase == "finished" or view.get("ended", false):
+		return "finished"
+	if phase == "starting" or view.is_empty():
+		return "connecting"
+	if not local and not CoopService.activity.get("partnerConnected", true):
+		return "disconnected"
+	var exit_request: Dictionary = view.get("exitRequest", {}) if view.get("exitRequest") is Dictionary else {}
+	if not exit_request.is_empty():
+		return "waiting" if exit_request.get("requestedBy") == controller else "confirming"
+	if not local:
+		return "ready" if view.get("partnerReady", false) else "choosing"
+	if not CoopService.pending_command.is_empty() or CoopService.command_in_flight:
+		return "sending" if CoopService.command_in_flight else "checking"
+	if view.get("locked", true):
+		# A lock may mean no action is required (e.g. the partner must switch).
+		# Only mark a local choice Ready once its acceptance was confirmed.
+		return "ready" if not CoopService.confirmed_decision_id.is_empty() and CoopService.confirmed_decision_id == view.get("decisionId") else "waiting"
+	return "switching" if view.get("forceSwitch", false) else "choosing"
+
+
+func _update_team_status() -> void:
+	if not _native_mode or not is_instance_valid(_native_vs):
+		return
+	var trainers: Array = []
+	for controller: String in ["p1", "p3"]:
+		trainers.append({"name": _trainer_name(controller), "local": controller == CoopService.view.get("participant", "p1"),
+			"state": _trainer_choice_state(controller)})
+	_native_vs.show_team_status(trainers, [{"name": _opponent_title()}])
+
+
 func _update_actions() -> void:
+	_update_team_status()
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
-		CoopService.pending_command.get("idempotencyKey"), selected_move, _playing, _bag_open,
+		CoopService.pending_command.get("idempotencyKey"), CoopService.command_in_flight,
+		CoopService.activity.get("partnerConnected"), CoopService.view.get("partnerReady"),
+		_returning_to_world, selected_move, _playing, _bag_open,
 		_mega_evolution_selected, _z_move_selected])
 	if signature == _action_signature:
 		return
@@ -945,6 +996,12 @@ func _update_actions() -> void:
 			_prompt.text = "Both Trainers fled from the wild battle."
 		elif phase == "finished" and CoopService.activity.get("forfeited", false):
 			_prompt.text = "Both Trainers forfeited the battle."
+		if _playing or _capture_animation_pending:
+			_prompt.text = _coop_text("playing")
+		elif _returning_to_world:
+			_prompt.text = _coop_text("returning")
+		elif phase == "finished" and _final_event_playback_pending():
+			_prompt.text = _coop_text("sync_final")
 		if phase == "finished" and not _finished_return_started:
 			_finished_return_started = true
 			_auto_return_after_finish.call_deferred()
@@ -960,9 +1017,14 @@ func _update_actions() -> void:
 		if CoopService.activity.get("canCancel", false) and not _native_mode:
 			_button(_actions, "Cancel start", func() -> void: await CoopService.party_action("cancel", {"reservationId": CoopService.activity.reservationId}))
 		return
-	if not CoopService.pending_command.is_empty():
-		_prompt.text = "Checking your choice…"
-		_button(_actions, "Check / retry my choice", func() -> void: await CoopService.retry_command())
+	if _playing or _capture_animation_pending:
+		_prompt.text = _coop_text("playing")
+		_show_capture_feedback_in_prompt()
+		return
+	if not CoopService.pending_command.is_empty() or CoopService.command_in_flight:
+		_prompt.text = _coop_text("sending") if CoopService.command_in_flight else _coop_text("checking")
+		if not CoopService.command_in_flight:
+			_button(_actions, _coop_text("retry"), func() -> void: await CoopService.retry_command())
 		return
 	var exit_request: Dictionary = CoopService.view.get("exitRequest", {}) if CoopService.view.get("exitRequest") is Dictionary else {}
 	if not exit_request.is_empty() and not CoopService.view.get("ended", false):
@@ -982,7 +1044,16 @@ func _update_actions() -> void:
 				_decision_button(label, "secondary" if staying else "primary", func() -> void: await CoopService.submit_action(action))
 		return
 	if _playing or CoopService.view.get("ended", false) or CoopService.view.get("locked", true):
-		_prompt.text = "Saving the result…" if CoopService.view.get("ended", false) else "Battle in progress…" if _playing else "Waiting for the other actions…"
+		if _playing or _capture_animation_pending:
+			_prompt.text = _coop_text("playing")
+		elif CoopService.view.get("ended", false):
+			_prompt.text = _coop_text("saving")
+		elif not CoopService.activity.get("partnerConnected", true):
+			_prompt.text = _coop_text("disconnected", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
+		elif not CoopService.view.get("partnerReady", false):
+			_prompt.text = _coop_text("waiting_partner", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
+		else:
+			_prompt.text = _coop_text("preparing")
 		_show_capture_feedback_in_prompt()
 		return
 	_prompt.text = "Choose a replacement from your team." if CoopService.view.get("forceSwitch", false) else BattleEventTextFormatter.new().format_action_prompt(_own_active_species())
@@ -1172,10 +1243,13 @@ func _auto_return_after_finish() -> void:
 		return
 	var world := GameState.get_world()
 	if world != null:
+		_returning_to_world = true
+		_update_actions()
 		await world.call("finish_coop_activity")
 	if not is_inside_tree():
 		return
 	if not is_instance_valid(world) or (CoopService.activity.get("status") == "finished" and not bool(world.get("coop_finishing"))):
+		_returning_to_world = false
 		_finished_return_retry_available = true
 		_action_signature = ""
 		_update_actions()

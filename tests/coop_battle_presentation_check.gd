@@ -258,8 +258,8 @@ func _run() -> void:
 	return_world.add_to_group("world")
 	panel._playing = true
 	service.apply_state({"activity": activity, "view": snapshot})
-	_expect(panel._prompt.text.contains("both Trainers won") and panel._actions.get_child_count() == 0,
-		"victory starts returning without a separate confirmation button")
+	_expect(panel._prompt.text == panel._coop_text("playing") and panel._actions.get_child_count() == 0,
+		"victory keeps the final playback status without a separate confirmation button")
 	await process_frame
 	_expect(return_world.finish_calls == 0, "automatic return waits for final event playback")
 	panel._playing = false
@@ -272,8 +272,8 @@ func _run() -> void:
 	service.activity.escaped = true
 	panel._action_signature = ""
 	panel._update_actions()
-	_expect(panel._prompt.text.contains("fled") and panel._actions.get_child_count() == 0,
-		"confirmed wild escape has no second confirmation")
+	_expect(panel._prompt.text == panel._coop_text("returning") and panel._actions.get_child_count() == 0,
+		"confirmed wild escape stays in the world-return phase without a second confirmation")
 	await process_frame
 	_expect(return_world.finish_calls == 1 and panel._actions.get_child_count() == 0,
 		"finished snapshots do not invoke world return twice")

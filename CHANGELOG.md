@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Show Adventure Party battle status per Trainer in two team panels, distinguish sending, choosing, ready and disconnected states without PvE timers, and clarify turn playback and world return.
 - Guild Leaders can establish their guild in Vermilion City at guild level 10 for 1,000,000 from the Guild Bank, granting the guild's members access to the shared garden.
 
 - Keep Vermilion's guild-garden entrance closed independently of the Guild Registrar's placement beside it.

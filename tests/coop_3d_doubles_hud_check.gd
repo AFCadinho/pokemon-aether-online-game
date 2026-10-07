@@ -161,6 +161,8 @@ func _run() -> void:
 	model.combatants[0] = {"species": "dragonite", "shiny": false}
 	model.identities[0] = model._combatant_key(0)
 	var focus_test_actor := Node3D.new()
+	# Projected visual bounds need a live world transform in this fixture too.
+	stage.add_child(focus_test_actor)
 	model.actors[0] = focus_test_actor
 	model.set_coop_camera_focus("", false)
 	model._update_camera(1.0)
