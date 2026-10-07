@@ -40,6 +40,7 @@
 
 ### Outfits and mounts
 
+- Give normal and shiny Arcanine small idle tail and ear movements while its body and rider remain steady.
 - Arcanine and Shiny Arcanine breathe gently while standing still, and Lapras gently bobs on the water, with the rider following the motion.
 - Get the Gyarados Surf Mount Box for 500 Aether Gems, with normal and red shiny variants using the approved riding pose and water effects.
 - Get the Thor outfit for 550 Gems, with a cape that moves as you walk and electric effects.
