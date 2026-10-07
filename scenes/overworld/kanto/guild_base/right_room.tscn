@@ -1,0 +1,59 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/guild_base_right_room/guild_base_right_room.visual.tscn" id="2_visual"]
+[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="3_exit"]
+
+[sub_resource type="RectangleShape2D" id="shape_0"]
+size = Vector2(24, 96)
+
+[node name="GuildBaseRightRoom" type="Node2D"]
+script = ExtResource("1_room")
+map_id = "guild_base_right_room"
+map_region_name = "Kanto"
+map_display_name = "Guild Base — Right Room"
+world_access_group_id = "guild_bases"
+world_access_group_label = "Guild Bases"
+world_access_area_type = "interior"
+region_id = "kanto"
+lighting_profile = "indoor"
+weather_profile = "disabled"
+music_profile_id = "kanto.vermilion_city"
+room_key = "right_room"
+room_size = Vector2i(23, 19)
+walkable_rects = Array[Rect2i]([Rect2i(4, 4, 15, 12), Rect2i(3, 7, 1, 3)])
+blocked_rects = Array[Rect2i]([Rect2i(4, 15, 1, 1), Rect2i(18, 15, 1, 1)])
+
+[node name="Visual" parent="." instance=ExtResource("2_visual")]
+position = Vector2(736, 0)
+scale = Vector2(-1, 1)
+
+[node name="Collision" type="TileMapLayer" parent="."]
+visible = false
+
+[node name="Spawns" type="Node2D" parent="."]
+
+[node name="FromMainHall" type="Marker2D" parent="Spawns"]
+position = Vector2(144, 272)
+
+[node name="Exits" type="Node2D" parent="."]
+
+[node name="ToMainHall" type="Area2D" parent="Exits"]
+position = Vector2(112, 272)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/main_hall.tscn"
+target_spawn_name = "FromRightRoom"
+transition_id = "guild_base_right_room__to_main_hall"
+transition_facing_direction = "left"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToMainHall"]
+shape = SubResource("shape_0")
+
+[node name="Entities" type="Node2D" parent="."]
+y_sort_enabled = true
+
+[node name="Players" type="Node2D" parent="Entities"]
+
+[node name="Furniture" type="Node2D" parent="Entities"]
+
+[connection signal="body_entered" from="Exits/ToMainHall" to="Exits/ToMainHall" method="_on_body_entered"]

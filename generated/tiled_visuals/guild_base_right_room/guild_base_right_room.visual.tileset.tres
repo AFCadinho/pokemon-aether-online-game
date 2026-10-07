@@ -1,0 +1,44 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_right_room/assets/guild_base_right_room.visual.tileset.compact_source_1_0.texture.res" id="1_j6oen"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_right_room/assets/guild_base_right_room.visual.tileset.compact_source_1025_0.texture.res" id="2_hehhe"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ingqg"]
+texture = ExtResource("1_j6oen")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_58tjl"]
+texture = ExtResource("2_hehhe")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ingqg")
+sources/1 = SubResource("TileSetAtlasSource_58tjl")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Room 2 - Empty.tmx"
+metadata/tiled_compact_atlas_version = 1

@@ -372,6 +372,12 @@ position = Vector2(656, 912)
 [node name="FromHouse3" type="Marker2D" parent="Spawns" unique_id=392467432]
 position = Vector2(1168, 1200)
 
+[node name="FromGuildBase" type="Marker2D" parent="Spawns"]
+position = Vector2(1680, 368)
+
+[node name="FromGuildGarden" type="Marker2D" parent="Spawns"]
+position = Vector2(1168, 624)
+
 [node name="Exits" type="Node2D" parent="." unique_id=1021724467]
 
 [node name="ToRoute6" type="Area2D" parent="Exits" unique_id=1456232347]
@@ -1021,3 +1027,19 @@ position = Vector2(1168, 1136)
 [connection signal="body_entered" from="Exits/ToDocks" to="Exits/ToDocks" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToPokecenter" to="Exits/ToPokecenter" method="_on_body_entered"]
 [connection signal="body_entered" from="Exits/ToGym" to="Exits/ToGym" method="_on_body_entered"]
+
+[node name="ToGuildBase" type="Area2D" parent="Exits"]
+position = Vector2(1680, 336)
+script = ExtResource("3_exit")
+target_scene_path = "res://scenes/overworld/kanto/guild_base/main_hall.tscn"
+target_spawn_name = "FromTown"
+transition_id = "kanto_vermilion_city__to_guild_base"
+transition_facing_direction = "up"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToGuildBase"]
+shape = SubResource("shape_center_door")
+
+[node name="DoorTransitionHint" parent="Exits/ToGuildBase" instance=ExtResource("center_door_hint")]
+z_as_relative = false
+
+[connection signal="body_entered" from="Exits/ToGuildBase" to="Exits/ToGuildBase" method="_on_body_entered"]

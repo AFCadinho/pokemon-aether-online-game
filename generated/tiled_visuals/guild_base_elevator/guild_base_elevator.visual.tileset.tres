@@ -1,0 +1,109 @@
+[gd_resource type="TileSet" format=3]
+
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator/assets/guild_base_elevator.visual.tileset.compact_source_1_0.texture.res" id="1_0erir"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator/assets/guild_base_elevator.visual.tileset.compact_source_1025_0.texture.res" id="2_0jpin"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator/assets/guild_base_elevator.visual.tileset.compact_source_2049_0.texture.res" id="3_wawce"]
+[ext_resource type="Texture2D" path="res://generated/tiled_visuals/guild_base_elevator/assets/guild_base_elevator.visual.tileset.compact_source_3073_0.texture.res" id="4_5g682"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gd3ho"]
+texture = ExtResource("1_0erir")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u25jq"]
+texture = ExtResource("2_0jpin")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ayt0l"]
+texture = ExtResource("3_wawce")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qsdch"]
+texture = ExtResource("4_5g682")
+margins = Vector2i(2, 2)
+separation = Vector2i(4, 4)
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+
+[resource]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_gd3ho")
+sources/1 = SubResource("TileSetAtlasSource_u25jq")
+sources/2 = SubResource("TileSetAtlasSource_ayt0l")
+sources/3 = SubResource("TileSetAtlasSource_qsdch")
+metadata/tiled_source_path = "/home/adinho/Documents/tiled_pokeaether/kanto/artist/interior/guild_base/Guild Base Elevator Room.tmx"
+metadata/tiled_compact_atlas_version = 1
