@@ -169,3 +169,9 @@ StandardMaterial models; per-model metadata checks corrected it. None of those
 runs count as passes. A host GPU emulator also crashed; the successful software
 run does not claim that host GPU issue is fixed. The emulator was closed after
 collection. No production access, release certification or deployment.
+
+The follow-up [texture residency isolation](android-texture-residency.md) now
+reproduces the extra allocation with all 42 imported textures. Native-format
+controls use ~52 MiB versus ~271 MiB for emulated ETC2/EAC in the same AVD;
+all uploaded/read-back mip bytes are exact. These are isolated allocation sums,
+not a measured phone or full-battle memory saving.

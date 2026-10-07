@@ -24,7 +24,9 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--battle-budget', action='store_true', help='Full battle suite in the existing dedicated 3D debug app; never clear its cache')
+    suites = parser.add_mutually_exclusive_group()
+    suites.add_argument('--texture-residency', action='store_true', help='Controlled native/compressed allocation and byte readback in the separate arena app')
+    suites.add_argument('--battle-budget', action='store_true', help='Full battle suite in the existing dedicated 3D debug app; never clear its cache')
     parser.add_argument('--assets', type=Path, required=True)
     parser.add_argument('--apk', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
@@ -35,7 +37,9 @@ def main():
     parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
     global PACKAGE
-    prefix = 'android-battle-budget' if args.battle_budget else 'android-arena'
+    prefix = 'android-texture-residency' if args.texture_residency else ('android-battle-budget' if args.battle_budget else 'android-arena')
+    if args.texture_residency and (args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline'):
+        parser.error('Texture residency requires Mobile and baseline lighting')
     if args.battle_budget:
         if args.variant != 'android-etc2-art' or args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline':
             parser.error('Battle budget requires ETC2, Mobile and baseline lighting')
@@ -49,6 +53,9 @@ def main():
         raise ValueError('Expected owned arena export')
     report = json.loads((assets / 'report.json').read_text())
     pins = {k: {key: v[key] for key in ['bytes', 'sha256']} for k, v in report['candidates'].items()}
+    if args.texture_residency:
+        for name, pin in pins.items():
+            pin['textures'] = report['candidates'][name]['textures']
     (assets / 'fixture.json').write_text(json.dumps(pins))
     aapt = sorted((args.sdk / 'build-tools').glob('*/aapt2'))[-1]
     metadata = subprocess.check_output([str(aapt), 'dump', 'badging', str(apk)], text=True)
@@ -73,7 +80,7 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
     summaries = []
     try:
-        if args.battle_budget:
+        if args.battle_budget or args.texture_residency:
             capabilities = device('shell', 'cmd', 'gpu', 'vkjson', check=False)
             if capabilities.returncode == 0:
                 (output / 'vulkan-capabilities.json').write_text(capabilities.stdout)
@@ -83,7 +90,7 @@ def main():
             folder = output / variant
             folder.mkdir(exist_ok=True)
             device('shell', 'am', 'force-stop', PACKAGE)
-            captures = ['normal', 'shiny', 'sleep', 'effect', 'large', 'reused'] if args.battle_budget else ['capture']
+            captures = [] if args.texture_residency else (['normal', 'shiny', 'sleep', 'effect', 'large', 'reused'] if args.battle_budget else ['capture'])
             stale = [f'files/{prefix}-{name}' for name in ['details.json','results.json','phase']] + [f'files/{prefix}-{name}.png' for name in captures]
             device('shell', 'run-as', PACKAGE, 'rm', '-f', *stale)
             # Literal controlled names only; no user text in a remote shell.
@@ -101,10 +108,12 @@ def main():
                 if pid:
                     log = device('logcat', '--pid=' + pid, '-d', '-v', 'brief', 'godot:V', '*:S').stdout
                     (folder / 'native.log').write_text(log)
+                    if any('SCRIPT ERROR:' in line or '): ERROR:' in line for line in log.splitlines()):
+                        raise RuntimeError('Native diagnostic errors; see ' + str(folder / 'native.log'))
                 status = device('shell', 'dumpsys', 'meminfo', PACKAGE, check=False).stdout
                 pss = re.search(r'TOTAL PSS:\s*(\d+)', status)
                 rss = re.search(r'TOTAL RSS:\s*(\d+)', status)
-                phase = device('shell', 'run-as', PACKAGE, 'cat', f'files/{prefix}-phase', check=False).stdout.strip() if args.battle_budget else ''
+                phase = device('shell', 'run-as', PACKAGE, 'cat', f'files/{prefix}-phase', check=False).stdout.strip() if (args.battle_budget or args.texture_residency) else ''
                 memory.append({'phase': phase, 'time': time.time(), 'pss_kib': int(pss[1]) if pss else 0, 'rss_kib': int(rss[1]) if rss else 0})
                 (folder / 'memory.json').write_text(json.dumps(memory, indent=2))
                 time.sleep(2)
@@ -132,11 +141,20 @@ def main():
                             'battle-normal','battle-shiny','battle-sleep','battle-mega','battle-after-effect',
                             'battle-large','battle-released','battle-reused']
                 success = success and details.get('suite') == 'android-battle-budget' and [p['label'] for p in details.get('phases', [])] == expected
+            if args.texture_residency:
+                cases = details.get('cases', [])
+                success = success and details.get('suite') == 'android-texture-residency' and len(cases) == 42
+                if cases:
+                    success = success and all(row.get('rgba_control', {}).get('roundtrip_exact') and row.get('rgba_control', {}).get('released_delta_bytes') == 0 for row in cases)
+                    success = success and all(not row.get('supported') or (row.get('encoded', {}).get('roundtrip_exact') and row.get('encoded', {}).get('released_delta_bytes') == 0) for row in cases)
+                    success = success and all(row.get('supported') for row in cases)
             summary = {'variant': variant, 'success': success, 'peak_pss_kib': max((m['pss_kib'] for m in memory), default=0),
                        'peak_rss_kib': max((m['rss_kib'] for m in memory), default=0), 'expected_renderer': args.expect_renderer, 'native_errors': native_errors, 'missing_captures': missing_captures, 'details': details}
             summaries.append(summary)
             (output / 'summary.json').write_text(json.dumps(summaries, indent=2))
-            print(json.dumps(summary), flush=True)
+            brief = {key: value for key, value in summary.items() if key != "details"}
+            brief["cases"] = len(details.get("cases", details.get("phases", [])))
+            print(json.dumps(brief), flush=True)
             if not success:
                 raise RuntimeError('Diagnostic failed: ' + variant)
     finally:

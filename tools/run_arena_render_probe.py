@@ -12,11 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--texture-residency', action='store_true', help='Direct RD allocations and readbacks instead of an arena render')
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--renderer', choices=['forward_plus','mobile','gl_compatibility'], required=True)
     parser.add_argument('--lighting-mode', choices=['baseline','hdr','sun-only','unshaded-grass','diffuse-grass','ambient-only','no-shadows'], default='baseline')
     args = parser.parse_args()
+    if args.texture_residency and args.renderer == "gl_compatibility":
+        parser.error("Texture allocation probe requires Vulkan (Mobile or Forward+)")
     if ROOT.parent.name.startswith('slot-') and os.environ.get('POKEAETHER_SLOT') != ROOT.parent.name:
         parser.error('Run through slot-env')
     manifest, output = args.manifest.resolve(), args.output.resolve()
@@ -35,9 +38,10 @@ def main():
     try:
         project.write_text(config)
         with (output/'render.log').open('w') as log:
+            test = 'res://tests/android_texture_residency_check.gd' if args.texture_residency else 'res://tests/android_arena_asset_check.gd'
+            probe_args = [str(manifest.parent/'forest.pck'), str(manifest.parent/'texture-list.json'), str(output/'details.json')] if args.texture_residency else [str(manifest),str(output/'details.json'),args.lighting_mode]
             child = subprocess.Popen(['godot','--path',str(ROOT),'--rendering-method',args.renderer,
-                                      '--resolution','960x540','--script','res://tests/android_arena_asset_check.gd','--',
-                                      str(manifest),str(output/'details.json'),args.lighting_mode],stdout=log,stderr=subprocess.STDOUT)
+                                      '--resolution','960x540','--script',test,'--',*probe_args],stdout=log,stderr=subprocess.STDOUT)
             try:
                 code = child.wait(timeout=90)
                 if code:
