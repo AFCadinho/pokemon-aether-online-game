@@ -1,0 +1,313 @@
+{
+  "schema": 1,
+  "prototype_only": true,
+  "date": "2026-10-07",
+  "device": {
+    "ro.product.model": "SM-T500",
+    "ro.build.version.release": "12",
+    "ro.build.version.sdk": "31",
+    "ro.product.cpu.abilist": "arm64-v8a,armeabi-v7a,armeabi",
+    "ro.board.platform": "bengal",
+    "memory": [
+      "MemTotal:        2768812 kB",
+      "MemAvailable:     726196 kB"
+    ],
+    "screen_size": "Physical size: 1200x2000"
+  },
+  "adapter": "Adreno (TM) 610",
+  "vulkan_version": "1.1.128",
+  "vendor_driver_build_date": "2021-10-08",
+  "production_changed": false,
+  "model_data_quality_reduced": false,
+  "model_pair_count": 16,
+  "model_cases": 32,
+  "native_semantic_graphs_equal": true,
+  "all_texture_weak_refs_released": true,
+  "model_only": {
+    "summary": {
+      "success": true,
+      "smoke": false,
+      "msaa": "4x",
+      "grass": true,
+      "models_only": true,
+      "model": "SM-T500",
+      "android": "12",
+      "adapter": "Adreno (TM) 610",
+      "phases": 0,
+      "observed_seconds": 0,
+      "peak_pss_kib": 547093,
+      "maximum_battery_c": 32.5,
+      "maximum_thermal_status": 0,
+      "apk_sha256": "b6656e60415957a7cb0e588c5fbb52271412ecc56cb2c647f33a288f0e077dc4",
+      "fresh_run_id": "bdf52a5c34484e33be6ac3e7eb0d6db3"
+    },
+    "cache_hits": 12,
+    "streamed_packs": 20,
+    "streamed_bytes": 210836632
+  },
+  "complete_arena_sustained_qualified": false,
+  "complete_arena_observed_phases": 0,
+  "complete_arena_failure": "Adreno submission deadlock / Vulkan device lost during forest pool rendering",
+  "msaa_disabled_isolation": "Vulkan device lost at forest-pool; not a performance or quality pass",
+  "grass_hidden_isolation": {
+    "summary": {
+      "success": true,
+      "smoke": true,
+      "msaa": "4x",
+      "grass": false,
+      "models_only": false,
+      "model": "SM-T500",
+      "android": "12",
+      "adapter": "Adreno (TM) 610",
+      "phases": 13,
+      "observed_seconds": 143.806156,
+      "peak_pss_kib": 660964,
+      "maximum_battery_c": 33.0,
+      "maximum_thermal_status": 0,
+      "apk_sha256": "b6656e60415957a7cb0e588c5fbb52271412ecc56cb2c647f33a288f0e077dc4",
+      "fresh_run_id": "a2b8446fcd6647c1aea74ac7ce2cca7a"
+    },
+    "fps_min": 1.79031386489675,
+    "fps_max": 1.84417408420984,
+    "frame_p95_ms_min": 548.207,
+    "frame_p95_ms_max": 731.673,
+    "interactive_performance_acceptable": false,
+    "complete_arena_quality_approved": false,
+    "model_cache_hits": 6
+  },
+  "evidence": {
+    ".tmp/tab-a7-benchmark/models-only-v2/summary.json": "c0a166441de9b253925fa6cd1eea5f681acf95b11f34a28b308b6b03479b766e",
+    ".tmp/tab-a7-benchmark/models-only-v2/results.json": "6f92639888c63818abb67d56eaedd2ad3e796432c820f5e6d2908820659b9a99",
+    ".tmp/tab-a7-benchmark/models-only-v2/android-model-pairs-details.json": "7808b725a1430ce762651338a1a28df1ce46fdccfe8a59a0ff7de8ebf5be1654",
+    ".tmp/tab-a7-benchmark/models-only-v2/android-tab-benchmark-details.json": "1c214d80db6e57000bd85e69a90579faa8f19142514873bf07957278c5dbe12c",
+    ".tmp/tab-a7-benchmark/models-only-v2/memory.json": "6364244d4fa4689e942841c0cf58824781bc1b0d2d0a153dfe4a0a5f31911a63",
+    ".tmp/tab-a7-benchmark/models-only-v2/native.log": "0d052b9457ab27133e49dc10ceccd1e42175969c4c9b590be7891ad3155156f4",
+    ".tmp/tab-a7-benchmark/models-only-v2/fixture.json": "08a626c665cd5e5a4c84c529f35990e3f1f616c9abc899ed127cfeb7ba2f3655",
+    ".tmp/tab-a7-benchmark/models-only-v2/device.json": "fa857fdc14723f538ddbc798c5e68b5cd959bc6b470fdcdba457c4d03ed52426",
+    ".tmp/tab-a7-benchmark/smoke-v4/android-model-pairs-details.json": "e828c4218881ba4b95c83aa43abe96ee8f484596f4d7fce3d052104df450d049",
+    ".tmp/tab-a7-benchmark/smoke-v4/native.log": "bce340c8a72a58e6a7fe9ba2c68baec0760e780587463d36cb00a2d45a7d70bc",
+    ".tmp/tab-a7-benchmark/smoke-v4/memory.json": "3301c7357f4a6b422dde53441bbba1e75ecc8972aa6f6215c0a7df5a9bb1c36a",
+    ".tmp/tab-a7-benchmark/smoke-no-msaa-v3/android-model-pairs-details.json": "4ec878375c4b62d5420a67e5c0363afe54da175177266f2296549ce40d8b83ae",
+    ".tmp/tab-a7-benchmark/smoke-no-msaa-v3/android-tab-benchmark-details.json": "4ec219ccc74305b595fb78767cffd554394f47c45cd15258e6ab89119cfdf5ae",
+    ".tmp/tab-a7-benchmark/smoke-no-msaa-v3/native.log": "001d9cdd5b18f1d00cb8ea7999a98186772cb91ea82483b36df0541a4a09597c",
+    ".tmp/tab-a7-benchmark/smoke-no-msaa-v3/memory.json": "1949832808d4c6f1f2ea7529623e1cdfaa9a4140f19448b134b78d1e75f7b655",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/summary.json": "42c75ff2ac73e12d119590d581091c15d747c563810f3871c2faa1f6ee3da88b",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/results.json": "6f92639888c63818abb67d56eaedd2ad3e796432c820f5e6d2908820659b9a99",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/android-model-pairs-details.json": "744a6f2c1e9300d46a68ee735800fdbce8c58df7a8e4d3825cc1d36ca4f9c39f",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/android-tab-benchmark-details.json": "b3dccae7b33a2da18b7e5c3087fd1595ee0a227f011210206b794fa6a45dc4a3",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/native.log": "62c54b2745ebf4a101ce7adb3ce7f4d181c910b1d121e3c9e47bf60182815716",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/memory.json": "134cc2c1707e93a9c628decd804ed5e5218f94e84ef546c787eaeea3c15f08c8",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/fixture.json": "a9d7449c2c3900b99ddf95f57d4f896c091f0fd4088c8367462cfbdc3e1ea721",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-0-garchomp-baseline-normal.png": "6a5cbf27a7459143dafa231a3455e5588e230ebb11658d8c23b1d2c24da6b4d5",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-0-garchomp-shared-normal.png": "25737339de608a00203f45b6a686a018678817c4daa912195ed5382b92d066e0",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-1-charizard-baseline-normal.png": "2ddc6103b50047ed4fc15e34c9a43b02f17e12f788ed7e558790944b94a79b89",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-1-charizard-shared-normal.png": "c4e3386efb4a6a0d312f19f2b2b747ddfe3dcaeb28d59a84cc429aaa06611fbc",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-2-dragonite-mega-baseline-normal.png": "086b380abde7c9ac4c333fd7089d1faa68ba6aa852685d29249417075618dc23",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-2-dragonite-mega-baseline-shiny.png": "5edf5e042e71bfedd7b936599b7b62b18128921a5621739a25a6630150f221ac",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-2-dragonite-mega-shared-normal.png": "2631e61777fa04ee521d0e800ebfcb00268e72081009e2a497902a2171fea486",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-2-dragonite-mega-shared-shiny.png": "39831d947d2e3acf54e32842b7489e4889bc35215ea1c078afc0658bf395e39a",
+    ".tmp/tab-a7-benchmark/smoke-no-grass-v1/tab-mega-prepared-shared.png": "c4b8ad3921999df9f5d19679d54593468a020bd81502fc1fc9ce63826e8db0f5",
+    ".tmp/tab-a7-benchmark/control-v1/android-model-pairs-details.json": "d69f29aad0ee634b5ffc0efbb2fd8c9a1b1f3d9f1fdcbd00ad6a5e474e33e0d4",
+    ".tmp/tab-a7-benchmark/control-v1/android-tab-benchmark-details.json": "2c19aff2954a1bfbfd6eac4042e6f6d8563949b4e2100a9fd37b068f07e949c8",
+    ".tmp/tab-a7-benchmark/control-v1/native.log": "2d76f20189e051d4924ec1b918ca49da3016737138ec4b750e7b009df065daef",
+    ".tmp/tab-a7-benchmark/control-v1/memory.json": "fde65fb3f3cab5ffb50d9ed6ed437818dc8aee02719307fa9b922b85e8352f68",
+    ".tmp/tab-a7-benchmark/control-v1/fixture.json": "11a3d03d3a295f8ec12fb9c305678501bab823d30708aa4af2d4196336b1dfbf"
+  },
+  "pairs": [
+    {
+      "species": "pikachu",
+      "remaining_texture_refs": 0,
+      "shared_objects": 10,
+      "texture_counter_baseline_bytes": 147616384,
+      "texture_counter_shared_bytes": 118125184,
+      "texture_counter_saved_bytes": 29491200,
+      "native_semantics": {
+        "pikachu": "63ce0ffb945aa04dceeba5ab70380904919e01254a1c702dcab2aa18221f2c0c",
+        "pikachu@shiny": "9a441a8e2ba1f2c94195a2ab0105e0039c469b70cab2828151fad0907eb1460c"
+      }
+    },
+    {
+      "species": "garchomp",
+      "remaining_texture_refs": 0,
+      "shared_objects": 12,
+      "texture_counter_baseline_bytes": 161559168,
+      "texture_counter_shared_bytes": 140661376,
+      "texture_counter_saved_bytes": 20897792,
+      "native_semantics": {
+        "garchomp": "e5439329925648f95cfef7770fa3b0eb7f5318f44871fe276d28a9523de5bc78",
+        "garchomp@shiny": "f77e23b2b9622fab8b49213bbc0c53d36c5b0fed6b60bc704af7ba3ab885344e"
+      }
+    },
+    {
+      "species": "azumarill",
+      "remaining_texture_refs": 0,
+      "shared_objects": 12,
+      "texture_counter_baseline_bytes": 161559168,
+      "texture_counter_shared_bytes": 140661376,
+      "texture_counter_saved_bytes": 20897792,
+      "native_semantics": {
+        "azumarill": "bb6a32abd7876d6c8510bf7161fc6350ac6eb4c0dba9c5b5ae4a4b97348f8293",
+        "azumarill@shiny": "c406a33c3e470c8656dfe7971500d2cdf665542b25589492d91a05248edd9198"
+      }
+    },
+    {
+      "species": "charizard",
+      "remaining_texture_refs": 0,
+      "shared_objects": 18,
+      "texture_counter_baseline_bytes": 165614208,
+      "texture_counter_shared_bytes": 142688896,
+      "texture_counter_saved_bytes": 22925312,
+      "native_semantics": {
+        "charizard": "31130bef0245f6deb4e07ad41222d3cdf058065da050738d97679bc487824dae",
+        "charizard@shiny": "ae77664845c501aaba83dcddd771ff0369c6eb5d964453ce0172adcc81dcecf6"
+      }
+    },
+    {
+      "species": "arcanine",
+      "remaining_texture_refs": 0,
+      "shared_objects": 10,
+      "texture_counter_baseline_bytes": 112865920,
+      "texture_counter_shared_bytes": 94425728,
+      "texture_counter_saved_bytes": 18440192,
+      "native_semantics": {
+        "arcanine": "92a1b14025a7e92bdbec10504910052abff1f3ebc62e999712146cb00d834106",
+        "arcanine@shiny": "ecc6a5667b5ca885a9cd3ff6e0c4e0b3e1e487864ce9645b36c901cd1bfb4cc1"
+      }
+    },
+    {
+      "species": "magnemite",
+      "remaining_texture_refs": 0,
+      "shared_objects": 7,
+      "texture_counter_baseline_bytes": 155087488,
+      "texture_counter_shared_bytes": 122679936,
+      "texture_counter_saved_bytes": 32407552,
+      "native_semantics": {
+        "magnemite": "57024a98f86846f602184ee68246041dc9697ac591359911da11c1df4c49c7bd",
+        "magnemite@shiny": "678b280cef0c60d7bc469cb199e56202b31025ebd60353bf7d19b9326ca95f6f"
+      }
+    },
+    {
+      "species": "palkia",
+      "remaining_texture_refs": 0,
+      "shared_objects": 16,
+      "texture_counter_baseline_bytes": 257503872,
+      "texture_counter_shared_bytes": 174346880,
+      "texture_counter_saved_bytes": 83156992,
+      "native_semantics": {
+        "palkia": "80855d9d275422feb53c8385e1d3245cd3be49f46205800ce12ae37fdf155265",
+        "palkia@shiny": "a43898ceea74d9e0e77684b4c85fa77fc5c6d25831c73e049ad035276ef169c0"
+      }
+    },
+    {
+      "species": "dondozo",
+      "remaining_texture_refs": 0,
+      "shared_objects": 12,
+      "texture_counter_baseline_bytes": 161559168,
+      "texture_counter_shared_bytes": 140661376,
+      "texture_counter_saved_bytes": 20897792,
+      "native_semantics": {
+        "dondozo": "79687ee7f2aba7fe891f759ad4fe7250b92728fdfddd892da48a5a97e79f9f00",
+        "dondozo@shiny": "8a0c041cd612651f5ca34b2323493a6a673f0280d03d95042ad19c735fa5345f"
+      }
+    },
+    {
+      "species": "dragonite-mega",
+      "remaining_texture_refs": 0,
+      "shared_objects": 13,
+      "texture_counter_baseline_bytes": 135844480,
+      "texture_counter_shared_bytes": 110264960,
+      "texture_counter_saved_bytes": 25579520,
+      "native_semantics": {
+        "dragonite-mega": "fb80b89d2e730f1cb0c6a7aeb791048938ad03f1d149c74b3a8e2d0d49e03420",
+        "dragonite-mega@shiny": "e97a0b374712720c54310f4baa3261102167bcdbfdbdf024f71e3bf02012e606"
+      }
+    },
+    {
+      "species": "darmanitan-standard",
+      "remaining_texture_refs": 0,
+      "shared_objects": 1,
+      "texture_counter_baseline_bytes": 68129408,
+      "texture_counter_shared_bytes": 67072640,
+      "texture_counter_saved_bytes": 1056768,
+      "native_semantics": {
+        "darmanitan-standard": "3414c699e5a42083036689c05245c05999c719843338e43618e4dad46f87d4eb",
+        "darmanitan-standard@shiny": "8994b3923e3aab2eabae4e3b2fe32fece44dd9eb1788f1483bd76f9ff3cfb1c8"
+      }
+    },
+    {
+      "species": "diancie-mega",
+      "remaining_texture_refs": 0,
+      "shared_objects": 8,
+      "texture_counter_baseline_bytes": 84955776,
+      "texture_counter_shared_bytes": 73269888,
+      "texture_counter_saved_bytes": 11685888,
+      "native_semantics": {
+        "diancie-mega": "0faa13b7c10326a9dcaaba00496f675e138c23a9d9d0d530bc0c96666b57cf64",
+        "diancie-mega@shiny": "38c84e0dc13412ca29ac04304743b0358eddd41f758eb9e22bcee43883383824"
+      }
+    },
+    {
+      "species": "greninja-mega",
+      "remaining_texture_refs": 0,
+      "shared_objects": 4,
+      "texture_counter_baseline_bytes": 77755520,
+      "texture_counter_shared_bytes": 71361664,
+      "texture_counter_saved_bytes": 6393856,
+      "native_semantics": {
+        "greninja-mega": "be5bc7f00ea768beb67421265bc31353de4d60c3fb6cd29ad03914e4b93530ba",
+        "greninja-mega@shiny": "6d5ea235cdc0386094f08a3f3bac72c32a60d0e6e00da4f8c2d3bdb7a56409ce"
+      }
+    },
+    {
+      "species": "zygarde-mega",
+      "remaining_texture_refs": 0,
+      "shared_objects": 9,
+      "texture_counter_baseline_bytes": 77959808,
+      "texture_counter_shared_bytes": 69165696,
+      "texture_counter_saved_bytes": 8794112,
+      "native_semantics": {
+        "zygarde-mega": "29e24381ec3bd273b6e43576216178218db349f3b210ea87fa29862f0cddc22f",
+        "zygarde-mega@shiny": "59bf38bfd39a06850a1c871dd9255ad7320b05dcc832e3d4550379fe0e7557da"
+      }
+    },
+    {
+      "species": "golisopod-mega",
+      "remaining_texture_refs": 0,
+      "shared_objects": 3,
+      "texture_counter_baseline_bytes": 109859456,
+      "texture_counter_shared_bytes": 101368448,
+      "texture_counter_saved_bytes": 8491008,
+      "native_semantics": {
+        "golisopod-mega": "c258ec65fd3f9c17bfe4d9194da1805d94892ac2b1a8c138a5b0b245ff5e17b2",
+        "golisopod-mega@shiny": "da4ad3b611fbf6d3a71dcd1de083e2d520eb56e784686e31a48c5683d8041ab4"
+      }
+    },
+    {
+      "species": "articuno-galar",
+      "remaining_texture_refs": 0,
+      "shared_objects": 9,
+      "texture_counter_baseline_bytes": 106107520,
+      "texture_counter_shared_bytes": 95257216,
+      "texture_counter_saved_bytes": 10850304,
+      "native_semantics": {
+        "articuno-galar": "c16c6b6fc47ff58d949130e7992d50a31b1b4bf070b2d0d468cf57445cfceadc",
+        "articuno-galar@shiny": "cd2457de574a95e4a6c35653cf7b2236aa0ae786c6e8e3bc98699889ba930788"
+      }
+    },
+    {
+      "species": "moltres-galar",
+      "remaining_texture_refs": 0,
+      "shared_objects": 15,
+      "texture_counter_baseline_bytes": 104911488,
+      "texture_counter_shared_bytes": 90083968,
+      "texture_counter_saved_bytes": 14827520,
+      "native_semantics": {
+        "moltres-galar": "413589c31cb31189df26e0444e3a682b6deab6617f55de15e441e74232644cb8",
+        "moltres-galar@shiny": "32e672a4cd1d33a792c8070efa4a33f883504d0f1494c26cd38a738dbfd8d4b4"
+      }
+    }
+  ],
+  "original_quality_reproduced_with_same_apk": true,
+  "control_apk_sha256": "b6656e60415957a7cb0e588c5fbb52271412ecc56cb2c647f33a288f0e077dc4",
+  "complete_arena_failure_phase": "forest-pool"
+}
