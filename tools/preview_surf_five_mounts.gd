@@ -13,13 +13,17 @@ func _run() -> void:
 	var output := "user://surf_five_previews"
 	var mount_ids: Array[String] = ["wailmer", "drednaw", "mantine", "basculegion", "wailord"]
 	var adinho_outfit := "--adinho" in OS.get_cmdline_user_args()
+	var idle_only := "--idle-only" in OS.get_cmdline_user_args()
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--mount="):
 			mount_ids = [arg.trim_prefix("--mount=")]
+		if arg.begins_with("--mounts="):
+			mount_ids.assign(arg.trim_prefix("--mounts=").split(",", false))
 		if arg.begins_with("--output="):
 			output = arg.trim_prefix("--output=")
 	DirAccess.make_dir_recursive_absolute(output)
-	root.size = Vector2i(1280, 720)
+	# Tall submerged fins (Kyogre) must fit without crossing the next row's label.
+	root.size = Vector2i(1280, 840)
 	root.content_scale_size = root.size
 	var viewport := SubViewport.new()
 	viewport.size = root.size
@@ -49,9 +53,9 @@ func _run() -> void:
 	for gi in range(2):
 		var gender: String = ["male", "female"][gi]
 		for row in range(4):
-			var position := Vector2(160+row*320, 230+gi*360)
+			var position := Vector2(160+row*320, 230+gi*420)
 			var label := Label.new()
-			label.position = Vector2(18+row*320, 14+gi*360)
+			label.position = Vector2(18+row*320, 14+gi*420)
 			viewport.add_child(label)
 			var tile := ReferenceRect.new()
 			tile.position = position - Vector2(32, 32)
@@ -90,7 +94,7 @@ func _run() -> void:
 			previews.append({"actor": actor, "label": label, "appearance": appearance, "gender": gender, "direction": DIRS[row], "position": position})
 	for base_id: String in mount_ids:
 		var id := base_id + ("_shiny" if "--shiny" in OS.get_cmdline_user_args() else "")
-		for activity: String in ["ride", "surf-fish"]:
+		for activity: String in (["ride"] if idle_only else ["ride", "surf-fish"]):
 			for item: Dictionary in previews:
 				var actor: Variant = item.actor
 				actor.configure(id, item.appearance, item.direction, false)
@@ -107,7 +111,7 @@ func _run() -> void:
 				actor.scale = Vector2(2, 2)
 				actor.look_node.position = Vector2(0, -16)
 				item.label.text = id + " / " + item.gender + " / " + item.direction + " / " + activity
-			for moving: bool in ([false, true] if activity == "ride" else [false]):
+			for moving: bool in ([false, true] if activity == "ride" and not idle_only else [false]):
 				for item: Dictionary in previews:
 					item.actor._sync_mount_animation(moving, item.actor.last_direction)
 					item.actor.mount_sprite.pause()

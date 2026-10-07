@@ -17,7 +17,9 @@ Catalog fields: `idleFrameCount` (1–4; default 1), `idleAnimationSpeed`, relat
 `idleForegroundSheet`, `idleRiderMaskSheet` atlases. The mount owns the animation
 clock. Its rider masks, clothing and foreground follow the same frame locally
 and remotely. Nameplates reserve the full envelope and do not bob. Collision,
-Look and interaction origins never move. Other mounts retain their old idles.
+Look and interaction origins never move. The remaining Surf mounts now use
+the related cycles described in [surf_idle.md](surf_idle.md). Other land and
+flying mounts retain their existing idles.
 
 Fishing keeps its existing static mount pose and separate cast/rod timing.
 The Gift Store's Animation Off control still freezes the preview at frame zero.
