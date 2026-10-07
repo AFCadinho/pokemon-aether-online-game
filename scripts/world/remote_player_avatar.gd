@@ -6,6 +6,7 @@ const ThorAccessoryEffect := preload("res://scripts/world/thor_accessory_effect.
 const MountHoverVisual := preload("res://scripts/world/mount_hover_visual.gd")
 const MountVisualDepth := preload("res://scripts/world/mount_visual_depth.gd")
 const MountWaterContact := preload("res://scripts/world/mount_water_contact.gd")
+const MountTurboEffect := preload("res://scripts/world/mount_turbo_effect.gd")
 
 signal interaction_requested(player_state: Dictionary, world_position: Vector2)
 signal battle_spectate_requested(target_user_id: int)
@@ -187,6 +188,7 @@ var look_node: Node2D
 var mount_sprite: AnimatedSprite2D
 var mount_foreground_sprite: AnimatedSprite2D
 var mount_water_contact: MountWaterContact
+var mount_turbo_effect: MountTurboEffect
 var rider_node: Node2D
 var mount_hover_visual: MountHoverVisual
 var mount_hover_id := ""
@@ -821,6 +823,7 @@ func _create_visual() -> void:
 
 func _sync_mount_visual() -> void:
 	_sync_mount_water_contact()
+	_sync_mount_turbo_effect()
 	_update_mount_hover(0.0)
 	if mount_sprite == null:
 		return
@@ -936,6 +939,18 @@ func _sync_mounted_rider_frame() -> void:
 		sprite.pause()
 
 
+func _sync_mount_turbo_effect() -> void:
+	if mount_foreground_sprite == null or mount_sprite == null:
+		return
+	var definition := MountService.get_mount_definition(current_mount_id)
+	if mount_turbo_effect == null and str(definition.get("movementEffect", "")) == "zekrom_turbo":
+		mount_turbo_effect = MountTurboEffect.new()
+		mount_turbo_effect.name = "MountTurboEffect"
+		mount_foreground_sprite.add_child(mount_turbo_effect)
+	if mount_turbo_effect != null:
+		mount_turbo_effect.configure(definition, mount_sprite)
+
+
 func _sync_mount_water_contact() -> void:
 	if mount_foreground_sprite == null:
 		return
@@ -959,6 +974,8 @@ func _sync_mount_foreground_frame() -> void:
 	mount_foreground_sprite.pause()
 	if mount_water_contact != null:
 		mount_water_contact.sync_frame(mount_sprite)
+	if mount_turbo_effect != null:
+		mount_turbo_effect.sync_frame(mount_sprite)
 
 
 func _sync_mount_rider_delta() -> void:
