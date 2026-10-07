@@ -13623,12 +13623,7 @@ func _setup_status_docks() -> void:
 		},
 	])
 	set_personal_buffs([])
-	_load_global_exp_boost.call_deferred()
-	_load_global_skill_exp_boost.call_deferred()
-	_load_global_ev_boost.call_deferred()
-	_load_global_shiny_boost.call_deferred()
-	_load_global_rare_encounter_boost.call_deferred()
-	_load_global_heal.call_deferred()
+	_load_startup_global_buffs.call_deferred()
 
 func set_global_buffs(buffs: Array) -> void:
 	global_buffs_data = buffs.duplicate(true)
@@ -14392,6 +14387,37 @@ func _on_global_buff_contribute_pressed() -> void:
 	_render_global_buff_details()
 
 
+var global_buff_state_revisions: Dictionary = {}
+
+
+func _load_startup_global_buffs() -> void:
+	var session := AuthService.session_token
+	var user_id := str(AuthService.current_user.get("id", ""))
+	var revisions := global_buff_state_revisions.duplicate()
+	var response: Dictionary = await PlayerWalletService.load_global_buffs()
+	if not bool(response.get("success", false)) or not AuthService.is_authenticated() or AuthService.session_token != session or str(AuthService.current_user.get("id", "")) != user_id:
+		return
+	_apply_startup_global_buffs(response.get("body", {}) as Dictionary, revisions)
+
+
+func _apply_startup_global_buffs(body: Dictionary, revisions: Dictionary) -> void:
+	for value: Variant in body.get("boosts", []):
+		if not value is Dictionary:
+			continue
+		var boost_id := str(value.get("id", ""))
+		if not PlayerWalletService.GLOBAL_BOOST_ENDPOINTS.has(boost_id):
+			continue
+		if int(global_buff_state_revisions.get(boost_id, 0)) == int(revisions.get(boost_id, 0)):
+			_apply_global_boost_state(value, boost_id)
+	var heal: Variant = body.get("heal", {})
+	if heal is Dictionary and not heal.is_empty() and int(global_buff_state_revisions.get("global_heal", 0)) == int(revisions.get("global_heal", 0)):
+		_apply_global_heal_state(heal)
+
+
+func _mark_global_buff_state_changed(boost_id: String) -> void:
+	global_buff_state_revisions[boost_id] = int(global_buff_state_revisions.get(boost_id, 0)) + 1
+
+
 func _load_global_exp_boost(show_activation_notification: bool = false) -> void:
 	var response: Dictionary = await PlayerWalletService.load_global_exp_boost()
 	if bool(response.get("success", false)):
@@ -14443,6 +14469,7 @@ func _load_global_rare_encounter_boost(show_activation_notification: bool = fals
 
 
 func _load_global_boost_state(boost_id: String, show_activation_notification: bool = false) -> void:
+	_mark_global_buff_state_changed(boost_id)
 	match boost_id:
 		"global_exp":
 			await _load_global_exp_boost(show_activation_notification)
@@ -14477,6 +14504,7 @@ func _apply_global_heal_state(state: Dictionary, show_activation_notification: b
 
 
 func _apply_global_heal_cooldown_state(state: Dictionary) -> void:
+	_mark_global_buff_state_changed("global_heal")
 	if not state.has("cooldownUntil") and not state.has("available"):
 		return
 	var cooldown_until := str(state.get("cooldownUntil", "")).strip_edges()
@@ -15105,6 +15133,7 @@ func _apply_global_boost_state(
 	boost_id: String,
 	show_activation_notification: bool = false
 ) -> void:
+	_mark_global_buff_state_changed(boost_id)
 	for index: int in range(global_buffs_data.size()):
 		var buff := global_buffs_data[index] as Dictionary
 		if str(buff.get("id", "")) != boost_id:
