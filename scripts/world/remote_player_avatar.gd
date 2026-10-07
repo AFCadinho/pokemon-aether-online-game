@@ -861,11 +861,14 @@ func _sync_mount_animation(moving: bool, direction: Vector2) -> void:
 	if not mount_sprite.sprite_frames.has_animation(animation_name):
 		return
 	var animation_changed := mount_sprite.animation != animation_name
-	if animation_changed or not moving and mount_sprite.is_playing():
+	if animation_changed:
 		mount_sprite.animation = animation_name
 		mount_sprite.frame = 0
 		mount_sprite.frame_progress = 0.0
-	if moving:
+	# Fishing keeps its independently timed cast/rod pose; riding can idle.
+	var idle_cycle := mount_sprite.sprite_frames.get_frame_count(animation_name) > 1 \
+		and CharacterAppearanceService.normalize_movement_style(current_activity_style) != CharacterAppearanceService.BODY_MOVEMENT_SURF_FISH
+	if moving or idle_cycle:
 		mount_sprite.play(animation_name)
 	else:
 		mount_sprite.animation = animation_name
@@ -969,7 +972,8 @@ func _sync_mount_rider_delta() -> void:
 	var rider_offset := MountService.get_rider_frame_offset(
 		current_mount_id,
 		direction,
-		mount_sprite.frame
+		mount_sprite.frame,
+		str(mount_sprite.animation).begins_with("idle_")
 	)
 	rider_node.position = base_rider_position + Vector2(rider_offset) \
 		+ _get_surf_fish_rider_offset(direction)

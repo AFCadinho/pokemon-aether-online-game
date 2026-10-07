@@ -41,6 +41,9 @@ func _run() -> void:
 	water.scale = Vector2(2, 2)
 	water.z_index = -9
 	viewport.add_child(water)
+	if "--land-bg" in OS.get_cmdline_user_args():
+		water.hide()
+		background.color = Color("73985a")
 	var script: Script = load("res://scripts/ui/mount_rider_preview.gd")
 	var previews: Array = []
 	for gi in range(2):
@@ -108,7 +111,8 @@ func _run() -> void:
 				for item: Dictionary in previews:
 					item.actor._sync_mount_animation(moving, item.actor.last_direction)
 					item.actor.mount_sprite.pause()
-				for phase in range(4 if moving else 1):
+				var phase_count := 4 if moving else int(previews[0].actor.mount_sprite.sprite_frames.get_frame_count(previews[0].actor.mount_sprite.animation)) if "--idle-cycle" in OS.get_cmdline_user_args() and activity == "ride" else 1
+				for phase in range(phase_count):
 					for item: Dictionary in previews:
 						item.actor.mount_sprite.frame = phase
 						item.actor._on_mount_frame_changed()

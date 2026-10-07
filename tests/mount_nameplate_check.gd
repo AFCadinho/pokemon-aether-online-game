@@ -42,7 +42,7 @@ func _run() -> void:
 						mount.pause()
 						var plate := actor.get_node("Nameplate") as Control
 						var stable_y := plate.position.y
-						for frame in range(4 if moving else 1):
+						for frame in range(mount.sprite_frames.get_frame_count(mount.animation)):
 							mount.frame = frame
 							actor.call("_on_mount_frame_changed")
 							actor.call("_update_mount_hover", 0.3)
