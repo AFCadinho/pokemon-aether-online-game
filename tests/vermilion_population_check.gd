@@ -21,8 +21,9 @@ func _run() -> void:
 			occupied[cell] = actor.name
 			_check_clear(city, collision, cell, str(actor.name))
 			if group == npcs:
-				var rear := cell - Vector2i(actor.facing_direction)
-				_check_clear(city, collision, rear, "%s pickpocket approach" % actor.name)
+				if actor.pickpocket_enabled:
+					var rear := cell - Vector2i(actor.facing_direction)
+					_check_clear(city, collision, rear, "%s pickpocket approach" % actor.name)
 				_check(actor.npc_sprite_frames != null, "%s has character sprites" % actor.name)
 				_check(actor.npc_id.begins_with("kanto_vermilion_city_"), "%s uses city metadata" % actor.name)
 			else:
@@ -32,6 +33,8 @@ func _run() -> void:
 					for offset in [-1, 1]:
 						_check_clear(city, collision, cell + axis * offset, "%s patrol" % actor.name)
 	for npc: Node2D in npcs.get_children():
+		if not npc.pickpocket_enabled:
+			continue
 		var rear := collision.local_to_map(npc.position) - Vector2i(npc.facing_direction)
 		_check(not occupied.has(rear), "%s rear approach is unoccupied" % npc.name)
 	for exit_node: Node2D in city.get_node("Exits").get_children():
