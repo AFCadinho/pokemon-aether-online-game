@@ -59,11 +59,11 @@ func _run() -> void:
 	_check(guard.visible and guard.guard_present, "closed passage retains its visible registrar even with allowed transition metadata")
 	_check(not guard.is_gate_open(), "transition metadata cannot open the unfinished registration passage")
 
-	# The explicit closure leaves the existing gate-opening behavior reusable.
+	# A guild passage always resolves fresh access before letting a player cross.
 	guard.passage_closed = false
-	_check(guard.is_gate_open(), "removing the explicit closure restores ordinary gate access")
-	_check(city.get_closed_route_gate_npc(Vector2(1200, 592)) == null, "open passage releases its side tiles")
-	_check(_garden_reachable(collision, guard), "garden can be reached when the passage opens")
+	_check(not guard.is_gate_open(), "removing the placeholder flag cannot bypass guild authorization")
+	_check(city.get_closed_route_gate_npc(Vector2(1200, 592)) == guard, "passage routes entry through the registrar's access check")
+	_check(not _garden_reachable(collision, guard), "unauthorized walking cannot enter the garden")
 	city.free()
 	metadata_service.clear_cache()
 	print("VERMILION_GUILD_GARDEN_GATE ", "FAIL" if failed else "PASS")

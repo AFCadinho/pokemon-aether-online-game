@@ -5035,9 +5035,9 @@ func _guild_log_action_filter(category: String) -> OptionButton:
 	select.set_item_metadata(0, "")
 	var actions: Array[String] = []
 	if category == "guild":
-		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed"])
+		actions.assign(["joined", "left", "kicked", "rank_changed", "bank_permission_changed", "base_purchased"])
 	elif category == "funds":
-		actions.assign(["deposit", "withdraw", "clash_stake_hold", "clash_stake_refund", "clash_stake_payout"])
+		actions.assign(["deposit", "withdraw", "clash_stake_hold", "clash_stake_refund", "clash_stake_payout", "base_purchase"])
 	elif category == "resources":
 		actions.assign(["deposit", "withdraw"])
 	else:
@@ -5300,6 +5300,12 @@ func _guild_log_icon(texture: Texture2D) -> TextureRect:
 func _guild_log_entry_text(category: String, entry: Dictionary) -> String:
 	var action := str(entry.get("action", "deposit"))
 	if category == "guild":
+		if action == "base_purchased":
+			var details := _dictionary(entry.get("details", {}))
+			return _t("ui.guild.log.guild.base_purchased", {
+				"town": str(details.get("townName", "")),
+				"amount": _format_number(int(details.get("price", 0))),
+			})
 		if action == "joined":
 			return _t("ui.guild.log.guild.joined", {
 				"trainer": str(entry.get("target", _t("common.unknown"))),
