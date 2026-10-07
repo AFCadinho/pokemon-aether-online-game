@@ -28,7 +28,7 @@ the player can copy a report to staff. No automatic telemetry was added.
 
 ## Publication prerequisites
 
-This task prepares local code; it does not publish an APK or assets.
+Release 0.3.101 enables the experiment in the signed Android build (version code 18). Both existing and new Android players receive the choice once; choosing 2D is recommended.
 
 `data/android_3d_experiment.json` pins the immutable arena object. The already
 generated source archive is retained in the assigned slot at:
@@ -45,9 +45,10 @@ generated source archive is retained in the assigned slot at:
   `optional-assets/battle-environments/android/battle-environment-android-etc2-art-0cd0051c1bf0/11a6e8b0eddd2df656adcd9ba74c658761bf80f0551eb9a5b9dc1665ac137403.zip`.
 - ZIP members: `forest-runtime/forest.json`, `forest-runtime/forest.pck`.
 
-At preparation time the public v11 model index passes its exact hash check;
-the Android arena object returns HTTP 404. Existing v11 models do not need
-republishing. After authorized upload of this exact arena object, run:
+The exact Android arena archive was published on 2026-10-07 and its public
+archive and extracted PCK passed the pinned size and SHA-256 checks. The public
+v11 model index also passes its exact hash check; existing v11 models do not
+need republishing. The candidate build repeats this public verification:
 
 ```sh
 python3 tools/verify_android_3d_assets.py --public
