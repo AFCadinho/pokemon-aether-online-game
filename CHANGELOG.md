@@ -4,6 +4,8 @@
 
 ### Outfits and mounts
 
+- Zekrom’s tail lights up with a short blue energy jet and sparks while moving, including its shiny variant.
+
 - Add gentle floating idle animations to all remaining Surf mounts and their shiny variants, with synchronized riders and water contact.
 
 ### Connection and loading

@@ -2125,7 +2125,8 @@
       "storePreviewOffset": [
         0,
         8
-      ]
+      ],
+      "movementEffect": "zekrom_turbo"
     },
     "palkia": {
       "displayName": "Palkia",
@@ -2323,7 +2324,8 @@
       "storePreviewOffset": [
         0,
         8
-      ]
+      ],
+      "movementEffect": "zekrom_turbo"
     },
     "palkia_shiny": {
       "displayName": "Shiny Palkia",
