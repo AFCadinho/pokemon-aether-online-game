@@ -37,14 +37,15 @@ func _run() -> void:
 			var direction: String = DIRS[row]
 			for moving: bool in [false, true]:
 				var animation := StringName(("walk_" if moving else "idle_") + direction)
-				_check(frames.get_frame_count(animation) == (4 if moving else 1), id + " idle/movement frame count")
+				var expected_frames := 4 if moving or base_id == "magikarp" else 1
+				_check(frames.get_frame_count(animation) == expected_frames, id + " idle/movement frame count")
 				var mask := Mounts._get_mask_image(id, not moving)
-				for phase in range(4 if moving else 1):
+				for phase in range(expected_frames):
 					var art := Mounts._get_texture_image(frames.get_frame_texture(animation, phase))
 					var front := Mounts._get_texture_image(foreground.get_frame_texture(animation, phase))
 					var actual_bottom := maxi(art.get_used_rect().end.y, front.get_used_rect().end.y) - art.get_height() / 2
-					# Limb/tail motion is not identical to the rider bob. Idle must match
-					# the reference exactly; native movement stays within two pixels.
+					# The approved resting frame matches the reference exactly; native
+					# movement and the authored floating cycle stay within two pixels.
 					_check(actual_bottom == expected_bottom if phase == 0 else absf(actual_bottom - expected_bottom) <= 2, "%s %s %d reaches the established ground/waterline" % [id, animation, phase])
 					var matching := true
 					for y in range(art.get_height()):

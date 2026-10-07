@@ -4,6 +4,7 @@ const Mounts := preload("res://scripts/services/mount_service.gd")
 const Icons := preload("res://scripts/services/item_icon_resolver.gd")
 const IDS := ["giratina_origin", "ho_oh", "yveltal", "miraidon", "reshiram", "metagross", "salamence", "zekrom", "palkia", "dialga", "arcanine", "aerodactyl", "toucannon", "latios", "latias"]
 const DIRECTIONS := ["down", "left", "right", "up"]
+const ANIMATED_IDLE_IDS := ["arcanine", "arcanine_shiny"]
 var failed := false
 
 
@@ -43,13 +44,15 @@ func _run() -> void:
 			_check(mask.get_data() == Mounts._get_mask_image(base_id).get_data(), id + " preserves rider mask")
 			_check(idle_mask.get_data() == Mounts._get_mask_image(base_id, true).get_data(), id + " preserves idle rider mask")
 			_check(Mounts.get_mount_definition(id).riderOffsets == Mounts.get_mount_definition(base_id).riderOffsets, id + " preserves seats")
-		_check(mask.get_size() == Vector2i(768, 768) and idle_mask.get_size() == Vector2i(192, 768), id + " walking and standing mask dimensions")
+		var idle_frames := 4 if id in ANIMATED_IDLE_IDS else 1
+		_check(mask.get_size() == Vector2i(768, 768) and idle_mask.get_size() == Vector2i(192 * idle_frames, 768), id + " walking and standing mask dimensions")
 		for row in range(4):
 			for moving: bool in [false, true]:
 				var animation := StringName(("walk_" if moving else "idle_") + DIRECTIONS[row])
-				_check(frames.get_frame_count(animation) == (4 if moving else 1), id + " animation frames")
+				_check(frames.get_frame_count(animation) == (4 if moving else idle_frames), id + " animation frames")
 				if moving:
 					_check(frames.get_animation_speed(animation) == 4.0 and foreground.get_animation_speed(animation) == 4.0, id + " layer timing matches")
+				var has_idle_motion := false
 				for phase in range(frames.get_frame_count(animation)):
 					var art := Mounts._get_texture_image(frames.get_frame_texture(animation, phase))
 					var front := Mounts._get_texture_image(foreground.get_frame_texture(animation, phase))
@@ -65,7 +68,11 @@ func _run() -> void:
 					_check(layers_match, "%s %s %d foreground and rider mask follow the same artwork" % [id,animation,phase])
 					if not moving:
 						var first := Mounts._get_texture_image(frames.get_frame_texture(StringName("walk_"+DIRECTIONS[row]),0))
-						_check(art.get_data() == first.get_data(), id + " idle starts at the reviewed pose")
+						if phase == 0:
+							_check(art.get_data() == first.get_data(), id + " idle starts at the reviewed pose")
+						has_idle_motion = has_idle_motion or art.get_data() != first.get_data()
+				if not moving and idle_frames > 1:
+					_check(has_idle_motion, id + " authored idle cycle contains visible motion")
 	_check_repaired_anatomy()
 	_check_grounded_dragon_mounts()
 	_check_dialga_side_anatomy()

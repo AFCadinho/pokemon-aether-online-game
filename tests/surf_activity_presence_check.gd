@@ -7,6 +7,10 @@ var failed := false
 
 
 func _init() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
 	_check_surf_follower_lifecycle_and_presence()
 	_check_surf_moves_at_running_speed()
 	_check_surf_ripples_render_below_mount()
@@ -199,18 +203,34 @@ func _check_mount_animation_continues_across_tiles() -> void:
 	_expect(
 		local_walk_source.contains("_apply_static_activity_idle_pose(direction)")
 		and not local_walk_source.contains("set_idle_frame()")
-		and mount_sync_source.contains("animation_changed")
-		and mount_sync_source.contains("mount_sprite.is_playing()"),
+		and mount_sync_source.contains("animation_changed"),
 		"local Surf keeps Lapras animation frames across chained tile moves"
 	)
 
 	var remote_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	var remote_mount_sync_source := _function_source(remote_source, "_sync_mount_animation")
 	_expect(
-		remote_mount_sync_source.contains("animation_changed")
-		and remote_mount_sync_source.contains("mount_sprite.is_playing()"),
+		remote_mount_sync_source.contains("animation_changed"),
 		"remote Surf keeps Lapras animation frames across replicated tile moves"
 	)
+	# Exercise playback rather than requiring a particular is_playing() guard:
+	# play() on the same animation resumes without restarting its current frame.
+	var frames: SpriteFrames = load("res://scripts/services/mount_service.gd").get_mount_frames("lapras")
+	for script_path: String in ["res://scripts/world/player.gd", "res://scripts/world/remote_player_avatar.gd"]:
+		var actor: Node2D = load(script_path).new()
+		var sprite := AnimatedSprite2D.new()
+		sprite.sprite_frames = frames
+		actor.add_child(sprite)
+		actor.set("mount_sprite", sprite)
+		actor.set("activity_style" if script_path.ends_with("/player.gd") else "current_activity_style", "surf")
+		for direction: Vector2 in [Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT, Vector2.UP]:
+			actor.call("_sync_mount_animation", true, direction)
+			_expect(sprite.frame == 0 and sprite.is_playing(), "changing direction starts the correct walking cycle")
+			sprite.set_frame_and_progress(2, 0.4)
+			for repeat in range(5):
+				actor.call("_sync_mount_animation", true, direction)
+				_expect(sprite.frame == 2 and is_equal_approx(sprite.frame_progress, 0.4) and sprite.is_playing(), "chained local/remote Surf updates preserve animation progress")
+		actor.free()
 
 
 func _function_source(source: String, function_name: String) -> String:

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.3.101
+
+- Show your current location in Vermilion City on the Town Map while inside its Guild Base rooms.
+
 - Save the current door position before entering or changing Guild Base rooms, preventing entrance refusals caused by an older autosave; clarify door and membership errors.
 
 - Add private Guild Base interiors in Vermilion City: a fixed main hall, two empty side rooms and a lift waiting room, with room doors, Guild-only player visibility and safe recovery when base access is lost.
@@ -10,7 +14,7 @@
 
 - Refine Adventure Party team panels with cyan and pink accents, readable status chips and a compact VS emblem in immersive 2D and 3D.
 
-- Prepare an optional experimental 3D choice for Android test builds, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. Standard Android builds remain in 2D.
+- Offer Android players a one-time choice between recommended 2D and experimental 3D, with a saved preference, automatic battlefield downloads and recovery to 2D after an interrupted 3D session. The choice can be changed in Settings.
 
 - Preserve remembered Android and desktop logins through temporary connection failures and server maintenance, and keep unchecked logins unsaved after profile changes.
 

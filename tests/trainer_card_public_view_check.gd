@@ -38,6 +38,8 @@ func _run() -> void:
 		],
 	})
 	root.add_child(overlay)
+	# The own card is now constructed on demand rather than during HUD startup.
+	overlay.call("_setup_trainer_card_popup")
 	overlay.call("_show_public_trainer_card", {
 		"userId": 42.0,
 		"username": "misty",
