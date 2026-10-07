@@ -9,6 +9,7 @@ signal notification_received(notification: Dictionary)
 const GUILDS_ENDPOINT := "/game/guilds"
 const GUILD_HOME_ENDPOINT := "/game/guilds/me"
 const GUILD_BANK_ENDPOINT := "/game/guilds/me/bank"
+const GUILD_BASE_ENDPOINT := "/game/guild-bases"
 const GUILD_INVITATIONS_ENDPOINT := "/game/guild-invitations"
 const GUILD_NOTIFICATIONS_ENDPOINT := "/game/guild-notifications"
 const GUILD_LOBBY_TELEPORT_ENDPOINT := "/game/guilds/me/lobby/teleport"
@@ -211,6 +212,36 @@ func disband_guild() -> Dictionary:
 func load_bank() -> Dictionary:
 	var response := await _authenticated_request(GUILD_BANK_ENDPOINT, HTTPClient.METHOD_GET, "")
 	return response if not bool(response.get("success", false)) else _bank_result(response.get("body", {}))
+
+
+func load_base_registrar(registrar_id: String) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_BASE_ENDPOINT + "/registrars/" + registrar_id.uri_encode(),
+		HTTPClient.METHOD_GET, ""
+	)
+	return response if not bool(response.get("success", false)) else {
+		"success": true, "registrar": _dictionary(response.get("body", {})),
+	}
+
+
+func purchase_base(registrar_id: String) -> Dictionary:
+	var response := await _authenticated_request(
+		GUILD_BASE_ENDPOINT + "/purchase", HTTPClient.METHOD_POST,
+		JSON.stringify({"registrarId": registrar_id})
+	)
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary(response.get("body", {}))
+	var registrar := _dictionary(body.get("registrar", {}))
+	if int(current_guild.get("id", 0)) == int(registrar.get("guildId", -1)):
+		var guild := current_guild.duplicate(true)
+		guild["baseTownId"] = registrar.get("baseTownId")
+		guild["basePurchasedAt"] = registrar.get("basePurchasedAt")
+		_set_current_guild(guild)
+	return {
+		"success": true, "purchased": bool(body.get("purchased", false)),
+		"registrar": registrar,
+	}
 
 
 func load_history(before_id: int = 0, search: String = "", action: String = "", date_from: String = "", date_to: String = "") -> Dictionary:

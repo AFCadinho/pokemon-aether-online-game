@@ -564,6 +564,7 @@ z_index = 5
 
 [node name="GuildRegistrarNPC" parent="Entities/NPCs" unique_id=1589898142 instance=ExtResource("guild_registrar")]
 position = Vector2(1136, 560)
+garden_bounds = Rect2(-16, -304, 832, 544)
 gate_id = "kanto_vermilion_city_guild_garden"
 guard_blocking_anchor_path = NodePath("../../Interactables/GuildGardenEntrance")
 guard_blocking_size = Vector2(32, 96)

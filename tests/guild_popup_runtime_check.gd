@@ -1128,7 +1128,15 @@ func _run() -> void:
 	_check(popup.find_child("GuildLogSearchField", true, false) != null, "Guild log search has a visible field label")
 	_check(popup.find_child("GuildLogActionField", true, false) != null, "Guild log action choice has a visible field label")
 	_check(log_search != null, "Guild logs expose a search field")
-	_check(log_action_filter != null and log_action_filter.item_count == 6, "Guild history exposes its relevant action filters")
+	_check(log_action_filter != null and log_action_filter.item_count == 7, "Guild history exposes its relevant action filters")
+	var base_history_text := popup._guild_log_entry_text("guild", {
+		"action": "base_purchased", "details": {"townName": "Vermilion City", "price": 1000000},
+	})
+	_check(base_history_text.contains("Vermilion City") and base_history_text.contains("1,000,000"), "Guild history explains the purchased city and bank cost")
+	var base_funds_text := popup._guild_log_entry_text("funds", {
+		"action": "base_purchase", "actor": "Maple", "amount": 1000000,
+	})
+	_check(base_funds_text.contains("Maple") and base_funds_text.contains("1,000,000") and not base_funds_text.contains("ui.guild.log"), "Guild Bank history renders the leader's base debit with a localized action")
 	_check(log_period_filter != null and log_period_filter.item_count == 5, "Guild logs offer all-time and useful recent periods")
 	_check(log_filter_fields != null and log_filter_fields.size.x <= history_window.size.x - 32, "Guild log filter fields fit inside the window")
 	if log_period_filter != null:
