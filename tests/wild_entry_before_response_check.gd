@@ -60,10 +60,46 @@ func _run() -> void:
 	ui.queue_free()
 	transition.queue_free()
 	await process_frame
+	for mode: String in ["2d", "3d"]:
+		await _check_cold_fullscreen_entry(mode)
+	settings.battle_presentation_mode = "2d"
 	for log_open in [true, false]:
 		await _check_classic_entry(log_open)
 	print("wild_entry_before_response_check: ", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
+
+func _check_cold_fullscreen_entry(mode: String) -> void:
+	root.get_node("SettingsManager").battle_presentation_mode = mode
+	var world: Variant = Node2D.new()
+	root.add_child(world)
+	world.set_script(load("res://tests/fixtures/wild_entry_request_probe.gd"))
+	world.set_process(false)
+	var ui := Control.new()
+	root.add_child(ui)
+	ui.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	world.battle_ui_host = ui
+	var transition := WildEncounterTransition.new()
+	root.add_child(transition)
+	world.wild_encounter_transition = transition
+	check(world.prepared_wild_battle == null, "Startup can leave the unused battle UI unallocated")
+	world.run_entry()
+	var battle: Control = world.battle_instance
+	check(battle != null and is_instance_valid(world.battle_screen_host), "First fullscreen encounter mounts its UI without a startup prewarm")
+	for _frame in range(3):
+		await process_frame
+	check(world.position_waiting and battle.has_meta("battle_entry_pending") and battle.battle_input_locked, "Cold entry still waits for authoritative position with actions locked")
+	world.continue_position.emit()
+	await process_frame
+	check(world.response_waiting, "Cold entry waits for the battle response")
+	world.continue_response.emit()
+	await process_frame
+	await process_frame
+	check(not world.is_in_battle and world.battle_instance == null and not ui.visible, "Rejected first encounter safely restores the overworld")
+	world.set_script(null)
+	world.queue_free()
+	ui.queue_free()
+	transition.queue_free()
+	await process_frame
 
 func _capture(name: String) -> void:
 	var output := OS.get_environment("POKEAETHER_STAGE_OUTPUT")

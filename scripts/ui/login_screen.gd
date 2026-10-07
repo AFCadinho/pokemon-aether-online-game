@@ -824,7 +824,22 @@ func _restore_saved_session() -> void:
 
 
 func _apply_saved_session_preview_state() -> void:
-	var profile_response: Dictionary = await PlayerGameStateService.load_player_profile()
+	# Login and /auth/me already carry the freshly equipped look. A full game
+	# profile is only needed by the loading screen after story recovery.
+	var appearance := _dictionary_from_value(AuthService.current_user.get("appearance", {}))
+	if not appearance.is_empty():
+		PlayerSave.apply_appearance_state(appearance)
+		_refresh_player_preview()
+		return
+	# Keep older servers and accounts without a saved look compatible.
+	var preview_session := AuthService.session_token
+	var preview_user_id := AuthService.get_user_id_text()
+	var profile_response: Dictionary = await _load_preview_profile()
+	if preview_session != AuthService.session_token or preview_user_id != AuthService.get_user_id_text():
+		return
+	var profile_user_id := AuthService.get_user_id_text_from(_dictionary_from_value(profile_response.get("user", {})))
+	if profile_user_id != "" and profile_user_id != preview_user_id:
+		return
 	if not bool(profile_response.get("success", false)):
 		return
 
@@ -833,12 +848,16 @@ func _apply_saved_session_preview_state() -> void:
 		return
 
 	var saved_state: Dictionary = _dictionary_from_value(position_response.get("state", {}))
-	var appearance: Dictionary = _dictionary_from_value(saved_state.get("appearance", {}))
+	appearance = _dictionary_from_value(saved_state.get("appearance", {}))
 	if appearance.is_empty():
 		return
 
 	PlayerSave.apply_appearance_state(appearance)
 	_refresh_player_preview()
+
+
+func _load_preview_profile() -> Dictionary:
+	return await PlayerGameStateService.load_player_profile()
 
 
 func _enter_world() -> void:

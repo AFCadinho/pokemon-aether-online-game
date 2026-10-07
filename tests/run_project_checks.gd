@@ -423,6 +423,8 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/npc_metadata_role_boundary_check.gd",
 	"res://tests/map_metadata_request_timing_check.gd",
 	"res://tests/startup_preferences_check.gd",
+	"res://tests/startup_request_reuse_check.gd",
+	"res://tests/startup_lazy_popups_check.gd",
 	"res://tests/npc_dialogue_metadata_check.gd",
 	"res://tests/npc_dialogue_resolver_check.gd",
 	"res://tests/dialogue_metadata_service_check.gd",

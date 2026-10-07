@@ -529,6 +529,7 @@ func finish_account_switch() -> void:
 
 func _reset_account_runtime_state() -> void:
 	ThievingService.clear_state()
+	InventoryService.clear_cached_state()
 	PlayerSave.reset_account_state()
 	GameState.reset_gameplay_runtime_state()
 	StoryService.reset_story()

@@ -102,7 +102,7 @@ func _init() -> void:
 		"Thieving state and pending jail release are cleared at every account and login boundary"
 	)
 	_check(
-		"await ThievingService.load_state()" in loading_screen,
+		"await ThievingService.ensure_state_loaded()" in loading_screen,
 		"The loading flow hydrates jail state for the newly authenticated account"
 	)
 	_check(

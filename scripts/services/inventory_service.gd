@@ -80,6 +80,8 @@ var cached_inventory_items: Array = []
 var cached_borrowed_inventory_items: Array = []
 var cached_mount_license_regions: Array[String] = []
 var cached_inventory_user_id := 0
+var cached_inventory_session := ""
+var inventory_generation := 0
 var inventory_loaded := false
 var collected_world_pickup_ids: Dictionary = {}
 var collected_world_pickups_user_id := 0
@@ -95,13 +97,20 @@ func load_inventory() -> Dictionary:
 			"error": "Not authenticated.",
 		}
 
+	var request_session := AuthService.session_token
+	var request_user_id := AuthService.get_user_id_text()
+	var request_generation := inventory_generation
 	var base_url: String = await GatewayApiConfig.get_base_url()
+	if not _inventory_request_is_current(request_session, request_user_id, request_generation):
+		return {"success": false, "error": "Inventory request was superseded."}
 	var response: Dictionary = await _request_json(
 		base_url + _inventory_endpoint(),
 		HTTPClient.METHOD_GET,
 		GatewayApiConfig.get_accept_headers(),
 		""
 	)
+	if not _inventory_request_is_current(request_session, request_user_id, request_generation):
+		return {"success": false, "error": "Inventory request was superseded."}
 	if not bool(response.get("success", false)):
 		return response
 
@@ -113,6 +122,39 @@ func load_inventory() -> Dictionary:
 		"borrowedItems": cached_borrowed_inventory_items.duplicate(true),
 		"mountLicenseRegions": cached_mount_license_regions.duplicate(),
 	}
+
+
+## Startup readers reuse the authoritative profile inventory. Explicit reloads
+## after purchases, trades or item use continue to call load_inventory().
+func ensure_inventory_loaded() -> Dictionary:
+	if has_current_inventory():
+		return {
+			"success": true,
+			"items": cached_inventory_items.duplicate(true),
+			"borrowedItems": cached_borrowed_inventory_items.duplicate(true),
+			"mountLicenseRegions": cached_mount_license_regions.duplicate(),
+		}
+	return await load_inventory()
+
+
+func has_current_inventory() -> bool:
+	return (
+		AuthService.is_authenticated() and inventory_loaded
+		and cached_inventory_user_id > 0
+		and cached_inventory_user_id == int(AuthService.get_user_id_text())
+		and cached_inventory_session == AuthService.session_token
+	)
+
+
+func _inventory_request_is_current(session: String, user_id: String, generation: int) -> bool:
+	return (
+		AuthService.is_authenticated() and session == AuthService.session_token
+		and user_id == AuthService.get_user_id_text() and generation == inventory_generation
+	)
+
+
+func clear_cached_state() -> void:
+	_clear_inventory_cache()
 
 
 func has_item(item_id: String) -> bool:
@@ -184,14 +226,17 @@ func _apply_inventory_items(items: Array) -> void:
 		cached_borrowed_inventory_items.clear()
 	cached_inventory_items = items.duplicate(true)
 	cached_inventory_user_id = current_user_id
+	cached_inventory_session = AuthService.session_token
 	inventory_loaded = true
 
 
 func _clear_inventory_cache() -> void:
+	inventory_generation += 1
 	cached_inventory_items.clear()
 	cached_borrowed_inventory_items.clear()
 	cached_mount_license_regions.clear()
 	cached_inventory_user_id = 0
+	cached_inventory_session = ""
 	inventory_loaded = false
 	collected_world_pickup_ids.clear()
 	collected_world_pickups_user_id = 0

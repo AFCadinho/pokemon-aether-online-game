@@ -57,13 +57,16 @@ func _ready() -> void:
 	if InventoryService.inventory_loaded:
 		update_owned_charms_from_inventory(InventoryService.cached_inventory_items)
 	else:
-		refresh_owned_charms.call_deferred()
+		refresh_owned_charms.call_deferred(true)
 
 
-func refresh_owned_charms() -> void:
+func refresh_owned_charms(reuse_loaded_inventory := false) -> void:
 	if not AuthService.is_authenticated():
 		return
-	await InventoryService.load_inventory()
+	if reuse_loaded_inventory:
+		await InventoryService.ensure_inventory_loaded()
+	else:
+		await InventoryService.load_inventory()
 
 
 func update_owned_charms_from_inventory(items_value: Variant) -> void:

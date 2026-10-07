@@ -1,5 +1,6 @@
 extends Node2D
 
+const StartupTiming := preload("res://scripts/debug/startup_timing.gd")
 const BATTLE_SCENE_PATH := "res://scenes/battle/battle.tscn"
 const LOGIN_SCENE_PATH := "res://scenes/interface/login_screen.tscn"
 const AETHER_CLASH_TRACE_ENVIRONMENT_VARIABLE := "POKEAETHER_AETHER_CLASH_TRACE"
@@ -217,6 +218,7 @@ func _exit_tree() -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	var startup_started := Time.get_ticks_usec()
 	add_to_group("world")
 	last_desktop_presentation_mode = SettingsManager.battle_presentation_mode
 	add_child(MOBILE_CONTROLS_SCENE.instantiate())
@@ -239,8 +241,8 @@ func _ready() -> void:
 		if not PlayerSave.party_changed.is_connected(_on_web_party_changed):
 			PlayerSave.party_changed.connect(_on_web_party_changed)
 		_ensure_map_transition_overlay()
-		_prewarm_wild_battle_ui()
 		await _setup_web_demo_world()
+		StartupTiming.record("world_restore", startup_started)
 		if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
 			player.process_mode = web_player_process_mode_before_load
 			_setup_coop_controls()
@@ -250,12 +252,12 @@ func _ready() -> void:
 		_show_pending_coop_battle_result.call_deferred()
 		return
 	_ensure_map_transition_overlay()
-	_prewarm_wild_battle_ui()
+	# Build the battle interface when a battle actually needs it. Restoring a
+	# saved battle already mounts its UI; prewarming here creates it twice.
 	await _setup_initial_world_state()
+	StartupTiming.record("world_restore", startup_started)
 	if is_in_battle:
 		_discard_prepared_wild_battle_ui()
-	else:
-		_prewarm_wild_battle_ui()
 	_setup_coop_controls()
 	await _refresh_fishing_progression()
 	if GameState.gameplay_reset_in_progress:
@@ -1794,9 +1796,11 @@ func _refresh_map_visual_depth_for_player(map: Node) -> void:
 func _setup_initial_world_state() -> void:
 	var first_map: Node = $CurrentMap.get_child(0)
 	var saved_state: Dictionary = {}
+	var prepared_map_scene: PackedScene
 	var recovered_blackout_loss := 0
 	if GameState.has_prepared_world_state():
 		var prepared_state: Dictionary = GameState.consume_prepared_world_state()
+		prepared_map_scene = prepared_state.get("mapScene") as PackedScene
 		recovered_blackout_loss = int(prepared_state.get("blackoutLoss", 0))
 		if bool(prepared_state.get("hasSavedState", false)):
 			saved_state = _dictionary_from_value(prepared_state.get("savedState", {}))
@@ -1822,10 +1826,12 @@ func _setup_initial_world_state() -> void:
 		str(saved_state.get("mapScenePath", ""))
 	)
 	if saved_scene_path != "" and saved_scene_path != _get_map_scene_path(first_map):
-		var saved_map: Node = _instantiate_map(saved_scene_path)
+		var saved_map: Node = _instantiate_map(saved_scene_path, prepared_map_scene)
 		if saved_map != null:
 			_clear_current_map()
+			var map_ready_started := Time.get_ticks_usec()
 			$CurrentMap.add_child(saved_map)
+			StartupTiming.record("saved_map_ready", map_ready_started)
 			initial_map = saved_map
 		else:
 			push_warning("World: saved map '%s' could not be loaded. Falling back to initial map." % saved_scene_path)
@@ -1866,12 +1872,18 @@ func _setup_initial_world_state() -> void:
 			"add_system_message",
 			LocalizationManager.text("ui.world.blackout.money_lost", {"amount": recovered_blackout_loss})
 		)
+	var recovery_started := Time.get_ticks_usec()
 	await _await_current_map_desktop_arena()
+	StartupTiming.record("desktop_arena", recovery_started)
+	recovery_started = Time.get_ticks_usec()
 	var wild_resume := await _resume_saved_wild_battle(saved_state)
+	StartupTiming.record("battle_recovery", recovery_started)
 	# Preserve a live or temporarily unreachable wild battle binding. Only a
 	# confirmed absent/expired battle may cross into the fresh overworld boundary.
 	if not bool(wild_resume.get("resumed", false)) and not bool(wild_resume.get("retryable", false)):
+		recovery_started = Time.get_ticks_usec()
 		await _save_player_activity_state("idle")
+		StartupTiming.record("idle_recovery", recovery_started)
 		WorldPresenceService.connect_presence.call_deferred()
 		_publish_world_presence.call_deferred(true)
 
@@ -2358,11 +2370,16 @@ func _validate_active_flash_source() -> void:
 	)
 
 
-func _instantiate_map(scene_path: String) -> Node:
-	var target_scene: PackedScene = load(scene_path) as PackedScene
+func _instantiate_map(scene_path: String, prepared_scene: PackedScene = null) -> Node:
+	var started := Time.get_ticks_usec()
+	var target_scene := prepared_scene
+	if target_scene == null or target_scene.resource_path != scene_path:
+		target_scene = load(scene_path) as PackedScene
 	if target_scene == null:
 		return null
-	return target_scene.instantiate()
+	var map := target_scene.instantiate()
+	StartupTiming.record("saved_map_instantiate", started)
+	return map
 
 
 func _clear_current_map() -> void:
@@ -3829,6 +3846,7 @@ func _prewarm_wild_battle_ui() -> void:
 	host.visible = false
 	battle_ui_host.add_child(host)
 	host.prewarm_battle(prepared, SettingsManager.battle_ui_layout == "immersive")
+	StartupTiming.record("battle_ui_prewarm", started_at_msec * 1000)
 	host.set_meta("prewarm_layout", SettingsManager.battle_ui_layout)
 	host.set_meta("prewarm_mode", SettingsManager.battle_presentation_mode)
 	prepared_wild_battle = prepared

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Connection and loading
+
+- Reduce login loading work by reusing the authenticated appearance and profile inventory, sharing the initial thieving-state load, and loading saved map resources in the background. Hidden menus and the unused battle interface are now built when needed instead of during world startup.
+
 ### Account
 
 - Simplify account management labels and guidance in all four languages to focus on player details, linked accounts and privacy.
