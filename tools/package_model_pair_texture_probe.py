@@ -40,7 +40,7 @@ def main():
     for pair in generated["pairs"]:
         species = pair["species"]
         record = {"species": species}
-        for kind in ("baseline", "shared"):
+        for kind in ("baseline", "codec-control", "shared"):
             directory = output / species / kind
             files = {}
             models = []
@@ -51,8 +51,11 @@ def main():
                 raw_source = source[4:] if source[:4] == b"RSRC" else decode(source, codec)
                 assert sha(raw_source) == bindings[identity]["decoded_sha256"]
                 if kind == "baseline":
-                    data = encode(raw_source, 262144, 9, codec)
+                    data = source if source[:4] == b"RSRC" else encode(raw_source, 262144, 9, codec)
                     assert sha(data) == bindings[identity]["candidate_sha256"]
+                elif kind == "codec-control":
+                    data = encode(raw_source, 262144, 9, codec)
+                    assert decode(data, codec) == raw_source
                 else:
                     saved = Path(row["candidate_path"]).read_bytes()
                     assert sha(saved) == row["candidate_sha256"]
@@ -88,19 +91,21 @@ def main():
     pack_list.write_bytes(encoded(packs))
     subprocess.run(["godot", "--headless", "--path", str(ROOT), "--script", "res://tools/sprite_factory/pack_model_pair_probe.gd", "--", str(pack_list)], check=True)
     for pair in result["pairs"]:
-        for kind in ("baseline", "shared"):
+        for kind in ("baseline", "codec-control", "shared"):
             pin = pair[kind]
             path = output / (pair["species"] + "-" + kind + ".pck")
             pin["pack"] = path.name
             pin["pack_sha256"] = sha(path.read_bytes())
             pin["pack_bytes"] = path.stat().st_size
-            render["packs"].append({"path": str(path), "sha256": pin["pack_sha256"]})
+            if kind != "codec-control":
+                render["packs"].append({"path": str(path), "sha256": pin["pack_sha256"]})
     (output / "fixture.json").write_bytes(encoded(result))
     (output / "render-input.json").write_bytes(encoded(render))
     print("Prototype pairs:", len(result["pairs"]))
     for row in result["pairs"]:
-        a, b = row["baseline"]["pack_bytes"], row["shared"]["pack_bytes"]
-        print(row["species"], a, b, "saving", round(100 * (a-b) / a, 2), "%")
+        a, control, b = [row[k]["pack_bytes"] for k in ("baseline", "codec-control", "shared")]
+        print(row["species"], a, control, b, "saving_vs_v11", round(100 * (a-b) / a, 2),
+              "% sharing_at_same_codec", round(100 * (control-b) / control, 2), "%")
 
 
 if __name__ == "__main__":

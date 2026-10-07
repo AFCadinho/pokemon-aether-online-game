@@ -1,4 +1,5 @@
 extends RefCounted
+const Audit = preload("res://tools/sprite_factory/model_texture_audit.gd")
 ## Diagnostic contract. Production v11 remains self-contained and unchanged.
 static func validate(directory: String, expected: Dictionary) -> String:
 	if expected.get("kind") != "pokeaether-model-pair-experiment" or not expected.get("prototype_only", false):
@@ -63,3 +64,30 @@ static func textures(value: Variant, seen: Dictionary = {}, result: Dictionary =
 		for item in value.values():
 			textures(item, seen, result)
 	return result
+
+## Only diagnostic reports: identify platform-dependent resource properties.
+static func fingerprints(value: Variant, path: String, result: Dictionary, seen: Dictionary) -> void:
+	if value is Resource:
+		var id: int = value.get_instance_id()
+		if seen.has(id):
+			return
+		seen[id] = true
+		var properties := {}
+		var record := value is ShaderMaterial or value is Shader or value is ImageTexture or value is Image
+		for name: String in Audit.storage_properties(value):
+			var item: Variant = value.get(name)
+			if record:
+				properties[name] = {"sha256": Audit.signature(item), "type": typeof(item)}
+				if item == null or item is float or item is int or item is bool or (item is String and item.length() < 200):
+					properties[name]["value"] = item
+			fingerprints(item, path + "/" + name, result, seen)
+		if record:
+			result[path] = {"class": value.get_class(), "properties": properties}
+		if value is ImageTexture:
+			result[path]["image"] = Audit.image_signature(value.get_image())
+	elif value is Array:
+		for index in value.size():
+			fingerprints(value[index], path + "/" + str(index), result, seen)
+	elif value is Dictionary:
+		for key in value:
+			fingerprints(value[key], path + "/" + str(key), result, seen)

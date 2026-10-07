@@ -1,0 +1,790 @@
+{
+  "schema": 1,
+  "prototype_only": true,
+  "date": "2026-10-07",
+  "quality_reduction": false,
+  "pair_count": 16,
+  "appearance_count": 32,
+  "codec": {
+    "block_size": 262144,
+    "level": 9,
+    "libzstd": "1.5.7"
+  },
+  "totals": {
+    "baseline": 268585920,
+    "codec-control": 210429184,
+    "shared": 163034332
+  },
+  "saved_vs_v11_bytes": 105551588,
+  "sharing_saved_at_equal_codec_bytes": 47394852,
+  "headless_cases": 32,
+  "android_cases": 32,
+  "pixel_frames": 320,
+  "pixel_frames_exact_first_source": 320,
+  "native_renderer": "mobile",
+  "native_platform": "Android 13 x86_64 emulator / software llvmpipe",
+  "physical_phone_qualified": false,
+  "native_peak_pss_kib": 565539,
+  "native_loaded_pack_file_entries": 427,
+  "mounted_index_memory_measured": false,
+  "evidence": {
+    ".tmp/model-pair-cohort/sources-v3/sources.json": "6454d2d3db649ec7d2d95fb09580abb211dfe67e30b498fad3918a25c1cdda29",
+    ".tmp/model-pair-cohort/generate-v1/report.json": "c24f895c73058d445cabf7c7e7ca6b2473c3cfb0dc724773d2e8464e99cd958b",
+    ".tmp/model-pair-cohort/packages-v1/fixture.json": "05b51f585fecc70909e4fab677de87d05f66930465ab47c360d6a17742172c9c",
+    ".tmp/model-pair-cohort/load-v2/details.json": "ece2adc96dd641eec54660c1bb90657a13d2dc82f22c10b74d588a036d6f54ae",
+    ".tmp/model-pair-cohort/render-v2/report.json": "4c7d4ef197e054db4b07154f48c725f1cec41db727633c2d9f4dc6fb2e2e25ee",
+    ".tmp/model-pair-cohort/render-v2/pixel-comparison.json": "f7fd7d4c5473a4336f027836b6ae6f94b8646b15965c65440523ad3ef51ebf13",
+    ".tmp/model-pair-cohort/native-v3/details.json": "b865baf60064c3b212747b377d297727d7cd108707b9e89c722a01a5c429426d",
+    ".tmp/model-pair-cohort/native-v3/results.json": "1c4f6d25eb6b8e5f7cdc8d78a8f80054e570db6ea95739cc3e2791edd9b2a09d",
+    ".tmp/model-pair-cohort/native-v3/memory.json": "a6eef314a564235638e3bf6004bfa0ca3698ce05a21f43b58eaabd713c5a1998",
+    ".tmp/model-pair-cohort/native-v3/native.log": "d259b8f7fdad2cb252b1cf7426edb2d838273e617308476ee2991bc8b7f7218e",
+    ".tmp/model-pair-cohort/shader-default-diagnosis.json": "a9dd89cca8a8c82c8025507d564940b6fa3c5a5156679eba2d0d6efee72c79ec",
+    ".tmp/model-pair-cohort/project-lock-check.json": "856192831e9717e68efb2dc44b428937ca5fd7c6d913d87f2b648173554388b1"
+  },
+  "pairs": [
+    {
+      "species": "pikachu",
+      "packs": {
+        "baseline": {
+          "sha256": "40ff7af2614a0705ab4007dd96ef89d8a0d2b8b0f81cc491aa3c7dcc4b5a6898",
+          "bytes": 16215660
+        },
+        "codec-control": {
+          "sha256": "149be026c73c0182a927eeac20e32b3acbf10b85dea0e86fd3ce57e04ee3fdcd",
+          "bytes": 16215676
+        },
+        "shared": {
+          "sha256": "8be11d68fb44502523acdf34c67adbf7d95150cccbb795bcae9378fcf6128807",
+          "bytes": 11485784
+        }
+      },
+      "native_shared_texture_objects": 10,
+      "native_texture_counter_baseline_bytes": 146614272,
+      "native_texture_counter_shared_bytes": 117254144,
+      "native_texture_counter_saved_bytes": 29360128,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "pikachu",
+          "kind": "approved_archive",
+          "archive_sha256": "24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c",
+          "object_key": "optional-assets/pokemon_3d/pikachu/base/v1-24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c.zip",
+          "input_sha256": "65ac2b5511affee7f13b2b9061b1e555d648ad187c06dde43d4740a308a4ee8f",
+          "candidate_sha256": "22258ead5409b0160c816de075f8ae97f4bb94db0e2c13527239bf39b2cf7bfc",
+          "decoded_sha256": "90d8fd8160a91f65fe310037d9bd37d261500067bc01f9cd305aa8a025404554",
+          "headless_semantic_sha256": "63ce0ffb945aa04dceeba5ab70380904919e01254a1c702dcab2aa18221f2c0c",
+          "native_semantic_sha256": "63ce0ffb945aa04dceeba5ab70380904919e01254a1c702dcab2aa18221f2c0c",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "pikachu@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c",
+          "object_key": "optional-assets/pokemon_3d/pikachu/base/v1-24d57977fe06a77e09698807140d5871d6637aa45b7d60a486fd79b9ebe3490c.zip",
+          "input_sha256": "e963b34ab0e3eb71e4523cfe8a47642b61617d261927b498ab205b0213b0b6ff",
+          "candidate_sha256": "b3ccd6167f54aa6ceb57ccbf837c4d4b455f60ef9879684c55f243958adf390a",
+          "decoded_sha256": "c72d6f9c8e90666cae402ed388e6e3b37496f9e8bf594b1084c0b92f18549d37",
+          "headless_semantic_sha256": "9a441a8e2ba1f2c94195a2ab0105e0039c469b70cab2828151fad0907eb1460c",
+          "native_semantic_sha256": "9a441a8e2ba1f2c94195a2ab0105e0039c469b70cab2828151fad0907eb1460c",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "garchomp",
+      "packs": {
+        "baseline": {
+          "sha256": "78787b5709d6f0e6da57b4e336706c9657274d4bf35df9dd47182170233488dc",
+          "bytes": 14987756
+        },
+        "codec-control": {
+          "sha256": "2e75cfb65cb72725240b4fde1b3e3d4d415545144ed0e0deb540f4cfc4c0d2a1",
+          "bytes": 14987772
+        },
+        "shared": {
+          "sha256": "5f4fff94b0f635c748fadda049244c17e6285d932b9fa024c0a5fe43332c0bc0",
+          "bytes": 11533928
+        }
+      },
+      "native_shared_texture_objects": 12,
+      "native_texture_counter_baseline_bytes": 159561728,
+      "native_texture_counter_shared_bytes": 139108864,
+      "native_texture_counter_saved_bytes": 20452864,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "garchomp",
+          "kind": "approved_archive",
+          "archive_sha256": "bc97413c86e95540667b8bec4b37fde9b47f48f7c24116a6a24c7fa087d95fb1",
+          "object_key": "optional-assets/pokemon_3d/garchomp/base/v1-bc97413c86e95540667b8bec4b37fde9b47f48f7c24116a6a24c7fa087d95fb1.zip",
+          "input_sha256": "63981135aef04a3b7403c0d49d61e9dac6e950df9f63fec186402c55208b8af3",
+          "candidate_sha256": "4e12199adb8033dfedb4409f1575433d6a63868bd72fbe5bfbc8c66b5a498d7a",
+          "decoded_sha256": "05829e0eb7f8f28513cb27bb590ac9d807dacf590f351a7a6b524cbc92ca8eb4",
+          "headless_semantic_sha256": "e5439329925648f95cfef7770fa3b0eb7f5318f44871fe276d28a9523de5bc78",
+          "native_semantic_sha256": "e5439329925648f95cfef7770fa3b0eb7f5318f44871fe276d28a9523de5bc78",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "garchomp@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "bc97413c86e95540667b8bec4b37fde9b47f48f7c24116a6a24c7fa087d95fb1",
+          "object_key": "optional-assets/pokemon_3d/garchomp/base/v1-bc97413c86e95540667b8bec4b37fde9b47f48f7c24116a6a24c7fa087d95fb1.zip",
+          "input_sha256": "4217c90f0a4cfb2f79641527a8c4cdcff283dad951dfad387ce84d8cf25cc0c9",
+          "candidate_sha256": "8272f0c8740dc0d50b22e777c00d230fcef0be98737b06dc7deb6ccc0279efe1",
+          "decoded_sha256": "85cb8726aefbfa82697a87b8a34550d25ce920815d9120bb54f2f8c5621fd0fc",
+          "headless_semantic_sha256": "f77e23b2b9622fab8b49213bbc0c53d36c5b0fed6b60bc704af7ba3ab885344e",
+          "native_semantic_sha256": "f77e23b2b9622fab8b49213bbc0c53d36c5b0fed6b60bc704af7ba3ab885344e",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "azumarill",
+      "packs": {
+        "baseline": {
+          "sha256": "836776e3b8e3c1e67ae4b2dcf5948c7d869f87b07461a7ae9681ac33c630e9f0",
+          "bytes": 19533452
+        },
+        "codec-control": {
+          "sha256": "75eab3c6bf35af5dac56d0cc3b947266ede2a02772577cca97abdf9f8052c9ad",
+          "bytes": 19533468
+        },
+        "shared": {
+          "sha256": "001e2112e39a20bd801e0ffacd5ca3d3a810a9f53b953a4754d1e9e5d13e9752",
+          "bytes": 16981288
+        }
+      },
+      "native_shared_texture_objects": 12,
+      "native_texture_counter_baseline_bytes": 159561728,
+      "native_texture_counter_shared_bytes": 139108864,
+      "native_texture_counter_saved_bytes": 20452864,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "azumarill",
+          "kind": "approved_archive",
+          "archive_sha256": "58011887310e9303d063db529b3d9d6bc4a9fcce46d7cd814da31edbeb3a6f2a",
+          "object_key": "optional-assets/pokemon_3d/azumarill/base/v1-58011887310e9303d063db529b3d9d6bc4a9fcce46d7cd814da31edbeb3a6f2a.zip",
+          "input_sha256": "debc9617ad98b5365dbdc4ff12ba419084552c15dd9d7813c1009e480a02643a",
+          "candidate_sha256": "c315df8c13f11d05ff8eff2dbae16ae53c0a2672de634e80bd1b646bd13f0dba",
+          "decoded_sha256": "5a6d826343490d10a1a3d43c29d50c2e2c5b48c0c26015a7787cb482040e028e",
+          "headless_semantic_sha256": "bb6a32abd7876d6c8510bf7161fc6350ac6eb4c0dba9c5b5ae4a4b97348f8293",
+          "native_semantic_sha256": "bb6a32abd7876d6c8510bf7161fc6350ac6eb4c0dba9c5b5ae4a4b97348f8293",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "azumarill@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "58011887310e9303d063db529b3d9d6bc4a9fcce46d7cd814da31edbeb3a6f2a",
+          "object_key": "optional-assets/pokemon_3d/azumarill/base/v1-58011887310e9303d063db529b3d9d6bc4a9fcce46d7cd814da31edbeb3a6f2a.zip",
+          "input_sha256": "eee07e6f093840a29c8cc74c9d4ea0309a59347bfc6f592408116a57da6cc002",
+          "candidate_sha256": "b4ea02a6f010ac04a304ecf3de368c091f3633689c70d84fd48c551476570494",
+          "decoded_sha256": "1ac027e78e9d553b1c6dedc077775d5c54ab6cec022c2fd03e19863ca3488e18",
+          "headless_semantic_sha256": "c406a33c3e470c8656dfe7971500d2cdf665542b25589492d91a05248edd9198",
+          "native_semantic_sha256": "c406a33c3e470c8656dfe7971500d2cdf665542b25589492d91a05248edd9198",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "charizard",
+      "packs": {
+        "baseline": {
+          "sha256": "304827ba1894a1db5de12803e76580ba3673d50c76e397bfe3d8144a1a06265b",
+          "bytes": 16820428
+        },
+        "codec-control": {
+          "sha256": "cf861f770845e954898844b6925f5f7e0eac85401baff50990749ca862691de2",
+          "bytes": 16820444
+        },
+        "shared": {
+          "sha256": "3e5513f4a5a73ca40ddb522d83ad9792811707288e42e9836ff2345c6fb5e29c",
+          "bytes": 12966336
+        }
+      },
+      "native_shared_texture_objects": 18,
+      "native_texture_counter_baseline_bytes": 163237376,
+      "native_texture_counter_shared_bytes": 140946688,
+      "native_texture_counter_saved_bytes": 22290688,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "charizard",
+          "kind": "approved_archive",
+          "archive_sha256": "b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45",
+          "object_key": "optional-assets/pokemon_3d/charizard/base/v1-b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45.zip",
+          "input_sha256": "bb610eb2d81ea3963756cca4f0dda3ded856af5efb5853758e55a76d33c3b33f",
+          "candidate_sha256": "93b657b9a694a2de21313d6418fd93347dfbcf0e046b67ebd877e41de3036e27",
+          "decoded_sha256": "d6508fac9bb618c27741e55bc719449f67841ea14dc1b52b9f3ae516da496df3",
+          "headless_semantic_sha256": "bf2e1dd37588ac4d73a018974d9e74398df544f9749c779e83dd28469a3141c9",
+          "native_semantic_sha256": "31130bef0245f6deb4e07ad41222d3cdf058065da050738d97679bc487824dae",
+          "native_matches_headless_reference": false
+        },
+        {
+          "identity": "charizard@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45",
+          "object_key": "optional-assets/pokemon_3d/charizard/base/v1-b5a3e1d21dc11f39863bc020ec00c6d8ed85dd7ae62ceedc098e246cb3b15e45.zip",
+          "input_sha256": "e24a79f05d9db792b78b90ad2b226a00cb82ffb9bc7ec2d93def5fa7ed290f55",
+          "candidate_sha256": "515dd6ef187b99d4764651612096747f3b678f11cb721c2e38bdc16990ba184a",
+          "decoded_sha256": "7a86b7645a4411b58b01150f584322eb7f620834172d724d2bbd9a55c6a8350a",
+          "headless_semantic_sha256": "e671a315ebe251bad893c44bcc60f7ac259cdb6d804d4e54fcace702fa9f0ed8",
+          "native_semantic_sha256": "ae77664845c501aaba83dcddd771ff0369c6eb5d964453ce0172adcc81dcecf6",
+          "native_matches_headless_reference": false
+        }
+      ]
+    },
+    {
+      "species": "arcanine",
+      "packs": {
+        "baseline": {
+          "sha256": "1e19f7d74e5b3213d5c12e4146666697e2df8bca16cff080056d94d5c2f29f7e",
+          "bytes": 15184844
+        },
+        "codec-control": {
+          "sha256": "45069b54bd351ac33c22113941e44433284c5c04c74ec4a39403dfb74f799f42",
+          "bytes": 15184860
+        },
+        "shared": {
+          "sha256": "90dbc7293cf51c7aec3b3d32c1cbb8ac9f7af6ec315548e3e94601005f88d4e2",
+          "bytes": 10583392
+        }
+      },
+      "native_shared_texture_objects": 10,
+      "native_texture_counter_baseline_bytes": 112011264,
+      "native_texture_counter_shared_bytes": 93661184,
+      "native_texture_counter_saved_bytes": 18350080,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "arcanine",
+          "kind": "approved_archive",
+          "archive_sha256": "e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970",
+          "object_key": "optional-assets/pokemon_3d/arcanine/base/v1-e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970.zip",
+          "input_sha256": "84b5cb98d3cff59f1c3f24489578f17c0e7549f4ff438003f26711057ffeddf3",
+          "candidate_sha256": "73af21492c3c4b6cd0ece8d3323561522ff08add6032b018fcd5b4db3190ef3d",
+          "decoded_sha256": "cbd89eb49835cea88fd09ac049e77fa9d7931f99b7f826f1b0de6df24005f111",
+          "headless_semantic_sha256": "92a1b14025a7e92bdbec10504910052abff1f3ebc62e999712146cb00d834106",
+          "native_semantic_sha256": "92a1b14025a7e92bdbec10504910052abff1f3ebc62e999712146cb00d834106",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "arcanine@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970",
+          "object_key": "optional-assets/pokemon_3d/arcanine/base/v1-e9dc8ddb62659cc0cc6551cbc77f3b88cee9c9abeccc480c9b5dcd1b2f5db970.zip",
+          "input_sha256": "ced7330e39fd5350bc97caef7f0ba55af5378e0fce765d6c0f1fe70c40594db5",
+          "candidate_sha256": "ccde05d8eb477be139e0b936e1a4f0c3b9969b655f288c1c57b18c6bfd577918",
+          "decoded_sha256": "3d7fae5a917ea97fb51d0c7fcab1f5ca9eaec49b4b8ce12c4d28cfd652085e16",
+          "headless_semantic_sha256": "ecc6a5667b5ca885a9cd3ff6e0c4e0b3e1e487864ce9645b36c901cd1bfb4cc1",
+          "native_semantic_sha256": "ecc6a5667b5ca885a9cd3ff6e0c4e0b3e1e487864ce9645b36c901cd1bfb4cc1",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "magnemite",
+      "packs": {
+        "baseline": {
+          "sha256": "ad2db24b891585123302203d4abcb8571fb966032120c1afd561dc7751edb95b",
+          "bytes": 3619884
+        },
+        "codec-control": {
+          "sha256": "e258e47cb39a69068acb40bf8a8d85b52c858b86f653ed08590774a7eb7aef54",
+          "bytes": 3619900
+        },
+        "shared": {
+          "sha256": "8efb80fac3978a4351091dcf5bb040e927c74c1040f4bdcf1bf52f652a6bdf3b",
+          "bytes": 2907052
+        }
+      },
+      "native_shared_texture_objects": 7,
+      "native_texture_counter_baseline_bytes": 153612288,
+      "native_texture_counter_shared_bytes": 121454080,
+      "native_texture_counter_saved_bytes": 32158208,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "magnemite",
+          "kind": "approved_archive",
+          "archive_sha256": "080752fab6dad4e34a575256bc4ee7ff4ff99314de575476d3d12a841b8f0339",
+          "object_key": "optional-assets/pokemon_3d/magnemite/base/v1-080752fab6dad4e34a575256bc4ee7ff4ff99314de575476d3d12a841b8f0339.zip",
+          "input_sha256": "b65e8d75dfef8de94265f454a675ded6e5803110b25752cec95025663eac1ff8",
+          "candidate_sha256": "a71c4cedd58bf7a62169700d4a2db68aacc5354bf37a4d4459672e628ccd9631",
+          "decoded_sha256": "85b2491970114d057990a9d5cb4bdbef63d60df73ec0f8f491ac53a7b4775827",
+          "headless_semantic_sha256": "57024a98f86846f602184ee68246041dc9697ac591359911da11c1df4c49c7bd",
+          "native_semantic_sha256": "57024a98f86846f602184ee68246041dc9697ac591359911da11c1df4c49c7bd",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "magnemite@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "080752fab6dad4e34a575256bc4ee7ff4ff99314de575476d3d12a841b8f0339",
+          "object_key": "optional-assets/pokemon_3d/magnemite/base/v1-080752fab6dad4e34a575256bc4ee7ff4ff99314de575476d3d12a841b8f0339.zip",
+          "input_sha256": "bcd458b782d1c4626e0be56af0743f3b3a46f5eba73704c943897b9c7f460933",
+          "candidate_sha256": "dbc7e8e476f8ddc7bd3e9db82b5abce1b87fcc1531959d8da74fa10248671435",
+          "decoded_sha256": "8ec4f205eaeaa6d062a10afe812a16cfa8e854d01f2643e587e26758a954ba25",
+          "headless_semantic_sha256": "678b280cef0c60d7bc469cb199e56202b31025ebd60353bf7d19b9326ca95f6f",
+          "native_semantic_sha256": "678b280cef0c60d7bc469cb199e56202b31025ebd60353bf7d19b9326ca95f6f",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "palkia",
+      "packs": {
+        "baseline": {
+          "sha256": "ed7c65d6aff435ab275be4b717c2f812c941c2980a17fec9ddcb066a834d7b3d",
+          "bytes": 35362572
+        },
+        "codec-control": {
+          "sha256": "5fa6bc60338449fb1f4498f04f95362415d89e551f9bab93ac3851837f70d877",
+          "bytes": 35362588
+        },
+        "shared": {
+          "sha256": "fc87685e3363de418e04cd47a564238c2a636d99722c319c46704aca277d995c",
+          "bytes": 21088808
+        }
+      },
+      "native_shared_texture_objects": 16,
+      "native_texture_counter_baseline_bytes": 254640128,
+      "native_texture_counter_shared_bytes": 172663296,
+      "native_texture_counter_saved_bytes": 81976832,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "palkia",
+          "kind": "approved_archive",
+          "archive_sha256": "167bec0c02a5e14ec8e1d3aa97d6a70eb578a6cff8b270d17beae6ee7be24a8c",
+          "object_key": "optional-assets/pokemon_3d/palkia/base/v1-167bec0c02a5e14ec8e1d3aa97d6a70eb578a6cff8b270d17beae6ee7be24a8c.zip",
+          "input_sha256": "207098b485c6b11f98156c32c6190ec02d2e0f8ecb142e7b2338b64b2d39406b",
+          "candidate_sha256": "0eca44a7f6e698a149e9ede76c4448a41f89316f8fad645c3e5afd1b6b78302d",
+          "decoded_sha256": "65d3d1ea1514ea1d1103e30b12725240be9ef3143aadac5537c4e990f690f4ad",
+          "headless_semantic_sha256": "80855d9d275422feb53c8385e1d3245cd3be49f46205800ce12ae37fdf155265",
+          "native_semantic_sha256": "80855d9d275422feb53c8385e1d3245cd3be49f46205800ce12ae37fdf155265",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "palkia@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "167bec0c02a5e14ec8e1d3aa97d6a70eb578a6cff8b270d17beae6ee7be24a8c",
+          "object_key": "optional-assets/pokemon_3d/palkia/base/v1-167bec0c02a5e14ec8e1d3aa97d6a70eb578a6cff8b270d17beae6ee7be24a8c.zip",
+          "input_sha256": "ce18fd90ee7448738200232e3dcafc628e3032b699ee3d39323513514f744021",
+          "candidate_sha256": "845509ea0fccf08881e1f6f464252b7bf3397bc9a4d323724f55e898a665b729",
+          "decoded_sha256": "93641c076122877b84c8dc6d4e243910bec2098bb4f2661a2b7404ce23f62d23",
+          "headless_semantic_sha256": "a43898ceea74d9e0e77684b4c85fa77fc5c6d25831c73e049ad035276ef169c0",
+          "native_semantic_sha256": "a43898ceea74d9e0e77684b4c85fa77fc5c6d25831c73e049ad035276ef169c0",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "dondozo",
+      "packs": {
+        "baseline": {
+          "sha256": "bf79617c853fc0c2ea871b2d356e6e4d47a83d043123277762e95db4507f324c",
+          "bytes": 12615532
+        },
+        "codec-control": {
+          "sha256": "f2a626b0f12201e4a89176a7efb53fda317be3df4e1d0010f873265d920ee912",
+          "bytes": 12615548
+        },
+        "shared": {
+          "sha256": "62db04b925245a46afd47dfbd7823eabcea3934899e00a61eeee6625f8ac8b50",
+          "bytes": 10986856
+        }
+      },
+      "native_shared_texture_objects": 12,
+      "native_texture_counter_baseline_bytes": 159561728,
+      "native_texture_counter_shared_bytes": 139108864,
+      "native_texture_counter_saved_bytes": 20452864,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "dondozo",
+          "kind": "approved_archive",
+          "archive_sha256": "e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff",
+          "object_key": "optional-assets/pokemon_3d/dondozo/base/v1-e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff.zip",
+          "input_sha256": "c89c88d63312dc6881a7059b241d618c1221f103e47542d9c61f43d51499069c",
+          "candidate_sha256": "4fbf5876d9b9b45c9e5e208d773f2e727e6c80dbfd425907788fb9d0203c6e2a",
+          "decoded_sha256": "f7a2d31d791ca123855f611242eff14a94e1185f173ec2e836539880df175a5c",
+          "headless_semantic_sha256": "79687ee7f2aba7fe891f759ad4fe7250b92728fdfddd892da48a5a97e79f9f00",
+          "native_semantic_sha256": "79687ee7f2aba7fe891f759ad4fe7250b92728fdfddd892da48a5a97e79f9f00",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "dondozo@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff",
+          "object_key": "optional-assets/pokemon_3d/dondozo/base/v1-e7dcf03df6af56c28f85df081791ffd8865545b655670b7d57ad345a39e000ff.zip",
+          "input_sha256": "96f6579a7bd46536ac343e1256f6df445f081c494e663dcabadd22644af6953d",
+          "candidate_sha256": "101aab7d5b4d60fff84065453b5304339f0625cec1b8acfe4a9f5891141bf231",
+          "decoded_sha256": "d03a161b87eb879d23c6fa16835970cfccfe2989068bff79d851a32e5037c5f4",
+          "headless_semantic_sha256": "8a0c041cd612651f5ca34b2323493a6a673f0280d03d95042ad19c735fa5345f",
+          "native_semantic_sha256": "8a0c041cd612651f5ca34b2323493a6a673f0280d03d95042ad19c735fa5345f",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "dragonite-mega",
+      "packs": {
+        "baseline": {
+          "sha256": "ea2fbb59cd85954ee6ea01d90c272200b3f58201273bb1215215a78968725b59",
+          "bytes": 67184748
+        },
+        "codec-control": {
+          "sha256": "ed63388a866bdf3cc68b646b0c4f1fe7b11f38d1ce9cbf7e9b501862a5a000b0",
+          "bytes": 9027644
+        },
+        "shared": {
+          "sha256": "99a8a568aff88b9b1e26aa0e3b2b122f38a7a510b95549ded72a6fd171eea890",
+          "bytes": 7306004
+        }
+      },
+      "native_shared_texture_objects": 13,
+      "native_texture_counter_baseline_bytes": 134842368,
+      "native_texture_counter_shared_bytes": 109402112,
+      "native_texture_counter_saved_bytes": 25440256,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "dragonite-mega",
+          "kind": "approved_archive",
+          "archive_sha256": "5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279",
+          "object_key": "optional-assets/pokemon_3d/dragonite/mega/v1-5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279.zip",
+          "input_sha256": "470f2bd0cec3155f4c96b63aa859fc71a12b6ac6691e88975f176f78a142ae3c",
+          "candidate_sha256": "470f2bd0cec3155f4c96b63aa859fc71a12b6ac6691e88975f176f78a142ae3c",
+          "decoded_sha256": "caf24b565b6cc1d9568f60fe7b92ac968c54ef224dba1dbc9fbba1b0e06fd991",
+          "headless_semantic_sha256": "fb80b89d2e730f1cb0c6a7aeb791048938ad03f1d149c74b3a8e2d0d49e03420",
+          "native_semantic_sha256": "fb80b89d2e730f1cb0c6a7aeb791048938ad03f1d149c74b3a8e2d0d49e03420",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "dragonite-mega@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279",
+          "object_key": "optional-assets/pokemon_3d/dragonite/mega/v1-5b8caedfda2fc270751947a45ce14178e1e9b768ae14c7d6a2a4b71e73aa4279.zip",
+          "input_sha256": "9ca480ed957f90a76e963eb6264e7888d53ae1c306e01410973ecab0ebb4dc09",
+          "candidate_sha256": "9ca480ed957f90a76e963eb6264e7888d53ae1c306e01410973ecab0ebb4dc09",
+          "decoded_sha256": "1e2273b2de0446078816381337306d5f8880b11fabc56a41c6b0841f5502f646",
+          "headless_semantic_sha256": "e97a0b374712720c54310f4baa3261102167bcdbfdbdf024f71e3bf02012e606",
+          "native_semantic_sha256": "e97a0b374712720c54310f4baa3261102167bcdbfdbdf024f71e3bf02012e606",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "darmanitan-standard",
+      "packs": {
+        "baseline": {
+          "sha256": "962453cf6bbe8c4677aa77dc98f82ec43b3f80604a3f94e8f350ebbe8af0b7af",
+          "bytes": 1323276
+        },
+        "codec-control": {
+          "sha256": "8b76d5c66919f1b93eb26d69d0d6623f3410914082a66c2f4ac859be644efed1",
+          "bytes": 1323292
+        },
+        "shared": {
+          "sha256": "e208708d78f1245aafa7e5547573cbb597277593a3d8d1ff2f14c376791fe1c0",
+          "bytes": 1189724
+        }
+      },
+      "native_shared_texture_objects": 1,
+      "native_texture_counter_baseline_bytes": 67446784,
+      "native_texture_counter_shared_bytes": 66398208,
+      "native_texture_counter_saved_bytes": 1048576,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "darmanitan-standard",
+          "kind": "approved_archive",
+          "archive_sha256": "5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8",
+          "object_key": "optional-assets/pokemon_3d/darmanitan-standard/base/v1-5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8.zip",
+          "input_sha256": "1d00c7b3112c2c65f5d46b9fb86237f6415602de26c81db0cf578942c473b57e",
+          "candidate_sha256": "f9364d49bc5d65850f2ed9419c60aa9e70aa5e5a0614760508e7b0b249c3ac77",
+          "decoded_sha256": "5a3c4b3cbe15b13fa8ecf25cc04db517208c58de6d35b74e3e2c78631539efa7",
+          "headless_semantic_sha256": "3414c699e5a42083036689c05245c05999c719843338e43618e4dad46f87d4eb",
+          "native_semantic_sha256": "3414c699e5a42083036689c05245c05999c719843338e43618e4dad46f87d4eb",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "darmanitan-standard@shiny",
+          "kind": "approved_archive",
+          "archive_sha256": "5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8",
+          "object_key": "optional-assets/pokemon_3d/darmanitan-standard/base/v1-5cf4b16a6eebf85f5afd283908e22aa643c9a3bb8d6a774c1ba3693b75c2c6f8.zip",
+          "input_sha256": "56d0f61739018d4e2b4cd5cc987e0772bee311c0be4abaff685ec612b9de727b",
+          "candidate_sha256": "ed70ea41c3ea6ba13fb361874e721f22a375c28fd589b972f951af383d0ace73",
+          "decoded_sha256": "1b82cf869de9e3abdcdd4a59dddcd133077a234cfb7423e46e035a02ef49dc5c",
+          "headless_semantic_sha256": "8994b3923e3aab2eabae4e3b2fe32fece44dd9eb1788f1483bd76f9ff3cfb1c8",
+          "native_semantic_sha256": "8994b3923e3aab2eabae4e3b2fe32fece44dd9eb1788f1483bd76f9ff3cfb1c8",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "diancie-mega",
+      "packs": {
+        "baseline": {
+          "sha256": "b10d4ef2aafeeef99208ec2710aa53d84c7a2e451ec092b45e3977f433220947",
+          "bytes": 9725068
+        },
+        "codec-control": {
+          "sha256": "1a6ded2c0238fe81bced1d436b36a885dc49a471b3ebd995eb9f85f8b928ed7f",
+          "bytes": 9725084
+        },
+        "shared": {
+          "sha256": "78ba796461e451716762e59adf5cb12e194e89a3ed2bdf7ec9ecaa17bb423cf8",
+          "bytes": 8535952
+        }
+      },
+      "native_shared_texture_objects": 8,
+      "native_texture_counter_baseline_bytes": 84125696,
+      "native_texture_counter_shared_bytes": 72517632,
+      "native_texture_counter_saved_bytes": 11608064,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "diancie-mega",
+          "kind": "owned_retained_source",
+          "input_sha256": "931dca1bdaf50eb4e560fd4aeb621fea6880b572cac4482dfc3fd51648700be8",
+          "candidate_sha256": "9c241e1a8db2531997e541ad7bb8e59ab9ac79b247ff06d5bd52eff2c898e200",
+          "decoded_sha256": "38fb3c1e7a71578ab6e71f444f2b8d41071cb5ab7507a88a81eba8ec3b1b8b69",
+          "headless_semantic_sha256": "0faa13b7c10326a9dcaaba00496f675e138c23a9d9d0d530bc0c96666b57cf64",
+          "native_semantic_sha256": "0faa13b7c10326a9dcaaba00496f675e138c23a9d9d0d530bc0c96666b57cf64",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "diancie-mega@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "796fb7004653862714693efaf1db0d1c60be74f90c4b93d67f8a950ada7a5990",
+          "candidate_sha256": "05e52e129382061f26ae7e55f282c107849a57fe84332e9658378cd171410c49",
+          "decoded_sha256": "5c8c862b6fa7d3061591d9a8def9ac87160511486aac84e94b8591bcccfe5320",
+          "headless_semantic_sha256": "38c84e0dc13412ca29ac04304743b0358eddd41f758eb9e22bcee43883383824",
+          "native_semantic_sha256": "38c84e0dc13412ca29ac04304743b0358eddd41f758eb9e22bcee43883383824",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "greninja-mega",
+      "packs": {
+        "baseline": {
+          "sha256": "c240740b9362d3f9d0a53e06c0103dc523ff43b165fb2e3a534dd9d472bb4a0f",
+          "bytes": 6454604
+        },
+        "codec-control": {
+          "sha256": "d9cacf6b3838fdf050f8f8adf9f40c8a76898cb9c60c31b3f7fb0eabc7677885",
+          "bytes": 6454652
+        },
+        "shared": {
+          "sha256": "17c25d950857b814325aa031d4aead2bec5664a8d1e7a09b9b5a4e07c3fe1a95",
+          "bytes": 5245456
+        }
+      },
+      "native_shared_texture_objects": 4,
+      "native_texture_counter_baseline_bytes": 77016064,
+      "native_texture_counter_shared_bytes": 70659072,
+      "native_texture_counter_saved_bytes": 6356992,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "greninja-mega",
+          "kind": "owned_retained_source",
+          "input_sha256": "1149cf54c0dd799f4ecdd4585ea44e79158947ed83bf429e77177fb25293260d",
+          "candidate_sha256": "750b584eea21914eba120240f4d7d39613337123c90a3c4bc30258c8ae8cfced",
+          "decoded_sha256": "86658fb2df84fefba0dd18d7f0fe38c3086048f34180d9478a3508a6bf5e1619",
+          "headless_semantic_sha256": "be5bc7f00ea768beb67421265bc31353de4d60c3fb6cd29ad03914e4b93530ba",
+          "native_semantic_sha256": "be5bc7f00ea768beb67421265bc31353de4d60c3fb6cd29ad03914e4b93530ba",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "greninja-mega@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "1cb822ea1affd2be296225e1baa891665db7a4092c6669dd1dc3c382277dd363",
+          "candidate_sha256": "e5ff3b0e28ab817b7c6939da074220212c1dbaaebb7caaa80952bf343411e35b",
+          "decoded_sha256": "1b42ddf9f46ede1b27b4c5c2459ef54b6853113befb8af0089c6c30faaeb2014",
+          "headless_semantic_sha256": "6d5ea235cdc0386094f08a3f3bac72c32a60d0e6e00da4f8c2d3bdb7a56409ce",
+          "native_semantic_sha256": "6d5ea235cdc0386094f08a3f3bac72c32a60d0e6e00da4f8c2d3bdb7a56409ce",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "zygarde-mega",
+      "packs": {
+        "baseline": {
+          "sha256": "31393b9f13f125e76ba9564570fa968618095d76241347ac6699f866ac8577f5",
+          "bytes": 8692556
+        },
+        "codec-control": {
+          "sha256": "25c6a450acc8ebac16727655ec68270627c048e147cfcc3b478f6ec6239a7aa9",
+          "bytes": 8692572
+        },
+        "shared": {
+          "sha256": "b8a5a8046a3f7864d894dd8908f319b3f2b465eca400cb12f601936ee661a814",
+          "bytes": 7626988
+        }
+      },
+      "native_shared_texture_objects": 9,
+      "native_texture_counter_baseline_bytes": 77155328,
+      "native_texture_counter_shared_bytes": 68434432,
+      "native_texture_counter_saved_bytes": 8720896,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "zygarde-mega",
+          "kind": "owned_retained_source",
+          "input_sha256": "d48541e0db89f02bc395329b043e3a4db19847b0ded6a44c4eacceeb05f272ac",
+          "candidate_sha256": "1791bdd612a41a24588c55186bec04f7b0085afb7a6b61ecd7e1e5874fbe0d7f",
+          "decoded_sha256": "123b624b2caffaf5bf9caa027421040f1ae5bfa2add2bd5395b2cc66511a4808",
+          "headless_semantic_sha256": "29e24381ec3bd273b6e43576216178218db349f3b210ea87fa29862f0cddc22f",
+          "native_semantic_sha256": "29e24381ec3bd273b6e43576216178218db349f3b210ea87fa29862f0cddc22f",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "zygarde-mega@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "bb16e72d6cd56f5b5b86db46511aecd02748536da166e54db9744231df36a557",
+          "candidate_sha256": "4ad011f5844c8f5c6793dea16dd658b96f4b66458c71240cb679e9fba12af669",
+          "decoded_sha256": "5900eff25d4f7174478a47aeb74c74ccb3a2f32cedbcd36f3597c5f710523af5",
+          "headless_semantic_sha256": "59bf38bfd39a06850a1c871dd9255ad7320b05dcc832e3d4550379fe0e7557da",
+          "native_semantic_sha256": "59bf38bfd39a06850a1c871dd9255ad7320b05dcc832e3d4550379fe0e7557da",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "golisopod-mega",
+      "packs": {
+        "baseline": {
+          "sha256": "345863911c71dc64948feb6dba549c2896ffcb02a4aaf56ffe6eea6b5dc5c7b5",
+          "bytes": 9045356
+        },
+        "codec-control": {
+          "sha256": "125c3e5566f59e18a4ec53479dc447a240533f8ffdf56efbb3926a9c307e263c",
+          "bytes": 9045404
+        },
+        "shared": {
+          "sha256": "da6fd4ca53f31dd0f80578849fbf44945e03ac7585f6baeaaa34653eb923020a",
+          "bytes": 7587764
+        }
+      },
+      "native_shared_texture_objects": 3,
+      "native_texture_counter_baseline_bytes": 109012992,
+      "native_texture_counter_shared_bytes": 100558848,
+      "native_texture_counter_saved_bytes": 8454144,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "golisopod-mega",
+          "kind": "owned_retained_source",
+          "input_sha256": "9ac5e95f94a6d8045bdd8ec41aa787c1495ca09ea9d69402fb965ccb0206f01a",
+          "candidate_sha256": "716752c06a6f0547cb8654181f4b6f5a9eb1be879a4cc083ee73bd96824b4870",
+          "decoded_sha256": "37554807bc68652ba436311b11946cb46d9b23f3f3881841152dc76a0e40a486",
+          "headless_semantic_sha256": "c258ec65fd3f9c17bfe4d9194da1805d94892ac2b1a8c138a5b0b245ff5e17b2",
+          "native_semantic_sha256": "c258ec65fd3f9c17bfe4d9194da1805d94892ac2b1a8c138a5b0b245ff5e17b2",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "golisopod-mega@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "56f5af6e51323c2c28067b0b9cb20b1be6a3e18bfe9c574430cd7aee7c59a908",
+          "candidate_sha256": "9019155e42d3d3fb869fb1d3723c1960990e2a9c259c6f5da059c23eaeae40ca",
+          "decoded_sha256": "3a0ef577e5d8316c468303b9caf21f6cf79eef0a91345db7e7bd489d3b483c89",
+          "headless_semantic_sha256": "da4ad3b611fbf6d3a71dcd1de083e2d520eb56e784686e31a48c5683d8041ab4",
+          "native_semantic_sha256": "da4ad3b611fbf6d3a71dcd1de083e2d520eb56e784686e31a48c5683d8041ab4",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "articuno-galar",
+      "packs": {
+        "baseline": {
+          "sha256": "9db8ce2ac9dfaf7457b3ba0cb1e4630d7679d52a24f5052c5f144a774263d850",
+          "bytes": 15318380
+        },
+        "codec-control": {
+          "sha256": "7a4d8ba09e101e32c7fc72e456fbf1b6241944fae04503cf07d7f862d4039a69",
+          "bytes": 15318428
+        },
+        "shared": {
+          "sha256": "060288b67ae5884c2767e35c21b29b764e0d749755ae5ba8a2079e9ac8e3d13c",
+          "bytes": 13115636
+        }
+      },
+      "native_shared_texture_objects": 9,
+      "native_texture_counter_baseline_bytes": 105228288,
+      "native_texture_counter_shared_bytes": 94464000,
+      "native_texture_counter_saved_bytes": 10764288,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "articuno-galar",
+          "kind": "owned_retained_source",
+          "input_sha256": "bc09f0bfb4ff03ea4fa98ebd6f156ebb3ce311e35768c1eac68d06f4222896cd",
+          "candidate_sha256": "1788dd8c35081d63962a551f19300fd71954522f8ad2bc38e8f2685be5372082",
+          "decoded_sha256": "1e7864b20f6cea7677a1f7262a6bea82ae5c8d035220007ec9ff00bfc19cfb13",
+          "headless_semantic_sha256": "c16c6b6fc47ff58d949130e7992d50a31b1b4bf070b2d0d468cf57445cfceadc",
+          "native_semantic_sha256": "c16c6b6fc47ff58d949130e7992d50a31b1b4bf070b2d0d468cf57445cfceadc",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "articuno-galar@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "287d661fbb43600781f7937e612579b783269d6d0eba6343a2e1a1911fc2c702",
+          "candidate_sha256": "0f12dd62048e05d1d681e942fbe0e1fd1a69cbf5d54f8161666afd82d90fd237",
+          "decoded_sha256": "5ac2f7532b115188f31349fb91489cfe27b7c0dae9060cf9f0891688d1931999",
+          "headless_semantic_sha256": "cd2457de574a95e4a6c35653cf7b2236aa0ae786c6e8e3bc98699889ba930788",
+          "native_semantic_sha256": "cd2457de574a95e4a6c35653cf7b2236aa0ae786c6e8e3bc98699889ba930788",
+          "native_matches_headless_reference": true
+        }
+      ]
+    },
+    {
+      "species": "moltres-galar",
+      "packs": {
+        "baseline": {
+          "sha256": "4d0e2ce87998d129cd2c45ce3b6b2ac8e3f7f6aff7ed5b6289dcc3a1b3bcb160",
+          "bytes": 16501804
+        },
+        "codec-control": {
+          "sha256": "72c537d7fccf85ecf45c45f19efe3dc75758c2f6b6f9e4ebfe85dcba21ae802e",
+          "bytes": 16501852
+        },
+        "shared": {
+          "sha256": "ff7358ff90afaf49c227b0d52793b493dabae63c8302b036db4f4c159131ed89",
+          "bytes": 13893364
+        }
+      },
+      "native_shared_texture_objects": 15,
+      "native_texture_counter_baseline_bytes": 102234624,
+      "native_texture_counter_shared_bytes": 88616192,
+      "native_texture_counter_saved_bytes": 13618432,
+      "remaining_texture_refs": 0,
+      "models": [
+        {
+          "identity": "moltres-galar",
+          "kind": "owned_retained_source",
+          "input_sha256": "8ad1dd98271cee51fd60044884beb74ab449b0595627071573978b25416694dd",
+          "candidate_sha256": "457fdac3797659131fa75b347eda63d6136e317a0ce259ebad3fbbf0ffec2c52",
+          "decoded_sha256": "0cc4920e8c34eb74e0735a5b85fd569e89b6f10772bee7b0cfc53c346f4150ef",
+          "headless_semantic_sha256": "413589c31cb31189df26e0444e3a682b6deab6617f55de15e441e74232644cb8",
+          "native_semantic_sha256": "413589c31cb31189df26e0444e3a682b6deab6617f55de15e441e74232644cb8",
+          "native_matches_headless_reference": true
+        },
+        {
+          "identity": "moltres-galar@shiny",
+          "kind": "owned_retained_source",
+          "input_sha256": "2f15fca1d16c9d71721d8536a8b2a579554a5ee3aec6d47e11d98692ec3f5057",
+          "candidate_sha256": "c9c476781973c605ac8498cffc0c53818d745ec6a5f61e111ae2c846d27a5241",
+          "decoded_sha256": "22499fa27bb1adddd0ed52f2a380f56dcccd10f733895ea12d4c661d0acfacf4",
+          "headless_semantic_sha256": "32e672a4cd1d33a792c8070efa4a33f883504d0f1494c26cd38a738dbfd8d4b4",
+          "native_semantic_sha256": "32e672a4cd1d33a792c8070efa4a33f883504d0f1494c26cd38a738dbfd8d4b4",
+          "native_matches_headless_reference": true
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,9 @@ class ProbeSettings:
 	var terrain_effects := false
 	var weather_effects := false
 
-func _render(path: String, directory: String) -> Dictionary:
+const POSES = [["idle", 0.0], ["physical_attack", 0.5], ["special_attack", 0.5], ["sleep", 0.5], ["faint_loop", 0.5]]
+
+func _render(path: String, directory: String, framing := 0.0) -> Dictionary:
 	var stage := ReviewStage.new()
 	root.add_child(stage)
 	stage.setup()
@@ -25,12 +27,32 @@ func _render(path: String, directory: String) -> Dictionary:
 	var actor := scene.instantiate() as Node3D
 	stage.world.add_child(actor)
 	var player: AnimationPlayer = actor.find_children("*", "AnimationPlayer", true, false)[0]
+	var poses := POSES.duplicate(true)
+	if not player.has_animation("faint_loop"):
+		# The production presenter retains faint_start's end for legacy models.
+		assert(player.has_animation("faint_start"))
+		poses[4] = ["faint_start", 1.0]
+	for pose in poses:
+		assert(player.has_animation(pose[0]), "Missing authored source clip: " + str(pose[0]))
 	var box := await _sample(actor, player, "idle", 0)
 	actor.scale *= 2.8 / maxf(box.size.y, 0.1)
 	box = _bounds(actor)
 	actor.position -= Vector3(box.get_center().x, box.position.y, box.get_center().z)
+	# Derive a matched camera from the source's visible sampled motion. Reuse
+	# it for both controls and the candidate; wide models must not be cropped.
+	if framing == 0.0:
+		framing = 5.5
+		for pose in poses:
+			var bounds := await _sample(actor, player, pose[0], pose[1])
+			for direction: Vector3 in [Vector3(0.4, 0.2, 1), Vector3(-0.4, 0.2, -1)]:
+				var forward := direction.normalized()
+				var right := forward.cross(Vector3.UP).normalized()
+				var up := right.cross(forward).normalized()
+				for corner in 8:
+					var relative := bounds.get_endpoint(corner) - Vector3(0, 1.4, 0)
+					framing = maxf(framing, maxf(absf(relative.dot(right)), absf(relative.dot(up))) * 2.2)
 	stage.camera.projection = Camera3D.PROJECTION_ORTHOGONAL
-	stage.camera.size = 5.5
+	stage.camera.size = framing
 	stage.camera.far = 1000
 	stage.packed["probe"] = scene
 	stage.identities[0] = "probe"
@@ -51,7 +73,7 @@ func _render(path: String, directory: String) -> Dictionary:
 		var direction := Vector3(0.4, 0.2, 1) if view == "front" else Vector3(-0.4, 0.2, -1)
 		stage.camera.position = Vector3(0, 1.4, 0) + direction.normalized() * 12
 		stage.camera.look_at(Vector3(0, 1.4, 0))
-		for pose in [["idle", 0.0], ["physical_attack", 0.5], ["special_attack", 0.5], ["sleep", 0.5], ["faint_loop", 0.5]]:
+		for pose in poses:
 			await _sample(actor, player, pose[0], pose[1])
 			effect_time(actor, pose[1])
 			helper._sync()
@@ -72,7 +94,7 @@ func _render(path: String, directory: String) -> Dictionary:
 	stage.free()
 	await process_frame
 	assert(scene_ref.get_ref() == null, "Packed scene remained after presentation release")
-	return {"frames": frames, "paths": paths, "texture_counter_bytes": texture_bytes, "response_schema": response_schema}
+	return {"frames": frames, "paths": paths, "texture_counter_bytes": texture_bytes, "response_schema": response_schema, "camera_size": framing}
 
 func _run() -> void:
 	var settings := ProbeSettings.new()
@@ -94,8 +116,8 @@ func _run() -> void:
 		assert(FileAccess.get_sha256(row.source_path) == row.source_sha256)
 		assert(FileAccess.get_sha256(row.candidate_path) == row.candidate_sha256)
 		var source := await _render(row.source_path, directory.path_join(row.identity + "/source"))
-		var repeat_source := await _render(row.source_path, directory.path_join(row.identity + "/repeat-source"))
-		var candidate := await _render(row.candidate_path, directory.path_join(row.identity + "/candidate"))
+		var repeat_source := await _render(row.source_path, directory.path_join(row.identity + "/repeat-source"), source.camera_size)
+		var candidate := await _render(row.candidate_path, directory.path_join(row.identity + "/candidate"), source.camera_size)
 		records.append({"identity": row.identity, "source": source, "candidate": candidate,
 			"repeat_source": repeat_source, "all_pixels_exact": source.frames == candidate.frames,
 			"repeat_source_pixels_exact": source.frames == repeat_source.frames,

@@ -3,6 +3,7 @@
 Run through slot-env. Project/preset edits and generated adapters are temporary.
 """
 import argparse
+import fcntl
 import os
 import struct
 import zlib
@@ -94,6 +95,12 @@ def main():
         parser.error("Run slot exports through ops/worktrees/slot-env SLOT -- COMMAND")
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    (ROOT / ".tmp").mkdir(exist_ok=True)
+    project_lock = (ROOT / ".tmp/diagnostic-project.lock").open("a+")
+    try:
+        fcntl.flock(project_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        raise RuntimeError("Another diagnostic owns temporary project edits; run sequentially")
     def chunk(kind, body):
         return struct.pack(">I", len(body)) + kind + body + struct.pack(">I", zlib.crc32(kind + body))
     png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", 4, 4, 8, 6, 0, 0, 0))
@@ -116,7 +123,9 @@ def main():
             (generated / "texture_ctex_reader.gd").write_text((ROOT / "tools/sprite_factory/texture_ctex_reader.gd").read_text())
         if android_pairs:
             for helper in ["model_texture_audit", "model_pair_bundle_contract"]:
-                (generated / (helper + ".gd")).write_text((ROOT / ("tools/sprite_factory/" + helper + ".gd")).read_text())
+                source = (ROOT / ("tools/sprite_factory/" + helper + ".gd")).read_text()
+                source = source.replace("res://tools/sprite_factory/model_texture_audit.gd", "res://scripts/battle_entry_qa_generated/model_texture_audit.gd")
+                (generated / (helper + ".gd")).write_text(source)
         for name in CHECKS:
             source = (ROOT / f"tests/{name}.gd").read_text()
             source = source.replace("extends SceneTree", "extends Node\nsignal completed(code: int)\n@onready var root: Window = get_tree().root\nfunc quit(code := 0) -> void:\n\tcompleted.emit.call_deferred(code)")
@@ -132,6 +141,10 @@ def main():
             (generated / f"{name}.gd").write_text(source)
         paths = [f"res://scripts/battle_entry_qa_generated/{name}.gd" for name in CHECKS]
         runner = "extends Node\nfunc _ready() -> void:\n\tvar origin := str(JavaScriptBridge.eval(\"window.location.origin\", true)) if OS.has_feature(\"web\") else \"http://127.0.0.1:8091\"\n\tWebPokemonSpriteService._release_config_cache = {\"spriteStyles\": {\"animated\": {\"front\": origin + \"/qa-sprites/front\", \"back\": origin + \"/qa-sprites/back\"}}}\n\tWebHomeIconService._catalog = {\"normal\": {}, \"shiny\": {}}\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
+        if android_pairs:
+            # The resource-only suite does not render/download sprites. Avoid
+            # coupling its runner to unrelated presentation autoload globals.
+            runner = "extends Node\nfunc _ready() -> void:\n\t_run.call_deferred()\nfunc _run() -> void:\n\tvar results := {}\n"
         if coop_sprites:
             runner = runner.replace('"front": origin + "/qa-sprites/front", "back": origin + "/qa-sprites/back"',
                                     ', '.join(f'"{side}": origin + "/qa-sprites/{side}-0123456789ab"'
@@ -216,9 +229,13 @@ def main():
         presets.write_text(preset + "\n" + selected)
         with (output / "export.log").open("w") as log:
             if android_3d:
-                subprocess.run(["godot", "--headless", "--path", str(ROOT),
-                                "--script", paths[0], "--check-only"],
-                               stdout=log, stderr=subprocess.STDOUT, check=True)
+                scripts = [paths[0]]
+                if android_pairs:
+                    scripts.append("res://scripts/battle_entry_qa_generated/runner.gd")
+                for script in scripts:
+                    subprocess.run(["godot", "--headless", "--path", str(ROOT),
+                                    "--script", script, "--check-only"],
+                                   stdout=log, stderr=subprocess.STDOUT, check=True)
             command = ["godot", "--headless", "--log-file", str(output / "engine-export.log"), "--path", str(ROOT)]
             android_file = "coop-sprite-qa.apk" if coop_sprites else ("mobile-collapse-qa.apk" if mobile_collapse else "battle-entry-qa.apk")
             if android_3d:
@@ -237,6 +254,7 @@ def main():
                 editor_settings.unlink(missing_ok=True)
             else:
                 editor_settings.write_bytes(original_editor)
+        project_lock.close()
 
 if __name__ == "__main__":
     main()

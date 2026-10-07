@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Owned offline model audit/render proof; no cache transfer or publication."""
 import argparse
+import fcntl
 import os
 from pathlib import Path
 import re
@@ -15,7 +16,10 @@ def main():
     parser.add_argument("--mode", choices=["audit", "render", "pair"], required=True)
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--timeout", type=int, default=240, help="Explicit cohort run limit in seconds")
     args = parser.parse_args()
+    if args.timeout < 1 or args.timeout > 1800:
+        parser.error("Diagnostic timeout must be between 1 and 1800 seconds")
     if not ROOT.parent.name.startswith("slot-") or os.environ.get("POKEAETHER_SLOT") != ROOT.parent.name:
         parser.error("Run in an assigned slot through slot-env")
     source, output = args.input.resolve(), args.output.resolve()
@@ -27,6 +31,11 @@ def main():
     log_path = output.with_suffix(".log")
     if log_path.exists():
         parser.error("Fresh log required")
+    project_lock = (ROOT / ".tmp/diagnostic-project.lock").open("a+")
+    try:
+        fcntl.flock(project_lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        raise RuntimeError("Another diagnostic owns temporary project edits; run sequentially")
     project = ROOT / "project.godot"
     original = project.read_bytes()
     config = re.sub(r"\[autoload\].*?(?=\n\[)", "", original.decode(), flags=re.S)
@@ -48,7 +57,7 @@ def main():
         with log_path.open("w") as log:
             child = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
             try:
-                code = child.wait(timeout=240)
+                code = child.wait(timeout=args.timeout)
                 if code:
                     raise RuntimeError(f"Godot exited {code}; inspect {log_path}")
             except BaseException:
@@ -61,6 +70,7 @@ def main():
                 raise
     finally:
         project.write_bytes(original)
+        project_lock.close()
     text = log_path.read_text()
     if re.search(r"(?:SCRIPT ERROR|^ERROR:)", text, re.M) or not (output / "report.json").is_file():
         raise RuntimeError(f"Probe failed; inspect {log_path}")
