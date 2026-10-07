@@ -186,6 +186,7 @@ var content_busy := false
 var installing_bundle := false
 var bundle_worker: Thread
 var planning_worker: Thread
+var cleanup_worker: Thread
 
 
 func _draw() -> void:
@@ -311,6 +312,7 @@ func _ready() -> void:
 	_load_local_versions()
 	_refresh_launcher_version()
 	_refresh_status()
+	await _prune_model_history()
 	_set_server_health_checking()
 	_sync_button_cursors()
 	_refresh_server_health.call_deferred()
@@ -893,6 +895,10 @@ func _create_game_process(absolute_executable_path: String) -> int:
 		_globalize_storage_path(install_dir.path_join("forest-runtime/forest.json"))
 	)
 	var process_id := _create_game_process_with_mods(absolute_executable_path)
+	if process_id > 0:
+		var lease_error := preload("model_store_usage.gd").register_process(release_asset_bundles.store.root, process_id)
+		if lease_error != OK:
+			_log_error("Could not record running game for model cleanup: " + error_string(lease_error))
 	if had_forest:
 		OS.set_environment(FOREST_MANIFEST_ENV, previous_forest)
 	else:
@@ -918,6 +924,21 @@ func _create_game_process(absolute_executable_path: String) -> int:
 	else:
 		OS.unset_environment("POKEAETHER_MODS_DIR")
 	return process_id
+
+
+func _prune_model_history() -> void:
+	_set_busy(true)
+	cleanup_worker = Thread.new()
+	if cleanup_worker.start(release_asset_bundles.store.prune_model_versions) == OK:
+		while cleanup_worker.is_alive():
+			await get_tree().process_frame
+		var cleanup: Dictionary = cleanup_worker.wait_to_finish()
+		if not str(cleanup.error).is_empty():
+			_log_error("Model cleanup deferred: " + str(cleanup.error))
+		elif int(cleanup.removed_objects) > 0:
+			_log("Removed %d previous model versions." % int(cleanup.removed_objects))
+	cleanup_worker = null
+	_set_busy(false)
 
 
 func _open_content_packs() -> void:
@@ -2989,7 +3010,8 @@ func _log_server_health_recovery_if_needed(result: Dictionary) -> void:
 
 func _apply_server_access_status() -> void:
 	var launcher_task_active := (
-		http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED
+		content_busy
+		or http_request.get_http_client_status() != HTTPClient.STATUS_DISCONNECTED
 		or (download_service != null and download_service.is_active())
 		or launcher_update_busy
 		or launcher_update_in_progress
@@ -3145,7 +3167,7 @@ func _setup_asset_downloads() -> void:
 
 func _exit_tree() -> void:
 	# Finish an atomic publication before releasing the store during shutdown.
-	for worker: Thread in [bundle_worker, planning_worker]:
+	for worker: Thread in [bundle_worker, planning_worker, cleanup_worker]:
 		if worker != null and worker.is_started():
 			worker.wait_to_finish()
 

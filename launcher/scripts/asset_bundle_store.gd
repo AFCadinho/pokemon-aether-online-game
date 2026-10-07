@@ -1,6 +1,7 @@
 extends RefCounted
 ## Transactional local store for optional immutable asset bundles.
 const Index = preload("asset_bundle_index.gd")
+const Usage = preload("model_store_usage.gd")
 const STATE_SCHEMA := 1
 const STATE_KIND := "pokeaether-installed-asset-bundles"
 const BUNDLE_SCHEMA := 1
@@ -12,6 +13,7 @@ const MAX_ARCHIVE := 512 * 1024 * 1024
 const MAX_FILES := 10
 
 var root: String
+var prune_previous_models := false
 
 
 func _init(directory: String = "user://asset-bundles-v1") -> void:
@@ -330,6 +332,101 @@ func garbage_collect() -> Dictionary:
 	return {"error": "", "removed_objects": removed_objects, "removed_generations": removed_generations}
 
 
+func prune_model_versions() -> Dictionary:
+	var result := {"error": "", "removed_objects": 0, "removed_generations": 0, "deferred": false}
+	if _models_in_use():
+		result.deferred = true
+		return result
+	var parent := DirAccess.open(root)
+	if parent != null and (parent.is_link("objects") or parent.is_link("generations")):
+		result.error = "Model store contains linked directories; cleanup skipped."
+		return result
+	# Never fall back to the previous pointer while deciding what to delete.
+	var generation := str(_read_json(_pointer_path()).get("generation", ""))
+	if generation.is_empty():
+		return result
+	if not _hex(generation) or not _validate_generation_metadata(generation):
+		result.error = "Current model catalog failed verification; cleanup skipped."
+		return result
+	var installed: Dictionary = _read_json(_generations_root().path_join(generation).path_join("installed-state.json"), MAX_STATE_JSON).assets
+	var referenced := {}
+	for asset: Dictionary in installed.values():
+		referenced[str(asset.archive_sha256)] = true
+	var objects := DirAccess.open(_objects_root())
+	var candidates: Array[String] = []
+	if objects != null:
+		for digest in objects.get_directories():
+			if not _hex(digest) or referenced.has(digest) or objects.is_link(digest):
+				continue
+			var manifest := _read_json(_objects_root().path_join(digest).path_join("bundle.json"))
+			var id := str(manifest.get("asset_id", ""))
+			if manifest.get("asset_type") != "pokemon_3d" or not installed.has(id):
+				continue
+			var current: Dictionary = installed[id]
+			# Completed future downloads remain resumable until collection activation.
+			var old_version: Variant = manifest.get("version")
+			var current_version: Variant = current.get("version")
+			if not (old_version is int or old_version is float) or not (current_version is int or current_version is float):
+				continue
+			if current.get("asset_type") != "pokemon_3d" or float(old_version) < 1 or float(old_version) >= float(current_version):
+				continue
+			if not _owns_model_object(digest, manifest):
+				continue
+			candidates.append(digest)
+	# Warm launches with no previous model files need no collection-wide SHA scan.
+	if candidates.is_empty():
+		return result
+	if not _validate_generation(generation):
+		result.error = "Replacement model failed verification; previous files kept."
+		return result
+	# Verification can take time; a game may have started since the first check.
+	if _models_in_use():
+		result.deferred = true
+		return result
+	for digest in candidates:
+		if _remove_tree(_objects_root().path_join(digest)):
+			result.removed_objects += 1
+		else:
+			result.error = "Could not remove a previous model version."
+	# Keep atomic recovery metadata when verification/deletion could not finish.
+	if not str(result.error).is_empty():
+		return result
+	DirAccess.remove_absolute(_pointer_path(true))
+	var generations := DirAccess.open(_generations_root())
+	if generations != null:
+		for name in generations.get_directories():
+			if _hex(name) and name != generation and not generations.is_link(name):
+				if _remove_tree(_generations_root().path_join(name)):
+					result.removed_generations += 1
+	return result
+
+
+func _models_in_use() -> bool:
+	return Usage.has_running_game(root)
+
+
+func _owns_model_object(digest: String, manifest: Dictionary) -> bool:
+	var path := _objects_root().path_join(digest)
+	var directory := DirAccess.open(path)
+	if directory == null or directory.get_files() != PackedStringArray(["bundle.json"]) or directory.get_directories() != PackedStringArray(["models"]) or directory.is_link("bundle.json") or directory.is_link("models"):
+		return false
+	var models := DirAccess.open(path.path_join("models"))
+	if models == null or not models.get_directories().is_empty() or not manifest.get("appearances") is Array:
+		return false
+	var expected: Array[String] = []
+	for appearance: Variant in manifest.appearances:
+		if not appearance is Dictionary:
+			return false
+		var relative := str(appearance.get("runtime_path", ""))
+		if not _safe_relative(relative) or relative != "models/" + relative.get_file() or models.is_link(relative.get_file()):
+			return false
+		expected.append(relative.get_file())
+	expected.sort()
+	var actual := models.get_files()
+	actual.sort()
+	return not expected.is_empty() and actual == PackedStringArray(expected)
+
+
 func _empty_state(revision: String) -> Dictionary:
 	return {"schema": STATE_SCHEMA, "kind": STATE_KIND, "catalog_revision": revision, "assets": {}}
 
@@ -564,6 +661,10 @@ func _activate_generation(generation: String) -> String:
 			DirAccess.rename_absolute(previous, active)
 		DirAccess.remove_absolute(next)
 		return "Cannot activate installed state."
+	if prune_previous_models:
+		var cleanup := prune_model_versions()
+		if not str(cleanup.error).is_empty():
+			push_warning(str(cleanup.error))
 	return ""
 
 

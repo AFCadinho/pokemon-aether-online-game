@@ -93,7 +93,7 @@ def main():
     output = args.output.resolve()
     output.relative_to(frontend / ".tmp")
     output.mkdir(parents=True, exist_ok=False)
-    files = ["scripts/release_asset_bundles.gd", "scripts/asset_bundle_store.gd",
+    files = ["scripts/release_asset_bundles.gd", "scripts/asset_bundle_store.gd", "scripts/model_store_usage.gd",
         "scripts/asset_bundle_index.gd", "scripts/resumable_download_service.gd",
         "scripts/model_pack_manifest.gd", "tests/native_compression_install_check.gd"]
     files += [source_relative_path(p, launcher) for p in (launcher / "data").glob("approved_3d_release_v*.json")]
