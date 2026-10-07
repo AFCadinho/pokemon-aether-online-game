@@ -706,7 +706,6 @@ transition_id = "kanto_cerulean_city__to_bike_store"
 transition_facing_direction = "up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToBikeStore" unique_id=706782338]
-position = Vector2(0, -16)
 shape = SubResource("RectangleShape2D_door_exit")
 
 [node name="DoorTransitionHint" parent="Exits/ToBikeStore" unique_id=22415696 instance=ExtResource("8_door_hint")]

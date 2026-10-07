@@ -6,11 +6,16 @@
 
 - Illustrate the official Item Dex guide with English screenshots and captions covering navigation, search and item sources.
 
+## 0.3.100
+
 ### Adventure and exploration
 
 - Claim three previously unavailable pickups on Route 14, and find Repel items among updated overworld rewards.
 - Your follower Pokémon hides while you surf and returns when you reach land.
 - Flowers sway gently across Kanto towns, routes and Viridian Forest, as well as the Aether Clash lobby.
+- Show the updated Pallet Town scenery, including its animated flowers.
+- Restore the entrance to Cerulean City's Bike Shop.
+- Restore rain ripples on Cerulean City's water.
 
 ### Items and controls
 

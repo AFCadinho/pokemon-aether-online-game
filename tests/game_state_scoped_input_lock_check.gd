@@ -27,6 +27,9 @@ func _init() -> void:
 	state.acquire_overworld_input_lock(&"story_sequence")
 	state.clear_world_runtime_state()
 	_expect(not state.is_overworld_input_locked(), "Changing maps clears orphaned scoped locks")
+	state.repel_steps = 125
+	state.reset_gameplay_runtime_state()
+	_expect(state.repel_steps == 0, "An isolated GameState reset clears Repel without a live service")
 	state.free()
 	quit(1 if failed else 0)
 
