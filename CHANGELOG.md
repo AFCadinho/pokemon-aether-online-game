@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Account
+
+- Simplify account management labels and guidance in all four languages to focus on player details, linked accounts and privacy.
+
 ### Chat
 
 - Show only the Discord badge on messages sent through Discord, hiding the player's role badge.
