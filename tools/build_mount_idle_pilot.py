@@ -1,14 +1,14 @@
 """Author four native-pixel idle cels for Arcanine and Lapras.
 
 Frame zero is the approved resting pose. Walking atlases are never modified.
-Arcanine holds its body and rider still and moves only the tail tuft (ear tips from behind).
+Arcanine holds its body and rider still and borrows its two native tail poses.
 Lapras rises/falls one pixel above its
 unchanged bottom water-contact rows. No scaling, rotation or interpolation.
 """
 import argparse
 import json
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTIONS = ('down', 'left', 'right', 'up')
@@ -30,34 +30,37 @@ def move_upper(image, split, dy):
     return out
 
 
-def move_tail_tip(image, row, phase):
-    # Tail-only regions in the original 64px follower cell (origin 64,64).
-    # From behind the tail lies across the rump, so use the exposed ear tips
-    # instead: never cut a moving patch out of the body underneath the tail.
-    if not phase:
-        return image.copy()
-    if row == 3:
-        parts = [((16,22,20,30), 0, -phase), ((44,22,48,30), 0, phase)]
-    else:
-        regions = ((22,8,46,22), (42,22,64,36), (0,22,22,36))
-        parts = [(regions[row], phase if row != 2 else -phase, 0)]
-    out = image.copy()
-    protected = image.copy()
-    for region,dx,dy in parts:
-        x0,y0,x1,y1 = region
-        box = (64+x0,64+y0,64+x1,64+y1)
-        out.paste((0,0,0,0), box)
-        out.alpha_composite(image.crop(box), (box[0]+dx,box[1]+dy))
-        travel = (box[0]+min(0,dx),box[1]+min(0,dy),
-                  box[2]+max(0,dx),box[3]+max(0,dy))
-        protected.paste((0,0,0,0), travel)
-    actual = out.copy()
-    for region,dx,dy in parts:
-        x0,y0,x1,y1 = region
-        actual.paste((0,0,0,0), (64+x0+min(0,dx),64+y0+min(0,dy),
-                                  64+x1+max(0,dx),64+y1+max(0,dy)))
-    assert protected.tobytes() == actual.tobytes(), 'Arcanine body changed'
-    return out
+def native_tail_selection(row, size):
+    # Anatomical tail regions in the original 64px follower cell. The approved
+    # Arcanine mount puts that cell at (64,68); head, torso and paws stay fixed.
+    polygons = (
+        [(20,2),(48,2),(48,24),(20,24)],
+        [(38,16),(64,16),(64,42),(38,42)],
+        [(0,16),(26,16),(26,42),(0,42)],
+        [(24,34),(38,34),(42,38),(42,48),(36,52),(28,52),
+         (26,50),(22,50),(20,48),(18,44),(18,42),(22,38)],
+    )
+    # The follower was authored on a doubled pixel grid: keep whole 2x2 pixels.
+    selection = Image.new('L', (size//2,size//2))
+    ImageDraw.Draw(selection).polygon([((64+x)//2,(68+y)//2) for x,y in polygons[row]], fill=255)
+    return selection.resize((size,size), Image.Resampling.NEAREST)
+
+
+def borrow_native_tail(rest, walking, row, column, size):
+    # The sheet has two tail drawings: 0/1 and 2/3 after cancelling walking bob.
+    # Use columns 0 and 2 directly: both have zero bob. No invented translation,
+    # stretched connector or independent ear movement is needed.
+    source_column = (0,2,0,2)[column]
+    donor = walking.crop((source_column*size,row*size,(source_column+1)*size,(row+1)*size))
+    selection = native_tail_selection(row,size)
+    result = rest.copy()
+    result.paste(donor, (0,0), selection)
+    protected = rest.copy()
+    actual = result.copy()
+    protected.paste((0,0,0,0),(0,0),selection)
+    actual.paste((0,0,0,0),(0,0),selection)
+    assert protected.tobytes() == actual.tobytes(), 'Arcanine changed outside its tail'
+    return result
 
 
 def build(check=False):
@@ -76,8 +79,10 @@ def build(check=False):
                 continue
             filename = layer+'.png' if surf else 'idle_'+layer+'.png'
             sources[layer] = Image.open(folder/filename).convert('RGBA')
+        walking = {} if surf else {k: Image.open(folder/(k+'.png')).convert('RGBA')
+                                  for k in ('mount','foreground','rider_mask')}
         sheets = {k: Image.new('RGBA', (size*4, size*4)) for k in ('mount','foreground','rider_mask')}
-        phases = (0, -1, 0, 1) if surf else (0, 2, 0, -2)
+        phases = (0, -1, 0, 1) if surf else (0, 0, 0, 0)
         seats = {}
         for row, direction in enumerate(DIRECTIONS):
             tiles = {key: im.crop((0,row*size,size,(row+1)*size)) for key,im in sources.items()}
@@ -85,11 +90,11 @@ def build(check=False):
                 tiles['foreground'] = Image.new('RGBA', (size,size))
                 if direction == 'down':
                     tiles['foreground'].paste(tiles['mount'].crop((0,0,size,50)), (0,0))
-            split = 58 if surf else 118
+            split = 58 if surf else 122
             seats[direction] = []
             for col,dy in enumerate(phases):
                 for key,tile in tiles.items():
-                    cel = move_upper(tile, split, dy) if surf else move_tail_tip(tile, row, dy)
+                    cel = move_upper(tile, split, dy) if surf else borrow_native_tail(tile, walking[key], row, col, size)
                     assert cel.crop((0,split,size,size)).tobytes() == tile.crop((0,split,size,size)).tobytes()
                     if col == 0:
                         assert cel.tobytes() == tile.tobytes()

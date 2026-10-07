@@ -1,8 +1,10 @@
 # Native idle pilot
 
 Arcanine, Shiny Arcanine and Lapras have four authored idle cels. Arcanine's
-body, paws and rider stay still; the tail tuft moves from the front/sides and
-the exposed ear tips flick from behind. Lapras
+head, ears, body, paws and rider stay still. Its tail uses the two original
+follower drawings from walk columns 0 and 2 in all four directions. Those
+columns have equal body height; walking bob and steps are excluded. The same
+anatomical selection is applied to its foreground and rider mask. Lapras
 bobs one pixel either side of its original resting pose; its lowest two water
 contact rows stay fixed. There is no scaling, rotation or interpolation.
 
