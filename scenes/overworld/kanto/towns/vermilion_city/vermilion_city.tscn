@@ -24,6 +24,7 @@
 [ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="life_worker"]
 [ext_resource type="SpriteFrames" uid="uid://11xcf8nbqgic" path="res://assets/npcs/classes/youngster_frames.tres" id="life_youngster"]
 [ext_resource type="PackedScene" path="res://scenes/world/interactables/cuttable_tree.tscn" id="ss_anne_gym_tree"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/guild_registrar_npc.tscn" id="guild_registrar"]
 
 [sub_resource type="RectangleShape2D" id="shape_1"]
 size = Vector2(96, 16)
@@ -560,6 +561,15 @@ z_as_relative = false
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=240788903]
+
+[node name="GuildRegistrarNPC" parent="Entities/NPCs" instance=ExtResource("guild_registrar")]
+position = Vector2(1168, 624)
+npc_id = "kanto_vermilion_city_guild_registrar"
+gate_id = "kanto_vermilion_city_guild_garden"
+facing_direction = Vector2(-1, 0)
+guard_blocking_offset = Vector2(32, 0)
+guard_blocking_size = Vector2(32, 96)
+blocked_dialogue_id = "kanto_vermilion_city_guild_registrar_closed"
 
 [node name="VisitorIris" parent="Entities/NPCs" unique_id=1448718584 instance=ExtResource("life_dialogue")]
 position = Vector2(528, 464)

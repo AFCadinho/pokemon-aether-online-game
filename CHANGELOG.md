@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a Guild Registrar at Vermilion City's garden entrance and close the full passage while guild-base registration is being prepared.
+
 - Reduced wild and ordinary trainer battle startup round trips for high-ping connections while preserving position saves, walk happiness, teleport fences and legacy backend compatibility.
 
 - Spread remote-avatar visual updates across frames so they no longer run inside pong processing, and fetch startup global buffs in one request with compatibility for older backends.

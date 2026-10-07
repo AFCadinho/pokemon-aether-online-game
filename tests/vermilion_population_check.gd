@@ -12,7 +12,7 @@ func _run() -> void:
 	var occupied: Dictionary = {}
 	var npcs := city.get_node("Entities/NPCs")
 	var pokemon := city.get_node("Entities/Pokemon")
-	_check(npcs.get_child_count() == 11 and npcs.get_node("TransitKeeperNPC").local_destination_id == "kanto_vermilion_city", "ten dialogue residents and the city Transit Keeper")
+	_check(npcs.get_child_count() == 12 and npcs.get_node("TransitKeeperNPC").local_destination_id == "kanto_vermilion_city" and npcs.has_node("GuildRegistrarNPC"), "ten dialogue residents, the city Transit Keeper and Guild Registrar")
 	_check(pokemon.get_child_count() == 6, "six ambient Pokemon")
 	for group: Node in [npcs, pokemon]:
 		for actor: Node2D in group.get_children():
