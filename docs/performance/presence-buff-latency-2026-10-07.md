@@ -64,12 +64,12 @@ client build and a new production measurement.
 ## Focused verification
 
 Backend: 8 snapshot route tests, 12 boost service tests, 9 heal service tests,
-and 13 game-settings tests passed (42 total). Each suite runs in a separate
+and 14 game-settings tests passed (43 total). Each suite runs in a separate
 Python process, following the existing boost-suite isolation convention. Loading
 the route fixture and old Base.metadata.create_all suites in one Python process
 exposes an existing missing-table registration dependency; isolated suites pass.
 
-Frontend: 14 distinct focused checks passed under Godot 4.6.2 headless/dummy:
+Frontend: 16 distinct focused checks passed under Godot 4.6.2 headless/dummy:
 
 - global_buffs_startup_check and remote_player_visual_queue_check;
 - world_presence_roster_check and presence_packet_budget_check;
@@ -78,7 +78,8 @@ Frontend: 14 distinct focused checks passed under Godot 4.6.2 headless/dummy:
   global_heal_check;
 - wild_entry_before_response_check, trainer_entry_before_response_check and
   world_activity_recovery_check;
-- startup_lazy_popups_check and startup_request_reuse_check.
+- startup_lazy_popups_check and startup_request_reuse_check;
+- zekrom_turbo_check and mount_idle_pilot_check after incorporating newer development.
 
 The real desktop/browser roster-to-avatar fixture now explicitly drains the
 visual queue. The notification-card fixture supplies its missing chat controls
@@ -88,7 +89,7 @@ run during the UID scan emitted a shutdown resource diagnostic; isolated
 original-base and candidate reruns completed without script/resource errors.
 Cold import and a subsequent warm native UID scan completed in slot-d. Existing
 asset UID fallback warnings remain; no full GPU or device certification is
-claimed. The 5 ms synthetic visual operation measured approximately 5.08 ms and
+claimed. The 5 ms synthetic visual operation measured approximately 5.1 ms and
 left the other 23 avatars queued after the first budgeted batch.
 
 New regression checks are registered with the frontend check runner; the backend
@@ -96,3 +97,12 @@ snapshot suite is registered with the existing per-suite CI loop. The complete
 paired gate is intentionally not run. Work used the explicitly authorized
 paired temporary slot-d, with task-local tooling support; shared slot tooling
 was not edited. No caches, userdata or credentials were copied between slots.
+
+After merging newer local development into the task branches, the snapshot and
+game-settings backend suites passed again. The combined buff startup, avatar
+queue, real desktop/browser avatars, notification cards, wild/trainer entry,
+Zekrom turbo and mount idle checks also passed again. Only CHANGELOG entries
+conflicted; both tasks' entries were preserved. Another task briefly switched
+the frontend checkout during an earlier compatibility run; those results were
+not counted. Exclusive slot-d use was restored after user coordination, followed
+by a fresh native UID scan and the successful compatibility run above.
