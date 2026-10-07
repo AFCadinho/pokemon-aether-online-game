@@ -67,6 +67,8 @@
   "ui.guild_base.error.owned": "Sua guilda já tem uma base em outra cidade.",
   "ui.guild_base.error.registrar": "Fale com o Registrador de Guildas ao lado da entrada do jardim.",
   "ui.guild_base.error.unavailable": "Este Registrador de Guildas não está disponível.",
+  "ui.guild_base.error.door": "Vá até a entrada da Base da Guilda ou a porta da sala e tente novamente.",
+  "ui.guild_base.error.access": "Somente membros da guilda proprietária desta base podem entrar.",
   "ui.repel.max": "Máx.",
   "ui.repel.batch_preview": "Usar {quantity} × {item}. Carga de Repel: {before} → {after} / {max} passos. Os itens excedentes são mantidos.",
   "ui.repel.recharge": "Recarregar Repel",

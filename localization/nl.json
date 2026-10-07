@@ -67,6 +67,8 @@
   "ui.guild_base.error.owned": "Je guild bezit al een base in een andere stad.",
   "ui.guild_base.error.registrar": "Spreek de Guildbeheerder naast de ingang van de tuin aan.",
   "ui.guild_base.error.unavailable": "Deze Guildbeheerder is niet beschikbaar.",
+  "ui.guild_base.error.door": "Loop naar de ingang van de guildbase of de kamerdeur en probeer het opnieuw.",
+  "ui.guild_base.error.access": "Alleen leden van de guild die deze base bezit mogen naar binnen.",
   "ui.repel.max": "Max",
   "ui.repel.batch_preview": "Gebruik {quantity} × {item}. Repel-lading: {before} → {after} / {max} stappen. Overtollige items blijven behouden.",
   "ui.repel.recharge": "Repel opladen",
