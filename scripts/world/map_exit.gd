@@ -10,6 +10,7 @@ extends Area2D
 @export var player_node_name := "Player"
 
 const FACING_DIRECTIONS: Array[String] = ["up", "down", "left", "right"]
+const DOOR_POSITION_INPUT_LOCK := &"guild_base_door_position"
 
 var is_transitioning := false
 
@@ -136,6 +137,22 @@ func _enter_authorized_transition(
 		is_transitioning = false
 		push_error("MapExit failed: World does not support authorized transitions.")
 		return
+
+	# Guild Base doors validate the last saved position on the server. Flush it
+	# before beginning the teleport, which deliberately blocks position autosave.
+	if normalized_transition_id.begins_with("guild_base_") or target_scene_path.contains("/guild_base/"):
+		var game_state := get_node("/root/GameState")
+		game_state.call("acquire_overworld_input_lock", DOOR_POSITION_INPUT_LOCK)
+		var position_result: Dictionary = await world.call("sync_player_position_for_world_action")
+		game_state.call("release_overworld_input_lock", DOOR_POSITION_INPUT_LOCK)
+		# Membership removal rejects private autosave. The server still permits
+		# leaving that instance and sends former members outside the garden.
+		var leaving_revoked_base := normalized_transition_id == "guild_base_main_hall__to_town" \
+			and BackendErrorLocalizationService.error_code(position_result) == "guild_base_access_denied"
+		if not bool(position_result.get("success", false)) and not leaving_revoked_base:
+			is_transitioning = false
+			await _show_transition_error(position_result)
+			return
 
 	var begin_result: Dictionary = await world.call("begin_authorized_teleport", true)
 	if not bool(begin_result.get("success", false)):

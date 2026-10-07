@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Save the current door position before entering or changing Guild Base rooms, preventing entrance refusals caused by an older autosave; clarify door and membership errors.
+
 - Add private Guild Base interiors in Vermilion City: a fixed main hall, two empty side rooms and a lift waiting room, with room doors, Guild-only player visibility and safe recovery when base access is lost.
 
 - Simplify Adventure Party team headers by removing the circular Trainer initial badges.

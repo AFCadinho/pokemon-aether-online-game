@@ -174,6 +174,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/vermilion_guild_garden_gate_check.gd",
 	"res://tests/guild_base_registrar_check.gd",
 	"res://tests/guild_base_interior_check.gd",
+	"res://tests/guild_base_door_sync_check.gd",
 	"res://tests/map_blocker_index_check.gd",
 	"res://tests/overlay_layout_performance_check.gd",
 	"res://tests/world_access_catalog_generation_check.gd",

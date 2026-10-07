@@ -67,6 +67,8 @@
   "ui.guild_base.error.owned": "你的公会已在另一座城市拥有基地。",
   "ui.guild_base.error.registrar": "请与花园入口旁的公会登记员交谈。",
   "ui.guild_base.error.unavailable": "该公会登记员暂不可用。",
+  "ui.guild_base.error.door": "请走到公会基地入口或房间门口，然后重试。",
+  "ui.guild_base.error.access": "只有拥有该基地的公会成员才能进入。",
   "ui.repel.max": "最大",
   "ui.repel.batch_preview": "使用 {quantity} × {item}。驱虫储量：{before} → {after} / {max} 步。保留多余道具。",
   "ui.repel.recharge": "补充驱虫储量",
