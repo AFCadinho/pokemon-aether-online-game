@@ -82,7 +82,7 @@ func _render() -> void:
 				row.name.text += " · " + _text("ui.chat.you")
 			var state := str(trainer.get("state", ""))
 			row.status.text = _text("battle.coop.status." + state) if not state.is_empty() else ""
-			row.status.modulate = Color("67e8bf") if state == "ready" else Color("fbbf24") if state in ["disconnected", "checking"] else Color.WHITE
+			row.status.modulate = Color("67e8bf") if state in ["ready", "ready_next"] else Color("fbbf24") if state in ["disconnected", "checking"] else Color.WHITE
 
 func _text(key: String) -> String:
 	var localization := get_node_or_null("/root/LocalizationManager")

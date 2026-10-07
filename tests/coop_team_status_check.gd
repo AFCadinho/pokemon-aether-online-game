@@ -54,7 +54,7 @@ func _run() -> void:
 	view.revision = 2
 	service.confirmed_decision_id = "coop-1"
 	service.apply_view(view)
-	assert(panel._prompt.text == "Waiting for adinho to choose…")
+	assert(panel._prompt.text == "Choice confirmed · Waiting for adinho…")
 	assert(strip.trainer_rows[0][1].status.text == "Ready ✓")
 	var stable_rows: Array = strip.trainer_rows[0].duplicate()
 	await _capture("waiting")
@@ -71,14 +71,17 @@ func _run() -> void:
 	service.apply_view(view)
 	assert(strip.trainer_rows[0][1].status.text == "Choosing replacement…")
 	service.pending_command = {"decisionId": "coop-2", "idempotencyKey": "choice"}
+	panel._capture_animation_pending = true
 	service.command_in_flight = true
 	service.state_changed.emit()
 	assert(strip.trainer_rows[0][1].status.text == "Sending…")
+	assert(panel._prompt.text == "Sending your choice…", "a capture POST is sending, not animated playback")
 	assert(panel._actions.get_child_count() == 0, "normal sending has no retry button")
 	service.command_in_flight = false
 	service.state_changed.emit()
 	assert(strip.trainer_rows[0][1].status.text == "Checking…")
 	assert(panel._actions.get_child_count() == 1, "uncertain submission exposes a durable retry")
+	panel._capture_animation_pending = false
 	service.pending_command = {}
 	view.ended = true
 	view.locked = true
