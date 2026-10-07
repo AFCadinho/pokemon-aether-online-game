@@ -30,6 +30,8 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	var canonical_snapshot := _build_snapshot()
+	var spectator_lead: Pokemon = battle._build_spectator_active_pokemon(canonical_snapshot, "p1")
+	_check(spectator_lead != null and spectator_lead.level == 37, "spectator bootstrap reads the level from public details")
 	battle.battle_type = 1 # BattleType.TRAINER
 	battle.pvp_room_code = "spectator-test"
 	battle.pvp_viewer_role = "spectator"
@@ -64,6 +66,9 @@ func _ready() -> void:
 		"Alpha", ALPHA_APPEARANCE, "Bravo", BRAVO_APPEARANCE,
 		"Pikachu", "Eevee", "initial"
 	)
+	_check_public_levels(battle, 37, 5, "initial")
+	_check(battle._apply_spectator_late_join_snapshot(canonical_snapshot), "late-join snapshot applies without switch history")
+	_check_public_levels(battle, 37, 5, "late join")
 	battle.player_trainer_sprite.show_command("Alpha command")
 	battle.enemy_trainer_sprite.show_command("Bravo command")
 
@@ -76,6 +81,10 @@ func _ready() -> void:
 		"Bravo", BRAVO_APPEARANCE, "Alpha", ALPHA_APPEARANCE,
 		"Eevee", "Pikachu", "swapped"
 	)
+	_check_public_levels(battle, 5, 37, "swapped")
+	battle.battle_state.load_from_api_response(battle.action_flow.map_response_for_local_player(canonical_snapshot), false)
+	battle._update_hud_panels()
+	_check_public_levels(battle, 5, 37, "reconnected")
 	_check(not battle.player_trainer_sprite.command_callout.visible, "left trainer callout is cleared when its owner changes")
 	_check(not battle.enemy_trainer_sprite.command_callout.visible, "right trainer callout is cleared when its owner changes")
 
@@ -110,10 +119,9 @@ func _build_request(player_id: String, species_list: Array[String]) -> Dictionar
 	for species in species_list:
 		team.append({
 			"ident": "%sa: %s" % [player_id, species],
-			"details": "%s, L50" % species,
+			"details": "%s, L%d" % [species, 37 if player_id == "p1" else 5],
 			"species": species,
 			"displaySpecies": species,
-			"level": 50,
 			"active": team.is_empty(),
 			"condition": "100/100",
 			"hp": 100,
@@ -176,6 +184,15 @@ func _check_side_identities(
 		_battle_stage_lead_species(battle.opponent_party_grid) == right_lead_species,
 		"%s visible right party icons follow their player" % phase
 	)
+
+
+func _check_public_levels(battle: Node, left_level: int, right_level: int, phase: String) -> void:
+	_check(battle.battle_state.get_active_pokemon_level("p1") == left_level, "%s left HUD receives the actual level" % phase)
+	_check(battle.battle_state.get_active_pokemon_level("p2") == right_level, "%s right HUD receives the actual level" % phase)
+	_check(int(battle.player_hud_panel.active_info_rows[0].get_meta("battle_hud_data").get("level")) == left_level, "%s visible left HUD preserves the level" % phase)
+	_check(int(battle.enemy_hud_panel.active_info_rows[0].get_meta("battle_hud_data").get("level")) == right_level, "%s visible right HUD preserves the level" % phase)
+	_check(int(battle.player_stage_party_grid.current_party_data[0].get("level", 100)) == left_level, "%s left party rail preserves the level" % phase)
+	_check(int(battle.opponent_party_grid.current_party_data[0].get("level", 100)) == right_level, "%s right party rail preserves the level" % phase)
 
 
 func _battle_stage_lead_species(party_grid: PartyGrid) -> String:

@@ -8119,7 +8119,7 @@ func _build_spectator_active_pokemon(response: Dictionary, player_id: String) ->
 		return null
 	var public_payload := {
 		"species": str(selected.get("displaySpecies", selected.get("species", ""))),
-		"level": int(selected.get("level", 100)),
+		"level": BattleState.PUBLIC_POKEMON_LEVEL.from_pokemon_data(selected),
 		"hp": int(selected.get("hp", 1)),
 		"maxHp": max(int(selected.get("maxHp", 1)), 1),
 		"status": str(selected.get("status", "")),

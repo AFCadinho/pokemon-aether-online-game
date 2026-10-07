@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Battles
+
+- Show the actual Pokémon levels while spectating NPC battles, including snapshots with levels stored only in Showdown details and perspective changes.
+
 ### Downloads
 
 - Automatically remove replaced 3D model versions after the new files are verified, freeing device storage while preserving interrupted downloads and models used by a running game.

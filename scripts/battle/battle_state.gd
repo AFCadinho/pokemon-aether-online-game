@@ -3,6 +3,7 @@ extends RefCounted
 class_name BattleState
 
 const CALCDEX_SNAPSHOT := preload("res://scripts/battle/battle_calcdex_snapshot.gd")
+const PUBLIC_POKEMON_LEVEL := preload("res://scripts/battle/battle_pokemon_hover_level.gd")
 const DEBUG_PAO_BATTLE_IDENTITY := false
 const DEBUG_PREFIX := "[PAO Battle Identity Debug]"
 
@@ -98,6 +99,7 @@ func load_from_api_response(
 		requests = next_requests_dictionary
 	elif next_requests_value != null:
 		requests = next_requests_value
+	_normalize_public_pokemon_levels()
 	if DEBUG_PAO_BATTLE_IDENTITY:
 		_debug_print_requests_snapshot("load_from_api_response after requests assignment")
 	battle_log = response.get("log", [])
@@ -2080,11 +2082,14 @@ func get_species_from_pokemon_data(pokemon_data: Dictionary) -> String:
 
 ## Geeft het level van de actieve pokemon terug.
 func get_active_pokemon_level(player_id: String) -> int:
-	var pokemon_data := get_active_player_pokemon(player_id)
-	if pokemon_data.has("level"):
-		return int(pokemon_data.get("level", 100))
+	return PUBLIC_POKEMON_LEVEL.from_pokemon_data(get_active_player_pokemon(player_id))
 
-	return 100
+func _normalize_public_pokemon_levels() -> void:
+	for player_id: String in ["p1", "p2"]:
+		for pokemon_value: Variant in get_player_team(player_id):
+			if pokemon_value is Dictionary:
+				var pokemon_data := pokemon_value as Dictionary
+				pokemon_data["level"] = PUBLIC_POKEMON_LEVEL.from_pokemon_data(pokemon_data)
 
 ## Geeft de huidige HP van de actieve Pokemon terug.
 func get_active_pokemon_current_hp(player_id: String) -> int:
