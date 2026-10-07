@@ -41,6 +41,7 @@ var hide_other_players_check_box: CheckBox
 var language_label: Label
 var language_options_button: OptionButton
 var battle_presentation_options: OptionButton
+var battle_presentation_hint: Label
 var battle_camera_motion_toggle: CheckBox
 var sprite_storage_button: Button
 var model_storage_button: Button
@@ -319,7 +320,9 @@ func _input(event: InputEvent) -> void:
 func _apply_settings_to_controls() -> void:
 	loading_controls = true
 	if battle_presentation_options != null:
-		battle_presentation_options.select(["2d", "2.5d", "3d"].find(SettingsManager.battle_presentation_mode))
+		for index in battle_presentation_options.item_count:
+			if battle_presentation_options.get_item_metadata(index) == SettingsManager.battle_presentation_mode:
+				battle_presentation_options.select(index)
 	if battle_camera_motion_toggle != null:
 		battle_camera_motion_toggle.button_pressed = SettingsManager.battle_3d_camera_motion
 	battle_animations_check_box.button_pressed = SettingsManager.battle_animations
@@ -476,21 +479,27 @@ func _setup_tabs() -> void:
 		var layout_label := Label.new()
 		layout_label.text = "Battle UI (next battle)"
 		general_tab.add_child(_create_labeled_control_row(layout_label, layout_options))
-	if not OS.has_feature("web") and not OS.has_feature("mobile"):
+	if SettingsManager.supports_3d_presentation():
 		var presentation_label := Label.new()
 		presentation_label.text = "Battle visuals (next battle)"
 		battle_presentation_options = OptionButton.new()
 		battle_presentation_options.name = "BattlePresentationOptions"
-		battle_presentation_options.add_item("2D — animated sprites")
-		battle_presentation_options.add_item("2.5D — models, 2D background")
-		battle_presentation_options.add_item("3D — models and 3D arena")
+		var modes := PackedStringArray(["2d", "3d"] if SettingsManager.is_android_3d_experimental() else ["2d", "2.5d", "3d"])
+		for mode in modes:
+			var title: String = {"2d": "2D — animated sprites", "2.5d": "2.5D — models, 2D background", "3d": "3D — models and 3D arena"}[mode]
+			if mode == "3d" and SettingsManager.is_android_3d_experimental():
+				title = LocalizationManager.text("ui.visual_choice.android.choose.3d")
+			battle_presentation_options.add_item(title)
+			battle_presentation_options.set_item_metadata(battle_presentation_options.item_count - 1, mode)
 		battle_presentation_options.item_selected.connect(func(index):
 			if not loading_controls:
-				SettingsManager.set_battle_presentation_mode(["2d", "2.5d", "3d"][index]))
+				SettingsManager.set_battle_presentation_mode(str(battle_presentation_options.get_item_metadata(index))))
 		var presentation_hint := Label.new()
-		presentation_hint.text = "2.5D and 3D share models. If a model is unavailable, the battle uses 2D sprites."
+		battle_presentation_hint = presentation_hint
+		presentation_hint.text = LocalizationManager.text("ui.visual_choice.android.settings_hint") if SettingsManager.is_android_3d_experimental() else "2.5D and 3D share models. If a model is unavailable, the battle uses 2D sprites."
 		presentation_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		general_tab.add_child(_create_labeled_control_row(presentation_label, battle_presentation_options, presentation_hint))
+	if not OS.has_feature("web") and not OS.has_feature("mobile"):
 		battle_camera_motion_toggle = CheckBox.new()
 		battle_camera_motion_toggle.name = "BattleCameraMotionToggle"
 		battle_camera_motion_toggle.text = "Gentle 3D camera movement"
@@ -1629,6 +1638,12 @@ func _refresh_tab_titles() -> void:
 
 func _refresh_localized_content() -> void:
 	LocalizationManager.localize_tree(self)
+	if battle_presentation_options != null and SettingsManager.is_android_3d_experimental():
+		for index in battle_presentation_options.item_count:
+			if battle_presentation_options.get_item_metadata(index) == "3d":
+				battle_presentation_options.set_item_text(index, LocalizationManager.text("ui.visual_choice.android.choose.3d"))
+		if battle_presentation_hint != null:
+			battle_presentation_hint.text = LocalizationManager.text("ui.visual_choice.android.settings_hint")
 	_refresh_localized_controls(self)
 	_refresh_tab_titles()
 	_refresh_navigation_state()

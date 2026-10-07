@@ -302,11 +302,11 @@ func _on_web_party_changed() -> void:
 
 func _schedule_current_map_web_sprite_prefetch() -> void:
 	_prefetch_current_map_desktop_arena.call_deferred()
-	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode in ["2.5d", "3d"]:
+	if preload("res://scripts/battle/battle_ui/model_platform.gd").supported() and SettingsManager.battle_presentation_mode in ["2.5d", "3d"]:
 		_prefetch_current_map_models.call_deferred()
-	elif not OS.has_feature("web") and not OS.has_feature("mobile"):
+	elif preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
 		OnDemand3DBundleService.cancel_prefetch()
-	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+	if preload("res://scripts/battle/battle_ui/model_platform.gd").supported() and SettingsManager.battle_presentation_mode != "2d":
 		return
 	if not WebPokemonSpriteService.is_available():
 		return
@@ -318,14 +318,29 @@ func _schedule_current_map_web_sprite_prefetch() -> void:
 	if area_id != "":
 		_prefetch_current_map_wild_sprites.call_deferred(area_id)
 
+var android_arena_download_requested := false
+
+func _download_android_arena_for_prefetch() -> void:
+	await Android3DEnvironmentService.ensure_ready()
+	android_arena_download_requested = false
+	if is_inside_tree() and Android3DEnvironmentService.verified:
+		_prefetch_current_map_desktop_arena()
+
 func _prefetch_current_map_desktop_arena() -> Node:
-	if SettingsManager.battle_presentation_mode != "3d" or OS.has_feature("web") or OS.has_feature("mobile"):
+	if SettingsManager.battle_presentation_mode != "3d" or not preload("res://scripts/battle/battle_ui/model_platform.gd").supported():
+		return null
+	if SettingsManager.is_android_3d_experimental() and not Android3DEnvironmentService.verified:
+		if not android_arena_download_requested:
+			android_arena_download_requested = true
+			_download_android_arena_for_prefetch.call_deferred()
 		return null
 	var arenas = preload("res://scripts/battle/arenas/arena_catalog.gd")
 	var requested_arena: String = arenas.resolve(SettingsManager.battle_3d_arena, _resolve_battle_environment_id("wild"), "wild")
 	if requested_arena != "classic":
 		# Session-bounded environment only: never cache combatants/network state.
-		return preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),Vector2i(get_viewport().get_visible_rect().size), requested_arena)
+		var dimensions := Vector2i(get_viewport().get_visible_rect().size)
+		dimensions = preload("res://scripts/battle/battle_ui/model_platform.gd").render_dimensions(dimensions, SettingsManager.is_android_3d_experimental())
+		return preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),dimensions, requested_arena)
 	return null
 
 var forest_preparation_input_owned := false
@@ -350,7 +365,7 @@ func _await_current_map_desktop_arena() -> void:
 
 
 func _prefetch_current_map_wild_sprites(area_id: String) -> void:
-	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+	if preload("res://scripts/battle/battle_ui/model_platform.gd").supported() and SettingsManager.battle_presentation_mode != "2d":
 		return
 	var response: Dictionary = await EncounterMetadataService.get_encounter_area_metadata(area_id)
 	if area_id != _current_fishing_area_id() or not bool(response.get("success", false)):
@@ -378,6 +393,11 @@ func _prefetch_current_map_models() -> void:
 			if identity not in identities:
 				identities.append(identity)
 	var area_id := _current_fishing_area_id()
+	if SettingsManager.is_android_3d_experimental():
+		# On mobile, warm only the player's team and its possible battle forms.
+		# Encounter opponents download when needed rather than fetching a whole map.
+		OnDemand3DBundleService.prefetch_models(identities)
+		return
 	if area_id.is_empty():
 		_append_current_map_trainer_models(identities)
 		OnDemand3DBundleService.prefetch_models(identities)
@@ -415,7 +435,7 @@ func _append_current_map_trainer_models(identities: Array[String]) -> void:
 
 
 func _prefetch_web_battle_sprites(response: Dictionary, wait_for_full_roster := false) -> void:
-	if not OS.has_feature("web") and not OS.has_feature("mobile") and SettingsManager.battle_presentation_mode != "2d":
+	if preload("res://scripts/battle/battle_ui/model_platform.gd").supported() and SettingsManager.battle_presentation_mode != "2d":
 		return
 	if not WebPokemonSpriteService.is_available():
 		return
@@ -2841,13 +2861,17 @@ func _get_remote_players_parent(map: Node = null) -> Node:
 func _on_settings_changed() -> void:
 	_sync_remote_players_visibility()
 	_sync_local_player_nameplate_visibility()
+	if SettingsManager.is_android_3d_experimental() and SettingsManager.battle_presentation_mode == "2d":
+		var pool := preload("res://scripts/battle/arenas/shared/environment_pool.gd").get_current()
+		if pool != null and pool.get_parent() == self:
+			pool.discard_when_unused()
 	if not _uses_fullscreen_battle():
 		_discard_prepared_wild_battle_ui()
 	else:
 		_prewarm_wild_battle_ui.call_deferred()
 	if not OS.has_feature("web"):
 		_prefetch_current_map_desktop_arena.call_deferred()
-	if not OS.has_feature("web") and not OS.has_feature("mobile") and last_desktop_presentation_mode != SettingsManager.battle_presentation_mode:
+	if preload("res://scripts/battle/battle_ui/model_platform.gd").supported() and last_desktop_presentation_mode != SettingsManager.battle_presentation_mode:
 		last_desktop_presentation_mode = SettingsManager.battle_presentation_mode
 		_schedule_current_map_web_sprite_prefetch()
 	if OS.has_feature("web"):
