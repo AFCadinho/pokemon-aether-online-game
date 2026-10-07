@@ -149,11 +149,11 @@ static func get_surf_fishing_rider_offsets(mount_id: String, fallback: Dictionar
 	return offsets
 
 
-static func get_rider_frame_offset(mount_id: String, direction: String, frame_index: int) -> Vector2i:
+static func get_rider_frame_offset(mount_id: String, direction: String, frame_index: int, idle := false) -> Vector2i:
 	# Read-only hot path: do not deep-copy the full catalog record every frame.
 	var normalized_id := normalize_mount_id(mount_id)
 	var definition: Dictionary = _get_mount_definitions().get(normalized_id, {})
-	var rider_offsets_value: Variant = definition.get("riderOffsets", {})
+	var rider_offsets_value: Variant = definition.get("idleRiderOffsets", definition.get("riderOffsets", {})) if idle else definition.get("riderOffsets", {})
 	if not rider_offsets_value is Dictionary:
 		return Vector2i.ZERO
 	return _get_rider_offset(rider_offsets_value as Dictionary, direction, frame_index)
@@ -240,6 +240,8 @@ static func get_mount_foreground_frames(mount_id: String) -> SpriteFrames:
 				mount_frames.get_frame_duration(animation_name, frame_index)
 			)
 
+	if not _apply_idle_sheet(foreground_frames, definition, "idleForegroundSheet", _get_mount_frame_size(definition)):
+		return null
 	_mount_foreground_frames_cache[normalized_id] = foreground_frames
 	return foreground_frames
 
@@ -292,23 +294,27 @@ static func get_mounted_rider_frames(
 		var direction := _direction_from_animation(animation_name_text)
 		var direction_row := _direction_row(direction)
 		var is_idle := animation_name_text.begins_with("idle_")
-		var frame_count := base_frames.get_frame_count(animation_name)
+		var source_count := base_frames.get_frame_count(animation_name)
+		var animated_idle := is_idle and _idle_frame_count(definition) > 1
+		var frame_count := _idle_frame_count(definition) if animated_idle else source_count
+		if animated_idle:
+			transformed.set_animation_speed(animation_name, _idle_speed(definition))
 		for frame_index: int in range(frame_count):
 			# Mounted riders keep one seated pose while the mount animates. Repeat
 			# that source pose so every mount frame still receives its own mask.
-			var source_frame_index := 0 if static_source_pose else frame_index
+			var source_frame_index := 0 if static_source_pose or animated_idle else frame_index
 			var source_texture := base_frames.get_frame_texture(
 				animation_name,
 				source_frame_index
 			)
 			var source_image := _get_texture_image(source_texture)
-			var offset := _get_rider_offset(rider_offsets_value as Dictionary, direction, frame_index)
+			var offset := get_rider_frame_offset(normalized_id, direction, frame_index, is_idle)
 			offset += _get_rider_offset_adjustment(rider_offset_adjustments, direction)
 			var mounted_image := _transform_rider_frame(
 				source_image,
 				idle_mask_image if is_idle else mask_image,
 				direction_row,
-				0 if is_idle and has_idle_mask else mini(frame_index, FRAME_COLUMNS - 1),
+				mini(frame_index, _idle_frame_count(definition) - 1) if is_idle and has_idle_mask else mini(frame_index, FRAME_COLUMNS - 1),
 				offset,
 				mount_frame_size
 			)
@@ -319,7 +325,7 @@ static func get_mounted_rider_frames(
 			transformed.add_frame(
 				animation_name,
 				mounted_texture,
-				base_frames.get_frame_duration(animation_name, frame_index)
+				_idle_duration(definition, frame_index) if animated_idle else base_frames.get_frame_duration(animation_name, frame_index)
 			)
 
 	while _rider_frames_cache.size() >= RIDER_FRAMES_CACHE_LIMIT:
@@ -368,7 +374,7 @@ static func _get_mask_image(mount_id: String, idle := false) -> Image:
 		return null
 	var image := texture.get_image()
 	var frame_size := _get_mount_frame_size(definition)
-	if image == null or image.get_size() != frame_size * Vector2i(1 if idle else FRAME_COLUMNS, FRAME_ROWS):
+	if image == null or image.get_size() != frame_size * Vector2i(_idle_frame_count(definition) if idle else FRAME_COLUMNS, FRAME_ROWS):
 		return null
 	if image.get_format() != Image.FORMAT_RGBA8:
 		image.convert(Image.FORMAT_RGBA8)
@@ -525,17 +531,35 @@ static func _direction_row(direction: String) -> int:
 			return 0
 
 
+static func _idle_frame_count(definition: Dictionary) -> int:
+	return clampi(int(definition.get("idleFrameCount", 1)), 1, FRAME_COLUMNS)
+
+
+static func _idle_speed(definition: Dictionary) -> float:
+	return maxf(float(definition.get("idleAnimationSpeed", IDLE_ANIMATION_SPEED)), 0.1)
+
+
+static func _idle_duration(definition: Dictionary, frame: int) -> float:
+	var durations: Array = definition.get("idleFrameDurations", [])
+	return maxf(float(durations[frame]), 0.01) if frame < durations.size() else 1.0
+
+
 static func _apply_idle_sheet(frames: SpriteFrames, definition: Dictionary, field: String, frame_size: Vector2i) -> bool:
-	# Optional one-column sheets keep standing poses independent of the walk.
+	# A dedicated idle atlas can hold a standing pose or a slow authored cycle.
 	var path := str(definition.get(field, ""))
 	if path.is_empty():
 		return true
+	var count := _idle_frame_count(definition)
 	var texture := _load_mount_texture(path)
-	if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(1, FRAME_ROWS):
+	if texture == null or Vector2i(texture.get_size()) != frame_size * Vector2i(count, FRAME_ROWS):
 		return false
 	for row: int in range(FRAME_ROWS):
 		var direction: String = str(["down", "left", "right", "up"][row])
-		frames.set_frame(StringName("idle_" + direction), 0, _make_frame_texture(texture, 0, row, frame_size))
+		var animation := StringName("idle_" + direction)
+		frames.clear(animation)
+		frames.set_animation_speed(animation, _idle_speed(definition))
+		for column in range(count):
+			frames.add_frame(animation, _make_frame_texture(texture, column, row, frame_size), _idle_duration(definition, column))
 	return true
 
 

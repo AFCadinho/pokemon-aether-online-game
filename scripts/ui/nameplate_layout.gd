@@ -81,7 +81,7 @@ static func sync_mount_position(
 			top = minf(top, parent_offset + _sprite_top(water))
 		if rider != null:
 			var direction := str(mount.animation).get_slice("_", 1)
-			var current_offset := Mounts.get_rider_frame_offset(mount_id, direction, mount.frame)
+			var current_offset := Mounts.get_rider_frame_offset(mount_id, direction, mount.frame, str(mount.animation).begins_with("idle_"))
 			var rider_y := rider.position.y - current_offset.y + envelope.x
 			for part: AnimatedSprite2D in parts:
 				if part.visible:
@@ -104,7 +104,8 @@ static func _mount_envelope(mount_id: String) -> Vector2:
 	var rider_top := INF
 	for direction: String in ["down", "left", "right", "up"]:
 		for frame in range(Mounts.FRAME_COLUMNS):
-			rider_top = minf(rider_top, Mounts.get_rider_frame_offset(mount_id, direction, frame).y)
+			for idle: bool in [false, true]:
+				rider_top = minf(rider_top, Mounts.get_rider_frame_offset(mount_id, direction, frame, idle).y)
 	var definition := Mounts.get_mount_definition(mount_id)
 	var height := maxf(float(definition.get("hoverHeight", 0.0)), 0.0)
 	var amplitude := clampf(float(definition.get("hoverAmplitude", 2.0)), 0.0, height)
