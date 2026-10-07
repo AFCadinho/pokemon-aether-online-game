@@ -128,7 +128,8 @@ func _assert_header_bounds(battle: Control) -> void:
 	var header: Control = battle.vs_panel_container
 	var rectangle := Rect2(header.position, header.size * header.scale)
 	assert(rectangle.position.x >= 0 and rectangle.end.x <= battle.battle_stage.size.x)
-	assert(rectangle.end.y < 90, "team status stays above the party rails")
+	for card: Control in battle.get_node("ImmersiveHud").coop_huds.values():
+		assert(card.position.y >= rectangle.end.y + 11.99, "HP cards leave room below team status")
 	var turn: Control = battle.battle_status_panel
 	assert(not rectangle.intersects(Rect2(turn.position, turn.size * turn.scale)), "team status leaves room for the turn indicator")
 	for side_index in range(2):

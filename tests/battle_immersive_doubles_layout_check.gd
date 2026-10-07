@@ -53,6 +53,7 @@ func _run() -> void:
 	await process_frame
 	if failed:
 		quit(1)
+		return
 	print("IMMERSIVE_DOUBLES_LAYOUT_OK")
 	quit()
 
@@ -191,12 +192,14 @@ func _check_move_animation_endpoints(battle: Control, presenter: Control) -> voi
 
 
 func _check_hud_clearance(battle: Control) -> void:
-	for index in 2:
-		var box: Control = battle.player_sprite_box if index == 0 else battle.enemy_sprite_box
-		var hud: Control = battle.player_hud_panel if index == 0 else battle.enemy_hud_panel
+	var immersive: Node = battle.get_node("ImmersiveHud")
+	_expect(immersive.coop_huds_active, "2D doubles uses the shared four-card layout")
+	for controller: String in ["p1", "p3", "p2", "p4"]:
+		var box: Control = battle.player_sprite_box if controller in ["p1", "p3"] else battle.enemy_sprite_box
+		var card: Control = immersive.coop_huds[controller]
 		var sprite_bounds: Rect2 = box.call("get_double_animation_visual_rect_in_node", battle.battle_stage)
-		var hud_bounds := Rect2(hud.position, hud.size * hud.scale)
-		_expect(sprite_bounds.has_area(), "immersive doubles exposes a combined sprite boundary")
+		var hud_bounds := Rect2(card.position, card.size * card.scale)
+		_expect(card.visible and sprite_bounds.has_area(), "immersive doubles exposes each HP card and sprite boundary")
 		_expect(hud_bounds.end.y <= sprite_bounds.position.y - 8.0,
 			"immersive doubles HP panel stays clear above both sprites: hud=%s sprites=%s" % [hud_bounds, sprite_bounds])
 

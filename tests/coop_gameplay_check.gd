@@ -325,7 +325,7 @@ func _run() -> void:
 	_expect(player_stat_overlay.visible and enemy_stat_overlay.visible
 		and player_stat_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
 		and enemy_stat_overlay.get_parent() == mounted_battle.get_node("%BattleStage")
-		and player_stat_overlay.get_global_rect().position.y >= mounted_battle.get_node("%PlayerHudPanel").get_global_rect().end.y,
+		and player_stat_overlay.get_global_rect().position.y >= mounted_battle.get_node("ImmersiveHud").coop_huds["p1"].get_global_rect().end.y,
 		"stat badges sit outside and below the shared HP containers")
 	_expect(mounted_battle.get_node("%BattleStatusPanel").turn_label.text.contains("4")
 		and mounted_battle.get_node("%PlayerStagePartyGrid").current_party_data.size() == 6
