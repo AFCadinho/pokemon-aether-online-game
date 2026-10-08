@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Return settled Gary co-op battles to the same world when the saved location is unchanged, release stale battle input locks, and preserve authoritative destinations across co-op world reloads.
 ## 0.3.102
 
 - Show your current location in Vermilion City on the Town Map while inside its Guild Base rooms.

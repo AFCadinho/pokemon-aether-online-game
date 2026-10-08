@@ -24,6 +24,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/routes_2_4_arena_check.gd",
 	"res://tests/cerulean_region_arena_check.gd",
 	"res://tests/coop_gameplay_check.gd",
+	"res://tests/coop_world_return_check.gd",
 	"res://tests/coop_team_status_check.gd",
 	"res://tests/coop_turn_feedback_check.gd",
 	"res://tests/coop_immersive_team_layout_check.gd",

@@ -127,9 +127,10 @@ func unlock_input() -> void:
 	overworld_input_locked = not overworld_input_lock_owners.is_empty()
 	ui_input_locked = not ui_input_lock_owners.is_empty()
 
-func clear_world_runtime_state() -> void:
+func clear_world_runtime_state(preserve_prepared_world := false) -> void:
 	current_map = null
-	prepared_world_state = {}
+	if not preserve_prepared_world:
+		prepared_world_state = {}
 	overworld_input_lock_owners.clear()
 	ui_input_lock_owners.clear()
 	if not gameplay_reset_in_progress:
