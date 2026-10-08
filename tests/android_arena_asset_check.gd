@@ -8,6 +8,11 @@ var failures: Array[String] = []
 var output := "user://android-arena-details.json"
 var viewport: SubViewport
 var lighting_mode := "baseline"
+var hour := 12.0
+var camera_view := "default"
+var shadow_casters := false
+var caster_shadows := true
+var correction: RefCounted
 class ErrorSink extends Logger:
 	var errors: Array[String] = []
 	func _log_error(_function: String, _file: String, _line: int, code: String, rationale: String, _notify: bool, kind: int, _backtraces: Array[ScriptBacktrace]) -> void:
@@ -40,6 +45,15 @@ func _run() -> void:
 	var manifest := ""
 	if OS.has_feature("android") and FileAccess.file_exists("user://android-arena-lighting"):
 		lighting_mode = FileAccess.get_file_as_string("user://android-arena-lighting").strip_edges()
+	if OS.has_feature("android") and FileAccess.file_exists("user://android-arena-probe-options.json"):
+		var options: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://android-arena-probe-options.json"))
+		if not _check(options is Dictionary, "Explicit diagnostic render options"):
+			_finish()
+			return
+		hour = float(options.get("hour", 12.0))
+		camera_view = str(options.get("camera", "default"))
+		shadow_casters = options.get("shadow_casters", false) == true
+		caster_shadows = options.get("caster_shadows", true) == true
 	if OS.has_feature("android"):
 		if not _check(OS.has_feature("android_arena_pilot") and OS.is_debug_build(), "Requires the separate tagged debug APK"):
 			_finish()
@@ -66,21 +80,38 @@ func _run() -> void:
 		manifest = "user://android-arena-forest.json"
 		report.variant = variant
 	else:
-		if not _check(args.size() in [2, 3], "Desktop diagnostic needs manifest and output"):
+		if not _check(args.size() >= 2 and args.size() <= 7, "Desktop diagnostic needs manifest, output and optional render options"):
 			_finish()
 			return
 		manifest = args[0]
 		output = args[1]
 		report.variant = manifest.get_base_dir().get_file()
-		if args.size() == 3:
+		if args.size() >= 3:
 			lighting_mode = args[2]
-	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows", "ground-srgb", "ground-srgb-no-shadows", "smooth-grass"], "Recognized lighting probe"):
+		if args.size() >= 4:
+			hour = args[3].to_float() if args[3].is_valid_float() else NAN
+		if args.size() >= 5:
+			camera_view = args[4]
+		if args.size() >= 6:
+			if not _check(args[5] in ["true", "false"], "Explicit shadow caster boolean"):
+				_finish()
+				return
+			shadow_casters = args[5] == "true"
+		if args.size() >= 7:
+			if not _check(args[6] in ["true", "false"], "Explicit caster shadow boolean"):
+				_finish()
+				return
+			caster_shadows = args[6] == "true"
+	if not _check(is_finite(hour) and hour >= 0.0 and hour < 24.0 and camera_view in ["default", "side"], "Recognized hour and camera"):
+		_finish()
+		return
+	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows", "ground-srgb", "ground-srgb-no-shadows", "smooth-grass", "shadow-colour"], "Recognized lighting probe"):
 		_finish()
 		return
 	report.lighting_mode = lighting_mode
 	print("ANDROID_ARENA_PHASE load ", lighting_mode)
 	report.renderer = RenderingServer.get_current_rendering_method()
-	if lighting_mode.begins_with("ground-srgb") and not _check(report.renderer == "gl_compatibility", "Ground sRGB investigation requires Compatibility"):
+	if (lighting_mode.begins_with("ground-srgb") or lighting_mode == "shadow-colour") and not _check(report.renderer == "gl_compatibility", "Colour investigation requires Compatibility"):
 		_finish()
 		return
 	report.adapter = RenderingServer.get_video_adapter_name()
@@ -121,6 +152,8 @@ func _run() -> void:
 	var camera := Camera3D.new()
 	world.add_child(camera)
 	camera.position = Catalog.camera_home("forest")
+	if camera_view == "side":
+		camera.position = Vector3(-15, 9, -18)
 	camera.fov = Catalog.CAMERA_FOV
 	camera.look_at(Catalog.camera_target("forest"))
 	camera.current = true
@@ -142,7 +175,21 @@ func _run() -> void:
 		material.shader = shader
 	var light := arena.get_node("OutdoorLighting")
 	light.set_process(false)
-	light.apply_seconds(43200.0)
+	light.apply_seconds(hour * 3600.0)
+	if shadow_casters:
+		# Calibration objects expose actual directional shadows on the terrain.
+		for point in [Vector3(-2, 1.5, 0), Vector3(7, 1.5, 0)]:
+			var caster := MeshInstance3D.new()
+			caster.mesh = BoxMesh.new()
+			caster.mesh.size = Vector3(1.5, 3, 1.5)
+			var material := StandardMaterial3D.new()
+			material.albedo_color = Color("808080")
+			material.roughness = 1.0
+			material.metallic_specular = 0.0
+			caster.material_override = material
+			caster.position = point
+			caster.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if caster_shadows else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			world.add_child(caster)
 	if lighting_mode in ["no-shadows", "ground-srgb-no-shadows"]:
 		for lamp in light._lights:
 			lamp.shadow_enabled = false
@@ -165,6 +212,18 @@ func _run() -> void:
 				"float edge = max(fwidth(ALPHA), 0.001);\n ALPHA = smoothstep(alpha_threshold - edge, alpha_threshold + edge, ALPHA);")
 		material.shader = shader
 		source.free()
+	if lighting_mode == "shadow-colour":
+		correction = preload("res://tests/fixtures/compatibility_outdoor_colour_probe.gd").new()
+		if not _check(correction.apply(arena, light), "Matte colour prototype: " + correction.error):
+			_finish()
+			return
+		report.corrected_materials = correction.materials.size()
+		report.corrected_surfaces = correction.replaced_surfaces
+		report.skipped_surfaces = correction.skipped_surfaces
+	report.hour = hour
+	report.camera = camera_view
+	report.shadow_casters = shadow_casters
+	report.caster_shadows = caster_shadows
 	report.lights = []
 	for lamp in light._lights:
 		report.lights.append({"energy":lamp.light_energy,"visible":lamp.visible,"shadows":lamp.shadow_enabled})
@@ -186,6 +245,14 @@ func _run() -> void:
 		_check(image.save_png(output.get_base_dir().path_join("android-arena-capture.png")) == OK, "Native rendered capture")
 	else:
 		_check(false, "A real rendering backend is required")
+	if correction != null:
+		# Retain prototype materials until their instances leave the render world.
+		viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+		viewport.queue_free()
+		await process_frame
+		await process_frame
+		correction = null
+		await process_frame
 	_finish()
 func _finish() -> void:
 	report.failures = failures

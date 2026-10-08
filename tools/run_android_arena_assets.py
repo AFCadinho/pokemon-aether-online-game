@@ -3,6 +3,7 @@
 Serve owned assets on loopback with adb reverse; never modify the normal game.
 """
 import argparse
+import hashlib
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
@@ -31,11 +32,21 @@ def main():
     parser.add_argument('--apk', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--sdk', type=Path, default=Path.home() / 'Android/Sdk')
-    parser.add_argument('--lighting-mode', choices=['baseline', 'hdr', 'sun-only'], default='baseline')
+    parser.add_argument('--lighting-mode', choices=['baseline', 'hdr', 'sun-only', 'shadow-colour'], default='baseline')
+    parser.add_argument('--hour', type=float, default=12.0)
+    parser.add_argument('--camera-view', choices=['default', 'side'], default='default')
+    parser.add_argument('--shadow-casters', action='store_true')
+    parser.add_argument('--no-caster-shadows', action='store_true')
     parser.add_argument('--expect-renderer', choices=['gl_compatibility', 'mobile'])
     parser.add_argument('--variant', choices=['desktop-art', 'android-etc2-art'])
     parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
+    if not 0 <= args.hour < 24:
+        parser.error('Hour must be finite and in [0, 24)')
+    if args.lighting_mode == 'shadow-colour' and args.expect_renderer != 'gl_compatibility':
+        parser.error('Shadow colour prototype requires Compatibility')
+    if (args.texture_residency or args.battle_budget) and (args.hour != 12.0 or args.camera_view != 'default' or args.shadow_casters or args.no_caster_shadows):
+        parser.error('Render options are limited to the arena diagnostic')
     global PACKAGE
     prefix = 'android-texture-residency' if args.texture_residency else ('android-battle-budget' if args.battle_budget else 'android-arena')
     if args.texture_residency and (args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline'):
@@ -67,9 +78,9 @@ def main():
             raise ValueError('Requires the local x86_64 emulator APK')
     output.mkdir(parents=True, exist_ok=True)
     adb = str(args.sdk / 'platform-tools/adb')
-    def device(*cmd, check=True, binary=False):
+    def device(*cmd, check=True, binary=False, input=None):
         return subprocess.run([adb, '-s', SERIAL, *cmd], timeout=45, check=check,
-                              capture_output=True, text=not binary)
+                              capture_output=True, text=not binary, input=input)
     if device('emu', 'avd', 'name').stdout.splitlines()[0] != 'PokeAether_Android13':
         raise ValueError('Refusing another device')
     handler = partial(QuietHandler, directory=str(assets))
@@ -85,7 +96,23 @@ def main():
             if capabilities.returncode == 0:
                 (output / 'vulkan-capabilities.json').write_text(capabilities.stdout)
         device('reverse', 'tcp:8799', 'tcp:8799')
-        device('install', '--no-incremental', '-r', str(apk))
+        # Repeated image probes need not stage another identical large APK.
+        # Reuse only the exact verified debug package, never a version match.
+        with apk.open('rb') as stream:
+            apk_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
+        installed = device('shell', 'pm', 'path', PACKAGE, check=False).stdout.strip().splitlines()
+        reuse_apk = False
+        if len(installed) == 1 and installed[0].startswith('package:/data/app/'):
+            installed_path = installed[0].removeprefix('package:')
+            if '/' + PACKAGE + '-' in installed_path and installed_path.endswith('/base.apk'):
+                digest = device('shell', 'sha256sum', installed_path, check=False)
+                words = digest.stdout.split()
+                reuse_apk = digest.returncode == 0 and bool(words) and words[0] == apk_hash
+        if not reuse_apk:
+            install = device('install', '--no-incremental', '-r', str(apk), check=False)
+            if install.returncode != 0:
+                raise RuntimeError('Debug APK install failed: ' + install.stdout.strip() + ' ' + install.stderr.strip())
+        (output / 'installation.json').write_text(json.dumps({'package': PACKAGE, 'apk_sha256': apk_hash, 'reused_exact_apk': reuse_apk}, indent=2))
         for variant in ([args.variant] if args.variant else ['desktop-art', 'android-etc2-art']):
             folder = output / variant
             folder.mkdir(exist_ok=True)
@@ -97,6 +124,9 @@ def main():
             device('shell', 'run-as', PACKAGE, 'mkdir', '-p', 'files')
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {variant} > files/android-arena-variant'")
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {args.lighting_mode} > files/android-arena-lighting'")
+            if not (args.texture_residency or args.battle_budget):
+                options = {'hour': args.hour, 'camera': args.camera_view, 'shadow_casters': args.shadow_casters, 'caster_shadows': not args.no_caster_shadows}
+                device('shell', 'run-as', PACKAGE, 'tee', 'files/android-arena-probe-options.json', input=json.dumps(options))
             device('shell', 'am', 'start', '-n', PACKAGE + '/com.godot.game.GodotAppLauncher')
             deadline = time.monotonic() + args.timeout
             memory = []

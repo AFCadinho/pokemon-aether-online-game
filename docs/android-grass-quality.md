@@ -1,5 +1,9 @@
 # Android grass quality investigation (2026-10-08)
 
+Follow-up: the [matte outdoor colour prototype](android-outdoor-colour-prototype.md)
+now demonstrates calmer Android grass/ground with actual shadows retained.
+It is an offline diagnostic and is not enabled in the ordinary game.
+
 ## Finding
 
 A player screenshot shows soft Pokémon and very high-contrast, speckled grass.
