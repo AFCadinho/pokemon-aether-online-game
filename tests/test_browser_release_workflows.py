@@ -25,6 +25,7 @@ class BrowserReleaseWorkflowTests(unittest.TestCase):
         workflows = ROOT / ".github/workflows"
         self.preview = yaml.safe_load((workflows / "deploy-web-cloudflare.yml").read_text())
         self.publisher = yaml.safe_load((workflows / "publish-browser-candidate.yml").read_text())
+        self.cleanup = yaml.safe_load((workflows / "cleanup-browser-r2.yml").read_text())
 
     def assert_retry_contract(self, preview, publisher):
         build = preview["jobs"]["build"]
@@ -38,8 +39,9 @@ class BrowserReleaseWorkflowTests(unittest.TestCase):
         self.assertNotIn("run_attempt", saved["with"]["name"])
         self.assertTrue(saved["with"]["overwrite"])
         self.assertIn("--reuse-upload", commands(deploy))
-        self.assertEqual(publisher["jobs"]["cleanup"]["needs"], "publish-manifest")
-        self.assertTrue(publisher["jobs"]["cleanup"]["continue-on-error"])
+        self.assertNotIn("cleanup", publisher["jobs"])
+        for job in publisher["jobs"].values():
+            self.assertNotIn("prune_r2_release_objects.py", commands(job))
         self.assertNotIn("prune_r2_release_objects.py", commands(publisher["jobs"]["publish"]))
         self.assertNotIn("environment", publisher["jobs"]["publish-manifest"])
         self.assertEqual(preview["concurrency"]["group"], publisher["concurrency"]["group"])
@@ -48,6 +50,40 @@ class BrowserReleaseWorkflowTests(unittest.TestCase):
 
     def test_failed_deployment_can_reuse_build_and_cleanup_cannot_block_activation(self):
         self.assert_retry_contract(self.preview, self.publisher)
+
+    def test_weekly_cleanup_protects_current_release_and_serializes_publication(self):
+        # PyYAML uses YAML 1.1, where the Actions key "on" parses as True.
+        triggers = self.cleanup.get("on", self.cleanup.get(True))
+        self.assertEqual(triggers["schedule"], [{"cron": "23 3 * * 0"}])
+        self.assertFalse(triggers["workflow_dispatch"]["inputs"]["apply"]["default"])
+        self.assertEqual(self.cleanup["concurrency"], self.publisher["concurrency"])
+        job = self.cleanup["jobs"]["cleanup"]
+        self.assertEqual(job["environment"], "web-production")
+        self.assertNotIn("needs", job)
+        self.assertNotIn("continue-on-error", job)
+        source = commands(job)
+        self.assertIn("https://updates.pokeaether.com/manifest-web.json", source)
+        self.assertIn("--active-web-url https://play.pokeaether.com", source)
+        self.assertIn("--scope web", source)
+        self.assertIn("--retain-previous 1 --minimum-age-hours 24 --max-delete 20000", source)
+        self.assertNotIn("download-artifact", str(job))
+
+    def test_manual_cleanup_preview_cannot_delete_without_explicit_apply(self):
+        command = next(step["run"] for step in self.cleanup["jobs"]["cleanup"]["steps"]
+                       if "python3 -u tools/prune_r2_release_objects.py" in step.get("run", ""))
+        with tempfile.TemporaryDirectory() as directory:
+            work = Path(directory)
+            (work / "tools").mkdir()
+            (work / "builds/browser-cleanup").mkdir(parents=True)
+            (work / "tools/prune_r2_release_objects.py").write_text(
+                "import sys\nprint('ARGS=' + repr(sys.argv[1:]))\n")
+            for apply in ("false", "true"):
+                result = subprocess.run(["bash", "-eo", "pipefail", "-c", command],
+                                        cwd=work, env={**os.environ, "APPLY": apply},
+                                        capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual("'--apply'" in result.stdout, apply == "true")
+                self.assertIn("'--scope', 'web'", result.stdout)
 
     def test_changing_step_labels_does_not_break_release_contract(self):
         preview, publisher = deepcopy(self.preview), deepcopy(self.publisher)
