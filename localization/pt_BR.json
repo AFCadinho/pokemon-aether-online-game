@@ -302,6 +302,7 @@
   "backend.error.party_changed_refresh": "Sua equipe mudou e foi recarregada. Tente novamente.",
   "backend.error.active_wild_battle": "Você já tem uma batalha selvagem ativa. Retome ou termine-a primeiro.",
   "backend.error.active_trainer_battle": "Você já tem uma batalha contra Treinador ativa. Retome ou termine-a primeiro.",
+  "backend.error.story_battle_quest_required": "Conclua as missões anteriores da história e chegue ao objetivo desta batalha antes de desafiar este Treinador. Confira seu Registro de Missões para ver o próximo objetivo.",
   "backend.error.reward_claim": "A recompensa não pôde ser recebida. Tente novamente.",
   "backend.error.fishing_locked": "Aprenda Pesca primeiro com o Guru da Pesca Sam na Casa 1 em Vermilion City.",
   "backend.error.party_heal": "Sua equipe não pôde ser curada agora. Tente novamente.",

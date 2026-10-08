@@ -302,6 +302,7 @@
   "backend.error.party_changed_refresh": "你的队伍已发生变化并已重新加载。请再试一次。",
   "backend.error.active_wild_battle": "你已有一场进行中的野生宝可梦战斗。请先恢复或完成它。",
   "backend.error.active_trainer_battle": "你已有一场进行中的训练家战斗。请先恢复或完成它。",
+  "backend.error.story_battle_quest_required": "请先完成之前的主线任务，并推进到这场对战的任务目标，再挑战这位训练家。查看任务日志以了解下一个目标。",
   "backend.error.reward_claim": "奖励无法领取。请再试一次。",
   "backend.error.fishing_locked": "请先向枯叶市1号房屋里的钓鱼达人 Sam学习钓鱼。",
   "backend.error.party_heal": "你的队伍现在无法被治愈。请再试一次。",
