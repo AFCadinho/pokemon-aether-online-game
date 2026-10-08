@@ -59,6 +59,10 @@ func _run() -> void:
 		"expired Royal outfit explains the Patreon role requirement")
 	_check(str(errors.call("message", {"code": "coop_npc_out_of_range"})).contains("Move closer"),
 		"co-op trainer range rejection explains the required action")
+	_check(str(errors.call("message", {"body": {"detail": {"code": "story_battle_quest_required"}}})).contains("Quest Log"),
+		"story battle rejection directs the player to their current quest objective")
+	_check(str(errors.call("message", {"code": "coop_story_prerequisite_required"})).contains("preceding story quests"),
+		"co-op story rejection explains the quest prerequisite")
 	var update_response := {
 		"status": 426,
 		"body": {

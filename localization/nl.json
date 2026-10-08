@@ -336,6 +336,7 @@
   "backend.error.party_changed_refresh": "Je team was gewijzigd en is opnieuw geladen. Probeer het nogmaals.",
   "backend.error.active_wild_battle": "Je hebt al een actief wild gevecht. Hervat of voltooi dat eerst.",
   "backend.error.active_trainer_battle": "Je hebt al een actief Trainergevecht. Hervat of voltooi dat eerst.",
+  "backend.error.story_battle_quest_required": "Rond eerst de voorgaande verhaalquests af en bereik deze gevechtsopdracht voordat je deze Trainer uitdaagt. Kijk in je questlog voor je volgende opdracht.",
   "backend.error.reward_claim": "De beloning kon niet worden opgehaald. Probeer het opnieuw.",
   "backend.error.fishing_locked": "Leer eerst Fishing van Visgoeroe Sam in Huis 1 in Vermilion City.",
   "backend.error.party_heal": "Je team kon nu niet worden geheeld. Probeer het opnieuw.",

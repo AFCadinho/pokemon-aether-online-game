@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Explain which story progression is required when a Trainer battle cannot be started.
+
 - Ask players with a staff-required name change to choose a new, appropriate name after login before entering the world.
 
 - Allow the Android emulator to use the dedicated NVIDIA GPU on hybrid laptops instead of defaulting to integrated graphics.

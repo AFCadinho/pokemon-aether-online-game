@@ -336,6 +336,7 @@
   "backend.error.party_changed_refresh": "Your party changed. It has been refreshed; please try again.",
   "backend.error.active_wild_battle": "You already have an active wild battle. Reopen or finish it first.",
   "backend.error.active_trainer_battle": "You already have an active Trainer battle. Reopen or finish it first.",
+  "backend.error.story_battle_quest_required": "Complete the preceding story quests and reach this battle objective before challenging this Trainer. Check your Quest Log for your next objective.",
   "backend.error.reward_claim": "The reward could not be claimed. Please try again.",
   "backend.error.fishing_locked": "Learn Fishing from Fishing Guru Sam in House 1 in Vermilion City first.",
   "backend.error.party_heal": "Your party could not be healed right now. Please try again.",
