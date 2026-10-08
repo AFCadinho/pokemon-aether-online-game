@@ -64,6 +64,8 @@ def main():
         if android_tab:
             CHECKS.append("android_tab_benchmark_check")
         FIXTURES = []
+        if android_arenas:
+            FIXTURES = ["compatibility_outdoor_colour_probe"]
     if mobile_collapse:
         if args.platform != "android":
             parser.error("Mobile collapse QA uses the native Android runtime")

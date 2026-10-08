@@ -1,0 +1,189 @@
+{
+  "schema": 1,
+  "status": "offline_prototype",
+  "date": "2026-10-08",
+  "package": "com.pokeaether.androidarenapilot",
+  "godot": "4.6.2",
+  "platform": "Android 13 x86_64 emulator",
+  "renderer": "gl_compatibility",
+  "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+  "pck_sha256": "0cd0051c1bf0491aaad75a0dfd8962ae9e7d60036b3920e47b4aff6ed766da1c",
+  "apk_sha256": "7840c00fcbd949f44b3c6a94aa907aa3b0b912608f5205b023e327e1481a88b9",
+  "fixture_sha256": "1b30adc4d15dfad55f2749e3c3b86de4fe8ac7e363f4d9fabf1702415c181e8a",
+  "viewport": [
+    960,
+    540
+  ],
+  "msaa": "4x",
+  "cases": [
+    {
+      "case": "native-baseline",
+      "lighting_mode": "baseline",
+      "hour": 12,
+      "camera": "default",
+      "caster_shadows": true,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "c1ca82b822866f43d9eb3efd9fca273b5422282ef46dc0468e29da1c33842d1b"
+    },
+    {
+      "case": "native-noon",
+      "lighting_mode": "shadow-colour",
+      "hour": 12,
+      "camera": "default",
+      "caster_shadows": true,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "93e9542b08180e885f8b9ac19758da896064034a9e5c21c17a8cbc0ab2134742"
+    },
+    {
+      "case": "native-night",
+      "lighting_mode": "shadow-colour",
+      "hour": 21,
+      "camera": "default",
+      "caster_shadows": true,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "4eb142fd1022e711502791d14440d3aef656ffd36eb13d7ee4faf72b8fddf36f"
+    },
+    {
+      "case": "native-no-caster-shadow-fixed",
+      "lighting_mode": "shadow-colour",
+      "hour": 12,
+      "camera": "default",
+      "caster_shadows": false,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "b4a301de70a5c6b8a0bc74d10defd03f6acbd8c10078251a106328494f98c03f"
+    },
+    {
+      "case": "native-side-visible",
+      "lighting_mode": "shadow-colour",
+      "hour": 19,
+      "camera": "side",
+      "caster_shadows": true,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "8d3bdb0b69987db9d0da059103bdfe69aa023bdc62c06d9234048cf15c133c08"
+    },
+    {
+      "case": "native-night-baseline",
+      "lighting_mode": "baseline",
+      "hour": 21,
+      "camera": "default",
+      "caster_shadows": true,
+      "success": true,
+      "engine_errors": [],
+      "capture_sha256": "f63244634af1cac90b5fa31d7fd50ad51fec4254da25c1eaa1140029b1847e60"
+    }
+  ],
+  "shadow_toggle": {
+    "roi": [
+      450,
+      270,
+      540,
+      318
+    ],
+    "shadow_on_mean_rgb": [
+      90.70601851851852,
+      147.54212962962964,
+      84.36226851851852
+    ],
+    "caster_shadow_off_mean_rgb": [
+      106.67847222222223,
+      167.94398148148147,
+      93.6287037037037
+    ],
+    "shadow_darkening_rgb": [
+      15.972453703703707,
+      20.40185185185183,
+      9.266435185185188
+    ],
+    "difference_bounds": [
+      356,
+      273,
+      926,
+      373
+    ]
+  },
+  "metrics": {
+    "before": {
+      "whole_image": {
+        "rmse_255": 49.79940672187595,
+        "psnr_db": 14.186320230974827,
+        "roi": [
+          0,
+          0,
+          960,
+          540
+        ]
+      },
+      "grass": {
+        "rmse_255": 48.008980664002934,
+        "psnr_db": 14.50435390783291,
+        "roi": [
+          20,
+          30,
+          750,
+          170
+        ]
+      },
+      "ground": {
+        "rmse_255": 57.312238016610614,
+        "psnr_db": 12.965856252894595,
+        "roi": [
+          465,
+          350,
+          650,
+          480
+        ]
+      }
+    },
+    "prototype": {
+      "whole_image": {
+        "rmse_255": 14.732743772594771,
+        "psnr_db": 24.765130892694778,
+        "roi": [
+          0,
+          0,
+          960,
+          540
+        ]
+      },
+      "grass": {
+        "rmse_255": 12.598436933873089,
+        "psnr_db": 26.12447028268136,
+        "roi": [
+          20,
+          30,
+          750,
+          170
+        ]
+      },
+      "ground": {
+        "rmse_255": 2.9247077553005965,
+        "psnr_db": 38.80915407451144,
+        "roi": [
+          465,
+          350,
+          650,
+          480
+        ]
+      }
+    }
+  },
+  "physical_device_qualified": false,
+  "battle_performance_qualified": false,
+  "production_enabled": false,
+  "known_failed_attempts": [
+    "Prototype parse and material teardown errors corrected before native APK export.",
+    "Redundant reinstall failed with insufficient storage; exact installed APK reuse verified by SHA-256.",
+    "Headless emulator exited 139 during loopback PCK download, before scene build; side camera passed after visible restart."
+  ],
+  "visual_review": {
+    "date": "2026-10-08",
+    "approved": true,
+    "response": "Ja, duidelijk beter",
+    "scope": "Standalone Android prototype appearance, including evening light"
+  }
+}
