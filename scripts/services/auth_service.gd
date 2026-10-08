@@ -361,6 +361,19 @@ func _is_safe_account_portal_url(
 	return host in ["localhost", "127.0.0.1"] or host.ends_with(".localhost")
 
 
+func complete_required_name_change(new_name: String) -> Dictionary:
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/name-change",
+		HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		JSON.stringify({"username": new_name.to_lower(), "displayName": new_name})
+	)
+	if bool(response.get("success", false)):
+		apply_current_user(_dictionary_from_value(response.get("body", {})))
+	return response
+
+
 func update_account_details(display_name: String, current_password: String, new_password: String) -> Dictionary:
 	if session_token == "":
 		return {

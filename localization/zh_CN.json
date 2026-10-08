@@ -6585,5 +6585,15 @@
   "ui.visual_choice.android.hint": "宝可梦图像、模型和战斗场景会在需要时自动下载并保存在此设备上。首次下载可能需要一些时间。你可以随时在设置中切换2D和3D。",
   "ui.visual_choice.android.settings_hint": "Android上的3D仍是实验功能。如果运行缓慢或崩溃，请选择2D。你可以随时更改。",
   "ui.loading.android_3d": "正在准备3D战斗场景……",
-  "ui.visual_choice.android.recovery": "已切换回2D，让你可以继续游玩。你可以在设置中再次尝试实验性3D。"
+  "ui.visual_choice.android.recovery": "已切换回2D，让你可以继续游玩。你可以在设置中再次尝试实验性3D。",
+  "ui.login.rename.title": "选择新的训练家名字",
+  "ui.login.rename.message": "工作人员要求你更改名字。请选择合适的名字后继续游戏。本次更改免费。",
+  "ui.login.rename.submit": "保存名字",
+  "ui.login.rename.logout": "退出登录",
+  "ui.login.rename.placeholder": "新的训练家名字",
+  "ui.login.rename.format": "请使用3至32个英文字母、数字或下划线。",
+  "ui.login.rename.error": "无法更改名字，请重试。",
+  "ui.login.rename.inappropriate": "请选择合适的训练家名字。",
+  "ui.login.rename.unavailable": "此名字不可用。",
+  "ui.login.rename.unchanged": "请选择不同的用户名。"
 }

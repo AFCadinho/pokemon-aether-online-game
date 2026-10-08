@@ -6585,5 +6585,15 @@
   "ui.visual_choice.android.hint": "Pokémon-afbeeldingen, modellen en gevechtsvelden downloaden wanneer je ze nodig hebt en blijven op dit apparaat. De eerste download kan even duren. Je kunt op elk moment wisselen tussen 2D en 3D in Instellingen.",
   "ui.visual_choice.android.settings_hint": "3D is experimenteel op Android. Kies 2D als het traag is of vastloopt. Je kunt dit op elk moment aanpassen.",
   "ui.loading.android_3d": "Je 3D-gevechtsvelden voorbereiden…",
-  "ui.visual_choice.android.recovery": "We zijn teruggeschakeld naar 2D zodat je kunt blijven spelen. Je kunt experimentele 3D opnieuw proberen in Instellingen."
+  "ui.visual_choice.android.recovery": "We zijn teruggeschakeld naar 2D zodat je kunt blijven spelen. Je kunt experimentele 3D opnieuw proberen in Instellingen.",
+  "ui.login.rename.title": "Kies een nieuwe spelersnaam",
+  "ui.login.rename.message": "Een medewerker heeft een naamswijziging verplicht. Kies een gepaste naam om verder te spelen. Deze wijziging is gratis.",
+  "ui.login.rename.submit": "Naam opslaan",
+  "ui.login.rename.logout": "Uitloggen",
+  "ui.login.rename.placeholder": "Nieuwe spelersnaam",
+  "ui.login.rename.format": "Gebruik 3–32 letters, cijfers of underscores.",
+  "ui.login.rename.error": "Je naam kon niet worden gewijzigd. Probeer het opnieuw.",
+  "ui.login.rename.inappropriate": "Kies een gepaste spelersnaam.",
+  "ui.login.rename.unavailable": "Deze naam is niet beschikbaar.",
+  "ui.login.rename.unchanged": "Kies een andere gebruikersnaam."
 }

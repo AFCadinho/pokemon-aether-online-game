@@ -6585,5 +6585,15 @@
   "ui.visual_choice.android.hint": "Pokémon images, models and battlefields download as you need them and stay on this device. The first download may take a moment. You can switch between 2D and 3D at any time in Settings.",
   "ui.visual_choice.android.settings_hint": "3D is experimental on Android. If it runs slowly or crashes, choose 2D. You can change this at any time.",
   "ui.loading.android_3d": "Preparing your 3D battlefields…",
-  "ui.visual_choice.android.recovery": "We switched back to 2D so you can keep playing. You can try experimental 3D again in Settings."
+  "ui.visual_choice.android.recovery": "We switched back to 2D so you can keep playing. You can try experimental 3D again in Settings.",
+  "ui.login.rename.title": "Choose a new trainer name",
+  "ui.login.rename.message": "Staff has required you to change your trainer name. Choose an appropriate name to continue. This change is free.",
+  "ui.login.rename.submit": "Save name",
+  "ui.login.rename.logout": "Log out",
+  "ui.login.rename.placeholder": "New trainer name",
+  "ui.login.rename.format": "Use 3–32 letters, numbers or underscores.",
+  "ui.login.rename.error": "Could not change your name. Please try again.",
+  "ui.login.rename.inappropriate": "Please choose an appropriate trainer name.",
+  "ui.login.rename.unavailable": "That name is unavailable.",
+  "ui.login.rename.unchanged": "Choose a different username."
 }
