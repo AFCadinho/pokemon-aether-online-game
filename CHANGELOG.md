@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Fix experimental Android 3D battles incorrectly displaying 2D after choosing 3D.
+
+- Distinguish normal Android background cleanup and user-requested exits from crashes, preserve the chosen 3D mode after those normal exits, and include Android's safe exit reason and memory figures in crash reports when available.
+
 ## 0.3.102
 
 - Show your current location in Vermilion City on the Town Map while inside its Guild Base rooms.

@@ -9,6 +9,13 @@ const SESSION_STATE_PATH := "user://diagnostics/client_session_state.json"
 const LATEST_REPORT_PATH := "user://diagnostics/latest_crash_report.txt"
 const MAX_LOG_READ_BYTES := 64 * 1024
 const MAX_DIAGNOSTIC_LINES := 180
+const ANDROID_EXIT_REASONS := {
+	0: "UNKNOWN", 1: "EXIT_SELF", 2: "SIGNALED", 3: "LOW_MEMORY",
+	4: "CRASH", 5: "CRASH_NATIVE", 6: "ANR", 7: "INITIALIZATION_FAILURE",
+	8: "PERMISSION_CHANGE", 9: "EXCESSIVE_RESOURCE_USAGE", 10: "USER_REQUESTED",
+	11: "USER_STOPPED", 12: "DEPENDENCY_DIED", 13: "OTHER", 14: "FREEZER",
+	15: "PACKAGE_STATE_CHANGE", 16: "PACKAGE_UPDATED",
+}
 
 const UI_BACKDROP := Color("#020711d9")
 const UI_PANEL := Color("#07111ffb")
@@ -25,6 +32,9 @@ var new_interrupted_session_detected := false
 var android_3d_recovery_required := false
 var android_3d_recovered_this_session := false
 var _current_session_state: Dictionary = {}
+var _mobile_paused := false
+var _mobile_focused := true
+var _session_ended := false
 var _localization_manager: Node
 var _dialog_layer: CanvasLayer
 var _dialog_root: Control
@@ -50,6 +60,9 @@ func _enter_tree() -> void:
 		return
 
 	var previous_state := _read_json_dictionary(SESSION_STATE_PATH)
+	var android_exit_info := _read_android_exit_info(previous_state)
+	if not android_exit_info.is_empty():
+		previous_state["androidExitInfo"] = android_exit_info
 	if _session_looks_interrupted(previous_state):
 		android_3d_recovery_required = bool(previous_state.get("experimentalAndroid3D", false))
 		latest_report = _build_crash_report(previous_state)
@@ -59,6 +72,7 @@ func _enter_tree() -> void:
 	_current_session_state = {
 		"schemaVersion": 1,
 		"cleanShutdown": false,
+		"lifecycle": "foreground",
 		"processId": OS.get_process_id(),
 		"startedAtUnix": int(Time.get_unix_time_from_system()),
 		"startedAt": Time.get_datetime_string_from_system(false, true),
@@ -99,6 +113,8 @@ func _exit_tree() -> void:
 	if _current_session_state.is_empty():
 		return
 	_current_session_state["cleanShutdown"] = true
+	_current_session_state["lifecycle"] = "closed"
+	_session_ended = true
 	_current_session_state["endedAtUnix"] = int(Time.get_unix_time_from_system())
 	_current_session_state["endedAt"] = Time.get_datetime_string_from_system(false, true)
 	_write_json_file(SESSION_STATE_PATH, _current_session_state)
@@ -107,14 +123,29 @@ func _exit_tree() -> void:
 func _notification(what: int) -> void:
 	if not OS.has_feature("mobile") or _current_session_state.is_empty():
 		return
-	if what == NOTIFICATION_APPLICATION_PAUSED:
-		# Android may kill an app after it enters the background. That is a normal
-		# lifecycle event, not evidence that the game crashed.
-		_current_session_state["cleanShutdown"] = true
-		_write_json_file(SESSION_STATE_PATH, _current_session_state)
-	elif what == NOTIFICATION_APPLICATION_RESUMED:
-		_current_session_state["cleanShutdown"] = false
-		_write_json_file(SESSION_STATE_PATH, _current_session_state)
+	_record_mobile_lifecycle_event(what)
+
+
+func _record_mobile_lifecycle_event(what: int) -> void:
+	if _current_session_state.is_empty() or _session_ended:
+		return
+	match what:
+		NOTIFICATION_APPLICATION_PAUSED:
+			_mobile_paused = true
+		NOTIFICATION_APPLICATION_RESUMED:
+			_mobile_paused = false
+		NOTIFICATION_APPLICATION_FOCUS_OUT:
+			_mobile_focused = false
+		NOTIFICATION_APPLICATION_FOCUS_IN:
+			_mobile_focused = true
+		_:
+			return
+	# Android may reclaim an app in the background without _exit_tree. Resume
+	# and focus callbacks are independent: neither alone proves it is visible.
+	var foreground := not _mobile_paused and _mobile_focused
+	_current_session_state["cleanShutdown"] = not foreground
+	_current_session_state["lifecycle"] = "foreground" if foreground else ("paused" if _mobile_paused else "unfocused")
+	_write_json_file(SESSION_STATE_PATH, _current_session_state)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -166,9 +197,41 @@ func _show_interrupted_session_prompt() -> void:
 func _session_looks_interrupted(state: Dictionary) -> bool:
 	if state.is_empty() or int(state.get("schemaVersion", 0)) != 1:
 		return false
+	var native_exit: Variant = state.get("androidExitInfo", {})
+	if native_exit is Dictionary and not native_exit.is_empty():
+		var reason := int(native_exit.get("reason", 0))
+		var status := int(native_exit.get("status", 0))
+		# These are affirmative OS reasons, not guesses from a missing error log.
+		if reason in [8, 10, 11, 14, 15, 16] or (reason == 1 and status == 0):
+			return false
+		if reason in [4, 5, 6, 7] or (reason == 2 and status in [4, 6, 7, 8, 11, 31]):
+			return true
+		# Foreground memory pressure is actionable; reclaiming a cached app is
+		# normal Android behaviour and must not reset an opted-in 3D preference.
+		if reason in [2, 3, 9] and int(native_exit.get("importance", 0)) >= 300:
+			return false
 	if bool(state.get("cleanShutdown", true)):
 		return false
 	return true
+
+
+func _read_android_exit_info(state: Dictionary) -> Dictionary:
+	if OS.get_name() != "Android" or state.is_empty() or int(state.get("schemaVersion", 0)) != 1:
+		return {}
+	if not Engine.has_singleton("AndroidRuntime") or not Engine.has_singleton("JavaClassWrapper"):
+		return {}
+	var runtime := Engine.get_singleton("AndroidRuntime")
+	var wrapper := Engine.get_singleton("JavaClassWrapper")
+	var bridge: Object = wrapper.call("wrap", "com.pokeaether.game.ApkInstallBridge")
+	if bridge == null or wrapper.call("get_exception") != null:
+		return {}
+	var result: Variant = bridge.call("getPreviousProcessExit", runtime.call("getActivity"),
+		int(state.get("processId", 0)), int(state.get("startedAtUnix", 0)) * 1000,
+		int(Time.get_unix_time_from_system() * 1000))
+	if wrapper.call("get_exception") != null or not result is String:
+		return {}
+	var parsed: Variant = JSON.parse_string(result)
+	return parsed if parsed is Dictionary else {}
 
 
 func _build_crash_report(previous_state: Dictionary) -> String:
@@ -196,7 +259,10 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		str(engine_version.get("patch", "?")),
 	]
 	var source_name := source_log_path.get_file() if not source_log_path.is_empty() else "Unavailable"
-	return "\n".join(PackedStringArray([
+	var lifecycle := str(previous_state.get("lifecycle", "unknown"))
+	if lifecycle not in ["foreground", "paused", "unfocused", "closed"]:
+		lifecycle = "unknown"
+	var report_lines := PackedStringArray([
 		"POKEAETHER CLIENT CRASH REPORT",
 		"Share this complete report with PokeAether staff.",
 		"This report excludes account credentials, sessions, chats, teams, and private battle data.",
@@ -213,7 +279,17 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		"Graphics adapter: %s" % _single_line(RenderingServer.get_video_adapter_name()),
 		"Device model: %s" % _single_line(OS.get_model_name()),
 		"Experimental Android 3D: %s" % bool(previous_state.get("experimentalAndroid3D", false)),
+		"Previous lifecycle: %s" % lifecycle,
 		"Source log: %s" % source_name,
+	])
+	var native_exit: Variant = previous_state.get("androidExitInfo", {})
+	if native_exit is Dictionary and not native_exit.is_empty():
+		var reason := int(native_exit.get("reason", 0))
+		report_lines.append("Android exit reason: %s (%d)" % [ANDROID_EXIT_REASONS.get(reason, "UNKNOWN"), reason])
+		report_lines.append("Android exit status: %d" % int(native_exit.get("status", 0)))
+		report_lines.append("Android process importance: %d" % int(native_exit.get("importance", 0)))
+		report_lines.append("Previous process PSS / RSS (KiB): %d / %d" % [maxi(int(native_exit.get("pssKiB", 0)), 0), maxi(int(native_exit.get("rssKiB", 0)), 0)])
+	report_lines.append_array(PackedStringArray([
 		"",
 		"SAFE ERROR DETAILS",
 		"------------------",
@@ -221,6 +297,7 @@ func _build_crash_report(previous_state: Dictionary) -> String:
 		"",
 		"END OF REPORT",
 	]))
+	return "\n".join(report_lines)
 
 
 static func extract_safe_diagnostics(contents: String, private_paths: PackedStringArray = PackedStringArray()) -> String:
