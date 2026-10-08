@@ -158,6 +158,9 @@ func _build() -> void:
 	if stage.has_method("build_response_arena"):
 		var arena: Node3D = stage.build_response_arena(world,camera)
 		if arena != null:
+			var outdoor := arena.get_node_or_null("OutdoorLighting")
+			if outdoor != null:
+				outdoor.irradiance_only = true
 			world.add_child(arena)
 		for child in world.get_children():
 			if child is WorldEnvironment:

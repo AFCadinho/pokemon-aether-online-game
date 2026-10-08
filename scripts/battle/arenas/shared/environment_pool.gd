@@ -109,6 +109,9 @@ func _build_pass(light_pass: bool) -> Dictionary:
 	camera.look_at(Catalog.camera_target(arena_id))
 	camera.current = true
 	var arena := Catalog.build(arena_id,world,camera)
+	var outdoor := arena.get_node_or_null("OutdoorLighting")
+	if outdoor != null:
+		outdoor.irradiance_only = light_pass
 	world.add_child(arena)
 	return {"viewport":viewport,"world":world,"camera":camera,"arena":arena,"base":world.get_children()}
 

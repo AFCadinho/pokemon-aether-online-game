@@ -1,6 +1,11 @@
 extends Node
 ## Per-arena lighting; both scenery and Pokémon irradiance use the world clock.
 const Cycle = preload("res://scripts/world/day_night_controller.gd")
+const CompatibilityColour = preload("res://scripts/battle/arenas/shared/compatibility_outdoor_colour.gd")
+var compatibility_colour_enabled := CompatibilityColour.supported()
+var irradiance_only := false
+var colour_correction: RefCounted
+var _last_colour_second := -1
 var _environment: Environment
 var _sky: ProceduralSkyMaterial
 var _lights: Array[DirectionalLight3D] = []
@@ -30,6 +35,11 @@ func _ready() -> void:
 	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	_environment.reflected_light_source = Environment.REFLECTION_SOURCE_BG
 	_process(0.0)
+	if compatibility_colour_enabled:
+		var correction := CompatibilityColour.new()
+		correction.irradiance_only = irradiance_only
+		if correction.apply(get_parent(), _environment, _lights):
+			colour_correction = correction
 
 func _process(_delta: float) -> void:
 	var clock := get_node_or_null("/root/WorldTimeService")
@@ -66,3 +76,8 @@ func apply_seconds(seconds: float) -> void:
 			light.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 			light.light_color = Color("d7e9ff").lerp(Color("a9c3f3"), night)
 			light.light_energy = lerpf(0.25, 0.12, night) if index < 3 else lerpf(0.35, 0.16, night)
+	# A one-second clock step is visually negligible and avoids resending dozens
+	# of identical material uniforms each frame, including pooled arena passes.
+	if colour_correction != null and int(seconds) != _last_colour_second:
+		_last_colour_second = int(seconds)
+		colour_correction.refresh(_environment, _lights)

@@ -1,0 +1,1024 @@
+{
+  "schema": 1,
+  "scope": "experimental Android outdoor GLES colour correction",
+  "physical_device_qualified": false,
+  "production_enabled": false,
+  "visual_review": {
+    "grass": "approved offline prototype",
+    "actors": "user thinks better; requests in-game assessment"
+  },
+  "comparison": {
+    "baseline": {
+      "success": true,
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_warm_phase_p50_ms": 17.8185,
+      "peak_pss_kib": 512312,
+      "peak_rss_kib": 600208,
+      "phases": [
+        {
+          "label": "autoloads",
+          "frame_p50_ms": 16.668,
+          "frame_p95_ms": 17.051,
+          "draw_calls": 0.0,
+          "render_bytes": 198200445.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "forest-resources",
+          "frame_p50_ms": 16.669,
+          "frame_p95_ms": 17.107,
+          "draw_calls": 0.0,
+          "render_bytes": 254819562.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "arena-main",
+          "frame_p50_ms": 16.674,
+          "frame_p95_ms": 17.03,
+          "draw_calls": 146.0,
+          "render_bytes": 290505362.0,
+          "outdoor_colour": [
+            {}
+          ]
+        },
+        {
+          "label": "arena-response",
+          "frame_p50_ms": 16.65,
+          "frame_p95_ms": 18.072,
+          "draw_calls": 292.0,
+          "render_bytes": 319880298.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "arena-suspended",
+          "frame_p50_ms": 16.678,
+          "frame_p95_ms": 16.996,
+          "draw_calls": 0.0,
+          "render_bytes": 319880298.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 17.529,
+          "frame_p95_ms": 25.058,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 17.748,
+          "frame_p95_ms": 25.364,
+          "draw_calls": 387.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 17.336,
+          "frame_p95_ms": 24.997,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 17.546,
+          "frame_p95_ms": 25.608,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 17.631,
+          "frame_p95_ms": 24.983,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 17.958,
+          "frame_p95_ms": 25.321,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 18.121,
+          "frame_p95_ms": 25.062,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 17.982,
+          "frame_p95_ms": 25.107,
+          "draw_calls": 377.0,
+          "render_bytes": 447530192.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-released",
+          "frame_p50_ms": 16.663,
+          "frame_p95_ms": 17.002,
+          "draw_calls": 1.0,
+          "render_bytes": 363883430.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 17.889,
+          "frame_p95_ms": 25.037,
+          "draw_calls": 377.0,
+          "render_bytes": 424181208.0,
+          "outdoor_colour": [
+            {},
+            {}
+          ]
+        }
+      ],
+      "captures": {
+        "normal.png": "ea5dec2a785dbe1db5a4841aa70ca12dfec7cc534ef48fa8ba7ad638d4e839b1",
+        "shiny.png": "0ed00619ca1161c6d2698cf1cb0f42a07223396b8a761e1daaf861c7128cea0c",
+        "sleep.png": "0a95b6a4da3e4b53fd0979a5f5d8db538af4fb5ef57803232bcac18b20ac2211",
+        "effect.png": "8f5f7eee0e333fad69e991d9440690ea221d39072cc718a9d4602ac734587206",
+        "large.png": "e62128e59e7af48b315baeb4920e7bafb8363b7fc9c8110986211b7a0151fab7",
+        "reused.png": "8c09cd79acc9a9833135ec40352a843d189fadec0272fbe82311d618f0990a6e",
+        "evening.png": "1bf50256642e88a6fcf5735230d2c0b3dad265ab90e28230617db5a87e35090d",
+        "night.png": "3237500f01644cf617c586f56775e8066df86d4d9935c35fd5124a91f63a9977"
+      }
+    },
+    "first": {
+      "success": true,
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_warm_phase_p50_ms": 22.826,
+      "peak_pss_kib": 522794,
+      "peak_rss_kib": 608844,
+      "phases": [
+        {
+          "label": "autoloads",
+          "frame_p50_ms": 16.657,
+          "frame_p95_ms": 17.053,
+          "draw_calls": 0.0,
+          "render_bytes": 198200445.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "forest-resources",
+          "frame_p50_ms": 16.678,
+          "frame_p95_ms": 17.016,
+          "draw_calls": 0.0,
+          "render_bytes": 254819562.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "arena-main",
+          "frame_p50_ms": 16.654,
+          "frame_p95_ms": 17.0,
+          "draw_calls": 146.0,
+          "render_bytes": 286244978.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "arena-response",
+          "frame_p50_ms": 20.247,
+          "frame_p95_ms": 31.262,
+          "draw_calls": 292.0,
+          "render_bytes": 324140682.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "arena-suspended",
+          "frame_p50_ms": 16.679,
+          "frame_p95_ms": 17.042,
+          "draw_calls": 0.0,
+          "render_bytes": 324140682.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 22.379,
+          "frame_p95_ms": 32.582,
+          "draw_calls": 371.0,
+          "render_bytes": 442813462.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 22.254,
+          "frame_p95_ms": 32.069,
+          "draw_calls": 387.0,
+          "render_bytes": 442813462.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 2
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 2
+            }
+          ]
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 22.799,
+          "frame_p95_ms": 32.551,
+          "draw_calls": 371.0,
+          "render_bytes": 442813462.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 3
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 3
+            }
+          ]
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 22.434,
+          "frame_p95_ms": 32.519,
+          "draw_calls": 371.0,
+          "render_bytes": 442813462.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 22.819,
+          "frame_p95_ms": 33.71,
+          "draw_calls": 371.0,
+          "render_bytes": 442813462.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 22.833,
+          "frame_p95_ms": 32.504,
+          "draw_calls": 377.0,
+          "render_bytes": 462899624.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 23.058,
+          "frame_p95_ms": 32.399,
+          "draw_calls": 377.0,
+          "render_bytes": 462899624.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 23.012,
+          "frame_p95_ms": 32.459,
+          "draw_calls": 377.0,
+          "render_bytes": 449660384.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-released",
+          "frame_p50_ms": 16.673,
+          "frame_p95_ms": 17.031,
+          "draw_calls": 1.0,
+          "render_bytes": 366013622.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 22.922,
+          "frame_p95_ms": 32.58,
+          "draw_calls": 377.0,
+          "render_bytes": 426311400.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        }
+      ],
+      "captures": {
+        "normal.png": "7010084ef6eda86cf47192537d1efc8016aa5b1270b62431c24a47f55a35a100",
+        "shiny.png": "ccedbca53c1617d4c8a619f73b3235f5f1891f51ce15b978e0de0592cb1f6fb9",
+        "sleep.png": "6cb711a184966fd232d83f85d3a555565080e5032c8ee42c5af13959096e284f",
+        "effect.png": "ab5a0946932cbe31dcf80496b2b00d1f02a9cd318af86c031a1e01dea3723c85",
+        "large.png": "3e076ecdf5167816134a9eb88512d1810895172f28716b6164d9e4cd645f3bda",
+        "reused.png": "d135f5d5e07992304eb9ad49f63d67f0bca7bc30b976b6a8e1d154fa80df31a3",
+        "evening.png": "d4102e66202f6e983deadd6dc14c00f3d23cd49ee21ac1bdddfd1ede1dca0bf1",
+        "night.png": "643e848212a98ba824855c475eb050ffc35792989e6f4f28d1cd8c4fbb76e9a7"
+      }
+    },
+    "vertex": {
+      "success": true,
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_warm_phase_p50_ms": 21.345,
+      "peak_pss_kib": 538965,
+      "peak_rss_kib": 625452,
+      "phases": [
+        {
+          "label": "autoloads",
+          "frame_p50_ms": 16.652,
+          "frame_p95_ms": 17.177,
+          "draw_calls": 0.0,
+          "render_bytes": 196070253.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "forest-resources",
+          "frame_p50_ms": 16.649,
+          "frame_p95_ms": 17.081,
+          "draw_calls": 0.0,
+          "render_bytes": 254819562.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "arena-main",
+          "frame_p50_ms": 16.668,
+          "frame_p95_ms": 17.5,
+          "draw_calls": 146.0,
+          "render_bytes": 288375170.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "arena-response",
+          "frame_p50_ms": 19.669,
+          "frame_p95_ms": 30.846,
+          "draw_calls": 292.0,
+          "render_bytes": 324140682.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "arena-suspended",
+          "frame_p50_ms": 16.637,
+          "frame_p95_ms": 19.657,
+          "draw_calls": 0.0,
+          "render_bytes": 324140682.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 21.872,
+          "frame_p95_ms": 31.171,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 21.343,
+          "frame_p95_ms": 30.213,
+          "draw_calls": 387.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 2
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 2
+            }
+          ]
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 21.127,
+          "frame_p95_ms": 30.733,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 3
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 3
+            }
+          ]
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 21.123,
+          "frame_p95_ms": 30.334,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 21.347,
+          "frame_p95_ms": 30.201,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 21.39,
+          "frame_p95_ms": 30.578,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 21.435,
+          "frame_p95_ms": 30.775,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 21.567,
+          "frame_p95_ms": 30.652,
+          "draw_calls": 377.0,
+          "render_bytes": 447530192.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-released",
+          "frame_p50_ms": 16.66,
+          "frame_p95_ms": 17.071,
+          "draw_calls": 1.0,
+          "render_bytes": 363883430.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 21.107,
+          "frame_p95_ms": 30.497,
+          "draw_calls": 377.0,
+          "render_bytes": 424181208.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            }
+          ]
+        }
+      ],
+      "captures": {
+        "normal.png": "6e3c9bf28cdf3e5180a841ededd2db2206e77cca9c01166e514a88a8ca58accd",
+        "shiny.png": "f4f6328179fbb89db088a5cb4d1c044d438dffb791124bf6d527db0df13a9fbd",
+        "sleep.png": "07c1c477f924800f2fb5f4ea4a56518584c1d456a8b04e74f04e3b3a75266ffb",
+        "effect.png": "2ddfb81104d5fe117f839c0fdbc23185ff83c218896e57d54539e280b7818410",
+        "large.png": "4ed49984bf01241bea342c8265b1f14224cd782327922a82e5945adda3143021",
+        "reused.png": "f4473c2cba7f5d41e59a4b05743c48daf8ee3bc0847d732421a9d84487f94d0a",
+        "evening.png": "b67ce9753e207ff3224c26b98f98f6a40602c89e51fe0a57d07c332d4006b52a",
+        "night.png": "300592f710e351ebeb0b2c15a0ae08ebcfa7720c113704d5613fb6c1b84e48dd"
+      }
+    },
+    "final": {
+      "success": true,
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_warm_phase_p50_ms": 18.2165,
+      "peak_pss_kib": 518388,
+      "peak_rss_kib": 604756,
+      "phases": [
+        {
+          "label": "autoloads",
+          "frame_p50_ms": 16.738,
+          "frame_p95_ms": 17.62,
+          "draw_calls": 0.0,
+          "render_bytes": 198200445.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "forest-resources",
+          "frame_p50_ms": 16.776,
+          "frame_p95_ms": 17.467,
+          "draw_calls": 0.0,
+          "render_bytes": 254819562.0,
+          "outdoor_colour": []
+        },
+        {
+          "label": "arena-main",
+          "frame_p50_ms": 16.769,
+          "frame_p95_ms": 17.659,
+          "draw_calls": 146.0,
+          "render_bytes": 286244978.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            }
+          ]
+        },
+        {
+          "label": "arena-response",
+          "frame_p50_ms": 16.795,
+          "frame_p95_ms": 19.572,
+          "draw_calls": 292.0,
+          "render_bytes": 322010490.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "arena-suspended",
+          "frame_p50_ms": 16.742,
+          "frame_p95_ms": 17.706,
+          "draw_calls": 0.0,
+          "render_bytes": 322010490.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 19.749,
+          "frame_p95_ms": 26.873,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 1
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 17.904,
+          "frame_p95_ms": 25.246,
+          "draw_calls": 387.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 2
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 18.105,
+          "frame_p95_ms": 25.865,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 3
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 18.192,
+          "frame_p95_ms": 25.506,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 18.056,
+          "frame_p95_ms": 25.361,
+          "draw_calls": 371.0,
+          "render_bytes": 440683270.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 18.502,
+          "frame_p95_ms": 25.817,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 18.637,
+          "frame_p95_ms": 26.074,
+          "draw_calls": 377.0,
+          "render_bytes": 460769432.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 18.241,
+          "frame_p95_ms": 25.138,
+          "draw_calls": 377.0,
+          "render_bytes": 447530192.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-released",
+          "frame_p50_ms": 16.683,
+          "frame_p95_ms": 17.042,
+          "draw_calls": 1.0,
+          "render_bytes": 363883430.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 18.298,
+          "frame_p95_ms": 25.808,
+          "draw_calls": 377.0,
+          "render_bytes": 424181208.0,
+          "outdoor_colour": [
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 4
+            },
+            {
+              "materials": 21,
+              "surfaces": 299,
+              "updates": 0
+            }
+          ]
+        }
+      ],
+      "captures": {
+        "normal.png": "6d6cc90a70d8a7ed52d2d20a27de1a16d56b7349bec983015a86b5e3d0fcfc8e",
+        "shiny.png": "40788ae2682cf25c7bae45b3b92301df170b7797de25d7824e338cc2d90a5b1e",
+        "sleep.png": "62f80b328ee62bb8c4c87940ae8e8bd7d784b2e605db37c31866f3c682fb96ed",
+        "effect.png": "800554418b1a75406acaac7ba5295cbd8e82c5a4fdaed9ccd80c4cfe202dbed8",
+        "large.png": "8043891fb582053fd7cc5ef81cc4ce0b278ba46d513d359c2e8a877a8085028d",
+        "reused.png": "3b378b89b8082a72d32214d8680f9fc6c1e378724bd8b3eed9c7740b2f6e2e3b",
+        "evening.png": "cea100fe873cb5bb9f580988922c953abc630737f9009287ba533fb61cbd8be2",
+        "night.png": "2ab11935036df47b1cea130e585788713e0ff31d2a2e7ebc8b1d7a44406d8050"
+      }
+    }
+  }
+}

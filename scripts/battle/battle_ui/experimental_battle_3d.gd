@@ -2418,6 +2418,8 @@ func _process(delta: float) -> void:
 			actors[i].rotation.y = atan2(direction.x, direction.z) + deg_to_rad(float(placements[desired[i]].yaw_degrees))
 			players[i] = _find_player(actors[i])
 			preload("res://scripts/battle/battle_ui/material_surface_order.gd").apply(actors[i])
+			if preload("res://scripts/battle/battle_ui/android_actor_exposure.gd").supported() and preload("res://scripts/battle/arenas/arena_catalog.gd").uses_outdoor_lighting(arena_id):
+				preload("res://scripts/battle/battle_ui/android_actor_exposure.gd").apply(actors[i])
 			preload("res://scripts/battle/animations/reviewed_source_visibility.gd").apply(actors[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
 			preload("res://scripts/battle/animations/gliscor_flight.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
 			preload("res://scripts/battle/animations/mega_garchomp_standing.gd").apply(players[i], desired[i], str(entries[desired[i]].get("_verified_runtime_hash", "")))
