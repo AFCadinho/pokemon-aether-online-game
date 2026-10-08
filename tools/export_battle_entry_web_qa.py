@@ -33,6 +33,7 @@ def main():
     parser.add_argument("--emulator-frame-pacing-off", action="store_true", help="3D diagnostic-only x86_64 workaround for Godot emulator issue 121035")
     parser.add_argument("--android-renderer", choices=["gl_compatibility", "mobile"], default="gl_compatibility")
     parser.add_argument("--architecture", choices=["arm64-v8a", "x86_64"], default="arm64-v8a")
+    parser.add_argument("--outdoor-colour-baseline", action="store_true", help="Disable the candidate ONLY inside a separate Compatibility battle diagnostic APK")
     args = parser.parse_args()
     mobile_collapse = args.suite == "mobile-collapse"
     coop_sprites = args.suite == "coop-sprites"
@@ -49,8 +50,10 @@ def main():
     android_pairs = args.suite in {"android-model-pairs", "android-tab-benchmark"}
     if android_tab and (args.architecture != "arm64-v8a" or args.emulator_frame_pacing_off):
         parser.error("Physical tablet benchmark requires ARM64 and ordinary frame pacing")
-    if (android_budget or android_textures or android_pairs) and args.android_renderer != "mobile":
-        parser.error("Android texture/battle diagnostics require --android-renderer mobile")
+    if (android_textures or android_pairs) and args.android_renderer != "mobile":
+        parser.error("Android texture and model-pair diagnostics require --android-renderer mobile")
+    if args.outdoor_colour_baseline and not (android_budget and args.android_renderer == "gl_compatibility"):
+        parser.error("Outdoor colour baseline is limited to the separate GLES battle diagnostic")
     renderer_diagnostic = android_arenas or android_budget or android_textures or android_pairs
     if args.android_renderer != "gl_compatibility" and not renderer_diagnostic:
         parser.error("--android-renderer is limited to the separate Android arena/battle budget diagnostic")
@@ -135,10 +138,25 @@ def main():
     project = ROOT / "project.godot"
     presets = ROOT / "export_presets.cfg"
     originals = {project: project.read_bytes(), presets: presets.read_bytes()}
+    if args.outdoor_colour_baseline:
+        outdoor = ROOT / "scripts/battle/arenas/shared/outdoor_lighting.gd"
+        originals[outdoor] = outdoor.read_bytes()
+        exposure = ROOT / "scripts/battle/battle_ui/android_actor_exposure.gd"
+        originals[exposure] = exposure.read_bytes()
     original_editor = None
     editor_settings = None
     generated.mkdir()
     try:
+        if args.outdoor_colour_baseline:
+            source = originals[outdoor].decode()
+            declaration = "var compatibility_colour_enabled := CompatibilityColour.supported()"
+            if source.count(declaration) != 1:
+                raise ValueError("Expected exact runtime colour declaration for the isolated baseline")
+            outdoor.write_text(source.replace(declaration, "var compatibility_colour_enabled := false"))
+            source = originals[exposure].decode()
+            if source.count("return Colour.supported()") != 1:
+                raise ValueError("Expected exact actor exposure declaration for the isolated baseline")
+            exposure.write_text(source.replace("return Colour.supported()", "return false"))
         for name in FIXTURES:
             source = (ROOT / f"tests/fixtures/{name}.gd").read_text()
             (generated / f"{name}.gd").write_text(rewrite_fixture_paths(source))
@@ -245,7 +263,7 @@ def main():
             selected = selected.replace('package/unique_name="com.pokeaether.game"', 'package/unique_name="' + package + '"')
             selected = selected.replace('package/name="PokeAether"', 'package/name="' + app_name + '"')
             if android_3d:
-                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
+                selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_pilot' + (',android_arena_pilot' if android_arenas else '') + (',android_battle_budget' if android_budget else '') + (',android_battle_budget_gl' if android_budget and args.android_renderer == 'gl_compatibility' else '') + (',android_outdoor_colour_baseline' if args.outdoor_colour_baseline else '') + (',android_texture_residency' if android_textures else '') + (',android_model_pairs' if android_pairs else '') + (',android_tab_benchmark' if android_tab else '') + '"', selected, flags=re.M)
                 release_version = re.search(r'^config/version="([^"]+)"$', originals[project].decode(), re.M).group(1)
                 selected = re.sub(r'^version/name=.*$', 'version/name="' + release_version + '-3d-pilot.1"', selected, flags=re.M)
             if android_choice:

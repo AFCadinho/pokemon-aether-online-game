@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Correct overly bright grass and dark ground in experimental Android 3D battles while preserving battlefield shadows and day/night lighting; reduce washed-out Pokémon brightness in those outdoor battles.
+
 - Explain which story progression is required when a Trainer battle cannot be started.
 
 - Ask players with a staff-required name change to choose a new, appropriate name after login before entering the world.

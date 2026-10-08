@@ -52,8 +52,8 @@ def main():
     if args.texture_residency and (args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline'):
         parser.error('Texture residency requires Mobile and baseline lighting')
     if args.battle_budget:
-        if args.variant != 'android-etc2-art' or args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline':
-            parser.error('Battle budget requires ETC2, Mobile and baseline lighting')
+        if args.variant != 'android-etc2-art' or args.expect_renderer not in {'mobile', 'gl_compatibility'} or args.lighting_mode != 'baseline':
+            parser.error('Battle budget requires ETC2, an explicit renderer and baseline lighting')
         PACKAGE = 'com.pokeaether.android3dpilot'
     if not 60 <= args.timeout <= 1800:
         parser.error('Timeout must be 60..1800 seconds')
@@ -118,6 +118,8 @@ def main():
             folder.mkdir(exist_ok=True)
             device('shell', 'am', 'force-stop', PACKAGE)
             captures = [] if args.texture_residency else (['normal', 'shiny', 'sleep', 'effect', 'large', 'reused'] if args.battle_budget else ['capture'])
+            if args.battle_budget and args.expect_renderer == 'gl_compatibility':
+                captures += ['evening', 'night']
             stale = [f'files/{prefix}-{name}' for name in ['details.json','results.json','phase']] + [f'files/{prefix}-{name}.png' for name in captures]
             device('shell', 'run-as', PACKAGE, 'rm', '-f', *stale)
             # Literal controlled names only; no user text in a remote shell.
@@ -170,6 +172,8 @@ def main():
                 expected = ['autoloads','forest-resources','arena-main','arena-response','arena-suspended',
                             'battle-normal','battle-shiny','battle-sleep','battle-mega','battle-after-effect',
                             'battle-large','battle-released','battle-reused']
+                if args.expect_renderer == 'gl_compatibility':
+                    expected[6:6] = ['battle-evening', 'battle-night']
                 success = success and details.get('suite') == 'android-battle-budget' and [p['label'] for p in details.get('phases', [])] == expected
             if args.texture_residency:
                 cases = details.get('cases', [])

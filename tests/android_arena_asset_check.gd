@@ -105,7 +105,7 @@ func _run() -> void:
 	if not _check(is_finite(hour) and hour >= 0.0 and hour < 24.0 and camera_view in ["default", "side"], "Recognized hour and camera"):
 		_finish()
 		return
-	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows", "ground-srgb", "ground-srgb-no-shadows", "smooth-grass", "shadow-colour"], "Recognized lighting probe"):
+	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows", "ground-srgb", "ground-srgb-no-shadows", "smooth-grass", "shadow-colour", "runtime-colour"], "Recognized lighting probe"):
 		_finish()
 		return
 	report.lighting_mode = lighting_mode
@@ -161,6 +161,9 @@ func _run() -> void:
 	if not _check(arena != null, "Actual grassfield composition"):
 		_finish()
 		return
+	# Isolate the old prototype/baseline; the runtime case exercises the actual
+	# controller installation rather than applying the fixture a second time.
+	arena.get_node("OutdoorLighting").compatibility_colour_enabled = lighting_mode == "runtime-colour" and report.renderer == "gl_compatibility"
 	world.add_child(arena)
 	# Diagnostic overrides only. Keep production shaders and downloaded art intact.
 	if lighting_mode.begins_with("ground-srgb"):
@@ -215,6 +218,14 @@ func _run() -> void:
 	if lighting_mode == "shadow-colour":
 		correction = preload("res://tests/fixtures/compatibility_outdoor_colour_probe.gd").new()
 		if not _check(correction.apply(arena, light), "Matte colour prototype: " + correction.error):
+			_finish()
+			return
+		report.corrected_materials = correction.materials.size()
+		report.corrected_surfaces = correction.replaced_surfaces
+		report.skipped_surfaces = correction.skipped_surfaces
+	if lighting_mode == "runtime-colour":
+		correction = light.colour_correction
+		if not _check(correction != null, "Runtime matte colour correction installed"):
 			_finish()
 			return
 		report.corrected_materials = correction.materials.size()

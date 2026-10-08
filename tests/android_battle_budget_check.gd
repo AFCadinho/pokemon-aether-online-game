@@ -99,6 +99,11 @@ func _observe(label: String) -> void:
 	phase.pool_passes = pool.passes.size() if is_instance_valid(pool) else 0
 	phase.cache_entries = Cache.items.size()
 	phase.cache_source_bytes = Cache.source_bytes
+	phase.outdoor_colour = []
+	if is_instance_valid(pool):
+		for pass_data: Dictionary in pool.passes:
+			var colour: RefCounted = pass_data.arena.get_node("OutdoorLighting").colour_correction
+			phase.outdoor_colour.append({"materials":colour.materials.size(),"surfaces":colour.replaced_surfaces,"updates":colour.uniform_updates} if colour != null else {})
 	if is_instance_valid(stage) and stage.viewport != null:
 		phase.render_size = [stage.viewport.size.x,stage.viewport.size.y]
 		phase.identities = stage.identities.duplicate()
@@ -108,10 +113,12 @@ func _observe(label: String) -> void:
 	report.phases.append(phase)
 	_write(REPORT,JSON.stringify(report,"\t"))
 func _noon() -> void:
+	_hour(12.0)
+func _hour(hour: float) -> void:
 	for pass_data: Dictionary in pool.passes:
 		var light: Node = pass_data.arena.get_node("OutdoorLighting")
 		light.set_process(false)
-		light.apply_seconds(43200.0)
+		light.apply_seconds(hour * 3600.0)
 func _new_stage() -> void:
 	stage = Stage.new()
 	canvas.add_child(stage)
@@ -156,7 +163,9 @@ func _run() -> void:
 	report.adapter = RenderingServer.get_video_adapter_name()
 	report.shader_cache = ProjectSettings.get_setting("rendering/shader_compiler/shader_cache/enabled",true)
 	report.frame_pacing = ProjectSettings.get_setting("display/window/frame_pacing/android/enable_frame_pacing", true)
-	if not _check(report.renderer == "mobile", "Mobile renderer required; no silent GLES fallback"):
+	var expected_renderer := "gl_compatibility" if OS.has_feature("android_battle_budget_gl") else "mobile"
+	report.outdoor_colour_baseline = OS.has_feature("android_outdoor_colour_baseline")
+	if not _check(report.renderer == expected_renderer, "Exact requested renderer required; no silent fallback"):
 		_finish()
 		return
 	settings.battle_presentation_mode = "3d"
@@ -214,6 +223,19 @@ func _run() -> void:
 		return
 	await _observe("battle-normal")
 	await _capture("normal")
+	if OS.has_feature("android_battle_budget_gl"):
+		for pass_data: Dictionary in pool.passes:
+			var colour: RefCounted = pass_data.arena.get_node("OutdoorLighting").colour_correction
+			if not _check((colour != null) != report.outdoor_colour_baseline,"Candidate installs in both passes; baseline remains unmodified"):
+				_finish()
+				return
+		_hour(19.0)
+		await _observe("battle-evening")
+		await _capture("evening")
+		_hour(21.0)
+		await _observe("battle-night")
+		await _capture("night")
+		_noon()
 	if not await _prepare("Bulbasaur",true):
 		_finish()
 		return

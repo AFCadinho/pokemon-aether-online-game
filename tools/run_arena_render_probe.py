@@ -16,7 +16,7 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--renderer', choices=['forward_plus','mobile','gl_compatibility'], required=True)
-    parser.add_argument('--lighting-mode', choices=['baseline','hdr','sun-only','unshaded-grass','diffuse-grass','ambient-only','no-shadows','ground-srgb','ground-srgb-no-shadows','smooth-grass','shadow-colour'], default='baseline')
+    parser.add_argument('--lighting-mode', choices=['baseline','hdr','sun-only','unshaded-grass','diffuse-grass','ambient-only','no-shadows','ground-srgb','ground-srgb-no-shadows','smooth-grass','shadow-colour','runtime-colour'], default='baseline')
     parser.add_argument('--hour', type=float, default=12.0)
     parser.add_argument('--camera-view', choices=['default','side'], default='default')
     parser.add_argument('--shadow-casters', action='store_true', help='Calibration objects for ground and grass shadows')
