@@ -238,51 +238,5 @@ jobs:
           print(f"- Version: {value['gameVersion']}")
           print(f"- Build ID: {value['gameBuildId']}")
           print('- URL: https://play.pokeaether.com')
+          print('- Old browser files are removed by the separate weekly cleanup workflow.')
           PY
-
-  cleanup:
-    needs: publish-manifest
-    runs-on: ubuntu-latest
-    environment: web-production
-    continue-on-error: true
-    permissions:
-      actions: read
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.sha }}
-
-      - uses: actions/download-artifact@v6
-        with:
-          name: browser-release-candidate-${{ inputs.candidate_run_id }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
-          run-id: ${{ inputs.candidate_run_id }}
-          path: builds/browser-candidate
-
-      - name: Test and prune obsolete browser releases
-        id: prune
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_BUCKET: ${{ secrets.R2_BUCKET }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-        run: |
-          python3 tools/test_prune_r2_release_objects.py
-          python3 tools/prune_r2_release_objects.py builds/browser-candidate/r2 \
-            --scope web --public-base-url https://updates.pokeaether.com \
-            --active-web-url https://play.pokeaether.com \
-            --retain-previous 1 --minimum-age-hours 24 --max-delete 20000 --apply
-
-      - name: Report cleanup result
-        if: always()
-        env:
-          PRUNE_OUTCOME: ${{ steps.prune.outcome }}
-        run: |
-          if [[ "${PRUNE_OUTCOME}" == "success" ]]; then
-            echo "Browser release cleanup completed."
-          else
-            echo "::warning::Browser release is already published; R2 cleanup did not complete."
-          fi
