@@ -65,7 +65,8 @@ func _run() -> void:
 	service.apply_view(view)
 	_check(panel._playing and panel._prompt.text.contains("adinho") and panel._prompt.text.contains("Pidgey")
 		and panel._prompt.text.contains("Tackle") and not panel._prompt.text.contains("Bulbasaur"), "playback names the actual earlier actor, not the future snapshot identity")
-	_check(battle.vs_panel_container.team_status_strip.trainer_rows[0][1].status.text == "Next: pending", "remote readiness belongs to the next decision while local playback is behind")
+	_check(battle.vs_panel_container.team_status_strip.trainer_rows[0][1].status.text == "Waiting…", "remote playback cannot be inferred from this screen or a new server decision")
+	_check(service._presentation.phase == "playing" and service._presentation.eventCursor == 4, "real playback reports completed cursor rather than future snapshot cursor")
 	var original_message: String = panel._prompt.text
 	view.revision = 3
 	service.apply_view(view)
@@ -85,12 +86,33 @@ func _run() -> void:
 	while panel._playing and Time.get_ticks_msec() < deadline:
 		await process_frame
 	_check(not panel._playing and panel.displayed_cursor == 9 and panel._playback_event.is_empty(), "all public events finish before next-turn controls reopen")
+	_check(service._presentation.phase == "idle" and service._presentation.eventCursor == 9, "real playback completion reports readiness to choose")
 	panel._capture_feedback_text = ""
 	panel._action_signature = ""
 	panel._update_actions()
 	hud.layout_now(0.0, true)
 	_check(panel._native_moves.visible and hud.coop_huds.values().all(func(card: Control) -> bool:
 		return card.get_theme_stylebox("panel") == card.get_meta("coop_normal_style")), "choice controls reopen and playback emphasis clears")
+	# The partner can still animate after our controls reopen (different clients/speeds).
+	service.activity.partnerPresentation = {"eventCursor": 4, "phase": "playing"}
+	service.state_changed.emit()
+	_check(not panel._playing and panel._trainer_choice_state("p3") == "playing", "partner playback is independent from our finished animation")
+	_check(panel._native_moves.visible, "partner presentation never blocks our next legal choice")
+	view.locked = true
+	service.view = view.duplicate(true)
+	panel._action_signature = "" # Manual fixture mutation bypasses the usual revision bump.
+	service.state_changed.emit()
+	_check(panel._prompt.text == "Waiting for m1bhompson's animations…", "waiting prompt does not claim an animating partner is choosing")
+	service.activity.partnerPresentation = {"eventCursor": 4, "phase": "idle"}
+	service.state_changed.emit()
+	_check(panel._trainer_choice_state("p3") == "waiting" and panel._prompt.text == "Waiting for m1bhompson…", "older idle cursor is not proof the latest turn has played")
+	service.activity.partnerPresentation = {"eventCursor": 9, "phase": "idle"}
+	service.state_changed.emit()
+	_check(panel._trainer_choice_state("p3") == "choosing" and panel._prompt.text.contains("to choose"), "only a caught-up idle report means choosing")
+	service.activity.partnerPresentation = {"eventCursor": 10, "phase": "idle"}
+	_check(panel._trainer_choice_state("p3") == "waiting", "a future report cannot label an older projection choosing")
+	service.activity.partnerPresentation = {"eventCursor": 9, "phase": "idle"}
+
 	panel._capture_feedback_text = "Earlier capture result"
 	panel._capture_feedback_until_msec = Time.get_ticks_msec() + 4000
 	view.locked = true
@@ -129,6 +151,9 @@ func _run() -> void:
 	panel._playing = false
 	panel._playback_event = {}
 	localization.set_locale("en")
+	# Headless runs skip screenshot waits; let independent Trainer callout timers drain.
+	await create_timer(TrainerCommandCallout.DISPLAY_SECONDS).timeout
+	await process_frame
 	print("COOP_TURN_FEEDBACK_", "FAIL" if failed else "OK")
 	host.release()
 	host.queue_free()

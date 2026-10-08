@@ -45,6 +45,8 @@
   "battle.coop.actor_opponent": "Opponent {slot} · {pokemon}",
   "battle.coop.hp_state": "{actor}: {percent}% HP.",
   "battle.coop.capture_playing": "{name} is throwing a Poké Ball…",
+  "battle.coop.waiting_partner_playback": "Waiting for {name}'s animations…",
+  "battle.coop.waiting_partner_sync": "Waiting for {name}…",
   "battle.coop.waiting_partner_confirmed": "Choice confirmed · Waiting for {name}…",
   "ui.guild.log.filter.action.base_purchased": "Base registered",
   "ui.guild.log.filter.action.base_purchase": "Base purchase",

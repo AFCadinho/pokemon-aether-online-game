@@ -607,7 +607,7 @@ func _process(_delta: float) -> void:
 		return
 	_connection.text = "%s  ·  %s" % [
 		"Partner connected" if CoopService.activity.get("partnerConnected", false) else "Partner disconnected — waiting for temporary AI",
-		"Partner ready" if CoopService.view.get("partnerReady", false) else "Partner choosing"]
+		"Partner · " + _coop_text("status." + _trainer_choice_state("p3" if CoopService.view.get("participant") == "p1" else "p1"))]
 	if CoopService.activity.get("status") != "active":
 		_connection.text = "Both Trainers share this battle. Progress and rewards are saved by the server."
 	else:
@@ -990,6 +990,10 @@ func _trainer_choice_state(controller: String) -> String:
 	var phase := str(CoopService.activity.get("status", "starting"))
 	if local and _playing:
 		return "playing"
+	if not local and CoopService.activity.get("partnerConnected", true):
+		var presentation: Dictionary = CoopService.activity.get("partnerPresentation", {})
+		if presentation.get("phase") == "playing":
+			return "playing"
 	if phase == "cancelled" or phase == "finished" or view.get("ended", false):
 		return "finished"
 	if phase == "starting" or view.is_empty():
@@ -1000,9 +1004,16 @@ func _trainer_choice_state(controller: String) -> String:
 	if not exit_request.is_empty():
 		return "waiting" if exit_request.get("requestedBy") == controller else "confirming"
 	if not local:
-		if _playing and _native_turn.current_turn > 0 and int(view.get("turn", 0)) > _native_turn.current_turn:
-			return "ready_next" if view.get("partnerReady", false) else "choosing_next"
-		return "ready" if view.get("partnerReady", false) else "choosing"
+		if view.get("partnerReady", false):
+			if _native_mode and _playing and _native_turn.current_turn > 0 and int(view.get("turn", 0)) > _native_turn.current_turn:
+				return "ready_next"
+			return "ready"
+		var presentation: Dictionary = CoopService.activity.get("partnerPresentation", {})
+		# A new server decision does not mean the other screen finished the turn.
+		# Missing, expired or lagging reports stay neutral (including older clients).
+		if presentation.get("phase") == "idle" and int(presentation.get("eventCursor", -1)) == int(view.get("eventCursor", 0)):
+			return "choosing"
+		return "waiting"
 	if not CoopService.pending_command.is_empty() or CoopService.command_in_flight:
 		return "sending" if CoopService.command_in_flight else "checking"
 	if view.get("locked", true):
@@ -1023,10 +1034,11 @@ func _update_team_status() -> void:
 
 
 func _update_actions() -> void:
+	CoopService.report_presentation(displayed_battle, displayed_cursor, _playing)
 	_update_team_status()
 	var signature := JSON.stringify([CoopService.activity.get("status"), CoopService.view.get("revision"),
 		CoopService.pending_command.get("idempotencyKey"), CoopService.command_in_flight,
-		CoopService.activity.get("partnerConnected"), CoopService.view.get("partnerReady"),
+		CoopService.activity.get("partnerConnected"), CoopService.view.get("partnerReady"), CoopService.activity.get("partnerPresentation"),
 		_returning_to_world, selected_move, _playing, _bag_open,
 		_mega_evolution_selected, _z_move_selected])
 	if signature == _action_signature:
@@ -1128,7 +1140,10 @@ func _update_actions() -> void:
 			_prompt.text = _coop_text("disconnected", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
 		elif not CoopService.view.get("partnerReady", false):
 			var confirmed: bool = not CoopService.confirmed_decision_id.is_empty() and CoopService.confirmed_decision_id == CoopService.view.get("decisionId")
-			_prompt.text = _coop_text("waiting_partner_confirmed" if confirmed else "waiting_partner", {"name": _trainer_name("p3" if CoopService.view.get("participant") == "p1" else "p1")})
+			var partner := "p3" if CoopService.view.get("participant") == "p1" else "p1"
+			var partner_state := _trainer_choice_state(partner)
+			var message := "waiting_partner_playback" if partner_state == "playing" else "waiting_partner_confirmed" if confirmed else "waiting_partner" if partner_state == "choosing" else "waiting_partner_sync"
+			_prompt.text = _coop_text(message, {"name": _trainer_name(partner)})
 		else:
 			_prompt.text = _coop_text("preparing")
 		_show_capture_feedback_in_prompt()
@@ -1945,6 +1960,7 @@ func _play_native_mechanic_effect(controller: String, effect_key: String) -> voi
 
 
 func _exit_tree() -> void:
+	CoopService.clear_presentation(displayed_battle)
 	var model: Node = _model_presenter()
 	if model != null:
 		model.set_coop_camera_focus("", false)
