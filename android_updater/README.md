@@ -91,9 +91,12 @@ the generated template, APKs, or signing credentials.
 
 ## Local USB game updates
 
-For desktop Android UI work, see `docs/android-emulator.md`. The local candidate
-helper accepts `--architecture x86_64` for the accelerated emulator; ARM64
-remains the default for physical phones. The selected architecture is checked
+For desktop Android UI work, see `docs/android-emulator.md`. The Pixel 6 /
+Android 15 Google Play phone profile runs the ordinary ARM64 APK and updater
+through the image's ARM translation. The separate Android 13 native QA device
+requires `--architecture x86_64` in the local candidate helper; ARM64 remains
+the default for physical phones and the phone-compatible emulator. The selected
+architecture is checked
 against the APK's native libraries and saved in its local build record.
 
 `tools/build_android_usb_candidate.py` builds the full signed game in an

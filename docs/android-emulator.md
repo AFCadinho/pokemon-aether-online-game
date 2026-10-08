@@ -1,5 +1,81 @@
 # Local Android emulator
 
+## Ordinary phone APKs and updates
+
+For playing the normal signed ARM64 release, use the **Pixel 6 / Android 15
+Google Play** profile, `PokeAether_Pixel6_Android15`, on `emulator-5582`.
+The Google Play x86_64 image (API 35, revision 9) includes
+`libndk_translation.so` and advertises both `x86_64` and `arm64-v8a`.
+The Android 13 Google APIs image below advertises only `x86_64`: changing its
+Samsung/Pixel screen profile cannot make the phone APK install.
+
+A hardware profile specifies the screen and sensors; it does not reproduce a
+phone's physical processor, GPU, vendor drivers or Samsung One UI. Pixel 6 is
+a standard Android SDK profile with the same 1080×2400 screen used by our phone
+layout checks. Prefer the verified image/renderer combination over a different
+phone label. Use the host GPU and KVM on this x86_64 Linux machine; full ARM
+system emulation does not get the same VM acceleration.
+
+Create an independent AVD (do not overwrite the Android 13 device or copy its
+userdata):
+
+```sh
+/home/adinho/Android/Sdk/cmdline-tools/latest/bin/sdkmanager --install 'system-images;android-35;google_apis_playstore;x86_64'
+ANDROID_AVD_HOME="$HOME/.local/share/pokeaether/android-emulator/avd" /home/adinho/Android/Sdk/cmdline-tools/latest/bin/avdmanager create avd --name PokeAether_Pixel6_Android15 --package 'system-images;android-35;google_apis_playstore;x86_64' --device pixel_6
+```
+
+Set `hw.ramSize=3072`, `hw.cpu.ncore=4`, `hw.lcd.width=1080`,
+`hw.lcd.height=2400`, `hw.lcd.density=480`, `disk.dataPartition.size=6G`,
+`hw.gpu.enabled=yes`, `hw.gpu.mode=host`, `hw.keyboard=yes`,
+`hw.keyboard.lid=no`, `hw.initialOrientation=portrait`
+and `showDeviceFrame=no` in this new AVD's `config.ini`. Start it once with
+`-port 5582 -gpu host -no-snapshot`, install a verified ordinary release APK
+using `adb -s emulator-5582 install --no-incremental -r /PATH/TO/APK`, then use:
+
+```sh
+python3 tools/open_android_emulator.py --profile phone
+```
+
+The launcher checks the exact AVD identity and ARM64 support before opening the
+game. Closing and reopening retains this device's own apps and settings.
+This is a separate virtual phone: sign in manually; existing Android 13 login
+data is not transferred.
+
+Keep `--profile native` (the CLI default) for the existing Android 13 diagnostic
+device on port 5580. Its x86_64 diagnostic APKs and pinned QA runners remain
+available independently of the phone profile.
+
+Sources: [AVD hardware profiles and system images](https://developer.android.com/studio/run/managing-avds),
+[emulator VM and GPU acceleration](https://developer.android.com/studio/run/emulator-acceleration),
+[Google's ARM translation announcement](https://android-developers.googleblog.com/2020/03/run-arm-apps-on-android-emulator.html).
+
+### Phone-profile checks (2026-10-08)
+
+The ordinary ARM64 0.3.102/code 19 APK installed and rendered the login screen.
+Its unmodified in-app updater downloaded and verified the public 0.3.103/code
+20 APK, opened Android's source-permission and confirmation screens, and
+installed the upgrade. After reboot, `primaryCpuAbi=arm64-v8a`, version 0.3.103
+and code 20 were confirmed; the data directory and first-install time were
+unchanged. The visible emulator survived three further app restarts.
+
+The initial **headless** host-GPU trial suffered an emulator SIGSEGV during
+the app's update shutdown. The upgrade had completed and survived restarting
+the AVD. Use the visible launcher; do not treat the headless configuration as
+qualified. Android 11 Google APIs/revision 16 was also rejected: it installed
+the APK but its older ARM translator crashed in a SIMD instruction (SIGILL).
+
+The machine-local desktop control bar follows the new AVD on port 5582. It
+matches Android's display rotation and fits both portrait and landscape into
+the monitor work area. The Pixel profile defaults to `hw.keyboard=no`; enable
+the keyboard as above and cold-start the AVD to pass laptop typing into the
+game. `show_ime_with_hard_keyboard=1` can also retain the on-screen keyboard.
+The old Android 13 AVD, including its apps and data, remains separate.
+
+These are installation, update and startup checks, not sustained 3D, battle,
+thermal or physical Pixel-device certification. No account was signed in.
+
+## Native Android 13 QA device
+
 Use the official Android SDK emulator for mobile UI work before physical-device
 testing. The dedicated `PokeAether_Android13` AVD uses Android 13 (API 33),
 x86_64, KVM, the host GPU, 3 GB RAM, 1080×2400 pixels and 480 dpi. In
