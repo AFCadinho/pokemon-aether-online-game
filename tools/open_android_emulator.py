@@ -27,6 +27,10 @@ def main():
     parser.add_argument("--boot-only", action="store_true",
                         help="Start Android without launching or requiring an installed app")
     parser.add_argument("--gpu", choices=["auto", "host", "software", "swiftshader", "swangle"], default="host")
+    parser.add_argument("--host-gpu", choices=["auto", "nvidia"], default="auto",
+                        help="Select NVIDIA PRIME offload on Linux hybrid-GPU laptops at cold start")
+    parser.add_argument("--keyboard", choices=["auto", "keycodes", "text"], default="auto",
+                        help="phone defaults to direct keycodes for held WASD; text uses host character translation")
     parser.add_argument("--window-scale", type=float, default=0.7,
                         help="Desktop viewing zoom for a newly opened emulator (default: 0.7)")
     parser.add_argument("--package", choices=["com.pokeaether.game", "com.pokeaether.mobilecollapseqa"],
@@ -59,11 +63,18 @@ def main():
         preferences.write_text("\n".join(lines + [f"window.scale = {args.window_scale:.6f}"]) + "\n")
         environment = os.environ.copy()
         environment["ANDROID_AVD_HOME"] = str(args.avd_home.resolve())
+        if args.host_gpu == "nvidia":
+            environment.update({"__NV_PRIME_RENDER_OFFLOAD": "1",
+                                "__GLX_VENDOR_LIBRARY_NAME": "nvidia",
+                                "__VK_LAYER_NV_optimus": "NVIDIA_only"})
         log_dir = args.avd_home.parent
         with (log_dir / "emulator.log").open("a") as log:
-            subprocess.Popen([str(emulator), "-avd", args.name, "-port", port,
-                              "-gpu", args.gpu, "-no-snapshot", "-no-boot-anim",
-                              "-camera-back", "none", "-camera-front", "none", "-no-skin"],
+            command = [str(emulator), "-avd", args.name, "-port", port,
+                       "-gpu", args.gpu, "-no-snapshot", "-no-boot-anim",
+                       "-camera-back", "none", "-camera-front", "none", "-no-skin"]
+            if args.keyboard == "keycodes" or (args.keyboard == "auto" and args.profile == "phone"):
+                command.append("-use-keycode-forwarding")
+            subprocess.Popen(command,
                              env=environment, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
 
     deadline = time.monotonic() + 180

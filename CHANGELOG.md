@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Allow the Android emulator to use the dedicated NVIDIA GPU on hybrid laptops instead of defaulting to integrated graphics.
+
+- Forward held WASD keys directly to the virtual phone so movement does not depend on repeated text characters.
+
 - Add a separate Pixel 6 / Android 15 virtual-phone profile for running ordinary Android APKs and their in-app updates.
 
 ## 0.3.103
