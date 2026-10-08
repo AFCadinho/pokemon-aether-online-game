@@ -74,12 +74,15 @@ func _run() -> void:
 		report.variant = manifest.get_base_dir().get_file()
 		if args.size() == 3:
 			lighting_mode = args[2]
-	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows"], "Recognized lighting probe"):
+	if not _check(lighting_mode in ["baseline", "hdr", "sun-only", "unshaded-grass", "diffuse-grass", "ambient-only", "no-shadows", "ground-srgb", "ground-srgb-no-shadows", "smooth-grass"], "Recognized lighting probe"):
 		_finish()
 		return
 	report.lighting_mode = lighting_mode
 	print("ANDROID_ARENA_PHASE load ", lighting_mode)
 	report.renderer = RenderingServer.get_current_rendering_method()
+	if lighting_mode.begins_with("ground-srgb") and not _check(report.renderer == "gl_compatibility", "Ground sRGB investigation requires Compatibility"):
+		_finish()
+		return
 	report.adapter = RenderingServer.get_video_adapter_name()
 	report.frame_pacing = ProjectSettings.get_setting("display/window/frame_pacing/android/enable_frame_pacing", true)
 	report.static_before = Performance.get_monitor(Performance.MEMORY_STATIC)
@@ -126,26 +129,47 @@ func _run() -> void:
 		_finish()
 		return
 	world.add_child(arena)
+	# Diagnostic overrides only. Keep production shaders and downloaded art intact.
+	if lighting_mode.begins_with("ground-srgb"):
+		var terrain := arena.find_child("MeshTerrain", true, false) as MeshInstance3D
+		var material := terrain.mesh.surface_get_material(0) as ShaderMaterial
+		var tint_conversion := "tint = mix(tint / 12.92, pow((tint + 0.055) / 1.055, vec3(2.4)), step(vec3(0.04045), tint));"
+		if not _check(tint_conversion in material.shader.code, "Diagnostic changes the authored ground tint conversion"):
+			_finish()
+			return
+		var shader := Shader.new()
+		shader.code = material.shader.code.replace(tint_conversion, "")
+		material.shader = shader
 	var light := arena.get_node("OutdoorLighting")
 	light.set_process(false)
 	light.apply_seconds(43200.0)
-	if lighting_mode == "no-shadows":
+	if lighting_mode in ["no-shadows", "ground-srgb-no-shadows"]:
 		for lamp in light._lights:
 			lamp.shadow_enabled = false
 	if lighting_mode in ["sun-only", "ambient-only"]:
 		for index in light._lights.size():
 			light._lights[index].light_energy = light._lights[index].light_energy if index == 0 and lighting_mode == "sun-only" else 0.0
-	if lighting_mode in ["unshaded-grass", "diffuse-grass"]:
+	if lighting_mode in ["unshaded-grass", "diffuse-grass", "smooth-grass"]:
 		var grass: PackedScene = Catalog.Art.resources["res://entities/nature/grass/grass_3_faces.tscn"]
 		var source := grass.instantiate()
 		var material: ShaderMaterial = source.get_node("Card").get_active_material(0)
 		var shader := Shader.new()
 		shader.code = material.shader.code.replace("render_mode ", "render_mode unshaded, ") if lighting_mode == "unshaded-grass" else material.shader.code.replace("specular_toon", "specular_disabled")
+		if lighting_mode == "smooth-grass":
+			if not _check("ALPHA_SCISSOR_THRESHOLD = alpha_threshold;" in material.shader.code, "Diagnostic changes the authored grass cutoff"):
+				source.free()
+				_finish()
+				return
+			shader.code = material.shader.code.replace("depth_draw_opaque", "depth_prepass_alpha").replace(
+				"ALPHA_SCISSOR_THRESHOLD = alpha_threshold;",
+				"float edge = max(fwidth(ALPHA), 0.001);\n ALPHA = smoothstep(alpha_threshold - edge, alpha_threshold + edge, ALPHA);")
 		material.shader = shader
 		source.free()
 	report.lights = []
 	for lamp in light._lights:
-		report.lights.append({"energy":lamp.light_energy,"visible":lamp.visible})
+		report.lights.append({"energy":lamp.light_energy,"visible":lamp.visible,"shadows":lamp.shadow_enabled})
+	report.viewport_size = [viewport.size.x, viewport.size.y]
+	report.msaa = viewport.msaa_3d
 	print("ANDROID_ARENA_PHASE draw")
 	var start := Time.get_ticks_msec()
 	for frame in 4:
