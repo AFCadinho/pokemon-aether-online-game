@@ -28,6 +28,7 @@ func _run() -> void:
 		"overworld_pokemon_metadata_service": "3.0",
 		"encounter_metadata_service": "3.0",
 		"trainer_progress_service": "REQUEST_TIMEOUT_SECONDS",
+		"trainer_metadata_service": "REQUEST_TIMEOUT_SECONDS",
 	}
 	for service: String in service_timeouts:
 		var source := FileAccess.get_file_as_string("res://scripts/services/%s.gd" % service)

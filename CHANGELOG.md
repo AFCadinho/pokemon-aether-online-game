@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow slow trainer metadata responses and retry a temporary connection failure once, preventing trainer encounters such as the Mysterious Trainer in Rock Tunnel from failing before the battle starts.
+
 - Render experimental Android 3D battles at the screen's native resolution, including prepared arenas and Pokémon lighting, instead of enlarging a 540p image.
 
 - Fix mounts purchased with Store Credit being selectable but unavailable when riding or restoring them, including Surf mounts.

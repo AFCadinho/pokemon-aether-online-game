@@ -3,6 +3,9 @@ extends Node
 class_name TrainerMetadataServiceNode
 
 const TRAINER_METADATA_ENDPOINT := "/trainers/%s"
+const REQUEST_TIMEOUT_SECONDS := 12.0
+const MAX_REQUEST_ATTEMPTS := 2
+const RETRY_DELAY_SECONDS := 0.25
 
 var trainer_metadata_cache: Dictionary = {}
 
@@ -26,11 +29,25 @@ func clear_cache() -> void:
 	trainer_metadata_cache.clear()
 
 func _fetch_trainer_metadata(trainer_id: String) -> Dictionary:
+	for attempt: int in range(MAX_REQUEST_ATTEMPTS):
+		var response := await _request_trainer_metadata(trainer_id)
+		if (
+			bool(response.get("success", false))
+			or not bool(response.get("retryable", false))
+			or attempt == MAX_REQUEST_ATTEMPTS - 1
+		):
+			return response
+		await get_tree().create_timer(RETRY_DELAY_SECONDS).timeout
+	return {"success": false, "error": "Trainer metadata request failed"}
+
+
+func _request_trainer_metadata(trainer_id: String) -> Dictionary:
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var url := base_url + TRAINER_METADATA_ENDPOINT % trainer_id.uri_encode()
 	var request := HTTPRequest.new()
 	add_child(request)
-	request.timeout = 3.0
+	request.timeout = REQUEST_TIMEOUT_SECONDS
 	
 	var error := request.request(url, GatewayApiConfig.get_accept_headers())
 	if error != OK:
@@ -44,7 +61,24 @@ func _fetch_trainer_metadata(trainer_id: String) -> Dictionary:
 	var result: Array = await request.request_completed
 	request.queue_free()
 	
+	var request_result := int(result[0])
 	var response_code := int(result[1])
+	if request_result != HTTPRequest.RESULT_SUCCESS:
+		return {
+			"success": false,
+			"status": response_code,
+			"code": request_result,
+			"error": BackendErrorLocalizationService.transport_message(request_result),
+			"retryable": request_result in [
+				HTTPRequest.RESULT_CANT_RESOLVE,
+				HTTPRequest.RESULT_CANT_CONNECT,
+				HTTPRequest.RESULT_CONNECTION_ERROR,
+				HTTPRequest.RESULT_NO_RESPONSE,
+				HTTPRequest.RESULT_REQUEST_FAILED,
+				HTTPRequest.RESULT_TIMEOUT,
+				HTTPRequest.RESULT_CHUNKED_BODY_SIZE_MISMATCH,
+			],
+		}
 	var body: PackedByteArray = result[3]
 	var response_text := body.get_string_from_utf8()
 	if response_code < 200 or response_code >= 300:
@@ -55,8 +89,8 @@ func _fetch_trainer_metadata(trainer_id: String) -> Dictionary:
 			"raw": response_text,
 		}
 	
-	var parsed: Variant = JSON.parse_string(response_text)
-	if not (parsed is Dictionary):
+	var parser := JSON.new()
+	if parser.parse(response_text) != OK or not parser.data is Dictionary:
 		return {
 			"success": false,
 			"status": response_code,
@@ -64,7 +98,7 @@ func _fetch_trainer_metadata(trainer_id: String) -> Dictionary:
 			"raw": response_text,
 		}
 	
-	var parsed_dictionary := parsed as Dictionary
+	var parsed_dictionary := parser.data as Dictionary
 	if parsed_dictionary.has("trainer") and parsed_dictionary["trainer"] is Dictionary:
 		return {
 			"success": true,
