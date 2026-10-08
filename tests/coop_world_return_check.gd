@@ -164,6 +164,9 @@ func _run() -> void:
 	state.reset_gameplay_runtime_state()
 	trainers.trainer_metadata_cache.erase(GARY)
 	dialogues.dialogue_metadata_cache.erase(cache_key)
+	# Drain deferred reload/result callbacks after freeing the final fixture world.
+	for _frame in 3:
+		await process_frame
 	print("COOP_WORLD_RETURN_", "FAIL" if failed else "PASS")
 	quit(1 if failed else 0)
 
