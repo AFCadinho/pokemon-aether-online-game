@@ -2258,8 +2258,9 @@ func _refresh_quest_tracker_layout() -> void:
 		- viewport_height * 0.5
 	)
 	var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)
+	var hotbar_height := maxf(HOTBAR_GRID_HEIGHT, hotkey_sidebar_panel.get_combined_minimum_size().y)
 	hotkey_sidebar_panel.offset_top = hotbar_top_offset
-	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + HOTBAR_GRID_HEIGHT
+	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + hotbar_height
 	_position_collapsible_button("hotkey_sidebar")
 
 

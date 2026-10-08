@@ -94,6 +94,13 @@ func _sample(percentage: float, state: String) -> void:
 	var buttons: Dictionary = {}
 	var rects: Array[Rect2] = []
 	var candidates: Dictionary = {}
+	var actions: Control = overlay.collapsible_panels["actions"]["panel"]
+	var dex: Control = overlay.collapsible_panels["dex_actions"]["panel"]
+	var tracker: Control = overlay.quest_journal_view.tracker_panel
+	_check(is_equal_approx(dex.position.y - actions.get_rect().end.y, overlay.ACTION_BAR_SLOT_GAP), "compact action-bar spacing at " + str(percentage))
+	_check(is_equal_approx(tracker.position.y - dex.get_rect().end.y, overlay.ACTION_BAR_SLOT_GAP), "quest follows compact bars at " + str(percentage))
+	if tracker.visible:
+		_check(overlay.hotkey_sidebar_panel.position.y >= tracker.get_rect().end.y + overlay.HOTBAR_TRACKER_GAP - 0.01, "hotbar clears quest at " + str(percentage))
 	for panel_id: String in overlay.collapsible_panels:
 		candidates[panel_id] = overlay.collapsible_panels[panel_id]["button"]
 	candidates["quest"] = overlay.quest_journal_view.tracker_collapse_button
@@ -113,13 +120,19 @@ func _sample(percentage: float, state: String) -> void:
 		if panel_id in ["actions", "dex_actions", "quest"]:
 			var owner: Control = overlay.quest_journal_view.tracker_panel if panel_id == "quest" else overlay.collapsible_panels[panel_id]["panel"]
 			var owner_rect: Rect2 = (root.get_screen_transform() * owner.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, owner.size)
-			_check(is_equal_approx(drawn.end.x, owner_rect.end.x) if state == "collapsed" else drawn.end.x <= owner_rect.position.x, "right-edge reopen / adjacent collapse arrow " + panel_id + " at " + str(percentage))
+			_check(drawn.end.x <= owner_rect.end.x + 0.01 if state == "collapsed" else drawn.end.x <= owner_rect.position.x, "reopen within right edge / collapse beside row " + panel_id + " at " + str(percentage))
+			_check(drawn.get_center().y >= owner_rect.position.y and drawn.get_center().y <= owner_rect.end.y, "arrow aligned with row " + panel_id + " at " + str(percentage))
 		_check(overlay.is_point_over_visible_ui(button.get_global_rect().position + button.size * Vector2(0.1, 0.9)), "blocks movement " + panel_id)
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "separate targets " + panel_id)
 		rects.append(rect)
 		buttons[panel_id] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y, "widthDp": rect.size.x / density, "heightDp": rect.size.y / density, "visibleWidthDp": drawn.size.x / density, "visibleHeightDp": drawn.size.y / density}
-	samples.append({"scale": percentage, "state": state, "buttons": buttons})
+	var panels: Dictionary = {}
+	for panel_id: String in ["actions", "dex_actions", "quest"]:
+		var panel: Control = tracker if panel_id == "quest" else overlay.collapsible_panels[panel_id]["panel"]
+		var rect: Rect2 = (root.get_screen_transform() * panel.get_global_transform_with_canvas()) * Rect2(Vector2.ZERO, panel.size)
+		panels[panel_id] = {"x": rect.position.x, "y": rect.position.y, "width": rect.size.x, "height": rect.size.y}
+	samples.append({"scale": percentage, "state": state, "buttons": buttons, "panels": panels})
 	await RenderingServer.frame_post_draw
 	root.get_texture().get_image().save_png("user://collapse-%d-%s.png" % [percentage, state])
 
