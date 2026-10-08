@@ -40,8 +40,9 @@ all PBR models. The user thinks the comparison looks better but requested an
 in-game review before judging the final appearance.
 
 The fix addresses the excessive brightness and dark terrain from separately
-encoded shadow lighting. It does not remove the Android 960×540 raster limit
-or all aliasing at grass-card edges.
+encoded shadow lighting. At the time of that colour trial, the Android 960×540 raster limit still
+applied. The subsequent [native-quality change](android-native-3d-quality.md)
+removes that limit. Grass-card edge aliasing is a separate consideration.
 
 ## Focused checks
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Render experimental Android 3D battles at the screen's native resolution, including prepared arenas and Pokémon lighting, instead of enlarging a 540p image.
+
 - Correct overly bright grass and dark ground in experimental Android 3D battles while preserving battlefield shadows and day/night lighting; reduce washed-out Pokémon brightness in those outdoor battles.
 
 - Explain which story progression is required when a Trainer battle cannot be started.

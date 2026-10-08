@@ -7,7 +7,7 @@ const Reviewed = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.
 const Cache = preload("res://scripts/battle/battle_ui/model_resource_cache.gd")
 const ORIGIN := "http://127.0.0.1:8799/"
 const REPORT := "user://android-battle-budget-details.json"
-const DIMENSIONS := Vector2i(960, 540)
+var dimensions := Vector2i(960, 540)
 var report := {"suite":"android-battle-budget", "schema":1, "phases":[]}
 var failures: Array[String] = []
 var service: Node
@@ -141,14 +141,14 @@ func _response_ok() -> bool:
 			response_exercised = true
 	if stage.material_response.viewport == null:
 		return true # Original StandardMaterial actors use their normal light path.
-	return _check(stage.material_response.sync_count > 0 and stage.material_response.viewport.size == DIMENSIONS,"Synchronized fixed-size irradiance pass")
+	return _check(stage.material_response.sync_count > 0 and stage.material_response.viewport.size == dimensions,"Synchronized fixed-size irradiance pass")
 func _prepare(name: String, shiny := false) -> bool:
 	stage.set_combatant(0,name,shiny)
 	await stage.await_prepared(true,60000)
 	for frame in 3:
 		await process_frame
 	var key := Reviewed.key(name,shiny)
-	return _check(stage.active and stage.handles("p1") and stage.handles("p2") and stage.arena_id == "forest" and not stage.forest_lease.is_empty(), "Full 3D forest: " + name + ": " + stage.reason) and _check(stage.identities[0] == key and stage.entries[key].runtime_sha256 == Reviewed.DATA.data.models[key].sha256, "Reviewed identity/hash: " + key) and _response_ok() and _check(stage.viewport.size == DIMENSIONS,"Fixed main raster size")
+	return _check(stage.active and stage.handles("p1") and stage.handles("p2") and stage.arena_id == "forest" and not stage.forest_lease.is_empty(), "Full 3D forest: " + name + ": " + stage.reason) and _check(stage.identities[0] == key and stage.entries[key].runtime_sha256 == Reviewed.DATA.data.models[key].sha256, "Reviewed identity/hash: " + key) and _response_ok() and _check(stage.viewport.size == dimensions,"Fixed main raster size")
 func _capture(name: String) -> void:
 	await RenderingServer.frame_post_draw
 	_check(canvas.get_texture().get_image().save_png("user://android-battle-budget-" + name + ".png") == OK,"Capture: " + name)
@@ -163,6 +163,17 @@ func _run() -> void:
 	report.adapter = RenderingServer.get_video_adapter_name()
 	report.shader_cache = ProjectSettings.get_setting("rendering/shader_compiler/shader_cache/enabled",true)
 	report.frame_pacing = ProjectSettings.get_setting("display/window/frame_pacing/android/enable_frame_pacing", true)
+	if FileAccess.file_exists("user://android-battle-budget-resolution.json"):
+		var requested: Variant = JSON.parse_string(FileAccess.get_file_as_string("user://android-battle-budget-resolution.json"))
+		if not _check(requested in ["960x540", "960x432", "1920x1080", "2400x1080"], "Explicit bounded diagnostic resolution"):
+			_finish()
+			return
+		if not _check(requested == "960x540" or OS.has_feature("android_battle_budget_gl"), "Higher-resolution comparison requires the GLES diagnostic"):
+			_finish()
+			return
+		var parts: PackedStringArray = requested.split("x")
+		dimensions = Vector2i(int(parts[0]),int(parts[1]))
+	report.requested_render_size = [dimensions.x,dimensions.y]
 	var expected_renderer := "gl_compatibility" if OS.has_feature("android_battle_budget_gl") else "mobile"
 	report.outdoor_colour_baseline = OS.has_feature("android_outdoor_colour_baseline")
 	if not _check(report.renderer == expected_renderer, "Exact requested renderer required; no silent fallback"):
@@ -190,7 +201,7 @@ func _run() -> void:
 	RenderingServer.global_shader_parameter_set("wind_strength",0.0)
 	RenderingServer.global_shader_parameter_set("wind_speed",0.0)
 	await _observe("forest-resources")
-	pool = Pool.prepare(root,settings.battle_3d_forest_manifest,DIMENSIONS,"forest")
+	pool = Pool.prepare(root,settings.battle_3d_forest_manifest,dimensions,"forest")
 	# Drive the existing builder in isolation to account for each unchanged pass.
 	pool.set_process(false)
 	pool._process(0.0)
@@ -208,7 +219,7 @@ func _run() -> void:
 		return
 	await _observe("arena-suspended")
 	canvas = SubViewport.new()
-	canvas.size = DIMENSIONS
+	canvas.size = dimensions
 	canvas.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	root.add_child(canvas)
 	var surface := TextureRect.new()

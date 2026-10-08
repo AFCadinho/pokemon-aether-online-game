@@ -2095,6 +2095,8 @@ func _sync_render_size() -> void:
 	target = ModelPlatform.render_dimensions(target, get_tree().root.get_node("SettingsManager").is_android_3d_experimental())
 	if viewport.size != target:
 		viewport.size = target
+		if OS.has_feature("android") and OS.is_debug_build():
+			print("ANDROID_3D_RENDER_SIZE ", target)
 
 func _project_to_ui(point: Vector3) -> Vector2:
 	var local_point := camera.unproject_position(point) * size / Vector2(viewport.size)
