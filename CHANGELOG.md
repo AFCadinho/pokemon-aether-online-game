@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move old browser-file cleanup to separate weekly maintenance so browser publication finishes as soon as the new version is active.
+
 - Retry remembered logins automatically after temporary startup connection failures, keep checking the server before briefly declaring it offline on slow devices, and save sessions immediately without overwriting the previous complete login during an interrupted write.
 
 - Return settled Gary co-op battles to the same world when the saved location is unchanged, release stale battle input locks, and preserve authoritative destinations across co-op world reloads.
