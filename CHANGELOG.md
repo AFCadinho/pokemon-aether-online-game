@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a separate Pixel 6 / Android 15 virtual-phone profile for running ordinary Android APKs and their in-app updates.
+
 ## 0.3.103
 
 - Show a co-op partner playing their turn while their own animations are still running; only show Choosing once their screen has caught up, with neutral waiting when playback status is unknown.
