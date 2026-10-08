@@ -36,6 +36,18 @@ using `adb -s emulator-5582 install --no-incremental -r /PATH/TO/APK`, then use:
 python3 tools/open_android_emulator.py --profile phone
 ```
 
+On this hybrid-GPU laptop, launch the phone profile with the dedicated RTX 3070:
+
+```sh
+python3 tools/open_android_emulator.py --profile phone --host-gpu nvidia
+```
+
+`--gpu host` by itself selected the integrated AMD renderer. The explicit
+NVIDIA option applies PRIME offload only to the spawned emulator process;
+it does not change desktop-wide graphics settings. Close the emulator before
+changing GPU selection. An already-running emulator keeps its current GPU.
+Leave `--host-gpu auto` on machines without NVIDIA PRIME support.
+
 The launcher checks the exact AVD identity and ARM64 support before opening the
 game. Closing and reopening retains this device's own apps and settings.
 This is a separate virtual phone: sign in manually; existing Android 13 login
@@ -74,6 +86,42 @@ The old Android 13 AVD, including its apps and data, remains separate.
 These are installation, update and startup checks, not sustained 3D, battle,
 thermal or physical Pixel-device certification. No automated login or battle
 run was part of these checks.
+
+### Hybrid-GPU performance follow-up (2026-10-08)
+
+The normal ARM64 phone APK was confirmed to render through the integrated AMD
+GPU initially, despite the laptop also having an RTX 3070. NVIDIA PRIME offload
+was verified in both the emulator's graphics-adapter log and the game's actual
+GLES renderer string. The machine-local desktop launcher now requests
+`--host-gpu nvidia`, retaining the same AVD, APK, resolution, keyboard settings
+and app data. It still uses the normal ARM64 updater.
+
+After the switch, eight passive SurfaceFlinger samples of the game's own
+SurfaceView presented at **59.5–60.1 FPS** in the outdoor overworld. Samples use
+actual presentation timestamps, not `1000 / EGL app_time_stats.avg`; the latter
+is not a reliable FPS calculation. User activity and startup phases changed
+during the earlier AMD observations, so these are not a controlled speedup
+ratio or proof that every menu, loading phase or 3D battle meets 60 FPS.
+
+ARM translation still adds CPU work. A native x86_64 build can avoid that cost,
+but future phone-only updates replace it with ARM64 again. Supporting native
+emulator execution throughout the public update stream needs separately
+reviewed APK architecture/build changes and an authorized release. Do not
+disable the updater or change its version code just to hide the difference.
+
+The remaining reported first-step pause was specific to **WASD**, while arrows
+and touch worked. The phone profile now defaults to the emulator's
+`-use-keycode-forwarding` option (`--keyboard keycodes` explicitly). This sends
+key presses/releases directly instead of translating letter keys into text
+characters. Character repeat can otherwise make a held letter look like an
+initial tap followed by a repeat-delay pause. This is an emulator input
+configuration change; game movement timing is unchanged. Keep a matching guest
+hardware-keyboard layout. Use `--keyboard text` to opt back into host character
+translation; the native QA profile's `auto` default retains its previous mode.
+Keyboard-mode changes require a cold start, just like GPU changes.
+
+Sources: [NVIDIA PRIME offload configuration](https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/optimus-laptops-and-multi-gpu-desktop-systems.html),
+[Android emulator graphics acceleration](https://developer.android.com/studio/run/emulator-acceleration).
 
 ## Native Android 13 QA device
 
