@@ -1,0 +1,81 @@
+name: Cleanup Old Browser Files
+
+on:
+  schedule:
+    # Sundays at 03:23 UTC, away from the busy start of the hour.
+    - cron: '23 3 * * 0'
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Delete obsolete browser files (unchecked previews the plan only).
+        required: true
+        type: boolean
+        default: false
+
+# Share the lock with browser candidate uploads and publication.
+concurrency:
+  group: browser-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  cleanup:
+    name: Prune obsolete browser releases
+    runs-on: ubuntu-latest
+    environment: web-production
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Test cleanup safeguards
+        run: python3 tools/test_prune_r2_release_objects.py
+
+      - name: Read the currently published browser manifest
+        run: |
+          mkdir -p builds/browser-cleanup
+          curl --fail --silent --show-error --location --retry 3 \
+            --connect-timeout 15 --max-time 60 \
+            -H 'Cache-Control: no-cache' \
+            https://updates.pokeaether.com/manifest-web.json \
+            -o builds/browser-cleanup/manifest-web.json
+
+      - name: Plan or apply browser cleanup
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_BUCKET: ${{ secrets.R2_BUCKET }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
+        run: |
+          args=()
+          if [[ "$APPLY" == "true" ]]; then
+            args+=(--apply)
+          fi
+          python3 -u tools/prune_r2_release_objects.py builds/browser-cleanup \
+            --scope web --public-base-url https://updates.pokeaether.com \
+            --active-web-url https://play.pokeaether.com \
+            --retain-previous 1 --minimum-age-hours 24 --max-delete 20000 \
+            "${args[@]}" | tee builds/browser-cleanup/result.log
+
+      - name: Summarize cleanup
+        if: always()
+        env:
+          RESULT: ${{ job.status }}
+          APPLY: ${{ github.event_name == 'schedule' || inputs.apply }}
+        run: |
+          {
+            echo '## Browser file cleanup'
+            echo "- Result: $RESULT"
+            echo "- Delete enabled: $APPLY"
+            echo '- Current releases and one previous browser release are protected.'
+            echo '- Browser publication runs separately from this maintenance task.'
+            if [[ -f builds/browser-cleanup/result.log ]]; then
+              grep -E '^(R2 cleanup plan:|R2 cleanup complete:|Dry-run only;)' \
+                builds/browser-cleanup/result.log || true
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
