@@ -2129,7 +2129,10 @@ func _is_mount_owned(mount_id: String) -> bool:
 	return (
 		inventory_service != null
 		and inventory_service.has_method("has_item")
-		and bool(inventory_service.call("has_item", unlock_item_id))
+		and (
+			bool(inventory_service.call("has_item", unlock_item_id))
+			or bool(inventory_service.call("has_item", unlock_item_id + "-bound"))
+		)
 	)
 
 
