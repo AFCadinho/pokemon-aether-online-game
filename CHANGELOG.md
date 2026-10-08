@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Offer a free return to a previous trainer name under Account settings when staff withdraws a completed name-change decision, and release the login prompt when a pending decision is withdrawn.
+
 - Preserve the hotbar's full gap below the quest tracker when its buttons require extra height at larger UI scales.
 
 - Keep Android's top-right action bars as close together as on desktop, preventing their touch padding from pushing the quest tracker and hotbar downward.

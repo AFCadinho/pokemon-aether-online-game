@@ -6596,5 +6596,12 @@
   "ui.login.rename.error": "Could not change your name. Please try again.",
   "ui.login.rename.inappropriate": "Please choose an appropriate trainer name.",
   "ui.login.rename.unavailable": "That name is unavailable.",
-  "ui.login.rename.unchanged": "Choose a different username."
+  "ui.login.rename.unchanged": "Choose a different username.",
+  "ui.settings.rename.offer": "Staff has withdrawn the required name change for {name}. You can keep your current name or return once for free.",
+  "ui.settings.rename.restore": "Return to {name} for free",
+  "ui.settings.rename.title": "Restore previous trainer name",
+  "ui.settings.rename.confirm": "Return to {name}? This changes your login username and uses your one free return.",
+  "ui.settings.rename.unavailable": "This name is currently unavailable or still restricted.",
+  "ui.settings.rename.success": "Your name is now {name}.",
+  "ui.settings.rename.error": "Could not restore your name. Please try again."
 }

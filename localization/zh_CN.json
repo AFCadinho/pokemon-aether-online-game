@@ -6596,5 +6596,12 @@
   "ui.login.rename.error": "无法更改名字，请重试。",
   "ui.login.rename.inappropriate": "请选择合适的训练家名字。",
   "ui.login.rename.unavailable": "此名字不可用。",
-  "ui.login.rename.unchanged": "请选择不同的用户名。"
+  "ui.login.rename.unchanged": "请选择不同的用户名。",
+  "ui.settings.rename.offer": "工作人员已撤销对{name}的强制改名决定。你可以保留当前名字，或免费恢复原名一次。",
+  "ui.settings.rename.restore": "免费恢复为{name}",
+  "ui.settings.rename.title": "恢复之前的训练家名字",
+  "ui.settings.rename.confirm": "恢复为{name}？这将更改你的登录用户名，并使用一次免费恢复机会。",
+  "ui.settings.rename.unavailable": "此名字目前不可用或仍受限制。",
+  "ui.settings.rename.success": "你的名字现在是{name}。",
+  "ui.settings.rename.error": "无法恢复名字，请重试。"
 }

@@ -6596,5 +6596,12 @@
   "ui.login.rename.error": "Je naam kon niet worden gewijzigd. Probeer het opnieuw.",
   "ui.login.rename.inappropriate": "Kies een gepaste spelersnaam.",
   "ui.login.rename.unavailable": "Deze naam is niet beschikbaar.",
-  "ui.login.rename.unchanged": "Kies een andere gebruikersnaam."
+  "ui.login.rename.unchanged": "Kies een andere gebruikersnaam.",
+  "ui.settings.rename.offer": "Staff heeft de verplichte naamswijziging voor {name} ingetrokken. Je kunt je huidige naam houden of één keer gratis terugkeren.",
+  "ui.settings.rename.restore": "Gratis terug naar {name}",
+  "ui.settings.rename.title": "Vorige spelersnaam herstellen",
+  "ui.settings.rename.confirm": "Terugkeren naar {name}? Dit wijzigt je gebruikersnaam voor het inloggen en gebruikt je eenmalige gratis herstel.",
+  "ui.settings.rename.unavailable": "Deze naam is momenteel niet beschikbaar of nog geblokkeerd.",
+  "ui.settings.rename.success": "Je naam is nu {name}.",
+  "ui.settings.rename.error": "Je naam kon niet worden hersteld. Probeer het opnieuw."
 }

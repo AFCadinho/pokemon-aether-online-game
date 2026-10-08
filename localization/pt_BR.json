@@ -6596,5 +6596,12 @@
   "ui.login.rename.error": "Não foi possível alterar seu nome. Tente novamente.",
   "ui.login.rename.inappropriate": "Escolha um nome apropriado.",
   "ui.login.rename.unavailable": "Este nome não está disponível.",
-  "ui.login.rename.unchanged": "Escolha outro nome de usuário."
+  "ui.login.rename.unchanged": "Escolha outro nome de usuário.",
+  "ui.settings.rename.offer": "A equipe revogou a alteração obrigatória de {name}. Você pode manter seu nome atual ou voltar uma vez gratuitamente.",
+  "ui.settings.rename.restore": "Voltar para {name} gratuitamente",
+  "ui.settings.rename.title": "Restaurar nome anterior",
+  "ui.settings.rename.confirm": "Voltar para {name}? Seu nome de usuário será alterado e seu retorno gratuito será usado.",
+  "ui.settings.rename.unavailable": "Este nome não está disponível ou ainda está restrito.",
+  "ui.settings.rename.success": "Seu nome agora é {name}.",
+  "ui.settings.rename.error": "Não foi possível restaurar seu nome. Tente novamente."
 }

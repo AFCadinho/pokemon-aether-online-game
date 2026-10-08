@@ -374,6 +374,53 @@ func complete_required_name_change(new_name: String) -> Dictionary:
 	return response
 
 
+func refresh_name_change_requirement() -> Dictionary:
+	var original_token := session_token
+	var original_account := get_user_id_text()
+	if original_token.is_empty():
+		return {"success": false}
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + _auth_path("me"), HTTPClient.METHOD_GET,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])), ""
+	)
+	if original_token != session_token or original_account != get_user_id_text():
+		return {"success": false}
+	if not bool(response.get("success", false)):
+		return response
+	var body := _dictionary_from_value(response.get("body", {}))
+	var user := _dictionary_from_value(body.get("user", body))
+	if get_user_id_text_from(user) != original_account:
+		return {"success": false}
+	if not bool(user.get("nameChangeRequired", true)):
+		apply_current_user(user)
+	return {"success": true, "user": user}
+
+
+func load_name_restore_options() -> Dictionary:
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	return await _request_json(
+		base_url + "/auth/name-change/options", HTTPClient.METHOD_GET,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, ACCEPT_HEADER, get_authorization_header()])), ""
+	)
+
+
+func restore_previous_trainer_name(decision_id: String) -> Dictionary:
+	var original_token := session_token
+	var original_account := get_user_id_text()
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + "/auth/name-change/restore", HTTPClient.METHOD_POST,
+		_client_headers(PackedStringArray([USER_AGENT_HEADER, CONTENT_TYPE_HEADER, ACCEPT_HEADER, get_authorization_header()])),
+		JSON.stringify({"decisionId": decision_id})
+	)
+	if original_token != session_token or original_account != get_user_id_text():
+		return {"success": false, "error": "Account changed during the request."}
+	if bool(response.get("success", false)):
+		apply_current_user(_dictionary_from_value(response.get("body", {})))
+	return response
+
+
 func update_account_details(display_name: String, current_password: String, new_password: String) -> Dictionary:
 	if session_token == "":
 		return {

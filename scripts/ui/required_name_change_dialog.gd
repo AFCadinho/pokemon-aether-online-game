@@ -7,6 +7,7 @@ signal name_changed
 var name_input: LineEdit
 var error_label: Label
 var submitting := false
+var checking_requirement := false
 
 
 func _ready() -> void:
@@ -28,10 +29,16 @@ func _ready() -> void:
 	add_custom_control(error_label)
 	name_input.text_submitted.connect(func(_text: String): _confirm())
 	name_input.grab_focus.call_deferred()
+	var timer := Timer.new()
+	timer.wait_time = 5.0
+	timer.timeout.connect(_check_requirement)
+	add_child(timer)
+	timer.start()
+
 
 
 func _confirm() -> void:
-	if submitting:
+	if submitting or checking_requirement:
 		return
 	var new_name := name_input.text.strip_edges()
 	var format := RegEx.new()
@@ -64,3 +71,25 @@ func _submit_name(new_name: String) -> Dictionary:
 func _cancel() -> void:
 	if not submitting:
 		super._cancel()
+
+
+func _check_requirement() -> void:
+	if submitting or checking_requirement or not visible or not _is_authenticated():
+		return
+	checking_requirement = true
+	var account := AuthService.get_user_id_text()
+	var result: Dictionary = await _refresh_requirement()
+	checking_requirement = false
+	if not is_inside_tree() or account != AuthService.get_user_id_text():
+		return
+	if bool(result.get("success", false)) and not bool(result.get("user", {}).get("nameChangeRequired", true)):
+		visible = false
+		name_changed.emit()
+
+
+func _refresh_requirement() -> Dictionary:
+	return await AuthService.refresh_name_change_requirement()
+
+
+func _is_authenticated() -> bool:
+	return AuthService.is_authenticated()
