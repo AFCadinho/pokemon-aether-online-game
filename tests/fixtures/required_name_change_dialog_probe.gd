@@ -8,3 +8,15 @@ func _submit_name(new_name: String) -> Dictionary:
 	submitted_names.append(new_name)
 	await get_tree().process_frame
 	return next_response
+
+
+var next_status := {"success": false}
+
+
+func _refresh_requirement() -> Dictionary:
+	await get_tree().process_frame
+	return next_status
+
+
+func _is_authenticated() -> bool:
+	return true

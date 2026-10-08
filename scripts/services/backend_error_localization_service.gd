@@ -11,6 +11,7 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"name_restore_unavailable": "ui.settings.rename.unavailable",
 	"name_inappropriate": "ui.login.rename.inappropriate",
 	"username_unavailable": "ui.login.rename.unavailable",
 	"name_unchanged": "ui.login.rename.unchanged",

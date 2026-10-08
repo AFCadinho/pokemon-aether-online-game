@@ -1230,6 +1230,11 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 	account_status_label.visible = false
 	account_tab.add_child(account_status_label)
 
+	var name_restore_panel := VBoxContainer.new()
+	name_restore_panel.set_script(preload("res://scripts/ui/trainer_name_restore_panel.gd"))
+	account_tab.add_child(name_restore_panel)
+	name_restore_panel.connect("name_restored", _refresh_account_tab)
+
 	account_return_note_label = Label.new()
 	_set_localized_text(account_return_note_label, "ui.settings.account.return_note")
 	account_return_note_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -1249,7 +1254,7 @@ func _build_account_tab(account_tab: VBoxContainer) -> void:
 		account_tab,
 		"ui.settings.account.section.manage",
 		"",
-		[account_user_label, account_portal_note_label, account_portal_button, account_status_label]
+		[account_user_label, account_portal_note_label, account_portal_button, account_status_label, name_restore_panel]
 	)
 	_wrap_settings_section(
 		account_tab,
