@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Return settled Gary co-op battles to the same world when the saved location is unchanged, release stale battle input locks, and preserve authoritative destinations across co-op world reloads.
+
 - Fix experimental Android 3D battles incorrectly displaying 2D after choosing 3D.
 
 - Distinguish normal Android background cleanup and user-requested exits from crashes, preserve the chosen 3D mode after those normal exits, and include Android's safe exit reason and memory figures in crash reports when available.

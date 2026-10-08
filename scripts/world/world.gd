@@ -82,6 +82,8 @@ var replay_return_callback: Callable
 var coop_controls: Control
 var coop_world_ready := false
 var coop_finishing := false
+var coop_world_reload_pending := false
+var coop_trainer_outro_input_owned := false
 var coop_wild_step_pending := false
 
 func start_battle_replay(recording: Dictionary, return_callback: Callable) -> bool:
@@ -217,11 +219,12 @@ func _discard_web_placeholder_map() -> void:
 
 
 func _exit_tree() -> void:
+	_release_coop_trainer_outro_input()
 	if forest_preparation_input_owned:
 		GameState.release_overworld_input_lock(&"forest_preparation")
 		forest_preparation_input_owned = false
-	if GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map):
-		GameState.clear_world_runtime_state()
+	if coop_world_reload_pending or (GameState.current_map != null and is_instance_valid(GameState.current_map) and is_ancestor_of(GameState.current_map)):
+		GameState.clear_world_runtime_state(coop_world_reload_pending)
 
 
 # Called when the node enters the scene tree for the first time.
@@ -1282,6 +1285,7 @@ func _is_player_position_save_blocked_by_teleport(allow_gameplay_reset := false)
 	return (
 		(GameState.gameplay_reset_in_progress and not allow_gameplay_reset)
 		or account_switch_in_progress
+		or coop_world_reload_pending
 		or ThievingService.is_arrest_transfer_pending()
 		or authorized_teleport_in_progress
 		or authorized_teleport_apply_failed_autosave_blocked
@@ -1293,6 +1297,8 @@ func _get_player_position_save_block_reason(allow_gameplay_reset := false) -> St
 		return "Gameplay reset is in progress."
 	if account_switch_in_progress:
 		return "Account switch is in progress."
+	if coop_world_reload_pending:
+		return "The settled co-op battle is restoring its saved world position."
 	if ThievingService.is_arrest_transfer_pending():
 		return "Arrest transfer is pending."
 	if authorized_teleport_apply_failed_autosave_blocked:
@@ -5871,7 +5877,6 @@ func finish_coop_activity() -> void:
 		return
 	coop_finishing = true
 	var finished_activity: Dictionary = CoopService.activity.duplicate(true)
-	var wild_battle: bool = str(finished_activity.get("activityId", "")).begins_with("wild_")
 	var key := str(CoopService.activity.get("reservationId", ""))
 	var profile: Dictionary = await PlayerGameStateService.load_player_profile()
 	if not profile.get("success", false):
@@ -5894,27 +5899,64 @@ func finish_coop_activity() -> void:
 	PlayerWalletService.apply_wallet_result({"success": true, "wallet": profile.get("wallet", {}), "badges": profile.get("badges", {})})
 	StoryService.apply_story(profile.get("story", {}))
 	var saved_position: Dictionary = profile.get("position", {}).get("state", {})
-	var can_resume_in_place := wild_battle and _can_resume_coop_wild_battle_in_place(
-		saved_position, _get_map_id(GameState.current_map), _get_current_player_persistent_position())
 	if not already_acknowledged:
 		var response: Dictionary = await CoopService.party_action("acknowledge", {"reservationId": key})
 		if not response.get("success", false) and not CoopService.activity.is_empty():
 			coop_finishing = false
 			return
+	_complete_coop_world_return(finished_activity, saved_position)
+
+
+func _complete_coop_world_return(finished_activity: Dictionary, saved_position: Dictionary) -> void:
+	# Only called after the authoritative profile and acknowledgement succeeded.
+	var activity_id := str(finished_activity.get("activityId", ""))
+	var can_resume_in_place := (activity_id.begins_with("wild_") or activity_id == "gary_route22") and _can_resume_coop_wild_battle_in_place(
+		saved_position, _get_map_id(GameState.current_map), _get_current_player_persistent_position())
 	if finished_activity.get("status") == "finished":
 		GameState.set_pending_coop_battle_result(finished_activity)
 	if can_resume_in_place:
-		# A settled wild battle that leaves the Trainer on the same tile can close
-		# without reloading the map and briefly showing an empty screen.
+		# StoryService already refreshed Gary's visibility and quest markers.
+		# Keep the same world and player instead of rebuilding the house placeholder.
+		if not _coop_trainer_outro_id(finished_activity).is_empty():
+			_acquire_coop_trainer_outro_input()
 		_abort_battle_start(true)
+		_clear_finished_coop_legacy_input()
 		coop_finishing = false
 		_show_pending_coop_battle_result.call_deferred()
 		return
-	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": profile.get("position", {}).get("state", {})})
+	GameState.set_prepared_world_state({"hasSavedState": true, "savedState": saved_position.duplicate(true)})
+	coop_world_reload_pending = true
 	# Account settlement already applied any respawn. Re-enter at that saved
 	# position; do not invoke the solo reward/blackout path a second time.
 	_abort_battle_start(true)
-	get_tree().call_deferred("reload_current_scene")
+	# Do not let the old player move or autosave during a respawn handoff.
+	_lock_overworld_for_battle()
+	_reload_coop_world.call_deferred()
+
+
+func _reload_coop_world() -> void:
+	var error := get_tree().reload_current_scene()
+	if error != OK:
+		CoopService.request_failed.emit("Could not restore your saved location. Please reconnect.")
+
+
+func _clear_finished_coop_legacy_input() -> void:
+	var scene := get_tree().current_scene if is_inside_tree() else null
+	var dialogue := scene.get_node_or_null("DialogueBox/Box") if scene != null else null
+	if dialogue == null or not bool(dialogue.get("is_open")):
+		# The completed battle owns the old global handoff, but not live scoped locks.
+		GameState.unlock_input()
+
+
+func _acquire_coop_trainer_outro_input() -> void:
+	coop_trainer_outro_input_owned = true
+	GameState.acquire_overworld_input_lock(&"coop_trainer_outro")
+
+
+func _release_coop_trainer_outro_input() -> void:
+	if coop_trainer_outro_input_owned:
+		GameState.release_overworld_input_lock(&"coop_trainer_outro")
+		coop_trainer_outro_input_owned = false
 
 
 func _coop_battle_result_message(activity: Dictionary) -> String:
@@ -5931,28 +5973,24 @@ func _coop_battle_result_message(activity: Dictionary) -> String:
 
 func _show_pending_coop_battle_result() -> void:
 	if GameState.pending_coop_battle_result.is_empty():
+		_release_coop_trainer_outro_input()
 		return
 	for _attempt in 120:
 		if not get_tree().get_nodes_in_group("ui_overlay").is_empty():
 			break
 		await get_tree().process_frame
 	if get_tree().get_nodes_in_group("ui_overlay").is_empty():
+		_release_coop_trainer_outro_input()
 		return
 	var activity: Dictionary = GameState.take_pending_coop_battle_result()
 	var message := _coop_battle_result_message(activity)
 	if not message.is_empty():
 		get_tree().call_group("ui_overlay", "add_system_message", message)
-	if activity.get("outcome") != "win" or str(activity.get("activityId", "")).begins_with("wild_"):
+	var trainer_id := _coop_trainer_outro_id(activity)
+	if trainer_id.is_empty():
+		_release_coop_trainer_outro_input()
 		return
-	var trainer_id := str(activity.get("activityId", ""))
-	if trainer_id == "brock":
-		trainer_id = "kanto_alpha_gym_brock"
-	elif trainer_id == "gary_route22":
-		# All three Route 22 rival teams share this closing dialogue.
-		trainer_id = "kanto_route_22_gary_bulbasaur"
-	elif trainer_id not in CoopService.ORDINARY_TRAINERS:
-		return
-	GameState.acquire_overworld_input_lock(&"coop_trainer_outro")
+	_acquire_coop_trainer_outro_input()
 	var metadata_response: Dictionary = await TrainerMetadataService.get_trainer_metadata(trainer_id)
 	if bool(metadata_response.get("success", false)):
 		var metadata: Dictionary = metadata_response.get("metadata", {})
@@ -5961,7 +5999,21 @@ func _show_pending_coop_battle_result() -> void:
 			await _show_trainer_outro_dialogue(dialogue_id, _coop_trainer_outro_mugshot(trainer_id, metadata))
 	else:
 		push_warning("World: co-op Trainer outro metadata failed for %s" % trainer_id)
-	GameState.release_overworld_input_lock(&"coop_trainer_outro")
+	# The key that closes Gary's dialogue must not reopen him on the same frame.
+	await get_tree().process_frame
+	_clear_finished_coop_legacy_input()
+	_release_coop_trainer_outro_input()
+
+
+func _coop_trainer_outro_id(activity: Dictionary) -> String:
+	if activity.get("outcome") != "win":
+		return ""
+	var trainer_id := str(activity.get("activityId", ""))
+	if trainer_id == "brock":
+		return "kanto_alpha_gym_brock"
+	if trainer_id == "gary_route22":
+		return "kanto_route_22_gary_bulbasaur"
+	return trainer_id if trainer_id in CoopService.ORDINARY_TRAINERS else ""
 
 
 func _coop_trainer_outro_mugshot(trainer_id: String, metadata: Dictionary) -> Texture2D:

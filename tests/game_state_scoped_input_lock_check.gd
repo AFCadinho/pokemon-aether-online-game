@@ -27,6 +27,17 @@ func _init() -> void:
 	state.acquire_overworld_input_lock(&"story_sequence")
 	state.clear_world_runtime_state()
 	_expect(not state.is_overworld_input_locked(), "Changing maps clears orphaned scoped locks")
+	var destination := {"hasSavedState": true, "savedState": {"mapId": "kanto_route_22"}}
+	state.set_prepared_world_state(destination)
+	state.lock_input()
+	state.clear_world_runtime_state(true)
+	_expect(state.has_prepared_world_state() and not state.is_overworld_input_locked(),
+		"A prepared world handoff survives cleanup while legacy input is released")
+	_expect(state.consume_prepared_world_state() == destination and not state.has_prepared_world_state(),
+		"The prepared destination is consumed exactly once")
+	state.set_prepared_world_state(destination)
+	state.clear_world_runtime_state()
+	_expect(not state.has_prepared_world_state(), "Ordinary world cleanup still clears old prepared state")
 	state.repel_steps = 125
 	state.reset_gameplay_runtime_state()
 	_expect(state.repel_steps == 0, "An isolated GameState reset clears Repel without a live service")
