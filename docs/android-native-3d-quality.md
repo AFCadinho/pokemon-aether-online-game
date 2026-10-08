@@ -54,4 +54,8 @@ Evidence: `tools/sprite_factory/android_native_quality_results.json`; slot-owned
 logs/APK/captures at `.tmp/android-native-quality/`. The full-game ARM64 review
 app uses the separate `com.pokeaether.androidcolourcandidate` package, preserving
 that preview's own saved login/preferences without touching the normal app.
-No production release has been performed.
+No production release has been performed. The private full-game build uses
+its normal Gradle/native bridge, including safe Android exit reasons. An initial
+built-in-template review APK omitted that bridge and logged two Java class
+errors on its next launch; that export path was corrected and the APK rebuilt.
+This was a test-build packaging problem, not a native-resolution shader failure.
