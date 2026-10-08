@@ -92,7 +92,7 @@ func _run() -> void:
 		"failed server checks are retried automatically"
 	)
 	_check(
-		login_source.contains("server_health_retry_timer.start()"),
+		login_source.contains("server_health_retry_timer.start(retry_delay)"),
 		"offline status schedules another server check"
 	)
 

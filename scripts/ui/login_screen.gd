@@ -23,6 +23,8 @@ const PLAYER_PREVIEW_VIEWPORT_SIZE := Vector2i(190, 154)
 const PLAYER_PREVIEW_POSITION := Vector2(95, 92)
 const PLAYER_PREVIEW_SCALE := Vector2(2.0, 2.0)
 const SERVER_HEALTH_RETRY_SECONDS := 10.0
+const STARTUP_HEALTH_RETRY_SECONDS := 1.0
+const STARTUP_HEALTH_MAX_RETRIES := 2
 
 @onready var username_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/UsernameInput
 @onready var password_input: LineEdit = $Background/Shell/MainSplit/LoginColumn/LoginCard/LoginMargin/LoginLayout/FormFields/PasswordInput
@@ -59,6 +61,10 @@ var server_online := false
 var server_in_maintenance := false
 var server_staff_only := false
 var server_health_check_in_progress := false
+var server_health_confirmed := false
+var startup_health_failures := 0
+var saved_session_restore_in_progress := false
+var saved_session_restore_pending := false
 var server_health_retry_timer: Timer
 var last_server_health_error := ""
 var server_access_notice_active := false
@@ -175,7 +181,7 @@ func set_loading(is_loading: bool) -> void:
 	username_input.editable = not is_loading
 	password_input.editable = not is_loading
 	remember_me_checkbox.disabled = is_loading
-	login_button.disabled = is_loading or not server_online
+	login_button.disabled = is_loading or not server_online or saved_session_restore_in_progress
 	continue_button.disabled = is_loading or not server_online
 	logout_button.disabled = is_loading
 	language_options_button.disabled = is_loading
@@ -598,7 +604,7 @@ func _escape_bbcode(text: String) -> String:
 
 
 func _submit_login() -> void:
-	if is_loading:
+	if is_loading or saved_session_restore_in_progress:
 		return
 	if _show_battle_visual_choice():
 		return
@@ -633,6 +639,7 @@ func _submit_login() -> void:
 
 	show_status("")
 	set_loading(true)
+	saved_session_restore_pending = false
 	var result: Dictionary = await AuthService.login(username, password, remember_me_checkbox.button_pressed)
 	set_loading(false)
 
@@ -659,16 +666,23 @@ func _submit_login() -> void:
 		_enter_world()
 
 
+func _request_server_health() -> Dictionary:
+	return await ServerHealthService.check_async(self)
+
+
 func _refresh_server_health() -> void:
 	if server_health_check_in_progress:
 		return
 	server_health_check_in_progress = true
 	if is_instance_valid(server_health_retry_timer):
 		server_health_retry_timer.stop()
-	var result: Dictionary = await ServerHealthService.check_async(self)
+	var result: Dictionary = await _request_server_health()
 	server_online = bool(result.get("online", false))
 	server_in_maintenance = bool(result.get("maintenance", false))
 	server_staff_only = bool(result.get("staff_only", false))
+	var retry_delay := SERVER_HEALTH_RETRY_SECONDS
+	if bool(result.get("reachable", false)) or server_online or server_in_maintenance:
+		server_health_confirmed = true
 	if server_online:
 		last_server_health_error = ""
 		if server_staff_only:
@@ -677,6 +691,8 @@ func _refresh_server_health() -> void:
 		else:
 			_set_server_status("ui.login.server_online", ONLINE_COLOR)
 			_clear_server_access_notice()
+		if saved_session_restore_pending and not is_loading and not AuthService.is_authenticated():
+			_restore_saved_session.call_deferred()
 		await _refresh_online_players()
 	elif server_in_maintenance:
 		# A valid closed/draining access status is an expected server state, not
@@ -690,6 +706,14 @@ func _refresh_server_health() -> void:
 			_set_server_access_notice("", "ui.login.error.maintenance")
 		else:
 			_set_server_access_notice(maintenance_message)
+	elif not server_health_confirmed and startup_health_failures < STARTUP_HEALTH_MAX_RETRIES and int(result.get("status", 0)) in [0, 408, 429, 500, 502, 503, 504]:
+		# A tablet may still be establishing its first connection. Keep the
+		# initial status honest while retrying before declaring it offline.
+		startup_health_failures += 1
+		retry_delay = STARTUP_HEALTH_RETRY_SECONDS
+		_set_server_status("ui.login.checking_server", CHECKING_COLOR)
+		_set_online_players_status("ui.login.checking_players", {}, CHECKING_COLOR)
+		_clear_server_access_notice()
 	else:
 		_log_server_health_error(result)
 		_set_server_status("ui.login.server_offline", OFFLINE_COLOR)
@@ -697,8 +721,8 @@ func _refresh_server_health() -> void:
 		_set_server_access_notice("", "ui.login.error.offline")
 	_apply_server_access_controls()
 	server_health_check_in_progress = false
-	if (not server_online or server_staff_only) and is_inside_tree() and is_instance_valid(server_health_retry_timer):
-		server_health_retry_timer.start()
+	if (not server_online or server_staff_only or saved_session_restore_pending) and is_inside_tree() and is_instance_valid(server_health_retry_timer):
+		server_health_retry_timer.start(retry_delay)
 
 
 func _log_server_health_error(result: Dictionary) -> void:
@@ -759,7 +783,7 @@ func _clear_login_return_notice() -> void:
 
 
 func _apply_server_access_controls() -> void:
-	login_button.disabled = is_loading or not server_online
+	login_button.disabled = is_loading or not server_online or saved_session_restore_in_progress
 	continue_button.disabled = is_loading or not server_online
 
 
@@ -802,9 +826,23 @@ func _refresh_online_players() -> void:
 	)
 
 
+func _request_saved_session_restore() -> Dictionary:
+	return await AuthService.restore_saved_session()
+
+
 func _restore_saved_session() -> void:
-	var result: Dictionary = await AuthService.restore_saved_session()
+	if saved_session_restore_in_progress or is_loading:
+		return
+	saved_session_restore_in_progress = true
+	saved_session_restore_pending = false
+	_apply_server_access_controls()
+	var result: Dictionary = await _request_saved_session_restore()
 	if not bool(result.get("success", false)):
+		saved_session_restore_in_progress = false
+		saved_session_restore_pending = bool(result.get("retryable", false))
+		_apply_server_access_controls()
+		if saved_session_restore_pending and is_instance_valid(server_health_retry_timer):
+			server_health_retry_timer.start(STARTUP_HEALTH_RETRY_SECONDS)
 		var restore_error_code := BackendErrorLocalizationService.error_code(result)
 		if int(result.get("status", 0)) == 503 or restore_error_code == "server_maintenance":
 			await _refresh_server_health()
@@ -821,6 +859,8 @@ func _restore_saved_session() -> void:
 	remember_me_checkbox.button_pressed = AuthService.remember_me_enabled
 	login_button.text = _get_idle_login_button_text()
 	_show_saved_session_card()
+	saved_session_restore_in_progress = false
+	_apply_server_access_controls()
 
 
 func _apply_saved_session_preview_state() -> void:
