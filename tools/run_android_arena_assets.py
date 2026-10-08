@@ -39,6 +39,7 @@ def main():
     parser.add_argument('--no-caster-shadows', action='store_true')
     parser.add_argument('--expect-renderer', choices=['gl_compatibility', 'mobile'])
     parser.add_argument('--variant', choices=['desktop-art', 'android-etc2-art'])
+    parser.add_argument('--battle-resolution', choices=['960x540','960x432','1920x1080','2400x1080'], default='960x540', help='Bounded GLES full-battle raster comparison; baseline stays 960x540')
     parser.add_argument('--timeout', type=int, default=600)
     args = parser.parse_args()
     if not 0 <= args.hour < 24:
@@ -47,6 +48,8 @@ def main():
         parser.error('Shadow colour prototype requires Compatibility')
     if (args.texture_residency or args.battle_budget) and (args.hour != 12.0 or args.camera_view != 'default' or args.shadow_casters or args.no_caster_shadows):
         parser.error('Render options are limited to the arena diagnostic')
+    if args.battle_resolution != '960x540' and not (args.battle_budget and args.expect_renderer == 'gl_compatibility'):
+        parser.error('Custom resolution is limited to the full GLES battle diagnostic')
     global PACKAGE
     prefix = 'android-texture-residency' if args.texture_residency else ('android-battle-budget' if args.battle_budget else 'android-arena')
     if args.texture_residency and (args.expect_renderer != 'mobile' or args.lighting_mode != 'baseline'):
@@ -126,6 +129,8 @@ def main():
             device('shell', 'run-as', PACKAGE, 'mkdir', '-p', 'files')
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {variant} > files/android-arena-variant'")
             device('shell', 'run-as', PACKAGE, 'sh', '-c', f"'echo {args.lighting_mode} > files/android-arena-lighting'")
+            if args.battle_budget:
+                device('shell', 'run-as', PACKAGE, 'tee', 'files/android-battle-budget-resolution.json', input=json.dumps(args.battle_resolution))
             if not (args.texture_residency or args.battle_budget):
                 options = {'hour': args.hour, 'camera': args.camera_view, 'shadow_casters': args.shadow_casters, 'caster_shadows': not args.no_caster_shadows}
                 device('shell', 'run-as', PACKAGE, 'tee', 'files/android-arena-probe-options.json', input=json.dumps(options))
@@ -174,6 +179,9 @@ def main():
                             'battle-large','battle-released','battle-reused']
                 if args.expect_renderer == 'gl_compatibility':
                     expected[6:6] = ['battle-evening', 'battle-night']
+                requested = [int(value) for value in args.battle_resolution.split('x')]
+                success = success and details.get('requested_render_size') == requested
+                success = success and all(p.get('render_size') == requested and (not p.get('response_size') or p['response_size'] == requested) for p in details.get('phases', []) if p['label'].startswith('battle-') and p['label'] != 'battle-released')
                 success = success and details.get('suite') == 'android-battle-budget' and [p['label'] for p in details.get('phases', [])] == expected
             if args.texture_residency:
                 cases = details.get('cases', [])

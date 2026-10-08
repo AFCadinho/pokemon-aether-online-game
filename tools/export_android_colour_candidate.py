@@ -73,7 +73,6 @@ def main():
         selected = content[start:end].replace("[preset.7",f"[preset.{index}")
         selected = re.sub(r'^name=.*$', 'name="Android Colour Candidate"',selected,flags=re.M)
         selected = re.sub(r'^custom_features=.*$', 'custom_features="android_v1,android_3d_experimental"',selected,flags=re.M)
-        selected = selected.replace('gradle_build/use_gradle_build=true','gradle_build/use_gradle_build=false')
         selected = selected.replace('package/unique_name="com.pokeaether.game"','package/unique_name="'+PACKAGE+'"')
         selected = selected.replace('package/name="PokeAether"','package/name="PokeAether Android Colour Test"')
         selected = re.sub(r'^version/code=.*$','version/code=1',selected,flags=re.M)
@@ -81,17 +80,26 @@ def main():
         selected = re.sub(r'^version/name=.*$','version/name="'+version+'-colour-review.1"',selected,flags=re.M)
         for arch in ["armeabi-v7a","arm64-v8a","x86","x86_64"]:
             selected = re.sub(r'^architectures/'+re.escape(arch)+r'=.*$', 'architectures/'+arch+'='+str(arch==args.architecture).lower(),selected,flags=re.M)
-        selected = selected.replace(f"[preset.{index}.options]",f'[preset.{index}.options]\ncustom_template/debug="{args.templates.resolve()/"android_debug.apk"}"')
         presets.write_text(content+"\n"+selected)
         editor.parent.mkdir(parents=True,exist_ok=True)
         editor.write_text('[gd_resource type="EditorSettings" format=3]\n[resource]\nexport/android/android_sdk_path = "'+str(args.sdk.resolve())+'"\nexport/android/java_sdk_path = "'+str(args.java.resolve())+'"\n')
         apk = output/("PokeAether-colour-review-"+args.architecture+".apk")
+        # The full app needs the real native bridge (including exit reasons).
+        # Built-in diagnostic templates omit it and cannot stand in for a game APK.
+        subprocess.run(["python3", str(ROOT/"android_updater/setup_build_template.py"), str(args.templates.resolve()/"android_source.zip")],check=True)
+        environment = os.environ.copy()
+        environment["JAVA_HOME"] = str(args.java.resolve())
+        environment["ANDROID_HOME"] = str(args.sdk.resolve())
+        environment["GRADLE_USER_HOME"] = str(ROOT.parent/".runtime/gradle")
         with (output/"export.log").open("w") as log:
-            subprocess.run(["godot","--headless","--path",str(ROOT),"--export-debug","Android Colour Candidate",str(apk)],stdout=log,stderr=subprocess.STDOUT,check=True)
+            subprocess.run(["godot","--headless","--path",str(ROOT),"--export-debug","Android Colour Candidate",str(apk)],env=environment,stdout=log,stderr=subprocess.STDOUT,check=True)
         if re.search(r'^(?:SCRIPT ERROR:|ERROR:)',(output/"export.log").read_text(errors="replace"),re.M):
             raise RuntimeError("Candidate export contains errors; inspect export.log")
         with ZipFile(apk) as archive:
             verify(ROOT,[n.removeprefix("assets/") for n in archive.namelist() if n.startswith("assets/")])
+            dex = [n for n in archive.namelist() if re.fullmatch(r"classes(?:[0-9]+)?\.dex",n)]
+            if not any(b"Lcom/pokeaether/game/ApkInstallBridge;" in archive.read(n) for n in dex):
+                raise ValueError("Full-game candidate must include the native exit/update bridge")
             libs=[n for n in archive.namelist() if n.startswith("lib/") and n.endswith(".so")]
             if not libs or any(n.split("/")[1]!=args.architecture for n in libs):
                 raise ValueError("Candidate ABI differs from requested architecture")
@@ -101,7 +109,7 @@ def main():
             raise ValueError("Expected separate, debuggable candidate package")
         with apk.open("rb") as stream:
             digest=hashlib.file_digest(stream,"sha256").hexdigest()
-        record={"schema":1,"test_only":True,"full_game":True,"published":False,"installed":False,"package":PACKAGE,"architecture":args.architecture,"apk":apk.name,"bytes":apk.stat().st_size,"sha256":digest,"source_commit":source_commit,"build_id":build_id,"asset_build_id":args.asset_build_id,"compatible_build_id":args.compatible_build_id,"normal_app_data_reused":False,"apk_updater_enabled":False}
+        record={"schema":1,"test_only":True,"full_game":True,"published":False,"installed":False,"package":PACKAGE,"architecture":args.architecture,"apk":apk.name,"bytes":apk.stat().st_size,"sha256":digest,"source_commit":source_commit,"build_id":build_id,"asset_build_id":args.asset_build_id,"compatible_build_id":args.compatible_build_id,"normal_app_data_reused":False,"apk_updater_enabled":False,"native_exit_bridge":True}
         (output/"candidate.json").write_text(json.dumps(record,indent=2)+"\n")
         print("Full game Android colour candidate prepared:",apk)
     finally:

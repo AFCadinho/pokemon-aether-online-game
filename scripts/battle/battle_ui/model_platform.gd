@@ -7,8 +7,7 @@ static func supported() -> bool:
 static func allows(web: bool, mobile: bool, android: bool, pilot: bool, debug: bool, experimental := false) -> bool:
 	return not web and (not mobile or (android and ((pilot and debug) or experimental)))
 
-static func render_dimensions(target: Vector2i, experimental_android: bool) -> Vector2i:
-	if not experimental_android:
-		return target
-	var factor := minf(1.0, minf(960.0 / maxf(2, target.x), 540.0 / maxf(2, target.y)))
-	return Vector2i(maxi(2, roundi(target.x * factor)), maxi(2, roundi(target.y * factor)))
+static func render_dimensions(target: Vector2i, _experimental_android: bool) -> Vector2i:
+	# Quality first: target already describes physical battlefield pixels after
+	# UI/window scaling. Keep native resolution rather than upscaling a 540p image.
+	return target.max(Vector2i(2, 2))

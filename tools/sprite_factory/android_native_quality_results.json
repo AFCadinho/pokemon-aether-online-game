@@ -1,0 +1,221 @@
+{
+  "schema": 1,
+  "policy": "native physical battlefield resolution, with unchanged MSAA 4x",
+  "physical_device_qualified": false,
+  "production_enabled": false,
+  "cases": {
+    "low-resolution": {
+      "success": true,
+      "resolution": [
+        960,
+        432
+      ],
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_battle_p50_ms": 18.279,
+      "peak_render_bytes": 451230872.0,
+      "peak_pss_kib": 508398,
+      "native_errors": [],
+      "phase_count": 15,
+      "normal_capture_sha256": "0219b8010899a7c7e9a11d06fd5dd64c61aaca6f52792664d592e4382c52557d",
+      "phases": [
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 18.465,
+          "frame_p95_ms": 25.545,
+          "render_bytes": 431144710.0
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 18.697,
+          "frame_p95_ms": 25.092,
+          "render_bytes": 431144710.0
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 18.774,
+          "frame_p95_ms": 25.286,
+          "render_bytes": 431144710.0
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 18.727,
+          "frame_p95_ms": 25.376,
+          "render_bytes": 431144710.0
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 18.279,
+          "frame_p95_ms": 25.145,
+          "render_bytes": 431144710.0
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 18.17,
+          "frame_p95_ms": 25.249,
+          "render_bytes": 451230872.0
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 18.111,
+          "frame_p95_ms": 24.938,
+          "render_bytes": 451230872.0
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 17.629,
+          "frame_p95_ms": 24.172,
+          "render_bytes": 437991632.0
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 17.434,
+          "frame_p95_ms": 24.376,
+          "render_bytes": 414642648.0
+        }
+      ]
+    },
+    "native-resolution": {
+      "success": true,
+      "resolution": [
+        2400,
+        1080
+      ],
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (AMD Radeon Graphics (radeonsi, renoir, ACO, DRM 3.64, 6.18.49-1-MANJARO))",
+      "median_of_battle_p50_ms": 61.599,
+      "peak_render_bytes": 653670824.0,
+      "peak_pss_kib": 522398,
+      "native_errors": [],
+      "phase_count": 15,
+      "normal_capture_sha256": "a19bb600f2fe48eb6044b589594d80aa4ced370c36be35797ab3e3a197f92312",
+      "phases": [
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 90.603,
+          "frame_p95_ms": 96.812,
+          "render_bytes": 633584662.0
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 22.072,
+          "frame_p95_ms": 99.403,
+          "render_bytes": 633584662.0
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 61.599,
+          "frame_p95_ms": 101.899,
+          "render_bytes": 633584662.0
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 56.235,
+          "frame_p95_ms": 99.337,
+          "render_bytes": 633584662.0
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 60.386,
+          "frame_p95_ms": 104.012,
+          "render_bytes": 633584662.0
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 58.743,
+          "frame_p95_ms": 129.875,
+          "render_bytes": 653670824.0
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 89.826,
+          "frame_p95_ms": 216.118,
+          "render_bytes": 653670824.0
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 91.904,
+          "frame_p95_ms": 105.249,
+          "render_bytes": 640431584.0
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 90.889,
+          "frame_p95_ms": 97.888,
+          "render_bytes": 617082600.0
+        }
+      ]
+    },
+    "native-resolution-nvidia": {
+      "success": true,
+      "resolution": [
+        2400,
+        1080
+      ],
+      "renderer": "gl_compatibility",
+      "adapter": "Android Emulator OpenGL ES Translator (NVIDIA GeForce RTX 3070 Laptop GPU/PCIe/SSE2)",
+      "median_of_battle_p50_ms": 16.661,
+      "peak_render_bytes": 651540632.0,
+      "peak_pss_kib": 505872,
+      "native_errors": [],
+      "phase_count": 15,
+      "normal_capture_sha256": "5a5a41685475fd0f86d7c0b748dfcd514240c17baaf09e9e0faf4935606ea5a0",
+      "phases": [
+        {
+          "label": "battle-normal",
+          "frame_p50_ms": 16.667,
+          "frame_p95_ms": 17.087,
+          "render_bytes": 631454470.0
+        },
+        {
+          "label": "battle-evening",
+          "frame_p50_ms": 16.655,
+          "frame_p95_ms": 17.047,
+          "render_bytes": 631454470.0
+        },
+        {
+          "label": "battle-night",
+          "frame_p50_ms": 16.667,
+          "frame_p95_ms": 17.168,
+          "render_bytes": 631454470.0
+        },
+        {
+          "label": "battle-shiny",
+          "frame_p50_ms": 16.67,
+          "frame_p95_ms": 17.164,
+          "render_bytes": 631454470.0
+        },
+        {
+          "label": "battle-sleep",
+          "frame_p50_ms": 16.659,
+          "frame_p95_ms": 16.983,
+          "render_bytes": 631454470.0
+        },
+        {
+          "label": "battle-mega",
+          "frame_p50_ms": 16.684,
+          "frame_p95_ms": 17.155,
+          "render_bytes": 651540632.0
+        },
+        {
+          "label": "battle-after-effect",
+          "frame_p50_ms": 16.656,
+          "frame_p95_ms": 17.135,
+          "render_bytes": 651540632.0
+        },
+        {
+          "label": "battle-large",
+          "frame_p50_ms": 16.661,
+          "frame_p95_ms": 17.189,
+          "render_bytes": 638301392.0
+        },
+        {
+          "label": "battle-reused",
+          "frame_p50_ms": 16.655,
+          "frame_p95_ms": 17.099,
+          "render_bytes": 614952408.0
+        }
+      ]
+    }
+  }
+}

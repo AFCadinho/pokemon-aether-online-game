@@ -342,6 +342,10 @@ func _prefetch_current_map_desktop_arena() -> Node:
 	if requested_arena != "classic":
 		# Session-bounded environment only: never cache combatants/network state.
 		var dimensions := Vector2i(get_viewport().get_visible_rect().size)
+		if SettingsManager.is_android_3d_experimental():
+			# Visible rect uses UI design coordinates; the retained 3D passes need
+			# the physical window size, just like the eventual battle presenter.
+			dimensions = get_window().size
 		dimensions = preload("res://scripts/battle/battle_ui/model_platform.gd").render_dimensions(dimensions, SettingsManager.is_android_3d_experimental())
 		return preload("res://scripts/battle/arenas/shared/environment_pool.gd").prepare(self, SettingsManager.get_battle_3d_forest_manifest(),dimensions, requested_arena)
 	return null
