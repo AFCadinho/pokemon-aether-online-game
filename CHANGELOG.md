@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show a co-op partner playing their turn while their own animations are still running; only show Choosing once their screen has caught up, with neutral waiting when playback status is unknown.
+
 - Return settled Gary co-op battles to the same world when the saved location is unchanged, release stale battle input locks, and preserve authoritative destinations across co-op world reloads.
 
 - Fix experimental Android 3D battles incorrectly displaying 2D after choosing 3D.

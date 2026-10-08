@@ -196,5 +196,24 @@ func _check_command_feedback() -> void:
 	fixture.response_ready.emit({"success": true, "body": {"view": view}})
 	assert(fixture.view.is_empty() and fixture.pending_command.is_empty() and not fixture.command_in_flight)
 	assert(completed_requests == 3)
+	fixture.activity = {"reservationId": "new", "battleId": "coop-new"}
+	fixture.report_presentation("old", 10, true)
+	assert(fixture._presentation.is_empty(), "late old panels cannot report into a new battle")
+	fixture.report_presentation("coop-new", 10, true)
+	assert(fixture._state_payload().is_empty(), "old backends keep the empty state body")
+	fixture.activity.presentationSupported = true
+	var payload: Dictionary = fixture._state_payload()
+	assert(payload.presentation.phase == "playing" and payload.presentation.eventCursor == 10)
+	var sequence: int = payload.presentation.sequence
+	fixture.report_presentation("coop-new", 10, false)
+	assert(fixture._state_payload().presentation.sequence > sequence)
+	assert(payload.presentation.phase == "playing", "in-flight reports are immutable snapshots")
+	fixture.clear_presentation("old")
+	assert(not fixture._state_payload().is_empty(), "old panels cannot clear the new battle report")
+	fixture.clear_presentation("coop-new")
+	assert(fixture._state_payload().is_empty(), "removed panels stop refreshing old hints")
+	fixture.reset()
+	assert(fixture._state_payload().is_empty())
+
 	fixture.queue_free()
 	await process_frame

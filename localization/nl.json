@@ -45,6 +45,8 @@
   "battle.coop.actor_opponent": "Tegenstander {slot} · {pokemon}",
   "battle.coop.hp_state": "{actor}: {percent}% HP.",
   "battle.coop.capture_playing": "{name} gooit een Poké Ball…",
+  "battle.coop.waiting_partner_playback": "Wachten op de animaties van {name}…",
+  "battle.coop.waiting_partner_sync": "Wachten op {name}…",
   "battle.coop.waiting_partner_confirmed": "Keuze bevestigd · Wachten op {name}…",
   "ui.guild.log.filter.action.base_purchased": "Guildbase gevestigd",
   "ui.guild.log.filter.action.base_purchase": "Guildbase gekocht",

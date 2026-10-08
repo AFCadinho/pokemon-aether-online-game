@@ -45,6 +45,8 @@
   "battle.coop.actor_opponent": "对手{slot} · {pokemon}",
   "battle.coop.hp_state": "{actor}：剩余{percent}% HP。",
   "battle.coop.capture_playing": "{name}正在投掷精灵球……",
+  "battle.coop.waiting_partner_playback": "等待{name}播放动画…",
+  "battle.coop.waiting_partner_sync": "等待{name}…",
   "battle.coop.waiting_partner_confirmed": "选择已确认 · 等待{name}……",
   "ui.guild.log.filter.action.base_purchased": "建立公会基地",
   "ui.guild.log.filter.action.base_purchase": "购买公会基地",

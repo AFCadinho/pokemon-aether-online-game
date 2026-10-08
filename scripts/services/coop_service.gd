@@ -38,6 +38,9 @@ var pending_start: Dictionary = {}
 var command_in_flight := false
 var _command_sequence := 0
 var confirmed_decision_id := ""
+var _presentation: Dictionary = {}
+var _presentation_client_id := ""
+var _presentation_sequence := 0
 var _polling := false
 var _poll_after := 0.0
 var _session_identity := ""
@@ -76,6 +79,9 @@ func _process(delta: float) -> void:
 
 
 func reset() -> void:
+	_presentation = {}
+	_presentation_client_id = ""
+	_presentation_sequence = 0
 	available = false
 	party = {}
 	invitations = []
@@ -96,10 +102,35 @@ func reset() -> void:
 	state_changed.emit()
 
 
+func report_presentation(battle_id: String, cursor: int, playing: bool) -> void:
+	if battle_id.is_empty() or battle_id != activity.get("battleId", ""):
+		return
+	var phase := "playing" if playing else "idle"
+	if _presentation.get("reservationId") == activity.get("reservationId") and _presentation.get("eventCursor") == cursor and _presentation.get("phase") == phase:
+		return
+	if _presentation_client_id.is_empty():
+		_presentation_client_id = new_id()
+	_presentation_sequence += 1
+	_presentation = {"reservationId": activity.get("reservationId"), "clientId": _presentation_client_id,
+		"sequence": _presentation_sequence, "eventCursor": cursor, "phase": phase}
+
+
+func clear_presentation(battle_id: String) -> void:
+	if battle_id == activity.get("battleId", ""):
+		_presentation = {}
+
+
+func _state_payload() -> Dictionary:
+	# Negotiate with the backend first: old state routes accept only an empty body.
+	if activity.get("presentationSupported", false) and not _presentation.is_empty() and _presentation.get("reservationId") == activity.get("reservationId"):
+		return {"presentation": _presentation.duplicate(true)}
+	return {}
+
+
 func refresh() -> Dictionary:
 	_sequence += 1
 	var sequence := _sequence
-	var result := await _request("state", {})
+	var result := await _request("state", _state_payload())
 	if result.get("success", false) and sequence >= _applied_sequence:
 		_applied_sequence = sequence
 		available = true
@@ -141,6 +172,7 @@ func apply_state(body: Dictionary) -> void:
 	invitations = body.get("invitations", []) if body.get("invitations") is Array else []
 	var incoming: Dictionary = body.get("activity", {}) if body.get("activity") is Dictionary else {}
 	if incoming.get("reservationId", "") != activity.get("reservationId", ""):
+		_presentation = {}
 		view = {}
 		pending_command = {}
 		command_in_flight = false
