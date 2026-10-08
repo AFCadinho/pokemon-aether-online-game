@@ -13,6 +13,8 @@ static func check_async(parent: Node, status_url: String = "") -> Dictionary:
 		var base_url: String = await GatewayApiConfig.get_base_url()
 		status_url = base_url.rstrip("/") + ACCESS_STATUS_ENDPOINT
 
+	# Let startup scene/resource work finish before starting the HTTP timeout.
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	var request := HTTPRequest.new()
 	request.timeout = REQUEST_TIMEOUT_SECONDS
 	parent.add_child(request)

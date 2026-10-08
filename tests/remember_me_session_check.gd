@@ -76,7 +76,7 @@ func _check_temporary_restore_failures() -> void:
 		var writes_before: int = auth.writes
 		auth.response = {"success": false, "status": status, "error": "Synthetic temporary failure"}
 		var result: Dictionary = await auth.restore_saved_session()
-		_check(not result.success, "Temporary restore failure is returned (%d)" % status)
+		_check(not result.success and bool(result.get("retryable", false)), "Temporary restore failure is returned (%d)" % status)
 		_check(auth.saved_session == before and auth.writes == writes_before, "Temporary failure preserves storage unchanged (%d)" % status)
 		_check(not auth.is_authenticated() and auth.session_token == "" and auth.expires_at == "", "Temporary failure leaves no active unverified session (%d)" % status)
 		auth.response = _login_response()
@@ -89,7 +89,7 @@ func _check_rejected_restore() -> void:
 		auth.saved_session = _saved_session()
 		auth.response = {"success": false, "status": status, "error": "Synthetic authentication rejection"}
 		var result: Dictionary = await auth.restore_saved_session()
-		_check(not result.success and auth.saved_session.is_empty(), "Rejected login is removed (%d)" % status)
+		_check(not result.success and not bool(result.get("retryable", false)) and auth.saved_session.is_empty(), "Rejected login is removed (%d)" % status)
 		_check(not auth.is_authenticated() and not auth.remember_me_enabled, "Rejected login resets the preference (%d)" % status)
 	var result: Dictionary = await auth.restore_saved_session()
 	_check(not result.success and not auth.is_authenticated(), "Missing saved login stays unauthenticated")

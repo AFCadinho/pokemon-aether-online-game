@@ -177,6 +177,7 @@ func restore_saved_session() -> Dictionary:
 			"error": "No saved session.",
 		}
 
+	await GatewayApiConfig.wait_for_metadata_request_frame()
 	session_token = saved_token
 	expires_at = str(saved_session.get("expiresAt", ""))
 	current_user = _dictionary_from_value(saved_session.get("user", {}))
@@ -200,6 +201,7 @@ func restore_saved_session() -> Dictionary:
 		session_token = ""
 		expires_at = ""
 		current_user.clear()
+		me_response["retryable"] = true
 	return me_response
 
 
@@ -648,20 +650,39 @@ func _save_session() -> void:
 
 
 func _write_session_file(value: Dictionary) -> void:
-	var file := FileAccess.open(SESSION_FILE_PATH, FileAccess.WRITE)
+	var path := _session_file_path()
+	var temporary_path := path + ".tmp"
+	# Never truncate the last complete login while writing a replacement.
+	var file := FileAccess.open(temporary_path, FileAccess.WRITE)
 	if file == null:
 		push_warning("AuthService: could not save session.")
 		return
 	file.store_string(JSON.stringify(value))
+	# Persist at login time, before Android can stop the app without exit hooks.
+	file.flush()
+	var write_error := file.get_error()
+	file.close()
+	if write_error != OK:
+		push_warning("AuthService: could not finish saving session.")
+		return
+	var replace_error := DirAccess.rename_absolute(
+		ProjectSettings.globalize_path(temporary_path), ProjectSettings.globalize_path(path)
+	)
+	if replace_error != OK:
+		push_warning("AuthService: could not replace saved session.")
+
+
+func _session_file_path() -> String:
+	return SESSION_FILE_PATH
 
 
 func _load_session_file() -> Dictionary:
 	if OS.has_feature("web"):
 		return WebRuntime.load_session()
-	if not FileAccess.file_exists(SESSION_FILE_PATH):
+	if not FileAccess.file_exists(_session_file_path()):
 		return {}
 
-	var file := FileAccess.open(SESSION_FILE_PATH, FileAccess.READ)
+	var file := FileAccess.open(_session_file_path(), FileAccess.READ)
 	if file == null:
 		return {}
 
@@ -683,8 +704,9 @@ func _clear_session_file() -> void:
 	if OS.has_feature("web"):
 		WebRuntime.clear_session()
 		return
-	if FileAccess.file_exists(SESSION_FILE_PATH):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(SESSION_FILE_PATH))
+	for path: String in [_session_file_path(), _session_file_path() + ".tmp"]:
+		if FileAccess.file_exists(path):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 
 
 func _request_result_message(result: int) -> String:
