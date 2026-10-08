@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.3.101
+## 0.3.102
 
 - Show your current location in Vermilion City on the Town Map while inside its Guild Base rooms.
 
