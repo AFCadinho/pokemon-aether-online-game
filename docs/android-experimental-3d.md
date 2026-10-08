@@ -28,7 +28,7 @@ the player can copy a report to staff. No automatic telemetry was added.
 
 ## Publication prerequisites
 
-Release 0.3.101 enables the experiment in the signed Android build (version code 18). Both existing and new Android players receive the choice once; choosing 2D is recommended.
+Release 0.3.102 enables the experiment in the signed Android build (version code 19). Both existing and new Android players receive the choice once; choosing 2D is recommended.
 
 `data/android_3d_experiment.json` pins the immutable arena object. The already
 generated source archive is retained in the assigned slot at:
