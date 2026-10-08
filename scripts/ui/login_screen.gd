@@ -87,6 +87,7 @@ var loading_language_options := false
 var web_demo_notice_acknowledged := false
 var login_return_notice := ""
 var battle_visual_choice: Control
+var required_name_dialog: RequiredNameChangeDialog
 
 func _ready() -> void:
 	var keyboard_avoidance := MobileKeyboardAvoidance.new()
@@ -659,6 +660,8 @@ func _submit_login() -> void:
 	_apply_authenticated_player_profile()
 	await _apply_saved_session_preview_state()
 
+	if _show_required_name_change():
+		return
 	login_submitted.emit(username, password)
 	if OS.has_feature("web"):
 		_show_web_demo_notice()
@@ -861,6 +864,7 @@ func _restore_saved_session() -> void:
 	_show_saved_session_card()
 	saved_session_restore_in_progress = false
 	_apply_server_access_controls()
+	_show_required_name_change()
 
 
 func _apply_saved_session_preview_state() -> void:
@@ -900,7 +904,38 @@ func _load_preview_profile() -> Dictionary:
 	return await PlayerGameStateService.load_player_profile()
 
 
+func _show_required_name_change() -> bool:
+	if not bool(AuthService.current_user.get("nameChangeRequired", false)):
+		return false
+	if is_instance_valid(required_name_dialog):
+		return true
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate()
+	dialog.set_script(preload("res://scripts/ui/required_name_change_dialog.gd"))
+	required_name_dialog = dialog
+	add_child(required_name_dialog)
+	required_name_dialog.name_changed.connect(func():
+		required_name_dialog.queue_free()
+		required_name_dialog = null
+		username_input.text = str(AuthService.current_user.get("username", ""))
+		_apply_authenticated_player_profile()
+		if OS.has_feature("web"):
+			_show_web_demo_notice()
+		else:
+			_enter_world()
+	)
+	required_name_dialog.canceled.connect(func():
+		await AuthService.logout()
+		required_name_dialog.queue_free()
+		required_name_dialog = null
+		_show_login_form()
+	)
+	required_name_dialog.popup_centered(Vector2i(540, 310))
+	return true
+
+
 func _enter_world() -> void:
+	if _show_required_name_change():
+		return
 	if _show_battle_visual_choice():
 		return
 	_apply_authenticated_player_profile()

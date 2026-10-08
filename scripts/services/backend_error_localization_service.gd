@@ -11,6 +11,10 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"name_inappropriate": "ui.login.rename.inappropriate",
+	"username_unavailable": "ui.login.rename.unavailable",
+	"name_unchanged": "ui.login.rename.unchanged",
+	"name_change_required": "ui.login.rename.message",
 	"guild_base_level_required": "ui.guild_base.error.level",
 	"guild_base_funds_required": "ui.guild_base.error.funds",
 	"guild_base_already_owned": "ui.guild_base.error.owned",
@@ -337,6 +341,13 @@ const CODE_TO_KEY: Dictionary = {
 
 
 static func error_code(response: Dictionary) -> String:
+	# FastAPI request validation returns a list of field errors.
+	var body := _dictionary(response.get("body", {}))
+	var validation: Variant = body.get("detail", [])
+	if validation is Array:
+		for entry: Variant in validation:
+			if entry is Dictionary and str(entry.get("type", "")) == "name_inappropriate":
+				return "name_inappropriate"
 	for source: Dictionary in _response_dictionaries(response):
 		for field: String in ["errorCode", "error_code", "code"]:
 			var value: Variant = source.get(field, "")

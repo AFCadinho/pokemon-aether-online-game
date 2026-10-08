@@ -6585,5 +6585,15 @@
   "ui.visual_choice.android.hint": "Imagens, modelos e campos de batalha são baixados conforme necessário e ficam neste dispositivo. O primeiro download pode demorar um pouco. Você pode trocar entre 2D e 3D a qualquer momento nas Configurações.",
   "ui.visual_choice.android.settings_hint": "O 3D é experimental no Android. Se ficar lento ou fechar inesperadamente, escolha 2D. Você pode alterar isso a qualquer momento.",
   "ui.loading.android_3d": "Preparando seus campos de batalha 3D…",
-  "ui.visual_choice.android.recovery": "Voltamos para 2D para você continuar jogando. Você pode tentar o 3D experimental novamente nas Configurações."
+  "ui.visual_choice.android.recovery": "Voltamos para 2D para você continuar jogando. Você pode tentar o 3D experimental novamente nas Configurações.",
+  "ui.login.rename.title": "Escolha um novo nome",
+  "ui.login.rename.message": "A equipe exigiu uma alteração de nome. Escolha um nome apropriado para continuar. Esta alteração é gratuita.",
+  "ui.login.rename.submit": "Salvar nome",
+  "ui.login.rename.logout": "Sair",
+  "ui.login.rename.placeholder": "Novo nome",
+  "ui.login.rename.format": "Use de 3 a 32 letras, números ou sublinhados.",
+  "ui.login.rename.error": "Não foi possível alterar seu nome. Tente novamente.",
+  "ui.login.rename.inappropriate": "Escolha um nome apropriado.",
+  "ui.login.rename.unavailable": "Este nome não está disponível.",
+  "ui.login.rename.unchanged": "Escolha outro nome de usuário."
 }
