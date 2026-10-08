@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.103
+
 - Show a co-op partner playing their turn while their own animations are still running; only show Choosing once their screen has caught up, with neutral waiting when playback status is unknown.
 
 - Move old browser-file cleanup to separate weekly maintenance so browser publication finishes as soon as the new version is active.
