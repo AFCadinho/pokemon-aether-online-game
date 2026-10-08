@@ -2227,8 +2227,7 @@ func _refresh_quest_tracker_layout() -> void:
 		return
 	var right_action_bar_bottom := 0.0
 	var native_touch := WindowFit.is_touch_ui() and not WindowFit.is_mobile_browser_ui()
-	var touch_size := TouchTargetSize.size_for(root_control, COLLAPSE_BUTTON_SIZE)
-	var row_gap := maxf(ACTION_BAR_SLOT_GAP, 4.0 / TouchTargetSize.screen_scale(root_control).y) if native_touch else ACTION_BAR_SLOT_GAP
+	var row_gap := ACTION_BAR_SLOT_GAP
 	var next_top := 0.0
 	for panel_id in ["actions", "dex_actions"]:
 		var state: Dictionary = collapsible_panels.get(panel_id, {})
@@ -2240,7 +2239,9 @@ func _refresh_quest_tracker_layout() -> void:
 				var height := panel.size.y
 				panel.offset_top = next_top
 				panel.offset_bottom = next_top + height
-				next_top += maxf(height, touch_size.y) + row_gap
+				# Match desktop surface spacing; invisible touch padding must not
+				# push the next bar, quest tracker and hotbar down the screen.
+				next_top += height + row_gap
 				right_action_bar_bottom = next_top - row_gap
 			else:
 				right_action_bar_bottom = maxf(right_action_bar_bottom, panel.position.y + panel.size.y)
@@ -2257,8 +2258,9 @@ func _refresh_quest_tracker_layout() -> void:
 		- viewport_height * 0.5
 	)
 	var hotbar_top_offset: float = maxf(HOTBAR_GRID_BASE_TOP_OFFSET, tracker_bottom_offset)
+	var hotbar_height := maxf(HOTBAR_GRID_HEIGHT, hotkey_sidebar_panel.get_combined_minimum_size().y)
 	hotkey_sidebar_panel.offset_top = hotbar_top_offset
-	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + HOTBAR_GRID_HEIGHT
+	hotkey_sidebar_panel.offset_bottom = hotbar_top_offset + hotbar_height
 	_position_collapsible_button("hotkey_sidebar")
 
 
@@ -31947,8 +31949,8 @@ func _fit_collapse_touch_controls() -> void:
 	var occupied: Array[Rect2] = []
 	var buttons: Array[Control] = []
 	var native_touch := not WindowFit.is_mobile_browser_ui()
-	# Hidden panels release their horizontal space. The native top-right rows
-	# retain their vertical spacing in _refresh_quest_tracker_layout().
+	# Hidden panels release their horizontal space. Keep the compact native
+	# top-right rows aligned while fitting their larger touch areas sideways.
 	for panel_id: String in collapsible_panels:
 		var state: Dictionary = collapsible_panels[panel_id]
 		var panel: Control = state["panel"]
@@ -31983,7 +31985,12 @@ func _fit_collapse_touch_controls() -> void:
 		# rect to the same space before fitting, then convert back for placement.
 		var to_root: Transform2D = root_control.get_global_transform().affine_inverse() * button.get_parent().get_global_transform()
 		var desired := to_root * button.get_rect()
-		var fitted := TouchTargetSize.fit_rect(desired, bounds, occupied, gap)
+		var keep_row: bool = native_touch and (
+			button == collapsible_panels["actions"]["button"]
+			or button == collapsible_panels["dex_actions"]["button"]
+			or (quest_journal_view != null and button == quest_journal_view.tracker_collapse_button)
+		)
+		var fitted := TouchTargetSize.fit_rect(desired, bounds, occupied, gap, keep_row)
 		button.position = to_root.affine_inverse() * fitted.position
 		occupied.append(fitted)
 
