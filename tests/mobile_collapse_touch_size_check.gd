@@ -105,7 +105,7 @@ func _check_layout(overlay: CanvasLayer, context: String) -> void:
 		for previous: Rect2 in rects:
 			_check(not previous.intersects(rect), "touch controls do not overlap: " + context + " " + str(previous) + " / " + str(rect))
 		for surface: Control in surfaces:
-			_check(not _screen_rect(surface).intersects(rect), "touch control clears " + surface.name + ": " + context)
+			_check(not _screen_rect(surface).intersects(rect), "touch control %s %s clears %s %s: %s" % [button.name, rect, surface.name, _screen_rect(surface), context])
 		rects.append(rect)
 
 

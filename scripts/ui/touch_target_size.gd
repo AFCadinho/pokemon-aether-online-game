@@ -66,18 +66,21 @@ static func pixel_density() -> float:
 	return DisplayServer.screen_get_scale() if OS.has_feature("mobile") or OS.has_feature("web") else 1.0
 
 
-static func fit_rect(desired: Rect2, bounds: Rect2, occupied: Array[Rect2], gap: float = 4.0) -> Rect2:
+static func fit_rect(desired: Rect2, bounds: Rect2, occupied: Array[Rect2], gap: float = 4.0, keep_row: bool = false) -> Rect2:
 	# Try the nearest free spot beside existing surfaces. Enlarging a button must
 	# not cover its neighbours or put it beyond the edge of the phone screen.
 	var maximum := bounds.end - desired.size
 	var origin := desired.position.clamp(bounds.position, maximum.max(bounds.position))
 	var xs: Array[float] = [origin.x, bounds.position.x, maximum.x]
-	var ys: Array[float] = [origin.y, bounds.position.y, maximum.y]
+	var ys: Array[float] = [origin.y]
+	if not keep_row:
+		ys.append_array([bounds.position.y, maximum.y])
 	for rect: Rect2 in occupied:
 		xs.append(rect.position.x - desired.size.x - gap)
 		xs.append(rect.end.x + gap)
-		ys.append(rect.position.y - desired.size.y - gap)
-		ys.append(rect.end.y + gap)
+		if not keep_row:
+			ys.append(rect.position.y - desired.size.y - gap)
+			ys.append(rect.end.y + gap)
 	var best := Rect2(origin, desired.size)
 	var best_distance := INF
 	for x: float in xs:
@@ -94,4 +97,8 @@ static func fit_rect(desired: Rect2, bounds: Rect2, occupied: Array[Rect2], gap:
 			if not blocked and distance < best_distance:
 				best = candidate
 				best_distance = distance
+	if keep_row and best_distance == INF:
+		# Very narrow viewports may have no free horizontal lane. Keep the
+		# HUD surfaces compact, but still give the button a separate target.
+		return fit_rect(desired, bounds, occupied, gap)
 	return best
