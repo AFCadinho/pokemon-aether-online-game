@@ -72,7 +72,8 @@ game. `show_ime_with_hard_keyboard=1` can also retain the on-screen keyboard.
 The old Android 13 AVD, including its apps and data, remains separate.
 
 These are installation, update and startup checks, not sustained 3D, battle,
-thermal or physical Pixel-device certification. No account was signed in.
+thermal or physical Pixel-device certification. No automated login or battle
+run was part of these checks.
 
 ## Native Android 13 QA device
 
