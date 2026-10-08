@@ -16,10 +16,12 @@ def main():
     parser.add_argument('--manifest', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--renderer', choices=['forward_plus','mobile','gl_compatibility'], required=True)
-    parser.add_argument('--lighting-mode', choices=['baseline','hdr','sun-only','unshaded-grass','diffuse-grass','ambient-only','no-shadows'], default='baseline')
+    parser.add_argument('--lighting-mode', choices=['baseline','hdr','sun-only','unshaded-grass','diffuse-grass','ambient-only','no-shadows','ground-srgb','ground-srgb-no-shadows','smooth-grass'], default='baseline')
     args = parser.parse_args()
     if args.texture_residency and args.renderer == "gl_compatibility":
         parser.error("Texture allocation probe requires Vulkan (Mobile or Forward+)")
+    if args.lighting_mode.startswith('ground-srgb') and args.renderer != 'gl_compatibility':
+        parser.error('Ground sRGB investigation modes require Compatibility')
     if ROOT.parent.name.startswith('slot-') and os.environ.get('POKEAETHER_SLOT') != ROOT.parent.name:
         parser.error('Run through slot-env')
     manifest, output = args.manifest.resolve(), args.output.resolve()
