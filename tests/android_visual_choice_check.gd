@@ -44,6 +44,17 @@ func _run() -> void:
 		host.queue_free()
 		settings.battle_presentation_mode = original_mode
 		await process_frame
+	# Check the actual battle scene as well: a synthetic presenter alone misses
+	# platform guards in Battle._ready(). Keep 2D selected to avoid downloads.
+	var construction_mode: String = settings.battle_presentation_mode
+	settings.battle_presentation_mode = "2d"
+	var actual_battle: Control = load("res://scenes/battle/battle.tscn").instantiate()
+	root.add_child(actual_battle)
+	var actual_presenter := actual_battle.get_node_or_null("%BattleStage/ExperimentalBattle3D")
+	_check((actual_presenter != null) == preload("res://scripts/battle/battle_ui/model_platform.gd").supported(), "Actual battle constructs the presenter on every supported platform")
+	actual_battle.queue_free()
+	await process_frame
+	settings.battle_presentation_mode = construction_mode
 	var original := FileAccess.get_file_as_bytes(settings.SETTINGS_PATH)
 	var reporter := root.get_node("ClientCrashReportService")
 	var previous_recovery: bool = reporter.android_3d_recovery_required
