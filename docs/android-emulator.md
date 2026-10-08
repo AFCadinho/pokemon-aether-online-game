@@ -123,6 +123,37 @@ Keyboard-mode changes require a cold start, just like GPU changes.
 Sources: [NVIDIA PRIME offload configuration](https://docs.nvidia.com/datacenter/tesla/driver-installation-guide/optimus-laptops-and-multi-gpu-desktop-systems.html),
 [Android emulator graphics acceleration](https://developer.android.com/studio/run/emulator-acceleration).
 
+### Compact HUD spacing QA (2026-10-08)
+
+The compact Android action-bar fix was tested on the Pixel 6 / Android 15
+profile, `emulator-5582`, using a separate offline x86_64
+`com.pokeaether.mobilecollapseqa` APK built from local development
+`ef695a9ee` with the follow-up hotbar-height correction. The runtime rendered
+at 2400×1080 landscape pixels and independently reported 480 dpi.
+
+The first device run exposed a slightly reduced quest-to-hotbar gap at 150%:
+the hotbar's combined minimum height exceeded its fixed requested height, and
+Godot's vertical growth moved its top upward. Positioning now uses the actual
+minimum height. The updated device probe checks compact bar/tracker spacing,
+hotbar clearance, arrow alignment, separate touch targets, movement blocking,
+and collapse/reopen input at 75%, 100% and 150% UI scale.
+
+The rebuilt diagnostic passed all **592 checks**, followed by **18 actual
+Android edge taps** at 75%. The independent ADB density check measured a
+minimum target of **48.125 dp**. Expanded 75%, 100% and 150% captures and the
+collapsed 150% capture were visually inspected. The action-bar gap measured
+7.5, 10 and 15 physical pixels respectively, matching the compact 8-unit UI
+gap. No Godot script errors occurred. The offline unauthenticated preference
+and mail warnings are expected.
+
+Local evidence and the final diagnostic APK are retained under
+`.worktrees/slot-d/.tmp/android-hud-emulator-qa-fixed/`, including
+`mobile-collapse-qa-results.json`, `mobile-collapse-details.json`,
+`android-edge-taps.json`, six `collapse-SCALE-STATE.png` captures, and export
+and Android runtime logs. The normal game package and its data were retained.
+This verifies the native HUD in the emulator; it is not logged-in gameplay,
+the ARM64 release, physical-device testing, or release certification.
+
 ## Native Android 13 QA device
 
 Use the official Android SDK emulator for mobile UI work before physical-device

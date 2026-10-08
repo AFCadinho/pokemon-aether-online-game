@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Preserve the hotbar's full gap below the quest tracker when its buttons require extra height at larger UI scales.
+
 - Keep Android's top-right action bars as close together as on desktop, preventing their touch padding from pushing the quest tracker and hotbar downward.
 
 - Allow slow trainer metadata responses and retry a temporary connection failure once, preventing trainer encounters such as the Mysterious Trainer in Rock Tunnel from failing before the battle starts.
