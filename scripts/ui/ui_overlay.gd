@@ -26384,7 +26384,7 @@ func _normalize_bag_inventory_items(items_value: Variant) -> Array[Dictionary]:
 			"name": str(borrowed.get("name", _format_item_name_from_id(borrowed_item_id))),
 			"category": _normalize_backend_bag_category(str(borrowed.get("category", "held-items")), borrowed_item_id),
 			"shortDesc": str(borrowed.get("shortDesc", borrowed.get("description", ""))).strip_edges(),
-			"isHoldable": true,
+			"isHoldable": bool(borrowed.get("isHoldable", false)),
 			"quantity": 1,
 			"borrowed": true,
 			"loanAssetId": loan_asset_id,

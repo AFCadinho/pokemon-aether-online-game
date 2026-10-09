@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Borrow tradeable mounts from the Guild Bank with visible loan deadlines. Expiry or recall safely ends land riding after the current tile and switches Surf to the default mount; owned copies remain usable.
+
 ## 0.3.104
 
 - Offer a free return to a previous trainer name under Account settings when staff withdraws a completed name-change decision, and release the login prompt when a pending decision is withdrawn.
