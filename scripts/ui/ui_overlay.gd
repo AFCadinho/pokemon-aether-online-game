@@ -40382,6 +40382,10 @@ func _create_item_dex_source_card(source: Dictionary) -> PanelContainer:
 	if source_count > 1:
 		facts.append(LocalizationManager.text("ui.item_dex.sources.pickup_count", {"count": source_count}))
 	_add_item_dex_source_card_line(content, " · ".join(facts), Color("#f2cf78"))
+	if str(source.get("type", "")) == "fishing_treasure":
+		_add_item_dex_source_card_line(content, LocalizationManager.text(
+			"ui.item_dex.sources.fishing_independent_rolls"
+		), UI_MUTED_TEXT)
 
 	var locations := _item_dex_source_locations(source)
 	if not locations.is_empty():

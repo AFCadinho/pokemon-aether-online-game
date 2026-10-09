@@ -3766,6 +3766,8 @@
   "ui.item_dex.chance_context.smashed_rock": "per smashed rock",
   "ui.item_dex.chance_context.successful_thieving": "after a successful theft",
   "ui.item_dex.chance_context.won_fishing_battle": "per won fishing battle",
+  "ui.item_dex.chance_context.completed_fishing_battle": "per fishing battle won or Pokémon caught",
+  "ui.item_dex.sources.fishing_independent_rolls": "Heart Scales and sale treasure have separate rolls. Both can drop from the same battle.",
   "ui.item_dex.chance_context.defeated_pokemon": "per defeated Pokémon",
   "ui.item_dex.chance_context.completed_wild_encounter": "per defeated or caught Pokémon",
   "ui.item_dex.sources.repeatable": "Repeatable",

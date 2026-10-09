@@ -1,0 +1,42 @@
+{
+  "verifiedAt": "2026-10-09T19:21:41.944268+00:00",
+  "gameplayDeployment": "pending; gameplay changes are not deployed",
+  "guides": [
+    {
+      "topicId": 39,
+      "postId": 43,
+      "postVersion": 6,
+      "author": "adinho",
+      "category": "Exploration & Activities",
+      "publicUrl": "https://forums.pokeaether.com/t/39",
+      "contentSha256": "c2590a02c09774e84aa8a70f5b5354dbc5ae7f8c1683e85bd5dbd5136bb24a3a",
+      "upcomingUpdateNotice": true,
+      "publicJsonChecked": true,
+      "publicPageChecked": true
+    },
+    {
+      "topicId": 87,
+      "postId": 94,
+      "postVersion": 3,
+      "author": "adinho",
+      "category": "Official Guides",
+      "publicUrl": "https://forums.pokeaether.com/t/87",
+      "contentSha256": "2189f81f96868df90fd029b64bd188bf0ad79bd052e4ae1dafc25a6f0478012d",
+      "upcomingUpdateNotice": true,
+      "publicJsonChecked": true,
+      "publicPageChecked": true
+    },
+    {
+      "topicId": 95,
+      "postId": 102,
+      "postVersion": 3,
+      "author": "adinho",
+      "category": "Official Guides",
+      "publicUrl": "https://forums.pokeaether.com/t/95",
+      "contentSha256": "36f7892bb5ad3c73c3f8ab82f1958ab6b5186f242fda0ae477069dcf34b1333f",
+      "upcomingUpdateNotice": true,
+      "publicJsonChecked": true,
+      "publicPageChecked": true
+    }
+  ]
+}

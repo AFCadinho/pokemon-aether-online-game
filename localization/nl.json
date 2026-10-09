@@ -3766,6 +3766,8 @@
   "ui.item_dex.chance_context.smashed_rock": "per gebroken rots",
   "ui.item_dex.chance_context.successful_thieving": "na een geslaagde diefstal",
   "ui.item_dex.chance_context.won_fishing_battle": "per gewonnen fishing-gevecht",
+  "ui.item_dex.chance_context.completed_fishing_battle": "per gewonnen fishing-gevecht of gevangen Pokémon",
+  "ui.item_dex.sources.fishing_independent_rolls": "Heart Scales en verkoop-treasures hebben aparte rolls. Beide kunnen uit hetzelfde gevecht vallen.",
   "ui.item_dex.chance_context.defeated_pokemon": "per verslagen Pokémon",
   "ui.item_dex.chance_context.completed_wild_encounter": "per verslagen of gevangen Pokémon",
   "ui.item_dex.sources.repeatable": "Herhaalbaar",

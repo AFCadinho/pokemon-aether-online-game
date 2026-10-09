@@ -3732,6 +3732,8 @@
   "ui.item_dex.chance_context.smashed_rock": "por rocha quebrada",
   "ui.item_dex.chance_context.successful_thieving": "após um furto bem-sucedido",
   "ui.item_dex.chance_context.won_fishing_battle": "por batalha de pesca vencida",
+  "ui.item_dex.chance_context.completed_fishing_battle": "por batalha de pesca vencida ou Pokémon capturado",
+  "ui.item_dex.sources.fishing_independent_rolls": "Heart Scales e tesouros para venda têm chances independentes. Ambos podem ser obtidos na mesma batalha.",
   "ui.item_dex.chance_context.defeated_pokemon": "por Pokémon derrotado",
   "ui.item_dex.chance_context.completed_wild_encounter": "por Pokémon derrotado ou capturado",
   "ui.item_dex.sources.repeatable": "Repetível",
