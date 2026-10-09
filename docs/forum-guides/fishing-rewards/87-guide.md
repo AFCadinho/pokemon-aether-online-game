@@ -33,13 +33,13 @@ The chosen material is used when the move is taught. Check the cost shown for th
 
 A move being listed for another Pokémon does not mean yours can learn it too. Availability depends on the species and its move list.
 
-## Collecting Heart Scales (next gameplay update)
+## Collecting Heart Scales (version 0.3.105)
 
 <!-- pa-fishing-rewards-2026-10 -->
 
-> **Next gameplay update:** The fishing reward changes below are prepared for the next update and are not live yet. Your current game may still use the previous chances.
+> **Version 0.3.105:** These fishing rewards apply from this update. Update your client before comparing the in-game Item Dex with the rates below.
 
-Fishing will give Heart Scales through a separate roll after you catch or defeat the Pokémon: **8% with an Old Rod, 10% with a Good Rod and 12% with a Super Rod**. Fishing level does not increase these chances.
+Fishing gives Heart Scales through a separate roll after you catch or defeat the Pokémon: **8% with an Old Rod, 10% with a Good Rod and 12% with a Super Rod**. Fishing level does not increase these chances.
 
 This roll is independent of Pearls and other sale treasures, so both rewards can drop from the same fishing battle. You receive one Heart Scale when its roll succeeds. A percentage is not a guarantee after a fixed number of attempts.
 

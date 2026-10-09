@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.105
+
 - Show updated fishing item chances in the Item Dex, explain the independent Heart Scale and sale-treasure rolls, and include both wins and catches in fishing source labels.
 
 - Borrow tradeable mounts from the Guild Bank with visible loan deadlines. Expiry or recall safely ends land riding after the current tile and switches Surf to the default mount; owned copies remain usable.

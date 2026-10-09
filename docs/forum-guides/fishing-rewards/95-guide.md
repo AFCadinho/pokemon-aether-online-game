@@ -32,7 +32,7 @@ An item may have several sources. Depending on the item, these can include:
 
 Read the requirements too. A source may need a quest, skill level, rod or access to a particular place.
 
-*The source screenshots below are from an earlier version. Their fishing percentages will change with the next update; use the new rates in the section below once that update is live.*
+*The source screenshots below are from an earlier version. Their fishing percentages are from before version 0.3.105; use the updated rates in the section below.*
 
 ![Heart Scale sources in WHERE TO GET|962x652](upload://2nmKcVjdHTFDhD17GjZ6BEhTxWX.png)
 
@@ -57,17 +57,17 @@ A percentage is **not a guarantee**. A 10% chance does not promise one item afte
 
 If the chance changes with your skill level, the Item Dex may show a range. Check the requirements and the activity guide before deciding where to collect items.
 
-## Fishing sources (next gameplay update)
+## Fishing sources (version 0.3.105)
 
 <!-- pa-fishing-rewards-2026-10 -->
 
-> **Next gameplay update:** The fishing reward changes below are prepared for the next update and are not live yet. Your current game may still use the previous chances.
+> **Version 0.3.105:** These fishing rewards apply from this update. Update your client before comparing the in-game Item Dex with the rates below.
 
-Heart Scales will have a separate, fixed chance after a fishing battle won or Pokémon caught: **8% with an Old Rod, 10% with a Good Rod and 12% with a Super Rod**. Fishing level does not increase these Heart Scale chances.
+Heart Scales have a separate, fixed chance after a fishing battle won or Pokémon caught: **8% with an Old Rod, 10% with a Good Rod and 12% with a Super Rod**. Fishing level does not increase these Heart Scale chances.
 
-Sale treasures have a different roll: **20% / 30% / 40% base chance** by rod, plus the Fishing level bonus of up to three percentage points. The Item Dex will show each sale item's effective chance after its table weight is applied. That is why a Pearl's chance differs from the total treasure chance.
+Sale treasures have a different roll: **20% / 30% / 40% base chance** by rod, plus the Fishing level bonus of up to three percentage points. The Item Dex shows each sale item's effective chance after its table weight is applied. That is why a Pearl's chance differs from the total treasure chance.
 
-The two rolls are independent, so a Heart Scale and a sale treasure can drop from the same battle. Fishing source cards will explain this and include both wins and catches. See the [Fishing Guide](https://forums.pokeaether.com/t/39) for the full reward rules.
+The two rolls are independent, so a Heart Scale and a sale treasure can drop from the same battle. Fishing source cards explain this and include both wins and catches. See the [Fishing Guide](https://forums.pokeaether.com/t/39) for the full reward rules.
 
 ## Example: materials for the Move Maniac
 
