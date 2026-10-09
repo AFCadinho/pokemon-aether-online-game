@@ -3732,6 +3732,8 @@
   "ui.item_dex.chance_context.smashed_rock": "每块击碎的岩石",
   "ui.item_dex.chance_context.successful_thieving": "成功偷窃后",
   "ui.item_dex.chance_context.won_fishing_battle": "每场获胜的钓鱼战斗",
+  "ui.item_dex.chance_context.completed_fishing_battle": "每场获胜或成功捕捉宝可梦的钓鱼战斗",
+  "ui.item_dex.sources.fishing_independent_rolls": "心之鳞片和可出售的宝物分别判定。同一场战斗可能同时获得两者。",
   "ui.item_dex.chance_context.defeated_pokemon": "每只被击败的宝可梦",
   "ui.item_dex.chance_context.completed_wild_encounter": "每只被击败或捕捉的宝可梦",
   "ui.item_dex.sources.repeatable": "可重复",

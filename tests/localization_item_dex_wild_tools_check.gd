@@ -64,10 +64,18 @@ func _check_runtime_copy() -> void:
 	_check(
 		overlay.call(
 			"_format_item_dex_source_chance",
-			{"minimum": 0.0075, "maximum": 0.012},
-			"won_fishing_battle"
-		) == "Kans: 0.75%–1.2%, afhankelijk van level per gewonnen fishing-gevecht",
-		"Item Dex renders effective chance ranges in Dutch"
+			{"minimum": 0.08, "maximum": 0.08},
+			"completed_fishing_battle"
+		) == "Kans: 8% per gewonnen fishing-gevecht of gevangen Pokémon",
+		"Item Dex renders the fixed Heart Scale chance for fishing wins and catches in Dutch"
+	)
+	_check(
+		overlay.call(
+			"_format_item_dex_source_chance",
+			{"minimum": 0.02, "maximum": 0.03},
+			"completed_fishing_battle"
+		) == "Kans: 2%–3%, afhankelijk van level per gewonnen fishing-gevecht of gevangen Pokémon",
+		"Item Dex still renders level-dependent treasure chance ranges in Dutch"
 	)
 	_check(
 		overlay.call(
