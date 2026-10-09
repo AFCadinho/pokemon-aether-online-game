@@ -53,9 +53,9 @@ Unlocking a species does not mean it appears on every map.
 
 <!-- pa-fishing-rewards-2026-10 -->
 
-> **Next gameplay update:** The fishing reward changes below are prepared for the next update and are not live yet. Your current game may still use the previous chances.
+> **Version 0.3.105:** These fishing rewards apply from this update. Update your client before comparing the in-game Item Dex with the rates below.
 
-## Fishing rewards (next gameplay update)
+## Fishing rewards (version 0.3.105)
 
 After you catch or defeat a normal fishing encounter, two separate reward rolls are made:
 
