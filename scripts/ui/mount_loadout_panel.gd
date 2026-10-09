@@ -404,6 +404,14 @@ func _populate_selector(movement_mode: String) -> void:
 			"✓" if mount_id == selected_mount_id else "",
 			MountServiceScript.get_mount_display_name(mount_id),
 		]
+		var item_id := MountServiceScript.get_mount_unlock_item_id(mount_id)
+		if inventory_service != null and not item_id.is_empty():
+			var loan: Dictionary = inventory_service.call("get_borrowed_mount_loan", item_id)
+			if not loan.is_empty() and not bool(inventory_service.call("has_item", item_id)) and not bool(inventory_service.call("has_item", item_id + "-bound")):
+				option.text += " · " + _text("ui.mounts.guild_loan")
+				option.tooltip_text = localization_manager.call("text", "ui.mounts.guild_loan_until", {
+					"deadline": str(loan.get("loanDueAt", "")).left(19).replace("T", " "),
+				})
 		option.add_theme_color_override("font_color", TEXT_COLOR)
 		option.add_theme_color_override("font_hover_color", TEXT_COLOR)
 		option.add_theme_stylebox_override(
@@ -501,6 +509,10 @@ func _on_inventory_changed(items: Array) -> void:
 		var item_id := str(item.get("itemId", item.get("item_id", ""))).strip_edges().to_lower()
 		if not item_id.is_empty() and item_id not in owned_item_ids:
 			owned_item_ids.append(item_id)
+	if inventory_service != null and inventory_service.has_method("get_available_borrowed_mount_item_ids"):
+		for item_id: String in inventory_service.call("get_available_borrowed_mount_item_ids"):
+			if item_id not in owned_item_ids:
+				owned_item_ids.append(item_id)
 	_refresh_slots()
 	refresh_mount_action()
 	if selector_panel != null and selector_panel.visible and not active_mode.is_empty():

@@ -1043,6 +1043,8 @@ func _story_path_direction(direction_name: String) -> Vector2:
 
 func _ready() -> void:
 	add_to_group("player")
+	if not InventoryService.inventory_changed.is_connected(_on_mount_inventory_changed):
+		InventoryService.inventory_changed.connect(_on_mount_inventory_changed)
 	if not SettingsManager.world_pixel_scale_changed.is_connected(_on_world_pixel_scale_changed):
 		SettingsManager.world_pixel_scale_changed.connect(_on_world_pixel_scale_changed)
 	if not SettingsManager.mount_loadout_changed.is_connected(_on_mount_loadout_changed):
@@ -1817,6 +1819,7 @@ func _advance_tile_movement(delta: float) -> void:
 			global_position = _snap_world_position(target_position)
 			is_moving = false
 			_clear_stair_visual_offset()
+			_reconcile_mount_access()
 
 			if not story_path_movement_active:
 				var completed_tiles := maxi(int(round(move_start_position.distance_to(target_position) / float(TILE_SIZE))), 1)
@@ -2128,12 +2131,30 @@ func _is_mount_owned(mount_id: String) -> bool:
 	var inventory_service := get_node_or_null("/root/InventoryService")
 	return (
 		inventory_service != null
-		and inventory_service.has_method("has_item")
+		and inventory_service.has_method("has_mount_item")
 		and (
-			bool(inventory_service.call("has_item", unlock_item_id))
-			or bool(inventory_service.call("has_item", unlock_item_id + "-bound"))
+			bool(inventory_service.call("has_mount_item", unlock_item_id))
+			or bool(inventory_service.call("has_mount_item", unlock_item_id + "-bound"))
 		)
 	)
+
+
+func _on_mount_inventory_changed(_items: Array) -> void:
+	_reconcile_mount_access()
+
+
+func _reconcile_mount_access() -> void:
+	# Finish a tile before changing movement mode, position or rider visuals.
+	if is_moving or active_mount_id.is_empty() or _is_mount_owned(active_mount_id):
+		return
+	if land_mount_activity_active:
+		_finish_land_mount_activity()
+		land_mount_toggled.emit()
+	elif surf_activity_active:
+		# Surf permission comes from the field move, not the cosmetic mount loan.
+		active_mount_id = MountService.get_default_mount_id(SettingsManager.MOUNT_MODE_SURF)
+		_sync_mount_visual()
+		_sync_body_sprite_frames_for_movement()
 
 
 func _has_mount_license_for_current_region() -> bool:

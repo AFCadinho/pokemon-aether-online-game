@@ -87,6 +87,135 @@ var collected_world_pickup_ids: Dictionary = {}
 var collected_world_pickups_user_id := 0
 var collected_world_pickups_loaded := false
 var world_pickup_request_active := false
+var available_mount_item_ids: Array[String] = []
+var borrowed_mount_poll_ticks := 0
+var borrowed_mount_poll_in_flight := false
+var revoked_mount_loan_asset_ids: Dictionary = {}
+
+
+func _ready() -> void:
+	ChatRealtimeService.message_received.connect(_on_mount_loan_event)
+	var timer := Timer.new()
+	timer.name = "BorrowedMountAccessTimer"
+	timer.wait_time = 1.0
+	timer.autostart = true
+	timer.timeout.connect(_refresh_borrowed_mount_access)
+	add_child(timer)
+
+
+func _on_mount_loan_event(message: Dictionary) -> void:
+	if str(message.get("type", "")) != "guild.mount_loan.changed":
+		return
+	if cached_inventory_user_id != int(AuthService.current_user.get("id", 0)) or cached_inventory_session != AuthService.session_token:
+		return
+	# An inventory request started before the committed recall may finish later.
+	# Retain the revocation so that older responses cannot restore this loan.
+	for change_value: Variant in _array_from_value(message.get("assets", [])):
+		if not change_value is Dictionary:
+			continue
+		var change := change_value as Dictionary
+		var asset_id := str(change.get("loanAssetId", ""))
+		var status := str(change.get("status", ""))
+		if asset_id.is_empty() or status not in ["returned", "return_pending"]:
+			continue
+		revoked_mount_loan_asset_ids[asset_id] = true
+		for value: Variant in cached_borrowed_inventory_items:
+			if value is Dictionary and str(value.get("loanAssetId", "")) == asset_id:
+				value["loanStatus"] = status
+	available_mount_item_ids = get_available_mount_item_ids()
+	inventory_changed.emit(cached_inventory_items.duplicate(true))
+	if AuthService.is_authenticated() and not borrowed_mount_poll_in_flight:
+		borrowed_mount_poll_in_flight = true
+		await load_inventory()
+		borrowed_mount_poll_in_flight = false
+
+
+## Mount access includes temporary Guild loans; general inventory ownership does not.
+func get_available_mount_item_ids() -> Array[String]:
+	var result: Array[String] = []
+	if cached_inventory_user_id <= 0 or cached_inventory_user_id != int(AuthService.current_user.get("id", 0)):
+		return result
+	for value: Variant in cached_inventory_items:
+		if value is Dictionary and int(value.get("quantity", 0)) > 0:
+			var item_id := str(value.get("itemId", value.get("item_id", ""))).strip_edges().to_lower()
+			if not item_id.is_empty() and item_id not in result:
+				result.append(item_id)
+	for item_id: String in get_available_borrowed_mount_item_ids():
+		if item_id not in result:
+			result.append(item_id)
+	result.sort()
+	return result
+
+
+func get_available_borrowed_mount_item_ids() -> Array[String]:
+	var result: Array[String] = []
+	if cached_inventory_user_id <= 0 or cached_inventory_user_id != int(AuthService.current_user.get("id", 0)) or cached_inventory_session != AuthService.session_token:
+		return result
+	for value: Variant in cached_borrowed_inventory_items:
+		if not value is Dictionary:
+			continue
+		var item := value as Dictionary
+		if not _borrowed_mount_is_available(item):
+			continue
+		var item_id := str(item.get("itemId", "")).strip_edges().to_lower()
+		if not item_id.is_empty() and item_id not in result:
+			result.append(item_id)
+	result.sort()
+	return result
+
+
+func has_mount_item(item_id: String) -> bool:
+	return item_id.strip_edges().to_lower() in get_available_mount_item_ids()
+
+
+func get_borrowed_mount_loan(item_id: String) -> Dictionary:
+	if cached_inventory_user_id != int(AuthService.current_user.get("id", 0)) or cached_inventory_session != AuthService.session_token:
+		return {}
+	var latest: Dictionary = {}
+	for value: Variant in cached_borrowed_inventory_items:
+		if value is Dictionary and str(value.get("itemId", "")) == item_id and _borrowed_mount_is_available(value):
+			if latest.is_empty() or str(value.get("loanDueAt", "")) > str(latest.get("loanDueAt", "")):
+				latest = value.duplicate(true)
+	return latest
+
+
+func _borrowed_mount_is_available(item: Dictionary) -> bool:
+	if (
+		revoked_mount_loan_asset_ids.has(str(item.get("loanAssetId", "")))
+		or str(item.get("category", "")) != "mounts"
+		or str(item.get("loanLenderKind", "")) != "guild"
+		or str(item.get("loanStatus", "")) != "active"
+		or int(item.get("quantity", 0)) <= 0
+	):
+		return false
+	var due_at := str(item.get("loanDueAt", "")).strip_edges()
+	if due_at.length() < 19:
+		return false
+	var deadline := float(Time.get_unix_time_from_datetime_string(due_at.left(19)))
+	return deadline > WorldTimeService.get_current_unix_time()
+
+
+func _refresh_borrowed_mount_access() -> void:
+	var current := get_available_mount_item_ids()
+	if current != available_mount_item_ids:
+		available_mount_item_ids = current
+		inventory_changed.emit(cached_inventory_items.duplicate(true))
+	borrowed_mount_poll_ticks += 1
+	if borrowed_mount_poll_ticks < 10 or borrowed_mount_poll_in_flight:
+		return
+	borrowed_mount_poll_ticks = 0
+	if not has_current_inventory():
+		return
+	var has_borrowed_mount := false
+	for value: Variant in cached_borrowed_inventory_items:
+		if value is Dictionary and str(value.get("category", "")) == "mounts":
+			has_borrowed_mount = true
+			break
+	if not has_borrowed_mount:
+		return
+	borrowed_mount_poll_in_flight = true
+	await load_inventory()
+	borrowed_mount_poll_in_flight = false
 
 
 func load_inventory() -> Dictionary:
@@ -206,6 +335,7 @@ func apply_inventory_state(value: Variant) -> bool:
 	cached_mount_license_regions.sort()
 	if inventory.get("borrowedItems", null) is Array:
 		cached_borrowed_inventory_items = _array_from_value(inventory.get("borrowedItems", [])).duplicate(true)
+	available_mount_item_ids = get_available_mount_item_ids()
 	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return true
 
@@ -216,14 +346,16 @@ func apply_inventory_items(items_value: Variant) -> bool:
 	if items_value is not Array:
 		return false
 	_apply_inventory_items(_array_from_value(items_value))
+	available_mount_item_ids = get_available_mount_item_ids()
 	inventory_changed.emit(cached_inventory_items.duplicate(true))
 	return true
 
 
 func _apply_inventory_items(items: Array) -> void:
 	var current_user_id := int(AuthService.current_user.get("id", 0))
-	if cached_inventory_user_id != current_user_id:
+	if cached_inventory_user_id != current_user_id or cached_inventory_session != AuthService.session_token:
 		cached_borrowed_inventory_items.clear()
+		revoked_mount_loan_asset_ids.clear()
 	cached_inventory_items = items.duplicate(true)
 	cached_inventory_user_id = current_user_id
 	cached_inventory_session = AuthService.session_token
@@ -234,6 +366,8 @@ func _clear_inventory_cache() -> void:
 	inventory_generation += 1
 	cached_inventory_items.clear()
 	cached_borrowed_inventory_items.clear()
+	available_mount_item_ids.clear()
+	revoked_mount_loan_asset_ids.clear()
 	cached_mount_license_regions.clear()
 	cached_inventory_user_id = 0
 	cached_inventory_session = ""
