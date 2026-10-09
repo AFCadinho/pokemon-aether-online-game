@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.104
+
 - Offer a free return to a previous trainer name under Account settings when staff withdraws a completed name-change decision, and release the login prompt when a pending decision is withdrawn.
 
 - Preserve the hotbar's full gap below the quest tracker when its buttons require extra height at larger UI scales.
