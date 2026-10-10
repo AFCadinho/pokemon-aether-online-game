@@ -17,7 +17,7 @@ func _init() -> void:
 	var battle_api_source := FileAccess.get_file_as_string(BATTLE_API_CLIENT_PATH)
 
 	_check_true(scene_source.contains('[node name="WorldTimeSelect" type="OptionButton"'), "developer menu contains a world-time selector")
-	_check_true(scene_source.contains('popup/item_0/text = "Default (Server UTC)"'), "default server UTC is the first selector option")
+	_check_true(scene_source.contains('popup/item_0/text = "Default (Game time)"'), "default game time is the first selector option")
 	_check_true(scene_source.contains('popup/item_1/text = "Morning (06:00)"'), "morning preview is available")
 	_check_true(scene_source.contains('popup/item_2/text = "Day (12:00)"'), "day preview is available")
 	_check_true(scene_source.contains('popup/item_3/text = "Evening (19:00)"'), "evening preview is available")

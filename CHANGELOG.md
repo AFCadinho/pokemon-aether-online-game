@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Use the developer game-time selector for evolution offers and confirmations, refresh pending targets when it changes, and label the default as Game time.
+
 - Refer to the shared game time when explaining evolution requirements.
 
 - Display Chinese guild names, descriptions and other player text in every interface language, including English.
