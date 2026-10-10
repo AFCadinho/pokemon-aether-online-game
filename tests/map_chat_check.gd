@@ -39,7 +39,6 @@ func _init() -> void:
 	fresh_bubble.queue_free()
 
 	var overlay_source := FileAccess.get_file_as_string("res://scripts/ui/ui_overlay.gd")
-	var settings_source := FileAccess.get_file_as_string("res://scripts/services/settings_manager.gd")
 	var world_source := FileAccess.get_file_as_string("res://scripts/world/world.gd")
 	var remote_avatar_source := FileAccess.get_file_as_string("res://scripts/world/remote_player_avatar.gd")
 	_check(
@@ -69,10 +68,10 @@ func _init() -> void:
 		"a temporarily empty local presence map does not suppress a valid bubble"
 	)
 	_check(
-		settings_source.contains(
-			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_SYSTEM,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_GUILD,"
+		overlay_source.contains(
+			"CHAT_TAB_ALL,\n\tCHAT_TAB_GENERAL,\n\tCHAT_TAB_LANGUAGES,\n\tCHAT_TAB_HELP,\n\tCHAT_TAB_PM,\n\tCHAT_TAB_GUILD,"
 		),
-		"the top-level chat tab order no longer includes Map"
+		"the top-level chat tab order exposes Help while Map and System remain under General"
 	)
 	_check(
 		overlay_source.contains("var active_chat_tab: String = CHAT_TAB_ALL")
