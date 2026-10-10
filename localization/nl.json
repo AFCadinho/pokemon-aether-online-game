@@ -1,4 +1,12 @@
 {
+  "world.vermilion_gym.puzzle.bin": "Prullenbak",
+  "world.vermilion_gym.puzzle.barrier": "Elektrische barrière",
+  "world.vermilion_gym.puzzle.empty": "Hier ligt alleen afval. Geen schakelaar.",
+  "world.vermilion_gym.puzzle.first": "Je hebt de eerste schakelaar gevonden! De onderste elektrische barrière is uit. De tweede schakelaar zit in een prullenbak direct boven, onder, links of rechts van deze bak.",
+  "world.vermilion_gym.puzzle.first_active": "Deze schakelaar staat al aan. Zoek de tweede schakelaar in een direct aangrenzende prullenbak.",
+  "world.vermilion_gym.puzzle.wrong": "Verkeerde schakelaar! Beide barrières staan weer aan. Activeer de eerste schakelaar opnieuw om het nog eens te proberen. De schakelaars blijven in dezelfde bakken totdat je de gym verlaat.",
+  "world.vermilion_gym.puzzle.solved": "Beide schakelaars staan aan! De elektrische barrières zijn uit. De weg naar Lt. Surge is vrij.",
+  "world.vermilion_gym.puzzle.barrier_closed": "Een elektrische barrière blokkeert de weg. Zoek de twee verborgen schakelaars in de prullenbakken om deze uit te schakelen.",
   "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
   "ui.trainer_card.wallet.casino_tokens_description": "Voor toekomstige casinospellen en prijzen. Verdienen en uitgeven wordt later beschikbaar.",
   "ui.staff.dev.add_casino_tokens": "Casino Tokens toevoegen",

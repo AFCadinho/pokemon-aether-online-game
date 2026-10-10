@@ -1822,6 +1822,8 @@ func _position_player_at_saved_state(map: Node, state: Dictionary) -> void:
 		float(position_data.get("y", player.global_position.y))
 	)
 	saved_position = _snap_world_position_to_map_tile_center(map, saved_position)
+	if map.has_method("get_safe_restored_player_position"):
+		saved_position = map.call("get_safe_restored_player_position", saved_position)
 
 	player.global_position = saved_position
 	player.target_position = saved_position

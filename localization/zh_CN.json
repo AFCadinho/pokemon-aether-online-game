@@ -1,4 +1,12 @@
 {
+  "world.vermilion_gym.puzzle.bin": "垃圾桶",
+  "world.vermilion_gym.puzzle.barrier": "电流屏障",
+  "world.vermilion_gym.puzzle.empty": "这里只有垃圾，没有开关。",
+  "world.vermilion_gym.puzzle.first": "你找到了第一个开关！下方的电流屏障已关闭。第二个开关就在这个垃圾桶正上方、正下方、左侧或右侧紧邻的垃圾桶中。",
+  "world.vermilion_gym.puzzle.first_active": "这个开关已经开启。请在紧邻的垃圾桶中寻找第二个开关。",
+  "world.vermilion_gym.puzzle.wrong": "选错开关了！两道屏障已重新启动。再次启动第一个开关即可重试。在你离开道馆之前，开关的位置不会改变。",
+  "world.vermilion_gym.puzzle.solved": "两个开关都已开启！电流屏障已关闭，通往 Lt. Surge 的道路畅通了。",
+  "world.vermilion_gym.puzzle.barrier_closed": "电流屏障挡住了去路。找到藏在垃圾桶中的两个开关，就能关闭屏障。",
   "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
   "ui.trainer_card.wallet.casino_tokens_description": "用于未来的赌场游戏和奖品。赚取与兑换功能将在之后开放。",
   "ui.staff.dev.add_casino_tokens": "添加 Casino Tokens",
