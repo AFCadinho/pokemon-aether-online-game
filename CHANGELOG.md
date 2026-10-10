@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Export each map's weather profile so rain-based evolutions match the map's actual overworld weather setting, and refresh pending developer evolution reviews after changing map weather.
+
+- Refresh level-up evolution options after learning a replacement move and explain changed evolution requirements consistently.
+
 - Make Help a visible main chat tab and move System into General's channel selector, while keeping system messages in All.
 
 - Use the developer game-time selector for evolution offers and confirmations, refresh pending targets when it changes, and label the default as Game time.

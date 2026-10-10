@@ -103,6 +103,32 @@ func _run() -> void:
 	auth.current_user = {"id": 1, "roles": [{"id": "owner"}]}
 	_check(transport._evolution_request_payload("lycanroc-midnight", true).get("debugTimeHour") == 0, "fixed Owner permission fallback agrees with the developer selector")
 
+	# A replacement move can satisfy a level-up requirement for an ordinary player.
+	clock.clear_debug_time()
+	auth.current_user = {"id": 2, "permissions": [], "roles": []}
+	overlay.fixture_pokemon.species = "Piloswine"
+	overlay.evolution_active_prompt.clear()
+	overlay.evolution_prompt_popup.visible = false
+	overlay.move_learn_queue.append({"pokemonId": 77, "moveId": "ancient-power"})
+	transport.responses.append(_response("Piloswine", "mamoswine"))
+	await overlay._refresh_evolutions_after_level_up_move(77)
+	_check(overlay.evolution_active_prompt.is_empty() and overlay.evolution_prompt_queue.size() == 1, "replacement-move review waits for the move learning queue")
+	_check(not transport.requests[-1].has("debugTimeHour"), "ordinary replacement-move review uses normal game time")
+	overlay.move_learn_queue.clear()
+	overlay._show_next_evolution_prompt()
+	_check(overlay.evolution_active_prompt.get("toSpeciesId") == "mamoswine", "newly learned Ancient Power can immediately offer Mamoswine")
+	transport.responses.append({"success": true, "body": {"pokemon": {}, "party": {}, "evolutionCandidates": []}})
+	await overlay._refresh_evolutions_after_level_up_move(77)
+	_check(overlay.evolution_active_prompt.is_empty() and overlay.evolution_prompt_queue.is_empty(), "replacing a required move clears its old evolution target")
+	transport.hold_next = true
+	transport.responses.append(_response("Piloswine", "mamoswine"))
+	overlay._refresh_evolutions_after_level_up_move(77)
+	transport.responses.append({"success": true, "body": {"pokemon": {}, "party": {}, "evolutionCandidates": []}})
+	await overlay._refresh_evolutions_after_level_up_move(77)
+	transport.release_held_response.emit()
+	await _settle()
+	_check(overlay.evolution_active_prompt.is_empty() and overlay.evolution_prompt_queue.is_empty(), "a late review from the previous move selection cannot restore its old target")
+
 	clock.clear_debug_time()
 	auth.current_user = {}
 	auth.session_token = ""
