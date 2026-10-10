@@ -87,6 +87,7 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	_check(host.fade_progress > 0.0 and host.entry_arena_ready, "3D arena starts the existing fade before its response arrives")
 	var arena_viewport: SubViewport = battle.animation_router.model_presenter.viewport
 	_check(arena_viewport != null and battle.animation_router.model_presenter.is_visible_in_tree(), "pending entry shows a genuine 3D arena")
+	_check(is_equal_approx(battle.animation_router.model_presenter.modulate.a, 1.0), "pending arena does not expose the 2D field through transparency")
 	_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "pending arena masks both 2D placeholders")
 	_check(not host.preparation_ready and probe.requested.is_empty(), "no incomplete pair is downloaded before the response")
 	# Local work stays quiet on the visible arena; only genuine network I/O
@@ -115,6 +116,7 @@ func _check_pending_entry(scene: PackedScene, probe: DownloadProbe, prewarmed: b
 	_check(probe.requested == ["zapdos", "hoothoot@shiny" if enemy.shiny else "hoothoot"], "uncached pair is requested through the real entry host")
 	_check(host.fade_progress > 0.0 and stage.viewport == arena_viewport and stage.is_visible_in_tree() and not host.preparation_ready,
 		"slow model download keeps the same 3D arena visible")
+	_check(is_equal_approx(stage.modulate.a, 1.0), "slow model download leaves the arena opaque")
 	_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "authoritative sprite updates never expose 2D placeholders")
 	_check(battle.battle_input_locked and not battle.battle_actions_ready and battle.has_meta("battle_screen_preparing"), "the visible arena cannot accept first-turn actions before the models are ready")
 	_check(not host.loading_label.is_visible_in_tree(), "quick preparations do not flash a loading message")
