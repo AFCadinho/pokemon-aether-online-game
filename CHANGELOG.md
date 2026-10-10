@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy's Vine Whip to both animated vine tips.
+- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy's Vine Whip to both animated vine tips and let Thwackey's mouth point follow its open/closed muzzle changes.
 
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
 

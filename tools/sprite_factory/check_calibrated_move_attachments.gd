@@ -2,6 +2,7 @@ extends SceneTree
 ## Check every calibrated part against real normal/shiny clips. Does not certify visuals.
 const Attachments = preload("res://scripts/battle/battle_ui/move_attachments_3d.gd")
 const Catalog = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Pose = preload("res://tools/sprite_factory/attack_attachment_pose.gd")
 var catalog_path := ""
 var output := "res://.tmp/attack-attachments/calibrated-check.json"
 var errors: Array[String] = []
@@ -77,9 +78,7 @@ func _run() -> void:
 			for action: String in player.get_animation_list():
 				if action != "idle" and not "attack" in action: continue
 				for frame in 21:
-					player.play(action)
-					player.seek(player.get_animation(action).length*float(frame)/20.0,true)
-					player.pause()
+					Pose.sample(player, action, player.get_animation(action).length*float(frame)/20.0)
 					for rig: Skeleton3D in actor.find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
 					for part: String in Attachments.configured_parts(identity):
 						var result := Attachments.sample_part(actor,identity,part,world,action)

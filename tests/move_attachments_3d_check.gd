@@ -234,6 +234,32 @@ func _check_weighted_attachments(world: Node3D) -> void:
 	assert(not Attachments.sample(partial, "__weighted_test", "ember", world, "physical_attack_2").is_empty())
 	assert(Attachments._bind(actor, [[{"bone": "upper", "offset": [0, 0], "weight": 1}]]).is_empty())
 	assert(Attachments._bind(actor, [[{"bone": "upper", "offset": [0, 0, 0], "weight": 0}]]).is_empty())
+	var open_mesh := MeshInstance3D.new()
+	open_mesh.name = "OpenMouth"
+	actor.add_child(open_mesh)
+	var closed_mesh := MeshInstance3D.new()
+	closed_mesh.name = "ClosedMouth"
+	actor.add_child(closed_mesh)
+	var open_point := upper.duplicate()
+	open_point["visible_mesh"] = "OpenMouth"
+	var closed_point := lower.duplicate()
+	closed_point["visible_mesh"] = "ClosedMouth"
+	calibrated_profiles["__visibility_test"] = {"parts":{"mouth":[[open_point], [closed_point]]}}
+	closed_mesh.hide()
+	var open_result := Attachments.sample(actor, "__visibility_test", "ember", world)
+	assert(open_result.sources.size() == 1)
+	assert(open_result.sources[0].is_equal_approx(actor.transform * Vector3(0, 2, .2)))
+	open_mesh.hide()
+	closed_mesh.show()
+	var closed_result := Attachments.sample(actor, "__visibility_test", "ember", world)
+	assert(closed_result.sources.size() == 1)
+	assert(closed_result.sources[0].is_equal_approx(actor.transform * Vector3(0, 0, .2)), "Cached bindings must follow mouth-mesh switches")
+	closed_mesh.hide()
+	assert(Attachments.sample(actor, "__visibility_test", "ember", world).is_empty())
+	open_mesh.free()
+	assert(Attachments.sample(actor, "__visibility_test", "ember", world).is_empty(), "Freed visibility predicates invalidate the attachment")
+	assert(Attachments._bind(actor, [[open_point]]).is_empty(), "Missing visibility mesh invalidates the attachment")
+	calibrated_profiles.erase("__visibility_test")
 	actor.free()
 	partial.free()
 	calibrated_profiles.erase("__weighted_test")

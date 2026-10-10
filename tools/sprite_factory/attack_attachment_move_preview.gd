@@ -3,10 +3,13 @@ extends SceneTree
 ## Uses approved local models; does not connect to a battle server.
 const Stage = preload("res://scripts/battle/battle_ui/experimental_battle_3d.gd")
 const Catalog = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Pose = preload("res://tools/sprite_factory/attack_attachment_pose.gd")
 var catalog_path := ""
 var output := "res://.tmp/attack-attachments/move-previews"
 var species := "snivy"
 var move := "Vine Whip"
+var camera_yaw := 0.0
+var camera_scale := 1.0
 var viewport: SubViewport
 var world: Node3D
 var camera: Camera3D
@@ -15,12 +18,16 @@ var stage: Control
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--output", "--species", "--move"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--output", "--species", "--move", "--camera-yaw", "--camera-scale"] and i + 1 >= args.size():
 			printerr("Missing argument: ", args[i]); quit(1); return
 		if args[i] == "--catalog": catalog_path = args[i+1]
 		if args[i] == "--output": output = args[i+1]
 		if args[i] == "--species": species = args[i+1]
 		if args[i] == "--move": move = args[i+1]
+		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
+		if args[i] == "--camera-scale": camera_scale = float(args[i+1])
+	if not is_finite(camera_scale) or camera_scale <= 0 or not is_finite(camera_yaw):
+		printerr("Invalid camera settings"); quit(1); return
 	_run.call_deferred()
 
 func _run() -> void:
@@ -71,13 +78,13 @@ func _run() -> void:
 		stage.identities[slot] = species
 		stage.combatants[slot] = {"species":species.trim_suffix("@shiny"),"shiny":species.ends_with("@shiny")}
 		stage.actor_shown[slot] = true; stage.lifecycle[slot] = "idle"
-		player.play("idle"); player.seek(player.get_animation("idle").length*.45,true); player.pause()
+		Pose.sample(player, "idle", player.get_animation("idle").length*.45)
 	var requested: String = stage.attack_action_for(move,"p1")
 	var mapped: Dictionary = Stage.ActionMap.resolve(requested,stage.players[0].get_animation_list(),profile.action_timing)
 	assert(not mapped.is_empty(), "Requested move has no native action")
 	var action: String = mapped.action
 	stage.current_actions[0] = action
-	stage.players[0].play(action); stage.players[0].seek(0,true); stage.players[0].pause()
+	Pose.sample(stage.players[0], action, 0.0)
 	var effect: Node = stage.create_move_effect(move,"p1","p2",{"show_impact":true})
 	assert(effect != null, "Move effect is unavailable")
 	effect.set_process(false)
@@ -91,7 +98,7 @@ func _run() -> void:
 	var records := []
 	for row in fractions.size():
 		var fraction: float = fractions[row]
-		stage.players[0].seek(stage.players[0].get_animation(action).length*fraction,true)
+		Pose.sample(stage.players[0], action, stage.players[0].get_animation(action).length*fraction)
 		for rig: Skeleton3D in stage.actors[0].find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
 		stage._update_move_contacts()
 		for frame in 2: await process_frame
@@ -100,7 +107,7 @@ func _run() -> void:
 			var center: Vector3 = points.source
 			var height := maxf(float(stage._effect_bounds(0).height),.65)
 			var direction := Vector3(.9,.35,1.6) if column == 0 else Vector3(-.4,.35,1.8)
-			camera.position = center + direction*height*1.7
+			camera.position = center + direction.rotated(Vector3.UP, camera_yaw)*height*1.7*camera_scale
 			camera.look_at(center)
 			effect._process(0)
 			label.text = "%s | %s | %s %.3f | %s" % [species,move,action,fraction,points.attachment_part]

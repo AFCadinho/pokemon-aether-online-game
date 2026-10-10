@@ -23,6 +23,11 @@ weighted bone-local points, allowing a mouth origin to follow both moving lips.
 `actions` can override parts for a particular native clip; `moves` selects a
 part for an individual move and `move_actions` selects its native attack clip.
 Snivy's Vine Whip uses both animated vine tips and `physical_attack_2`.
+The first point in an emitter group may specify `visible_mesh`, an exact
+actor-relative mesh path. The group emits only while that mesh is visible.
+This supports rigs that replace a closed muzzle with a separate open muzzle;
+each surface can use its own calibrated skin influences. Missing or freed
+predicate meshes invalidate the attachment and retain the bounds fallback.
 
 The [full catalog coverage audit](move-attachment-coverage.md) lists every
 supported species/form and distinguishes configured attachments from bounds
@@ -79,6 +84,17 @@ runtime catalog. The tools read those scenes without modifying them:
 - `calibrate_attack_attachment.py` and `fit_attack_attachment.py`: recorded
   anatomical pixel measurements to bone-local offsets; their output still
   requires rendering and visual review.
+- `project_attack_attachment_landmarks.gd`: projects selected lip pixels onto
+  captured visible skinned triangles and combines their bone influences. Use
+  fresh forward-sampled captures and inspect the chosen mesh/triangle before
+  approving a new marker sheet. Active blend shapes are rejected. Transparent
+  texture regions and material displacement are not resolved by this geometry
+  projection; they still require anatomical review.
+- `attack_attachment_pose.gd`: samples each pose by advancing from the start.
+  This preserves discrete mesh visibility when returning to the same pose for
+  another camera. Older sheets could show a closed mouth in the side view after
+  seeking backwards. `audit_attack_attachment_pose_visibility.gd` identifies
+  affected captures; these require a fresh visual review.
 - `attack_attachment_move_preview.gd`: actual stage anchors and move effects
   with native animation and contact movement. These are offline captures;
   they do not certify live wild or NPC battle presentation.
@@ -96,6 +112,8 @@ an entire proposal directory solely because it passes the binding checks.
 
 The calibration math checks can be run with
 `python3 tools/sprite_factory/test_attack_attachment_calibration.py`.
+`check_attack_attachment_pose.gd` checks repeated discrete-visibility sampling
+and ray/triangle projection.
 All Godot commands must run through the assigned slot's `slot-env` wrapper.
 
 The original interactive preview is also available. For example, from the

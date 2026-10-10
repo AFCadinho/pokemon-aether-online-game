@@ -60,16 +60,16 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 975,
+		"with_any_attachment": 992,
 		"with_cannons": 1,
 		"with_electric_body": 1,
 		"with_foot": 228,
 		"with_hand": 563,
 		"with_left_foot": 209,
 		"with_left_hand": 561,
-		"with_mouth": 843,
+		"with_mouth": 880,
 		"with_vines": 1,
-		"without_attachments": 225
+		"without_attachments": 208
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -25607,6 +25607,30 @@
 				]
 			]
 		},
+		"nickit": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.263685118019344,
+							0.00208107756811484,
+							0.0847456472348542
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw_01",
+						"offset": [
+							0.27125141565853,
+							0.00115389088602973,
+							0.102394554340043
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"nidoking": {
 			"foot": [
 				[
@@ -26811,6 +26835,21 @@
 				]
 			]
 		},
+		"palossand": {
+			"mouth": [
+				[
+					{
+						"bone": "root_jaw",
+						"offset": [
+							0.223834141525945,
+							0.00139910925826629,
+							-0.0173552982767007
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"palpitoad": {
 			"mouth": [
 				[
@@ -27030,6 +27069,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.222247822178069,
+							-0.0003447853562744,
+							-0.0203155150798782
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.164272626784286,
+							0.00034478252742393,
+							0.0248231623977817
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"pansage": {
@@ -27084,6 +27145,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.224033809623837,
+							-0.00614284168799152,
+							-0.0200861343906427
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.166027571435536,
+							0.00614284400911384,
+							0.0244200046413118
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"pansear": {
@@ -27136,6 +27219,28 @@
 							0.00012787617743015
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.223969295640238,
+							-0.00581844338051367,
+							-0.0165675892552344
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.165618798353496,
+							0.00581844382996879,
+							0.0209246745648765
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -27282,6 +27387,28 @@
 							-0.0000985711812972988
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.0468960851430893,
+							-0.00436992757022381,
+							0.352018803358078
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.181701749563217,
+							0.00051875575445592,
+							0.0225925520062447
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -27981,6 +28108,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw_c",
+						"offset": [
+							0.00204308749010916,
+							0.00532532386055926,
+							-0.00050210703713462
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw_c",
+						"offset": [
+							-0.00546146945057612,
+							0.00532742174899314,
+							0.0146374938933478
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"pikachu": {
@@ -28146,6 +28295,30 @@
 				]
 			]
 		},
+		"pincurchin": {
+			"mouth": [
+				[
+					{
+						"bone": "waist",
+						"offset": [
+							-0.032740268856287,
+							0.000000166706740856171,
+							0.162696331739426
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0426025204360485,
+							0.000000166706740856171,
+							-0.00057479739189147
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"pinsir": {
 			"hand": [
 				[
@@ -28170,6 +28343,28 @@
 							0.00048130005598064
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.182980907260948,
+							0.00332150213287616,
+							0.305177820464758
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "root_jaw",
+						"offset": [
+							0.182980907260948,
+							0.00332150213287616,
+							0.305177820464758
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -28198,6 +28393,28 @@
 							-0.0174421556293963
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.143548398805971,
+							-0.00369538027537169,
+							0.346918352693517
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "root_jaw",
+						"offset": [
+							0.206943367242416,
+							-0.00369398080511535,
+							-0.0215522132821166
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -28707,6 +28924,36 @@
 				]
 			]
 		},
+		"porygon-z": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0922013070188496,
+							0.00915747285402096,
+							0.301062047608181
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
+		"porygon2": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.112752150871208,
+							0.00410446320904102,
+							0.399279612708725
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"primarina": {
 			"hand": [
 				[
@@ -28949,6 +29196,28 @@
 							-0.00000225007534025018
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.355783980579496,
+							-0.0112070081436165,
+							-0.0210435167355157
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.281308859782143,
+							-0.0112070082052879,
+							0.0912471405966395
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -29670,6 +29939,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.134776012195438,
+							0.00114584511475797,
+							-0.024803444672238
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.154175466584648,
+							-0.00115201788662652,
+							-0.0435786668363083
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"raichu": {
@@ -29922,6 +30213,28 @@
 							-0.0558773428201673
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.242668280827948,
+							-0.00256823579873273,
+							0.352747501375187
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.308228955277635,
+							-0.00256828507380941,
+							-0.0765265582512822
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -30491,6 +30804,30 @@
 							0.0
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"reshiram": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.25467117476278,
+							-0.0017048267854879,
+							0.5557216695846
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.282304214239799,
+							-0.00409295704850797,
+							0.0846402727601647
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -32296,6 +32633,30 @@
 				]
 			]
 		},
+		"scizor-mega": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.249593496322632,
+							-0.000000000041802436512306,
+							-0.00216066837310791
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.304040789604187,
+							0.00000000000306913652478591,
+							0.00809884071350098
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"scolipede": {
 			"hand": [
 				[
@@ -32452,6 +32813,30 @@
 				]
 			]
 		},
+		"scrafty-mega": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.150261640548706,
+							-0.0000000339287993256221,
+							-0.0430301427841187
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.165301531553268,
+							-0.00000000000000000163753378650731,
+							0.00250822305679321
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"scraggy": {
 			"foot": [
 				[
@@ -32502,6 +32887,28 @@
 							0.0000368542969226507
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0766660715435159,
+							-0.00074795363738203,
+							0.155025052580406
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.138625818687177,
+							0.00074795716989337,
+							-0.0276474369471301
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -33087,6 +33494,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0931907147169113,
+							0.0000000108950963806365,
+							0.13998056948185
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0931936502456665,
+							-0.0000000045454968677916,
+							-0.0177160166203976
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"shiftry": {
@@ -33135,6 +33564,21 @@
 							-0.0586328059434891
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"shiinotic": {
+			"mouth": [
+				[
+					{
+						"bone": "EffMouth01",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -33263,6 +33707,30 @@
 							0.0
 						],
 						"weight": 1.0
+					}
+				]
+			]
+		},
+		"silicobra": {
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.0108620626851916,
+							-0.0000000372529029846191,
+							0.268797248601913
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.175761699676514,
+							-0.00000000803006994232192,
+							0.00973440986126661
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -34991,6 +35459,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.00552762493867831,
+							0.00074297637710139,
+							0.11466072178469
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.0753747582314782,
+							0.00074179991960986,
+							-0.00067622275441619
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"squawkabilly": {
@@ -35053,6 +35543,28 @@
 							-0.00512933731079105
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.101339083234274,
+							0.0898710956335575,
+							0.286980796728986
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0635721305924112,
+							-0.079430417041807,
+							-0.00716370036890556
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -35163,6 +35675,28 @@
 							-0.0232740640640259
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.051968164741993,
+							0.0000214354222407565,
+							0.230024486780167
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.19900806248188,
+							0.0000214362080441788,
+							0.00163891317788512
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -36129,6 +36663,30 @@
 				]
 			]
 		},
+		"tarountula": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.0687204450368881,
+							0.0000000103803259321467,
+							0.00064626336097717
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.0693224966526031,
+							-0.0000000217862954343673,
+							-0.00122552050743252
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"tauros": {
 			"hand": [
 				[
@@ -36767,6 +37325,68 @@
 						"weight": 0.333333333333333
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "jaw_a",
+						"offset": [
+							-0.0254433673739792,
+							0.00130265065506901,
+							0.0039308930043072
+						],
+						"visible_mesh": "pm0949_00_00/Skeleton3D/pm0949_00_00_muzzle_a_mesh",
+						"weight": 0.463879939991683
+					},
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.105738721483406,
+							0.00149799463092434,
+							0.00559836612459818
+						],
+						"weight": 0.0145305305063754
+					},
+					{
+						"bone": "right_jaw_a",
+						"offset": [
+							-0.00022804670432727,
+							-0.0155107519106614,
+							0.00261550058202907
+						],
+						"weight": 0.0183044778633174
+					},
+					{
+						"bone": "head",
+						"offset": [
+							0.119589840148291,
+							-0.00219750775963841,
+							0.20179480279339
+						],
+						"weight": 0.060591337725667
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.135984746927082,
+							0.00344167648282644,
+							-0.00505083040919394
+						],
+						"weight": 0.442693713912958
+					}
+				],
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0701910927891731,
+							-0.0005427073338069,
+							0.27778759598732
+						],
+						"visible_mesh": "pm0949_00_00/Skeleton3D/pm0949_00_00_muzzle_b_mesh",
+						"weight": 1.0
+					}
+				]
 			]
 		},
 		"timburr": {
@@ -36793,6 +37413,28 @@
 							-0.000000812113285050819
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0197213739156723,
+							0.0,
+							0.0977238193154335
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.152842611074448,
+							0.0,
+							0.00033704267116263
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -37314,6 +37956,30 @@
 				]
 			]
 		},
+		"toxapex": {
+			"mouth": [
+				[
+					{
+						"bone": "root_jaw",
+						"offset": [
+							-0.0315680666248598,
+							0.0,
+							0.0164080651397616
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.0783296325414592,
+							0.0,
+							-0.00166689362325095
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
 		"toxicroak": {
 			"foot": [
 				[
@@ -37497,6 +38163,28 @@
 							-0.0111162588000297
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							0.0271127648981002,
+							0.00303334076547901,
+							0.367286275281746
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.285091755072951,
+							0.00303332053323608,
+							-0.0429686739128182
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -37731,6 +38419,30 @@
 							0.0484617725014687,
 							0.00000999867916107178,
 							0.00047661364078521
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
+		"turtonator": {
+			"mouth": [
+				[
+					{
+						"bone": "Head",
+						"offset": [
+							15.5026005792475,
+							-0.669371234832749,
+							51.1689412478024
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "Jaw",
+						"offset": [
+							35.2729110474809,
+							0.670137686706917,
+							18.766110544672
 						],
 						"weight": 0.5
 					}
@@ -38570,6 +39282,28 @@
 						"weight": 1.0
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.0717101320624352,
+							0.00000000457715376711576,
+							0.00072140991687774
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.0791402906179428,
+							-0.00000000694424207026145,
+							-0.00109240633901209
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"vanillish": {
@@ -38998,6 +39732,28 @@
 						"weight": 0.5
 					}
 				]
+			],
+			"mouth": [
+				[
+					{
+						"bone": "head",
+						"offset": [
+							-0.0760044213134465,
+							0.00119297430491723,
+							0.238673406713747
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "jaw",
+						"offset": [
+							0.199665228394482,
+							-0.00119392730436011,
+							0.0481767549033464
+						],
+						"weight": 0.5
+					}
+				]
 			]
 		},
 		"vileplume": {
@@ -39018,6 +39774,30 @@
 							0.381984680891037,
 							-0.000000000438269448510553,
 							-0.00138815364334732
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
+		"virizion": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.146581172943115,
+							0.0,
+							-0.091387152671814
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.272853970527649,
+							0.0,
+							0.0376545190811157
 						],
 						"weight": 0.5
 					}
@@ -39206,6 +39986,54 @@
 							0.0269995890557766,
 							0.000000000000000209991379025162,
 							0.00018846988677978
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
+		"vulpix": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.132531076669693,
+							-0.00000000817510326101001,
+							0.00570446252822876
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.116486936807632,
+							-0.000000660307705402374,
+							0.00197960808873177
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
+		"vulpix-alola": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.115064717829227,
+							0.0000000167470837197925,
+							0.0017724335193634
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.114079639315605,
+							-0.0000000305378122789079,
+							-0.00104235485196114
 						],
 						"weight": 0.5
 					}
@@ -39834,6 +40662,30 @@
 							0.459971278905869,
 							0.0,
 							0.00179577327799052
+						],
+						"weight": 0.5
+					}
+				]
+			]
+		},
+		"wimpod": {
+			"mouth": [
+				[
+					{
+						"bone": "upper_jaw",
+						"offset": [
+							0.0691212117671967,
+							-0.00000000183417014909537,
+							0.00092164054512977
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "lower_jaw",
+						"offset": [
+							0.0688027963042259,
+							-0.00000000203566119516552,
+							-0.00262492639012635
 						],
 						"weight": 0.5
 					}
@@ -41441,8 +42293,8 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "29bb7172669c039844c122995b458d8f923f22755ce6d2cd430eb9a455cc43c2",
-		"scripts/battle/battle_ui/move_attachments_3d.gd": "5d66a9ac0f7563f4ac0e9839ec67fce8fb0f71b3da1592d9ad416b73f9aec3a3",
+		"data/battle_move_attachments_3d.json": "78d105ddb77d9e98422619076d283344c639a9bf866becd0d05c3506e4bc5c70",
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "68db5a9d0118bccba8e82badc9efff0611f814a05fead9d7a95acbaf4c4fa11f",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
 		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
@@ -61003,8 +61855,114 @@
 			]
 		},
 		"nickit": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							229.0,
+							186.0,
+							71.0,
+							196.0
+						],
+						"ray_residual": 0.00414076467851644
+					}
+				],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
+				"normal_runtime_sha256": "6e34db027e3774b7ede7e3e71eb7af12f9d7b896c956ac64e36ab46614fcbbf2",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-reframe-v13c/nickit.json",
+								"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									229.0,
+									186.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-reframe-v13c/nickit.json",
+								"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									71.0,
+									196.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-reframe-v13c/nickit.json",
+								"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									222.0,
+									193.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-reframe-v13c/nickit.json",
+								"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									211.0,
+									201.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-reframe-v13c/nickit.json",
+								"capture_sha256": "63072e8631b1dbb80dded712d6d63ab810489cd1509304469542a860d0ab8536",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									194.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00195739559106518,
+							0.0022716770731175,
+							0.00292539356961906,
+							0.0030012090404978,
+							0.00215225323109994
+						],
+						"regularization": 0.00001
+					}
+				],
+				"preview_sha256": "7399721fb04e58f3448920de88ec01acb42e230fb3c3844ba07775fa0e0c0c1a",
+				"scope": "Mouth marker placement in visible sampled native poses; actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -61983,8 +62941,44 @@
 			]
 		},
 		"palossand": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "14a1d450b042fee1cb0705b10644ca95f21427188d0b9e5ed64ed87e14c42898",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							300.0,
+							183.0,
+							301.0
+						],
+						"ray_residual": 0.00968378291757841
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "cc42588dff19eaf5cedf58b503d61716bfead1d595689793a28052074a39b19f",
+				"preview_sha256": "af589eceb80f9821766c20c103e5e9a3f1d81597a0f011e0873fa5ee87ab3f78",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -62100,8 +63094,39 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"capture_sha256": "679ca62402c67e3929355a13c9291df3ca6b158117f538f669b1042ab3e656a9",
+						"pixels": [
+							210.0,
+							243.0,
+							162.0,
+							244.0
+						],
+						"ray_residual": 0.00384271380468794
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "a674fc4606dacbbb1b74be9ced12b195624ba9386b6eb5d80bc38b74be5aeedf",
+				"preview_sha256": "de3b8ae25ff1765f5cb538bfb0adc55a0bf79734164510b82be87a9b02b6056a",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62113,8 +63138,39 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"capture_sha256": "48819371246e72e8c5943c7a72f5559d41d217e74134274df897cc488daa245e",
+						"pixels": [
+							210.0,
+							239.0,
+							162.0,
+							239.0
+						],
+						"ray_residual": 0.00290246926070668
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "be9531762429810781f113cf32ea55a2f8539e971265df70f75f18fe2f15cc35",
+				"preview_sha256": "aa4b0ca9b84d8f3ccb82cc9ef1b1e2242ea96c02516e4b6807bf498c02a3f478",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62126,8 +63182,39 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"capture_sha256": "b610f3261b2db0d8726ec8e45b4a7ef5c7fa12f39ad5a1238139471acc85b0fd",
+						"pixels": [
+							214.0,
+							268.0,
+							166.0,
+							271.0
+						],
+						"ray_residual": 0.00340342145213474
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "8cbd342488078422284967ab3f65ab9b6a728ab02390b1a101934c0a784a0eeb",
+				"preview_sha256": "275a8b413372c8ff596dfceb74a1836546c3b38ff3593598a0caf82c683de7c8",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62195,8 +63282,28 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "71320ebaa6e6382389800452d422c148f204b4cd7db1cffdef1534b1044957c3",
+				"preview_sha256": "1a94ca6ee2a149beb2f2b122e6e7035a6d5a05ed97041a105cff574b17acb708",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62759,8 +63866,43 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "07ebc5f6b81d99e2d5369b8c666165d65f6bc2b24daff9ee017571e7467ae064",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							151.0,
+							192.0,
+							168.0,
+							189.0
+						],
+						"ray_residual": 0.0036800219069908
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "858f159fc1582285b21f78dcb98be3ae9cf0fe9045a91d0cb9fed143b53bc045",
+				"preview_sha256": "3e6268070a633e3cd845780ae8daf719f6ae7191d228f3301dc6f07b0bb56222",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62866,8 +64008,29 @@
 			]
 		},
 		"pincurchin": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "0f19c2b8d08c1a548aa5cf8a22ab040a3a0f16c54d0f6065005c04c47e9d2676",
+				"preview_sha256": "22314f561613e3d0382d90c62a8dce15a5088fd11addf1913a70779e9dc878b8",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -62884,8 +64047,42 @@
 		"pinsir": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "2474c9de98947fc11c28193747c46d74f0e6784c2830bfa3d4373bd768ff3a5c",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							217.0,
+							209.0,
+							217.0
+						],
+						"ray_residual": 0.00847984703351269
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "b75d079d9774eb7a135304e4ac7f8acfc73dbe1f3d3823f4e8c4512e0245a2fe",
+				"preview_sha256": "bfb9c4cef0301a03708d9434140eed24665778248f0120cdb5ca4b2b1f5f9c66",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -62895,8 +64092,43 @@
 		"pinsir-mega": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "979d05a44779c3861be04c4c4af2812ab1e29a2d68e80c68699f763e81118329",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							213.0,
+							206.0,
+							215.0
+						],
+						"ray_residual": 0.00075219971005637
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "3eb20fbc356ec221c38e3ff4dee8d33f7574ba66bb8b49acf3965943f8003e80",
+				"preview_sha256": "214e50e636ecaaf4697937bfcd6e57229c1c599a8b28792f2f85e4c646313bdc",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -63236,16 +64468,88 @@
 			]
 		},
 		"porygon-z": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "067275c10e176c0948b35ca2ea4a84ad4f067ee762ec7ec7e8b54b5ee1384464",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							329.0,
+							292.0,
+							78.0,
+							296.0
+						],
+						"ray_residual": 0.0004585574922037
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "8c081d1eae10c5a5a628e6c2d652155b425ba3307ff7b126b911685d449f802b",
+				"preview_sha256": "b7c26ae755d0aed2c5938e9d3b9eb62a007c7dd55d1f5c8223fea849b0ce2365",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"porygon2": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "aa687fd7e95a2dbd1229129310d4448f04b25ee235341de075b45319af3f6cf1",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							235.0,
+							337.0,
+							15.0,
+							311.0
+						],
+						"ray_residual": 0.00079885986716213
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "e42cd5e73a74e7735186559af3b598e981eda70b1deb5a924ff822e137f424e0",
+				"preview_sha256": "8930cbc07204418513be6faa9cecdea6fa7b25e58ca97301db20bf067863a5ee",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -63354,8 +64658,43 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "b07a029de2e156b8f654c07ce3a0cc31e48085df7b9d3fe1497f06d511efb941",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							214.0,
+							199.0,
+							148.0,
+							196.0
+						],
+						"ray_residual": 0.00452016761596296
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "37bf5eae53421d16c092756edf148c12075c92ac12ed4b156a3a29547cea549b",
+				"preview_sha256": "0fbe555e64a9693fdccae1ec3e30f4a7749ab0c277127181067a406b2a6471d8",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -63805,8 +65144,43 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "special_attack",
+						"all_mouth_bones": true,
+						"capture_sha256": "ca34530480e3eea9826381abb6743421716fd582465b6c5d0550516a22085d29",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							214.0,
+							158.0,
+							196.0,
+							158.0
+						],
+						"ray_residual": 0.00062675508844374
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "18e5877e206235f2a3c4480852b77063bbd39f6e269f6b855cfa8600ec2e7a65",
+				"preview_sha256": "a87a26ed451cc80d19672f9e1e2779e4848f0abba2e914369c6e185d433b6016",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -63971,8 +65345,43 @@
 		"raikou": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "aa952cbef816f259f88a37f22240d0bf6c421a436942facde8581848da0cb2e3",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							214.0,
+							125.0,
+							182.0,
+							122.0
+						],
+						"ray_residual": 0.00285230749704452
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "cef7ad3abbc5d1b97eb6b81888b416819a96c5edd8f9f98a03ccfb04b6b486b0",
+				"preview_sha256": "c9cfb201f6f0d4617f2c0bb7454889ec81fc157e31cccc1e4c077d659ac078c3",
+				"scope": "Mouth or beak tip marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -64416,8 +65825,114 @@
 			]
 		},
 		"reshiram": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"capture_sha256": "12932e6c545443eff91cd7ac484c9ea953dc3d3bb412a055f8d2ca91da57c2c2",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							235.0,
+							319.0,
+							68.0,
+							293.0
+						],
+						"ray_residual": 0.0220002825625126
+					}
+				],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
+				"normal_runtime_sha256": "e3d8ef90fb5633b4b051a365d1e6a1e57f8d59b8761518640435ab34ca0881ed",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v15d/reshiram.json",
+								"capture_sha256": "a53f608fe6c5ec0cf46be8cf54a76272afffc52233d96a982d79d4bfeb6b3b7b",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									211.0,
+									181.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v15d/reshiram.json",
+								"capture_sha256": "a53f608fe6c5ec0cf46be8cf54a76272afffc52233d96a982d79d4bfeb6b3b7b",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									181.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v15d/reshiram.json",
+								"capture_sha256": "a53f608fe6c5ec0cf46be8cf54a76272afffc52233d96a982d79d4bfeb6b3b7b",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									213.0,
+									154.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v15d/reshiram.json",
+								"capture_sha256": "a53f608fe6c5ec0cf46be8cf54a76272afffc52233d96a982d79d4bfeb6b3b7b",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									202.0,
+									165.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v15d/reshiram.json",
+								"capture_sha256": "a53f608fe6c5ec0cf46be8cf54a76272afffc52233d96a982d79d4bfeb6b3b7b",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									226.0,
+									167.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.0034006267208542,
+							0.00321745899051215,
+							0.00997540713234214,
+							0.010491015802677,
+							0.00982326862874995
+						],
+						"regularization": 0.00001
+					}
+				],
+				"preview_sha256": "de2893a41a977dabce5a44b1973fa8232bac546b20fbca25818139ac89e9fbd0",
+				"scope": "Mouth marker placement in visible sampled native poses; actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -65410,8 +66925,27 @@
 			]
 		},
 		"scizor-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"method": "anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "9c720481b0b2821df503eaac50e30001e18e598ca1ca4449b1945b9cd1ec33a3",
+				"preview_sha256": "c1f8ac2ad0d1d523b8d2b3bcdf7426c37ed124f05e63653364326cfd52c12fd5",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -65532,8 +67066,27 @@
 			]
 		},
 		"scrafty-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"method": "anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "25c221e1999d5bcce832c24a4fb436be54a36399a3a546424c4e1848a1cc575a",
+				"preview_sha256": "9bcf2b6375d3d0dd18ab0fd7849c161bdccac20cfd263b7b9a35f3d637d65ebf",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -65544,8 +67097,42 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"capture_sha256": "c8b48dbd8a9a5f117771608b32d660755a51086c02c5218d2e7d7dbcc5e6c0f4",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							219.0,
+							210.0,
+							224.0
+						],
+						"ray_residual": 0.0021065114120475
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "c8cdbe3deeffe2187ac2b96708d5d88dda4c0981bffda60c0b05d37161248746",
+				"preview_sha256": "1c42e654c693d28f47c1da45709e88742cdf70ded36bd0e15b1befde7527f8e3",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -66200,8 +67787,27 @@
 		"shieldon": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"method": "anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "9971f57c52b5c6d80a8da75df94e46e0fcc7dbbb7168f57825a49b21bff45055",
+				"preview_sha256": "9eacada2851ad0af2a492d74c2ef2ddc52e2220757fef01749b800857ab32dca",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -66238,8 +67844,27 @@
 			]
 		},
 		"shiinotic": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"method": "anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "5e4bc71da65699afe112d7f047a8c551e9fdd90ce8e34fc049d61bcba356e5e6",
+				"preview_sha256": "25c8d2cda093361da29a4a22dbee369b59e8abf2465509ca2d003941b53015fe",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -66402,8 +68027,30 @@
 			]
 		},
 		"silicobra": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "51394fa40f81d53418d55ca471beef4eb38c690c7b3f63b831395c5ecf13cdf8",
+				"pose_fits": [],
+				"preview_sha256": "1c34be89a325d8f8c8c42061c615576aa3d685c33f0a13bce00e8e3750b6381a",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -67849,8 +69496,44 @@
 		"sprigatito": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "1877addd64228b16fdf1ec257ebb7ca44e6cc3c0399823b558fd10c879a6583c",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							174.0,
+							200.0,
+							175.0
+						],
+						"ray_residual": 0.00279212061967461
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "cc8ce94daa082ede60bd4f025c300614081d49471e9756a2a4b17052e9fa1adc",
+				"pose_fits": [],
+				"preview_sha256": "93d94c457e85c32c25749391bd8066ce14961c4f53c31d6b96052201d4b4fce7",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -67868,8 +69551,126 @@
 		"squawkabilly": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "1330b84f5d3cb160f979974c57b7cd8556b561bbb38e7141488922cf9a81a5f4",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							207.0,
+							204.0,
+							214.0,
+							201.0
+						],
+						"ray_residual": 0.00512216911305087
+					}
+				],
+				"method": "manual_multi_pose_anatomy_fit_visual_review",
+				"normal_runtime_sha256": "0c92b0170f1de711f184e6a7d3b5c430197ec55fb4a11bc286f806889e5d5d7a",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									211.0,
+									179.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									211.0,
+									179.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									201.0,
+									147.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									219.0,
+									162.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									204.0,
+									153.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v16/squawkabilly.json",
+								"capture_sha256": "8678da8daa6e9b24fa5c2fc22caaa554ad3240a9b1791f90f816c922b7174a92",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									191.0,
+									151.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00296153944754797,
+							0.00185417902566936,
+							0.00270418993453764,
+							0.0025182923143388,
+							0.00565206102761913,
+							0.0024344249824778
+						],
+						"regularization": 0.00001
+					}
+				],
+				"preview_sha256": "6528e3b66a7b1269c00d6493b49de121756ebab6abd3e5c237dc63673e662375",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -67920,8 +69721,28 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "2f126955c4e7f8de714b5f3820280efce2de13cb8b4a7f38ab2cd9ed5397c8be",
+				"pose_fits": [],
+				"preview_sha256": "b03ad7077687c2414f03912b810685d51be539602225a5e1f17974817e04ffaa",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -68863,8 +70684,30 @@
 			]
 		},
 		"tarountula": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "5a4c7512e3099f1f0cd167826b3391beadac33cb33c17c5e8aecdf17161b5151",
+				"pose_fits": [],
+				"preview_sha256": "8458c97b3b98532e681a22a1327a49f308a6f0139ba8d56b614dfcbc48198381",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -69283,8 +71126,353 @@
 		"thwackey": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "49e3eb4ea959e2ee6ea15b1916d9ffd4c87595f84495ab00640004da72f323d5",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							151.0,
+							191.0,
+							155.0
+						],
+						"ray_residual": 0.010298455822081
+					}
+				],
+				"method": "manual_skinned_surface_landmark_visual_review",
+				"normal_runtime_sha256": "c1a768952ff9e20678ae620319c556e22f4203d37cacc7b7a4a95f9351887ba2",
+				"pose_fits": [
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									179.0
+								]
+							},
+							{
+								"action": "idle",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									178.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									201.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									186.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									198.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-manual-review-v17/thwackey.json",
+								"capture_sha256": "cab8454fae60e2c523d03b32b204cc9e2fb693fe45f49bc64ac2cc41d65415f8",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									211.0,
+									198.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00546434948292969,
+							0.00920597285002653,
+							0.0132681400808664,
+							0.00428047210092317,
+							0.00251523878151884,
+							0.00169284962834029,
+							0.00237180874663408
+						],
+						"regularization": 0.00001
+					},
+					{
+						"emitter": 0.0,
+						"observations": [
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									169.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "physical_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									168.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 0.0,
+								"fraction": 0.2,
+								"pixel": [
+									210.0,
+									176.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									173.0
+								]
+							},
+							{
+								"action": "physical_attack_2",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									177.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 1.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									181.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 2.0,
+								"fraction": 0.65,
+								"pixel": [
+									210.0,
+									180.0
+								]
+							},
+							{
+								"action": "special_attack",
+								"capture": ".tmp/attack-attachments/mouth-surface-gated-review-v2/thwackey.json",
+								"capture_sha256": "be7ccb85c347593395a6330964c0c1029789f3b4039d9f20ed94c0228d340b4c",
+								"column": 3.0,
+								"fraction": 0.45,
+								"pixel": [
+									210.0,
+									181.0
+								]
+							}
+						],
+						"part": "mouth",
+						"ray_residuals": [
+							0.00085561142082614,
+							0.00023533165171405,
+							0.00036367114376486,
+							0.0012070832837548,
+							0.0013834493918714,
+							0.00097699826276581,
+							0.00089594716532192,
+							0.00102312095778636,
+							0.00157767290169484,
+							0.00099321417941123
+						],
+						"regularization": 0.00001
+					}
+				],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "3d3ea66acd9a20eaa7518a0e05cee8a01c5ac66ef9f01b4e5c13429dfd4be918",
+				"scope": "Separate open and closed muzzle bindings follow visible native mouth poses, with skin landmarks refined by ten multi-pose observations. Physical attack side view is obscured by the stick; actual effects remain pending.",
+				"side_fraction": 0.45,
+				"surface_landmarks": [
+					{
+						"capture_sha256": "1f948151e188ff8c04d518cb9eada951057b3354e3fd436d1cec6f6a9f0948fd",
+						"landmarks": [
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.0631928892092506,
+									0.842939281244217,
+									0.0938678295465324
+								],
+								"column": 1.0,
+								"distance": 0.410144948178093,
+								"mesh": "pm0949_00_00/Skeleton3D/pm0949_00_00_muzzle_a_mesh",
+								"mesh_contains": "muzzle_a_mesh",
+								"pixel": [
+									210.0,
+									134.0
+								],
+								"surface": 1.0,
+								"triangle": 179.0,
+								"vertex_indices": [
+									32.0,
+									42.0,
+									27.0
+								],
+								"weight": 0.5
+							},
+							{
+								"action": "special_attack",
+								"barycentric": [
+									0.597211228292125,
+									0.164004153120542,
+									0.238784618587333
+								],
+								"column": 1.0,
+								"distance": 0.455596838983279,
+								"mesh": "pm0949_00_00/Skeleton3D/pm0949_00_00_muzzle_a_mesh",
+								"mesh_contains": "muzzle_a_mesh",
+								"pixel": [
+									210.0,
+									223.0
+								],
+								"surface": 0.0,
+								"triangle": 216.0,
+								"vertex_indices": [
+									81.0,
+									80.0,
+									143.0
+								],
+								"weight": 0.5
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					},
+					{
+						"capture_sha256": "1f948151e188ff8c04d518cb9eada951057b3354e3fd436d1cec6f6a9f0948fd",
+						"landmarks": [
+							{
+								"action": "idle",
+								"barycentric": [
+									0.606302682956214,
+									0.024624315505274,
+									0.369073001538512
+								],
+								"column": 1.0,
+								"distance": 0.425475736240058,
+								"mesh": "pm0949_00_00/Skeleton3D/pm0949_00_00_muzzle_b_mesh",
+								"mesh_contains": "muzzle_b_mesh",
+								"pixel": [
+									210.0,
+									165.0
+								],
+								"surface": 0.0,
+								"triangle": 124.0,
+								"vertex_indices": [
+									9.0,
+									77.0,
+									4.0
+								]
+							}
+						],
+						"method": "ray_triangle_barycentric_skin_binding"
+					}
+				]
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -69294,8 +71482,29 @@
 		"timburr": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "7f669144252ffb7dbf1eb4c8c01d47aea350a57ce4373dd306ce7a72bf88f7bf",
+				"pose_fits": [],
+				"preview_sha256": "ea7da8ffb2404bd3a60f56bdf790c3c954c9006ddaa3138fb52095c4b8109c4a",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -69804,8 +72013,54 @@
 			]
 		},
 		"toxapex": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"manual_adjustments": [
+					{
+						"axis": 1.0,
+						"method": "symmetric_local_lateral_plane",
+						"part": "mouth",
+						"reason": "Remove rightward bias visible at idle in front view.",
+						"value": 0.0
+					}
+				],
+				"measurements": [
+					{
+						"action": "physical_attack",
+						"all_mouth_bones": true,
+						"capture_sha256": "dfa2d60cd22bd7838004d3c6a161fb7deebb19d19cdbe80efdd4f45d14e6ada8",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							222.0,
+							229.0,
+							315.0,
+							228.0
+						],
+						"ray_residual": 0.00591447627080099
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "0a00ebf4596451906dd8c60b70cd7fda82dc463707f31be6a4ace796cd57e9e2",
+				"pose_fits": [],
+				"preview_sha256": "d213e6496e9d7643e50dc878bab3d2c0f16224a74fe9efdca382b329de90ea88",
+				"scope": "Mouth marker reviewed in visible idle and physical attack poses below the shell. Special attack flips and occludes the head; its anatomical emission route and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -69911,8 +72166,44 @@
 		"trapinch": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "ff503a59c7bfbd4ea7b3f70d30944aca7f4f7650d27c69d60baf8e7132eb1e07",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							169.0,
+							204.0,
+							170.0
+						],
+						"ray_residual": 0.00338638222230345
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "9f16b5446e750d2d41c9e71c68a8c989d264c94fb42a7aed0ec2baed859140b6",
+				"pose_fits": [],
+				"preview_sha256": "562f3e90c7e820ee52894b2a95a492821e86578f49da823f71ca4892156cbbec",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -70055,8 +72346,45 @@
 			]
 		},
 		"turtonator": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "220cd2ea1a89c13db8f7c1d4f4050b24045f81f1713eeca60e4320c92bb4257a",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							165.0,
+							181.0,
+							163.0,
+							180.0
+						],
+						"ray_residual": 1.85252314885352
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "6dbd2464c3c07dc417ca2c734e0c69d108105b836a4e16429be9df18a5b2a5b6",
+				"pose_fits": [],
+				"preview_sha256": "4059120037afcc1ae610e9a00f32681ba8c3616a6dca8a0495779998520534d7",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -70563,8 +72891,29 @@
 		"uxie": {
 			"attachments": [
 				"hand",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "2de180ae314ea84eb4670800e137fad1ed689554faffee7f5fa5c0b86108f6cd",
+				"pose_fits": [],
+				"preview_sha256": "e62f21b151776ffe7a90f4643175a721123d932fc25108423ec74c4edd4e77a1",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -70941,8 +73290,44 @@
 				"foot",
 				"hand",
 				"left_foot",
-				"left_hand"
+				"left_hand",
+				"mouth"
 			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [
+					{
+						"action": "idle",
+						"all_mouth_bones": true,
+						"capture_sha256": "e078ea80c64fb59940b264f1186ba60f76ba83d506d56227d9ec18437a234aff",
+						"fraction": 0.45,
+						"part": "mouth",
+						"pixels": [
+							210.0,
+							166.0,
+							208.0,
+							167.0
+						],
+						"ray_residual": 0.00408186337458339
+					}
+				],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "5989746da13abd457060342f6729972bec13f8260fb0c82266447771248148ed",
+				"pose_fits": [],
+				"preview_sha256": "419ecb7c53ff0c954b155d4504d3f3c77a725f676d75819623995907876aa3df",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
 			"status": "configured",
 			"variants": [
 				"normal",
@@ -70986,8 +73371,30 @@
 			]
 		},
 		"virizion": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "db349619fbe1865547911ad03085a3bdc8ff509d2247fefdeaabfc7df5993219",
+				"pose_fits": [],
+				"preview_sha256": "b75099062655e005f2a4a8083379b6b748a7876aabb36a50f1087b76401a7574",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -71117,16 +73524,59 @@
 			]
 		},
 		"vulpix": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"physical_attack_2",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "20f48ff46022f49f42f45ba1959a3db1ee882708170f60b7b7d07a6580480aea",
+				"pose_fits": [],
+				"preview_sha256": "d5b045c5edc59e0714d8ba2087044d00ac34a3bfc7fc59453b76d52b9cfc7994",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
 			]
 		},
 		"vulpix-alola": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "1ddf0962a0cf2dcfaaec39d99429d1992f81c34fffd23d3eceadf3fe9e69b852",
+				"pose_fits": [],
+				"preview_sha256": "e2f1a2d5362675653781e3ad1efe636a92bcbdc05a939c36bb073013b5569aac",
+				"scope": "Mouth marker placement in visible sampled native poses; occluded surfaces and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -71638,8 +74088,30 @@
 			]
 		},
 		"wimpod": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"mouth"
+			],
+			"review": {
+				"actions": [
+					"idle",
+					"physical_attack",
+					"special_attack"
+				],
+				"fractions": [
+					0.2,
+					0.45,
+					0.65
+				],
+				"measurements": [],
+				"method": "manual_anatomy_marker_pose_visual_review",
+				"normal_runtime_sha256": "84d6ad939ee6313627cda03c680288bbb974041029c9c8c5f7416b68fd4446d6",
+				"pose_fits": [],
+				"pose_sampling": "forward_from_start_v1",
+				"preview_sha256": "af071bc07955b87aa062aef8669a66fbb6400eadb6568c9cac55265c9db63ee1",
+				"scope": "Mouth aperture marker matches visible idle and native attack poses, including the exposed special-attack opening; occluded physical side and actual effects remain unapproved.",
+				"side_fraction": 0.45
+			},
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"

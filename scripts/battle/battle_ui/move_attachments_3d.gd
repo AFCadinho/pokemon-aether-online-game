@@ -85,6 +85,10 @@ static func sample_part(actor: Node3D, identity: String, part: String, world: No
 	var points: Array[Vector3] = []
 	var names: Array[String] = []
 	for group: Array in cache[cache_key]:
+		if group[0].has("visible_mesh"):
+			var mesh: Node3D = group[0].visible_mesh.get_ref()
+			if not is_instance_valid(mesh) or not mesh.is_inside_tree(): return {}
+			if not mesh.is_visible_in_tree(): continue
 		var point := Vector3.ZERO
 		var total_weight := 0.0
 		for binding: Dictionary in group:
@@ -103,6 +107,10 @@ static func _bind(actor: Node3D, definitions: Array) -> Array:
 	var groups := []
 	for group: Array in definitions:
 		if group.is_empty(): return []
+		var visible_mesh: Node3D
+		if group[0].has("visible_mesh"):
+			visible_mesh = actor.get_node_or_null(NodePath(str(group[0].visible_mesh))) as MeshInstance3D
+			if visible_mesh == null: return []
 		var bindings := []
 		for definition: Dictionary in group:
 			var raw: Array = definition.get("offset", [])
@@ -120,5 +128,6 @@ static func _bind(actor: Node3D, definitions: Array) -> Array:
 				break
 			# Missing one lip or one cannon invalidates the entire attachment.
 			if not found: return []
+		if visible_mesh != null: bindings[0]["visible_mesh"] = weakref(visible_mesh)
 		groups.append(bindings)
 	return groups

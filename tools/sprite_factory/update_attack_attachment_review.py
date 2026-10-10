@@ -17,6 +17,7 @@ def main():
     parser.add_argument('--decisions', action='append', default=[], type=Path)
     parser.add_argument('--part-decisions', action='append', default=[], type=Path)
     parser.add_argument('--profiles', type=Path, default=Path('data/battle_move_attachments_3d.json'))
+    parser.add_argument('--pose-visibility-audit', type=Path, default=Path('docs/3d/attack-attachment-pose-visibility.json'))
     parser.add_argument('--output', type=Path, default=Path('docs/3d/attack-attachment-review.json'))
     args = parser.parse_args()
     decisions = {}
@@ -29,6 +30,7 @@ def main():
             part_decisions.setdefault(species, {}).update(decision.get('parts', {}))
             part_review_notes.setdefault(species, []).append(decision)
     profiles = json.loads(args.profiles.read_text())['profiles']
+    visibility = json.loads(args.pose_visibility_audit.read_text()).get('models', {}) if args.pose_visibility_audit.exists() else {}
     rows = {}
     for path in sorted(args.inspection.glob('*.json')):
         model = json.loads(path.read_text())
@@ -61,6 +63,14 @@ def main():
             row['mouth_review'] = profile['review']
         elif status == 'mouth_pose_review_pass':
             row['mouth_status'] = 'candidate_review_pass_not_installed'
+        changes = visibility.get(species, {}).get('differences', [])
+        if changes:
+            row['previous_pose_visibility_differences'] = changes
+            if profile.get('parts', {}).get('mouth') and profile.get('review', {}).get('pose_sampling') != 'forward_from_start_v1':
+                row['mouth_status'] = 'installed_pending_forward_visibility_review'
+            for part, review in profile.get('part_reviews', {}).items():
+                if review.get('pose_sampling') != 'forward_from_start_v1':
+                    row['part_status'][part] = 'installed_pending_forward_visibility_review'
         rows[species] = row
     report = {'schema': 2, 'complete': False,
               'scope': 'Per-form review progress; sampled anatomical markers do not certify all attack effects.',

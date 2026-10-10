@@ -7,9 +7,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 975 species/forms.
-- No anatomical attachment profile: 225 species/forms; these use bounds-based fallback positions.
-- Mouth attachments: 843 species/forms.
+- At least one configured anatomical attachment: 992 species/forms.
+- No anatomical attachment profile: 208 species/forms; these use bounds-based fallback positions.
+- Mouth attachments: 880 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
@@ -599,6 +599,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | murkrow | hand, left_hand, mouth | Same attachment profile |
 | naganadel | hand, left_hand, mouth | Same attachment profile |
 | natu | mouth | Same attachment profile |
+| nickit | mouth | Same attachment profile |
 | nidoking | foot, hand, left_hand, mouth | Same attachment profile |
 | nidoqueen | foot, hand, left_hand, mouth | Same attachment profile |
 | nidoran-f | mouth | Same attachment profile |
@@ -635,15 +636,16 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | palafin | mouth | Same attachment profile |
 | palafin-hero | hand, left_hand | Same attachment profile |
 | palkia | hand, left_hand, mouth | Same attachment profile |
+| palossand | mouth | Same attachment profile |
 | palpitoad | mouth | Same attachment profile |
 | pancham | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | pangoro | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| panpour | foot, hand, left_foot, left_hand | Same attachment profile |
-| pansage | foot, hand, left_foot, left_hand | Same attachment profile |
-| pansear | foot, hand, left_foot, left_hand | Same attachment profile |
+| panpour | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| pansage | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| pansear | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | paras | hand, left_hand, mouth | Same attachment profile |
 | parasect | mouth | Same attachment profile |
-| passimian | foot, hand, left_foot, left_hand | Same attachment profile |
+| passimian | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | patrat | foot, left_foot | Same attachment profile |
 | pawmi | hand, left_hand, mouth | Same attachment profile |
 | pawmo | hand, left_hand, mouth | Same attachment profile |
@@ -662,12 +664,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | pidgeotto | mouth | Same attachment profile |
 | pidgey | mouth | Same attachment profile |
 | pidove | mouth | Same attachment profile |
-| pignite | foot, hand, left_foot, left_hand | Same attachment profile |
+| pignite | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | pikachu | electric_body, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | pikachu-alola | hand, left_hand, mouth | Same attachment profile |
 | pikipek | mouth | Same attachment profile |
-| pinsir | hand, left_hand | Same attachment profile |
-| pinsir-mega | hand, left_hand | Same attachment profile |
+| pincurchin | mouth | Same attachment profile |
+| pinsir | hand, left_hand, mouth | Same attachment profile |
+| pinsir-mega | hand, left_hand, mouth | Same attachment profile |
 | piplup | hand, left_hand, mouth | Same attachment profile |
 | plusle | mouth | Same attachment profile |
 | poipole | hand, left_hand, mouth | Same attachment profile |
@@ -679,11 +682,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ponyta-galar | foot, mouth | Same attachment profile |
 | poochyena | hand, left_hand, mouth | Same attachment profile |
 | popplio | hand, left_hand, mouth | Same attachment profile |
+| porygon-z | mouth | Same attachment profile |
+| porygon2 | mouth | Same attachment profile |
 | primarina | hand, left_hand, mouth | Same attachment profile |
 | primeape | foot, hand, left_foot, left_hand | Same attachment profile |
 | prinplup | mouth | Same attachment profile |
 | probopass | hand, left_hand | Same attachment profile |
-| psyduck | foot, hand, left_foot, left_hand | Same attachment profile |
+| psyduck | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | pumpkaboo-average | mouth | Same attachment profile |
 | purrloin | hand, left_hand, mouth | Same attachment profile |
 | purugly | hand, left_hand, mouth | Same attachment profile |
@@ -698,12 +703,12 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | quilladin | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | qwilfish | mouth | Same attachment profile |
 | qwilfish-hisui | mouth | Same attachment profile |
-| raboot | foot, hand, left_foot, left_hand | Same attachment profile |
+| raboot | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | raichu | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | raichu-alola | hand, left_hand, mouth | Same attachment profile |
 | raichu-mega-x | hand, left_hand, mouth | Same attachment profile |
 | raichu-mega-y | hand, left_hand, mouth | Same attachment profile |
-| raikou | hand, left_hand | Same attachment profile |
+| raikou | hand, left_hand, mouth | Same attachment profile |
 | ralts | hand, left_hand, mouth | Same attachment profile |
 | rampardos | hand, left_hand, mouth | Same attachment profile |
 | rapidash | foot, mouth | Same attachment profile |
@@ -720,6 +725,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | registeel | hand, left_hand | Same attachment profile |
 | relicanth | mouth | Same attachment profile |
 | remoraid | mouth | Same attachment profile |
+| reshiram | mouth | Same attachment profile |
 | reuniclus | hand, left_hand, mouth | Same attachment profile |
 | rhydon | hand, left_hand, mouth | Same attachment profile |
 | rhyhorn | hand, left_hand, mouth | Same attachment profile |
@@ -755,11 +761,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sceptile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sceptile-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | scizor | mouth | Same attachment profile |
+| scizor-mega | mouth | Same attachment profile |
 | scolipede | hand, left_hand | Same attachment profile |
 | scolipede-mega | hand, left_hand | Same attachment profile |
 | scorbunny | hand, left_hand, mouth | Same attachment profile |
 | scrafty | hand, left_hand, mouth | Same attachment profile |
-| scraggy | foot, hand, left_foot, left_hand | Same attachment profile |
+| scrafty-mega | mouth | Same attachment profile |
+| scraggy | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | scream-tail | hand, left_hand, mouth | Same attachment profile |
 | scyther | mouth | Same attachment profile |
 | seadra | mouth | Same attachment profile |
@@ -780,13 +788,15 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | shellder | mouth | Same attachment profile |
 | shellos | mouth | Same attachment profile |
 | shelmet | mouth | Same attachment profile |
-| shieldon | hand, left_hand | Same attachment profile |
+| shieldon | hand, left_hand, mouth | Same attachment profile |
 | shiftry | foot, left_foot, mouth | Same attachment profile |
+| shiinotic | mouth | Same attachment profile |
 | shinx | foot, left_foot, mouth | Same attachment profile |
 | shroomish | mouth | Same attachment profile |
 | shuckle | mouth | Same attachment profile |
 | shuppet | mouth | Same attachment profile |
 | sigilyph | mouth | Same attachment profile |
+| silicobra | mouth | Same attachment profile |
 | silvally | mouth | Same attachment profile |
 | simipour | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | simisage | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -832,11 +842,11 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | spectrier | mouth | Same attachment profile |
 | spheal | hand, left_hand, mouth | Same attachment profile |
 | spinda | mouth | Same attachment profile |
-| sprigatito | hand, left_hand | Same attachment profile |
-| squawkabilly | hand, left_hand | Same attachment profile |
+| sprigatito | hand, left_hand, mouth | Same attachment profile |
+| squawkabilly | hand, left_hand, mouth | Same attachment profile |
 | squirtle | hand, left_hand, mouth | Same attachment profile |
 | stakataka | mouth | Same attachment profile |
-| stantler | foot, hand, left_foot, left_hand | Same attachment profile |
+| stantler | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | staraptor | mouth | Same attachment profile |
 | staraptor-mega | mouth | Same attachment profile |
 | staravia | mouth | Same attachment profile |
@@ -866,6 +876,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | tapu-fini | hand, left_hand, mouth | Same attachment profile |
 | tapu-koko | mouth | Same attachment profile |
 | tapu-lele | hand, left_hand, mouth | Same attachment profile |
+| tarountula | mouth | Same attachment profile |
 | tauros | hand, left_hand, mouth | Same attachment profile |
 | tauros-paldea-aqua | hand, left_hand, mouth | Same attachment profile |
 | tauros-paldea-blaze | hand, left_hand, mouth | Same attachment profile |
@@ -879,8 +890,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | thievul | mouth | Same attachment profile |
 | throh | foot, hand, left_foot, left_hand | Same attachment profile |
 | thundurus | mouth | Same attachment profile |
-| thwackey | hand, left_hand | Same attachment profile |
-| timburr | hand, left_hand | Same attachment profile |
+| thwackey | hand, left_hand, mouth | Same attachment profile |
+| timburr | hand, left_hand, mouth | Same attachment profile |
 | tinkatink | mouth | Same attachment profile |
 | tinkaton | mouth | Same attachment profile |
 | tinkatuff | mouth | Same attachment profile |
@@ -895,14 +906,16 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | torterra | hand, left_hand, mouth | Same attachment profile |
 | totodile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | toucannon | mouth | Same attachment profile |
+| toxapex | mouth | Same attachment profile |
 | toxicroak | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | toxtricity | hand, left_hand, mouth | Same attachment profile |
 | tranquill | mouth | Same attachment profile |
-| trapinch | hand, left_hand | Same attachment profile |
+| trapinch | hand, left_hand, mouth | Same attachment profile |
 | treecko | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | tropius | hand, left_hand, mouth | Same attachment profile |
 | trubbish | hand, left_hand, mouth | Same attachment profile |
 | trumbeak | mouth | Same attachment profile |
+| turtonator | mouth | Same attachment profile |
 | turtwig | hand, left_hand, mouth | Same attachment profile |
 | tympole | mouth | Same attachment profile |
 | tynamo | mouth | Same attachment profile |
@@ -918,7 +931,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | ursaluna | hand, left_hand, mouth | Same attachment profile |
 | ursaring | hand, left_hand, mouth | Same attachment profile |
 | urshifu | foot, left_foot | Same attachment profile |
-| uxie | hand, left_hand | Same attachment profile |
+| uxie | hand, left_hand, mouth | Same attachment profile |
 | vanillish | mouth | Same attachment profile |
 | vanillite | mouth | Same attachment profile |
 | vaporeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -929,12 +942,15 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | victini | hand, left_hand, mouth | Same attachment profile |
 | victreebel | mouth | Same attachment profile |
 | victreebel-mega | mouth | Same attachment profile |
-| vigoroth | foot, hand, left_foot, left_hand | Same attachment profile |
+| vigoroth | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | vileplume | mouth | Same attachment profile |
+| virizion | mouth | Same attachment profile |
 | vivillon | mouth | Same attachment profile |
 | volbeat | hand, left_hand, mouth | Same attachment profile |
 | volcanion | hand, left_hand | Same attachment profile |
 | vullaby | hand, left_hand, mouth | Same attachment profile |
+| vulpix | mouth | Same attachment profile |
+| vulpix-alola | mouth | Same attachment profile |
 | wailmer | hand, left_hand, mouth | Same attachment profile |
 | wailord | mouth | Same attachment profile |
 | walking-wake | foot, left_foot | Same attachment profile |
@@ -950,6 +966,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | whiscash | hand, left_hand, mouth | Same attachment profile |
 | whismur | hand, left_hand, mouth | Same attachment profile |
 | wigglytuff | hand, left_hand, mouth | Same attachment profile |
+| wimpod | mouth | Same attachment profile |
 | wingull | mouth | Same attachment profile |
 | wishiwashi | mouth | Same attachment profile |
 | wishiwashi-school | mouth | Same attachment profile |

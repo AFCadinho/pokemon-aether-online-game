@@ -1,6 +1,7 @@
 extends SceneTree
 ## Captures every requested model's actual attack poses with candidate markers.
 const Catalog = preload("res://scripts/battle/battle_ui/reviewed_model_catalog.gd")
+const Pose = preload("res://tools/sprite_factory/attack_attachment_pose.gd")
 var catalog_path := ""
 var candidates := "res://.tmp/attack-attachments/candidates"
 var output := "res://.tmp/attack-attachments/previews"
@@ -59,6 +60,12 @@ func _point(actor: Node3D, source: Array) -> Vector3:
 			total += weight
 			break
 	return result/maxf(total,0.00001)
+
+func _visible(actor: Node3D, source: Array) -> bool:
+	if source.is_empty(): return false
+	if not source[0].has("visible_mesh"): return true
+	var mesh := actor.get_node_or_null(NodePath(str(source[0].visible_mesh))) as MeshInstance3D
+	return mesh != null and mesh.is_visible_in_tree()
 
 func _marker(color: Color) -> MeshInstance3D:
 	var marker := MeshInstance3D.new()
@@ -182,11 +189,15 @@ func _run() -> void:
 						overview_markers.append({"source":group,"marker":_marker(PART_COLORS.get(part,Color.WHITE))})
 			for column in 4:
 				var fraction: float = [0.2,0.45,0.65,0.45][column]
-				player.play(action)
-				player.seek(player.get_animation(action).length*fraction,true)
-				player.pause()
+				Pose.sample(player, action, player.get_animation(action).length*fraction)
 				for rig: Skeleton3D in actor.find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
 				for frame in 2: await process_frame
+				if selected_part != "all":
+					var active_sources := []
+					for group: Array in action_sources[selected_part]:
+						if _visible(actor, group): active_sources.append(group)
+					assert(emitter_index < active_sources.size(), "Requested emitter is not visible in this pose")
+					source = active_sources[emitter_index]
 				marker.position = _point(actor,source)
 				var geometry: Dictionary = report.geometry.get("head",{})
 				var size := maxf(float(profile.get("bounds",{}).get("idle",{}).get("size",[0.6,1,1])[0])*0.65,0.08)
@@ -203,6 +214,7 @@ func _run() -> void:
 					target = box.get_center()
 					size = maxf(box.size.length()*0.95,0.01)
 					for item: Dictionary in overview_markers:
+						item.marker.visible = _visible(actor, item.source)
 						item.marker.position = _point(actor,item.source)
 						item.marker.scale = Vector3.ONE*size*0.012
 				camera.position = target + direction*size
@@ -217,11 +229,11 @@ func _run() -> void:
 					for bone in rig.get_bone_count():
 						bones[rig.get_bone_name(bone)] = _transform(rig.global_transform*rig.get_bone_global_pose(bone))
 				captures.append({"action":action,"fraction":fraction,"column":column,"row":row,
-					"camera":_transform(camera.global_transform),"fov":camera.fov,"bones":bones,"parts":action_sources})
+					"camera":_transform(camera.global_transform),"fov":camera.fov,"bones":bones,"parts":action_sources,"meshes":Pose.meshes(actor)})
 		assert(sheet.save_png(output.path_join(identity+".png"))==OK)
 		var file := FileAccess.open(output.path_join(identity+".json"),FileAccess.WRITE)
 		file.store_string(JSON.stringify({"identity":identity,"runtime_sha256":entry.runtime_sha256,
-			"width":420,"height":360,"parts":sources,"captures":captures},"\t")+"\n")
+			"width":420,"height":360,"parts":sources,"captures":captures,"pose_sampling":"forward_from_start_v1"},"\t")+"\n")
 		file.close()
 		for item: Dictionary in overview_markers: item.marker.free()
 		actor.free()
