@@ -354,6 +354,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/wild_entry_before_response_check.gd",
 	"res://tests/wild_3d_opponent_preparation_check.gd",
 	"res://tests/early_3d_arena_check.gd",
+	"res://tests/android_3d_entry_visibility_check.gd",
 	"res://tests/hybrid_platform_framing_check.gd",
 	"res://tests/android_3d_platform_check.gd",
 	"res://tests/cached_3d_battle_ready_check.gd",

@@ -62,10 +62,14 @@ func _run() -> void:
 		deadline = started + 3000
 		while host.fade_progress < 1.0 and Time.get_ticks_msec() < deadline:
 			await process_frame
+			if host.fade_progress > 0.0:
+				_check(is_equal_approx(battle.animation_router.model_presenter.modulate.a, 1.0),
+					"the 3D arena is opaque from the first frame of the entry fade")
 		var stage: Node = battle.animation_router.model_presenter
 		_check(host.fade_progress == 1.0 and host.entry_arena_ready and not host.preparation_ready,
 			"the existing fade finishes before a response or model load")
 		_check(stage.viewport == pool.passes[0].viewport and stage.is_visible_in_tree(), "entry reuses the already drawn arena")
+		_check(is_equal_approx(stage.modulate.a, 1.0), "pending entry never exposes the 2D field beneath a transparent arena")
 		_check(stage.actors[0] == null and stage.actors[1] == null, "pending entry has no placeholder actors")
 		await _capture("pending-%d" % round_index)
 		var retained_viewport: SubViewport = stage.viewport
@@ -88,6 +92,7 @@ func _run() -> void:
 		for frame in 10:
 			await process_frame
 			_check(stage.viewport == retained_viewport and stage.is_visible_in_tree(), "arena stays visible throughout local model preparation")
+			_check(is_equal_approx(stage.modulate.a, 1.0), "model preparation keeps the arena opaque")
 			_check(battle.player_sprite_box.model_sprites_hidden and battle.enemy_sprite_box.model_sprites_hidden, "sprite frame refresh cannot flash a 2D Pokémon")
 		_check(probe.requested == ["dragonite", "garchomp@shiny", "dragonite-mega", "garchomp-mega@shiny", "garchomp-mega-z@shiny"],
 			"normal and shiny leads plus their possible Mega forms are requested: %s" % str(probe.requested))
@@ -145,6 +150,7 @@ func _check_empty_preview(pool: Node) -> void:
 	var stage: Node = battle.animation_router.model_presenter
 	_check(host.preparation_ready and not host.get_node("Cover").visible and stage.active and stage.viewport == pool.passes[0].viewport,
 		"empty Team Preview remains in 3D without requiring a Pokémon catalog")
+	_check(is_equal_approx(stage.modulate.a, 1.0), "empty Team Preview never exposes the underlying 2D field")
 	_check(stage.actors[0] == null and stage.actors[1] == null, "preview readiness never invents active combatants")
 	host.release()
 	host.free()
