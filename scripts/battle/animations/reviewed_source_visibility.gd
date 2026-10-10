@@ -6,6 +6,7 @@ const Pack = preload("res://scripts/battle/animations/source_visibility_pack.gd"
 const META := "pokeaether_source_visibility_revision"
 
 static func matches(identity: String,digest: String) -> bool:
+	digest = preload("res://scripts/services/model_pair_pilot.gd").source_digest(identity,digest)
 	var model: Dictionary=DATA.data.models.get(identity,{})
 	return not digest.is_empty() and (digest==model.get("source_sha256","") or digest==model.get("container_sha256",""))
 

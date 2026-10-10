@@ -490,8 +490,8 @@ func _verified_entry(entries: Array, identity: String, expected_digest: String) 
 
 
 func _local_index_path(release: Dictionary) -> String:
-	if PairPilot.enabled() and release.revision == PairPilot.DATA.data.catalog_revision:
-		return "res://data/model_pair_pilot.json"
+	if PairPilot.enabled() and release.revision == PairPilot.catalog().catalog_revision:
+		return PairPilot.data_path()
 	var pin: Dictionary = release.index
 	var launcher_path := OS.get_environment("POKEAETHER_MODEL_INDEX")
 	if launcher_path.is_absolute_path() and _valid_file(launcher_path, int(pin.size_bytes), str(pin.sha256)):
