@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1004 species/forms.
-- No anatomical attachment profile: 196 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1007 species/forms.
+- No anatomical attachment profile: 193 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 883 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -43,6 +43,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | arbok | mouth | Same attachment profile |
 | arcanine | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | arcanine-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| archaludon | hand, left_hand | Same attachment profile |
 | archen | hand, left_hand, mouth | Same attachment profile |
 | archeops | hand, left_hand, mouth | Same attachment profile |
 | arctibax | hand, left_hand, mouth | Same attachment profile |
@@ -286,7 +287,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | espathra | foot, left_foot, mouth | Same attachment profile |
 | espeon | foot, left_foot, mouth | Same attachment profile |
 | espurr | hand, left_hand, mouth | Same attachment profile |
-| excadrill | mouth | Same attachment profile |
+| excadrill | hand, left_hand, mouth | Same attachment profile |
 | excadrill-mega | mouth | Same attachment profile |
 | exeggutor | foot, left_foot | Same attachment profile |
 | exeggutor-alola | foot, left_foot | Same attachment profile |
@@ -336,7 +337,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | garbodor | hand, mouth | Same attachment profile |
 | garchomp | hand, left_hand, mouth | Same attachment profile |
 | garchomp-mega | mouth | Same attachment profile |
-| garchomp-mega-z | mouth | Same attachment profile |
+| garchomp-mega-z | hand, left_hand, mouth | Same attachment profile |
 | gardevoir | hand, left_hand, mouth | Same attachment profile |
 | gardevoir-mega | hand, left_hand, mouth | Same attachment profile |
 | garganacl | hand, left_hand | Same attachment profile |
@@ -575,7 +576,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mewtwo-mega-x | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mewtwo-mega-y | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mienfoo | foot, hand, left_foot, left_hand | Same attachment profile |
-| mienshao | foot, left_foot | Same attachment profile |
+| mienshao | foot, hand, left_foot, left_hand | Same attachment profile |
 | mightyena | hand, left_hand, mouth | Same attachment profile |
 | milcery | mouth | Same attachment profile |
 | miltank | hand, left_hand, mouth | Same attachment profile |
@@ -767,7 +768,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | sceptile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | sceptile-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | scizor | mouth | Same attachment profile |
-| scizor-mega | mouth | Same attachment profile |
+| scizor-mega | hand, left_hand, mouth | Same attachment profile |
 | scolipede | hand, left_hand | Same attachment profile |
 | scolipede-mega | hand, left_hand | Same attachment profile |
 | scorbunny | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -796,7 +797,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | shellos | mouth | Same attachment profile |
 | shelmet | mouth | Same attachment profile |
 | shieldon | hand, left_hand, mouth | Same attachment profile |
-| shiftry | foot, left_foot, mouth | Same attachment profile |
+| shiftry | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | shiinotic | mouth | Same attachment profile |
 | shinx | foot, left_foot, mouth | Same attachment profile |
 | shroomish | mouth | Same attachment profile |
@@ -881,6 +882,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | taillow | mouth | Same attachment profile |
 | tandemaus | foot, left_foot, mouth | Same attachment profile |
 | tangela | mouth | Same attachment profile |
+| tangrowth | hand, left_hand | Same attachment profile |
 | tapu-bulu | hand, left_hand, mouth | Same attachment profile |
 | tapu-fini | hand, left_hand, mouth | Same attachment profile |
 | tapu-koko | mouth | Same attachment profile |
@@ -921,6 +923,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | tranquill | mouth | Same attachment profile |
 | trapinch | hand, left_hand, mouth | Same attachment profile |
 | treecko | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| trevenant | hand, left_hand | Same attachment profile |
 | tropius | hand, left_hand, mouth | Same attachment profile |
 | trubbish | hand, left_hand, mouth | Same attachment profile |
 | trumbeak | mouth | Same attachment profile |
@@ -997,12 +1000,12 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | yanma | mouth | Same attachment profile |
 | yanmega | mouth | Same attachment profile |
 | yungoos | mouth | Same attachment profile |
-| yveltal | mouth | Same attachment profile |
+| yveltal | hand, left_hand, mouth | Same attachment profile |
 | zacian | hand, left_hand, mouth | Same attachment profile |
 | zacian-crowned | hand, left_hand, mouth | Same attachment profile |
 | zamazenta | hand, left_hand, mouth | Same attachment profile |
 | zamazenta-crowned | hand, left_hand, mouth | Same attachment profile |
-| zangoose | foot, left_foot, mouth | Same attachment profile |
+| zangoose | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | zapdos-galar | foot, left_foot | Same attachment profile |
 | zarude | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | zebstrika | foot, hand, left_foot, left_hand, mouth | Same attachment profile |

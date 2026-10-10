@@ -3485,6 +3485,94 @@
         "side_fraction": 0.45
       }
     },
+    "archaludon": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "0942b768425a666f69a50970e49bfe351049c27193dfa027e32d47870c546665",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c5d015c7ffa56856910028668a84e55005b70ed85462f94a2dbaa11e9f5808a4",
+          "scope": "Distal black/silver end of the index plate; idle, physical and special poses. Some views occluded by opposite plate. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "0942b768425a666f69a50970e49bfe351049c27193dfa027e32d47870c546665",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4959d90d413fce3cccb051f16b1653cd83d53ada375b3548631f2e858dc08dc6",
+          "scope": "Distal black/silver end of the index plate; idle, physical and special poses. Some views occluded by opposite plate. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_index_02",
+              "offset": [
+                0.22704452514648432,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_index_02",
+              "offset": [
+                0.22704478740692144,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "archen": {
       "part_reviews": {
         "hand": {
@@ -27672,7 +27760,101 @@
       }
     },
     "excadrill": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "ac6fbfbc339c6cdbb98307eeb64359e00ad3c5725f2d514ca72c6311649a1eca",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7404b5bb0c8608242350982de73320b3b1d7e061e0cffd1eca5471caaa72869b",
+          "scope": "Single central metal claw tip, avoiding averaged empty space when three claws spread. Idle, both physical attacks and special views reviewed; opposite claws sometimes occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "ac6fbfbc339c6cdbb98307eeb64359e00ad3c5725f2d514ca72c6311649a1eca",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "5c87468d367263a179106cad14b307592757e361e8082d05519d873a303a5483",
+          "scope": "Single central metal claw tip, avoiding averaged empty space when three claws spread. Idle, both physical attacks and special views reviewed; opposite claws sometimes occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_middle",
+              "offset": [
+                0.2080982744693757,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle",
+              "offset": [
+                0.20809851586818662,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -33364,7 +33546,214 @@
       }
     },
     "garchomp-mega-z": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": [
+            {
+              "capture_sha256": "2a0968ab17b7b8b0001ace22376f1ca970c24cf333047abc377e3c1848b4658f",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.636647308015563,
+                    0.178452545908481,
+                    0.184900146075955
+                  ],
+                  "column": 0.0,
+                  "distance": 3.74035902671536,
+                  "mesh": "pm0445_52_00/Skeleton3D/pm0445_52_00_claw_mesh",
+                  "pixel": [
+                    55.0,
+                    270.0
+                  ],
+                  "surface": 0,
+                  "triangle": 817,
+                  "vertex_indices": [
+                    716,
+                    718,
+                    717
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "52d624c5897bcb3a8341e3bcaec918978c0a3d6a4f36b19786e7ff7513794a3c",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.00160699694618827,
+                    0.922551346863569,
+                    0.0758416561902427
+                  ],
+                  "column": 3.0,
+                  "distance": 3.37804851992118,
+                  "mesh": "pm0445_52_00/Skeleton3D/pm0445_52_00_body_mesh",
+                  "pixel": [
+                    383.0,
+                    280.0
+                  ],
+                  "surface": 2,
+                  "triangle": 109,
+                  "vertex_indices": [
+                    158,
+                    160,
+                    159
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b0f06bb06f31a53b1629d735bebfd4cd51aff26488dfbf470ac583bba4d17727",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f655a2d08030692954faf61b641785088ae7cc0556646795256f33f8d2f43903",
+          "scope": "Distal serrated blade edge of each arm, selected independently on visible skin surfaces, following feeler bones as blades fold. Idle, physical and special poses; blade can occlude in side views. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_surface_landmarks": [
+            {
+              "capture_sha256": "2a0968ab17b7b8b0001ace22376f1ca970c24cf333047abc377e3c1848b4658f",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.636647308015563,
+                    0.178452545908481,
+                    0.184900146075955
+                  ],
+                  "column": 0.0,
+                  "distance": 3.74035902671536,
+                  "mesh": "pm0445_52_00/Skeleton3D/pm0445_52_00_claw_mesh",
+                  "pixel": [
+                    55.0,
+                    270.0
+                  ],
+                  "surface": 0,
+                  "triangle": 817,
+                  "vertex_indices": [
+                    716,
+                    718,
+                    717
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "52d624c5897bcb3a8341e3bcaec918978c0a3d6a4f36b19786e7ff7513794a3c",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.00160699694618827,
+                    0.922551346863569,
+                    0.0758416561902427
+                  ],
+                  "column": 3.0,
+                  "distance": 3.37804851992118,
+                  "mesh": "pm0445_52_00/Skeleton3D/pm0445_52_00_body_mesh",
+                  "pixel": [
+                    383.0,
+                    280.0
+                  ],
+                  "surface": 2,
+                  "triangle": 109,
+                  "vertex_indices": [
+                    158,
+                    160,
+                    159
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "b0f06bb06f31a53b1629d735bebfd4cd51aff26488dfbf470ac583bba4d17727",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c9522c8457a83a0ea6874c3f49b352c23dd4935c91b74770cf5d102b40183bde",
+          "scope": "Distal serrated blade edge of each arm, selected independently on visible skin surfaces, following feeler bones as blades fold. Idle, physical and special poses; blade can occlude in side views. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_feeler_02",
+              "offset": [
+                0.272526204586029,
+                -0.318736791610718,
+                0.0115755051374435
+              ],
+              "weight": 0.532876964198261
+            },
+            {
+              "bone": "right_feeler_01",
+              "offset": [
+                1.08276808261871,
+                -0.257394224405289,
+                0.0118872644379735
+              ],
+              "weight": 0.467123035801739
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_feeler_01",
+              "offset": [
+                0.951144933700562,
+                0.184381484985352,
+                0.0105543928220868
+              ],
+              "weight": 0.576196895035139
+            },
+            {
+              "bone": "left_feeler_02",
+              "offset": [
+                0.160633593797684,
+                0.219430968165398,
+                0.0089902738109231
+              ],
+              "weight": 0.421479704381502
+            },
+            {
+              "bone": "left_hand_sub",
+              "offset": [
+                0.132422551512718,
+                -1.10065293312073,
+                0.0522135347127914
+              ],
+              "weight": 0.00232340058335882
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -61209,6 +61598,25 @@
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
         },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "57c95c6f737f9e9aabf5557fbdca6813ebade66328d52ecf3df8876a72dc1fbf",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a949c6e5c80028a613a9fb180532296dafc986bd6e7a78ae9476760c6c926fca",
+          "scope": "Actual small finger pad on the hand beneath the long sleeve fur. Visible physical and special poses reviewed; sleeves occlude idle and some angles. Sleeve-whip move routing needs separate review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "left_foot": {
           "actions": [
             "idle",
@@ -61226,6 +61634,25 @@
           "preview_sha256": "0138d6bdf033b78fc4f8b6590ea0adafb91bdcdae944712f24a36e036ba17bb6",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "57c95c6f737f9e9aabf5557fbdca6813ebade66328d52ecf3df8876a72dc1fbf",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fb95bed33060278765ea98a3a792e8a58798e5785ce33e1cdaabd337995a7b66",
+          "scope": "Actual small finger pad on the hand beneath the long sleeve fur. Visible physical and special poses reviewed; sleeves occlude idle and some angles. Sleeve-whip move routing needs separate review. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
@@ -61242,6 +61669,19 @@
             }
           ]
         ],
+        "hand": [
+          [
+            {
+              "bone": "right_index",
+              "offset": [
+                0.072731912136078,
+                -0.0018361210823059013,
+                0.0012286752462387016
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "left_foot": [
           [
             {
@@ -61252,6 +61692,19 @@
                 0.00392866134643555
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_index",
+              "offset": [
+                0.0727191343903542,
+                0.0018435120582580514,
+                0.001230388879776001
+              ],
+              "weight": 1.0
             }
           ]
         ]
@@ -80772,7 +81225,109 @@
       }
     },
     "scizor-mega": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "9c720481b0b2821df503eaac50e30001e18e598ca1ca4449b1945b9cd1ec33a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4d939e59fc4031cf0777cc37990b71377e84eddc9bceb4412e65ae3671da2873",
+          "scope": "Weighted midpoint between distal pincer halves; closed physical strike and open special poses. Intentional gap when pincer opens. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "9c720481b0b2821df503eaac50e30001e18e598ca1ca4449b1945b9cd1ec33a3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "831ddd90a6066ec5e552bbd8e57f8feab9dd872d4c80110335b9c27f5cde148b",
+          "scope": "Weighted midpoint between distal pincer halves; closed physical strike and open special poses. Intentional gap when pincer opens. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_hand",
+              "offset": [
+                0.7075818300247195,
+                0,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "right_index",
+              "offset": [
+                0.5746268600225449,
+                0,
+                0
+              ],
+              "weight": 0.5
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_hand",
+              "offset": [
+                0.7075818866491314,
+                0,
+                0
+              ],
+              "weight": 0.5
+            },
+            {
+              "bone": "left_index",
+              "offset": [
+                0.574625217914581,
+                0,
+                0
+              ],
+              "weight": 0.5
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -83405,6 +83960,34 @@
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
         },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "acff2e77052b8720d55a1ff3af6ef9c9988e1b09fdd191caedc3aabfd92d258a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "653ee5562e34286b6dfdf4f4c98b560453ed279fca173e73432ed4e863c3cc4f",
+          "scope": "Tip of the central leaf blade, following distal middle_03 bending; idle, physical swing and special poses. Some left views occluded by head. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "left_foot": {
           "actions": [
             "idle",
@@ -83420,6 +84003,34 @@
           "normal_runtime_sha256": "acff2e77052b8720d55a1ff3af6ef9c9988e1b09fdd191caedc3aabfd92d258a",
           "preview_sha256": "06d469481e1d241d846354e1da8440e7ff6b6110436940d4c39f7f88c620a0e3",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "acff2e77052b8720d55a1ff3af6ef9c9988e1b09fdd191caedc3aabfd92d258a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "912d1954746acba323b7917e2873a96c5478b90f0c8ea6bfea0e7811292a0707",
+          "scope": "Tip of the central leaf blade, following distal middle_03 bending; idle, physical swing and special poses. Some left views occluded by head. Move routing and actual effects pending.",
           "side_fraction": 0.45
         }
       },
@@ -83437,6 +84048,19 @@
             }
           ]
         ],
+        "hand": [
+          [
+            {
+              "bone": "right_middle_03",
+              "offset": [
+                0.28114104866981493,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "left_foot": [
           [
             {
@@ -83447,6 +84071,19 @@
                 -0.0900228172540667
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle_03",
+              "offset": [
+                0.2811406731605532,
+                0,
+                0
+              ],
+              "weight": 1.0
             }
           ]
         ],
@@ -91282,6 +91919,96 @@
         "side_fraction": 0.45
       }
     },
+    "tangrowth": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8bd65e7bb85a58718552d08c58647f69aaa644591804eb16d8c3b182ce94b067",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d8ad5d874f58981a6ba138fa44dd4c452cb8e230b7708caadd918a0c8992bee8",
+          "scope": "Distal red middle fingertip on the stretching arm; idle, both physical attacks and special poses, including curled and spread fingers. Other arm/body may occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "8bd65e7bb85a58718552d08c58647f69aaa644591804eb16d8c3b182ce94b067",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cbe87c64b438748d593a5f2b1292eb6a779449ecbdc0a76fdc96edc1d10297cd",
+          "scope": "Distal red middle fingertip on the stretching arm; idle, both physical attacks and special poses, including curled and spread fingers. Other arm/body may occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_middle_03",
+              "offset": [
+                0.1491763114929195,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle_03",
+              "offset": [
+                0.1491760969161984,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
+      }
+    },
     "tapu-bulu": {
       "part_reviews": {
         "hand": {
@@ -95906,6 +96633,102 @@
         "preview_sha256": "246f563d4691737361e54e18b5417ebe84e666d73a0c602b0d705975744f9297",
         "scope": "mouth marker placement in sampled native action poses",
         "side_fraction": 0.45
+      }
+    },
+    "trevenant": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "d9c721a00ebd2408a120fea2e6d13c2b4386a6be37f7fd4db70fca659a197cdd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "20e4c843873a3d0a99a9435591a01c6980301892735c15afb252f3dd8f210992",
+          "scope": "Distal middle wooden finger/claw; follows open curl and closed fist through idle, physical and special poses. Opposite hand/body can occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "d9c721a00ebd2408a120fea2e6d13c2b4386a6be37f7fd4db70fca659a197cdd",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "776b585cd6c477bba9d9cd15037d22762931972fa0dfcfb6a6bb44e6a3927bec",
+          "scope": "Distal middle wooden finger/claw; follows open curl and closed fist through idle, physical and special poses. Opposite hand/body can occlude. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_middle_02",
+              "offset": [
+                0.1345475971698759,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle_02",
+              "offset": [
+                0.1345476508140564,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ]
       }
     },
     "tropius": {
@@ -103009,7 +103832,91 @@
       }
     },
     "yveltal": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6001a1e72b2c4a465272cb8f2d5cbacbca245c35de060a7839b355379de7da76",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a89ae452b1a4db3f46b70e98810eae8ce410e31eb68f911b761034e28c58282f",
+          "scope": "Distal central wing-finger claw, following flexion through idle, physical and special attacks. Distinguishes wing hand from lower foot talons; some opposite-wing occlusion. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "6001a1e72b2c4a465272cb8f2d5cbacbca245c35de060a7839b355379de7da76",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "005139a936d4c832d5e419fc33647c83273c590bed998d1c563a846223e545e3",
+          "scope": "Distal central wing-finger claw, following flexion through idle, physical and special attacks. Distinguishes wing hand from lower foot talons; some opposite-wing occlusion. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_middle_03",
+              "offset": [
+                0.4757397651672363,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle_03",
+              "offset": [
+                0.47574276924133263,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -103558,6 +104465,39 @@
           "scope": "White middle forward toe surface; arm/body occlusion excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a32f0044dc861822c10023f8d3c5ae645bee8c172787f34a3357441b06aff444",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0b95487830bde03a630990e8af8ad2a92aee083fa773b64bb0efd8f5ef4bff68",
+          "scope": "Distal middle claw tip, avoiding midpoint between the two spread claws. Idle, both physical and special poses; some near-arm/body occlusion. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "left_foot": {
           "actions": [
             "idle",
@@ -103576,6 +104516,39 @@
           "preview_sha256": "6977dec7e1c67e0afb9611442a08b4de4c05af4e9c9c22c4703d36b620cc61ca",
           "scope": "White middle forward toe surface; arm/body occlusion excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_distal_bone_proposal_requires_review",
+              "parts": [
+                "hand",
+                "left_hand"
+              ],
+              "reason": "v53 closeups located prior point near claw or finger root; move to distal geometry"
+            },
+            {
+              "method": "single_middle_claw_proposal_requires_review",
+              "reason": "Avoid empty gap between spread claws in v54"
+            }
+          ],
+          "method": "individual_native_part_pose_visual_review",
+          "normal_runtime_sha256": "a32f0044dc861822c10023f8d3c5ae645bee8c172787f34a3357441b06aff444",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "647b4c86982ab4a301ad2bc7d7e4305d3d1d52480dcfca9d8c11d5c00a383e71",
+          "scope": "Distal middle claw tip, avoiding midpoint between the two spread claws. Idle, both physical and special poses; some near-arm/body occlusion. Move routing and actual effects pending.",
+          "side_fraction": 0.45
         }
       },
       "parts": {
@@ -103592,6 +104565,19 @@
             }
           ]
         ],
+        "hand": [
+          [
+            {
+              "bone": "right_middle_02",
+              "offset": [
+                0.1337540388107301,
+                0,
+                0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
         "left_foot": [
           [
             {
@@ -103602,6 +104588,19 @@
                 0.0093502961099148
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_middle_02",
+              "offset": [
+                0.133753824234009,
+                0,
+                0
+              ],
+              "weight": 1.0
             }
           ]
         ],
