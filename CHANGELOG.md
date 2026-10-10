@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Move Vermilion Gym trainer spawn points away from bin approach tiles so every bin stays reachable from all sides.
+
 - Guard both Rock Tunnel entrances until the player has at least three Gym Badges; guards disappear when entry becomes available.
 
 - Open supported Android 3D battles directly on the 3D arena, without briefly showing the 2D field while battle data loads.
