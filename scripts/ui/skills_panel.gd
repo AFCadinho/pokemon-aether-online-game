@@ -29,6 +29,8 @@ const SKILL_FORUM_GUIDES := {
 }
 const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
 const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
+const OVERVIEW_PREFERRED_SIZE := Vector2(640, 470)
+const OVERVIEW_MINIMUM_SIZE := Vector2(400, 300)
 const WINDOW_EDGE_MARGIN := 12.0
 const DETAIL_GRID_MINIMUM_WIDTH := 700.0
 
@@ -140,7 +142,6 @@ func toggle_manager() -> void:
 
 
 func open_manager() -> void:
-	_fit_window_to_parent()
 	visible = true
 	showing_detail = false
 	_render_skills(SkillsService.get_skills())
@@ -290,7 +291,6 @@ func _build_interface() -> void:
 	skill_cards = GridContainer.new()
 	skill_cards.columns = 1
 	skill_cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	skill_cards.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	skill_cards.add_theme_constant_override("v_separation", 9)
 	overview_scroll.add_child(skill_cards)
 
@@ -580,6 +580,8 @@ func _render_skills(skills: Array) -> void:
 		overview_hint_label.text = ""
 		overview_panel.visible = true
 		detail_panel.visible = false
+		back_button.visible = false
+		_fit_window_to_parent()
 		return
 	var unlocked_count := 0
 	var total_level := 0
@@ -611,6 +613,7 @@ func _render_skills(skills: Array) -> void:
 		overview_panel.visible = true
 		detail_panel.visible = false
 		back_button.visible = false
+	_fit_window_to_parent()
 
 
 func _create_skill_overview_card(skill: Dictionary) -> Button:
@@ -621,7 +624,7 @@ func _create_skill_overview_card(skill: Dictionary) -> Button:
 	var accent := _skill_accent_color(skill_id) if skill_unlocked else LOCKED_COLOR
 	var button := Button.new()
 	button.name = "%sSkillCard" % skill_id.to_pascal_case()
-	button.custom_minimum_size = Vector2(0, 154)
+	button.custom_minimum_size = Vector2(0, 100)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.focus_mode = Control.FOCUS_NONE
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -634,27 +637,30 @@ func _create_skill_overview_card(skill: Dictionary) -> Button:
 	var margin := MarginContainer.new()
 	margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	margin.add_theme_constant_override("margin_left", 15)
-	margin.add_theme_constant_override("margin_top", 13)
-	margin.add_theme_constant_override("margin_right", 15)
-	margin.add_theme_constant_override("margin_bottom", 13)
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_bottom", 10)
 	button.add_child(margin)
 
 	var row := HBoxContainer.new()
 	row.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	row.add_theme_constant_override("separation", 14)
+	row.add_theme_constant_override("separation", 12)
 	margin.add_child(row)
 
 	var icon_frame := PanelContainer.new()
 	icon_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon_frame.custom_minimum_size = Vector2(66, 66)
-	icon_frame.add_theme_stylebox_override("panel", _make_panel_style(_with_alpha(accent, 0.10), _with_alpha(accent, 0.42), 9, 1))
+	icon_frame.custom_minimum_size = Vector2(48, 48)
+	icon_frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	var icon_style := _make_panel_style(_with_alpha(accent, 0.10), _with_alpha(accent, 0.42), 9, 1)
+	icon_style.set_content_margin_all(4.0)
+	icon_frame.add_theme_stylebox_override("panel", icon_style)
 	row.add_child(icon_frame)
 
 	var icon := TextureRect.new()
 	icon.name = "SkillIcon"
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icon.custom_minimum_size = Vector2(52, 52)
+	icon.custom_minimum_size = Vector2(36, 36)
 	icon.texture = _skill_icon(skill_id)
 	icon.modulate = Color.WHITE if skill_unlocked else Color("#788492")
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -665,7 +671,7 @@ func _create_skill_overview_card(skill: Dictionary) -> Button:
 	var copy := VBoxContainer.new()
 	copy.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	copy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	copy.add_theme_constant_override("separation", 5)
+	copy.add_theme_constant_override("separation", 4)
 	row.add_child(copy)
 
 	var card_header := HBoxContainer.new()
@@ -701,8 +707,9 @@ func _create_skill_overview_card(skill: Dictionary) -> Button:
 
 	var progress := ProgressBar.new()
 	progress.name = "SkillProgress"
+	progress.visible = skill_unlocked
 	progress.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	progress.custom_minimum_size.y = 12.0
+	progress.custom_minimum_size.y = 8.0
 	progress.show_percentage = false
 	progress.min_value = 0.0
 	progress.max_value = 100.0
@@ -721,6 +728,7 @@ func _create_skill_overview_card(skill: Dictionary) -> Button:
 	progress_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	if not skill_unlocked:
 		progress_label.text = _text(str(skill.get("unlockHintKey", "ui.skills.%s.unlock_hint" % skill_id)))
+		button.tooltip_text = progress_label.text
 	elif level >= max_level:
 		progress_label.text = _text("ui.skills.max_level")
 	else:
@@ -1585,13 +1593,15 @@ func _fit_window_to_parent() -> void:
 	var available_size := parent_control.size - Vector2.ONE * WINDOW_EDGE_MARGIN * 2.0
 	available_size.x = maxf(available_size.x, 320.0)
 	available_size.y = maxf(available_size.y, 360.0)
+	var preferred_size := WINDOW_PREFERRED_SIZE if showing_detail else OVERVIEW_PREFERRED_SIZE
+	var minimum_size := WINDOW_MINIMUM_SIZE if showing_detail else OVERVIEW_MINIMUM_SIZE
 	custom_minimum_size = Vector2(
-		minf(WINDOW_MINIMUM_SIZE.x, available_size.x),
-		minf(WINDOW_MINIMUM_SIZE.y, available_size.y)
+		minf(minimum_size.x, available_size.x),
+		minf(minimum_size.y, available_size.y)
 	)
 	size = Vector2(
-		minf(WINDOW_PREFERRED_SIZE.x, available_size.x),
-		minf(WINDOW_PREFERRED_SIZE.y, available_size.y)
+		minf(preferred_size.x, available_size.x),
+		minf(preferred_size.y, available_size.y)
 	)
 	_clamp_window_to_parent()
 
