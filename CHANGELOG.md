@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Align Vermilion Gym bin visuals to the gameplay tile grid so players can stand directly in front of each bin.
+
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
 
 - Replace the rails around Vermilion Gym's puzzle floor with open walkways and give Lt. Surge a raised stone stage with central steps.
