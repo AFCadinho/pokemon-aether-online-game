@@ -12398,7 +12398,115 @@
       }
     },
     "charizard": {
+      "part_reviews": {
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93b657b9a694a2de21313d6418fd93347dfbcf0e046b67ebd877e41de3036e27",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "ca54385f4f69b27db284afa3ecce382f4fa89ec48737ce6fd74df12763c77dc2",
+            "c59f2cb777c75ebccb73e884c9f2102a6f820bf264ef27c480ef3b11ad35c659"
+          ],
+          "scope": "Visible sampled hand/fist centers individually reviewed; occluded poses excluded. Separate distal claws, wings, move routing and effects remain pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93b657b9a694a2de21313d6418fd93347dfbcf0e046b67ebd877e41de3036e27",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "ca54385f4f69b27db284afa3ecce382f4fa89ec48737ce6fd74df12763c77dc2",
+            "c59f2cb777c75ebccb73e884c9f2102a6f820bf264ef27c480ef3b11ad35c659"
+          ],
+          "scope": "Visible sampled hand/fist centers individually reviewed; occluded poses excluded. Separate distal claws, wings, move routing and effects remain pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "hand": [
+          [
+            {
+              "bone": "right_index_01",
+              "offset": [
+                0.047645986080169705,
+                -0.0103577747941017,
+                -0.007063090801239048
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_middle_01",
+              "offset": [
+                0.026553243398666364,
+                -0.0009968793019652488,
+                -0.0029569864273071497
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_ring_01",
+              "offset": [
+                0.040276899933815,
+                0.0013718977570533995,
+                -0.0056895911693573015
+              ],
+              "weight": 0.3333333333333333
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_index_01",
+              "offset": [
+                0.0476457178592682,
+                0.010358050465583801,
+                -0.00706201791763305
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_middle_01",
+              "offset": [
+                0.026552543044090285,
+                0.0009966492652892997,
+                -0.0029555559158324987
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_ring_01",
+              "offset": [
+                0.040276587009429946,
+                -0.0013721436262130998,
+                -0.005687773227691649
+              ],
+              "weight": 0.3333333333333333
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -51239,6 +51347,48 @@
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
         },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93103e5c96db466fb975cfcf4cb7a65b32ed00cde8df93c1ae467e9ea00d8446",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "9d4ffaf7348d139329e2becb7a50aa07e81cedbd725f44bf28b07936cb127927",
+            "8bc5e49d2630080f569a8a1e145f5105422fee3c3112ef2f5280a5005eccb657"
+          ],
+          "scope": "All four hand/fist centers individually reviewed in sampled native poses and both views. Upper pair has separate named parts; multi-punch move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "hand_upper": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93103e5c96db466fb975cfcf4cb7a65b32ed00cde8df93c1ae467e9ea00d8446",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "9d4ffaf7348d139329e2becb7a50aa07e81cedbd725f44bf28b07936cb127927",
+            "8bc5e49d2630080f569a8a1e145f5105422fee3c3112ef2f5280a5005eccb657"
+          ],
+          "scope": "All four hand/fist centers individually reviewed in sampled native poses and both views. Upper pair has separate named parts; multi-punch move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "left_foot": {
           "actions": [
             "idle",
@@ -51254,6 +51404,48 @@
           "normal_runtime_sha256": "93103e5c96db466fb975cfcf4cb7a65b32ed00cde8df93c1ae467e9ea00d8446",
           "preview_sha256": "d6facee1e84c037f450644d43ab61fcec28788b19b7853fbfee8d75f4ad27b81",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93103e5c96db466fb975cfcf4cb7a65b32ed00cde8df93c1ae467e9ea00d8446",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "9d4ffaf7348d139329e2becb7a50aa07e81cedbd725f44bf28b07936cb127927",
+            "8bc5e49d2630080f569a8a1e145f5105422fee3c3112ef2f5280a5005eccb657"
+          ],
+          "scope": "All four hand/fist centers individually reviewed in sampled native poses and both views. Upper pair has separate named parts; multi-punch move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_hand_upper": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "finger_skin_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "93103e5c96db466fb975cfcf4cb7a65b32ed00cde8df93c1ae467e9ea00d8446",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": [
+            "9d4ffaf7348d139329e2becb7a50aa07e81cedbd725f44bf28b07936cb127927",
+            "8bc5e49d2630080f569a8a1e145f5105422fee3c3112ef2f5280a5005eccb657"
+          ],
+          "scope": "All four hand/fist centers individually reviewed in sampled native poses and both views. Upper pair has separate named parts; multi-punch move routing and effects pending.",
           "side_fraction": 0.45
         }
       },
@@ -51271,6 +51463,68 @@
             }
           ]
         ],
+        "hand": [
+          [
+            {
+              "bone": "right_a_index_01",
+              "offset": [
+                0.0435647070407867,
+                0.0034489631652832014,
+                -0.00243073701858525
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_a_middle_01",
+              "offset": [
+                0.04569262266159055,
+                0.003134190104901801,
+                -0.003656148910522501
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_a_ring_01",
+              "offset": [
+                0.0403921604156494,
+                0.0029266886413097486,
+                -0.00342345237731935
+              ],
+              "weight": 0.3333333333333333
+            }
+          ]
+        ],
+        "hand_upper": [
+          [
+            {
+              "bone": "right_b_index_01",
+              "offset": [
+                0.053982436656951904,
+                -0.0019008219242096017,
+                0.0010462403297424004
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_b_middle_01",
+              "offset": [
+                0.048253178596496575,
+                -0.0013381913304329023,
+                -0.00028884410858150134
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "right_b_ring_01",
+              "offset": [
+                0.0457893013954163,
+                0.0006664544343948503,
+                -0.00569915771484375
+              ],
+              "weight": 0.3333333333333333
+            }
+          ]
+        ],
         "left_foot": [
           [
             {
@@ -51281,6 +51535,68 @@
                 -0.0083580194041133
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_a_index_01",
+              "offset": [
+                0.0435649454593658,
+                -0.0034489706158638,
+                -0.002430617809295649
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_a_middle_01",
+              "offset": [
+                0.04569277167320255,
+                -0.0031341938301920995,
+                -0.0036560297012329015
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_a_ring_01",
+              "offset": [
+                0.04039183259010315,
+                -0.00292669516056775,
+                -0.00342345237731935
+              ],
+              "weight": 0.3333333333333333
+            }
+          ]
+        ],
+        "left_hand_upper": [
+          [
+            {
+              "bone": "left_b_index_01",
+              "offset": [
+                0.053980827331542955,
+                0.0018926709890365514,
+                0.0010464191436767509
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_b_middle_01",
+              "offset": [
+                0.04825234413146975,
+                0.0013299807906151009,
+                -0.0002888441085815499
+              ],
+              "weight": 0.3333333333333333
+            },
+            {
+              "bone": "left_b_ring_01",
+              "offset": [
+                0.0457897186279297,
+                -0.0006743222475052019,
+                -0.0056993365287781005
+              ],
+              "weight": 0.3333333333333333
             }
           ]
         ],
@@ -52116,7 +52432,92 @@
       }
     },
     "magmortar": {
+      "move_effect_reviews": {
+        "flamethrower": {
+          "action": "special_attack",
+          "attachment_data_sha256_at_capture": "ef834da8d61f7d899b0b598356df7f359a403cc4b62aa83ddcf1e43a0d44bd93",
+          "normal_runtime_sha256": "5a55afc86984179180d08e38bfd487136b7e2d92d9de92e1ecc09e00b8ed59e6",
+          "preview_sha256": "f911edf54553f90f58cba91b0fb9fe67369a690cba5cad0f612d7afa02ef1efe",
+          "scope": "Normal and shiny offline stage: Flamethrower originates at the right arm cannon opening in sampled frames. Live battle and effect art/scale pending.",
+          "shiny_preview_sha256": "2adac2d0e6738a05516ad50337f6d8dde37d001efac5ac5b0102d2df2878304d",
+          "shiny_runtime_sha256": "70bb0b0f124d0622815d8a3d921f9c212be083c0ec7c5a5e4108b9b27ecc84b2",
+          "status": "sampled_runtime_origin_review_pass",
+          "views": 2
+        }
+      },
+      "moves": {
+        "ember": "cannon",
+        "flamethrower": "cannon"
+      },
       "part_reviews": {
+        "cannon": {
+          "actions": [
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "manual_skinned_rim_projection_visual_review",
+          "normal_runtime_sha256": "5a55afc86984179180d08e38bfd487136b7e2d92d9de92e1ecc09e00b8ed59e6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "056f55002f90481f73a0c8385e3454c75b6baab71ad2c26e9cab4ca61efecf54",
+          "scope": "Right arm cannon opening individually reviewed in all sampled special-attack poses and side view. Ember/Flamethrower route to this cannon; actual effects pending.",
+          "side_fraction": 0.45,
+          "surface_landmarks": {
+            "capture_sha256": "4367a6c2edcf5d1949f3d66bec395193aa2a3770d6ee7d38af52764459f5ccd2",
+            "landmarks": [
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.481379021445724,
+                  0.160183730309848,
+                  0.358437248244429
+                ],
+                "column": 1.0,
+                "distance": 2.50364084165509,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  117.0,
+                  148.0
+                ],
+                "surface": 0,
+                "triangle": 2087,
+                "vertex_indices": [
+                  2521,
+                  2520,
+                  2524
+                ],
+                "weight": 0.5
+              },
+              {
+                "action": "special_attack",
+                "barycentric": [
+                  0.145989302321346,
+                  0.82248331677594,
+                  0.0315273809027143
+                ],
+                "column": 1.0,
+                "distance": 2.52640715431879,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  187.0,
+                  148.0
+                ],
+                "surface": 0,
+                "triangle": 2130,
+                "vertex_indices": [
+                  2660,
+                  2669,
+                  2668
+                ],
+                "weight": 0.5
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          }
+        },
         "foot": {
           "actions": [
             "idle",
@@ -52135,6 +52536,100 @@
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
         },
+        "hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "manual_skinned_claw_surface_projection_visual_review",
+          "normal_runtime_sha256": "5a55afc86984179180d08e38bfd487136b7e2d92d9de92e1ecc09e00b8ed59e6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bbf78226dfc799ee0b894669469f81354d72f37f50cfb38f03561304927de253",
+          "scope": "Both claw/hand contact centers individually reviewed in visible sampled native poses. Emitting cannon opening has a separate part; actual punch effects pending.",
+          "side_fraction": 0.45,
+          "surface_landmarks": {
+            "capture_sha256": "d34894368021e5e809e66b77d290d7c021cd8973be297ca474ab93df1b8cb2d6",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.188683880759119,
+                  0.526842591784288,
+                  0.284473527456593
+                ],
+                "column": 2.0,
+                "distance": 1.30089809478899,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  270.0,
+                  165.0
+                ],
+                "surface": 0,
+                "triangle": 3718,
+                "vertex_indices": [
+                  113,
+                  114,
+                  110
+                ],
+                "weight": 0.333333333333333
+              },
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.331614330336427,
+                  0.363755118338415,
+                  0.304630551325158
+                ],
+                "column": 2.0,
+                "distance": 1.24427906752603,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  250.0,
+                  226.0
+                ],
+                "surface": 0,
+                "triangle": 3836,
+                "vertex_indices": [
+                  173,
+                  174,
+                  169
+                ],
+                "weight": 0.333333333333333
+              },
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.172203528430905,
+                  0.683597824134793,
+                  0.144198647434302
+                ],
+                "column": 2.0,
+                "distance": 1.19973449762788,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  205.0,
+                  170.0
+                ],
+                "surface": 0,
+                "triangle": 3784,
+                "vertex_indices": [
+                  153,
+                  131,
+                  152
+                ],
+                "weight": 0.333333333333333
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          }
+        },
         "left_foot": {
           "actions": [
             "idle",
@@ -52152,9 +52647,134 @@
           "preview_sha256": "8ed156b845324e8e0e9b5e6417e7d32cefe7706022e3991cbb74884c08be8484",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
           "side_fraction": 0.45
+        },
+        "left_hand": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "manual_skinned_claw_surface_projection_visual_review",
+          "normal_runtime_sha256": "5a55afc86984179180d08e38bfd487136b7e2d92d9de92e1ecc09e00b8ed59e6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bbf78226dfc799ee0b894669469f81354d72f37f50cfb38f03561304927de253",
+          "scope": "Both claw/hand contact centers individually reviewed in visible sampled native poses. Emitting cannon opening has a separate part; actual punch effects pending.",
+          "side_fraction": 0.45,
+          "surface_landmarks": {
+            "capture_sha256": "4367a6c2edcf5d1949f3d66bec395193aa2a3770d6ee7d38af52764459f5ccd2",
+            "landmarks": [
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.251049242827982,
+                  0.214395079198699,
+                  0.534555677973319
+                ],
+                "column": 2.0,
+                "distance": 3.08834914379279,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  328.0,
+                  154.0
+                ],
+                "surface": 0,
+                "triangle": 3875,
+                "vertex_indices": [
+                  1459,
+                  1454,
+                  1458
+                ],
+                "weight": 0.333333333333333
+              },
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.30875819987273,
+                  0.420511723287915,
+                  0.270730076839356
+                ],
+                "column": 2.0,
+                "distance": 3.0282416650218,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  348.0,
+                  154.0
+                ],
+                "surface": 0,
+                "triangle": 3731,
+                "vertex_indices": [
+                  51,
+                  52,
+                  48
+                ],
+                "weight": 0.333333333333333
+              },
+              {
+                "action": "physical_attack",
+                "barycentric": [
+                  0.506550695038189,
+                  0.460650116934513,
+                  0.0327991880272984
+                ],
+                "column": 2.0,
+                "distance": 3.10393325179898,
+                "mesh": "pm0467_00_00/Skeleton3D/pm0467_00_00_body_mesh",
+                "pixel": [
+                  337.0,
+                  180.0
+                ],
+                "surface": 0,
+                "triangle": 3894,
+                "vertex_indices": [
+                  1467,
+                  1455,
+                  1452
+                ],
+                "weight": 0.333333333333333
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          }
         }
       },
       "parts": {
+        "cannon": [
+          [
+            {
+              "bone": "right_feeler_b",
+              "offset": [
+                0.18684133887291,
+                -0.0589518137276173,
+                -0.0318912453949451
+              ],
+              "weight": 0.173222427858725
+            },
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.423732459545135,
+                0.0227468498051167,
+                0.0129780322313309
+              ],
+              "weight": 0.78736035017771
+            },
+            {
+              "bone": "right_feeler_e",
+              "offset": [
+                0.191042900085449,
+                0.0230284929275513,
+                -0.00642146170139313
+              ],
+              "weight": 0.039417221963565
+            }
+          ]
+        ],
         "foot": [
           [
             {
@@ -52168,6 +52788,55 @@
             }
           ]
         ],
+        "hand": [
+          [
+            {
+              "bone": "right_finger_a",
+              "offset": [
+                0.105987414717674,
+                0.00587670831009746,
+                -0.0040545635856688
+              ],
+              "weight": 0.319023167924663
+            },
+            {
+              "bone": "right_hand",
+              "offset": [
+                0.0728787928819656,
+                -0.0289693847298622,
+                -0.0381654091179371
+              ],
+              "weight": 0.0745839430622353
+            },
+            {
+              "bone": "right_finger_b",
+              "offset": [
+                0.109927847981453,
+                0.00782805308699608,
+                0.00634075189009309
+              ],
+              "weight": 0.319426298146638
+            },
+            {
+              "bone": "right_finger_c",
+              "offset": [
+                0.0687113180756569,
+                -0.0125597268342972,
+                0.0191151052713394
+              ],
+              "weight": 0.260599340551525
+            },
+            {
+              "bone": "right_arm_02",
+              "offset": [
+                0.411515116691589,
+                -0.0602658726274967,
+                -0.068806380033493
+              ],
+              "weight": 0.026367250314939
+            }
+          ]
+        ],
         "left_foot": [
           [
             {
@@ -52178,6 +52847,37 @@
                 -0.0019074752926826512
               ],
               "weight": 1
+            }
+          ]
+        ],
+        "left_hand": [
+          [
+            {
+              "bone": "left_arm_02",
+              "offset": [
+                0.479566872119904,
+                -0.0261969864368439,
+                -0.00480015575885773
+              ],
+              "weight": 0.493140081370188
+            },
+            {
+              "bone": "left_hand",
+              "offset": [
+                0.0770294293761253,
+                -0.0130677009001374,
+                0.00877491757273674
+              ],
+              "weight": 0.188111612725166
+            },
+            {
+              "bone": "left_finger_c",
+              "offset": [
+                0.106710158288479,
+                -0.0135013544932008,
+                -0.0183285586535931
+              ],
+              "weight": 0.318748305904646
             }
           ]
         ],
@@ -76965,6 +77665,43 @@
       }
     },
     "serperior": {
+      "move_actions": {
+        "vinewhip": "physical_attack"
+      },
+      "move_effect_reviews": {
+        "vinewhip": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "ef834da8d61f7d899b0b598356df7f359a403cc4b62aa83ddcf1e43a0d44bd93",
+          "normal_runtime_sha256": "c5636190ce31e3d417fed4a8ca09c2e693b60747772f60b9685114f98d754861",
+          "preview_sha256": "e1f065b816e1d22985c56c02e6be79c0516573f08cf61f65946e0fe47115da2b",
+          "scope": "Normal and shiny offline stage: both lash origins follow animated vine tips in sampled frames. Live battle and effect art/scale pending.",
+          "shiny_preview_sha256": "e0f64472572e1fc057b3c2f4d12e4679cfe58290b091ce2916670d8ba2ed55e7",
+          "shiny_runtime_sha256": "31a35ad59641f2428568264dbe913f7992767c3334f4a038f737741d9100be7e",
+          "status": "sampled_runtime_origin_review_pass",
+          "views": 2
+        }
+      },
+      "moves": {
+        "vinewhip": "vines"
+      },
+      "part_reviews": {
+        "vines": {
+          "actions": [
+            "physical_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "c5636190ce31e3d417fed4a8ca09c2e693b60747772f60b9685114f98d754861",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "265b47555aaff9c5580c25d0584c2464c3220743a753545e93c08f520af3adad",
+          "scope": "Both visible vine tips reviewed in the native vine attack. Idle and non-vine actions conceal the vines. Actual Vine Whip effect review pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
         "mouth": [
           [
@@ -76985,6 +77722,30 @@
                 -0.00130977632943541
               ],
               "weight": 0.5
+            }
+          ]
+        ],
+        "vines": [
+          [
+            {
+              "bone": "left_feeler_c_10",
+              "offset": [
+                0.162422657012939,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ],
+          [
+            {
+              "bone": "right_feeler_c_10",
+              "offset": [
+                0.162422657012939,
+                0,
+                0
+              ],
+              "weight": 1
             }
           ]
         ]
@@ -77009,6 +77770,43 @@
       }
     },
     "servine": {
+      "move_actions": {
+        "vinewhip": "physical_attack_2"
+      },
+      "move_effect_reviews": {
+        "vinewhip": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "9275eb0da3e80f1bf4a4abcabf7e625e8301e5c805ad87c9c6c2b7c01e7a98db",
+          "normal_runtime_sha256": "3effef4e041e39ea6b6ffe77e51c075b162ac6b52759bc414dd98d868c36544e",
+          "preview_sha256": "d496d7de2c44d5d74349812b4d07e746e9bdbbe9de4012b564fde64cf4d2dee6",
+          "scope": "Normal and shiny offline stage: both lash origins follow animated vine tips in sampled frames. Live battle and effect art/scale pending.",
+          "shiny_preview_sha256": "7e01203600713cdb996366fe328dfdbc17d01420c518d7090e9faef706b9886a",
+          "shiny_runtime_sha256": "e70aadf6680b1e415cf8c99833a2d4508f75e49f749d2aaee7d54dd171c825ac",
+          "status": "sampled_runtime_origin_review_pass",
+          "views": 2
+        }
+      },
+      "moves": {
+        "vinewhip": "vines"
+      },
+      "part_reviews": {
+        "vines": {
+          "actions": [
+            "physical_attack_2"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "3effef4e041e39ea6b6ffe77e51c075b162ac6b52759bc414dd98d868c36544e",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "900f43c3c743e0208fecc671c1af4bb9bcbad6c1d2ace61c2a48bca6a5f7b789",
+          "scope": "Both visible vine tips reviewed in the native vine attack. Idle and non-vine actions conceal the vines. Actual Vine Whip effect review pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
         "mouth": [
           [
@@ -77029,6 +77827,30 @@
                 -0.00745826959609985
               ],
               "weight": 0.5
+            }
+          ]
+        ],
+        "vines": [
+          [
+            {
+              "bone": "left_feeler_b_10",
+              "offset": [
+                0.0974537134170532,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ],
+          [
+            {
+              "bone": "right_feeler_b_10",
+              "offset": [
+                0.0974538326263428,
+                0,
+                0
+              ],
+              "weight": 1
             }
           ]
         ]

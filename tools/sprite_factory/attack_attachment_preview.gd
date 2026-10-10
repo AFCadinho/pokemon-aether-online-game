@@ -12,6 +12,7 @@ var camera_scale := 1.0
 var camera_yaw := 0.0
 var camera_elevation := 0.0
 var emitter_index := 0
+var pose_fractions: Array[float] = [0.2, 0.45, 0.65, 0.45]
 var viewport: SubViewport
 var world: Node3D
 var camera: Camera3D
@@ -27,7 +28,7 @@ func _transform(value: Transform3D) -> Array:
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	for i in args.size():
-		if args[i] in ["--catalog", "--candidates", "--output", "--species", "--part", "--camera-scale", "--camera-yaw", "--camera-elevation", "--emitter"] and i + 1 >= args.size():
+		if args[i] in ["--catalog", "--candidates", "--output", "--species", "--part", "--camera-scale", "--camera-yaw", "--camera-elevation", "--emitter", "--fractions"] and i + 1 >= args.size():
 			printerr("Missing value for ", args[i])
 			quit(1)
 			return
@@ -41,6 +42,16 @@ func _init() -> void:
 		if args[i] == "--camera-yaw": camera_yaw = deg_to_rad(float(args[i+1]))
 		if args[i] == "--camera-elevation": camera_elevation = float(args[i+1])
 		if args[i] == "--emitter": emitter_index = int(args[i+1])
+		if args[i] == "--fractions":
+			var values := args[i+1].split(",")
+			if values.size() != 4:
+				printerr("Supply four fractions: three primary views and one side view")
+				quit(1); return
+			for column in 4:
+				if not values[column].is_valid_float() or not is_finite(float(values[column])) or float(values[column]) < 0.0 or float(values[column]) > 1.0:
+					printerr("Pose fractions must be finite numbers from zero to one")
+					quit(1); return
+				pose_fractions[column] = float(values[column])
 	if camera_scale <= 0.0 or not is_finite(camera_scale) or emitter_index < 0:
 		printerr("Camera scale must be positive and emitter index nonnegative")
 		quit(1)
@@ -188,7 +199,7 @@ func _run() -> void:
 					for group: Array in action_sources[part]:
 						overview_markers.append({"source":group,"marker":_marker(PART_COLORS.get(part,Color.WHITE))})
 			for column in 4:
-				var fraction: float = [0.2,0.45,0.65,0.45][column]
+				var fraction: float = pose_fractions[column]
 				Pose.sample(player, action, player.get_animation(action).length*fraction)
 				for rig: Skeleton3D in actor.find_children("*","Skeleton3D",true,false): rig.force_update_all_bone_transforms()
 				for frame in 2: await process_frame

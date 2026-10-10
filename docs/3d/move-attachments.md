@@ -23,6 +23,9 @@ weighted bone-local points, allowing a mouth origin to follow both moving lips.
 `actions` can override parts for a particular native clip; `moves` selects a
 part for an individual move and `move_actions` selects its native attack clip.
 Snivy's Vine Whip uses both animated vine tips and `physical_attack_2`.
+Servine uses that same action name with its own measured tip offsets; Serperior
+uses `physical_attack`. Magmortar's Ember and Flamethrower use the right cannon
+opening, independently of its claw contact points and mouth.
 The first point in an emitter group may specify `visible_mesh`, an exact
 actor-relative mesh path. The group emits only while that mesh is visible.
 This supports rigs that replace a closed muzzle with a separate open muzzle;

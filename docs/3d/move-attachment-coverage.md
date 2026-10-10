@@ -138,7 +138,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | cetoddle | hand, left_hand | Same attachment profile |
 | chansey | hand, left_hand, mouth | Same attachment profile |
 | charcadet | hand, left_hand | Same attachment profile |
-| charizard | mouth | Same attachment profile |
+| charizard | hand, left_hand, mouth | Same attachment profile |
 | charizard-mega-x | mouth | Same attachment profile |
 | charizard-mega-y | mouth | Same attachment profile |
 | charjabug | mouth | Same attachment profile |
@@ -519,14 +519,14 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | luxray | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | lycanroc | hand, left_hand, mouth | Same attachment profile |
 | mabosstiff | mouth | Same attachment profile |
-| machamp | foot, left_foot, mouth | Same attachment profile |
+| machamp | foot, hand, hand_upper, left_foot, left_hand, left_hand_upper, mouth | Same attachment profile |
 | machoke | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | machop | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magby | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magcargo | mouth | Same attachment profile |
 | magikarp | mouth | Same attachment profile |
 | magmar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| magmortar | foot, left_foot, mouth | Same attachment profile |
+| magmortar | cannon, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | makuhita | hand, left_hand, mouth | Same attachment profile |
 | malamar | mouth | Same attachment profile |
 | malamar-mega | mouth | Same attachment profile |
@@ -776,8 +776,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | seel | mouth | Same attachment profile |
 | seismitoad | foot, hand, left_hand, mouth | Same attachment profile |
 | sentret | hand, left_hand, mouth | Same attachment profile |
-| serperior | mouth | Same attachment profile |
-| servine | mouth | Same attachment profile |
+| serperior | mouth, vines | Same attachment profile |
+| servine | mouth, vines | Same attachment profile |
 | seviper | mouth | Same attachment profile |
 | sewaddle | mouth | Same attachment profile |
 | sharpedo | hand, left_hand, mouth | Same attachment profile |

@@ -55,11 +55,12 @@ func _run() -> void:
 		var moves := {}
 		for bucket: String in BUCKETS:
 			for value in raw.get(bucket, []):
-				var move := Recipes.key(str(value.get("move", "")) if value is Dictionary else str(value))
+				var move_name := str(value.get("move", "")) if value is Dictionary else str(value)
+				var move := Recipes.key(move_name)
 				if move.is_empty():
 					errors.append("Empty move: " + filename + ":" + bucket)
 					continue
-				moves[move] = true
+				moves[move] = move_name
 		var groups := {}
 		var routes := {}
 		var unsupported: Array[String] = []
@@ -72,7 +73,9 @@ func _run() -> void:
 			# These two renderers reserve explicit orb clearance before sampling
 			# anatomical attachments. Report their effective runtime behavior.
 			var part := "orb_clearance" if move in ["moonblast", "dracometeor"] else Attachments.part_for(identity, move)
-			var requested := stage.attack_action_for(move, "p1")
+			# The category index uses hyphenated learnset IDs. Recipe keys have
+			# removed those separators and must not be fed to the selector.
+			var requested := stage.attack_action_for(str(moves[move]), "p1")
 			var mapped := Stage.ActionMap.resolve(requested, PackedStringArray(timing.keys()), timing)
 			var action := str(mapped.get("action", ""))
 			if action.is_empty(): errors.append("Missing attack action: " + identity + ":" + move)

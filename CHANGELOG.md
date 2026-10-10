@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy's Vine Whip to both animated vine tips, follow Thwackey's open/closed muzzle changes, and track Mega Golurk's detached rocket fists.
+- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, and emit Magmortar's fire attacks from its arm cannon.
 
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
 
