@@ -9,11 +9,16 @@ to the target and back on the same native action clock.
 
 ## Initial profiles
 
+The [full catalog coverage audit](move-attachment-coverage.md) lists every
+supported species/form and distinguishes configured attachments from bounds
+fallbacks. Rerun it after changing profiles or admitting additional models.
+
 | Model | Move/part | Bone(s) |
 | --- | --- | --- |
 | Pikachu | Thunder Shock, Thunderbolt / electric body | `spine_02` |
 | Charmander | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
 | Charmander | Scratch / hand | `right_hand` |
+| Charmeleon | Flamethrower and other mouth moves / mouth | `head` |
 | Squirtle | Ember, Flamethrower, Water Gun, Bubble, Bubble Beam, Ice Beam, Bite / mouth | `head` |
 | Blastoise | Water Gun, Bubble Beam, Ice Beam, Flash Cannon / cannons | `left_feeler_b_02`, `right_feeler_b_02` |
 | Blastoise | Ember, Flamethrower, Bubble, Bite / mouth | `head` |
@@ -32,6 +37,12 @@ Blastoise's cannon mesh weights identify the two `feeler_b_02` bones as the
 moving barrels: the muzzle is at approximately local X = 0.261 m, Y/Z = 0.
 The rig's rest pose is not its mesh bind pose, so using a mesh-space point as a
 bone offset produces an incorrect origin.
+
+Charmeleon's mouth uses head-local `(-0.015, 0, 0.235)`, calibrated against
+the native special-attack pose and the lip geometry in skin bind space. This
+also applies to shiny Charmeleon. Previously its mouth moves used 82% of the
+idle bounds height, which did not follow the head during attacks, including
+the player's Flamethrower in NPC battles.
 
 Bindings are cached on each model instance; skeleton references are weak.
 Each sample reads the current bone pose and applies skeleton/global/world
