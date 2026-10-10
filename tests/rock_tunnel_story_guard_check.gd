@@ -15,10 +15,10 @@ func _run() -> void:
 		_check(guard.guard_role == "transition_guard", "%s guards a transition" % guard.name)
 		_check(guard.call("_resolve_guarded_exit") == exit, "%s guards its own entrance" % guard.name)
 		_check(guard.npc_id == "kanto_route_10_rock_tunnel_%s_guard" % side.to_lower(), "%s uses its server identity" % guard.name)
-		_check(guard.blocked_dialogue_id == "kanto_route_10_rock_tunnel_badges_required", "%s explains the badge requirement" % guard.name)
+		_check(guard.blocked_dialogue_id == "kanto_route_10_rock_tunnel_oak_advice_required", "%s explains the Oak quest requirement" % guard.name)
 		_check_rock_tunnel_presence(map, guard, exit.get_node("CollisionShape2D"))
 	map.free()
-	await _check_badge_refresh()
+	await _check_story_refresh()
 	quit(1 if failed else 0)
 
 
@@ -36,7 +36,7 @@ func _check_rock_tunnel_presence(map: Node, guard: Node, exit_shape: CollisionSh
 	_check(not bool(guard.call("blocks_world_position", guard.position)), "%s leaves no invisible collision" % guard.name)
 
 
-func _check_badge_refresh() -> void:
+func _check_story_refresh() -> void:
 	var guard = load("res://scenes/npcs/gate_npc.tscn").instantiate()
 	guard.set_script(load("res://tests/support/gate_refresh_stub.gd"))
 	guard.guard_role = "transition_guard"
@@ -50,17 +50,16 @@ func _check_badge_refresh() -> void:
 	guard.transition_access = {"allowed": false}
 	guard.transition_access_resolved = true
 	guard._sync_guard_presence()
-	var player_save := root.get_node("PlayerSave")
+	var story_service := root.get_node("StoryService")
 	guard.next_access_allowed = true
-	player_save.emit_signal("gym_badges_changed")
-	_check(guard.visible and not guard.transition_access_resolved, "badge changes invalidate the old access decision")
+	story_service.emit_signal("story_changed", 1)
 	await process_frame
-	_check(guard.refresh_count == 1 and guard.last_force_refresh, "badge changes force a fresh server access check")
-	_check(not guard.visible and guard.is_gate_open(), "the guard disappears immediately after access is granted")
+	_check(guard.refresh_count == 1 and guard.last_force_refresh, "Oak quest changes force a fresh server access check")
+	_check(not guard.visible and guard.is_gate_open(), "starting the Rock Tunnel quest removes the guard")
 	guard.next_access_allowed = false
-	player_save.emit_signal("gym_badges_changed")
+	story_service.emit_signal("story_changed", 2)
 	await process_frame
-	_check(guard.visible and not guard.is_gate_open(), "revoked badges restore the guard and close the passage")
+	_check(guard.visible and not guard.is_gate_open(), "rewinding the story restores the guard and closes the passage")
 	guard.free()
 
 

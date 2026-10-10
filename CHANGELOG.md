@@ -4,7 +4,7 @@
 
 - Move Vermilion Gym trainer spawn points away from bin approach tiles so every bin stays reachable from all sides.
 
-- Guard both Rock Tunnel entrances until the player has at least three Gym Badges; guards disappear when entry becomes available.
+- Guard both Rock Tunnel entrances until the post-Surge visit to Oak starts the Rock Tunnel main quest; guards disappear once that quest is active or completed.
 
 - Open supported Android 3D battles directly on the 3D arena, without briefly showing the 2D field while battle data loads.
 
@@ -49,6 +49,8 @@
 - Add a direct forum guide link to each skill's detail view.
 
 - Resolve Urshifu Rapid Strike's existing shiny HOME sprite for evolution previews and Pokémon icons.
+
+- Resolve Gourgeist size variants to existing HOME icons in evolution previews and browser/mobile interfaces, and show the correct shiny Average form.
 
 ## 0.3.105
 
