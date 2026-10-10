@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add a direct forum guide link to each skill's detail view.
+
 ## 0.3.105
 
 - Show updated fishing item chances in the Item Dex, explain the independent Heart Scale and sale-treasure rolls, and include both wins and catches in fishing source labels.

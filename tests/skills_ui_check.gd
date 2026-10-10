@@ -211,6 +211,11 @@ func _run() -> void:
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "Skills opens on the level overview")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "Skill details stay hidden until a skill is selected")
 	panel.call("_select_skill", "fishing")
+	_check(
+		str(panel.call("_skill_forum_guide_url", "fishing")) == "https://forums.pokeaether.com/t/fishing-guide/39"
+		and (panel.get("forum_guide_button") as Button).visible,
+		"Fishing detail links to its forum guide"
+	)
 	_check((panel.get("detail_level") as Label).text.contains("Locked"), "locked Fishing is clearly identified")
 	_check(not (panel.get("experience_bar") as ProgressBar).visible, "locked Fishing hides unavailable progression")
 	_check((panel.get("stats_label") as Label).text.contains("Fishing Guru"), "locked Fishing explains where it is learned")
@@ -218,6 +223,11 @@ func _run() -> void:
 	skills_service.set("skills", test_skills)
 	panel.call("_show_overview")
 	panel.call("_select_skill", "thieving")
+	_check(
+		str(panel.call("_skill_forum_guide_url", "thieving")) == "https://forums.pokeaether.com/t/thieving-guide/27"
+		and (panel.get("forum_guide_button") as Button).visible,
+		"Thieving detail links to its forum guide"
+	)
 	await process_frame
 	_check(not (panel.get("overview_panel") as VBoxContainer).visible, "Selecting Thieving leaves the overview")
 	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")
@@ -325,6 +335,11 @@ func _run() -> void:
 	panel.size.x = 760.0
 	panel.call("_on_window_resized")
 	panel.call("_select_skill", "rock_smash")
+	_check(
+		str(panel.call("_skill_forum_guide_url", "rock_smash")) == "https://forums.pokeaether.com/t/official-rock-smash-guide/59"
+		and (panel.get("forum_guide_button") as Button).visible,
+		"Rock Smash detail links to its forum guide"
+	)
 	_check((panel.get("detail_name") as Label).text == "Rock Smash", "Rock Smash opens its own detailed interface")
 	_check((panel.get("stats_label") as Label).text.contains("0.25") and (panel.get("stats_label") as Label).text.contains("4"), "Rock Smash shows fossil chance and today's availability")
 	_check(not (panel.get("wanted_section") as VBoxContainer).visible, "Rock Smash hides the Thieving Wanted meter")
@@ -440,6 +455,10 @@ func _run() -> void:
 			and (parsed as Dictionary).has("ui.skills.overview.xp")
 			and (parsed as Dictionary).has("ui.skills.overview.open"),
 			"%s contains the Skills dashboard translations" % locale_path
+		)
+		_check(
+			parsed is Dictionary and (parsed as Dictionary).has("ui.skills.forum_guide"),
+			"%s contains the forum guide button translation" % locale_path
 		)
 		_check(
 			parsed is Dictionary
