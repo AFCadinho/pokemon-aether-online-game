@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Recover interrupted shared-model pilot installations and repairs without retaining abandoned model copies; preserve live installs and loaded packs.
+
 - Keep Gym Leader badges and trainer challenge icons visible in front of gym walls and other foreground map decorations.
 
 - Play a short electrical power-down sound when either Vermilion Gym switch turns off its barrier. Already active switches stay silent.

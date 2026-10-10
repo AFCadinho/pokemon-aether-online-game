@@ -1,0 +1,405 @@
+{
+  "schema": 1,
+  "date": "2026-10-10",
+  "local_only": true,
+  "release_certification": false,
+  "pilot_default_enabled": false,
+  "base_frontend_commit": "1bf12ef9ea5fefe9bb5fdde6bdd20bc0c2edd956",
+  "host": {
+    "os": "Linux",
+    "godot": "4.6.2-stable (official)",
+    "renderer": "mobile",
+    "gpu": "NVIDIA GeForce RTX 3070 Laptop GPU"
+  },
+  "source_sha256": {
+    "scripts/services/model_pair_pack.gd": "85999aef0df5816ad1ebbf2ea26d4c4983cf9bdf577400de8906318861e15d8b",
+    "launcher/scripts/model_pair_pack.gd": "85999aef0df5816ad1ebbf2ea26d4c4983cf9bdf577400de8906318861e15d8b",
+    "tests/shared_model_crash_faults.c": "82eb2a14db9f4ebdf49f27a39cc1fd04317f1bb8e5994f0fb588b748147c6da7",
+    "tests/shared_model_crash_worker.gd": "251ad6aafbb9dc3d4b056c5413f1b9ac2315f8c492ee4adf78622d3e028fb91b",
+    "tests/shared_model_recovery_ownership_check.gd": "03d1614c15251ed5a527fc7b62f96cf5672b60c989ba7996e479b348a4c724da",
+    "tests/shared_model_stress_check.gd": "0c591d9df58a1d217b358fd12f250b1a7f8fc3da06e18ebc6860366908bf6909",
+    "tests/shared_model_mount_budget_check.gd": "128f716d8e552ed5ca404fde628dbca1e8d5ce38655107ccc16cad97f5e64b8d",
+    "tools/run_shared_model_crash_checks.py": "bd63e291551567051993a27f9272f10ed1e2d9ae4ebe3df68e4bcb912936f331",
+    "data/model_pair_pilot.json": "192d95c05b336512c95ab3d5cbd1688482e4304b413963acbc91748812ef2219",
+    "launcher/data/model_pair_pilot.json": "192d95c05b336512c95ab3d5cbd1688482e4304b413963acbc91748812ef2219"
+  },
+  "session": {
+    "sweeps": 6,
+    "pairs": 16,
+    "declared_pck_members": 379,
+    "battles": 96,
+    "previews": 384,
+    "canceled": 6,
+    "expired_texture_checks": 2940,
+    "elapsed_ms": 333410
+  },
+  "session_idle_samples": [
+    {
+      "buffer_bytes": 4619292,
+      "closures": 0,
+      "elapsed_ms": 11252,
+      "label": "baseline",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 10,
+      "mounts": 0,
+      "namespaces": 0,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 666079232,
+      "static_bytes": 221312195,
+      "texture_bytes": 133936640
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 68081,
+      "label": "sweep-1",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 1200578560,
+      "static_bytes": 363819723,
+      "texture_bytes": 167753728
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 119312,
+      "label": "sweep-2",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 1351704576,
+      "static_bytes": 364420887,
+      "texture_bytes": 167753728
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 172177,
+      "label": "sweep-3",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 906121216,
+      "static_bytes": 365316611,
+      "texture_bytes": 167753728
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 223625,
+      "label": "sweep-4",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 1001041920,
+      "static_bytes": 365921403,
+      "texture_bytes": 167753728
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 275539,
+      "label": "sweep-5",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 1024204800,
+      "static_bytes": 366821423,
+      "texture_bytes": 167753728
+    },
+    {
+      "buffer_bytes": 11010460,
+      "closures": 16,
+      "elapsed_ms": 333371,
+      "label": "sweep-6",
+      "lru_entries": 0,
+      "lru_source_bytes": 0,
+      "mount_registry_json_bytes": 8375,
+      "mounts": 16,
+      "namespaces": 16,
+      "nodes": 400,
+      "orphans": 0,
+      "resources": 792,
+      "rss_bytes": 773214208,
+      "static_bytes": 367439167,
+      "texture_bytes": 167753728
+    }
+  ],
+  "session_bounds": {
+    "source_cache_entries": 2,
+    "source_cache_bytes": 67108864,
+    "static_growth_limit_bytes": 16777216,
+    "static_growth_observed_bytes": 3619444,
+    "post_warm_rss_min_bytes": 773214208,
+    "post_warm_rss_max_bytes": 1351704576,
+    "captured_engine_script_errors": []
+  },
+  "mount_budget": {
+    "pairs": 16,
+    "declared_pck_members": 379,
+    "repeat_mount_requests": 80,
+    "static_growth_packs_2_to_16_bytes": 419576,
+    "static_growth_repeat_bytes": 852,
+    "samples": [
+      {
+        "closures": 0,
+        "label": "baseline",
+        "mounts": 0,
+        "namespaces": 0,
+        "registry_json_bytes": 10,
+        "resources": 388,
+        "static_bytes": 235800319
+      },
+      {
+        "closures": 1,
+        "label": "pokemon_3d:pikachu:base",
+        "mounts": 1,
+        "namespaces": 1,
+        "registry_json_bytes": 480,
+        "resources": 388,
+        "static_bytes": 371282159
+      },
+      {
+        "closures": 2,
+        "label": "pokemon_3d:garchomp:base",
+        "mounts": 2,
+        "namespaces": 2,
+        "registry_json_bytes": 953,
+        "resources": 388,
+        "static_bytes": 371298423
+      },
+      {
+        "closures": 3,
+        "label": "pokemon_3d:azumarill:base",
+        "mounts": 3,
+        "namespaces": 3,
+        "registry_json_bytes": 1426,
+        "resources": 388,
+        "static_bytes": 371314735
+      },
+      {
+        "closures": 4,
+        "label": "pokemon_3d:charizard:base",
+        "mounts": 4,
+        "namespaces": 4,
+        "registry_json_bytes": 1899,
+        "resources": 388,
+        "static_bytes": 371333759
+      },
+      {
+        "closures": 5,
+        "label": "pokemon_3d:arcanine:base",
+        "mounts": 5,
+        "namespaces": 5,
+        "registry_json_bytes": 2372,
+        "resources": 388,
+        "static_bytes": 371345103
+      },
+      {
+        "closures": 6,
+        "label": "pokemon_3d:magnemite:base",
+        "mounts": 6,
+        "namespaces": 6,
+        "registry_json_bytes": 2845,
+        "resources": 388,
+        "static_bytes": 371356147
+      },
+      {
+        "closures": 7,
+        "label": "pokemon_3d:palkia:base",
+        "mounts": 7,
+        "namespaces": 7,
+        "registry_json_bytes": 3318,
+        "resources": 388,
+        "static_bytes": 371375963
+      },
+      {
+        "closures": 8,
+        "label": "pokemon_3d:dondozo:base",
+        "mounts": 8,
+        "namespaces": 8,
+        "registry_json_bytes": 3791,
+        "resources": 388,
+        "static_bytes": 371392227
+      },
+      {
+        "closures": 9,
+        "label": "pokemon_3d:dragonite:mega",
+        "mounts": 9,
+        "namespaces": 9,
+        "registry_json_bytes": 4264,
+        "resources": 388,
+        "static_bytes": 371408239
+      },
+      {
+        "closures": 10,
+        "label": "pokemon_3d:darmanitan-standard:base",
+        "mounts": 10,
+        "namespaces": 10,
+        "registry_json_bytes": 4737,
+        "resources": 388,
+        "static_bytes": 371417363
+      },
+      {
+        "closures": 11,
+        "label": "pokemon_3d:diancie:mega",
+        "mounts": 11,
+        "namespaces": 11,
+        "registry_json_bytes": 5210,
+        "resources": 388,
+        "static_bytes": 371627587
+      },
+      {
+        "closures": 12,
+        "label": "pokemon_3d:greninja:mega",
+        "mounts": 12,
+        "namespaces": 12,
+        "registry_json_bytes": 5683,
+        "resources": 388,
+        "static_bytes": 371641187
+      },
+      {
+        "closures": 13,
+        "label": "pokemon_3d:zygarde:mega",
+        "mounts": 13,
+        "namespaces": 13,
+        "registry_json_bytes": 6156,
+        "resources": 388,
+        "static_bytes": 371656407
+      },
+      {
+        "closures": 14,
+        "label": "pokemon_3d:golisopod:mega",
+        "mounts": 14,
+        "namespaces": 14,
+        "registry_json_bytes": 6629,
+        "resources": 388,
+        "static_bytes": 371668195
+      },
+      {
+        "closures": 15,
+        "label": "pokemon_3d:articuno-galar:base",
+        "mounts": 15,
+        "namespaces": 15,
+        "registry_json_bytes": 7102,
+        "resources": 388,
+        "static_bytes": 371679983
+      },
+      {
+        "closures": 16,
+        "label": "pokemon_3d:moltres-galar:base",
+        "mounts": 16,
+        "namespaces": 16,
+        "registry_json_bytes": 7575,
+        "resources": 388,
+        "static_bytes": 371699355
+      },
+      {
+        "closures": 16,
+        "label": "all-mounted",
+        "mounts": 16,
+        "namespaces": 16,
+        "registry_json_bytes": 7575,
+        "resources": 388,
+        "static_bytes": 371701735
+      },
+      {
+        "closures": 16,
+        "label": "five-repeat-sweeps",
+        "mounts": 16,
+        "namespaces": 16,
+        "registry_json_bytes": 7575,
+        "resources": 388,
+        "static_bytes": 371702587
+      }
+    ],
+    "extrapolated_to_full_catalog": false
+  },
+  "interruption": {
+    "method": "external Linux LD_PRELOAD SIGKILL at real file writes/renames",
+    "injected_sigkills": 20,
+    "worker_invocations": 63,
+    "all_final_workers_passed": true,
+    "baseline_failed_restarts": 12,
+    "baseline_validator_sha256": "c5aad48d7165d151a4f85010221a6669ac31a6006c02540256fc7f6ff03c08b2",
+    "game_and_launcher_install_points": [
+      "copy",
+      "staged",
+      "published"
+    ],
+    "game_and_launcher_repair_points": [
+      "copy",
+      "staged",
+      "quarantined",
+      "published"
+    ],
+    "launcher_update_points": [
+      "copy",
+      "staged",
+      "published",
+      "generation",
+      "previous",
+      "active"
+    ],
+    "update_rollback_and_gc_checked": true
+  },
+  "checks": [
+    "shared_model_stress_check",
+    "shared_model_mount_budget_check",
+    "shared_model_recovery_ownership_check",
+    "shared_model_installation_check",
+    "shared_model_release_check",
+    "asset_bundle_store_check",
+    "python_py_compile"
+  ],
+  "evidence_root": ".worktrees/slot-b/frontend/.tmp/shared-model-stress-v1",
+  "evidence_sha256": {
+    "stress-v5.json": "c249efcaa5d063b6c0b0c33f1ad47bf226946e4cd09b81329e6cdd8545324a22",
+    "mount-budget.json": "870c63199e67d3119d91421d503e32bbdc438ff920988e66b5edcc1af1727294",
+    "crash-final/receipt.json": "ba230b3a73ff578875ec1331d097dae882c1d2db587f3372fc6e2e8301fb82cc",
+    "crash-baseline/receipt.json": "d8b29b7a76fd4144058d38fc20914ed55fc77d62fe886abde254ebd866b76de5",
+    "install-regression.log": "4b46d6639fe97592c565c72c6b1506feca665e86b74c10f25a5b998eb4b64797",
+    "launcher-regression.log": "1ceff8b1a1ea0f6e423152b8ef46c896d2cf08a9cb90a6755de08cd096621498",
+    "legacy-store.log": "870ddbcf890c11a83756e66193a008e8451d6ca183e5bd5f3eee8a4cc7095392",
+    "ownership-v3.engine.log": "3cb202f2d4074e2bccd9359feddf0d74250b9ac0649569e35d396481922b1e90",
+    "stress-v5.log": "c0f9817a5d02fe3ab88b13161a9290114d75d00c083138f1a7199480ea51ed37",
+    "mount-budget.log": "3fbbc7bcced9b3cab5ee7408c0a7c76214eb799446e70ab7dab2562fc45c892f"
+  },
+  "limits": [
+    "16 qualified pairs only; full catalog size and distinct-pack index growth unqualified",
+    "Native Windows/macOS and physical Android integration unqualified",
+    "Process SIGKILL only; no power-loss filesystem durability claim",
+    "No FPS improvement or zero allocation growth claim",
+    "Full paired certification and publication not performed"
+  ],
+  "legacy_store_gc_mode": "deferred_while_game_running"
+}

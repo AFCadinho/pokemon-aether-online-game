@@ -133,6 +133,10 @@ and a complete size/quality audit. Native Windows/macOS installation, update,
 repair and cleanup checks remain; the previous Android cohort qualification
 does not certify this new installer/presenter integration. Mounted index growth
 across long sessions and interrupted replacement recovery need broader platform
-qualification. There is no claimed FPS, physical phone RAM or all-catalog size
+qualification. The subsequent [session and interruption checks](shared-model-stress.md)
+qualify 96 battles, 384 previews, repeated mount budgets and 20 SIGKILL/restart
+cases on Linux, with recovery of abandoned staged/quarantined copies. Broader
+distinct-pack counts and native platform qualification remain open. There is no
+claimed FPS, physical phone RAM or all-catalog size
 improvement from these local checks. Full paired certification, publication and
 release promotion require their separate explicit authorization.
