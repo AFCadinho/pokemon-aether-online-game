@@ -9,6 +9,10 @@ to the target and back on the same native action clock.
 
 ## Initial profiles
 
+The [full catalog coverage audit](move-attachment-coverage.md) lists every
+supported species/form and distinguishes configured attachments from bounds
+fallbacks. Rerun it after changing profiles or admitting additional models.
+
 | Model | Move/part | Bone(s) |
 | --- | --- | --- |
 | Pikachu | Thunder Shock, Thunderbolt / electric body | `spine_02` |

@@ -1,0 +1,9754 @@
+{
+	"aliases": {
+		"meowstic-f-mega": {
+			"attachments": [],
+			"canonical_identity": "meowstic-m-mega"
+		},
+		"meowstic-f-mega@shiny": {
+			"attachments": [],
+			"canonical_identity": "meowstic-m-mega@shiny"
+		},
+		"mr.-mime-galar": {
+			"attachments": [],
+			"canonical_identity": "mr-mime-galar"
+		},
+		"mr.-mime-galar@shiny": {
+			"attachments": [],
+			"canonical_identity": "mr-mime-galar@shiny"
+		},
+		"mrmime-galar": {
+			"attachments": [],
+			"canonical_identity": "mr-mime-galar"
+		},
+		"mrmime-galar@shiny": {
+			"attachments": [],
+			"canonical_identity": "mr-mime-galar@shiny"
+		}
+	},
+	"counts": {
+		"catalog_identities": 2400,
+		"normal": 1200,
+		"shiny": 1200,
+		"species_forms": 1200,
+		"with_any_attachment": 5,
+		"with_cannons": 1,
+		"with_electric_body": 1,
+		"with_hand": 1,
+		"with_mouth": 4,
+		"without_attachments": 1195
+	},
+	"learnsets_checked": false,
+	"profiles": {
+		"blastoise": {
+			"cannons": [
+				{
+					"bone": "left_feeler_b_02",
+					"offset": [
+						0.261000007390976,
+						0.0,
+						0.0
+					]
+				},
+				{
+					"bone": "right_feeler_b_02",
+					"offset": [
+						0.261000007390976,
+						0.0,
+						0.0
+					]
+				}
+			],
+			"mouth": [
+				{
+					"bone": "head",
+					"offset": [
+						0.0799999982118607,
+						0.0,
+						0.275000005960464
+					]
+				}
+			]
+		},
+		"charmander": {
+			"hand": [
+				{
+					"bone": "right_hand",
+					"offset": [
+						0.0329999998211861,
+						0.0,
+						0.0
+					]
+				}
+			],
+			"mouth": [
+				{
+					"bone": "head",
+					"offset": [
+						0.0500000007450581,
+						0.0,
+						0.194999992847443
+					]
+				}
+			]
+		},
+		"charmeleon": {
+			"mouth": [
+				{
+					"bone": "head",
+					"offset": [
+						-0.0149999996647239,
+						0.0,
+						0.234999999403954
+					]
+				}
+			]
+		},
+		"pikachu": {
+			"electric_body": [
+				{
+					"bone": "spine_02",
+					"offset": [
+						0.0,
+						0.0,
+						0.0
+					]
+				}
+			]
+		},
+		"squirtle": {
+			"mouth": [
+				{
+					"bone": "head",
+					"offset": [
+						0.0,
+						0.0,
+						0.144999995827675
+					]
+				}
+			]
+		}
+	},
+	"rigs_visually_verified_by_this_audit": false,
+	"schema": 1,
+	"scope": "configured_3d_attachment_coverage",
+	"source_sha256": {
+		"scripts/battle/battle_ui/move_attachments_3d.gd": "afe9881b698838d6051438c9f9b4eefda2b78bc9aedb7eec2f6b7047aa7c9ba3",
+		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
+		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
+		"scripts/battle/battle_ui/screened_model_catalog.json": "e48e36f568932290b2b7f1f461e15391444d6e7821d48f6ef0c59ede5b36839d"
+	},
+	"species_forms": {
+		"abomasnow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"abomasnow-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"abra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"absol": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"absol-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"absol-mega-z": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"accelgor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aegislash-blade": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aegislash-shield": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aerodactyl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aerodactyl-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aggron": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aggron-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aipom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"alakazam": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"alakazam-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"alcremie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"alomomola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"altaria": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"altaria-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"amaura": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ambipom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"amoonguss": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ampharos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ampharos-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"annihilape": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"anorith": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"appletun": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"applin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"araquanid": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arbok": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arboliva": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arcanine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arcanine-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arceus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"archaludon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"archen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"archeops": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arctibax": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arctovish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arctozolt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ariados": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"armaldo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"armarouge": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aromatisse": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aron": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"arrokuda": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"articuno": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"articuno-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"audino": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"audino-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"aurorus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"avalugg": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"avalugg-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"axew": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"azelf": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"azumarill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"azurill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bagon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"baltoy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"banette": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"banette-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"barbaracle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"barbaracle-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"barboach": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"barraskewda": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"basculegion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"basculin-red-striped": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bastiodon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"baxcalibur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"baxcalibur-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bayleef": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beartic": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beautifly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beedrill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beedrill-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beheeyem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"beldum": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bellibolt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bellossom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bellsprout": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bergmite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bewear": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bibarel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bidoof": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"binacle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bisharp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blacephalon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blastoise": {
+			"attachments": [
+				"cannons",
+				"mouth"
+			],
+			"status": "configured",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blastoise-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blaziken": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blaziken-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blipbug": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blissey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"blitzle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"boldore": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"boltund": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bombirdier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bonsly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bouffalant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bounsweet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"braixen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"brambleghast": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bramblin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"braviary": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"braviary-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"breloom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"brionne": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bronzong": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bronzor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"brute-bonnet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bruxish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"budew": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"buizel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bulbasaur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"buneary": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"bunnelby": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"burmy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"butterfree": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"buzzwole": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cacnea": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cacturne": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"calyrex": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"calyrex-ice": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"calyrex-shadow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"camerupt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"camerupt-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"capsakid": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"carbink": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"carkol": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"carnivine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"carracosta": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"carvanha": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cascoon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"castform": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"caterpie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"celebi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"celesteela": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"centiskorch": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ceruledge": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cetitan": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cetoddle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chandelure": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chandelure-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chansey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charcadet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charizard": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charizard-mega-x": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charizard-mega-y": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charjabug": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charmander": {
+			"attachments": [
+				"hand",
+				"mouth"
+			],
+			"status": "configured",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"charmeleon": {
+			"attachments": [
+				"mouth"
+			],
+			"status": "configured",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chatot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cherrim": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cherubi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chesnaught": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chesnaught-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chespin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chewtle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chi-yu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chien-pao": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chikorita": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chimchar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chimecho": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chimecho-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chinchou": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"chingling": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cinccino": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cinderace": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clamperl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clauncher": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clawitzer": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"claydol": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clefable": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clefable-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clefairy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cleffa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clobbopus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"clodsire": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cloyster": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"coalossal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cobalion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cofagrigus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"combee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"combusken": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"comfey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"conkeldurr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"copperajah": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"corphish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"corsola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"corsola-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"corviknight": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"corvisquire": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cosmoem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cosmog": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cottonee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crabominable": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crabominable-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crabrawler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cradily": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cramorant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cranidos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crawdaunt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cresselia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"croagunk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crobat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crocalor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"croconaw": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"crustle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cryogonal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cubchoo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cubone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cufant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cursola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cutiefly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cyclizar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"cyndaquil": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dachsbun": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darkrai": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darkrai-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darmanitan-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darmanitan-galar-zen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darmanitan-standard": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darmanitan-zen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dartrix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darumaka": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"darumaka-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"decidueye": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"decidueye-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dedenne": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"deerling": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"deino": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"delcatty": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"delibird": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"delphox": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"delphox-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"deoxys": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dewgong": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dewott": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dewpider": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dhelmise": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dialga": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"diancie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"diancie-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"diggersby": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"diglett": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"diglett-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dipplin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ditto": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dodrio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"doduo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dolliv": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dondozo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"donphan": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dottler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"doublade": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dracovish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dracozolt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragalge": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragalge-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragapult": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragonair": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragonite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dragonite-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drakloak": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drampa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drampa-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drapion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dratini": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drednaw": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dreepy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drifblim": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drifloon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drilbur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drizzile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"drowzee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"druddigon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dubwool": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ducklett": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dudunsparce": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dugtrio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dugtrio-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dunsparce": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"duosion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"duraludon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"durant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dusclops": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dusknoir": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"duskull": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dustox": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"dwebble": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eelektrik": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eelektross": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eelektross-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eevee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eiscue": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eiscue-noice": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ekans": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eldegoss": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"electabuzz": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"electivire": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"electrike": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"electrode": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"electrode-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"elekid": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"elgyem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"emboar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"emboar-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"emolga": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"empoleon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"enamorus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"entei": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"escavalier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"espathra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"espeon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"espurr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"eternatus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"excadrill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"excadrill-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"exeggcute": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"exeggutor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"exeggutor-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"exploud": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"falinks": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"falinks-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"farfetchd": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"farfetchd-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"farigiraf": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fearow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"feebas": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fennekin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"feraligatr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"feraligatr-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ferroseed": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ferrothorn": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fezandipiti": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fidough": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"finizen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"finneon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flaaffy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flabebe": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flamigo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flapple": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flareon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fletchinder": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fletchling": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flittle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"floatzel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"floette": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"floette-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"floragato": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"florges": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flutter-mane": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"flygon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fomantis": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"foongus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"forretress": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fraxure": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"frigibax": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"frillish-male": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"froakie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"frogadier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"froslass": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"froslass-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"frosmoth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"fuecoco": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"furfrou": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"furret": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gabite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gallade": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gallade-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"galvantula": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"garbodor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"garchomp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"garchomp-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"garchomp-mega-z": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gardevoir": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gardevoir-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"garganacl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gastly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gastrodon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"genesect": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gengar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gengar-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"geodude": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"geodude-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gholdengo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gible": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gigalith": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gimmighoul": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"girafarig": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"giratina": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glaceon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glalie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glalie-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glameow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glastrier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gligar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glimmet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glimmora": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"glimmora-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gliscor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gloom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gogoat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golbat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"goldeen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golduck": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golem-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golett": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golisopod": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golisopod-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golurk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"golurk-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"goodra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"goodra-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"goomy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gorebyss": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gossifleur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gothita": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gothitelle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gothorita": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gouging-fire": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gourgeist-average": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grafaiai": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"granbull": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grapploct": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"graveler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"graveler-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"great-tusk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"greavard": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"greedent": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"greninja": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"greninja-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grimer": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grimer-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grimmsnarl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grookey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grotle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"groudon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grovyle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"growlithe": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"growlithe-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grubbin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"grumpig": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gulpin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gumshoos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gurdurr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"guzzlord": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gyarados": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"gyarados-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hakamo-o": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"happiny": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hariyama": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hatenna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hatterene": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hattrem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"haunter": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hawlucha": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hawlucha-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"haxorus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heatmor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heatran": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heatran-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heliolisk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"helioptile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heracross": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"heracross-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"herdier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hippopotas": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hippowdon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hitmonchan": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hitmonlee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hitmontop": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ho-oh": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"honchkrow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"honedge": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hoopa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hoothoot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hoppip": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"horsea": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"houndoom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"houndoom-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"houndour": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"houndstone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"huntail": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hydrapple": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hydreigon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"hypno": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"igglybuff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"illumise": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"impidimp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"incineroar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"indeedee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"infernape": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"inkay": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"inteleon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-boulder": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-bundle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-crown": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-hands": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-jugulis": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-leaves": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-moth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-thorns": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-treads": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"iron-valiant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ivysaur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jangmo-o": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jellicent-male": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jigglypuff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jirachi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jolteon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"joltik": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jumpluff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"jynx": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kabuto": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kabutops": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kadabra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kakuna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kangaskhan": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kangaskhan-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"karrablast": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kartana": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kecleon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"keldeo-ordinary": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kilowattrel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kingambit": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kingdra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kingler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kirlia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"klang": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"klawf": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kleavor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"klefki": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"klink": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"klinklang": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"koffing": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"komala": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kommo-o": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"koraidon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"krabby": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kricketot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kricketune": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"krokorok": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"krookodile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kubfu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kyogre": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kyurem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kyurem-black": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"kyurem-white": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lairon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lampent": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"landorus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lanturn": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lapras": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"larvesta": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"larvitar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"latias": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"latias-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"latios": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"latios-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"leafeon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"leavanny": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lechonk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ledian": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ledyba": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lickilicky": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lickitung": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"liepard": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lileep": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lilligant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lilligant-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lillipup": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"linoone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"linoone-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"litleo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"litten": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"litwick": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lokix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lombre": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lopunny": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lopunny-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lotad": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"loudred": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lucario": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lucario-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lucario-mega-z": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ludicolo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lugia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lumineon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lunala": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lunatone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lurantis": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"luvdisc": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"luxio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"luxray": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"lycanroc": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mabosstiff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"machamp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"machoke": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"machop": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magby": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magcargo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magearna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magearna-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magearna-original-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magikarp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magmar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magmortar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magnemite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magneton": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"magnezone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"makuhita": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"malamar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"malamar-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mamoswine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"manaphy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mandibuzz": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"manectric": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"manectric-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mankey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mantine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mantyke": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"maractus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mareanie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mareep": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marowak": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marowak-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marowak-alola-totem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marshadow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"marshtomp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"maschiff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"masquerain": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"maushold": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mawile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mawile-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"medicham": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"medicham-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meditite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meganium": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meganium-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"melmetal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meloetta": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meltan": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowscarada": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowstic-m-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowstic-male": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowth-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"meowth-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mesprit": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"metagross": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"metagross-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"metang": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"metapod": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mew": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mewtwo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mewtwo-mega-x": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mewtwo-mega-y": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mienfoo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mienshao": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mightyena": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"milcery": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"milotic": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"miltank": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mime-jr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mimikyu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mimikyu-busted": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"minccino": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"minior": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"minun": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"miraidon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"misdreavus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mismagius": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"moltres": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"moltres-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"monferno": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"morelull": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"morgrem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"morpeko": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"morpeko-hangry": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mothim": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mr-mime": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mr-mime-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mr-rime": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mudbray": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mudkip": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"mudsdale": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"muk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"muk-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"munchlax": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"munkidori": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"munna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"murkrow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"musharna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nacli": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"naclstack": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"naganadel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"natu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"necrozma": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nickit": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidoking": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidoqueen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidoran-f": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidoran-m": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidorina": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nidorino": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nihilego": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nincada": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ninetales": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ninetales-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ninjask": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"noctowl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"noibat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"noivern": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nosepass": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"numel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nuzleaf": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"nymble": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"obstagoon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"octillery": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"oddish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ogerpon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ogerpon-cornerstone": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ogerpon-hearthflame": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ogerpon-wellspring": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"oinkologne": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"okidogi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"omanyte": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"omastar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"onix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"oranguru": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"orbeetle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"oricorio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"orthworm": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"oshawott": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"overqwil": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pachirisu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"palafin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"palafin-hero": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"palkia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"palossand": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"palpitoad": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pancham": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pangoro": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"panpour": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pansage": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pansear": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"paras": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"parasect": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"passimian": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"patrat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pawmi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pawmo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pawmot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pawniard": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pecharunt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pelipper": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"perrserker": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"persian": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"persian-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"petilil": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"phanpy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"phantump": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pheromosa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"phione": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pichu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pidgeot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pidgeot-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pidgeotto": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pidgey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pidove": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pignite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pikachu": {
+			"attachments": [
+				"electric_body"
+			],
+			"status": "configured",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pikachu-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pikipek": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"piloswine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pincurchin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pineco": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pinsir": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pinsir-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"piplup": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"plusle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poipole": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"politoed": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poliwag": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poliwhirl": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poliwrath": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poltchageist": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"polteageist": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ponyta": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ponyta-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"poochyena": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"popplio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"porygon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"porygon-z": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"porygon2": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"primarina": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"primeape": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"prinplup": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"probopass": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"psyduck": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pumpkaboo-average": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pupitar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"purrloin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"purugly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pyroar-male": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pyroar-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"pyukumuku": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quagsire": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quaquaval": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quaxly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quaxwell": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quilava": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"quilladin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"qwilfish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"qwilfish-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raboot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rabsca": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raging-bolt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raichu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raichu-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raichu-mega-x": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raichu-mega-y": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raikou": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ralts": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rampardos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rapidash": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rapidash-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raticate": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raticate-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"raticate-alola-totem": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rattata": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rattata-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rayquaza": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rayquaza-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"regice": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"regidrago": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"regieleki": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"regigigas": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"regirock": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"registeel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"relicanth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rellor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"remoraid": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"reshiram": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"reuniclus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"revavroom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rhydon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rhyhorn": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rhyperior": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ribombee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rillaboom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"riolu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"roaring-moon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rockruff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"roggenrola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rolycoly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rookidee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"roselia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"roserade": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rotom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rowlet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"rufflet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"runerigus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sableye": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sableye-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"salamence": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"salamence-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"salandit": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"salazzle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"samurott": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"samurott-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandaconda": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandshrew": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandshrew-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandslash": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandslash-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandy-shocks": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sandygast": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sawk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sawsbuck": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scatterbug": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sceptile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sceptile-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scizor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scizor-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scolipede": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scolipede-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scorbunny": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scovillain": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scovillain-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scrafty": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scrafty-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scraggy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scream-tail": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"scyther": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seadra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seaking": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sealeo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seedot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seismitoad": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sentret": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"serperior": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"servine": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"seviper": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sewaddle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sharpedo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sharpedo-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shaymin": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shedinja": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shelgon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shellder": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shellos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shelmet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shieldon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shiftry": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shiinotic": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shinx": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shroodle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shroomish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shuckle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"shuppet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sigilyph": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"silcoon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"silicobra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"silvally": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"simipour": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"simisage": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"simisear": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sinistcha": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sinistea": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sirfetchd": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sizzlipede": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skarmory": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skarmory-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skeledirge": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skiddo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skiploom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skitty": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skorupi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skrelp": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skuntank": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"skwovet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slaking": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slakoth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sliggoo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sliggoo-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slither-wing": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowbro": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowbro-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowbro-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowking": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowking-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowpoke": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slowpoke-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slugma": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"slurpuff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"smeargle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"smoliv": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"smoochum": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sneasel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sneasel-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sneasler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snivy": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snorlax": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snorunt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snover": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"snubbull": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sobble": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"solgaleo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"solosis": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"solrock": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spearow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spectrier": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spewpa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spheal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spidops": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spinarak": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spinda": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spiritomb": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spoink": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sprigatito": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"spritzee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"squawkabilly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"squirtle": {
+			"attachments": [
+				"mouth"
+			],
+			"status": "configured",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stakataka": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stantler": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"staraptor": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"staraptor-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"staravia": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"starly": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"starmie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"starmie-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"staryu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"steelix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"steelix-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"steenee": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stonjourner": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stoutland": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stufful": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stunfisk": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stunfisk-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"stunky": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sudowoodo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"suicune": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sunflora": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sunkern": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"surskit": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swablu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swadloon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swalot": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swampert": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swampert-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swanna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swellow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swinub": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swirlix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"swoobat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"sylveon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tadbulb": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"taillow": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"talonflame": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tandemaus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tangela": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tangrowth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tapu-bulu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tapu-fini": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tapu-koko": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tapu-lele": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tarountula": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tatsugiri": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tatsugiri-curly-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tatsugiri-droopy-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tatsugiri-stretchy-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tauros": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tauros-paldea-aqua": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tauros-paldea-blaze": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tauros-paldea-combat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"teddiursa": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tentacool": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tentacruel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tepig": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"terapagos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"terapagos-stellar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"terapagos-terastal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"terrakion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"thievul": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"throh": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"thundurus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"thwackey": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"timburr": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ting-lu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tinkatink": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tinkaton": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tinkatuff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tirtouga": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toedscool": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toedscruel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"togedemaru": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"togekiss": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"togepi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"togetic": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"torchic": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"torkoal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tornadus": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"torracat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"torterra": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"totodile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toucannon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toxapex": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toxel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toxicroak": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"toxtricity": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tranquill": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"trapinch": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"treecko": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"trevenant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tropius": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"trubbish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"trumbeak": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tsareena": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"turtonator": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"turtwig": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tympole": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tynamo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"type-null": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"typhlosion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"typhlosion-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tyranitar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tyranitar-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tyrantrum": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tyrogue": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"tyrunt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"umbreon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"unfezant": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"unown": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ursaluna": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"ursaring": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"urshifu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"uxie": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vanillish": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vanillite": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vanilluxe": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vaporeon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"varoom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"veluza": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"venipede": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"venomoth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"venonat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"venusaur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"venusaur-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vespiquen": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vibrava": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"victini": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"victreebel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"victreebel-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vigoroth": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vikavolt": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vileplume": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"virizion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vivillon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"volbeat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"volcanion": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"volcarona": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"voltorb": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"voltorb-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vullaby": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vulpix": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"vulpix-alola": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wailmer": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wailord": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"walking-wake": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"walrein": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wartortle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"watchog": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wattrel": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"weavile": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"weedle": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"weepinbell": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"weezing": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"weezing-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"whimsicott": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"whirlipede": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"whiscash": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"whismur": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wigglytuff": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wiglett": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wimpod": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wingull": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wishiwashi": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wishiwashi-school": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wo-chien": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wobbuffet": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"woobat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wooloo": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wooper": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wooper-paldea": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wormadam": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wugtrio": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wurmple": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wynaut": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"wyrdeer": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"xatu": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"xerneas": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"xurkitree": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yamask": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yamask-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yamper": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yanma": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yanmega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yungoos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"yveltal": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zacian": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zacian-crowned": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zamazenta": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zamazenta-crowned": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zangoose": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zapdos": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zapdos-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zarude": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zebstrika": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zekrom": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zeraora": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zeraora-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zigzagoon": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zigzagoon-galar": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zoroark": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zoroark-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zorua": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zorua-hisui": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zubat": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zweilous": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zygarde-50": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		},
+		"zygarde-mega": {
+			"attachments": [],
+			"status": "bounds_fallback_only",
+			"variants": [
+				"normal",
+				"shiny"
+			]
+		}
+	}
+}
