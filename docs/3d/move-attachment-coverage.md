@@ -7,13 +7,13 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 995 species/forms.
-- No anatomical attachment profile: 205 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 996 species/forms.
+- No anatomical attachment profile: 204 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 883 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
 | --- | --- | --- |
-| abomasnow | hand, left_hand, mouth | Same attachment profile |
+| abomasnow | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | abomasnow-mega | hand, left_hand, mouth | Same attachment profile |
 | abra | hand, left_hand, mouth | Same attachment profile |
 | absol | hand, left_hand, mouth | Same attachment profile |
@@ -34,7 +34,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | amaura | hand, left_hand, mouth | Same attachment profile |
 | ambipom | foot, left_foot, mouth | Same attachment profile |
 | amoonguss | hand, left_hand, mouth | Same attachment profile |
-| ampharos | hand, left_hand, mouth | Same attachment profile |
+| ampharos | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | ampharos-mega | mouth | Same attachment profile |
 | annihilape | hand, left_hand | Same attachment profile |
 | anorith | mouth | Same attachment profile |
@@ -91,18 +91,18 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | blacephalon | hand, left_hand | Same attachment profile |
 | blastoise | cannons, hand, left_hand, mouth | Same attachment profile |
 | blastoise-mega | hand, left_hand, mouth | Same attachment profile |
-| blaziken | hand, left_hand, mouth | Same attachment profile |
+| blaziken | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | blaziken-mega | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | blipbug | mouth | Same attachment profile |
 | blissey | hand, left_hand, mouth | Same attachment profile |
-| blitzle | mouth | Same attachment profile |
+| blitzle | foot, left_foot, mouth | Same attachment profile |
 | boldore | hand, left_hand, mouth | Same attachment profile |
 | boltund | mouth | Same attachment profile |
 | bombirdier | mouth | Same attachment profile |
 | bonsly | foot, left_foot, mouth | Same attachment profile |
 | bouffalant | mouth | Same attachment profile |
 | bounsweet | mouth | Same attachment profile |
-| braixen | hand, left_hand, mouth | Same attachment profile |
+| braixen | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | braviary | mouth | Same attachment profile |
 | braviary-hisui | mouth | Same attachment profile |
 | breloom | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -110,7 +110,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | brute-bonnet | hand, left_hand, mouth | Same attachment profile |
 | bruxish | hand, left_hand, mouth | Same attachment profile |
 | budew | mouth | Same attachment profile |
-| buizel | hand, left_hand, mouth | Same attachment profile |
+| buizel | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | bulbasaur | hand, left_hand, mouth | Same attachment profile |
 | buneary | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | bunnelby | foot, hand, left_foot, left_hand | Same attachment profile |
@@ -225,6 +225,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | diggersby | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | dipplin | mouth | Same attachment profile |
 | ditto | mouth | Same attachment profile |
+| dodrio | foot, left_foot | Same attachment profile |
 | dondozo | mouth | Same attachment profile |
 | donphan | hand, left_hand | Same attachment profile |
 | dottler | mouth | Same attachment profile |
@@ -357,7 +358,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | golduck | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | golem | hand, left_hand, mouth | Same attachment profile |
 | golem-alola | hand, left_hand, mouth | Same attachment profile |
-| golett | hand, left_hand | Same attachment profile |
+| golett | foot, hand, left_foot, left_hand | Same attachment profile |
 | golurk | foot, hand, left_foot, left_hand | Same attachment profile |
 | golurk-mega | foot, hand, left_foot, left_hand | Same attachment profile |
 | goodra | hand, left_hand | Same attachment profile |
@@ -370,7 +371,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | gothorita | hand, left_hand, mouth | Same attachment profile |
 | gouging-fire | mouth | Same attachment profile |
 | gourgeist-average | hand, left_hand, mouth | Same attachment profile |
-| grafaiai | hand, left_hand, mouth | Same attachment profile |
+| grafaiai | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | granbull | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | graveler | mouth | Same attachment profile |
 | graveler-alola | mouth | Same attachment profile |
