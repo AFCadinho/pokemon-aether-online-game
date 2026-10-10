@@ -66,8 +66,8 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 				_check(podium.has_point(cell), "carpet has no extra row or column outside the centered podium")
 	_check(carpet_cells == 9, "complete three-by-three podium")
 	_check(not gym.has_node("Visual/Arena Trim"), "puzzle floor has no surrounding rails")
-	var bins := gym.get_node("Visual/Puzzle Bins - Visuals") as TileMapLayer
-	_check(bins.position == Vector2(16, 0), "bin rows are centered on their Godot interactables")
+	var bin_tops := gym.get_node("Visual/ObjectsTop") as TileMapLayer
+	var bin_bottoms := gym.get_node("Visual/Objects") as TileMapLayer
 	var bin_nodes := gym.get_node("Entities/Interactables")
 	var reachable := _reachable_walkable_cells(gym, collision)
 	var bin_count := 0
@@ -76,26 +76,29 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 			continue
 		bin_count += 1
 		var bin_coordinates: Vector2i = bin.get("bin_coordinates")
-		var visual_origin := Vector2i(5 + bin_coordinates.x * 3, 18 + bin_coordinates.y * 3)
-		_check(bins.get_cell_source_id(visual_origin) != -1 and bins.get_cell_source_id(visual_origin + Vector2i(0, 1)) != -1, "%s has a complete visual bin" % bin.name)
-		var expected_spawn := Vector2(float(visual_origin.x + 1) * 32.0, (float(visual_origin.y) + 1.5) * 32.0)
+		var visual_origin := Vector2i(5 + bin_coordinates.x * 3, 18 + bin_coordinates.y * 2)
+		_check(bin_tops.get_cell_atlas_coords(visual_origin) == Vector2i(0, 2) and bin_bottoms.get_cell_atlas_coords(visual_origin + Vector2i(0, 1)) == Vector2i(1, 2), "%s has a complete visual bin split across authored object layers" % bin.name)
+		var expected_spawn := Vector2((float(visual_origin.x) + 0.5) * 32.0, (float(visual_origin.y) + 1.5) * 32.0)
 		_check(bin.position == expected_spawn, "%s gameplay spawn aligns with its visual bin" % bin.name)
-		var footprint_origin := Vector2i(floori(bin.position.x / 32.0) - 1, floori(bin.position.y / 32.0) - 1)
+		var footprint_origin: Vector2i = Vector2i(floori(bin.position.x / 32.0), floori(bin.position.y / 32.0)) + bin.blocked_tile_offset
+		var footprint: Vector2i = bin.blocked_tile_footprint
+		_check(footprint_origin == visual_origin and footprint == Vector2i(1, 2), "%s interaction footprint matches its visual tiles" % bin.name)
+		_check(not bin.blocks_movement, "%s has no movement collision" % bin.name)
 		var x := footprint_origin.x
 		var y := footprint_origin.y
 		var access_cells: Array[Vector2i] = []
-		for dx in range(2):
+		for dx in range(footprint.x):
 			access_cells.append(Vector2i(x + dx, y - 1))
-			access_cells.append(Vector2i(x + dx, y + 2))
-		for dy in range(2):
+			access_cells.append(Vector2i(x + dx, y + footprint.y))
+		for dy in range(footprint.y):
 			access_cells.append(Vector2i(x - 1, y + dy))
-			access_cells.append(Vector2i(x + 2, y + dy))
+			access_cells.append(Vector2i(x + footprint.x, y + dy))
 		for cell: Vector2i in access_cells:
 			var world_position := Vector2(cell * 32) + Vector2(16, 16)
 			_check(collision.get_cell_source_id(cell) == -1, "%s has clear floor beside its footprint" % bin.name)
 			_check(not gym.is_position_blocked_by_character(world_position), "%s approach tile is not occupied" % bin.name)
 			_check(reachable.has(cell), "%s approach tile is reachable from the entrance" % bin.name)
-	_check(bin_count == 15, "all fifteen bins have Godot interactables")
+	_check(bin_count == 20, "all twenty bins have aligned Godot interactables")
 	var platform := gym.get_node("Visual/Leader Platform") as TileMapLayer
 	_check(platform.get_used_rect() == Rect2i(8, 12, 7, 1), "complete raised stage front")
 	for x in range(8, 15):

@@ -42,8 +42,8 @@ func _run() -> void:
 		if child.get("bin_coordinates") == null:
 			continue
 		bins[child.bin_coordinates] = child
-		# Both grid tiles in front of the centered bin support normal interaction.
-		for dx in [-16, 16]:
+		# Both positions within the single front tile support normal interaction.
+		for dx in [-8, 8]:
 			player.global_position = child.global_position + Vector2(dx, 32)
 			_check(child._is_player_facing_interactable(player), "bin front supports facing interaction")
 			_check(not child.blocks_world_position(player.global_position), "bin leaves its approach open")
@@ -51,7 +51,7 @@ func _run() -> void:
 		player.last_direction = Vector2.DOWN
 		_check(not child._is_player_facing_interactable(player), "bin ignores interaction while facing away")
 		player.last_direction = Vector2.UP
-	_check(bins.size() == 15, "all fifteen visual bins are interactive")
+	_check(bins.size() == 20, "all twenty visual bins are interactive")
 	_check(gym.get_adjacent_bins(gym.first_switch).has(gym.second_switch), "visit selects cardinal neighbors")
 	var lower := gym.get_node("Entities/Interactables/LowerElectricBarrier")
 	var upper := gym.get_node("Entities/Interactables/UpperElectricBarrier")
@@ -62,7 +62,7 @@ func _run() -> void:
 	var entrance: Vector2 = gym.get_node("Spawns/FromVermilionCity").global_position
 	for position: Vector2 in [Vector2(368, 304), Vector2(368, 432), Vector2(368, 496), Vector2(368, 528)]:
 		_check(gym.get_safe_restored_player_position(position) == entrance, "new visit restores saved upper corridor positions at entrance")
-	_check(gym.get_safe_restored_player_position(Vector2(384, 720)) == Vector2(384, 720), "restoring inside a nonblocking bin preserves the position")
+	_check(gym.get_safe_restored_player_position(Vector2(368, 752)) == Vector2(368, 752), "restoring inside a nonblocking bin preserves the position")
 	_check(gym.get_safe_restored_player_position(Vector2(368, 1008)) == Vector2(368, 1008), "normal saved puzzle-floor position stays unchanged")
 
 	# Exercise every possible adjacent pair and every wrong second choice.
