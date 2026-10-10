@@ -64,7 +64,7 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 	_check(carpet_cells == 9, "complete three-by-three podium")
 	_check(not gym.has_node("Visual/Arena Trim"), "puzzle floor has no surrounding rails")
 	var bins := gym.get_node("Visual/Puzzle Bins - Visuals") as TileMapLayer
-	_check(bins.position == Vector2.ZERO, "bin visuals align with the gameplay tile grid")
+	_check(bins.position == Vector2(16, 0), "bin rows are centered within the puzzle room")
 	for x in [5, 8, 11, 14, 17]:
 		for y in [18, 21, 24]:
 			for front_x in [x, x + 1]:
