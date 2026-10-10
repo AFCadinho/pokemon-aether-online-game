@@ -1,4 +1,10 @@
 {
+  "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
+  "ui.trainer_card.wallet.casino_tokens_description": "Reserved for future casino games and prizes. Earning and spending will become available later.",
+  "ui.staff.dev.add_casino_tokens": "Add Casino Tokens",
+  "ui.staff.dev.casino_tokens_added": "Added {amount} Casino Tokens.",
+  "ui.staff.dev.casino_tokens_failed": "Could not add Casino Tokens: {error}",
+  "backend.error.casino_tokens_balance_overflow": "Casino Token balance limit exceeded.",
   "ui.guild.log.guild.admin_updated": "Guild settings were corrected by staff.",
   "ui.guild.log.action.funds.admin_credit": "added to the bank",
   "ui.guild.log.action.items.admin_credit": "added to the bank",

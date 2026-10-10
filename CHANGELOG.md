@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show Casino Tokens in the wallet and developer currency tools; add the Gold Coin icon and localized item text for Gimmighoul evolution. Casino earning and prize shops will follow later.
+
 - Align Vermilion Gym bin visuals to the gameplay tile grid so players can stand directly in front of each bin.
 
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.

@@ -62,6 +62,7 @@ const CODE_TO_KEY: Dictionary = {
 	"bank_interaction_required": "backend.error.bank_interaction_required",
 	"not_enough_aetherite": "backend.error.not_enough_aetherite",
 	"not_enough_battle_points": "backend.error.not_enough_battle_points",
+	"casino_tokens_balance_overflow": "backend.error.casino_tokens_balance_overflow",
 	"market_not_active": "backend.error.market_not_active",
 	"market_interaction_required": "backend.error.market_interaction_required",
 	"market_interaction_misconfigured": "backend.error.market_unavailable",

@@ -17,6 +17,7 @@ var bank_money := 0
 var gems := 0
 var aetherite := 0
 var battle_points := 0
+var casino_tokens := 0
 var playtime_seconds := 0
 var appearance_body_id: String = CharacterAppearanceService.DEFAULT_BODY_ID
 var appearance_hair_id: String = CharacterAppearanceService.DEFAULT_MALE_HAIR_ID
@@ -69,6 +70,7 @@ func reset_account_state() -> void:
 	gems = 0
 	aetherite = 0
 	battle_points = 0
+	casino_tokens = 0
 	playtime_seconds = 0
 	flags = {}
 	earned_gym_badges.clear()
@@ -106,6 +108,7 @@ func reset_gameplay_progress() -> void:
 	bank_money = 0
 	aetherite = 0
 	battle_points = 0
+	casino_tokens = 0
 	playtime_seconds = 0
 	flags = {}
 	earned_gym_badges.clear()

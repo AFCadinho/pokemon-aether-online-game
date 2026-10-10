@@ -33,6 +33,7 @@ func redeem(code: String, request_id: String = "") -> Dictionary:
 	PlayerSave.gems = maxi(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = maxi(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = maxi(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	PlayerSave.casino_tokens = maxi(int(wallet.get("casino_tokens", PlayerSave.casino_tokens)), 0)
 
 	var party_response := _dictionary(body.get("party", {}))
 	var party := _array(party_response.get("party", []))
