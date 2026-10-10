@@ -11621,6 +11621,56 @@
       }
     },
     "calyrex-ice": {
+      "anatomical_route_reviews": {
+        "foot": {
+          "action": "physical_attack",
+          "moves": [
+            "doublekick"
+          ],
+          "preview_sha256": "88416efcfe1e47848bee21a77ee531a988b19a536f6d7e0a63147adff526a038",
+          "scope": "Native first physical clip extends the horse hind hooves for a rear kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_actions": {
+        "doublekick": "physical_attack"
+      },
+      "move_choreography": {
+        "doublekick": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 180,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.12
+        }
+      },
+      "move_effect_reviews": {
+        "doublekick": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "6af2e73c3d535b75bb9dc14898db8ce017c9ae9f113d84fe2df66ea152010723",
+          "fractions": [
+            0.2,
+            0.417,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "56fcae010419ca83f08c592285be7a6c58c9f6fb0538efa8209bfa55bad13da5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1714b55cd65b72ae69f95823021c7a806a3f77d100190a69364920bfc1ba1547",
+          "scope": "Native first physical clip extends the horse hind hooves for a rear kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "shiny_preview_sha256": "5097ef6f2990a3e9acbaa0505c2a1dff446328204843389817f0d3563bf26ba8",
+          "shiny_runtime_sha256": "2b9c745137acd2af9947cd31df9b57fbbc137b111fa8079c19bfed936a7068b4",
+          "status": "sampled_runtime_origin_and_choreography_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 180.0,
+            "frames": 130.0,
+            "impact_frame": 58.5,
+            "launch_frame": 15.6,
+            "move_key": "doublekick"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -11743,6 +11793,20 @@
       }
     },
     "calyrex-shadow": {
+      "anatomical_route_reviews": {
+        "foot": {
+          "action": "physical_attack",
+          "moves": [
+            "doublekick"
+          ],
+          "preview_sha256": "fbe6a0a5d0635cc8f46be6f6d1a27fb23654acc4ef7088d8a21b918570490036",
+          "scope": "Native first physical clip extends the horse hind hooves for a rear kick. Effect/timing review pending. Actual effect review held: actor/target overlap obscures contact in v43/v45/v46; proposed timing/orientation not installed.",
+          "status": "sampled_native_pose_review_pass"
+        }
+      },
+      "move_actions": {
+        "doublekick": "physical_attack"
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -20234,6 +20298,20 @@
       }
     },
     "decidueye": {
+      "anatomical_route_reviews": {
+        "foot": {
+          "action": "physical_attack_2",
+          "moves": [
+            "lowkick"
+          ],
+          "preview_sha256": "ef8bcd098f4bd0b0ae8cfe6d312aa8c6ed9f08caec6be65d14963d5f87307c88",
+          "scope": "Native second physical clip raises the talons for a kick. Effect/timing review pending. Actual effect review held: actor/target overlap obscures contact in v43/v45/v46; proposed timing/orientation not installed.",
+          "status": "sampled_native_pose_review_pass"
+        }
+      },
+      "move_actions": {
+        "lowkick": "physical_attack_2"
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -27642,6 +27720,56 @@
       }
     },
     "exploud": {
+      "anatomical_route_reviews": {
+        "foot": {
+          "action": "physical_attack",
+          "moves": [
+            "lowkick"
+          ],
+          "preview_sha256": "190042c048362acb27af34ad125523fd174bdb820161aa76cabc1dbb2e85e3c4",
+          "scope": "Native physical clip raises the right sole forward for a kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_actions": {
+        "lowkick": "physical_attack"
+      },
+      "move_choreography": {
+        "lowkick": {
+          "action": "physical_attack",
+          "contact_yaw_degrees": 0,
+          "impact_fraction": 0.22,
+          "launch_fraction": 0.05
+        }
+      },
+      "move_effect_reviews": {
+        "lowkick": {
+          "action": "physical_attack",
+          "attachment_data_sha256_at_capture": "6af2e73c3d535b75bb9dc14898db8ce017c9ae9f113d84fe2df66ea152010723",
+          "fractions": [
+            0.2,
+            0.203,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "caefcc750ea4aea833291aa3252a2bf523b95f403ea213055d79c8b149fe7561",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1dd6eacba002a30cbc5c888917885c97260b3e655cc938eccec2fce2083304d7",
+          "scope": "Native physical clip raises the right sole forward for a kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "shiny_preview_sha256": "38bbfe806b8ee75d3d48b88e5af8c16db055dbf316e8f2c5c8113aaa436ebecc",
+          "shiny_runtime_sha256": "523185cd1b07a3da63ab366b8e73ec1b92c7e6865b0e4b9b30cbb61d9c1253c0",
+          "status": "sampled_runtime_origin_and_choreography_review_pass",
+          "timing": {
+            "action": "physical_attack",
+            "contact_yaw_degrees": 0.0,
+            "frames": 146.4,
+            "impact_frame": 32.208,
+            "launch_frame": 7.32,
+            "move_key": "lowkick"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -34964,6 +35092,56 @@
       }
     },
     "glastrier": {
+      "anatomical_route_reviews": {
+        "foot": {
+          "action": "physical_attack_2",
+          "moves": [
+            "doublekick"
+          ],
+          "preview_sha256": "6a43f419093e4f14d0100bca8b19eedb1bcba41accb1c7bf2762df5ee600531a",
+          "scope": "Native second physical clip extends both hind hooves for a rear kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "status": "sampled_native_pose_and_effect_review_pass"
+        }
+      },
+      "move_actions": {
+        "doublekick": "physical_attack_2"
+      },
+      "move_choreography": {
+        "doublekick": {
+          "action": "physical_attack_2",
+          "contact_yaw_degrees": 180,
+          "impact_fraction": 0.45,
+          "launch_fraction": 0.12
+        }
+      },
+      "move_effect_reviews": {
+        "doublekick": {
+          "action": "physical_attack_2",
+          "attachment_data_sha256_at_capture": "6af2e73c3d535b75bb9dc14898db8ce017c9ae9f113d84fe2df66ea152010723",
+          "fractions": [
+            0.2,
+            0.417,
+            0.45,
+            0.65
+          ],
+          "normal_runtime_sha256": "1bc72770c4bf9c54fe3af255f76ce15f85f4eeb8c221325e3dcd25f84931ec0a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4cd480d24bd3045c0cb80c71d9a6b48b3c5cf48cf489846aa3ca440c6d276c48",
+          "scope": "Native second physical clip extends both hind hooves for a rear kick. Actual stage effect sampled with normal and shiny models; early kick timing reviewed; rear kick faces opponent where applicable. Offline same-species target review, not live battle certification.",
+          "shiny_preview_sha256": "d1ed11a1c058c708eecd1dd72584441aac875c96d3983c374b8a4c3135a21157",
+          "shiny_runtime_sha256": "55bba4454e630f023cd233ccffa29cc2dedb42f4972c9d20d843f7a6e71890db",
+          "status": "sampled_runtime_origin_and_choreography_review_pass",
+          "timing": {
+            "action": "physical_attack_2",
+            "contact_yaw_degrees": 180.0,
+            "frames": 150.0,
+            "impact_frame": 67.5,
+            "launch_frame": 18.0,
+            "move_key": "doublekick"
+          },
+          "views": 2
+        }
+      },
       "part_reviews": {
         "foot": {
           "actions": [
@@ -39290,6 +39468,28 @@
     },
     "grovyle": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "dae56cacb3902b1d9ff6376470d23cc5dfd2b58472fbd18e874969ca6af901bc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9f8d2e79ef41ca8fdfbd4328df5e996bd9562ae0d35565c83262ac0cf35a3102",
+          "scope": "Single middle toe pad replaces the gap between spread toes; visible sampled poses reviewed. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -39306,6 +39506,28 @@
           "normal_runtime_sha256": "dae56cacb3902b1d9ff6376470d23cc5dfd2b58472fbd18e874969ca6af901bc",
           "preview_sha256": "47262061c0c8d6b2bd7e92bdbc05192812a4657ad43fc4d3bbc11d2811e461a8",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "dae56cacb3902b1d9ff6376470d23cc5dfd2b58472fbd18e874969ca6af901bc",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "06550383766e12f50a8fad0e835d337d7f035ebf1293b0bb19180f7099e9d029",
+          "scope": "Single middle toe pad replaces the gap between spread toes; visible sampled poses reviewed. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -39328,6 +39550,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_middle_01",
+              "offset": [
+                0.025,
+                0,
+                -0.018
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -39347,6 +39582,19 @@
                 0.0012192726135253993
               ],
               "weight": 0.5
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_middle_01",
+              "offset": [
+                0.025,
+                0,
+                -0.018
+              ],
+              "weight": 1
             }
           ]
         ],
@@ -40277,6 +40525,25 @@
     },
     "gurdurr": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "258969948778197dbef859c6aab323a165f69dec2e20cdebe4b442542a915613",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7caa9f03027c1b29d9aa13e7305c27fa9bc9789c23b3aa0b8fc7fb8c6b5f07e7",
+          "scope": "Visible toe tips in sampled native poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -40293,6 +40560,25 @@
           "normal_runtime_sha256": "258969948778197dbef859c6aab323a165f69dec2e20cdebe4b442542a915613",
           "preview_sha256": "f56a531a9645463120954336a9dcf8ccbaf5ddef6787555768646c28cf158741",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "258969948778197dbef859c6aab323a165f69dec2e20cdebe4b442542a915613",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "bac563116196f89f98a7db246acd1a53b38769544f6131629c0843394a02aeaa",
+          "scope": "Visible toe tips in sampled native poses. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -40315,6 +40601,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.03362104296684267,
+                -1.6689300537491014e-06,
+                0.005062366835772985
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -40323,6 +40622,19 @@
                 0.05045488476753235,
                 -0.0029231309890747,
                 -0.0035515278577804565
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.03362096846103668,
+                1.579523086551321e-06,
+                0.005062331445515165
               ],
               "weight": 1
             }
@@ -40500,6 +40812,25 @@
     },
     "hakamo-o": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "5b80f0e7de3edaff7387283eef084cd29992c171cc8481f55609860520b72856",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "600d3765850a3c2356bdd402d2a82544ceb7f327ebeb5aef1c1f2e86fdee8fda",
+          "scope": "Visible middle claw base in sampled native poses; rear-facing occluded poses excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -40516,6 +40847,25 @@
           "normal_runtime_sha256": "5b80f0e7de3edaff7387283eef084cd29992c171cc8481f55609860520b72856",
           "preview_sha256": "47832996947fc17c7d8ff2e54286b47b4eb57bc762bac1ebbd081feaf3783c5e",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "5b80f0e7de3edaff7387283eef084cd29992c171cc8481f55609860520b72856",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ceb064b1844a921be6a5754669b36b6206f1b2eb6e3dd8a76a0ac08246d5c524",
+          "scope": "Visible middle claw base in sampled native poses; rear-facing occluded poses excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -40538,6 +40888,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.059243056923150794,
+                -3.650784492492676e-07,
+                -0.00616538524627685
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -40566,6 +40929,19 @@
                 -0.003413394093513499
               ],
               "weight": 0.3333333333333333
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.05924321152269835,
+                -7.450580600393275e-08,
+                -0.006165638566017151
+              ],
+              "weight": 1
             }
           ]
         ],
@@ -40752,6 +41128,25 @@
     },
     "hariyama": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "0ecb8bfc86640391ec943830e9445a56f39ea8cfeda2e99f718e8276cd497640",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b0d3690bc3eff7d4393a9446bbdf447e9e6872aa8266b7f74ecf7ad50116ce05",
+          "scope": "Visible front toe contact plane; belly/skirt-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -40768,6 +41163,25 @@
           "normal_runtime_sha256": "0ecb8bfc86640391ec943830e9445a56f39ea8cfeda2e99f718e8276cd497640",
           "preview_sha256": "282049abeea091c300c9d0a893fe33b904acc93b8b797b1c8486ec4eab5b041d",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "0ecb8bfc86640391ec943830e9445a56f39ea8cfeda2e99f718e8276cd497640",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "af15bd8186c6ceed213402d154ebb470e3e974d836ab3a014d94ce21f8c78cb1",
+          "scope": "Visible front toe contact plane; belly/skirt-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -40790,6 +41204,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.16424500942230236,
+                0.0048283636569975,
+                0.012931801378726952
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -40798,6 +41225,19 @@
                 0.12172669172287001,
                 0.0076846182346345104,
                 -0.03481951355934099
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.16424556076526656,
+                -0.004828214645385992,
+                0.012931708246469505
               ],
               "weight": 1
             }
@@ -45233,6 +45673,28 @@
     },
     "iron-hands": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "be3fa09679d9c3d02b8c03e6e4e4c40395b60746f1ba0dc22521201e4bfefa06",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "83f72f24ffcc8227abcd48016549bc850d2deed21e199d1e27a37cb0e02fa80c",
+          "scope": "Forward lower toe surface replaces high ankle location. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -45249,6 +45711,28 @@
           "normal_runtime_sha256": "be3fa09679d9c3d02b8c03e6e4e4c40395b60746f1ba0dc22521201e4bfefa06",
           "preview_sha256": "c297d322b0ac2ffef0a43c837589a61001dfc3a5be9040ffacc7fd27ea802552",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "be3fa09679d9c3d02b8c03e6e4e4c40395b60746f1ba0dc22521201e4bfefa06",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "60010c4032d8ede88a3af848ab0b06742835855f23d605cb8d6350ee3a9f0621",
+          "scope": "Forward lower toe surface replaces high ankle location. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -45271,6 +45755,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot",
+              "offset": [
+                0.24,
+                0,
+                -0.12
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -45279,6 +45776,19 @@
                 0.051655769348144503,
                 0.021298825740813987,
                 -0.24086481332778953
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot",
+              "offset": [
+                0.24,
+                0,
+                -0.12
               ],
               "weight": 1
             }
@@ -46894,7 +47404,77 @@
       }
     },
     "kangaskhan": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6bb8ecadcc0caf46b7a24516f26cf7e86cd84dedfe5e2edc40ac20e899c53900",
+          "scope": "Adult middle toe claw tip through visible native samples; pouch-occluded samples excluded. Child feet are separate pending anatomy. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "24f478a466884a073e814df257288f628fdf557ef70fd05d7aa48b0289e2f08d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ed0b5910508487a6bc8fba3bf86cccab6d4adac8c9e59ecd0e13c55660bf5c52",
+          "scope": "Adult middle toe claw tip through visible native samples; pouch-occluded samples excluded. Child feet are separate pending anatomy. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_middle_a",
+              "offset": [
+                0.12,
+                0,
+                -0.015
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_middle_a",
+              "offset": [
+                0.12,
+                0,
+                -0.015
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -46937,7 +47517,77 @@
       }
     },
     "kangaskhan-mega": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2ac0b37b5072424dcabb328ab7a294554b9b796a5612fa66cdaa9328b275200c",
+          "scope": "Adult middle toe claw tip; child/pouch-occluded samples excluded. Child feet are separate pending anatomy. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "1d313b530091b789324a99e36291becd187bd60e62655eb28778132f6363da1c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "78424533f80a82b45bf99231f8674e7002d373d391c8f718239b0ca122726a84",
+          "scope": "Adult middle toe claw tip; child/pouch-occluded samples excluded. Child feet are separate pending anatomy. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_middle_a",
+              "offset": [
+                0.12,
+                0,
+                -0.015
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_middle_a",
+              "offset": [
+                0.12,
+                0,
+                -0.015
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -48020,6 +48670,25 @@
     },
     "komala": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "5d9ed607543b3604823c80d940ef00469f5639d56e5c15bf754f339aa3a3b578",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9d2e0f3915772fb2d709603d4fadde8b649168398d94e02f9877a32d0183e3ac",
+          "scope": "Visible foot pads; log/body-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -48036,6 +48705,25 @@
           "normal_runtime_sha256": "5d9ed607543b3604823c80d940ef00469f5639d56e5c15bf754f339aa3a3b578",
           "preview_sha256": "8447c4c88a2b8831518ca3670897bcc0d36b35b1474dea74929b9df930593330",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "5d9ed607543b3604823c80d940ef00469f5639d56e5c15bf754f339aa3a3b578",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d898b3b2bd9a4e8cb713c475a4c699a968fc5131f64335a32ffc7a7c24de1cbd",
+          "scope": "Visible foot pads; log/body-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -48058,6 +48746,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot",
+              "offset": [
+                0.0132450582459569,
+                0.0011731237173080514,
+                -0.006840243935585014
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -48066,6 +48767,19 @@
                 0.012086845934391001,
                 0.00213578343391415,
                 0.002538898959755901
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot",
+              "offset": [
+                0.013245079666376098,
+                -0.0011731050908565504,
+                -0.00684025138616561
               ],
               "weight": 1
             }
@@ -48333,7 +49047,73 @@
       }
     },
     "koraidon": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "71e718aac352e4a0657b84d5defc8871c36856f757c00ee971b2bb91be1f4115",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "65c6dc8e0bb2db1346c41afff25e452045c1ddae9e8d7427f359ddeb777319b4",
+          "scope": "Webbed toe/sole centers in sampled native poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "71e718aac352e4a0657b84d5defc8871c36856f757c00ee971b2bb91be1f4115",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f91626380fe97b428b1919bbf9d651aa85e101ea86bbff91d549db2b279524e2",
+          "scope": "Webbed toe/sole centers in sampled native poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_toe",
+              "offset": [
+                0.12142506241798395,
+                0.013379812240600598,
+                -0.06153105199337005
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_toe",
+              "offset": [
+                0.12142622470855721,
+                -0.01644176244735715,
+                -0.0650755763053894
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -50070,7 +50850,79 @@
       }
     },
     "leavanny": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "09c4464b8dd78323b3e80ef191a1c6998cfddfae900ebe9c854cfd21c20f5dee",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9f638701d2a53db1ac5c49586d9df1f9c42329a983bb88f46eb4d6b257fc2a50",
+          "scope": "Native foot endpoints coincide with narrow pointed yellow leg tips. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "09c4464b8dd78323b3e80ef191a1c6998cfddfae900ebe9c854cfd21c20f5dee",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "60d97fb08d7dde2f7ab597c7b1b8f927ca210add43a96ad49fc971d50f1ec718",
+          "scope": "Native foot endpoints coincide with narrow pointed yellow leg tips. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -55141,6 +55993,25 @@
     },
     "makuhita": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "d59d45d17c6cc1b745e6df3f51a5d7ef22753cf16e8eda7c37b88460315eba60",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "366d882a825702704a2b11ef78bd0d97b16bfc2e5f7fa92eb4cf2cc26640f97f",
+          "scope": "Front toe surface in sampled native poses; body-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -55157,6 +56028,25 @@
           "normal_runtime_sha256": "d59d45d17c6cc1b745e6df3f51a5d7ef22753cf16e8eda7c37b88460315eba60",
           "preview_sha256": "f0f77df1d69e685005e315eb4a2c41bb85bcb0530893255d11be253282ca7ed4",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "d59d45d17c6cc1b745e6df3f51a5d7ef22753cf16e8eda7c37b88460315eba60",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fcf41304dd60c8af1aa452c38c642a4676dcab2885cee3c974330d59da102b2e",
+          "scope": "Front toe surface in sampled native poses; body-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -55179,6 +56069,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.039061933755874655,
+                0.0014034323394298484,
+                0.0019010752439499005
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -55187,6 +56090,19 @@
                 0.1237573474645616,
                 0.0054367482662201,
                 0.005189731717109992
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.03906190395355226,
+                -0.0014034025371074538,
+                0.001901062205433849
               ],
               "weight": 1
             }
@@ -56189,6 +57105,24 @@
     },
     "marowak-alola": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b98188c1d65ae9b6a2df32ee7d8ce93ae57fc7595b8eeb9a48830281ff2ac374",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3c4e170318de3f38b7e2fccc0d34643fcf701a3450bcec891975fa35d416eaab",
+          "scope": "White toe claw surface through native attack poses; effect-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -56204,6 +57138,24 @@
           "normal_runtime_sha256": "b98188c1d65ae9b6a2df32ee7d8ce93ae57fc7595b8eeb9a48830281ff2ac374",
           "preview_sha256": "60ff8e4c7a491d368846e6263832c8b212bd44cda39bb6e7540549dd1f0f44c5",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b98188c1d65ae9b6a2df32ee7d8ce93ae57fc7595b8eeb9a48830281ff2ac374",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f3f28a0cc6b85b5704d284c853a8a2acf4511163e3305558e422d82742dd9459",
+          "scope": "White toe claw surface through native attack poses; effect-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -56225,6 +57177,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.02210496179759504,
+                -0.0005152374505996496,
+                -0.0010237544775009008
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -56233,6 +57198,19 @@
                 0.053048655390739455,
                 0.009883359074592597,
                 -0.00010236352682115035
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.022104946896433848,
+                0.0005151554942131494,
+                -0.0010242015123366997
               ],
               "weight": 1
             }
@@ -56294,6 +57272,24 @@
     },
     "marowak-alola-totem": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b29cf360c462a278e3972a224f9c64b8cdb774e3168376e089d507ed4468d35d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e9e7b8bae282f34de8d05c3d9dade2c6744d4e0e535270aadd765e87547ee60a",
+          "scope": "White toe claw surface through native attack poses; effect-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -56309,6 +57305,24 @@
           "normal_runtime_sha256": "b29cf360c462a278e3972a224f9c64b8cdb774e3168376e089d507ed4468d35d",
           "preview_sha256": "10125625996cee317ded5aef1032fdcc26fcdc0d38983c6253c55bbb57eeb9ea",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b29cf360c462a278e3972a224f9c64b8cdb774e3168376e089d507ed4468d35d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3fbf263c8bbb5a07c3f96671ba724f999a17a05c62c54234e2c57300725fc31d",
+          "scope": "White toe claw surface through native attack poses; effect-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -56330,6 +57344,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.02210496179759504,
+                -0.0005152374505996496,
+                -0.0010237544775009008
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -56338,6 +57365,19 @@
                 0.053048655390739455,
                 0.009883359074592597,
                 -0.00010236352682115035
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.022104946896433848,
+                0.0005151554942131494,
+                -0.0010242015123366997
               ],
               "weight": 1
             }
@@ -57248,7 +58288,71 @@
       }
     },
     "medicham-mega": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "65efcc9a48d7b3c440477911b316defadd7b801c24b1c9c65b5097416158704d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3082dab1f1204cdfe85725ee23c9e37b565a09f515463336748c9e3fe19d2e7b",
+          "scope": "Toe contact surface; side views confirm raised left foot behind trousers. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "65efcc9a48d7b3c440477911b316defadd7b801c24b1c9c65b5097416158704d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f2e17173ebef983bb6640fcc37542ccc970e6192997869f5aa936c2607b3fba2",
+          "scope": "Toe contact surface; side views confirm raised left foot behind trousers. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.02992860972881319,
+                -0.0028106719255447006,
+                0.01303692162036895
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.029928691685199724,
+                0.0028104484081268,
+                0.0130369607359171
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -57874,6 +58978,25 @@
     },
     "meowscarada": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "decb9c84801adca121d862e7edac70a65e196600ce7c32461cfb212b486dce04",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e3b197a47ee8a70de12a6268e20eb69527c911443754386067e8763c9c05cac9",
+          "scope": "Paw toe surface through sampled native attack poses. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -57890,6 +59013,25 @@
           "normal_runtime_sha256": "decb9c84801adca121d862e7edac70a65e196600ce7c32461cfb212b486dce04",
           "preview_sha256": "d894d27ab259cd99cef60ba2f4b31966952af501000e52c95a7196951f32a0b4",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "decb9c84801adca121d862e7edac70a65e196600ce7c32461cfb212b486dce04",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1a8ed02b1582832ea049bb0c91472118457271e66e944fa8f799685e8a39305b",
+          "scope": "Paw toe surface through sampled native attack poses. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -57912,6 +59054,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_toe",
+              "offset": [
+                0.043939378112554356,
+                -0.0011207424104213992,
+                -0.023232501000165898
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -57920,6 +59075,19 @@
                 0.05780068039894105,
                 0.008034560829400999,
                 -0.0032578110694885497
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_toe",
+              "offset": [
+                0.04393939673900625,
+                0.0011207312345504969,
+                -0.023232527077198
               ],
               "weight": 1
             }
@@ -61676,6 +62844,28 @@
     },
     "mudbray": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "4d8c70759244e0ec6a2976aaa7978aeaa6125d2f48f07e09191070c4e5717f87",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f2a53e323d5ec0abdb915ebea957c80e29efe8cfd13e524bf9b6ff98e81bde11",
+          "scope": "Black hoof contact surface replaces high hoof rim location. Foreleg-occluded samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -61692,6 +62882,28 @@
           "normal_runtime_sha256": "4d8c70759244e0ec6a2976aaa7978aeaa6125d2f48f07e09191070c4e5717f87",
           "preview_sha256": "e357a9e75a26bc99b0447a5e4294d1fb79cfc9ad4dfb8488d3a939a2e9075392",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "4d8c70759244e0ec6a2976aaa7978aeaa6125d2f48f07e09191070c4e5717f87",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2bba0e88da6f7c2954576663aba81613d6c027d96d148e9d0609e983895f5bae",
+          "scope": "Black hoof contact surface replaces high hoof rim location. Foreleg-occluded samples excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -61714,6 +62926,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.085,
+                0,
+                -0.04
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -61722,6 +62947,19 @@
                 0.0333897620439528,
                 0.0002789683640002996,
                 -0.0130639374256134
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.085,
+                0,
+                -0.04
               ],
               "weight": 1
             }
@@ -61914,6 +63152,28 @@
     },
     "mudsdale": {
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b0cde424d031ab7b0c6936bd293a57ee0b1ec7e51d7bd80ce3cb6302cc0840d3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "d479a94c1adeeb2fcf72d2b9b141510ba1ac0b1f014b04d783899354efc653be",
+          "scope": "Lower hoof sole/contact surface, including raised special pose. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -61930,6 +63190,28 @@
           "normal_runtime_sha256": "b0cde424d031ab7b0c6936bd293a57ee0b1ec7e51d7bd80ce3cb6302cc0840d3",
           "preview_sha256": "6b0e9b7046b9997ef54d50d7730dbcdf2db7ac0e8a02823ddc88765208c8f715",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Proposal: individually selected toe/hoof sole positions; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b0cde424d031ab7b0c6936bd293a57ee0b1ec7e51d7bd80ce3cb6302cc0840d3",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "4e631233b745f315e647f5e7b7de12baaf6142ae6df4a35687c71cd9e28d0968",
+          "scope": "Lower hoof sole/contact surface, including raised special pose. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -61952,6 +63234,19 @@
         }
       },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "right_foot_index",
+              "offset": [
+                0.18,
+                0,
+                -0.18
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "hand": [
           [
             {
@@ -61960,6 +63255,19 @@
                 0.05701211094856251,
                 -0.002667844295501487,
                 -0.10718030482530605
+              ],
+              "weight": 1
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "left_foot_index",
+              "offset": [
+                0.18,
+                0,
+                -0.18
               ],
               "weight": 1
             }
@@ -62997,7 +64305,74 @@
       }
     },
     "nidoran-f": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "65469dda207ac6a1cb78ff5a77d5b1fa1321658f0e475f7ccda95a9ae20a077d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "c64d7d1d7050bdac9474424630d4b109e68f4c9a46c54e51959b2ddd4d6fef93",
+          "scope": "Native hind right foot contact plane, visible front samples. Foreleg/body-occluded side samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Native left foot marker proposal; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "65469dda207ac6a1cb78ff5a77d5b1fa1321658f0e475f7ccda95a9ae20a077d",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8aa0c43880529a32baeb4dc11b7f97164e6c6ceaafa643d04221a5dff65cac84",
+          "scope": "Native left hind foot sole plane in visible sampled poses. Belly and foreleg occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "EffFoot01",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "EffFoot02",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {
@@ -63031,7 +64406,74 @@
       }
     },
     "nidoran-m": {
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "6d37745f419963ccf3b9b40f4a45e08877c5d1d4b9263309d0bb83b944ae1da6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1239d75e818d6be6afa06f4052baa20c8ba88e8ce30ebee17136afa6a552e12c",
+          "scope": "Native hind right foot contact plane, visible front samples. Foreleg/body-occluded side samples excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v46": "Native left foot marker proposal; visual review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "6d37745f419963ccf3b9b40f4a45e08877c5d1d4b9263309d0bb83b944ae1da6",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6ab16cafe5c3501a579397a1c276dbbd9ec03b7ac978e094892894e1558c295e",
+          "scope": "Native left hind foot sole plane in visible sampled poses. Belly and foreleg occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "parts": {
+        "foot": [
+          [
+            {
+              "bone": "EffFoot01",
+              "offset": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "weight": 1.0
+            }
+          ]
+        ],
+        "left_foot": [
+          [
+            {
+              "bone": "EffFoot02",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "weight": 1
+            }
+          ]
+        ],
         "mouth": [
           [
             {

@@ -65,6 +65,12 @@ func _run() -> void:
 		assert(Attachments.definitions_for(species, "mouth").size() == 1)
 		assert(Attachments.definitions_for(species, "mouth_red").size() == 1)
 	assert(Attachments.action_for("scovillain-mega", "flamethrower", {"physical_attack": {}, "special_attack": {}}).is_empty(), "Alternate forms must not inherit incompatible native action routes")
+	for route: Array in [["decidueye", "lowkick", "physical_attack_2"], ["glastrier", "doublekick", "physical_attack_2"], ["calyrex-ice", "doublekick", "physical_attack"], ["calyrex-shadow", "doublekick", "physical_attack"], ["exploud", "lowkick", "physical_attack"]]:
+		for identity: String in [route[0], route[0] + "@shiny"]:
+			assert(Attachments.part_for(identity, route[1]) == "foot")
+			assert(Attachments.action_for(identity, route[1], {"physical_attack": {}, "physical_attack_2": {}}) == route[2])
+			assert(Attachments.definitions_for(identity, "foot").size() == 1)
+	assert(Attachments.action_for("decidueye-hisui", "lowkick", {"physical_attack": {}, "physical_attack_2": {}}).is_empty(), "Hisuian form must not inherit Decidueye's kick clip")
 	var electric_actor := _rig(world, ["spine_02"])
 	var electric_rig: Skeleton3D = electric_actor.get_node("Rig")
 	electric_rig.set_bone_pose_position(0, Vector3(0, 0.8, 0))
@@ -93,6 +99,14 @@ func _run() -> void:
 	assert(stage.attack_action_for("Flamethrower", "p1") == "physical_attack")
 	assert(stage.attack_action_for("Solar Beam", "p1") == "special_attack")
 	stage.entries.erase("scovillain")
+	stage.identities[0] = "decidueye"
+	stage.entries.decidueye = {"action_timing": {"physical_attack": {}, "physical_attack_2": {}}}
+	assert(stage.attack_action_for("Low Kick", "p1") == "physical_attack_2")
+	stage.entries.erase("decidueye")
+	stage.identities[0] = "glastrier"
+	stage.entries.glastrier = {"action_timing": {"physical_attack": {}, "physical_attack_2": {}}}
+	assert(stage.attack_action_for("Double Kick", "p1") == "physical_attack_2")
+	stage.entries.erase("glastrier")
 	for i in 2:
 		stage.actors[i] = _rig(world, ["head"])
 		stage.actors[i].position.x = -2 if i == 0 else 2

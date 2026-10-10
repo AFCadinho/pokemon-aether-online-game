@@ -45,6 +45,18 @@ static func part_for(identity: String, move_key: String) -> String:
 	overrides.merge(CALIBRATED.data.profiles.get(species, {}).get("moves", {}), true)
 	return overrides.get(move_key, MOVE_PARTS.get(move_key, Recipes.get_recipe(move_key).get("attachment", "body")))
 
+## Reviewed timing/orientation belongs to one exact form, move and native clip.
+static func choreography_for(identity: String, move_key: String, action: String) -> Dictionary:
+	var species := Catalog.canonical_identity(identity).trim_suffix("@shiny")
+	var spec: Dictionary = CALIBRATED.data.profiles.get(species, {}).get("move_choreography", {}).get(move_key, {})
+	if spec.get("action", "") != action: return {}
+	var launch := float(spec.get("launch_fraction", -1))
+	var impact := float(spec.get("impact_fraction", -1))
+	var yaw := float(spec.get("contact_yaw_degrees", 0))
+	if not is_finite(launch) or not is_finite(impact) or not is_finite(yaw): return {}
+	if launch < 0 or launch >= impact or impact >= 1 or absf(yaw) > 180: return {}
+	return {"launch_fraction": launch, "impact_fraction": impact, "contact_yaw_degrees": yaw}
+
 ## One outer element is one emitter. Its weighted bones describe a single
 ## moving point (e.g. between two lips); paired cannons remain two emitters.
 static func definitions_for(identity: String, part: String, action := "") -> Array:

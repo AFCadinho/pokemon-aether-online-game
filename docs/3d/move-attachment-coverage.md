@@ -388,20 +388,20 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | grookey | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | grotle | hand, left_hand, mouth | Same attachment profile |
 | groudon | hand, left_hand, mouth | Same attachment profile |
-| grovyle | hand, left_hand, mouth | Same attachment profile |
+| grovyle | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | growlithe | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | growlithe-hisui | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | grubbin | mouth | Same attachment profile |
 | grumpig | foot, hand, left_foot, left_hand | Same attachment profile |
 | gulpin | hand, left_hand, mouth | Same attachment profile |
 | gumshoos | hand, left_hand, mouth | Same attachment profile |
-| gurdurr | hand, left_hand | Same attachment profile |
+| gurdurr | foot, hand, left_foot, left_hand | Same attachment profile |
 | guzzlord | mouth | Same attachment profile |
 | gyarados | mouth | Same attachment profile |
 | gyarados-mega | mouth | Same attachment profile |
-| hakamo-o | hand, left_hand, mouth | Same attachment profile |
+| hakamo-o | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | happiny | hand, left_hand, mouth | Same attachment profile |
-| hariyama | hand, left_hand | Same attachment profile |
+| hariyama | foot, hand, left_foot, left_hand | Same attachment profile |
 | hatenna | mouth | Same attachment profile |
 | hattrem | mouth | Same attachment profile |
 | haunter | hand, left_hand, mouth | Same attachment profile |
@@ -439,7 +439,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | iron-boulder | mouth | Same attachment profile |
 | iron-bundle | mouth | Same attachment profile |
 | iron-crown | mouth | Same attachment profile |
-| iron-hands | hand, left_hand | Same attachment profile |
+| iron-hands | foot, hand, left_foot, left_hand | Same attachment profile |
 | iron-jugulis | mouth | Same attachment profile |
 | iron-leaves | hand, left_hand | Same attachment profile |
 | iron-thorns | foot, left_foot, mouth | Same attachment profile |
@@ -457,8 +457,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | kabuto | mouth | Same attachment profile |
 | kabutops | foot, mouth | Same attachment profile |
 | kadabra | hand, left_hand | Same attachment profile |
-| kangaskhan | mouth | Same attachment profile |
-| kangaskhan-mega | mouth | Same attachment profile |
+| kangaskhan | foot, left_foot, mouth | Same attachment profile |
+| kangaskhan-mega | foot, left_foot, mouth | Same attachment profile |
 | karrablast | hand, left_hand, mouth | Same attachment profile |
 | kartana | mouth | Same attachment profile |
 | kecleon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -472,9 +472,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | klink | mouth | Same attachment profile |
 | klinklang | mouth | Same attachment profile |
 | koffing | mouth | Same attachment profile |
-| komala | hand, left_hand, mouth | Same attachment profile |
+| komala | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | kommo-o | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| koraidon | mouth | Same attachment profile |
+| koraidon | foot, left_foot, mouth | Same attachment profile |
 | krabby | hand, left_hand, mouth | Same attachment profile |
 | krokorok | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | krookodile | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -492,7 +492,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | latias-mega | mouth | Same attachment profile |
 | latios-mega | mouth | Same attachment profile |
 | leafeon | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| leavanny | mouth | Same attachment profile |
+| leavanny | foot, left_foot, mouth | Same attachment profile |
 | ledian | mouth | Same attachment profile |
 | ledyba | mouth | Same attachment profile |
 | lickilicky | hand, left_hand, mouth | Same attachment profile |
@@ -532,7 +532,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | magikarp | mouth | Same attachment profile |
 | magmar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | magmortar | cannon, foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| makuhita | hand, left_hand, mouth | Same attachment profile |
+| makuhita | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | malamar | mouth | Same attachment profile |
 | malamar-mega | mouth | Same attachment profile |
 | mamoswine | hand, left_hand | Same attachment profile |
@@ -546,20 +546,20 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mareep | mouth | Same attachment profile |
 | marill | mouth | Same attachment profile |
 | marowak | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| marowak-alola | hand, left_hand, mouth | Same attachment profile |
-| marowak-alola-totem | hand, left_hand, mouth | Same attachment profile |
+| marowak-alola | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
+| marowak-alola-totem | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marshadow | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marshtomp | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | maschiff | mouth | Same attachment profile |
 | mawile | hand, left_hand | Same attachment profile |
 | mawile-mega | hand, left_hand | Same attachment profile |
 | medicham | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| medicham-mega | mouth | Same attachment profile |
+| medicham-mega | foot, left_foot, mouth | Same attachment profile |
 | meditite | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | meganium | hand, left_hand, mouth | Same attachment profile |
 | meganium-mega | hand, left_hand, mouth | Same attachment profile |
 | meloetta | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| meowscarada | hand, left_hand, mouth | Same attachment profile |
+| meowscarada | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | meowstic-m-mega | hand, left_hand | Same attachment profile |
 | meowstic-male | hand, left_hand, mouth | Same attachment profile |
 | meowth | hand, left_hand, mouth | Same attachment profile |
@@ -593,9 +593,9 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | mr-mime | hand, left_hand, mouth | Same attachment profile |
 | mr-mime-galar | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | mr-rime | foot, hand, left_foot, left_hand | Same attachment profile |
-| mudbray | hand, left_hand | Same attachment profile |
+| mudbray | foot, hand, left_foot, left_hand | Same attachment profile |
 | mudkip | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
-| mudsdale | hand, left_hand | Same attachment profile |
+| mudsdale | foot, hand, left_foot, left_hand | Same attachment profile |
 | muk | mouth | Same attachment profile |
 | muk-alola | mouth | Same attachment profile |
 | munchlax | hand, left_hand, mouth | Same attachment profile |
@@ -607,8 +607,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | nickit | mouth | Same attachment profile |
 | nidoking | foot, hand, left_hand, mouth | Same attachment profile |
 | nidoqueen | foot, hand, left_hand, mouth | Same attachment profile |
-| nidoran-f | mouth | Same attachment profile |
-| nidoran-m | mouth | Same attachment profile |
+| nidoran-f | foot, left_foot, mouth | Same attachment profile |
+| nidoran-m | foot, left_foot, mouth | Same attachment profile |
 | nidorina | foot, hand, left_hand, mouth | Same attachment profile |
 | nidorino | hand, left_hand, mouth | Same attachment profile |
 | nihilego | mouth | Same attachment profile |

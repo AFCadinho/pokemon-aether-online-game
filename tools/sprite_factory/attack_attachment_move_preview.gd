@@ -113,12 +113,13 @@ func _run() -> void:
 			label.text = "%s | %s | %s %.3f | %s" % [species,move,action,fraction,points.attachment_part]
 			await process_frame; await RenderingServer.frame_post_draw
 			sheet.blit_rect(viewport.get_texture().get_image(),Rect2i(0,0,720,540),Vector2i(column*720,row*540))
-			records.append({"fraction":fraction,"view":column,"part":points.attachment_part,"bones":points.attachment_bones,"sources":points.sources.size(),"pieces":effect.cursor})
+			records.append({"fraction":fraction,"view":column,"part":points.attachment_part,"bones":points.attachment_bones,"sources":points.sources.size(),"pieces":effect.cursor,
+				"source_position":[points.source.x,points.source.y,points.source.z],"target_position":[points.target.x,points.target.y,points.target.z],"contact_yaw":stage.contact_yaws[0]})
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output))
 	var filename := species+"-"+Stage.MoveEffect.move_key(move)
 	assert(sheet.save_png(output.path_join(filename+".png")) == OK)
 	var file := FileAccess.open(output.path_join(filename+".json"),FileAccess.WRITE)
-	file.store_string(JSON.stringify({"species":species,"move":move,"action":action,"runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
+	file.store_string(JSON.stringify({"species":species,"move":move,"action":action,"timing":timing,"pose_sampling":"forward_from_start_v1","runtime_sha256":model.runtime_sha256,"attachment_data_sha256":FileAccess.get_sha256("res://data/battle_move_attachments_3d.json"),"scope":"offline actual stage anchors, native action, contact approach and move VFX; plain review lighting","captures":records},"\t")+"\n")
 	file.close()
 	effect.cancel(); await process_frame
 	stage.world = null; stage.camera = null; stage.free()

@@ -1003,6 +1003,10 @@ func _start_move_contact(actor: String, target: String, timing: Dictionary, effe
 	var destination := _move_visual(target)
 	var partner: Vector3 = _position(index + 1 if index % 2 == 0 else index - 1) - _position(index)
 	var turn := wrapf(atan2(delta.x, delta.z) - atan2(partner.x, partner.z), -PI, PI)
+	# A reviewed rear kick turns the actual Pokemon during its approach.
+	# A Substitute keeps its own presentation and never inherits the rig turn.
+	if source == actors[index]:
+		turn += deg_to_rad(float(timing.get("contact_yaw_degrees", 0)))
 	var motion := {"source":source, "target":destination, "actor":actor, "target_ident":target,
 		"clock":bind_action_clock(actor), "duration":float(timing.frames)/60.0,
 		"quick": str(timing.get("move_key", "")) == "quickattack",
@@ -1340,6 +1344,11 @@ func move_timing(move: String, ident: String) -> Dictionary:
 		elif profile.move_key == "dracometeor":
 			profile["launch_frame"] = float(profile.frames) * (0.7/3.2)
 			profile["impact_frame"] = float(profile.frames) * (2.05/3.2)
+		var choreography := MoveAttachments.choreography_for(identities[index], profile.move_key, mapped.action)
+		if not choreography.is_empty() and _move_visual(ident) == actors[index]:
+			profile["launch_frame"] = float(profile.frames) * float(choreography.launch_fraction)
+			profile["impact_frame"] = float(profile.frames) * float(choreography.impact_fraction)
+			profile["contact_yaw_degrees"] = float(choreography.contact_yaw_degrees)
 	return profile
 
 func action_clock(ident: String, generation: int, end_seconds: float) -> float:

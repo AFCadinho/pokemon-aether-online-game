@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, emit Magmortar's fire attacks from its arm cannon, and give Scovillain separate red and green mouth origins with matching attack poses.
+- Add individually reviewed mouth, hand and foot attachment profiles for more 3D Pokémon forms, including points that follow moving jaws and snouts. Connect Snivy, Servine and Serperior's Vine Whip to their animated vine tips, follow Thwackey's open/closed muzzle changes, track Mega Golurk's detached rocket fists, emit Magmortar's fire attacks from its arm cannon, and give Scovillain separate red and green mouth origins with matching attack poses. Align Exploud’s Low Kick timing and turn Glastrier and Ice Rider Calyrex toward their opponent for rear kicks.
 
 - Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
 
