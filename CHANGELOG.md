@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refer to the shared game time when explaining evolution requirements.
+
 - Display Chinese guild names, descriptions and other player text in every interface language, including English.
 
 - Make the Skills overview smaller with compact cards and square icons, expanding the window only when viewing skill details.
