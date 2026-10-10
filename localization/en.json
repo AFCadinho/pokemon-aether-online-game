@@ -1,4 +1,12 @@
 {
+  "world.vermilion_gym.puzzle.bin": "Gym bin",
+  "world.vermilion_gym.puzzle.barrier": "Electric barrier",
+  "world.vermilion_gym.puzzle.empty": "There is only rubbish here. No switch.",
+  "world.vermilion_gym.puzzle.first": "You found the first switch! The lower electric barrier is off. The second switch is in a bin directly above, below, left or right of this one.",
+  "world.vermilion_gym.puzzle.first_active": "This switch is already on. Look in a directly adjacent bin for the second switch.",
+  "world.vermilion_gym.puzzle.wrong": "Wrong switch! Both barriers are back on. Activate the first switch again to retry; the switches are still in the same bins until you leave the gym.",
+  "world.vermilion_gym.puzzle.solved": "Both switches are on! The electric barriers are off. The way to Lt. Surge is clear.",
+  "world.vermilion_gym.puzzle.barrier_closed": "An electric barrier blocks the way. Find the two switches hidden in the bins to turn it off.",
   "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
   "ui.trainer_card.wallet.casino_tokens_description": "Reserved for future casino games and prizes. Earning and spending will become available later.",
   "ui.staff.dev.add_casino_tokens": "Add Casino Tokens",
