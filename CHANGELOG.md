@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Prevent repeated interaction presses after a won trainer rematch from starting another battle before the trainer enters its sleeping state.
+
 - Add a direct forum guide link to each skill's detail view.
 
 ## 0.3.105
