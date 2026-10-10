@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show Karrablast/Shelmet trade evolution outcomes before confirming, display their real-trade requirement in Evolution conditions, and announce Shedinja when Nincada evolves with a free party slot.
+
 - Reimport the latest Vermilion Gym device decoration edits from Tiled.
 
 - Add blue-white sparks and flickering electrical arcs to the two devices in Vermilion Gym's lower corners.

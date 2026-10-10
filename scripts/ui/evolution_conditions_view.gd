@@ -56,12 +56,22 @@ func render(data: Dictionary) -> void:
 			if progress >= required:
 				status_key = "ui.evolution_conditions.met" if bool(entry.get("conditionsMet", false)) else "ui.evolution_conditions.walk_complete"
 			stack.add_child(_label(LocalizationManager.text(status_key), Color("9eb3c5")))
-		if str(entry.get("itemId", "")) == "" and not (rule.has("min_walk_steps") and bool(entry.get("conditionsMet", false))):
+		if str(entry.get("itemId", "")) == "" and not rule.has("trade_species") and not (rule.has("min_walk_steps") and bool(entry.get("conditionsMet", false))):
 			stack.add_child(_label(LocalizationManager.text("ui.evolution_conditions.met" if bool(entry.get("conditionsMet", false)) else "ui.evolution_conditions.not_met"), Color("9eb3c5")))
 
 static func requirement_lines(entry: Dictionary) -> Array[String]:
 	var lines: Array[String] = []
 	var rule: Dictionary = entry.get("rule", {})
+	if rule.has("trade_species"):
+		var partner := str(rule.trade_species)
+		lines.append(LocalizationManager.text("ui.evolution_conditions.partner_trade", {
+			"partner": ContentLocalization.display_name("species", partner, _display_id(partner)),
+		}))
+	if rule.get("trigger", "") == "shed":
+		var target := str(rule.get("evolves_with", "ninjask"))
+		lines.append(LocalizationManager.text("ui.evolution_conditions.shed_rule", {
+			"pokemon": ContentLocalization.display_name("species", target, _display_id(target)),
+		}))
 	if rule.has("level"):
 		lines.append(LocalizationManager.text("ui.evolution_conditions.level", {"level": int(rule.level)}))
 	if rule.has("min_walk_steps"):

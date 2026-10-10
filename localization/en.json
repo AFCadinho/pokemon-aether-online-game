@@ -6655,5 +6655,9 @@
   "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\nHold to remove this shortcut.",
   "ui.hotbar.message.empty.touch": "Hotbar slot {slot} is empty. Hold a usable item in your Bag to assign it.",
   "ui.storage.status.idle.touch": "Drag to move · tap to inspect · hold to take held item",
-  "ui.creator.photo.help.touch": "Drag to move the camera · use the zoom slider"
+  "ui.creator.photo.help.touch": "Drag to move the camera · use the zoom slider",
+  "ui.evolution_conditions.partner_trade": "Trade this Pokémon for {partner}. Linking Cord does not replace this trade.",
+  "ui.evolution_conditions.shed_rule": "Evolve your owned Pokémon into {pokemon} with a free party slot. Shedinja appears in that slot.",
+  "ui.evolution.result.bonus_created": "{pokemon} appeared in your party.",
+  "ui.trade.review.evolves_to": "Evolves into {pokemon} after this trade."
 }
