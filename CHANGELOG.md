@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show Casino Tokens in the wallet and developer currency tools; add the Gold Coin icon and localized item text for Gimmighoul evolution. Casino earning and prize shops will follow later.
+
 - Replace the rails around Vermilion Gym's puzzle floor with open walkways and give Lt. Surge a raised stone stage with central steps.
 
 - Show an invitation to answer Help chat questions instead of a cooldown warning when the player has permission to bypass the Help cooldown.

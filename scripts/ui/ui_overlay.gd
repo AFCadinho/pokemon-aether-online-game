@@ -236,6 +236,7 @@ const TRAINER_WALLET_MONEY_ICON: Texture2D = preload("res://assets/items/icons/C
 const TRAINER_WALLET_AETHER_GEM_ICON: Texture2D = preload("res://assets/ui/donator_gem.svg")
 const TRAINER_WALLET_AETHERITE_ICON: Texture2D = preload("res://assets/ui/aetherite.svg")
 const TRAINER_WALLET_BATTLE_POINTS_ICON: Texture2D = preload("res://assets/ui/battle_points.svg")
+const TRAINER_WALLET_CASINO_TOKENS_ICON: Texture2D = preload("res://assets/items/icons/AMULETCOIN.png")
 const DEV_HEAL_PARTY_ICON: Texture2D = preload("res://assets/ui/tool_heal_party.svg")
 const DEV_TRAINER_PROGRESS_ICON: Texture2D = preload("res://assets/gym_badges/kanto_badges/Boulder_Badge.png")
 const DEV_TRAINER_REMATCH_ICON: Texture2D = preload("res://assets/ui/icons/trainer_challenge.png")
@@ -1262,6 +1263,7 @@ var trainer_card_money_label: Label
 var trainer_card_aether_gems_label: Label
 var trainer_card_aetherite_label: Label
 var trainer_card_battle_points_label: Label
+var trainer_card_casino_tokens_label: Label
 var trainer_card_playtime_label: Label
 var trainer_card_guild_label: Label
 var trainer_card_pvp_value_labels: Dictionary = {}
@@ -1604,6 +1606,7 @@ var dev_money_confirm_button: Button
 var dev_gems_confirm_button: Button
 var dev_aetherite_confirm_button: Button
 var dev_battle_points_confirm_button: Button
+var dev_casino_tokens_confirm_button: Button
 var dev_heal_party_button: Button
 var dev_open_pc_button: Button
 var dev_badge_progress_button: Button
@@ -10095,9 +10098,9 @@ func _setup_dev_add_item_tools() -> void:
 	dev_add_money_popup.anchor_right = 0.5
 	dev_add_money_popup.anchor_bottom = 0.5
 	dev_add_money_popup.offset_left = -230
-	dev_add_money_popup.offset_top = -150
+	dev_add_money_popup.offset_top = -175
 	dev_add_money_popup.offset_right = 230
-	dev_add_money_popup.offset_bottom = 150
+	dev_add_money_popup.offset_bottom = 175
 	var add_currency_shell_style := _make_glass_panel_style(14)
 	add_currency_shell_style.border_color = Color("#75613bcc")
 	dev_add_money_popup.add_theme_stylebox_override("panel", add_currency_shell_style)
@@ -10225,12 +10228,22 @@ func _setup_dev_add_item_tools() -> void:
 	_apply_dev_currency_button_icon(dev_battle_points_confirm_button, TRAINER_WALLET_BATTLE_POINTS_ICON)
 	currency_buttons.add_child(dev_battle_points_confirm_button)
 
+	dev_casino_tokens_confirm_button = Button.new()
+	_set_localized_control_property(dev_casino_tokens_confirm_button, "text", "ui.staff.dev.add_casino_tokens")
+	dev_casino_tokens_confirm_button.custom_minimum_size = Vector2(0, 36)
+	dev_casino_tokens_confirm_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	dev_casino_tokens_confirm_button.focus_mode = Control.FOCUS_NONE
+	dev_casino_tokens_confirm_button.pressed.connect(_on_dev_casino_tokens_confirm_pressed)
+	_apply_dev_currency_button_icon(dev_casino_tokens_confirm_button, TRAINER_WALLET_CASINO_TOKENS_ICON)
+	currency_buttons.add_child(dev_casino_tokens_confirm_button)
+
 	_apply_button_style(money_close_button)
 	_apply_line_edit_style(dev_money_amount_spinbox.get_line_edit())
 	_apply_button_style(dev_money_confirm_button, "primary")
 	_apply_button_style(dev_gems_confirm_button, "primary")
 	_apply_button_style(dev_aetherite_confirm_button, "primary")
 	_apply_button_style(dev_battle_points_confirm_button, "primary")
+	_apply_button_style(dev_casino_tokens_confirm_button, "primary")
 
 func _apply_dev_currency_button_icon(button: Button, icon_texture: Texture2D) -> void:
 	button.icon = icon_texture
@@ -16112,6 +16125,8 @@ func _refresh_player_status_card() -> void:
 		trainer_card_aetherite_label.text = _format_money(PlayerSave.aetherite)
 	if trainer_card_battle_points_label != null:
 		trainer_card_battle_points_label.text = _format_money(PlayerSave.battle_points)
+	if trainer_card_casino_tokens_label != null:
+		trainer_card_casino_tokens_label.text = _format_money(PlayerSave.casino_tokens)
 	if trainer_card_playtime_label != null:
 		trainer_card_playtime_label.text = _format_playtime(PlayerSave.playtime_seconds)
 	_refresh_trainer_card_identity_values()
@@ -17589,6 +17604,15 @@ func _create_trainer_card_wallet_tab() -> Control:
 			"battle_points"
 		)
 	)
+	cards.add_child(
+		_create_trainer_card_currency_card(
+			"ui.trainer_card.wallet.casino_tokens",
+			"ui.trainer_card.wallet.casino_tokens_description",
+			TRAINER_WALLET_CASINO_TOKENS_ICON,
+			TRAINER_CARD_ACCENT,
+			"casino_tokens"
+		)
+	)
 	return tab
 
 
@@ -17655,6 +17679,8 @@ func _create_trainer_card_currency_card(
 			trainer_card_aetherite_label = balance
 		"battle_points":
 			trainer_card_battle_points_label = balance
+		"casino_tokens":
+			trainer_card_casino_tokens_label = balance
 
 	var description := Label.new()
 	_set_localized_control_property(description, "text", description_key)
@@ -17673,6 +17699,8 @@ func _get_trainer_card_currency_balance(currency_key: String) -> int:
 			return PlayerSave.aetherite
 		"battle_points":
 			return PlayerSave.battle_points
+		"casino_tokens":
+			return PlayerSave.casino_tokens
 		_:
 			return _get_player_money_value()
 
@@ -26598,6 +26626,8 @@ func _normalize_backend_bag_category(category: String, item_id: String) -> Strin
 		return "power_stones"
 	var normalized := category.strip_edges().to_lower().replace("-", "_")
 	match normalized:
+		"evolution_items":
+			return "general"
 		"held_items", "berries":
 			return "held_items"
 		"poke_balls", "pokeballs":
@@ -37069,6 +37099,7 @@ func _rebuild_trainer_card_popup(keep_visible: bool) -> void:
 	trainer_card_aether_gems_label = null
 	trainer_card_aetherite_label = null
 	trainer_card_battle_points_label = null
+	trainer_card_casino_tokens_label = null
 	trainer_card_playtime_label = null
 	trainer_card_level_cap_label = null
 	trainer_card_trade_level_cap_label = null
@@ -40890,6 +40921,24 @@ func _on_dev_battle_points_confirm_pressed() -> void:
 	PlayerWalletService.apply_wallet_result(result)
 	_refresh_player_status_card()
 	_add_chat_message("Added %s Battle Points." % _format_money(amount))
+	_hide_dev_add_money_popup()
+
+
+func _on_dev_casino_tokens_confirm_pressed() -> void:
+	if not _can_use_dev_tools():
+		return
+
+	var amount := _current_dev_currency_amount()
+	dev_casino_tokens_confirm_button.disabled = true
+	var result: Dictionary = await PlayerWalletService.dev_add_casino_tokens(amount)
+	dev_casino_tokens_confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.staff.dev.casino_tokens_failed", {"error": str(result.get("error", "Unknown error"))}))
+		return
+
+	PlayerWalletService.apply_wallet_result(result)
+	_refresh_player_status_card()
+	_add_chat_message(LocalizationManager.text("ui.staff.dev.casino_tokens_added", {"amount": _format_money(amount)}))
 	_hide_dev_add_money_popup()
 
 
@@ -45291,6 +45340,8 @@ func _mail_currency_icon(currency_id: String) -> Texture2D:
 			return TRAINER_WALLET_AETHERITE_ICON
 		"battle_points":
 			return TRAINER_WALLET_BATTLE_POINTS_ICON
+		"casino_tokens":
+			return TRAINER_WALLET_CASINO_TOKENS_ICON
 	return null
 
 func _create_mail_attachment_row(

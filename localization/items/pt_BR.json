@@ -1,4 +1,5 @@
 {
+  "gold-coin": {"name": "Gold Coin", "shortDesc": "Evolui Gimmighoul para Gholdengo. Consumido após uso bem-sucedido."},
   "gyarados-mount": {"name": "Montaria Gyarados", "shortDesc": "Desbloqueia Gyarados como montaria de Surf."},
   "repel": {"name": "Repel", "shortDesc": "Adiciona 100 passos à carga de Repel (máximo de 10.000)."},
   "super-repel": {"name": "Super Repel", "shortDesc": "Adiciona 200 passos à carga de Repel (máximo de 10.000)."},

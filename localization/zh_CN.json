@@ -1,4 +1,10 @@
 {
+  "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
+  "ui.trainer_card.wallet.casino_tokens_description": "用于未来的赌场游戏和奖品。赚取与兑换功能将在之后开放。",
+  "ui.staff.dev.add_casino_tokens": "添加 Casino Tokens",
+  "ui.staff.dev.casino_tokens_added": "已添加 {amount} Casino Tokens。",
+  "ui.staff.dev.casino_tokens_failed": "无法添加 Casino Tokens：{error}",
+  "backend.error.casino_tokens_balance_overflow": "Casino Tokens 余额已达上限。",
   "ui.guild.log.guild.admin_updated": "工作人员调整了公会资料。",
   "ui.guild.log.action.funds.admin_credit": "添加到公会银行",
   "ui.guild.log.action.items.admin_credit": "添加到公会银行",

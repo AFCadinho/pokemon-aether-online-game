@@ -62,6 +62,7 @@ func _check_trainer_card_runtime_translation() -> void:
 	_check(subtitle != null and subtitle.text.begins_with("TRAINERPASPOORT"), "Trainer Card passport renders in Dutch")
 	_check(redeem_button != null and redeem_button.text == "Code inwisselen", "Trainer Card redeem action renders in Dutch")
 	_check(_find_label(popup, "VALUTAPORTEMONNEE") != null, "Trainer Card wallet renders in Dutch")
+	_check(_find_label(popup, "Casino Tokens") != null, "Casino Tokens wallet card renders in Dutch")
 	_check(_find_label(popup, "VOORTGANGSLIMIETEN") != null, "Trainer Card progression limits render in Dutch")
 	_check(_find_label(popup, "Levellimiet") != null, "Trainer Card level cap renders in Dutch")
 	_check(_find_label(popup, "Trade-limiet") != null, "Trainer Card trade cap renders in Dutch")

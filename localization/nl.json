@@ -1,4 +1,10 @@
 {
+  "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
+  "ui.trainer_card.wallet.casino_tokens_description": "Voor toekomstige casinospellen en prijzen. Verdienen en uitgeven wordt later beschikbaar.",
+  "ui.staff.dev.add_casino_tokens": "Casino Tokens toevoegen",
+  "ui.staff.dev.casino_tokens_added": "{amount} Casino Tokens toegevoegd.",
+  "ui.staff.dev.casino_tokens_failed": "Casino Tokens toevoegen mislukt: {error}",
+  "backend.error.casino_tokens_balance_overflow": "De limiet voor Casino Tokens is bereikt.",
   "ui.guild.log.guild.admin_updated": "Guildgegevens zijn aangepast door staff.",
   "ui.guild.log.action.funds.admin_credit": "voegde toe aan de bank",
   "ui.guild.log.action.items.admin_credit": "voegde toe aan de bank",

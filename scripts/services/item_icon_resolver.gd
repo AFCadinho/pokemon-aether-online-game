@@ -18,6 +18,8 @@ static func load_icon(
 	cosmetic_gender: String = "male"
 ) -> Texture2D:
 	var canonical_id := _canonical_item_id(item_id)
+	if canonical_id == "gold-coin":
+		return _load_texture(ICON_ROOT + "GIMMIGHOULCOIN.png")
 	if canonical_id == "aether-gift-voucher":
 		return _load_texture("res://assets/ui/store_credit_card.svg")
 	if canonical_id.begins_with("aether-credit-voucher-"):

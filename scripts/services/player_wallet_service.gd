@@ -12,6 +12,7 @@ const DEV_ADD_GEMS_ENDPOINT := "/game/dev/wallet/gems"
 const DEV_ADD_AETHERITE_ENDPOINT := "/game/dev/wallet/aetherite"
 const ALPHA_ADD_AETHERITE_ENDPOINT := "/game/alpha/wallet/aetherite"
 const DEV_ADD_BATTLE_POINTS_ENDPOINT := "/game/dev/wallet/battle-points"
+const DEV_ADD_CASINO_TOKENS_ENDPOINT := "/game/dev/wallet/casino-tokens"
 const WILD_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/wild-battle"
 const TRAINER_BATTLE_REWARD_ENDPOINT := "/game/wallet/rewards/trainer-battle"
 const GLOBAL_EXP_BOOST_ENDPOINT := "/game/global-boosts/exp"
@@ -399,6 +400,30 @@ func dev_add_battle_points(amount: int) -> Dictionary:
 	return _wallet_result_from_response(response)
 
 
+func dev_add_casino_tokens(amount: int) -> Dictionary:
+	if not AuthService.is_authenticated():
+		return {
+			"success": false,
+			"error": "Not authenticated.",
+		}
+	if amount < 1 or amount > 999999999:
+		return {
+			"success": false,
+			"error": "Choose an amount from 1 to 999999999.",
+		}
+
+	var base_url: String = await GatewayApiConfig.get_base_url()
+	var response: Dictionary = await _request_json(
+		base_url + DEV_ADD_CASINO_TOKENS_ENDPOINT,
+		HTTPClient.METHOD_POST,
+		GatewayApiConfig.get_json_headers(),
+		JSON.stringify({
+			"amount": amount,
+		})
+	)
+	return _wallet_result_from_response(response)
+
+
 func award_wild_battle_money(battle_id: String) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -457,6 +482,7 @@ func apply_wallet_result(result: Dictionary) -> void:
 	PlayerSave.gems = max(int(wallet.get("gems", PlayerSave.gems)), 0)
 	PlayerSave.aetherite = max(int(wallet.get("aetherite", PlayerSave.aetherite)), 0)
 	PlayerSave.battle_points = max(int(wallet.get("battle_points", PlayerSave.battle_points)), 0)
+	PlayerSave.casino_tokens = max(int(wallet.get("casino_tokens", PlayerSave.casino_tokens)), 0)
 	var party: Array = _array_from_value(result.get("party", []))
 	if not party.is_empty():
 		PlayerSave.replace_party_from_state(party)
