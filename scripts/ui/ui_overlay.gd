@@ -91,6 +91,7 @@ const CHAT_TAB_DEFAULT_ORDER: Array[String] = [
 	CHAT_TAB_PM,
 	CHAT_TAB_GUILD,
 ]
+const TouchContextGesture := preload("res://scripts/ui/mobile/touch_context_gesture.gd")
 const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
@@ -22425,7 +22426,18 @@ func _create_pokemon_summary_tab_button(tab_id: String, label_key: String, accen
 	_apply_summary_tab_style(button, false, accent_color)
 	return button
 
+func _context_input_key(key: String) -> String:
+	if WindowFit.is_touch_ui() and key in ["ui.bag.inventory_hint", "ui.bag.item_tooltip", "ui.hotbar.empty_tooltip", "ui.hotbar.key_item_tooltip", "ui.hotbar.field_move_tooltip", "ui.hotbar.item_tooltip", "ui.hotbar.message.empty", "ui.storage.status.idle"]:
+		return key + ".touch"
+	return key
+
+
+func _context_input_text(key: String, values: Dictionary = {}) -> String:
+	return LocalizationManager.text(_context_input_key(key), values)
+
+
 func _set_localized_control_property(control: Control, property_name: String, key: String) -> void:
+	key = _context_input_key(key)
 	control.set_meta("i18n_source_%s" % property_name, key)
 	control.set(property_name, LocalizationManager.text(key))
 
@@ -24719,7 +24731,7 @@ func _create_bag_item_slot(item: Dictionary) -> Control:
 	if _is_mega_stone_bag_item(item):
 		slot.tooltip_text += "\n%s" % _mega_stone_provenance_label(item)
 	slot.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	slot.gui_input.connect(_on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
+	TouchContextGesture.attach(slot, _on_bag_item_slot_gui_input.bind(item.duplicate(true), slot))
 	slot.mouse_entered.connect(_on_bag_item_slot_hover_changed.bind(slot, true))
 	slot.mouse_exited.connect(_on_bag_item_slot_hover_changed.bind(slot, false))
 	slot.set_meta("bag_hovered", false)
@@ -35129,7 +35141,7 @@ func _setup_player_hotbar() -> void:
 			slot_index
 		)
 		button.pressed.connect(_on_hotbar_slot_pressed.bind(slot_index))
-		button.gui_input.connect(_on_hotbar_slot_gui_input.bind(slot_index))
+		TouchContextGesture.attach(button, _on_hotbar_slot_gui_input.bind(slot_index))
 		button.bag_item_dropped.connect(_on_hotbar_bag_item_dropped)
 		button.field_move_dropped.connect(_on_hotbar_field_move_dropped)
 		button.hotbar_entry_dropped.connect(_on_hotbar_entry_dropped)
@@ -35200,7 +35212,7 @@ func _refresh_hotbar_ui() -> void:
 		button.modulate = Color(1.0, 1.0, 1.0, 0.35)
 		quantity_label.text = ""
 		button.tooltip_text = _hotbar_tooltip_with_shortcut(
-			LocalizationManager.text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1}),
+			_context_input_text("ui.hotbar.empty_tooltip", {"slot": slot_index + 1}),
 			slot_index
 		)
 		(hotbar_slot_panels[slot_index] as PanelContainer).tooltip_text = button.tooltip_text
@@ -35214,7 +35226,7 @@ func _refresh_hotbar_ui() -> void:
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE
 			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
-			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
+			button.tooltip_text = _context_input_text("ui.hotbar.key_item_tooltip", {
 				"item": ItemLocalization.display_name(entry_id, entry_id.replace("-", " ").capitalize()),
 			})
 		elif entry_type == "player_action" and entry_id == "escape-rope":
@@ -35222,7 +35234,7 @@ func _refresh_hotbar_ui() -> void:
 			button.preview_texture = button.texture_normal
 			button.modulate = Color.WHITE if bool(escape_rope_status.get("available", false)) else Color(1.0, 1.0, 1.0, 0.55)
 			quantity_label.text = LocalizationManager.text("ui.bag.key_marker")
-			button.tooltip_text = LocalizationManager.text("ui.hotbar.key_item_tooltip", {
+			button.tooltip_text = _context_input_text("ui.hotbar.key_item_tooltip", {
 				"item": escape_rope_button.tooltip_text,
 			})
 		elif entry_type == "field_move":
@@ -35244,7 +35256,7 @@ func _refresh_hotbar_ui() -> void:
 				if is_charm
 				else _hotbar_field_move_pokemon_name(pokemon_id)
 			)
-			button.tooltip_text = LocalizationManager.text("ui.hotbar.field_move_tooltip", {
+			button.tooltip_text = _context_input_text("ui.hotbar.field_move_tooltip", {
 				"move": _format_move_name(move_id),
 				"source": source_name,
 				"availability": (
@@ -35259,7 +35271,7 @@ func _refresh_hotbar_ui() -> void:
 			var quantity := _hotbar_inventory_quantity(entry_id)
 			quantity_label.text = "x%s" % quantity
 			button.modulate = Color.WHITE if quantity > 0 else Color(1.0, 1.0, 1.0, 0.28)
-			button.tooltip_text = LocalizationManager.text("ui.hotbar.item_tooltip", {
+			button.tooltip_text = _context_input_text("ui.hotbar.item_tooltip", {
 				"item": _item_name_from_id(entry_id),
 				"availability": (
 					LocalizationManager.text("ui.hotbar.item_remaining", {"quantity": quantity})
@@ -35295,7 +35307,7 @@ func _hotbar_tooltip_with_shortcut(base_tooltip: String, slot_index: int) -> Str
 func _on_hotbar_slot_pressed(slot_index: int) -> void:
 	var entry := _hotbar_entry_for_slot(slot_index)
 	if entry.is_empty():
-		_add_chat_message(LocalizationManager.text("ui.hotbar.message.empty", {"slot": slot_index + 1}))
+		_add_chat_message(_context_input_text("ui.hotbar.message.empty", {"slot": slot_index + 1}))
 		return
 	var entry_type := str(entry.get("entryType", ""))
 	var entry_id := str(entry.get("entryId", ""))
@@ -42501,7 +42513,7 @@ func _render_pc_party() -> void:
 			occupied_count += 1
 		var storage_slot := _pc_storage_slot_for_party_pokemon(pokemon, slot_index)
 		var button := _create_pc_party_slot_button(slot_index, storage_slot, pokemon, _pc_source_matches("party", storage_slot))
-		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
+		TouchContextGesture.attach(button, _on_pc_slot_button_gui_input.bind(button))
 		pc_party_list.add_child(button)
 	if pc_party_count_label != null:
 		pc_party_count_label.text = "%d / %d" % [occupied_count, MAX_PARTY_SIZE]
@@ -42523,7 +42535,7 @@ func _render_pc_box() -> void:
 		if not pokemon_response.is_empty():
 			occupied_count += 1
 		var button := _create_pc_box_slot_button(slot_index, pokemon_response, _pc_source_matches("box", slot_index))
-		button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
+		TouchContextGesture.attach(button, _on_pc_slot_button_gui_input.bind(button))
 		pc_box_grid.add_child(button)
 	_refresh_pc_box_overview(occupied_count)
 
@@ -42545,7 +42557,7 @@ func _render_pc_box_search_results(search_query: String) -> void:
 			if slot_index < 0:
 				continue
 			var button := _create_pc_box_slot_button_for_location(box_index, slot_index, pokemon_response, _pc_source_matches_location("box", box_index, slot_index), "B%d · %02d" % [box_index + 1, slot_index + 1])
-			button.gui_input.connect(_on_pc_slot_button_gui_input.bind(button))
+			TouchContextGesture.attach(button, _on_pc_slot_button_gui_input.bind(button))
 			pc_box_grid.add_child(button)
 			result_count += 1
 	if result_count == 0:
@@ -43223,7 +43235,7 @@ func _set_pc_status(key: String, values: Dictionary = {}) -> void:
 	pc_status_translation_key = key
 	pc_status_translation_values = values.duplicate(true)
 	if pc_status_label != null:
-		pc_status_label.text = LocalizationManager.text(key, values)
+		pc_status_label.text = _context_input_text(key, values)
 
 
 func _on_pc_filter_toggled(active: bool) -> void:
@@ -53090,7 +53102,7 @@ func _enable_chat_message_actions(control: Control, entry: RichTextLabel) -> voi
 	if str(context.get("text", "")) == "":
 		return
 	control.tooltip_text = LocalizationManager.text("ui.chat.message.copy_tooltip")
-	control.gui_input.connect(_on_chat_message_gui_input.bind(entry, control))
+	TouchContextGesture.attach(control, _on_chat_message_gui_input.bind(entry, control))
 
 
 func _on_chat_message_gui_input(

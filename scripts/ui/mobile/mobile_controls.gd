@@ -63,6 +63,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _try_nearby_battle_spectate(event):
 		get_viewport().set_input_as_handled()
 		return
+	if _try_player_context(event):
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventScreenTouch:
 		var touch := event as InputEventScreenTouch
 		_recent_touch_msec = Time.get_ticks_msec()
@@ -93,6 +96,20 @@ func _unhandled_input(event: InputEvent) -> void:
 		_mouse_position = mouse_button.position
 		_mouse_started_msec = Time.get_ticks_msec()
 		get_viewport().set_input_as_handled()
+
+
+func _try_player_context(event: InputEvent) -> bool:
+	if not event is InputEventScreenTouch or not event.pressed or _is_pointer_over_visible_ui(event.position):
+		return false
+	for avatar: Node in get_tree().get_nodes_in_group("remote_player_avatar"):
+		if avatar.get_viewport() == get_viewport() and avatar.call("try_touch_context", event, _pulse_interact):
+			# Its emulated mouse press arrived before this native touch. Cancel
+			# only that pending press, preserving any other finger's joystick.
+			if _mouse_tracking and not _mouse_joystick_active and _mouse_start.distance_to(event.position) <= 10.0:
+				_mouse_tracking = false
+			_recent_touch_msec = Time.get_ticks_msec()
+			return true
+	return false
 
 
 func _try_nearby_battle_spectate(event: InputEvent) -> bool:
