@@ -186,6 +186,78 @@ static func inspect(path: String, asset: Dictionary) -> Dictionary:
 				return _failure("Invalid native model-pair footer.")
 	return {"error": "", "manifest": manifest, "members": members, "path": ProjectSettings.globalize_path(path), "sha256": asset.sha256}
 
+static func _owned_installation(directory: String, asset: Dictionary) -> bool:
+	var parent := DirAccess.open(directory.get_base_dir())
+	var folder := DirAccess.open(directory)
+	if parent == null or parent.is_link(directory.get_file()) or folder == null or not folder.get_directories().is_empty():
+		return false
+	var files := folder.get_files()
+	if files.is_empty():
+		return true # Removing an empty abandoned directory cannot discard payload.
+	for name: String in files:
+		if name not in ["bundle.json", "model-pair.pck"] or folder.is_link(name):
+			return false
+	var metadata := FileAccess.open(directory.path_join("bundle.json"), FileAccess.READ)
+	return metadata != null and metadata.get_length() <= MAX_MANIFEST and JSON.parse_string(metadata.get_as_text()) == asset
+
+static func _abandoned_installations(destination: String, asset: Dictionary) -> Array[String]:
+	var result: Array[String] = []
+	var parent := DirAccess.open(destination.get_base_dir())
+	if parent == null:
+		return result
+	var pattern := RegEx.create_from_string("^([1-9][0-9]{0,9})-[0-9]+$")
+	for name: String in parent.get_directories():
+		for kind in [".install-", ".replaced-"]:
+			var prefix: String = destination.get_file() + kind
+			if not name.begins_with(prefix):
+				continue
+			var match := pattern.search(name.trim_prefix(prefix))
+			if match == null:
+				continue # Older pilot names provide no process ownership evidence.
+			var pid := match.get_string(1).to_int()
+			if pid > 2147483647 or _process_running(pid):
+				continue
+			var directory := destination.get_base_dir().path_join(name)
+			if _owned_installation(directory, asset) and not protects(directory):
+				result.append(directory)
+	result.sort()
+	return result
+
+static func _process_running(pid: int) -> bool:
+	if pid == OS.get_process_id():
+		return true
+	# OS.is_process_running only knows children of this Godot instance. Recovery
+	# must also protect another installer and processes started before a restart.
+	if OS.get_name() == "Linux" and DirAccess.dir_exists_absolute("/proc"):
+		return DirAccess.dir_exists_absolute("/proc/" + str(pid))
+	var output: Array = []
+	if OS.get_name() == "Windows":
+		var command := OS.get_environment("SystemRoot").path_join("System32/tasklist.exe")
+		if OS.execute(command, PackedStringArray(["/FI", "PID eq " + str(pid), "/FO", "CSV", "/NH"]), output, true) != 0:
+			return true
+		for row: Variant in output:
+			if str(row).contains('\",\"%d\",' % pid):
+				return true
+		return false
+	if OS.get_name() in ["macOS", "Linux", "FreeBSD", "NetBSD", "OpenBSD", "BSD"]:
+		# ps returns 1 for a missing PID; other failures defer cleanup.
+		return OS.execute("/bin/ps", PackedStringArray(["-p", str(pid), "-o", "pid="]), output, true) != 1
+	return true
+
+static func _discard_installation(directory: String, asset: Dictionary) -> void:
+	if not _owned_installation(directory, asset) or protects(directory):
+		return
+	# Retain the ownership record until the potentially large payload is gone.
+	var pack := directory.path_join("model-pair.pck")
+	if FileAccess.file_exists(pack) and DirAccess.remove_absolute(pack) != OK:
+		return
+	DirAccess.remove_absolute(directory.path_join("bundle.json"))
+	DirAccess.remove_absolute(directory)
+
+static func _cleanup_abandoned(destination: String, asset: Dictionary) -> void:
+	for directory: String in _abandoned_installations(destination, asset):
+		_discard_installation(directory, asset)
+
 static func install(source: String, asset: Dictionary, destination: String, allow_repair := true) -> Dictionary:
 	var checked := inspect(source, asset)
 	if not str(checked.error).is_empty():
@@ -197,8 +269,9 @@ static func install(source: String, asset: Dictionary, destination: String, allo
 	if replace:
 		var existing := object_check(destination, asset)
 		if str(existing.error).is_empty():
+			_cleanup_abandoned(destination, asset)
 			return existing
-		if not allow_repair or protects(destination):
+		if not allow_repair:
 			return _failure("Corrupt shared model is in use; repair deferred until restart.")
 		var folder := DirAccess.open(destination)
 		var metadata := FileAccess.open(destination.path_join("bundle.json"), FileAccess.READ)
@@ -206,32 +279,24 @@ static func install(source: String, asset: Dictionary, destination: String, allo
 		names.sort()
 		if folder == null or names != PackedStringArray(["bundle.json", "model-pair.pck"]) or not folder.get_directories().is_empty() or folder.is_link("bundle.json") or folder.is_link("model-pair.pck") or metadata == null or metadata.get_length() > MAX_MANIFEST or JSON.parse_string(metadata.get_as_text()) != asset:
 			return _failure("Invalid immutable model object ownership; repair refused.")
-	var staging := destination + ".install-" + str(Time.get_ticks_usec())
-	if DirAccess.make_dir_recursive_absolute(staging) != OK:
-		return _failure("Cannot stage model-pair object.")
-	var pack := staging.path_join("model-pair.pck")
-	var input := FileAccess.open(source, FileAccess.READ)
-	var output := FileAccess.open(pack, FileAccess.WRITE)
+	if protects(destination):
+		return _failure("Corrupt shared model is in use; repair deferred until restart.")
+	var staging := ""
+	for abandoned: String in _abandoned_installations(destination, asset):
+		if abandoned.get_file().begins_with(destination.get_file() + ".replaced-") and not allow_repair:
+			return _failure("Interrupted shared model replacement is in use; recovery deferred until restart.")
+		if staging.is_empty() and abandoned.get_file().begins_with(destination.get_file() + ".install-") and str(object_check(abandoned, asset).error).is_empty():
+			staging = abandoned # Fully verified copies survive an abrupt process exit.
+	var recovered := not staging.is_empty()
+	var token := str(OS.get_process_id()) + "-" + str(Time.get_ticks_usec())
+	if not recovered:
+		staging = destination + ".install-" + token
+		if DirAccess.make_dir_recursive_absolute(staging) != OK:
+			return _failure("Cannot stage model-pair object.")
 	var error := ""
-	if input == null or output == null:
-		error = "Cannot write staged model-pair pack."
-	else:
-		while input.get_position() < input.get_length():
-			var chunk := input.get_buffer(1048576)
-			if chunk.is_empty():
-				error = "Model-pair source read failed."
-				break
-			output.store_buffer(chunk)
-			if output.get_error() != OK:
-				error = "Model-pair write failed."
-				break
-		output.close()
-	input = null
-	output = null
-	if error.is_empty():
-		var staged := inspect(pack, asset)
-		error = str(staged.error)
-	if error.is_empty():
+	var pack := staging.path_join("model-pair.pck")
+	if not recovered:
+		# Persist ownership before writing a large, potentially interrupted copy.
 		var file := FileAccess.open(staging.path_join("bundle.json"), FileAccess.WRITE)
 		if file == null:
 			error = "Cannot write model-pair metadata."
@@ -240,7 +305,27 @@ static func install(source: String, asset: Dictionary, destination: String, allo
 			if file.get_error() != OK:
 				error = "Model-pair metadata write failed."
 			file.close()
-	var previous := destination + ".replaced-" + str(Time.get_ticks_usec())
+		if error.is_empty():
+			var input := FileAccess.open(source, FileAccess.READ)
+			var output := FileAccess.open(pack, FileAccess.WRITE)
+			if input == null or output == null:
+				error = "Cannot write staged model-pair pack."
+			else:
+				while input.get_position() < input.get_length():
+					var chunk := input.get_buffer(1048576)
+					if chunk.is_empty():
+						error = "Model-pair source read failed."
+						break
+					output.store_buffer(chunk)
+					if output.get_error() != OK:
+						error = "Model-pair write failed."
+						break
+				output.close()
+			input = null
+			output = null
+		if error.is_empty():
+			error = str(inspect(pack, asset).error)
+	var previous := destination + ".replaced-" + token
 	if error.is_empty() and replace and DirAccess.rename_absolute(destination, previous) != OK:
 		error = "Cannot stage corrupt model-pair replacement."
 	if error.is_empty() and DirAccess.rename_absolute(staging, destination) != OK:
@@ -248,14 +333,13 @@ static func install(source: String, asset: Dictionary, destination: String, allo
 		if replace:
 			DirAccess.rename_absolute(previous, destination)
 	if not error.is_empty():
-		DirAccess.remove_absolute(pack)
-		DirAccess.remove_absolute(staging.path_join("bundle.json"))
-		DirAccess.remove_absolute(staging)
+		if DirAccess.dir_exists_absolute(previous) and not DirAccess.dir_exists_absolute(destination):
+			return _failure(error) # Keep both copies if restoration also failed.
+		_discard_installation(staging, asset)
 		return _failure(error)
 	if replace:
-		DirAccess.remove_absolute(previous.path_join("model-pair.pck"))
-		DirAccess.remove_absolute(previous.path_join("bundle.json"))
-		DirAccess.remove_absolute(previous)
+		_discard_installation(previous, asset)
+	_cleanup_abandoned(destination, asset)
 	return {"error": "", "manifest": asset.pair_manifest}
 
 static func object_check(directory: String, asset: Dictionary) -> Dictionary:

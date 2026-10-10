@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Recover interrupted shared-model pilot installations and repairs without retaining abandoned model copies; preserve live installs and loaded packs.
+
 - Add a local opt-in pilot for lossless normal/shiny texture sharing, with verified launcher/on-demand installation, battle and preview loading, and protected cleanup of loaded models.
 
 - Reimport the updated Vermilion Gym visual and align its switch puzzle with all twenty bins in four rows, keeping the bins free of movement collision.
