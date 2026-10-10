@@ -22,6 +22,9 @@ func _init() -> void:
 func _run() -> void:
 	var game_state := root.get_node("GameState")
 	var localization := root.get_node("LocalizationManager")
+	var sfx := root.get_node("SfxManager")
+	var power_off := load("res://assets/audio/sfx/overworld/gym_electric_power_off.ogg") as AudioStreamOggVorbis
+	_check(power_off != null and power_off.get_length() > 0.4 and power_off.get_length() < 1.0 and not power_off.loop, "electrical shutdown effect is short and does not loop")
 	var host := Node2D.new()
 	root.add_child(host)
 	current_scene = host
@@ -89,14 +92,30 @@ func _run() -> void:
 	_set_pair(gym, Vector2i(2, 1), Vector2i(3, 1))
 	_check_barrier_footprints(gym)
 	var locale_before: String = localization.current_locale
+	var played_sounds: Array[String] = []
+	var record_sound := func(child: Node) -> void:
+		if child is AudioStreamPlayer:
+			played_sounds.append(child.stream.resource_path)
+	sfx.child_entered_tree.connect(record_sound)
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
 		localization.set_locale(locale)
 		_set_pair(gym, Vector2i(2, 1), Vector2i(3, 1))
-		for bin: Vector2i in [Vector2i(0, 0), Vector2i(2, 1), Vector2i(2, 1), Vector2i(2, 0), Vector2i(2, 1), Vector2i(3, 1)]:
+		var expected_sounds := played_sounds.size()
+		var attempt := 0
+		for bin: Vector2i in [Vector2i(0, 0), Vector2i(2, 1), Vector2i(2, 1), Vector2i(2, 0), Vector2i(2, 1), Vector2i(3, 1), Vector2i(3, 1)]:
+			if attempt in [1, 4, 5]:
+				expected_sounds += 1
 			await bins[bin]._start_manual_interaction(player)
+			_check(played_sounds.size() == expected_sounds, "only newly activated switches play their barrier shutdown sound")
 			_check(not dialogue.last_lines.is_empty() and not dialogue.last_lines[0].begins_with("world."), "localized bin feedback: " + locale)
 			_check(not game_state.is_overworld_input_locked(), "dialogue releases input lock")
+			attempt += 1
 		_check(gym.puzzle_solved, "actual bin interactions solve puzzle")
+	sfx.child_entered_tree.disconnect(record_sound)
+	for path: String in played_sounds:
+		_check(path == power_off.resource_path, "both switches use the electrical power-off effect")
+	# Let the actual one-shot players finish and release their playback streams.
+	await create_timer(0.8).timeout
 	localization.set_locale(locale_before)
 	_check(_reachable(gym, Vector2i(11, 9)), "solved barriers allow walking to Lt. Surge")
 	_check(gym.get_safe_restored_player_position(Vector2(368, 304)) == Vector2(368, 304), "active solved visit keeps its leader position")

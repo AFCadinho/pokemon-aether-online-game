@@ -11,7 +11,10 @@ func _ready() -> void:
 
 
 func interact_with_player(_player: Node2D) -> void:
+	var already_solved: bool = puzzle.puzzle_solved
 	var result: String = puzzle.activate_bin(bin_coordinates)
+	if result == "first" or (result == "solved" and not already_solved):
+		SfxManager.play("gym_electric_power_off")
 	var lines: Array[String] = [LocalizationManager.text("world.vermilion_gym.puzzle." + result)]
 	await show_dialogue(lines, LocalizationManager.text("world.vermilion_gym.puzzle.bin"))
 
