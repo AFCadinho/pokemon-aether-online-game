@@ -5413,6 +5413,11 @@ func _submit_evolution_choice(confirm: bool) -> void:
 			}
 		))
 		_announce_evolution_moves(result, pokemon_id, target_species_id, to_species)
+		var bonus: Variant = evolution.get("bonusPokemon", {})
+		if bonus is Dictionary and int(bonus.get("pokemonId", 0)) > 0:
+			add_system_message(LocalizationManager.text("ui.evolution.result.bonus_created", {
+				"pokemon": _localized_species_name(str(bonus.get("speciesId", "")), str(bonus.get("species", "Shedinja"))),
+			}))
 	else:
 		if evolution_prompt_popup != null:
 			evolution_prompt_popup.visible = false

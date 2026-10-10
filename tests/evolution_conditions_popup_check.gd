@@ -12,6 +12,12 @@ func _run() -> void:
 	root.get_node("ThievingService").set_process(false)
 	root.get_node("RockSmashService").set_process(false)
 	root.get_node("WalkingEvolutionService").set_process(false)
+	root.get_node("LocalizationManager").set_locale("en")
+	var conditions_view = load("res://scripts/ui/evolution_conditions_view.gd")
+	var partner_lines: Array[String] = conditions_view.requirement_lines({"rule": {"trade_species": "shelmet"}})
+	_check(partner_lines.size() == 1 and partner_lines[0].contains("Shelmet") and partner_lines[0].contains("Linking Cord"), "partner conditions explain the required real trade")
+	var shed_lines: Array[String] = conditions_view.requirement_lines({"rule": {"trigger": "shed", "evolves_with": "ninjask"}})
+	_check(shed_lines.size() == 1 and shed_lines[0].contains("Ninjask") and shed_lines[0].contains("party"), "Shedinja conditions explain the bonus and free party slot")
 	var auth := root.get_node("AuthService")
 	auth.session_token = "evolution-conditions-fixture"
 	auth.current_user = {"id": 1}

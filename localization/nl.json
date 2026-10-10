@@ -6655,5 +6655,9 @@
   "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\nHoud ingedrukt om deze sneltoets te verwijderen.",
   "ui.hotbar.message.empty.touch": "Hotbarpositie {slot} is leeg. Houd een bruikbaar item in je Bag ingedrukt om het toe te wijzen.",
   "ui.storage.status.idle.touch": "Sleep: verplaatsen · Tik: bekijken · Houd ingedrukt: item afnemen",
-  "ui.creator.photo.help.touch": "Sleep om de camera te verplaatsen · gebruik de zoomschuif"
+  "ui.creator.photo.help.touch": "Sleep om de camera te verplaatsen · gebruik de zoomschuif",
+  "ui.evolution_conditions.partner_trade": "Ruil deze Pokémon voor {partner}. Linking Cord vervangt deze ruil niet.",
+  "ui.evolution_conditions.shed_rule": "Laat je eigen Pokémon evolueren naar {pokemon} met een vrij party-slot. Daar verschijnt Shedinja.",
+  "ui.evolution.result.bonus_created": "{pokemon} is in je party verschenen.",
+  "ui.trade.review.evolves_to": "Evolueert na deze ruil naar {pokemon}."
 }

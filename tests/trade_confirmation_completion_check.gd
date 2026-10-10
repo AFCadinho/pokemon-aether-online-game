@@ -40,6 +40,26 @@ func _run() -> void:
 	}, 1)
 	_check(completion_messages.get("removed", "") == "Removed Pidgey from your party.", "completion reports authoritative removed Pokemon")
 	_check(completion_messages.get("received", "") == "Received Sparky in your party.", "completion reports authoritative received Pokemon")
+	var partner_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
+		"completionResult": {"transfers": [
+			{"pokemonId":11,"fromUserId":1,"toUserId":2,"speciesId":"karrablast","speciesName":"Karrablast","evolutionSpeciesId":"escavalier","evolutionSpeciesName":"Escavalier"},
+			{"pokemonId":22,"fromUserId":2,"toUserId":1,"speciesId":"shelmet","speciesName":"Shelmet","evolutionSpeciesId":"accelgor","evolutionSpeciesName":"Accelgor"},
+		]}
+	}, 1)
+	_check(partner_messages.get("removed", "") == "Removed Karrablast from your party.", "partner trade reports the original outgoing species")
+	_check(partner_messages.get("received", "") == "Received Accelgor in your party.", "partner trade reports the evolved incoming species")
+	var workspace := preload("res://scripts/ui/trade_workspace.gd").new()
+	root.add_child(workspace)
+	var review := VBoxContainer.new()
+	workspace.add_child(review)
+	workspace._add_review_pokemon(review, [{"speciesId":"karrablast","speciesName":"Karrablast","level":20,
+		"evolutionSpeciesId":"escavalier","evolutionSpeciesName":"Escavalier"}])
+	var shows_evolution := false
+	for label: Node in review.find_children("*", "Label", true, false):
+		if (label as Label).text == "Evolves into Escavalier after this trade.":
+			shows_evolution = true
+	_check(shows_evolution, "immutable review warns about the partner evolution before confirmation")
+	workspace.free()
 	var item_messages := preload("res://scripts/ui/trade_workspace.gd").completion_transfer_messages({
 		"completionResult": {"itemTransfers": [
 			{"itemId":"poke-ball","name":"Poke Ball","quantity":4,"fromUserId":1,"toUserId":2},
