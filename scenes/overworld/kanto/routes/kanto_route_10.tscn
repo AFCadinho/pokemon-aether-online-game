@@ -324,7 +324,7 @@ display_name = "Rock Tunnel Guard"
 guard_role = "transition_guard"
 guarded_transition_id = "kanto_route_10__to_rock_tunnel_north"
 requires_party_pokemon = false
-blocked_dialogue_id = "kanto_route_10_rock_tunnel_badges_required"
+blocked_dialogue_id = "kanto_route_10_rock_tunnel_oak_advice_required"
 
 [node name="RockTunnelSouthGuard" parent="Entities/NPCs" instance=ExtResource("rock_tunnel_guard")]
 position = Vector2(624, 2480)
@@ -333,7 +333,7 @@ display_name = "Rock Tunnel Guard"
 guard_role = "transition_guard"
 guarded_transition_id = "kanto_route_10__to_rock_tunnel_south"
 requires_party_pokemon = false
-blocked_dialogue_id = "kanto_route_10_rock_tunnel_badges_required"
+blocked_dialogue_id = "kanto_route_10_rock_tunnel_oak_advice_required"
 
 [node name="PicnickerHeidi" parent="Entities/NPCs" unique_id=584268297 instance=ExtResource("trainer")]
 position = Vector2(656, 592)
