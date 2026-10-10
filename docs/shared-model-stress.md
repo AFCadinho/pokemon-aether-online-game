@@ -133,9 +133,11 @@ slot's `.tmp/shared-model-stress-v1` directory.
 
 ## Remaining qualification
 
-These checks bound repeated use of the 16 qualified pairs. They do not measure
-the full catalog's storage saving, native index growth across 1,200 distinct
-pairs, physical phone RAM, player FPS or an overnight session. Native
+These checks bound repeated use of the 16 qualified pairs. The subsequent
+[complete storage audit](shared-model-catalog-audit.md) measures a 3.02 GB /
+23.46% installed saving across a selected 1,084-pair conversion with 116 legacy
+pairs retained. These session checks do not measure native index growth across
+1,200 distinct pairs, physical phone RAM, player FPS or an overnight session. Native
 Windows/macOS installation, repair, update, cleanup and process detection still
 need qualification. SIGKILL tests cover process interruption, not filesystem
 durability after power loss. Broader catalog bindings/quality checks and the
