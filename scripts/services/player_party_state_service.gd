@@ -5,6 +5,7 @@ class_name PlayerPartyStateServiceNode
 const PLAYER_PARTY_ENDPOINT := "/game/party"
 const PLAYER_PARTY_BATTLE_ENDPOINT := "/game/party/battle-state"
 const REQUEST_TIMEOUT_SECONDS := 8.0
+const STAFF_PERMISSION_POLICY := preload("res://scripts/ui/staff_permission_policy.gd")
 
 
 func load_party() -> Dictionary:
@@ -695,6 +696,35 @@ func reorder_pokemon_moves(pokemon_id: int, move_ids: Array[String]) -> Dictiona
 	return result
 
 
+func get_developer_evolution_time_hour() -> int:
+	if not AuthService.is_authenticated() or not WorldTimeService.is_debug_time_active():
+		return -1
+	var permissions: Variant = AuthService.current_user.get("permissions", [])
+	var allowed := permissions is Array and (permissions as Array).has("generating")
+	var role_ids: Array[String] = []
+	var roles: Variant = AuthService.current_user.get("roles", [])
+	if roles is Array:
+		for role: Variant in roles:
+			role_ids.append(str(role.get("id", "") if role is Dictionary else role).strip_edges().to_lower())
+	allowed = allowed or STAFF_PERMISSION_POLICY.fixed_role_grants_permission(role_ids, "generating")
+	if not allowed:
+		return -1
+	return int(WorldTimeService.get_utc_datetime().get("hour", 0))
+
+
+func _evolution_request_payload(target_species_id: String, confirm: bool) -> Dictionary:
+	var payload := {"targetSpeciesId": target_species_id, "confirm": confirm}
+	var debug_hour := get_developer_evolution_time_hour()
+	if debug_hour >= 0:
+		payload["debugTimeHour"] = debug_hour
+	return payload
+
+
+func get_evolution_candidates(pokemon_id: int) -> Dictionary:
+	# confirm=false is the existing read-only evolution review operation.
+	return await evolve_pokemon(pokemon_id, "", false)
+
+
 func evolve_pokemon(pokemon_id: int, target_species_id: String, confirm: bool = true) -> Dictionary:
 	if not AuthService.is_authenticated():
 		return {
@@ -712,10 +742,7 @@ func evolve_pokemon(pokemon_id: int, target_species_id: String, confirm: bool = 
 			"error": "Missing target species.",
 		}
 
-	var payload := {
-		"targetSpeciesId": target_species_id,
-		"confirm": confirm,
-	}
+	var payload := _evolution_request_payload(target_species_id, confirm)
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var response: Dictionary = await _request_json(
@@ -932,6 +959,7 @@ func _pokemon_evolution_result_from_response(response: Dictionary) -> Dictionary
 		"hasParty": bool(party.get("hasParty", false)),
 		"pokemonLevelCap": _dictionary_from_value(party.get("pokemonLevelCap", {})),
 		"evolution": _dictionary_from_value(body.get("evolution", {})),
+		"evolutionCandidates": _array_from_value(body.get("evolutionCandidates", [])),
 		"learnedMoves": _array_from_value(body.get("learnedMoves", [])),
 		"moveLearnCandidates": _array_from_value(body.get("moveLearnCandidates", [])),
 		"skipped": bool(body.get("skipped", false)),

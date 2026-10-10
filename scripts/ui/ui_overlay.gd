@@ -868,6 +868,8 @@ var evolution_prompt_new_sprite: TextureRect
 var evolution_prompt_confirm_button: Button
 var evolution_prompt_skip_button: Button
 var evolution_prompt_queue: Array[Dictionary] = []
+var developer_evolution_review_ids: Dictionary = {}
+var developer_evolution_review_revision := 0
 var evolution_active_prompt: Dictionary = {}
 var evolution_prompt_processing := false
 var evolution_prompt_review_total := 0
@@ -5058,6 +5060,13 @@ func _refresh_story_after_reward_level_up() -> void:
 	await PlayerGameStateService.refresh_story()
 
 func _queue_reward_evolution_prompts_from_reward(reward: Dictionary) -> int:
+	if _can_use_dev_tools():
+		var review_ids := _reward_evolution_review_ids(reward)
+		for pokemon_id: int in review_ids:
+			developer_evolution_review_ids[pokemon_id] = true
+		if PlayerPartyStateService.get_developer_evolution_time_hour() >= 0:
+			_refresh_developer_evolution_prompts.call_deferred(review_ids)
+			return 0
 	var queued_count := 0
 	var prompts_value: Variant = reward.get("evolutionPrompts", [])
 	if prompts_value is Array:
@@ -5094,6 +5103,70 @@ func _queue_reward_evolution_prompts_from_reward(reward: Dictionary) -> int:
 
 	_extend_evolution_review_count(queued_count)
 	return queued_count
+
+
+func _reward_evolution_review_ids(reward: Dictionary) -> Array[int]:
+	var ids: Array[int] = []
+	for key: String in ["levelUps", "evolutionPrompts"]:
+		var entries: Variant = reward.get(key, [])
+		if not entries is Array:
+			continue
+		for value: Variant in entries:
+			if not value is Dictionary:
+				continue
+			var pokemon_id := int(value.get("pokemonId", 0))
+			if pokemon_id > 0 and not ids.has(pokemon_id):
+				ids.append(pokemon_id)
+	return ids
+
+
+func _request_developer_evolution_candidates(pokemon_id: int) -> Dictionary:
+	return await PlayerPartyStateService.get_evolution_candidates(pokemon_id)
+
+
+func _refresh_developer_evolution_prompts(pokemon_ids: Array[int]) -> void:
+	var revision := developer_evolution_review_revision
+	var session := AuthService.session_token
+	var queued_count := 0
+	for pokemon_id: int in pokemon_ids:
+		var result: Dictionary = await _request_developer_evolution_candidates(pokemon_id)
+		if revision != developer_evolution_review_revision or session != AuthService.session_token:
+			return
+		if not developer_evolution_review_ids.has(pokemon_id):
+			continue
+		if not bool(result.get("success", false)):
+			_add_chat_message("Could not refresh developer evolution options: %s" % str(result.get("error", "Unknown error")))
+			continue
+		var candidates: Variant = result.get("evolutionCandidates", [])
+		if not candidates is Array:
+			continue
+		for value: Variant in candidates:
+			if not value is Dictionary:
+				continue
+			var prompt: Dictionary = value.duplicate(true)
+			prompt["pokemonId"] = pokemon_id
+			if _queue_evolution_prompt(prompt):
+				queued_count += 1
+	_extend_evolution_review_count(queued_count)
+	_show_next_evolution_prompt()
+
+
+func _refresh_pending_developer_evolutions() -> void:
+	developer_evolution_review_revision += 1
+	for prompt: Dictionary in evolution_prompt_queue:
+		developer_evolution_review_ids[int(prompt.get("pokemonId", 0))] = true
+	if not evolution_active_prompt.is_empty():
+		developer_evolution_review_ids[int(evolution_active_prompt.get("pokemonId", 0))] = true
+	var review_ids: Array[int] = []
+	for pokemon_id: int in developer_evolution_review_ids:
+		if pokemon_id > 0:
+			review_ids.append(pokemon_id)
+	evolution_prompt_queue.clear()
+	evolution_active_prompt.clear()
+	_finish_evolution_review_queue()
+	if evolution_prompt_popup != null:
+		evolution_prompt_popup.visible = false
+	_refresh_developer_evolution_prompts(review_ids)
 
 func _queue_evolution_prompt(prompt_value: Dictionary) -> bool:
 	var prompt := prompt_value.duplicate(true)
@@ -5301,6 +5374,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 			{"pokemon": _localized_species_name(from_species, from_species)}
 		))
 
+	developer_evolution_review_ids.erase(pokemon_id)
 	evolution_active_prompt.clear()
 	_refresh_party()
 	_refresh_open_pokemon_summary_cards()
@@ -41003,16 +41077,20 @@ func _on_dev_world_time_selected(index: int) -> void:
 		return
 	if index < 0 or index >= DEV_WORLD_TIME_HOURS.size():
 		return
+	if evolution_prompt_processing or evolution_is_playing:
+		_refresh_dev_world_time_selector()
+		return
 
 	var selected_hour: int = DEV_WORLD_TIME_HOURS[index]
 	if selected_hour < 0:
 		WorldTimeService.clear_debug_time()
-		_add_chat_message("World time reset to default server UTC.")
+		_add_chat_message("World time reset to default game time.")
 	else:
 		WorldTimeService.set_debug_time(selected_hour)
-		_add_chat_message("World time preview set to %02d:00 UTC." % selected_hour)
+		_add_chat_message("Developer game time set to %02d:00 for encounters and evolutions." % selected_hour)
 	_refresh_utc_time_label(UTC_TIME_REFRESH_INTERVAL_SECONDS, true)
 	_refresh_dev_world_time_selector()
+	_refresh_pending_developer_evolutions()
 
 
 func _refresh_dev_world_time_selector() -> void:
