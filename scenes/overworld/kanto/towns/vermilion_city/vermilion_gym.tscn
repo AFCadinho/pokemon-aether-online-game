@@ -144,7 +144,7 @@ npc_sprite_frames = ExtResource("8_8ig2e")
 battle_environment_id = "pvp_stadium"
 
 [node name="WorkerDax" parent="Entities/NPCs" unique_id=328813408 instance=ExtResource("trainer")]
-position = Vector2(208, 848)
+position = Vector2(176, 912)
 trainer_id = "kanto_vermilion_city_gym_worker_dax"
 npc_id = "kanto_vermilion_city_gym_worker_dax"
 npc_definition_id = "trainer_class_worker"
@@ -154,7 +154,7 @@ npc_sprite_frames = ExtResource("frames_worker")
 battle_environment_id = "pvp_stadium"
 
 [node name="ScientistMira" parent="Entities/NPCs" unique_id=879809808 instance=ExtResource("trainer")]
-position = Vector2(560, 656)
+position = Vector2(592, 912)
 trainer_id = "kanto_vermilion_city_gym_scientist_mira"
 npc_id = "kanto_vermilion_city_gym_scientist_mira"
 npc_definition_id = "trainer_class_scientist_f"
@@ -164,7 +164,7 @@ npc_sprite_frames = ExtResource("frames_scientist_f")
 battle_environment_id = "pvp_stadium"
 
 [node name="GentlemanEdwin" parent="Entities/NPCs" unique_id=1550059326 instance=ExtResource("trainer")]
-position = Vector2(272, 560)
+position = Vector2(400, 912)
 trainer_id = "kanto_vermilion_city_gym_gentleman_edwin"
 npc_id = "kanto_vermilion_city_gym_gentleman_edwin"
 npc_definition_id = "trainer_class_gentleman"

@@ -10,6 +10,8 @@ func _init() -> void:
 func _run() -> void:
 	var gym := (load(GYM) as PackedScene).instantiate()
 	var city := (load(CITY) as PackedScene).instantiate()
+	root.add_child(gym)
+	await process_frame
 	_check(gym.map_id == "kanto_vermilion_city_gym", "gym identity")
 	_check(gym.lighting_profile == "indoor" and gym.weather_profile == "disabled" and gym.music_profile_id == "gym.interior", "gym environment")
 	for path: String in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Spawns/FromVermilionCity", "Exits/ToVermilionCity", "FloorVisibilityMask/Top", "FloorVisibilityMask/Bottom", "FloorVisibilityMask/Left", "FloorVisibilityMask/Right"]:
@@ -64,11 +66,35 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 	_check(carpet_cells == 9, "complete three-by-three podium")
 	_check(not gym.has_node("Visual/Arena Trim"), "puzzle floor has no surrounding rails")
 	var bins := gym.get_node("Visual/Puzzle Bins - Visuals") as TileMapLayer
-	_check(bins.position == Vector2(16, 0), "bin rows are centered within the puzzle room")
-	for x in [5, 8, 11, 14, 17]:
-		for y in [18, 21, 24]:
-			for front_x in [x, x + 1]:
-				_check(collision.get_cell_source_id(Vector2i(front_x, y + 2)) == -1, "each bin has an open tile directly in front")
+	_check(bins.position == Vector2(16, 0), "bin rows are centered on their Godot interactables")
+	var bin_nodes := gym.get_node("Entities/Interactables")
+	var reachable := _reachable_walkable_cells(gym, collision)
+	var bin_count := 0
+	for bin: Node2D in bin_nodes.get_children():
+		if not bin.name.begins_with("Bin"):
+			continue
+		bin_count += 1
+		var bin_coordinates: Vector2i = bin.get("bin_coordinates")
+		var visual_origin := Vector2i(5 + bin_coordinates.x * 3, 18 + bin_coordinates.y * 3)
+		_check(bins.get_cell_source_id(visual_origin) != -1 and bins.get_cell_source_id(visual_origin + Vector2i(0, 1)) != -1, "%s has a complete visual bin" % bin.name)
+		var expected_spawn := Vector2(float(visual_origin.x + 1) * 32.0, (float(visual_origin.y) + 1.5) * 32.0)
+		_check(bin.position == expected_spawn, "%s gameplay spawn aligns with its visual bin" % bin.name)
+		var footprint_origin := Vector2i(floori(bin.position.x / 32.0) - 1, floori(bin.position.y / 32.0) - 1)
+		var x := footprint_origin.x
+		var y := footprint_origin.y
+		var access_cells: Array[Vector2i] = []
+		for dx in range(2):
+			access_cells.append(Vector2i(x + dx, y - 1))
+			access_cells.append(Vector2i(x + dx, y + 2))
+		for dy in range(2):
+			access_cells.append(Vector2i(x - 1, y + dy))
+			access_cells.append(Vector2i(x + 2, y + dy))
+		for cell: Vector2i in access_cells:
+			var world_position := Vector2(cell * 32) + Vector2(16, 16)
+			_check(collision.get_cell_source_id(cell) == -1, "%s has clear floor beside its footprint" % bin.name)
+			_check(not gym.is_position_blocked_by_character(world_position), "%s approach tile is not occupied" % bin.name)
+			_check(reachable.has(cell), "%s approach tile is reachable from the entrance" % bin.name)
+	_check(bin_count == 15, "all fifteen bins have Godot interactables")
 	var platform := gym.get_node("Visual/Leader Platform") as TileMapLayer
 	_check(platform.get_used_rect() == Rect2i(8, 12, 7, 1), "complete raised stage front")
 	for x in range(8, 15):
@@ -82,6 +108,27 @@ func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) ->
 			_check(collision.get_cell_source_id(Vector2i(x, y)) != -1, "complete column footprint blocks movement")
 	var emblem := gym.get_node("Visual/Gym Emblem") as TileMapLayer
 	_check(emblem.position.x + float(emblem.get_used_rect().position.x * 32) + float(emblem.get_used_rect().size.x * 16) == leader.position.x, "emblem shares the leader centerline")
+
+func _reachable_walkable_cells(gym: Node, collision: TileMapLayer) -> Dictionary:
+	var spawn := gym.get_node("Spawns/FromVermilionCity") as Marker2D
+	var start := collision.local_to_map(collision.to_local(spawn.global_position))
+	var reachable: Dictionary = {start: true}
+	var queue: Array[Vector2i] = [start]
+	while not queue.is_empty():
+		var current: Vector2i = queue.pop_front()
+		for direction: Vector2i in [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]:
+			var next := current + direction
+			if next.x < 0 or next.x >= 24 or next.y < 0 or next.y >= 36 or reachable.has(next):
+				continue
+			if collision.get_cell_source_id(next) != -1:
+				continue
+			var world_position := collision.to_global(collision.map_to_local(next))
+			if gym.is_position_blocked_by_character(world_position):
+				continue
+			reachable[next] = true
+			queue.append(next)
+	return reachable
+
 
 func _check_trainers(gym: Node) -> void:
 	var expected := {
