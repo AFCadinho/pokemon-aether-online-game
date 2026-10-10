@@ -15,7 +15,6 @@ func _run() -> void:
 	for path: String in ["Entities/Players", "Entities/NPCs", "Entities/Pokemon", "Entities/Interactables", "Spawns/FromVermilionCity", "Exits/ToVermilionCity", "FloorVisibilityMask/Top", "FloorVisibilityMask/Bottom", "FloorVisibilityMask/Left", "FloorVisibilityMask/Right"]:
 		_check(gym.has_node(path), "required node " + path)
 	var collision := gym.get_node("Tiles/Collision") as TileMapLayer
-	_check(collision.get_used_cells().is_empty(), "terrain collision remains empty for manual authoring")
 	_check(collision.tile_set != null and collision.tile_set.tile_size == Vector2i(32, 32), "collision marker tileset is ready to paint")
 	var visual := gym.get_node("Visual")
 	_check(visual.get_meta("tiled_visual_map").width == 24 and visual.get_meta("tiled_visual_map").height == 36, "TMX dimensions preserved")
@@ -25,6 +24,7 @@ func _run() -> void:
 	_check(validator.validate(visual, "res://generated/tiled_visuals/vermilion_gym/vermilion_gym.visual.tileset.tres").is_empty(), "imported atlas is valid")
 	var leader := gym.get_node("Entities/NPCs/GymLeaderLtSurge")
 	_check(leader.trainer_id == "kanto_alpha_gym_lt_surge" and leader.npc_profile.badge_id == "thunder", "existing Lt. Surge trainer and Thunder Badge profile")
+	_check_leader_podium(gym, leader, collision)
 	_check(gym.get_node("Entities/NPCs/GymGuide").npc_id == "kanto_vermilion_city_gym_guide", "guide uses dedicated dialogue metadata")
 	_check_trainers(gym)
 	var entrance := city.get_node("Exits/ToGym")
@@ -46,6 +46,29 @@ func _check(ok: bool, label: String) -> void:
 	if not ok:
 		failed = true
 		push_error("FAIL " + label)
+
+func _check_leader_podium(gym: Node, leader: Node2D, collision: TileMapLayer) -> void:
+	var ground := gym.get_node("Visual/Ground") as TileMapLayer
+	var detail := gym.get_node("Visual/GroundDetail") as TileMapLayer
+	var podium := Rect2i(10, 8, 3, 3)
+	var center := podium.position + podium.size / 2
+	_check(leader.position == ground.map_to_local(center), "Lt. Surge stands on the exact center tile of the podium")
+	_check(leader.position == Vector2(podium.position * 32) + Vector2(podium.size * 32) / 2.0, "podium visual center matches the actor grid")
+	var carpet_cells := 0
+	for x in range(10, 14):
+		for y in range(8, 12):
+			var cell := Vector2i(x, y)
+			if detail.get_cell_source_id(cell) != -1:
+				carpet_cells += 1
+				_check(podium.has_point(cell), "carpet has no extra row or column outside the centered podium")
+	_check(carpet_cells == 9, "complete three-by-three podium")
+	for y in range(center.y, 18):
+		_check(collision.get_cell_source_id(Vector2i(center.x, y)) == -1, "leader tile and straight approach are walkable")
+	for x in [8, 9, 13, 14]:
+		for y in range(8, 12):
+			_check(collision.get_cell_source_id(Vector2i(x, y)) != -1, "complete column footprint blocks movement")
+	var emblem := gym.get_node("Visual/Gym Emblem") as TileMapLayer
+	_check(emblem.position.x + float(emblem.get_used_rect().position.x * 32) + float(emblem.get_used_rect().size.x * 16) == leader.position.x, "emblem shares the leader centerline")
 
 func _check_trainers(gym: Node) -> void:
 	var expected := {

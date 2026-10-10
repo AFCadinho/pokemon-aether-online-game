@@ -511,6 +511,7 @@ var summon_original_z_index := 0
 var summon_original_z_as_relative := true
 var summon_release_audio_mode := SUMMON_RELEASE_AUDIO_BALL
 var summon_release_cry_species := ""
+var initial_lead_summon_pending := [false, false]
 var pvp_team_preview_greeting_shown := false
 var current_move_hover_rect := Rect2()
 var current_party_hover_rect := Rect2()
@@ -7864,6 +7865,7 @@ func setup_trainer_battle_from_response(
 ) -> void:
 	var early_arena := has_meta("battle_entry_pending")
 	_prepare_battle_setup(BattleType.TRAINER, player_pokemon, null, environment_id)
+	_prepare_initial_lead_summons()
 	training_ai_battle = is_training_ai
 	if training_ai_battle:
 		pvp_battle_purpose = "training"
@@ -8378,6 +8380,12 @@ func _prepare_battle_setup(
 ) -> void:
 	if has_meta("battle_entry_pending"):
 		_finish_pending_entry()
+	# Resumed/wild battles do not summon their leads. Release an unfinished
+	# previous intro before applying their snapshot, even for the same species.
+	for index in initial_lead_summon_pending.size():
+		if initial_lead_summon_pending[index] and is_instance_valid(animation_router.model_presenter):
+			animation_router.model_presenter.set_actor_shown(index, true)
+	initial_lead_summon_pending.fill(false)
 	battle_type = type
 	enemy_hud_panel.level_hidden = false
 	display_data_presenter.opponent_levels_hidden = false
@@ -8746,15 +8754,26 @@ func _show_original_player_lead_before_initial_events(species: String, fallback_
 	_set_single_pokemon_species_with_pvp_warning(player_sprite_box, species, "back", is_shiny, "initial_setup")
 	player_hud_panel.set_pokemon_data(species, level, hp, max_hp, status, gender, is_shiny, _get_active_player_experience_data("p1", fallback_pokemon), _get_active_display_name("p1"))
 
+func _prepare_initial_lead_summons() -> void:
+	# The 3D actors are independent of the hidden SpriteBoxes. Keep this hold
+	# through provisional/authoritative lead replacements and command callouts.
+	initial_lead_summon_pending.fill(true)
+	if is_instance_valid(animation_router.model_presenter):
+		for index in initial_lead_summon_pending.size():
+			animation_router.model_presenter.set_actor_shown(index, false)
+
 func _play_lead_summon(ball_item_id: String, cry_species: String, sprite_box: Control, side: String) -> void:
+	var actor_index := 0 if side == "back" else 1
 	var desktop_stage := battle_stage.get_node_or_null("ExperimentalBattle3D")
 	if desktop_stage != null:
-		desktop_stage.set_actor_shown(0 if side == "back" else 1, false)
+		desktop_stage.set_actor_shown(actor_index, false)
 		await desktop_stage.await_prepared()
 		var actor_ident := "p1" if side == "back" else "p2"
 		if desktop_stage.handles(actor_ident):
+			initial_lead_summon_pending[actor_index] = false
 			await desktop_stage.send_out(actor_ident, ball_item_id, cry_species, true)
 			return
+	initial_lead_summon_pending[actor_index] = false
 	if sprite_box == null or pokeball_summon_animation_player == null:
 		return
 
@@ -9692,6 +9711,7 @@ func _hide_team_preview_layers() -> void:
 	enemy_hud_panel.visible = true
 
 func _prepare_team_preview_lead_summon_transition() -> void:
+	_prepare_initial_lead_summons()
 	_clear_team_preview_visuals()
 	player_sprite_box.visible = false
 	enemy_sprite_box.visible = false
@@ -10325,7 +10345,10 @@ func _set_single_pokemon_species_with_pvp_warning(
 	])
 	_warn_if_pvp_species_change_outside_batch(sprite_box, species, context)
 	if is_instance_valid(animation_router.model_presenter):
-		animation_router.model_presenter.set_combatant(0 if sprite_box == player_sprite_box else 1, species, is_shiny, context == "switch_event")
+		var actor_index := 0 if sprite_box == player_sprite_box else 1
+		animation_router.model_presenter.set_combatant(actor_index, species, is_shiny, context == "switch_event")
+		if initial_lead_summon_pending[actor_index]:
+			animation_router.model_presenter.set_actor_shown(actor_index, false)
 	sprite_box.set_single_pokemon_species(species, side, is_shiny)
 
 func _warn_if_pvp_species_change_outside_batch(sprite_box: Node, species: String, context: String) -> void:
