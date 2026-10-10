@@ -48,6 +48,8 @@
 
 - Resolve Urshifu Rapid Strike's existing shiny HOME sprite for evolution previews and Pokémon icons.
 
+- Resolve Gourgeist size variants to existing HOME icons in evolution previews and browser/mobile interfaces, and show the correct shiny Average form.
+
 ## 0.3.105
 
 - Show updated fishing item chances in the Item Dex, explain the independent Heart Scale and sale-treasure rolls, and include both wins and catches in fishing source labels.
