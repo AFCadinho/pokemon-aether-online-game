@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Open supported Android 3D battles directly on the 3D arena, without briefly showing the 2D field while battle data loads.
+
 - Show Casino Tokens in the wallet and developer currency tools; add the Gold Coin icon and localized item text for Gimmighoul evolution. Casino earning and prize shops will follow later.
 
 - Center Vermilion Gym bin rows within the puzzle room while keeping the tiles in front of every bin walkable.
