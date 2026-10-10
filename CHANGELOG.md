@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh Vermilion Gym's Tiled visual with the updated lower-room decorations.
+
 - On touchscreens, hold party Pokémon, Bag items, PC slots, chat messages, hotbar shortcuts, or other players for their right-click actions. Keep short taps and dragging; pan the photo camera with one finger.
 
 - Recover interrupted shared-model pilot installations and repairs without retaining abandoned model copies; preserve live installs and loaded packs.
