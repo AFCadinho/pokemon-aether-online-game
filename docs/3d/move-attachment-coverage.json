@@ -60,20 +60,20 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 996,
+		"with_any_attachment": 1000,
 		"with_cannon": 1,
 		"with_cannons": 1,
 		"with_electric_body": 1,
-		"with_foot": 237,
+		"with_foot": 257,
 		"with_hand": 566,
 		"with_hand_upper": 1,
-		"with_left_foot": 218,
+		"with_left_foot": 238,
 		"with_left_hand": 564,
 		"with_left_hand_upper": 1,
 		"with_mouth": 883,
 		"with_mouth_red": 1,
 		"with_vines": 3,
-		"without_attachments": 204
+		"without_attachments": 200
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -154,6 +154,37 @@
 			]
 		},
 		"abomasnow-mega": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.162173554301262,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "right_foot_middle",
+						"offset": [
+							0.153221827000379,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "right_foot_ring",
+						"offset": [
+							0.162173677235842,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -164,6 +195,37 @@
 							-0.0007025599479675
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.162173956632614,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "left_foot_middle",
+						"offset": [
+							0.153221614658833,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "left_foot_ring",
+						"offset": [
+							0.162173666059971,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
 					}
 				]
 			],
@@ -1138,6 +1200,32 @@
 			]
 		},
 		"ampharos-mega": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.0710439905524255,
+							-0.0098963752388954,
+							-0.00485419668257234
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.0710435956716537,
+							0.00989588350057599,
+							-0.00485418178141114
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -1162,6 +1250,19 @@
 			]
 		},
 		"annihilape": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.093332953751087,
+							-0.00494612753391265,
+							0.00348427519202235
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -1170,6 +1271,19 @@
 							0.0746359825134278,
 							-0.007833983749151,
 							-0.012211561203003
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.0933328717947005,
+							0.00494634360074995,
+							0.0034842509776354
 						],
 						"weight": 1.0
 					}
@@ -2492,6 +2606,32 @@
 			]
 		},
 		"barbaracle-mega": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.158956907689571,
+							0.0,
+							0.00672118831425904
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.158956922590732,
+							0.0000000149011612007866,
+							0.0067208604887128
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -4812,6 +4952,32 @@
 			]
 		},
 		"calyrex-ice": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index_a",
+						"offset": [
+							0.15,
+							0.0,
+							-0.17
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index_a",
+						"offset": [
+							0.15,
+							0.0,
+							-0.17
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -4836,6 +5002,32 @@
 			]
 		},
 		"calyrex-shadow": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index_a",
+						"offset": [
+							0.08,
+							0.0,
+							-0.09
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index_a",
+						"offset": [
+							0.08,
+							0.0,
+							-0.09
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -5032,6 +5224,32 @@
 			]
 		},
 		"carracosta": {
+			"foot": [
+				[
+					{
+						"bone": "EffFoot01",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "EffFoot02",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -8254,6 +8472,34 @@
 				]
 			]
 		},
+		"decidueye": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot",
+						"offset": [
+							0.0255341753363608,
+							0.000000372529029797619,
+							-0.0572583600878717
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot",
+						"offset": [
+							0.0255341269075873,
+							0.0000000149011612007866,
+							-0.0572579726576807
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"decidueye-hisui": {
 			"foot": [
 				[
@@ -8498,6 +8744,19 @@
 			]
 		},
 		"delphox": {
+			"foot": [
+				[
+					{
+						"bone": "right_toe",
+						"offset": [
+							0.0215113200247288,
+							0.000000033527612700035,
+							-0.0298231076449156
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -8506,6 +8765,19 @@
 							0.0500359553843737,
 							0.00124084949493409,
 							0.0000784993171691999
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_toe",
+						"offset": [
+							0.0215113498270511,
+							-0.0000000186264514992485,
+							-0.0298231225460768
 						],
 						"weight": 1.0
 					}
@@ -8548,6 +8820,68 @@
 			]
 		},
 		"delphox-mega": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.0493429899215698,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "right_foot_middle",
+						"offset": [
+							0.0512747839093208,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "right_foot_ring",
+						"offset": [
+							0.0493427664041519,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.0493430346250534,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "left_foot_middle",
+						"offset": [
+							0.051274873316288,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					},
+					{
+						"bone": "left_foot_ring",
+						"offset": [
+							0.0493430346250534,
+							0.0,
+							0.0
+						],
+						"weight": 0.333333333333333
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -8567,6 +8901,34 @@
 							-0.00634352350607514
 						],
 						"weight": 0.5
+					}
+				]
+			]
+		},
+		"deoxys": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -8966,6 +9328,34 @@
 							0.0
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			]
+		},
+		"doduo": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_middle_02",
+						"offset": [
+							0.0695415392518044,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_middle_02",
+						"offset": [
+							0.0695416331291196,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
 					}
 				]
 			]
@@ -11350,6 +11740,32 @@
 			]
 		},
 		"exploud": {
+			"foot": [
+				[
+					{
+						"bone": "EffFoot01",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "EffFoot02",
+						"offset": [
+							0.0,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -12384,6 +12800,19 @@
 			]
 		},
 		"floatzel": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.0397292897105217,
+							-0.0011717900633812,
+							-0.00086118932813404
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -12392,6 +12821,19 @@
 							0.0327969044446945,
 							0.00437477231025694,
 							0.00035543739795685
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.0397294983267784,
+							0.00117213279008864,
+							-0.00086119398474695
 						],
 						"weight": 1.0
 					}
@@ -12904,6 +13346,19 @@
 			]
 		},
 		"frogadier": {
+			"foot": [
+				[
+					{
+						"bone": "right_toe",
+						"offset": [
+							0.0293759554624557,
+							0.013958478346467,
+							-0.00609441031701863
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -12932,6 +13387,19 @@
 							0.00848717987537382
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_toe",
+						"offset": [
+							0.0293760895729065,
+							-0.0139584206044674,
+							-0.00609446014277637
+						],
+						"weight": 1.0
 					}
 				]
 			],
@@ -14235,6 +14703,19 @@
 			]
 		},
 		"glastrier": {
+			"foot": [
+				[
+					{
+						"bone": "right_toe",
+						"offset": [
+							0.15,
+							0.0,
+							-0.17
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -14243,6 +14724,19 @@
 							0.0453635081648825,
 							-0.00420223176479349,
 							-0.10987251251936
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_toe",
+						"offset": [
+							0.15,
+							0.0,
+							-0.17
 						],
 						"weight": 1.0
 					}
@@ -15156,6 +15650,32 @@
 			]
 		},
 		"gouging-fire": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.178790688514709,
+							-0.0148807764053345,
+							-0.0151120498776435
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.178790688514709,
+							0.0148807018995285,
+							-0.0151119604706765
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -15540,6 +16060,28 @@
 			]
 		},
 		"greninja": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index_01",
+						"offset": [
+							0.106294602155686,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "right_foot_middle_01",
+						"offset": [
+							0.118792288005352,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -15571,6 +16113,28 @@
 					}
 				]
 			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index_01",
+						"offset": [
+							0.10629465803504,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_foot_middle_01",
+						"offset": [
+							0.118792220950127,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					}
+				]
+			],
 			"left_hand": [
 				[
 					{
@@ -15599,6 +16163,52 @@
 							0.0102110505104065
 						],
 						"weight": 0.333333333333333
+					}
+				]
+			]
+		},
+		"greninja-mega": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index_01",
+						"offset": [
+							0.0993803814053535,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "right_foot_middle_01",
+						"offset": [
+							0.0977578461170198,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index_01",
+						"offset": [
+							0.0993804484605788,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
+					},
+					{
+						"bone": "left_foot_middle_01",
+						"offset": [
+							0.0977579355239865,
+							0.0,
+							0.0
+						],
+						"weight": 0.5
 					}
 				]
 			]
@@ -15790,6 +16400,19 @@
 			]
 		},
 		"grookey": {
+			"foot": [
+				[
+					{
+						"bone": "right_foot_index",
+						"offset": [
+							0.00785385817289354,
+							0.0000207405537366988,
+							-0.00263993069529532
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -15798,6 +16421,19 @@
 							0.00698207318782804,
 							0.00097410380840299,
 							-0.0013828203082085
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.00785381719470025,
+							-0.0000206958502531,
+							-0.00263995863497256
 						],
 						"weight": 1.0
 					}
@@ -43253,7 +43889,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "6e19af807f62c57c1571a2955a254083b2a88cc8c539c91f676782f049b6e3d7",
+		"data/battle_move_attachments_3d.json": "4c285037b99c18ff007a8e4447c4ab2f3a02fbf9916fe62fa1a57e463122b7fc",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "68db5a9d0118bccba8e82badc9efff0611f814a05fead9d7a95acbaf4c4fa11f",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -43309,7 +43945,9 @@
 		},
 		"abomasnow-mega": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -44148,6 +44786,8 @@
 		},
 		"ampharos-mega": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -44175,7 +44815,9 @@
 		},
 		"annihilape": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand"
 			],
 			"status": "configured",
@@ -45253,6 +45895,8 @@
 		},
 		"barbaracle-mega": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -47417,6 +48061,8 @@
 		},
 		"calyrex-ice": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -47445,6 +48091,8 @@
 		},
 		"calyrex-shadow": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -47833,6 +48481,8 @@
 		},
 		"carracosta": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -50696,8 +51346,11 @@
 			]
 		},
 		"decidueye": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"foot",
+				"left_foot"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -50911,7 +51564,9 @@
 		},
 		"delphox": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -50941,6 +51596,8 @@
 		},
 		"delphox-mega": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -50967,8 +51624,11 @@
 			]
 		},
 		"deoxys": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"foot",
+				"left_foot"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -51303,8 +51963,11 @@
 			]
 		},
 		"doduo": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"foot",
+				"left_foot"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -53351,6 +54014,8 @@
 		},
 		"exploud": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -54386,7 +55051,9 @@
 		},
 		"floatzel": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -54767,7 +55434,9 @@
 		},
 		"frogadier": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -55810,7 +56479,9 @@
 		},
 		"glastrier": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -56474,6 +57145,8 @@
 		},
 		"gouging-fire": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {
@@ -56723,7 +57396,9 @@
 		},
 		"greninja": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand"
 			],
 			"status": "configured",
@@ -56733,8 +57408,11 @@
 			]
 		},
 		"greninja-mega": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"foot",
+				"left_foot"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -56827,7 +57505,9 @@
 		},
 		"grookey": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],

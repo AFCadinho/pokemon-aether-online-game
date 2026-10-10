@@ -31,19 +31,19 @@
     "part_status": {
       "pending_anatomical_review": 37,
       "pending_anatomical_routing_review": 22,
-      "pending_closeup_review": 145,
-      "pending_distal_contact_correction": 117,
+      "pending_closeup_review": 122,
+      "pending_distal_contact_correction": 109,
       "pending_missing_native_part": 6,
       "pending_missing_part": 26,
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
-      "pending_runtime_visibility_and_anatomy_review": 5,
-      "sampled_marker_pose_review_pass_installed": 1592
+      "pending_runtime_visibility_and_anatomy_review": 4,
+      "sampled_marker_pose_review_pass_installed": 1632
     },
-    "runtime_profiles": 996,
+    "runtime_profiles": 1000,
     "species_forms": 1200
   },
-  "profile_sha256": "6e19af807f62c57c1571a2955a254083b2a88cc8c539c91f676782f049b6e3d7",
+  "profile_sha256": "4c285037b99c18ff007a8e4447c4ab2f3a02fbf9916fe62fa1a57e463122b7fc",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -325,9 +325,44 @@
           },
           "preview": "limb-corrections-review-v2/abomasnow-mega.png",
           "proposal": "limb-corrections-v2/abomasnow-mega.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "9bc0df826516d63fde3dca689b4d7d44d47cc1f08b8fd363f1897ba2cc769c7c"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "distal_toe_geometry_weighted_center_proposal",
+              "notes": "Per-model distal toe/claw geometry; forward marker review required before installation."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "fcef609027578e59983deb331b57579f8ee563af2a1016be8e47638fe719bff5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2b423c1cc2b4440d2b261c4497e1d63bdd75e69cb9615a0069f659472b622c2e",
+          "scope": "Three-toe contact center. Individually reviewed in front and rear/underside views for sampled native clips. Body, hand and broom occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -343,6 +378,33 @@
           "normal_runtime_sha256": "fcef609027578e59983deb331b57579f8ee563af2a1016be8e47638fe719bff5",
           "preview_sha256": "4eb4f460a7907bd83bcde774e092d4b895f39014362dcb3ea1a1fc92bf52188e",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "80918b67fb2d1458b92ded005c32d468f90e84eb862c80413b5da534d087c235"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "distal_toe_geometry_weighted_center_proposal",
+              "notes": "Per-model distal toe/claw geometry; forward marker review required before installation."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "fcef609027578e59983deb331b57579f8ee563af2a1016be8e47638fe719bff5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2151019c86f4ce5373d8413a0b98aa726a33b97d946a59280f79077a0108cb6d",
+          "scope": "Three-toe contact center. Individually reviewed in front and rear/underside views for sampled native clips. Body, hand and broom occlusion excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -364,9 +426,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -2223,11 +2285,57 @@
           },
           "preview": "geometry-limb-review/ampharos-mega.png",
           "proposal": "candidates-limbs-v1/ampharos-mega.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Closer v38 views confirm toe contact points. Occluded samples excluded; actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8ac5e4f032e476b1d3bb8f82879184caa7991cdc89337fc6cafa09daf07a4f97",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "15741868f6d4d93d014c502023930df3eb21dc6a893617407d4323d9f1948c79",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "18670d49ba9c24aacab435ebffd9c0fbb38c852b985ac248b69183c4a6952914",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
-        "left_foot": "pending_closeup_review"
+        "foot": "sampled_marker_pose_review_pass_installed",
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       }
     },
     "annihilape": {
@@ -2258,9 +2366,36 @@
           },
           "preview": "geometry-limb-review/annihilape.png",
           "proposal": "candidates-limbs-v1/annihilape.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Toe contact centers visible through sampled native clips. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "396b206f7b95c451db9967242530f92c2fdec305980597c724e76c4794dbcbc5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fd50cb9c0fd67f6960f5b4bd430f1851bce322094869c9ea6e5975c06e4d19b1",
+          "scope": "Toe contact centers visible through sampled native clips. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -2277,6 +2412,25 @@
           "normal_runtime_sha256": "396b206f7b95c451db9967242530f92c2fdec305980597c724e76c4794dbcbc5",
           "preview_sha256": "103423d5b69da1123b46ffe3cbb9addcad59ff67842d818920a93fbcc91cc44c",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "396b206f7b95c451db9967242530f92c2fdec305980597c724e76c4794dbcbc5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "1587bef2157149815ea664da45b4457579eee5f2c9da6f1aece966f1b0d70c42",
+          "scope": "Toe contact centers visible through sampled native clips. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -2299,9 +2453,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -5145,12 +5299,58 @@
           },
           "preview": "geometry-limb-review/barbaracle-mega.png",
           "proposal": "candidates-limbs-v1/barbaracle-mega.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Closer v38 views confirm toe contact points. Occluded samples excluded; actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "c8afe3c51f2650fccb22a1a46bb84233473e4ea223a48843ae76fefadf7d74b8",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7501a483383049cd927ceea6434b0a4da9336257404d37f8ad008dfe8f1e737f",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "c8afe3c51f2650fccb22a1a46bb84233473e4ea223a48843ae76fefadf7d74b8",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "b45bd1c5e31131c2aff7968312bbb82ad111e90c1757f570b27f2ffbff080edd",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_missing_part",
-        "left_foot": "pending_closeup_review"
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       },
       "previous_pose_visibility_differences": [
         {
@@ -10255,7 +10455,72 @@
       ],
       "normal_runtime_sha256": "56fcae010419ca83f08c592285be7a6c58c9f6fb0538efa8209bfa55bad13da5",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "56fcae010419ca83f08c592285be7a6c58c9f6fb0538efa8209bfa55bad13da5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "88416efcfe1e47848bee21a77ee531a988b19a536f6d7e0a63147adff526a038",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "56fcae010419ca83f08c592285be7a6c58c9f6fb0538efa8209bfa55bad13da5",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "01c38e9511bdd4de3df4f0b968b97725d0c9f6ab027412dd564d7c209d468153",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "foot": "sampled_marker_pose_review_pass_installed",
+        "left_foot": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "calyrex-shadow": {
       "anatomical_move_routing_review": "pending",
@@ -10290,7 +10555,72 @@
       ],
       "normal_runtime_sha256": "84c190c010896a8294ff1fe4377cf7e82e1bc3c4d756111316366bc4efe9e8b9",
       "other_parts_status": "pending_visual_and_move_routing_review",
-      "part_status": {}
+      "part_candidate_reviews": [
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
+        }
+      ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "84c190c010896a8294ff1fe4377cf7e82e1bc3c4d756111316366bc4efe9e8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "fbe6a0a5d0635cc8f46be6f6d1a27fb23654acc4ef7088d8a21b918570490036",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "84c190c010896a8294ff1fe4377cf7e82e1bc3c4d756111316366bc4efe9e8b9",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "e0ea56987e7f9793d52116e4f634f63a7277799b15179e941172302534b61a82",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
+      "part_status": {
+        "foot": "sampled_marker_pose_review_pass_installed",
+        "left_foot": "sampled_marker_pose_review_pass_installed"
+      }
     },
     "camerupt": {
       "anatomical_move_routing_review": "pending",
@@ -11087,10 +11417,70 @@
           },
           "preview": "native-all-parts-review/carracosta.png",
           "proposal": "candidates-v5/carracosta.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "2d47b4840a52c9b7ec50fc98b3bae4189bb1d90485a29e3fe68d31be5c8a62d7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3a10fbf9efd12ee0869f9e88e6020b8680d82ab4c7eb0a51562d7282b58198e4",
+          "scope": "Native foot socket on sole contact plane. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "2d47b4840a52c9b7ec50fc98b3bae4189bb1d90485a29e3fe68d31be5c8a62d7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cd8ee618f53b9397be915f124b0d90bd5d0c2e07bc9734c910b0f161ef133c93",
+          "scope": "Native foot socket on sole contact plane. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_distal_contact_correction",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_distal_contact_correction"
       }
     },
@@ -18723,12 +19113,60 @@
           },
           "preview": "geometry-limb-review/decidueye.png",
           "proposal": "candidates-limbs-v1/decidueye.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Foot palm/sole centers, including both raised feet in physical_attack_2. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "a2cf932d5b0f42db9720513fa6ed09304c83f42c39d188fa75591c3b3349f912",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ef8bcd098f4bd0b0ae8cfe6d312aa8c6ed9f08caec6be65d14963d5f87307c88",
+          "scope": "Foot palm/sole centers, including both raised feet in physical_attack_2. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "a2cf932d5b0f42db9720513fa6ed09304c83f42c39d188fa75591c3b3349f912",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "afdc7a37111f474265ad8a516582bbb03dd842342614030f34e35a4979e48e91",
+          "scope": "Foot palm/sole centers, including both raised feet in physical_attack_2. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_missing_part",
-        "left_foot": "pending_closeup_review"
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       },
       "previous_pose_visibility_differences": [
         {
@@ -19632,9 +20070,36 @@
           },
           "preview": "geometry-limb-review/delphox.png",
           "proposal": "candidates-limbs-v1/delphox.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Visible foot contact centers; skirt-obscured samples excluded. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "d7884539482d9deb11498531312429802ea02717ca605486836ba8787f689c4a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "98c55ae08d6aff32a86d24bdc065204e6015f4d5b69c4e31fcad8eff6e96b91e",
+          "scope": "Visible foot contact centers; skirt-obscured samples excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -19651,6 +20116,25 @@
           "normal_runtime_sha256": "d7884539482d9deb11498531312429802ea02717ca605486836ba8787f689c4a",
           "preview_sha256": "8346ea906c33d303ec2843ff5a266406c14dbcddf052de9e48ed1148deb13d7d",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "d7884539482d9deb11498531312429802ea02717ca605486836ba8787f689c4a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cb74d218ecc1d5d5a2522d92ec2715219b0abafd387bcdc49552ddf9a2013a02",
+          "scope": "Visible foot contact centers; skirt-obscured samples excluded. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -19673,9 +20157,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -19722,12 +20206,76 @@
           },
           "preview": "geometry-limb-review/delphox-mega.png",
           "proposal": "candidates-limbs-v1/delphox-mega.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "9341b24b4486460e08b24ae71dcbad18e0c243d4c71a291c4815d8ba436b64d0"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "distal_toe_geometry_weighted_center_proposal",
+              "notes": "Per-model distal toe/claw geometry; forward marker review required before installation."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "17035b29caef71487c2b8b2ac9b98d93d7ace601fee3bb7445dc76d6f0276a41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "65d32aa8af5afaab32f327414d4918afea22cbf495a41e02d586414a8ded77b9",
+          "scope": "Toe contact center following the foot wrapped around the broom. Individually reviewed in front and rear/underside views for sampled native clips. Body, hand and broom occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "030e7e79762a5034a5812834f3036a18b255be69f9e2b389c61055cefad70db6"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "distal_toe_geometry_weighted_center_proposal",
+              "notes": "Per-model distal toe/claw geometry; forward marker review required before installation."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "17035b29caef71487c2b8b2ac9b98d93d7ace601fee3bb7445dc76d6f0276a41",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ef148f8e031e9fc501b3eacebeb3107c64ac91b9503efb7c5b0670882da2aba3",
+          "scope": "Toe contact center following the foot wrapped around the broom. Individually reviewed in front and rear/underside views for sampled native clips. Body, hand and broom occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_closeup_review",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_closeup_review"
       }
     },
@@ -19758,11 +20306,70 @@
           },
           "preview": "geometry-limb-review/deoxys.png",
           "proposal": "candidates-limbs-v1/deoxys.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9e2d4e30f6e536e3ac117ccd47b233bea947d635b611c975684fdd2548f93eac",
+          "scope": "Tapered leg tip with native foot bone. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "24f159fef03105cd4c4e802bb8ec2718746b570639d2a8058bd2645a3c25ffc7",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "451441e380bbc56e7e7c74f93c1da2d125e45ae665340d32faee355bd12945a2",
+          "scope": "Tapered leg tip with native foot bone. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_runtime_visibility_and_anatomy_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_runtime_visibility_and_anatomy_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_runtime_visibility_and_anatomy_review"
       }
     },
@@ -20566,12 +21173,70 @@
           },
           "preview": "geometry-limb-review/doduo.png",
           "proposal": "candidates-limbs-v1/doduo.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Corrected v39 both feet individually reviewed. V38 proposal rejected because distal average lay in empty gap; actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6a8684553f156fdfa4b42f131aeee3453d2a9da33b5926f0bb39cefed90c9c2a",
+          "scope": "Leading middle toe/claw contact point. Individually reviewed in visible sampled native clips; occluded views excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "7b469643ffd84a00dffd8779a82bbe9df8ff0967cf3e2baf93e312d4686c0658",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "aba0c8a2b58455e97d3ae5bc50dc980652bd4d3835f6e3027d0685691c8b7898",
+          "scope": "Leading middle toe/claw contact point. Individually reviewed in visible sampled native clips; occluded views excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_missing_part",
-        "left_foot": "pending_closeup_review"
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       }
     },
     "dolliv": {
@@ -25621,11 +26286,70 @@
           },
           "preview": "native-all-parts-review/exploud.png",
           "proposal": "candidates-v5/exploud.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "caefcc750ea4aea833291aa3252a2bf523b95f403ea213055d79c8b149fe7561",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "190042c048362acb27af34ad125523fd174bdb820161aa76cabc1dbb2e85e3c4",
+          "scope": "Native foot socket on sole contact plane. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "caefcc750ea4aea833291aa3252a2bf523b95f403ea213055d79c8b149fe7561",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "cf54cb70536c123a2f00830359d6454982615ca672f7dd46b9242476a3b54d75",
+          "scope": "Native foot socket on sole contact plane. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_closeup_review"
       }
     },
@@ -28450,9 +29174,36 @@
           },
           "preview": "geometry-limb-review/floatzel.png",
           "proposal": "candidates-limbs-v1/floatzel.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Front paw/toe contact centers, including rotated feet. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "20feaf1164126681f3271627647c5e545e0458448d6d4b3c2f97b63d2d54496a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "26c253cb69fefc8c86512dbf83aa6a796c87da9e6781acc9d6b03b136bd128fc",
+          "scope": "Front paw/toe contact centers, including rotated feet. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -28469,6 +29220,25 @@
           "normal_runtime_sha256": "20feaf1164126681f3271627647c5e545e0458448d6d4b3c2f97b63d2d54496a",
           "preview_sha256": "e111424608abdaccacf9f614310bf11d6883ee7646de856a328b9058cb27fd1b",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "20feaf1164126681f3271627647c5e545e0458448d6d4b3c2f97b63d2d54496a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0d9675ca00549feaa37c954df47548b914ac1c24014af602f755e83707d912ca",
+          "scope": "Front paw/toe contact centers, including rotated feet. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -28491,9 +29261,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -29639,9 +30409,36 @@
           },
           "preview": "limb-corrections-review-v2/frogadier.png",
           "proposal": "limb-corrections-v2/frogadier.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Webbed foot center between toe pads; obscuring hands excluded. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "2c148c482f56a292af0e256f4ddb08436b63a59df2861351885ba73c1545f08c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "2595eab62b3e95480f51d5030e8fa4825ead5590ea88751f10930bea1444be62",
+          "scope": "Webbed foot center between toe pads; obscuring hands excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -29658,6 +30455,25 @@
           "normal_runtime_sha256": "2c148c482f56a292af0e256f4ddb08436b63a59df2861351885ba73c1545f08c",
           "preview_sha256": "fc5bd26d48b86fb176053dec01da4d895ce22e193f4eb33890b43963bf30b111",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "2c148c482f56a292af0e256f4ddb08436b63a59df2861351885ba73c1545f08c",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7fe7b504caae5c1b13dad89e1e3deb1b475adcf750c0c260ec2ffb8c13faa9a0",
+          "scope": "Webbed foot center between toe pads; obscuring hands excluded. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -29680,9 +30496,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_distal_contact_correction",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_distal_contact_correction",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -32783,9 +33599,42 @@
           },
           "preview": "geometry-limb-review/glastrier.png",
           "proposal": "candidates-limbs-v1/glastrier.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "1bc72770c4bf9c54fe3af255f76ce15f85f4eeb8c221325e3dcd25f84931ec0a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "6a43f419093e4f14d0100bca8b19eedb1bcba41accb1c7bf2762df5ee600531a",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -32802,6 +33651,31 @@
           "normal_runtime_sha256": "1bc72770c4bf9c54fe3af255f76ce15f85f4eeb8c221325e3dcd25f84931ec0a",
           "preview_sha256": "6777907297ed4eb39751a0bcade7a4ad0625ff640881fc35e336e3a625904fdd",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "native_foot_or_hoof_geometry_proposal",
+              "notes": "Individual native foot effect socket or hoof surface candidate; visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "1bc72770c4bf9c54fe3af255f76ce15f85f4eeb8c221325e3dcd25f84931ec0a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9ae10bd735a9344c999d5a8a5a2a9234c9748e0ad3e5a4e48a170d4ac2bc6a26",
+          "scope": "Horse hind-hoof contact point on lower toe/hoof shell. Individually reviewed through visible sampled native clips; other leg/body occlusion excluded. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -32824,9 +33698,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_distal_contact_correction",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_distal_contact_correction",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -34966,12 +35840,58 @@
           },
           "preview": "geometry-limb-review/gouging-fire.png",
           "proposal": "candidates-limbs-v1/gouging-fire.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Hind-paw toe contact centers; foreleg-obscured samples excluded. Actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "7c2afb53087009318ecf667b8f3a27b486fe580495aef444747254498ad2399e",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "0226938823dc7b24daa3b2c149d077ff9b31a678945bf01c4f5d3aa52b7b1010",
+          "scope": "Hind-paw toe contact centers; foreleg-obscured samples excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "7c2afb53087009318ecf667b8f3a27b486fe580495aef444747254498ad2399e",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "f7c1a40cab6f7013201f141b0d92be54ed17051bdce282088a8edce36c948917",
+          "scope": "Hind-paw toe contact centers; foreleg-obscured samples excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_closeup_review",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_closeup_review"
       }
     },
@@ -35612,9 +36532,42 @@
           },
           "preview": "limb-corrections-review-v2/greninja.png",
           "proposal": "limb-corrections-v2/greninja.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Corrected v39 both feet individually reviewed. V38 proposal rejected because distal average lay in empty gap; actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "5c4340ffdaa64795a038135aee547b220c37b35e1467c946b8123a7ec03cb784",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "40ed18fe457a7cbac9783af7d39de36cca3bb54a0fa4b35d391fefe395c5e5dc",
+          "scope": "Webbed foot contact center between proximal toe segments. Individually reviewed in visible sampled native clips; occluded views excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -35631,6 +36584,31 @@
           "normal_runtime_sha256": "5c4340ffdaa64795a038135aee547b220c37b35e1467c946b8123a7ec03cb784",
           "preview_sha256": "650aae990925735f951079953482a25753560bf1662b5a1ee85fa7a4a794d725",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "5c4340ffdaa64795a038135aee547b220c37b35e1467c946b8123a7ec03cb784",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "598ad2a70783adbdd71597b18449bad8804d9a1f3e006a8e510d84a8de6670ad",
+          "scope": "Webbed foot contact center between proximal toe segments. Individually reviewed in visible sampled native clips; occluded views excluded. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -35653,9 +36631,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_distal_contact_correction",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_distal_contact_correction",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -35685,12 +36663,76 @@
           },
           "preview": "geometry-limb-review/greninja-mega.png",
           "proposal": "candidates-limbs-v1/greninja-mega.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "8c1733537a67ca9abca4c36a03f3f9a53b92316f77a12a5951d527cdbf323c02"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "750b584eea21914eba120240f4d7d39613337123c90a3c4bc30258c8ae8cfced",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3a7ef599254a733a9b124bd9b612c8bf9b7e33e6171cc5bcbf7905bfab73c069",
+          "scope": "Webbed foot center individually reviewed in visible sampled idle/physical/special poses from below and front/side. Native blue effect sheet and body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "e7c5d8817af85a00060c77b73257c8386a5841efb38463d38ec6c8a267c93bf1"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "anatomical_toe_contact_refinement",
+              "notes": "Doduo uses leading middle toe; Greninja uses web center between proximal toe segments. Prior distal average lay in empty gap. Visual review required."
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "750b584eea21914eba120240f4d7d39613337123c90a3c4bc30258c8ae8cfced",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "3aa0808261fdb198754aef2791ff4e45acfae31d2f3da6f899c00e602af48bf1",
+          "scope": "Webbed foot center individually reviewed in visible sampled idle/physical/special poses from below and front/side. Native blue effect sheet and body occlusion excluded. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "pending_closeup_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "pending_closeup_review",
-        "left_foot": "pending_closeup_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "pending_closeup_review"
       },
       "previous_pose_visibility_differences": [
@@ -36436,9 +37478,36 @@
           },
           "preview": "limb-corrections-review-v2/grookey.png",
           "proposal": "limb-corrections-v2/grookey.json"
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Closer v38 views confirm toe contact points. Occluded samples excluded; actual effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "c8c4c7459fdc7c4cdebc6ff7527ad2156f6675f29416fe6db3086561759d1ac1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "9ca5fcffd12b48c35e3cba5eaa8457f7114597196e000039d49ecac080d33f3a",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -36455,6 +37524,25 @@
           "normal_runtime_sha256": "c8c4c7459fdc7c4cdebc6ff7527ad2156f6675f29416fe6db3086561759d1ac1",
           "preview_sha256": "e0f9ad3f2907fcb5a33ece8f6c8dd3b7d6c3fd8662d71e2cbc86983c3514b016",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "method": "distal_foot_geometry_native_pose_visual_review",
+          "normal_runtime_sha256": "c8c4c7459fdc7c4cdebc6ff7527ad2156f6675f29416fe6db3086561759d1ac1",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ffe4c3e6b15acf2fbaa71b5c89819be8f12d00c63f711d74b6bcfbd96182dc6e",
+          "scope": "Toe/claw contact point reviewed in visible sampled native poses from close front/side views. Body/other-foot occlusion excluded. Actual move routing and effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -36477,9 +37565,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_distal_contact_correction",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_distal_contact_correction",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
