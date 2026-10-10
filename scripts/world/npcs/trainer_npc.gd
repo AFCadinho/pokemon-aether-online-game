@@ -384,7 +384,10 @@ func _claim_battle_interaction() -> bool:
 func finish_trainer_battle(finished_trainer_id: String, player_won: bool) -> void:
 	if finished_trainer_id.strip_edges() != trainer_id.strip_edges():
 		return
-	battle_in_progress = false
+	# A win still owns the interaction while World settles its reward and
+	# applies the authoritative defeated/sleeping state. Releasing here lets
+	# repeated interaction presses start another rematch during that request.
+	battle_in_progress = player_won
 	if trainer_progress_state == STATE_FIRST_ENCOUNTER:
 		if player_won:
 			trainer_progress_state = STATE_DEFEATED
