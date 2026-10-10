@@ -2,6 +2,7 @@ extends RefCounted
 ## Transactional local store for optional immutable asset bundles.
 const Index = preload("asset_bundle_index.gd")
 const Usage = preload("model_store_usage.gd")
+const PairPack = preload("model_pair_pack.gd")
 const STATE_SCHEMA := 1
 const STATE_KIND := "pokeaether-installed-asset-bundles"
 const BUNDLE_SCHEMA := 1
@@ -204,6 +205,9 @@ func finish_collection(session: Dictionary) -> Dictionary:
 
 
 func _object_manifest(asset: Dictionary) -> Dictionary:
+	if asset.get("format") == PairPack.FORMAT:
+		var checked := PairPack.object_check(_objects_root().path_join(str(asset.sha256)), asset)
+		return checked.manifest if str(checked.error).is_empty() else {}
 	var manifest := _read_json(_objects_root().path_join(str(asset.sha256)).path_join("bundle.json"))
 	var sizes := {"bundle.json": 1}
 	for appearance: Variant in manifest.get("appearances", []):
@@ -239,6 +243,10 @@ func _prepare_archive(asset: Dictionary, archive_path: String, installed: Dictio
 	archive.close()
 	if FileAccess.get_sha256(archive_path) != str(asset.sha256):
 		return {"error": "Bundle archive checksum mismatch."}
+	if asset.get("format") == PairPack.FORMAT:
+		if not _space_available(root, int(asset.size_bytes) + 32 * 1024 * 1024):
+			return {"error": "Not enough free space to install 3D models."}
+		return PairPack.install(archive_path, asset, _objects_root().path_join(str(asset.sha256)), not _models_in_use())
 	var sizes := _archive_entries(archive_path)
 	if sizes.is_empty():
 		return {"error": "Invalid or unsafe bundle archive."}
@@ -309,6 +317,8 @@ func remove(asset_id: String) -> Dictionary:
 
 
 func garbage_collect() -> Dictionary:
+	if _models_in_use() or PairPack.protects(root):
+		return {"error": "Model files are in use; cleanup deferred.", "removed_objects": 0, "removed_generations": 0}
 	var generation := active_generation()
 	if generation.is_empty():
 		return {"error": "No valid active asset state.", "removed_objects": 0, "removed_generations": 0}
@@ -402,11 +412,13 @@ func prune_model_versions() -> Dictionary:
 
 
 func _models_in_use() -> bool:
-	return Usage.has_running_game(root)
+	return PairPack.protects(root) or Usage.has_running_game(root)
 
 
 func _owns_model_object(digest: String, manifest: Dictionary) -> bool:
 	var path := _objects_root().path_join(digest)
+	if manifest.get("format") == PairPack.FORMAT:
+		return manifest.get("sha256") == digest and str(PairPack.object_check(path, manifest).error).is_empty()
 	var directory := DirAccess.open(path)
 	if directory == null or directory.get_files() != PackedStringArray(["bundle.json"]) or directory.get_directories() != PackedStringArray(["models"]) or directory.is_link("bundle.json") or directory.is_link("models"):
 		return false
@@ -432,7 +444,7 @@ func _empty_state(revision: String) -> Dictionary:
 
 
 func _state_entry(asset: Dictionary, manifest: Dictionary) -> Dictionary:
-	return {
+	var entry := {
 		"asset_id": asset.asset_id,
 		"asset_type": asset.asset_type,
 		"species_id": asset.species_id,
@@ -443,6 +455,9 @@ func _state_entry(asset: Dictionary, manifest: Dictionary) -> Dictionary:
 		"dependencies": asset.get("dependencies", []).duplicate(),
 		"appearances": manifest.appearances.duplicate(true),
 	}
+	if asset.get("format") == PairPack.FORMAT:
+		entry["pair_asset"] = asset.duplicate(true)
+	return entry
 
 
 func _validate_bundle_manifest(manifest: Dictionary, asset: Dictionary, sizes: Dictionary) -> String:
@@ -512,6 +527,8 @@ func _validate_object(archive_sha256: String, expected_manifest := {}) -> bool:
 	if object_directory == null or object_directory.is_link("bundle.json"):
 		return false
 	var manifest := _read_json(directory.path_join("bundle.json"))
+	if manifest.get("format") == PairPack.FORMAT:
+		return manifest.get("sha256") == archive_sha256 and (expected_manifest.is_empty() or expected_manifest == manifest.pair_manifest) and str(PairPack.object_check(directory, manifest).error).is_empty()
 	if manifest.is_empty() or (not expected_manifest.is_empty() and manifest != expected_manifest):
 		return false
 	for appearance: Dictionary in manifest.get("appearances", []):
@@ -581,6 +598,9 @@ func _runtime_catalog(value: Dictionary) -> Array:
 	for asset_id: String in ids:
 		var asset: Dictionary = value.assets[asset_id]
 		var object_root := _objects_root().path_join(str(asset.archive_sha256))
+		if asset.get("pair_asset") is Dictionary:
+			result.append_array(PairPack.catalog_entries(asset.pair_asset, object_root))
+			continue
 		for appearance: Dictionary in asset.appearances:
 			var identity := str(appearance.runtime_identity)
 			result.append({
@@ -617,6 +637,8 @@ func _validate_generation_metadata(generation: String) -> bool:
 		if not _hex(str(asset.get("archive_sha256", ""))):
 			return false
 		var object_manifest := _read_json(_objects_root().path_join(str(asset.get("archive_sha256", ""))).path_join("bundle.json"))
+		if asset.get("pair_asset") is Dictionary and object_manifest != asset.pair_asset:
+			return false
 		if object_manifest.get("asset_id") != asset_id or object_manifest.get("asset_type") != asset.get("asset_type") or object_manifest.get("species_id") != asset.get("species_id") or object_manifest.get("form_id") != asset.get("form_id") or object_manifest.get("version") != asset.get("version"):
 			return false
 		if object_manifest.get("dependencies", []) != asset.get("dependencies", []) or object_manifest.get("appearances", []) != asset.get("appearances", []):
@@ -639,6 +661,9 @@ func _validate_generation_metadata(generation: String) -> bool:
 				return false
 		if int(parsed[index].get("runtime_schema", 0)) != 1 or int(parsed[index].get("bytes", 0)) != int(expected[index].bytes):
 			return false
+		for field in ["pack_path", "pair_asset"]:
+			if parsed[index].get(field) != expected[index].get(field):
+				return false
 	return true
 
 

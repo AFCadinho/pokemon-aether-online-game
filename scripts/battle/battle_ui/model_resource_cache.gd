@@ -7,8 +7,8 @@ static var items := {}
 static var order: Array[String] = []
 static var source_bytes := 0
 
-static func key(path: String, hash: String, timing: Dictionary) -> String:
-	return path + ":" + hash + ":" + JSON.stringify(timing, "", true).sha256_text()
+static func key(path: String, hash: String, timing: Dictionary, pack_identity := "") -> String:
+	return path + ":" + hash + ":" + JSON.stringify(timing, "", true).sha256_text() + (":" + pack_identity if not pack_identity.is_empty() else "")
 
 static func fetch(cache_key: String) -> PackedScene:
 	if not items.has(cache_key):

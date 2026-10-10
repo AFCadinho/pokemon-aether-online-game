@@ -105,6 +105,7 @@
   "ui.settings.storage.empty": "尚未下载任何文件。",
   "ui.settings.storage.battle_busy": "请先结束对战，再删除文件。",
   "ui.settings.storage.download_busy": "请等待下载完成。",
+  "ui.settings.storage.restart_models": "请重启游戏后再删除已加载的3D模型。",
   "ui.settings.storage.confirm_title": "删除宝可梦文件？",
   "ui.settings.storage.confirm_sprites": "删除已下载的宝可梦2D图像？需要时会重新下载。你的宝可梦和游戏进度会保留。",
   "ui.settings.storage.confirm_models": "删除已下载的宝可梦3D模型？需要时会重新下载。你的宝可梦和游戏进度会保留。",
