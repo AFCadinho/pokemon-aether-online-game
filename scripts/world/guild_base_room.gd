@@ -9,6 +9,7 @@ extends "res://scripts/world/map_metadata.gd"
 var guild_id := 0
 var base_town_id := ""
 var access_refresh_in_flight := false
+var furnishing_editor: CanvasLayer
 
 
 func _ready() -> void:
@@ -30,6 +31,10 @@ func _ready() -> void:
 	timer.autostart = true
 	timer.timeout.connect(_refresh_access)
 	add_child(timer)
+	if room_key in ["left_room", "right_room"]:
+		furnishing_editor = preload("res://scripts/ui/guild_base_furnishing_editor.gd").new()
+		furnishing_editor.room = self
+		add_child(furnishing_editor)
 
 
 func configure_guild_base_instance(instance_map_id: String) -> void:
@@ -63,7 +68,11 @@ func is_walkable_tile(tile: Vector2i) -> bool:
 
 func _build_room_collision() -> void:
 	# Terrain collision belongs to the runtime scene, independently of TMX art.
-	var layer := get_node("Collision") as TileMapLayer
+	var layer := find_map_tilemap_layer("Collision") as TileMapLayer
+	if layer != null and layer.tile_set != null and not layer.get_used_cells().is_empty():
+		# Preserve authored terrain, including a lobby Collision under Tiles.
+		collision = layer
+		return
 	var tiles := TileSet.new()
 	tiles.tile_size = Vector2i(32, 32)
 	tiles.add_physics_layer()

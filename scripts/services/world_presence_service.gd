@@ -12,6 +12,7 @@ signal roster_changed(players: Array, roster_revision: int)
 signal roster_player_changed(player_state: Dictionary, roster_revision: int)
 signal roster_player_removed(user_id: int, roster_revision: int)
 signal weather_changed(weather_state: Dictionary)
+signal guild_base_layout_updated(map_id: String, revision: int)
 signal connection_changed(connected: bool)
 signal session_invalid(reason: String)
 
@@ -239,6 +240,9 @@ func _process_packets() -> void:
 				_apply_snapshot_message(message)
 			"weather_update":
 				_apply_weather_state(message)
+			"guild_base_layout_updated":
+				if str(message.get("mapId", "")) == last_sent_map_id:
+					guild_base_layout_updated.emit(last_sent_map_id, int(message.get("revision", 0)))
 			"player_update":
 				_debug_log_player_update(message)
 				_apply_player_update_message(message)

@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_jodx1"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_2ri1i"]
+
+[node name="StatueLeft" type="Node2D" unique_id=1169713761]
+texture_filter = 1
+script = ExtResource("1_jodx1")
+furniture_id = "statue_left"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2016920888]
+position = Vector2(-32, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAIAAIAAAABAAAAAAAJAAIAAAACAAAAAAAKAAIAAAAAAAEAAAAOAAIAAAABAAEAAAAPAAIAAAABAAIAAAADAAMAAAA=")
+tile_set = ExtResource("2_2ri1i")

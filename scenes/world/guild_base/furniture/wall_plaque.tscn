@@ -1,0 +1,14 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_c61xh"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_iy0bh"]
+
+[node name="WallPlaque" type="Node2D" unique_id=1395627672]
+texture_filter = 1
+script = ExtResource("1_c61xh")
+furniture_id = "wall_plaque"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=110404318]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0)
+tile_set = ExtResource("2_iy0bh")

@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_lonaq"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_utxl7"]
+
+[node name="Fireplace" type="Node2D" unique_id=1690452568]
+texture_filter = 1
+script = ExtResource("1_lonaq")
+furniture_id = "fireplace"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=2113091031]
+position = Vector2(0, -128)
+tile_map_data = PackedByteArray("AAAAAAAAAAAEAAEAAAABAAAAAAAFAAEAAAACAAAAAAAGAAEAAAADAAAAAAAHAAEAAAAEAAAAAAAIAAEAAAAAAAEAAAAJAAEAAAABAAEAAAAKAAEAAAACAAEAAAALAAEAAAADAAEAAAAMAAEAAAAEAAEAAAANAAEAAAAAAAIAAAAOAAEAAAABAAIAAAAPAAEAAAACAAIAAAAAAAIAAAADAAIAAAABAAIAAAAEAAIAAAACAAIAAAAAAAMAAAADAAIAAAABAAMAAAAEAAIAAAACAAMAAAAFAAIAAAADAAMAAAAGAAIAAAAEAAMAAAAHAAIAAAA=")
+tile_set = ExtResource("2_utxl7")

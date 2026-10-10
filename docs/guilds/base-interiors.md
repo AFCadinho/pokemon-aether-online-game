@@ -44,13 +44,51 @@ ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend 
 The right room mirrors its visual so its entrance faces the main hall. Gameplay
 coordinates stay local to the room scene. Layer names and original artist TMXs
 are preserved; the lift's final foreground layer is exposed to the runtime's
-existing object depth sorter. Runtime collision is an explicit floor mask, with
-blocked footprints for fixed lobby and lift furnishings.
+existing object depth sorter. Runtime collision preserves the authored lobby
+and lift layer. Empty side rooms use explicit floor masks; furniture adds its
+own movement footprints without changing terrain tiles.
 
-`Entities/Furniture` is the insertion point for later Guild-owned furniture.
-Future placement storage should use `(guild_id, room_key)` with stable room-local
-tile coordinates, server-validated footprints, edit permissions and revisions.
-The current feature does not include furniture placement or personal rooms.
+`Entities/Furniture` holds runtime furniture in each side room. The account
+service stores both room layouts and shared inventory in `guild_base_furnishings`,
+keyed by Guild. Stable placement IDs and local tile coordinates are independent
+of town. The lobby and lift retain their fixed art and authored collision.
+
+In either side room, the leader can choose **Furnish room** to open the catalog.
+Select furniture and click a valid green preview to place it. **Select / move**
+selects existing furniture; **Return to storage** removes it. Each click saves
+on the server. **Done** or Escape restores the camera and walking controls.
+Red previews reject overlaps, invisible artwork, blocked routes and occupied
+player tiles. The entrance remains clear. Rugs have adjustable dimensions and
+allow furniture on top; flowers and plates attach to a free tabletop slot and
+follow the table when moved. Returning a table returns its decorations too.
+
+The catalog contains 24 reusable scenes in `scenes/world/guild_base/furniture/`.
+Each uses a `TileMapLayer` with a compact shared atlas, a movement footprint and
+the existing character-blocking protocol. Tall art renders above its footprint;
+the player remains sorted by feet. The original decorated TMXs are references,
+not preplaced layouts. Their selected tiles can be rebuilt without editing the
+artist sources:
+
+```sh
+python tools/import_guild_base_furniture.py \
+  '/home/adinho/Documents/tiled_pokeaether/kanto/artist/tilesets/inside/Indoors Tileset.tsx'
+ops/worktrees/slot-env SLOT -- godot --headless --path .worktrees/SLOT/frontend \
+  --script res://tools/import_guild_base_furniture.gd
+```
+
+Keep `data/guild_base_furniture.json` byte-identical to the account-service
+catalog. The first visit initializes a finite starter inventory once. Both
+rooms draw from it. This version does not buy furniture or charge the Guild Bank.
+The leader grants explicit decorating rights through **Decorating rights**;
+Guild rank alone does not grant them. One editor per room holds a server lease,
+renewed while editing. Concurrent saves in different rooms share a Guild lock,
+so they cannot spend the same furniture copy. Save revisions prevent old layouts
+from overwriting new ones. Revision-only world-presence notifications trigger a
+fresh authorized fetch; ten-second polling also reconciles layouts after an outage.
+Offline player positions covered by new furniture recover to nearby clear floor
+through the existing authorized teleport flow on login.
+
+Personal rooms are not included in this feature.
 The lift waiting room is reachable; its upper lift door stays closed until a
 personal-room selector and server-authorized player room instances are added.
 
@@ -58,5 +96,11 @@ For Celadon/Saffron, add their actual city entrance/return points and registrars
 before enabling purchases. Reuse the room scenes; extend the server door/return
 contract and town access rather than duplicating maps per Guild or town.
 
-Focused checks: `tests/guild_base_interior_check.gd`, account-service
-`tests.test_guild_base_interiors`, and gateway `tests.test_guild_base_presence`.
+Focused checks: `tests/guild_base_interior_check.gd`,
+`tests/guild_base_furnishing_check.gd` (add `-- --screenshot` with a graphics
+renderer for a visual preview), account-service `tests.test_guild_base_interiors`,
+`tests.test_guild_base_furniture`, and gateway `tests.test_guild_base_presence`
+and `tests.test_guild_base_furniture_events`. Optional account-service
+`tests.test_guild_base_furniture_postgres.PostgresFurnitureTests` tests migration
+and concurrency when `GUILD_FURNITURE_TEST_DATABASE_URL` points at a disposable
+PostgreSQL database; it creates and drops its own randomly named test schemas.

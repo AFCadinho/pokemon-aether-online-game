@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_c8qsb"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_phmqc"]
+
+[node name="Sink" type="Node2D" unique_id=1965454102]
+texture_filter = 1
+script = ExtResource("1_c8qsb")
+furniture_id = "sink"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=1757117160]
+position = Vector2(0, -64)
+tile_map_data = PackedByteArray("AAAAAAAAAAAPAAMAAAABAAAAAAAAAAQAAAACAAAAAAAOAAMAAAAAAAEAAAACAAQAAAABAAEAAAADAAQAAAACAAEAAAABAAQAAAA=")
+tile_set = ExtResource("2_phmqc")

@@ -7,6 +7,7 @@ const NPC_CONTAINER_PATHS: Array[String] = [
 	"Entities/Pokemon",
 	"Entities/Interactables",
 	"Entities/StaticEncounters",
+	"Entities/Furniture",
 	# Oudere/handgemaakte maps plaatsen dit direct onder de map-root.
 	"Interactables",
 ]
