@@ -128,8 +128,10 @@ retained v11 dependency ZIPs under the slot's lossless preparation directory.
 
 ## Before production activation
 
-The broader catalog still needs newly generated, reviewed candidate bindings
-and a complete size/quality audit. Native Windows/macOS installation, update,
+The [complete storage audit](shared-model-catalog-audit.md) measures all 1,200
+pairs, with 1,084 selected shared pairs and 3.02 GB / 23.46% less installed data.
+Broader render/actor quality checks and reviewed candidate bindings remain.
+Native Windows/macOS installation, update,
 repair and cleanup checks remain; the previous Android cohort qualification
 does not certify this new installer/presenter integration. Mounted index growth
 across long sessions and interrupted replacement recovery need broader platform
