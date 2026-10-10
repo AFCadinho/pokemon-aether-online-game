@@ -18,6 +18,8 @@ const PROFILES := {
 		"mouth": [["head", Vector3(0.05, 0, 0.195)]],
 		"hand": [["right_hand", Vector3(0.033, 0, 0)]],
 	},
+	# Calibrated at the open lip in Charmeleon's native special-attack pose.
+	"charmeleon": {"mouth": [["head", Vector3(-0.015, 0, 0.235)]]},
 	"squirtle": {"mouth": [["head", Vector3(0, 0, 0.145)]]},
 	"blastoise": {
 		"mouth": [["head", Vector3(0.08, 0, 0.275)]],

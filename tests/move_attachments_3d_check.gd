@@ -75,6 +75,29 @@ func _run() -> void:
 	var actual: Dictionary = stage._move_anchors("p1", "p2", "Ember")
 	assert(actual.attachment_part == "mouth")
 	assert(stage._move_anchors("p2", "p1", "Ember").attachment_part == "mouth")
+	# Charmeleon previously used static idle bounds above its animated mouth.
+	# Exercise the battle-stage route on both sides, including the shiny rig.
+	for index in 2:
+		stage.identities[index] = "charmeleon" if index == 0 else "charmeleon@shiny"
+		stage.combatants[index] = {"species": "charmeleon", "shiny": index == 1}
+		var rig: Skeleton3D = stage.actors[index].get_node("Rig")
+		var ident := "p%d" % (index + 1)
+		var target := "p%d" % (2 - index)
+		stage.actors[index].rotation.y = 0.7 if index == 0 else -0.7
+		stage.actors[index].scale = Vector3.ONE * 1.6
+		for head_y in [0.8, 1.2]:
+			rig.set_bone_pose_position(0, Vector3(0, head_y, 0))
+			rig.set_bone_pose_rotation(0, Quaternion(Vector3.RIGHT, head_y))
+			var flame: Dictionary = stage._move_anchors(ident, target, "Flamethrower")
+			var lip := Vector3(-0.015, 0, 0.235)
+			var expected_lip := world.to_local(rig.to_global(rig.get_bone_global_pose(0) * lip))
+			assert(flame.attachment_part == "mouth" and flame.attachment_bones == ["head"])
+			assert(flame.source.is_equal_approx(expected_lip), "Flamethrower must follow Charmeleon's animated mouth")
+		stage.identities[index] = "charmander"
+		stage.combatants[index] = {"species": "charmander", "shiny": false}
+		stage.actors[index].rotation.y = 0
+		stage.actors[index].scale = Vector3.ONE
+		rig.reset_bone_pose(0)
 	# The whole Moonblast orb must clear the attacker's silhouette on either
 	# side, including rotated/scaled models; the moon keeps its own body anchor.
 	var orb_radius: float = Stage.BatchFourMoveEffect.MOONBLAST_ORB_RADIUS * LegacyEffect.PRESENTATION_SCALES.moonblast
@@ -98,6 +121,11 @@ func _run() -> void:
 	doll.position = Vector3(-3,0,1)
 	stage.substitute_models[0] = doll
 	assert(stage._move_anchors("p1", "p2", "Ember").attachment_part == "bounds", "Visible Substitute must own the emitter")
+	stage.identities[0] = "charmeleon"
+	stage.combatants[0].species = "charmeleon"
+	assert(stage._move_anchors("p1", "p2", "Flamethrower").attachment_part == "bounds")
+	stage.identities[0] = "charmander"
+	stage.combatants[0].species = "charmander"
 	var doll_charge: Dictionary = stage._move_anchors("p1","p2","Moonblast")
 	assert(doll_charge.source.distance_to(doll.position)>orb_radius+doll.idle_scale*0.6)
 	doll.hide()

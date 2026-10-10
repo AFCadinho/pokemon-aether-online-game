@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Charmeleon's 3D Flamethrower and other mouth attacks originate at its animated mouth, including in NPC battles.
+
 - Replace the rails around Vermilion Gym's puzzle floor with open walkways and give Lt. Surge a raised stone stage with central steps.
 
 - Show an invitation to answer Help chat questions instead of a cooldown warning when the player has permission to bypass the Help cooldown.
