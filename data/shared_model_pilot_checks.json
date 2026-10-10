@@ -25,7 +25,7 @@
   "evidence_sha256": {
     "data/model_pair_pilot.json": "192d95c05b336512c95ab3d5cbd1688482e4304b413963acbc91748812ef2219",
     "scripts/services/model_pair_pack.gd": "c5aad48d7165d151a4f85010221a6669ac31a6006c02540256fc7f6ff03c08b2",
-    "scripts/services/model_pair_pilot.gd": "d346532aa532b4ea08c74cdfaa1f5a7948420fffc3af2b6a86dc3b6940666c3a",
+    "scripts/services/model_pair_pilot.gd": "39351367a7f32e1eca5a2832f5595f0988fcaadf39aa0aadf621460db56f75b5",
     ".tmp/shared-model-pilot-v1/generated/report.json": "1ebd470bf6ffdf38792365e9da7c6f4f08083e135c92bcd68af4f24782cc08b3",
     ".tmp/shared-model-pilot-v1/render-v2/report.json": "4432bb81be97646154cad6efe69cdf2d0070c06e3a21e75437cb8c58ae572480",
     ".tmp/shared-model-pilot-v1/render-v2/pixel-comparison.json": "8d0dd62d7bbb9c7c0ef679bdec5b87f61f8635e44e1f584a135e6bd1d27476c1"

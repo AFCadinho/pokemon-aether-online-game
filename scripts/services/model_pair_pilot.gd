@@ -40,4 +40,3 @@ static func entry_asset(entry: Dictionary) -> Dictionary:
 			if entry.get("runtime_path") == str(asset.pair_manifest.resource_root).path_join(appearance.runtime_path) and entry.get("bytes") == appearance.bytes:
 				return asset
 	return {}
-
