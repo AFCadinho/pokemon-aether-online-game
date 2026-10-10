@@ -1008,6 +1008,35 @@ func _authenticated_request(path: String, method: HTTPClient.Method, body: Strin
 	return await _request_json(path, method, body)
 
 
+func base_furniture(room_key: String) -> Dictionary:
+	return await _base_furniture_request("/rooms/%s/furniture" % room_key, HTTPClient.METHOD_GET, {})
+
+func base_furniture_lease(room_key: String, action: String, token := "") -> Dictionary:
+	return await _base_furniture_request("/rooms/%s/lease" % room_key, HTTPClient.METHOD_POST, {"action": action, "leaseToken": token})
+
+func save_base_furniture(room_key: String, token: String, revision: int, items: Array) -> Dictionary:
+	# JSON.parse_string reads server integers as floats. Restore their wire types
+	# before saving unchanged placements alongside a new or moved piece.
+	var wire_items: Array = []
+	for placement: Dictionary in items:
+		var value := placement.duplicate(true)
+		for key: String in ["x", "y", "width", "height", "slot"]:
+			if value.get(key) != null:
+				value[key] = int(value[key])
+		wire_items.append(value)
+	return await _base_furniture_request("/rooms/%s/furniture" % room_key, HTTPClient.METHOD_PUT, {"leaseToken": token, "expectedRevision": revision, "items": wire_items})
+
+func base_furniture_editors() -> Dictionary:
+	return await _base_furniture_request("/editors", HTTPClient.METHOD_GET, {})
+
+func set_base_furniture_editor(user_id: int, allowed: bool) -> Dictionary:
+	return await _base_furniture_request("/editors/%d" % user_id, HTTPClient.METHOD_PUT, {"allowed": allowed})
+
+func _base_furniture_request(path: String, method: HTTPClient.Method, body: Dictionary) -> Dictionary:
+	var response := await _authenticated_request(GUILD_BASE_ENDPOINT + path, method, JSON.stringify(body) if method != HTTPClient.METHOD_GET else "")
+	return response if not bool(response.get("success", false)) else {"success": true, "state": _dictionary(response.get("body", {}))}
+
+
 func _normalize_guild(value: Variant) -> Dictionary:
 	var guild := _dictionary(value).duplicate(true)
 	guild["members"] = maxi(int(guild.get("memberCount", guild.get("members", 0))), 0)

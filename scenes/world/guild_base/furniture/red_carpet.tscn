@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://scripts/world/guild_base_furniture.gd" id="1_4cucy"]
+[ext_resource type="TileSet" path="res://assets/guild_base/furniture/furniture.tileset.tres" id="2_mm26y"]
+
+[node name="RedCarpet" type="Node2D" unique_id=1850352352]
+texture_filter = 1
+script = ExtResource("1_4cucy")
+furniture_id = "red_carpet"
+
+[node name="Visual" type="TileMapLayer" parent="." unique_id=943554157]
+position = Vector2(0, -96)
+tile_map_data = PackedByteArray("AAAAAAAAAAAJAAAAAAABAAAAAAAKAAAAAAACAAAAAAALAAAAAAAAAAEAAAAMAAAAAAABAAEAAAANAAAAAAACAAEAAAAOAAAAAAAAAAIAAAAPAAAAAAABAAIAAAAAAAEAAAACAAIAAAABAAEAAAA=")
+tile_set = ExtResource("2_mm26y")
