@@ -4,6 +4,8 @@
 
 - Center Lt. Surge on a single tile in Vermilion Gym's resized yellow podium and align the surrounding alcove and collision.
 
+- Keep 3D Pokemon hidden until their opening summon in trainer battles, including provisional NPC team members before the actual lead is selected.
+
 - Restyle the Vermilion Gym with a continuous blue-gray stone floor, matching gym walkways and lighting, complete switches and visible electric emitters.
 
 - Export each map's weather profile so rain-based evolutions match the map's actual overworld weather setting, and refresh pending developer evolution reviews after changing map weather.
