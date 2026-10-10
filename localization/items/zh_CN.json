@@ -1,4 +1,20 @@
 {
+  "stick": {
+    "name": "大葱",
+    "shortDesc": "对伽勒尔大葱鸭使用可进化为葱游兵。携带时也能提高击中要害的概率。"
+  },
+  "leaders-crest": {
+    "name": "头领凭证",
+    "shortDesc": "使用后使劈斩司令进化为仆刀将军。"
+  },
+  "peat-block": {
+    "name": "泥炭块",
+    "shortDesc": "在游戏时间的夜晚使用，使圈圈熊进化为月月熊。"
+  },
+  "strawberry-sweet": {
+    "name": "草莓糖饰",
+    "shortDesc": "使用后使小仙奶进化为霜奶仙。"
+  },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "使索财灵进化为赛富豪。仅在成功使用后消耗。"},
   "gyarados-mount": {"name": "暴鲤龙坐骑", "shortDesc": "解锁暴鲤龙作为冲浪坐骑。"},
   "repel": {"name": "驱虫喷雾", "shortDesc": "补充 100 步驱虫储量（最多 10,000 步）。"},

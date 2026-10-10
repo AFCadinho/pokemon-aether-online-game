@@ -1827,6 +1827,8 @@ func _ready() -> void:
 	_setup_pvp_queue_ball_spin()
 	if not LocalizationManager.locale_changed.is_connected(_on_locale_changed):
 		LocalizationManager.locale_changed.connect(_on_locale_changed)
+	if not WorldTimeService.time_changed.is_connected(_on_bag_evolution_time_changed):
+		WorldTimeService.time_changed.connect(_on_bag_evolution_time_changed)
 	if not InventoryService.mount_box_opened.is_connected(_on_mount_box_inventory_updated):
 		InventoryService.mount_box_opened.connect(_on_mount_box_inventory_updated)
 	if not InventoryService.item_received.is_connected(_on_inventory_item_received):
@@ -25763,6 +25765,12 @@ func _create_bag_item_use_pokemon_button(pokemon: Pokemon, slot_index: int) -> C
 	_apply_button_style(button, "primary" if slot_index == bag_item_use_selected_slot else "default")
 	return button
 
+func _on_bag_evolution_time_changed() -> void:
+	if bag_item_use_popup != null and bag_item_use_popup.visible and not bag_item_use_in_progress:
+		_refresh_bag_item_use_party_list()
+		_refresh_bag_item_use_selected_preview()
+
+
 func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, requested_quantity: int) -> Dictionary:
 	if pokemon == null:
 		return {}
@@ -25814,6 +25822,11 @@ func _bag_item_use_preview_for_pokemon(pokemon: Pokemon, item_id: String, reques
 				}),
 				"canApply": false,
 			}
+		var unmet_time := BAG_ITEM_EFFECT_PREVIEW.unmet_evolution_time(
+			_bag_gameplay_definition_for_item_id(item_id), int(WorldTimeService.get_utc_datetime().get("hour", 0)))
+		if unmet_time != "":
+			var requirement := LocalizationManager.text("ui.evolution_conditions.time." + unmet_time)
+			return {"label": requirement, "tooltip": requirement, "canApply": false}
 		if evolution_effect_type == "evolve_trade":
 			return {
 				"label": LocalizationManager.text("ui.bag.use.trade_evolution"),

@@ -1,4 +1,20 @@
 {
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "Use on Galarian Farfetch’d to evolve into Sirfetch’d. Also boosts critical hits when held."
+  },
+  "leaders-crest": {
+    "name": "Leader’s Crest",
+    "shortDesc": "Evolves Bisharp into Kingambit when used."
+  },
+  "peat-block": {
+    "name": "Peat Block",
+    "shortDesc": "Evolves Ursaring into Ursaluna when used at night (game time)."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "Evolves Milcery into Alcremie when used."
+  },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "Evolves Gimmighoul into Gholdengo. Consumed on successful use."},
   "gyarados-mount": {"name": "Gyarados Mount", "shortDesc": "Unlocks Gyarados as a Surf mount."},
   "repel": {"name": "Repel", "shortDesc": "Adds 100 steps to your Repel charge (maximum 10,000)."},

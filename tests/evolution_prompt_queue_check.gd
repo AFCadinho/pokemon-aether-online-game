@@ -44,7 +44,7 @@ func _check_evolution_form_sprites() -> void:
 		rapid_shiny != null and rapid_shiny.resource_path.ends_with("pokemon_home_shiny/urshifu-rapidstrike.png"),
 		"Rapid Strike evolution uses its shiny form sprite instead of the normal fallback"
 	)
-	for species: String in ["maushold", "solgaleo", "lunala"]:
+	for species: String in ["maushold", "solgaleo", "lunala", "malamar", "sirfetchd", "kingambit", "annihilape", "wyrdeer", "runerigus", "alcremie", "ursaluna", "basculegion", "basculegion-f"]:
 		for shiny: bool in [false, true]:
 			var sprite := POKEMON_ASSETS.load_home_sprite(species, shiny)
 			_check(sprite != null, "%s evolution preview loads (shiny=%s)" % [species, shiny])

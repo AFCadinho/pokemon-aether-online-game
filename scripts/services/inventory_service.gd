@@ -995,14 +995,12 @@ func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Di
 
 	var base_url: String = await GatewayApiConfig.get_base_url()
 	var endpoint := POKEMON_ITEM_USE_ENDPOINT % str(pokemon_id).uri_encode()
+	var request_body := _pokemon_item_use_request_payload(item_id, quantity)
 	var response: Dictionary = await _request_json(
 		base_url + endpoint,
 		HTTPClient.METHOD_POST,
 		GatewayApiConfig.get_json_headers(),
-		JSON.stringify({
-			"itemId": item_id,
-			"quantity": max(quantity, 1),
-		})
+		JSON.stringify(request_body)
 	)
 	if not bool(response.get("success", false)):
 		return response
@@ -1017,6 +1015,14 @@ func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Di
 		"party": _array_from_value(party.get("party", [])),
 		"inventory": _array_from_value(inventory.get("items", [])),
 	}
+
+
+func _pokemon_item_use_request_payload(item_id: String, quantity: int) -> Dictionary:
+	var payload := {"itemId": item_id, "quantity": max(quantity, 1)}
+	var hour := PlayerPartyStateService.get_developer_evolution_time_hour()
+	if hour >= 0:
+		payload["debugTimeHour"] = hour
+	return payload
 
 
 func dev_add_item(item_id: String, quantity: int) -> Dictionary:
