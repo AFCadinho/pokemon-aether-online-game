@@ -6646,5 +6646,14 @@
   "ui.evolution_conditions.time.day": "Dia: 05:00–21:00 no horário do jogo.",
   "ui.evolution_conditions.time.night": "Noite: 21:00–05:00 no horário do jogo.",
   "ui.evolution_conditions.time.dusk": "Entardecer: 17:00–21:00 no horário do jogo.",
-  "ui.evolution_conditions.walk_notification": "{pokemon} concluiu a caminhada necessária! Suba de nível para evoluir."
+  "ui.evolution_conditions.walk_notification": "{pokemon} concluiu a caminhada necessária! Suba de nível para evoluir.",
+  "ui.bag.inventory_hint.touch": "Toque para ver · mantenha pressionado para ações",
+  "ui.bag.item_tooltip.touch": "{item}\nToque para ver detalhes. Mantenha pressionado para mais opções.",
+  "ui.hotbar.empty_tooltip.touch": "Atalho vazio {slot}\nMantenha pressionado um item utilizável da Bolsa para colocá-lo aqui.",
+  "ui.hotbar.key_item_tooltip.touch": "{item}\nEste item-chave nunca se esgota.\nMantenha pressionado para remover este atalho.",
+  "ui.hotbar.field_move_tooltip.touch": "{move} · {source}\n{availability}\nMantenha pressionado para remover este atalho.",
+  "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\nMantenha pressionado para remover este atalho.",
+  "ui.hotbar.message.empty.touch": "A posição {slot} da barra está vazia. Mantenha pressionado um item utilizável da Bolsa para atribuí-lo.",
+  "ui.storage.status.idle.touch": "Arraste para mover · toque para ver · mantenha pressionado para retirar o item",
+  "ui.creator.photo.help.touch": "Arraste para mover a câmera · use o controle de zoom"
 }

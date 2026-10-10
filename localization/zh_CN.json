@@ -6646,5 +6646,14 @@
   "ui.evolution_conditions.time.day": "白天：游戏时间 05:00–21:00。",
   "ui.evolution_conditions.time.night": "夜晚：游戏时间 21:00–05:00。",
   "ui.evolution_conditions.time.dusk": "黄昏：游戏时间 17:00–21:00。",
-  "ui.evolution_conditions.walk_notification": "{pokemon}已完成进化所需的步行条件！升级后即可进化。"
+  "ui.evolution_conditions.walk_notification": "{pokemon}已完成进化所需的步行条件！升级后即可进化。",
+  "ui.bag.inventory_hint.touch": "轻触查看 · 长按打开操作",
+  "ui.bag.item_tooltip.touch": "{item}\n轻触查看详情。长按查看更多选项。",
+  "ui.hotbar.empty_tooltip.touch": "空快捷栏 {slot}\n长按背包中可使用的物品即可添加到此处。",
+  "ui.hotbar.key_item_tooltip.touch": "{item}\n此重要物品不会消耗。\n长按移除此快捷方式。",
+  "ui.hotbar.field_move_tooltip.touch": "{move} · {source}\n{availability}\n长按移除此快捷方式。",
+  "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\n长按移除此快捷方式。",
+  "ui.hotbar.message.empty.touch": "快捷栏 {slot} 为空。长按背包中可使用的物品即可分配。",
+  "ui.storage.status.idle.touch": "拖动移动 · 轻触查看 · 长按取下携带物品",
+  "ui.creator.photo.help.touch": "拖动移动镜头 · 使用缩放滑块"
 }

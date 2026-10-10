@@ -6646,5 +6646,14 @@
   "ui.evolution_conditions.time.day": "Dag: 05:00–21:00 game time.",
   "ui.evolution_conditions.time.night": "Nacht: 21:00–05:00 game time.",
   "ui.evolution_conditions.time.dusk": "Schemering: 17:00–21:00 game time.",
-  "ui.evolution_conditions.walk_notification": "{pokemon} heeft de stappenvoorwaarde voltooid! Stijg een level om te evolueren."
+  "ui.evolution_conditions.walk_notification": "{pokemon} heeft de stappenvoorwaarde voltooid! Stijg een level om te evolueren.",
+  "ui.bag.inventory_hint.touch": "Tik om te bekijken · houd ingedrukt voor acties",
+  "ui.bag.item_tooltip.touch": "{item}\nTik voor details. Houd ingedrukt voor meer opties.",
+  "ui.hotbar.empty_tooltip.touch": "Lege sneltoets {slot}\nHoud een bruikbaar item in je Bag ingedrukt om het hier te plaatsen.",
+  "ui.hotbar.key_item_tooltip.touch": "{item}\nDit belangrijke item raakt nooit op.\nHoud ingedrukt om deze sneltoets te verwijderen.",
+  "ui.hotbar.field_move_tooltip.touch": "{move} · {source}\n{availability}\nHoud ingedrukt om deze sneltoets te verwijderen.",
+  "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\nHoud ingedrukt om deze sneltoets te verwijderen.",
+  "ui.hotbar.message.empty.touch": "Hotbarpositie {slot} is leeg. Houd een bruikbaar item in je Bag ingedrukt om het toe te wijzen.",
+  "ui.storage.status.idle.touch": "Sleep: verplaatsen · Tik: bekijken · Houd ingedrukt: item afnemen",
+  "ui.creator.photo.help.touch": "Sleep om de camera te verplaatsen · gebruik de zoomschuif"
 }

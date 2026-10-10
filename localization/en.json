@@ -6646,5 +6646,14 @@
   "ui.evolution_conditions.time.day": "Day: 05:00–21:00 game time.",
   "ui.evolution_conditions.time.night": "Night: 21:00–05:00 game time.",
   "ui.evolution_conditions.time.dusk": "Dusk: 17:00–21:00 game time.",
-  "ui.evolution_conditions.walk_notification": "{pokemon} has completed its evolution walking requirement! Level up to evolve."
+  "ui.evolution_conditions.walk_notification": "{pokemon} has completed its evolution walking requirement! Level up to evolve.",
+  "ui.bag.inventory_hint.touch": "Tap to inspect · hold for actions",
+  "ui.bag.item_tooltip.touch": "{item}\nTap for details. Hold for more options.",
+  "ui.hotbar.empty_tooltip.touch": "Empty shortcut {slot}\nHold a usable item in your Bag to place it here.",
+  "ui.hotbar.key_item_tooltip.touch": "{item}\nThis key item is never used up.\nHold to remove this shortcut.",
+  "ui.hotbar.field_move_tooltip.touch": "{move} · {source}\n{availability}\nHold to remove this shortcut.",
+  "ui.hotbar.item_tooltip.touch": "{item}\n{availability}\nHold to remove this shortcut.",
+  "ui.hotbar.message.empty.touch": "Hotbar slot {slot} is empty. Hold a usable item in your Bag to assign it.",
+  "ui.storage.status.idle.touch": "Drag to move · tap to inspect · hold to take held item",
+  "ui.creator.photo.help.touch": "Drag to move the camera · use the zoom slider"
 }

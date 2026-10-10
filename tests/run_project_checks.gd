@@ -41,6 +41,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/held_item_stat_modifier_check.gd",
 	"res://tests/held_item_drag_drop_check.gd",
 	"res://tests/party_slot_context_menu_check.gd",
+	"res://tests/touch_context_gesture_check.gd",
 	"res://tests/trainer_interaction_ownership_check.gd",
 	"res://tests/trainer_rematch_completion_check.gd",
 	"res://tests/trainer_first_encounter_marker_check.gd",
