@@ -176,6 +176,29 @@ def reference_reconciliation(report):
     assert report["qualified_appearances"] == len(accepted)
     pairs = {identity.removesuffix("@shiny") for identity in accepted}
     assert report["qualified_pairs"] == sum(identity in accepted and identity + "@shiny" in accepted for identity in pairs)
+    return accepted
+
+
+def selection_summary(report, catalog, storage):
+    """A shared pack needs both appearances; unresolved pairs retain v11."""
+    accepted = reference_reconciliation(report)
+    selected = [a["asset_id"] for a in catalog["assets"]
+                if a.get("format") == "model-pair-pck-v1"
+                and all(m["runtime_identity"] in accepted for m in a["appearances"])]
+    assert len(selected) == report["qualified_pairs"]
+    additional_original = [a["asset_id"] for a in catalog["assets"]
+                           if a.get("format") == "model-pair-pck-v1" and a["asset_id"] not in selected]
+    proofs = storage["pairs"]
+    assert [a["asset_id"] for a in catalog["assets"]] == [p["asset_id"] for p in proofs]
+    totals = {"shared_pairs": len(selected), "original_pairs": len(proofs) - len(selected),
+              "shared_asset_ids": selected, "additional_original_pair_ids": additional_original}
+    for measure, candidate in (("download", "shared_pck_bytes"), ("installed", "shared_installed_bytes")):
+        source = sum(p["source_" + measure + "_bytes"] for p in proofs)
+        result = sum(p[candidate] if p["asset_id"] in selected else p["source_" + measure + "_bytes"] for p in proofs)
+        totals["source_" + measure + "_bytes"] = source
+        totals["selected_" + measure + "_bytes"] = result
+        totals["saved_" + measure + "_bytes"] = source - result
+    return totals
 
 
 def main():
@@ -202,6 +225,15 @@ def main():
     else:
         for name, digest in report["inputs"].items():
             assert sha(ROOT / name) == digest, "Frozen evidence input changed: " + name
+    if "selection" in bound:
+        catalog = read(ROOT / "data/model_pair_catalog.json")
+        assert bound["selection"] == selection_summary(bound, catalog, read(ROOT / "tools/sprite_factory/shared_model_catalog_results.json"))
+        if args.run:
+            draft = read(args.run / "qualified-index.json")
+            originals = {a["asset_id"]: a for a in read(ROOT / "release/approved_3d_bundles_v11_index.json")["assets"]}
+            assert draft["prototype_only"] and not draft["production_approved"]
+            assert draft["qualification_run_sha256"] == bound["run_report_sha256"]
+            assert draft["assets"] == [a if a["asset_id"] in bound["selection"]["shared_asset_ids"] else originals[a["asset_id"]] for a in catalog["assets"]]
     physical = retained_check(args.run, report, read(ROOT / "data/model_pair_catalog.json")) if args.run else {}
     print("SHARED_MODEL_QUALIFICATION_EVIDENCE_CHECK_OK", "appearances=" + str(len(rows)),
           "frames=" + str(report["candidate_frames"]), "holds=" + str(sum(not r["pixels_exact"] for r in rows)), physical)

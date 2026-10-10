@@ -147,6 +147,14 @@ source captures. Raw primary verdicts remain intact. `qualified_pairs` requires
 both appearances to pass the primary comparison or have an exact unchanged
 source witness for every held frame.
 
+Collection also writes a retained `qualified-index.json`. A pair is shared
+only when both normal and shiny qualify; otherwise its complete original v11
+entry is preserved byte-for-byte as JSON data. The receipt's `selection` records
+the exact shared asset IDs, additional original pairs, and recalculated download
+and installed totals. The full debug test catalog deliberately keeps all 1,084
+storage candidates for reproducibility; it is not an activation approval for a
+candidate with an unresolved render hold.
+
 The metadata check also rejects changed source/candidate bindings, a reduced
 cache charge, a changed legacy fallback and a duplicate pair. The comparator
 check rejects a one-channel change in one pixel, forged PNG hashes, missing

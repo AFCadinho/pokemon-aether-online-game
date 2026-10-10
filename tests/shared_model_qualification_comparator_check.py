@@ -13,7 +13,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from qualify_shared_model_catalog import compare
-from shared_model_qualification_evidence_check import frame_keys, frozen_commit_check, sha
+from shared_model_qualification_evidence_check import frame_keys, frozen_commit_check, sha, selection_summary
 
 
 def rejected(callback):
@@ -32,6 +32,31 @@ def main():
     invalid_history = copy.deepcopy(historical)
     invalid_history["inputs"]["project.godot"] = "0" * 64
     rejected(lambda: frozen_commit_check(invalid_history))
+    # One held shiny appearance must retain BOTH original models in that pack.
+    selection_report = {"qualified_appearances": 3, "qualified_pairs": 1, "records": [
+        {"identity": identity, "pixels_exact": identity != "held@shiny", "source_sha256": "source",
+         "candidate_sha256": "candidate", "frames": [{"frame": "front-idle", "first_exact": identity != "held@shiny", "repeat_exact": False}]}
+        for identity in ("held", "held@shiny", "exact", "exact@shiny")],
+        "reference_variation": [{"identity": "held@shiny", "source_sha256": "source", "candidate_sha256": "candidate",
+            "original_comparison_passed": False, "extra_unchanged_captures": 16,
+            "held_frames": [{"frame": "front-idle", "matching_unchanged_controls": []}],
+            "all_held_frames_reproduced_by_unchanged_source": False}]}
+    selection_catalog = {"assets": [{"asset_id": identity, "format": "model-pair-pck-v1",
+        "appearances": [{"runtime_identity": identity}, {"runtime_identity": identity + "@shiny"}]}
+        for identity in ("held", "exact")] + [{"asset_id": "legacy"}]}
+    selection_storage = {"pairs": [{"asset_id": identity, "source_download_bytes": 100,
+        "source_installed_bytes": 200, "shared_pck_bytes": 50, "shared_installed_bytes": 150}
+        for identity in ("held", "exact", "legacy")]}
+    selected = selection_summary(selection_report, selection_catalog, selection_storage)
+    assert selected["shared_asset_ids"] == ["exact"] and selected["additional_original_pair_ids"] == ["held"]
+    assert selected["original_pairs"] == 2 and selected["selected_download_bytes"] == 250 and selected["selected_installed_bytes"] == 550
+    # Exact source evidence can qualify the pack, without changing any pixels.
+    selection_report["reference_variation"][0]["held_frames"][0]["matching_unchanged_controls"] = [1]
+    selection_report["reference_variation"][0]["all_held_frames_reproduced_by_unchanged_source"] = True
+    selection_report.update(qualified_appearances=4, qualified_pairs=2)
+    selected = selection_summary(selection_report, selection_catalog, selection_storage)
+    assert selected["shared_asset_ids"] == ["held", "exact"] and selected["original_pairs"] == 1
+    assert selected["selected_download_bytes"] == 200 and selected["selected_installed_bytes"] == 500
     with tempfile.TemporaryDirectory(prefix="pixel-proof-", dir=ROOT / ".tmp") as name:
         directory = Path(name)
         keys = [v + "-" + a for v in ("front", "back") for a in
@@ -79,7 +104,7 @@ def main():
         invalid = copy.deepcopy(report)
         invalid["records"][0]["candidate"]["pose_signatures"][keys[0]] = "changed"
         rejected(lambda: evaluate(invalid))
-    print("SHARED_MODEL_QUALIFICATION_COMPARATOR_CHECK_OK exact_repeat=true zero_tolerance=true hash_frame_pose_faults_rejected=true")
+    print("SHARED_MODEL_QUALIFICATION_COMPARATOR_CHECK_OK exact_repeat=true zero_tolerance=true hash_frame_pose_faults_rejected=true whole_pair_fallback=true")
 
 
 if __name__ == "__main__":

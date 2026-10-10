@@ -9,7 +9,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tests"))
-from shared_model_qualification_evidence_check import read, sha, reconcile, retained_check, reference_reconciliation, frozen_commit_check
+from shared_model_qualification_evidence_check import read, sha, reconcile, retained_check, reference_reconciliation, frozen_commit_check, selection_summary
 from check_shared_model_reference_variation import inspect
 
 
@@ -23,6 +23,7 @@ def main():
     directory.relative_to(ROOT / ".tmp")
     target = ROOT / "tools/shared_model_qualification_results.json"
     assert not target.exists(), "Do not replace a committed receipt implicitly"
+    assert not (directory / "qualified-index.json").exists()
     report = read(directory / "report.json")
     reconcile(report, read(ROOT / "data/model_pair_catalog.json"))
     for name, digest in report["inputs"].items():
@@ -74,6 +75,16 @@ def main():
                                           for identity in {i.removesuffix("@shiny") for i in accepted})})
     reference_reconciliation(report)
     import json
+    catalog = read(ROOT / "data/model_pair_catalog.json")
+    report["selection"] = selection_summary(report, catalog, read(ROOT / "tools/sprite_factory/shared_model_catalog_results.json"))
+    originals = {a["asset_id"]: a for a in read(ROOT / "release/approved_3d_bundles_v11_index.json")["assets"]}
+    draft = copy.deepcopy(catalog)
+    draft["catalog_revision"] = "shared-model-render-qualified-draft-v1"
+    draft["qualification_run_sha256"] = report["run_report_sha256"]
+    draft["assets"] = [a if a["asset_id"] in report["selection"]["shared_asset_ids"] else originals[a["asset_id"]] for a in catalog["assets"]]
+    draft_path = directory / "qualified-index.json"
+    draft_path.write_text(json.dumps(draft, sort_keys=True, separators=(',', ':')) + '\n')
+    report["artifact_sha256"]["qualified-index.json"] = sha(draft_path)
     rows = report.pop("records")
     target.write_text(json.dumps(report, indent=2)[:-2] + ',\n  "records": [\n' +
                       ',\n'.join('    ' + json.dumps(r, sort_keys=True, separators=(',', ':')) for r in rows) + '\n  ]\n}\n')
