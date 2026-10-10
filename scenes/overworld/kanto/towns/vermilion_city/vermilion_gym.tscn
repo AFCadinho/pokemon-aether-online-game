@@ -1,25 +1,90 @@
-[gd_scene format=3]
+[gd_scene format=4 uid="uid://dwjc12wgl1jsy"]
 
-[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_gym/vermilion_gym.visual.tscn" id="visual"]
-[ext_resource type="Script" path="res://scripts/world/map_metadata.gd" id="metadata"]
-[ext_resource type="Script" path="res://scripts/world/map_exit.gd" id="exit"]
-[ext_resource type="Script" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="SpriteFrames" uid="uid://cjm3wij7i0akx" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="8_8ig2e"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="15_u2yhm"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="door_hint"]
-[ext_resource type="TileSet" path="res://resources/world/collision_marker_tileset.tres" id="collision_tiles"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/dialogue_npc.tscn" id="guide"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/gym_guide_frames.tres" id="guide_frames"]
-[ext_resource type="PackedScene" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
-[ext_resource type="Resource" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="surge_profile"]
-
-[ext_resource type="PackedScene" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/scientist_f_frames.tres" id="frames_scientist_f"]
-[ext_resource type="SpriteFrames" path="res://assets/npcs/classes/gentleman_frames.tres" id="frames_gentleman"]
+[ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
+[ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
+[ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="frames_gentleman"]
+[ext_resource type="SpriteFrames" uid="uid://ckxh3g37blbkj" path="res://assets/npcs/classes/scientist_f_frames.tres" id="frames_scientist_f"]
+[ext_resource type="SpriteFrames" uid="uid://itfidf78jmm5" path="res://assets/npcs/classes/worker_frames.tres" id="frames_worker"]
+[ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="guide"]
+[ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="guide_frames"]
+[ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
+[ext_resource type="Script" uid="uid://e7ovuc1k8gd2" path="res://scripts/world/map_metadata.gd" id="metadata"]
+[ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="surge_profile"]
+[ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_gym/vermilion_gym.visual.tscn" id="visual"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(128, 32)
 
-[node name="VermilionGym" type="Node2D"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sc12b"]
+texture = ExtResource("15_u2yhm")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_ih767"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_sc12b")
+
+[node name="VermilionGym" type="Node2D" unique_id=1144694838]
 script = ExtResource("metadata")
 map_id = "kanto_vermilion_city_gym"
 map_region_name = "Kanto"
@@ -34,9 +99,9 @@ lighting_profile = "indoor"
 weather_profile = "disabled"
 music_profile_id = "gym.interior"
 
-[node name="Visual" parent="." instance=ExtResource("visual")]
+[node name="Visual" parent="." unique_id=739083617 instance=ExtResource("visual")]
 
-[node name="FloorVisibilityMask" type="Node2D" parent="."]
+[node name="FloorVisibilityMask" type="Node2D" parent="." unique_id=1352017430]
 z_index = 4096
 z_as_relative = false
 script = ExtResource("floor_mask")
@@ -45,35 +110,38 @@ floor_regions = {
 }
 follow_player_floor = false
 
-[node name="Top" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Top" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1376453576]
 
-[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Bottom" type="Polygon2D" parent="FloorVisibilityMask" unique_id=400412626]
 
-[node name="Left" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Left" type="Polygon2D" parent="FloorVisibilityMask" unique_id=231723825]
 
-[node name="Right" type="Polygon2D" parent="FloorVisibilityMask"]
+[node name="Right" type="Polygon2D" parent="FloorVisibilityMask" unique_id=1325511692]
 
-[node name="Entities" type="Node2D" parent="."]
+[node name="Entities" type="Node2D" parent="." unique_id=159913612]
 z_index = 5
 
-[node name="Players" type="Node2D" parent="Entities"]
+[node name="Players" type="Node2D" parent="Entities" unique_id=98232201]
 
-[node name="NPCs" type="Node2D" parent="Entities"]
+[node name="NPCs" type="Node2D" parent="Entities" unique_id=1815559690]
 
-[node name="GymGuide" parent="Entities/NPCs" instance=ExtResource("guide")]
+[node name="GymGuide" parent="Entities/NPCs" unique_id=219067994 instance=ExtResource("guide")]
 position = Vector2(496, 944)
 npc_id = "kanto_vermilion_city_gym_guide"
 display_name = "Vermilion Gym Guide"
 npc_sprite_frames = ExtResource("guide_frames")
 portrait_id = "showdown_trialguide"
 
-[node name="GymLeaderLtSurge" parent="Entities/NPCs" instance=ExtResource("leader")]
+[node name="GymLeaderLtSurge" parent="Entities/NPCs" unique_id=1998269031 instance=ExtResource("leader")]
 position = Vector2(368, 272)
-npc_profile = ExtResource("surge_profile")
 trainer_id = "kanto_alpha_gym_lt_surge"
+npc_profile = ExtResource("surge_profile")
 npc_id = "kanto_alpha_gym_lt_surge"
+display_name = "Alpha Trial · Lt. Surge"
+npc_sprite_frames = ExtResource("8_8ig2e")
+battle_environment_id = "pvp_stadium"
 
-[node name="WorkerDax" parent="Entities/NPCs" instance=ExtResource("trainer")]
+[node name="WorkerDax" parent="Entities/NPCs" unique_id=328813408 instance=ExtResource("trainer")]
 position = Vector2(208, 816)
 trainer_id = "kanto_vermilion_city_gym_worker_dax"
 npc_id = "kanto_vermilion_city_gym_worker_dax"
@@ -81,10 +149,9 @@ npc_definition_id = "trainer_class_worker"
 display_name = "Worker Dax"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("frames_worker")
-sight_range_tiles = 5
 battle_environment_id = "pvp_stadium"
 
-[node name="ScientistMira" parent="Entities/NPCs" instance=ExtResource("trainer")]
+[node name="ScientistMira" parent="Entities/NPCs" unique_id=879809808 instance=ExtResource("trainer")]
 position = Vector2(528, 720)
 trainer_id = "kanto_vermilion_city_gym_scientist_mira"
 npc_id = "kanto_vermilion_city_gym_scientist_mira"
@@ -92,10 +159,9 @@ npc_definition_id = "trainer_class_scientist_f"
 display_name = "Scientist Mira"
 facing_direction = Vector2(-1, 0)
 npc_sprite_frames = ExtResource("frames_scientist_f")
-sight_range_tiles = 5
 battle_environment_id = "pvp_stadium"
 
-[node name="GentlemanEdwin" parent="Entities/NPCs" instance=ExtResource("trainer")]
+[node name="GentlemanEdwin" parent="Entities/NPCs" unique_id=1550059326 instance=ExtResource("trainer")]
 position = Vector2(272, 624)
 trainer_id = "kanto_vermilion_city_gym_gentleman_edwin"
 npc_id = "kanto_vermilion_city_gym_gentleman_edwin"
@@ -103,21 +169,20 @@ npc_definition_id = "trainer_class_gentleman"
 display_name = "Gentleman Edwin"
 facing_direction = Vector2(1, 0)
 npc_sprite_frames = ExtResource("frames_gentleman")
-sight_range_tiles = 5
 battle_environment_id = "pvp_stadium"
 
-[node name="Pokemon" type="Node2D" parent="Entities"]
+[node name="Pokemon" type="Node2D" parent="Entities" unique_id=466378670]
 
-[node name="Interactables" type="Node2D" parent="Entities"]
+[node name="Interactables" type="Node2D" parent="Entities" unique_id=843274590]
 
-[node name="Spawns" type="Node2D" parent="."]
+[node name="Spawns" type="Node2D" parent="." unique_id=846921729]
 
-[node name="FromVermilionCity" type="Marker2D" parent="Spawns"]
+[node name="FromVermilionCity" type="Marker2D" parent="Spawns" unique_id=661323271]
 position = Vector2(368, 1008)
 
-[node name="Exits" type="Node2D" parent="."]
+[node name="Exits" type="Node2D" parent="." unique_id=1498559568]
 
-[node name="ToVermilionCity" type="Area2D" parent="Exits"]
+[node name="ToVermilionCity" type="Area2D" parent="Exits" unique_id=529335407]
 position = Vector2(384, 1040)
 script = ExtResource("exit")
 target_scene_path = "res://scenes/overworld/kanto/towns/vermilion_city/vermilion_city.tscn"
@@ -125,20 +190,21 @@ target_spawn_name = "FromGym"
 transition_id = "kanto_vermilion_city_gym__to_outside"
 transition_facing_direction = "down"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exits/ToVermilionCity" unique_id=2122587413]
 shape = SubResource("shape_exit")
 
-[node name="DoorTransitionHint" parent="Exits/ToVermilionCity" instance=ExtResource("door_hint")]
+[node name="DoorTransitionHint" parent="Exits/ToVermilionCity" unique_id=1731541648 instance=ExtResource("door_hint")]
 z_as_relative = false
 tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
-[node name="Tiles" type="Node2D" parent="."]
+[node name="Tiles" type="Node2D" parent="." unique_id=948034320]
 visible = false
 
-[node name="Collision" type="TileMapLayer" parent="Tiles"]
+[node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1597756323]
 visible = false
 z_index = 4096
-tile_set = ExtResource("collision_tiles")
+tile_map_data = PackedByteArray("AAAIAAIAAAABAAEAAAAIAAMAAAABAAEAAAAIAAQAAAABAAEAAAAIAAUAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAIAAgAAAABAAEAAAAIAAkAAAABAAEAAAAIAAoAAAABAAEAAAAIAAsAAAABAAEAAAAIAAwAAAABAAEAAAAIAA0AAAABAAEAAAAIAA4AAAABAAEAAAAIAA8AAAABAAEAAAADAA8AAAABAAEAAAAEAA8AAAABAAEAAAAFAA8AAAABAAEAAAAGAA8AAAABAAEAAAAHAA8AAAABAAEAAAADABAAAAABAAEAAAADABEAAAABAAEAAAADABIAAAABAAEAAAADABMAAAABAAEAAAADABQAAAABAAEAAAADABUAAAABAAEAAAADABYAAAABAAEAAAADABcAAAABAAEAAAADABgAAAABAAEAAAADABkAAAABAAEAAAADABoAAAABAAEAAAADABsAAAABAAEAAAADABwAAAABAAEAAAADAB0AAAABAAEAAAADAB4AAAABAAEAAAADAB8AAAABAAEAAAADACAAAAABAAEAAAAEACAAAAABAAEAAAAFACAAAAABAAEAAAAGACAAAAABAAEAAAAHACAAAAABAAEAAAAIACAAAAABAAEAAAAJACAAAAABAAEAAAAJACEAAAABAAEAAAAKACEAAAABAAEAAAALACEAAAABAAEAAAAMACEAAAABAAEAAAANACEAAAABAAEAAAAOACEAAAABAAEAAAAOACAAAAABAAEAAAAPACAAAAABAAEAAAAQACAAAAABAAEAAAARACAAAAABAAEAAAASACAAAAABAAEAAAATACAAAAABAAEAAAAUACAAAAABAAEAAAAUAA8AAAABAAEAAAAUABAAAAABAAEAAAAUABEAAAABAAEAAAAUABIAAAABAAEAAAAUABMAAAABAAEAAAAUABQAAAABAAEAAAAUABUAAAABAAEAAAAUABYAAAABAAEAAAAUABcAAAABAAEAAAAUABgAAAABAAEAAAAUABkAAAABAAEAAAAUABoAAAABAAEAAAAUABsAAAABAAEAAAAUABwAAAABAAEAAAAUAB0AAAABAAEAAAAUAB4AAAABAAEAAAAUAB8AAAABAAEAAAAPAA8AAAABAAEAAAAQAA8AAAABAAEAAAARAA8AAAABAAEAAAASAA8AAAABAAEAAAATAA8AAAABAAEAAAAPAAIAAAABAAEAAAAPAAMAAAABAAEAAAAPAAQAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAPAA0AAAABAAEAAAAPAA4AAAABAAEAAAAJAAIAAAABAAEAAAAJAAMAAAABAAEAAAAJAAQAAAABAAEAAAAKAAIAAAABAAEAAAAKAAMAAAABAAEAAAAKAAQAAAABAAEAAAALAAIAAAABAAEAAAALAAMAAAABAAEAAAALAAQAAAABAAEAAAAMAAIAAAABAAEAAAAMAAMAAAABAAEAAAAMAAQAAAABAAEAAAANAAIAAAABAAEAAAANAAMAAAABAAEAAAANAAQAAAABAAEAAAAOAAIAAAABAAEAAAAOAAMAAAABAAEAAAAOAAQAAAABAAEAAAAJAAUAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAOAAUAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAQAB0AAAABAAEAAAAHAB0AAAABAAEAAAA=")
+tile_set = SubResource("TileSet_ih767")
 
 [connection signal="body_entered" from="Exits/ToVermilionCity" to="Exits/ToVermilionCity" method="_on_body_entered"]
