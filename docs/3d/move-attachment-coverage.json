@@ -60,20 +60,20 @@
 		"normal": 1200,
 		"shiny": 1200,
 		"species_forms": 1200,
-		"with_any_attachment": 1003,
+		"with_any_attachment": 1004,
 		"with_cannon": 1,
 		"with_cannons": 1,
 		"with_electric_body": 1,
-		"with_foot": 303,
+		"with_foot": 307,
 		"with_hand": 566,
 		"with_hand_upper": 1,
-		"with_left_foot": 284,
+		"with_left_foot": 288,
 		"with_left_hand": 564,
 		"with_left_hand_upper": 1,
 		"with_mouth": 883,
 		"with_mouth_red": 1,
 		"with_vines": 3,
-		"without_attachments": 197
+		"without_attachments": 196
 	},
 	"learnsets_checked": false,
 	"profiles": {
@@ -6880,6 +6880,19 @@
 			]
 		},
 		"cobalion": {
+			"foot": [
+				[
+					{
+						"bone": "right_toe",
+						"offset": [
+							0.0991593369942526,
+							-0.0249475218189735,
+							-0.165657787355374
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -6890,6 +6903,28 @@
 							-0.00310939550399779
 						],
 						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_foot_index",
+						"offset": [
+							0.114570744335651,
+							-0.00843071285635233,
+							0.0379641093313694
+						],
+						"weight": 0.976160871237098
+					},
+					{
+						"bone": "left_toe",
+						"offset": [
+							0.21807998418808,
+							-0.00018088519573211,
+							-0.102976754307747
+						],
+						"weight": 0.0238391287629021
 					}
 				]
 			],
@@ -24684,6 +24719,78 @@
 				]
 			]
 		},
+		"maushold": {
+			"foot": [
+				[
+					{
+						"bone": "right_leg_a",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_leg_b",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_leg_c",
+						"offset": [
+							0.036,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_leg_a",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_leg_b",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_leg_c",
+						"offset": [
+							0.036,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			]
+		},
 		"mawile": {
 			"hand": [
 				[
@@ -38003,6 +38110,19 @@
 			]
 		},
 		"stonjourner": {
+			"foot": [
+				[
+					{
+						"bone": "right_leg_sub",
+						"offset": [
+							1.7347400188446,
+							-0.250426560640335,
+							0.378581970930099
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"hand": [
 				[
 					{
@@ -38011,6 +38131,19 @@
 							0.193845391273498,
 							0.00133246183395401,
 							-0.00358446314930899
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_leg_sub",
+						"offset": [
+							1.74931645393372,
+							-0.460745096206665,
+							0.249209612607956
 						],
 						"weight": 1.0
 					}
@@ -38718,6 +38851,54 @@
 			]
 		},
 		"tandemaus": {
+			"foot": [
+				[
+					{
+						"bone": "right_leg_a",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "right_leg_b",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
+			"left_foot": [
+				[
+					{
+						"bone": "left_leg_a",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				],
+				[
+					{
+						"bone": "left_leg_b",
+						"offset": [
+							0.045,
+							0.0,
+							0.0
+						],
+						"weight": 1.0
+					}
+				]
+			],
 			"mouth": [
 				[
 					{
@@ -45091,7 +45272,7 @@
 	"schema": 2,
 	"scope": "configured_3d_attachment_coverage",
 	"source_sha256": {
-		"data/battle_move_attachments_3d.json": "decded3157bba0201aa470c8c4567429f70c5aebe2c37e3f8b6409ef8092fbfd",
+		"data/battle_move_attachments_3d.json": "c7c5c318fb2ba956c741a5eee6d320f08e98905e4a8e010cc00d1b74f50d2735",
 		"scripts/battle/battle_ui/move_attachments_3d.gd": "8176a39bc14e1915921edbadfcc0e599996057c38c44894428391a1fe6e9ea11",
 		"scripts/battle/battle_ui/reviewed_model_catalog.gd": "66274853f4ebd7c0c63d5104532201afcdda1cc717189f075bb50d8303aa983a",
 		"scripts/battle/battle_ui/reviewed_model_catalog.json": "f9611f925e400e104dc610696545ca5494bd99472613c8e60c32ff9607f34ead",
@@ -51254,7 +51435,9 @@
 		},
 		"cobalion": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand",
 				"mouth"
 			],
@@ -64247,8 +64430,11 @@
 			]
 		},
 		"maushold": {
-			"attachments": [],
-			"status": "bounds_fallback_only",
+			"attachments": [
+				"foot",
+				"left_foot"
+			],
+			"status": "configured",
 			"variants": [
 				"normal",
 				"shiny"
@@ -74504,7 +74690,9 @@
 		},
 		"stonjourner": {
 			"attachments": [
+				"foot",
 				"hand",
+				"left_foot",
 				"left_hand"
 			],
 			"status": "configured",
@@ -75098,6 +75286,8 @@
 		},
 		"tandemaus": {
 			"attachments": [
+				"foot",
+				"left_foot",
 				"mouth"
 			],
 			"review": {

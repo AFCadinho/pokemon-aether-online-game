@@ -29,10 +29,8 @@
       "sampled_mouth_pose_review_pass": 879
     },
     "part_status": {
-      "candidate_missing": 4,
       "correction_pending": 2,
-      "held_for_manual_review": 2,
-      "pending_anatomical_review": 35,
+      "pending_anatomical_review": 33,
       "pending_anatomical_routing_review": 22,
       "pending_closeup_review": 78,
       "pending_distal_contact_correction": 77,
@@ -41,12 +39,12 @@
       "pending_multipose_correction": 8,
       "pending_runtime_identity_review": 4,
       "pending_runtime_visibility_and_anatomy_review": 4,
-      "sampled_marker_pose_review_pass_installed": 1724
+      "sampled_marker_pose_review_pass_installed": 1732
     },
-    "runtime_profiles": 1003,
+    "runtime_profiles": 1004,
     "species_forms": 1200
   },
-  "profile_sha256": "decded3157bba0201aa470c8c4567429f70c5aebe2c37e3f8b6409ef8092fbfd",
+  "profile_sha256": "c7c5c318fb2ba956c741a5eee6d320f08e98905e4a8e010cc00d1b74f50d2735",
   "schema": 2,
   "scope": "Per-form review progress; sampled anatomical markers do not certify all attack effects.",
   "species_forms": {
@@ -15683,9 +15681,86 @@
             "foot": "pending_anatomical_review",
             "left_foot": "pending_anatomical_review"
           }
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "mirrored_proposal_requires_visual_review",
+              "part": "left_foot"
+            }
+          ],
+          "manual_measurements": [
+            {
+              "action": "idle",
+              "bone": "right_toe",
+              "capture_sha256": "3bd90c9ae16ef62491ff19531677f8f7d828e8425a814df6c7ecab6c337435d0",
+              "fraction": 0.45,
+              "part": "foot",
+              "pixels": [
+                144.0,
+                206.0,
+                137.0,
+                204.0
+              ],
+              "ray_residual": 0.00248196374329677
+            }
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "74f27afe60a1d81a860d73260a9d1504e9cee3b9948eea4962768cf9b9f753b7",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.794657807980582,
+                  0.064439123535476,
+                  0.140903068483941
+                ],
+                "column": 3.0,
+                "distance": 1.09928690226802,
+                "mesh": "pm0638_00_00/Skeleton3D/pm0638_00_00_body_mesh",
+                "pixel": [
+                  211.0,
+                  173.0
+                ],
+                "surface": 3,
+                "triangle": 67,
+                "vertex_indices": [
+                  86,
+                  88,
+                  85
+                ]
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b1002db4b5b5de13aa34f29b8d444c71f878fd1e54267f3b5fab5d5cdaf6be77",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "a1bf5de51c7cbf3be561dd84e19c2bc9d5bf60b82fdb2e315e011a0c7c172666",
+          "scope": "Right black hind-hoof toe surface; visible idle and both physical/special actions, including raised hoof in physical_attack_2. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -15702,6 +15777,75 @@
           "normal_runtime_sha256": "b1002db4b5b5de13aa34f29b8d444c71f878fd1e54267f3b5fab5d5cdaf6be77",
           "preview_sha256": "b00a02e842ead933023e337637ce432302691901c2be172ee214b47879cc2e5a",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": [
+            {
+              "method": "mirrored_proposal_requires_visual_review",
+              "part": "left_foot"
+            }
+          ],
+          "manual_measurements": [
+            {
+              "action": "idle",
+              "bone": "right_toe",
+              "capture_sha256": "3bd90c9ae16ef62491ff19531677f8f7d828e8425a814df6c7ecab6c337435d0",
+              "fraction": 0.45,
+              "part": "foot",
+              "pixels": [
+                144.0,
+                206.0,
+                137.0,
+                204.0
+              ],
+              "ray_residual": 0.00248196374329677
+            }
+          ],
+          "manual_surface_landmarks": {
+            "capture_sha256": "74f27afe60a1d81a860d73260a9d1504e9cee3b9948eea4962768cf9b9f753b7",
+            "landmarks": [
+              {
+                "action": "physical_attack_2",
+                "barycentric": [
+                  0.794657807980582,
+                  0.064439123535476,
+                  0.140903068483941
+                ],
+                "column": 3.0,
+                "distance": 1.09928690226802,
+                "mesh": "pm0638_00_00/Skeleton3D/pm0638_00_00_body_mesh",
+                "pixel": [
+                  211.0,
+                  173.0
+                ],
+                "surface": 3,
+                "triangle": 67,
+                "vertex_indices": [
+                  86,
+                  88,
+                  85
+                ]
+              }
+            ],
+            "method": "ray_triangle_barycentric_skin_binding"
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "b1002db4b5b5de13aa34f29b8d444c71f878fd1e54267f3b5fab5d5cdaf6be77",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "8df4e8a30737035fc868e0ef3e45941e8fd05e5582571faf94258f315eb1651b",
+          "scope": "Left black hind-hoof toe surface, projected from unobstructed raised-hoof side view in physical_attack_2. Forehoof occludes the point in other views; visible lateral idle and attack views reviewed. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -15724,9 +15868,9 @@
         }
       },
       "part_status": {
-        "foot": "pending_anatomical_review",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "pending_anatomical_review",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -54665,11 +54809,75 @@
             "foot": "held_for_manual_review",
             "left_foot": "held_for_manual_review"
           }
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "79e65066a1228fc11d0e0cd7f179e9685af6db2d177b4a1bbe27787f7937e65e",
+            "721e9026603e9354a202e7330441255333b5dcea0b2b5816e655f4813598c8e7",
+            "a5a27193bf59018b70e35bcde24f3a0988a1958e1fc6b3ee0afe6ebfe978e321"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v49": "Separate distal leg point per visible creature; individual pose review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "d4bbfa037f02765f5aec594ccc4978fc6d903d8892526240fe2c318d5022b87a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "92ed392d3215ee3bf12e221a7b7c2e4743f0495707f744714435cb98458c771a",
+          "scope": "Separate sole emitter on each visible mouse: adult A and B, individually reviewed from front and rear including raised soles during physical_attack_2. Child C separately reviewed; no emitter on absent child D. Other family members can occlude points. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "7bae21bd9b5df4e18e3a1fd74bdf9704e595c4f69879b37f679f8cfc5d1ec978",
+            "6e49144972cf9e9574a134978b3c9b62fa57fb667538828c342d44c737a4f400",
+            "b374b7388ce7ac6e0b2844f9eda74ad50dd43ba1adaf9dfa8cb4fb39851dfc06"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v49": "Separate distal leg point per visible creature; individual pose review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "d4bbfa037f02765f5aec594ccc4978fc6d903d8892526240fe2c318d5022b87a",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ca461e16b7607b5be95b2ed06ea2d84635b6b2d65a99d9ff2a3e56ecb23cd23d",
+          "scope": "Separate sole emitter on each visible mouse: adult A and B, individually reviewed from front and rear including raised soles during physical_attack_2. Child C separately reviewed; no emitter on absent child D. Other family members can occlude points. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "held_for_manual_review",
-        "left_foot": "held_for_manual_review"
+        "foot": "sampled_marker_pose_review_pass_installed",
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       },
       "previous_pose_visibility_differences": [
         {
@@ -83784,9 +83992,97 @@
             "foot": "candidate_missing",
             "left_foot": "candidate_missing"
           }
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
       "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_review_v48": "Individual geometry and visible pose correction proposal; requires rendered review."
+          },
+          "manual_surface_landmarks": [
+            {
+              "capture_sha256": "15d11ae66be1d174a730961074d278b40712c57bbd22bae705a7175ab061db9b",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.142035480306966,
+                    0.644321424326456,
+                    0.213643095366578
+                  ],
+                  "column": 0.0,
+                  "distance": 0.188740123702668,
+                  "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+                  "pixel": [
+                    210.0,
+                    180.0
+                  ],
+                  "surface": 1,
+                  "triangle": 864,
+                  "vertex_indices": [
+                    541,
+                    428,
+                    587
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "ed557cd4f591172305020317f18ce95a67567cf485a575ff9c8df1417cddec3f",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.0870657753882006,
+                    0.055629539810602,
+                    0.857304684801197
+                  ],
+                  "column": 0.0,
+                  "distance": 0.120182946555896,
+                  "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+                  "pixel": [
+                    210.0,
+                    180.0
+                  ],
+                  "surface": 1,
+                  "triangle": 18,
+                  "vertex_indices": [
+                    316,
+                    318,
+                    317
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "2a1928162741e282d16a5a2421cd8987ef3e39723b7e1c99571ee28e8d2249bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "ecbc47414b83386d5024428da449dd82521fa4534ef349af33c999835ed7c3ac",
+          "scope": "Lower front surface of the corresponding stone leg; idle and both physical/special actions. Opposite leg can occlude the point. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
         "hand": {
           "actions": [
             "idle",
@@ -83803,6 +84099,86 @@
           "normal_runtime_sha256": "2a1928162741e282d16a5a2421cd8987ef3e39723b7e1c99571ee28e8d2249bb",
           "preview_sha256": "00cbd490f5213960276df14b81af84385b1579f9a7b402f279a955c18c77e581",
           "scope": "anatomical marker placement in sampled native action poses; move routing pending",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_review_v48": "Individual geometry and visible pose correction proposal; requires rendered review."
+          },
+          "manual_surface_landmarks": [
+            {
+              "capture_sha256": "15d11ae66be1d174a730961074d278b40712c57bbd22bae705a7175ab061db9b",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.142035480306966,
+                    0.644321424326456,
+                    0.213643095366578
+                  ],
+                  "column": 0.0,
+                  "distance": 0.188740123702668,
+                  "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+                  "pixel": [
+                    210.0,
+                    180.0
+                  ],
+                  "surface": 1,
+                  "triangle": 864,
+                  "vertex_indices": [
+                    541,
+                    428,
+                    587
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            },
+            {
+              "capture_sha256": "ed557cd4f591172305020317f18ce95a67567cf485a575ff9c8df1417cddec3f",
+              "landmarks": [
+                {
+                  "action": "idle",
+                  "barycentric": [
+                    0.0870657753882006,
+                    0.055629539810602,
+                    0.857304684801197
+                  ],
+                  "column": 0.0,
+                  "distance": 0.120182946555896,
+                  "mesh": "pm0974_00_00/Skeleton3D/pm0974_00_00_body_mesh",
+                  "pixel": [
+                    210.0,
+                    180.0
+                  ],
+                  "surface": 1,
+                  "triangle": 18,
+                  "vertex_indices": [
+                    316,
+                    318,
+                    317
+                  ]
+                }
+              ],
+              "method": "ray_triangle_barycentric_skin_binding"
+            }
+          ],
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "2a1928162741e282d16a5a2421cd8987ef3e39723b7e1c99571ee28e8d2249bb",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "23a3dcb334319578eceb9388b6c4b7e95091f01e7caaa515487c1b5a1a82fcb4",
+          "scope": "Lower front surface of the corresponding stone leg; idle and both physical/special actions. Opposite leg can occlude the point. Move routing and actual effects pending.",
           "side_fraction": 0.45
         },
         "left_hand": {
@@ -83825,9 +84201,9 @@
         }
       },
       "part_status": {
-        "foot": "candidate_missing",
+        "foot": "sampled_marker_pose_review_pass_installed",
         "hand": "sampled_marker_pose_review_pass_installed",
-        "left_foot": "candidate_missing",
+        "left_foot": "sampled_marker_pose_review_pass_installed",
         "left_hand": "sampled_marker_pose_review_pass_installed"
       }
     },
@@ -85529,11 +85905,73 @@
             "foot": "candidate_missing",
             "left_foot": "candidate_missing"
           }
+        },
+        {
+          "move_routing_review": "pending",
+          "notes": "Individually reviewed visible sampled marker poses. Actual routing/effects pending.",
+          "parts": {
+            "foot": "sampled_marker_pose_review_pass",
+            "left_foot": "sampled_marker_pose_review_pass"
+          }
         }
       ],
+      "part_reviews": {
+        "foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "6caa195960f57819392940405a0b1a8266967dd5affd2979c07ce6eac96725a8",
+            "2930d4947cd794a7180e591d1297cc356acb884e3bafcb963af9646395996a1d"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v49": "Separate distal leg point per visible creature; individual pose review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "dfad25bcafb277d8f30eca92d262c8f8148d52f01c4b69efb9ea5b12a1352152",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "7ff665d485262b74f33b1c050032da2dae0f57b734aa60b06c8bdd32a271f1f5",
+          "scope": "Separate sole emitter on each visible mouse: adult A and B, individually reviewed from front and rear including raised soles during physical_attack_2. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        },
+        "left_foot": {
+          "actions": [
+            "idle",
+            "physical_attack",
+            "physical_attack_2",
+            "special_attack"
+          ],
+          "additional_preview_sha256": [
+            "8d00682da1239dc235396a990567022e8a51a1ad75ca53995b005773d7aa26c9",
+            "6a4555d3d968c40277161b9ace2efbf7e43b97306031070964c6584c46c9167e"
+          ],
+          "fractions": [
+            0.2,
+            0.45,
+            0.65
+          ],
+          "manual_adjustments": {
+            "foot_v49": "Separate distal leg point per visible creature; individual pose review required."
+          },
+          "method": "individual_foot_native_pose_visual_review",
+          "normal_runtime_sha256": "dfad25bcafb277d8f30eca92d262c8f8148d52f01c4b69efb9ea5b12a1352152",
+          "pose_sampling": "forward_from_start_v1",
+          "preview_sha256": "700e9aebeee2ccd63b8af68d176fdc44a7b5d50d908de1b5c8983b11b4dc5adb",
+          "scope": "Separate sole emitter on each visible mouse: adult A and B, individually reviewed from front and rear including raised soles during physical_attack_2. Move routing and actual effects pending.",
+          "side_fraction": 0.45
+        }
+      },
       "part_status": {
-        "foot": "candidate_missing",
-        "left_foot": "candidate_missing"
+        "foot": "sampled_marker_pose_review_pass_installed",
+        "left_foot": "sampled_marker_pose_review_pass_installed"
       },
       "previous_pose_visibility_differences": [
         {

@@ -7,8 +7,8 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 
 - Catalog models: 1200 species/forms, 1200 normal + 1200 shiny = 2400 identities.
 - Additional battle lookup aliases checked separately: 6 (including spelling aliases and shared-model forms).
-- At least one configured anatomical attachment: 1003 species/forms.
-- No anatomical attachment profile: 197 species/forms; these use bounds-based fallback positions.
+- At least one configured anatomical attachment: 1004 species/forms.
+- No anatomical attachment profile: 196 species/forms; these use bounds-based fallback positions.
 - Mouth attachments: 883 species/forms.
 
 | Species/form | Configured parts | Shiny routing |
@@ -167,7 +167,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | clodsire | foot, left_foot, mouth | Same attachment profile |
 | cloyster | mouth | Same attachment profile |
 | coalossal | hand, left_hand, mouth | Same attachment profile |
-| cobalion | hand, left_hand, mouth | Same attachment profile |
+| cobalion | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | cofagrigus | mouth | Same attachment profile |
 | combee | mouth | Same attachment profile |
 | combusken | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -551,6 +551,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | marshadow | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | marshtomp | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
 | maschiff | mouth | Same attachment profile |
+| maushold | foot, left_foot | Same attachment profile |
 | mawile | hand, left_hand | Same attachment profile |
 | mawile-mega | hand, left_hand | Same attachment profile |
 | medicham | foot, hand, left_foot, left_hand, mouth | Same attachment profile |
@@ -859,7 +860,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | staravia | mouth | Same attachment profile |
 | starly | mouth | Same attachment profile |
 | steenee | mouth | Same attachment profile |
-| stonjourner | hand, left_hand | Same attachment profile |
+| stonjourner | foot, hand, left_foot, left_hand | Same attachment profile |
 | stoutland | mouth | Same attachment profile |
 | stufful | mouth | Same attachment profile |
 | stunfisk-galar | hand, left_hand, mouth | Same attachment profile |
@@ -878,7 +879,7 @@ The [complete inventory](move-attachment-coverage.json) includes every catalog s
 | swoobat | mouth | Same attachment profile |
 | sylveon | foot, left_foot, mouth | Same attachment profile |
 | taillow | mouth | Same attachment profile |
-| tandemaus | mouth | Same attachment profile |
+| tandemaus | foot, left_foot, mouth | Same attachment profile |
 | tangela | mouth | Same attachment profile |
 | tapu-bulu | hand, left_hand, mouth | Same attachment profile |
 | tapu-fini | hand, left_hand, mouth | Same attachment profile |
