@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Refresh level-up evolution options after learning a replacement move and explain changed evolution requirements consistently.
+
 - Use the developer game-time selector for evolution offers and confirmations, refresh pending targets when it changes, and label the default as Game time.
 
 - Refer to the shared game time when explaining evolution requirements.

@@ -870,6 +870,7 @@ var evolution_prompt_skip_button: Button
 var evolution_prompt_queue: Array[Dictionary] = []
 var developer_evolution_review_ids: Dictionary = {}
 var developer_evolution_review_revision := 0
+var evolution_move_review_revisions: Dictionary = {}
 var evolution_active_prompt: Dictionary = {}
 var evolution_prompt_processing := false
 var evolution_prompt_review_total := 0
@@ -5124,14 +5125,50 @@ func _request_developer_evolution_candidates(pokemon_id: int) -> Dictionary:
 	return await PlayerPartyStateService.get_evolution_candidates(pokemon_id)
 
 
+func _refresh_evolutions_after_level_up_move(pokemon_id: int) -> void:
+	var revision := developer_evolution_review_revision
+	var move_revision := int(evolution_move_review_revisions.get(pokemon_id, 0)) + 1
+	evolution_move_review_revisions[pokemon_id] = move_revision
+	var session := AuthService.session_token
+	var result: Dictionary = await _request_developer_evolution_candidates(pokemon_id)
+	if revision != developer_evolution_review_revision or session != AuthService.session_token or move_revision != int(evolution_move_review_revisions.get(pokemon_id, 0)):
+		return
+	if not bool(result.get("success", false)):
+		_add_chat_message(LocalizationManager.text("ui.evolution.error.refresh"))
+		return
+	var removed := 0
+	for index: int in range(evolution_prompt_queue.size() - 1, -1, -1):
+		if int(evolution_prompt_queue[index].get("pokemonId", 0)) == pokemon_id:
+			evolution_prompt_queue.remove_at(index)
+			removed += 1
+	if int(evolution_active_prompt.get("pokemonId", 0)) == pokemon_id:
+		evolution_active_prompt.clear()
+		removed += 1
+		if evolution_prompt_popup != null:
+			evolution_prompt_popup.visible = false
+	evolution_prompt_review_total = maxi(0, evolution_prompt_review_total - removed)
+	var queued := 0
+	for value: Variant in _array_from_variant(result.get("evolutionCandidates", [])):
+		if value is Dictionary:
+			var prompt: Dictionary = value.duplicate(true)
+			prompt["pokemonId"] = pokemon_id
+			if _queue_evolution_prompt(prompt):
+				queued += 1
+	_extend_evolution_review_count(queued)
+	_show_next_evolution_prompt()
+
+
 func _refresh_developer_evolution_prompts(pokemon_ids: Array[int]) -> void:
 	var revision := developer_evolution_review_revision
 	var session := AuthService.session_token
 	var queued_count := 0
 	for pokemon_id: int in pokemon_ids:
+		var move_revision := int(evolution_move_review_revisions.get(pokemon_id, 0))
 		var result: Dictionary = await _request_developer_evolution_candidates(pokemon_id)
 		if revision != developer_evolution_review_revision or session != AuthService.session_token:
 			return
+		if move_revision != int(evolution_move_review_revisions.get(pokemon_id, 0)):
+			continue
 		if not developer_evolution_review_ids.has(pokemon_id):
 			continue
 		if not bool(result.get("success", false)):
@@ -5976,6 +6013,8 @@ func _submit_move_learn_choice(replace_slot: int, skip: bool) -> void:
 		skip,
 		move_learn_active_prompt
 	)
+	if not skip and source_item_id == "" and str(move_learn_active_prompt.get("learnMethod", "level-up")) == "level-up":
+		await _refresh_evolutions_after_level_up_move(pokemon_id)
 
 	move_learn_popup.visible = false
 	_hide_move_learn_hover_panel()
