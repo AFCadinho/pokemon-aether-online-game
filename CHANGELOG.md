@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reimport the latest Vermilion Gym device decoration edits from Tiled.
+
 - Add blue-white sparks and flickering electrical arcs to the two devices in Vermilion Gym's lower corners.
 
 - Refresh Vermilion Gym's Tiled visual with the updated lower-room decorations.
