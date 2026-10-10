@@ -13,6 +13,10 @@ const FIELD_MOVE_SOUND_IDS := {
 	"sunny-day": "field_move_sunny_day",
 }
 const SOUND_DATA := {
+	"gym_electric_power_off": {
+		"path": "res://assets/audio/sfx/overworld/gym_electric_power_off.ogg",
+		"volume_db": -4.0,
+	},
 	"poke_flute_awaken": {
 		"path": "res://assets/audio/sfx/poke_flute_awaken.wav",
 		"volume_db": -3.0,
