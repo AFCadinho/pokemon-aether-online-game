@@ -65,6 +65,9 @@ func rename_box(box_index: int, name: String) -> Dictionary:
 
 
 func move_pokemon(pokemon_id: int, source: Dictionary, target: Dictionary) -> Dictionary:
+	var walking_result: Dictionary = await _flush_evolution_walking()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not _is_authenticated():
 		return {
 			"success": false,
@@ -95,6 +98,9 @@ func move_pokemon(pokemon_id: int, source: Dictionary, target: Dictionary) -> Di
 
 
 func release_pokemon(pokemon_id: int) -> Dictionary:
+	var walking_result: Dictionary = await _flush_evolution_walking()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not _is_authenticated():
 		return {
 			"success": false,
@@ -389,3 +395,11 @@ func _get_json_headers() -> PackedStringArray:
 		return PackedStringArray()
 	var headers: Variant = gateway_config.call("get_json_headers")
 	return headers as PackedStringArray if headers is PackedStringArray else PackedStringArray()
+
+
+func _flush_evolution_walking() -> Dictionary:
+	var tree := get_tree()
+	var walking: Node = tree.root.get_node_or_null("WalkingEvolutionService") if tree != null else null
+	if walking == null:
+		return {"success": true}
+	return await walking.call("flush")

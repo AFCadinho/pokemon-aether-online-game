@@ -974,6 +974,9 @@ func catch_wild_pokemon(battle_id: String, item_id: String) -> Dictionary:
 
 
 func use_pokemon_item(pokemon_id: int, item_id: String, quantity: int = 1) -> Dictionary:
+	var walking_result: Dictionary = await WalkingEvolutionService.flush()
+	if not bool(walking_result.get("success", false)):
+		return walking_result
 	if not AuthService.is_authenticated():
 		return {
 			"success": false,

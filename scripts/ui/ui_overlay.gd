@@ -95,6 +95,8 @@ const PARTY_CONTEXT_SUMMARY := 0
 const PARTY_CONTEXT_GIVE_ITEM := 1
 const PARTY_CONTEXT_TAKE_ITEM := 2
 const PARTY_CONTEXT_SET_LEAD := 3
+const PARTY_CONTEXT_EVOLUTION_CONDITIONS := 4
+const EVOLUTION_CONDITIONS_VIEW := preload("res://scripts/ui/evolution_conditions_view.gd")
 const PC_CONTEXT_TAKE_ITEM := 1
 const CHAT_CONTEXT_COPY_TEXT := 100
 const CHAT_CONTEXT_COPY_FULL := 101
@@ -786,6 +788,7 @@ var skills_panel: Control
 var party_slots: Array = []
 var party_display_override: Array = []
 var party_slot_context_menu: PopupMenu
+var evolution_conditions_dialog: AetherConfirmationDialog
 var party_slot_context_index := -1
 var escape_rope_status: Dictionary = {}
 var escape_rope_remaining_seconds: float = 0.0
@@ -1834,6 +1837,7 @@ func _ready() -> void:
 	_setup_bag_popup()
 	_setup_bag_item_context_menu()
 	_setup_party_slot_context_menu()
+	WalkingEvolutionService.walking_completed.connect(_on_evolution_walking_completed)
 	_setup_bag_item_use_popup()
 	_setup_pokemon_summary_ev_allocate_popup()
 	_build_party_slots()
@@ -32603,8 +32607,20 @@ func _on_party_slot_context_requested(slot_index: int, global_position: Vector2)
 		return
 	var pokemon := pokemon_value as Pokemon
 	party_slot_context_index = slot_index
+	_populate_party_slot_context_menu(pokemon, slot_index)
+	var viewport_size := get_viewport().get_visible_rect().size
+	var menu_position := global_position
+	menu_position.x = minf(menu_position.x, viewport_size.x - 230.0)
+	menu_position.y = minf(menu_position.y, viewport_size.y - 180.0)
+	party_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
+	party_slot_context_menu.popup()
+
+
+func _populate_party_slot_context_menu(pokemon: Pokemon, slot_index: int) -> void:
 	party_slot_context_menu.clear()
 	party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.summary"), PARTY_CONTEXT_SUMMARY)
+	if pokemon.can_evolve:
+		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.evolution_conditions"), PARTY_CONTEXT_EVOLUTION_CONDITIONS)
 	party_slot_context_menu.add_item(
 		LocalizationManager.text(
 			"ui.party.context.change_item" if _get_pokemon_held_item_id(pokemon) != "" else "ui.party.context.give_item"
@@ -32616,12 +32632,6 @@ func _on_party_slot_context_requested(slot_index: int, global_position: Vector2)
 	if slot_index > 0:
 		party_slot_context_menu.add_separator()
 		party_slot_context_menu.add_item(LocalizationManager.text("ui.party.context.set_lead"), PARTY_CONTEXT_SET_LEAD)
-	var viewport_size := get_viewport().get_visible_rect().size
-	var menu_position := global_position
-	menu_position.x = minf(menu_position.x, viewport_size.x - 230.0)
-	menu_position.y = minf(menu_position.y, viewport_size.y - 180.0)
-	party_slot_context_menu.position = Vector2i(menu_position.max(Vector2.ZERO))
-	party_slot_context_menu.popup()
 
 
 func _on_party_slot_context_action(action_id: int) -> void:
@@ -32644,6 +32654,71 @@ func _on_party_slot_context_action(action_id: int) -> void:
 			await _take_pokemon_held_item(pokemon)
 		PARTY_CONTEXT_SET_LEAD:
 			await _set_party_slot_as_lead(slot_index)
+		PARTY_CONTEXT_EVOLUTION_CONDITIONS:
+			await _show_evolution_conditions(pokemon)
+
+
+func _on_evolution_walking_completed(pokemon_id: int) -> void:
+	var pokemon := _find_party_pokemon_by_owned_id(pokemon_id)
+	if pokemon != null:
+		_add_chat_message(LocalizationManager.text("ui.evolution_conditions.walk_notification", {"pokemon": pokemon.species}))
+
+
+func _show_evolution_conditions(pokemon: Pokemon) -> void:
+	if pokemon == null or pokemon.owned_pokemon_id <= 0 or not pokemon.can_evolve:
+		return
+	if is_instance_valid(evolution_conditions_dialog):
+		evolution_conditions_dialog.queue_free()
+	var dialog := AETHER_CONFIRMATION_DIALOG_SCENE.instantiate() as AetherConfirmationDialog
+	evolution_conditions_dialog = dialog
+	root_control.add_child(dialog)
+	dialog.configure(LocalizationManager.text("ui.party.context.evolution_conditions"),
+		LocalizationManager.text("ui.evolution_conditions.loading"), LocalizationManager.text("ui.evolution_conditions.refresh"), LocalizationManager.text("common.close"))
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 290)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	dialog.add_custom_control(scroll)
+	var view := EVOLUTION_CONDITIONS_VIEW.new()
+	view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	view.add_theme_constant_override("separation", 10)
+	scroll.add_child(view)
+	dialog.canceled.connect(dialog.queue_free)
+	dialog.confirmed.connect(func() -> void:
+		dialog.popup_centered(Vector2i(540, 470))
+		_track_movement_blocking_ui_panel(dialog)
+		_refresh_evolution_conditions(dialog, view, pokemon.owned_pokemon_id)
+	)
+	dialog.popup_centered(Vector2i(540, 470))
+	_track_movement_blocking_ui_panel(dialog)
+	await _refresh_evolution_conditions(dialog, view, pokemon.owned_pokemon_id)
+
+
+func _request_evolution_conditions(pokemon_id: int) -> Dictionary:
+	return await PlayerPartyStateService.get_evolution_conditions(pokemon_id)
+
+
+func _refresh_evolution_conditions(dialog: AetherConfirmationDialog, view: VBoxContainer, pokemon_id: int) -> void:
+	var session := AuthService.session_token
+	dialog.confirm_button.disabled = true
+	var flush_result: Dictionary = await WalkingEvolutionService.flush()
+	var result: Dictionary = flush_result
+	if bool(flush_result.get("success", false)):
+		result = await _request_evolution_conditions(pokemon_id)
+	if not is_instance_valid(dialog) or dialog.is_queued_for_deletion():
+		return
+	if session != AuthService.session_token:
+		dialog.queue_free()
+		return
+	dialog.confirm_button.disabled = false
+	if not bool(result.get("success", false)):
+		dialog.message_label.text = LocalizationManager.text("ui.evolution_conditions.failed")
+		return
+	var data: Dictionary = result.get("body", {})
+	dialog.message_label.text = LocalizationManager.text("ui.evolution_conditions.intro")
+	for entry: Variant in data.get("evolutions", []):
+		if entry is Dictionary:
+			entry["name"] = _localized_species_name(str(entry.get("speciesId", "")), str(entry.get("name", "")))
+	view.call("render", data)
 
 
 func _set_party_slot_as_lead(slot_index: int) -> void:

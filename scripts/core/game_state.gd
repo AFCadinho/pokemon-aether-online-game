@@ -89,6 +89,9 @@ func reset_gameplay_runtime_state() -> void:
 		var repel_service := get_tree().root.get_node_or_null("RepelService")
 		if repel_service != null:
 			repel_service.reset()
+		var walking_service := get_tree().root.get_node_or_null("WalkingEvolutionService")
+		if walking_service != null:
+			walking_service.reset()
 	show_follower = true
 	running_shoes_enabled = false
 	global_heal_requests_enabled = true
