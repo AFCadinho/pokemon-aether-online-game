@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://dwjc12wgl1jsy"]
+[gd_scene format=4 uid="uid://dwjc12wgl1jsy"]
 
 [ext_resource type="SpriteFrames" uid="uid://cjm3wij7i0akx" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="8_8ig2e"]
+[ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="17_sc12b"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="door_hint"]
 [ext_resource type="Script" uid="uid://ceiq67i4mftsa" path="res://scripts/world/interactables/vermilion_gym_electric_barrier.gd" id="electric_barrier"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
@@ -20,8 +21,70 @@
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(128, 32)
 
-[sub_resource type="TileSet" id="empty_collision_grid"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ih767"]
+texture = ExtResource("17_sc12b")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+8:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+8:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+4:3/0 = 0
+5:3/0 = 0
+6:3/0 = 0
+7:3/0 = 0
+8:3/0 = 0
+0:4/0 = 0
+1:4/0 = 0
+2:4/0 = 0
+3:4/0 = 0
+4:4/0 = 0
+5:4/0 = 0
+6:4/0 = 0
+7:4/0 = 0
+8:4/0 = 0
+3:5/0 = 0
+4:5/0 = 0
+0:6/0 = 0
+1:6/0 = 0
+2:6/0 = 0
+3:6/0 = 0
+4:6/0 = 0
+5:6/0 = 0
+0:7/0 = 0
+1:7/0 = 0
+2:7/0 = 0
+3:7/0 = 0
+4:7/0 = 0
+5:7/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_tmh5f"]
 tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_ih767")
 
 [node name="VermilionGym" type="Node2D" unique_id=1144694838]
 script = ExtResource("metadata")
@@ -65,7 +128,7 @@ z_index = 5
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1815559690]
 
 [node name="GymGuide" parent="Entities/NPCs" unique_id=219067994 instance=ExtResource("guide")]
-position = Vector2(496, 944)
+position = Vector2(400, 944)
 npc_id = "kanto_vermilion_city_gym_guide"
 display_name = "Vermilion Gym Guide"
 npc_sprite_frames = ExtResource("guide_frames")
@@ -81,7 +144,7 @@ npc_sprite_frames = ExtResource("8_8ig2e")
 battle_environment_id = "pvp_stadium"
 
 [node name="WorkerDax" parent="Entities/NPCs" unique_id=328813408 instance=ExtResource("trainer")]
-position = Vector2(176, 912)
+position = Vector2(144, 720)
 trainer_id = "kanto_vermilion_city_gym_worker_dax"
 npc_id = "kanto_vermilion_city_gym_worker_dax"
 npc_definition_id = "trainer_class_worker"
@@ -91,7 +154,7 @@ npc_sprite_frames = ExtResource("frames_worker")
 battle_environment_id = "pvp_stadium"
 
 [node name="ScientistMira" parent="Entities/NPCs" unique_id=879809808 instance=ExtResource("trainer")]
-position = Vector2(592, 912)
+position = Vector2(592, 720)
 trainer_id = "kanto_vermilion_city_gym_scientist_mira"
 npc_id = "kanto_vermilion_city_gym_scientist_mira"
 npc_definition_id = "trainer_class_scientist_f"
@@ -101,7 +164,7 @@ npc_sprite_frames = ExtResource("frames_scientist_f")
 battle_environment_id = "pvp_stadium"
 
 [node name="GentlemanEdwin" parent="Entities/NPCs" unique_id=1550059326 instance=ExtResource("trainer")]
-position = Vector2(400, 912)
+position = Vector2(272, 560)
 trainer_id = "kanto_vermilion_city_gym_gentleman_edwin"
 npc_id = "kanto_vermilion_city_gym_gentleman_edwin"
 npc_definition_id = "trainer_class_gentleman"
@@ -278,7 +341,7 @@ blocked_tile_offset = Vector2i(0, -1)
 blocked_tile_footprint = Vector2i(1, 2)
 interaction_shape_size = Vector2(128, 128)
 
-[node name="Bin41" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin41" type="Node2D" parent="Entities/Interactables" unique_id=232204421]
 position = Vector2(176, 816)
 script = ExtResource("puzzle_bin")
 bin_coordinates = Vector2i(0, 3)
@@ -289,7 +352,7 @@ blocked_tile_offset = Vector2i(0, -1)
 blocked_tile_footprint = Vector2i(1, 2)
 interaction_shape_size = Vector2(128, 128)
 
-[node name="Bin42" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin42" type="Node2D" parent="Entities/Interactables" unique_id=1804283632]
 position = Vector2(272, 816)
 script = ExtResource("puzzle_bin")
 bin_coordinates = Vector2i(1, 3)
@@ -300,7 +363,7 @@ blocked_tile_offset = Vector2i(0, -1)
 blocked_tile_footprint = Vector2i(1, 2)
 interaction_shape_size = Vector2(128, 128)
 
-[node name="Bin43" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin43" type="Node2D" parent="Entities/Interactables" unique_id=438350828]
 position = Vector2(368, 816)
 script = ExtResource("puzzle_bin")
 bin_coordinates = Vector2i(2, 3)
@@ -311,7 +374,7 @@ blocked_tile_offset = Vector2i(0, -1)
 blocked_tile_footprint = Vector2i(1, 2)
 interaction_shape_size = Vector2(128, 128)
 
-[node name="Bin44" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin44" type="Node2D" parent="Entities/Interactables" unique_id=1245235820]
 position = Vector2(464, 816)
 script = ExtResource("puzzle_bin")
 bin_coordinates = Vector2i(3, 3)
@@ -322,7 +385,7 @@ blocked_tile_offset = Vector2i(0, -1)
 blocked_tile_footprint = Vector2i(1, 2)
 interaction_shape_size = Vector2(128, 128)
 
-[node name="Bin45" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin45" type="Node2D" parent="Entities/Interactables" unique_id=525255790]
 position = Vector2(560, 816)
 script = ExtResource("puzzle_bin")
 bin_coordinates = Vector2i(4, 3)
@@ -378,8 +441,12 @@ tile_footprint = Vector2i(4, 1)
 flow_direction = "down"
 
 [node name="Tiles" type="Node2D" parent="." unique_id=948034320]
+visible = false
 
 [node name="Collision" type="TileMapLayer" parent="Tiles" unique_id=1903114035]
-tile_set = SubResource("empty_collision_grid")
+visible = false
+z_index = 4096
+tile_map_data = PackedByteArray("AAADAA4AAAABAAEAAAADAA8AAAABAAEAAAADABAAAAABAAEAAAADABEAAAABAAEAAAADABIAAAABAAEAAAADABMAAAABAAEAAAADABQAAAABAAEAAAADABUAAAABAAEAAAADABYAAAABAAEAAAADABcAAAABAAEAAAADABgAAAABAAEAAAADABkAAAABAAEAAAADABoAAAABAAEAAAADABsAAAABAAEAAAADABwAAAABAAEAAAADAB0AAAABAAEAAAADAB4AAAABAAEAAAADAB8AAAABAAEAAAADACAAAAABAAEAAAAEACAAAAABAAEAAAAEACEAAAABAAEAAAAFACAAAAABAAEAAAAFACEAAAABAAEAAAAGACAAAAABAAEAAAAGACEAAAABAAEAAAAHACAAAAABAAEAAAAHACEAAAABAAEAAAAIACAAAAABAAEAAAAIACEAAAABAAEAAAAJACAAAAABAAEAAAAJACEAAAABAAEAAAAKACEAAAABAAEAAAALACEAAAABAAEAAAAMACEAAAABAAEAAAANACEAAAABAAEAAAANACAAAAABAAEAAAAOACAAAAABAAEAAAAPACAAAAABAAEAAAAQACAAAAABAAEAAAARACAAAAABAAEAAAASACAAAAABAAEAAAATACAAAAABAAEAAAATAA4AAAABAAEAAAATAA8AAAABAAEAAAATABAAAAABAAEAAAATABEAAAABAAEAAAATABIAAAABAAEAAAATABMAAAABAAEAAAATABQAAAABAAEAAAATABUAAAABAAEAAAATABYAAAABAAEAAAATABcAAAABAAEAAAATABgAAAABAAEAAAATABkAAAABAAEAAAATABoAAAABAAEAAAATABsAAAABAAEAAAATABwAAAABAAEAAAATAB0AAAABAAEAAAATAB4AAAABAAEAAAATAB8AAAABAAEAAAAPAA4AAAABAAEAAAAQAA4AAAABAAEAAAARAA4AAAABAAEAAAASAA4AAAABAAEAAAAEAA4AAAABAAEAAAAFAA4AAAABAAEAAAAGAA4AAAABAAEAAAAHAA4AAAABAAEAAAAHAAUAAAABAAEAAAAHAAYAAAABAAEAAAAHAAcAAAABAAEAAAAHAAgAAAABAAEAAAAHAAkAAAABAAEAAAAHAAoAAAABAAEAAAAHAAsAAAABAAEAAAAHAAwAAAABAAEAAAAHAA0AAAABAAEAAAAIAAUAAAABAAEAAAAIAAYAAAABAAEAAAAIAAcAAAABAAEAAAAJAAUAAAABAAEAAAAJAAYAAAABAAEAAAAJAAcAAAABAAEAAAAKAAUAAAABAAEAAAAKAAYAAAABAAEAAAAKAAcAAAABAAEAAAALAAUAAAABAAEAAAALAAYAAAABAAEAAAALAAcAAAABAAEAAAAMAAUAAAABAAEAAAAMAAYAAAABAAEAAAAMAAcAAAABAAEAAAANAAUAAAABAAEAAAANAAYAAAABAAEAAAANAAcAAAABAAEAAAAOAAUAAAABAAEAAAAOAAYAAAABAAEAAAAOAAcAAAABAAEAAAAPAAUAAAABAAEAAAAPAAYAAAABAAEAAAAPAAcAAAABAAEAAAAPAAgAAAABAAEAAAAPAAkAAAABAAEAAAAPAAoAAAABAAEAAAAPAAsAAAABAAEAAAAPAAwAAAABAAEAAAAPAA0AAAABAAEAAAAPAA8AAAABAAEAAAAPABAAAAABAAEAAAAPABEAAAABAAEAAAAQAA8AAAABAAEAAAAQABAAAAABAAEAAAAQABEAAAABAAEAAAAGAA8AAAABAAEAAAAGABAAAAABAAEAAAAGABEAAAABAAEAAAAHAA8AAAABAAEAAAAHABAAAAABAAEAAAAHABEAAAABAAEAAAAEAA8AAAABAAEAAAAEABAAAAABAAEAAAAFAA8AAAABAAEAAAAFABAAAAABAAEAAAAIAA0AAAABAAEAAAAIABAAAAABAAEAAAAOABAAAAABAAEAAAAOAA0AAAABAAEAAAANAAgAAAABAAEAAAANAAkAAAABAAEAAAANAAoAAAABAAEAAAANAAsAAAABAAEAAAANAAwAAAABAAEAAAAOAAgAAAABAAEAAAAOAAkAAAABAAEAAAAOAAoAAAABAAEAAAAOAAsAAAABAAEAAAAOAAwAAAABAAEAAAAIAAgAAAABAAEAAAAIAAkAAAABAAEAAAAIAAoAAAABAAEAAAAIAAsAAAABAAEAAAAIAAwAAAABAAEAAAAJAAgAAAABAAEAAAAJAAkAAAABAAEAAAAJAAoAAAABAAEAAAAJAAsAAAABAAEAAAAJAAwAAAABAAEAAAANAB0AAAABAAEAAAAJAB0AAAABAAEAAAAFABkAAAABAAEAAAAIABkAAAABAAEAAAALABkAAAABAAEAAAAOABkAAAABAAEAAAARABkAAAABAAEAAAARABcAAAABAAEAAAAOABcAAAABAAEAAAALABcAAAABAAEAAAAIABcAAAABAAEAAAAFABcAAAABAAEAAAAFABUAAAABAAEAAAAFABMAAAABAAEAAAAIABUAAAABAAEAAAAIABMAAAABAAEAAAALABMAAAABAAEAAAALABUAAAABAAEAAAAOABUAAAABAAEAAAAOABMAAAABAAEAAAARABMAAAABAAEAAAARAA8AAAABAAEAAAARABAAAAABAAEAAAASAA8AAAABAAEAAAASABAAAAABAAEAAAA=")
+tile_set = SubResource("TileSet_tmh5f")
 
 [connection signal="body_entered" from="Exits/ToVermilionCity" to="Exits/ToVermilionCity" method="_on_body_entered"]
