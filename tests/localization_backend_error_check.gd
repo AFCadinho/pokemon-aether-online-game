@@ -55,6 +55,8 @@ func _run() -> void:
 		},
 	}
 	_check(errors.call("error_code", coded_response) == "guild_name_unavailable", "nested stable code is extracted")
+	_check(str(errors.call("message", {"body": {"detail": {"code": "pokemon_evolution_conditions_changed"}}})).contains("Check the time"),
+		"expired evolution conditions explain time, friendship and held-item requirements")
 	_check(str(errors.call("message", {"body": {"detail": {"code": "patreon_role_required"}}})).contains("Patreon role"),
 		"expired Royal outfit explains the Patreon role requirement")
 	_check(str(errors.call("message", {"code": "coop_npc_out_of_range"})).contains("Move closer"),
@@ -85,6 +87,8 @@ func _run() -> void:
 	)
 
 	localization.call("set_locale", "nl")
+	_check(str(errors.call("message", {"body": {"detail": {"code": "pokemon_evolution_conditions_changed"}}})).contains("Controleer de tijd"),
+		"expired evolution requirements are explained in Dutch")
 	_check(
 		errors.call("message", coded_response) == "Die Guildnaam is al in gebruik.",
 		"known backend code displays in Dutch"

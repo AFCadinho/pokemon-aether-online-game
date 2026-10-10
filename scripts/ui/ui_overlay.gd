@@ -5268,7 +5268,7 @@ func _submit_evolution_choice(confirm: bool) -> void:
 
 	if not bool(result.get("success", false)):
 		push_warning("UIOverlay: evolution choice failed: %s" % str(result.get("error", "Unknown error")))
-		evolution_prompt_status_label.text = LocalizationManager.text("ui.evolution.error.save")
+		evolution_prompt_status_label.text = BackendErrorLocalizationService.message(result, "ui.evolution.error.save")
 		evolution_prompt_status_label.add_theme_color_override("font_color", UI_DANGER)
 		_set_evolution_prompt_controls_disabled(false)
 		return

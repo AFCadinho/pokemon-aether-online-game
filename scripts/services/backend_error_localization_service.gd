@@ -11,6 +11,7 @@ const CATALOG_PATHS: Dictionary = {
 }
 
 const CODE_TO_KEY: Dictionary = {
+	"pokemon_evolution_conditions_changed": "ui.evolution.error.conditions_changed",
 	"name_restore_unavailable": "ui.settings.rename.unavailable",
 	"name_inappropriate": "ui.login.rename.inappropriate",
 	"username_unavailable": "ui.login.rename.unavailable",

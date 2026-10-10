@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Explain when an evolution's conditions are no longer met, including a changed time window, friendship or held item, and resolve Lycanroc Midday's existing sprites correctly.
+
 - Add a direct forum guide link to each skill's detail view.
 
 ## 0.3.105

@@ -3877,6 +3877,7 @@
   "ui.evolution.available_level": "Available at Lv. {level}",
   "ui.evolution.error.open_prompt": "Could not open evolution prompt for {pokemon}.",
   "ui.evolution.error.save": "Could not save the evolution choice.",
+  "ui.evolution.error.conditions_changed": "This evolution is no longer available. Check the time, friendship and held item, then try again after a level-up.",
   "ui.evolution.result.evolved": "{from} evolved into {to}!",
   "ui.evolution.result.skipped": "{pokemon} did not evolve.",
   "ui.move_mentor.title": "Move Maniac",
