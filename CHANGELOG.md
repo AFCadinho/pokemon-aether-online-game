@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Make Help a visible main chat tab and move System into General's channel selector, while keeping system messages in All.
+
 - Use the developer game-time selector for evolution offers and confirmations, refresh pending targets when it changes, and label the default as Game time.
 
 - Refer to the shared game time when explaining evolution requirements.

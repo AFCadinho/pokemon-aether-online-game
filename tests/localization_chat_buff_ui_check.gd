@@ -20,6 +20,7 @@ func _run() -> void:
 
 	var original_locale := str(localization_manager.get("current_locale"))
 	_check_localized_helpers()
+	_check_chat_navigation()
 	_check_scene_uses_semantic_keys()
 	localization_manager.call("set_locale", original_locale)
 	await process_frame
@@ -182,6 +183,61 @@ func _check_localized_helpers() -> void:
 	if map_prefix != null:
 		map_prefix.free()
 	overlay.free()
+
+
+func _check_chat_navigation() -> void:
+	var overlay_script := load(OVERLAY_SCRIPT_PATH) as Script
+	if overlay_script == null:
+		return
+	var overlay: Node = overlay_script.new()
+	var controls := Node.new()
+	root.add_child(controls)
+	var input := LineEdit.new()
+	var send := Button.new()
+	var selector := Button.new()
+	var dock := PanelContainer.new()
+	var row := HBoxContainer.new()
+	var messages := VBoxContainer.new()
+	var options := VBoxContainer.new()
+	for binding: Array in [
+		["chat_input", input], ["send_button", send],
+		["chat_context_selector_button", selector], ["chat_input_dock", dock],
+		["chat_input_row", row], ["message_list", messages],
+		["chat_context_options", options],
+	]:
+		overlay.set(binding[0], binding[1])
+		controls.add_child(binding[1])
+
+	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		localization_manager.call("set_locale", locale)
+		overlay.call("_on_general_chat_context_selected", "system")
+		_check(overlay.call("_active_primary_chat_tab_id") == "general", "System selects General in %s" % locale)
+		_check(dock.visible and row.visible and selector.visible and not selector.disabled, "System keeps channel navigation accessible in %s" % locale)
+		_check(not input.visible and not send.visible, "System remains read-only in %s" % locale)
+		_check(selector.text.contains(str(localization_manager.call("text", "ui.chat.tab.system"))), "System selector is localized in %s" % locale)
+		overlay.call("_rebuild_chat_context_options")
+		_check(options.get_child_count() == 4, "General exposes four channel choices in %s" % locale)
+		_check((options.get_child(0) as Button).text == localization_manager.call("text", "ui.chat.channel.global"), "Global remains reachable from System in %s" % locale)
+		_check((options.get_child(3) as Button).text == localization_manager.call("text", "ui.chat.tab.system"), "System replaces Help in General's menu in %s" % locale)
+		(options.get_child(0) as Button).pressed.emit()
+		_check(overlay.get("active_chat_tab") == "general" and input.visible and input.editable and send.visible, "Choosing Global from System restores message input in %s" % locale)
+		(options.get_child(3) as Button).pressed.emit()
+		_check(overlay.get("active_chat_tab") == "system" and not input.visible, "Choosing System from Global restores the read-only view in %s" % locale)
+
+		overlay.call("_on_all_channel_badge_pressed", "help")
+		_check(overlay.call("_active_primary_chat_tab_id") == "help", "All's Help prefix opens the independent Help tab in %s" % locale)
+		_check(input.visible and input.editable and send.visible and not send.disabled, "Help accepts messages in %s" % locale)
+		_check(selector.text == localization_manager.call("text", "ui.chat.tab.help") and selector.disabled, "Help shows its localized fixed channel in %s" % locale)
+		_check(overlay.call("_get_active_chat_channel") == "help", "Help sends to the Help channel in %s" % locale)
+		_check(overlay.call("_should_show_chat_category", "help") and not overlay.call("_should_show_chat_category", "system"), "Help filters messages to its channel in %s" % locale)
+		overlay.call("_on_chat_tab_pressed", "general")
+		_check(overlay.get("active_chat_tab") == "system", "Returning from Help preserves General's System selection in %s" % locale)
+		overlay.call("_on_chat_tab_pressed", "all")
+		_check(overlay.call("_should_show_chat_category", "system"), "All retains system messages in %s" % locale)
+		_check(overlay.call("_should_show_chat_category", "system_warning"), "All retains important warnings in %s" % locale)
+
+	overlay.free()
+	controls.free()
 
 
 func _check_scene_uses_semantic_keys() -> void:
