@@ -1,4 +1,12 @@
 {
+  "world.vermilion_gym.puzzle.bin": "Lixeira",
+  "world.vermilion_gym.puzzle.barrier": "Barreira elétrica",
+  "world.vermilion_gym.puzzle.empty": "Só tem lixo aqui. Nenhum interruptor.",
+  "world.vermilion_gym.puzzle.first": "Você encontrou o primeiro interruptor! A barreira elétrica inferior foi desligada. O segundo interruptor está na lixeira imediatamente acima, abaixo, à esquerda ou à direita desta.",
+  "world.vermilion_gym.puzzle.first_active": "Este interruptor já está ligado. Procure o segundo interruptor em uma lixeira imediatamente ao lado desta.",
+  "world.vermilion_gym.puzzle.wrong": "Interruptor errado! As duas barreiras foram reativadas. Ative o primeiro interruptor novamente para tentar de novo. Os interruptores ficam nas mesmas lixeiras até você sair do Ginásio.",
+  "world.vermilion_gym.puzzle.solved": "Os dois interruptores estão ligados! As barreiras elétricas foram desligadas. O caminho até Lt. Surge está livre.",
+  "world.vermilion_gym.puzzle.barrier_closed": "Uma barreira elétrica bloqueia o caminho. Encontre os dois interruptores escondidos nas lixeiras para desligá-la.",
   "ui.trainer_card.wallet.casino_tokens": "Casino Tokens",
   "ui.trainer_card.wallet.casino_tokens_description": "Reservados para futuros jogos e prêmios do cassino. Ganhar e gastar ficará disponível mais tarde.",
   "ui.staff.dev.add_casino_tokens": "Adicionar Casino Tokens",
