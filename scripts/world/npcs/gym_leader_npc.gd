@@ -118,7 +118,8 @@ func _setup_badge_marker() -> void:
 	badge_marker.texture = badge_icon_texture
 	badge_marker.position = Vector2(0, -102)
 	badge_marker.scale = Vector2(0.075, 0.075)
-	badge_marker.z_index = 513
+	badge_marker.z_as_relative = false
+	badge_marker.z_index = OVERHEAD_NAMEPLATE_Z - 2
 	add_child(badge_marker)
 	_refresh_badge_marker()
 
