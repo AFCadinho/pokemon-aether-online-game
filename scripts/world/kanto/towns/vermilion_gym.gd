@@ -3,7 +3,7 @@ extends "res://scripts/world/map_metadata.gd"
 signal puzzle_changed
 
 const BIN_COLUMNS := 5
-const BIN_ROWS := 3
+const BIN_ROWS := 4
 
 # State belongs to this map instance: battles keep it, leaving the map drops it.
 var first_switch := Vector2i(-1, -1)
