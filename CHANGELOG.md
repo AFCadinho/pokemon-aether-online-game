@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Explain when an evolution's conditions are no longer met, including a changed time window, friendship or held item, and resolve Lycanroc Midday's existing sprites correctly.
+
 - Add black visibility masks and room-centered camera bounds to the Guild Base lobby, both side rooms and the elevator waiting room.
 
 - Prevent repeated interaction presses after a won trainer rematch from starting another battle before the trainer enters its sleeping state.

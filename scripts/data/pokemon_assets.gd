@@ -33,6 +33,7 @@ const SPECIES_SPRITE_ALIASES := {
 	"keldeo-ordinary": ["Keldeo"],
 	"landorus-incarnate": ["Landorus"],
 	"lucario-mega-z": ["Lucario-Mega"],
+	"lycanroc-midday": ["Lycanroc"],
 	"magearna-original-mega": ["Magearna-Mega"],
 	"meloetta-aria": ["Meloetta"],
 	"meowstic-f-mega": ["meowstic-mega"],
