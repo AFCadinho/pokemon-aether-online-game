@@ -84,10 +84,13 @@ func _run() -> void:
 	panel_host.add_child(panel)
 	await process_frame
 	_check(not panel.visible, "Skills panel starts hidden")
-	_check(panel.size == Vector2(760, 780), "Skills uses its larger preferred size when screen space allows")
+	_check(panel.size == Vector2(640, 470), "Skills opens in a compact overview window")
 	panel_host.size = Vector2(640, 520)
 	panel.call("_fit_window_to_parent")
-	_check(panel.size == Vector2(616, 496), "Skills shrinks to the available screen space with safe edge margins")
+	_check(panel.size == Vector2(616, 470), "Skills overview shrinks to the available screen width")
+	panel_host.size = Vector2(640, 420)
+	panel.call("_fit_window_to_parent")
+	_check(panel.size == Vector2(616, 396), "Skills overview also fits shorter screens with safe edge margins")
 	panel_host.size = Vector2(1280, 900)
 	panel.call("_fit_window_to_parent")
 
@@ -203,7 +206,14 @@ func _run() -> void:
 	_check((panel.get("overview_summary_label") as Label).text.contains("2/3") and (panel.get("overview_summary_label") as Label).text.contains("40"), "the overview summarizes unlocked skills and total level")
 	var fishing_card := (panel.get("skill_cards") as GridContainer).get_child(0) as Button
 	var thieving_card := (panel.get("skill_cards") as GridContainer).get_child(1) as Button
-	_check(fishing_card.custom_minimum_size.y >= 150.0 and thieving_card.custom_minimum_size.y >= 150.0, "overview cards make useful use of the available window height")
+	_check(fishing_card.size.y <= 112.0 and thieving_card.size.y <= 112.0, "overview cards stay compact instead of stretching to fill the window")
+	_check(
+		(panel.get("skill_cards") as Control).get_combined_minimum_size().y <= (panel.get("overview_scroll") as Control).size.y,
+		"all three skill cards fit the default overview without unnecessary scrolling"
+	)
+	var icon_frame := (fishing_card.find_child("SkillIcon", true, false) as TextureRect).get_parent() as Control
+	_check(icon_frame.size == Vector2(48, 48), "overview icons keep a small square frame")
+	_check(not (fishing_card.find_child("SkillProgress", true, false) as ProgressBar).visible, "locked skills omit an empty XP track")
 	_check(fishing_card.find_child("SkillDescription", true, false) is Label and fishing_card.find_child("SkillProgress", true, false) is ProgressBar, "each overview card shows its description and level progress")
 	_check((fishing_card.find_child("SkillLevel", true, false) as Label).text.contains("Locked"), "locked skills have a clear overview status")
 	_check(is_equal_approx((thieving_card.find_child("SkillProgress", true, false) as ProgressBar).value, 0.0), "unlocked skill cards use the server XP progress")
@@ -229,6 +239,7 @@ func _run() -> void:
 		"Thieving detail links to its forum guide"
 	)
 	await process_frame
+	_check(panel.size == Vector2(760, 780), "skill details expand to the larger catalog window")
 	_check(not (panel.get("overview_panel") as VBoxContainer).visible, "Selecting Thieving leaves the overview")
 	_check((panel.get("detail_panel") as PanelContainer).visible, "Selecting Thieving opens its dedicated interface")
 	_check((panel.get("detail_name") as Label).text == "Thieving", "Thieving is the selected detailed skill")
@@ -423,6 +434,8 @@ func _run() -> void:
 	var refreshed_second_rock_status := ((refreshed_second_rock.get_child(0) as HBoxContainer).get_child(1) as Label)
 	_check(refreshed_second_rock_status.text == "Smashed today", "a successful smash refreshes the daily rock status immediately")
 	panel.call("_show_overview")
+	await process_frame
+	_check(panel.size == Vector2(640, 470), "returning to all skills restores the compact overview size")
 	_check((panel.get("overview_panel") as VBoxContainer).visible, "the detail back action returns to all skill levels")
 	_check(not (panel.get("detail_panel") as PanelContainer).visible, "returning to the overview hides skill-specific content")
 	panel.position = Vector2.ZERO
