@@ -4,6 +4,10 @@
 
 - Recover interrupted shared-model pilot installations and repairs without retaining abandoned model copies; preserve live installs and loaded packs.
 
+- Keep Gym Leader badges and trainer challenge icons visible in front of gym walls and other foreground map decorations.
+
+- Play a short electrical power-down sound when either Vermilion Gym switch turns off its barrier. Already active switches stay silent.
+
 - Add a local opt-in pilot for lossless normal/shiny texture sharing, with verified launcher/on-demand installation, battle and preview loading, and protected cleanup of loaded models.
 
 - Reimport the updated Vermilion Gym visual and align its switch puzzle with all twenty bins in four rows, keeping the bins free of movement collision.
