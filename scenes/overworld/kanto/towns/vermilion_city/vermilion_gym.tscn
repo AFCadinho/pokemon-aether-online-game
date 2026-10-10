@@ -3,6 +3,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cjm3wij7i0akx" path="res://assets/npcs/gym_leaders/alpha_lt_surge_frames.tres" id="8_8ig2e"]
 [ext_resource type="Texture2D" uid="uid://dvmryegkvtlri" path="res://assets/tilesets/fiver/tiles_env2_cliffs32.png" id="15_u2yhm"]
 [ext_resource type="PackedScene" path="res://scenes/world/transition_hints/door_transition_hint.tscn" id="door_hint"]
+[ext_resource type="Script" uid="uid://ceiq67i4mftsa" path="res://scripts/world/interactables/vermilion_gym_electric_barrier.gd" id="electric_barrier"]
 [ext_resource type="Script" uid="uid://joipkd2b75ga" path="res://scripts/world/map_exit.gd" id="exit"]
 [ext_resource type="Script" uid="uid://c2lb88uoffsow" path="res://scripts/world/floor_visibility_mask.gd" id="floor_mask"]
 [ext_resource type="SpriteFrames" uid="uid://dew17ac2tan52" path="res://assets/npcs/classes/gentleman_frames.tres" id="frames_gentleman"]
@@ -11,13 +12,11 @@
 [ext_resource type="PackedScene" uid="uid://cqj4cmsw38oxt" path="res://scenes/npcs/dialogue_npc.tscn" id="guide"]
 [ext_resource type="SpriteFrames" uid="uid://bxh5nxs12bywr" path="res://assets/npcs/gym_guide_frames.tres" id="guide_frames"]
 [ext_resource type="PackedScene" uid="uid://ds0lg7oj5khbm" path="res://scenes/npcs/gym_leader_npc.tscn" id="leader"]
-[ext_resource type="Script" path="res://scripts/world/kanto/towns/vermilion_gym.gd" id="metadata"]
+[ext_resource type="Script" uid="uid://c8bad7626hkvk" path="res://scripts/world/kanto/towns/vermilion_gym.gd" id="metadata"]
+[ext_resource type="Script" uid="uid://evbp0mojsmvi" path="res://scripts/world/interactables/vermilion_gym_bin.gd" id="puzzle_bin"]
 [ext_resource type="Resource" uid="uid://dmm23s1e2m34y" path="res://resources/npcs/gym_leaders/alpha_lt_surge.tres" id="surge_profile"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
 [ext_resource type="PackedScene" path="res://generated/tiled_visuals/vermilion_gym/vermilion_gym.visual.tscn" id="visual"]
-
-[ext_resource type="Script" path="res://scripts/world/interactables/vermilion_gym_bin.gd" id="puzzle_bin"]
-[ext_resource type="Script" path="res://scripts/world/interactables/vermilion_gym_electric_barrier.gd" id="electric_barrier"]
 
 [sub_resource type="RectangleShape2D" id="shape_exit"]
 size = Vector2(128, 32)
@@ -178,7 +177,7 @@ battle_environment_id = "pvp_stadium"
 
 [node name="Interactables" type="Node2D" parent="Entities" unique_id=843274590]
 
-[node name="Bin11" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin11" type="Node2D" parent="Entities/Interactables" unique_id=117570056]
 position = Vector2(192, 624)
 script = ExtResource("puzzle_bin")
 interactable_id = "vermilion_gym_bin_1_1"
@@ -186,169 +185,167 @@ interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(0, 0)
 
-[node name="Bin12" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin12" type="Node2D" parent="Entities/Interactables" unique_id=912802703]
 position = Vector2(288, 624)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(1, 0)
 interactable_id = "vermilion_gym_bin_1_2"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(1, 0)
 
-[node name="Bin13" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin13" type="Node2D" parent="Entities/Interactables" unique_id=1051050296]
 position = Vector2(384, 624)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(2, 0)
 interactable_id = "vermilion_gym_bin_1_3"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(2, 0)
 
-[node name="Bin14" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin14" type="Node2D" parent="Entities/Interactables" unique_id=52713493]
 position = Vector2(480, 624)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(3, 0)
 interactable_id = "vermilion_gym_bin_1_4"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(3, 0)
 
-[node name="Bin15" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin15" type="Node2D" parent="Entities/Interactables" unique_id=1139142933]
 position = Vector2(576, 624)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(4, 0)
 interactable_id = "vermilion_gym_bin_1_5"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(4, 0)
 
-[node name="Bin21" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin21" type="Node2D" parent="Entities/Interactables" unique_id=125551364]
 position = Vector2(192, 720)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(0, 1)
 interactable_id = "vermilion_gym_bin_2_1"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(0, 1)
 
-[node name="Bin22" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin22" type="Node2D" parent="Entities/Interactables" unique_id=1069695744]
 position = Vector2(288, 720)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(1, 1)
 interactable_id = "vermilion_gym_bin_2_2"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(1, 1)
 
-[node name="Bin23" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin23" type="Node2D" parent="Entities/Interactables" unique_id=709604540]
 position = Vector2(384, 720)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(2, 1)
 interactable_id = "vermilion_gym_bin_2_3"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(2, 1)
 
-[node name="Bin24" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin24" type="Node2D" parent="Entities/Interactables" unique_id=6811594]
 position = Vector2(480, 720)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(3, 1)
 interactable_id = "vermilion_gym_bin_2_4"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(3, 1)
 
-[node name="Bin25" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin25" type="Node2D" parent="Entities/Interactables" unique_id=227326469]
 position = Vector2(576, 720)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(4, 1)
 interactable_id = "vermilion_gym_bin_2_5"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(4, 1)
 
-[node name="Bin31" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin31" type="Node2D" parent="Entities/Interactables" unique_id=2041200150]
 position = Vector2(192, 816)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(0, 2)
 interactable_id = "vermilion_gym_bin_3_1"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(0, 2)
 
-[node name="Bin32" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin32" type="Node2D" parent="Entities/Interactables" unique_id=1268855720]
 position = Vector2(288, 816)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(1, 2)
 interactable_id = "vermilion_gym_bin_3_2"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(1, 2)
 
-[node name="Bin33" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin33" type="Node2D" parent="Entities/Interactables" unique_id=355587724]
 position = Vector2(384, 816)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(2, 2)
 interactable_id = "vermilion_gym_bin_3_3"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(2, 2)
 
-[node name="Bin34" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin34" type="Node2D" parent="Entities/Interactables" unique_id=1974068770]
 position = Vector2(480, 816)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(3, 2)
 interactable_id = "vermilion_gym_bin_3_4"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(3, 2)
 
-[node name="Bin35" type="Node2D" parent="Entities/Interactables"]
+[node name="Bin35" type="Node2D" parent="Entities/Interactables" unique_id=1709041655]
 position = Vector2(576, 816)
 script = ExtResource("puzzle_bin")
+bin_coordinates = Vector2i(4, 2)
 interactable_id = "vermilion_gym_bin_3_5"
 interactable_kind = "gym_switch_bin"
 blocked_tile_offset = Vector2i(-1, -1)
 blocked_tile_footprint = Vector2i(2, 2)
 interaction_shape_size = Vector2(128, 128)
-bin_coordinates = Vector2i(4, 2)
 
-[node name="LowerElectricBarrier" type="Node2D" parent="Entities/Interactables"]
-position = Vector2(368, 528)
+[node name="LowerElectricBarrier" type="Node2D" parent="Entities/Interactables" unique_id=783130390]
 z_index = 20
+position = Vector2(368, 528)
 script = ExtResource("electric_barrier")
+opens_with_first_switch = true
 interactable_id = "vermilion_gym_LowerElectricBarrier"
 interactable_kind = "electric_barrier"
 blocked_tile_offset = Vector2i(-3, 0)
 blocked_tile_footprint = Vector2i(7, 1)
 interaction_shape_size = Vector2(256, 96)
-opens_with_first_switch = true
 
-[node name="UpperElectricBarrier" type="Node2D" parent="Entities/Interactables"]
-position = Vector2(368, 432)
+[node name="UpperElectricBarrier" type="Node2D" parent="Entities/Interactables" unique_id=801975997]
 z_index = 20
+position = Vector2(368, 432)
 script = ExtResource("electric_barrier")
 interactable_id = "vermilion_gym_UpperElectricBarrier"
 interactable_kind = "electric_barrier"
 blocked_tile_offset = Vector2i(-3, 0)
 blocked_tile_footprint = Vector2i(7, 1)
 interaction_shape_size = Vector2(256, 96)
-opens_with_first_switch = false
 
 [node name="Spawns" type="Node2D" parent="." unique_id=846921729]
 

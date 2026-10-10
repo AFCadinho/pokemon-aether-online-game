@@ -50,7 +50,7 @@ func _ready() -> void:
 		if guard_role == GUARD_ROLE_TRANSITION:
 			_set_guard_present(true)
 			_connect_guard_presence_signals()
-		Callable(self, "_refresh_transition_access").call_deferred()
+		Callable(self, "_refresh_transition_access").call_deferred(true)
 	Callable(self, "_load_gate_metadata").call_deferred()
 
 
@@ -270,6 +270,9 @@ func _refresh_transition_access(force_refresh := false) -> Dictionary:
 
 
 func _connect_guard_presence_signals() -> void:
+	var badges_changed_callable := Callable(self, "_on_guard_badges_changed")
+	if not PlayerSave.gym_badges_changed.is_connected(badges_changed_callable):
+		PlayerSave.gym_badges_changed.connect(badges_changed_callable)
 	var party_changed_callable := Callable(self, "_on_guard_party_changed")
 	if not PlayerSave.party_changed.is_connected(party_changed_callable):
 		PlayerSave.party_changed.connect(party_changed_callable)
@@ -280,6 +283,12 @@ func _connect_guard_presence_signals() -> void:
 
 func _on_guard_party_changed() -> void:
 	_sync_guard_presence()
+
+
+func _on_guard_badges_changed() -> void:
+	transition_access_resolved = false
+	_sync_guard_presence()
+	Callable(self, "_refresh_transition_access").call_deferred(true)
 
 
 func _on_guard_story_changed(_revision: int) -> void:

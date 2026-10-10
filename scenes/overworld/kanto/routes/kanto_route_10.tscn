@@ -13,6 +13,7 @@
 [ext_resource type="SpriteFrames" uid="uid://cpib33tqeyr00" path="res://assets/npcs/classes/picnicker_frames.tres" id="picnicker"]
 [ext_resource type="PackedScene" uid="uid://bdi2qbau6f5eo" path="res://scenes/npcs/overworld_pokemon.tscn" id="pokemon"]
 [ext_resource type="PackedScene" uid="uid://dv2jhka7evdtn" path="res://scenes/npcs/trainer_npc.tscn" id="trainer"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/gate_npc.tscn" id="rock_tunnel_guard"]
 
 [sub_resource type="RectangleShape2D" id="shape_pokecenter_exit"]
 size = Vector2(32, 32)
@@ -315,6 +316,24 @@ flow_direction = "down"
 z_index = 5
 
 [node name="NPCs" type="Node2D" parent="Entities" unique_id=1867281248]
+
+[node name="RockTunnelNorthGuard" parent="Entities/NPCs" instance=ExtResource("rock_tunnel_guard")]
+position = Vector2(1072, 1040)
+npc_id = "kanto_route_10_rock_tunnel_north_guard"
+display_name = "Rock Tunnel Guard"
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_route_10__to_rock_tunnel_north"
+requires_party_pokemon = false
+blocked_dialogue_id = "kanto_route_10_rock_tunnel_badges_required"
+
+[node name="RockTunnelSouthGuard" parent="Entities/NPCs" instance=ExtResource("rock_tunnel_guard")]
+position = Vector2(624, 2480)
+npc_id = "kanto_route_10_rock_tunnel_south_guard"
+display_name = "Rock Tunnel Guard"
+guard_role = "transition_guard"
+guarded_transition_id = "kanto_route_10__to_rock_tunnel_south"
+requires_party_pokemon = false
+blocked_dialogue_id = "kanto_route_10_rock_tunnel_badges_required"
 
 [node name="PicnickerHeidi" parent="Entities/NPCs" unique_id=584268297 instance=ExtResource("trainer")]
 position = Vector2(656, 592)
