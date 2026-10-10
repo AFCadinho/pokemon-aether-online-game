@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add black visibility masks and room-centered camera bounds to the Guild Base lobby, both side rooms and the elevator waiting room.
+
 - Add a direct forum guide link to each skill's detail view.
 
 ## 0.3.105
