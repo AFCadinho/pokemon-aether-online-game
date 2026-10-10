@@ -2,6 +2,7 @@ extends SceneTree
 
 const UI_OVERLAY_PATH := "res://scripts/ui/ui_overlay.gd"
 const PARTY_SERVICE_PATH := "res://scripts/services/player_party_state_service.gd"
+const POKEMON_ASSETS := preload("res://scripts/data/pokemon_assets.gd")
 
 var failed := false
 
@@ -30,6 +31,18 @@ func _init() -> void:
 		party_service_source.contains('body.get("learnedMoves", [])')
 		and party_service_source.contains('body.get("moveLearnCandidates", [])'),
 		"Evolution responses preserve automatic moves and replacement candidates"
+	)
+	call_deferred("_check_evolution_form_sprites")
+
+
+func _check_evolution_form_sprites() -> void:
+	for species: String in ["Marowak Alola", "Urshifu", "Urshifu Rapid-Strike"]:
+		var sprite := POKEMON_ASSETS.load_home_sprite(species)
+		_check(sprite != null, "%s evolution preview has an existing HOME sprite" % species)
+	var rapid_shiny := POKEMON_ASSETS.load_home_sprite("Urshifu Rapid-Strike", true)
+	_check(
+		rapid_shiny != null and rapid_shiny.resource_path.ends_with("pokemon_home_shiny/urshifu-rapidstrike.png"),
+		"Rapid Strike evolution uses its shiny form sprite instead of the normal fallback"
 	)
 	quit(1 if failed else 0)
 
