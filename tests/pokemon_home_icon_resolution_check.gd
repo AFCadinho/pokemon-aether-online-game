@@ -20,6 +20,9 @@ const REPORTED_FORM_NAMES: Array[String] = [
 	"Meowstic M Mega",
 	"Ribombee Totem",
 	"Rockruff Dusk",
+	"Lycanroc Midday",
+	"Lycanroc Midnight",
+	"Lycanroc Dusk",
 	"Kommo o Totem",
 	"Magearna Original Mega",
 	"Tatsugiri Curly Mega",
@@ -48,6 +51,9 @@ const EXPECTED_BATTLE_ALIASES := {
 	"Meowstic M Mega": "meowstic-mega",
 	"Ribombee Totem": "ribombee",
 	"Rockruff Dusk": "rockruff",
+	"Lycanroc Midday": "lycanroc",
+	"Lycanroc Midnight": "lycanroc-midnight",
+	"Lycanroc Dusk": "lycanroc-dusk",
 	"Kommo o Totem": "kommoo-totem",
 	"Magearna Original Mega": "magearna-mega",
 	"Tatsugiri Curly Mega": "tatsugiri-mega",
@@ -140,6 +146,8 @@ func _init() -> void:
 		failed = true
 		push_error("Pokédex detail sprite probing does not suppress expected candidate misses")
 	for sprite_root: String in ["front", "back", "shiny_front", "shiny_back"]:
+		for lycanroc_form: String in ["lycanroc", "lycanroc-midnight", "lycanroc-dusk"]:
+			_check_battle_sprite_asset(lycanroc_form, sprite_root)
 		_check_battle_sprite_asset("greninja-ash", sprite_root)
 		_check_battle_sprite_asset("pikachu-rockstar", sprite_root)
 		_check_battle_sprite_asset("raichu-megax", sprite_root)
