@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Display Chinese guild names, descriptions and other player text in every interface language, including English.
+
 - Make the Skills overview smaller with compact cards and square icons, expanding the window only when viewing skill details.
 
 - Explain when an evolution's conditions are no longer met, including a changed time window, friendship or held item, and resolve Lycanroc Midday's existing sprites correctly.
