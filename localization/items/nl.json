@@ -1,4 +1,20 @@
 {
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "Gebruik op Galarian Farfetch’d om te evolueren naar Sirfetch’d. Verhoogt ook critical hits als held item."
+  },
+  "leaders-crest": {
+    "name": "Leader’s Crest",
+    "shortDesc": "Laat Bisharp evolueren naar Kingambit bij gebruik."
+  },
+  "peat-block": {
+    "name": "Peat Block",
+    "shortDesc": "Laat Ursaring bij gebruik ’s nachts evolueren naar Ursaluna (game time)."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "Laat Milcery evolueren naar Alcremie bij gebruik."
+  },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "Laat Gimmighoul evolueren naar Gholdengo. Wordt verbruikt bij succesvol gebruik."},
   "gyarados-mount": {"name": "Gyarados-mount", "shortDesc": "Ontgrendelt Gyarados als surfmount."},
   "repel": {"name": "Repel", "shortDesc": "Voegt 100 stappen toe aan je Repel-voorraad (maximaal 10.000)."},

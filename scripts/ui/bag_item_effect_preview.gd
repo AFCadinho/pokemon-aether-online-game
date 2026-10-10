@@ -37,6 +37,18 @@ static func supports(gameplay: Dictionary) -> bool:
 	return true
 
 
+static func unmet_evolution_time(gameplay: Dictionary, hour: int) -> String:
+	for effect: Dictionary in gameplay.get("effects", []):
+		if effect.get("type", "") != "evolve_item":
+			continue
+		var period := str(effect.get("time_of_day", ""))
+		var met: bool = {"": true, "day": hour >= 5 and hour < 21,
+			"night": hour < 5 or hour >= 21, "dusk": hour >= 17 and hour < 21}.get(period, false)
+		if not met:
+			return period
+	return ""
+
+
 static func preview(pokemon: Pokemon, gameplay: Dictionary, requested_quantity: int) -> Dictionary:
 	if pokemon == null or not supports(gameplay):
 		return {}

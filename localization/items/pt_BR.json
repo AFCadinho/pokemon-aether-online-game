@@ -1,4 +1,20 @@
 {
+  "stick": {
+    "name": "Leek",
+    "shortDesc": "Use em Farfetch’d de Galar para evoluir para Sirfetch’d. Também aumenta acertos críticos quando equipado."
+  },
+  "leaders-crest": {
+    "name": "Leader’s Crest",
+    "shortDesc": "Evolui Bisharp para Kingambit ao usar."
+  },
+  "peat-block": {
+    "name": "Peat Block",
+    "shortDesc": "Evolui Ursaring para Ursaluna quando usado à noite (horário do jogo)."
+  },
+  "strawberry-sweet": {
+    "name": "Strawberry Sweet",
+    "shortDesc": "Evolui Milcery para Alcremie ao usar."
+  },
   "gold-coin": {"name": "Gold Coin", "shortDesc": "Evolui Gimmighoul para Gholdengo. Consumido após uso bem-sucedido."},
   "gyarados-mount": {"name": "Montaria Gyarados", "shortDesc": "Desbloqueia Gyarados como montaria de Surf."},
   "repel": {"name": "Repel", "shortDesc": "Adiciona 100 passos à carga de Repel (máximo de 10.000)."},

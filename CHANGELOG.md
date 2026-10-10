@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add localized Leek, Leader's Crest, Strawberry Sweet and Peat Block evolution descriptions; preview Peat Block against game time and send authorized developer time overrides with item use.
+
 - Refresh Vermilion Gym's latest device artwork from Tiled.
 
 - Show Karrablast/Shelmet trade evolution outcomes before confirming, display their real-trade requirement in Evolution conditions, and announce Shedinja when Nincada evolves with a free party slot.
