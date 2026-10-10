@@ -178,6 +178,7 @@ const CHECK_SCRIPTS: Array[String] = [
 	"res://tests/world_activity_recovery_check.gd",
 	"res://tests/wild_battle_reconnect_check.gd",
 	"res://tests/map_character_route_gate_check.gd",
+	"res://tests/rock_tunnel_badge_guard_check.gd",
 	"res://tests/vermilion_guild_garden_gate_check.gd",
 	"res://tests/guild_base_registrar_check.gd",
 	"res://tests/guild_base_interior_check.gd",

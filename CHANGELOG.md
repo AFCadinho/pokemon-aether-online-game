@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Guard both Rock Tunnel entrances until the player has at least three Gym Badges; guards disappear when entry becomes available.
+
 - Show Casino Tokens in the wallet and developer currency tools; add the Gold Coin icon and localized item text for Gimmighoul evolution. Casino earning and prize shops will follow later.
 
 - Center Vermilion Gym bin rows within the puzzle room while keeping the tiles in front of every bin walkable.
