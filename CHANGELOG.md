@@ -58,6 +58,8 @@
 
 - Resolve Gourgeist size variants to existing HOME icons in evolution previews and browser/mobile interfaces, and show the correct shiny Average form.
 
+- Add Evolution conditions to the party right-click menu for evolvable Pokémon, with a separate localized popup and personal walking progress for Pawmo, Bramblin and Rellor. Count on-foot tiles independently of Repel, save before progression and party changes, and announce walking completion once.
+
 ## 0.3.105
 
 - Show updated fishing item chances in the Item Dex, explain the independent Heart Scale and sale-treasure rolls, and include both wins and catches in fishing source labels.

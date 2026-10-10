@@ -251,6 +251,7 @@ func logout() -> Dictionary:
 	if trade_realtime_service != null and trade_realtime_service.has_method("leave_active_trade_for_exit"):
 		await trade_realtime_service.call("leave_active_trade_for_exit")
 
+	await WalkingEvolutionService.flush()
 	await RepelService.flush()
 
 	# Trade cleanup must complete before the /auth/logout request is sent.
