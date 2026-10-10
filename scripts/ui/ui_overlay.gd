@@ -135,6 +135,7 @@ const PM_TRANSLATION_LANGUAGE_LABELS := {
 }
 const CHAT_MUTE_PERMISSION := "chat:mute"
 const CHAT_TRANSLATE_PERMISSION := "chat:translate"
+const CHAT_HELP_COOLDOWN_BYPASS_PERMISSION := "chat:help:cooldown:bypass"
 const IMPERSONATE_PERMISSION := "accounts:impersonate"
 const DEV_TOOLS_PERMISSION := "generating"
 const GAMEPLAY_RESET_PERMISSION := "gameplay:reset"
@@ -33437,7 +33438,7 @@ func _refresh_chat_context_selector() -> void:
 		CHAT_TAB_HELP:
 			chat_context_selector_button.text = LocalizationManager.text("ui.chat.tab.help")
 			chat_context_selector_button.disabled = true
-			chat_context_selector_button.tooltip_text = LocalizationManager.text("ui.chat.input.help")
+			chat_context_selector_button.tooltip_text = _help_chat_input_placeholder()
 		CHAT_TAB_PM:
 			if active_pm_user_id != 0 and pm_conversations_by_user_id.has(active_pm_user_id):
 				var conversation := _dictionary_from_value(pm_conversations_by_user_id.get(active_pm_user_id, {}))
@@ -34317,7 +34318,7 @@ func _apply_chat_tab_state() -> void:
 	elif active_chat_tab == CHAT_TAB_TRADE:
 		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.trade")
 	elif active_chat_tab == CHAT_TAB_HELP:
-		chat_input.placeholder_text = LocalizationManager.text("ui.chat.input.help")
+		chat_input.placeholder_text = _help_chat_input_placeholder()
 	elif active_chat_tab == CHAT_TAB_GUILD:
 		chat_input.placeholder_text = (
 			LocalizationManager.text("ui.chat.input.guild_checking")
@@ -34362,6 +34363,14 @@ func _apply_chat_tab_state() -> void:
 	_refresh_chat_context_selector()
 	_refresh_chat_translate_mode_ui()
 	_scroll_chat_to_bottom.call_deferred()
+
+func _help_chat_input_placeholder() -> String:
+	return LocalizationManager.text(
+		"ui.chat.input.help.no_cooldown"
+		if _has_user_permission(CHAT_HELP_COOLDOWN_BYPASS_PERMISSION)
+		else "ui.chat.input.help"
+	)
+
 
 func _refresh_chat_message_visibility() -> void:
 	for child: Node in message_list.get_children():

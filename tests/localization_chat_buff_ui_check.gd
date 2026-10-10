@@ -190,6 +190,8 @@ func _check_chat_navigation() -> void:
 	if overlay_script == null:
 		return
 	var overlay: Node = overlay_script.new()
+	var auth_service := root.get_node("AuthService")
+	var original_user: Dictionary = auth_service.get("current_user").duplicate(true)
 	var controls := Node.new()
 	root.add_child(controls)
 	var input := LineEdit.new()
@@ -209,6 +211,7 @@ func _check_chat_navigation() -> void:
 		controls.add_child(binding[1])
 
 	for locale: String in ["en", "nl", "pt_BR", "zh_CN"]:
+		auth_service.set("current_user", {"permissions": []})
 		localization_manager.call("set_locale", locale)
 		overlay.call("_on_general_chat_context_selected", "system")
 		_check(overlay.call("_active_primary_chat_tab_id") == "general", "System selects General in %s" % locale)
@@ -230,12 +233,21 @@ func _check_chat_navigation() -> void:
 		_check(selector.text == localization_manager.call("text", "ui.chat.tab.help") and selector.disabled, "Help shows its localized fixed channel in %s" % locale)
 		_check(overlay.call("_get_active_chat_channel") == "help", "Help sends to the Help channel in %s" % locale)
 		_check(overlay.call("_should_show_chat_category", "help") and not overlay.call("_should_show_chat_category", "system"), "Help filters messages to its channel in %s" % locale)
+		_check(input.placeholder_text == localization_manager.call("text", "ui.chat.input.help"), "Regular players see the Help cooldown hint in %s" % locale)
+		auth_service.set("current_user", {"permissions": ["chat:help:cooldown:bypass"]})
+		overlay.call("_apply_chat_tab_state")
+		var bypass_hint := str(localization_manager.call("text", "ui.chat.input.help.no_cooldown"))
+		_check(input.placeholder_text == bypass_hint and selector.tooltip_text == bypass_hint, "Help bypass updates input and tooltip in %s" % locale)
+		auth_service.set("current_user", {"permissions": []})
+		overlay.call("_apply_chat_tab_state")
+		_check(input.placeholder_text == localization_manager.call("text", "ui.chat.input.help"), "Removing the bypass restores the cooldown hint in %s" % locale)
 		overlay.call("_on_chat_tab_pressed", "general")
 		_check(overlay.get("active_chat_tab") == "system", "Returning from Help preserves General's System selection in %s" % locale)
 		overlay.call("_on_chat_tab_pressed", "all")
 		_check(overlay.call("_should_show_chat_category", "system"), "All retains system messages in %s" % locale)
 		_check(overlay.call("_should_show_chat_category", "system_warning"), "All retains important warnings in %s" % locale)
 
+	auth_service.set("current_user", original_user)
 	overlay.free()
 	controls.free()
 

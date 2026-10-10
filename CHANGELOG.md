@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show an invitation to answer Help chat questions instead of a cooldown warning when the player has permission to bypass the Help cooldown.
+
 - Center Lt. Surge on a single tile in Vermilion Gym's resized yellow podium and align the surrounding alcove and collision.
 
 - Keep 3D Pokemon hidden until their opening summon in trainer battles, including provisional NPC team members before the actual lead is selected.
