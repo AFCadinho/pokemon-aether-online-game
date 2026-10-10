@@ -22,6 +22,11 @@ const THIEVING_ICON: Texture2D = preload("res://assets/ui/thieving.svg")
 const ROCK_SMASH_ICON: Texture2D = preload("res://assets/ui/rock_smash_skill_icon.tres")
 const ROCK_SMASH_ROCK_SHEET: Texture2D = preload("res://assets/world/field_move_obstacles/object_rock.png")
 const RockSmashLevelPalette := preload("res://scripts/world/interactables/rock_smash_level_palette.gd")
+const SKILL_FORUM_GUIDES := {
+	"fishing": "https://forums.pokeaether.com/t/fishing-guide/39",
+	"thieving": "https://forums.pokeaether.com/t/thieving-guide/27",
+	"rock_smash": "https://forums.pokeaether.com/t/official-rock-smash-guide/59",
+}
 const WINDOW_PREFERRED_SIZE := Vector2(760, 780)
 const WINDOW_MINIMUM_SIZE := Vector2(480, 420)
 const WINDOW_EDGE_MARGIN := 12.0
@@ -43,6 +48,7 @@ var detail_panel: PanelContainer
 var detail_icon: TextureRect
 var detail_name: Label
 var detail_description: Label
+var forum_guide_button: Button
 var detail_level: Label
 var experience_bar: ProgressBar
 var experience_label: Label
@@ -331,6 +337,21 @@ func _build_interface() -> void:
 	detail_description.add_theme_color_override("font_color", MUTED_TEXT_COLOR)
 	detail_description.add_theme_font_size_override("font_size", 10)
 	detail_heading.add_child(detail_description)
+
+	forum_guide_button = Button.new()
+	forum_guide_button.name = "ForumGuideButton"
+	forum_guide_button.custom_minimum_size = Vector2(130, 31)
+	forum_guide_button.focus_mode = Control.FOCUS_NONE
+	forum_guide_button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	forum_guide_button.add_theme_font_size_override("font_size", 10)
+	forum_guide_button.add_theme_color_override("font_color", ACCENT_COLOR)
+	forum_guide_button.add_theme_color_override("font_hover_color", TEXT_COLOR)
+	forum_guide_button.add_theme_stylebox_override("normal", _make_panel_style(CARD_BACKGROUND, PANEL_BORDER, 7, 1))
+	forum_guide_button.add_theme_stylebox_override("hover", _make_panel_style(CARD_HOVER, CARD_SELECTED_BORDER, 7, 1))
+	forum_guide_button.add_theme_stylebox_override("pressed", _make_panel_style(CARD_SELECTED, CARD_SELECTED_BORDER, 7, 1))
+	forum_guide_button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+	forum_guide_button.pressed.connect(_open_skill_forum_guide)
+	detail_content.add_child(forum_guide_button)
 
 	detail_level = Label.new()
 	detail_level.custom_minimum_size = Vector2(74, 36)
@@ -746,6 +767,8 @@ func _render_detail(skill: Dictionary) -> void:
 	var max_level := maxi(int(skill.get("maxLevel", 100)), level)
 	var skill_unlocked := bool(skill.get("unlocked", true))
 	detail_icon.texture = _skill_icon(skill_id)
+	forum_guide_button.text = _text("ui.skills.forum_guide")
+	forum_guide_button.visible = _skill_forum_guide_url(skill_id) != ""
 	detail_icon.modulate = Color.WHITE if skill_unlocked else Color("#788492")
 	detail_name.text = _text(str(skill.get("nameKey", "ui.skills.%s.name" % skill_id)))
 	detail_description.text = _text(str(skill.get("descriptionKey", "ui.skills.%s.description" % skill_id)))
@@ -818,6 +841,16 @@ func _create_detail_tab_button(tab_id: String) -> Button:
 	button.add_theme_font_size_override("font_size", 11)
 	button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	return button
+
+
+func _skill_forum_guide_url(skill_id: String) -> String:
+	return str(SKILL_FORUM_GUIDES.get(skill_id, ""))
+
+
+func _open_skill_forum_guide() -> void:
+	var guide_url := _skill_forum_guide_url(selected_skill_id)
+	if not guide_url.is_empty():
+		OS.shell_open(guide_url)
 
 
 func _select_detail_tab(tab_id: String) -> void:
