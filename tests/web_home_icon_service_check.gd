@@ -10,7 +10,12 @@ class FixtureService extends Service:
 		requests[url] = int(requests.get(url, 0)) + 1
 		await get_tree().process_frame
 		if url.ends_with("catalog.json"):
-			return JSON.stringify({"normal": {"Pikachu": "home-icons/normal.png", "Vulpix-Alola": "home-icons/normal.png"}, "shiny": {"pikachu": "home-icons/shiny.png"}}).to_utf8_buffer()
+			return JSON.stringify({
+				"normal": {"Pikachu": "home-icons/normal.png", "Vulpix-Alola": "home-icons/normal.png",
+					"Gourgeist-Average": "home-icons/gourgeist-normal.png"},
+				"shiny": {"pikachu": "home-icons/shiny.png", "gourgeist": "home-icons/gourgeist-shiny.png",
+					"gourgeist-small": "home-icons/gourgeist-small-shiny.png"},
+			}).to_utf8_buffer()
 		var image := Image.create(20, 20, false, Image.FORMAT_RGBA8)
 		image.fill(Color.TRANSPARENT)
 		image.fill_rect(Rect2i(8, 8, 4, 4), Color.BLUE if "shiny" in url else Color.RED)
@@ -33,6 +38,20 @@ func _run() -> void:
 	_check(party.get_width() == 12, "party icon crops downloaded pixels with padding")
 	_check((service._files["home-icons/shiny.png"] as Image).get_pixel(9, 9).is_equal_approx(Color.BLUE), "shiny identity stays separate")
 	_check(alias.get_width() == 20, "form alias resolves")
+	for species: String in ["Gourgeist", "Gourgeist Average", "gourgeist-small", "gourgeist-large", "gourgeist-super"]:
+		var gourgeist_normal := await service.load_icon(species)
+		_check(gourgeist_normal.get_width() == 20
+			and (service._files["home-icons/gourgeist-normal.png"] as Image).get_pixel(9, 9).is_equal_approx(Color.RED),
+			"%s normal form resolves through the HOME catalog" % species)
+	var gourgeist_shiny := await service.load_icon("gourgeist-average", true)
+	_check(gourgeist_shiny.get_width() == 20
+		and (service._files["home-icons/gourgeist-shiny.png"] as Image).get_pixel(9, 9).is_equal_approx(Color.BLUE),
+		"average Gourgeist resolves to its shiny icon rather than the normal fallback")
+	await service.load_icon("gourgeist-small", true)
+	_check(service.requests.get("home-icons/gourgeist-small-shiny.png") == 1,
+		"small Gourgeist keeps its own shiny icon ahead of shared aliases")
+	_check(service.requests.get("home-icons/gourgeist-normal.png") == 1,
+		"Gourgeist normal aliases share a single downloaded image")
 	_check(service.requests.get("home-icons/catalog.json") == 1, "catalog fetch is coalesced")
 	_check(service.requests.get("home-icons/normal.png") == 1, "same file across aliases downloads once")
 	_check(await service._load_image("home-icons/../secret.png") == null, "unsafe catalog path refused")
